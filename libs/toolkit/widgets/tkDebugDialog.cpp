@@ -32,6 +32,14 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \class tkDebugDialog
+  \brief This class is a QDialog that shows the content of the tkLog class of this library.
+  It can send message over the web with the tkSendMessage class (part of freemedforms).
+  \ingroup toolkit
+  \ingroup widget_toolkit
+*/
+
 #include "tkDebugDialog.h"
 #include "tkDebugDialog_p.h"
 

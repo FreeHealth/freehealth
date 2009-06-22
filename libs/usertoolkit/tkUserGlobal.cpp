@@ -46,9 +46,10 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 
-/*!
-  \brief Global functions for the User Toolkit library
+/**
+  \brief Some global functions for user toolkit librairy.
   \ingroup usertoolkit object_usertoolkit
+  \ingroup usermanager
 */
 Q_TKUSER_BEGIN_GLOBAL
 

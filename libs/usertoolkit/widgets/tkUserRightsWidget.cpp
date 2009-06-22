@@ -37,6 +37,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkUserRightsWidget
+  \brief This widget is specifically develop for tkUserViewer rights datamapper.
+  \ingroup usertoolkit widget_usertoolkit usermanager
+*/
+
 #include "tkUserRightsWidget.h"
 
 #include <QListWidgetItem>

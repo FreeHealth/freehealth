@@ -37,6 +37,64 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkActionManager
+  \brief tkActionManager is the place to hold your actions, menus and menubars.
+  * It manages automatic menu/menubar creation and automatic translation as well.
+  * You can easily create menuBars using createMenuBar(). MENUBARS ONLY CONTAINS MENUS.\n
+  * You can easily create menus using createMenu(). MENUS ONLY CONTAINS GROUPS.\n
+  * You can set groups into menus using appendGroup(). GROUP CAN CONTAIN ACTIONS AND MENUS.\n
+  * You can easily create actions using createAction() and then setActionDatas(), setActionText(), setActionToolTip(),
+  * setActionThemedIcon(), setActionUnthemedIcon(), setActionEnabled(). Themed icon are retreive using the tkTheme manager.\n
+  * Use QString as identifiants. Identifiants MUST BE UNIQUE inside the same structure (menuBars, menus, groups and action).
+  *
+  * If you want to use the automatic translation of menus / actions, use the setContext() before defining menus and actions.\n
+  * The context correspond to the translation context (please refer Qt doc QCoreApplication::translate() ). By default, this
+  * manager uses the tkConstants context to ask for translations. retranslate() is automatically connected to the tkTranslators
+  * signal languageChanged(). To take full advantage of automatic translation, pass a QT_TRANSLATE_NOOP( "context", "What to translate" )
+  * or a QT_TR_NOOP("Text to tr") to the functions. Please refer to Qt doc.
+  *
+  * !!!!  IF YOU DON'T SPECIFY PARENT QOBJECT AT MENUBARS, MENUS AND ACTIONS CREATION TIME,
+  * YOU MUST MANAGE DELETION OF MENUBARS, MENUS AND ACTIONS POINTERS.
+  *
+  * \code
+  *    setTrContext("context");
+  *    setActionText( id, QT_TRANSLATE_NOOP( "context", "What to translate" ) );  // OK for automatic translations using "context"
+  * \endcode
+  *
+  * \code
+  *    setTrContext(className());
+  *    setActionText( id, QT_TR_NOOP( "What to translate" ) );   // OK for automatic translation using current class context
+  * \endcode
+  *
+  * \code
+  *    setActionText( id, tr( "What to translate" ) );      // No automatic translation can be done if language changes during execution
+  * \endcode
+  *
+  * If you are not using this class inside FreeMedForms, you can create basic menuBar using createDefaultMenusAndGroups(),
+  * or createDefaultFileMenu(), createDefaultEditMenu(), createDefaultFormatMenu(), createDefaultAboutMenu()
+  * and populate these menus with classicals actions using createDefaultActions() or createDefaultFileMenuActions(),
+  * createDefaultEditMenuActions(), createDefaultFormatMenuActions(), createDefaultAboutMenuActions(). \n
+  * If you are using this manager in your plugins please DO NOT USE these functions.
+  *
+  * When you have setted all your menubars/menus/groups/actions or when you add something you must call refreshAll() or
+  * refreshMenu() or refreshMenuBar() in order to create/refresh the item. Unless that, you will not have the correct item.
+  *
+  * You can automatically connect menuBars/menus/actions to slots like this :
+  * \code
+  *    // According your class is a QObject/QWidget with macro Q_OBJECT setted.
+  *    m->createMenu( "myMenu", "parentMenu", "Text", "Icon.png", this);  // DON'T FORGET THE OWNERSHIP (parent) TO CONNECT SIGNALS
+  *    m->createAction( "action", G_EDIT_SELECT, this);             // DON'T FORGET THE OWNERSHIP (parent) TO CONNECT SIGNALS
+  *    m->setActionDatas( "action", "Automatic slot connection" );
+  *    QMetaObject::connectSlotsByName(this);
+  *    // --> Q_SLOT on_action_triggered() { is automacally connect to action SIGNAL(triggered()) }
+  *    // --> Q_SLOT on_myMenu_aboutToShow() { is automacally connect to myMenu SIGNAL(aboutToShow()) }
+  * \endcode
+  \ingroup toolkit
+  \ingroup object_toolkit
+  \sa constants_actionmanager
+*/
+
 #include "tkActionManager.h"
 
 #include <tkLog.h>
@@ -415,6 +473,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 tkActionManager *tkActionManager::m_Instance = 0;
 
+/*! \brief Return the unique instance of tkActionManager. If instance does not exists it is automacally created. */
 tkActionManager *tkActionManager::instance()
 {
     if (!m_Instance)
@@ -431,6 +490,7 @@ tkActionManager::tkActionManager( QObject *parent ) :
     connect( tkTranslators::instance(), SIGNAL(languageChanged()), this, SLOT( retranslate()));
 }
 
+/** \brief Destructor */
 tkActionManager::~tkActionManager()
 {
     if (d)
@@ -438,6 +498,7 @@ tkActionManager::~tkActionManager()
     d=0;
 }
 
+/** \brief Create a default menubar with : menu/groups (File, Edit, About) */
 void tkActionManager::createDefaultMenusAndGroups(QWidget * parent)
 {
     createMenuBar( MENUBAR, qApp->activeWindow() );
@@ -447,6 +508,7 @@ void tkActionManager::createDefaultMenusAndGroups(QWidget * parent)
     createDefaultAboutMenu(parent);
 }
 
+/** \brief Create a default menu's structure for File menu. No actions are inserted. */
 void tkActionManager::createDefaultFileMenu(QWidget * parent)
 {
     if (!d->menuBarExists( MENUBAR ))
@@ -466,6 +528,7 @@ void tkActionManager::createDefaultFileMenu(QWidget * parent)
     m->appendGroup( G_FILE_EXIT,       M_FILE );
 }
 
+/** \brief Create a default menu's structure for Edit menu. No actions are inserted. */
 void tkActionManager::createDefaultEditMenu(QWidget * parent, const QString &toMenuOrMenuBar)
 {
     if (d->menuExists( M_EDIT ) )
@@ -495,6 +558,7 @@ void tkActionManager::createDefaultEditMenu(QWidget * parent, const QString &toM
     m->appendGroup( G_EDIT_OTHER,      M_EDIT );
 }
 
+/** \brief Create a default menu's structure for Format menu. No actions are inserted. */
 void tkActionManager::createDefaultFormatMenu(QWidget *parent, const QString &toMenuOrMenuBar)
 {
     if (d->menuExists( M_FORMAT ) )
@@ -522,6 +586,7 @@ void tkActionManager::createDefaultFormatMenu(QWidget *parent, const QString &to
     m->appendGroup( G_FORMAT_OTHER,     M_FORMAT );
 }
 
+/** \brief Create a default menu's structure for Configuration menu. No actions are inserted. */
 void tkActionManager::createDefaultConfigurationMenu(QWidget * parent)
 {
     if (!d->menuBarExists( MENUBAR ))
@@ -538,6 +603,7 @@ void tkActionManager::createDefaultConfigurationMenu(QWidget * parent)
     m->appendGroup( G_PREFERENCES,     M_CONFIGURATION );
 }
 
+/** \brief Create a default menu's structure for About menu. No actions are inserted. */
 void tkActionManager::createDefaultAboutMenu(QWidget * parent)
 {
     if (!d->menuBarExists( MENUBAR ))
@@ -551,6 +617,7 @@ void tkActionManager::createDefaultAboutMenu(QWidget * parent)
     m->appendGroup( G_HELP_DEBUG,      M_ABOUT );
 }
 
+/** \brief Create the default actions for menus/groups : File, Edit, Format, About */
 void tkActionManager::createDefaultActions( QObject *parent )
 {
     createDefaultFileMenuActions(parent);
@@ -559,6 +626,7 @@ void tkActionManager::createDefaultActions( QObject *parent )
     createDefaultAboutMenuActions(parent);
 }
 
+/** \brief Create the default actions for menu File */
 void tkActionManager::createDefaultFileMenuActions( QObject *parent )
 {
     Q_ASSERT_X(d->menuExists( M_FILE ), "tkActionManager::createDefaultFileMenuActions","menu file does not exists");
@@ -584,6 +652,7 @@ void tkActionManager::createDefaultFileMenuActions( QObject *parent )
     a->setMenuRole( QAction::QuitRole );
 }
 
+/** \brief Create the default actions for menu Edit */
 void tkActionManager::createDefaultEditMenuActions( QObject *parent )
 {
     Q_ASSERT_X(d->menuExists( M_EDIT ), "tkActionManager::createDefaultEditMenuActions","menu edit does not exists");
@@ -622,6 +691,7 @@ void tkActionManager::createDefaultEditMenuActions( QObject *parent )
     m->setActionDatas( A_LIST_MOVEDOWN,  LISTMOVEDOWN_TEXT, LISTMOVEDOWN_TEXT, ICONMOVEDOWN );
 }
 
+/** \brief Create the default actions for menu Format */
 void tkActionManager::createDefaultFormatMenuActions( QObject *parent )
 {
     Q_ASSERT_X(d->menuExists( M_FORMAT ), "tkActionManager::createDefaultFormatMenuActions","menu format does not exists");
@@ -683,6 +753,7 @@ void tkActionManager::createDefaultFormatMenuActions( QObject *parent )
     m->setActionDatas( A_FORMAT_TABLE,  FORMATTABLE_TEXT, FORMATTABLE_TEXT, ICONTABLE );
 }
 
+/** \brief Create the default actions for menu Configuration */
 void tkActionManager::createDefaultConfigurationMenuActions( QObject *parent )
 {
     Q_ASSERT_X(d->menuExists( M_CONFIGURATION ), "tkActionManager::createDefaultAboutMenuActions","menu about does not exists");
@@ -694,6 +765,7 @@ void tkActionManager::createDefaultConfigurationMenuActions( QObject *parent )
 //    a->setShortcut( QKeySequence:: );
 }
 
+/** \brief Create the default actions for menu About */
 void tkActionManager::createDefaultAboutMenuActions( QObject *parent )
 {
     Q_ASSERT_X(d->menuExists( M_ABOUT ), "tkActionManager::createDefaultAboutMenuActions","menu about does not exists");

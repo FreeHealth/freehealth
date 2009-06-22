@@ -46,11 +46,6 @@
 class QListWidgetItem;
 class QEvent;
 
-/**
-  \brief This widget is specifically develop for tkUserViewer rights datamapper.
-  \ingroup usertoolkit widget_usertoolkit usermanager
-*/
-
 class tkUserRightsWidget : public QListWidget
 {
     Q_OBJECT

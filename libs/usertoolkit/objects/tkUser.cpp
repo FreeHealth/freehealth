@@ -32,6 +32,56 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \class UserDynamicDataPrivate
+  \brief Private part
+  \internal
+*/
+
+/**
+  \class UserDynamicData
+  \brief Stores dynamic datas of users.
+  Dynamic datas can be :
+  \li strings
+  \li datetime value
+  \li files and images (coded into database into base64)
+  \li integer or double
+  \li a tkTextDocumentExtra pointer
+  Get informations of the database structure in tkUserBase.
+  \sa tkUserBase
+*/
+
+
+/**
+  \class tkUserPrivate
+  \brief Private part
+  \internal
+*/
+
+/**
+  \class tkUser
+  \brief This class owns the user datas.
+  This class is a link between tkUserBase and tkUserModel. You should never use it directly to access user's datas.\n
+  All the user's datas are available via the tkUserModel.
+
+  Some members are reserved for the use with tkUserBase and shouldn't be assessed outside of the tkUserBase class.\n
+  You can set/get values using database tables representations with :
+  - setValue() and value() for the USERS table,
+  - addDynamicDataFromDatabase() and dynamicDataValue() for the DATAS table,
+  - addRightsFromDatabase() and rightsValue() for the RIGHTS table,
+  - hasModifiedDynamicDatasToStore(), hasModifiedRightsToStore inform tkUserBase of needed changes,
+  - modifiedDynamicDatas(), modifiedRoles() inform tkUserBase of the dynamic datas and rights to save to base.
+
+  Some members are reserved for users interactions. Theses members are mainly assessed by the tkUserModel.
+  - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
+  - setRights() can be used for creating new rights or change the value of the rights.
+  - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
+  - A modifiable state can be set/get using setModifiable() and isModifiable(). If the user is not modifiable,
+  you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
+
+  \ingroup object_usertoolkit usertoolkit usermanager
+*/
+
 #include "tkUser.h"
 
 // include toolkit headers
@@ -54,10 +104,6 @@
 
 Q_TKUSER_USING_CONSTANTS
 
-/**
-  \brief Private part
-  \internal
-*/
 class UserDynamicDataPrivate {
 public:
     UserDynamicDataPrivate() : m_IsDirty(false), m_IsNull(true), m_Id(-1), m_Trace(-1), m_Doc(0), m_Type(UserDynamicData::String)
@@ -125,6 +171,11 @@ bool UserDynamicData::isNull() const
 bool UserDynamicData::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+DynamicDataType UserDynamicData::type() const
+{
+    return d->m_Type;
 }
 
 /** \brief Returns the name of the UserDynamicData */
@@ -421,6 +472,7 @@ public:
 
 QHash<QString, int> tkUserPrivate::m_Link_PaperName_ModelIndex;
 
+/** \brief Constructor */
 tkUser::tkUser()
     : d(0 )
 {
@@ -443,6 +495,7 @@ tkUser::tkUser()
                          .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
 }
 
+/** \brief Constructor */
 tkUser::tkUser(const QString & uuid )
 {
     // TODO : add a uuid checker before all
@@ -465,6 +518,7 @@ tkUser::tkUser(const QString & uuid )
                          .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
 }
 
+/** \brief Destructor */
 tkUser::~tkUser()
 {
     if (d) delete d; d=0;
@@ -764,13 +818,13 @@ void tkUser::setExtraDocumentHtml(const QVariant &val, const int index )
 //    }
 }
 
-tkTextDocumentExtra *tkUser::extraDocument(const int index) const
+QVariant tkUser::extraDocument(const char* name) const
 {
-//    qWarning() << "extraDoc" << d->m_Docs.keys();
-//    Q_ASSERT(d->m_Docs.contains(index));
-//    if (d->m_Docs.contains(index))
-//       return d->m_Docs.value(index);
-//    return 0;
+    if (d->m_DynamicDatas.keys().contains(name)) {
+        if (d->m_DynamicDatas.value(name)->type() == UserDynamicData::ExtraDocument)
+            return d->m_DynamicDatas.value(name)->value();
+    }
+    return QVariant();
 }
 
 

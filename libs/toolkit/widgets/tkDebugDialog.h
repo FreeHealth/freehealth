@@ -55,12 +55,6 @@ class tkSettings;
  * \date 15 Feb 2009
 */
 
-/**
-  \brief This class is a QDialog that shows the content of the tkLog class of this library.
-  It can send message over the web with the tkSendMessage class (part of freemedforms).
-  \ingroup toolkit
-  \ingroup widget_toolkit
-*/
 class Q_TK_EXPORT tkDebugDialog : public QDialog
 {
     Q_OBJECT

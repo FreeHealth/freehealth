@@ -50,15 +50,6 @@ class tkUserPasswordDialogPrivate;
  * \date 04 March 2009
 */
 
-/** \brief Dialog to use when user want to change its password. You need to know the actual password of the user.
-    Dialog is QDialog::Accepted only if all is good (old password correctly written and new password verification
-    passed). You can verify this state of validity using canGetNewPassword() before
-    retreiving the new crypted password with cryptedPassword().
-
-    cryptedPassword() returns an empty string if you call it when an error occured.
-  \ingroup usertoolkit widget_usertoolkit usermanager
-*/
-
 class tkUserPasswordDialog : public QDialog
 {
     Q_OBJECT

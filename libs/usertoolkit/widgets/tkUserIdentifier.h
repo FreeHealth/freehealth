@@ -54,25 +54,6 @@ class tkUserIdentifierPrivate;
  * \date 07 March 2009
 */
 
-/**
-  \brief This class is a dialog that ask user for is login/password, with a limited number of tries.
-  You can show some informations on the left using the first parameter of the constructor.
-  If there is not informations to show, the informations' groupBox is hidden.
-
-  When the identification is good :
-  - the dialog result() is setted to QDialog::Accepted,
-  - current user is setted into user's model with the login and password of this dialog,
-  - the lastLogin information is saved into database,
-  - the login history is completed.
-
-  In the other case, it is setted to QDialog::Rejected.
-
-  You can retreive cryptedLogin and cryptedPassword using : login() and cryptedPassword().
-  \ingroup usertoolkit widget_usertoolkit
-  \ingroup usermanager
-*/
-
-
 class Q_TKUSER_EXPORT tkUserIdentifier : public QDialog
 {
     Q_OBJECT

@@ -32,6 +32,12 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \class tkScrollingWidget
+  \ingroup toolkit
+  \ingroup widget_toolkit
+*/
+
 #include "tkScrollingWidget.h"
 
 #include <QPainter>

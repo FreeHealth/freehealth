@@ -68,56 +68,6 @@ class tkSettingsPrivate;
 */
 
 
-/** \brief This class is a multiOS settings manager.
-    When instanciating this class, the ini file is determined using member getIniFile().\n
-    If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
-    Else the better ini file is retreived (testing first into app bundle, then user home dir).
-
-    m_ResourcesPath is protected and can be defined, retreive it using resourcesPath().\n
-    m_DatabasePath is protected and can be defined, retreive it using databasePath().
-
-    The debugging members are used by tkDebugDialog :\n
-    getTreeWidget() returns a treeWidget containing all values of the QSettings\n
-    toString() is idem but returns a QString formatted.
-
-    You can store extra-datas such as webSiteUrl().
-
-    getTreeWidget() mechanism :\n
-    - if *parent is a QTreeWidget, just populate it with infos\n
-    - if passing QMap each element is supposed to be : "Name of path to show", "/absolute/path/to/show"\n
-
-    DEFAULT BUNDLE PATHS
-
-       MacOSX                                Linux/Win32
-
-       ApplicationName.app                   Application-Version
-       |- Contents                           |
-          |- MacOs                           |
-          |   `- applicationbinary           |- applicationbinary
-          |                                  |
-          |- Resources                       |- Resources                <-- ReadOnly Resources at least
-          |   |                              |  |
-          |   |- CONFIG.INI                  |  |- CONFIG.INI            <-- if user can write into bundle
-          |   |                              |  |
-          |   |- databases                   |  |- databases
-          |   |  |- datas                    |  |  |- datas              <-- if user can write into bundle
-          |   |  |- drugs                    |  |  |- drugs
-          |   |  `- users                    |  |  `- users              <-- if user can write into bundle
-          |   |                              |  |
-          |   |- forms                       |  |- forms
-          |   |- pixmap                      |  |- pixmap                <-- Default Theme
-          |   |  |- 16x16                    |  |  |- 16x16
-          |   |  `- 32x32                    |  |  `- 32x32
-          |   `- translations                |  `- translations
-          |                                  |
-          |- plugins                         |- plugins
-          |  |- qt                           |  |- qt
-          |                                  |
-          `- FrameWorks (Qt FrameWorks)      `- libs (Qt if needed)
-
-  \ingroup toolkit
-   \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkSettings : public QSettings
 {
     Q_OBJECT

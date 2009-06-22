@@ -56,15 +56,6 @@ class tkUserViewerPrivate;
  * \date 07 March 2009
 */
 
-/**
-  \brief This class is a data wrapper for users.
-  When you instanciate this widget, it retreive and show the tkUserModel::currentUserIndex().\n
-  Rights are managed via the tkUserModel.\n
-  Changes are automaticaly saved into the tkUserModel.
-  \todo limit memory usage.
-  \ingroup usertoolkit widget_usertoolkit usermanager
-*/
-
 class Q_TKUSER_EXPORT tkUserViewer : public QWidget
 {
     Q_OBJECT

@@ -37,6 +37,16 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkUserManager
+  \brief This is the Users' Manager of FreeMedForms.
+
+  You can use it as main app or secondary mainWindow.\n
+  You only need to instanciate the tkUserModel and define a current user before using this mainwindow.
+  \ingroup usertoolkit widget_usertoolkit
+  \ingroup usermanager
+*/
+
 #include "tkUserManager.h"
 #include "tkUserManager_p.h"
 

@@ -67,8 +67,9 @@ class UserDynamicDataPrivate;
  * \date 22 June 2009
 */
 
+Q_TKUSER_USING_CONSTANTS;
 
-/** \brief Stores dynamic datas of users. */
+
 class Q_TKUSER_EXPORT UserDynamicData
 {
     friend class tkUserBase;
@@ -90,6 +91,7 @@ public:
 
     bool isNull() const;
     bool isDirty() const;
+    DynamicDataType type() const;
     QString name() const;
     void setName(const QString &name);
     int id() const;
@@ -114,41 +116,13 @@ private:
 };
 
 
-/**
-  \brief This class owns the user datas.
-  This class is a link between tkUserBase and tkUserModel. You should never use it directly to access user's datas.\n
-  All the user's datas are available via the tkUserModel.
-
-  Some members are reserved for the use with tkUserBase and shouldn't be assessed outside of the tkUserBase class.\n
-  You can set/get values using database tables representations with :
-  - setValue() and value() for the USERS table,
-  - addDynamicDataFromDatabase() and dynamicDataValue() for the DATAS table,
-  - addRightsFromDatabase() and rightsValue() for the RIGHTS table,
-  - hasModifiedDynamicDatasToStore(), hasModifiedRightsToStore inform tkUserBase of needed changes,
-  - modifiedDynamicDatas(), modifiedRoles() inform tkUserBase of the dynamic datas and rights to save to base.
-
-  Some members are reserved for users interactions. Theses members are mainly assessed by the tkUserModel.
-  - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
-  - setRights() can be used for creating new rights or change the value of the rights.
-  - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
-  - A modifiable state can be set/get using setModifiable() and isModifiable(). If the user is not modifiable,
-  you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
-
-  \ingroup object_usertoolkit usertoolkit usermanager
-*/
-
-Q_TKUSER_USING_CONSTANTS;
-
 class Q_TKUSER_EXPORT tkUser
 {
     friend class tkUserBase;
 public:
-    /** \brief Constructor */
     tkUser();//( QObject * parent = 0 );
     //tkUser( const tkUser& );
-    /** \brief Constructor with a determined \e uuid */
     tkUser( const QString & uuid );//( QObject * parent = 0 );
-    /** \brief Destructor */
     ~tkUser();
 
     void setModifiable( bool state );
@@ -248,7 +222,7 @@ public:
 
     void setExtraDocument( tkTextDocumentExtra *extra, const int index );
     void setExtraDocumentHtml( const QVariant &val, const int index );
-    tkTextDocumentExtra *extraDocument( const int index ) const;
+    QVariant extraDocument( const int index ) const;
 
     QString preferences() const          { return dynamicDataValue( USER_DATAS_PREFERENCES ).toString(); }
     QString loginHistory() const         { return dynamicDataValue( USER_DATAS_LOGINHISTORY ).toString(); }

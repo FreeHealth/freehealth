@@ -32,6 +32,16 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \class tkUserViewer
+  \brief This class is a data wrapper for users.
+  When you instanciate this widget, it retreive and show the tkUserModel::currentUserIndex().\n
+  Rights are managed via the tkUserModel.\n
+  Changes are automaticaly saved into the tkUserModel.
+  \todo limit memory usage.
+  \ingroup usertoolkit widget_usertoolkit usermanager
+*/
+
 #include "tkUserViewer.h"
 #include "tkUserViewer_p.h"
 

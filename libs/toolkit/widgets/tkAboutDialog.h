@@ -46,17 +46,13 @@ class tkAboutDialogPrivate;
 #include <tkExporter.h>
 
 Q_TK_BEGIN_CONSTANTS
-
 const char* const TEAM_CREATOR_MAINDEV     = QT_TRANSLATE_NOOP( "tkAboutDialog", "Creator & Main Developer" );
 const char* const TEAM_DEV_CONTRIBUTORS    = QT_TRANSLATE_NOOP( "tkAboutDialog", "Developer" );
 const char* const TEAM_DEV_DEBUGGER        = QT_TRANSLATE_NOOP( "tkAboutDialog", "Developer, Debugger" );
 const char* const TEAM_HELPER              = QT_TRANSLATE_NOOP( "tkAboutDialog", "Helper" );
 const char* const TEAM_HELPER_DEBUGGER     = QT_TRANSLATE_NOOP( "tkAboutDialog", "Helper, Debugger" );
 const char* const TEAM_TESTER              = QT_TRANSLATE_NOOP( "tkAboutDialog", "Tester" );
-
 Q_TK_END_CONSTANTS
-
-
 
 struct Q_TK_EXPORT tkAboutDatas
 {
@@ -68,13 +64,6 @@ struct Q_TK_EXPORT tkAboutDatas
     QString UnTranslatedComment;
 };
 
-/** \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full licence text.
-   It also shows the compilation date and time and the actual version of the application.
-   The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion().
-   You can inform the team using the addTeamList().
-  \ingroup toolkit
-  \ingroup widget_toolkit
-**/
 class Q_TK_EXPORT tkAboutDialog : public QDialog
 {
     Q_OBJECT

@@ -37,6 +37,22 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkAboutDialog
+ \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full licence text.
+   It also shows the compilation date and time and the actual version of the application.
+   The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion().
+   You can inform the team using the addTeamList().
+  \ingroup toolkit
+  \ingroup widget_toolkit
+**/
+
+/**
+  \struct tkAboutDatas
+  \brief Contains all informations to show.
+*/
+
+
 #include "tkAboutDialog.h"
 #include "tkAboutDialog_p.h"
 

@@ -54,14 +54,6 @@ class tkUser;
  * \date 07 March 2009
 */
 
-/**
-  \brief This is the Users' Manager of FreeMedForms.
-
-  You can use it as main app or secondary mainWindow.\n
-  You only need to instanciate the tkUserModel and define a current user before using this mainwindow.
-  \ingroup usertoolkit widget_usertoolkit
-  \ingroup usermanager
-*/
 class Q_TKUSER_EXPORT tkUserManager : public QMainWindow
 {
     Q_OBJECT

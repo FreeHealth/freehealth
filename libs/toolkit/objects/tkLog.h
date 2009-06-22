@@ -57,13 +57,6 @@ class tkLogPrivate;
 class QTreeWidget;
 
 
-//Q_TK_BEGIN_CONSTANTS
-//    const char* const TKLOG_MARK = "tkLogMark";    // tkLog object marking, if object contains
-//                                                   // a property TKLOG_MARK --> it is included into tkLog objectWatcher
-//    const char* const TKLOG_WATCHER_NAME = "tkLogObjectWatcher";
-//Q_TK_END_CONSTANTS
-
-
 class tkDataLog
 {
 public:
@@ -102,21 +95,6 @@ public:
  * \date 16 June 2009
 */
 
-/**
- \brief this class holds the logs messages.
-    Set messages with addMessage() or addMessages(), set errors with setError() or setErrors(). The strings
-    are stored into two string list that you can retreive with messages() and errors().
-    You can log QSqlQuery errors using addQueryError().
-    The first param of each members is the name of the class that asked to log.
-
-    Return format is for messages and errors :
-     - ClassNameAsker : DateOfTheLog - Log
-     - ClassNameAsker : DateOftheLog - SQL Error : Driver : xxxxx, Database : xxxx, Query : xxxxxx
-
-     You can directly save the logs via saveLog(), or retreive a string formatted using toString().
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkLog
 {
 

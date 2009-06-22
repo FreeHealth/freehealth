@@ -65,12 +65,6 @@ class QMenu;
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfRichTextEditor implementation -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-/**
-  \class tkRichTextEditor
-  \todo Document code.
-  \ingroup toolkit
-  \ingroup widget_toolkit
-*/
 class Q_TK_EXPORT tkRichTextEditor : public QWidget
 {
     Q_OBJECT

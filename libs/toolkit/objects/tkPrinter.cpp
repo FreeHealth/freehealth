@@ -35,6 +35,12 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  ***************************************************************************/
+/**
+  \class tkPrinter
+  \brief Manages document printing task with headers, footers and watermark.
+  \ingroup toolkit
+  \ingroup object_toolkit
+*/
 #include "tkPrinter.h"
 
 #include <tkLog.h>

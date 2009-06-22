@@ -37,6 +37,17 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \brief Users are represented into a table model. Each row represents a user, each column a value.
+  \sa User, tkUserConstants
+  \todo write documentation+++
+  \todo code LOCKER
+  \todo when QDataWidgetMapper (tkUserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
+  Set filter with setFilter().
+  \ingroup usertoolkit object_usertoolkit
+  \ingroup usermanager
+*/
+
 #include "tkUserModel.h"
 
 // include toolkit headers
@@ -504,7 +515,7 @@ QVariant tkUserModel::data( const QModelIndex & item, int role ) const
             case User::UserSpecialities : toReturn = user->specialty(); break;
             case User::UserQualifications : toReturn = user->qualifications(); break;
             case User::UserPreferences : toReturn = user->preferences(); break;
-//            case User::UserGenericHeader : toReturn = user->extraDocument(User::UserGenericHeader)->toHtml(); break;
+            case User::UserGenericHeader : toReturn = user->extraDocument(USER_DATAS_GENERICHEADER); break;
 //            case User::UserGenericFooter : toReturn = user->genericFooter(); break;
 //            case User::UserAdministrativeHeader : toReturn = user->adminPapers().at(0); break;
 //            case User::UserAdministrativeFooter : toReturn = user->adminPapers().at(1); break;

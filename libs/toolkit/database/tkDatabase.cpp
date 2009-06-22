@@ -37,6 +37,44 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkDatabase
+ \brief this class is a base class for databases. It manages scheme and creates SQL queries.
+    The idea is to create a database scheme dynamically. Your superbase must hold the enums
+    corresponding to the tables and the fields of each tables.\n
+    Then tkDatabase is populated with real names of tables and fields.\n
+    Then you can get what ever you want without any knowledge of the database tables, fields names and driver.\n
+
+    It manages connections and propose a virtual member for the database creation if requiered.\n
+    You can easily manage automatic scheme database creation with createTables().\n
+
+    Usage :
+    \code
+    // Your superclass inherits of tkDatabase
+    class MyDatabase : public tkDatabase
+    // in the header public part put your enums (don't forget the '=0' next the first enumerator)
+    enum Tables { Table_TABLE1=0, Table_TABLE2, Table_End };
+    enum TABLE1FIELDS { TAB1_FIELD1=0, TAB1_FIELD2... };
+    enum TABLE2FIELDS { TAB2_FIELD1=0, TAB2_FIELD2... };
+
+    // In constructor populate tables' names and fields' names in the same order they appear in database/table.
+    addTable( Table_TABLE1, "FIRST_TABLE" );
+    addField( Table_TABLE1, TAB1_FIELD1, "FIRST_FIELD_OF_TABLE1", FieldIsInteger, "NULL" );
+    addField( Table_TABLE1, TAB1_FIELD2, "SECOND_FIELD_OF_TABLE1", FieldIsInteger, "NULL" );
+    ...
+    addTable( Table_TABLE2, "SECOND_TABLE" );
+    addField( Table_TABLE2, TAB2_FIELD1, "FIRST_FIELD_OF_TABLE2", FieldIsInteger, "NULL" );
+    ...
+    // In constructor call createConnection()
+    createConnection( "users", "users.db", databasePath(), ReadWrite, SQLite );
+    // That's done, now you can work with enums instead of magic strings...
+    // If you want to create database if it doesn't exist define the member createDatabase() in your superclass.
+
+    \endcode
+  \ingroup toolkit
+  \ingroup database_toolkit
+*/
+
 #include "tkDatabase.h"
 
 // include toolkit headers

@@ -43,6 +43,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class tkRichTextEditor
+  \todo Document code.
+  \ingroup toolkit
+  \ingroup widget_toolkit
+*/
+
 #include "tkRichTextEditor.h"
 #include "tkRichTextEditor_p.h"
 

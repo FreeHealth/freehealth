@@ -37,6 +37,22 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  * \class tkListView
+  * \brief This widget shows a QListView with some buttons and a context menu.
+  * Buttons to show can be setted using AvailableButtons and setButtons().
+  * Actions inside the menu can be setted using AvailableActions and setActions().
+  * You can change the tooltip and text of buttons/actions using setAddToolTip() and setRemoveToolTip().
+  * You can reimplement on_add_triggered(), on_remove_triggered() and on_edit_triggered()
+    that are called by buttons and menu (add , remove).
+  * The getContextMenu() is automatically called when the contextMenu is requiered.
+    You can reimplement getContextMenu() in order to use your own contextMenu.
+    Remember that the poped menu will be deleted after execution.
+  \todo There is a problem when including this widget into a QDataWidgetMapper, when this widget loses focus, datas are not retreived.
+  \ingroup toolkit
+  \ingroup widget_toolkit
+*/
+
 #include "tkListView.h"
 #include "tkListView_p.h"
 

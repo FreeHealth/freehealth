@@ -90,28 +90,28 @@ const char * const  M_UPDATE_TEXT        = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEX
 // Groups' name
 // file menu groups
 const char * const G_FILE_NEW            = "grFile.New";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_OPEN           = "grFile.Open";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_PROJECT        = "grFile.Project";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_SAVE           = "grFile.Save";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_CLOSE          = "grFile.Close";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_PRINT          = "grFile.Print";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_RECENTS        = "grFile.Recents";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_OTHER          = "grFile.Other";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FILE_EXIT           = "grFile.Exit";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_OPEN           = "grFile.Open";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_PROJECT        = "grFile.Project";  /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_SAVE           = "grFile.Save";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_CLOSE          = "grFile.Close";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_PRINT          = "grFile.Print";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_RECENTS        = "grFile.Recents";  /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_OTHER          = "grFile.Other";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FILE_EXIT           = "grFile.Exit";     /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // edit menu groups
-const char * const G_EDIT_UNDOREDO       = "grEdit.UndoRedo";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_EDIT_COPYPASTE      = "grEdit.CopyPaste";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_EDIT_SELECT         = "grEdit.SelectAll";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_UNDOREDO       = "grEdit.UndoRedo";  /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_COPYPASTE      = "grEdit.CopyPaste"; /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_SELECT         = "grEdit.SelectAll"; /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_LIST           = "grEdit.List";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_EDIT_ADVANCED       = "grEdit.Advanced";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_ADVANCED       = "grEdit.Advanced";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_FIND           = "grEdit.Find";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_EDIT_EDITOR         = "grEdit.Editor";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_EDIT_OTHER          = "grEdit.Other";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_EDITOR         = "grEdit.Editor";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_OTHER          = "grEdit.Other";     /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // format menu groups
-const char * const G_FORMAT_FONT         = "grFormat.Font";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_FORMAT_PARAGRAPH    = "grFormat.Paragraph";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FORMAT_FONT         = "grFormat.Font";       /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FORMAT_PARAGRAPH    = "grFormat.Paragraph";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_TABLE        = "grFormat.Table";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_IMAGE        = "grFormat.Image";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_OTHER        = "grFormat.Other";      /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -128,32 +128,32 @@ const char * const G_FORMAT_OTHER        = "grFormat.Other";      /*!< \brief De
 //    const char * const G_WINDOW_FULLSCREEN   = "grwindow.Fullscreen";
 
 // Interpretor groups
-const char * const G_INTERPRETOR_GENERAL = "grInterpretor.General";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_INTERPRETOR_GENERAL = "grInterpretor.General";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // Configuration groups (global)
-const char * const G_CONFIGURATION       = "grConfig.Config";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_CONFIGURATION       = "grConfig.Config";        /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_TOOLBARS            = "grConfig.Toolbars";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_LANGUAGES           = "grConfig.Languages";      /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_PREFERENCES         = "grConfig.Preferences";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_LANGUAGES           = "grConfig.Languages";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_PREFERENCES         = "grConfig.Preferences";   /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // Tools groups
-const char * const G_TOOLS_GENERAL       = "grTools.General";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TOOLS_GENERAL       = "grTools.General";        /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // help groups (global)
-const char * const G_HELP_HELP           = "grHelp.Help";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_HELP_HELP           = "grHelp.Help";       /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_ABOUT          = "grHelp.About";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_DEBUG          = "grHelp.Debug";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // Update groups
-const char * const G_UPDATE              = "grHelp.Update";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_UPDATE              = "grHelp.Update";     /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // File Menu Action's name (find icon default into tkTheme.h)
-const char * const  A_FILE_NEW            = "actionFileNew";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_OPEN           = "actionFileOpen";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVE           = "actionFileSave";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVEAS         = "actionFileSaveAs";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_PRINT          = "actionFilePrint";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_EXIT           = "actionFileExit";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_NEW            = "actionFileNew";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_OPEN           = "actionFileOpen";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVE           = "actionFileSave";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVEAS         = "actionFileSaveAs"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINT          = "actionFilePrint";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_EXIT           = "actionFileExit";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  FILENEW_TEXT          = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "New");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  FILEOPEN_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Open");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  FILESAVE_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Save");    /*!< \brief Default action text  \ingroup constants_actionmanager */
@@ -164,59 +164,59 @@ const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTE
 // Edit Menu Action's name (find icon default into tkTheme.h)
 // A_EDIT_COPY << A_EDIT_CUT << A_EDIT_PASTE << A_EDIT_UNDO << A_EDIT_REDO << A_EDIT_SELECTALL << A_EDIT_DESELECT
 const char * const  A_EDIT_COPY           = "actionEditCopy";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_CUT            = "actionEditCut";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_PASTE          = "actionEditPaste";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_CUT            = "actionEditCut";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_PASTE          = "actionEditPaste";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_EDIT_UNDO           = "actionEditUndo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_EDIT_REDO           = "actionEditRedo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_SELECTALL      = "actionEditSelectAll";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_DESELECT       = "actionEditDeselect";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  EDITCOPY_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Paste");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITCUT_TEXT          = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Cut");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITPASTE_TEXT        = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Paste");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITUNDO_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Undo");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITREDO_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Redo");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITSELECTALL_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Select All");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  EDITDESESLECT_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Deselect");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  A_EDIT_SELECTALL      = "actionEditSelectAll"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_DESELECT       = "actionEditDeselect";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  EDITCOPY_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Paste");      /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITCUT_TEXT          = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Cut");        /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITPASTE_TEXT        = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Paste");      /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITUNDO_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Undo");       /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITREDO_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Redo");       /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITSELECTALL_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Select All"); /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  EDITDESESLECT_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Deselect");   /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // List actions's
-const char * const  A_LIST_ADD            = "actionListAdd";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_REMOVE         = "actionListRemove";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_MOVEUP         = "actionListMoveUp";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_MOVEDOWN       = "actionListMoveDown";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_ADD            = "actionListAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_REMOVE         = "actionListRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_MOVEUP         = "actionListMoveUp";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_MOVEDOWN       = "actionListMoveDown";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  LISTADD_TEXT          = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Add to list");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  LISTREMOVE_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Remove of list");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  LISTMOVEUP_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Move item up");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  LISTMOVEDOWN_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Move item down");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  LISTREMOVE_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Remove of list"); /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  LISTMOVEUP_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Move item up");   /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  LISTMOVEDOWN_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Move item down"); /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
 // << A_FORMAT_BOLD << A_FORMAT_ITALIC << A_FORMAT_UNDERLINE << A_FORMAT_STRIKE << A_FORMAT_TABLE << A_FORMAT_IMAGE
-const char * const  A_FORMAT_BOLD         = "actionFormatBold";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_ITALIC       = "actionFormatItalic";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_UNDERLINE    = "actionFormatUnderline";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_STRIKE       = "actionFormatStrike";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_BIGGER       = "actionFormatBigger";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_SMALLER      = "actionFormatSmaller";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_FONT         = "actionFormatFont";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_ITALIC       = "actionFormatItalic";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_UNDERLINE    = "actionFormatUnderline";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_STRIKE       = "actionFormatStrike";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_BIGGER       = "actionFormatBigger";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_SMALLER      = "actionFormatSmaller";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_FONT         = "actionFormatFont";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_TABLE        = "actionFormatTable";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_IMAGE        = "actionFormatImage";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Bold");      /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Italic");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  FORMATUNDERLINE_TEXT  = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Underline");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  FORMATSTRIKE_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Strike");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  FORMATBIGGER_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Bigger");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  FORMATSMALLER_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Smaller");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Bold");           /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Italic");         /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATUNDERLINE_TEXT  = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Underline");      /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATSTRIKE_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Strike");         /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATBIGGER_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Bigger");         /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  FORMATSMALLER_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Smaller");        /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  FORMATFONT_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Font format");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  FORMATTABLE_TEXT      = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Table format");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  FORMATIMAGE_TEXT      = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Image format");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // Paragraph Format Action's name
-const char * const  A_ALIGN_CENTER        = "actionAlignCenter";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ALIGN_LEFT          = "actionAlignLeft";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_CENTER        = "actionAlignCenter";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_LEFT          = "actionAlignLeft";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ALIGN_RIGHT         = "actionAlignRight";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ALIGN_JUSTIFY       = "actionAlignJustify";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  ALIGNCENTER_TEXT      = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Center");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  ALIGNLEFT_TEXT        = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Left");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  ALIGNRIGHT_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Right");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_JUSTIFY       = "actionAlignJustify";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  ALIGNCENTER_TEXT      = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Center");     /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  ALIGNLEFT_TEXT        = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Left");       /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  ALIGNRIGHT_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Right");      /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  ALIGNJUSTIFY_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Justify");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // Interpretor Actions
@@ -228,18 +228,18 @@ const char * const  A_USERMANAGER     = "actionUserManager";      /*!< \brief De
 const char * const  USERMANAGER_TEXT  = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "User manager");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // About Menu Action's name (find icon default into tkTheme.h)
-const char * const  A_ABOUT              = "actionAbout";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ABOUTQT            = "actionAboutQt";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ABOUTFORM          = "actionAboutThisForm";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_DEBUGHELPER        = "actionDebugHelper";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_DEBUGHELPER        = "actionDebugHelper";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
-const char * const  ABOUT_TEXT           = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  ABOUTQT_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About Qt");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  ABOUTFORM_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About this form");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  APPLICATIONHELP_TEXT = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Help");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-const char * const  DEBUGHELPER_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Debugging tools");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  ABOUT_TEXT           = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About");             /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  ABOUTQT_TEXT         = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About Qt");          /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  ABOUTFORM_TEXT       = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "About this form");   /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  APPLICATIONHELP_TEXT = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Help");              /*!< \brief Default action text  \ingroup constants_actionmanager */
+const char * const  DEBUGHELPER_TEXT     = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Debugging tools");   /*!< \brief Default action text  \ingroup constants_actionmanager */
 const char * const  HELPTEXTTOGGLER_TEXT = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT, "Display/Hide form's help text");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
 // Configuration Menu Action's name (find icon default into tkTheme.h)
@@ -254,95 +254,27 @@ const char * const  VIEWUPDATE_TEXT    = QT_TRANSLATE_NOOP(TK_CONSTANTS_CONTEXT,
 Q_TK_END_CONSTANTS
 
 
-/** \brief tkActionManager is the place to hold your actions, menus and menubars. It manages automatic menu/menubar creation and automatic translation as well.
-  * You can easily create menuBars using createMenuBar(). MENUBARS ONLY CONTAINS MENUS.
-  * You can easily create menus using createMenu(). MENUS ONLY CONTAINS GROUPS.
-  * You can set groups into menus using appendGroup(). GROUP CAN CONTAIN ACTIONS AND MENUS.
-  * You can easily create actions using createAction() and then setActionDatas(), setActionText(), setActionToolTip(),
-  * setActionThemedIcon(), setActionUnthemedIcon(), setActionEnabled(). Themed icon are retreive using the tkTheme manager.
-  * Use QString as identifiants. Identifiants MUST BE UNIQUE inside the same structure (menuBars, menus, groups and action).
-  *
-  * If you want to use the automatic translation of menus / actions, use the setContext() before defining menus and actions.
-  * The context correspond to the translation context (please refer Qt doc QCoreApplication::translate() ). By default, this
-  * manager uses the tkConstants context to ask for translations. retranslate() is automatically connected to the tkTranslators
-  * signal languageChanged(). To take full advantage of automatic translation, pass a QT_TRANSLATE_NOOP( "context", "What to translate" )
-  * or a QT_TR_NOOP("Text to tr") to the functions. Please refer to Qt doc.
-  *
-  * !!!!  IF YOU DON'T SPECIFY PARENT QOBJECT AT MENUBARS, MENUS AND ACTIONS CREATION TIME,
-  * YOU MUST MANAGE DELETION OF MENUBARS, MENUS AND ACTIONS POINTERS.
-  *
-  * \code
-  *    setTrContext("context");
-  *    setActionText( id, QT_TRANSLATE_NOOP( "context", "What to translate" ) );  // OK for automatic translations using "context"
-  * \endcode
-  *
-  * \code
-  *    setTrContext(className());
-  *    setActionText( id, QT_TR_NOOP( "What to translate" ) );   // OK for automatic translation using current class context
-  * \endcode
-  *
-  * \code
-  *    setActionText( id, tr( "What to translate" ) );      // No automatic translation can be done if language changes during execution
-  * \endcode
-  *
-  * If you are not using this class inside FreeMedForms, you can create basic menuBar using createDefaultMenusAndGroups(),
-  * or createDefaultFileMenu(), createDefaultEditMenu(), createDefaultFormatMenu(), createDefaultAboutMenu()
-  * and populate these menus with classicals actions using createDefaultActions() or createDefaultFileMenuActions(),
-  * createDefaultEditMenuActions(), createDefaultFormatMenuActions(), createDefaultAboutMenuActions().
-  * If you are using this manager in your plugins please DO NOT USE these functions.
-  *
-  * When you have setted all your menubars/menus/groups/actions or when you add something you must call refreshAll() or
-  * refreshMenu() or refreshMenuBar() in order to create/refresh the item. Unless that, you will not have the correct item.
-  *
-  * You can automatically connect menuBars/menus/actions to slots like this :
-  * \code
-  *    // According your class is a QObject/QWidget with macro Q_OBJECT setted.
-  *    m->createMenu( "myMenu", "parentMenu", "Text", "Icon.png", this);  // DON'T FORGET THE OWNERSHIP (parent) TO CONNECT SIGNALS
-  *    m->createAction( "action", G_EDIT_SELECT, this);             // DON'T FORGET THE OWNERSHIP (parent) TO CONNECT SIGNALS
-  *    m->setActionDatas( "action", "Automatic slot connection" );
-  *    QMetaObject::connectSlotsByName(this);
-  *    // --> Q_SLOT on_action_triggered() { is automacally connect to action SIGNAL(triggered()) }
-  *    // --> Q_SLOT on_myMenu_aboutToShow() { is automacally connect to myMenu SIGNAL(aboutToShow()) }
-  * \endcode
-  \ingroup toolkit
-  \ingroup object_toolkit
-  \sa constants_actionmanager
-*/
 class Q_TK_EXPORT tkActionManager : public QObject
 {
     Q_OBJECT
     friend const void tkGlobal::initLib();
 
 public:
-    /*! \brief Return the unique instance of tkActionManager. If instance does not exists it is automacally created. */
     static tkActionManager *instance();
-    /*! \brief Destructor */
     ~tkActionManager();
 
-    /** \brief Create a default menubar with : menu/groups (File, Edit, About) */
     void createDefaultMenusAndGroups( QWidget * parent = 0 );
-    /** \brief Create a default menu's structure for File menu. No actions are inserted. */
     void createDefaultFileMenu( QWidget * parent = 0 );
-    /** \brief Create a default menu's structure for Edit menu. No actions are inserted. */
     void createDefaultEditMenu( QWidget * parent = 0, const QString &toMenuOrMenuBar = QString::null );
-    /** \brief Create a default menu's structure for Format menu. No actions are inserted. */
     void createDefaultFormatMenu( QWidget *parent = 0, const QString &toMenuOrMenuBar = QString::null );
-    /** \brief Create a default menu's structure for Configuration menu. No actions are inserted. */
     void createDefaultConfigurationMenu( QWidget *parent = 0 );
-    /** \brief Create a default menu's structure for About menu. No actions are inserted. */
     void createDefaultAboutMenu( QWidget * parent = 0 );
 
-    /** \brief Create the default actions for menus/groups : File, Edit, Format, About */
     void createDefaultActions( QObject *parent = 0 );
-    /** \brief Create the default actions for menu File */
     void createDefaultFileMenuActions( QObject *parent = 0 );
-    /** \brief Create the default actions for menu Edit */
     void createDefaultEditMenuActions( QObject *parent = 0 );
-    /** \brief Create the default actions for menu Format */
     void createDefaultFormatMenuActions( QObject *parent = 0 );
-    /** \brief Create the default actions for menu Configuration */
     void createDefaultConfigurationMenuActions( QObject *parent = 0 );
-    /** \brief Create the default actions for menu About */
     void createDefaultAboutMenuActions( QObject *parent = 0 );
 
     void setTrContext( const QString &context );
@@ -383,7 +315,6 @@ public:
     bool menuExists( const QString &id );
 
 protected:
-    /*! \brief Constructor. Use instance() to get the instance of tkActionManager. */
     tkActionManager( QObject *parent = 0 );
 
 private Q_SLOTS:

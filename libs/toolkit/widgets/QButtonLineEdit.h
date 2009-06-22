@@ -56,15 +56,6 @@
 #include <QToolButton>
 #include <QAction>
 
-/**
- \brief This widget can present inside a line edit two QToolButtons : one left, the other on the right.
-    QButtonLineEdit inherits QLineEdit
-    After instanciate it, define the Tools Buttons for the right and the left, or only one.
-    The tooltip of the leftButton is shown in gray inside the line edit when the user does not tape in.
-    To retreive the text of the QLineEdit use the function : searchText().
-  \ingroup toolkit
-  \ingroup widget_toolkit
- */
 class Q_TK_EXPORT QButtonLineEdit : public QLineEdit
 {
     Q_OBJECT

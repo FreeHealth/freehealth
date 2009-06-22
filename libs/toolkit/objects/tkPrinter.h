@@ -65,11 +65,6 @@ class QTextEdit;
  * \date 03 May 2009
 */
 
-/**
-  \brief Manages document printing task with headers, footers and watermark.
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkPrinter : public QObject
 {
     Q_OBJECT

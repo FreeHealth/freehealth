@@ -37,6 +37,26 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+ \class tkUSerIdentifier
+  \brief This class is a dialog that ask user for is login/password, with a limited number of tries.
+  You can show some informations on the left using the first parameter of the constructor.
+  If there is not informations to show, the informations' groupBox is hidden.
+
+  When the identification is good :
+  - the dialog result() is setted to QDialog::Accepted,
+  - current user is setted into user's model with the login and password of this dialog,
+  - the lastLogin information is saved into database,
+  - the login history is completed.
+
+  In the other case, it is setted to QDialog::Rejected.
+
+  You can retreive cryptedLogin and cryptedPassword using : login() and cryptedPassword().
+  \ingroup usertoolkit widget_usertoolkit
+  \ingroup usermanager
+*/
+
 #include "tkUserIdentifier.h"
 #include "tkUserIdentifier_p.h"
 
@@ -114,12 +134,12 @@ void tkUserIdentifier::done( int result )
     }
 }
 
-inline QString  tkUserIdentifier::cryptedPassword()
+inline QString tkUserIdentifier::cryptedPassword()
 {
     return crypt( d->password->lineEdit()->text() );
 }
 
-inline QString  tkUserIdentifier::login()
+inline QString tkUserIdentifier::login()
 {
     return loginForSQL( d->login->lineEdit()->text() );
 }

@@ -62,16 +62,6 @@ using namespace tkUserConstants;
  * \date 08 March 2009
 */
 
-/**
-  \brief Users are represented into a table model. Each row represents a user, each column a value.
-  \sa User, tkUserConstants
-  \todo write documentation+++
-  \todo code LOCKER
-  \todo when QDataWidgetMapper (tkUserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
-  Set filter with setFilter().
-  \ingroup usertoolkit object_usertoolkit
-  \ingroup usermanager
-*/
 class Q_TKUSER_EXPORT tkUserModel : public QSqlTableModel
 {
     Q_OBJECT

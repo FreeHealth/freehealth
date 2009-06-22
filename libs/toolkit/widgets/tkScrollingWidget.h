@@ -51,11 +51,6 @@ class tkScrollingWidgetPrivate;
  * \date 10 June 2009
 */
 
-/**
-  \class tkScrollingWidget
-  \ingroup toolkit
-  \ingroup widget_toolkit
-*/
 class Q_TK_EXPORT tkScrollingWidget : public QWidget
 {
     Q_OBJECT

@@ -59,21 +59,6 @@ class QPushButton;
  * \date 25 April 2009
 */
 
-/**
-  \brief Wizard for user creation.
-  You can tell tkWiz to create the user itself or use a defined user. createUser() define the
-  creation mode. If you set it to false, inform the row of the model to use with setModelRow(). By default,
-  tkUserWizard create itself a new user.\n
-  Usage :
-  \code
-    tkUserWizard tkWiz;
-    tkWiz.createUser( true );   // will create the user (optionnal)
-    tkWiz.show();
-  \endcode
-
-  \todo If row is defined --> populate all wizard pages with users values.
-  \ingroup usertoolkit widget_usertoolkit usermanager
-*/
 class tkUserWizard : public QWizard
 {
     Q_OBJECT
