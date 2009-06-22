@@ -7,7 +7,8 @@
 
     \section introduction Introduction
 
-    FreeMedForms is a crossplatform medical forms manager.
+    FreeMedForms is a crossplatform medical forms manager.\n
+    Actually, FreeMedForms is release <b>in early alpha stage</b> and should not be used for current practice.
     It can be used as clinical research patient database or usual pratice patient database. \n
     The forms of the patients' file can be defined with a simple XML file, which can use script like JavaScript. \n
     FreeMedForms is a core application that manages forms, database and users. Forms elements are all plugins. \n
