@@ -1,7 +1,16 @@
 /*!
    \mainpage FreeMedForms a free and open source medical files manager.
 
-   FreeMedForms and derivatives are open source free software, released under New BSD License and available for :
+    FreeMedForms is a crossplatform medical forms manager.
+    It can be used as clinical research patient database or usual pratice patient database.
+    The forms of the patients' file can be defined with a simple XML file, which can use script like JavaScript. \n
+    FreeMedForms is a core application that manages forms, database and users. Forms elements are all plugins. \n
+
+    There are some derivatives like \link drugsinteractions DrugsInteractions\endlink. This application is made on the base of the
+    DrugsWidgetPlugins of FreeMedForms.
+
+   FreeMedForms and derivatives are all open source free software, released <b>under New BSD License</b>
+   and are availables for :
    - Linux
    - FreeBSD
    - MacOs X universal
@@ -10,9 +19,11 @@
    \section authors Authors and contributors
     - Creator and Main author :
         - Maeker Eric, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a>.
+
     - Contributors :
         - Guillaume Denry <guillaume.denry@gmail.com>
         - Sébastien Belin, MD <belin.s@wanadoo.fr>
+
     - Helpers :
         -  Filipe Azevedo <pasnox@gmail.com>
         -  David Geldreich <david.geldreich@free.fr>
@@ -54,7 +65,7 @@
     Some part can be pure c++, but most of the code is c++/Qt4.5.  \n
     All the code is cross-platform. Scripts used in forms is an ECMA Script (like Javascript).\n
 
-    If you want to participate you must read the \link code rules.
+    If you want to participate you must read the \link coderules code rules (in french only) \endlink.
 
    \section changelog Changelog and roadmap
     Please find all informations about the changelog and the roadmap of developments on the web site.

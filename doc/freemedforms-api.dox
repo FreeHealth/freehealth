@@ -1,8 +1,6 @@
 /*!
-    \page FreeMedForms toolkits
+    \page freemedforms_apis FreeMedForms toolkits
 
-    FreeMedForms is a crossplatform medical forms manager. \n
-    FreeMedForms is a core application that manages forms, database and users. Forms elements are all plugins.
 
     \section core FreeMedForms Core
 
