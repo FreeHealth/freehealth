@@ -1,0 +1,10 @@
+Quelques manip pour travailler sous MacOsX
+
+Mettre à jour le PATH pour la dernière version SVN
+export PATH=/opt/subversion/bin:$PATH
+
+Droits utilisateurs sur les fichiers de la clé :
+chflags -R nouchg ./
+
+Make :
+qmake -spec macx-g++ && make

@@ -1,0 +1,78 @@
+version=0.0.8
+{
+    * April 2009
+    * FreeMedForms goes multi-user capabilities
+    * A graphical user manager is available
+    * Better management of databases
+    * User interface can be thematized (icons for now)
+    * Dosage editor and drugs prescription is available
+    * Drugs database updated to AFSSAPS release of May 2009, interactions to Déc 2008
+    * Lots of improvments in DrugsWidget plugins (please see DrugsInteractions changelog)
+    * New print engine with header, footer and watermark abilities
+    * MacOs X Universal binary
+    * Toolkits librairies are now dynamic libs
+    * Lots of speed improvments
+    * Data saving still not available...
+}
+
+version=0.0.6
+{
+    * Jan 2009
+    * Very first implementation of data saving/restoring (not fully functionnal)
+    * New drugs selector plugin with drugs interactions tester
+    * Drugs interactions stand alone application and FreeMedForms drugs widget
+        * first version for testers
+        * datas from AFSSAPS Dec 2008
+    * first MacOs release (Universal Binary)
+    * New 'special combo' widget : combo is filled with datas stored into a database or a file (not fully functionnal)
+    * Command line parser for applications parameters and resources
+    * Very first user identification (not functionnal)
+    * Debugging informations via menu Help / Debugging informations
+    * Ability to easily send informations to developers
+}
+
+version=0.0.5
+{
+    * Nov 2008
+    * Form's widgets are now plugins of application
+    * mfRichTextWidget's plugin provides new types : richtext, fullrichtext with many available options
+    * New options : BoldLabel, Vertical, Horizontal, LabelOnTop, CompactView, NumericOnly, mask=XXXXX, Hide
+    * New form navigation toolbar
+    * Improvments on windows binaries
+    * Massive code and project reorganisation
+}
+
+version=0.0.4
+{
+    * Nov 2008
+    * Data saving is NOT implemented yet +++
+    * Added button, spin, scriptonload, script, bibliography, license, authors
+    * Script extensions (cf doc)
+    * Multi-language ability for forms
+    * PDF print of forms
+    * Crash recovery of datas prepared (will be functionnal when data saving will be implemented)
+    * Rudimentary "About this form" dialog
+}
+
+version=0.0.3
+{
+    * Oct 2008
+    * Adding Date type to form's possibilities
+    * Some corrections (thanks to Guillaume Denry)
+    * Adding new script functions (sumOfChildren, sumOfCheckedLabels, sumOfInterpretValues, allChildInterpreted)
+    * Adding new script properties for the objects (interpreted, completed,
+    * Adding optional/required property for form's object (XML tag = <name completion="optional">...). Set by default to required.
+    * Adding dynamic adding of form into an opened form (popupmenu on treeview)
+    * Seg fault removed when clicking "New" action in file menu
+}
+version=0.0.2
+{
+    * Oct 2008
+    * First implementation of the script engine
+    * Adding understanded tags to XML forms
+}
+version=0.0.1
+{
+    * Oct 2008
+    * First release
+}

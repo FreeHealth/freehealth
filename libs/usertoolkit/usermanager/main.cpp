@@ -1,0 +1,64 @@
+/***************************************************************************
+ *   FreeMedForms Project                                                  *
+ *   Copyright (C) 2008-2009 by Eric MAEKER, MD                            *
+ *   eric.maeker@free.fr                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+#include <QApplication>
+
+#include <tkUserIdentifier.h>
+#include <tkUserManager.h>
+#include <tkUserGlobal.h>
+
+#include <tkGlobal.h>
+#include <tkSettings.h>
+#include <tkTranslators.h>
+
+#include <QDebug>
+
+/**
+  \brief This project is the FreeMedForms' usermanager application
+  \author Eric MAEKER, MD <eric.maeker@free.fr>
+*/
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    app.setApplicationName( QCoreApplication::translate("main", "FreeMedForms' Users Manager") );
+    app.setApplicationVersion( "0.0.1" );
+
+    // init settings
+    tkSettings settings;
+
+    // add translators (if not there will be a segfault)
+    tkTranslators *trans = tkTranslators::instance(qApp);
+    trans->setPathToTranslations( settings.path( tkSettings::TranslationsPath ) );
+    tkUserGlobal::initLib();
+    tkGlobal::initLib();
+    trans->addNewTranslator( "qt" );
+
+    // identification
+    tkUserIdentifier tki;//( QStringList() << QCoreApplication::translate( "main", "Nothing to tell" ) );
+    if ( tki.exec() == QDialog::Rejected )
+        return 123;
+
+    // user manager
+    tkUserManager *tkm = new tkUserManager();
+    tkm->show();
+
+    return app.exec();
+}

@@ -1,0 +1,500 @@
+/***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   eric.maeker@free.fr                                                   *
+ *   All rights reserved.                                                  *
+ *                                                                         *
+ *   This program is a free and open source software.                      *
+ *   It is released under the terms of the new BSD License.                *
+ *                                                                         *
+ *   Redistribution and use in source and binary forms, with or without    *
+ *   modification, are permitted provided that the following conditions    *
+ *   are met:                                                              *
+ *   - Redistributions of source code must retain the above copyright      *
+ *   notice, this list of conditions and the following disclaimer.         *
+ *   - Redistributions in binary form must reproduce the above copyright   *
+ *   notice, this list of conditions and the following disclaimer in the   *
+ *   documentation and/or other materials provided with the distribution.  *
+ *   - Neither the name of the FreeMedForms' organization nor the names of *
+ *   its contributors may be used to endorse or promote products derived   *
+ *   from this software without specific prior written permission.         *
+ *                                                                         *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+ *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+ *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+ *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+ *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+ *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+ *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+ *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+ *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+ *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ ***************************************************************************/
+#include "tkSettings.h"
+
+// include toolkit headers
+#include <tkLog.h>
+#include <tkGlobal.h>
+#include <tkTheme.h>
+
+// include Qt headers
+#include <QApplication>
+#include <QMainWindow>
+#include <QTreeWidget>
+#include <QFileInfo>
+#include <QDir>
+
+namespace tkSettingsPrivateConstants {
+
+    const char* const WEBSITE              = "http://www.ericmaeker.fr/FreeMedForms";
+
+    // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
+#ifdef DEBUG
+    const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
+#else
+    const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
+#endif
+    const char* const READONLYRESOURCES    = "";
+    const char* const READONLYDATABASE     = "/databases";
+    const char* const TRANSLATIONS_PATH    = "/translations";
+    const char* const DEFAULTFORMS         = "/forms";
+    const char* const DEFAULTTHEME_PATH    = "";
+    const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
+    const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
+
+    // APPLICATIONS RESOURCES --> located next to the application binary
+    const char* const MAC_PLUGINSPATH      = "/../plugins";
+    const char* const NONMAC_PLUGINSPATH   = "/plugins";
+    const char* const ALL_QTPLUGINSPATH    = "/qt";
+    const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
+    const char* const WIN_QTFRAMEWORKPATH  = "";
+    const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
+    
+    // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
+    const char* const WRITABLEDATABASE     = "/databases";
+
+}
+
+using namespace tkSettingsPrivateConstants;
+
+class tkSettingsPrivate
+{
+public:
+    QHash< int, QString >   m_Enum_Path;
+    bool                    m_FirstTime;
+};
+
+tkSettings* tkSettings::m_Instance = 0;
+
+tkSettings* tkSettings::instance()
+{
+    return m_Instance;
+}
+
+tkSettings::tkSettings( QObject * parent, const QString & appName, const QString & fileName )
+        : QSettings( getIniFile( appName, fileName ) , QSettings::IniFormat, parent ), d( new tkSettingsPrivate() )
+{
+    setObjectName( "tkSetting" );
+    QString resourcesPath;
+    QString databasePath;
+    setPath( ApplicationPath, qApp->applicationDirPath() );
+    setPath( ApplicationTempPath, QDir::tempPath() );
+    setPath( SystemTempPath, QDir::tempPath() );
+    setPath( WebSiteUrl, WEBSITE );
+
+    if (tkGlobal::isDebugCompilation()) {
+        // DEBUG BUILD
+        // transform defined path during compilation to relative path during execution...
+        QDir fmfBin( QDir::cleanPath( FMF_BIN_PATH ) );
+        QString res = fmfBin.relativeFilePath( QDir::cleanPath( FMF_GLOBAL_RESOURCES ) );
+        res = QDir::cleanPath( qApp->applicationDirPath() + QDir::separator() + res );
+        resourcesPath  = res + "/";
+        setPath( ResourcesPath, resourcesPath );
+
+        if (tkGlobal::isRunningOnMac()) {
+            setPath( BundleResourcesPath, resourcesPath );
+        } else {
+            setPath( BundleResourcesPath, resourcesPath );
+        }
+    } else {
+        // RELEASE BUILD
+        if (tkGlobal::isRunningOnMac()) {
+            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
+            setPath( BundleResourcesPath, qApp->applicationDirPath() + "/.." );
+        } else {
+            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath() + QDir::separator() + "Resources";
+            setPath( BundleResourcesPath, qApp->applicationDirPath() );
+        }
+        d->m_FirstTime = value( "FirstTimeRunning", true ).toBool();
+        setPath( ResourcesPath, resourcesPath );
+    }
+
+    if (parent)
+        setParent(parent);
+    else
+        setParent(qApp);
+
+    m_Instance = this;
+//    tkLog::instance()->addObjectWatcher(this);
+}
+
+tkSettings::~tkSettings()
+{
+    if (d) delete d;
+    d=0;
+}
+
+void tkSettings::setPath( const int type, const QString & absPath )
+{
+    switch (type)
+    {
+        case WebSiteUrl :
+        {
+            d->m_Enum_Path.insert( type, absPath );
+            break;
+        }
+        case ResourcesPath :
+        {
+            QString resourcesPath = QDir::cleanPath(absPath);
+            d->m_Enum_Path.insert( ReadWriteDatabasesPath, resourcesPath + "/databases" );
+            break;
+        }
+        case BundleResourcesPath :
+        {
+            QString bundlePath = QDir::cleanPath(absPath) + BUNDLERESOURCE_PATH;
+            d->m_Enum_Path.insert( BundleResourcesPath, bundlePath );
+            d->m_Enum_Path.insert( ReadOnlyDatabasesPath, bundlePath + READONLYDATABASE );
+            d->m_Enum_Path.insert( TranslationsPath, bundlePath + TRANSLATIONS_PATH );
+            d->m_Enum_Path.insert( SmallPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/16x16/" );
+            d->m_Enum_Path.insert( MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/" );
+            d->m_Enum_Path.insert( BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/" );
+            d->m_Enum_Path.insert( SampleFormsPath, bundlePath + DEFAULTFORMS );
+            tkTheme::instance()->setThemeRootPath( bundlePath + DEFAULTTHEME_PATH );
+            break;
+        }
+        case ApplicationPath :
+        {
+            d->m_Enum_Path.insert( ApplicationPath, absPath );
+            if (tkGlobal::isRunningOnMac()) {
+                d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH) );
+                d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH) );
+                d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+            } else if (tkGlobal::isRunningOnLinux()) {
+                d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
+                d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
+                d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+            } else if (tkGlobal::isRunningOnWin()) {
+                d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH) );
+                d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
+                d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+            } else if (tkGlobal::isRunningOnFreebsd()) {
+                d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
+                d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
+                d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+            }
+            break;
+        }
+        default: d->m_Enum_Path.insert( type, QDir::cleanPath( absPath ) ); break;
+    }
+}
+
+QString tkSettings::path( const int type ) const
+{
+    return d->m_Enum_Path.value( type );
+}
+
+bool tkSettings::firstTimeRunning()
+{
+    return value( "FirstTimeRunning", true ).toBool();
+}
+void tkSettings::noMoreFirstTimeRunning()
+{
+    setValue( "FirstTimeRunning", false );
+    d->m_FirstTime = false;
+}
+
+QString tkSettings::getIniFile( const QString & appName, const QString & fileName )
+{
+    // manage defaults --> ".AppName/config.ini"
+    QString tmpAppName = appName;
+    QString tmpFileName = fileName;
+    if ( appName.isEmpty() )
+        tmpAppName = qApp->applicationName();
+    tmpAppName.prepend( "." );
+
+    if ( fileName.isEmpty() )
+        tmpFileName = "config.ini";
+
+    // if QApplication args contains "--config=iniFileName.ini" use it if possible
+    // retreive command line arguments
+    QStringList list = QCoreApplication::arguments();
+    int index = list.indexOf( QRegExp( "--config=*", Qt::CaseSensitive, QRegExp::Wildcard ) );
+
+    if ( index != -1 ) {
+        QString iniFileName = list[ index ];
+        iniFileName = iniFileName.mid( iniFileName.indexOf( "=" ) + 1 );
+        tkLog::addMessage( "tkSetting", tr( "Passing command line ini file : %1" ).arg( iniFileName ) );
+
+        if ( QDir::isRelativePath( iniFileName ) )
+            iniFileName.prepend( qApp->applicationDirPath() + QDir::separator() );
+        iniFileName = QDir::cleanPath( iniFileName );
+
+        QFileInfo info( iniFileName );
+        if ( info.exists() && info.isReadable() ) {
+            if ( info.isWritable() ) {
+                tkLog::addMessage( "tkSetting", tr( "Using ini file %1." ).arg( iniFileName) );
+                return iniFileName;
+            }
+            else
+                tkLog::addError( "tkSetting", tr( "Ini file %1 is not writable. Can not use it." ).arg( iniFileName ) ) ;
+        } else {
+            // can we create and access to ini file ?
+            QFile file( iniFileName );
+            if ( file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
+                tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFileName ) );
+                return iniFileName;
+            }
+            else
+                tkLog::addMessage( "tkSetting", tr( "WARNING : Ini file %1 can not be used." ).arg( iniFileName) );
+        }
+    }
+
+    // try to use 'config.ini' inside the bundle (ex : /usr/share/application/config.ini , appli.app/Resources/config.ini)
+    QString iniFile;
+    if (tkGlobal::isRunningOnMac())
+        iniFile = QDir::cleanPath( qApp->applicationDirPath() + "/../Resources" ) + QDir::separator() + tmpFileName;
+    else
+        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
+
+    // test iniFile
+    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
+    QFile file( iniFile );
+    QFileInfo info( iniFile );
+    if ( info.exists() && info.isReadable() && info.isWritable() ) {
+        tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+        return iniFile;
+    } else {
+        if ( ( ! info.exists() ) &&  file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
+            tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+            return iniFile;
+        }
+        else tkLog::addError( "tkSetting", tr( "Ini file %1 can not be used." ).arg( iniFile) );
+    }
+
+    // Now use the $HOME path
+    iniFile = QString( "%1/%2/%3" ).arg( QDir::homePath(), tmpAppName, tmpFileName);
+    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
+    QDir dir( QFileInfo( iniFile ).absolutePath() );
+
+    if ( ! dir.exists() ) {
+        dir.cdUp();
+        if ( ! dir.mkdir( tmpAppName ) ) {
+            tkLog::addError( "tkSettings" , tr( "Unable to create dir : %1, no Ini File can be used.").arg( dir.absolutePath() + QDir::separator() + tmpAppName ) );
+            return QString::null;
+        }
+    }
+
+    tkLog::addMessage( "tkSettings", tr( "Using ini file %1" ).arg( iniFile ) );
+    return iniFile;
+}
+
+void tkSettings::restoreState( QMainWindow * window, const QString & prefix )
+{
+    if ( !window )
+        return;
+    QString keyGeo = prefix + "MainWindow/Geometry";
+    QString keyState = prefix + "MainWindow/State";
+    if ( value( keyGeo ).toByteArray().isEmpty() ) {
+        window->setGeometry( 100, 100, 600, 400 );
+        tkGlobal::centerWidget( window );
+    } else {
+        window->restoreGeometry( value( keyGeo ).toByteArray() );
+        window->restoreState( value( keyState ).toByteArray() );
+    }
+}
+
+void tkSettings::saveState( QMainWindow * window, const QString & prefix )
+{
+    if ( !window )
+        return;
+    setValue( prefix + "MainWindow/Geometry", window->saveGeometry() );
+    setValue( prefix + "MainWindow/State", window->saveState() );
+}
+
+/**
+  \brief Append a string \e value to the stringlist represented by the \e key in settings assuming no doublon.
+*/
+void tkSettings::appendToValue( const QString &key, const QString &value )
+{
+    QVariant q = this->value(key);
+    if (q.isNull() || q.toString().isEmpty()) {
+        this->setValue( key, value );
+        return;
+    }
+    if (q.toStringList().indexOf(value) != -1) {
+        return;
+    }
+    this->setValue( key, QStringList() << this->value(key).toStringList() << value );
+}
+
+QTreeWidget* tkSettings::getTreeWidget( QWidget * parent ) const
+{
+    // manage parent as tree widget
+    QTreeWidget * tree = qobject_cast<QTreeWidget*>(parent);
+    if ( !tree )
+        tree = new QTreeWidget( parent );
+
+    // add columns
+    tree->setColumnCount( 2 );
+
+    // add system informations
+    QTreeWidgetItem * sysItem = new QTreeWidgetItem( tree, QStringList() << tr( "System informations" ) );
+    new QTreeWidgetItem( sysItem, QStringList() << tr("Operating System") << tkGlobal::osName() );
+    new QTreeWidgetItem( sysItem, QStringList() << tr("uname output") << tkGlobal::uname() );
+
+    // add compilation informations
+    QTreeWidgetItem * compilItem = new QTreeWidgetItem( tree, QStringList() << tr( "Compilation informations" ) );
+    new QTreeWidgetItem( compilItem, QStringList() << tr("Compilation Date") << QString("%1 - %2").arg( __DATE__, __TIME__));
+    new QTreeWidgetItem( compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg( QT_VERSION_STR ));
+    new QTreeWidgetItem( compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg( qVersion() ));
+    new QTreeWidgetItem( compilItem, QStringList() << tr("Actual Application Version") << QString("%1").arg( qApp->applicationVersion() ));
+    if (tkGlobal::isDebugCompilation())
+        new QTreeWidgetItem( compilItem, QStringList() << tr("Actual build") << tr("Debug") );
+    else
+        new QTreeWidgetItem( compilItem, QStringList() << tr("Actual build") << tr("Release") );
+    if (tkGlobal::isFullApplication())
+        new QTreeWidgetItem( compilItem, QStringList() << tr("Actual build") << tr("Full Application Build") );
+    else
+        new QTreeWidgetItem( compilItem, QStringList() << tr("Actual build") << tr("Svn Build") );
+
+
+    // add paths
+    QDir appDir( qApp->applicationDirPath() );
+    QMap<QString, QString> paths;
+    paths.insert( tr("Binary"), path( ApplicationPath ) );
+    paths.insert( tr("Resources"), path( ResourcesPath ) );
+    paths.insert( tr("Read only Databases"), path( ReadOnlyDatabasesPath ) );
+    paths.insert( tr("Writable databases"), path( ReadWriteDatabasesPath ) );
+    paths.insert( tr("Bundle root path"), path( BundleResourcesPath ) );
+    paths.insert( tr("Translations path"), path( TranslationsPath ) );
+    paths.insert( tr("Qt Plugins path"), path( QtPlugInsPath ) );
+    paths.insert( tr("Qt FrameWorks path"), path( QtFrameWorksPath ) );
+    paths.insert( tr("FreeMedForms PlugIns path"), path( FMFPlugInsPath ) );
+    paths.insert( tr("SmallPixmapPath"), path( SmallPixmapPath ) );
+    paths.insert( tr("MediumPixmapPath"), path( MediumPixmapPath ) );
+    paths.insert( tr("BigPixmapPath"), path( BigPixmapPath ) );
+    paths.insert( tr("SystemTempPath"), path( SystemTempPath ) );
+    paths.insert( tr("ApplicationTempPath"), path( ApplicationTempPath ) );
+    paths.insert( tr("FormsPath"), path( FormsPath ) );
+    paths.insert( tr("SampleFormsPath"), path( SampleFormsPath ) );
+
+    QTreeWidgetItem * absPathsItem = new QTreeWidgetItem( tree, QStringList() << tr( "Absolute Paths" ) );
+    new QTreeWidgetItem( absPathsItem, QStringList() << tr( "Using Ini File" ) << fileName() );
+
+    QTreeWidgetItem * relPathsItem = new QTreeWidgetItem( tree, QStringList() << tr( "Relative Paths" ) );
+    new QTreeWidgetItem( relPathsItem, QStringList() << tr( "Using Ini File" ) << appDir.relativeFilePath( QFileInfo( fileName() ).absoluteFilePath() ) );
+
+    foreach( const QString & p, paths.keys() )
+    {
+        new QTreeWidgetItem( relPathsItem, QStringList() << p << appDir.relativeFilePath( QFileInfo( paths[p] ).absoluteFilePath() ) );
+        new QTreeWidgetItem( absPathsItem, QStringList() << p << paths[p] );
+    }
+    new QTreeWidgetItem( relPathsItem, QStringList() << tr("WebSiteUrl") << path( WebSiteUrl ) );
+    new QTreeWidgetItem( absPathsItem, QStringList() << tr("WebSiteUrl") << path( WebSiteUrl ) );
+
+    //add library informations
+    new QTreeWidgetItem( tree, QStringList() << tr( "Libs" ) << tkGlobal::getLibraryInformations() );
+
+    // add settings
+    QTreeWidgetItem * orphan = new QTreeWidgetItem( tree, QStringList() << tr( "Orphan settings" ) );
+    QTreeWidgetItem * group = 0;
+    QStringList list = allKeys();
+    qSort( list );
+    foreach( const QString & k, list ) {
+        if ( k.contains( "/" ) ) {
+            QString tmp = k.left( k.indexOf( "/" ) );
+            if ( ! group )
+                group = new QTreeWidgetItem( tree, QStringList() << tmp );
+            if ( ! k.startsWith( group->text( 0 ) ) )
+                group = new QTreeWidgetItem( tree, QStringList() << tmp );
+            new QTreeWidgetItem( group, QStringList() << k.mid( k.indexOf( "/" ) + 1 )  << value( k ).toString() );
+        }
+        else
+            new QTreeWidgetItem( orphan, QStringList() << k << value( k ).toString() );
+    }
+
+    // resize columns
+    tree->resizeColumnToContents( 0 );
+    tree->resizeColumnToContents( 1 );
+
+    return tree;
+}
+
+QString tkSettings::toString() const
+{
+    /** \todo add uname output if running on linux */
+    QString tmp = "\n\n";
+    tmp += "********************\n";
+    tmp += "**    SETTINGS    **\n";
+    tmp += "********************\n\n";
+
+    // add building informations
+    tmp += tr( "Running version : %1\n" ).arg( qApp->applicationName() );
+    tmp += tr( "Build date : %1 %2\n").arg( __DATE__, __TIME__);
+    tmp += tr( "Qt Build version : %1\n").arg( QT_VERSION_STR );
+    tmp += tr( "Qt running version : %1\n").arg( qVersion() );
+    tmp += tr( "Application Version : %1\n").arg( qApp->applicationVersion() );
+    if (tkGlobal::isDebugCompilation())
+        tmp += tr("Actual build : Debug\n" );
+    else
+        tmp += tr("Actual build : Release\n" );
+    if (tkGlobal::isFullApplication())
+        tmp += tr("Actual build") + " : " + tr("Full Application Build\n");
+    else
+        tmp += tr("Actual build") + " : " + tr("Svn Build\n");
+    tmp += tr( "Application path : %1\n").arg( qApp->applicationDirPath() );
+    tmp += QString( "Ini File Name\t%2" ).arg( fileName() ) + "\n";
+    tmp += tr( "Using Ini File" ) + "\t" + fileName() + "\n";
+    if (tkGlobal::isRunningOnLinux()) {
+        tmp.append( tr("Running on Linux" ) );
+        tmp += tr("   uname returns : %1").arg(tkGlobal::uname());
+    }
+    else if (tkGlobal::isRunningOnMac())
+        tmp.append( tr("Running on MacOs" ) );
+    else if (tkGlobal::isRunningOnWin())
+        tmp.append( tr("Running on Windows" ) );
+
+    tmp += "\n\n";
+
+    // add paths
+    QMap<QString, QString> paths;
+    paths.insert( tr("Binary"), path( ApplicationPath ) );
+    paths.insert( tr("Resources"), path( ResourcesPath ) );
+    paths.insert( tr("Read only Databases"), path( ReadOnlyDatabasesPath ) );
+    paths.insert( tr("Writable databases"), path( ReadWriteDatabasesPath ) );
+    paths.insert( tr("Bundle root path"), path( BundleResourcesPath ) );
+    paths.insert( tr("Translations path"), path( TranslationsPath ) );
+    paths.insert( tr("Qt Plugins path"), path( QtPlugInsPath ) );
+    paths.insert( tr("Qt FrameWorks path"), path( QtFrameWorksPath ) );
+    paths.insert( tr("FreeMedForms PlugIns path"), path( FMFPlugInsPath ) );
+    paths.insert( tr("SmallPixmapPath"), path( SmallPixmapPath ) );
+    paths.insert( tr("MediumPixmapPath"), path( MediumPixmapPath ) );
+    paths.insert( tr("BigPixmapPath"), path( BigPixmapPath ) );
+    paths.insert( tr("SystemTempPath"), path( SystemTempPath ) );
+    paths.insert( tr("ApplicationTempPath"), path( ApplicationTempPath ) );
+    paths.insert( tr("FormsPath"), path( FormsPath ) );
+    paths.insert( tr("SampleFormsPath"), path( SampleFormsPath ) );
+    paths.insert( tr("WebSiteUrl"), path( WebSiteUrl ) );
+    foreach( const QString & p, paths.keys() )
+        tmp += p + "\t" + paths[p] + "\n";
+
+    // add all values of the inifile
+    foreach( QString k, allKeys() )
+        tmp += QString( "%1\t%2\n" ).arg( k, value( k ).toString() );
+    tmp += "\n\n";
+
+    return tmp;
+}
+

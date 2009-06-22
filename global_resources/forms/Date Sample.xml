@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+   <name>formsample</name>
+   <label>Working with dates</label>
+   <type>form</type>
+   <version>0.04</version>
+   <cdate>2008-10-19</cdate>
+   <categorie>examples</categorie>
+   <script>
+	{   
+	    var object = _formsample.date;
+	    
+	    /* new Date(année, mois, jour, heures, minutes, secondes[, millisecondes]) */
+	    
+	    var oneDate = new Date(2007,2,1,12,00,01);
+	    object.value = oneDate;
+	    return object.value;
+	}
+   </script>
+   <MedForm>
+      <name>date</name>
+      <type>date</type>
+      <label>Sélectionnez une date</label>
+      <option>now</option>
+      <option>format=dd MMMM yyyy</option>
+   </MedForm>
+ </MedForm>

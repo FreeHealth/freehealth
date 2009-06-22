@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>iadl</name>
+	<label>IADL</label>
+	<type>form</type>
+	<categorie>geriatrie</categorie>
+	<version>0.03</version>
+	<cdate>2008-10-17</cdate>
+	<categorie>samples</categorie>
+	<option>col=2</option>
+	<script>
+		{
+		var str = "";
+		var object = thisObject;
+		if (!object.completed) return "";
+		
+		/* Get sum of IADL by adding all iadl childs */
+		var sum = object.sumOfChildren;
+		str += "L'IADL est à " + sum + " sur 4.";
+		
+		/* Construct dependencies sentence */
+		var dependances = object.sumOfInterpretValues( ", " );
+		
+		if (dependances)
+		{  str += " Des dépendances sont repérées pour : " + dependances + ".\n";
+		}
+		
+		/* Set thisObject to interperted */
+		/* This must be done 'cause we done want to get de selected values of the IADL */
+		object.interpreted = true;
+		object.allChildInterpreted();
+		
+		return str;
+		}
+	</script>
+	
+	<MedForm>
+		<name>budget</name>
+		<label>&lt;b&gt;Budget&lt;/b&gt;</label>
+		<type>radio</type>
+		<possiblevalues id="0">autonome</possiblevalues>
+		<possiblevalues id="1">dépendant</possiblevalues>
+		<interpretvalues id="0"></interpretvalues>
+		<interpretvalues id="1">la gestion du budget</interpretvalues>
+		<numericalvalues id="0">0</numericalvalues>
+		<numericalvalues id="1">1</numericalvalues>
+	</MedForm>
+	<MedForm>
+		<name>telephone</name>
+		<label>&lt;b&gt;Téléphone&lt;/b&gt;</label>
+		<type>radio</type>
+		<possiblevalues id="1">autonome</possiblevalues>
+		<possiblevalues id="2">dépendant</possiblevalues>
+		<interpretvalues id="0"></interpretvalues>
+		<interpretvalues id="1">l'utilisation du téléphone</interpretvalues>
+		<interpretvalues id="2">1</interpretvalues>
+		<numericalvalues id="0">0</numericalvalues>
+		<numericalvalues id="1">1</numericalvalues>
+	</MedForm>
+	<MedForm>
+		<name>medicament</name>
+		<label>&lt;b&gt;Médicaments&lt;/b&gt;</label>
+		<type>radio</type>
+		<possiblevalues id="1">autonome</possiblevalues>
+		<possiblevalues id="2">dépendant</possiblevalues>
+		<interpretvalues id="0"></interpretvalues>
+		<interpretvalues id="1">la gestion des médicaments</interpretvalues>
+		<numericalvalues id="0">0</numericalvalues>
+		<numericalvalues id="1">1</numericalvalues>
+	</MedForm>
+	<MedForm>
+		<name>transport</name>
+		<label>&lt;b&gt;Transports&lt;/b&gt;</label>
+		<type>radio</type>
+		<possiblevalues id="1">autonome</possiblevalues>
+		<possiblevalues id="2">dépendant</possiblevalues>
+		<interpretvalues id="0"></interpretvalues>
+		<interpretvalues id="1">l'utilisation des transports en commun</interpretvalues>
+		<numericalvalues id="0">0</numericalvalues>
+		<numericalvalues id="1">1</numericalvalues>
+	</MedForm>
+</MedForm>

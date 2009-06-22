@@ -1,0 +1,125 @@
+// all groups are :
+
+// For toolkits
+// toolkit widget_toolkit object_toolkit database_toolkit
+// usertoolkit widget_usertoolkit  object_usertoolkit database_usertoolkit
+// medintuxtoolkit
+
+// For FreeMedForms
+// freemedforms fmf_plugins fmf_plugins_formswidget fmf_plugins_interfaces
+
+// For DrugsInteractions
+// drugsinteractions
+
+
+// FREMEDFORMS GROUPS
+/**
+ \defgroup freemedforms FreeMedForms
+ */
+
+/**
+ \defgroup fmf_plugins FreeMedForms Plugins
+ \ingroup freemedforms
+ */
+
+/**
+ \defgroup fmf_plugins_formswidget FreeMedForms Plugins : Forms Widgets
+ \ingroup fmf_plugins
+*/
+
+/**
+ \defgroup fmf_plugins_interfaces FreeMedForms Plugins' Interfaces
+ \ingroup freemedforms fm_plugins
+*/
+
+/**
+  \defgroup derivatives FreeMedForms Derivative and Standalone applications
+  \ingroup freemedforms
+ */
+
+
+
+// DRUGSINTERACTIONS GROUPS
+/**
+   \defgroup drugsinteractions DrugsInteractions
+   \ingroup derivatives
+*/
+
+
+  // TOOLKITS GROUPS
+/**
+ \defgroup toolkit ToolKit
+ */
+
+/**
+   \defgroup widget_toolkit ToolKit : Widgets
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup object_toolkit ToolKit : Objects
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup database_toolkit ToolKit : Database Management
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup constants_toolkit ToolKit : Constants
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup constants_serializer ToolKit : Constants For the Serializer
+   \ingroup constants_toolkit
+*/
+/**
+   \defgroup constants_actionmanager ToolKit : Constants For the Action Manager
+   \ingroup constants_toolkit
+*/
+/**
+   \defgroup constants_theme ToolKit : Constants For Theme Engine
+   \ingroup constants_toolkit
+*/
+
+
+// USER TOOLKIT GROUPS
+
+/**
+   \defgroup usertoolkit User ToolKit
+*/
+
+/**
+   \defgroup widget_usertoolkit User ToolKit : Widgets
+   \ingroup usertoolkit
+*/
+
+/**
+   \defgroup object_usertoolkit User ToolKit : Objects
+   \ingroup usertoolkit
+*/
+
+/**
+   \defgroup database_usertoolkit User ToolKit : Database Management
+   \ingroup usertoolkit
+*/
+
+/**
+  \defgroup usermanager Unser Manager Standalone
+  \ingroup derivatives
+ */
+
+// MEDINTUX TOOLKIT
+
+/**
+   \defgroup medintuxtoolkit MedinTux ToolKit
+*/
+
+
+// FMF PLUGINS SPECIFIC
+/**
+   \defgroup drugswidget Drug Widget Plugins - see also DrugsInteractions
+   \ingroup fmf_plugins_formswidget fmf_plugins
+*/

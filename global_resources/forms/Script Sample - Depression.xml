@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Les 9 critères diagnostiques de la dépression sont :  -->
+<!--  Pour affirmer le diagnostic de dépression, la présence d'au moins 5 critères est nécessaire dont au moins 2 dans les critères spécifiques  -->
+<MedForm>
+   <name>depressionForm</name>
+   <label>Diagnostic de la dépression</label>
+   <type>form</type>
+   <version>0.04</version>
+   <cdate>26/10/2008</cdate>
+   <categorie>français</categorie>
+   <categorie>psychiatrie</categorie>
+   <categorie>dépression</categorie>
+   <authors>Laurent Masson, MD ; Eric Maeker, MD</authors>
+   <script>
+	   function constructSentence( )
+	   {
+	      var obj = _depressionForm.crit_spe;
+	      var separator = ", ";
+	      
+	      var str = "La dépression est confirmée avec comme ";
+	      
+	      if (str) str += "critères spécifiques retrouvés : " + 
+	                       obj.sumOfCheckedLabels( separator ).toLowerCase() + " ; ";
+              else return "";
+	      
+	      obj = _depressionForm.crit_non_spe;
+	      str += "et comme critères non spécifiques : " + obj.sumOfInterpretValues( separator ) + ".\n";
+	      
+	      return str;
+	   }
+	   
+	   var object = _depressionForm;
+	   
+	   var sumSpecific = object.crit_spe.sumOfChildren();
+	   var sum = object.crit_non_spe.sumOfChildren() + sumSpecific;
+	   var str ="";
+	   
+	   if (sumSpecific >= 2)
+	   {  if (sum >= 5)
+	          str += constructSentence( );
+	      else str += "Le diagnostic de dépression est peu probable.\n";
+	   }
+	   else str += "Le diagnostic de dépression est peu probable.\n";
+	   
+	   /* Set _depression to interperted */
+	   /* This must be done 'cause we done want to get de selected values of the form */
+	   object.interpreted = true;
+	   object.allChildInterpreted();
+	   return str;
+	  
+   </script>
+	<MedForm>
+      		<name>crit_spe</name>
+      		<label>Critères spécifiques :</label>
+      		<type>group</type>
+      		<option>col=1</option>
+			<MedForm>
+         			<name>hum_dep</name>
+         			<label>Humeur dépressive</label>
+         			<type>check</type>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>dim_int</name>
+         			<label>Diminution ou perte d'intérêt et/ou de plaisir pour les activités</label>
+         			<type>check</type>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>sent_dev</name>
+         			<label>Sentiment de dévalorisation ou de culpabilité excessive ou inappropriée</label>
+         			<type>check</type>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>suicide</name>
+         			<label>Pensée de mort et de suicide</label>
+         			<type>check</type>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+	</MedForm>
+	<MedForm>
+      		<name>crit_non_spe</name>
+      		<label>Critères non spécifiques :</label>
+      		<type>group</type>
+      		<option>col=1</option>
+			<MedForm>
+         			<name>tbl_som</name>
+         			<label>Troubles du sommeil (insomnie ou hypersomnie)</label>
+         			<type>check</type>
+				<interpretvalues id="0"></interpretvalues>
+				<interpretvalues id="1">troubles du sommeil</interpretvalues>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>agitation</name>
+         			<label>Agitation ou ralentissement psychomoteur</label>
+         			<type>check</type>
+				<interpretvalues id="0"></interpretvalues>
+				<interpretvalues id="1">agitation ou ralentissement psychomoteur</interpretvalues>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>			
+			<MedForm>
+         			<name>appetit</name>
+         			<label>Troubles de l'appétit (augmenté ou diminué avec perte ou gain de poids)</label>
+         			<type>check</type>
+				<interpretvalues id="0"></interpretvalues>
+				<interpretvalues id="1">troubles de l'appétit</interpretvalues>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>concent</name>
+         			<label>Difficulté de concentration</label>
+         			<type>check</type>
+				<interpretvalues id="0"></interpretvalues>
+				<interpretvalues id="1">difficulté de concentration</interpretvalues>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>
+			<MedForm>
+         			<name>fatigue</name>
+         			<label>Fatigue et/ou perte d'énergie</label>
+         			<type>check</type>
+				<interpretvalues id="0"></interpretvalues>
+				<interpretvalues id="1">fatigue et/ou perte d'énergie</interpretvalues>
+				<numericalvalues id="0">0</numericalvalues>
+				<numericalvalues id="1">1</numericalvalues>
+      			</MedForm>	
+	</MedForm>
+</MedForm>

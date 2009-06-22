@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>simple_identity</name>
+	<label lang="fr">Identité simplifiée</label>
+	<label lang="en">Simplified Identity</label>
+	<label lang="de">Vereinfachte Identity</label>
+	<type>form</type>
+	<version>0.06</version>
+	<cdate>2008-11-04</cdate>
+	<categorie>examples</categorie>
+	
+	<MedForm>
+		<name>groupIdentity</name>
+		<type>group</type>
+		<option>col=3</option>
+		<option>boldlabel</option>
+		<label lang="fr">Identité</label>
+		<label lang="en">Identity</label>
+		<label lang="de">Identität</label>
+		<MedForm>
+			<name>patient_name</name>
+			<type>shorttext</type>
+			<option>labelontop</option>
+			<label lang="en">Name</label>
+			<label lang="fr">Nom</label>
+			<label lang="de">Name</label>
+		</MedForm>
+		<MedForm>
+			<name>maidenname</name>
+			<type>shorttext</type>
+			<option>labelontop</option>
+			<label lang="en">Married Name</label>
+			<label lang="fr">Nom marital</label>
+			<label lang="de">Name Familienstand</label>
+		</MedForm>
+		<MedForm>
+			<name>surname</name>
+			<type>shorttext</type>
+			<option>labelontop</option>
+			<label lang="en">Surname</label>
+			<label lang="fr">Prénom</label>
+			<label lang="de">Nachname</label>
+		</MedForm>
+		<MedForm>
+			<name>title</name>
+			<type>combo</type>
+			<option>labelontop</option>
+			<option>SizePreferred</option>
+			<label lang="en">Title</label>
+			<label lang="fr">Titre</label>
+			<label lang="de">Titel</label>
+			<possiblevalues id="0" lang="en">Select a title</possiblevalues>
+			<possiblevalues id="1" lang="en">Mister</possiblevalues>
+			<possiblevalues id="2" lang="en">Miss</possiblevalues>
+			
+			<possiblevalues id="0" lang="fr">Sélectionnez un titre</possiblevalues>
+			<possiblevalues id="1" lang="fr">Monsieur</possiblevalues>
+			<possiblevalues id="2" lang="fr">Madame</possiblevalues>
+			
+			<possiblevalues id="0" lang="de">Wählen Sie einen Titel</possiblevalues>
+			<possiblevalues id="1" lang="de">Herr</possiblevalues>
+			<possiblevalues id="2" lang="de">Frau</possiblevalues>
+		</MedForm>
+		
+		<MedForm>
+			<name>sex</name>
+			<type>radio</type>
+			<option>labelontop</option>
+			<option>horizontal</option>
+			<label lang="en">Sex</label>
+			<label lang="fr">Sexe</label>
+			<label lang="de">Geschlecht</label>
+			<possiblevalues id="0">M</possiblevalues>
+			<possiblevalues id="1">F</possiblevalues>
+		</MedForm>
+		<MedForm>
+			<name>birthday</name>
+			<type>date</type>
+			<option>labelontop</option>
+			<label lang="en">Date of birth</label>
+			<label lang="fr">Date de naissance</label>
+			<label lang="de">Geburtsdatum</label>
+			<option>now</option>
+			<option>format=dd MM yyyy</option>
+		</MedForm>
+	</MedForm>
+	
+	<MedForm>
+		<name>groupAdress</name>
+		<type>group</type>
+		<option>col=1</option>
+		<label lang="fr">Adresse</label>
+		<label lang="en">Adress</label>
+		<label lang="de">Adresse</label>
+		<MedForm>
+			<name>adress</name>
+			<type>longtext</type>
+			<option>labelontop</option>
+			<label lang="en">Adress</label>
+			<label lang="fr">Adresse</label>
+			<label lang="de">Adresse</label>
+		</MedForm>
+		<MedForm>
+			<name>city</name>
+			<type>shorttext</type>
+			<option>labelontop</option>
+			<label lang="en">City</label>
+			<label lang="fr">Ville</label>
+			<label lang="de">Stadt</label>
+		</MedForm>
+		<MedForm>
+			<name>zipcode</name>
+			<type>shorttext</type>
+			<option>labelontop</option>
+			<label lang="en">Zip Code</label>
+			<label lang="fr">Code postal</label>
+			<label lang="de">Postleitzahl</label>
+		</MedForm>
+	</MedForm>
+<MedForm>
+	<name>contact</name>
+	<type>group</type>
+	<label>Contact</label>
+	<MedForm>
+		<name>tel1</name>
+		<type>shorttext</type>
+		<option>labelontop</option>
+		<label lang="en">Telephon</label>
+		<label lang="fr">Téléphone</label>
+		<label lang="de">Telefon</label>
+		<option>mask=99 99 99 99 99</option>
+	</MedForm>   
+	<MedForm>
+		<name>tel2</name>
+		<type>shorttext</type>
+		<option>labelontop</option>
+		<label lang="en">Second Telephon</label>
+		<label lang="fr">Deuxième Téléphone</label>
+		<label lang="de">Zweiter Telefon</label>
+		<option>mask=99 99 99 99 99</option>
+	</MedForm>
+	<MedForm>
+		<name>fax</name>
+		<type>shorttext</type>
+		<option>labelontop</option>
+		<label lang="en">Fax</label>
+		<label lang="fr">Fax</label>
+		<label lang="de">Fax</label>
+		<option>mask=99 99 99 99 99</option>
+	</MedForm>
+	<MedForm>
+		<name>mail</name>
+		<type>shorttext</type>
+		<option>labelontop</option>
+		<label lang="en">EMail adress</label>
+		<label lang="fr">Courriel</label>
+		<label lang="de">E-Mail</label>
+	</MedForm>
+	<MedForm>
+		<name>profession</name>
+		<type>shorttext</type>
+		<option>labelontop</option>
+		<label lang="en">Actual work</label>
+		<label lang="fr">Profession actuelle</label>
+		<label lang="de">Eigentliche Arbeit</label>
+	</MedForm>
+</MedForm>
+	
+	
+</MedForm>

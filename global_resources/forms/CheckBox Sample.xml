@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>formSample</name>
+	<label>CheckBox' example</label>
+	<type>form</type>
+	<version>0.1</version>
+	<cdate>2008-10-16</cdate>
+	<categorie>samples</categorie>
+	<script>
+		{
+		var object = thisForm.sampleCheck;
+		var str = "";
+		str =  object.name + " has value " + object.value + "\n";
+		str += "Setting value to \"checked\" \n";
+		
+		object.value = "checked";
+		
+		if ( object.value == "checked" )
+		str += "All is good !!! See the form now !";
+		else str += "Something is wrong " + object.value;
+		
+		str += "\nActual Id is " + object.id + " giving value " + object.value;
+		
+		object.id = false;
+		str += "\nThis time value is : " + object.value;
+		
+		object.id = true;
+		str += "\nThis time value is : " + object.value;
+		
+		return str;
+		}
+	</script>
+	
+	<MedForm>
+		<name>sampleCheck</name>
+		<label>This is a simple scripted checkbox sample</label>
+		<type>check</type>
+		<interpretvalues id="0">The box is NOT checked</interpretvalues>
+		<interpretvalues id="1">The box is checked</interpretvalues>
+		<numericalvalues id="0">1</numericalvalues>
+		<numericalvalues id="1">2</numericalvalues>
+	</MedForm>
+</MedForm>

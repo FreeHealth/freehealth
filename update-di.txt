@@ -1,0 +1,70 @@
+version=0.0.7
+{
+    * Juin 2009
+    * Amélioration du moteur de recherche d'interactions médicamenteuses (~deux fois plus rapide)
+    * Possibilité d'ajouter une prescription à une prescription en cours d'édition
+    * Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)
+    * Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine)
+    * Nouveaux repères pour les informations patients (WEIGHT, SIZE, DATEOFBIRTH)
+    * Amélioration des remplacements des repères : [texte à mettre avant si repere existe [REPERE] texte après]
+    * Amélioration de la sauvegarde des fichiers HTML (meilleure gestion de l'encodage)
+    * Possibilité de sauvegarder son entête et pied de page dans des fichiers HTML séparés
+    * Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
+    * Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
+    * Possibilité d'ajouter sans effort ses propres formes
+    * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
+    * Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
+    * Transformation des librairies 'toolkit' en librairies dynamiques
+    * correction de bogues
+}
+
+version=0.0.6
+{
+    * Juin 2009
+    * Mise à jour de la base de données thérapeutique à celle du mois de Mars 2009 (site AFSSAPS)
+    * Mise à jour des interactions connues AFSSAPS Décembre 2008
+    * Sauvegarde des prescriptions avec les posologies
+    * Recherche automatique des mises à jour pour les ordinateurs connectés à internet
+    * Interfaçage avec MedinTux en un clique (cf menus)
+    * Possibilité de réaliser des prescriptions intégrales
+    * Impression des prescriptions sans limitation, avec duplicatas et sans effort
+    * Menu Préférences --> beaucoup de fonctionnalités nouvelles
+    * Information sur la license de diffusion du logiciel
+    * Amélioration des traductions françaises
+    * Correction des interactions au sein de la même classe. Valable pour les classes : "anti-inflammatoires non stéroïdiens" ; "sympathomimétiques indirects" ; "aminosides" ; "analgésiques morphiniques agonistes" ; "diurétiques épargneurs de potassium (seuls ou associés)" ; "antiarythmiques" ; "bradycardisants" ; "hyperkaliémiants" ; "hypnotiques" ; "hypokaliémiants" ; "médicaments hyponatrémiants" ; "médicaments abaissant le seuil épileptogène" ; "médicaments atropiniques" ; "médicaments néphrotoxiques" ; "médicaments sédatifs". Ces interactions sont identifiées dans le thésaurus de l'AFSSAPS par "autres xxxx".
+    * Limitation du nombre d'IAM retrouvées ( 1<>2 et 2<>1 --> garde seulement 1<>2 )
+    * Amélioration du moteur de recherche d'interactions
+    * Dialogue d'aide au déboggage de l'application avec envoie simplifié des erreurs aux développeurs de la suite.
+    * Meilleure gestion des paramètres utilisateurs
+    * Correction de bogues
+    * Distribution pour MacOsX 'Universal'
+}
+
+version=0.0.5
+{
+    * Mai 2009
+    * Version de test avant la sortie de la version 0.0.6
+}
+
+version=0.0.4
+{
+    * 13 Janvier 2009
+    * Recherche des médicaments par nom commercial, nom de molécules ou par DCI
+    * Plus d'icônes pour mieux comprendre les interactions et non interactions
+    * Historique des médicaments sélectionnés
+    * Niveau d'alerte paramétrable
+    * Alerte si plus d'une même DCI est présente dans la prescription
+    * Fenêtre de préférences
+    * Sauvegarde et impression de la prescription avec état d'interaction pour chaque médicaments
+    * Interface pour les testeurs fonctionnelle
+    * Base de données non garantie, basée sur les données de l'AFSSAPS : - Décembre 2008
+}
+version=0.0.2
+{
+    * Déc 2008
+    * Première mise en ligne de l'application
+    * Possibilité de créer une ordonnance et d'en vérifier les interactions
+    * Possibilité de sauvegarder en HTML l'ordonnance avec son analyse
+    * Base de données des interactions n'est pas exhaustive, basée sur les données de l'AFSSAPS Juillet 2008
+    * Disponible pour Linux, Mac Os X intel, Windows
+}

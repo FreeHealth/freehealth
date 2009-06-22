@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>formSample</name>
+	<label>Special ComboBox' example</label>
+	<type>form</type>
+	<version>0.1</version>
+	<cdate>2008-11-14</cdate>
+	<categorie>samples</categorie>
+	<script>
+	{
+	  var object = thisForm.sampleCombo;
+	  var str = "";
+	  str =  object.name + " has value " + object.value + "\n";
+	  
+	  str += "\nActual Id is " + object.id + " giving value " + object.value;
+	  
+	  object.id = 2;
+	  
+	  str += "\nThis time value is : " + object.value;
+	  
+	  return str;
+	}
+	</script>
+	
+	<MedForm>
+		<name>sampleCombo</name>
+		<label>This a Special ComboBox</label>
+		<type>specialcombo</type>
+		<option lang="fr">file=specialcombofile.txt</option>
+		<option lang="en">file=specialcombofile.txt</option>
+	</MedForm>
+</MedForm>

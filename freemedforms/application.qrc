@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>htmlTranformers/header.html</file>
+        <file>htmlTranformers/footer.html</file>
+        <file>htmlTranformers/formHeader.html</file>
+        <file>htmlTranformers/formFooter.html</file>
+    </qresource>
+</RCC>

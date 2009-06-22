@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>tkPrinterPreviewerPrivate</class>
+ <widget class="QWidget" name="tkPrinterPreviewerPrivate">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>5</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="editorLayout"/>
+   </item>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="previewLayout">
+     <item>
+      <widget class="QLabel" name="previewLabel">
+       <property name="text">
+        <string>preview</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="automaticUpdateCheck">
+       <property name="toolTip">
+        <string>If it's checked the preview will update at each changes of text.
+ This can be heavy CPU consuming.</string>
+       </property>
+       <property name="text">
+        <string>Automatic update</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="updatePreviewButton">
+       <property name="text">
+        <string>Update preview</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
