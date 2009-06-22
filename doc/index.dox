@@ -1,8 +1,14 @@
 /*!
-   \mainpage FreeMedForms a free and open source medical files manager.
+    \mainpage FreeMedForms a free and open source medical files manager.
+    \author    Eric Maeker, MD
+    \version   0.0.7 , released under New BSD License.
+    \date      22/06/2009
+
+
+    \section introduction Introduction
 
     FreeMedForms is a crossplatform medical forms manager.
-    It can be used as clinical research patient database or usual pratice patient database.
+    It can be used as clinical research patient database or usual pratice patient database. \n
     The forms of the patients' file can be defined with a simple XML file, which can use script like JavaScript. \n
     FreeMedForms is a core application that manages forms, database and users. Forms elements are all plugins. \n
 
@@ -10,6 +16,8 @@
     DrugsWidgetPlugins of FreeMedForms.
 
    FreeMedForms and derivatives are all open source free software, released <b>under New BSD License</b>
+   (\link license_terms read the license terms\endlink),
+
    and are availables for :
    - Linux
    - FreeBSD
@@ -32,44 +40,23 @@
     -  French Public Mailing :
         -  <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>
 
-   \section licence License of FreeMedForms and derivative
-    Please find the terms of the license inside each code file of FreeMedForms and inside the 'About' dialog.  \n
-    FreeMedForms and all applications found in the code deposite are released under New BSD License. \n
+   \section new What's new there ?
 
-    Redistribution and use in source and binary forms, with or without modification, \n
-    are permitted provided that the following conditions are met: \n
-    - Redistributions of source code must retain the above copyright notice, \n
-      this list of conditions and the following disclaimer. \n
-    - Redistributions in binary form must reproduce the above copyright notice, \n
-      this list of conditions and the following disclaimer in the documentation \n
-      and/or other materials provided with the distribution. \n
-    - Neither the name of the FreeMedForms' organization nor the names of its contributors \n
-      may be used to endorse or promote products derived from this software without specific \n
-      prior written permission. \n
-
-     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \n
-     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT \n
-     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS \n
-     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE \n
-     COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, \n
-     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, \n
-     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; \n
-     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER \n
-     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT \n
-     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN \n
-     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE \n
-     POSSIBILITY OF SUCH DAMAGE. \n
+    Please read the \link whatsnew What's new page\endlink.
 
    \section code Code
     We exclusively use the c++ and <a href="http://www.qtsoftware.com/">Qt4.5 libs (from Nokia)</a> for this project. \n
     Some part can be pure c++, but most of the code is c++/Qt4.5.  \n
     All the code is cross-platform. Scripts used in forms is an ECMA Script (like Javascript).\n
 
-    If you want to participate you must read the \link coderules code rules (in french only) \endlink.
+    If you want to participate you must read the \link coderules code rules (in french only) \endlink.\n
+    You should also read the \link freemedforms_apis FreeMedForms API documentation \endlink.\n
+
 
    \section changelog Changelog and roadmap
     Please find all informations about the changelog and the roadmap of developments on the web site.
     <a href="http://www.ericmaeker.fr/FreeMedForms">http://www.ericmaeker.fr/FreeMedForms</a>
+
 
    \section participate Participate to FreeMedForms and derivative
     If you want to participate at this project, please let us know by sending a mail at freemedforms@googlegroups.com.
@@ -82,32 +69,14 @@
 
    \section getting Getting latest version
     Check the website. \n
-    While you are running applications of FreeMedForms suite, please verify the menubar. You will be automatically warned
-    if a new version is available over the web.
+    While you are running applications of FreeMedForms suite, please verify the menubar.\n
+    You will be automatically warned if a new version is available over the web.\n
+    \htmlonly
+     <a href="http://code.google.com/p/freemedforms/source/checkout">Checkout the SVN</a>
+    \endhtmlonly
 
-   \section building Building, and installing
-    The code in the SVN will, normally, always build under Linux, FreeBSD, MacOs and Win32. \n
-    - Requirements :
-        - Qt, at least, version 4.5.0 (better to use Qt4.5.1)
-        - You have to manage your configuration of Qt4.5.1
-    - There are two ways to build FreeMedForms and derivatives : the release mode and the debug mode. \n
-      The release mode will neutralize functions that are not fully functionnal. \n
-      The debug mode is the lastest version of the application you buils, it may contains bug and must not be used in current practice.
-        - When builind in release mode, please do the `make install` command. Then you will find the binary in the `package` dir.
-      \code
-       qmake -r -config release freemedforms.pro --spec yourSpecFile
-       or
-       qmake -r -config release drugsinteractions.pro
-       make && make install
-       cd packages/YourOSType/NameOfAppBuild/
-      \endcode
-        - When builind in debug mode, please do not do the `make install` command. You will find the binary in the `bin` dir.
-      \code
-       qmake -r -config debug freemedforms.pro
-       or
-       qmake -r -config debug drugsinteractions.pro
-       make
-      \endcode
+    \link build_instructions Read the build instructions\endlink
+
 
    \section testing Testing and bug submition
     <b>Please, before sending us a bug verify that you are using the LATEST version.</b> \n
@@ -116,8 +85,4 @@
     - Debug dialog inside the application, information sending is available only if the application detects an error
     - The mailing list
 
-   \section maindocversion Version of this document
-    This document was written by Eric MAEKER, MD.  \n
-    Last update : 12 June 2009.\n
-    Released under New BSD License.
 */

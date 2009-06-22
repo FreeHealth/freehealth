@@ -6,17 +6,9 @@
 
     There are a few libraries used by many parts of FreeMedForms and derivatives.
 
-    \table
-    \header
-    \o Library Name
-    \o Description
-
-    \row
-    \o ToolKit
-    \o \group toolkit
-
-
-    \endtable
+    \li \link toolkit The ToolKit Library provides generic objects, widgets and database abstraction. \endlink
+    \li \link usertoolkit The Users' ToolKit Library provides generic objects, widgets and database abstraction for users' management into applications. \endlink
+    \li \link medintuxtoolkit The MedinTux ToolKit Library provides generic functions for MedinTux relations. \endlink
 
     \section plugins Plugins
 
@@ -37,3 +29,4 @@
 
     \endtable
 */
+
