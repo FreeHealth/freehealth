@@ -35,8 +35,9 @@
 /**
   \class tkLog
   \brief this class holds the logs messages.
-    Set messages with addMessage() or addMessages(), set errors with setError() or setErrors(). The strings
-    are stored into two string list that you can retreive with messages() and errors().
+    Set messages with addMessage() or addMessages(), set errors with setError() or setErrors().\n
+    The strings are stored and you can retreive messages with messages() and errors with errors().\n
+    All message and error is warned into console, you can inhibate this behavior with muteConsoleWarnings(). \n
     You can log QSqlQuery errors using addQueryError().
     The first param of each members is the name of the class that asked to log.
 
@@ -62,6 +63,7 @@
 
 QList<tkDataLog> tkLog::m_Messages;
 bool tkLog::m_HasError = false;
+bool tkLog::m_MuteConsole = false;
 //QStringList tkLog::m_Messages = QStringList();
 //QStringList tkLog::m_Errors = QStringList();
 
