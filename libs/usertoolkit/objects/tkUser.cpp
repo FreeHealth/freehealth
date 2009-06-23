@@ -46,7 +46,7 @@
   \li datetime value
   \li files and images (coded into database into base64)
   \li integer or double
-  \li a tkTextDocumentExtra pointer
+  \li a tkTextDocumentExtra pointer or html contents
   Get informations of the database structure in tkUserBase.
   \sa tkUserBase
 */
@@ -118,7 +118,7 @@ public:
     {
         if (!m_Doc)
             m_Doc = new tkTextDocumentExtra();
-        m_Doc->setHtml(value.toString() );
+        m_Doc->setHtml(value.toString());
     }
 
     /** \brief Defines the Xml of the extraDocument */
@@ -126,7 +126,7 @@ public:
     {
         if (!m_Doc)
             m_Doc = new tkTextDocumentExtra();
-        m_Doc = tkTextDocumentExtra::fromXml(value.toString() );
+        m_Doc = tkTextDocumentExtra::fromXml(value.toString());
     }
 
     void setDirty()
@@ -173,7 +173,13 @@ bool UserDynamicData::isDirty() const
     return d->m_IsDirty;
 }
 
-DynamicDataType UserDynamicData::type() const
+/** \brief Define the drity state of the UserDynamicData. */
+void UserDynamicData::setDirty( bool state )
+{
+    d->m_IsDirty = state;
+}
+
+UserDynamicData::DynamicDataType UserDynamicData::type() const
 {
     return d->m_Type;
 }
@@ -196,18 +202,27 @@ int UserDynamicData::id() const
     return d->m_Id;
 }
 
+/** \brief Defines the id. Used by tkUserBase::saveUser(), when UserDynamicData is created into database. */
+void UserDynamicData::setId(const int id)
+{
+    d->m_Id = id;
+}
+
 /** \brief Defines the related user's uuid of UserDynamicData */
 void UserDynamicData::setUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
 }
 
-/** \brief Feed the class with datas without marking it as dirty. Only used by tkUserBase. */
-void UserDynamicData::feedFromSql(const int field, const QVariant& value )
+/**
+  \brief Feed the class with datas without marking it as dirty. Only used by tkUserBase.
+  tkTextDocumentExtra values should be setted from complete xml encoded tkTextDocumentExtra.
+*/
+void UserDynamicData::feedFromSql(const int field, const QVariant& value)
 {
     Q_ASSERT(field>=DATAS_ID && field <= DATAS_TRACE_ID);
     switch (field) {
-            case DATAS_ID : d->m_Id = value.toInt();
+            case DATAS_ID : d->m_Id = value.toInt(); break;
             case DATAS_USER_UUID : d->m_UserUuid = value.toString(); break;
             case DATAS_DATANAME:
                 {
@@ -230,9 +245,9 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value )
                         d->setDocumentXml(value);
                     else {
                         if (value.type() == QVariant::DateTime)
-                            qWarning() << d->m_Name << "datetime";
+                            d->m_Type = Date;
                         else if (value.type() == QVariant::String)
-                            qWarning() << d->m_Name << "string";
+                            d->m_Type = String;
                         d->m_Value = value;
                     }
                     break;
@@ -241,16 +256,8 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value )
     d->m_IsNull = false;
 }
 
-/** \brief Feed the class with datas collected into a QHash. Only used by tkUserBase. */
-void UserDynamicData::feedFromSql(const QHash<int,QVariant> &values)
-{
-    foreach(const int k, values.keys())
-        feedFromSql(k, values.value(k) );
-    d->m_IsNull = false;
-}
-
 /** \brief Defines this dynamic data as a tkTextDocumentExtra. */
-void UserDynamicData::setValue(tkTextDocumentExtra *extra )
+void UserDynamicData::setValue(tkTextDocumentExtra *extra)
 {
     if (d->m_Doc)
         delete d->m_Doc;
@@ -260,11 +267,12 @@ void UserDynamicData::setValue(tkTextDocumentExtra *extra )
 }
 
 /** \brief Defines the values of the dynamic data. If it is a tkTextDocumentExtra defines the html code. */
-void UserDynamicData::setValue(const QVariant &value )
+void UserDynamicData::setValue(const QVariant &value)
 {
     if (d->m_Type==ExtraDocument) {
         d->setDocumentHtml(value);
-    } else if (d->m_Value != value) {
+        d->setDirty();
+   } else if (d->m_Value != value) {
         d->m_Value = value;
         d->setDirty();
     }
@@ -290,13 +298,11 @@ tkTextDocumentExtra *UserDynamicData::extraDocument() const
 */
 QVariant UserDynamicData::value() const
 {
-//    qWarning() << "UserDynamicData::value() ";
     if (d->m_Type==ExtraDocument) {
         if (!d->m_Doc)
             d->m_Doc = tkTextDocumentExtra::fromXml(d->m_Value.toString());
         return d->m_Doc->toHtml();
     } else {
-//        qWarning() << d->m_Name << d->m_Value;
         return d->m_Value;
     }
     return QVariant();
@@ -308,8 +314,8 @@ QVariant UserDynamicData::value() const
 */
 void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
 {
-    bindedQuery.bindValue( DATAS_USER_UUID,  d->m_UserUuid );
-    bindedQuery.bindValue( DATAS_DATANAME ,  d->m_Name );
+    bindedQuery.bindValue( DATAS_USER_UUID,  d->m_UserUuid);
+    bindedQuery.bindValue( DATAS_DATANAME ,  d->m_Name);
 
     switch (d->m_Value.type())
     {
@@ -352,9 +358,9 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
             break;
         }
     }
-    bindedQuery.bindValue( DATAS_LANGUAGE,   d->m_Language );
-    bindedQuery.bindValue( DATAS_LASTCHANGE, d->m_Lastchange );
-    bindedQuery.bindValue( DATAS_TRACE_ID,   d->m_Trace );
+    bindedQuery.bindValue( DATAS_LANGUAGE,   d->m_Language);
+    bindedQuery.bindValue( DATAS_LASTCHANGE, d->m_Lastchange);
+    bindedQuery.bindValue( DATAS_TRACE_ID,   d->m_Trace);
 }
 
 /** \brief For debugging purpose only */
@@ -367,13 +373,15 @@ void UserDynamicData::warn() const
 QString UserDynamicData::warnText() const
 {
     QString tmp;
-    tmp = QString("Name : %1, Type : %2, Value : %3, Lang : %4, Dirt %5 Null %6")
-          .arg(d->m_Name)
-          .arg(d->m_Type)
-          .arg(d->m_Value.toString())
+    tmp = QString("Name : %1, Type : %2, Value : %3, Lang : %4, Dirt %5 Null %6 , UserUuid : %7, Id : %8")
+          .arg(name())
+          .arg(type())
+          .arg(value().toString())
           .arg(d->m_Language)
-          .arg(d->m_IsDirty)
-          .arg(d->m_IsNull);
+          .arg(isDirty())
+          .arg(isNull())
+          .arg(d->m_UserUuid)
+          .arg(id());
     return tmp;
 }
 
@@ -439,7 +447,7 @@ public:
 //    /** \brief Logs the last changed date of a dynamic data to now. Mark user as non null and modified. */
 //    void logLastChangeDate(const char *name)
 //    {
-//        m_DataName_Datas[name].insert(DATAS_LASTCHANGE, QDateTime::currentDateTime() );
+//        m_DataName_Datas[name].insert(DATAS_LASTCHANGE, QDateTime::currentDateTime());
 //        m_IsNull = false;
 //        m_Modified = true;
 //        // store modified dynamic datas changed into a list to limit database access
@@ -450,10 +458,10 @@ public:
 //    /** \brief When add or set dynamic data to user, if it is a known extra document (tkTextDocumentExtra), this part manages its creation into the cache. */
 //    void createExtraDoc(const char* name, const QVariant &val, bool logDate)
 //    {
-//        m_Docs.insert(documentNameToIndex(name), tkTextDocumentExtra::fromXml(val.toString() ));
+//        m_Docs.insert(documentNameToIndex(name), tkTextDocumentExtra::fromXml(val.toString()));
 //        if (!m_DataName_Datas.contains(name)) {
-//            m_DataName_Datas[name].insert(DATAS_DATANAME, name );
-//            m_DataName_Datas[name].insert(DATAS_ID, -1 );
+//            m_DataName_Datas[name].insert(DATAS_DATANAME, name);
+//            m_DataName_Datas[name].insert(DATAS_ID, -1);
 //        }
 //        if (logDate)
 //            logLastChangeDate(name);
@@ -472,50 +480,65 @@ public:
 
 QHash<QString, int> tkUserPrivate::m_Link_PaperName_ModelIndex;
 
-/** \brief Constructor */
+/**
+  \brief Constructor
+  Some default values are setted :
+  \li automatic uuid setting to a fresh new one
+  \li rights for UserManager are setted to User::ReadOwn and User::WriteOwn
+  \li no rights for Medical, paramedical, dosage management
+  \li empty password is setted encrypted
+  \li locker is unsetted
+ */
 tkUser::tkUser()
-    : d(0 )
+    : d(0)
 {
     d = new tkUserPrivate();
     d->m_Modifiable = true;
-    setValue(Table_USERS, USER_ID, -1 );
-    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn );
-    setRights(USER_ROLE_MEDICAL, User::NoRights );
-    setRights(USER_ROLE_DOSAGES, User::NoRights );
-    setRights(USER_ROLE_PARAMEDICAL, User::NoRights );
-    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights );
+    setValue(Table_USERS, USER_ID, -1);
+    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn);
+    setRights(USER_ROLE_MEDICAL, User::NoRights);
+    setRights(USER_ROLE_DOSAGES, User::NoRights);
+    setRights(USER_ROLE_PARAMEDICAL, User::NoRights);
+    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights);
     setCryptedPassword(tkUserGlobal::crypt(""));
-    setLocker(false );
+    setLocker(false);
     createUuid();
     d->m_IsNull = true;
     d->m_Modified = false;
     d->m_IsCurrent = false;
-    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
-                         QCoreApplication::translate("tkUser", "User created at %1\n" )
-                         .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
+//    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
+//                        QCoreApplication::translate("tkUser", "User created at %1\n")
+//                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
 }
 
-/** \brief Constructor */
-tkUser::tkUser(const QString & uuid )
+/**
+  \brief Constructor with a determined uuid
+  Some default values are setted :
+  \li rights for UserManager are setted to User::ReadOwn and User::WriteOwn
+  \li no rights for Medical, paramedical, dosage management
+  \li empty password is setted encrypted
+  \li locker is unsetted
+ */
+tkUser::tkUser(const QString & uuid)
 {
     // TODO : add a uuid checker before all
     d = new tkUserPrivate();
     d->m_Modifiable = true;
-    setValue(Table_USERS, USER_ID, -1 );
-    setUuid(uuid );
-    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn );
-    setRights(USER_ROLE_MEDICAL, User::NoRights );
-    setRights(USER_ROLE_DOSAGES, User::NoRights );
-    setRights(USER_ROLE_PARAMEDICAL, User::NoRights );
-    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights );
+    setValue(Table_USERS, USER_ID, -1);
+    setUuid(uuid);
+    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn);
+    setRights(USER_ROLE_MEDICAL, User::NoRights);
+    setRights(USER_ROLE_DOSAGES, User::NoRights);
+    setRights(USER_ROLE_PARAMEDICAL, User::NoRights);
+    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights);
     setCryptedPassword(tkUserGlobal::crypt(""));
-    setLocker(false );
+    setLocker(false);
     d->m_IsNull = true;
     d->m_Modified = false;
     d->m_IsCurrent = false;
-    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
-                         QCoreApplication::translate("tkUser", "User created at %1\n" )
-                         .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
+//    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
+//                        QCoreApplication::translate("tkUser", "User created at %1\n")
+//                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
 }
 
 /** \brief Destructor */
@@ -524,7 +547,7 @@ tkUser::~tkUser()
     if (d) delete d; d=0;
 }
 
-void tkUser::setModifiable(bool state )
+void tkUser::setModifiable(bool state)
 {
     d->m_Modifiable = state;
 }
@@ -534,7 +557,7 @@ bool tkUser::isModifiable() const
     return d->m_Modifiable;
 }
 
-void tkUser::setModified(bool state )
+void tkUser::setModified(bool state)
 {
     d->m_Modified = state;
 }
@@ -551,14 +574,14 @@ bool tkUser::isNull() const
 
 bool tkUser::isEmpty() const
 {
-    if (id() != -1 )
+    if (id() != -1)
         return false;
-    if (d->m_Table_Field_Value.count() == 1 )
+    if (d->m_Table_Field_Value.count() == 1)
         return true;
     return false;
 }
 
-void tkUser::setCurrent(bool state )
+void tkUser::setCurrent(bool state)
 {
     d->m_IsCurrent = state;
 }
@@ -571,12 +594,21 @@ bool tkUser::isCurrent() const
 /** \brief If user is modifiable and does not have an uuid then create a new one and return true, otherwise return false. */
 bool tkUser::createUuid()
 {
-    if (! d->m_Modifiable )
+    if (! d->m_Modifiable)
         return false;
-    if (! uuid().isEmpty() )
+    if (! uuid().isEmpty())
         return true;
-    setUuid(QUuid::createUuid().toString() );
+    setUuid(QUuid::createUuid().toString());
     return true;
+}
+
+/** \brief Defines the Uuid of the user. Modify all users' datas uuid. */
+void tkUser::setUuid( const QString & val )
+{
+    Q_ASSERT(!val.isEmpty());
+    setValue(Table_USERS, USER_UUID, val);
+    foreach( UserDynamicData *dyn, d->m_DynamicDatas)
+        dyn->setUserUuid(val);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -587,23 +619,25 @@ bool tkUser::createUuid()
  If user is modifiable, set the value \e val for the table \e tableref index and \e fieldref field index. \n
  Values must be determined fields values not dynamicValues.
 */
-void tkUser::setValue(const int tableref, const int fieldref, const QVariant & val )
+void tkUser::setValue(const int tableref, const int fieldref, const QVariant & val)
 {
-    if (! d->m_Modifiable )
+    if (! d->m_Modifiable)
         return;
     // if value is the same as the stored value --> return
-    if (d->m_Table_Field_Value.count() )//contains(tableref))
+    if (d->m_Table_Field_Value.count())//contains(tableref))
     {
         if (d->m_Table_Field_Value.keys().contains(tableref)) {
-            const QHash<int, QVariant> & table = d->m_Table_Field_Value.value(tableref );
+            const QHash<int, QVariant> &table = d->m_Table_Field_Value.value(tableref);
             if (table.keys().contains(fieldref))
-                if (table.value(fieldref)==  val )
+                if (table.value(fieldref) == val)
                     return;
         }
     }
-    d->m_Table_Field_Value[tableref].insert(fieldref, val );
+
+    d->m_Table_Field_Value[tableref].insert(fieldref, val);
+
     d->m_IsNull = false;
-    setModified(true );
+    setModified(true);
 }
 
 /**
@@ -616,13 +650,11 @@ void tkUser::addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list)
     if (!d->m_Modifiable)
         return;
     d->m_IsNull = false;
-    Q_ASSERT_X(d->m_DynamicDatas.count()<=1, "tkUser::addDynamicDatasFromDatabase", "Only call this function once !");
-    if (d->m_DynamicDatas.count()) {
-        qDeleteAll(d->m_DynamicDatas);
-        d->m_DynamicDatas.clear();
+    foreach(UserDynamicData *dyn, list) {
+        // no double
+        if (!d->m_DynamicDatas.keys().contains(dyn->name()))
+            d->m_DynamicDatas.insert(dyn->name(), dyn);
     }
-    foreach(UserDynamicData *dyn, list)
-        d->m_DynamicDatas.insert(dyn->name(), dyn);
 }
 
 /**
@@ -630,17 +662,17 @@ void tkUser::addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list)
  If user is modifiable, set the dynamic value \e val named \e name and \e fieldref field index.
  \todo explain dynamicValues / values
 */
-void tkUser::addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val )
+void tkUser::addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val)
 {
-    if (! d->m_Modifiable )
+    if (! d->m_Modifiable)
         return;
     if (fieldref == RIGHTS_USER_UUID)// don't store user's uuid
         return;
 
     // datas are stored into a QHash<int, QHash< int, QVariant > >  int is the row
-    d->m_Role_Rights[roleName].insert(fieldref, val );
+    d->m_Role_Rights[roleName].insert(fieldref, val);
     d->m_IsNull = false;
-    setModified(true );
+    setModified(true);
 }
 
 /**
@@ -649,7 +681,7 @@ void tkUser::addRightsFromDatabase(const char * roleName, const int fieldref, co
   Mark the UserDynamicData as dirty if value \e val differs of the stored data.
   \todo documentation
 */
-void tkUser::setDynamicDataValue(const char * name, const QVariant & val, UserDynamicData::DynamicDataType t )
+void tkUser::setDynamicDataValue(const char * name, const QVariant & val, UserDynamicData::DynamicDataType t)
 {
     // this member should not be used by database
     if (!val.isValid())
@@ -680,18 +712,18 @@ void tkUser::setDynamicDataValue(const char * name, const QVariant & val, UserDy
 /**
   \todo document
 */
-void tkUser::setRights(const char * roleName, const User::UserRights rights )
+void tkUser::setRights(const char * roleName, const User::UserRights rights)
 {
     User::UserRights r = rights;
-    if (rights & User::ReadAll )
+    if (rights & User::ReadAll)
         r |= User::ReadOwn | User::ReadDelegates;
-    if (rights & User::WriteAll )
+    if (rights & User::WriteAll)
         r |= User::WriteOwn | User::WriteDelegates;
-    d->m_Role_Rights[roleName].insert(RIGHTS_RIGHTS, int(r) );
-    if (! d->m_ModifiedRoles.contains(roleName) )
-        d->m_ModifiedRoles.insert(roleName );
+    d->m_Role_Rights[roleName].insert(RIGHTS_RIGHTS, int(r));
+    if (! d->m_ModifiedRoles.contains(roleName))
+        d->m_ModifiedRoles.insert(roleName);
     d->m_IsNull = false;
-    setModified(true );
+    setModified(true);
 }
 
 /**
@@ -700,11 +732,11 @@ void tkUser::setRights(const char * roleName, const User::UserRights rights )
 void tkUser::addLoginToHistory()
 {
     setDynamicDataValue(USER_DATAS_LOGINHISTORY,
-                         dynamicDataValue(USER_DATAS_LOGINHISTORY ).toString() +
-                         QCoreApplication::translate("tkUser", "User logged at %1\n" )
-                         .arg(lastLogin().toString(Qt::DefaultLocaleLongDate) )
+                        dynamicDataValue(USER_DATAS_LOGINHISTORY).toString() +
+                        QCoreApplication::translate("tkUser", "User logged at %1\n")
+                        .arg(lastLogin().toString(Qt::DefaultLocaleLongDate))
                        );
-    setModified(true );
+    setModified(true);
 }
 
 
@@ -716,8 +748,8 @@ void tkUser::addLoginToHistory()
 */
 QVariant tkUser::value(const int tableref, const int fieldref) const
 {
-    if (d->m_Table_Field_Value.value(tableref ).keys().contains(fieldref))
-        return d->m_Table_Field_Value.value(tableref ).value(fieldref );
+    if (d->m_Table_Field_Value.value(tableref).keys().contains(fieldref))
+        return d->m_Table_Field_Value.value(tableref).value(fieldref);
     return QVariant();
 }
 
@@ -736,23 +768,23 @@ QVariant tkUser::dynamicDataValue(const char* name) const
 */
 QVariant tkUser::rightsValue(const QString & name, const int fieldref) const
 {
-    return d->m_Role_Rights.value(name ).value(fieldref );
+    return d->m_Role_Rights.value(name).value(fieldref);
 }
 /**
   \todo document
 */
 QVariant tkUser::rightsValue(const char * name) const
 {
-    return d->m_Role_Rights.value(name ).value(RIGHTS_RIGHTS );
+    return d->m_Role_Rights.value(name).value(RIGHTS_RIGHTS);
 }
 
 
 //QString tkUser::lastLogin() const
 //{
-//    if (! value(Table_USERS, USER_LASTLOG ).isValid() )
-//        return QCoreApplication::translate("tkUSer", "Never logged" );
-//    QDateTime d = value(Table_USERS, USER_LASTLOG ).toDateTime();
-//    return d.toString(Qt::DefaultLocaleLongDate );
+//    if (! value(Table_USERS, USER_LASTLOG).isValid())
+//        return QCoreApplication::translate("tkUSer", "Never logged");
+//    QDateTime d = value(Table_USERS, USER_LASTLOG).toDateTime();
+//    return d.toString(Qt::DefaultLocaleLongDate);
 //}
 
 
@@ -772,7 +804,7 @@ bool tkUser::hasModifiedDynamicDatasToStore() const
 QList<UserDynamicData*> tkUser::modifiedDynamicDatas() const
 {
     QList<UserDynamicData*> list;
-    foreach( UserDynamicData *dyn, d->m_DynamicDatas.values() ) {
+    foreach( UserDynamicData *dyn, d->m_DynamicDatas.values()) {
         if (dyn->isDirty()) {
             list << dyn;
         }
@@ -797,29 +829,28 @@ QStringList tkUser::modifiedRoles() const
   \brief Defines the header, footer and watermark (exactly in this order) to use for generic printing.
   \sa tkTextDocumentExtra, tkTextDocumentExtra::toXml()
 */
-void tkUser::setExtraDocument(tkTextDocumentExtra *extra, const int index )
+void tkUser::setExtraDocumentHtml(const QVariant &val, const int index)
 {
-//    qWarning() << "setExtraDocument" << d->documentIndexToName(index);
-//    if (d->m_Docs.contains(index)) {
-//        delete d->m_Docs[index];
-//        d->m_Docs.remove(index);
-//    }
-//    d->m_Docs.insert(index, extra);
-    // TODO save to dynamicdatas
-//    addDynamicDataFromDatabase();
+    QString name = d->documentIndexToName(index);
+    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty())
+        return ;
+    if (!d->m_DynamicDatas.keys().contains(name)) {
+        UserDynamicData *data = new UserDynamicData();
+        data->setName(name);
+        data->setUserUuid(uuid());
+        d->m_DynamicDatas.insert(name,data);
+    }
+    d->m_DynamicDatas[name]->setValue(val);
 }
 
-void tkUser::setExtraDocumentHtml(const QVariant &val, const int index )
+QVariant tkUser::extraDocumentHtml(const int index) const
 {
-//    if (d->m_Docs.contains(index))
-//       d->m_Docs[index]->setHtml(val.toString());
-//    else {
-//        d->createExtraDoc(d->documentIndexToName(index).toAscii(), val, true);
-//    }
-}
+    QString name = d->documentIndexToName(index);
+    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty())
+        return QVariant();
 
-QVariant tkUser::extraDocument(const char* name) const
-{
     if (d->m_DynamicDatas.keys().contains(name)) {
         if (d->m_DynamicDatas.value(name)->type() == UserDynamicData::ExtraDocument)
             return d->m_DynamicDatas.value(name)->value();
@@ -850,44 +881,44 @@ QStringList tkUser::warnText() const
     tkUserBase * tkb = tkUserBase::instance();
 
     QString tmp;
-    for (i = 0; i < USER_MaxParam; i++ )
-        tmp = QString("%1 = %2\n" )
+    for (i = 0; i < USER_MaxParam; i++)
+        tmp = QString("%1 = %2\n")
         .arg(tkb->field(Table_USERS , i))
-        .arg(d->m_Table_Field_Value.value(Table_USERS ).value(i ).toString() );
+        .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
     list << tmp;
     tmp.clear();
 
     const QList<UserDynamicData*> &dynList = modifiedDynamicDatas();
 
-    if (d->m_DynamicDatas.count() == 0 )
+    if (d->m_DynamicDatas.count() == 0)
         list << "    /!\\ NO DATAS RECORDED /!\\ ";
     else
         foreach(const UserDynamicData *dyn, d->m_DynamicDatas) {
             tmp += "\n\nDATA : " + dyn->name() + "\n";
-            tmp += QString("%1\n" ).arg(dyn->warnText());
+            tmp += QString("%1\n").arg(dyn->warnText());
         }
     list << tmp;
     tmp.clear();
 
-    if (d->m_Role_Rights.count() == 0 )
+    if (d->m_Role_Rights.count() == 0)
         list <<  "    /!\\ NO RIGHTS RECORDED /!\\ " ;
     else
         foreach(const QString & id, d->m_Role_Rights.keys()){
             tmp += "\n\nRIGHT : " + id + "\n";
-            for (i = 0; i < RIGHTS_MaxParam; i++ )
-                tmp += QString("%1 : %2 = %3\n" )
-                                   .arg(id )
+            for (i = 0; i < RIGHTS_MaxParam; i++)
+                tmp += QString("%1 : %2 = %3\n")
+                                   .arg(id)
                                    .arg(tkb->field(Table_RIGHTS , i))
-                                   .arg(d->m_Role_Rights.value(id ).value(i ).toString() );
+                                   .arg(d->m_Role_Rights.value(id).value(i).toString());
         }
     list << tmp;
     tmp.clear();
 
     tmp += "  * Values *\n";
-    tmp += QString("%1 = %2\n" ).arg("m_Modifiable" ).arg(isModifiable() );
-    tmp += QString("%1 = %2\n" ).arg("m_Modified" ).arg(isModified() );
-    tmp += QString("%1 = %2\n" ).arg("m_IsNull" ).arg(d->m_IsNull );
-    tmp += QString("%1 = %2\n" ).arg("hasModifiedDynamicDatas" ).arg(hasModifiedDynamicDatasToStore() );
+    tmp += QString("%1 = %2\n").arg("m_Modifiable").arg(isModifiable());
+    tmp += QString("%1 = %2\n").arg("m_Modified").arg(isModified());
+    tmp += QString("%1 = %2\n").arg("m_IsNull").arg(d->m_IsNull);
+    tmp += QString("%1 = %2\n").arg("hasModifiedDynamicDatas").arg(hasModifiedDynamicDatasToStore());
     tmp += "modifiedDynamicDatas = ";
     foreach( UserDynamicData *dyn, dynList)
              tmp += dyn->name() + "; ";

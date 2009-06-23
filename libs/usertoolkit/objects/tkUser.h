@@ -91,10 +91,12 @@ public:
 
     bool isNull() const;
     bool isDirty() const;
+    void setDirty( bool state );
     DynamicDataType type() const;
     QString name() const;
     void setName(const QString &name);
     int id() const;
+    void setId(const int id);
     void setUserUuid(const QString &uuid);
 
     void setValue( tkTextDocumentExtra *extra );
@@ -109,7 +111,7 @@ public:
 
 //protected:
     void feedFromSql( const int field, const QVariant& value );
-    void feedFromSql(const QHash<int,QVariant> &values);
+//    void feedFromSql(const QHash<int,QVariant> &values);
 
 private:
     UserDynamicDataPrivate *d;
@@ -134,6 +136,7 @@ public:
     bool isNull() const;
     bool isEmpty() const;
     bool createUuid();
+    void setUuid( const QString & val );
 
     // setters to create or change the values
     void setDynamicDataValue( const char * name, const QVariant & val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
@@ -142,7 +145,6 @@ public:
 
     // simplified setters (TODO : some must be logged)
     void  setId( const QVariant & val )                  { setValue( Table_USERS, USER_ID, val ); }
-    void  setUuid( const QVariant & val )                { setValue( Table_USERS, USER_UUID, val ); }
     void  setValidity( const QVariant & val )            { setValue( Table_USERS, USER_VALIDITY, val ); }
     void  setLocker( const QVariant & val)               { setValue( Table_USERS, USER_LOCKER ,val ); }
     void  setLogin( const QVariant & val )               { setValue( Table_USERS, USER_LOGIN, val ); }
@@ -222,7 +224,7 @@ public:
 
     void setExtraDocument( tkTextDocumentExtra *extra, const int index );
     void setExtraDocumentHtml( const QVariant &val, const int index );
-    QVariant extraDocument( const int index ) const;
+    QVariant extraDocumentHtml( const int index ) const;
 
     QString preferences() const          { return dynamicDataValue( USER_DATAS_PREFERENCES ).toString(); }
     QString loginHistory() const         { return dynamicDataValue( USER_DATAS_LOGINHISTORY ).toString(); }

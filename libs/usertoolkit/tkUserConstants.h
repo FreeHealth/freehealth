@@ -94,7 +94,7 @@ namespace tkUserConstants
     const char * const DEFAULT_USER_PASSWORD  = "0DPiKuNIrrVmD8IUCuw1hQxNqZc=";  // admin
     const char * const DEFAULT_USER_NAME      = "GENERAL ADMINISTRATOR";
     const char * const DEFAULT_USER_SURNAME   = "THIS A GENERIC USER";
-    const char * const DEFAULT_USER_ADRESS    = "You should change the login/passowrd of this user.";
+    const char * const DEFAULT_USER_ADRESS    = "You should change the login/password of this user.";
 
     const char * const DEFAULT_USER_ROLE      = USER_ROLE_USERMANAGER;
     int const          DEFAULT_USER_RIGHT     = -1;

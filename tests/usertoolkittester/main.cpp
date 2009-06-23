@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setApplicationName( "tkUserTester" );
     app.setApplicationVersion( "0.0.1" );
+//    tkLog::muteConsoleWarnings();
 
     // init settings
     tkSettings settings;

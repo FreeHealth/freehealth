@@ -110,9 +110,6 @@ public:
 
     int numberOfUsersInMemory();
 
-    tkTextDocumentExtra *currentUserDocument( const int column );
-    void setCurrentUserDocument( tkTextDocumentExtra *extra, const int column );
-
     void warn();
 
 public Q_SLOTS:

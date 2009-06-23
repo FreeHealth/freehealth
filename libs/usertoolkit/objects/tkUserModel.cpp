@@ -112,11 +112,13 @@ public:
     {
         // get user from database
         QString uuid = tkUserBase::instance()->getUuid( log64, pass64 );
+        if (uuid.isEmpty())
+            return uuid;
         // make sure it is not already in the hash
         if ( m_Uuid_UserList.keys().contains( uuid ) ) {
             return QString::null;
         }
-        m_Uuid_UserList.insert( uuid, tkUserBase::instance()->getUserByLoginPassword( log64, pass64 ) );
+        m_Uuid_UserList.insert( uuid, tkUserBase::instance()->getUserByUuid(uuid) );
         return uuid;
     }
 
@@ -158,7 +160,6 @@ tkUserModel::tkUserModel( QObject * parent )
     QSqlTableModel::setTable( tkUserBase::instance()->table( Table_USERS ) );
     setEditStrategy( QSqlTableModel::OnManualSubmit );
     select();
-//    m_Instance = this;
 }
 
 /** \brief Destructor */
@@ -371,7 +372,7 @@ bool tkUserModel::setData( const QModelIndex & item, const QVariant & value, int
     switch (item.column())
     {
         case User::UserId :  user->setId( value ); break;
-        case User::UserUuid :  user->setUuid( value ); break;
+        case User::UserUuid :  user->setUuid( value.toString() ); break;
         case User::UserValidity :  user->setValidity( value ); break;
         case User::UserLogin :  user->setLogin( value ); break;
         case User::UserDecryptedLogin : user->setLogin( value.toString().toAscii().toBase64() ); break;
@@ -397,8 +398,8 @@ bool tkUserModel::setData( const QModelIndex & item, const QVariant & value, int
         case User::UserSpecialities :  user->setSpecialty( value.toStringList() ); break;
         case User::UserQualifications :  user->setQualification( value.toStringList() ); break;
         case User::UserPreferences :  user->setPreferences( value ); break;
-//        case User::UserGenericHeader : user->setExtraDocumentHtml( value, User::UserGenericHeader ); break;
-//        case User::UserGenericFooter :  user->setExtraDocumentHtml( value, User::UserGenericFooter ); break;
+        case User::UserGenericHeader : user->setExtraDocumentHtml( value, User::UserGenericHeader ); break;
+        case User::UserGenericFooter :  user->setExtraDocumentHtml( value, User::UserGenericFooter ); break;
 //        case User::UserAdministrativeHeader : user->setAdminHeader( value ); break;
 //        case User::UserAdministrativeFooter : user->setAdminFooter( value ); break;
 //        case User::UserPrescriptionHeader : user->setPrescriptionHeader( value ); break;
@@ -515,8 +516,8 @@ QVariant tkUserModel::data( const QModelIndex & item, int role ) const
             case User::UserSpecialities : toReturn = user->specialty(); break;
             case User::UserQualifications : toReturn = user->qualifications(); break;
             case User::UserPreferences : toReturn = user->preferences(); break;
-            case User::UserGenericHeader : toReturn = user->extraDocument(USER_DATAS_GENERICHEADER); break;
-//            case User::UserGenericFooter : toReturn = user->genericFooter(); break;
+            case User::UserGenericHeader : toReturn = user->extraDocumentHtml(User::UserGenericHeader); break;
+            case User::UserGenericFooter : toReturn = user->extraDocumentHtml(User::UserGenericFooter); break;
 //            case User::UserAdministrativeHeader : toReturn = user->adminPapers().at(0); break;
 //            case User::UserAdministrativeFooter : toReturn = user->adminPapers().at(1); break;
 //            case User::UserPrescriptionHeader : toReturn = user->prescrPapers().at(0); break;
@@ -662,19 +663,6 @@ int tkUserModel::numberOfUsersInMemory()
 {
     return d->m_Uuid_UserList.count();
 }
-
-tkTextDocumentExtra *tkUserModel::currentUserDocument( const int column )
-{
-     tkUser *u = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-     return u->extraDocument(column);
-}
-
-void tkUserModel::setCurrentUserDocument( tkTextDocumentExtra *extra, const int column )
-{
-     tkUser *u = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-     u->setExtraDocument( extra, column);
-}
-
 
 /** \brief For debugging purpose only */
 void tkUserModel::warn()

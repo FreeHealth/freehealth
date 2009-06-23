@@ -197,10 +197,10 @@ tkUser * tkUserBase::getUser( const QHash<int, QString> & conditions ) const
                                                                                 "ERROR : will retreiving %1. Wrong number of fields" )
                                      .arg( USER_DB_CONNECTION ) );
                 int i = 0;
-                toReturn = new tkUser();
+                uuid = q.value( USER_UUID ).toString();
+                toReturn = new tkUser(uuid);
                 for ( i = 0; i < USER_MaxParam; ++i )
                     toReturn->setValue( Table_USERS, i , q.value( i ) );
-                uuid = q.value( USER_UUID ).toString();
             }
         }
         else
@@ -329,10 +329,10 @@ bool tkUserBase::checkLogin( const QString & login, const QString & cryptedPassw
 
     QSqlQuery q( req , DB );
     if ( q.isActive() ) {
-        if ( q.next() ){
-            m_LastUuid = q.value( 0 ).toInt();
-            m_LastLogin = q.value( 0 ).toString();
-            m_LastPass = q.value( 0 ).toString();
+        if ( q.next() ) {
+            m_LastUuid = q.value( 0 ).toString();
+            m_LastLogin = q.value( 1 ).toString();
+            m_LastPass = q.value( 2 ).toString();
         }
     }
     else
@@ -342,12 +342,13 @@ bool tkUserBase::checkLogin( const QString & login, const QString & cryptedPassw
 }
 
 /**
-  \brief Return the Uuid of the user identified with couple login/password.
+  \brief Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs.
 */
 QString tkUserBase::getUuid( const QString & log64, const QString cryptpass64 )
 {
     if ( ( log64 == m_LastLogin ) && ( cryptpass64 == m_LastPass ) )
         return m_LastUuid;
+    m_LastUuid.clear();
     // create query
     QHash<int, QString> where;
     where.insert( USER_LOGIN, QString( "='%1'" ).arg( log64 ) );
@@ -362,7 +363,6 @@ QString tkUserBase::getUuid( const QString & log64, const QString cryptpass64 )
     else {
         tkLog::addError("tkUserBase", QApplication::translate("tkUserBase", "Can not create a new user's UUID, database access error"));
         tkLog::addQueryError( "tkUserBase", q );
-        m_LastUuid.clear();
     }
     return m_LastUuid;
 }
@@ -438,14 +438,30 @@ bool tkUserBase::createDatabase(  const QString & connectionName, const QString 
     user->setName( DEFAULT_USER_NAME );
     user->setLanguage( QLocale().name().left( 2 ) );
     user->setSpecialty( QStringList() << DEFAULT_USER_SPECIALTY );
-
-    user->setExtraDocument(new tkTextDocumentExtra(DEFAULT_USER_HEADER), User::UserGenericHeader );
-    user->setExtraDocument(new tkTextDocumentExtra(DEFAULT_USER_FOOTER), User::UserGenericFooter );
-
     user->setAdress(DEFAULT_USER_ADRESS);
     user->setSurname(DEFAULT_USER_SURNAME);
     user->setRights( USER_ROLE_USERMANAGER, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print );
-    saveUser( user );
+
+    QList<UserDynamicData*> list;
+    tkTextDocumentExtra *extra = new tkTextDocumentExtra();
+    extra->setHtml(DEFAULT_USER_HEADER);
+    UserDynamicData *header = new UserDynamicData();
+    header->setName(USER_DATAS_GENERICHEADER);
+    header->setValue(extra->toXml());
+    header->setUserUuid(user->uuid());
+    list << header;
+    UserDynamicData *footer = new UserDynamicData();
+    delete extra;
+    extra = new tkTextDocumentExtra();
+    extra->setHtml(DEFAULT_USER_FOOTER);
+    footer->setName(USER_DATAS_GENERICFOOTER);
+    footer->setValue(extra->toXml());
+    footer->setUserUuid(user->uuid());
+    list << footer;
+    user->addDynamicDatasFromDatabase(list);
+    delete extra;
+
+    saveUser(user);
     delete user;
     // database is readable/writable
     tkLog::addMessage( "tkUserBase", QCoreApplication::translate( "tkUserBase", "User database created : File %1" ).arg( pathOrHostName + QDir::separator() + dbName ) );
@@ -534,8 +550,10 @@ bool tkUserBase::saveUser( tkUser *user )
         // update dynamic datas
         if ( user->hasModifiedDynamicDatasToStore() ) {
             const QList<UserDynamicData*> & datasToUpdate = user->modifiedDynamicDatas();
-            foreach( const UserDynamicData *dyn, datasToUpdate ) {
+            foreach( UserDynamicData *dyn, datasToUpdate ) {
                 QSqlQuery q ( DB );
+                qWarning() << "SAVE UDD TO BASE" ;
+                dyn->warn();
                 if ( dyn->id() == -1 ) {
                     // create the dynamic data
                     q.prepare( prepareInsertQuery( Table_DATAS ) );
@@ -553,11 +571,12 @@ bool tkUserBase::saveUser( tkUser *user )
                 if (!q.exec()) {
                     error = true;
                     tkLog::addQueryError( "tkUserBase", q );
-                }
+                } else
+                    dyn->setDirty(false);
             }
         }
         // TODO --> update rights
-        if ( ! error )
+        if (!error)
             tkLog::addMessage( "tkUserBase", QCoreApplication::translate( "tkUserBase", "User %1 correctly updated." ).arg( user->uuid() ) );
     } else {
         // INSERT USER
@@ -584,14 +603,18 @@ bool tkUserBase::saveUser( tkUser *user )
         // add dynamic datas
         if ( user->hasModifiedDynamicDatasToStore() ) {
             const QList<UserDynamicData*> & datasToUpdate = user->modifiedDynamicDatas();
-            foreach( const UserDynamicData *dyn, datasToUpdate ) {
+            foreach( UserDynamicData *dyn, datasToUpdate ) {
                 QSqlQuery q ( DB );
                 q.prepare( prepareInsertQuery( Table_DATAS ) );
-                q.bindValue( DATAS_ID,         QVariant() );
+                q.bindValue( DATAS_ID, QVariant() );
                 dyn->prepareQuery(q);
                 q.exec();
-                if ( ! q.isActive() )
+                if (!q.isActive() ) {
                     tkLog::addQueryError( "tkUserBase", q );
+                } else {
+                    dyn->setId( q.lastInsertId().toInt() );
+                    dyn->setDirty(false);
+                }
             }
         }
 
