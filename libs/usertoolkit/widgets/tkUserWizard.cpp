@@ -139,108 +139,96 @@ void tkUserWizard::done( int r )
             }
         }
         QModelIndex idx;
-        idx = M->index( m_Row, User::UserDecryptedLogin );
+        idx = M->index( m_Row, User::DecryptedLogin );
         M->setData( idx, field("Login") );
-        idx = M->index( m_Row, User::UserPassword );
+        idx = M->index( m_Row, User::Password );
         M->setData( idx, tkUserGlobal::crypt( field("Password").toString() ) );
 
-        idx = M->index( m_Row, User::UserName );
+        idx = M->index( m_Row, User::Name );
         M->setData( idx, field("Name") );
-        idx = M->index( m_Row, User::UserSecondName );
+        idx = M->index( m_Row, User::SecondName );
         M->setData( idx, field("SecondName") );
-        idx = M->index( m_Row, User::UserSurname );
+        idx = M->index( m_Row, User::Surname );
         M->setData( idx, field("Surname") );
-        idx = M->index( m_Row, User::UserTitle );
+        idx = M->index( m_Row, User::Title );
         M->setData( idx, field("Title") );
-        idx = M->index( m_Row, User::UserGender );
+        idx = M->index( m_Row, User::Gender );
         M->setData( idx, field("Gender") );
 
-        idx = M->index( m_Row, User::UserAdress );
+        idx = M->index( m_Row, User::Adress );
         M->setData( idx, field("Adress") );
-        idx = M->index( m_Row, User::UserZipcode );
+        idx = M->index( m_Row, User::Zipcode );
         M->setData( idx, field("Zipcode") );
-        idx = M->index( m_Row, User::UserCity );
+        idx = M->index( m_Row, User::City );
         M->setData( idx, field("City") );
-        idx = M->index( m_Row, User::UserCountry );
+        idx = M->index( m_Row, User::Country );
         M->setData( idx, field("Country") );
-        idx = M->index( m_Row, User::UserLanguageIndex );
+        idx = M->index( m_Row, User::LanguageIndex );
         M->setData( idx, field("Language") );
 
-        idx = M->index( m_Row, User::UserTel1 );
+        idx = M->index( m_Row, User::Tel1 );
         M->setData( idx, field("Tel1") );
-        idx = M->index( m_Row, User::UserTel2 );
+        idx = M->index( m_Row, User::Tel2 );
         M->setData( idx, field("Tel2") );
-        idx = M->index( m_Row, User::UserTel3 );
+        idx = M->index( m_Row, User::Tel3 );
         M->setData( idx, field("Tel3") );
-        idx = M->index( m_Row, User::UserFax );
+        idx = M->index( m_Row, User::Fax );
         M->setData( idx, field("Fax") );
-        idx = M->index( m_Row, User::UserMail );
+        idx = M->index( m_Row, User::Mail );
         M->setData( idx, field("Mail") );
 
-        idx = M->index( m_Row, User::UserSpecialities );
+        idx = M->index( m_Row, User::Specialities );
         M->setData( idx, field("Specialities") );
-        idx = M->index( m_Row, User::UserQualifications );
+        idx = M->index( m_Row, User::Qualifications );
         M->setData( idx, field("Qualifications") );
-        idx = M->index( m_Row, User::UserPractitionerId );
+        idx = M->index( m_Row, User::PractitionerId );
         M->setData( idx, field("Identifiants") );
 
-        idx = M->index( m_Row, User::UserManagerRights );
+        idx = M->index( m_Row, User::ManagerRights );
         M->setData( idx, field("UserManager") );
-        idx = M->index( m_Row, User::UserDrugsRights );
+        idx = M->index( m_Row, User::DrugsRights );
         M->setData( idx, field("DrugsManager") );
-        idx = M->index( m_Row, User::UserMedicalRights );
+        idx = M->index( m_Row, User::MedicalRights );
         M->setData( idx, field("Medical") );
-        idx = M->index( m_Row, User::UserParamedicalRights );
+        idx = M->index( m_Row, User::ParamedicalRights );
         M->setData( idx, field("Paramedical") );
-        idx = M->index( m_Row, User::UserAdministrativeRights );
+        idx = M->index( m_Row, User::AdministrativeRights );
         M->setData( idx, field("Administrative") );
 
-//        idx = M->index( m_Row, User::UserGenericHeader );
+//        idx = M->index( m_Row, User::GenericHeader );
 //        M->setData( idx, field("GenericHeader") );
-//        idx = M->index( m_Row, User::UserGenericFooter );
+//        idx = M->index( m_Row, User::GenericFooter );
 //        M->setData( idx, field("GenericFooter") );
 
-        idx = M->index( m_Row, User::UserPrescriptionHeader );
+        idx = M->index( m_Row, User::PrescriptionHeader );
         M->setData( idx, field("PrescrHeader") );
-        idx = M->index( m_Row, User::UserPrescriptionFooter );
+        idx = M->index( m_Row, User::PrescriptionFooter );
         M->setData( idx, field("PrescrFooter") );
 
-        idx = M->index( m_Row, User::UserAdministrativeHeader );
+        idx = M->index( m_Row, User::AdministrativeHeader );
         M->setData( idx, field("AdminHeader") );
-        idx = M->index( m_Row, User::UserAdministrativeFooter );
+        idx = M->index( m_Row, User::AdministrativeFooter );
         M->setData( idx, field("AdminFooter") );
 
 #ifdef DEBUG
         // warn user
-        idx = M->index( m_Row, User::UserWarn );
+        idx = M->index( m_Row, User::Warn );
         idx.data();
 #endif
 
         if ( M->submitRow( m_Row ) ) {
-            QMessageBox mb( this );
-            mb.setIcon( QMessageBox::Information );
-            mb.setWindowTitle( tr( "User correctly saved into database." ) );
-            mb.setText( tr( "User correctly saved into database." ) );
-            // TODO
-//            mb.setInformativeText( tr( "You can poursue with the current user %1 or "
-//                                       "set this new user to current user." )
-//                                   .arg( M->currentUserData(User::UserName).toString()) );
-            mb.setStandardButtons(QMessageBox::Ok);
-            mb.setDefaultButton(QMessageBox::Ok);
-            mb.exec();
+            tkGlobal::informativeMessageBox( tr( "User correctly saved into database." ),
+                                             tr( "You can poursue with the current user %1 or set this new user to current user." )
+                                             .arg( M->currentUserData(User::Name).toString()),
+                                             "", tr( "User correctly saved into database." ) );
             m_Saved = true;
             QDialog::done(r);
         } else {
             M->removeRows( m_Row, 1 );
-            QMessageBox mb( this );
-            mb.setIcon( QMessageBox::Critical );
-            mb.setWindowTitle( tr( "Error during database access" ) );
-            mb.setText( tr( "An error occured during database access." ) );
-            mb.setInformativeText( tr( "Logged errors saved. Please refer to the %1 to manage this error." )
-                                   .arg( tkLog::saveLog() ) );
-            mb.setStandardButtons(QMessageBox::Ok);
-            mb.setDefaultButton(QMessageBox::Ok);
-            mb.exec();
+            tkGlobal::warningMessageBox( tr( "An error occured during database access." ),
+                                         tr( "Logged errors saved. Please refer to the %1 to manage this error." )
+                                         .arg( tkLog::saveLog() ),
+                                         "", tr( "Error during database access" ) );
             QDialog::done(r);
             m_Saved = false;
         }

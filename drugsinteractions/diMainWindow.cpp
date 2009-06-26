@@ -198,17 +198,17 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
     // else show the dosage creator widget
 
     int drugPrescriptionRow = m_PrescriptionModel->addDrug(CIS);
-    mfDosageCreatorDialog dlg(this, CIS, mfDrugsModel::instance()->dosageModel(CIS));
-    dlg.exec();
-//    if (!m_DosageDialog)
-//        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
-//    else
-//        m_DosageDialog->changeRow(drugPrescriptionRow,0);
-//
-//    int r = m_DosageDialog->exec();
-//    if ( r == QDialog::Rejected )
-//        m_PrescriptionModel->removeLastInsertedDrug();
-//    m_PrescriptionView->listview()->update();
+//    mfDosageCreatorDialog dlg(this, CIS, mfDrugsModel::instance()->dosageModel(CIS));
+//    dlg.exec();
+    if (!m_DosageDialog)
+        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
+    else
+        m_DosageDialog->changeRow(drugPrescriptionRow,0);
+
+    int r = m_DosageDialog->exec();
+    if ( r == QDialog::Rejected )
+        m_PrescriptionModel->removeLastInsertedDrug();
+    m_PrescriptionView->listview()->update();
 }
 
 void diMainWindow::showDosageDialog(const QModelIndex &item)

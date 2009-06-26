@@ -163,6 +163,7 @@ bool diCorePrivate::m_Chrono = false;
 void showMessage( QSplashScreen* s, const QString& m )
 { s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::black ); }
 
+/** \brief Returns the settings manager */
 tkSettings* diCore::settings()
 {
     if ( !diCorePrivate::mInstances.contains( &tkSettings::staticMetaObject ) )
@@ -170,6 +171,7 @@ tkSettings* diCore::settings()
     return qobject_cast<tkSettings*>( diCorePrivate::mInstances[&tkSettings::staticMetaObject] );
 }
 
+/** \brief Returns the mainwindow */
 diMainWindow* diCore::mainWindow()
 {
     if ( !diCorePrivate::mInstances.contains( &diMainWindow::staticMetaObject ) )
@@ -177,11 +179,13 @@ diMainWindow* diCore::mainWindow()
     return qobject_cast<diMainWindow*>( diCorePrivate::mInstances[&diMainWindow::staticMetaObject] );
 }
 
+/** \brief Returns the translators manager */
 tkTranslators* diCore::translators()
 {
     return tkTranslators::instance(qApp);
 }
 
+/** \brief Returns the update checker manager */
 tkUpdateChecker *diCore::updateChecker()
 {
     if ( !diCorePrivate::mInstances.contains( &tkUpdateChecker::staticMetaObject ) )
@@ -189,11 +193,19 @@ tkUpdateChecker *diCore::updateChecker()
     return qobject_cast<tkUpdateChecker*>( diCorePrivate::mInstances[&tkUpdateChecker::staticMetaObject] );
 }
 
+/**
+  \brief Returns the unique drugs model
+  \sa mfDrugsModel::instance()
+*/
 mfDrugsModel* diCore::drugsModel()
 {
     return mfDrugsModel::instance();
 }
 
+/**
+  \brief Returns the medintux manager
+  \sa tkMedintuxConfiguration::instance()
+*/
 tkMedintuxConfiguration *medintuxConfiguration()
 {
     return tkMedintuxConfiguration::instance();  // need to be deleted
@@ -203,6 +215,7 @@ tkMedintuxConfiguration *medintuxConfiguration()
 //-------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Init Function -------------------------------------------
 //-------------------------------------------------------------------------------------------------------
+/** \brief initialize the core manager */
 bool diCore::init()
 {
     QTime chrono;
@@ -309,41 +322,49 @@ bool diCore::init()
     return true;
 }
 
+/** \brief Returns the patient name. */
 QString & diCore::patientName()
 {
     return diCorePrivate::m_PatientName;
 }
 
+/** \brief Set patient name. */
 void diCore::setPatientName( const QString &name)
 {
     diCorePrivate::m_PatientName = name;
 }
 
+/** \brief Patient date of birth */
 QString & diCore::patientDateOfBirth()
 {
     return diCorePrivate::m_PatientDOB;
 }
 
+/** \todo Todo */
 QString & diCore::patientAge()
 {
     return diCorePrivate::m_PatientDOB;
 }
 
+/** \brief Patient date of birth */
 void diCore::setPatientDateOfBirth( const QString &date)
 {
     diCorePrivate::m_PatientDOB = date;
 }
 
+/** \brief Patient wieght */
 QString & diCore::patientWeight()
 {
     return diCorePrivate::m_PatientWeight;
 }
 
+/** \brief Patient size */
 QString & diCore::patientSize()
 {
     return diCorePrivate::m_PatientSize;
 }
 
+/** \brief Patient Clearance of creatinin */
 QString & diCore::patientClCr()
 {
     return diCorePrivate::m_PatientClCr;

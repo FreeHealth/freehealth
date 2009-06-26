@@ -399,6 +399,7 @@ bool tkUserModel::setData( const QModelIndex & item, const QVariant & value, int
         case User::Qualifications :  user->setQualification( value.toStringList() ); break;
         case User::Preferences :  user->setPreferences( value ); break;
 
+        /** \todo Add Xml extra document to model */
         case User::GenericHeader : user->setExtraDocumentHtml( value, User::GenericHeader ); break;
         case User::GenericFooter :  user->setExtraDocumentHtml( value, User::GenericFooter ); break;
         case User::GenericWatermark :  user->setExtraDocumentHtml( value, User::GenericWatermark ); break;
