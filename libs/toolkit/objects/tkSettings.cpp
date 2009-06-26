@@ -122,6 +122,11 @@
  * Defines the users' resources path. This path is readable and writable for the user.
 */
 
+/*! \var tkSettings::Paths tkSettings::BundleRootPath
+ * Defines the root path of the bundle. On MacOs, the path is the one where lies the \e Application.app. On other OS,
+ * the path is the path where stands the \e Application path.
+*/
+
 /*! \var tkSettings::Paths tkSettings::BundleResourcesPath
  * Defines the users' resources path. This path is readable and writable for the user.
 */
@@ -169,7 +174,11 @@ namespace tkSettingsPrivateConstants {
     const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
     const char* const WIN_QTFRAMEWORKPATH  = "";
     const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
-    
+    const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
+    const char* const WIN_TOBUNDLEROOTPATH = "/..";
+    const char* const NUX_TOBUNDLEROOTPATH = "/..";
+    const char* const BSD_TOBUNDLEROOTPATH = "/..";
+
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
     const char* const WRITABLEDATABASE     = "/databases";
 
@@ -235,7 +244,6 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
         setParent(qApp);
 
     m_Instance = this;
-//    tkLog::instance()->addObjectWatcher(this);
 }
 
 tkSettings::~tkSettings()
@@ -244,6 +252,12 @@ tkSettings::~tkSettings()
     d=0;
 }
 
+/**
+  \brief defines a path \e absPath with the index \e type.
+  When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
+  When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, SampleFormsPath.\n
+  When setting ResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
+*/
 void tkSettings::setPath( const int type, const QString & absPath )
 {
     switch (type)
@@ -279,18 +293,22 @@ void tkSettings::setPath( const int type, const QString & absPath )
                 d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH) );
                 d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH) );
                 d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+                d->m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH ) );
             } else if (tkGlobal::isRunningOnLinux()) {
                 d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
                 d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+                d->m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + NUX_TOBUNDLEROOTPATH ) );
             } else if (tkGlobal::isRunningOnWin()) {
                 d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH) );
                 d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+                d->m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH ) );
             } else if (tkGlobal::isRunningOnFreebsd()) {
                 d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
                 d->m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 d->m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
+                d->m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + BSD_TOBUNDLEROOTPATH ) );
             }
             break;
         }

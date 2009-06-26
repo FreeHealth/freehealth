@@ -77,6 +77,7 @@ public:
     enum Paths {
         ResourcesPath = 0,
         ApplicationPath,
+        BundleRootPath,
         BundleResourcesPath,
         ReadOnlyDatabasesPath,
         ReadWriteDatabasesPath,
