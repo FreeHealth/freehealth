@@ -194,6 +194,9 @@ QString UserDynamicData::name() const
 void UserDynamicData::setName(const QString &name)
 {
     d->m_Name = name;
+    if (d->m_Name.startsWith(PAPERS_MARK)) {
+        d->m_Type = ExtraDocument;
+    }
 }
 
 /** \brief Returns the Id of the UserDynamicData */
@@ -224,14 +227,7 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value)
     switch (field) {
             case DATAS_ID : d->m_Id = value.toInt(); break;
             case DATAS_USER_UUID : d->m_UserUuid = value.toString(); break;
-            case DATAS_DATANAME:
-                {
-                    d->m_Name = value.toString();
-                    if (d->m_Name.startsWith(PAPERS_MARK)) {
-                        d->m_Type = ExtraDocument;
-                    }
-                    break;
-                }
+            case DATAS_DATANAME: setName(value.toString()); break;
             case DATAS_LANGUAGE: d->m_Language = value.toString(); break;
             case DATAS_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
             case DATAS_TRACE_ID: d->m_Trace = value.toInt(); break;

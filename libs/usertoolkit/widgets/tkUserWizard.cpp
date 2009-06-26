@@ -126,15 +126,10 @@ void tkUserWizard::done( int r )
         if ( ( m_CreateUser) || (m_Row == -1) ) {
             m_Row = M->rowCount();
             if ( ! M->insertRows( m_Row, 1) ) {
-                QMessageBox mb( this );
-                mb.setIcon( QMessageBox::Critical );
-                mb.setWindowTitle( tr( "Error during database access" ) );
-                mb.setText( tr( "An error occured during database access." ) );
-                mb.setInformativeText( tr( "Logged errors saved. Please refer to the %1 to manage this error." )
-                                       .arg( tkLog::saveLog() ) );
-                mb.setStandardButtons(QMessageBox::Ok);
-                mb.setDefaultButton(QMessageBox::Ok);
-                mb.exec();
+                tkGlobal::warningMessageBox( tr( "An error occured during database access." ),
+                                             tr( "Logged errors saved. Please refer to the %1 to manage this error." )
+                                       .arg( tkLog::saveLog() ),
+                                       "", tr( "Error during database access" ) );
                 QDialog::done( QDialog::Rejected );
             }
         }
@@ -195,10 +190,10 @@ void tkUserWizard::done( int r )
         idx = M->index( m_Row, User::AdministrativeRights );
         M->setData( idx, field("Administrative") );
 
-//        idx = M->index( m_Row, User::GenericHeader );
-//        M->setData( idx, field("GenericHeader") );
-//        idx = M->index( m_Row, User::GenericFooter );
-//        M->setData( idx, field("GenericFooter") );
+        idx = M->index( m_Row, User::GenericHeader );
+        M->setData( idx, field("GenericHeader") );
+        idx = M->index( m_Row, User::GenericFooter );
+        M->setData( idx, field("GenericFooter") );
 
         idx = M->index( m_Row, User::PrescriptionHeader );
         M->setData( idx, field("PrescrHeader") );
