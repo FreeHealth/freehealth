@@ -72,7 +72,6 @@
 
 // include Qt headers
 #include <QApplication>
-#include <QMessageBox>
 
 Q_TKUSER_USING_GLOBAL
 Q_TK_USING_CONSTANTS
@@ -112,15 +111,9 @@ void tkUserIdentifier::done( int result )
             if ( d->m_NumberOfTries == MaxNumberOfTries )
                 QDialog::done( QDialog::Rejected );
             else {
-                QMessageBox mb( this );
-                mb.setIcon( QMessageBox::Critical );
-                mb.setWindowTitle( qApp->applicationName() );
-                mb.setText( tr( "Incorrect login/password informations." ) );
-                mb.setInformativeText( tr( "You can try %1 more time(s)." )
-                                       .arg( MaxNumberOfTries - d->m_NumberOfTries ) );
-                mb.setStandardButtons(QMessageBox::Ok);
-                mb.setDefaultButton(QMessageBox::Ok);
-                mb.exec();
+                tkGlobal::warningMessageBox( tr( "Incorrect login/password informations." ),
+                                             tr( "You can try %1 more time(s)." )
+                                             .arg( MaxNumberOfTries - d->m_NumberOfTries ),"",qApp->applicationName());
             }
         } else {
             tkLog::addMessage( this, tr( "User is identified." ) );

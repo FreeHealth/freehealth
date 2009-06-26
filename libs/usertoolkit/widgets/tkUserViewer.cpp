@@ -61,7 +61,6 @@
 #include <QSqlTableModel>
 #include <QHeaderView>
 #include <QStringListModel>
-#include <QMessageBox>
 #include <QTextEdit>
 
 //--------------------------------------------------------------------------------------------------------
@@ -253,15 +252,10 @@ void tkUserViewerPrivate::on_but_changePassword_clicked()
 void tkUserViewerPrivate::on_but_viewHistory_clicked()
 {
     tkUserModel *m = tkUserModel::instance();
-    QMessageBox mb( qApp->activeWindow() );
-    mb.setIcon( QMessageBox::Information );
-    mb.setWindowTitle( qApp->activeWindow()->windowTitle() );
-    mb.setText( tr( "Login history." ) );
-    mb.setInformativeText( tr( "User %1\nLast connection : %2" )
+    tkGlobal::informativeMessageBox( tr( "Login history." ),
+                                     tr( "User %1\nLast connection : %2" )
                            .arg( m->index(m_Row,User::Name).data().toString() )
-                           .arg( m->index(m_Row,User::LastLogin).data().toDateTime().toString() ) );
-    mb.setDetailedText( m->index(m_Row,User::LoginHistory).data().toString() );
-    mb.setStandardButtons(QMessageBox::Ok);
-    mb.setDefaultButton(QMessageBox::Ok);
-    mb.exec();
+                           .arg( m->index(m_Row,User::LastLogin).data().toDateTime().toString() ),
+                            m->index(m_Row,User::LoginHistory).data().toString(),
+                            qApp->applicationName());
 }

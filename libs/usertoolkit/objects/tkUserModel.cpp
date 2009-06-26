@@ -66,7 +66,6 @@
 #include <QColor>
 #include <QByteArray>
 #include <QFont>
-#include <QMessageBox>
 #include <QHash>
 
 using namespace tkUserConstants;

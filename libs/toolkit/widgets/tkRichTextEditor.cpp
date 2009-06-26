@@ -83,20 +83,19 @@
 #include <QTextCharFormat>
 #include <QVBoxLayout>
 #include <QStringList>
-#include <QMessageBox>
 #include <QFontDialog>
 
  #include <QDebug>
 
 // Some constants
 const char * const CREATE_TKRICHTEXTMENU = "menuTkRichTextEditor";
-const char * const A_TKRICH_FILEOPEN   = "actiontkRichTextEditorOpen";
-const char * const A_TKRICH_FILESAVE   = "actiontkRichTextEditorSave";
-const char * const M_RICHTEXT          = "menutkRichTextEditor";
-const char * const G_RICHTEXT_FILE     = "grouptkRichTextEditor";
-const char * const TKRT_FILEOPEN_TEXT  = QT_TRANSLATE_NOOP("tkRichTextEditor", "Open document into text editor");
-const char * const TKRT_FILESAVE_TEXT  = QT_TRANSLATE_NOOP("tkRichTextEditor", "Save document of text editor");
-const char * const TKRICHTEXTMENU_TEXT = QT_TRANSLATE_NOOP("tkRichTextEditor", "Rich Text Editor");
+const char * const A_TKRICH_FILEOPEN     = "actiontkRichTextEditorOpen";
+const char * const A_TKRICH_FILESAVE     = "actiontkRichTextEditorSave";
+const char * const M_RICHTEXT            = "menutkRichTextEditor";
+const char * const G_RICHTEXT_FILE       = "grouptkRichTextEditor";
+const char * const TKRT_FILEOPEN_TEXT    = QT_TRANSLATE_NOOP("tkRichTextEditor", "Open document into text editor");
+const char * const TKRT_FILESAVE_TEXT    = QT_TRANSLATE_NOOP("tkRichTextEditor", "Save document of text editor");
+const char * const TKRICHTEXTMENU_TEXT   = QT_TRANSLATE_NOOP("tkRichTextEditor", "Rich Text Editor");
 
 Q_TK_USING_CONSTANTS
 

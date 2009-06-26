@@ -40,12 +40,12 @@
 
 /**
   \class tkUserPasswordDialog
-  \brief Dialog to use when user want to change its password. You need to know the actual password of the user.
-    Dialog is QDialog::Accepted only if all is good (old password correctly written and new password verification
-    passed). You can verify this state of validity using canGetNewPassword() before
-    retreiving the new crypted password with cryptedPassword().
-
-    cryptedPassword() returns an empty string if you call it when an error occured.
+  \brief Dialog for password changing.
+  With this dialog, user can change its password. He's asked of the actual password once, and of the new password
+  twice. When user accept the dialog a verification is done, no changes are saved into database or users' model. \n
+  \li canGetNewPassword() return the verification state. If it's true, all is good : old password was verified, and
+  new password was correctly confirmed.
+  \li cryptedPassword() return the crypted new password to use.
   \ingroup usertoolkit widget_usertoolkit usermanager
 */
 
@@ -60,7 +60,6 @@
 #include <tkUserGlobal.h>
 
 // include Qt headers
-#include <QMessageBox>
 
 tkUserPasswordDialog::tkUserPasswordDialog( const QString & actualCryptedPassword, QWidget * parent ) :
     QDialog(parent)
@@ -72,11 +71,13 @@ tkUserPasswordDialog::tkUserPasswordDialog( const QString & actualCryptedPasswor
    d->m_ActualPass = actualCryptedPassword;
 }
 
+/** \brief Return the state of verification. Verification is done when user accepts the dialog. */
 bool tkUserPasswordDialog::canGetNewPassword()
 {
     return d->m_AllIsGood;
 }
 
+/** \brief Returns the crypted password */
 QString tkUserPasswordDialog::cryptedPassword()
 {
     if ( d->m_AllIsGood )
@@ -108,17 +109,13 @@ void tkUserPasswordDialogPrivate::accept()
         m_Parent->accept();
     } else {
         m_AllIsGood = false;
-        QMessageBox mb( m_Parent );
-        mb.setIcon( QMessageBox::Critical );
-        mb.setWindowTitle( m_Parent->windowTitle() );
-        mb.setText( tr( "Password can not be change." ) );
-        mb.setStandardButtons(QMessageBox::Cancel);
-        mb.setDefaultButton(QMessageBox::Cancel);
+        QString info;
         if ( oldPass != m_ActualPass )
-            mb.setInformativeText( tr( "The old password is not correct. Please retry with the correct password." ) );
+             info = tr( "The old password is not correct. Please retry with the correct password." );
         else
-            mb.setInformativeText( tr( "Wrong password confirmation." ) );
-        mb.exec();
+            info = tr( "Wrong password confirmation." );
+        tkGlobal::warningMessageBox( tr( "Password can not be change." ),
+                                     info, "", m_Parent->windowTitle());
         m_Parent->reject();
     }
 }
