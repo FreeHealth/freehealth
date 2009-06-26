@@ -144,7 +144,7 @@ tkUserManagerPrivate::tkUserManagerPrivate( QMainWindow * parent )
     m_PermanentUserName(0),
     m_PermanentWidget(0)
 {
-    m_SearchBy = User::UserName;
+    m_SearchBy = User::Name;
     setupUi(parent);
 
     toolBar->addActions( menuUser_manager->actions() );
@@ -234,7 +234,7 @@ void tkUserManagerPrivate::analyseCurrentUserRights()
 {
     // retreive user manager rights from model
     tkUserModel *m = tkUserModel::instance();
-    User::UserRights r ( m->data( m->index( m->currentUserIndex().row(), User::UserManagerRights ) ).toInt() );
+    User::UserRights r ( m->data( m->index( m->currentUserIndex().row(), User::ManagerRights ) ).toInt() );
     // translate to bools
     m_CanModify = ( r & User::WriteAll );
     m_CanCreate = ( r & User::Create );
@@ -266,7 +266,7 @@ void tkUserManagerPrivate::updateStatusBar()
     memoryUsageLabel->setText( tr( "Database usage : %1,\nMemory usage : %2" )
                                      .arg( m->rowCount())
                                      .arg(m->numberOfUsersInMemory()) );
-    m_PermanentUserName->setText( m->index( m->currentUserIndex().row(), User::UserName ).data().toString() );
+    m_PermanentUserName->setText( m->index( m->currentUserIndex().row(), User::Name ).data().toString() );
     m_Parent->statusBar()->addPermanentWidget(m_PermanentWidget);
 }
 
@@ -274,13 +274,13 @@ void tkUserManagerPrivate::updateStatusBar()
 void tkUserManagerPrivate::on_m_SearchToolButton_triggered( QAction * act )
 {
     if ( act == searchByNameAct )
-        m_SearchBy= User::UserName;
+        m_SearchBy= User::Name;
     else if (act == searchBySurnameAct)
-        m_SearchBy= User::UserSurname;
+        m_SearchBy= User::Surname;
     else if (act == searchByNameAndSurnameAct)
         m_SearchBy= -1;
     else if (act == searchByCityAct)
-        m_SearchBy= User::UserCity;
+        m_SearchBy= User::City;
 }
 
 /**
@@ -386,6 +386,6 @@ void tkUserManagerPrivate::retranslate()
 void tkUserManagerPrivate::showUserDebugDialog( const QModelIndex &id )
 {
     QStringList list;
-    list << tkUserModel::instance()->index(id.row(), User::UserWarnText).data(Qt::DisplayRole).toStringList();
+    list << tkUserModel::instance()->index(id.row(), User::WarnText).data(Qt::DisplayRole).toStringList();
     tkGlobal::quickDebugDialog( list );
 }

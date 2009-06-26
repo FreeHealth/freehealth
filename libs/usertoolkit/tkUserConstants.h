@@ -182,48 +182,48 @@ namespace User
     // For complete abstraction of database, use the tkUserModel with this abstracting enum
     enum UserModel {
         // ORDER SHOULD NEVER CHANGE
-        UserId = 0,
-        UserUuid,           /*!< \brief Unique identifier the each users */
-        UserValidity,       /*!< \brief Validity of this user */
-        UserLogin,          /*!< \brief Crypted login \sa tkUserGlobal::loginForSQL() */
-        UserPassword,       /*!< \brief Crypted password \sa tkUserGlobal::crypt() */
-        UserLastLogin,      /*!< \brief Date of the last correct login */
-        UserName,           /*!< \brief Name */
-        UserSecondName,     /*!< \brief Second name */
-        UserSurname,        /*!< \brief surname */
-        UserMail,           /*!< \brief Mail address */
-        UserLanguage,       /*!< \brief Language for interface */
-        UserLocker,         /*!< \brief Locker */
-        UserLanguageIndex,  /*!< \brief Language index from tkTranslator::availbleLanguages() */
+        Id = 0,
+        Uuid,           /*!< \brief Unique identifier the each users */
+        Validity,       /*!< \brief Validity of this user */
+        Login,          /*!< \brief Crypted login \sa tkUserGlobal::loginForSQL() */
+        Password,       /*!< \brief Crypted password \sa tkUserGlobal::crypt() */
+        LastLogin,      /*!< \brief Date of the last correct login */
+        Name,           /*!< \brief Name */
+        SecondName,     /*!< \brief Second name */
+        Surname,        /*!< \brief surname */
+        Mail,           /*!< \brief Mail address */
+        Language,       /*!< \brief Language for interface */
+        Locker,         /*!< \brief Locker */
+        LanguageIndex,  /*!< \brief Language index from tkTranslator::availbleLanguages() */
         // ORDER CAN CHANGE
-        UserGenderIndex, UserTitleIndex, UserGender, UserTitle,
-        UserAdress, UserZipcode, UserCity, UserCountry, UserTel1, UserTel2, UserTel3, UserFax, UserPractitionerId,
-        UserSpecialities, UserQualifications, UserPreferences,
+        GenderIndex, TitleIndex, Gender, Title,
+        Adress, Zipcode, City, Country, Tel1, Tel2, Tel3, Fax, PractitionerId,
+        Specialities, Qualifications, Preferences,
 
-        UserGenericHeader,            /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserGenericFooter,            /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserGenericWatermark,         /*!< \brief Extra Document \sa tkTextDocumentExtra */
+        GenericHeader,            /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        GenericFooter,            /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        GenericWatermark,         /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
 
-        UserAdministrativeHeader,     /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserAdministrativeFooter,     /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserAdministrativeWatermark,  /*!< \brief Extra Document \sa tkTextDocumentExtra */
+        AdministrativeHeader,     /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        AdministrativeFooter,     /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        AdministrativeWatermark,  /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
 
-        UserPrescriptionHeader,       /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserPrescriptionFooter,       /*!< \brief Extra Document \sa tkTextDocumentExtra */
-        UserPrescriptionWatermark,    /*!< \brief Extra Document \sa tkTextDocumentExtra */
+        PrescriptionHeader,       /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        PrescriptionFooter,       /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        PrescriptionWatermark,    /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
 
-        UserManagerRights,
-        UserDrugsRights,
-        UserMedicalRights,
-        UserParamedicalRights,
-        UserAdministrativeRights,
+        ManagerRights,
+        DrugsRights,
+        MedicalRights,
+        ParamedicalRights,
+        AdministrativeRights,
 
-        UserDecryptedLogin,
-        UserLoginHistory,
-        UserIsModified,
-        UserWarn,                   // for debugging function only with data()
-        UserWarnText,
-        UserMaxParam
+        DecryptedLogin,           /*!< \brief Clear human readable login. */
+        LoginHistory,             /*!< \brief Full login history of the user. */
+        IsModified,
+        Warn,                     /*!< \brief For debugging purpose. */
+        WarnText,                 /*!< \brief For debugging purpose. */
+        MaxParam
     };
 
     // for Rights understanding

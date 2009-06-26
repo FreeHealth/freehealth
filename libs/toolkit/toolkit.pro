@@ -14,7 +14,7 @@ INCLUDEPATH *= $${PWD}/sdk
 QT *= sql \
     network \
     xml
-ÿCONFIG *= dll
+CONFIG *= dll
 
 # make library exportable
 DEFINES *= TOOLKIT_CORE_BUILD

@@ -14,6 +14,8 @@ namespace tkPrinterPreviewerPrivateConstants {
     const char* const HEADER = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Header");
     const char* const FOOTER = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Footer");
     const char* const WATERMARK = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Watermark");
+    const char* const EXAMPLE_CONTENT =
+            "";
 
 QWidget *createEditor( QWidget *parent, tkRichTextEditor *t, const QString &title, const int defaultPresence = tkPrinter::EachPages)
 {
@@ -39,6 +41,7 @@ using namespace tkPrinterPreviewerPrivateConstants;
   \brief For internal use
   \internal
   \todo Manage printer page magins...
+  \todo Manage the page changer for the preview (spinbox)
 */
 tkPrinterPreviewerPrivate::tkPrinterPreviewerPrivate(QWidget *parent) :
     tkPrinterPreviewer(parent), m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0), m_AutoCheck(false)

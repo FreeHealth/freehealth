@@ -62,25 +62,6 @@ Q_TK_END_CONSTANTS
 
 Q_TK_USING_CONSTANTS
 
-/**
-  \brief This class is used by tkPrinter for header/footer/watermark management.
-  Xml structure looks like :\n
-  <tkConstants::TKDOCUMENT_GENERAL_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_VERSION_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_PRESENCE_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_PRIORITY_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_EXTRA_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_HTML_XML_TAG> </idem>\n
-  </tkConstants::TKDOCUMENT_GENERAL_XML_TAG>\n
-  You can :
-  \li get a pointer to the referenced QTextDocument using document().\n
-  \li set the Presence of the document according to tkPrinter::Presence\n
-  \li set the Priority of the document according to tkPrinter::Priority\n
-  \li get/set to/from Xml using toXml() , fromXml()\n
-
-  \sa tkPrinter
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkTextDocumentExtra
 {
 public:

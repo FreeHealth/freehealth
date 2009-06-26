@@ -39,7 +39,7 @@
  ***************************************************************************/
 
 /**
- \class tkUSerIdentifier
+ \class tkUserIdentifier
   \brief This class is a dialog that ask user for is login/password, with a limited number of tries.
   You can show some informations on the left using the first parameter of the constructor.
   If there is not informations to show, the informations' groupBox is hidden.

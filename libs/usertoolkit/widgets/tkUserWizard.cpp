@@ -562,6 +562,7 @@ UserGenericPage::UserGenericPage(QWidget *parent) :
     QLabel * lblH = new QLabel( tr( "Header" ), this );
     QLabel * lblF = new QLabel( tr( "Footer" ), this );
 
+    /** \todo use tkPrinterPreviewer instead of tkRichTextEditors */
     tkRichTextEditor * head = new tkRichTextEditor( this );
     tkRichTextEditor * foot = new tkRichTextEditor( this );
 
@@ -586,6 +587,7 @@ UserPrescriptionsPage::UserPrescriptionsPage(QWidget *parent) :
     QLabel * lblH = new QLabel( tr( "Header" ), this );
     QLabel * lblF = new QLabel( tr( "Footer" ), this );
 
+    /** \todo use tkPrinterPreviewer instead of tkRichTextEditors */
     tkRichTextEditor * head = new tkRichTextEditor( this );
     tkRichTextEditor * foot = new tkRichTextEditor( this );
 
@@ -610,6 +612,7 @@ UserAdministrativePage::UserAdministrativePage(QWidget *parent) :
     QLabel * lblH = new QLabel( tr( "Header" ), this );
     QLabel * lblF = new QLabel( tr( "Footer" ), this );
 
+    /** \todo use tkPrinterPreviewer instead of tkRichTextEditors */
     tkRichTextEditor * head = new tkRichTextEditor( this );
     tkRichTextEditor * foot = new tkRichTextEditor( this );
 

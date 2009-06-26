@@ -154,45 +154,46 @@ void tkUserViewerPrivate::prepareMapper()
     m_Mapper = new QDataWidgetMapper( m_Parent );
     m_Mapper->setModel( tkUserModel::instance() );
     m_Mapper->setSubmitPolicy( QDataWidgetMapper::AutoSubmit );
-    m_Mapper->addMapping( uuidLineEdit, User::UserUuid );
-    m_Mapper->addMapping( titleCombo, User::UserTitleIndex, "currentIndex" );
-    m_Mapper->addMapping( genderCombo, User::UserGenderIndex, "currentIndex" );
-    m_Mapper->addMapping( nameLineEdit, User::UserName );
-    m_Mapper->addMapping( loginLineEdit, User::UserDecryptedLogin );
-    m_Mapper->addMapping( secNameLineEdit, User::UserSecondName );
-    m_Mapper->addMapping( surnameLineEdit, User::UserSurname );
-    m_Mapper->addMapping( lastLoginDateTimeEdit, User::UserLastLogin );
-    m_Mapper->addMapping( languageCombo, User::UserLanguageIndex, "currentIndex" );
-    m_Mapper->addMapping( specialtyListView, User::UserSpecialities );
-    m_Mapper->addMapping( adressTextEdit, User::UserAdress, "plainText" );
-    m_Mapper->addMapping( countryLineEdit, User::UserCountry );
-    m_Mapper->addMapping( zipcodeLineEdit, User::UserZipcode );
-    m_Mapper->addMapping( cityLineEdit, User::UserCity );
-    m_Mapper->addMapping( tel1LineEdit, User::UserTel1 );
-    m_Mapper->addMapping( tel2LineEdit, User::UserTel2 );
-    m_Mapper->addMapping( tel3LineEdit, User::UserTel3 );
-    m_Mapper->addMapping( faxLineEdit, User::UserFax );
-    m_Mapper->addMapping( mailLineEdit, User::UserMail );
-    m_Mapper->addMapping( specialtyListView, User::UserSpecialities, "stringList" );
-    m_Mapper->addMapping( qualificationsListView, User::UserQualifications, "stringList" );
-    m_Mapper->addMapping( practIdsListView, User::UserPractitionerId, "stringList" );
+    m_Mapper->addMapping( uuidLineEdit, User::Uuid );
+    m_Mapper->addMapping( titleCombo, User::TitleIndex, "currentIndex" );
+    m_Mapper->addMapping( genderCombo, User::GenderIndex, "currentIndex" );
+    m_Mapper->addMapping( nameLineEdit, User::Name );
+    m_Mapper->addMapping( loginLineEdit, User::DecryptedLogin );
+    m_Mapper->addMapping( secNameLineEdit, User::SecondName );
+    m_Mapper->addMapping( surnameLineEdit, User::Surname );
+    m_Mapper->addMapping( lastLoginDateTimeEdit, User::LastLogin );
+    m_Mapper->addMapping( languageCombo, User::LanguageIndex, "currentIndex" );
+    m_Mapper->addMapping( specialtyListView, User::Specialities );
+    m_Mapper->addMapping( adressTextEdit, User::Adress, "plainText" );
+    m_Mapper->addMapping( countryLineEdit, User::Country );
+    m_Mapper->addMapping( zipcodeLineEdit, User::Zipcode );
+    m_Mapper->addMapping( cityLineEdit, User::City );
+    m_Mapper->addMapping( tel1LineEdit, User::Tel1 );
+    m_Mapper->addMapping( tel2LineEdit, User::Tel2 );
+    m_Mapper->addMapping( tel3LineEdit, User::Tel3 );
+    m_Mapper->addMapping( faxLineEdit, User::Fax );
+    m_Mapper->addMapping( mailLineEdit, User::Mail );
+    m_Mapper->addMapping( specialtyListView, User::Specialities, "stringList" );
+    m_Mapper->addMapping( qualificationsListView, User::Qualifications, "stringList" );
+    m_Mapper->addMapping( practIdsListView, User::PractitionerId, "stringList" );
 
-    // Got lots of problems with datawidgetmapper and tkrichtexteditor
-    // So save by hand
-    m_Mapper->addMapping( genericPreview->headerEditor() , User::UserGenericHeader, "html" );
-    m_Mapper->addMapping( genericPreview->footerEditor() , User::UserGenericFooter, "html" );
+    m_Mapper->addMapping( genericPreview->headerEditor() , User::GenericHeader, "html" );
+    m_Mapper->addMapping( genericPreview->footerEditor() , User::GenericFooter, "html" );
+    m_Mapper->addMapping( genericPreview->watermarkEditor(), User::GenericWatermark, "html" );
 
-    m_Mapper->addMapping( adminPreview->headerEditor(), User::UserAdministrativeHeader, "html" );
-    m_Mapper->addMapping( adminPreview->footerEditor(), User::UserAdministrativeFooter, "html" );
+    m_Mapper->addMapping( adminPreview->headerEditor(), User::AdministrativeHeader, "html" );
+    m_Mapper->addMapping( adminPreview->footerEditor(), User::AdministrativeFooter, "html" );
+    m_Mapper->addMapping( adminPreview->watermarkEditor(), User::AdministrativeWatermark, "html" );
 
-    m_Mapper->addMapping( prescriptionPreview->headerEditor(), User::UserPrescriptionHeader, "html" );
-    m_Mapper->addMapping( prescriptionPreview->footerEditor(), User::UserPrescriptionFooter, "html" );
+    m_Mapper->addMapping( prescriptionPreview->headerEditor(), User::PrescriptionHeader, "html" );
+    m_Mapper->addMapping( prescriptionPreview->footerEditor(), User::PrescriptionFooter, "html" );
+    m_Mapper->addMapping( prescriptionPreview->watermarkEditor(), User::PrescriptionWatermark, "html" );
 
-    m_Mapper->addMapping( userManagerRightsListWidget, User::UserManagerRights, "rights" );
-    m_Mapper->addMapping( drugsRightsListWidget, User::UserDrugsRights, "rights" );
-    m_Mapper->addMapping( medicalRightsListWidget, User::UserMedicalRights, "rights" );
-    m_Mapper->addMapping( paramedicalRightsWidget, User::UserParamedicalRights, "rights" );
-    m_Mapper->addMapping( administrativeRightsWidget, User::UserAdministrativeRights, "rights" );
+    m_Mapper->addMapping( userManagerRightsListWidget, User::ManagerRights, "rights" );
+    m_Mapper->addMapping( drugsRightsListWidget, User::DrugsRights, "rights" );
+    m_Mapper->addMapping( medicalRightsListWidget, User::MedicalRights, "rights" );
+    m_Mapper->addMapping( paramedicalRightsWidget, User::ParamedicalRights, "rights" );
+    m_Mapper->addMapping( administrativeRightsWidget, User::AdministrativeRights, "rights" );
 
     m_Mapper->setCurrentModelIndex( tkUserModel::instance()->currentUserIndex() );
     // make connections
@@ -212,12 +213,12 @@ void tkUserViewerPrivate::checkUserRights()
     int currentUserRow = m->currentUserIndex().row();
     if ( currentUserRow == m_Row ) {
         // showing currentuser
-        User::UserRights r = User::UserRights( m->index( currentUserRow, User::UserManagerRights).data().toInt() );
+        User::UserRights r = User::UserRights( m->index( currentUserRow, User::ManagerRights).data().toInt() );
         m_CanModify = ( r ^ User::WriteOwn );
         m_CanRead = ( r ^ User::ReadOwn );
     } else {
         // not showing currentuser
-        User::UserRights r = User::UserRights( m->index( currentUserRow, User::UserManagerRights).data().toInt() );
+        User::UserRights r = User::UserRights( m->index( currentUserRow, User::ManagerRights).data().toInt() );
         m_CanModify = ( r & User::WriteAll );
         m_CanRead = ( r & User::ReadAll );
     }
@@ -240,11 +241,11 @@ void tkUserViewerPrivate::on_languageCombo_activated( int )
 void tkUserViewerPrivate::on_but_changePassword_clicked()
 {
     tkUserModel * m = tkUserModel::instance();
-    tkUserPasswordDialog d( m->index( m_Row, User::UserPassword).data().toString(), m_Parent );
+    tkUserPasswordDialog d( m->index( m_Row, User::Password).data().toString(), m_Parent );
     if ( d.exec() == QDialog::Accepted ) {
         if ( ! d.canGetNewPassword() )
             return;
-        QModelIndex idx = m->index( m_Row, User::UserPassword );
+        QModelIndex idx = m->index( m_Row, User::Password );
         m->setData( idx, d.cryptedPassword() );
     }
 }
@@ -257,9 +258,9 @@ void tkUserViewerPrivate::on_but_viewHistory_clicked()
     mb.setWindowTitle( qApp->activeWindow()->windowTitle() );
     mb.setText( tr( "Login history." ) );
     mb.setInformativeText( tr( "User %1\nLast connection : %2" )
-                           .arg( m->index(m_Row,User::UserName).data().toString() )
-                           .arg( m->index(m_Row,User::UserLastLogin).data().toDateTime().toString() ) );
-    mb.setDetailedText( m->index(m_Row,User::UserLoginHistory).data().toString() );
+                           .arg( m->index(m_Row,User::Name).data().toString() )
+                           .arg( m->index(m_Row,User::LastLogin).data().toDateTime().toString() ) );
+    mb.setDetailedText( m->index(m_Row,User::LoginHistory).data().toString() );
     mb.setStandardButtons(QMessageBox::Ok);
     mb.setDefaultButton(QMessageBox::Ok);
     mb.exec();

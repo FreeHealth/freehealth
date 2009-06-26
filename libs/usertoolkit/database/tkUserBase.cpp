@@ -552,8 +552,8 @@ bool tkUserBase::saveUser( tkUser *user )
             const QList<UserDynamicData*> & datasToUpdate = user->modifiedDynamicDatas();
             foreach( UserDynamicData *dyn, datasToUpdate ) {
                 QSqlQuery q ( DB );
-                qWarning() << "SAVE UDD TO BASE" ;
-                dyn->warn();
+//                qWarning() << "SAVE UDD TO BASE" ;
+//                dyn->warn();
                 if ( dyn->id() == -1 ) {
                     // create the dynamic data
                     q.prepare( prepareInsertQuery( Table_DATAS ) );

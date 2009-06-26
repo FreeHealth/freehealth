@@ -340,18 +340,21 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
         }
         default:
         {
-            if (d->m_Value.toString().length() < 200) {
-                bindedQuery.bindValue( DATAS_STRING ,    d->m_Value);
+            QString tmp = d->m_Value.toString();
+            if (type() == ExtraDocument)
+                tmp = d->m_Doc->toXml();
+            if (tmp.length() < 200) {
+                bindedQuery.bindValue( DATAS_STRING ,    tmp);
                 bindedQuery.bindValue( DATAS_LONGSTRING, QVariant());
                 bindedQuery.bindValue( DATAS_FILE,       QVariant());
-            } else if (d->m_Value.toString().length() < 2000) {
+            } else if (tmp.length() < 2000) {
                 bindedQuery.bindValue( DATAS_STRING ,    QVariant());
-                bindedQuery.bindValue( DATAS_LONGSTRING, d->m_Value);
+                bindedQuery.bindValue( DATAS_LONGSTRING, tmp);
                 bindedQuery.bindValue( DATAS_FILE,       QVariant());
             } else {
                 bindedQuery.bindValue( DATAS_STRING ,    QVariant());
                 bindedQuery.bindValue( DATAS_LONGSTRING, QVariant());
-                bindedQuery.bindValue( DATAS_FILE,       d->m_Value);
+                bindedQuery.bindValue( DATAS_FILE,       tmp);
             }
             bindedQuery.bindValue( DATAS_NUMERIC,    QVariant());
             bindedQuery.bindValue( DATAS_DATE,       QVariant());
@@ -405,15 +408,15 @@ public:
 
     void feedStaticHash()
     {
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICHEADER, User::UserGenericHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICFOOTER, User::UserGenericFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICWATERMARK, User::UserGenericWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEHEADER, User::UserAdministrativeHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEFOOTER, User::UserAdministrativeFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEWATERMARK, User::UserAdministrativeWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONHEADER, User::UserPrescriptionHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONFOOTER, User::UserPrescriptionFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONWATERMARK, User::UserPrescriptionWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICHEADER, User::GenericHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICFOOTER, User::GenericFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICWATERMARK, User::GenericWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEHEADER, User::AdministrativeHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEFOOTER, User::AdministrativeFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEWATERMARK, User::AdministrativeWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONHEADER, User::PrescriptionHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONFOOTER, User::PrescriptionFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONWATERMARK, User::PrescriptionWatermark);
     }
 
     ~tkUserPrivate()

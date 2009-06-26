@@ -106,44 +106,30 @@ public:
     tkPrinter( QObject * parent = 0 );
     ~tkPrinter();
 
-    /** \brief Shows the print dialog. */
     bool askForPrinter( QWidget *parent = 0 );
-    /** \brief Try to find the default system printer and use it without annoying user. */
     bool useDefaultPrinter();
-    /** \brief Defines the printer to use. */
     void setPrinter( QPrinter * printer );
-    /** \brief Returns the printer in use. */
     QPrinter *printer();
 
-    /** \brief Shows the print preview dialog. test param should only be used for debugging. */
     bool previewDialog( QWidget *parent = 0, bool test = false );
 
-    /** \brief Set a header. */
     void setHeader( const QString & html, Presence p = EachPages, tkPrinter::Priority prior = First );
-    /** \brief Deletes all headers. */
     void clearHeaders();
 
-    /** \brief Set a footer. */
     void setFooter( const QString & html, Presence p = EachPages, tkPrinter::Priority prior = First );
-    /** \brief Deletes all footers. */
     void clearFooters();
 
-    /** \brief Set the main text to print/ */
     void setContent( const QString & html );
 
-    /** */
     void setOrientation(QPrinter::Orientation orientation);
-    /** */
     void setPaperSize(QPrinter::PaperSize size);
 
 public Q_SLOTS:
     // Watermark management
-    /** \brief Add a pixmap watermark to pages. */
     void addPixmapWatermark( const QPixmap & pix,
                              const Presence p = EachPages,
                              const Qt::AlignmentFlag alignement = Qt::AlignCenter);
 
-    /** \brief Add a plain text watermark to pages. */
     void addTextWatermark( const QString & plainText,
                            const Presence p = EachPages,
                            const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
@@ -152,7 +138,6 @@ public Q_SLOTS:
                            const QColor & color = QColor("lightgrey"),
                            const int orientation = -1 );
 
-    /** \brief Add a Html watermark to pages. */
     void addHtmlWatermark( const QString & html,
                            const Presence p = EachPages,
                            const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
@@ -162,52 +147,39 @@ public Q_SLOTS:
 
     void previewToPixmap( QPixmap &drawTo, QPrinter *printer );
 
-    /** */
     void previewHeaderFooter( QPixmap &drawTo,
                               const QString &headerHtml,
                               const QString &footerHtml );
 
-    /** */
     static void previewDocumentWatermark( QPixmap &drawTo,
                                        QTextDocument *doc,
                                       const Presence p = EachPages,
                                       const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
                                       const int orientation = -1 );
-    /** */
     static void previewHtmlWatermark( QPixmap &drawTo,
                                       const QString & html,
                                       const Presence p = EachPages,
                                       const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
                                       const int orientation = -1 );
-    /** */
     static void previewTextWatermark( QPixmap &drawTo,
                                       const QString & plainText,
                                       const Presence p = EachPages,
                                       const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
                                       const int orientation = -1 );
 
-    /** \brief Clear all watermark already passed. */
     void clearWatermark();
 
-    /** */
     bool print( const QTextDocument & docToPrint );
-    /** \brief By default no duplicatas are printed, if you want a duplicata set it to true. */
     bool printWithDuplicata( bool state = true );
-    /** */
     bool print( const QString &htmlToPrint );
 
 protected Q_SLOTS:
-    /** \brief Slot used by the preview dialog. */
     bool print( QPrinter *printer = 0 );  // used by tkPrinter PreviewDialog
 
 private:
     tkPrinterPrivate *d;
 };
 
-/**
-  \brief QWidget for printing previewing. Must be instanciate by tkPrinter::previewer().
-  \ingroup toolkit widget_toolkit
- */
 class tkPrinterPreviewer : public QWidget
 {
     Q_OBJECT
