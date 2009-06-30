@@ -38,6 +38,14 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class mfDrugsModel
+  \brief Model asks mfDrugsBase to check interaction only while passing new *mfDrugs via addDrugs()
+  or while passing QDrugsList via setDrugsList().
+  \todo write code documentation
+  \ingroup drugsinteractions drugswidget
+*/
+
 #include "mfDrugsModel.h"
 
 // include drugwidgets headers
@@ -59,9 +67,105 @@
 #include <QPointer>
 #include <QStringList>
 
+
+namespace mfDrugsModelConstants {
+    const char *const XML_PRESCRIPTION_MAINTAG            = "PRESCRIPTION";
+    const char *const XML_PRESCRIPTION_CIS                = "CIS";
+    const char *const XML_PRESCRIPTION_ID                 = "ID_";
+    const char *const XML_PRESCRIPTION_USEDDOSAGE         = "REF_DOSAGE";
+    const char *const XML_PRESCRIPTION_CIP                = "CIP";
+    const char *const XML_PRESCRIPTION_INTAKEFROM         = "INTAKEFROM";
+    const char *const XML_PRESCRIPTION_INTAKETO           = "INTAKETO";
+    const char *const XML_PRESCRIPTION_INTAKESCHEME       = "INTAKESCHEME";
+    const char *const XML_PRESCRIPTION_INTAKEFROMTO       = "INTAKEFROMTO";
+    const char *const XML_PRESCRIPTION_INTAKEFULLSTRING   = "INTAKEFULL";
+    const char *const XML_PRESCRIPTION_DURATIONFROM       = "DURATIONFROM";
+    const char *const XML_PRESCRIPTION_DURATIONTO         = "DURATIONTO";
+    const char *const XML_PRESCRIPTION_DURATIONSCHEME     = "DURATIONSCHEME";
+    const char *const XML_PRESCRIPTION_DURATIONFROMTO     = "DURATIONFROMTO";
+    const char *const XML_PRESCRIPTION_PERIOD             = "PERIOD";
+    const char *const XML_PRESCRIPTION_PERIODSCHEME       = "PERIODSCHEME";
+    const char *const XML_PRESCRIPTION_DAILYSCHEME        = "DAILY";
+    const char *const XML_PRESCRIPTION_MEALSCHEME         = "MEALTIME";
+    const char *const XML_PRESCRIPTION_NOTE               = "NOTE";
+    const char *const XML_PRESCRIPTION_ISINN              = "INN";
+    const char *const XML_PRESCRIPTION_SPECIFYFORM        = "SPECFORM";
+    const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION = "SPECPRESENTATION";
+    const char *const XML_PRESCRIPTION_ISALD              = "ISALD";
+    const char *const XML_PRESCRIPTION_TOHTML             = "HTM";
+
+    const char * const ALD_BACKGROUND_COLOR               = "khaki";
+}
+
+using namespace mfDrugsModelConstants;
+
+/**
+  \brief Private part of mfDrugsModel
+  \internal
+*/
 class mfDrugsModelPrivate
 {
 public:
+    mfDrugsModelPrivate() : m_LastDrugRequiered(0)
+    {
+        m_XmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
+        m_XmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
+        m_XmlTags.insert(Prescription::CIP , XML_PRESCRIPTION_CIP);
+        m_XmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
+        m_XmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
+        m_XmlTags.insert(Prescription::IntakesScheme, XML_PRESCRIPTION_INTAKESCHEME);
+        m_XmlTags.insert(Prescription::IntakesUsesFromAndTo, XML_PRESCRIPTION_INTAKEFROMTO);
+        m_XmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
+        m_XmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
+        m_XmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
+        m_XmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
+        m_XmlTags.insert(Prescription::DurationUsesFromAndTo, XML_PRESCRIPTION_DURATIONFROMTO);
+        m_XmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
+        m_XmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
+        m_XmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
+        m_XmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
+        m_XmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
+        m_XmlTags.insert(Prescription::IsINNPrescription, XML_PRESCRIPTION_ISINN);
+        m_XmlTags.insert(Prescription::SpecifyForm, XML_PRESCRIPTION_SPECIFYFORM);
+        m_XmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
+        m_XmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
+        m_XmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
+    }
+
+    /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
+    mfDrugs *getDrug(const int CIS)
+    {
+        if (m_LastDrugRequiered) {
+            if (m_LastDrugRequiered->CIS() == CIS) {
+                return m_LastDrugRequiered;
+            }
+        }
+        m_LastDrugRequiered = 0;
+        foreach(mfDrugs *drug, m_DrugsList) {
+            if (drug->CIS()==CIS)
+                m_LastDrugRequiered = drug;
+        }
+        return m_LastDrugRequiered;
+    }
+
+    /**
+       \brief Set drugs' data directly into the private drugsList
+       \sa mfDrugsModel::setData()
+    */
+    bool setDrugData( mfDrugs *drug, const int column, const QVariant & value )
+    {
+        Q_ASSERT(drug);
+        if ((column < Prescription::Id) || (column > Prescription::MaxParam))
+            return false;
+        drug->setPrescriptionValue( column, value );
+//        qWarning() << "setdrugdata" << xmlTagForPrescriptionRow(column) << value;
+        return true;
+    }
+
+    /**
+       \brief Returns the datas of the drugs by picking it into the private drugslist of the model
+       \sa mfDrugsModel::data()
+    */
     QVariant getDrugValue( const mfDrugs *drug, const int column ) const
     {
         switch ( column )
@@ -179,14 +283,28 @@ public:
         return QVariant();
     }
 
-public:
-    QDrugsList  m_DrugsList;
-    int m_levelOfWarning;
-    mutable QHash<int, QPointer<mfDosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
-    QHash<int, int> m_RowSize;
-};
+    /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
+    QString xmlTagForPrescriptionRow(const int row)
+    {
+        return m_XmlTags.value(row);
+    }
 
-const char * const ALD_BACKGROUND_COLOR = "khaki";
+    /** \brief For the Xml transformation of the prescription, return the mfDrugsConstants::Prescription for the xml tag \e xmltag */
+    int xmlTagToColumnIndex(const QString &xmltag)
+    {
+        if (!m_XmlTags.values().contains(xmltag))
+            return -1;
+        return m_XmlTags.key(xmltag);
+    }
+
+public:
+    QDrugsList  m_DrugsList;       /*!< \brief Actual prescription drugs list */
+    int m_levelOfWarning;          /*!< \brief Level of warning to use (retrieve from settings). */
+    mutable QHash<int, QPointer<mfDosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
+    QHash<int,QString> m_XmlTags;  /*!< \brief Used for Xml reading/writing. Contains the translation from index to string. */
+    mfDrugs *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
+
+};
 
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
@@ -194,6 +312,7 @@ using namespace mfInteractionsConstants;
 
 mfDrugsModel *mfDrugsModel::m_Instance = 0;
 
+/** \brief Unique instance of the drugs model */
 mfDrugsModel *mfDrugsModel::instance()
 {
     if ( ! m_Instance )
@@ -201,17 +320,19 @@ mfDrugsModel *mfDrugsModel::instance()
     return m_Instance;
 }
 
+/** \brief Constructor */
 mfDrugsModel::mfDrugsModel( QObject * parent )
-               : QAbstractTableModel( parent ),
-               d(new mfDrugsModelPrivate())
+        : QAbstractTableModel( parent ),
+        d(new mfDrugsModelPrivate())
 {
     if ( !mfDrugsBase::isInitialized() )
         return;
-//    m_DosageModel = mfDosageModel::instance();
+    //    m_DosageModel = mfDosageModel::instance();
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
 }
 
+/** \brief Destructor */
 mfDrugsModel::~mfDrugsModel()
 {
     qDeleteAll( d->m_DosageModelList );
@@ -222,12 +343,14 @@ mfDrugsModel::~mfDrugsModel()
     d=0;
 }
 
+/** \brief count the number of selected drugs */
 int mfDrugsModel::rowCount( const QModelIndex & parent ) const
 {
     Q_UNUSED(parent);
     return d->m_DrugsList.count();
 }
 
+/** \brief Returns the actual selected drugs list in the model */
 const QDrugsList & mfDrugsModel::drugsList() const
 {
     return d->m_DrugsList;
@@ -253,145 +376,129 @@ QModelIndex mfDrugsModel::createIndex( int /*row*/, int /*column*/, quint32 /*id
     return QModelIndex();
 }
 
+/**
+  \brief Defines the data of drugs.
+  The drugs model is a read only model for all the namespace mfDrugsConstants::Drug enum values.\n
+  Dosages values are not accessible from here. Use the mfDosageModel.\n
+  Prescritions values are writables. Informations are transmitted using mfDrugs::setPrescriptionValue().
+*/
 bool mfDrugsModel::setData( const QModelIndex & index, const QVariant & value, int role )
 {
     Q_UNUSED(role);
-    // The drugs model is a read only model for all Drug:: values.
-    // Dosages values are writable using the dosage model
-    // Prescritions values are writables
-   if (!index.isValid())
-       return false;
-   int column = index.column();
-   int row = index.row();
-   // Writables datas are ONLY Prescription:: values
-   if ((column < Prescription::Id) || (column > Prescription::MaxParam))
-       return false;
-   if ((row >= d->m_DrugsList.count()) || (row < 0))
-       return false;
+    if (!index.isValid())
+        return false;
+    int row = index.row();
+    if ((row >= d->m_DrugsList.count()) || (row < 0))
+        return false;
+    mfDrugs * drug = d->m_DrugsList.at(row);
+    if (d->setDrugData(drug, index.column(), value)) {
+        // inform of the modification
+        Q_EMIT dataChanged(index, index);
+        QModelIndex fullPrescr = this->index(index.row(),Drug::FullPrescription);
+        Q_EMIT dataChanged( fullPrescr, fullPrescr );
+        Q_EMIT prescriptionResultChanged( drug->prescriptionToPlainText() );
+    }
+    return true;
+}
 
-   mfDrugs * drug = d->m_DrugsList.at( row );
-   drug->setPrescriptionValue( column, value );
-//   switch (column)
-//   {
-//       case Prescription::UsedDosage : drug->setPrescriptionValue( Prescription::UsedDosage, value ); break;
-//       case Prescription::IntakesFrom : drug->setPrescriptionValue( Prescription::IntakesFrom, value ); break;
-//       case Prescription::IntakesTo : drug->setPrescriptionValue( Prescription::IntakesTo, value ); break;
-//       case Prescription::IntakesScheme : drug->setPrescriptionValue( Prescription::IntakesScheme, value ); break;
-//       case Prescription::IntakesUsesFromAndTo : drug->setPrescriptionValue( Prescription::IntakesUsesFromAndTo, value ); break;;
-//       case Prescription::DurationFrom : drug->setPrescriptionValue( Prescription::DurationFrom, value ); break;
-//       case Prescription::DurationTo : drug->setPrescriptionValue( Prescription::DurationTo, value ); break;
-//       case Prescription::DurationScheme : drug->setPrescriptionValue( Prescription::DurationScheme, value ); break;
-//       case Prescription::DurationUsesFromAndTo : drug->setPrescriptionValue( Prescription::DurationUsesFromAndTo, value ); break;;
-//       case Prescription::Period : drug->setPrescriptionValue( Prescription::Period, value ); break;
-//       case Prescription::PeriodScheme : drug->setPrescriptionValue( Prescription::PeriodScheme, value ); break;
-//       case Prescription::MealTimeSchemeIndex : drug->setPrescriptionValue( Prescription::MealTimeSchemeIndex, value ); break;
-//       case Prescription::Note : drug->setPrescriptionValue( Prescription::Note, value ); break;
-//        IsINNPrescription,
-//        SpecifyForm,
-//        SpecifyPresentation,
-//        IsALD,
-//             case Prescription::DailyScheme : return drug->prescriptionValue( Prescription::DailyScheme );
+/**
+  \brief Set data for the specified drug with the corresponding \e CIS.
+  Drug must be setted into the model otherwise, this function returns false.\n
+  If you want the model to be refreshed call resetModel() after all datas were setted.
+*/
+bool mfDrugsModel::setDrugData( const int CIS, const int column, const QVariant &value )
+{
+    mfDrugs *drug = d->getDrug(CIS);
+    if (!drug)
+        return false;
+    if (d->setDrugData(drug, column, value)) {
+        Q_EMIT prescriptionResultChanged( drug->prescriptionToPlainText() );
+        return true;
+    }
+    return false;
+}
 
-//       default : break;
-//   }
-   emit dataChanged(index, index);
-   QModelIndex fullPrescr = this->index(index.row(),Drug::FullPrescription);
-   emit dataChanged( fullPrescr, fullPrescr );
-   emit prescriptionResultChanged( drug->prescriptionToPlainText() );
-
-   return true;
+/** \brief Reset the model */
+void mfDrugsModel::resetModel()
+{
+    reset();
 }
 
 /**
   \brief Returns the values of drugs and prescription, you can not access to the dosage model this way.
-  mfDosageModel regarding a specific drug is accessible using dosageModel().
+  mfDosageModel regarding a specific drug is accessible using dosageModel().\n
+  Available datas index :
+  \li Drugs specific datas : see mfDrugsConstants::Drug enumerator
+  \li Interactions specific datas : see mfInteractionsConstants::Interaction enumerator
+  \li Prescription datas : see mfDrugsConstants::Prescription enumerator
 */
 QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
 {
-     if ( !index.isValid() )
-          return QVariant();
+    if ( !index.isValid() )
+        return QVariant();
 
-     if (( index.row() > d->m_DrugsList.count() ) || ( index.row() < 0 ) )
-          return QVariant();
+    if (( index.row() > d->m_DrugsList.count() ) || ( index.row() < 0 ) )
+        return QVariant();
 
-     mfDrugsBase *b = mfDrugsBase::instance();
-     const mfDrugs * drug = d->m_DrugsList.at( index.row() );
+    mfDrugsBase *b = mfDrugsBase::instance();
+    const mfDrugs * drug = d->m_DrugsList.at( index.row() );
 
-     if ( ( role == Qt::DisplayRole ) || ( role == Qt::EditRole ) ) {
-         int col = index.column();
+    if ( ( role == Qt::DisplayRole ) || ( role == Qt::EditRole ) ) {
+        int col = index.column();
 
-         // manage indexes for dosageModel
-         if ( (col >= Dosage::Id) && (col < Dosage::MaxParam) ) {
-             return QVariant();
-         } else {
-             // deep in the abyss
-             return d->getDrugValue(drug, index.column());
-         }
-     }
-     else if ( role == Qt::DecorationRole ) {
-         return mfDrugInteraction::iamIcon( drug, d->m_levelOfWarning );
-     }
-     else if ( role == Qt::ToolTipRole ) {
-          QString display;
-          display = drug->toHtml();
+        // manage indexes for dosageModel
+        if ( (col >= Dosage::Id) && (col < Dosage::MaxParam) ) {
+            return QVariant();
+        } else {
+            // deep in the abyss
+            return d->getDrugValue(drug, index.column());
+        }
+    }
+    else if ( role == Qt::DecorationRole ) {
+        return mfDrugInteraction::iamIcon( drug, d->m_levelOfWarning );
+    }
+    else if ( role == Qt::ToolTipRole ) {
+        QString display;
+        display = drug->toHtml();
 
-          QDrugsList withoutThis = d->m_DrugsList;
-          if ( b->drugHaveInteraction( drug ) ) {
-               const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
-               display.append( "<br>\n" );
-               display.append( mfDrugInteraction::listToHtml( list, false ) );
-          }
-          return display;
-     }
-     else if ( role == Qt::BackgroundRole ) {
-         if (drug->prescriptionValue( Prescription::IsALD ).toBool()) {
-             return QColor(ALD_BACKGROUND_COLOR);
-         }
-     }
-//     else if ( role == Qt::SizeHintRole ) {
-//         return QSize(d->m_RowSize[index.row()],d->m_RowSize[index.row()]);
-//     }
-     return QVariant();
+        QDrugsList withoutThis = d->m_DrugsList;
+        if ( b->drugHaveInteraction( drug ) ) {
+            const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
+            display.append( "<br>\n" );
+            display.append( mfDrugInteraction::listToHtml( list, false ) );
+        }
+        return display;
+    }
+    else if ( role == Qt::BackgroundRole ) {
+        if (drug->prescriptionValue( Prescription::IsALD ).toBool()) {
+            return QColor(ALD_BACKGROUND_COLOR);
+        }
+    }
+    //     else if ( role == Qt::SizeHintRole ) {
+    //         return QSize(d->m_RowSize[index.row()],d->m_RowSize[index.row()]);
+    //     }
+    return QVariant();
 }
 
 /**
   \brief At anytime, you can get all values of drugs inside the prescription model using the CIS as row index.
+  \sa data()
 */
 QVariant mfDrugsModel::drugData( const int CIS, const int column )
 {
-    static mfDrugs *lastDrugRequiered = 0;
-    if (lastDrugRequiered) {
-        if (lastDrugRequiered->CIS() != CIS) {
-            foreach( mfDrugs *dg, m_Instance->d->m_DrugsList) {
-                if (dg->CIS() == CIS) {
-                    lastDrugRequiered = dg;
-                    break;
-                }
-            }
-            if (!lastDrugRequiered)
-                return QVariant();
-        }
-    } else {
-            foreach( mfDrugs *dg, m_Instance->d->m_DrugsList) {
-                if (dg->CIS() == CIS) {
-                    lastDrugRequiered = dg;
-                    break;
-                }
-            }
-            if (!lastDrugRequiered)
-                return QVariant();
-    }
-    return m_Instance->d->getDrugValue(lastDrugRequiered, column);
+    mfDrugs *drug = m_Instance->d->getDrug(CIS);
+    if (!drug)
+        return QVariant();
+    return m_Instance->d->getDrugValue(drug, column);
 }
-
 
 /** \brief Should not be used. \internal */
 Qt::ItemFlags mfDrugsModel::flags( const QModelIndex &index ) const
 {
-     if ( !index.isValid() )
-          return Qt::ItemIsEnabled;
+    if ( !index.isValid() )
+        return Qt::ItemIsEnabled;
 
-     return QAbstractItemModel::flags( index );
+    return QAbstractItemModel::flags( index );
 }
 
 /** \brief Removes \e count drugs from the \e row. */
@@ -408,33 +515,37 @@ bool mfDrugsModel::removeRows( int row, int count, const QModelIndex & parent )
     checkInteractions();
     endRemoveRows();
     reset();
-    emit numberOfRowsChanged();
+    Q_EMIT numberOfRowsChanged();
     return true;
 }
 
-/** \brief Add a drug to the prescription. \e automaticInteractionChecking can be setted of if you want to add
-     multiple drugs. You should call checkInteractions() after all in this case.
+/**
+ \brief Add a drug to the prescription.
+ \sa addDrug()
 */
 int mfDrugsModel::addDrug( mfDrugs* drug, bool automaticInteractionChecking )
 {
-     if ( ! d->m_DrugsList.isEmpty() ) {
-          if ( !d->m_DrugsList.contains( drug ) )
-               d->m_DrugsList.append( drug );
-     }
-     else
-          d->m_DrugsList <<  drug;
-     // check drugs interactions from mfDrugsBase
-     if (automaticInteractionChecking) {
-         checkInteractions();
-         d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
-     }
-     reset();
-     emit numberOfRowsChanged();
-     return d->m_DrugsList.indexOf( drug );
+    // insert only once the same drug
+    if (containsDrug(drug->CIS()))
+        return -1;
+    d->m_DrugsList << drug;
+    // check drugs interactions from mfDrugsBase
+    if (automaticInteractionChecking) {
+        checkInteractions();
+        d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+    }
+    reset();
+    Q_EMIT numberOfRowsChanged();
+    return d->m_DrugsList.indexOf(drug);
 }
 
-/** \brief Add a drug to the prescription. \e automaticInteractionChecking can be setted of if you want to add
-     multiple drugs. You should call checkInteractions() after all in this case.
+/**
+  \brief Add a drug to the prescription.
+  \e automaticInteractionChecking can be setted of if you want to add
+     multiple drugs. You should call checkInteractions() after all in this case. \n
+   Please take care, that the same drug can not be inserted more than once ! \n
+   Return the index of the inserted drug into the list or -1 if no drug was inserted.
+   \sa addDrug()
 */
 int mfDrugsModel::addDrug( const int _CIS, bool automaticInteractionChecking )
 {
@@ -444,22 +555,31 @@ int mfDrugsModel::addDrug( const int _CIS, bool automaticInteractionChecking )
 /** \brief Clear the prescription. Clear all interactions too. */
 void mfDrugsModel::clearDrugsList()
 {
-     qDeleteAll(d->m_DrugsList);
-     d->m_DrugsList.clear();
-     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
-     reset();
-     emit numberOfRowsChanged();
+    qDeleteAll(d->m_DrugsList);
+    d->m_DrugsList.clear();
+    d->m_LastDrugRequiered=0;
+    d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+    reset();
+    Q_EMIT numberOfRowsChanged();
 }
 
 /** \brief Insert a list of drugs and check interactions. */
 void mfDrugsModel::setDrugsList( QDrugsList & list )
 {
-     d->m_DrugsList.clear();
-     d->m_DrugsList << list;
-     checkInteractions();
-     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
-     reset();
-     emit numberOfRowsChanged();
+    d->m_DrugsList.clear();
+    d->m_DrugsList << list;
+    checkInteractions();
+    d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+    reset();
+    Q_EMIT numberOfRowsChanged();
+}
+
+/** \brief Returns true if the drug is already in the prescription */
+bool mfDrugsModel::containsDrug(const int CIS) const
+{
+    if (d->getDrug(CIS))
+        return true;
+    return false;
 }
 
 /** \brief Sort the drugs inside prescription. \sa mfDrugs::lessThan(). */
@@ -497,6 +617,7 @@ bool mfDrugsModel::moveDown( const QModelIndex & item )
     return false;
 }
 
+/** \brief Returns the dosage model for the selected drug */
 mfDosageModel * mfDrugsModel::dosageModel( const int _CIS )
 {
     if ( ! d->m_DosageModelList.keys().contains( _CIS ) ) {
@@ -509,7 +630,8 @@ mfDosageModel * mfDrugsModel::dosageModel( const int _CIS )
     return d->m_DosageModelList.value(_CIS);
 }
 
-mfDosageModel * mfDrugsModel::dosageModel( const QModelIndex & drugIndex )
+/** \brief Returns the dosage model for the selected drug */
+mfDosageModel *mfDrugsModel::dosageModel( const QModelIndex &drugIndex )
 {
     if ( ! drugIndex.isValid() )
         return 0;
@@ -518,6 +640,7 @@ mfDosageModel * mfDrugsModel::dosageModel( const QModelIndex & drugIndex )
     return dosageModel( drugIndex.data().toInt() );
 }
 
+/** \brief Removes a drug from the prescription */
 int mfDrugsModel::removeDrug( const int _CIS )
 {
     // Take care that this function removes all occurence of the referenced drug
@@ -531,11 +654,11 @@ int mfDrugsModel::removeDrug( const int _CIS )
     }
     checkInteractions();
     reset();
-    emit numberOfRowsChanged();
+    Q_EMIT numberOfRowsChanged();
     return i;
 }
 
-/**  */
+/** \brief Removes last inserted drug from the prescription */
 int mfDrugsModel::removeLastInsertedDrug()
 {
     // TODO Take care if user inserted x times the same drug
@@ -545,7 +668,7 @@ int mfDrugsModel::removeLastInsertedDrug()
     d->m_DrugsList.removeLast();
     checkInteractions();
     reset();
-    emit numberOfRowsChanged();
+    Q_EMIT numberOfRowsChanged();
     return 1;
 }
 
@@ -558,6 +681,10 @@ void mfDrugsModel::warn()
     qWarning() << "dosagemodels in memory" << d->m_DosageModelList.count();
 }
 
+/**
+  \brief Transform actual prescription to readable Html.
+  Prescription is automaticaaly sorted.\n
+*/
 QString mfDrugsModel::prescriptionToHtml()
 {
     if (rowCount() <= 0)
@@ -584,16 +711,10 @@ QString mfDrugsModel::prescriptionToHtml()
         tmp = QString(ENCODEDHTML_DRUG);
         tmp.replace( "{NUMBER}", QString::number(i+1));
         tmp.replace( "{DRUGSTYLE}", drugStyle);
-//        if (index(i, Prescription::IsINNPrescription).data().toBool()) {
-//            mfDrugs *drug = d->m_DrugsList.at(i);
-//            QString name = drug->listOfInnWithPosology().join(" ; ");
-//            tmp.replace( "{DRUG}", name );
-//        } else {
-            tmp.replace( "{DRUG}", index( i, Drug::Denomination ).data().toString());
-//        }
+        tmp.replace( "{DRUG}", index( i, Drug::Denomination ).data().toString());
         tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
         tmp.replace( "{PRESCRIPTION}", index( i, Prescription::ToHtml ).data().toString());
-//        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
+        //        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
 
         if (index( i, Prescription::IsALD ).data().toBool()) {
             ALD += tmp;
@@ -621,6 +742,7 @@ QString mfDrugsModel::prescriptionToHtml()
     return toReturn;
 }
 
+/** \brief Serialize prescription for data saving */
 QString mfDrugsModel::serializePrescription()
 {
     QString tmp;
@@ -631,20 +753,25 @@ QString mfDrugsModel::serializePrescription()
             << Prescription::Period << Prescription::PeriodScheme <<  Prescription::MealTimeSchemeIndex
             << Prescription::Note << Prescription::IsINNPrescription << Prescription::SpecifyForm
             << Prescription::SpecifyPresentation << Prescription::IsALD;
-    QHash<QString, QString> serializeIt;
+    QHash<QString, QString> forXml;
     int i;
     for(i=0; i<rowCount() ; ++i) {
-        serializeIt.insert( "CIS", index(i, Drug::CIS).data().toString() );
+        forXml.insert( XML_PRESCRIPTION_CIS, index(i, Drug::CIS).data().toString() );
         foreach(int k, keysToSave) {
-            serializeIt.insert( Prescription::PRESCRIPTION_CODES[k-Prescription::Id], index(i, k).data().toString() );
+            forXml.insert( d->xmlTagForPrescriptionRow(k), index(i, k).data().toString() );
         }
-        tmp += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
+        tmp += tkGlobal::createXml(XML_PRESCRIPTION_MAINTAG, forXml,2,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
     }
     return tmp;
 }
 
+/**
+  \brief Deserialize prescription
+  You can replace the actual prescription with the desérialized one or add the deserialized one. Use the \e param.
+*/
 void mfDrugsModel::deSerializePrescription( const QString &serialized, PrescriptionDeserializer z )
 {
+    // XML_PRESCRIPTION_MAINTAG
     int row = 0;
     QStringList drugs = serialized.split("[Drug]", QString::SkipEmptyParts );
     // clear model
@@ -657,9 +784,9 @@ void mfDrugsModel::deSerializePrescription( const QString &serialized, Prescript
             continue;
         this->addDrug( hash.value( "CIS" ).toInt(), false );
         hash.remove("CIS");
-        foreach(const QString &i, hash.keys()) {
-            setData( index(row, Prescription::PRESCRIPTION_CODES.indexOf(i) + Prescription::Id ), hash.value(i) );
-        }
+        //        foreach(const QString &i, hash.keys()) {
+        //            setData( index(row, Prescription::PRESCRIPTION_CODES.indexOf(i) + Prescription::Id ), hash.value(i) );
+        //        }
         ++row;
     }
     checkInteractions();

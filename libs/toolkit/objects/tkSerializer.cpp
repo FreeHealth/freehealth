@@ -39,12 +39,12 @@
 
 Q_TK_USING_CONSTANTS
 
-Q_TK_BEGIN_SERIALIZER
+        Q_TK_BEGIN_SERIALIZER
 
-/**
+        /**
   \brief Official separator for the serializer engine.
 */
-const QString separator()
+        const QString separator()
 {
     return QString( SERIALIZER_SEPARATOR );
 }
@@ -98,7 +98,7 @@ const QString toString( const QHash<int,QString> & hash, bool base64Protection )
         foreach( int i, hash.keys() ) {
             tmp += QString::number(i) + separator() + hash.value(i) + separator();
         }
-//        tmp << hash;
+        //        tmp << hash;
         return tmp;
     }
     QString val;
@@ -159,13 +159,14 @@ const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, boo
         foreach( const QString &i, hash.keys() ) {
             tmp += i + separator() + hash.value(i) + separator();
         }
-//        tmp << hash;
+        //        tmp << hash;
         return tmp;
-    }
-    QString val;
-    foreach( const QString &i, hash.keys() ) {
-        val = hash.value(i);
-        tmp += i + separator() + val.toAscii().toBase64() + separator();
+    } else {
+        QString val;
+        foreach( const QString &i, hash.keys() ) {
+            val = hash.value(i);
+            tmp += i + separator() + val.toAscii().toBase64() + separator();
+        }
     }
     return tmp;
 }

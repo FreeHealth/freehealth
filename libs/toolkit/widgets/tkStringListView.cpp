@@ -37,6 +37,21 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class tkStringListView
+  \brief Provides a stringlist view to use with tkUserViewer. For eg with the specialties, qualifications... of users.
+  - Property stringList is used for QDataWidgetMapper.
+  - Holds the mecanism for add, remove, move up and down for all items using a contextmenu.
+  - Set and get the model stringList using getStringList() and setStringList().
+
+  - You can use it with the tkStringListModel and set items to be checkable. Then populate the stringlist with the
+  setStringList() and manage checked items with property checkedStringList. The getCheckedStringList() and
+  setItemsCheckable() only work if the model of the view is a tkStringListModel.
+  \ingroup toolkit
+  \ingroup widget_toolkit
+*/
+
 #include "tkStringListView.h"
 
 #include <tkStringListModel.h>

@@ -52,16 +52,10 @@ class mfDrugsModelPrivate;
 /**
  * \file mfDrugsModel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 05 June 2009
+ * \version 0.0.10
+ * \date 28 June 2009
 */
 
-/**
- \brief Model asks mfDrugsBase to check interaction only while passing new *mfDrugs via addDrugs()
-  or while passing QDrugsList via setDrugsList().
-  \todo documentation
- \ingroup drugsinteractions drugswidget
-*/
 class mfDrugsModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -89,6 +83,8 @@ public:
     bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
     QVariant data( const QModelIndex & index, int role ) const;
     static QVariant drugData( const int CIS, const int column );
+    bool setDrugData( const int CIS, const int column, const QVariant &value);
+    void resetModel();
     Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     // ADDING DRUGS / PRESCRIPTION
@@ -99,6 +95,7 @@ public:
     int addDrug( const int _CIS, bool automaticInteractionChecking = true );
     int removeDrug( const int _CIS );
     int removeLastInsertedDrug();
+    bool containsDrug(const int CIS) const;
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
@@ -123,7 +120,7 @@ Q_SIGNALS:
 protected:
     QModelIndex createIndex( int row, int column, void * ptr = 0 ) const;
     QModelIndex createIndex( int row, int column, quint32 id ) const;
-    void checkInteractions() const;
+    virtual void checkInteractions() const;
 
 private:
     static mfDrugsModel *m_Instance;

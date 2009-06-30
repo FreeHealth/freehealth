@@ -38,6 +38,17 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class mfDosageCreator
+  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
+  doctors when prescribing a drug.
+  If you want to create a new dosage, you must create a new row onto the model BEFORE.
+  If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
+  \ingroup drugsinteractions drugswidget
+*/
+
+
 #include "mfDosageCreatorDialog.h"
 
 // include drugwidget headers
@@ -51,6 +62,8 @@
 #include <tkLog.h>
 #include <tkStringListModel.h>
 #include <tkTheme.h>
+#include <tkSettings.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QHeaderView>
@@ -66,6 +79,7 @@ using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 /**
   \brief Private part
@@ -77,7 +91,14 @@ public:
     mfDosageCreatorDialogPrivate(mfDosageCreatorDialog *parent) :
             m_Mapper(0), m_DosageModel(0), m_Parent(parent) {}
 
-    
+    void setCheckBoxStateToModel( const int index, const int qtCheckState )
+    {
+        if (qtCheckState==Qt::Checked)
+            m_DosageModel->setData( m_DosageModel->index( m_Mapper->currentIndex(), index), true );
+        else
+            m_DosageModel->setData( m_DosageModel->index( m_Mapper->currentIndex(), index), false );
+    }
+
     /** \brief Insert value into index (row, colum) of dosage model if checkbox is check and return true. Otherwise, insert a QVariant and return false. */
     bool checkToDosageModel( const int row, const int column, QCheckBox *b, const QVariant &value )
     {
@@ -101,7 +122,7 @@ public:
             return true;
         } else {
             b->setChecked(false);
-            cb->setCurrentIndex(0);
+            cb->setCurrentIndex(-1);
         }
         return false;
     }
@@ -121,26 +142,182 @@ public:
         return false;
     }
 
+    bool checkDosageValidity(const int row)
+    {
+        QStringList list = m_DosageModel->isDosageValid(row);
+        if (list.count()) {
+            tkGlobal::warningMessageBox(m_Parent->tr("Dosage is not valid."),
+                                        list.join("br />"),
+                                        "", m_Parent->tr("Drug Dosage Creator"));
+            return false;
+        }
+        return true;
+    }
+
     /** \brief Commits dosage model using a transaction to database */
     void commitModelToDatabase()
     {
         m_DosageModel->database().transaction();
-        if ( m_DosageModel->submitAll() ) {
-            m_DosageModel->database().commit();
+        if (m_DosageModel->submitAll()) {
+            if (m_DosageModel->database().commit())
+                tkLog::addMessage(m_Parent, m_Parent->tr("Dosage correctly saved to base"));
+            else
+                tkLog::addError(m_Parent, m_Parent->tr("SQL Error : Dosage can not be added to database : %1")
+                                .arg(m_DosageModel->lastError().text()));
         } else {
             m_DosageModel->database().rollback();
             QMessageBox::warning(m_Parent, m_Parent->tr("Drug Dosage Creator"),
-                                 m_Parent->tr("ERROR SQL : The database reported an error: %1")
-                                 .arg(m_DosageModel->database().lastError().text()));
+                                 tkTr(ERROR_1_FROM_DATABASE_2)
+                                 .arg(m_DosageModel->database().lastError().text())
+                                 .arg(m_DosageModel->database().connectionName()));
         }
     }
 
+    /** \brief If mapper does not already exists, create it */
+    void createMapper()
+    {
+        if (!m_Mapper) {
+            m_Mapper = new QDataWidgetMapper(m_Parent);
+            m_Mapper->setModel( m_DosageModel );
+            m_Mapper->setSubmitPolicy( QDataWidgetMapper::AutoSubmit );
+            m_Mapper->addMapping( m_Parent->labelLineEdit, Dosage::Label, "text" );
+
+            m_Mapper->addMapping( m_Parent->intakesFromSpin, Dosage::IntakesFrom, "value" );
+            m_Mapper->addMapping( m_Parent->intakesToSpin, Dosage::IntakesTo, "value" );
+            m_Mapper->addMapping( m_Parent->intakesCombo, Dosage::IntakesScheme, "currentText" );
+            m_Mapper->addMapping( m_Parent->periodSchemeCombo, Dosage::PeriodScheme, "currentText" );
+            m_Mapper->addMapping( m_Parent->periodSpin, Dosage::Period, "value" );
+
+            m_Mapper->addMapping( m_Parent->durationFromSpin, Dosage::DurationFrom );
+            m_Mapper->addMapping( m_Parent->durationToSpin, Dosage::DurationTo );
+            m_Mapper->addMapping( m_Parent->durationCombo, Dosage::DurationScheme, "currentText"  );
+
+            m_Mapper->addMapping( m_Parent->minIntervalIntakesSpin, Dosage::IntakesIntervalOfTime, "value" );
+            m_Mapper->addMapping( m_Parent->intervalTimeSchemeCombo, Dosage::IntakesIntervalScheme, "currentIndex"  );
+            m_Mapper->addMapping( m_Parent->mealTimeCombo, Dosage::MealScheme, "currentIndex" );
+            m_Mapper->addMapping( m_Parent->noteTextEdit, Dosage::Note, "plainText" );
+            m_Mapper->addMapping( m_Parent->dailySchemeListView, Dosage::DailyScheme, "checkedStringList" );
+
+            m_Mapper->addMapping( m_Parent->minAgeSpin, Dosage::MinAge, "value" );
+            m_Mapper->addMapping( m_Parent->maxAgeSpin, Dosage::MaxAge, "value" );
+            m_Mapper->addMapping( m_Parent->minAgeCombo, Dosage::MinAgeReferenceIndex, "currentIndex" );
+            m_Mapper->addMapping( m_Parent->maxAgeCombo, Dosage::MaxAgeReferenceIndex, "currentIndex" );
+            m_Mapper->addMapping( m_Parent->minWeightSpin, Dosage::MinWeight, "value" );
+            m_Mapper->addMapping( m_Parent->minClearanceSpin, Dosage::MinClearance, "value" );
+            m_Mapper->addMapping( m_Parent->maxClearanceSpin, Dosage::MaxClearance, "value" );
+            m_Mapper->addMapping( m_Parent->sexLimitCombo, Dosage::SexLimitedIndex, "currentIndex" );
+        }
+    }
+
+    /**
+       \brief Manage non mapped datas from the model to the ui
+       Manages Sex limitation, Age limitations, Clearance limitations
+    */
+    void changeNonMappedDataFromModelToUi(const int dosageRow)
+    {
+        // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
+        // Need to be filled by hand the comboboxes...
+        // Label
+        m_Parent->labelLineEdit->setText(m_DosageModel->index( dosageRow, Dosage::Label).data().toString());
+        // Intakes
+        m_Parent->intakesCombo->setCurrentIndex(-1);
+        m_Parent->intakesCombo->setEditText(m_DosageModel->index( dosageRow, Dosage::IntakesScheme).data().toString());
+        // Intakes scheme
+        m_Parent->periodSpin->setValue(m_DosageModel->index( dosageRow, Dosage::Period).data().toDouble());
+        m_Parent->periodSchemeCombo->setEditText(m_DosageModel->index( dosageRow, Dosage::PeriodScheme).data().toString());
+        // Duration
+        m_Parent->durationCombo->setEditText(m_DosageModel->index( dosageRow, Dosage::DurationScheme).data().toString());
+        // Interval
+        m_Parent->minIntervalIntakesSpin->setValue(m_DosageModel->index( dosageRow, Dosage::IntakesIntervalOfTime).data().toDouble());
+
+        if (m_DosageModel->index( dosageRow, Dosage::IntakesUsesFromTo).data().toBool()) {
+            m_Parent->fromToIntakesCheck->setChecked(true);
+            m_Parent->intakesToLabel->show();
+            m_Parent->intakesToSpin->show();
+        }
+        if (m_DosageModel->index( dosageRow, Dosage::DurationUsesFromTo).data().toBool()) {
+            m_Parent->fromToDurationCheck->setChecked(true);
+            m_Parent->durationToLabel->show();
+            m_Parent->durationToSpin->show();
+        }
+    }
+
+    /** \brief Resize hourly table widget on view */
+    void resizeTableWidget()
+    {
+        int i = 0;
+        int size = ( ( m_Parent->hourlyTableWidget->size().width() - m_Parent->style()->pixelMetric( QStyle::PM_DefaultFrameWidth ) ) / 8 );
+        for( i = 0; i < 8; i++ )
+            m_Parent->hourlyTableWidget->setColumnWidth( i, size );
+    }
+
+    /** \brief Update the Ui with the drug informations */
+    void fillDrugsData()
+    {
+        mfDrugsModel *drugM = mfDrugsModel::instance();
+        int CIS = m_DosageModel->drugCIS();
+        m_Parent->drugNameLabel->setText( drugM->drugData( CIS, Drug::Denomination).toString() );
+        m_Parent->labelOfDosageLabel->setToolTip( drugM->drugData( CIS, Drug::AvailableDosages).toString() );
+        QString toolTip = drugM->drugData( CIS, Interaction::ToolTip ).toString();
+        toolTip = drugM->drugData( CIS, Drug::CompositionString ).toString();
+        m_Parent->drugNameLabel->setToolTip( toolTip );
+    }
+
+    /**
+      \brief Reset the Ui to the defaults.
+      \li Clears all combo, refill them and set their currentIndex to the default mfDosageModel::periodDefault()
+      \li Manage scored tablet
+    */
+    void resetUiToDefaults()
+    {
+        mfDrugsModel *drugM = mfDrugsModel::instance();
+        int CIS = m_DosageModel->drugCIS();
+        m_Parent->intakesToLabel->hide();
+        m_Parent->intakesToSpin->hide();
+        m_Parent->durationToLabel->hide();
+        m_Parent->durationToSpin->hide();
+        // Prepare some combos
+        m_Parent->durationCombo->clear();
+        m_Parent->durationCombo->addItems( periods() );
+        m_Parent->durationCombo->setCurrentIndex( Time::Months );
+        m_Parent->periodSchemeCombo->clear();
+        m_Parent->periodSchemeCombo->addItems( periods() );
+        m_Parent->periodSchemeCombo->setCurrentIndex( Time::Days );
+        m_Parent->intervalTimeSchemeCombo->clear();
+        m_Parent->intervalTimeSchemeCombo->addItems( periods() );
+        m_Parent->intervalTimeSchemeCombo->setCurrentIndex( Time::Days );
+        m_Parent->intakesCombo->addItems(drugM->drugData(CIS, Drug::AvailableForms).toStringList());
+        m_Parent->intakesCombo->setCurrentIndex(0);
+        m_Parent->mealTimeCombo->clear();
+        m_Parent->mealTimeCombo->addItems( mealTime() );
+
+        m_Parent->minAgeCombo->clear();
+        m_Parent->minAgeCombo->addItems( preDeterminedAges() );
+        m_Parent->maxAgeCombo->clear();
+        m_Parent->maxAgeCombo->addItems( preDeterminedAges() );
+
+        m_Parent->hourlyTableWidget->verticalHeader()->hide();
+        m_Parent->hourlyTableWidget->horizontalHeader()->hide();
+        m_Parent->hourlyTableWidget->resizeColumnsToContents();
+        bool isScored = drugM->drugData( CIS, Drug::IsScoredTablet ).toBool();
+        if ( isScored ) {
+            m_Parent->intakesToSpin->setDecimals( 2 );
+            m_Parent->intakesFromSpin->setDecimals( 2 );
+            m_Parent->intakesToSpin->setSingleStep( 0.25 );
+            m_Parent->intakesFromSpin->setSingleStep( 0.25 );
+        } else {
+            m_Parent->intakesToSpin->setDecimals( 0 );
+            m_Parent->intakesFromSpin->setDecimals( 0 );
+            m_Parent->intakesToSpin->setSingleStep( 1 );
+            m_Parent->intakesFromSpin->setSingleStep( 1 );
+        }
+        resizeTableWidget();
+    }
 
 public:
     QDataWidgetMapper  *m_Mapper;
     mfDosageModel      *m_DosageModel;
     QString             m_ActualDosageUuid;
-    int                 m_CIS;
 private:
     mfDosageCreatorDialog *m_Parent;
 };
@@ -151,131 +328,75 @@ private:
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
  \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
-mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, const int CIS, mfDosageModel *dosageModel )
+mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel )
     : QDialog( parent ),
     d(0)
 {
     // some initializations
-    mfDrugsModel *drugM = mfDrugsModel::instance();
     setObjectName( "mfDosageCreatorDialog" );
     d = new mfDosageCreatorDialogPrivate(this);
     d->m_DosageModel = dosageModel;
-    d->m_CIS = CIS;
 
     // Ui initialization
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
     userformsButton->setIcon( tkTheme::icon(ICONEDIT) );
-    intakesToLabel->hide();
-    intakesToSpin->hide();
-    durationToLabel->hide();
-    durationToSpin->hide();
 
     // this must be done here
     tkStringListModel * stringModel = new tkStringListModel( this );
-    stringModel->setStringList( d->m_DosageModel->dailyScheme() );
+    stringModel->setStringList( dailySchemeList() );
     stringModel->setCheckable(true);
     dailySchemeListView->setModel( stringModel );
     dailySchemeListView->hideButtons();
 
-    // retreive drug informations before drugmodel changes
-    drugNameLabel->setText( drugM->drugData( d->m_CIS, Drug::Denomination).toString() );
-    labelOfDosageLabel->setToolTip( drugM->drugData( d->m_CIS, Drug::AvailableDosages).toString() );
-    QString toolTip = drugM->drugData( d->m_CIS, Interaction::ToolTip ).toString();
-//    iconInteractionLabel->setToolTip( toolTip );
-//    iconInteractionLabel->setPixmap( drugM->index( drugRow, Interaction::Icon ).data().value<QIcon>().pixmap(16,16) );
-    toolTip = drugM->drugData( d->m_CIS, Drug::CompositionString ).toString();
-    drugNameLabel->setToolTip( toolTip );
+    d->resetUiToDefaults();
+    d->fillDrugsData();
 
-    resetUiToDefaults();
-}
+    availableDosagesListView->setModel(dosageModel);
+    availableDosagesListView->setModelColumn(Dosage::Label);
+    availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
 
-void mfDosageCreatorDialog::prepareMapper( const int dosageRow )
-{
-    // mapper preparation
-    if ( ! d->m_Mapper ) {
-        d->m_Mapper = new QDataWidgetMapper( this );
-        d->m_Mapper->setModel( d->m_DosageModel );
-        d->m_Mapper->setSubmitPolicy( QDataWidgetMapper::ManualSubmit );
-        d->m_Mapper->addMapping( labelLineEdit, Dosage::Label, "text" );
-        d->m_Mapper->addMapping( intakesCombo, Dosage::SelectedForm, "currentText" );
+    d->createMapper();
 
-        d->m_Mapper->addMapping( intakesFromSpin, Dosage::IntakeFrom, "value" );
-        d->m_Mapper->addMapping( intakesToSpin, Dosage::IntakeTo, "value" );
-        d->m_Mapper->addMapping( intakesCombo, Dosage::SelectedForm, "currentText" );
-//        d->m_Mapper->addMapping( minNumberIntakesByUnit, Dosage::MinIntakePerUnit, "value" );
-//        d->m_Mapper->addMapping( maxNumberIntakesByUnit, Dosage::MaxIntakePerUnit, "value" );
-//        d->m_Mapper->addMapping( unitCombo, Dosage::SelectedUnit, "currentText" );
-//        d->m_Mapper->addMapping( unitPerCombo, Dosage::UnitDivisor, "currentText" );
-        d->m_Mapper->addMapping( periodSchemeCombo, Dosage::IntakeScheme, "currentIndex" );
-
-        d->m_Mapper->addMapping( durationFromSpin, Dosage::DurationFrom );
-        d->m_Mapper->addMapping( durationToSpin, Dosage::DurationTo );
-        d->m_Mapper->addMapping( durationCombo, Dosage::DurationScheme, "currentIndex"  );
-//        d->m_Mapper->addMapping( minIntervalIntakesSpin, Dosage::IntakesIntervalOfTime );
-//        d->m_Mapper->addMapping( intervalTimeSchemeCombo, Dosage::IntakesIntervalScheme, "currentIndex"  );
-        d->m_Mapper->addMapping( mealTimeCombo, Dosage::MealScheme, "currentIndex" );
-        d->m_Mapper->addMapping( noteTextEdit, Dosage::Note, "plainText" );
-        d->m_Mapper->addMapping( dailySchemeListView, Dosage::DailyScheme, "checkedStringList" );
-    }
-
-    // manage non mapped datas
-    QModelIndex idx;
-    d->dosageModelToCheckAndCombo( dosageRow, Dosage::MinClearance, minClearanceCheck, minClearanceSpin );
-    d->dosageModelToCheckAndCombo( dosageRow, Dosage::MaxClearance, maxClearanceCheck, maxClearanceSpin );
-    d->dosageModelToCheckAndCombo( dosageRow, Dosage::SexLimitedIndex, sexLimitCheck, sexLimitCombo );
-    if (d->dosageModelToCheckAndCombo( dosageRow, Dosage::MinAge, minAgeCheck, minAgeSpin )) {
-        idx = d->m_DosageModel->index( dosageRow, Dosage::MinAgeReferenceIndex );
-        minAgeCombo->setCurrentIndex( idx.data().toInt() );
-    }
-    if (d->dosageModelToCheckAndCombo( dosageRow, Dosage::MaxAge, maxAgeCheck, maxAgeSpin )) {
-        idx = d->m_DosageModel->index( dosageRow, Dosage::MaxAgeReferenceIndex );
-        maxAgeCombo->setCurrentIndex( idx.data().toInt() );
-    }
-    d->m_Mapper->setCurrentIndex( dosageRow );
-}
-
-void mfDosageCreatorDialog::resetUiToDefaults()
-{
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    // some ui preparations
-    periodSchemeCombo->clear();
-//    intervalTimeSchemeCombo->clear();
-    durationCombo->clear();
-    mealTimeCombo->clear();
-//    scoredTabletScheme->clear();
-    hourlyTableWidget->verticalHeader()->hide();
-    hourlyTableWidget->horizontalHeader()->hide();
-    hourlyTableWidget->resizeColumnsToContents();
-    // populate combos
-//    formSchemeCombo->clear();
-//    formSchemeCombo->addItems( drugM->index( m_DrugRow, Drug::AvailableForms ).data().toStringList() );
-    bool isScored = drugM->drugData( d->m_CIS, Drug::IsScoredTablet ).toBool();
-    if ( isScored ) {
-//        scoredTabletScheme->setEnabled( true );
-        intakesToSpin->setDecimals( 2 );
-        intakesFromSpin->setDecimals( 2 );
-        intakesToSpin->setSingleStep( 0.25 );
-        intakesFromSpin->setSingleStep( 0.25 );
+    if (dosageModel->rowCount()==0) {
+//        qWarning() << "creating default dosage";
+        dosageModel->insertRow(0);
+        changeCurrentRow(0);
     } else {
-//        scoredTabletScheme->setEnabled( false );
-        durationToSpin->setDecimals( 0 );
-        durationFromSpin->setDecimals( 0 );
-        durationToSpin->setSingleStep( 1 );
-        durationFromSpin->setSingleStep( 1 );
+        changeCurrentRow(0);
     }
-    // set periods
-    periodSchemeCombo->addItems( mfDosageModel::periods() );
-    intervalTimeSchemeCombo->addItems( mfDosageModel::periods() );
-    durationCombo->addItems( mfDosageModel::periods() );
-    periodSchemeCombo->setCurrentIndex( mfDosageModel::periodDefault() );
-    intervalTimeSchemeCombo->setCurrentIndex( mfDosageModel::periodDefault() );
-    durationCombo->setCurrentIndex( mfDosageModel::periodDefault() );
-    mealTimeCombo->addItems( mfDosageModel::mealTime() );
 
-    resizeTableWidget();
+    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),this,SLOT(changeCurrentRow(QModelIndex)));
 }
 
+/** \brief Destructor */
+mfDosageCreatorDialog::~mfDosageCreatorDialog()
+{
+    if (d) delete d;
+    d=0;
+}
+
+/** \brief Changes the current editing dosage */
+void mfDosageCreatorDialog::changeCurrentRow(const int dosageRow)
+{
+    // manage non mapped datas
+    if (dosageRow==d->m_Mapper->currentIndex())
+        return;
+    d->resetUiToDefaults();
+    d->changeNonMappedDataFromModelToUi(dosageRow);
+    d->m_Mapper->setCurrentIndex(dosageRow);
+}
+
+/** \brief Changes the current editing dosage */
+void mfDosageCreatorDialog::changeCurrentRow(const QModelIndex &item )
+{
+    changeCurrentRow(item.row());
+}
+
+/**
+   \brief Validate the dialog
+   \todo Check dosage validity before validate the dialog
+*/
 void mfDosageCreatorDialog::done( int r )
 {
     int row;
@@ -286,50 +407,109 @@ void mfDosageCreatorDialog::done( int r )
 
     if ( r == QDialog::Rejected ) {
         d->m_DosageModel->revertRow( row );
-    }  else if ( d->m_Mapper ) {
+    }  else {
+        // match the user's form for the settings
+        const QStringList &pre = mfDosageModel::predeterminedForms();
+        const QStringList &av  = mfDrugsModel::instance()->drugData(d->m_DosageModel->drugCIS(),Drug::AvailableForms).toStringList();
+        if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
+            ( av.indexOf(intakesCombo->currentText()) == -1 )) {
+            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
+        }
 
         // ******************************************************
         // * TODO check validity of the dosage before submition *
         // ******************************************************
         //        if ( m_DosageModel->isDosageValid( row ) ) {
         // submit mapper to model
-        d->m_Mapper->submit();
+//        d->m_Mapper->submit();
 
-        // manage non mapped datas (sexlimit, weightlimit...)
-        QModelIndex idx;
-
-        d->checkToDosageModel( row, Dosage::SexLimitedIndex, sexLimitCheck , sexLimitCombo->currentIndex() );
-        d->checkToDosageModel( row, Dosage::MinWeight, minWeightCheck , minWeightSpin->value() );
-        d->checkToDosageModel( row, Dosage::MinClearance, minClearanceCheck , minClearanceSpin->value() );
-        d->checkToDosageModel( row, Dosage::MaxClearance, maxClearanceCheck , maxClearanceSpin->value() );
-        if (d->checkToDosageModel( row, Dosage::MinAge, minWeightCheck , minAgeSpin->value() )) {
-            idx = d->m_DosageModel->index( row, Dosage::MinAgeReferenceIndex );
-            d->m_DosageModel->setData( idx, minAgeCombo->currentIndex() );
-        }
-        if (d->checkToDosageModel( row, Dosage::MaxAge, maxAgeCheck , maxAgeSpin->value() )) {
-            idx = d->m_DosageModel->index( row, Dosage::MaxAgeReferenceIndex );
-            d->m_DosageModel->setData( idx, maxAgeCombo->currentIndex() );
-        }
 
         // commit model changes to database
-        d->commitModelToDatabase();
-    } else
-        QDialog::done(QDialog::Rejected);
+    }
     QDialog::done(r);
 }
 
-/** \brief Resize hourly table widget on view */
-void mfDosageCreatorDialog::resizeTableWidget()
+void mfDosageCreatorDialog::on_saveButton_clicked()
 {
-    int i = 0;
-    int size = ( ( hourlyTableWidget->size().width() - style()->pixelMetric( QStyle::PM_DefaultFrameWidth ) ) / 8 );
-    for( i = 0; i < 8; i++ )
-        hourlyTableWidget->setColumnWidth( i, size );
+    int row = d->m_Mapper->currentIndex();
+    if (!d->checkDosageValidity(row))
+        return;
+    d->commitModelToDatabase();
+    QDialog::done(QDialog::Accepted);
+}
+
+void mfDosageCreatorDialog::on_prescribeButton_clicked()
+{
+    // make sure that the drug was inserted to the drugsmodel
+    int row = d->m_Mapper->currentIndex();
+    d->m_DosageModel->toPrescription(row);
+    QDialog::done(QDialog::Accepted);
+}
+
+void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
+{
+    int row = d->m_Mapper->currentIndex();
+    if (!d->checkDosageValidity(row))
+        return;
+    d->m_DosageModel->toPrescription(row);
+    d->commitModelToDatabase();
+    QDialog::done(QDialog::Accepted);
 }
 
 /** \brief Used for hourly table widget resizing */
 void mfDosageCreatorDialog::resizeEvent( QResizeEvent * event )
 {
-    resizeTableWidget();
+    d->resizeTableWidget();
     QWidget::resizeEvent( event );
+}
+
+void mfDosageCreatorDialog::on_fromToIntakesCheck_stateChanged(int state)
+{
+    d->setCheckBoxStateToModel( Dosage::IntakesUsesFromTo, state);
+}
+
+void mfDosageCreatorDialog::on_fromToDurationCheck_stateChanged(int state)
+{
+    d->setCheckBoxStateToModel( Dosage::DurationUsesFromTo, state );
+}
+
+void mfDosageCreatorDialog::on_intakesFromSpin_valueChanged( double d  )
+{
+    if (intakesToSpin->value() < d) {
+        intakesToSpin->setValue( d );
+    }
+    intakesToSpin->setMinimum(d);
+}
+
+void mfDosageCreatorDialog::on_durationFromSpin_valueChanged( double d )
+{
+    if (durationToSpin->value() < d) {
+        durationToSpin->setValue( d );
+    }
+    durationToSpin->setMinimum(d);
+}
+
+/** \brief Show a menu with the user recorded forms */
+void mfDosageCreatorDialog::on_userformsButton_clicked()
+{
+    if (tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS, QVariant()).isNull())
+        return;
+
+    const QStringList &ulist = tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
+    QList<QAction*> list;
+    foreach( const QString &form, ulist ) {
+        if (!form.isEmpty())
+            list << new QAction(form, this);
+    }
+    QAction *aclear = new QAction(tr("Clear this list", "Clear the user's intakes recorded forms"), this);
+    list << aclear;
+
+    QAction *a = QMenu::exec(list, userformsButton->mapToGlobal(QPoint(0,20)) );
+    if (!a)
+        return;
+    if (a == aclear) {
+        tkSettings::instance()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
+    } else {
+        intakesCombo->setEditText( a->text() );
+    }
 }

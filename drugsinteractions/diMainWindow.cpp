@@ -64,6 +64,7 @@
 #include <tkPrinter.h>
 #include <tkActionManager.h>
 #include <tkUpdateChecker.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QMenuBar>
@@ -80,6 +81,7 @@
 //#define DEBUG
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 const char* const  DRUGINTERACTION_FILEFILTER = QT_TRANSLATE_NOOP("diMainWindow", "DrugsInteractions Prescriptions (*.di)");
 
@@ -126,7 +128,7 @@ diMainWindow::diMainWindow( QWidget *parent )
 
     // Patient name (for prescribing)
     QLabel * lbl = new QLabel(wgt);
-    lbl->setText( tr("Patient Name") );
+    lbl->setText( tkTr(PATIENT_NAME) );
     patientName = new QLineEdit(wgt);
 
     patientName->setText( diCore::patientName() );
@@ -198,17 +200,17 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
     // else show the dosage creator widget
 
     int drugPrescriptionRow = m_PrescriptionModel->addDrug(CIS);
-//    mfDosageCreatorDialog dlg(this, CIS, mfDrugsModel::instance()->dosageModel(CIS));
-//    dlg.exec();
-    if (!m_DosageDialog)
-        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
-    else
-        m_DosageDialog->changeRow(drugPrescriptionRow,0);
-
-    int r = m_DosageDialog->exec();
-    if ( r == QDialog::Rejected )
-        m_PrescriptionModel->removeLastInsertedDrug();
-    m_PrescriptionView->listview()->update();
+    mfDosageCreatorDialog dlg(this, mfDrugsModel::instance()->dosageModel(CIS));
+    dlg.exec();
+//    if (!m_DosageDialog)
+//        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
+//    else
+//        m_DosageDialog->changeRow(drugPrescriptionRow,0);
+//
+//    int r = m_DosageDialog->exec();
+//    if ( r == QDialog::Rejected )
+//        m_PrescriptionModel->removeLastInsertedDrug();
+//    m_PrescriptionView->listview()->update();
 }
 
 void diMainWindow::showDosageDialog(const QModelIndex &item)
@@ -235,7 +237,6 @@ void diMainWindow::writeSettings()
 
 void diMainWindow::createMenus()
 {
-    // TODO Everyone must use tkActionManager !!!
     tkActionManager *am = tkActionManager::instance();
     // create menu structure
     am->createMenuBar(MENUBAR, this);
@@ -256,7 +257,7 @@ void diMainWindow::createMenus()
 
 void diMainWindow::createStatusBar()
 {
-    statusBar()->showMessage( tr( "Ready" ), 2000 );
+    statusBar()->showMessage( tkTr(READY), 2000 );
 }
 
 void diMainWindow::about()
@@ -278,7 +279,7 @@ void diMainWindow::preferences()
     connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
     l.addWidget( &prefs );
     l.addWidget( &buttonBox );
-    dlg.setWindowTitle( tr("Preferences") + " - " + qApp->applicationName() );
+    dlg.setWindowTitle( tkTr(PREFERENCES) + " - " + qApp->applicationName() );
 //    tkLog::logTimeElapsed(t, this->objectName(), "OpeningPreferences" );
     dlg.exec();
     if ( dlg.result() == QDialog::Accepted ) {
@@ -331,10 +332,11 @@ void diMainWindow::savePrescription()
 {
     QString toSave = QString( "<DrugsInteractionsFile>\n"
                               "<name>%1</name>\n"
-                              "<prescription>%2</prescription>\n")
+                              "%2\n"
+                              "</DrugsInteractionsFile>")
             .arg( QString(patientName->text().toAscii().toBase64()) )
             .arg( mfDrugsModel::instance()->serializePrescription() );
-    tkGlobal::saveStringToFile( toSave.toAscii().toBase64(),
+    tkGlobal::saveStringToFile( toSave,//.toAscii().toBase64(),
                                 QDir::homePath() + "/prescription.di",
                                 tr(DRUGINTERACTION_FILEFILTER) );
 }
@@ -342,7 +344,7 @@ void diMainWindow::savePrescription()
 void diMainWindow::openPrescription()
 {
     QString f = QFileDialog::getOpenFileName(this,
-                                             tr("Open File"),
+                                             tkTr(OPEN_FILE),
                                              QDir::homePath(),
                                              tr(DRUGINTERACTION_FILEFILTER) );
     if (f.isEmpty())

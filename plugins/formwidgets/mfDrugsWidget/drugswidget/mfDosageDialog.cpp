@@ -51,6 +51,7 @@
 #include <tkStringListModel.h>
 #include <tkSettings.h>
 #include <tkTheme.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QHeaderView>
@@ -66,15 +67,21 @@ using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
- \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
 // **************************************************************************************************************
 // TODO : with FreeMedForms check compatibility between patient parameters and dosage (weight, age, clearance...)
 // **************************************************************************************************************
 
+/**
+  \brief Constructor
+  \param parent : parent QWidget
+  \param drugRow : row of the drug inside the actual model \todo Change to QPersistentModelIndex
+  \param dosageRow : row of the dosage to use in the actual model \todo Change to QPersistentModelIndex
+*/
 mfDosageDialog::mfDosageDialog( QWidget *parent, const int drugRow, const int dosageRow )
     : QDialog( parent ),
     m_Mapper(0),
@@ -96,17 +103,17 @@ mfDosageDialog::mfDosageDialog( QWidget *parent, const int drugRow, const int do
 
     // Prepare some combos
     durationCombo->clear();
-    durationCombo->addItems( mfDosageModel::periods() );
-    durationCombo->setCurrentIndex( mfDosageModel::periodDefault()+2 );
+    durationCombo->addItems( periods() );
+    durationCombo->setCurrentIndex( Time::Months );
     periodSchemeCombo->clear();
-    periodSchemeCombo->addItems( mfDosageModel::periods() );
-    periodSchemeCombo->setCurrentIndex( mfDosageModel::periodDefault() );
+    periodSchemeCombo->addItems( periods() );
+    periodSchemeCombo->setCurrentIndex( Time::Days );
     mealTimeCombo->clear();
-    mealTimeCombo->addItems( mfDosageModel::mealTime() );
+    mealTimeCombo->addItems( mealTime() );
 
     // Prepare dailyScheme
     tkStringListModel * stringModel = new tkStringListModel( this );
-    stringModel->setStringList( mfDosageModel::dailyScheme() );
+    stringModel->setStringList( dailySchemeList() );
     stringModel->setCheckable(true);
     dailySchemeListView->setModel( stringModel );
     dailySchemeListView->hideButtons();
@@ -134,11 +141,16 @@ mfDosageDialog::mfDosageDialog( QWidget *parent, const int drugRow, const int do
     changeRow( drugRow, dosageRow );
 }
 
+/** \brief Destructor, frees mapper */
 mfDosageDialog::~mfDosageDialog()
 {
     m_Mapper->clearMapping();
 }
 
+/**
+  \brief Change the current row of the drug model
+  \todo Manage dosagemodel
+*/
 void mfDosageDialog::changeRow( const int drugRow, const int dosageRow )
 {
     m_DrugRow = drugRow;
@@ -159,17 +171,34 @@ void mfDosageDialog::changeRow( const int drugRow, const int dosageRow )
     tabWidget->setCurrentWidget(tabIntakes);
     intakesCombo->clear();
     intakesCombo->addItems( drugM->index( m_DrugRow, Drug::AvailableForms ).data().toStringList() );
-    periodSpin->setValue( 1 );
+    periodSpin->setValue(1);
     noteTxtEdit->clear();
 
     if (!drugM->index( m_DrugRow, Drug::HasPrescription ).data().toBool())
         createDefaultDosage();
-    m_Mapper->setCurrentIndex( m_DrugRow );
-    durationCombo->setCurrentIndex( mfDosageModel::periodDefault()+2 );
-    periodSchemeCombo->setCurrentIndex( mfDosageModel::periodDefault() );
+    m_Mapper->setCurrentIndex(m_DrugRow);
+    QString tmp = drugM->index(m_DrugRow, Prescription::DurationScheme).data().toString();
+    int id = periods().indexOf(tmp);
+    if (id-=-1)
+        durationCombo->setCurrentIndex(id-1);
+    else {
+        durationCombo->setCurrentIndex(Time::Months);
+        durationCombo->setEditText(tmp);
+    }
+    tmp = drugM->index(m_DrugRow, Prescription::PeriodScheme).data().toString();
+    id = periods().indexOf(tmp);
+    if (id-=-1)
+        periodSchemeCombo->setCurrentIndex(id-1);
+    else {
+        periodSchemeCombo->setCurrentIndex(Time::Days);
+        periodSchemeCombo->setEditText(tmp);
+    }
+
     modelToCheckBoxes();
+    checkScoreDrug();
 }
 
+/** \brief Transform some datas of the model to checkBoxes */
 void mfDosageDialog::modelToCheckBoxes()
 {
     mfDrugsModel *drugM = mfDrugsModel::instance();
@@ -214,6 +243,27 @@ void mfDosageDialog::modelToCheckBoxes()
         noPresentationCheck->setCheckState( Qt::Unchecked );
 }
 
+/** \brief Check if drug is scorable. Adapt min and max values of intakes spins */
+void mfDosageDialog::checkScoreDrug()
+{
+    mfDrugsModel *drugM = mfDrugsModel::instance();
+    if (drugM->index(m_DrugRow, Drug::IsScoredTablet).data().toBool()) {
+        // Score
+        intakesFromSpin->setMinimum(0.25);
+        intakesFromSpin->setSingleStep(0.25);
+        intakesToSpin->setMinimum(0.25);
+        intakesToSpin->setSingleStep(0.25);
+    } else {
+        // Not score
+        intakesFromSpin->setMinimum(1);
+        intakesFromSpin->setSingleStep(1);
+        intakesToSpin->setMinimum(1);
+        intakesToSpin->setSingleStep(1);
+    }
+}
+
+
+/** \brief Creates an empty default dosage inside the model. The Ui should be updated with the mapper. */
 void mfDosageDialog::createDefaultDosage()
 {
     mfDrugsModel *drugM = mfDrugsModel::instance();
@@ -224,9 +274,9 @@ void mfDosageDialog::createDefaultDosage()
     drugM->setData( drugM->index( m_DrugRow, Prescription::DurationTo), 1 );
     drugM->setData( drugM->index( m_DrugRow, Prescription::DurationUsesFromAndTo), false );
     drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesScheme), intakesCombo->itemText(0) );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationScheme), mfDosageModel::period(mfDosageModel::periodDefault()+2) );
+    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationScheme), period(Time::Months));
     drugM->setData( drugM->index( m_DrugRow, Prescription::Period), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::PeriodScheme), mfDosageModel::period(mfDosageModel::periodDefault()) );
+    drugM->setData( drugM->index( m_DrugRow, Prescription::PeriodScheme), period(Time::Days) );
     drugM->setData( drugM->index( m_DrugRow, Prescription::MealTimeSchemeIndex), QVariant() );
     drugM->setData( drugM->index( m_DrugRow, Prescription::Note), QVariant() );
     drugM->setData( drugM->index( m_DrugRow, Prescription::IsINNPrescription), false );
@@ -235,6 +285,11 @@ void mfDosageDialog::createDefaultDosage()
     drugM->setData( drugM->index( m_DrugRow, Prescription::IsALD), false );
 }
 
+/**
+  \brief Closes the dialog.
+  \li If the dialog is accepted, retreive the prescribed form and store it into the settings is needed.
+  \todo If the dialog is accepted and no dosage exists in the dosage model --> create a dosage in the dosage model
+*/
 void mfDosageDialog::done( int r )
 {
     if ( r == QDialog::Accepted ) {
@@ -276,6 +331,7 @@ void mfDosageDialog::setPrescriptionState( const int index, const int qtCheckSta
         drugM->setData( drugM->index( m_DrugRow, index), false );
 }
 
+/** \brief Show the information dialog for the drug */
 void mfDosageDialog::on_drugNameButton_clicked()
 {
     mfDrugInfo dialog( m_DrugRow, this );
@@ -334,6 +390,7 @@ void mfDosageDialog::on_durationFromSpin_valueChanged( double d  )
     durationToSpin->setMinimum(d);
 }
 
+/** \brief Show a menu with the user recorded forms */
 void mfDosageDialog::on_userformsButton_clicked()
 {
     if (tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).isNull())
@@ -358,6 +415,7 @@ void mfDosageDialog::on_userformsButton_clicked()
     }
 }
 
+/** \todo code this */
 void mfDosageDialog::on_toogleInnButton_clicked()
 {
     // get from model the list of substituable drugs

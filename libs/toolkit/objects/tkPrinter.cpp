@@ -46,6 +46,7 @@
 
 #include <tkLog.h>
 #include <tkGlobal.h>
+#include <tkConstantTranslations.h>
 
 class tkPrinterPrivate {
 };
@@ -123,21 +124,21 @@ bool tkPrinter::previewDialog( QWidget *parent, bool test )
 {
     Q_UNUSED(parent);
     Q_UNUSED(test);
-    tkGlobal::functionNotAvailableMessageBox( tr("Print Preview not available") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ISNOT_AVAILABLE).arg(tkTr(PRINT_PREVIEW)) );
     return false;
 }
 
 bool tkPrinter::print( const QTextDocument & docToPrint )
 {
     Q_UNUSED(docToPrint);
-    tkGlobal::functionNotAvailableMessageBox( tr("Print functions are not available.") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
 bool tkPrinter::print( const QString &htmlToPrint )
 {
     Q_UNUSED(htmlToPrint);
-    tkGlobal::functionNotAvailableMessageBox( tr("Print functions are not available.") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
@@ -150,7 +151,7 @@ bool tkPrinter::printWithDuplicata( bool state )
 bool tkPrinter::print( QPrinter *printer )
 {
     Q_UNUSED(printer);
-    tkGlobal::functionNotAvailableMessageBox( tr("Print functions are not available.") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
@@ -251,5 +252,25 @@ void tkPrinter::previewHeaderFooter( QPixmap &drawTo,
     Q_UNUSED(drawTo);
     Q_UNUSED(headerHtml);
     Q_UNUSED(footerHtml);
+}
+
+bool tkPrinter::toPdf(const QString &fileName)
+{
+    Q_UNUSED(fileName);
+    return true;
+}
+
+bool tkPrinter::toPdf(const QString &fileName, const QString &html)
+{
+    Q_UNUSED(fileName);
+    Q_UNUSED(html);
+    return true;
+}
+
+bool tkPrinter::toPdf(const QString &fileName, const QTextDocument & docToPrint)
+{
+    Q_UNUSED(fileName);
+    Q_UNUSED(docToPrint);
+    return true;
 }
 

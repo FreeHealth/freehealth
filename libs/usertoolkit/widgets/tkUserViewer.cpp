@@ -147,7 +147,9 @@ void tkUserViewerPrivate::initialize()
     tabHeadersFooters->setCurrentWidget( genericTab );
 }
 
-/** \brief Mapper preparer */
+/**
+  \brief Mapper preparer
+*/
 void tkUserViewerPrivate::prepareMapper()
 {
     m_Mapper = new QDataWidgetMapper( m_Parent );

@@ -57,7 +57,12 @@
 #include "tkAboutDialog_p.h"
 
 #include <tkScrollingWidget.h>
+#include <tkConstantTranslations.h>
+
 #include <QApplication>
+
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 const QString m_RubrikMask =
         "%1\n"
@@ -229,7 +234,7 @@ tkAboutDialogPrivate::tkAboutDialogPrivate( QObject * parent )
 void tkAboutDialogPrivate::initialize()
 {
     setupUi(m_Parent);
-    m_Parent->setWindowTitle( tr("About") + " - " + qApp->applicationName());
+    m_Parent->setWindowTitle( tkTr(ABOUT) + " - " + qApp->applicationName());
     compilDateLbl->setText( QString("%1 %2").arg(__DATE__, __TIME__));
     versionLbl->setText(qApp->applicationVersion());
     tabWidget->setCurrentWidget(generalInformations);

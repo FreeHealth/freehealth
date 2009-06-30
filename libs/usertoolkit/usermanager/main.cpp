@@ -29,6 +29,7 @@
 #include <tkTranslators.h>
 
 #include <QDebug>
+#include <QFileDialog>
 
 /**
   \brief This project is the FreeMedForms' usermanager application
@@ -39,10 +40,26 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     app.setApplicationName( QCoreApplication::translate("main", "FreeMedForms' Users Manager") );
-    app.setApplicationVersion( "0.0.1" );
+    app.setApplicationVersion( "0.0.2" );
 
     // init settings
     tkSettings settings;
+
+    // ask user for freemedforms' resources path (try to find user.db)
+    QString tmp;
+    if (!tkGlobal::isDebugCompilation()) {
+        tmp = QFileDialog::getOpenFileName(0, QApplication::translate("main","Select FreeMedForms' binary"),
+                                           tkSettings::instance()->path(tkSettings::BundleRootPath));
+        if (tmp.isEmpty())
+            return 0;
+
+        if (tkGlobal::isRunningOnMac())
+            tmp += "/Contents/Resources/";
+        else
+            tmp += "/Resources";
+        tkSettings::instance()->setPath( tkSettings::BundleResourcesPath, tmp );
+        tkSettings::instance()->setPath( tkSettings::ResourcesPath, tmp );
+    }
 
     // add translators (if not there will be a segfault)
     tkTranslators *trans = tkTranslators::instance(qApp);

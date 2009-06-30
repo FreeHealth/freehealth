@@ -233,7 +233,6 @@ namespace mfDrugsConstants
       IAM_MaxParam, IAM_MAIN, IAM_INTERACTOR
     };
 
-
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------
@@ -282,6 +281,7 @@ namespace Prescription
     {
         Id = 1200,
         UsedDosage,
+        CIP,
         IntakesFrom,
         IntakesTo,
         IntakesScheme,
@@ -303,32 +303,6 @@ namespace Prescription
         ToHtml,
         MaxParam
     };
-
-    /** \brief These codes are used for the serialization of the prescription model. All model column are replaced by its 3 char name. */
-    const QStringList PRESCRIPTION_CODES =
-            QStringList()
-        << "ID_"  // = 1200,
-        << "DOS" // UsedDosage,
-        << "IFR" // IntakesFrom,
-        << "ITO" // IntakesTo,
-        << "ISC" // IntakesScheme,
-        << "IFT" // IntakesUsesFromAndTo,
-        << "IFS" // IntakesFullString,
-        << "DFR" // DurationFrom,
-        << "DTO" // DurationTo,
-        << "DSC" // DurationScheme,
-        << "DFT" // DurationUsesFromAndTo,
-        << "PER" // Period,
-        << "PSC" // PeriodScheme,
-        << "DLY" // DailyScheme,
-        << "MTI" // MealTimeSchemeIndex,
-        << "NTE" // Note,
-        << "INN" // IsINNPrescription,
-        << "FRM" // SpecifyForm,
-        << "PRS" // SpecifyPresentation,
-        << "ALD" // IsALD,
-        << "HTM" // ToHtml,
-        ;        // MaxParam
 
 
 }  // End namespace mfDrugsConstants::Prescription
@@ -367,38 +341,52 @@ namespace Dosage
         CIS_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */
         CIP_LK,                 /*!< \brief Code CIP           --> int */
         Label,                  /*!< \brief Libellé            --> varchar( 300 ) */
-        DurationScheme,     /*!< \brief codage             --> int cf enum Period */
-        DurationFrom,      /*!< \brief espacement prises  --> double */
-        DurationTo,      /*!< \brief espacement prises  --> double */
-        IntakeFrom,              /*!< \brief Nb de prises       --> double */
-        IntakeTo,              /*!< \brief Nb de prises       --> double  */
-        MinIntakePerUnit,       /*!< \brief  */
-        MaxIntakePerUnit,       /*!< \brief  */
-        SelectedUnit,           /*!< \brief  */
-        UnitDivisor,            /*!< \brief  */
-        SelectedForm,           /*!< \brief texte de la forme sélectionnée */
-        IntakeScheme,           /*!< \brief Schéma de prise    --> varchar ? */
-        DailyScheme,            /*!< \brief  */
-        MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
-        IntakeHourlyScheme,     /*!< \brief Schéma de prise    --> varchar ? */
-        IntakeDailyScheme,      /*!< \brief Schéma de prise (matin,midi,soir...) cf enum --> QFlag */
+
+        IntakesFrom,             /*!< \brief Nb de prises       --> double */
+        IntakesTo,               /*!< \brief Nb de prises       --> double  */
+        IntakesUsesFromTo,       /*!< \brief bool : intake uses the "from x to y" scheme */
+        IntakesScheme,           /*!< \brief Forme sélectionnée */
         IntakesIntervalOfTime,  /*!< \brief temps entre chaque prise --> int */
         IntakesIntervalScheme,  /*!< \brief schéma de temps --> int cf enum */
-        DurationModulator,      /*!< \brief                    --> ??? */
+
+        DurationFrom,           /*!< \brief espacement prises  --> double */
+        DurationTo,             /*!< \brief espacement prises  --> double */
+        DurationUsesFromTo,     /*!< \brief bool : duration uses the "from x to y" scheme */
+        DurationScheme,         /*!< \brief codage             --> int cf enum Period */
+
+        Period,
+        PeriodScheme,
+        DailyScheme,            /*!< \brief  */
+        MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
+
         MinAge,                 /*!< \brief Limite d'âge en mois */
         MaxAge,                 /*!< \brief Limite d'âge en mois */
         MinAgeReferenceIndex,   /*!< \brief Reference pour la limite d'âge : heures, jours, semaines, mois, années      --> int cf Enum Period */
         MaxAgeReferenceIndex,   /*!< \brief Reference pour la limite d'âge : heures, jours, semaines, mois, années      --> int cf Enum Period */
         MinWeight,              /*!< \brief Poids minimal      --> int                     40 (kg) */
         SexLimitedIndex,        /*!< \brief int 0 = M / 1 = F */
-
         MinClearance,           /*!< \brief Clearance de la créatinine minimale pour la prescription */
         MaxClearance,           /*!< \brief Clearance de la créatinine maximale pour la prescription (définition d'interval). Eg : HBPM */
-
-        Physiology,             /*!< \brief Terrain            --> int --> cf Physio       WeigtLimited */
-        ScoredTablet,           /*!< \brief comprimé sécable   --> int cf enum Divsible */
-        AlternateWith,          /*!< \brief link to another posology                       1/2 cp - 1/4 cp en alternance */
+        PregnancyLimitsIndex,   /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::PregnancyLimits. */
+        BreastFeedingLimitsIndex, /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::BreastFeedingLimits. */
         Note,                   /*!< \brief note               --> varchar ( 500 ) */
+
+        CIM10Links,             /*!< \brief CIM10 codes related to the prescription. Codes are separated by a ';'. */
+        EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  */
+
+//        MinIntakePerUnit,       /*!< \brief  */
+//        MaxIntakePerUnit,       /*!< \brief  */
+//        SelectedUnit,           /*!< \brief  */
+//        UnitDivisor,            /*!< \brief  */
+//        SelectedForm,           /*!< \brief texte de la forme sélectionnée */
+//        IntakeHourlyScheme,     /*!< \brief Schéma de prise    --> varchar ? */
+//        IntakeDailyScheme,      /*!< \brief Schéma de prise (matin,midi,soir...) cf enum --> QFlag */
+//        DurationModulator,      /*!< \brief                    --> ??? */
+
+//        Physiology,             /*!< \brief Terrain            --> int --> cf Physio       WeigtLimited */
+//        ScoredTablet,           /*!< \brief comprimé sécable   --> int cf enum Divsible */
+//        AlternateWith,          /*!< \brief link to another posology                       1/2 cp - 1/4 cp en alternance */
+
         Extras,                 /*!< \brief blob that contains extra datas XML formatted */
         UserUuid,               /*!< \brief Utilisateur        --> ???? */
         ValidatorUuid,          /*!< \brief nom de celui qui a validé la posologie */

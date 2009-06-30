@@ -40,17 +40,19 @@
  ***************************************************************************/
 #include "mfDrugsPreferences.h"
 
+#include <mfDrugsConstants.h>
+
 #include <tkTheme.h>
 #include <tkPrinter.h>
 #include <tkSettings.h>
 #include <tkLog.h>
-#include <mfDrugsConstants.h>
+#include <tkConstantTranslations.h>
 
 #include <QPixmap>
-#include <QDebug>
 
 using namespace mfDrugsConstants;
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 mfDrugsPreferences::mfDrugsPreferences(QWidget *parent) :
         QWidget(parent)
@@ -172,7 +174,7 @@ void mfDrugsPreferences::saveToSettings( tkSettings *settings )
 void mfDrugsPreferences::writeDefaultSettings( tkSettings *s )
 {
 //    qWarning() << "---------> writedefaults";
-    tkLog::addMessage("mfDrugsPreferences", tr("Creating default settings for DrugsWidget.") );
+    tkLog::addMessage("mfDrugsPreferences", tkTr(CREATING_DEFAULT_SETTINGS_FOR_1).arg("mfDrugsWidget") );
     s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
     s->setValue( MFDRUGS_SETTING_VIEWFONT , QFont() );
     s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize() );

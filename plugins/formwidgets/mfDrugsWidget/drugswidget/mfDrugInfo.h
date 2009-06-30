@@ -58,7 +58,7 @@ class mfDrugInfoPrivate;
 /**
   \brief Show a dialog with drugs informations and interactions founded.
   This dialog allows user to send debugging datas.
- \ingroup drugsinteractions drugswidget
+  \ingroup drugsinteractions drugswidget
 */
 class mfDrugInfo : public QDialog
 {

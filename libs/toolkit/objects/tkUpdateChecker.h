@@ -60,65 +60,35 @@ Q_TK_END_CONSTANTS
  * \date 02 June 2009
 */
 
-/** \brief Threaded update checker over the internet. Connect the SIGNAL to catch the update.
-  - Usage :
-  \code
-      tkUpdateChecker::instance()->check("http://my.url.com/update.file.txt");
-      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded()), this, SLOT(on_UpdateFounded()));
-      // OR
-      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded(const QString &)), this, SLOT(on_UpdateFounded(const QString &)));
-  \endcode
-
-  - You can :
-      - check for update with hasUpdate(),
-      - get the extracted update's text using updateText(),
-      - stop the downloading of the file using cancel().
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkUpdateChecker : public QObject
 {
     Q_OBJECT
     friend class tkUpdateCheckerPrivate;
 
 public:
-    /** */
      tkUpdateChecker(QObject *parent = 0);
-    /** */
     ~tkUpdateChecker();
 
-    /** */
     void check( const QString &url );
-    /** */
     void check( const QUrl &url );
-    /** */
     void cancel();
 
-    /** */
     bool fileRetreived();
-    /** */
     bool hasUpdate();
-    /** */
     QString lastVersion();
-    /** */
     QString updateText();
 
 public Q_SLOTS:
-    /** */
     void showUpdateInformations();
 
 Q_SIGNALS:
-    /** */
     void updateFounded(const QString &updateText);
-    /** */
     void updateFounded();
 
 protected:
-    /** */
     void emitSignals();
 
 private:
-//    static tkUpdateChecker *m_Instance;
     tkUpdateCheckerPrivate *d;
 };
 

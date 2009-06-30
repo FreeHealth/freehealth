@@ -153,39 +153,39 @@ mfDrugsBase::mfDrugsBase( QObject *parent )
     addTable( Table_IAM, "IAM_IMPORT" );
     addTable( Table_IAM_DENOMINATION, "IAM_DENOMINATION" );
 
-    addField( Table_CIS, CIS_CIS , "CIS" );
-    addField( Table_CIS, CIS_DENOMINATION , "DENOMINATION");
-    addField( Table_CIS, CIS_FORME,"FORME" );
-    addField( Table_CIS, CIS_ADMINISTRATION, "ADMINISTRATION");
-    addField( Table_CIS, CIS_AMM, "AMM");
-    addField( Table_CIS, CIS_AUTORISATION, "AUTORISATION");
-    addField( Table_CIS, CIS_COMMERCIALISATION, "COMMERCIALISATION");
-    addField( Table_CIS, CIS_CODE_RPC, "CODE_RPC");
+    addField( Table_CIS, CIS_CIS ,            "CIS" );
+    addField( Table_CIS, CIS_DENOMINATION ,   "DENOMINATION");
+    addField( Table_CIS, CIS_FORME,           "FORME" );
+    addField( Table_CIS, CIS_ADMINISTRATION,  "ADMINISTRATION");
+    addField( Table_CIS, CIS_AMM,              "AMM");
+    addField( Table_CIS, CIS_AUTORISATION,     "AUTORISATION");
+    addField( Table_CIS, CIS_COMMERCIALISATION,"COMMERCIALISATION");
+    addField( Table_CIS, CIS_CODE_RPC,         "CODE_RPC");
 
-    addField( Table_CIS_CIP, CISP_CIS, "CIS");
-    addField( Table_CIS_CIP, CISP_CIP, "CIP");
-    addField( Table_CIS_CIP, CISP_LIBELLE, "LIBELLE");
-    addField( Table_CIS_CIP, CISP_STATUT, "STATUT");
+    addField( Table_CIS_CIP, CISP_CIS,         "CIS");
+    addField( Table_CIS_CIP, CISP_CIP,         "CIP");
+    addField( Table_CIS_CIP, CISP_LIBELLE,     "LIBELLE");
+    addField( Table_CIS_CIP, CISP_STATUT,      "STATUT");
     addField( Table_CIS_CIP, CISP_COMMERCIALISATION, "COMMERCIALISATION");
-    addField( Table_CIS_CIP, CISP_DATE, "DATE_STR");
-    addField( Table_CIS_CIP, CISP_CIPLONG, "CIP_LONG");
+    addField( Table_CIS_CIP, CISP_DATE,        "DATE_STR");
+    addField( Table_CIS_CIP, CISP_CIPLONG,     "CIP_LONG");
 
-    addField( Table_COMPO, COMPO_CIS, "CIS" );
-    addField( Table_COMPO, COMPO_NOM, "NOM");
-    addField( Table_COMPO, COMPO_CODE_SUBST, "CODE_SUBST");
+    addField( Table_COMPO, COMPO_CIS,          "CIS" );
+    addField( Table_COMPO, COMPO_NOM,          "NOM");
+    addField( Table_COMPO, COMPO_CODE_SUBST,   "CODE_SUBST");
     addField( Table_COMPO, COMPO_DENOMINATION, "DENOMINATION");
-    addField( Table_COMPO, COMPO_DOSAGE,"DOSAGE" );
-    addField( Table_COMPO, COMPO_REF_DOSAGE, "REF_DOSAGE");
-    addField( Table_COMPO, COMPO_NATURE, "NATURE" );
-    addField( Table_COMPO, COMPO_LK_NATURE, "LK_NATURE");
+    addField( Table_COMPO, COMPO_DOSAGE,       "DOSAGE" );
+    addField( Table_COMPO, COMPO_REF_DOSAGE,   "REF_DOSAGE");
+    addField( Table_COMPO, COMPO_NATURE,       "NATURE" );
+    addField( Table_COMPO, COMPO_LK_NATURE,    "LK_NATURE");
 
     addField( Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, "ID_DENOMINATION");
-    addField( Table_IAM_DENOMINATION, IAM_DENOMINATION, "DENOMINATION");
+    addField( Table_IAM_DENOMINATION, IAM_DENOMINATION,    "DENOMINATION");
 
-    addField( Table_IAM, IAM_ID, "IAM_ID");
-    addField( Table_IAM, IAM_ID1, "ID1");
-    addField( Table_IAM, IAM_ID2, "ID2");
-    addField( Table_IAM, IAM_TYPE, "TYPE");
+    addField( Table_IAM, IAM_ID,       "IAM_ID");
+    addField( Table_IAM, IAM_ID1,      "ID1");
+    addField( Table_IAM, IAM_ID2,      "ID2");
+    addField( Table_IAM, IAM_TYPE,     "TYPE");
     addField( Table_IAM, IAM_TEXT_IAM, "TEXT_IAM");
     addField( Table_IAM, IAM_TEXT_CAT, "TEXT_CAT");
 }
@@ -275,61 +275,66 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
                        .arg( pathOrHostName, dbName ) );
         // create an empty database and connect
     QSqlDatabase DB;
-    if ( driver == SQLite )
-    {
+    if ( driver == SQLite ) {
         DB = QSqlDatabase::addDatabase( "QSQLITE" , connectionName );
         DB.setDatabaseName( QDir::cleanPath( pathOrHostName + QDir::separator() + dbName ) );
         DB.open();
     }
-    else if ( driver == MySQL )
-    {
+    else if ( driver == MySQL ) {
         // TODO : how to create a new mysql database ???
     }
 
     // create db structure
     // before we need to inform tkDatabase of the connectionName to use
     setConnectionName( connectionName );
+    // The SQL scheme MUST BE synchronized with the mfDosageConstants Model Enumerator !!!
     if ( executeSQL(       "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-                           "`POSO_ID`            INTEGER        PRIMARY KEY AUTOINCREMENT,"
-                           "`POSO_UUID`          varchar(40)    NULL,"    // put NOT NULL
-                           "`CIS_LK`             int(11)        NULL,"    // put NOT NULL
-                           "`CIP_LK`             int(11)        NULL,"    // put NOT NULL
-                           "`LABEL`              varchar(300)   NULL,"    // put NOT NULL
-                           "`DURATIONTIMESCHEME` integer        NULL,"
-                           "`MININTAKEDURATION`  double         NULL,"
-                           "`MAXINTAKEDURATION`  double         NULL,"
-                           "`MININTAKE`          double         NULL,"
-                           "`MAXINTAKE`          double         NULL,"
-                           "`MININTAKEPERUNIT`   double         NULL,"
-                           "`MAXINTAKEPERUNIT`   double         NULL,"
-                           "`SELECTEDUNIT`       varchar(200)   NULL,"
-                           "`UNITDIVISOR`        varchar(200)   NULL,"
-                           "`SELECTEDFORM`       varchar(200)   NULL,"
-                           "`INTAKESCHEME`       varchar(200)   NULL,"
-                           "`DAILYCHEME`         int(10)        NULL,"
-                           "`MEALCHEME`          int(10)        NULL,"
-                           "`INTAKEHOURLYSCHEME`    varchar(200)   NULL,"
-                           "`INTAKEDAILYSCHEME`     varchar(200)   NULL,"
-                           "`INTAKESINTERVALOFTIME` varchar(200)   NULL,"
+                           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
+                           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+                           "`INN_LK`                int(11)        NULL,"    // put NOT NULL
+                           "`CIS_LK`                int(11)        NULL,"    // put NOT NULL
+                           "`CIP_LK`                int(11)        NULL,"    // put NOT NULL
+                           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
+
+                           "`INTAKEFROM`            double         NULL,"
+                           "`INTAKETO`              double         NULL,"
+                           "`INTAKEFROMTO`          bool           NULL,"
+                           "`INTAKESCHEME`          varchar(200)   NULL,"
+                           "`INTAKESINTERVALOFTIME` double         NULL,"
                            "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
-                           "`DURATIONMODULATOR`     varchar(200)   NULL,"
-                           "`MINAGE`             int(10)        NULL,"
-                           "`MAXAGE`             int(10)        NULL,"
-                           "`AGEREFERENCE`       int(10)        NULL,"
-                           "`MINWEIGHT`          int(10)        NULL,"
-                           "`SEXLIMIT`           int(10)        NULL,"
-                           "`MINCLEARANCE`       int(10)        NULL,"
-                           "`MAXCLEARANCE`       int(10)        NULL,"
-                           "`PHYSIOLOGY`         int(10)        NULL,"
-                           "`SCOREDTABLET`       int(10)        NULL,"
-                           "`ALTERNATEWITH`      int(11)        NULL,"
-                           "`NOTE`               varchar(500)   NULL,"
-                           "`EXTRAS`             blob           NULL,"
-                           "`USER`               varchar(40)    NULL,"    // put NOT NULL
-                           "`USERVALIDATOR`      varchar(40)    NULL,"
-                           "`CREATIONDATE`       date           NULL,"    // put NOT NULL
-                           "`MODIFICATIONDATE`   date           NULL,"
-                           "`TRANSMITTED`        date           NULL"
+
+                           "`DURATIONFROM`          double        NULL,"
+                           "`DURATIONTO`            double        NULL,"
+                           "`DURATIONFROMTO`        bool          NULL,"
+                           "`DURATIONSCHEME`        varchar(200)  NULL,"
+
+                           "`PERIOD`                int(10)         NULL,"
+                           "`PERIODSCHEME`          varchar(200)    NULL,"
+                           "`DAILYSCHEME`           int(10)         NULL,"
+                           "`MEALSCHEME`            int(10)         NULL,"
+
+                           "`MINAGE`                int(10)         NULL,"
+                           "`MAXAGE`                int(10)         NULL,"
+                           "`MINAGEREFERENCE`       int(10)         NULL,"
+                           "`MAXAGEREFERENCE`       int(10)         NULL,"
+                           "`MINWEIGHT`             int(10)         NULL,"
+                           "`SEXLIMIT`              int(10)         NULL,"
+                           "`MINCLEARANCE`          int(10)         NULL,"
+                           "`MAXCLEARANCE`          int(10)         NULL,"
+                           "`PREGNANCYLIMITS`       int(10)         NULL,"
+                           "`BREASTFEEDINGLIMITS`   int(10)         NULL,"
+
+                           "`NOTE`                  varchar(500)    NULL,"
+
+                           "`CIM10_LK`              varchar(150)    NULL,"
+                           "`EDRC_LK`               varchar(150)    NULL,"
+
+                           "`EXTRAS`                blob            NULL,"
+                           "`USERUUID`              varchar(40)     NULL,"    // put NOT NULL
+                           "`USERVALIDATOR`         varchar(40)     NULL,"
+                           "`CREATIONDATE`          date            NULL,"    // put NOT NULL
+                           "`MODIFICATIONDATE`      date            NULL,"
+                           "`TRANSMITTED`           date            NULL"
                            ");", DB
                            )
         ) {

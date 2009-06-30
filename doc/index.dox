@@ -2,7 +2,7 @@
     \mainpage FreeMedForms a free and open source medical files manager.
     \author    Eric Maeker, MD
     \version   0.0.7 , released under New BSD License.
-    \date      22/06/2009
+    \date      29/06/2009
 
 
     \section introduction Introduction
@@ -27,19 +27,31 @@
 
    \section authors Authors and contributors
     - Creator and Main author :
-        - Maeker Eric, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a>.
+        - Éric Maeker, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a> : Main manager.
 
     - Contributors :
-        - Guillaume Denry <guillaume.denry@gmail.com>
-        - Sébastien Belin, MD <belin.s@wanadoo.fr>
+        - Guillaume Denry <guillaume.denry@gmail.com> : coder, debugger, informatic advisor
+        - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior coder, medical advisor
+        - Laurent Masson, MD <> : medical advisor
 
     - Helpers :
-        -  Filipe Azevedo <pasnox@gmail.com>
-        -  David Geldreich <david.geldreich@free.fr>
-        -  Jourdan Romain  <No@Mail.com>
+        -  Filipe Azevedo <pasnox@gmail.com> : coder helper, debugger helper, Qt advisor.
+        -  David Geldreich <david.geldreich@free.fr> : C++ advisor,
+        -  Jourdan Romain  <No@Mail.com> : coder helper on printer engine
+
+    - Testers :
+        - Many french anonymous testers.
+
+    - Translators :
+        - Éric Maeker, MD
+        - We need help !!!
 
     -  French Public Mailing :
         -  <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>
+
+    - WebMaster
+        - Vincent Perez, MD <vinperez@gmail.com>
+
 
    \section new What's new there ?
 
@@ -66,7 +78,8 @@
     - coders
     - writer for documentation, howto and tutorial
     - drugs database checking
-    - medical doctors to help us in providing a better application.
+    - medical doctors to help us in providing a better application
+    - translators (from english to german, spanish, italian...).
 
    \section getting Getting latest version
     Check the website. \n

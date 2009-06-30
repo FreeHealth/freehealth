@@ -83,6 +83,7 @@ private:
     void createDefaultDosage();
     void setPrescriptionState( const int index, const int qtCheckState );
     void modelToCheckBoxes();
+    void checkScoreDrug();
 
 private Q_SLOTS:
     void done( int r );

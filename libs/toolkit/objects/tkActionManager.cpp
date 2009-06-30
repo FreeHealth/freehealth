@@ -100,12 +100,14 @@
 #include <tkLog.h>
 #include <tkTheme.h>
 #include <tkTranslators.h>
+#include <tkConstantTranslations.h>
 
 #include <QAction>
 #include <QApplication>
 //#include <QObject>
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 // Some constants to mark the Ids of Objects
 const char * const MENUBARPREFIX = "B_";
@@ -808,7 +810,7 @@ QMenuBar *tkActionManager::createMenuBar( const QString &menuId, QWidget *parent
 {
     Q_ASSERT_X(!menuId.isEmpty(), "tkActionManager::createMenuBar", "No menu Id defined");
     if (d->menuBarExists(menuId)) {
-        tkLog::addError( this, tr("Can not create MenuBar %1 : MenuBar already exists").arg(menuId) );
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_ALREADY_EXISTS).arg(menuId) );
         return 0;
     }
     QMenuBar *mb = new QMenuBar(parent);
@@ -823,12 +825,12 @@ QMenu *tkActionManager::createMenu( const QString &menuId, const QString &menuPa
 {
     Q_ASSERT_X(!menuId.isEmpty(), "tkActionManager::createMenu", "No menu Id defined");
     if (d->menuExists(menuId)) {
-        tkLog::addError( this, tr("Can not create Menu %1 : Menu already exists").arg(menuId) );
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_ALREADY_EXISTS).arg(menuId) );
         return 0;
     }
     const QString &parent = menuParent_OR_groupParent;
     if ((!d->groupExists(parent)) && (!d->menuExists(parent)) && (!d->menuBarExists(parent))) {
-        tkLog::addError( this, tr("Can not create Menu %1 : Parent %2 does not exist").arg(menuId, parent) );
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_NOPARENT).arg(menuId, parent) );
         return 0;
     }
     // create menu
@@ -847,7 +849,7 @@ QMenu *tkActionManager::createMenu( const QString &menuId, const QString &menuPa
         d->insertMenuToGroup(m,menuId,parent);
     }
     else {
-        tkLog::addError( this, tr("Can not createMenu %1 : no parent founded (%2)").arg(menuId,parent));
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_NOPARENT).arg(menuId));
         delete m; m=0;
         return 0;
     }
@@ -860,7 +862,7 @@ QMenu *tkActionManager::createPopMenu( const QString &menuId, const QString &unT
 {
     Q_ASSERT_X(!menuId.isEmpty(), "tkActionManager::createMenu", "No menu Id defined");
     if (d->menuExists(menuId)) {
-        tkLog::addError( this, tr("Can not create PopUpMenu %1 : Menu already exists").arg(menuId) );
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_ALREADY_EXISTS).arg(menuId) );
         return 0;
     }
      // create menu
@@ -876,12 +878,13 @@ QMenu *tkActionManager::createPopMenu( const QString &menuId, const QString &unT
     return m;
 }
 
+/** \brief Add a group \e groupId to the menu id \e menuId. Returns the error's state. */
 bool tkActionManager::appendGroup( const QString &groupId, const QString &menuId )
 {
     if (d->groupExists(groupId))
-        tkLog::addError( this, tr("Can not add Group %1 : already exists in menu %2").arg(groupId,menuId) );
+        return true;
     else if (!d->menuExists(menuId))
-        tkLog::addError( this, tr("Can not add Group %1. Menu %2 does not exists").arg(groupId,menuId) );
+        tkLog::addError( this, tkTr(CAN_NOT_CREATE_1_NOPARENT).arg(groupId) );
     else {
         d->insertGroupToMenu(groupId,menuId);
         return true;
@@ -900,7 +903,7 @@ QMenuBar *tkActionManager::menubar( const QString &menuId )
 {
     Q_ASSERT_X(!menuId.isEmpty(), "tkActionManager::menubar", "No id");
     if (!d->menuBarExists(menuId)) {
-        tkLog::addError( this, tr("Can not return menubar %1 : menubar does not exist").arg(menuId) );
+        tkLog::addError( this, tkTr(CAN_NOT_RETURN_1_DOESNOT_EXISTS).arg(menuId) );
         return 0;
     }
     return d->menuBar(menuId);
@@ -929,7 +932,7 @@ QAction *tkActionManager::action( const QString &id )
 {
     Q_ASSERT_X(!id.isEmpty(), "tkActionManager::action", "No id");
     if (!d->actionExists(id)) {
-        tkLog::addError( this, tr("Can not return action %1 : action does not exist").arg(id) );
+        tkLog::addError( this, tkTr(CAN_NOT_RETURN_1_DOESNOT_EXISTS).arg(id) );
         return 0;
     }
     return d->action(id);

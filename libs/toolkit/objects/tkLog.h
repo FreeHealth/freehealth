@@ -42,6 +42,7 @@
 
 // include toolkit headers
 #include <tkExporter.h>
+#include <tkConstantTranslations.h>
 class tkLogPrivate;
 
 // include Qt headers
@@ -56,6 +57,8 @@ class tkLogPrivate;
 #include <QDebug>
 class QTreeWidget;
 
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 class tkDataLog
 {
@@ -115,7 +118,7 @@ public:
         if (o)
             addMessage(o->objectName(), msg );
         else
-            addMessage(o->objectName(), QApplication::translate("tkLog","Unknwown") );
+            addMessage( tkTr(UNKNOWN), msg );
     }
 
     static void addMessage( const QString & object, const QString & msg )
@@ -132,7 +135,7 @@ public:
                 addMessage(o, m);
         } else {
             foreach( const QString & m, msg )
-                addMessage(QApplication::translate("tkLog","Unknwown"), m);
+                addMessage(tkTr(UNKNOWN), m);
         }
     }
 
@@ -147,7 +150,7 @@ public:
         if (o)
             addError(o->objectName(), err );
         else
-            addError(o->objectName(), QApplication::translate("tkLog","Unknwown") );
+            addError(tkTr(UNKNOWN), err );
     }
 
     static void addError( const QString & object, const QString & err )
@@ -164,7 +167,7 @@ public:
                 addError(o, m);
         } else {
             foreach( const QString & m, err )
-                addError(QApplication::translate("tkLog","Unknwown"), m);
+                addError(tkTr(UNKNOWN), m);
         }
     }
 

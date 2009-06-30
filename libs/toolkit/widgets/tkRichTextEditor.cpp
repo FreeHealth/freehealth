@@ -58,6 +58,7 @@
 #include <tkTheme.h>
 #include <tkActionManager.h>
 #include <tkLog.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QLocale>
@@ -85,7 +86,8 @@
 #include <QStringList>
 #include <QFontDialog>
 
- #include <QDebug>
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 // Some constants
 const char * const CREATE_TKRICHTEXTMENU = "menuTkRichTextEditor";
@@ -96,8 +98,6 @@ const char * const G_RICHTEXT_FILE       = "grouptkRichTextEditor";
 const char * const TKRT_FILEOPEN_TEXT    = QT_TRANSLATE_NOOP("tkRichTextEditor", "Open document into text editor");
 const char * const TKRT_FILESAVE_TEXT    = QT_TRANSLATE_NOOP("tkRichTextEditor", "Save document of text editor");
 const char * const TKRICHTEXTMENU_TEXT   = QT_TRANSLATE_NOOP("tkRichTextEditor", "Rich Text Editor");
-
-Q_TK_USING_CONSTANTS
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ tkRichTextEditor implementation -----------------------------------
@@ -799,7 +799,7 @@ void tkRichTextEditorPrivate::clipboardDataChanged()
 
 void tkRichTextEditorPrivate::about()
 {
-    QMessageBox::about( m_Parent, tr( "About" ),
+    QMessageBox::about( m_Parent, tkTr(ABOUT),
                         tr( "This rich text editor is part of FreeMedForms Project. " ) );
 }
 

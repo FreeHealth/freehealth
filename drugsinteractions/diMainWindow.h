@@ -61,6 +61,7 @@ class tkTranslators;
  * \version 0.0.8
  * \date 12 May 2009
  * \brief Mainwindow of DrugsInteractions.
+   \ingroup drugsinteractions
 */
 
 class diMainWindow: public QMainWindow

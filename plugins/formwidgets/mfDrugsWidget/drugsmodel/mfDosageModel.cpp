@@ -38,6 +38,27 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class mfDosageModel
+  \brief Manages predetermined dosage.
+  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply :
+  \li on a specific drug base on its CIS,
+  \li on the INN molecule of the drug which are presented in the same "dosage" (100mg, 1g...).
+  For example :
+  \li CLAMOXYL 1g can have prescription based on its CIS or on the \e amoxicilline molecule.
+  \li CIS based could be : one intake morning and evening during seven days.
+  \li INN based could be the same and can be applied to AMOXICILLINE PHARMACEUTICAL_LABO 1g.
+
+  A \b "prescription" is the when and how you prescribe a selected drug.\n
+  database( DOSAGES_DATABASE_NAME ) should be defined BEFORE instance()
+
+  \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
+
+  \ingroup drugsinteractions drugswidget
+*/
+
+
 #include "mfDosageModel.h"
 
 // including plugins headers
@@ -48,12 +69,13 @@
 // including toolkit headers
 #include <tkGlobal.h>
 #include <tkLog.h>
+#include <tkConstantTranslations.h>
 
 // including usertoolkit headers (for FreeMedForms only)
 #ifndef DRUGS_INTERACTIONS_STANDALONE
 #   include <tkUserModel.h>
 #   include <tkUserConstants.h>
-    using namespace tkUserConstants;
+using namespace tkUserConstants;
 #endif
 
 // including Qt headers
@@ -66,22 +88,20 @@
 #include <QColor>
 #include <QLocale>
 
-//mfDosageModel * mfDosageModel::m_Instance = 0;
-//mfDosageModel * mfDosageModel::instance()
-//{
-//    if ( ! m_Instance )
-//        m_Instance = new mfDosageModel( qApp );
-//    return m_Instance;
-//}
 
+namespace mfDosageModelConstants {
+    const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
+    const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
+}
+
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
+using namespace mfDosageModelConstants;
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- Static Datas --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 // intialize static private members
-QStringList mfDosageModel::m_Periods = QStringList();
-QStringList mfDosageModel::m_DailyScheme = QStringList();
-QStringList mfDosageModel::m_MealTime = QStringList();
 QStringList mfDosageModel::m_Physiology = QStringList();
 QStringList mfDosageModel::m_Pregnancy = QStringList();
 QStringList mfDosageModel::m_ScoredTabletScheme = QStringList();
@@ -91,6 +111,7 @@ QString     mfDosageModel::m_ActualLangage = "";
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Translations ----------------------------------------
 //--------------------------------------------------------------------------------------------------------
+/** \brief Used to retranslate static stringlists */
 void mfDosageModel::changeEvent( QEvent * event )
 {
     // proceed only LangageChange events
@@ -99,42 +120,16 @@ void mfDosageModel::changeEvent( QEvent * event )
     retranslate();
 }
 
+/** \brief Used to retranslate static stringlists */
 void mfDosageModel::retranslate()
 {
     // proceed only if needed
-    if ( m_ActualLangage == QLocale().name().left( 2 ) )
+    if ( m_ActualLangage == QLocale().name().left(2) )
         return;
 
     // store the langage and retranslate
-    m_ActualLangage = QLocale().name().left( 2 );
+    m_ActualLangage = QLocale().name().left(2);
 
-    // translate strings
-    m_Periods =
-            QStringList()
-            << tr( "seconds" )
-            << tr( "minutes" )
-            << tr( "hours" )
-            << tr( "days" )
-            << tr( "weeks" )
-            << tr( "months" )
-            << tr( "quarters" ) // quarters = trimestres
-            << tr( "years" );
-
-    m_DailyScheme =
-            QStringList()
-            << tr( "morning" )
-            << tr( "afternoon" )
-            << tr( "tea time" )
-            << tr( "evening" )
-            << tr( "bed time" );
-
-    m_MealTime =
-            QStringList()
-            << tr( "no relation with meal" )
-            << tr( "not during meal" )
-            << tr( "during meal" )
-            << tr( "before meal" )
-            << tr( "after meal" );
 
     m_Physiology =
             QStringList()
@@ -166,10 +161,11 @@ void mfDosageModel::retranslate()
             << tr( "inhalation" )
             << tr( "application" )
             << tr( "washing" )
+            << tr( "shampooing" )
             << tr( "eyewash" )
             << tr( "instillation" )
             << tr( "pulverization" );
-//            << tr("");
+    //            << tr("");
 
     m_Pregnancy =
             QStringList()
@@ -180,104 +176,19 @@ void mfDosageModel::retranslate()
             << tr( "usable during pregnancy with warnings" )
             << tr( "not usable during pregnancy" );
 
-//    m_BreastFeeding =
-//            QStringList() <<
-//            << tr( "" )
-//            << tr( "" )
-//            << tr( "" )
-//            << tr( "" )
-//            << tr( "" )
-//            << tr( "" )
-//            << tr( "" );
 }
 
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Static datas ----------------------------------------
 //--------------------------------------------------------------------------------------------------------
-QStringList mfDosageModel::periods()
-{
-    if ( m_Periods.count() == 0 )
-        retranslate();
-    return m_Periods;
-}
 
-QString mfDosageModel::period( int id )
-{
-    if ( m_Periods.count() == 0 )
-        retranslate();
-
-    if ( ( id > 0 ) && ( id < m_Periods.count() ) )
-        return m_Periods[id];
-    return QString::null;
-}
-
+/** \brief Scored tablet predetermined stringlist */
 QStringList mfDosageModel::scoredTabletScheme()
 {
     if ( m_ScoredTabletScheme.count() == 0 )
         retranslate();
     return m_ScoredTabletScheme;
-}
-
-QStringList mfDosageModel::dailyScheme()
-{
-    if ( m_DailyScheme.count() == 0 )
-        retranslate();
-    // TODO : undefined should not appear in this list...
-    return m_DailyScheme;
-}
-
-QStringList mfDosageModel::dailySchemes( const DailySchemes scheme )
-{
-    if ( scheme == Undefined )
-        return QStringList();
-    QStringList list;
-    if ( scheme & Morning )
-        list << m_DailyScheme.at(0);
-    if ( scheme & Afternoon )
-        list << m_DailyScheme.at(1);
-    if ( scheme & TeaTime )
-        list << m_DailyScheme.at(2);
-    if ( scheme & Evening )
-        list << m_DailyScheme.at(3);
-    if ( scheme & BedTime )
-        list << m_DailyScheme.at(4);
-
-//    qWarning() << "dailySchemes" << scheme << list;
-
-    return list;
-}
-
-mfDosageModel::DailySchemes mfDosageModel::toDailyScheme( const QStringList & list )
-{
-    DailySchemes r = Undefined;
-    if ( list.indexOf( m_DailyScheme.at(0) ) != -1 )
-        r |= Morning;
-    if ( list.indexOf( m_DailyScheme.at(1) ) != -1 )
-        r |= Afternoon;
-    if ( list.indexOf( m_DailyScheme.at(2) ) != -1 )
-        r |= TeaTime;
-    if ( list.indexOf( m_DailyScheme.at(3) ) != -1 )
-        r |= Evening;
-    if ( list.indexOf( m_DailyScheme.at(4) ) != -1 )
-        r |= BedTime;
-    return r;
-}
-
-QStringList mfDosageModel::mealTime()
-{
-    if ( m_MealTime.count() == 0 )
-        retranslate();
-    return m_MealTime;
-}
-
-QString mfDosageModel::mealTime( int id )
-{
-    if ( m_MealTime.count() == 0 )
-        retranslate();
-    if ( ( id > 0 ) && ( id < m_MealTime.count() ) )
-        return m_MealTime[id];
-    return QString::null;
 }
 
 QStringList mfDosageModel::pregnancy()
@@ -306,8 +217,9 @@ QStringList mfDosageModel::predeterminedForms()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ Dosage Model ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+/** \brief Constructor */
 mfDosageModel::mfDosageModel( QObject *parent )
-    : QSqlTableModel( parent, QSqlDatabase::database( DOSAGES_DATABASE_NAME ) )
+        : QSqlTableModel( parent, QSqlDatabase::database( DOSAGES_DATABASE_NAME ) )
 {
     setObjectName( "mfDosageModel" );
     QSqlTableModel::setTable( DOSAGES_TABLE_NAME );
@@ -315,66 +227,85 @@ mfDosageModel::mfDosageModel( QObject *parent )
     m_CIS = -1;
 }
 
+/** \brief Defines datas for the dosage. Database is only updated when calling submitAll(). */
 bool mfDosageModel::setData( const QModelIndex & index, const QVariant & value, int role )
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
     if ( ! index.isValid() )
         return false;
     if ( role == Qt::EditRole ) {
+        // verify the value is different as model
+        QVariant q = data(index,Qt::DisplayRole);
+        if (q==value)
+            return false;
 
         // set only once modification date (infinite loop prevention)
-        if ( index.column() != Dosage::ModificationDate )
+        if (index.column()!=Dosage::ModificationDate)
             setData( this->index( index.row(), Dosage::ModificationDate ), QDateTime::currentDateTime() );
 
         // mark row as dirty
-        if ( ! m_DirtyRows.contains( index.row() ) ) {
+        if (!m_DirtyRows.contains(index.row())) {
             m_DirtyRows << index.row();
-            QModelIndex label = this->index( index.row(), Dosage::Label );
-            emit dataChanged( label, label );
         }
-        // set data to model
+
         switch (index.column())
         {
         case Dosage::DailyScheme : // --> receive stringList, transform to QFlag
             {
-                return QSqlTableModel::setData( index, int(toDailyScheme( value.toStringList() )) , role);
+                if (!QSqlTableModel::setData( index, int(toDailyScheme(value.toStringList())), role))
+                    return false;
                 break;
             }
-        default : return QSqlTableModel::setData( index, value, role );
+        default :
+        {
+            if (!QSqlTableModel::setData( index, value, role ))
+                return false;
+            break;
         }
+    }
+//        qWarning() <<"data set"<<record().fieldName(index.column())<<value;
+        QModelIndex label = this->index( index.row(), Dosage::Label );
+        emit dataChanged( label, label );
     }
     return false;
 }
 
+/** \brief Retreive dosage's datas. */
 QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::data", "before using the dosagemodel, you must specify the CIS of the related drug");
     if ( ! item.isValid() )
         return QVariant();
 
-    if ( ( role == Qt::DisplayRole ) || ( role == Qt::EditRole ) ) {
+    if (role==Qt::FontRole) {
+        QFont font;
+        if (m_DirtyRows.contains(item.row()))
+            font.setBold(true);
+        else
+            font.setBold(false);
+        return font;
+    } else if (role==Qt::BackgroundRole) {
+        if (m_DirtyRows.contains(item.row()))
+            return QColor(DIRTYROW_BACKGROUNDCOLOR);
+        else
+            return QColor("white");
+    } else if ((role==Qt::DisplayRole) || (role == Qt::EditRole)) {
         switch (item.column())
         {
-        case Dosage::Label :
+        case Dosage::DailyScheme : // --> is a QFlags to transform to stringList
             {
-                if ( m_DirtyRows.contains(item.row())  )
-                    return QString("[*] - %1").arg( QSqlTableModel::data( item, role ).toString() );
+                return dailySchemes( tkConstants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
                 break;
             }
-         case Dosage::DailyScheme : // --> is a QFlags to transform to stringList
-            {
-                return dailySchemes( DailySchemes( QSqlTableModel::data(item).toInt() ) );
-                break;
-            }
-        }
-    } else if ( role == Qt::BackgroundRole ) {
-        if ( m_DirtyRows.contains(item.row())  )
-            return QColor(240,240,240);
+        default :
+//                qWarning() << record().fieldName(item.column())<<QSqlTableModel::data(item, role);
+        return QSqlTableModel::data(item, role);
     }
-
-    return QSqlTableModel::data( item, role );
+    }
+    return QVariant();
 }
 
+/** \brief Create new dosages. Defaults values of the dosages are stted here. */
 bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
@@ -395,19 +326,39 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
         } else {
             setData( index( createdRow, Dosage::Uuid ) , QUuid::createUuid().toString() );
             setData( index( createdRow, Dosage::CIS_LK ) , m_CIS );
+            setData( index( createdRow, Dosage::IntakesTo ) , 1 );
+            setData( index( createdRow, Dosage::IntakesFrom ) , 1 );
+            setData( index( createdRow, Dosage::IntakesUsesFromTo ) , false );
+            setData( index( createdRow, Dosage::IntakesScheme ) , tkTr(INTAKES, 1) );
+            setData( index( createdRow, Dosage::Period ), 1 );
+            setData( index( createdRow, Dosage::PeriodScheme ) , tkTr(DAYS) );
+            setData( index( createdRow, Dosage::DurationTo ) , 1 );
+            setData( index( createdRow, Dosage::DurationFrom ) , 1 );
+            setData( index( createdRow, Dosage::DurationUsesFromTo ) , false );
+            setData( index( createdRow, Dosage::DurationScheme ) , tkTr(MONTHS) );
+            setData( index( createdRow, Dosage::IntakesIntervalOfTime ) , 0 );
+            setData( index( createdRow, Dosage::MinAge ) , 0 );
+            setData( index( createdRow, Dosage::MaxAge ) , 0 );
+            setData( index( createdRow, Dosage::MinWeight ) , 0 );
+            setData( index( createdRow, Dosage::MinClearance ) , 0 );
+            setData( index( createdRow, Dosage::MaxClearance ) , 0 );
+            setData( index( createdRow, Dosage::SexLimitedIndex ) , 0 );
+            setData( index( createdRow, Dosage::Note ) , QVariant() );
             setData( index( createdRow, Dosage::CreationDate ) , QDateTime::currentDateTime() );
             setData( index( createdRow, Dosage::UserUuid ) , userUuid );
+            setData( index( createdRow, Dosage::Transmitted ) , QVariant() );
         }
     }
     return toReturn;
 }
 
+/**
+  \brief Removes somes rows.
+  \todo  when QSqlTableModel removes rows it may call select() and reset(),  this causes non submitted modifications deletion on the model THIS MUST BE IMPROVED
+*/
 bool mfDosageModel::removeRows( int row, int count, const QModelIndex & parent )
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
-    // TODO when QSqlTableModel removes rows it may call select() and reset(),
-    //      this causes non submitted modifications deletion on the model
-    //      THIS MUST BE IMPROVED
     setEditStrategy( QSqlTableModel::OnRowChange );
     bool toReturn = false;
     if ( QSqlTableModel::removeRows( row, count, parent ) ) {
@@ -422,27 +373,34 @@ bool mfDosageModel::removeRows( int row, int count, const QModelIndex & parent )
     return toReturn;
 }
 
+/** \brief Revert a row */
 void mfDosageModel::revertRow( int row )
 {
-   Q_ASSERT_X( m_CIS != -1, "mfDosageModel::revertRow", "before using the dosagemodel, you must specify the CIS of the related drug");
-   QSqlTableModel::revertRow( row );
+    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::revertRow", "before using the dosagemodel, you must specify the CIS of the related drug");
+    QSqlTableModel::revertRow( row );
     if (m_DirtyRows.contains(row))
         m_DirtyRows.remove( row );
 }
 
+/** \brief Submit model changes to database */
 bool mfDosageModel::submitAll()
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
+    warn();
     QSet<int> safe = m_DirtyRows;
     m_DirtyRows.clear();
     if ( QSqlTableModel::submitAll() ) {
         return true;
     } else
         m_DirtyRows = safe;
-//    reset();
+    //    reset();
     return false;
 }
 
+/**
+  \brief Filter the model from the drug CIS.
+  \todo filter from inn
+*/
 bool mfDosageModel::setDrugCIS( const int _CIS )
 {
     if ( _CIS == m_CIS )
@@ -453,15 +411,46 @@ bool mfDosageModel::setDrugCIS( const int _CIS )
     return true;
 }
 
-bool mfDosageModel::isDosageValid( const int row )
+/** \brief Return the actual drug's CIS */
+int mfDosageModel::drugCIS()
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
-    //TODO
-    return true;
+    return m_CIS;
 }
 
+/** \brief Test all the column of the selected row, if one value is dirty return true. */
+bool mfDosageModel::isDirty(const int row) const
+{
+    int i;
+    for(i=0;i<columnCount();++i) {
+        if (QSqlTableModel::isDirty(index(row, i)))
+            return true;
+    }
+    return false;
+}
+
+/** \todo write this */
+QStringList mfDosageModel::isDosageValid( const int row )
+{
+    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
+    QStringList errors;
+    // Label
+    if (index(row, Dosage::Label).data().toString().isEmpty())
+        errors << tr("The dosage must be labelled.");
+    // Intakes
+    if (index(row, Dosage::IntakesScheme).data().toString().isEmpty())
+        errors << tr("The intakes' scheme must be defined.");
+    if (index(row, Dosage::PeriodScheme).data().toString().isEmpty())
+        errors << tr("The period's scheme must be defined.");
+    // Duration
+    if (index(row, Dosage::DurationScheme).data().toString().isEmpty())
+        errors << tr("The duration's scheme must be defined.");
+
+    //TODO
+    return errors;
+}
 
 #ifndef DRUGS_INTERACTIONS_STANDALONE
+/** \brief Test user's permissions for the drugs read access */
 bool mfDosageModel::userCanRead()
 {
     //TODO --> test
@@ -469,6 +458,7 @@ bool mfDosageModel::userCanRead()
     return (r & User::ReadOwn) || (r & User::ReadAll);
 }
 
+/** \brief Test user's permissions for the drugs write access */
 bool mfDosageModel::userCanWrite()
 {
     //TODO  --> test
@@ -477,18 +467,87 @@ bool mfDosageModel::userCanWrite()
 }
 #endif
 
+/**
+  \brief Transforms a dosage to a drug's prescription.
+  \sa mfDrugsModel
+*/
+void mfDosageModel::toPrescription(const int row)
+{
+    Q_ASSERT(mfDrugsModel::instance()->containsDrug(m_CIS));
+    mfDrugsModel *M = mfDrugsModel::instance();
+    QHash<int,int> prescr_dosage;
+    prescr_dosage.insert( Prescription::IntakesFrom ,          Dosage::IntakesFrom );
+    prescr_dosage.insert( Prescription::IntakesTo ,            Dosage::IntakesTo );
+    prescr_dosage.insert( Prescription::IntakesUsesFromAndTo , Dosage::IntakesUsesFromTo );
+    prescr_dosage.insert( Prescription::IntakesScheme ,        Dosage::IntakesScheme );
+    prescr_dosage.insert( Prescription::Period ,               Dosage::Period );
+    prescr_dosage.insert( Prescription::PeriodScheme ,         Dosage::PeriodScheme );
+    prescr_dosage.insert( Prescription::DurationFrom ,         Dosage::DurationFrom );
+    prescr_dosage.insert( Prescription::DurationTo ,           Dosage::DurationTo );
+    prescr_dosage.insert( Prescription::DurationUsesFromAndTo, Dosage::DurationUsesFromTo );
+    prescr_dosage.insert( Prescription::DurationScheme ,       Dosage::DurationScheme );
+    prescr_dosage.insert( Prescription::Note ,                 Dosage::Note );
+    prescr_dosage.insert( Prescription::DailyScheme ,          Dosage::DailyScheme );
+    prescr_dosage.insert( Prescription::MealTimeSchemeIndex ,  Dosage::MealScheme );
+    foreach( const int i, prescr_dosage.keys()) {
+        M->setDrugData(m_CIS, i, data(index(row, prescr_dosage.value(i))) );
+    }
+    M->resetModel();
+//    M->drugData(m_CIS, Prescription::ToHtml);
+}
+
+/** \brief Transforms a model's row into XML encoded QString. This part is using the database fieldnames.*/
+QString mfDosageModel::toXml( const int row )
+{
+    int j;
+    QHash<QString,QString> datas;
+    for( j=0; j < columnCount(); ++j ) {
+        datas.insert( record().fieldName(j).toLower(), index( row, j ).data().toString() );
+    }
+    return tkGlobal::createXml(XML_DOSAGE_MAINTAG,datas,4,false);
+}
+
+/**
+  \brief Adds a XML file to the model. A verification of the drugs' CIS is done.
+  \todo write this
+*/
+bool mfDosageModel::addFromXml(const QString &xml)
+{
+//    QHash<QString, QString> datas;
+//    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");
+//    if (n<=0)
+//        return false;
+//    foreach( const QString &s, xml.split("</"+XML_DOSAGE_MAINTAG+">")) {
+//        if (!tkGlobal::readXml(xml,XML_DOSAGE_MAINTAG,datas,false))
+//            return false;
+//        // insert row, get the index of it
+//        foreach(const QString &k, datas.keys()) {
+//            int id = record().indexOf(k);
+//            if (id==-1)
+//                continue;
+//            //        setData( index(
+//        }
+//
+//    }
+    return true;
+}
+
+/** \brief For debugging purpose only */
 void mfDosageModel::warn( const int row )
 {
     if (!tkGlobal::isDebugCompilation())
         return;
+//    qWarning() << "database connection" << database().connectionName();
+
     // row == -1 -> warn all rows
     int i;
     int j;
     if ( row == -1 ) {
         for (i=0; i < rowCount(); ++i )
-        for( j=0; j < columnCount(); ++j ) {
-            qWarning() << record().fieldName(j) << index( i, j ).data() ;
-        }
+            qWarning() << toXml(i);
+//            for( j=0; j < columnCount(); ++j ) {
+//            qWarning() << record().fieldName(j) << index( i, j ).data() ;
+//        }
     } else {
         for( j=0; j < columnCount(); ++j ) {
             qWarning() << record().fieldName(j) << index( row, j ).data() ;

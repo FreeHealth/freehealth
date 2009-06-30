@@ -39,11 +39,13 @@
 #include <tkSettings.h>
 //#include <tkSerialNumber.h>
 #include <tkScrollingWidget.h>
+#include <tkConstantTranslations.h>
 
 #include <QApplication>
 
 using namespace mfDrugsConstants;
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 namespace diAboutDialogPrivateConstants {
 
@@ -75,9 +77,9 @@ const QList<tkAboutDatas> m_Database = QList<tkAboutDatas>()
 diAboutDialog::diAboutDialog(QWidget *parent) :
     tkAboutDialog(parent)
 {
-    addTeamList( tr("Creator and Main Developper"), m_Creator );
-    addTeamList( tr("Developpers and Contributors"), m_Contributors );
-    addTeamList( tr("Drugs Database Management"), m_Database );
+    addTeamList( tkTr(CREATOR), m_Creator );
+    addTeamList( tkTr(DEVELOPPERS_CONTRIBUTORS), m_Contributors );
+    addTeamList( tkTr(DRUG_DATABASE_MANAGER), m_Database );
 
     setAboutText( tr("<p>Drugs Interactions is an open source software part of the FreeMedForms project "
                      "(<a href=\"http://code.google.com/p/freemedforms\"><span style=\"text-decoration: underline; "

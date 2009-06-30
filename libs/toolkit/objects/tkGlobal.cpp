@@ -192,7 +192,6 @@ QString osName()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   FILES FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \brief Ask user for multi selection of files.  **/
 const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
     QFileInfoList files;
@@ -208,7 +207,6 @@ const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool rec
     return files;
 }
 
-/** \brief Ask user for multi selection of files.  **/
 const QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursive )
 {
     return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive );
@@ -704,7 +702,8 @@ const QString toHtmlAccent( const QString &html )
   \brief Create a simple Xml content with a \e mainTag and a hash \e datas.
   You can specify the indentation of the resulting Xml.\n
   You can automatically encode to base64 the values of the tags.\n
-  The \e mainTag represents the first englobing Xml tag of the output.
+  The \e mainTag represents the first englobing Xml tag of the output.\n
+  The tags are added in an unordered way cause of the uses of the QHash.\n
   Usage :
   \code
       QHash<QString, QString> tag_value;
@@ -725,14 +724,14 @@ const QString createXml( const QString &mainTag, const QHash<QString,QString> &d
     doc.appendChild(main);
     if (valueToBase64) {
         foreach( const QString &k, datas.keys() ) {
-            QDomElement data = doc.createElement(k);
+            QDomElement data  = doc.createElement(k);
             QDomText dataText = doc.createTextNode( datas.value(k).toAscii().toBase64() );
             main.appendChild(data);
             data.appendChild(dataText);
         }
     } else {
         foreach( const QString &k, datas.keys() ) {
-            QDomElement data = doc.createElement(k);
+            QDomElement data  = doc.createElement(k);
             QDomText dataText = doc.createTextNode(datas.value(k));
             main.appendChild(data);
             data.appendChild(dataText);

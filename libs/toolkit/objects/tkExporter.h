@@ -70,4 +70,14 @@
 #define Q_TK_END_SERIALNUMBER    }
 #define Q_TK_USING_SERIALNUMBER  using namespace tkSerialNumber;
 
+
+/**
+ \namespace tkConstantTranslations
+ \ingroup toolkit object_toolkit
+ */
+#define Q_TK_BEGIN_TRANSLATIONS  namespace tkConstantTranslations {
+#define Q_TK_END_TRANSLATIONS    }
+#define Q_TK_USING_TRANSLATIONS  using namespace tkConstantTranslations;
+
+
 #endif  // TKEXPORTER_H

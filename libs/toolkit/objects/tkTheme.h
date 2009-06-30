@@ -143,16 +143,6 @@ const char * const  ICONNEWUSER       = "adduser.png";
 
 Q_TK_END_CONSTANTS
 
-/**
- \brief this is the theme manager. Actually manages only the icons of the app.
- You first need to instanciate it, inform it of path to use. Then ask the needed QIcon.\n
- There is a cache of asked icons. Limit of the cache can be dynamycally setted using setCacheMaxCost().
-
- Themes paths must be setted like this :\n
- \ingroup toolkit
- \ingroup object_toolkit
- \sa constants_theme
-*/
 class Q_TK_EXPORT tkTheme : public QObject
 {
     Q_OBJECT

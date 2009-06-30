@@ -275,6 +275,8 @@ void tkSettings::setPath( const int type, const QString & absPath )
         }
         case BundleResourcesPath :
         {
+            if (d->m_Enum_Path.value(BundleResourcesPath)==QDir::cleanPath(absPath))
+                break;
             QString bundlePath = QDir::cleanPath(absPath) + BUNDLERESOURCE_PATH;
             d->m_Enum_Path.insert( BundleResourcesPath, bundlePath );
             d->m_Enum_Path.insert( ReadOnlyDatabasesPath, bundlePath + READONLYDATABASE );
@@ -288,6 +290,8 @@ void tkSettings::setPath( const int type, const QString & absPath )
         }
         case ApplicationPath :
         {
+            if (d->m_Enum_Path.value(ApplicationPath)==QDir::cleanPath(absPath))
+                break;
             d->m_Enum_Path.insert( ApplicationPath, absPath );
             if (tkGlobal::isRunningOnMac()) {
                 d->m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH) );

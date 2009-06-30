@@ -32,8 +32,30 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
+/**
+  \class tkTranslators
+  \brief This class is a QTranslator manager. All translations files are loaded using the pathToTranslations().
+
+  In first, instanciate this class inside the core of the app.
+
+  Then set the translation path to use with : setPathToTranslations().
+
+  You can add new translations file using members addNewTranslator().
+  - specifying filename only (eg : 'myTrans' the suffix ('_lang') is automatcally added (using QLocale::staticDatas).
+  - specifying full path of the file.
+
+  Use changeLangage() to automacally reload all translators with the right language.Toolkit manages its own translator.
+
+  Get availables languages and locales with : availableLocales(), availableLanguages(), availableLocalesAndLanguage().
+
+  \ingroup toolkit
+  \ingroup object_toolkit
+*/
+
 #include "tkTranslators.h"
 #include "tkLog.h"
+#include <tkConstantTranslations.h>
 
 #include <QTranslator>
 #include <QFileInfo>
@@ -41,9 +63,13 @@
 #include <QLocale>
 #include <QApplication>
 
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
+
 QString tkTranslators::m_PathToTranslations = "";
 tkTranslators * tkTranslators::m_Instance = 0;
 
+/** \brief Get the unique instance of tkTranslators */
 tkTranslators *tkTranslators::instance( QObject *parent )
 {
     if (!m_Instance)
@@ -54,6 +80,7 @@ tkTranslators *tkTranslators::instance( QObject *parent )
     return m_Instance;
 }
 
+/** \brief Protected constructor. Call instance() to get the pointer to this class. */
 tkTranslators::tkTranslators( QObject * parent )
           : QObject( parent )
 {
@@ -63,28 +90,32 @@ tkTranslators::tkTranslators( QObject * parent )
     m_Instance = this;
 }
 
+/** \brief Destructor */
 tkTranslators::~tkTranslators()
 {
 }
 
+/**
+  \brief Defines the path to translations
+  \sa tkSettings::Paths, tkSettings::setPath()
+*/
 bool tkTranslators::setPathToTranslations( const QString & path )
 {
     if ( QDir( path ).exists() ) {
         m_PathToTranslations = QDir::cleanPath( path );
-        tkLog::addMessage( "tkTranslators", tr( "Setting path to translation : %1" ).arg( QDir::cleanPath( path ) ) );
+        tkLog::addMessage( "tkTranslators", tkTr(SETTING_1_PATH_TO_2).arg( tkTr(TRANSLATORS), QDir::cleanPath(path) ) );
         return true;
     } else {
-        tkLog::addError( "tkTranslators", tr( "Path to translations does not exist : %1." ).arg( QDir::cleanPath( path ) ) );
+        tkLog::addError( "tkTranslators", tkTr(PATH_1_DOESNOT_EXISTS).arg( QDir::cleanPath( path ) ) );
         return false;
     }
 }
 
+/** \brief Returns the path the actual translations */
 QString tkTranslators::pathToTranslations()
 {
     return m_PathToTranslations;
 }
-
-
 
 /**
   \brief change the default langage for the application and reload all translators.
@@ -108,11 +139,10 @@ void tkTranslators::changeLanguage( const QString & lang )
         if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) )
             tkLog::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
         else
-            tkLog::addMessage( this, tr( "%1 correctly loaded." ).arg( f.fileName() + "_" + lang) );
+            tkLog::addMessage( this, tkTr(FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
     }
     emit languageChanged();
 }
-
 
 /**
  * \brief Add a translator to the known application translators. It can be for app or for plugins.
@@ -156,21 +186,25 @@ bool tkTranslators::addNewTranslator( const QString & fileMask, bool fromDefault
     return false;
 }
 
+/** \brief Adds a new translator from the \e path and with the template filename \e fileTemplate */
 bool tkTranslators::addNewTranslator( const QString & path, const QString & fileTemplate )
 {
     return addNewTranslator( path + QDir::separator() + fileTemplate, false );
 }
 
+/** \brief Returns the availables translated locales for the application. */
 QStringList tkTranslators::availableLocales()
 {
     return availableLocalesAndLanguages().keys();
 }
 
+/** \brief Returns the available translated languages for the application. It is based on the Qt qm files. */
 QStringList tkTranslators::availableLanguages()
 {
     return availableLocalesAndLanguages().values();
 }
 
+/** \brief Returns the available translated languages for the application. It is based on the Qt qm files. */
 QMap<QString, QString> tkTranslators::availableLocalesAndLanguages()
 {
     QMap<QString, QString> toReturn;
@@ -191,17 +225,4 @@ QMap<QString, QString> tkTranslators::availableLocalesAndLanguages()
         toReturn.insert( locale, lang );
     }
     return toReturn;
-}
-
-QString tkTranslators::intToString( const int i )
-{
-    switch (i) {
-        case 0: return tr("zero");
-        case 1: return tr("one");
-        case 2: return tr("two");
-        case 3: return tr("three");
-        case 4: return tr("four");
-    };
-
-    return QString::null;
 }

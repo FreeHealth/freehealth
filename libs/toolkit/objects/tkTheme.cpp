@@ -37,17 +37,34 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class tkTheme
+  \brief this is the theme manager. Actually manages only the icons of the app.
+  You first need to instanciate it, inform it of path to use. Then ask the needed QIcon.\n
+  There is a cache of asked icons. Limit of the cache can be dynamycally setted using setCacheMaxCost().
+
+  \ingroup toolkit
+  \ingroup object_toolkit
+  \sa constants_theme
+  \todo write full documentation
+*/
+
 #include "tkTheme.h"
 
 // include toolkit headers
 #include <tkSettings.h>
 #include <tkLog.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QCache>
 #include <QString>
 #include <QApplication>
 #include <QDir>
+
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 class tkThemePrivate
 {
@@ -95,7 +112,7 @@ void tkTheme::setThemeRootPath( const QString &absPath )
         tkLog::addMessage(this, QString("Setting theme path to : %1").arg(d->m_AbsolutePath) );
     }
     else
-        tkLog::addError( this, tr("Theme path (%1) does not exist.").arg(absPath) );
+        tkLog::addError( this, tkTr(PATH_1_DOESNOT_EXISTS).arg(absPath) );
 }
 
 void tkTheme::setThemeRelativeRootPath( const QString & relPathFromAppBinary )
@@ -107,7 +124,7 @@ void tkTheme::setThemeRelativeRootPath( const QString & relPathFromAppBinary )
         tkLog::addMessage(this, QString("INFO : theme path setted to : %1").arg(path) );
     }
     else
-        tkLog::addError( this, tr("Theme path (%1) does not exist.").arg(relPathFromAppBinary) );
+        tkLog::addError( this, tkTr(PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary) );
 }
 
 void tkTheme::refrehCache()
@@ -124,7 +141,7 @@ void tkTheme::setSmallIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         d->m_SmallIconPath = absPath;
     else
-        tkLog::addError(this, tr("Theme path (%1) does not exist.").arg("SmallIcon : "+absPath) );
+        tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) );
 }
 
 void tkTheme::setMediumIconPath( const QString &absPath )
@@ -132,7 +149,7 @@ void tkTheme::setMediumIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         d->m_MediumIconPath = absPath;
     else
-        tkLog::addError(this, tr("Theme path (%1) does not exist.").arg("MediumIcon : "+absPath) );
+        tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) );
 }
 
 void tkTheme::setBigIconPath( const QString &absPath )
@@ -140,7 +157,7 @@ void tkTheme::setBigIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         d->m_BigIconPath = absPath;
     else
-        tkLog::addError(this, tr("Theme path (%1) does not exist.").arg("BigIcon : "+absPath) );
+        tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath) );
 }
 
 QIcon tkTheme::icon( const QString & fileName, IconSize size )

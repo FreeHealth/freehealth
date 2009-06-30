@@ -67,7 +67,6 @@ class tkSettingsPrivate;
  * \date 10 June 2009
 */
 
-
 class Q_TK_EXPORT tkSettings : public QSettings
 {
     Q_OBJECT

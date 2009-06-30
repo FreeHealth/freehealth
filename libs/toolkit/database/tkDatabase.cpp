@@ -533,7 +533,7 @@ bool tkDatabase::executeSQL(const QStringList & list, const QSqlDatabase & DB)co
         QSqlQuery q(r, DB );
         if (! q.isActive() )
         {
-            tkLog::addQueryError("tkUserBase", q );
+            tkLog::addQueryError("tkDatabase", q );
             return false;
         }
     }
@@ -547,7 +547,7 @@ bool tkDatabase::executeSQL(const QString & req, const QSqlDatabase & DB)const
     QSqlQuery q(req, DB );
     if (! q.isActive() )
     {
-        tkLog::addQueryError("tkUserBase", q );
+        tkLog::addQueryError("tkDatabase", q );
         return false;
     }
     return true;

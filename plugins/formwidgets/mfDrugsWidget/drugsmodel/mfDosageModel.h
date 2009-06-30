@@ -50,11 +50,6 @@
 
 using namespace mfDosagesConstants;
 
-/**
-  database( DOSAGES_DATABASE_NAME ) should be defined BEFORE instance()
-  \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
- \ingroup drugsinteractions drugswidget
-*/
 class mfDosageModel : public QSqlTableModel
 {
     Q_OBJECT
@@ -71,36 +66,6 @@ class mfDosageModel : public QSqlTableModel
         WomanOnly    = 0x10000000
     };
 
-    enum Pregnancy  // QFlag it
-    {
-        PregnancyOk         = 0x00000000,
-        FirstQuaOk          = 0x00000010,
-        SecondQuaOk         = 0x00000100,
-        ThirdQuaOk          = 0x00001000,
-        UsableWithWarn      = 0x00010000,
-        NeverDuringPregnacy = 0x00100000
-    };
-
-    enum Period
-    {
-        Seconds      = 0,
-        Minutes,
-        Hours,
-        Days,
-        Weeks,
-        Months,
-        Quarter,
-        Year
-    };
-
-    enum MealTime
-    {
-        NoRelationWiyhMeal = 0,
-        DuringMeal,
-        BeforeMeal,
-        AfterMeal,
-        OutsideMeal
-    };
 
     enum ScoredTablet
     {
@@ -126,18 +91,6 @@ class mfDosageModel : public QSqlTableModel
     };
 
 public:
-    enum DailyScheme
-    {
-        Undefined    = 0x00000000,
-        Morning      = 0x00000001,
-        Afternoon    = 0x00000010,
-        TeaTime      = 0x00000100,
-        Evening      = 0x00001000,
-        BedTime      = 0x00010000
-    };
-    Q_DECLARE_FLAGS( DailySchemes, DailyScheme );
-
-
     mfDosageModel( QObject *parent = 0 );
 
     virtual int columnCount( const QModelIndex & = QModelIndex() ) const { return Dosage::MaxParam; }
@@ -150,8 +103,14 @@ public:
     void setTable ( const QString & ) {}
 
     virtual bool setDrugCIS( const int _CIS );
+    int drugCIS();
 
-    bool isDosageValid( const int row );
+    QStringList isDosageValid( const int row );
+    bool isDirty(const int row) const;
+
+    QString toXml(const int row);
+    bool addFromXml(const QString &xml);
+    void toPrescription(const int row);
 
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     bool userCanRead()   { return true; }
@@ -170,15 +129,8 @@ public:
     //--------------------------------------------------------------------------------------------------------
     // static viewers to use for ui generation
     static void         initStaticDatas()      { retranslate() ; }
-    static QStringList  periods();
-    static QString      period( int id );
-    static int          periodDefault()        { return Days; }
+    static int          periodDefault()        { return 4; }
     static QStringList  scoredTabletScheme();
-    static QStringList  dailyScheme();
-    static QStringList  dailySchemes( const DailySchemes scheme );
-    static DailySchemes toDailyScheme( const QStringList & list );
-    static QStringList  mealTime();
-    static QString      mealTime( int id );
     static QStringList  pregnancy();
     static QString      pregnancy( int id );
     static QStringList  predeterminedForms();
@@ -197,9 +149,6 @@ private Q_SLOTS:
     //----------------------------------------- PRIVATE DATAS ------------------------------------------------
     //--------------------------------------------------------------------------------------------------------
 private:
-    static QStringList    m_Periods;
-    static QStringList    m_DailyScheme;
-    static QStringList    m_MealTime;
     static QStringList    m_Physiology;
     static QStringList    m_Pregnancy;
     static QStringList    m_BreastFeeding;
@@ -209,6 +158,5 @@ private:
     int m_CIS;
     QSet<int> m_DirtyRows;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS( mfDosageModel::DailySchemes)
 
 #endif // MFDOSAGEMODEL_H

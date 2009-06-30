@@ -33,6 +33,16 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /**
+  \class tkDataLog
+  Represents a message to log.
+  \ingroup toolkit
+  \ingroup object_toolkit
+  \sa tkLog
+*/
+
+
+
+/**
   \class tkLog
   \brief this class holds the logs messages.
     Set messages with addMessage() or addMessages(), set errors with setError() or setErrors().\n
@@ -48,6 +58,7 @@
      You can directly save the logs via saveLog(), or retreive a string formatted using toString().
   \ingroup toolkit
   \ingroup object_toolkit
+  \sa tkDataLog
 */
 
 #include "tkLog.h"
@@ -64,58 +75,8 @@
 QList<tkDataLog> tkLog::m_Messages;
 bool tkLog::m_HasError = false;
 bool tkLog::m_MuteConsole = false;
-//QStringList tkLog::m_Messages = QStringList();
-//QStringList tkLog::m_Errors = QStringList();
 
-//tkLog *tkLog::m_Instance = 0;
-//
-//class tkLogPrivate {
-//public:
-//    QList<QObject *> m_WatchedObject;
-//};
-//
-//
-//tkLog *tkLog::instance()
-//{
-//    if (!m_Instance)
-//        m_Instance = new tkLog(qApp);
-//    return m_Instance;
-//}
-//
-//tkLog::tkLog(QObject *o) :
-//        QObject(o), d(0)
-//{
-//    setObjectName("tkLog");
-//    d = new tkLogPrivate();
-//}
-//
-//tkLog::~tkLog()
-//{
-//    qWarning() << tr("Object destroyed : %1").arg(this->objectName());
-//    qWarning() << tr("Object watched list") << d->m_WatchedObject;
-//    if (d) delete d;
-//    d=0;
-//}
-//
-//void tkLog::addObjectWatcher( QObject *o )
-//{
-//    if (o) {
-//        o->setProperty( TKLOG_MARK, QVariant(TKLOG_MARK) );
-//        if (!d->m_WatchedObject.contains(o)) {
-//            d->m_WatchedObject<< o;
-//        }
-//        connect(o, SIGNAL(destroyed(QObject*)), this, SLOT(on_watchedObject_destroyed(QObject*)));
-//    }
-//}
-//
-//void tkLog::on_watchedObject_destroyed(QObject *o)
-//{
-//    if (o->property(TKLOG_MARK).toString() == TKLOG_MARK) {
-//        d->m_WatchedObject.removeAll(o);
-//        addMessage( TKLOG_WATCHER_NAME, tr("Object destroyed : %1").arg(o->objectName()));
-//    }
-//}
-
+/** \brief Saves the log to the file \e fileName */
 QString tkLog::saveLog( const QString & fileName )
 {
     QString f = fileName;
@@ -135,6 +96,7 @@ QString tkLog::saveLog( const QString & fileName )
     return f;
 }
 
+/** \brief Transforms log to a readable string. */
 QString tkLog::toString( const QString & settingsLog )
 {
     QString tmp;

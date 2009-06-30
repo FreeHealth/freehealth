@@ -60,6 +60,7 @@
 #include <tkStringListModel.h>
 #include <tkTheme.h>
 #include <tkActionManager.h>
+#include <tkConstantTranslations.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -71,13 +72,10 @@
 #include <QStringListModel>
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 namespace tkListViewConstants
 {
-    const char * const  TEXTADD      = QT_TRANSLATE_NOOP( "tkListView", "Add");
-    const char * const  TEXTREMOVE   = QT_TRANSLATE_NOOP( "tkListView", "Remove");
-    const char * const  TEXTMOVEUP   = QT_TRANSLATE_NOOP( "tkListView", "Move Up");
-    const char * const  TEXTMOVEDOWN = QT_TRANSLATE_NOOP( "tkListView", "Move Down");
     const char * const  M_TKLISTVIEW = "menu_tkListView";
 }
 
@@ -285,7 +283,7 @@ void tkListViewPrivate::createButtons()
         addButton->setMinimumSize( 22, 22 );
         addButton->setMaximumSize( 22, 22 );
         addButton->setIcon( tkTheme::icon(ICONADD) );
-        addButton->setToolTip( tr("Add") );
+        addButton->setToolTip( tkTr(ADD) );
         butLayout->addWidget( addButton );
         connect( addButton, SIGNAL(clicked()), m_Parent, SLOT(on_add_triggered()) );
     }
@@ -295,14 +293,14 @@ void tkListViewPrivate::createButtons()
         removeButton->setMinimumSize( 22, 22 );
         removeButton->setMaximumSize( 22, 22 );
         removeButton->setIcon( tkTheme::icon(ICONREMOVE) );
-        removeButton->setToolTip( tr("Remove") );
+        removeButton->setToolTip( tkTr(REMOVE) );
         butLayout->addWidget( removeButton );
         connect( removeButton, SIGNAL(clicked()), m_Parent, SLOT(on_remove_triggered()) );
     }
 
     if (m_Buttons & tkListView::MoveUpButton) {
         moveUpButton = new  QPushButton(wgtButtons);
-        moveUpButton->setToolTip( tr("Move up") );
+        moveUpButton->setToolTip( tkTr(MOVEUP) );
         moveUpButton->setMinimumSize( 22, 22 );
         moveUpButton->setMaximumSize( 22, 22 );
         moveUpButton->setIcon( tkTheme::icon(ICONMOVEUP) );
@@ -312,7 +310,7 @@ void tkListViewPrivate::createButtons()
 
     if (m_Buttons & tkListView::MoveDownButton) {
         moveDownButton = new  QPushButton(wgtButtons);
-        moveDownButton->setToolTip( tr("Move down") );
+        moveDownButton->setToolTip( tkTr(MOVEDOWN) );
         moveDownButton->setMinimumSize( 22, 22 );
         moveDownButton->setMaximumSize( 22, 22 );
         moveDownButton->setIcon( tkTheme::icon(ICONMOVEDOWN) );
@@ -323,6 +321,7 @@ void tkListViewPrivate::createButtons()
     butLayout->addSpacerItem( new QSpacerItem( 10, 10, QSizePolicy::Expanding,QSizePolicy::Fixed ) );
 }
 
+/** \todo avoid calling createDefaultMenuEdit() multiple times */
 void tkListViewPrivate::createActions()
 {
     tkActionManager *m = tkActionManager::instance();
@@ -366,7 +365,7 @@ void tkListViewPrivate::createActions()
 
 //    if (m_Actions & tkListView::EditAction) {
 //        editAct = new QAction( this );
-//        editAct->setText( tr( "Edit" ) );
+//        editAct->setText( tkTr(EDIT) );
 
 //        connect( editAct, SIGNAL(triggered()), m_Parent, SLOT(on_edit_triggered()));
 //    }
@@ -413,7 +412,7 @@ void tkListView::on_remove_triggered()
     if ( d->m_ListView->currentIndex().isValid() ) {
         d->m_ListView->closePersistentEditor( d->m_ListView->currentIndex() );
         if ( ! d->m_ListView->model()->removeRows( d->m_ListView->currentIndex().row(), 1 ) )
-            tkLog::addError( this, tr("tkListView can not remove row %1 to the model %1")
+            tkLog::addError( this, tr("tkListView can not remove row %1 to the model %2")
                              .arg( d->m_ListView->currentIndex().row() )
                              .arg( model()->objectName() ) );
     }

@@ -42,6 +42,7 @@ using namespace tkPrinterPreviewerPrivateConstants;
   \internal
   \todo Manage printer page magins...
   \todo Manage the page changer for the preview (spinbox)
+  \todo pageNumberSpinBox
 */
 tkPrinterPreviewerPrivate::tkPrinterPreviewerPrivate(QWidget *parent) :
     tkPrinterPreviewer(parent), m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0), m_AutoCheck(false)
@@ -292,3 +293,18 @@ void tkPrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged( int checks
     connectPreview(m_EditorWatermark);
 }
 
+void tkPrinterPreviewerPrivate::on_duplicataCheck_stateChanged( int state )
+{
+    if (state == Qt::Checked)
+        printer.printWithDuplicata(true);
+    else
+        printer.printWithDuplicata(false);
+    on_updatePreviewButton_clicked();
+}
+
+void tkPrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
+{
+    /** \todo needs modification of tkPrinter::previewToPixmap( QPixmap &drawTo, QPrinter *printer ) to
+              tkPrinter::previewToPixmap( QPixmap &drawTo, QPrinter *printer, int pageNumber )
+    */
+}

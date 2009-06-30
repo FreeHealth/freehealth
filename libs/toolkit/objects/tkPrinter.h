@@ -173,6 +173,10 @@ public Q_SLOTS:
     bool printWithDuplicata( bool state = true );
     bool print( const QString &htmlToPrint );
 
+    bool toPdf(const QString &fileName);
+    bool toPdf(const QString &fileName, const QString &html);
+    bool toPdf(const QString &fileName, const QTextDocument & docToPrint);
+
 protected Q_SLOTS:
     bool print( QPrinter *printer = 0 );  // used by tkPrinter PreviewDialog
 

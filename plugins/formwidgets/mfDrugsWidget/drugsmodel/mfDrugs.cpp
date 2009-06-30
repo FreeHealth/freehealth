@@ -50,6 +50,7 @@
 #include <tkLog.h>
 #include <tkSettings.h>
 #include <tkGlobal.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QApplication>
@@ -59,6 +60,8 @@
 #include <QLocale>
 
 using namespace mfDrugsConstants;
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
@@ -511,7 +514,7 @@ QString mfDrugsPrivate::prescriptionToText( bool toHtml )
     if (daily.count() > 0) {
         QString tmp;
         tmp = QString( " %1").arg(daily.join(", "));
-        tmp.replace( tmp.lastIndexOf(", "), 2, " " + QCoreApplication::translate("mfDrugs", "and"));
+        tmp.replace( tmp.lastIndexOf(", "), 2, " " + QCoreApplication::translate("mfDrugs", "and") + " " );
         // replace last , to AND
         intakes += tmp;
     }
@@ -559,7 +562,7 @@ QString mfDrugsPrivate::prescriptionToText( bool toHtml )
 
     int idx = m_PrescriptionValues.value(Prescription::MealTimeSchemeIndex).toInt();
     if (idx != 0)
-        toReturn += linebreak + mfDosageModel::mealTime(idx);
+        toReturn += linebreak + mealTime(idx);
 
     QString note = m_PrescriptionValues.value(Prescription::Note).toString();
     if (!note.isEmpty()) {

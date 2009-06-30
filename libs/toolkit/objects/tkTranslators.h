@@ -49,67 +49,35 @@ class QTranslator;
 /**
  * \file tkTranslators.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 13 April 2009
+ * \version 0.0.6
+ * \date 28 June 2009
 */
 
-/**
-  \brief This class is a QTranslator manager. All translations files are loaded using the pathToTranslations().
-
-  In first, instanciate this class inside the core of the app.
-
-  Then set the translation path to use with : setPathToTranslations().
-
-  You can add new translations file using members addNewTranslator().
-  - specifying filename only (eg : 'myTrans' the suffix ('_lang') is automatcally added (using QLocale::staticDatas).
-  - specifying full path of the file.
-
-  Use changeLangage() to automacally reload all translators with the right language.Toolkit manages its own translator.
-
-  Get availables languages and locales with : availableLocales(), availableLanguages(), availableLocalesAndLanguage().
-
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkTranslators : public QObject
 {
     Q_OBJECT
 public:
-    /** */
     static tkTranslators* instance( QObject * parent = 0) ;
-    /** */
      ~tkTranslators();
 
-    /** */
      bool addNewTranslator( const QString & fileName, bool fromDefaultPath = true );
-    /** */
      bool addNewTranslator( const QString & path, const QString & file );
-    /** */
-     QString intToString( const int i );
 
 public Q_SLOTS:
-    /** */
      void changeLanguage( const QString & lang );
 
  public:
-    /** */
      static bool setPathToTranslations( const QString & path );
-    /** */
      static QString pathToTranslations();
 
-    /** */
      static QStringList availableLocales();
-    /** */
      static QStringList availableLanguages();
-    /** */
      static QMap<QString, QString> availableLocalesAndLanguages();
 
  Q_SIGNALS:
-    /** */
      void languageChanged();
 
  protected:
-    /** */
      tkTranslators( QObject * parent = 0 );
 
  private:

@@ -50,7 +50,8 @@ HEADERS += objects/tkExporter.h \
     widgets/tkAboutDialog_p.h \
     objects/tkUpdateChecker_p.h \
     objects/tkUpdateChecker.h \
-    widgets/tkPrinterPreviewer_p.h
+    widgets/tkPrinterPreviewer_p.h \
+    objects/tkConstantTranslations.h
 SOURCES += objects/tkSettings.cpp \
     objects/tkLog.cpp \
     objects/tkGlobal.cpp \
@@ -71,7 +72,8 @@ SOURCES += objects/tkSettings.cpp \
     widgets/tkAboutDialog.cpp \
     objects/tkUpdateChecker.cpp \
     widgets/tkPrinterPreviewer_p.cpp \
-    objects/tkTextDocumentExtra.cpp
+    objects/tkTextDocumentExtra.cpp \
+    objects/tkConstantTranslations.cpp
 FORMS += widgets/tkDebugDialog.ui \
     widgets/tkTableDialog.ui \
     widgets/tkAboutDialog.ui \

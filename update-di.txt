@@ -1,6 +1,7 @@
 version=0.0.7
 {
     * Juin 2009
+    * Passage à la version 4.5.2 des librairies de Qt
     * Amélioration du moteur de recherche d'interactions médicamenteuses (~deux fois plus rapide)
     * Possibilité d'ajouter une prescription à une prescription en cours d'édition
     * Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)
@@ -12,6 +13,7 @@ version=0.0.7
     * Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
     * Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
     * Possibilité d'ajouter sans effort ses propres formes
+    * Gestion de la sécabilité
     * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
     * Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
     * Transformation des librairies 'toolkit' en librairies dynamiques

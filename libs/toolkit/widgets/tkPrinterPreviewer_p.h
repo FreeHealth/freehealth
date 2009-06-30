@@ -86,6 +86,8 @@ public:
 private Q_SLOTS:
     void on_updatePreviewButton_clicked();
     void on_automaticUpdateCheck_stateChanged( int checkstate );
+    void on_duplicataCheck_stateChanged( int state );
+    void on_pageNumberSpinBox_valueChanged( int value );
 
 private:
     void connectPreview( tkRichTextEditor * t );

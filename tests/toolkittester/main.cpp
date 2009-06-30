@@ -28,8 +28,13 @@
 #include <tkGlobal.h>
 #include <tkPrinter.h>
 #include <tkSettings.h>
+#include <tkTranslators.h>
+#include <tkConstantTranslations.h>
 
 #include <tkPrinterTester.h>
+
+Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
 QMainWindow *win;
 
@@ -104,7 +109,12 @@ void test_Xml()
     d.insert( "K_4", "Value4");
     QString xml = tkGlobal::createXml( "DIPRESCRIPTION", d , 4 , true );
     d.clear();
-    qWarning() << xml << tkGlobal::readXml( xml ,"DIPRESCRIPTION", d , true );
+    qWarning() << xml << "correctly read XML ?" << tkGlobal::readXml( xml ,"DIPRESCRIPTION", d , true );
+    qWarning() << d;
+
+    xml = tkGlobal::createXml( "DIPRESCRIPTION", d , 4 , false );
+    d.clear();
+    qWarning() << xml << tkGlobal::readXml( xml ,"DIPRESCRIPTION", d , false );
     qWarning() << d;
 }
 
@@ -120,16 +130,29 @@ void testTokenReplacement()
     qWarning() << text;
 }
 
+void test_Translations()
+{
+    tkTranslators *t = tkTranslators::instance();
+    t->setPathToTranslations( tkSettings::instance()->path( tkSettings::TranslationsPath ) );
+    t->addNewTranslator( "toolkit" );
+    t->addNewTranslator( "qt" );
+    qWarning() << tkTr(INTAKES, 2);
+    qWarning() << tkTr(INTAKES, 1);
+    qWarning() << tkTr(INTAKES, 0);
+}
+
 int main(int argc, char *argv[])
 {
 //    Q_INIT_RESOURCE(toolkittester);
-    win=0;
     QApplication app(argc, argv);
+    win=0;
     tkSettings *s = new tkSettings();
+    s->setPath(tkSettings::BundleResourcesPath, qApp->applicationDirPath()+ "/../../../../global_resources/");
 
 //    test_QButtonLineEdit();
 //    text_Html();
-    test_Xml();
+//    test_Xml();
+    test_Translations();
 //    test_tkPrinter();
     app.exec();
     return 0;

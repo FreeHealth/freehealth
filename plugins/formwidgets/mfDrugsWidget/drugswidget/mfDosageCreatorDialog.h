@@ -61,33 +61,30 @@ QT_END_NAMESPACE
  * \date 24 March 2009
 */
 
-/**
- * \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
- * doctors when prescribing a drug.
- * Before all, this dialog is a wrapper on the mfDrugsModel (not the mfDosageModel). The mfDrugsModel is a kind of proxy
- * that manages drugs (view only) / dosages (via mfDosageModel) / interactions (view only).
- * If you want to create a new dosage, you must create a new row onto the model BEFORE.
- * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
- \ingroup drugsinteractions drugswidget
-*/
 class mfDosageCreatorDialog : public QDialog, public Ui::mfDosageCreatorDialog
 {
     Q_OBJECT
     Q_DISABLE_COPY( mfDosageCreatorDialog );
 
 public:
-    explicit mfDosageCreatorDialog( QWidget *parent, int CIS , mfDosageModel *dosageModel );
-    ~mfDosageCreatorDialog() {}
+    explicit mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel );
+    ~mfDosageCreatorDialog();
 
 private:
-    void resetUiToDefaults();
-    void prepareMapper( const int dosageRow );
     void resizeEvent( QResizeEvent * event );
-    void resizeTableWidget();
-//    void preparePrescriptionWidget();
 
 private Q_SLOTS:
     void done( int r );
+    void changeCurrentRow( const int dosageRow );
+    void changeCurrentRow(const QModelIndex &item );
+    void on_fromToIntakesCheck_stateChanged(int state);
+    void on_fromToDurationCheck_stateChanged(int state);
+    void on_intakesFromSpin_valueChanged(double d);
+    void on_durationFromSpin_valueChanged(double d);
+    void on_userformsButton_clicked();
+    void on_saveButton_clicked();
+    void on_prescribeButton_clicked();
+    void on_saveAndPrescribeButton_clicked();
 
 private:
     mfDosageCreatorDialogPrivate *d;

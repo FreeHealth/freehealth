@@ -37,6 +37,7 @@
 #include <tkLog.h>
 #include <tkGlobal.h>
 #include <tkSettings.h>
+#include <tkConstantTranslations.h>
 
 #include <QMessageBox>
 #include <QHttp>
@@ -89,7 +90,7 @@ bool tkSendMessage::setTypeOfMessage( const typeOfMessage & t )
 
 bool tkSendMessage::postMessage()
 {
-    tkGlobal::functionNotAvailableMessageBox( tr("Message can not be sended.") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(MESSAGE_NOT_SENDED) );
     return false;
 }
 

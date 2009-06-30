@@ -1,11 +1,12 @@
 #include "tkPrinterTester.h"
 
 #include <tkPrinter.h>
-#include "../../libs/toolkit/widgets/tkPrinterPreviewer_p.h"
+//#include "../../libs/toolkit/widgets/tkPrinterPreviewer_p.h"
 
 #include <QDir>
 #include <tkGlobal.h>
 #include <QDebug>
+#include <QApplication>
 
 
 tkPrinterTester::tkPrinterTester( QMainWindow *win ) :

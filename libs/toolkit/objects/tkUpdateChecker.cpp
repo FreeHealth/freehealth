@@ -32,12 +32,35 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
+/**
+  \class tkUpdateChecker
+  \brief Threaded update checker over the internet. Connect the SIGNAL to catch the update.
+  - Usage :
+  \code
+      tkUpdateChecker::instance()->check("http://my.url.com/update.file.txt");
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded()), this, SLOT(on_UpdateFounded()));
+      // OR
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded(const QString &)), this, SLOT(on_UpdateFounded(const QString &)));
+      // OR
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded()), tkUpdateChecker::instance(), SLOT(showUpdateInformations()));
+  \endcode
+
+  - You can :
+      - check for update with hasUpdate(),
+      - get the extracted update's text using updateText(),
+      - stop the downloading of the file using cancel().
+  \ingroup toolkit
+  \ingroup object_toolkit
+*/
+
 #include <tkUpdateChecker.h>
 #include "tkUpdateChecker_p.h"
 
 // include freemedforms headers
 #include <tkLog.h>
 #include <tkSettings.h>
+#include <tkConstantTranslations.h>
 
 // include Qt headers
 #include <QApplication>
@@ -49,20 +72,9 @@
 #include <QFrame>
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
 
-// Initializing static vars
-//tkUpdateChecker *tkUpdateChecker::m_Instance = 0;
-
-//tkUpdateChecker *tkUpdateChecker::instance( QObject *parent )
-//{
-//    if (!m_Instance) {
-//        if (!parent)
-//            parent = qApp;
-//        m_Instance = new tkUpdateChecker(parent);
-//    }
-//    return m_Instance;
-//}
-
+/** \brief Constructor */
 tkUpdateChecker::tkUpdateChecker( QObject *parent )
           : QObject(parent), d(0)
 {
@@ -71,6 +83,7 @@ tkUpdateChecker::tkUpdateChecker( QObject *parent )
     d = new tkUpdateCheckerPrivate(this);
 }
 
+/** \brief Destructor */
 tkUpdateChecker::~tkUpdateChecker()
 {
     if (d) {
@@ -80,38 +93,64 @@ tkUpdateChecker::~tkUpdateChecker()
     }
 }
 
+/**
+  \brief Check for update using the URL \e url.
+  \li Download the selected file
+  \li Find the latest version notified in it
+  \li Compare with the QApplication::applicationVersion() string
+*/
 void tkUpdateChecker::check( const QString &url )
 {
-    tkLog::addMessage( this, tr( "Check for Updates : %1" ).arg( url ) );
+    tkLog::addMessage( this, tkTr(CHECKING_UPDATE_FROM_1).arg( url ) );
     d->getFile( QUrl(url) );
 }
 
+/**
+  \brief Check for update using the URL \e url.
+  \sa check()
+*/
 void tkUpdateChecker::check( const QUrl &url )
 {
-    tkLog::addMessage( this, tr( "Check for Updates : %1" ).arg( url.toString() ) );
+    tkLog::addMessage( this, tkTr(CHECKING_UPDATE_FROM_1).arg( url.toString() ) );
     d->getFile( url );
 }
 
+/**
+  \brief Returns the latest version notified in the downloaded update file
+*/
 QString tkUpdateChecker::lastVersion()
 {
     return d->m_LastVersion;
 }
 
+/**
+  \brief Returns the update text for the latest version notified in the downloaded update file
+*/
 QString tkUpdateChecker::updateText()
 {
     return d->m_UpdateText;
 }
 
+/**
+  \brief Returns true if there is a later version notified in the downloaded update file
+*/
 bool tkUpdateChecker::hasUpdate()
 {
     return (!d->m_UpdateText.isEmpty());
 }
 
+/**
+  \brief Returns true if the update file was correctly downloaded
+*/
 bool tkUpdateChecker::fileRetreived()
 {
     return d->m_FileRetreived;
 }
 
+/**
+  \brief Privat part of tkUpdateChecker
+  \internal
+*/
 tkUpdateCheckerPrivate::tkUpdateCheckerPrivate( QObject *parent )
           : QObject(parent)
 {
@@ -175,31 +214,36 @@ void tkUpdateCheckerPrivate::httpDone( bool error )
     }
 
     if ( m_UpdateText.isEmpty() ) {
-        tkLog::addMessage( this, tr( "Version up to date." ) );
+        tkLog::addMessage( this, tkTr(VERSION_UPTODATE) );
         return;
     }
 
     forLog.chop(2);
-    tkLog::addMessage( this, tr( "Update founded : %1" ).arg( forLog ));
+    tkLog::addMessage( this, tkTr(UPDATE_AVAILABLE) + ": " + forLog);
     m_UpdateText = m_UpdateText.replace( "\t", "  " );
     static_cast<tkUpdateChecker*>(parent())->emitSignals();
 }
 
+/** \internal */
 void tkUpdateChecker::emitSignals()
 {
     Q_EMIT updateFounded(d->m_UpdateText);
     Q_EMIT updateFounded();
 }
 
+/** \brief Abort the download */
 void tkUpdateCheckerPrivate::cancelDownload()
 {
     m_Http.abort();
 }
 
+/**
+  \brief Opens a dialog window that show all the update text available
+*/
 void tkUpdateChecker::showUpdateInformations()
 {
     QDialog *dialog = new QDialog;
-    dialog->setWindowTitle( tr("Update Available") + " - " + qApp->applicationName() );
+    dialog->setWindowTitle( tkTr(UPDATE_AVAILABLE) + " - " + qApp->applicationName() );
     dialog->resize( 500, 400 );
     QGridLayout *layout = new QGridLayout(dialog);
     QLabel *intro = new QLabel( "<b>" + tr("An update is available. Please check the web site : <a href=\"%1\">%1</a>")
@@ -213,8 +257,8 @@ void tkUpdateChecker::showUpdateInformations()
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
 
-    QLabel *actual = new QLabel( "<b>" + tr("Current version :") + "</b> " + qApp->applicationVersion(), dialog );
-    QLabel *uped = new QLabel(   "<b>" + tr("Last version :") + "</b> " + lastVersion(), dialog );
+    QLabel *actual = new QLabel( "<b>" + tkTr(CURRENT_VERSION) + "</b> " + qApp->applicationVersion(), dialog );
+    QLabel *uped = new QLabel(   "<b>" + tkTr(LATEST_VERSION) + "</b> " + lastVersion(), dialog );
     QTextBrowser *browser = new QTextBrowser(dialog);
     browser->setPlainText(updateText());
     QDialogButtonBox *butBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, dialog);
