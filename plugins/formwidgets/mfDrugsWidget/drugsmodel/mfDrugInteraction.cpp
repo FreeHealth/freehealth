@@ -38,6 +38,25 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class mfDrugInteraction
+  \brief Drugs Interaction class.
+  This class is a 'data class'. It only holds datas about interactions.\n
+  You can statically :
+  \li get the interaction's icon using the static iamIcon().
+  \li transform a list of interactions to human readable Html with listToHtml()
+  \li transform a list of interactions to a synthesis human readable Html with synthesisToHtml()
+  \li get the type of interaction's name using typeToString().
+
+  You can, non statically :
+  \li set the values of the interactions with setValue() (only used by mfDrugsBase).
+  \li get the values with value()
+  \li get the type of interaction with typeOfIAM() and type()
+  \li get information's text of the interaction with information()
+  \li get the recommandation's text with whatToDo()
+  \ingroup drugsinteractions drugswidget
+*/
+
 #include "mfDrugInteraction.h"
 
 // include toolkit headers
@@ -74,6 +93,7 @@ namespace mfDrugInteractionConstants {
 
 using namespace mfDrugInteractionConstants;
 
+/** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
 void mfDrugInteraction::setValue( const int fieldref, const QVariant & value )
 {
     if ( fieldref == IAM_TYPE )
@@ -103,7 +123,7 @@ void mfDrugInteraction::setValue( const int fieldref, const QVariant & value )
         m_Infos.insert( fieldref, value );
 }
 
-
+/** \brief Get values of the interaction class. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
 QVariant mfDrugInteraction::value( const int fieldref ) const
 {
      if ( fieldref == IAM_TYPE )
@@ -114,7 +134,7 @@ QVariant mfDrugInteraction::value( const int fieldref ) const
      return QVariant();
 }
 
-
+/** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 QString mfDrugInteraction::typeToString( const int t )
 {
      QStringList tmp;
@@ -133,11 +153,13 @@ QString mfDrugInteraction::typeToString( const int t )
      return tmp.join( ", " );
 }
 
+/** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 QString mfDrugInteraction::typeOfIAM( const int & t ) const
 {
     return typeToString(t);
 }
 
+/** \brief Returns the type of interactions. Type refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 Interaction::TypesOfIAM mfDrugInteraction::type() const
 {
      if ( m_Infos.uniqueKeys().contains( IAM_TYPE ) )
@@ -146,6 +168,7 @@ Interaction::TypesOfIAM mfDrugInteraction::type() const
           return Interaction::TypesOfIAM( 0 );
 }
 
+/** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
 QIcon mfDrugInteraction::iamIcon( const mfDrugs * drug, const int & levelOfWarning )  // static
 {
     // mfDrugsBase::interactions() should be called first
@@ -175,6 +198,7 @@ QIcon mfDrugInteraction::iamIcon( const mfDrugs * drug, const int & levelOfWarni
     return QIcon();
 }
 
+/** \brief for debugging purpose */
 void mfDrugInteraction::warn() const
 {
      foreach( const int i, m_Infos.keys() )
@@ -186,16 +210,19 @@ QString mfDrugInteraction::header() const
     return value( IAM_MAIN ).toString() + " - " + value( IAM_INTERACTOR ).toString() ;
 }
 
+/** \brief Returns the information's text of the interaction */
 QString mfDrugInteraction::information() const
 {
     return value( IAM_TEXT_IAM ).toString();
 }
 
+/** \brief Returns the recommandation's text of the interaction */
 QString mfDrugInteraction::whatToDo() const
 {
     return value( IAM_TEXT_CAT ).toString();
 }
 
+/** \brief Transforms a list of interactions to human readable Html (static). */
 QString mfDrugInteraction::listToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
@@ -228,6 +255,7 @@ QString mfDrugInteraction::listToHtml( const QList<mfDrugInteraction*> & list, b
      return toReturn;
 }
 
+/** \brief Transform a list of interactions to a human readable synthesis Html */
 QString mfDrugInteraction::synthesisToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;

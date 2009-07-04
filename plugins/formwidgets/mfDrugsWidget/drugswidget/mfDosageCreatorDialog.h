@@ -70,18 +70,8 @@ public:
     explicit mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel );
     ~mfDosageCreatorDialog();
 
-private:
-    void resizeEvent( QResizeEvent * event );
-
 private Q_SLOTS:
     void done( int r );
-    void changeCurrentRow( const int dosageRow );
-    void changeCurrentRow(const QModelIndex &item );
-    void on_fromToIntakesCheck_stateChanged(int state);
-    void on_fromToDurationCheck_stateChanged(int state);
-    void on_intakesFromSpin_valueChanged(double d);
-    void on_durationFromSpin_valueChanged(double d);
-    void on_userformsButton_clicked();
     void on_saveButton_clicked();
     void on_prescribeButton_clicked();
     void on_saveAndPrescribeButton_clicked();

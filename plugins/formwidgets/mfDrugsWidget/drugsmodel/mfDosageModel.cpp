@@ -69,6 +69,7 @@
 // including toolkit headers
 #include <tkGlobal.h>
 #include <tkLog.h>
+#include <tkTheme.h>
 #include <tkConstantTranslations.h>
 
 // including usertoolkit headers (for FreeMedForms only)
@@ -88,7 +89,6 @@ using namespace tkUserConstants;
 #include <QColor>
 #include <QLocale>
 
-
 namespace mfDosageModelConstants {
     const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
@@ -102,8 +102,6 @@ using namespace mfDosageModelConstants;
 //---------------------------------------------- Static Datas --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 // intialize static private members
-QStringList mfDosageModel::m_Physiology = QStringList();
-QStringList mfDosageModel::m_Pregnancy = QStringList();
 QStringList mfDosageModel::m_ScoredTabletScheme = QStringList();
 QStringList mfDosageModel::m_PreDeterminedForms = QStringList();
 QString     mfDosageModel::m_ActualLangage = "";
@@ -130,19 +128,6 @@ void mfDosageModel::retranslate()
     // store the langage and retranslate
     m_ActualLangage = QLocale().name().left(2);
 
-
-    m_Physiology =
-            QStringList()
-            << tr( "no physiologic limit" )
-            << tr( "infants" ) // nourrissons
-            << tr( "children" )
-            << tr( "adult only" )
-            << tr( "no chronic renal failure" )
-            << tr( "no chronic heaptic failure" )
-            << tr( "weight limited" )
-            << tr( "only for man" )
-            << tr( "only for woman" );
-
     m_ScoredTabletScheme =
             QStringList()
             << tr( "complet tab." )
@@ -165,16 +150,7 @@ void mfDosageModel::retranslate()
             << tr( "eyewash" )
             << tr( "instillation" )
             << tr( "pulverization" );
-    //            << tr("");
 
-    m_Pregnancy =
-            QStringList()
-            << tr( "usable during whole pregnancy" )
-            << tr( "usable during the first quarter of pregnancy" )
-            << tr( "usable during the second quarter of pregnancy" )
-            << tr( "usable during the third quarter of pregnancy" )
-            << tr( "usable during pregnancy with warnings" )
-            << tr( "not usable during pregnancy" );
 
 }
 
@@ -189,22 +165,6 @@ QStringList mfDosageModel::scoredTabletScheme()
     if ( m_ScoredTabletScheme.count() == 0 )
         retranslate();
     return m_ScoredTabletScheme;
-}
-
-QStringList mfDosageModel::pregnancy()
-{
-    if ( m_Pregnancy.count() == 0 )
-        retranslate();
-    return m_Pregnancy;
-}
-
-QString mfDosageModel::pregnancy( int id )
-{
-    if ( m_Pregnancy.count() == 0 )
-        retranslate();
-    if ( ( id > 0 ) && ( id < m_Pregnancy.count() ) )
-        return m_Pregnancy[id];
-    return QString::null;
 }
 
 QStringList mfDosageModel::predeterminedForms()
@@ -277,30 +237,47 @@ QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
     if ( ! item.isValid() )
         return QVariant();
 
-    if (role==Qt::FontRole) {
-        QFont font;
-        if (m_DirtyRows.contains(item.row()))
-            font.setBold(true);
-        else
-            font.setBold(false);
-        return font;
-    } else if (role==Qt::BackgroundRole) {
-        if (m_DirtyRows.contains(item.row()))
-            return QColor(DIRTYROW_BACKGROUNDCOLOR);
-        else
-            return QColor("white");
-    } else if ((role==Qt::DisplayRole) || (role == Qt::EditRole)) {
-        switch (item.column())
+    switch (role)
+    {
+    case Qt::FontRole:
         {
-        case Dosage::DailyScheme : // --> is a QFlags to transform to stringList
+            QFont font;
+            if (m_DirtyRows.contains(item.row()))
+                font.setBold(true);
+            else
+                font.setBold(false);
+            return font;
+        }
+    case Qt::BackgroundRole :
+        {
+            if (m_DirtyRows.contains(item.row()))
+                return QColor(DIRTYROW_BACKGROUNDCOLOR);
+            else
+                return QColor("white");
+        }
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        {
+            switch (item.column())
             {
-                return dailySchemes( tkConstants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
-                break;
+            case Dosage::DailyScheme : // --> is a QFlags to transform to stringList
+                {
+                    return dailySchemes( tkConstants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
+                    break;
+                }
+            default :
+                    //                qWarning() << record().fieldName(item.column())<<QSqlTableModel::data(item, role);
+                    return QSqlTableModel::data(item, role);
             }
-        default :
-//                qWarning() << record().fieldName(item.column())<<QSqlTableModel::data(item, role);
-        return QSqlTableModel::data(item, role);
-    }
+            break;
+        }
+    case Qt::DecorationRole :
+        {
+//            qWarning() << QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString();
+            if (!QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString().isEmpty())
+                return tkTheme::icon(MFDRUGS_ICONSEARCHDCI);
+            return tkTheme::icon(MFDRUGS_ICONSEARCHCOMMERCIAL);
+        }
     }
     return QVariant();
 }
@@ -386,7 +363,7 @@ void mfDosageModel::revertRow( int row )
 bool mfDosageModel::submitAll()
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
-    warn();
+//    warn();
     QSet<int> safe = m_DirtyRows;
     m_DirtyRows.clear();
     if ( QSqlTableModel::submitAll() ) {
@@ -398,15 +375,28 @@ bool mfDosageModel::submitAll()
 }
 
 /**
-  \brief Filter the model from the drug CIS.
-  \todo filter from inn
+  \brief Filter the model from the drug CIS and if possible for the inn prescriptions.
 */
 bool mfDosageModel::setDrugCIS( const int _CIS )
 {
     if ( _CIS == m_CIS )
         return true;
     m_CIS = _CIS;
-    setFilter( QString( "%1=%2" ).arg( record().fieldName( Dosage::CIS_LK ) ).arg( m_CIS ) );
+    QString filter = QString("%1=%2").arg(record().fieldName(Dosage::CIS_LK)).arg(m_CIS);
+    int inn = mfDrugsModel::drugData(_CIS,Drug::MainInnCode).toInt();
+    if (inn!=-1) {
+        // add INN_LK
+        QString innFilter = QString::number(inn);
+        innFilter = QString("%1=%2").arg(record().fieldName(Dosage::INN_LK)).arg(innFilter);
+        // add INN_DOSAGE
+        innFilter = QString("(%1) AND (%2='%3')")
+                    .arg(innFilter)
+                    .arg(record().fieldName(Dosage::InnLinkedDosage))
+                    .arg(mfDrugsModel::drugData(_CIS,Drug::MainInnDosage).toString());
+        filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
+    }        
+//    qWarning() << "filter" << filter;
+    setFilter(filter);
     select();
     return true;
 }
@@ -476,24 +466,28 @@ void mfDosageModel::toPrescription(const int row)
     Q_ASSERT(mfDrugsModel::instance()->containsDrug(m_CIS));
     mfDrugsModel *M = mfDrugsModel::instance();
     QHash<int,int> prescr_dosage;
+    prescr_dosage.insert( Prescription::UsedDosage ,           Dosage::Uuid );
     prescr_dosage.insert( Prescription::IntakesFrom ,          Dosage::IntakesFrom );
     prescr_dosage.insert( Prescription::IntakesTo ,            Dosage::IntakesTo );
-    prescr_dosage.insert( Prescription::IntakesUsesFromAndTo , Dosage::IntakesUsesFromTo );
+    prescr_dosage.insert( Prescription::IntakesUsesFromTo ,    Dosage::IntakesUsesFromTo );
     prescr_dosage.insert( Prescription::IntakesScheme ,        Dosage::IntakesScheme );
     prescr_dosage.insert( Prescription::Period ,               Dosage::Period );
     prescr_dosage.insert( Prescription::PeriodScheme ,         Dosage::PeriodScheme );
     prescr_dosage.insert( Prescription::DurationFrom ,         Dosage::DurationFrom );
     prescr_dosage.insert( Prescription::DurationTo ,           Dosage::DurationTo );
-    prescr_dosage.insert( Prescription::DurationUsesFromAndTo, Dosage::DurationUsesFromTo );
+    prescr_dosage.insert( Prescription::DurationUsesFromTo,    Dosage::DurationUsesFromTo );
     prescr_dosage.insert( Prescription::DurationScheme ,       Dosage::DurationScheme );
+    prescr_dosage.insert( Prescription::IntakesIntervalOfTime ,Dosage::IntakesIntervalOfTime );
+    prescr_dosage.insert( Prescription::IntakesIntervalScheme ,Dosage::IntakesIntervalScheme );
     prescr_dosage.insert( Prescription::Note ,                 Dosage::Note );
     prescr_dosage.insert( Prescription::DailyScheme ,          Dosage::DailyScheme );
     prescr_dosage.insert( Prescription::MealTimeSchemeIndex ,  Dosage::MealScheme );
     foreach( const int i, prescr_dosage.keys()) {
         M->setDrugData(m_CIS, i, data(index(row, prescr_dosage.value(i))) );
     }
+    if (index(row,Dosage::INN_LK).data().toInt() > 999) // this is an INN prescription
+        M->setDrugData(m_CIS, Prescription::IsINNPrescription, true);
     M->resetModel();
-//    M->drugData(m_CIS, Prescription::ToHtml);
 }
 
 /** \brief Transforms a model's row into XML encoded QString. This part is using the database fieldnames.*/

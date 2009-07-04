@@ -52,7 +52,7 @@ Q_TK_BEGIN_CONSTANTS
 
 namespace Physiology {
 
-    enum PregnancyLimit  // QFlag it
+    enum PregnancyLimit  // QFlag
     {
         NeverDuringPregnacy = 0x00000000,
         FirstQuaOk          = 0x00000010,
@@ -63,8 +63,22 @@ namespace Physiology {
     };
     Q_DECLARE_FLAGS( PregnancyLimits, PregnancyLimit );
 
+    enum PhysiologicalLimit // QFlag
+    {
+        EveryOne     = 0x00000000,
+        Infant       = 0x00000001,  // Nourrisson
+        Child        = 0x00000010,
+        AdultOnly    = 0x00000100,
+        ChronicRenalFailureAvoid   = 0x00001000,
+        ChronicHepaticFailureAvoid   = 0x00010000,
+        ManOnly      = 0x01000000,
+        WomanOnly    = 0x10000000
+    };
+    Q_DECLARE_FLAGS( PhysiologicalLimits, PhysiologicalLimit );
+
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS( Physiology::PregnancyLimits)
+Q_DECLARE_OPERATORS_FOR_FLAGS( Physiology::PhysiologicalLimits)
 
 
 namespace Time {

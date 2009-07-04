@@ -254,12 +254,16 @@ namespace Drug
         Molecules,
         CodeMoleculesList,
         AllInnsKnown,
-        Inns,
-        InnClasses,
+        Inns,                    // names
+        InnClasses,              // names
+        MainInnCode,             // -1 if no INN known or more than one INN
+        MainInnName,             // -1 if no INN known or more than one INN
+        MainInnDosage,
         Administration,
         Interacts,
         MaximumLevelOfInteraction,
         CompositionString,
+        InnCompositionString,    // inn dose form ; inn dose form...
         AvailableForms,
         AvailableDosages,
         HasPrescription,
@@ -285,16 +289,18 @@ namespace Prescription
         IntakesFrom,
         IntakesTo,
         IntakesScheme,
-        IntakesUsesFromAndTo,
+        IntakesUsesFromTo,
         IntakesFullString,
         DurationFrom,
         DurationTo,
         DurationScheme,
-        DurationUsesFromAndTo,
+        DurationUsesFromTo,
         Period,
         PeriodScheme,
         DailyScheme,
         MealTimeSchemeIndex,
+        IntakesIntervalOfTime,
+        IntakesIntervalScheme,
         Note,
         IsINNPrescription,
         SpecifyForm,
@@ -338,6 +344,7 @@ namespace Dosage
         Id = 0,                 /*!< \brief Identifiant du dosage. integer. */
         Uuid,                   /*!< \brief Identifiant unique --> varchar(40) */
         INN_LK,                 /*!< \brief Si la prescription est la même pour toutes les DCI alors le champs est renseigné, sinon laissé à -1. integer */
+        InnLinkedDosage,        /*!< \brief Linked dosage of the Inn. */
         CIS_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */
         CIP_LK,                 /*!< \brief Code CIP           --> int */
         Label,                  /*!< \brief Libellé            --> varchar( 300 ) */
@@ -367,8 +374,10 @@ namespace Dosage
         SexLimitedIndex,        /*!< \brief int 0 = M / 1 = F */
         MinClearance,           /*!< \brief Clearance de la créatinine minimale pour la prescription */
         MaxClearance,           /*!< \brief Clearance de la créatinine maximale pour la prescription (définition d'interval). Eg : HBPM */
-        PregnancyLimitsIndex,   /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::PregnancyLimits. */
+        PregnancyLimitsFlag,    /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::PregnancyLimits. */
         BreastFeedingLimitsIndex, /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::BreastFeedingLimits. */
+        PhysiologicalLimitsFlag,  /*!< \brief Physiological limits flaged from tkConstants::Physiology::PhysiologicalLimitsFlag. */
+
         Note,                   /*!< \brief note               --> varchar ( 500 ) */
 
         CIM10Links,             /*!< \brief CIM10 codes related to the prescription. Codes are separated by a ';'. */

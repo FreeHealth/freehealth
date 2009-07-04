@@ -89,6 +89,8 @@ public:
     void setLicense( const QString &html );
     void setCopyright( const QString &years, const QString &names );
 
+    static QString getLicenseText(AvailableLicense license);
+
 protected:
     virtual void done(int result);
 

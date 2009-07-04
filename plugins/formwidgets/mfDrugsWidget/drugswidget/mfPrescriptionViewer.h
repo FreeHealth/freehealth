@@ -69,6 +69,7 @@ class mfPrescriptionViewer : public QWidget, private Ui::mfPrescriptionViewer
     Q_DISABLE_COPY(mfPrescriptionViewer)
 public:
     explicit mfPrescriptionViewer(QWidget *parent = 0);
+    void initialize();
     QListView *listview();
     void setModel( mfDrugsModel *model );
     void setModelColumn( const int col );

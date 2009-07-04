@@ -55,6 +55,8 @@ class mfDosageDialog;
 class tkSettings;
 class tkTranslators;
 
+#include "ui_diMainWindow.h"
+
 /**
  * \file diMainWindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
@@ -64,7 +66,7 @@ class tkTranslators;
    \ingroup drugsinteractions
 */
 
-class diMainWindow: public QMainWindow
+class diMainWindow: public QMainWindow , public Ui::diMainWindow
 {
     Q_OBJECT
     friend class diCore;
@@ -98,15 +100,15 @@ private Q_SLOTS:
     void printPrescription();
 
 private:
-    mfDrugSelector       *m_DrugSelector;
+//    mfDrugSelector       *m_DrugSelector;
     mfDrugsPrescriptor   *m_DrugPrescriptor;
-    mfPrescriptionViewer *m_PrescriptionView;
+//    mfPrescriptionViewer *m_PrescriptionView;
     mfDrugsModel         *m_PrescriptionModel;
     mfDosageDialog       *m_DosageDialog;
     QString               m_iniPath;
 
     QAction *prefAct, *aboutAct, *debugAct, *configureMedinTuxAct, *saveAct;
-    QLineEdit *patientName;
+
 };
 
 #endif  // DIMAINWINDOW_H

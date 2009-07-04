@@ -38,57 +38,56 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGINFO_P_H
-#define MFDRUGINFO_P_H
+#ifndef MFDOSAGEVIEWER_H
+#define MFDOSAGEVIEWER_H
 
-// include drugswidget headers
-class mfDrugs;
-class mfDrugInteraction;
-
-// include toolkit headers
-#include <tkSendMessage.h>
+// include drugwidget headers
+class mfDosageModel;
+class mfDosageViewerPrivate;
 
 // include Qt headers
-#include <QDialog>
-#include <QObject>
+#include <QWidget>
 
 // include Ui
-#include "ui_mfDrugInfo.h"
-
+#include "ui_mfDosageViewer.h"
 
 /**
- * \file mfDrugsInfo.h
+ * \file mfDosageViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 31 Janv 2009
+ * \version 0.0.6
+ * \date 30 June 2009
 */
 
-/**
-  \brief Show a dialog with drugs informations and interactions founded.
-  This dialog allows user to send debugging datas.
-*/
-
-class mfDrugInfoPrivate : public QObject, public Ui::mfDrugInfo
+class mfDosageViewer : public QWidget, public Ui::mfDosageViewer
 {
-     Q_OBJECT
-public:
-     mfDrugInfoPrivate( QDialog * parent );
-     ~mfDrugInfoPrivate() {}
+    Q_OBJECT
+    Q_DISABLE_COPY( mfDosageViewer );
 
-     bool checkSent();
+public:
+    explicit mfDosageViewer( QWidget *parent );
+    ~mfDosageViewer();
+
+    void setDosageModel( mfDosageModel *model );
+    void useDrugsModel(const int CIS, const int drugRow);
 
 public Q_SLOTS:
-     void on_butSendINN_clicked();
-     void on_butIAMSend_clicked();
-     void on_listWidgetInteractions_itemSelectionChanged();
+    void changeCurrentRow( const int dosageRow );
+    void changeCurrentRow( const QModelIndex &item );
 
-public:
-     QDialog *m_Parent;
-     int m_CIS;
-     tkSendMessage               m_Sender;
-     QList<mfDrugInteraction *>  m_InteractionsList;         // should not be deleted
-     bool                        m_INNSent, m_InteractSent;
+private:
+    void resizeEvent( QResizeEvent * event );
+
+private Q_SLOTS:
+    void done( int r );
+    void on_fromToIntakesCheck_stateChanged(int state);
+    void on_fromToDurationCheck_stateChanged(int state);
+    void on_intakesFromSpin_valueChanged(double d);
+    void on_durationFromSpin_valueChanged(double d);
+    void on_userformsButton_clicked();
+    void on_dosageForAllInnCheck_stateChanged(int state);
+
+private:
+    mfDosageViewerPrivate *d;
 };
 
-#endif  // MFDRUGINFO_P_H
-
+#endif // MFDOSAGEVIEWER_H

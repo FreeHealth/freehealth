@@ -51,8 +51,8 @@ class mfDrugInfoPrivate;
 /**
  * \file mfDrugsInfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 29 April 2009
+ * \version 0.0.6
+ * \date 01 July 2009
 */
 
 /**
@@ -64,10 +64,10 @@ class mfDrugInfo : public QDialog
 {
     Q_OBJECT
 public:
-    mfDrugInfo( const int modelRow, QWidget * parent = 0 );
+    mfDrugInfo( const int CIS, QWidget * parent = 0 );
     ~mfDrugInfo() {}
 
-    void setDrug( const int row );
+    void setDrug( const int CIS );
 
 protected Q_SLOTS:
     void accept();

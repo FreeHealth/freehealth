@@ -41,6 +41,7 @@
 #define TKGLOBAL_H
 
 #include <tkExporter.h>
+#include <tkAboutDialog.h>
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -105,7 +106,7 @@ Q_TK_EXPORT const void centerWidget( QWidget * win );
 /** \brief Toggle a widget to fullScreen. */
 Q_TK_EXPORT const void setFullScreen( QWidget* win, bool on );
 
-// Message Boxes
+// Message Boxes and default dialogs
 Q_TK_EXPORT const void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
 Q_TK_EXPORT const void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
 Q_TK_EXPORT const bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
@@ -114,6 +115,7 @@ Q_TK_EXPORT const int withButtonsMessageBox( const QString &text, const QString&
 Q_TK_EXPORT const bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
 Q_TK_EXPORT const bool functionNotAvailableMessageBox( const QString &functionText );
 Q_TK_EXPORT const void quickDebugDialog( const QStringList &texts);
+Q_TK_EXPORT bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::AvailableLicense licence);
 
 // Dialogs for user input
 Q_TK_EXPORT const QString askUser( const QString &title, const QString &question );

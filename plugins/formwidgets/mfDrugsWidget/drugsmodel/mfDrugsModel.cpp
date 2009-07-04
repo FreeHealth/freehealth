@@ -78,6 +78,8 @@ namespace mfDrugsModelConstants {
     const char *const XML_PRESCRIPTION_INTAKETO           = "INTAKETO";
     const char *const XML_PRESCRIPTION_INTAKESCHEME       = "INTAKESCHEME";
     const char *const XML_PRESCRIPTION_INTAKEFROMTO       = "INTAKEFROMTO";
+    const char *const XML_PRESCRIPTION_INTAKEINTERVALTIME = "INTAKEINTERVALTIME";
+    const char *const XML_PRESCRIPTION_INTAKEINTERVALSCHEME = "INTAKEINTERAVALSCHEME";
     const char *const XML_PRESCRIPTION_INTAKEFULLSTRING   = "INTAKEFULL";
     const char *const XML_PRESCRIPTION_DURATIONFROM       = "DURATIONFROM";
     const char *const XML_PRESCRIPTION_DURATIONTO         = "DURATIONTO";
@@ -114,12 +116,14 @@ public:
         m_XmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
         m_XmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
         m_XmlTags.insert(Prescription::IntakesScheme, XML_PRESCRIPTION_INTAKESCHEME);
-        m_XmlTags.insert(Prescription::IntakesUsesFromAndTo, XML_PRESCRIPTION_INTAKEFROMTO);
+        m_XmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
         m_XmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
+        m_XmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
+        m_XmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
         m_XmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
         m_XmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
         m_XmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
-        m_XmlTags.insert(Prescription::DurationUsesFromAndTo, XML_PRESCRIPTION_DURATIONFROMTO);
+        m_XmlTags.insert(Prescription::DurationUsesFromTo, XML_PRESCRIPTION_DURATIONFROMTO);
         m_XmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
         m_XmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
         m_XmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
@@ -168,7 +172,7 @@ public:
     */
     QVariant getDrugValue( const mfDrugs *drug, const int column ) const
     {
-        switch ( column )
+        switch (column)
         {
              case Drug::Denomination : return drug->denomination();
              case Drug::CIS : return drug->CIS();
@@ -204,17 +208,24 @@ public:
              case Drug::Molecules :          return drug->listOfMolecules();
              case Drug::AllInnsKnown :       return mfDrugsBase::instance()->drugsINNIsKnown(drug);
              case Drug::Inns :               return drug->listOfInn();
+             case Drug::MainInnCode :        return drug->mainInnCode();
+             case Drug::MainInnDosage :      return drug->mainInnDosage();
+             case Drug::MainInnName :        return drug->mainInnName();
              case Drug::InnClasses :         return drug->listOfInnClasses();
              case Drug::InnEquivalentsNames: return mfDrugsBase::instance()->findInnEquivalentsNames( drug );
              case Drug::Administration :     return QVariant();
              case Drug::Interacts :          return mfDrugsBase::instance()->drugHaveInteraction( drug );
              case Drug::MaximumLevelOfInteraction : return int(mfDrugsBase::instance()->getMaximumTypeOfIAM( drug ));
              case Drug::CompositionString :  return drug->toHtml();
+             case Drug::InnCompositionString :  return drug->innComposition();
              case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
              case Drug::HasPrescription :    return drug->hasPrescription();
              case Drug::FullPrescription :
                  {
-                     QString tmp = drug->denomination();
+                     QString tmp;
+                     if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
+                         tmp = drug->innComposition();
+                     else tmp = drug->denomination();
                      tmp += "\n";
                      tmp += drug->prescriptionToPlainText();
                      return tmp;
@@ -224,11 +235,13 @@ public:
              case Prescription::IntakesFrom :           return drug->prescriptionValue( Prescription::IntakesFrom );
              case Prescription::IntakesTo :             return drug->prescriptionValue( Prescription::IntakesTo );
              case Prescription::IntakesScheme :         return drug->prescriptionValue( Prescription::IntakesScheme );
-             case Prescription::IntakesUsesFromAndTo :  return drug->prescriptionValue( Prescription::IntakesUsesFromAndTo );
+             case Prescription::IntakesUsesFromTo :     return drug->prescriptionValue( Prescription::IntakesUsesFromTo );
+             case Prescription::IntakesIntervalOfTime : return drug->prescriptionValue( Prescription::IntakesIntervalOfTime );
+             case Prescription::IntakesIntervalScheme : return drug->prescriptionValue( Prescription::IntakesIntervalScheme );
              case Prescription::DurationFrom :          return drug->prescriptionValue( Prescription::DurationFrom );
              case Prescription::DurationTo :            return drug->prescriptionValue( Prescription::DurationTo );
              case Prescription::DurationScheme :        return drug->prescriptionValue( Prescription::DurationScheme );
-             case Prescription::DurationUsesFromAndTo : return drug->prescriptionValue( Prescription::DurationUsesFromAndTo );
+             case Prescription::DurationUsesFromTo :    return drug->prescriptionValue( Prescription::DurationUsesFromTo );
              case Prescription::MealTimeSchemeIndex :   return drug->prescriptionValue( Prescription::MealTimeSchemeIndex );
              case Prescription::Period :                return drug->prescriptionValue( Prescription::Period );
              case Prescription::PeriodScheme :          return drug->prescriptionValue( Prescription::PeriodScheme );
@@ -461,7 +474,7 @@ QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
         QString display;
         display = drug->toHtml();
 
-        QDrugsList withoutThis = d->m_DrugsList;
+//        QDrugsList withoutThis = d->m_DrugsList;
         if ( b->drugHaveInteraction( drug ) ) {
             const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
             display.append( "<br>\n" );
@@ -527,7 +540,7 @@ int mfDrugsModel::addDrug( mfDrugs* drug, bool automaticInteractionChecking )
 {
     // insert only once the same drug
     if (containsDrug(drug->CIS()))
-        return -1;
+        return d->m_DrugsList.indexOf(drug);
     d->m_DrugsList << drug;
     // check drugs interactions from mfDrugsBase
     if (automaticInteractionChecking) {
@@ -711,7 +724,11 @@ QString mfDrugsModel::prescriptionToHtml()
         tmp = QString(ENCODEDHTML_DRUG);
         tmp.replace( "{NUMBER}", QString::number(i+1));
         tmp.replace( "{DRUGSTYLE}", drugStyle);
-        tmp.replace( "{DRUG}", index( i, Drug::Denomination ).data().toString());
+        if (index(i,Prescription::IsINNPrescription).data().toBool()) {
+            tmp.replace( "{DRUG}", index(i,Drug::InnCompositionString).data().toString());
+        } else {
+            tmp.replace( "{DRUG}", index( i, Drug::Denomination ).data().toString());
+        }
         tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
         tmp.replace( "{PRESCRIPTION}", index( i, Prescription::ToHtml ).data().toString());
         //        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
@@ -748,8 +765,8 @@ QString mfDrugsModel::serializePrescription()
     QString tmp;
     QList<int> keysToSave;
     keysToSave << Prescription::IntakesFrom << Prescription::IntakesTo
-            << Prescription::IntakesScheme << Prescription::IntakesUsesFromAndTo << Prescription::DurationFrom
-            << Prescription::DurationTo << Prescription::DurationScheme << Prescription::DurationUsesFromAndTo
+            << Prescription::IntakesScheme << Prescription::IntakesUsesFromTo << Prescription::DurationFrom
+            << Prescription::DurationTo << Prescription::DurationScheme << Prescription::DurationUsesFromTo
             << Prescription::Period << Prescription::PeriodScheme <<  Prescription::MealTimeSchemeIndex
             << Prescription::Note << Prescription::IsINNPrescription << Prescription::SpecifyForm
             << Prescription::SpecifyPresentation << Prescription::IsALD;

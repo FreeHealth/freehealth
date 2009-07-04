@@ -89,7 +89,7 @@ namespace diCorePrivateConstants {
     const char* const  COMMANDLINE_PATIENTSIZE        = "--size";
     const char* const  COMMANDLINE_PATIENTCLCR        = "--clcr";
     const char* const  COMMANDLINE_CHRONOMETER        = "--chrono";
-//    const char* const  COMMANDLINE_  = "--";
+    const char* const  COMMANDLINE_CREATININ          = "--creatinin";
 //    const char* const  COMMANDLINE_  = "--";
 
 }
@@ -123,6 +123,8 @@ public:
                 m_PatientSize = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
             } else if (arg.contains(COMMANDLINE_PATIENTCLCR)) {
                 m_PatientClCr = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+            } else if (arg.contains(COMMANDLINE_CREATININ)) {
+                m_PatientCreat = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
             } else if (arg.contains(COMMANDLINE_CHRONOMETER)) {
                 m_Chrono = true;
             }
@@ -141,6 +143,7 @@ public:
     static QString m_PatientWeight;
     static QString m_PatientSize;
     static QString m_PatientClCr;
+    static QString m_PatientCreat;
     static bool m_WineRunning;
     static bool m_Chrono;
 };
@@ -154,6 +157,7 @@ QString diCorePrivate::m_PatientDOB = "";
 QString diCorePrivate::m_PatientWeight = "";
 QString diCorePrivate::m_PatientSize = "";
 QString diCorePrivate::m_PatientClCr = "";
+QString diCorePrivate::m_PatientCreat = "";
 bool diCorePrivate::m_WineRunning = false;
 bool diCorePrivate::m_Chrono = false;
 
@@ -215,7 +219,10 @@ tkMedintuxConfiguration *medintuxConfiguration()
 //-------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Init Function -------------------------------------------
 //-------------------------------------------------------------------------------------------------------
-/** \brief initialize the core manager */
+/**
+  \brief initialize the core manager.
+  \todo start a thread that : opens dosagemodel, filter to non transmitted dosage, transform them to xml, send over the web
+*/
 bool diCore::init()
 {
     QTime chrono;
@@ -244,7 +251,6 @@ bool diCore::init()
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", "settings and splash");
 
-
     // log infos about libraries
     QApplication::addLibraryPath( settings()->path(tkSettings::QtPlugInsPath) );
     foreach( QString l, QCoreApplication::libraryPaths() )
@@ -262,6 +268,9 @@ bool diCore::init()
 
     // first time runnning ?
     if ( settings()->firstTimeRunning() ) {
+        // show the license agreement dialog
+        if (!tkGlobal::defaultLicenceAgreementDialog("", tkAboutDialog::BSD ))
+            return false;
         showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Default Parameters..." ) );
         tkSettings *s = settings();
         s->noMoreFirstTimeRunning();
@@ -352,7 +361,7 @@ void diCore::setPatientDateOfBirth( const QString &date)
     diCorePrivate::m_PatientDOB = date;
 }
 
-/** \brief Patient wieght */
+/** \brief Patient weight */
 QString & diCore::patientWeight()
 {
     return diCorePrivate::m_PatientWeight;
@@ -364,7 +373,10 @@ QString & diCore::patientSize()
     return diCorePrivate::m_PatientSize;
 }
 
-/** \brief Patient Clearance of creatinin */
+/**
+  \brief Patient Clearance of creatinin
+  \todo Automatically calculates clcr is possible
+*/
 QString & diCore::patientClCr()
 {
     return diCorePrivate::m_PatientClCr;

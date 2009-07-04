@@ -42,13 +42,7 @@
 #define MFDOSAGEDIALOG_H
 
 // include drugwidget headers
-class mfDosageModel;
-
-// include Qt headers
-#include <QtGlobal>
-QT_BEGIN_NAMESPACE
-class QDataWidgetMapper;
-QT_END_NAMESPACE
+class mfDosageDialogPrivate;
 
 // include Ui
 #include "ui_mfDosageDialog.h"
@@ -56,8 +50,8 @@ QT_END_NAMESPACE
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 07 June 2009
+ * \version 0.0.14
+ * \date 01 July 2009
 */
 
 /**
@@ -74,38 +68,19 @@ class mfDosageDialog : public QDialog, public Ui::mfDosageDialog
     Q_DISABLE_COPY( mfDosageDialog );
 
 public:
-    explicit mfDosageDialog( QWidget *parent, const int drugRow , const int dosageRow );
+    explicit mfDosageDialog(QWidget *parent);
     ~mfDosageDialog();
 
     void changeRow( const int drugRow , const int dosageRow );
 
-private:
-    void createDefaultDosage();
-    void setPrescriptionState( const int index, const int qtCheckState );
-    void modelToCheckBoxes();
-    void checkScoreDrug();
 
 private Q_SLOTS:
     void done( int r );
     void on_drugNameButton_clicked();
-    void availableDosages_activated( const QModelIndex & item );
-    void on_fromToIntakesCheck_stateChanged( int state );
-    void on_fromToDurationCheck_stateChanged( int state );
-    void on_ALDCheck_stateChanged( int state );
-    void on_INNCheck_stateChanged( int state );
-    void on_noFormCheck_stateChanged( int state );
-    void on_noPresentationCheck_stateChanged( int state );
-    void on_intakesFromSpin_valueChanged( double d );
-    void on_durationFromSpin_valueChanged( double d  );
-    void on_userformsButton_clicked();
-    void on_toogleInnButton_clicked();
+    void on_innButton_clicked();
 
 private:
-    QDataWidgetMapper  *m_Mapper;
-    mfDosageModel      *m_DosageModel;
-    QString             m_ActualDosageUuid;
-    int m_DrugRow, m_DosageRow;
-    QMenu *m_UserFormButtonPopup;
+    mfDosageDialogPrivate *d;
 };
 
 #endif // MFDOSAGEDIALOG_H

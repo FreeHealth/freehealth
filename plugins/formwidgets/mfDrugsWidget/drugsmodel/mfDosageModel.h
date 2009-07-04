@@ -53,19 +53,6 @@ using namespace mfDosagesConstants;
 class mfDosageModel : public QSqlTableModel
 {
     Q_OBJECT
-    enum Physio    // QFlag it
-    {
-        EveryOne     = 0,
-        Nourrissons  = 0x00000001,
-        Children     = 0x00000010,
-        AdultOnly    = 0x00000100,
-        InsufRenal   = 0x00001000,
-        InsufHepat   = 0x00010000,
-        WeigtLimited = 0x00100000,
-        ManOnly      = 0x01000000,
-        WomanOnly    = 0x10000000
-    };
-
 
     enum ScoredTablet
     {
@@ -131,8 +118,6 @@ public:
     static void         initStaticDatas()      { retranslate() ; }
     static int          periodDefault()        { return 4; }
     static QStringList  scoredTabletScheme();
-    static QStringList  pregnancy();
-    static QString      pregnancy( int id );
     static QStringList  predeterminedForms();
 
     // non static viewers for ui generation (need to be instanciate first)
@@ -149,9 +134,6 @@ private Q_SLOTS:
     //----------------------------------------- PRIVATE DATAS ------------------------------------------------
     //--------------------------------------------------------------------------------------------------------
 private:
-    static QStringList    m_Physiology;
-    static QStringList    m_Pregnancy;
-    static QStringList    m_BreastFeeding;
     static QStringList    m_ScoredTabletScheme;
     static QStringList    m_PreDeterminedForms;
     static QString        m_ActualLangage;

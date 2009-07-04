@@ -38,6 +38,41 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class mfDrugsBase
+  \brief This class owns the drugs and dosages database and interactions mechanism.
+
+  0. Terminology\n
+  \e Substances are the chimic molecules that compose a drug.\n
+  \e IamCode or \e INN are the INN codes and names.\n
+  \e IamClass are the classes that regroups INNs into classes of pharmaceutics family.\n
+  \e CIP : presentation code of a drug. A drug can be presented into different presentation (15 pills, 30 pills a box...).\n
+  \e CIS : speciality code of a drug. Everything is base on this code.
+     One CIS code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
+
+  1. Initialization\n
+  This class is pure static, so you can not instanciate it. To initialize datas, just do once : init().
+  isInitialized() alerts you of the state of intialization.
+  These two members returns true if all is ok.
+
+  2. Drugs retreiver\n
+  You can retreive drugs using CIS ou CIP code via getDrugByCIS() and getDrufByCIP().
+
+  3. Drugs Interactions\n
+  Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
+  getLastIAMFound() and getAllIAMFound().
+  You must always in first call interactions() with the list of drugs to test.
+  Then you can retreive interactions found using the other members.
+
+  4. Dosages retreiver / saver
+
+  \todo Manage user rights when creating dosage database
+
+  \sa mfDrugInteraction, mfDrugs, mfDrugsTables, mfDrugDosage
+  \ingroup drugsinteractions drugswidget
+*/
+
 #include "mfDrugsBase.h"
 
 // include freemedforms headers
@@ -94,7 +129,6 @@ public:
     void retreiveLinkTables();
 
     // private members for interactions
-    QString getIamSubstDenomination( const int & code_subst );
     QStringList getIamClassDenomination( const int & code_subst );
     QSet<int> getAllInnAndIamClassesIndex(const int code_subst);
     bool checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugs );
@@ -291,50 +325,53 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
     if ( executeSQL(       "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
                            "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
                            "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
-                           "`INN_LK`                int(11)        NULL,"    // put NOT NULL
-                           "`CIS_LK`                int(11)        NULL,"    // put NOT NULL
-                           "`CIP_LK`                int(11)        NULL,"    // put NOT NULL
+                           "`INN_LK`                int(11)        NULL,"
+                           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
+                           "`CIS_LK`                int(11)        NULL,"
+                           "`CIP_LK`                int(11)        NULL,"
                            "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
-                           "`INTAKEFROM`            double         NULL,"
+                           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
                            "`INTAKETO`              double         NULL,"
                            "`INTAKEFROMTO`          bool           NULL,"
-                           "`INTAKESCHEME`          varchar(200)   NULL,"
-                           "`INTAKESINTERVALOFTIME` double         NULL,"
+                           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
+                           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
                            "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
 
-                           "`DURATIONFROM`          double        NULL,"
-                           "`DURATIONTO`            double        NULL,"
-                           "`DURATIONFROMTO`        bool          NULL,"
-                           "`DURATIONSCHEME`        varchar(200)  NULL,"
+                           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
+                           "`DURATIONTO`            double         NULL,"
+                           "`DURATIONFROMTO`        bool           NULL,"
+                           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
 
-                           "`PERIOD`                int(10)         NULL,"
-                           "`PERIODSCHEME`          varchar(200)    NULL,"
-                           "`DAILYSCHEME`           int(10)         NULL,"
-                           "`MEALSCHEME`            int(10)         NULL,"
+                           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
+                           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+                           "`DAILYSCHEME`           int(10)        NULL,"
+                           "`MEALSCHEME`            int(10)        NULL,"
 
-                           "`MINAGE`                int(10)         NULL,"
-                           "`MAXAGE`                int(10)         NULL,"
-                           "`MINAGEREFERENCE`       int(10)         NULL,"
-                           "`MAXAGEREFERENCE`       int(10)         NULL,"
-                           "`MINWEIGHT`             int(10)         NULL,"
-                           "`SEXLIMIT`              int(10)         NULL,"
-                           "`MINCLEARANCE`          int(10)         NULL,"
-                           "`MAXCLEARANCE`          int(10)         NULL,"
-                           "`PREGNANCYLIMITS`       int(10)         NULL,"
-                           "`BREASTFEEDINGLIMITS`   int(10)         NULL,"
+                           "`MINAGE`                int(10)        NULL,"
+                           "`MAXAGE`                int(10)        NULL,"
+                           "`MINAGEREFERENCE`       int(10)        NULL,"
+                           "`MAXAGEREFERENCE`       int(10)        NULL,"
+                           "`MINWEIGHT`             int(10)        NULL,"
+                           "`SEXLIMIT`              int(10)        NULL,"
+                           "`MINCLEARANCE`          int(10)        NULL,"
+                           "`MAXCLEARANCE`          int(10)        NULL,"
+                           "`PREGNANCYLIMITS`       int(10)        NULL,"
+                           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+                           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
 
-                           "`NOTE`                  varchar(500)    NULL,"
+                           "`NOTE`                  varchar(500)   NULL,"
 
-                           "`CIM10_LK`              varchar(150)    NULL,"
-                           "`EDRC_LK`               varchar(150)    NULL,"
+                           "`CIM10_LK`              varchar(150)   NULL,"
+                           "`EDRC_LK`               varchar(150)   NULL,"
 
-                           "`EXTRAS`                blob            NULL,"
-                           "`USERUUID`              varchar(40)     NULL,"    // put NOT NULL
-                           "`USERVALIDATOR`         varchar(40)     NULL,"
-                           "`CREATIONDATE`          date            NULL,"    // put NOT NULL
-                           "`MODIFICATIONDATE`      date            NULL,"
-                           "`TRANSMITTED`           date            NULL"
+                           "`EXTRAS`                blob           NULL,"
+                           "`USERUUID`              varchar(40)    NULL,"    // put NOT NULL
+                           "`USERVALIDATOR`         varchar(40)    NULL,"
+                           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+                           "`MODIFICATIONDATE`      date           NULL,"
+                           "`TRANSMITTED`           date           NULL,"
+                           "`ORDER`                 int(10)        NULL"
                            ");", DB
                            )
         ) {
@@ -501,9 +538,9 @@ QList<int> mfDrugsBase::getLinkedSubstCode( const QString & iamDenomination )
 /** \brief Return true if all the INNs of the drug are known. */
 bool mfDrugsBase::drugsINNIsKnown( const mfDrugs * drug )
 {
-    const QList<QVariant> & list = drug->value( Table_COMPO, COMPO_CODE_SUBST ).toList();
+    const QList<QVariant> & list = drug->listOfCodeMolecules().toList(); //->value( Table_COMPO, COMPO_CODE_SUBST ).toList();
     foreach( QVariant q, list)
-        if ( d->m_Lk_iamCode_substCode.keys( q.toInt() ).count() == 0 )
+        if ( d->m_Lk_iamCode_substCode.keys(q.toInt()).count() == 0 )
             return false;
     return true;
 }
@@ -522,12 +559,17 @@ QStringList mfDrugsBase::findInnEquivalentsNames( const mfDrugs *drug )
 //----------------------------------------- Retreive drugs from database ---------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** \brief Returns the name of the INN for the substance code \e code_subst. */
-QString mfDrugsBasePrivate::getIamSubstDenomination( const int & code_subst )
+QString mfDrugsBase::getInnDenominationFromSubstanceCode( const int code_subst )
 {
      // if molecule is not associated with a dci exit
-     if ( !m_Lk_iamCode_substCode.values().contains( code_subst ) )
+     if ( !d->m_Lk_iamCode_substCode.values().contains(code_subst) )
           return QString::null;
-     return m_IamDenominations.value(m_Lk_iamCode_substCode.key(code_subst));
+     return d->m_IamDenominations.value(d->m_Lk_iamCode_substCode.key(code_subst));
+}
+
+QString mfDrugsBase::getInnDenomination( const int inncode )
+{
+     return d->m_IamDenominations.value(inncode);
 }
 
 /** \brief Returns the name of the INN for the substance code \e code_subst. */
@@ -561,6 +603,13 @@ QSet<int> mfDrugsBasePrivate::getAllInnAndIamClassesIndex(const int code_subst)
     return toReturn;
 }
 
+/** \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule. */
+int mfDrugsBase::getInnCodeForCodeMolecule(const int code)
+{
+    if (d->m_Lk_iamCode_substCode.values().contains(code))
+        return d->m_Lk_iamCode_substCode.key(code);
+    return -1;
+}
 
 /** \brief Returns the unique code CIS for the CIP code \e CIP. */
 int mfDrugsBase::getCISFromCIP( int CIP )
@@ -627,36 +676,50 @@ mfDrugs * mfDrugsBase::getDrugByCIS( const QVariant & CIS_id )
      // get COMPO table
      where.clear();
      where.insert( COMPO_CIS, QString( "=%1" ).arg( toReturn->CIS() ) );
-     req = select( Table_COMPO, where );
+     QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
+     req = select( Table_COMPO, where ) + sort;
+     QSet<int> codeMols;
      {
+         mfDrugComposition *compo = 0;
+         mfDrugComposition *precedent = 0;
           QSqlQuery q( req , DB );
           if ( q.isActive() ) {
+              QList<mfDrugComposition*> list;
                while ( q.next() ) {
                     if ( q.record().count() != COMPO_MaxParam )
                          tkLog::addError( "mfDrugsBase", QCoreApplication::translate( "mfDrugsBase",
                                    "ERROR : will retreiving %1. Wrong number of fields" )
                                           .arg( "drugs composition" ) );
+                    compo = new mfDrugComposition();
                     int i = 0;
                     for ( i = 0; i < COMPO_MaxParam; ++i )
-                         toReturn->setValue( Table_COMPO, i, q.value(i) );
+                         compo->setValue( i, q.value(i) );
+                    compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->m_CodeMolecule) );
+                    compo->setValue(COMPO_IAM_CLASS_DENOMINATION, d->getIamClassDenomination(compo->m_CodeMolecule) );
+                    compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_CODE_SUBST).toInt()));
+                    list << compo;
+                    codeMols << q.value(COMPO_CODE_SUBST).toInt();
+                    if (precedent) {
+                        if (q.value(COMPO_LK_NATURE) == precedent->linkId()) {
+                            compo->setLinkedSubstance(list.at(list.count()-2));
+                        }
+                    }
+                    precedent = compo;
                }
+               foreach( mfDrugComposition *c, list)
+                   toReturn->addComposition(c);
           }
       }
-     // retreive iam_subst from database
-     foreach( const QVariant &code, toReturn->value(Table_COMPO,COMPO_CODE_SUBST).toList()) {
-         toReturn->setValue( Table_COMPO, COMPO_IAM_DENOMINATION,
-                             d->getIamSubstDenomination( code.toInt() ) );
-         toReturn->setValue( Table_COMPO, COMPO_IAM_CLASS_DENOMINATION,
-                             d->getIamClassDenomination( code.toInt() ) );
-         toReturn->addInnAndIamClasses( d->getAllInnAndIamClassesIndex( code.toInt() ) ) ;
+     foreach( const int i, codeMols) {
+         toReturn->addInnAndIamClasses( d->getAllInnAndIamClassesIndex(i) ) ;
      }
+
+//     toReturn->warn();
 
      if (d->m_LogChrono)
          tkLog::logTimeElapsed(t, "mfDrugsBase", "getDrugByCIS");
 
-     // TODO : CIP Table (should be facultative)
      return toReturn;
-//     return d->getDrug( map );
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -756,7 +819,7 @@ bool mfDrugsBase::interactions( const QList<mfDrugs*> & drugs )
           // test all drugs in the list
           foreach( mfDrugs * drg, drugs )  {
                // test molecule by molecule
-               foreach( QVariant code_subst, drg->value( Table_COMPO, COMPO_CODE_SUBST ).toList() ) {
+              foreach( QVariant code_subst, drg->listOfCodeMolecules().toList()) { // ->value( Table_COMPO, COMPO_CODE_SUBST ).toList() ) {
                     iam_subst = d->m_Lk_iamCode_substCode.key( code_subst.toInt() );
                     const QList<int> & iam_class = d->m_Lk_classCode_iamCode.keys( iam_subst );
 

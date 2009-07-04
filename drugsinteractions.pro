@@ -2,7 +2,8 @@ include ( checkqtversion.pri )
 TEMPLATE = subdirs
 CONFIG *= ordered
 
-SUBDIRS += libs/toolkit \
+SUBDIRS += \
+           libs/toolkit \
            libs/medintuxtoolkit \
            drugsinteractions
 

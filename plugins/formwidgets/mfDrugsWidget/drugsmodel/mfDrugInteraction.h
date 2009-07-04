@@ -54,9 +54,13 @@ class mfDrugs;
 using namespace mfInteractionsConstants;
 
 /**
-  \brief Interaction class.
-  \ingroup drugsinteractions drugswidget
+ * \file mfDrugInteraction.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.5
+ * \date 29 April 2009
 */
+
+
 class mfDrugInteraction : public QObject
 {
     Q_OBJECT

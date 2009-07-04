@@ -39,12 +39,14 @@
  ***************************************************************************/
 /**
   \class tkAboutDialog
- \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full licence text.
-   It also shows the compilation date and time and the actual version of the application.
-   The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion().
-   You can inform the team using the addTeamList().
+   \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full licence text.
+   It also shows the compilation date and time and the actual version of the application. \n
+   The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion(). \n
+   You can inform the team using the addTeamList().\n
+   You can get the default licence terms using the static getLicenceTerms() function. This function manages english and french language by looking the default QLocale()::name().\n
   \ingroup toolkit
   \ingroup widget_toolkit
+  \todo add LGPLfrench, GPLv3french licence terms.
 **/
 
 /**
@@ -205,6 +207,7 @@ const char* const  GPLv3_EN =
   "</body></html>";
 
 const char* const BSD_EN =
+  "<p align=center><b>Terms of the BSD license.</b></p><p&nbsp;</p>"
   "<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>"
   "<p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>"
   "<p>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution."
@@ -212,6 +215,15 @@ const char* const BSD_EN =
   "<p></p>"
   "<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>";
 
+const char* const BSD_FR =
+  "<p align=center><b>Termes de la licence BSD.</b></p><p&nbsp;</p>"
+  "<p>La redistribution et l'utilisation sous forme binaire ou de code source, avec ou sans modification, sont autoris&eacute;es &agrave; condition que les conditions suivantes soient respect&eacute;es :</p>"
+  "<p>Les redistributions du code source doivent conserver l'indication de copyright ci-dessus, cette liste de conditions et la renonciation suivante.</p>"
+  "<p>Les redistributions sous forme binaire doivent reproduire l'indication de copyright ci-dessus, cette liste de conditions et la renonciation suivante dans la documentation et/ou les autres accessoires fournis avec la distribution.</p>"
+  "<p>Ni le nom de l'organisation ni les noms de ses collaborateurs ne peuvent &ecirc;tre utilis&eacute;s pour approuver ou promouvoir les produits d&eacute;riv&eacute;s de ce logiciel sans une permission &eacute;crite sp&eacute;cifique pr&eacute;alable.</p>"
+  "<p>CE LOGICIEL EST FOURNI PAR LES REGENTS ET LES PARTICIPANTS \"TEL QUEL\" ET TOUTES LES GARANTIES EXPLICITES OU IMPLICITES, Y COMPRIS, MAIS NON LIMIT&Eacute;ES A CELLES-CI, LES GARANTIES IMPLICITES DE COMMERCIALISATION ET D'AD&Eacute;QUATION &Agrave; UN USAGE PARTICULIER SONT D&Eacute;NI&Eacute;ES. EN AUCUN CAS LES REGENTS OU LES PARTICIPANTS NE PEUVENT &Ecirc;TRE TENUS POUR RESPONSABLE DES DOMMAGES DIRECTS, INDIRECTS, FORTUITS, PARTICULIERS, EXEMPLAIRES OU CONS&Eacute;CUTIFS &Agrave; UNE ACTION (Y COMPRIS, MAIS NON LIMIT&Eacute;S &Agrave; CEUX-CI, L'ACQUISITION DE MARCHANDISES OU DE SERVICES DE REMPLACEMENT; LES PERTES D'UTILISATIONS, DE DONN&Eacute;ES OU FINANCI&Egrave;RES; OU L'INTERRUPTION D'ACTIVIT&Eacute;S) DE QUELQUE MANI&Egrave;RE QUE CES DOMMAGES SOIENT CAUS&Eacute;S ET CECI POUR TOUTES LES TH&Eacute;ORIES DE RESPONSABILIT&Eacute;S, QUE CE SOIT DANS UN CONTRAT, POUR DES RESPONSABILIT&Eacute;S STRICTES OU DES PR&Eacute;JUDICES (Y COMPRIS DUS &Agrave; UNE NEGLIGENCE OU AUTRE CHOSE) SURVENANT DE QUELQUE MANI&Egrave;RE QUE CE SOIT EN DEHORS DE L'UTILISATION DE CE LOGICIEL, M&Ecirc;ME EN CAS D'AVERTISSEMENT DE LA POSSIBILIT&Eacute; DE TELS DOMMAGES.</p>";
+
+/** \brief Constructor. Should call initialize() after */
 tkAboutDialog::tkAboutDialog( QWidget *parent ) :
         QDialog(parent)
 {
@@ -223,7 +235,6 @@ tkAboutDialog::tkAboutDialog( QWidget *parent ) :
 //    setWindowTitle( qApp->applicationName() );
 }
 
-
 tkAboutDialogPrivate::tkAboutDialogPrivate( QObject * parent )
          : QObject( parent ), m_Parent( 0 )
 {
@@ -231,6 +242,14 @@ tkAboutDialogPrivate::tkAboutDialogPrivate( QObject * parent )
     setObjectName( "tkAboutDialogPrivate" );
 }
 
+/**
+  \brief Initialize about dialog.
+  All that is done :
+  \li setup the ui
+  \li setup the window title
+  \li prepare compilation date and time
+  \li prepare the tab widget
+*/
 void tkAboutDialogPrivate::initialize()
 {
     setupUi(m_Parent);
@@ -241,11 +260,13 @@ void tkAboutDialogPrivate::initialize()
     m_TeamText = "\n\n\n\n";
 }
 
+/** \brief Defines the test to show on the first page of the about dialog */
 void tkAboutDialog::setAboutText( const QString &htmlOrPlainText )
 {
     d->aboutLabel->setText( htmlOrPlainText );
 }
 
+/** \brief Add a team list */
 void tkAboutDialog::addTeamList( const QString &title, const QList<tkAboutDatas> &list )
 {
    QString tmp;
@@ -262,22 +283,61 @@ void tkAboutDialog::addTeamList( const QString &title, const QList<tkAboutDatas>
     d->teamWidget->setTimerDelay( 45 );
 }
 
+/** \brief Defines the licence terms to show on the about dialog tab. */
 void tkAboutDialog::setLicense( const QString &html )
 {
     d->licenseTextBrowser->setHtml(html);
 }
 
+/** \brief Defines the licence terms to show on the about dialog tab according to the enumerator \e AvailableLicense. */
 void tkAboutDialog::setLicense( AvailableLicense licence )
 {
+    QString locale = QLocale().name().left(2);
     switch (licence)
     {
         case LGPL :  d->licenseLabel->setText(tr("LGPL"));         d->licenseTextBrowser->setHtml(LGPL_EN);   break;
-        case BSD :   d->licenseLabel->setText(tr("BSD"));           d->licenseTextBrowser->setHtml(BSD_EN);   break;
+        case BSD :
+        {
+            d->licenseLabel->setText(tr("BSD"));
+            if (locale=="en")
+                d->licenseTextBrowser->setHtml(BSD_EN);
+            else if (locale=="fr")
+                d->licenseTextBrowser->setHtml(BSD_FR);
+            break;
+        }
         case GPLv3 : d->licenseLabel->setText(tr("GPL v3"));       d->licenseTextBrowser->setHtml(GPLv3_EN);  break;
         default :    d->licenseLabel->setText(tr("LGPL"));         d->licenseTextBrowser->setHtml(LGPL_EN); break;
     }
 }
 
+/** \brief Returns the terms of the \e license. */
+QString tkAboutDialog::getLicenseText(AvailableLicense license)
+{
+    QString locale = QLocale().name().left(2);
+    switch (license)
+    {
+        case LGPL :
+        {
+//            if (locale=="en")
+                return LGPL_EN;
+//            else if (locale=="fr")
+//                return LGPL_FR;
+            break;
+        }
+        case BSD :
+        {
+            if (locale=="en")
+                return BSD_EN;
+            else if (locale=="fr")
+                return BSD_FR;
+            break;
+        }
+        default : return "License terms are not available."; break;
+    }
+    return QString();
+}
+
+/** \brieg Defines the copyright of the about dialog */
 void tkAboutDialog::setCopyright( const QString &years, const QString &names )
 {
     if (years.isEmpty() || names.isEmpty())
@@ -286,6 +346,7 @@ void tkAboutDialog::setCopyright( const QString &years, const QString &names )
     d->yearsLabel->setText(years);
 }
 
+/** \brief set application's name */
 void tkAboutDialog::setApplicationName(const QString &appName)
 {
     d->applicationNameLabel->setText( appName );

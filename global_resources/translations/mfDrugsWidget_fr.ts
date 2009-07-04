@@ -32,62 +32,62 @@
 <context>
     <name>diCore</name>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="251"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="253"/>
         <source>DrugInteractions using library : %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="229"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="232"/>
         <source>Starting application at %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="243"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="246"/>
         <source>Getting settings file...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="254"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="256"/>
         <source>Initializing Translations...</source>
         <translation>Initialise les traductions...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="265"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="267"/>
         <source>Initializing Default Parameters...</source>
         <translation>Initialise les paramètres par défaut...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="274"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="276"/>
         <source>Initializing Drugs database...</source>
         <translation>Initialise la base de données thérapeutiques...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="290"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="292"/>
         <source>Checking command line parameters...</source>
         <translation>Vérifie les paramètres de la ligne de commande...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="297"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="299"/>
         <source>Checking for updates...</source>
         <translation>Vérifie les mises à jour...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="304"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="306"/>
         <source>Raising Application...</source>
         <translation>Fait apparaître l&apos;application...</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="314"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="316"/>
         <source>%1 v%2 Ready !</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="305"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="307"/>
         <source>Trying to raise application</source>
         <translation>Essaie de mettre l&apos;application au premier plan</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diCore.cpp" line="318"/>
+        <location filename="../../drugsinteractions/diCore.cpp" line="320"/>
         <source>Core intialization finished...</source>
         <translation></translation>
     </message>
@@ -105,27 +105,27 @@
         <translation>Configurer MednTux</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="360"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="394"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture une prescription : ajouter ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="361"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="395"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Une prescription est déjà disponible dans l&apos;éditeur, voulez-vous remplacer cette prescription ou ajouter à cette prescription ?</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="362"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="396"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="362"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="396"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="363"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="397"/>
         <source>Open a prescription</source>
         <translation>Ouvrir une prescription</translation>
     </message>
@@ -265,15 +265,9 @@ Veuillez vous référer à la documentation.</translation>
 <context>
     <name>mfDosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="342"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="156"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="504"/>
-        <source>Clear this list</source>
-        <comment>Clear the user&apos;s intakes recorded forms</comment>
-        <translation>Effacer la liste</translation>
     </message>
     <message>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="14"/>
@@ -286,442 +280,66 @@ Veuillez vous référer à la documentation.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="60"/>
-        <source>Label</source>
-        <translation>Libellé</translation>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="73"/>
+        <source>Cancel this window, all changes will be lost.</source>
+        <translation>Annuler, toutes les modifications seront perdues.</translation>
     </message>
     <message>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="76"/>
-        <source>Basics</source>
-        <translation>Bases</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="135"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="288"/>
-        <source>From</source>
-        <translation>de</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="161"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="314"/>
-        <source>To</source>
-        <translation>à</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="359"/>
-        <source>Schemes</source>
-        <translation>schémas</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="491"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="511"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="496"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="516"/>
-        <source>2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="501"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="521"/>
-        <source>3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="506"/>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="526"/>
-        <source>4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="531"/>
-        <source>5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="536"/>
-        <source>6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="541"/>
-        <source>7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="546"/>
-        <source>00</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="551"/>
-        <source>01</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="556"/>
-        <source>02</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="561"/>
-        <source>03</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="566"/>
-        <source>04</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="571"/>
-        <source>05</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="576"/>
-        <source>06</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="581"/>
-        <source>07</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="586"/>
-        <source>08</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="591"/>
-        <source>09</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="596"/>
-        <source>10</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="601"/>
-        <source>11</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="606"/>
-        <source>12</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="611"/>
-        <source>13</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="616"/>
-        <source>14</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="621"/>
-        <source>15</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="626"/>
-        <source>16</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="631"/>
-        <source>17</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="636"/>
-        <source>18</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="641"/>
-        <source>19</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="646"/>
-        <source>20</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="651"/>
-        <source>21</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="656"/>
-        <source>22</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="661"/>
-        <source>23</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1130"/>
-        <source>Cancel this window, all changes will be lost.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1133"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1140"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="83"/>
         <source>The dosage will be used for your actual prescription,&lt;br /&gt; and it will be saved in your dosage database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette posologie sera utilisée dans votre actuelle prescription,&lt;br&gt; et sera sauvegardée en base.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1143"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="86"/>
         <source>Save and prescribe</source>
         <translation>Sauvegarder et prescrire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1150"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="93"/>
         <source>The dosage will be saved in your dosage databse, &lt;br /&gt;no cahnges will be done to your actual prescription.</source>
-        <translation type="unfinished"></translation>
+        <translation>La posologie sera sauvegardée dans la base, &lt;br /&gt; aucun changement ne sera effectué sur votre prescription actuelle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1153"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="96"/>
         <source>Save changes</source>
         <translation>Sauvegarder les modifications</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1160"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="103"/>
         <source>The dosage will be used for your actual prescription,&lt;br /&gt; but will not be saved in your dosage database.</source>
-        <translation type="unfinished"></translation>
+        <translation>La posologie sera utilisée pour votre prescription, &lt;br/&gt; mais ne sera sauvegardée dans la base.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1163"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="106"/>
         <source>Only prescribe</source>
         <translation>Prescrire seulement</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="391"/>
-        <source>Min interval between intakes</source>
-        <translation>Intervalle minimum entre deux prises</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="699"/>
-        <source>Limits</source>
-        <translation>Limites</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="711"/>
-        <source>Weight / Age / Sex Limited</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="787"/>
-        <source>Min age</source>
-        <translation>Âge min</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="801"/>
-        <source>Min weight</source>
-        <translation>Poids Min</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="745"/>
-        <source>Kg</source>
-        <translation>Kg</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="808"/>
-        <source>Sex limited</source>
-        <translation>Limitation de genre</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="767"/>
-        <source>Man only</source>
-        <translation>Homme seulement</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="772"/>
-        <source>Woman only</source>
-        <translation>Femme seulement</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="794"/>
-        <source>Max age</source>
-        <translation>Âge max</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="827"/>
-        <source>Renal function limits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="897"/>
-        <source>Min clearance</source>
-        <translation>Clairance min</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="861"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="890"/>
-        <source>ml/min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="101"/>
-        <source>Dosage is valid for all drugs of this INN</source>
-        <translation>Ce dosage est valide pour toutes les presentations de la même DCI</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="108"/>
-        <source>Intakes</source>
-        <translation>Prises</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="120"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="273"/>
-        <source>From x To y</source>
-        <translation>De x À y</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="235"/>
-        <source>Each</source>
-        <translation>Tous les</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="261"/>
-        <source>Duration</source>
-        <translation>Durée</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="686"/>
-        <source>Meal time relation</source>
-        <translation>Relation avec le repas</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="762"/>
-        <source>No Sex limitation</source>
-        <translation>Pas de limite de genre</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="904"/>
-        <source>Max clearance</source>
-        <translation>Clairance max</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="914"/>
-        <source>Pregnancy / breast feeding</source>
-        <translation>Grossesse et allaitement</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="920"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="949"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="971"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1006"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1028"/>
-        <source>Work in progress</source>
-        <translation>Travail en cours</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="931"/>
-        <source>Links</source>
-        <translation>Liens</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="937"/>
-        <source>Links to CIM10 diagnosis</source>
-        <translation>Liens vers la CIM10</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="959"/>
-        <source>Links to eDRC diagnosis</source>
-        <translation>Lien vers l&apos;eDRC</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="982"/>
-        <source>Monitoring</source>
-        <translation>Surveillance</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="994"/>
-        <source>CIM10 Limitations</source>
-        <translation>Limitations CIM10</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1016"/>
-        <source>Biological monitoring</source>
-        <translation>Surveillance biologique</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1039"/>
-        <source>Todos</source>
-        <translation>À faire</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1057"/>
-        <source>Time modulation (one intake each)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1064"/>
-        <source>Don&apos;t specify the form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1071"/>
-        <source>INN prescription</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1084"/>
-        <source>Alternate with</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1091"/>
-        <source>For all drugs of this INN always use this drug as replacement</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="1099"/>
-        <source>Note</source>
-        <translation></translation>
     </message>
 </context>
 <context>
     <name>mfDosageCreatorDialogPrivate</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="149"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="94"/>
         <source>Dosage is not valid.</source>
         <translation>Dosage non valide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="151"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="169"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="96"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="117"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="163"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="111"/>
         <source>Dosage correctly saved to base</source>
         <translation>Posologie correctement sauvegardée dans la base</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="165"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="113"/>
         <source>SQL Error : Dosage can not be added to database : %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -851,189 +469,514 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>mfDosageModel</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="136"/>
-        <source>no physiologic limit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="137"/>
-        <source>infants</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="138"/>
-        <source>children</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="139"/>
-        <source>adult only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="140"/>
-        <source>no chronic renal failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="141"/>
-        <source>no chronic heaptic failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="142"/>
-        <source>weight limited</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="143"/>
-        <source>only for man</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="144"/>
-        <source>only for woman</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="148"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="134"/>
         <source>complet tab.</source>
         <translation>comprimé complet.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="149"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="135"/>
         <source>half tab.</source>
         <translation>demi-comprimé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="150"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="136"/>
         <source>quater tab.</source>
         <translation>quart de comprimé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="154"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="140"/>
         <source>dose per kilograms</source>
         <translation>dose par kilogrammes</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="155"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="141"/>
         <source>reference spoon</source>
         <translation>cuillère-mesure</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="156"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="142"/>
         <source>2.5 ml spoon</source>
         <translation>cuillère de 2,5 ml</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="157"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="143"/>
         <source>5 ml spoon</source>
         <translation>cuillère de 5ml</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="158"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="144"/>
         <source>puffs</source>
         <translation>bouffées</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="159"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="145"/>
         <source>dose</source>
         <translation>dose</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="160"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="146"/>
         <source>mouthwash</source>
         <translation>bain de bouche</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="161"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="147"/>
         <source>inhalation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="162"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="148"/>
         <source>application</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="163"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="149"/>
         <source>washing</source>
         <translation>lavement</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="164"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="150"/>
         <source>shampooing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="165"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="151"/>
         <source>eyewash</source>
         <translation>lavement oculaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="166"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="152"/>
         <source>instillation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="167"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="153"/>
         <source>pulverization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="172"/>
-        <source>usable during whole pregnancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="173"/>
-        <source>usable during the first quarter of pregnancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="174"/>
-        <source>usable during the second quarter of pregnancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="175"/>
-        <source>usable during the third quarter of pregnancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="176"/>
-        <source>usable during pregnancy with warnings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="177"/>
-        <source>not usable during pregnancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="324"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="302"/>
         <source>Model Error : unable to insert a row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="438"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="429"/>
         <source>The dosage must be labelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="441"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="432"/>
         <source>The intakes&apos; scheme must be defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="443"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="434"/>
         <source>The period&apos;s scheme must be defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="446"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDosageModel.cpp" line="437"/>
         <source>The duration&apos;s scheme must be defined.</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mfDosageViewer</name>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="352"/>
+        <source>Drug Dosage Creator</source>
+        <translation type="unfinished">Créateur de posologie</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="507"/>
+        <source>Clear this list</source>
+        <comment>Clear the user&apos;s intakes recorded forms</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="539"/>
+        <source>Linking to : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">Dialog</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="35"/>
+        <source>Label</source>
+        <translation type="unfinished">Libellé</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="51"/>
+        <source>Basics</source>
+        <translation type="unfinished">Bases</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="76"/>
+        <source>Intakes</source>
+        <translation type="unfinished">Prises</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="88"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="241"/>
+        <source>From x To y</source>
+        <translation type="unfinished">De x À y</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="103"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="256"/>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="129"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="282"/>
+        <source>To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="203"/>
+        <source>Each</source>
+        <translation type="unfinished">Tous les</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="229"/>
+        <source>Duration</source>
+        <translation type="unfinished">Durée</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="336"/>
+        <source>Dosage is valid for all drugs of this INN</source>
+        <translation type="unfinished">Ce dosage est valide pour toutes les presentations de la même DCI</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="344"/>
+        <source>Schemes</source>
+        <translation type="unfinished">schémas</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="376"/>
+        <source>Min interval between intakes</source>
+        <translation type="unfinished">Intervalle minimum entre deux prises</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="448"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="468"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="453"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="473"/>
+        <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="458"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="478"/>
+        <source>3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="463"/>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="483"/>
+        <source>4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="488"/>
+        <source>5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="493"/>
+        <source>6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="498"/>
+        <source>7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="503"/>
+        <source>00</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="508"/>
+        <source>01</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="513"/>
+        <source>02</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="518"/>
+        <source>03</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="523"/>
+        <source>04</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="528"/>
+        <source>05</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="533"/>
+        <source>06</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="538"/>
+        <source>07</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="543"/>
+        <source>08</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="548"/>
+        <source>09</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="553"/>
+        <source>10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="558"/>
+        <source>11</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="563"/>
+        <source>12</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="568"/>
+        <source>13</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="573"/>
+        <source>14</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="578"/>
+        <source>15</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="583"/>
+        <source>16</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="588"/>
+        <source>17</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="593"/>
+        <source>18</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="598"/>
+        <source>19</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="603"/>
+        <source>20</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="608"/>
+        <source>21</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="613"/>
+        <source>22</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="618"/>
+        <source>23</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="643"/>
+        <source>Meal time relation</source>
+        <translation type="unfinished">Relation avec le repas</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="656"/>
+        <source>Limits</source>
+        <translation type="unfinished">Limites</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="668"/>
+        <source>Weight / Age / Sex Limited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="702"/>
+        <source>Kg</source>
+        <translation type="unfinished">Kg</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="719"/>
+        <source>No Sex limitation</source>
+        <translation type="unfinished">Pas de limite de genre</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="724"/>
+        <source>Man only</source>
+        <translation type="unfinished">Homme seulement</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="729"/>
+        <source>Woman only</source>
+        <translation type="unfinished">Femme seulement</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="744"/>
+        <source>Min age</source>
+        <translation type="unfinished">Âge min</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="751"/>
+        <source>Max age</source>
+        <translation type="unfinished">Âge max</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="758"/>
+        <source>Min weight</source>
+        <translation type="unfinished">Poids Min</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="765"/>
+        <source>Sex limited</source>
+        <translation type="unfinished">Limitation de genre</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="784"/>
+        <source>Renal function limits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="818"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="847"/>
+        <source>ml/min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="854"/>
+        <source>Min clearance</source>
+        <translation type="unfinished">Clairance min</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="861"/>
+        <source>Max clearance</source>
+        <translation type="unfinished">Clairance max</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="871"/>
+        <source>Pregnancy / breast feeding</source>
+        <translation type="unfinished">Grossesse et allaitement</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="877"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="906"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="928"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="963"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="985"/>
+        <source>Work in progress</source>
+        <translation type="unfinished">Travail en cours</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="888"/>
+        <source>Links</source>
+        <translation type="unfinished">Liens</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="894"/>
+        <source>Links to CIM10 diagnosis</source>
+        <translation type="unfinished">Liens vers la CIM10</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="916"/>
+        <source>Links to eDRC diagnosis</source>
+        <translation type="unfinished">Lien vers l&apos;eDRC</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="939"/>
+        <source>Monitoring</source>
+        <translation type="unfinished">Surveillance</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="951"/>
+        <source>CIM10 Limitations</source>
+        <translation type="unfinished">Limitations CIM10</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="973"/>
+        <source>Biological monitoring</source>
+        <translation type="unfinished">Surveillance biologique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="996"/>
+        <source>Todos</source>
+        <translation type="unfinished">À faire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1014"/>
+        <source>Time modulation (one intake each)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1021"/>
+        <source>Don&apos;t specify the form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1028"/>
+        <source>INN prescription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1041"/>
+        <source>Alternate with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1048"/>
+        <source>For all drugs of this INN always use this drug as replacement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.ui" line="1056"/>
+        <source>Note</source>
+        <translation type="unfinished">Note</translation>
     </message>
 </context>
 <context>
@@ -1228,45 +1171,45 @@ Voulez-vous les transmettre ?</translation>
 <context>
     <name>mfDrugInteraction</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="123"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="143"/>
         <source>Take into account</source>
         <translation>A prendre en compte</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="125"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="145"/>
         <source>Discouraged</source>
         <translation>Déconseillée</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="127"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="147"/>
         <source>Contraindication</source>
         <translation>Contre-indiquée</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="129"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="149"/>
         <source>Precaution for use</source>
         <translation>Précaution d&apos;emploi</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="213"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="245"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="240"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="273"/>
         <source>Text information: </source>
         <translation>Texte d&apos;information :</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="218"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="250"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="245"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="278"/>
         <source>Text &apos;todo&apos;: </source>
         <translation>Texte pour la conduite à tenir :</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="227"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="259"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="254"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="287"/>
         <source>Interaction(s) Found : </source>
         <translation>Interaction(s) trouvée(s) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="131"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugInteraction.cpp" line="151"/>
         <source>Information</source>
         <translation></translation>
     </message>
@@ -1318,49 +1261,49 @@ Voulez-vous les transmettre ?</translation>
 <context>
     <name>mfDrugs</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="142"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="161"/>
         <source>Wrong table reference parameter in mfDrugs::setValue().</source>
         <translation>Mauvaise réference de table dans mfDrugs::setValue().</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="204"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="223"/>
         <source>Wrong table reference parameter in mfDrugs::value().</source>
         <translation>Mauvais paramètre de table dans mfDrugs::value().</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="391"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="433"/>
         <source>No INN found.</source>
         <translation>Aucune DCI trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="396"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="438"/>
         <source>No interaction class found.</source>
         <translation>Aucune classe d&apos;interaction trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="500"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="528"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="542"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="570"/>
         <source>from</source>
         <translation>de</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="502"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="530"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="544"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="572"/>
         <source>to</source>
         <translation>à</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="517"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="559"/>
         <source>and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="556"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="598"/>
         <source>each</source>
         <translation>tous les</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="558"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="600"/>
         <source>during</source>
         <translation>durant</translation>
     </message>
@@ -1368,17 +1311,17 @@ Voulez-vous les transmettre ?</translation>
 <context>
     <name>mfDrugsBase</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="212"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="211"/>
         <source>FATAL ERROR : SQLite driver is not available.</source>
         <translation>ERREUR FATALE : Le pilote SQLite n&apos;est pas disponible.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="232"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="231"/>
         <source>Searching databases into dir %1</source>
         <translation>Recherche les bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="274"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="273"/>
         <source>Trying to create empty database. 
 Location : %1 
 FileName: %2</source>
@@ -1387,23 +1330,23 @@ Localisation : %1
 Nom de fichier : %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="341"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="343"/>
         <source>Database %1 %2 correctly created</source>
         <translation>Base de données %1 %2 correctement créée</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="344"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="346"/>
         <source>ERROR : database can not be created %1 %2 %3</source>
         <translation>ERREUR : la base de données ne peut être créée %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="876"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="884"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="616"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="636"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="623"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="644"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : Mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
@@ -1411,27 +1354,27 @@ Nom de fichier : %2</translation>
 <context>
     <name>mfDrugsModel</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="180"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="184"/>
         <source>intakes</source>
         <translation>prises</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="183"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="187"/>
         <source>x %1 of %2</source>
         <translation>x %1 de %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="198"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="202"/>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="256"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="265"/>
         <source>No Inn founded</source>
         <translation>Pas de DCI retrouvée</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="276"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsModel.cpp" line="285"/>
         <source>No interactions founded</source>
         <translation>Pas d&apos;interactions retrouvées</translation>
     </message>

@@ -1,23 +1,33 @@
 version=0.0.7
 {
-    * Juin 2009
-    * Passage à la version 4.5.2 des librairies de Qt
-    * Amélioration du moteur de recherche d'interactions médicamenteuses (~deux fois plus rapide)
-    * Possibilité d'ajouter une prescription à une prescription en cours d'édition
-    * Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)
-    * Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine)
-    * Nouveaux repères pour les informations patients (WEIGHT, SIZE, DATEOFBIRTH)
-    * Amélioration des remplacements des repères : [texte à mettre avant si repere existe [REPERE] texte après]
-    * Amélioration de la sauvegarde des fichiers HTML (meilleure gestion de l'encodage)
-    * Possibilité de sauvegarder son entête et pied de page dans des fichiers HTML séparés
-    * Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
-    * Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
-    * Possibilité d'ajouter sans effort ses propres formes
-    * Gestion de la sécabilité
-    * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
-    * Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
-    * Transformation des librairies 'toolkit' en librairies dynamiques
-    * correction de bogues
+    * Juillet 2009
+    * Nouvelles fonctionnalités
+      * Prescription en DCI lorsque la DCI est connue
+      * Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
+      * Possibilité d'ajouter une prescription à une prescription en cours d'édition
+      * Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine, créatinine)
+      * Nouveaux repères pour les informations patients (WEIGHT, SIZE, DATEOFBIRTH, CLCR, CREATININ)
+      * Possibilité de sauvegarder son entête et pied de page dans des fichiers HTML séparés
+      * Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
+
+    * Modifications importantes :
+      * L'acceptation de la licence est maintenant obligatoire pour utiliser ce logiciel
+      * Amélioration des remplacements des repères : [texte à mettre avant si repere existe [REPERE] texte après]
+      * Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)
+      * Amélioration de la sauvegarde des fichiers HTML (meilleure gestion de l'encodage)
+      * Possibilité d'ajouter sans effort ses propres formes
+      * Gestion de la sécabilité des médicaments
+      * Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
+      * Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
+      * Préparation de la gestion de la physiologie du patient (poids, taille, clairance de la créatinine, allergies)
+
+    * Modifications techniques :
+      * Passage à la version 4.5.2 des librairies de Qt
+      * Amélioration du moteur de recherche d'interactions médicamenteuses (~ trois fois plus rapide)
+      * Forte amélioration de l'accès à la base de données des médicaments
+      * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
+      * Transformation des librairies 'toolkit' en librairies dynamiques
+      * correction de bogues
 }
 
 version=0.0.6

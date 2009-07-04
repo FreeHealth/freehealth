@@ -63,6 +63,7 @@
 #include <QDialogButtonBox>
 #include <QTextDocument>
 #include <QGridLayout>
+#include <QLabel>
 
 Q_TK_USING_CONSTANTS
 
@@ -491,6 +492,7 @@ const bool functionNotAvailableMessageBox( const QString &functionText )
     return true;
 }
 
+/** \brief Shows a full screen quick debug dialog that shows each string of the list inside a textbrowser */
 const void quickDebugDialog( const QStringList &texts)
 {
     QDialog *dlg = new QDialog();
@@ -506,12 +508,51 @@ const void quickDebugDialog( const QStringList &texts)
         grid->addWidget(f);
     }
     grid->addWidget(buttonBox);
-
     dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    setFullScreen(dlg,true);
     dlg->exec();
     delete buttonBox;
     delete dlg;
 }
+
+/** \brief Shows a default dialog with \e license terms and a small \e message. */
+bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::AvailableLicense license)
+{
+    QDialog dlg;
+    QGridLayout layout(&dlg);
+    QDialogButtonBox buttonBox(QDialogButtonBox::Yes | QDialogButtonBox::No);
+    QTextBrowser tbrowse(&dlg);
+    tbrowse.setReadOnly(true);
+    QLabel appname(&dlg);
+    if (qApp->applicationName().isEmpty()) {
+        dlg.setWindowTitle(QCoreApplication::translate("tkGlobal", "License agreement acceptation"));
+        appname.setText(QString("<b>%1</b>").arg(QCoreApplication::translate("tkGlobal", "License agreement acceptation")));
+    } else {
+        dlg.setWindowTitle(qApp->applicationName());
+        appname.setText(QString("<b>%1</b>").arg(qApp->applicationName()));
+    }
+    appname.setAlignment(Qt::AlignCenter);
+    QLabel centered(QCoreApplication::translate("tkGlobal", "<b>Before you can use this software, you must agree its license terms</b>"));
+    centered.setAlignment(Qt::AlignCenter);
+    tbrowse.setText( tkAboutDialog::getLicenseText(license) );
+    QLabel question(QCoreApplication::translate("tkGlobal", "Do you agree these terms ?"));
+    layout.addWidget(&appname);
+    if (!message.isEmpty()) {
+        QLabel msg(message,&dlg);
+        layout.addWidget(&msg);
+    }
+    layout.addWidget(&centered);
+    layout.addWidget(&tbrowse);
+    layout.addWidget(&question);
+    layout.addWidget(&buttonBox);
+    dlg.connect(&buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()));
+    dlg.connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
+    if (dlg.exec()==QDialog::Accepted)
+        return true;
+    return false;
+}
+
+
 /** \brief Creates a Dialog for simple user's input.  **/
 const QString askUser( const QString &title, const QString &question )
 {

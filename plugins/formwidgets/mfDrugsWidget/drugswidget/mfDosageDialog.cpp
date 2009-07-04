@@ -69,6 +69,18 @@ using namespace mfInteractionsConstants;
 Q_TK_USING_CONSTANTS
 Q_TK_USING_TRANSLATIONS
 
+class mfDosageDialogPrivate
+{
+public:
+    mfDosageDialogPrivate() : m_DosageModel(0), m_CIS(-1), m_UserFormButtonPopup(0) {}
+
+    mfDosageModel      *m_DosageModel;
+    QString             m_ActualDosageUuid;
+    int m_CIS, m_DosageRow;
+    QMenu *m_UserFormButtonPopup;
+};
+
+
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
 */
@@ -82,208 +94,72 @@ Q_TK_USING_TRANSLATIONS
   \param drugRow : row of the drug inside the actual model \todo Change to QPersistentModelIndex
   \param dosageRow : row of the dosage to use in the actual model \todo Change to QPersistentModelIndex
 */
-mfDosageDialog::mfDosageDialog( QWidget *parent, const int drugRow, const int dosageRow )
+mfDosageDialog::mfDosageDialog( QWidget *parent )
     : QDialog( parent ),
-    m_Mapper(0),
-    m_DosageModel(0),
-    m_DrugRow(drugRow),
-    m_DosageRow(dosageRow),
-    m_UserFormButtonPopup(0)
+    d(0)
 {
     setObjectName( "mfDosageDialog" );
+    d = new mfDosageDialogPrivate();
     setupUi(this);
+    innButton->setIcon( tkTheme::icon(MFDRUGS_ICONSEARCHDCI));
     setWindowTitle( tr( "Drug Dosage" ) + " - " + qApp->applicationName() );
-
-    // hide what should be hidden , set some icons
-    dosageSelectorLabel->hide();
-    dosageSelectorCombo->hide();
-    but_ModifyDosage->hide();
-    but_CreateDosage->hide();
-    userformsButton->setIcon( tkTheme::icon(ICONEDIT) );
-
-    // Prepare some combos
-    durationCombo->clear();
-    durationCombo->addItems( periods() );
-    durationCombo->setCurrentIndex( Time::Months );
-    periodSchemeCombo->clear();
-    periodSchemeCombo->addItems( periods() );
-    periodSchemeCombo->setCurrentIndex( Time::Days );
-    mealTimeCombo->clear();
-    mealTimeCombo->addItems( mealTime() );
-
-    // Prepare dailyScheme
-    tkStringListModel * stringModel = new tkStringListModel( this );
-    stringModel->setStringList( dailySchemeList() );
-    stringModel->setCheckable(true);
-    dailySchemeListView->setModel( stringModel );
-    dailySchemeListView->hideButtons();
-    dailySchemeListView->useContextMenu(false);
-
-    // Prepare mapper
-    m_Mapper = new QDataWidgetMapper(this);
-    m_Mapper->setModel( mfDrugsModel::instance() );
-    m_Mapper->addMapping( intakesFromSpin, Prescription::IntakesFrom, "value" );
-    m_Mapper->addMapping( intakesToSpin, Prescription::IntakesTo, "value" );
-    m_Mapper->addMapping( durationFromSpin, Prescription::DurationFrom, "value" );
-    m_Mapper->addMapping( durationToSpin, Prescription::DurationTo, "value" );
-    m_Mapper->addMapping( intakesCombo, Prescription::IntakesScheme, "currentText" );
-    m_Mapper->addMapping( durationCombo, Prescription::DurationScheme, "currentText" );
-    m_Mapper->addMapping( periodSpin, Prescription::Period, "value" );
-    m_Mapper->addMapping( periodSchemeCombo, Prescription::PeriodScheme, "currentText" );
-    m_Mapper->addMapping( mealTimeCombo, Prescription::MealTimeSchemeIndex, "currentIndex" );
-    m_Mapper->addMapping( noteTxtEdit, Prescription::Note, "plainText" );
-    m_Mapper->addMapping( dailySchemeListView, Prescription::DailyScheme, "checkedStringList" );
-    m_Mapper->setSubmitPolicy( QDataWidgetMapper::AutoSubmit );
 
     // make connections
     connect( mfDrugsModel::instance(), SIGNAL(prescriptionResultChanged(const QString &)),
              resultTextBrowser, SLOT(setPlainText(const QString &)));
-    changeRow( drugRow, dosageRow );
 }
 
 /** \brief Destructor, frees mapper */
 mfDosageDialog::~mfDosageDialog()
 {
-    m_Mapper->clearMapping();
+    if (d) delete d; d=0;
 }
 
 /**
   \brief Change the current row of the drug model
   \todo Manage dosagemodel
 */
-void mfDosageDialog::changeRow( const int drugRow, const int dosageRow )
+void mfDosageDialog::changeRow( const int CIS, const int dosageRow )
 {
-    m_DrugRow = drugRow;
-    m_DosageRow = dosageRow;
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    //    m_DosageModel = drugM->dosageModel( mfDrugsModel::instance()->index(drugRow, Drug::CIS).data().toInt() );
+    Q_ASSERT(mfDrugsModel::instance()->containsDrug(CIS));
+    d->m_CIS = CIS;
+    d->m_DosageRow = dosageRow;
+    mfDrugsModel *m = mfDrugsModel::instance();
+    dosageViewer->useDrugsModel(CIS, dosageRow);
+    innButton->setChecked(m->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
 
     // retreive drug informations before drugmodel changes
-    QString name = drugM->index( drugRow, Drug::Denomination).data().toString();
-    drugNameButton->setText( name.left( name.lastIndexOf(",") ) );
-    QString toolTip = drugM->index( drugRow, Interaction::ToolTip ).data().toString();
+    QString name = m->drugData(CIS, Drug::Denomination).toString();
+    drugNameButton->setText(name.left( name.lastIndexOf(",")));
+    QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
     iconInteractionLabel->setToolTip( toolTip );
-    iconInteractionLabel->setPixmap( drugM->index( drugRow, Interaction::Icon ).data().value<QIcon>().pixmap(16,16) );
-    toolTip = drugM->index( drugRow , Drug::CompositionString ).data().toString();
+    iconInteractionLabel->setPixmap( m->drugData(CIS, Interaction::Icon ).value<QIcon>().pixmap(16,16) );
+    toolTip = m->drugData(CIS, Drug::CompositionString ).toString();
     drugNameButton->setToolTip( toolTip );
-    toogleInnButton->setEnabled( drugM->index( drugRow , Drug::AllInnsKnown ).data().toBool() );
-
-    tabWidget->setCurrentWidget(tabIntakes);
-    intakesCombo->clear();
-    intakesCombo->addItems( drugM->index( m_DrugRow, Drug::AvailableForms ).data().toStringList() );
-    periodSpin->setValue(1);
-    noteTxtEdit->clear();
-
-    if (!drugM->index( m_DrugRow, Drug::HasPrescription ).data().toBool())
-        createDefaultDosage();
-    m_Mapper->setCurrentIndex(m_DrugRow);
-    QString tmp = drugM->index(m_DrugRow, Prescription::DurationScheme).data().toString();
-    int id = periods().indexOf(tmp);
-    if (id-=-1)
-        durationCombo->setCurrentIndex(id-1);
-    else {
-        durationCombo->setCurrentIndex(Time::Months);
-        durationCombo->setEditText(tmp);
-    }
-    tmp = drugM->index(m_DrugRow, Prescription::PeriodScheme).data().toString();
-    id = periods().indexOf(tmp);
-    if (id-=-1)
-        periodSchemeCombo->setCurrentIndex(id-1);
-    else {
-        periodSchemeCombo->setCurrentIndex(Time::Days);
-        periodSchemeCombo->setEditText(tmp);
-    }
-
-    modelToCheckBoxes();
-    checkScoreDrug();
+    innButton->setEnabled( m->drugData(CIS, Drug::AllInnsKnown ).toBool() );
 }
 
-/** \brief Transform some datas of the model to checkBoxes */
-void mfDosageDialog::modelToCheckBoxes()
-{
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    if (drugM->index( m_DrugRow, Prescription::IntakesUsesFromAndTo).data().toBool()) {
-        fromToIntakesCheck->setCheckState( Qt::Checked );
-        intakesFromLabel->show();
-        intakesToLabel->show();
-        intakesToSpin->show();
-    } else {
-        fromToIntakesCheck->setCheckState( Qt::Unchecked );
-        intakesFromLabel->hide();
-        intakesToLabel->hide();
-        intakesToSpin->hide();
-    }
-    if (drugM->index( m_DrugRow, Prescription::DurationUsesFromAndTo).data().toBool()) {
-        fromToDurationCheck->setCheckState( Qt::Checked );
-        durationFromLabel->show();
-        durationToLabel->show();
-        durationToSpin->show();
-    } else {
-        fromToDurationCheck->setCheckState( Qt::Unchecked );
-        durationFromLabel->hide();
-        durationToLabel->hide();
-        durationToSpin->hide();        
-    }
-
-    if (drugM->index( m_DrugRow, Prescription::IsINNPrescription).data().toBool())
-        INNCheck->setCheckState( Qt::Checked );
-    else
-        INNCheck->setCheckState( Qt::Unchecked );
-    if (drugM->index( m_DrugRow, Prescription::IsALD).data().toBool())
-        ALDCheck->setCheckState( Qt::Checked );
-    else
-        ALDCheck->setCheckState( Qt::Unchecked );
-    if (!drugM->index( m_DrugRow, Prescription::SpecifyForm).data().toBool())
-        noFormCheck->setCheckState( Qt::Checked );
-    else
-        noFormCheck->setCheckState( Qt::Unchecked );
-    if (!drugM->index( m_DrugRow, Prescription::SpecifyPresentation).data().toBool())
-        noPresentationCheck->setCheckState( Qt::Checked );
-    else
-        noPresentationCheck->setCheckState( Qt::Unchecked );
-}
-
-/** \brief Check if drug is scorable. Adapt min and max values of intakes spins */
-void mfDosageDialog::checkScoreDrug()
-{
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    if (drugM->index(m_DrugRow, Drug::IsScoredTablet).data().toBool()) {
-        // Score
-        intakesFromSpin->setMinimum(0.25);
-        intakesFromSpin->setSingleStep(0.25);
-        intakesToSpin->setMinimum(0.25);
-        intakesToSpin->setSingleStep(0.25);
-    } else {
-        // Not score
-        intakesFromSpin->setMinimum(1);
-        intakesFromSpin->setSingleStep(1);
-        intakesToSpin->setMinimum(1);
-        intakesToSpin->setSingleStep(1);
-    }
-}
-
-
-/** \brief Creates an empty default dosage inside the model. The Ui should be updated with the mapper. */
-void mfDosageDialog::createDefaultDosage()
-{
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesFrom), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesTo), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesUsesFromAndTo), false );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationFrom), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationTo), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationUsesFromAndTo), false );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesScheme), intakesCombo->itemText(0) );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationScheme), period(Time::Months));
-    drugM->setData( drugM->index( m_DrugRow, Prescription::Period), 1 );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::PeriodScheme), period(Time::Days) );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::MealTimeSchemeIndex), QVariant() );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::Note), QVariant() );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IsINNPrescription), false );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::SpecifyForm), true );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::SpecifyPresentation), true );
-    drugM->setData( drugM->index( m_DrugRow, Prescription::IsALD), false );
-}
+///** \brief Creates an empty default dosage inside the model. The Ui should be updated with the mapper. */
+//void mfDosageDialog::createDefaultDosage()
+//{
+//    mfDrugsModel *drugM = mfDrugsModel::instance();
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesFrom), 1 );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesTo), 1 );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesUsesFromTo), false );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationFrom), 1 );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationTo), 1 );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationUsesFromTo), false );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IntakesScheme), intakesCombo->itemText(0) );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::DurationScheme), period(Time::Months));
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::Period), 1 );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::PeriodScheme), period(Time::Days) );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::MealTimeSchemeIndex), QVariant() );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::Note), QVariant() );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IsINNPrescription), false );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::SpecifyForm), true );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::SpecifyPresentation), true );
+//    drugM->setData( drugM->index( m_DrugRow, Prescription::IsALD), false );
+//}
 
 /**
   \brief Closes the dialog.
@@ -292,132 +168,138 @@ void mfDosageDialog::createDefaultDosage()
 */
 void mfDosageDialog::done( int r )
 {
-    if ( r == QDialog::Accepted ) {
-        // test intakes forms
-        const QStringList &pre = mfDosageModel::predeterminedForms();
-        const QStringList &av  = mfDrugsModel::instance()->index(m_DrugRow,Drug::AvailableForms).data().toStringList();
-        if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
-            ( av.indexOf(intakesCombo->currentText()) == -1 )) {
-            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
-        }
-    }
+//    if ( r == QDialog::Accepted ) {
+//        // test intakes forms
+//        const QStringList &pre = mfDosageModel::predeterminedForms();
+//        const QStringList &av  = mfDrugsModel::instance()->drugData(CIS,Drug::AvailableForms).toStringList();
+//        if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
+//            ( av.indexOf(intakesCombo->currentText()) == -1 )) {
+//            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
+//        }
+//    }
     QDialog::done(r);
 }
 
-void mfDosageDialog::availableDosages_activated( const QModelIndex & item )
-{
-    // change current index of mapper
-    int row = item.row();
-    if ( m_ActualDosageUuid == m_DosageModel->index( row, Dosage::Uuid ).data().toString() ) {
-        return;
-    } else {
-        m_ActualDosageUuid = m_DosageModel->index( row, Dosage::Uuid ).data().toString();
-        m_DosageRow = row;
-    }
-    // prepare ui before changing the view
-    //    if (stackedWidget->currentWidget() == dosageCreatorWidget ) {
-    //        prepareMapperDosageCreator( row );
-    //    } else {
-    //        preparePrescriptionWidget();
-    //    }
-}
-
-void mfDosageDialog::setPrescriptionState( const int index, const int qtCheckState )
-{
-    mfDrugsModel *drugM = mfDrugsModel::instance();
-    if (qtCheckState==Qt::Checked)
-        drugM->setData( drugM->index( m_DrugRow, index), true );
-    else
-        drugM->setData( drugM->index( m_DrugRow, index), false );
-}
+//void mfDosageDialog::availableDosages_activated( const QModelIndex & item )
+//{
+//    // change current index of mapper
+//    int row = item.row();
+//    if ( m_ActualDosageUuid == m_DosageModel->index( row, Dosage::Uuid ).data().toString() ) {
+//        return;
+//    } else {
+//        m_ActualDosageUuid = m_DosageModel->index( row, Dosage::Uuid ).data().toString();
+//        m_DosageRow = row;
+//    }
+//    // prepare ui before changing the view
+//    //    if (stackedWidget->currentWidget() == dosageCreatorWidget ) {
+//    //        prepareMapperDosageCreator( row );
+//    //    } else {
+//    //        preparePrescriptionWidget();
+//    //    }
+//}
+//
+//void mfDosageDialog::setPrescriptionState( const int index, const int qtCheckState )
+//{
+//    mfDrugsModel *drugM = mfDrugsModel::instance();
+//    if (qtCheckState==Qt::Checked)
+//        drugM->setData( drugM->index( m_DrugRow, index), true );
+//    else
+//        drugM->setData( drugM->index( m_DrugRow, index), false );
+//}
 
 /** \brief Show the information dialog for the drug */
 void mfDosageDialog::on_drugNameButton_clicked()
 {
-    mfDrugInfo dialog( m_DrugRow, this );
+    mfDrugInfo dialog(d->m_CIS, this );
     dialog.exec();
 }
 
-void mfDosageDialog::on_fromToIntakesCheck_stateChanged( int state )
-{
-    setPrescriptionState( Prescription::IntakesUsesFromAndTo, state );
-}
-
-void mfDosageDialog::on_fromToDurationCheck_stateChanged( int state )
-{
-    setPrescriptionState( Prescription::DurationUsesFromAndTo, state );
-}
-
-void mfDosageDialog::on_ALDCheck_stateChanged( int state )
-{
-    setPrescriptionState( Prescription::IsALD, state );
-}
-
-void mfDosageDialog::on_INNCheck_stateChanged( int state )
-{
-    setPrescriptionState( Prescription::IsINNPrescription, state );
-}
-
-void mfDosageDialog::on_noFormCheck_stateChanged( int state )
-{
-    if (state==Qt::Checked)
-        setPrescriptionState( Prescription::SpecifyForm, Qt::Unchecked );
-    else
-        setPrescriptionState( Prescription::SpecifyForm, Qt::Checked );
-}
-
-void mfDosageDialog::on_noPresentationCheck_stateChanged( int state )
-{
-    if (state==Qt::Checked)
-        setPrescriptionState( Prescription::SpecifyPresentation, Qt::Unchecked );
-    else
-        setPrescriptionState( Prescription::SpecifyPresentation, Qt::Checked );
-}
-
-void mfDosageDialog::on_intakesFromSpin_valueChanged( double d  )
-{
-    if (intakesToSpin->value() < d) {
-        intakesToSpin->setValue( d );
-    }
-    intakesToSpin->setMinimum(d);
-}
-
-void mfDosageDialog::on_durationFromSpin_valueChanged( double d  )
-{
-    if (durationToSpin->value() < d) {
-        durationToSpin->setValue( d );
-    }
-    durationToSpin->setMinimum(d);
-}
-
-/** \brief Show a menu with the user recorded forms */
-void mfDosageDialog::on_userformsButton_clicked()
-{
-    if (tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).isNull())
-        return;
-
-    const QStringList &ulist = tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
-    QList<QAction*> list;
-    foreach( const QString &form, ulist ) {
-        if (!form.isEmpty())
-            list << new QAction(form, this);
-    }
-    QAction *aclear = new QAction(tr("Clear this list", "Clear the user's intakes recorded forms"), this);
-    list << aclear;
-
-    QAction *a = QMenu::exec(list, userformsButton->mapToGlobal(QPoint(0,20)) );
-    if (!a)
-        return;
-    if (a == aclear) {
-        tkSettings::instance()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
-    } else {
-        intakesCombo->setEditText( a->text() );
-    }
-}
+//void mfDosageDialog::on_fromToIntakesCheck_stateChanged( int state )
+//{
+//    setPrescriptionState( Prescription::IntakesUsesFromTo, state );
+//}
+//
+//void mfDosageDialog::on_fromToDurationCheck_stateChanged( int state )
+//{
+//    setPrescriptionState( Prescription::DurationUsesFromTo, state );
+//}
+//
+//void mfDosageDialog::on_ALDCheck_stateChanged( int state )
+//{
+//    setPrescriptionState( Prescription::IsALD, state );
+//}
+//
+//void mfDosageDialog::on_INNCheck_stateChanged( int state )
+//{
+//    setPrescriptionState( Prescription::IsINNPrescription, state );
+//}
+//
+//void mfDosageDialog::on_noFormCheck_stateChanged( int state )
+//{
+//    if (state==Qt::Checked)
+//        setPrescriptionState( Prescription::SpecifyForm, Qt::Unchecked );
+//    else
+//        setPrescriptionState( Prescription::SpecifyForm, Qt::Checked );
+//}
+//
+//void mfDosageDialog::on_noPresentationCheck_stateChanged( int state )
+//{
+//    if (state==Qt::Checked)
+//        setPrescriptionState( Prescription::SpecifyPresentation, Qt::Unchecked );
+//    else
+//        setPrescriptionState( Prescription::SpecifyPresentation, Qt::Checked );
+//}
+//
+//void mfDosageDialog::on_intakesFromSpin_valueChanged( double d  )
+//{
+//    if (intakesToSpin->value() < d) {
+//        intakesToSpin->setValue( d );
+//    }
+//    intakesToSpin->setMinimum(d);
+//}
+//
+//void mfDosageDialog::on_durationFromSpin_valueChanged( double d  )
+//{
+//    if (durationToSpin->value() < d) {
+//        durationToSpin->setValue( d );
+//    }
+//    durationToSpin->setMinimum(d);
+//}
+//
+///** \brief Show a menu with the user recorded forms */
+//void mfDosageDialog::on_userformsButton_clicked()
+//{
+//    if (tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).isNull())
+//        return;
+//
+//    const QStringList &ulist = tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
+//    QList<QAction*> list;
+//    foreach( const QString &form, ulist ) {
+//        if (!form.isEmpty())
+//            list << new QAction(form, this);
+//    }
+//    QAction *aclear = new QAction(tr("Clear this list", "Clear the user's intakes recorded forms"), this);
+//    list << aclear;
+//
+//    QAction *a = QMenu::exec(list, userformsButton->mapToGlobal(QPoint(0,20)) );
+//    if (!a)
+//        return;
+//    if (a == aclear) {
+//        tkSettings::instance()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
+//    } else {
+//        intakesCombo->setEditText( a->text() );
+//    }
+//}
 
 /** \todo code this */
-void mfDosageDialog::on_toogleInnButton_clicked()
+void mfDosageDialog::on_innButton_clicked()
 {
-    // get from model the list of substituable drugs
-    // show inside a QMenu
+    mfDrugsModel *m = mfDrugsModel::instance();
+    m->setDrugData( d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
+    if (innButton->isChecked())
+        drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+    else {
+        QString name = m->drugData(d->m_CIS, Drug::Denomination).toString();
+        drugNameButton->setText(name.left( name.lastIndexOf(",")));
+    }
 }

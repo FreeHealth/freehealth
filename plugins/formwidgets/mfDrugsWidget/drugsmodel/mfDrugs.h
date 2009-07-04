@@ -55,30 +55,145 @@ class mfDrugsPrivate;
 #include <QStringList>
 #include <QDate>
 #include <QSet>
+#include <QDebug>
 
 /**
  * \file mfDrugs.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 12 May 2009
-*/
-
-/**
-  \brief This class owns the getters, setters and viewers of drugs.
-  For each drug, the datas are stored into QHash. The QHash are exact images of the database tables.
-  Three tables of the drugs database are used : CIS, COMPO and CIS_CIP.
-
-  The interactions are stored into specialized class : mfDrugInteraction.
-  The dosage of drugs are stored into : mfDrugDosage.
-
-  The drug class owns the list of all available dosages, see addDosage() and getDosages().
-
-  \todo Actually inside FMF and drugwidgetplugins mfDrugs are carried via a QList of pointers. This way we can not
-  use the operators with mfDrugs. May be we must redefine QList of pointers in QList of references ?
- \ingroup drugsinteractions drugswidget
+ * \version 0.0.15
+ * \date 03 July 2009
 */
 
 using namespace mfDrugsConstants;
+
+class mfDrugComposition
+{
+public:
+
+    mfDrugComposition() : m_InnCode(-1), m_LinkId(-1), m_Link(0) {}
+    ~mfDrugComposition() {} // Don't delete m_Link
+
+    /** \brief Feed values from the database */
+    void setValue(const int fieldref, const QVariant &value )
+    {
+        switch (fieldref)
+        {
+            case COMPO_NOM : m_Form = value.toString(); break;
+            case COMPO_DENOMINATION : m_MoleculeName = value.toString(); break;
+            case COMPO_CODE_SUBST : m_CodeMolecule = value.toInt(); break;
+            case COMPO_DOSAGE : m_Dosage = value.toString(); break;
+            case COMPO_REF_DOSAGE : m_RefDosage = value.toString(); break;
+            case COMPO_NATURE : m_Nature = value.toString(); break;
+            case COMPO_LK_NATURE: m_LinkId = value.toInt(); break;
+            case COMPO_IAM_DENOMINATION: m_InnName = value.toString(); break;
+            case COMPO_IAM_CLASS_DENOMINATION : m_IamClass = value.toStringList(); break;
+            default : break;
+        }
+    }
+
+    /** \brief Set the linked mfDrugComposition (this happens when a molecule is transform to another one which is the active one */
+    void setLinkedSubstance( mfDrugComposition *link )
+    {
+        Q_ASSERT(link);
+        m_Link = link;
+        link->m_Link = this;
+    }
+
+    void setInnCode(const int code)
+    {
+        m_InnCode = code;
+    }
+
+    int linkId() const
+    {
+        return m_LinkId;
+    }
+
+    /** \brief Test link relation with the \e link */
+    bool isLinkedWith( mfDrugComposition *link ) const
+    {
+        Q_ASSERT(link);
+        return (link==m_Link);
+    }
+
+    /** \brief Returns composition is the active substance ? */
+    bool isTheActiveSubstance() const
+    {
+        if (m_Nature=="FT")
+            return true;
+        if (!m_Link)
+            return true;
+        return (!m_Link->isTheActiveSubstance());  // take care to infinite looping...
+    }
+
+    /** \brief Return the INN of the molecule. Check the linked composition for the inn name. */
+    QString innName() const
+    {
+        if (this->isTheActiveSubstance())
+            return m_InnName;
+        else if (m_Link)
+                return m_Link->m_InnName; // avoid infinite loop by retreiving value directly not with the function of m_Link
+        return QString();
+    }
+
+
+    /** \brief Returns the iam classes names */
+    QStringList iamClasses() const
+    {
+        return m_IamClass;
+    }
+
+    /** \breif Return the dosage of the INN */
+    QString innDosage() const
+    {
+        QString tmp;
+        if (this->isTheActiveSubstance())
+            tmp = m_Dosage;
+        else if (m_Link)
+            tmp = m_Link->m_Dosage; // avoid infinite loop by retreiving value directly not with the function of m_Link
+        // do some transformations
+        if (!tmp.isEmpty()) {
+            tmp.replace(",00","");
+        }
+        // set the transformed dosage for the next call
+        m_Dosage = tmp;
+        return tmp;
+    }
+
+    /** \brief Return the dosage of the molecule */
+    QString dosage() const
+    {
+        return m_Dosage;
+    }
+
+    QString warnText() const
+    {
+        QString tmp;
+        tmp += "Composition : " + m_MoleculeName
+               + "\nForm : " + m_Form + "\ninn : " + m_InnName +  "\ndosage : " + m_Dosage
+               + "\nrefDosagase : " + m_RefDosage + "\nnature : " + m_Nature;
+        if (m_Link)
+            tmp += "\n Linked";
+        tmp += "\ninnName() : " + innName() + "\ninnDosage() : " + innDosage();
+        tmp += "\niamClasses() : " + iamClasses().join("; ");
+        return tmp + "\n";
+    }
+
+public:
+    QString m_MoleculeName;
+    QString m_InnName;
+    QStringList m_IamClass;
+    int m_CodeMolecule;
+    int m_InnCode;
+    QString m_Form;       // NOM
+    mutable QString m_Dosage;
+    QString m_RefDosage;
+    QString m_Nature;     // SA / FT
+    int m_LinkId;
+    mfDrugComposition *m_Link;
+};
+
+
 
 class mfDrugs : public QObject
 {
@@ -101,16 +216,17 @@ public:
      QString           form() const               { return value( Table_CIS, CIS_FORME ).toString(); }
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
-     QStringList       listOfMolecules() const    { return value( Table_COMPO, COMPO_DENOMINATION ).toStringList(); }
-     QVariant          listOfCodeMolecules() const{ return value( Table_COMPO, COMPO_CODE_SUBST ); }
+     QStringList       listOfMolecules() const;
+     QVariant          listOfCodeMolecules() const;
 
      QStringList       listOfInn() const;
-     QStringList       listOfInnWithPosology() const;
      int               numberOfInn() const        { return allInnAndIamClasses().count(); }
-     QStringList       listOfInnClasses() const   { return value( Table_COMPO, COMPO_IAM_CLASS_DENOMINATION ).toStringList(); }
-     QStringList       innEquivalentsFullNames() const;
-     void              setInnEquivalentsFullNames( const QStringList &list );
+     QStringList       listOfInnClasses() const;
      QSet<int>         allInnAndIamClasses() const;
+     int               mainInnCode() const;
+     QString           mainInnName() const;
+     QString           mainInnDosage() const;
+     QString           innComposition() const;
 
      QStringList       dosageOfMolecules() const;
      bool              hasPrescription() const;
@@ -126,7 +242,9 @@ public:
      // viewers
      QString toHtml() const;
      static QString drugsListToHtml( const QList<mfDrugs*> & list );
+
      void warn() const;
+     QString warnText() const;
      void smallDrugWarn() const;
 
      // sorters
@@ -137,6 +255,7 @@ protected:
      void setValue( const int tableref, const int fieldref, const QVariant & value );
      void addInnAndIamClasses( const QSet<int> &codes );
      void addCIP( const int CIP, const QString & denomination, QDate date = QDate() );
+     void addComposition( mfDrugComposition *compo );
 
      // getters
      QVariant value( const int tableref, const int fieldref ) const;

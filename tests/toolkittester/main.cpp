@@ -141,6 +141,11 @@ void test_Translations()
     qWarning() << tkTr(INTAKES, 0);
 }
 
+void test_dialogs()
+{
+    qWarning() << tkGlobal::defaultLicenceAgreementDialog("Smouky touky", tkAboutDialog::BSD);
+}
+
 int main(int argc, char *argv[])
 {
 //    Q_INIT_RESOURCE(toolkittester);
@@ -152,8 +157,9 @@ int main(int argc, char *argv[])
 //    test_QButtonLineEdit();
 //    text_Html();
 //    test_Xml();
-    test_Translations();
+//    test_Translations();
 //    test_tkPrinter();
+    test_dialogs();
     app.exec();
     return 0;
 }

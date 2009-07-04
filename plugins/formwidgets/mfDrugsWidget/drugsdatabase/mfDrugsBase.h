@@ -61,41 +61,8 @@ class mfDrugsBasePrivate;
 /**
  * \file mfDrugsBase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 13 March 2009
-*/
-
-/**
-  \brief This class owns the drugs and dosages database and interactions mechanism.
-
-  0. Terminology\n
-  \e Substances are the chimic molecules that compose a drug.\n
-  \e IamCode or \e INN are the INN codes and names.\n
-  \e IamClass are the classes that regroups INNs into classes of pharmaceutics family.\n
-  \e CIP : presentation code of a drug. A drug can be presented into different presentation (15 pills, 30 pills a box...).\n
-  \e CIS : speciality code of a drug. Everything is base on this code.
-     One CIS code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
-
-  1. Initialization\n
-  This class is pure static, so you can not instanciate it. To initialize datas, just do once : init().
-  isInitialized() alerts you of the state of intialization.
-  These two members returns true if all is ok.
-
-  2. Drugs retreiver\n
-  You can retreive drugs using CIS ou CIP code via getDrugByCIS() and getDrufByCIP().
-
-  3. Drugs Interactions\n
-  Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
-  getLastIAMFound() and getAllIAMFound().
-  You must always in first call interactions() with the list of drugs to test.
-  Then you can retreive interactions found using the other members.
-
-  4. Dosages retreiver / saver
-
-  \todo Manage user rights when creating dosage database
-
-  \sa mfDrugInteraction, mfDrugs, mfDrugsTables, mfDrugDosage
- \ingroup drugsinteractions drugswidget
+ * \version 0.0.14
+ * \date 03 July 2009
 */
 
 using namespace mfInteractionsConstants;
@@ -122,10 +89,14 @@ public:
     QList<int> getLinkedCodeSubst( QList<int> & code_iam );
     QList<int> getLinkedIamCode( QList<int> & code_subst );
     QList<int> getLinkedSubstCode( const QString & iamDenomination );
+    int        getInnCodeForCodeMolecule(const int code);
+
 
      mfDrugs * getDrugByCIP( const QVariant & CIP_id );
      mfDrugs * getDrugByCIS( const QVariant & CIS_id );
      int       getCISFromCIP( int CIP );
+     QString   getInnDenominationFromSubstanceCode( const int code_subst );
+     QString   getInnDenomination( const int inncode );
 
      void      logChronos( bool state );
 

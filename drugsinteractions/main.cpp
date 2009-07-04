@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
     tkLog::addMessages("Command Line", app.arguments());
 
     tkLog::addMessage( "Main", QCoreApplication::translate( "main", "Starting application : %1" ).arg( qApp->applicationName() ) );
-    diCore::init();
+    if (!diCore::init())
+        return 1;
     return app.exec();
 }
 

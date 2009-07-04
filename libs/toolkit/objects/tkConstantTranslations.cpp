@@ -214,12 +214,16 @@ QString mealTime(const int index)
     return QString();
 }
 
+
+//    m_Pregnancy =
+//            QStringList()
+//            << tr( "usable during whole pregnancy" )
+//            << tr( "usable during the first quarter of pregnancy" )
+//            << tr( "usable during the second quarter of pregnancy" )
+//            << tr( "usable during the third quarter of pregnancy" )
+//            << tr( "usable during pregnancy with warnings" )
+//            << tr( "not usable during pregnancy" );
+
 Q_TK_END_TRANSLATIONS
 
 
-// This function is "a fantom" used to define some plurials forms of translations
-// It is unused (so it's name)
-void unused()
-{
-    QCoreApplication::translate("tkConstants", "intake(s)","",QCoreApplication::UnicodeUTF8, 0);
-}
