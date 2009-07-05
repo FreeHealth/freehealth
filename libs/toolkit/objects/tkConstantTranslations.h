@@ -175,6 +175,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const CAN_NOT_RETURN_1_DOESNOT_EXISTS = QT_TRANSLATE_NOOP("tkConstants", "Can not return %1 : it does not exists");
         const char* const CAN_NOT_CREATE_1_NOPARENT  = QT_TRANSLATE_NOOP("tkConstants", "Can not create %1 : no parent founded");
         const char* const _1_ISNOT_AVAILABLE   = QT_TRANSLATE_NOOP("tkConstants", "%1 is not avaible");
+        const char* const _1_ISNOT_AVAILABLE_CANNOTBE_CREATED   = QT_TRANSLATE_NOOP("tkConstants", "%1 is not avaible and can not be created");
         const char* const _1_ARENOT_AVAILABLE  = QT_TRANSLATE_NOOP("tkConstants", "%1 are not avaible");
         const char* const PATH_1_DOESNOT_EXISTS  = QT_TRANSLATE_NOOP("tkConstants", "Path %1 does not exist");
         const char* const SETTING_1_PATH_TO_2 =   QT_TRANSLATE_NOOP("tkConstants", "Setting %1 path to %2");

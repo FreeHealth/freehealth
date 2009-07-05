@@ -4,18 +4,18 @@
 <context>
     <name>tkAboutDialog</name>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="274"/>
-        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="277"/>
+        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="298"/>
+        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="309"/>
         <source>LGPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="275"/>
+        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="301"/>
         <source>BSD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="276"/>
+        <location filename="../../libs/toolkit/widgets/tkAboutDialog.cpp" line="308"/>
         <source>GPL v3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -419,7 +419,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkActionManager.h" line="247"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="109"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="123"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -429,306 +429,302 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="110"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="124"/>
         <source>Print Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="111"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="125"/>
         <source>Translators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkActionManager.h" line="87"/>
         <location filename="../../libs/toolkit/objects/tkActionManager.h" line="238"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="112"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="126"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkActionManager.h" line="77"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="113"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="127"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="114"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="128"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="115"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="129"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="116"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="130"/>
         <source>Move up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="117"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="131"/>
         <source>Move down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="123"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="137"/>
         <source>second(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="124"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="138"/>
         <source>minute(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="125"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="139"/>
         <source>hour(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="126"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="140"/>
         <source>day(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="127"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="141"/>
         <source>week(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="128"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="142"/>
         <source>month(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="129"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="143"/>
         <source>quarter(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="130"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="144"/>
         <source>years(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="131"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="145"/>
         <source>decade(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="134"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="148"/>
         <source>wake up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="135"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="149"/>
         <source>morning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="136"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="150"/>
         <source>ten o&apos;clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="137"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="151"/>
         <source>afternoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="138"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="152"/>
         <source>tea time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="139"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="153"/>
         <source>evening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="140"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="154"/>
         <source>bedtime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="143"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="157"/>
         <source>no meal realation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="144"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="158"/>
         <source>during meal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="145"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="159"/>
         <source>after meal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="146"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="160"/>
         <source>before meal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="147"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="161"/>
         <source>not during meal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="150"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="164"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="151"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="165"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="152"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="166"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="153"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="167"/>
         <source>File %1 loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="154"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="168"/>
         <source>Message sended without error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="155"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="169"/>
         <source>An error occured, message was not sended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="156"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="170"/>
         <source>Informative message : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="157"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="171"/>
         <source>Starting task : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="158"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="172"/>
         <source>posting message to : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="159"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="173"/>
         <source>Error %1 occured while %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="160"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="174"/>
         <source>Can not create %1 : it already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="161"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="175"/>
         <source>Can not return %1 : it does not exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="162"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="176"/>
         <source>Can not create %1 : no parent founded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="163"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="177"/>
         <source>%1 is not avaible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="164"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="178"/>
         <source>%1 are not avaible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="165"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="179"/>
         <source>Path %1 does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="166"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="180"/>
         <source>Setting %1 path to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="167"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="181"/>
         <source>Checking for updates from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="168"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="182"/>
         <source>Version up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="169"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="183"/>
         <source>Current version :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="170"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="184"/>
         <source>Lastest version :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="171"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="185"/>
         <source>Update Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="172"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="186"/>
         <source>Error %1 from database %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="173"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="187"/>
         <source>Creating default settings for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="176"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="190"/>
         <source>Creator and Main Developper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="177"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="191"/>
         <source>Developpers and Contributors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="178"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="192"/>
         <source>Drugs Database Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="179"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="193"/>
         <source>Medical advisor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="182"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="196"/>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.cpp" line="224"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="120"/>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="134"/>
         <source>intake(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -923,95 +919,111 @@ Using Url : %1
 <context>
     <name>tkGlobal</name>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="174"/>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="176"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="175"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="177"/>
         <source>Error while retrieve informations of uname under %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="225"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="226"/>
         <source>%1 : %2 does not exist. Trying to create it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="228"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="229"/>
         <source>Unable to create the %1 : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="233"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="234"/>
         <source>%1 : %2 does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="255"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="256"/>
         <source>File %1 already exists. Do you want de replace it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="260"/>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="272"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="261"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="273"/>
         <source>Error %1 while trying to save file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="264"/>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="276"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="265"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="277"/>
         <source>%1 correctly saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="266"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="267"/>
         <source>Save file aborted by user (file already exists) : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="288"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="289"/>
         <source>Save to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="307"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="308"/>
         <source>File %1 does not exists or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="314"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="315"/>
         <source>Error %1 while trying to open file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="321"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="322"/>
         <source>%1 correctly read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="431"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="432"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="488"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="489"/>
         <source>This function is only available to identified users.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="489"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="490"/>
         <source>To get your identifier please connect to the web site : %1. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="545"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="528"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="529"/>
+        <source>License agreement acceptation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="535"/>
+        <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="538"/>
+        <source>Do you agree these terms ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="586"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="550"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="591"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="893"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="934"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>

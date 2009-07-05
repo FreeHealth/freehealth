@@ -57,6 +57,17 @@
 \verbatim
        MacOSX                                Linux/Win32
 
+       homeDir (/Users/name)                homeDir (/home/name)
+       |                                    |
+       `- .ApplicationName                   `- .ApplicationName
+        |                                     |
+        |- config.ini                         |- config.ini
+        |                                     |
+        `- databases                          `- databases
+         |                                     |
+         `- drugs (dosages)                    `- drugs (dosages)
+
+
        ApplicationName.app                   Application-Version
        |- Contents                           |
           |- MacOs                           |
@@ -197,6 +208,8 @@ tkSettings* tkSettings::m_Instance = 0;
 
 tkSettings* tkSettings::instance()
 {
+    if (!m_Instance)
+        m_Instance = new tkSettings();
     return m_Instance;
 }
 
@@ -206,6 +219,15 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
     setObjectName( "tkSetting" );
     QString resourcesPath;
     QString databasePath;
+    QString applicationName;
+    // if appName like "AppName - debug"  --> use "AppName" only
+    if (appName.isEmpty())
+        applicationName = qApp->applicationName();
+    else
+        applicationName = appName;
+    if (applicationName.contains(" "))
+        applicationName = applicationName.left(applicationName.indexOf(" "));
+
     setPath( ApplicationPath, qApp->applicationDirPath() );
     setPath( ApplicationTempPath, QDir::tempPath() );
     setPath( SystemTempPath, QDir::tempPath() );
@@ -217,8 +239,8 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
         QDir fmfBin( QDir::cleanPath( FMF_BIN_PATH ) );
         QString res = fmfBin.relativeFilePath( QDir::cleanPath( FMF_GLOBAL_RESOURCES ) );
         res = QDir::cleanPath( qApp->applicationDirPath() + QDir::separator() + res );
-        resourcesPath  = res + "/";
-        setPath( ResourcesPath, resourcesPath );
+        resourcesPath = res + "/";
+        setPath( ResourcesPath, QDir::homePath() + "/." + applicationName );//resourcesPath );
 
         if (tkGlobal::isRunningOnMac()) {
             setPath( BundleResourcesPath, resourcesPath );
@@ -235,15 +257,13 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
             setPath( BundleResourcesPath, qApp->applicationDirPath() );
         }
         d->m_FirstTime = value( "FirstTimeRunning", true ).toBool();
-        setPath( ResourcesPath, resourcesPath );
+        setPath( ResourcesPath,  + "/." + applicationName);//resourcesPath );
     }
 
     if (parent)
         setParent(parent);
     else
         setParent(qApp);
-
-    m_Instance = this;
 }
 
 tkSettings::~tkSettings()
@@ -270,7 +290,12 @@ void tkSettings::setPath( const int type, const QString & absPath )
         case ResourcesPath :
         {
             QString resourcesPath = QDir::cleanPath(absPath);
-            d->m_Enum_Path.insert( ReadWriteDatabasesPath, resourcesPath + "/databases" );
+            d->m_Enum_Path.insert( ResourcesPath, resourcesPath );
+            resourcesPath += "/databases";
+            d->m_Enum_Path.insert( ReadWriteDatabasesPath, resourcesPath );
+            if (!QDir(resourcesPath).exists())
+                if (!QDir().mkpath(resourcesPath))
+                    tkLog::addError("tkSettings", tkTr(_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath));
             break;
         }
         case BundleResourcesPath :
@@ -340,11 +365,14 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
     // manage defaults --> ".AppName/config.ini"
     QString tmpAppName = appName;
     QString tmpFileName = fileName;
-    if ( appName.isEmpty() )
+    if ( appName.isEmpty() ) {
         tmpAppName = qApp->applicationName();
+        if (tmpAppName.contains(" "))
+            tmpAppName = tmpAppName.left(tmpAppName.indexOf(" "));
+    }
     tmpAppName.prepend( "." );
 
-    if ( fileName.isEmpty() )
+    if (fileName.isEmpty())
         tmpFileName = "config.ini";
 
     // if QApplication args contains "--config=iniFileName.ini" use it if possible
@@ -383,34 +411,34 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
 
     // try to use 'config.ini' inside the bundle (ex : /usr/share/application/config.ini , appli.app/Resources/config.ini)
     QString iniFile;
-    if (tkGlobal::isRunningOnMac())
-        iniFile = QDir::cleanPath( qApp->applicationDirPath() + "/../Resources" ) + QDir::separator() + tmpFileName;
-    else
-        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
-
-    // test iniFile
-    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
-    QFile file( iniFile );
-    QFileInfo info( iniFile );
-    if ( info.exists() && info.isReadable() && info.isWritable() ) {
-        tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
-        return iniFile;
-    } else {
-        if ( ( ! info.exists() ) &&  file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
-            tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
-            return iniFile;
-        }
-        else tkLog::addError( "tkSetting", tr( "Ini file %1 can not be used." ).arg( iniFile) );
-    }
+//    if (tkGlobal::isRunningOnMac())
+//        iniFile = QDir::cleanPath( qApp->applicationDirPath() + "/../Resources" ) + QDir::separator() + tmpFileName;
+//    else
+//        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
+//
+//    // test iniFile
+//    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
+//    QFile file( iniFile );
+//    QFileInfo info( iniFile );
+//    if ( info.exists() && info.isReadable() && info.isWritable() ) {
+//        tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+//        return iniFile;
+//    } else {
+//        if ( ( ! info.exists() ) &&  file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
+//            tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+//            return iniFile;
+//        }
+//        else tkLog::addError( "tkSetting", tr( "Ini file %1 can not be used." ).arg( iniFile) );
+//    }
 
     // Now use the $HOME path
     iniFile = QString( "%1/%2/%3" ).arg( QDir::homePath(), tmpAppName, tmpFileName);
     tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
     QDir dir( QFileInfo( iniFile ).absolutePath() );
 
-    if ( ! dir.exists() ) {
+    if (!dir.exists()) {
         dir.cdUp();
-        if ( ! dir.mkdir( tmpAppName ) ) {
+        if (!dir.mkdir(tmpAppName)) {
             tkLog::addError( "tkSettings" , tr( "Unable to create dir : %1, no Ini File can be used.").arg( dir.absolutePath() + QDir::separator() + tmpAppName ) );
             return QString::null;
         }

@@ -270,7 +270,7 @@ bool mfDrugsBase::init()
      //  const QString & login = QString::null, const QString & pass = QString::null,
      //  CreationOption createOption = WarnOnly );
 
-     createConnection( DOSAGES_DATABASE_NAME, DOSAGES_DATABASE_FILENAME, pathToDb,
+     createConnection( DOSAGES_DATABASE_NAME, DOSAGES_DATABASE_FILENAME, tkSettings::instance()->path(tkSettings::ReadWriteDatabasesPath),
                        tkDatabase::ReadWrite, tkDatabase::SQLite, "log", "pas", tkDatabase::CreateDatabase);
 
      d->retreiveLinkTables();
