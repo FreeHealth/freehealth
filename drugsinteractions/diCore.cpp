@@ -92,6 +92,7 @@ namespace diCorePrivateConstants {
     const char* const  COMMANDLINE_CREATININ          = "--creatinin";
 //    const char* const  COMMANDLINE_  = "--";
 
+    const char* const  SETTINGS_COUNTDOWN             = "transmissionCountDown";
 }
 
 Q_TK_USING_CONSTANTS
@@ -133,6 +134,13 @@ public:
 //            m_Chrono = true;
     }
 
+    static bool transmitDosage()
+    {
+        tkLog::addMessage("diCore", QCoreApplication::translate("diCore", "Preparing dosage transmission"));
+        return true;
+    }
+
+public:
     // instances of object
     static QHash<const QMetaObject*, QObject*> mInstances;
     static bool isMedintuxPlugins;
@@ -170,9 +178,7 @@ void showMessage( QSplashScreen* s, const QString& m )
 /** \brief Returns the settings manager */
 tkSettings* diCore::settings()
 {
-    if ( !diCorePrivate::mInstances.contains( &tkSettings::staticMetaObject ) )
-        diCorePrivate::mInstances[&tkSettings::staticMetaObject] = new tkSettings( qApp );
-    return qobject_cast<tkSettings*>( diCorePrivate::mInstances[&tkSettings::staticMetaObject] );
+    return tkSettings::instance(qApp);
 }
 
 /** \brief Returns the mainwindow */
@@ -318,6 +324,15 @@ bool diCore::init()
         if (diCorePrivate::m_Chrono)
             tkLog::logTimeElapsed(chrono, "diCore", "medintux plugins preparation");
     }
+
+    // Update countdown to transmission
+    int count = settings()->value(SETTINGS_COUNTDOWN,0).toInt();
+    ++count;
+    if (count==30) {
+        settings()->setValue(SETTINGS_COUNTDOWN,0);
+        diCorePrivate::transmitDosage();
+    } else
+        settings()->setValue(SETTINGS_COUNTDOWN,count);
 
     // ready
     showMessage( &splash, QCoreApplication::translate( "diCore", "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );

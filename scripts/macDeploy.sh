@@ -63,6 +63,7 @@ APP_BIN="$BUNDLE/Contents/MacOS/`basename \"${APP_NAME}\"`"
 APP_PLUGINS_PATH="$BUNDLE/Contents/plugins"
 APP_QT_PLUGINS_PATH="$BUNDLE/Contents/plugins/qt"
 APP_FRAMEWORKS_PATH="$BUNDLE/Contents/Frameworks"
+APP_LIBS_PATH="$BUNDLE/Contents/libs"
 QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
 
 if [ ! -d "${BUNDLE}" ] ; then
@@ -77,6 +78,7 @@ fi
 
 echo "application: ${APP_NAME}"
 echo "bundle:      ${BUNDLE}"
+echo "libs path:   ${APP_LIBS_PATH}"
 echo
 
 ### functions ######################################################
@@ -162,24 +164,24 @@ setId()
 
 relinkPlugins()
 {
-	tmp_plugins=`find "${1}" | egrep ".dylib"`
-	
-	old_ifs="$IFS"
-	IFS=$'\n'
-	count=0
-	for plugin in $tmp_plugins ; do
-		plugins[$count]="${plugin}"
-		((count++))
-	done
-	IFS=$old_ifs
-	
-	count=${#plugins[@]}
-	for ((i=0;i<$count;i++));
-	do
-		plugin=${plugins[${i}]}
-		relinkBinary "$plugin"
-		echo
-	done
+        tmp_plugins=`find "${1}" | egrep ".dylib"`
+
+        old_ifs="$IFS"
+        IFS=$'\n'
+        count=0
+        for plugin in $tmp_plugins ; do
+                plugins[$count]="${plugin}"
+                ((count++))
+        done
+        IFS=$old_ifs
+
+        count=${#plugins[@]}
+        for ((i=0;i<$count;i++));
+        do
+                plugin=${plugins[${i}]}
+                relinkBinary "$plugin"
+                echo
+        done
 }
 
 makeInstall()
@@ -259,6 +261,9 @@ echo
 echo
 
 relinkPlugins "$APP_PLUGINS_PATH"
+echo
+
+relinkPlugins "$APP_LIBS_PATH"
 echo
 
 #echo "Striping `basename \"${APP_BIN}\"` binary..."

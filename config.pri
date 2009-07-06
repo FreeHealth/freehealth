@@ -53,7 +53,8 @@ CONFIG( debug, debug|release ) {
 } else {
   #Release
   message( Building $${PACKAGE_TARGET} in RELEASE )
-  RPATH_LIBS_BIN   = ../libs/
+  mac:RPATH_LIBS_BIN   = ../libs/
+  else:RPATH_LIBS_BIN   = libs/
   DEFINES   *= RELEASE \
                QT_NO_DEBUG_OUTPUT \
                QT_NO_WARNING_OUTPUT \

@@ -89,7 +89,7 @@ class mfDosageViewerPrivate
 {
 public:
     mfDosageViewerPrivate(mfDosageViewer *parent) :
-            m_Mapper(0), m_DosageModel(0), m_Parent(parent), m_CIS(-1) {}
+            m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_Parent(parent) {}
 
     void setCheckBoxStateToModel( const int index, const int qtCheckState )
     {
@@ -210,6 +210,7 @@ public:
                 m_Parent->durationToSpin->show();
             }
             m_Parent->dosageForAllInnCheck->setChecked(m_DosageModel->index( row, Dosage::INN_LK).data().toBool());
+            m_Parent->aldCheck->setChecked(m_DosageModel->index(row,Dosage::IsALD).data().toBool());
         } else {
             m_Parent->labelLineEdit->hide();
             m_Parent->labelOfDosageLabel->hide();
@@ -235,6 +236,7 @@ public:
                 m_Parent->durationToLabel->show();
                 m_Parent->durationToSpin->show();
             }
+            m_Parent->aldCheck->setChecked(m->drugData(m_CIS,Prescription::IsALD).toBool());
         }
     }
 
@@ -522,7 +524,7 @@ void mfDosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
 {
     mfDrugsModel *m = mfDrugsModel::instance();
     if (d->m_DosageModel) {
-            // INN Prescription ?
+        // INN Prescription ?
         int row = d->m_Mapper->currentIndex();
             if ((dosageForAllInnCheck->isEnabled()) && (state==Qt::Checked)) {
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::CIS_LK), d->m_CIS );
@@ -542,4 +544,12 @@ void mfDosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
                                       + m->drugData(d->m_CIS, Drug::MainInnDosage).toString());
     } else
         innCompositionLabel->hide();
+}
+
+void mfDosageViewer::on_aldCheck_stateChanged(int state)
+{
+    if (d->m_DosageModel)
+        d->setCheckBoxStateToModel( Dosage::IsALD, state );
+    else
+        d->setCheckBoxStateToModel( Prescription::IsALD, state );
 }

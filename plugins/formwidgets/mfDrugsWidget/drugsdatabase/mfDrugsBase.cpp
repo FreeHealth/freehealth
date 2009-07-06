@@ -93,11 +93,12 @@
 #include <tkSettings.h>
 
 // include Qt headers
+#include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include <QCoreApplication>
+#include <QSqlField>
 #include <QFile>
 #include <QDir>
 #include <QMultiHash>
@@ -270,12 +271,11 @@ bool mfDrugsBase::init()
      //  const QString & login = QString::null, const QString & pass = QString::null,
      //  CreationOption createOption = WarnOnly );
 
-     createConnection( DOSAGES_DATABASE_NAME, DOSAGES_DATABASE_FILENAME, tkSettings::instance()->path(tkSettings::ReadWriteDatabasesPath),
+     createConnection( DOSAGES_DATABASE_NAME, DOSAGES_DATABASE_FILENAME,
+                       tkSettings::instance()->path(tkSettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
                        tkDatabase::ReadWrite, tkDatabase::SQLite, "log", "pas", tkDatabase::CreateDatabase);
 
      d->retreiveLinkTables();
-     // initialize extra static members of other classes
-//     mfDosage::initStaticDatas();
      m_initialized = true;
      return true;
 }
@@ -311,6 +311,9 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
     QSqlDatabase DB;
     if ( driver == SQLite ) {
         DB = QSqlDatabase::addDatabase( "QSQLITE" , connectionName );
+        if (!QDir(pathOrHostName).exists())
+            if (!QDir().mkpath(pathOrHostName))
+                tkTr(_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName( QDir::cleanPath( pathOrHostName + QDir::separator() + dbName ) );
         DB.open();
     }
@@ -322,59 +325,64 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
     // before we need to inform tkDatabase of the connectionName to use
     setConnectionName( connectionName );
     // The SQL scheme MUST BE synchronized with the mfDosageConstants Model Enumerator !!!
-    if ( executeSQL(       "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-                           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
-                           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
-                           "`INN_LK`                int(11)        NULL,"
-                           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-                           "`CIS_LK`                int(11)        NULL,"
-                           "`CIP_LK`                int(11)        NULL,"
-                           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
+    if ( executeSQL( QStringList()
+        << "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
+           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
+           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+           "`INN_LK`                int(11)        NULL,"
+           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
+           "`CIS_LK`                int(11)        NULL,"
+           "`CIP_LK`                int(11)        NULL,"
+           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
-                           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
-                           "`INTAKETO`              double         NULL,"
-                           "`INTAKEFROMTO`          bool           NULL,"
-                           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
-                           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
-                           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
+           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
+           "`INTAKETO`              double         NULL,"
+           "`INTAKEFROMTO`          bool           NULL,"
+           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
+           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
+           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
 
-                           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
-                           "`DURATIONTO`            double         NULL,"
-                           "`DURATIONFROMTO`        bool           NULL,"
-                           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
+           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
+           "`DURATIONTO`            double         NULL,"
+           "`DURATIONFROMTO`        bool           NULL,"
+           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
 
-                           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
-                           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
-                           "`DAILYSCHEME`           int(10)        NULL,"
-                           "`MEALSCHEME`            int(10)        NULL,"
+           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
+           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+           "`DAILYSCHEME`           int(10)        NULL,"
+           "`MEALSCHEME`            int(10)        NULL,"
+           "`ISALD`                 bool           NULL,"
 
-                           "`MINAGE`                int(10)        NULL,"
-                           "`MAXAGE`                int(10)        NULL,"
-                           "`MINAGEREFERENCE`       int(10)        NULL,"
-                           "`MAXAGEREFERENCE`       int(10)        NULL,"
-                           "`MINWEIGHT`             int(10)        NULL,"
-                           "`SEXLIMIT`              int(10)        NULL,"
-                           "`MINCLEARANCE`          int(10)        NULL,"
-                           "`MAXCLEARANCE`          int(10)        NULL,"
-                           "`PREGNANCYLIMITS`       int(10)        NULL,"
-                           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
-                           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
+           "`MINAGE`                int(10)        NULL,"
+           "`MAXAGE`                int(10)        NULL,"
+           "`MINAGEREFERENCE`       int(10)        NULL,"
+           "`MAXAGEREFERENCE`       int(10)        NULL,"
+           "`MINWEIGHT`             int(10)        NULL,"
+           "`SEXLIMIT`              int(10)        NULL,"
+           "`MINCLEARANCE`          int(10)        NULL,"
+           "`MAXCLEARANCE`          int(10)        NULL,"
+           "`PREGNANCYLIMITS`       int(10)        NULL,"
+           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
 
-                           "`NOTE`                  varchar(500)   NULL,"
+           "`NOTE`                  varchar(500)   NULL,"
 
-                           "`CIM10_LK`              varchar(150)   NULL,"
-                           "`EDRC_LK`               varchar(150)   NULL,"
+           "`CIM10_LK`              varchar(150)   NULL,"
+           "`EDRC_LK`               varchar(150)   NULL,"
 
-                           "`EXTRAS`                blob           NULL,"
-                           "`USERUUID`              varchar(40)    NULL,"    // put NOT NULL
-                           "`USERVALIDATOR`         varchar(40)    NULL,"
-                           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
-                           "`MODIFICATIONDATE`      date           NULL,"
-                           "`TRANSMITTED`           date           NULL,"
-                           "`ORDER`                 int(10)        NULL"
-                           ");", DB
-                           )
-        ) {
+           "`EXTRAS`                blob           NULL,"
+           "`USERUUID`              varchar(40)    NULL,"    // put NOT NULL
+           "`USERVALIDATOR`         varchar(40)    NULL,"
+           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+           "`MODIFICATIONDATE`      date           NULL,"
+           "`TRANSMITTED`           date           NULL,"
+           "`ORDER`                 int(10)        NULL"
+           ");"
+        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
+           "`ACTUAL`                varchar(10)    NULL"
+           ");"
+        << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.0.8');"
+        , DB) ) {
         tkLog::addMessage( this, tr( "Database %1 %2 correctly created" ).arg( connectionName, dbName ) );
         return true;
     } else {
@@ -384,6 +392,45 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
     return false;
 }
 
+/**
+  \brief Check the version of the doage database. Do the necessary updates for that database according to the application version number.
+  Added from drugsinteractions version 0.0.8 stable
+*/
+void mfDrugsBase::checkDosageDatabaseVersion()
+{
+    Q_ASSERT(!qApp->applicationVersion().isEmpty());
+    QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` ASC LIMIT 1;";
+//    if (ret!=qApp->applicationVersion())
+//        tkLog::addError(this, tr("Dosage database need to be updated from %1 to %2").arg(ret, qApp->applicationVersion()));
+    // retreive the versio of database - compare to app version
+    // to the necessary updates for the dosage database.
+}
+
+QHash<QString, QString> mfDrugsBase::getDosageToTransmit()
+{
+    QHash<QString, QString> toReturn;
+    QString req = "﻿SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);";
+    QSqlDatabase DB = QSqlDatabase::database(DOSAGES_DATABASE_NAME);
+    if (!DB.open()) {
+        tkLog::addError(this, tr("Unable to open database %1 for dosage transmission").arg(DOSAGES_DATABASE_NAME));
+        return toReturn;
+    }
+    QSqlQuery query(req,DB);
+    if (query.isActive()) {
+        while (query.next()) {
+            QHash<QString,QString> toXml;
+            int i=0;
+            for (i=0;i<query.record().count();++i) {
+                // create a XML of the dosage
+                toXml.insert( query.record().field(i).name(), query.value(i).toString() );
+            }
+            toReturn.insert(toXml.value("POSO_UUID"), tkGlobal::createXml(DOSAGES_TABLE_NAME,toXml,4,false) );
+        }
+    } else
+        tkLog::addQueryError(this, query);
+    qWarning() << toReturn;
+    return toReturn;
+}
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Link Tables -----------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -395,7 +442,7 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
 */
 void mfDrugsBasePrivate::retreiveLinkTables()
 {
-     if ( ( ! m_Lk_iamCode_substCode.isEmpty() ) && ( ! m_Lk_classCode_iamCode.isEmpty() ) )
+     if ((!m_Lk_iamCode_substCode.isEmpty()) && (!m_Lk_classCode_iamCode.isEmpty()))
          return;
 
      QString tmp;
@@ -543,16 +590,6 @@ bool mfDrugsBase::drugsINNIsKnown( const mfDrugs * drug )
         if ( d->m_Lk_iamCode_substCode.keys(q.toInt()).count() == 0 )
             return false;
     return true;
-}
-
-/** \brief Return the list of equivalents (full drug denomination) if they can be founded. Store the list into the drug. */
-QStringList mfDrugsBase::findInnEquivalentsNames( const mfDrugs *drug )
-{
-//    if (!drugsINNIsKnown(drug))
-        return QStringList();
-//    if (!drug->innEquivalentsFullNames().isEmpty())
-//        return drug->innEquivalentsFullNames().isEmpty();
-    /** \todo try to find inn equivalents */
 }
 
 //--------------------------------------------------------------------------------------------------------

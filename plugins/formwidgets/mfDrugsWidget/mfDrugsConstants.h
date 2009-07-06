@@ -148,6 +148,8 @@ namespace mfDrugsConstants
     const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td>{FULLPRESCRIPTION}</td></tr></table>";
     const char * const  ENCODEDHTML_DRUGSINTERACTIONSTAG = "DrugsInteractionsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
+    const char* const   XML_FULLPRESCRIPTION_TAG   = "Full_Prescription";   /*!< \brief tag that englobes the whole prescription on file saved using DrugWidget/DrugsInteractions */
+
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
                               << "ABBOT FRANCE " << "ACTAVIS " << "AGHETTANT " << "ALMUS " << "ALTER "
@@ -268,8 +270,6 @@ namespace Drug
         AvailableDosages,
         HasPrescription,
         FullPrescription,
-        InnEquivalentsNames,
-        InnEquivalentsCIS,
         MaxParam
     };
 }  // End namespace mfDrugsConstants::Drug
@@ -365,6 +365,7 @@ namespace Dosage
         PeriodScheme,
         DailyScheme,            /*!< \brief  */
         MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
+        IsALD,                  /*!< \brief Prescription en ALD */
 
         MinAge,                 /*!< \brief Limite d'âge en mois */
         MaxAge,                 /*!< \brief Limite d'âge en mois */

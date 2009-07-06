@@ -212,7 +212,6 @@ public:
              case Drug::MainInnDosage :      return drug->mainInnDosage();
              case Drug::MainInnName :        return drug->mainInnName();
              case Drug::InnClasses :         return drug->listOfInnClasses();
-             case Drug::InnEquivalentsNames: return mfDrugsBase::instance()->findInnEquivalentsNames( drug );
              case Drug::Administration :     return QVariant();
              case Drug::Interacts :          return mfDrugsBase::instance()->drugHaveInteraction( drug );
              case Drug::MaximumLevelOfInteraction : return int(mfDrugsBase::instance()->getMaximumTypeOfIAM( drug ));
@@ -755,12 +754,12 @@ QString mfDrugsModel::prescriptionToHtml()
     toReturn.replace("{PRESCRIPTION}", tmp );
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_DRUGSINTERACTIONSTAG)
-                     .arg( QString(serializePrescription().toAscii().toBase64())) );
+                     .arg( QString(prescriptionToXml().toAscii().toBase64())) );
     return toReturn;
 }
 
-/** \brief Serialize prescription for data saving */
-QString mfDrugsModel::serializePrescription()
+/** \brief Transforms prescription to XML format for data saving */
+QString mfDrugsModel::prescriptionToXml()
 {
     QString tmp;
     QList<int> keysToSave;
@@ -777,8 +776,10 @@ QString mfDrugsModel::serializePrescription()
         foreach(int k, keysToSave) {
             forXml.insert( d->xmlTagForPrescriptionRow(k), index(i, k).data().toString() );
         }
-        tmp += tkGlobal::createXml(XML_PRESCRIPTION_MAINTAG, forXml,2,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
+        tmp += tkGlobal::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
     }
+    tmp.prepend( QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+    tmp.append( QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
     return tmp;
 }
 
@@ -786,30 +787,51 @@ QString mfDrugsModel::serializePrescription()
   \brief Deserialize prescription
   You can replace the actual prescription with the desérialized one or add the deserialized one. Use the \e param.
 */
-void mfDrugsModel::deSerializePrescription( const QString &serialized, PrescriptionDeserializer z )
+void mfDrugsModel::prescriptionFromXml( const QString &xml, PrescriptionDeserializer z )
 {
-    // XML_PRESCRIPTION_MAINTAG
     int row = 0;
-    QStringList drugs = serialized.split("[Drug]", QString::SkipEmptyParts );
+
+    // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
+    QString start = QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG);
+    QString finish = QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG);
+    int begin = xml.indexOf(start) + start.length();
+    int end = xml.indexOf(finish, begin);
+    if (begin==-1 || end==-1) {
+        tkLog::addError(this, tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
+        return;
+    }
+    QString x = xml.mid( begin, end - begin);
+
+    // split fuul prescription drug by drug
+    QString splitter = QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG);
+    QStringList drugs = x.split(splitter, QString::SkipEmptyParts );
+
     // clear model
     if (z==ReplacePrescription)
         clearDrugsList();
+
     // rebuild model with serialized prescription
+    QHash<QString, QString> hash;
     foreach( const QString &s, drugs) {
-        QHash<QString, QString> hash = tkSerializer::threeCharKeyHashToHash(s);
-        if (hash.isEmpty())
+        if (!tkGlobal::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG),XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
+            tkLog::addError(this,tr("Unable to read xml prescription"));
             continue;
-        this->addDrug( hash.value( "CIS" ).toInt(), false );
-        hash.remove("CIS");
-        //        foreach(const QString &i, hash.keys()) {
-        //            setData( index(row, Prescription::PRESCRIPTION_CODES.indexOf(i) + Prescription::Id ), hash.value(i) );
-        //        }
+        }
+        if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_CIS)))
+            continue;
+        this->addDrug( hash.value(XML_PRESCRIPTION_CIS).toInt(), false );
+        hash.remove(XML_PRESCRIPTION_CIS);
+        foreach(const QString &i, hash.keys()) {
+            setData( index(row, d->xmlTagToColumnIndex(i)), hash.value(i) );
+        }
         ++row;
+        hash.clear();
     }
     checkInteractions();
     reset();
 }
 
+/** \brief Starts the interactions checking */
 void mfDrugsModel::checkInteractions() const
 {
     mfDrugsBase::instance()->interactions( d->m_DrugsList );

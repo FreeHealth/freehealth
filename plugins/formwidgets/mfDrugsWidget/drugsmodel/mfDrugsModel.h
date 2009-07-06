@@ -108,8 +108,8 @@ public:
 
     // FOR PRINTING FUNCTION
     QString prescriptionToHtml();
-    QString serializePrescription();
-    void deSerializePrescription( const QString &serialized, PrescriptionDeserializer z = ReplacePrescription );
+    QString prescriptionToXml();
+    void prescriptionFromXml( const QString &xml, PrescriptionDeserializer z = ReplacePrescription );
 
     void warn();
 

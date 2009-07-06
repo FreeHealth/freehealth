@@ -206,17 +206,24 @@ public:
 
 tkSettings* tkSettings::m_Instance = 0;
 
-tkSettings* tkSettings::instance()
+/** \brief Returns the single instance of tkSettings */
+tkSettings* tkSettings::instance( QObject * parent, const QString & appName, const QString & fileName )
 {
-    if (!m_Instance)
-        m_Instance = new tkSettings();
+    if (!m_Instance) {
+        m_Instance = new tkSettings(parent,appName,fileName);
+    }
     return m_Instance;
 }
 
+/**
+  \brief Protected Constructor. Use instance() to create a new instance of this class.
+  All path are calculated by the constructor.\n
+  Users' writable resources are located in the dir of the config.ini file.
+*/
 tkSettings::tkSettings( QObject * parent, const QString & appName, const QString & fileName )
         : QSettings( getIniFile( appName, fileName ) , QSettings::IniFormat, parent ), d( new tkSettingsPrivate() )
 {
-    setObjectName( "tkSetting" );
+    setObjectName( "tkSettings" );
     QString resourcesPath;
     QString databasePath;
     QString applicationName;
@@ -227,6 +234,7 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
         applicationName = appName;
     if (applicationName.contains(" "))
         applicationName = applicationName.left(applicationName.indexOf(" "));
+    Q_ASSERT(!applicationName.isEmpty());
 
     setPath( ApplicationPath, qApp->applicationDirPath() );
     setPath( ApplicationTempPath, QDir::tempPath() );
@@ -240,7 +248,7 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
         QString res = fmfBin.relativeFilePath( QDir::cleanPath( FMF_GLOBAL_RESOURCES ) );
         res = QDir::cleanPath( qApp->applicationDirPath() + QDir::separator() + res );
         resourcesPath = res + "/";
-        setPath( ResourcesPath, QDir::homePath() + "/." + applicationName );//resourcesPath );
+        setPath( ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath() );//QDir::homePath() + "/." + applicationName );//resourcesPath );
 
         if (tkGlobal::isRunningOnMac()) {
             setPath( BundleResourcesPath, resourcesPath );
@@ -250,14 +258,14 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
     } else {
         // RELEASE BUILD
         if (tkGlobal::isRunningOnMac()) {
-            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
+//            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
             setPath( BundleResourcesPath, qApp->applicationDirPath() + "/.." );
         } else {
-            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath() + QDir::separator() + "Resources";
+//            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath() + QDir::separator() + "Resources";
             setPath( BundleResourcesPath, qApp->applicationDirPath() );
         }
         d->m_FirstTime = value( "FirstTimeRunning", true ).toBool();
-        setPath( ResourcesPath,  + "/." + applicationName);//resourcesPath );
+        setPath( ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath() );//QDir::homePath() + "/." + applicationName );//resourcesPath );
     }
 
     if (parent)
@@ -266,6 +274,7 @@ tkSettings::tkSettings( QObject * parent, const QString & appName, const QString
         setParent(qApp);
 }
 
+/** \brief Destructor */
 tkSettings::~tkSettings()
 {
     if (d) delete d;
@@ -273,10 +282,11 @@ tkSettings::~tkSettings()
 }
 
 /**
-  \brief defines a path \e absPath with the index \e type.
+  \brief defines a path \e absPath with the index \e type refering to the enumarator \e tkSettings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, SampleFormsPath.\n
   When setting ResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
+  It also inform tkTheme (that is instanciate by tkGlobal::initLib()) of the default theme to use.
 */
 void tkSettings::setPath( const int type, const QString & absPath )
 {
@@ -345,21 +355,37 @@ void tkSettings::setPath( const int type, const QString & absPath )
     }
 }
 
+/** \brief Returns the path according to the enumerator tkSettings::Paths */
 QString tkSettings::path( const int type ) const
 {
     return d->m_Enum_Path.value( type );
 }
 
-bool tkSettings::firstTimeRunning()
+/**
+  \brief Return true if the application runs for the first time.
+  \sa noMoreFirstTimeRunning()
+*/
+bool tkSettings::firstTimeRunning() const
 {
     return value( "FirstTimeRunning", true ).toBool();
 }
+
+/**
+  \brief Set the first time running of this application to false.
+  \sa firstTimeRunning()
+*/
 void tkSettings::noMoreFirstTimeRunning()
 {
     setValue( "FirstTimeRunning", false );
     d->m_FirstTime = false;
 }
 
+/**
+  \brief Returns the ini file to use the the initialization of QSettings. See constructor.
+  Test in this order :
+  \li command line --config="/abs/path/to/config.ini" or --config="../relative/path/to/config.ini". If the ini file can be used it is returned.
+  \li home path
+*/
 QString tkSettings::getIniFile( const QString & appName, const QString & fileName )
 {
     // manage defaults --> ".AppName/config.ini"
@@ -383,7 +409,7 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
     if ( index != -1 ) {
         QString iniFileName = list[ index ];
         iniFileName = iniFileName.mid( iniFileName.indexOf( "=" ) + 1 );
-        tkLog::addMessage( "tkSetting", tr( "Passing command line ini file : %1" ).arg( iniFileName ) );
+        tkLog::addMessage( "tkSettings", tr( "Passing command line ini file : %1" ).arg( iniFileName ) );
 
         if ( QDir::isRelativePath( iniFileName ) )
             iniFileName.prepend( qApp->applicationDirPath() + QDir::separator() );
@@ -392,20 +418,20 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
         QFileInfo info( iniFileName );
         if ( info.exists() && info.isReadable() ) {
             if ( info.isWritable() ) {
-                tkLog::addMessage( "tkSetting", tr( "Using ini file %1." ).arg( iniFileName) );
+                tkLog::addMessage( "tkSettings", tr( "Using ini file %1." ).arg( iniFileName) );
                 return iniFileName;
             }
             else
-                tkLog::addError( "tkSetting", tr( "Ini file %1 is not writable. Can not use it." ).arg( iniFileName ) ) ;
+                tkLog::addError( "tkSettings", tr( "Ini file %1 is not writable. Can not use it." ).arg( iniFileName ) ) ;
         } else {
             // can we create and access to ini file ?
             QFile file( iniFileName );
             if ( file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
-                tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFileName ) );
+                tkLog::addMessage( "tkSettings", tr( "Using ini file %1" ).arg( iniFileName ) );
                 return iniFileName;
             }
             else
-                tkLog::addMessage( "tkSetting", tr( "WARNING : Ini file %1 can not be used." ).arg( iniFileName) );
+                tkLog::addMessage( "tkSettings", tr( "WARNING : Ini file %1 can not be used." ).arg( iniFileName) );
         }
     }
 
@@ -417,23 +443,23 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
 //        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
 //
 //    // test iniFile
-//    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
+//    tkLog::addMessage( "tkSettings", tr( "Trying ini file %1" ).arg( iniFile ) );
 //    QFile file( iniFile );
 //    QFileInfo info( iniFile );
 //    if ( info.exists() && info.isReadable() && info.isWritable() ) {
-//        tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+//        tkLog::addMessage( "tkSettings", tr( "Using ini file %1" ).arg( iniFile ) );
 //        return iniFile;
 //    } else {
 //        if ( ( ! info.exists() ) &&  file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
-//            tkLog::addMessage( "tkSetting", tr( "Using ini file %1" ).arg( iniFile ) );
+//            tkLog::addMessage( "tkSettings", tr( "Using ini file %1" ).arg( iniFile ) );
 //            return iniFile;
 //        }
-//        else tkLog::addError( "tkSetting", tr( "Ini file %1 can not be used." ).arg( iniFile) );
+//        else tkLog::addError( "tkSettings", tr( "Ini file %1 can not be used." ).arg( iniFile) );
 //    }
 
     // Now use the $HOME path
     iniFile = QString( "%1/%2/%3" ).arg( QDir::homePath(), tmpAppName, tmpFileName);
-    tkLog::addMessage( "tkSetting", tr( "Trying ini file %1" ).arg( iniFile ) );
+    tkLog::addMessage( "tkSettings", tr( "Trying ini file %1" ).arg( iniFile ) );
     QDir dir( QFileInfo( iniFile ).absolutePath() );
 
     if (!dir.exists()) {
@@ -448,6 +474,7 @@ QString tkSettings::getIniFile( const QString & appName, const QString & fileNam
     return iniFile;
 }
 
+/** \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same tkSettings */
 void tkSettings::restoreState( QMainWindow * window, const QString & prefix )
 {
     if ( !window )
@@ -463,6 +490,7 @@ void tkSettings::restoreState( QMainWindow * window, const QString & prefix )
     }
 }
 
+/** \brief Main windows save state. \e prefix can be used if you store multiple main window in the same tkSettings */
 void tkSettings::saveState( QMainWindow * window, const QString & prefix )
 {
     if ( !window )
@@ -487,6 +515,7 @@ void tkSettings::appendToValue( const QString &key, const QString &value )
     this->setValue( key, QStringList() << this->value(key).toStringList() << value );
 }
 
+/** \brief For debugging purpose. */
 QTreeWidget* tkSettings::getTreeWidget( QWidget * parent ) const
 {
     // manage parent as tree widget
@@ -580,6 +609,7 @@ QTreeWidget* tkSettings::getTreeWidget( QWidget * parent ) const
     return tree;
 }
 
+/** \brief For debugging purpose. */
 QString tkSettings::toString() const
 {
     /** \todo add uname output if running on linux */

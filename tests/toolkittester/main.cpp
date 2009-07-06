@@ -150,8 +150,9 @@ int main(int argc, char *argv[])
 {
 //    Q_INIT_RESOURCE(toolkittester);
     QApplication app(argc, argv);
+    app.setApplicationName("toolkittester");
     win=0;
-    tkSettings *s = new tkSettings();
+    tkSettings *s = tkSettings::instance();
     s->setPath(tkSettings::BundleResourcesPath, qApp->applicationDirPath()+ "/../../../../global_resources/");
 
 //    test_QButtonLineEdit();

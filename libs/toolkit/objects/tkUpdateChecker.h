@@ -51,8 +51,6 @@ Q_TK_BEGIN_CONSTANTS
         const char* const  DRUGSINTERACTIONS_UPDATE_URL   = "http://www.ericmaeker.fr/FreeMedForms/update-di.txt";
 Q_TK_END_CONSTANTS
 
-
-
 /**
  * \file tkUpdateChecker.h
  * \author Eric MAEKER <eric.maeker@free.fr>

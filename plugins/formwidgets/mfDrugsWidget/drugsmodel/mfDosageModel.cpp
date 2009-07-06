@@ -482,6 +482,7 @@ void mfDosageModel::toPrescription(const int row)
     prescr_dosage.insert( Prescription::Note ,                 Dosage::Note );
     prescr_dosage.insert( Prescription::DailyScheme ,          Dosage::DailyScheme );
     prescr_dosage.insert( Prescription::MealTimeSchemeIndex ,  Dosage::MealScheme );
+    prescr_dosage.insert( Prescription::IsALD ,                Dosage::IsALD );
     foreach( const int i, prescr_dosage.keys()) {
         M->setDrugData(m_CIS, i, data(index(row, prescr_dosage.value(i))) );
     }

@@ -1,6 +1,6 @@
 version=0.0.7
 {
-    * Juillet 2009
+    * Juillet 2009 - Version bétâ
     * Nouvelles fonctionnalités
       * Prescription en DCI lorsque la DCI est connue
       * Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
@@ -22,7 +22,7 @@ version=0.0.7
       * Préparation de la gestion de la physiologie du patient (poids, taille, clairance de la créatinine, allergies)
 
     * Modifications techniques :
-      * Passage à la version 4.5.2 des librairies de Qt
+      * Passage à la version 4.5.2 des librairies de Qt (pour MacOs)
       * Amélioration du moteur de recherche d'interactions médicamenteuses (~ trois fois plus rapide)
       * Forte amélioration de l'accès à la base de données des médicaments
       * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS

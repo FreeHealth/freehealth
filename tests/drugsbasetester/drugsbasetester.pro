@@ -14,7 +14,6 @@ QT *= sql \
     network \
     xml
 DEFINES *= DRUGS_INTERACTIONS_STANDALONE
-
 include ( $${PACKAGE_LIBS_SOURCES}/rpath.pri)
 
 # symbol export/import for toolkit
@@ -35,4 +34,6 @@ else:*-g++:LIBS *= -Wl,--no-whole-archive # stop importing all symbols
 include( ../../plugins/formwidgets/mfDrugsWidget/mfdrugswidget.pri )
 
 # sources
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    IamTester.cpp
+HEADERS += IamTester.h

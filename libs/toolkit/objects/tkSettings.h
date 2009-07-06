@@ -63,8 +63,8 @@ class tkSettingsPrivate;
 /**
  * \file tkSettings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 10 June 2009
+ * \version 0.0.7
+ * \date 06 July 2009
 */
 
 class Q_TK_EXPORT tkSettings : public QSettings
@@ -72,7 +72,6 @@ class Q_TK_EXPORT tkSettings : public QSettings
     Q_OBJECT
 public:
 
-    /** */
     enum Paths {
         ResourcesPath = 0,
         ApplicationPath,
@@ -94,52 +93,33 @@ public:
         WebSiteUrl
     };
 
-    /** */
-    static tkSettings* instance();
-    /** */
-    tkSettings( QObject * parent = 0, const QString & appName = QString::null, const QString & fileName = QString::null );
-    /** */
+    static tkSettings* instance( QObject * parent = 0, const QString & appName = QString::null, const QString & fileName = QString::null);
     ~tkSettings();
 
     // first time running ?
-    /** */
-    virtual bool firstTimeRunning();
-    /** */
+    virtual bool firstTimeRunning() const;
     virtual void noMoreFirstTimeRunning();
 
     // manage mainwindow
-    /** */
     virtual void restoreState( QMainWindow * window, const QString & prefix = QString::null );
-    /** */
     virtual void saveState( QMainWindow * window, const QString & prefix = QString::null );
 
     // paths
-    /**
-        \brief Use the \e Paths enum to set and retrieve paths.
-               This function automatically recalculates the path when setting : ApplicationPath, BundleResourcesPath adn ResourcesPath.
-               It also inform tkTheme (that is instanciate by tkGlobal::initLib()) of the default theme to use.
-    */
     virtual void      setPath( const int type, const QString & absPath );    // Use enum with this member, or
-    /** Use the \e Paths enum to set and retrieve paths. */
     virtual QString   path( const int type ) const;                          // redefine your own enum (based on the above)
 
-    /** */
     QString resourcesPath() const { return path( ResourcesPath ); }
-    /** */
     QString databasePath() const  { return path( ReadOnlyDatabasesPath ); }
 
     // for debugging functions : to treewidget and to string
-    /** \brief For debugging purpose. */
     virtual QTreeWidget* getTreeWidget( QWidget * parent ) const;
-    /** \brief For debugging purpose. */
     virtual QString toString() const;
 
     // values management
-    /** */
     virtual void appendToValue( const QString &key, const QString &value );
 
 private:
-    /** */
+    tkSettings( QObject * parent = 0, const QString & appName = QString::null, const QString & fileName = QString::null );
     QString getIniFile( const QString & name = QString::null, const QString & version = QString::null );
 
 protected:

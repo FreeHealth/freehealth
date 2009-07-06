@@ -13,19 +13,12 @@ INCLUDEPATH *= $${PWD}/sdk
 
 # define Qt
 QT *= sql
-﻿CONFIG *= dll
+CONFIG *= dll
 
 # make library exportable
 DEFINES *= MEDINTUXTOOLKIT_CORE_BUILD
 
 PRE_TARGETDEPS *= $${PACKAGE_LIBS_SOURCES}/toolkit
-
-CONFIG( debug, debug|release ) {
-  win32:LIBS *= -ltoolkit_d
-  else:LIBS *= -ltoolkit_debug
-} else {
-  LIBS *= -ltoolkit
-}
 
 include( ../rpath.pri )
 

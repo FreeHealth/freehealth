@@ -73,8 +73,8 @@ else {
         TARGET_BINARY            = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.bin
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/Resources
-        LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/lib
-        LIB_EXTENSION            = $${QMAKE_EXTENSION_SHLIB}
+        LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/libs
+        LIB_EXTENSION            = so*
 
         installtarget.path = $${TARGET_INSTALL_PATH}
         installtarget.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}

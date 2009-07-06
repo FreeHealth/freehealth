@@ -85,23 +85,17 @@ Q_TK_USING_TRANSLATIONS
 
 const char* const  DRUGINTERACTION_FILEFILTER = QT_TRANSLATE_NOOP("diMainWindow", "DrugsInteractions Prescriptions (*.di)");
 
-const char * const A_CONFIG_MEDINTUX          = "configureMedinTuxAction";
-const char * const CONFIGMEDINTUX_TEXT        = QT_TRANSLATE_NOOP("diMainWindow", "Configure MedinTux");
+const char* const A_CONFIG_MEDINTUX          = "configureMedinTuxAction";
+const char* const CONFIGMEDINTUX_TEXT        = QT_TRANSLATE_NOOP("diMainWindow", "Configure MedinTux");
 
 namespace diMainWindowPrivate {
-void readName(const QString &serializedPrescription)
+
+void readName(QString &serializedPrescription)
 {
     int begin = serializedPrescription.indexOf("<name>") + 6;
     int end = serializedPrescription.indexOf("</name>", begin);
     QString name = QByteArray::fromBase64(( serializedPrescription.mid( begin, end - begin).toAscii() ));
     diCore::setPatientName( name );
-}
-
-QString getClearPrescription(const QString &serializedPrescription)
-{
-    int begin = serializedPrescription.indexOf("<prescription>") + 14;
-    int end = serializedPrescription.indexOf("</prescription>", begin);
-    return serializedPrescription.mid( begin, end - begin);
 }
 
 }  // end namespace diMainWindowPrivate
@@ -373,7 +367,7 @@ void diMainWindow::savePrescription()
                               "%2\n"
                               "</DrugsInteractionsFile>")
             .arg( QString(patientName->text().toAscii().toBase64()) )
-            .arg( mfDrugsModel::instance()->serializePrescription() );
+            .arg( mfDrugsModel::instance()->prescriptionToXml() );
     tkGlobal::saveStringToFile( toSave,//.toAscii().toBase64(),
                                 QDir::homePath() + "/prescription.di",
                                 tr(DRUGINTERACTION_FILEFILTER) );
@@ -391,7 +385,7 @@ void diMainWindow::openPrescription()
     if (f.isEmpty())
         return;
 //    QString f= "/Users/eric/Desktop/prescription.di";
-    QString serialized = QString( QByteArray::fromBase64( tkGlobal::readTextFile(f).toAscii() ) );
+    QString serialized = tkGlobal::readTextFile(f).toAscii();
     if (!serialized.startsWith("<DrugsInteractionsFile>"))
         return;
     mfDrugsModel::PrescriptionDeserializer z = mfDrugsModel::ReplacePrescription;
@@ -409,8 +403,7 @@ void diMainWindow::openPrescription()
         }
     }
     diMainWindowPrivate::readName(serialized);
-//    this->patientName->setText( diCore::patientName() );
-    mfDrugsModel::instance()->deSerializePrescription( diMainWindowPrivate::getClearPrescription(serialized), z );
+    mfDrugsModel::instance()->prescriptionFromXml(serialized, z);//diMainWindowPrivate::getClearPrescription(serialized), z );
 }
 
 /**
