@@ -100,4 +100,4 @@ const QString loginFromSQL( const QVariant & sql )
 const QString loginFromSQL( const QString & sql )
 { return QByteArray::fromBase64( sql.toAscii() ); }
 
-} // end NAMESPACE TKGLOBAL
+Q_TKUSER_END_GLOBAL

@@ -11,6 +11,7 @@ version=0.0.7
       * Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
 
     * Modifications importantes :
+      * Nouveau système de sauvegarde en XML (non compatible avec la sauvegarde des versions antérieures de DI)
       * L'acceptation de la licence est maintenant obligatoire pour utiliser ce logiciel
       * Amélioration des remplacements des repères : [texte à mettre avant si repere existe [REPERE] texte après]
       * Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)

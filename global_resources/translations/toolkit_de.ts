@@ -648,76 +648,91 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="178"/>
-        <source>%1 are not avaible</source>
+        <source>%1 is not avaible and can not be created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="179"/>
-        <source>Path %1 does not exist</source>
+        <source>%1 are not avaible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="180"/>
-        <source>Setting %1 path to %2</source>
+        <source>Path %1 does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="181"/>
-        <source>Checking for updates from %1</source>
+        <source>File %1 does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="182"/>
-        <source>Version up to date</source>
+        <source>File %1 is not readable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="183"/>
-        <source>Current version :</source>
+        <source>Setting %1 path to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="184"/>
-        <source>Lastest version :</source>
+        <source>Checking for updates from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="185"/>
-        <source>Update Available</source>
+        <source>Version up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="186"/>
-        <source>Error %1 from database %2</source>
+        <source>Current version :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="187"/>
-        <source>Creating default settings for %1</source>
+        <source>Lastest version :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="188"/>
+        <source>Update Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="189"/>
+        <source>Error %1 from database %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="190"/>
-        <source>Creator and Main Developper</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="191"/>
-        <source>Developpers and Contributors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="192"/>
-        <source>Drugs Database Management</source>
+        <source>Creating default settings for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="193"/>
-        <source>Medical advisor</source>
+        <source>Creator and Main Developper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="194"/>
+        <source>Developpers and Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="195"/>
+        <source>Drugs Database Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="196"/>
+        <source>Medical advisor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="199"/>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1350,325 +1365,317 @@ Using Url : %1
 <context>
     <name>tkSettings</name>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="358"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="412"/>
         <source>Passing command line ini file : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="367"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="421"/>
         <source>Using ini file %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="371"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="425"/>
         <source>Ini file %1 is not writable. Can not use it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="376"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="396"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="400"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="419"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="430"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="473"/>
         <source>Using ini file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="380"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="434"/>
         <source>WARNING : Ini file %1 can not be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="392"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="408"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="462"/>
         <source>Trying ini file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="403"/>
-        <source>Ini file %1 can not be used.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="414"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="468"/>
         <source>Unable to create dir : %1, no Ini File can be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="473"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="530"/>
         <source>System informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="474"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="531"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="475"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="532"/>
         <source>uname output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="478"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="535"/>
         <source>Compilation informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="479"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="536"/>
         <source>Compilation Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="480"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="537"/>
         <source>Compile Qt version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="481"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="538"/>
         <source>Actual Qt version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="482"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="539"/>
         <source>Actual Application Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="484"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="486"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="488"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="490"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="576"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="541"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="543"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="545"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="547"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="632"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="634"/>
         <source>Actual build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="484"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="541"/>
         <source>Debug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="486"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="543"/>
         <source>Release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="488"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="545"/>
         <source>Full Application Build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="490"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="547"/>
         <source>Svn Build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="496"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="593"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="553"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="651"/>
         <source>Binary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="497"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="594"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="554"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="652"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="498"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="595"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="555"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="653"/>
         <source>Read only Databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="499"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="596"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="556"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="654"/>
         <source>Writable databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="500"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="597"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="557"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="655"/>
         <source>Bundle root path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="501"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="598"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="558"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="656"/>
         <source>Translations path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="502"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="599"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="559"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="657"/>
         <source>Qt Plugins path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="503"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="600"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="560"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="658"/>
         <source>Qt FrameWorks path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="504"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="601"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="561"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="659"/>
         <source>FreeMedForms PlugIns path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="505"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="602"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="562"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="660"/>
         <source>SmallPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="506"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="603"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="563"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="661"/>
         <source>MediumPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="507"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="604"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="564"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="662"/>
         <source>BigPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="508"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="605"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="565"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="663"/>
         <source>SystemTempPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="509"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="606"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="566"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="664"/>
         <source>ApplicationTempPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="510"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="607"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="567"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="665"/>
         <source>FormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="511"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="608"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="568"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="666"/>
         <source>SampleFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="524"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="525"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="609"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="581"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="582"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="667"/>
         <source>WebSiteUrl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="581"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="639"/>
         <source>Running on Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="582"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="640"/>
         <source>   uname returns : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="585"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="643"/>
         <source>Running on MacOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="587"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="645"/>
         <source>Running on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="513"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="570"/>
         <source>Absolute Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="514"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="517"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="579"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="571"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="637"/>
         <source>Using Ini File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="516"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="573"/>
         <source>Relative Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="528"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="585"/>
         <source>Libs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="531"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="588"/>
         <source>Orphan settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="564"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="622"/>
         <source>Running version : %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="565"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="623"/>
         <source>Build date : %1 %2
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="566"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="624"/>
         <source>Qt Build version : %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="567"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="625"/>
         <source>Qt running version : %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="568"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="626"/>
         <source>Application Version : %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="570"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="628"/>
         <source>Actual build : Debug
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="572"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="630"/>
         <source>Actual build : Release
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="632"/>
         <source>Full Application Build
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="576"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="634"/>
         <source>Svn Build
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="577"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="635"/>
         <source>Application path : %1
 </source>
         <translation type="unfinished"></translation>
