@@ -57,6 +57,7 @@
 #include <drugsmodel/mfDrugsModel.h>
 #include <drugswidget/mfDrugsPreferences.h>
 #include <drugsdatabase/mfDrugsBase.h>
+#include <drugsmodel/mfDrugsIO.h>
 
 // including toolkit headers
 #include <tkGlobal.h>
@@ -137,6 +138,7 @@ public:
     static bool transmitDosage()
     {
         tkLog::addMessage("diCore", QCoreApplication::translate("diCore", "Preparing dosage transmission"));
+        mfDrugsIO::instance()->startsDosageTransmission();
         return true;
     }
 
@@ -328,9 +330,9 @@ bool diCore::init()
     // Update countdown to transmission
     int count = settings()->value(SETTINGS_COUNTDOWN,0).toInt();
     ++count;
-    if (count==30) {
+    if (count) {
         settings()->setValue(SETTINGS_COUNTDOWN,0);
-        diCorePrivate::transmitDosage();
+//        diCorePrivate::transmitDosage();
     } else
         settings()->setValue(SETTINGS_COUNTDOWN,count);
 

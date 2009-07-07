@@ -69,7 +69,7 @@
 
   \todo Manage user rights when creating dosage database
 
-  \sa mfDrugInteraction, mfDrugs, mfDrugsTables, mfDrugDosage
+  \sa mfDrugInteraction, mfDrugs, mfDrugsTables, mfDrugDosage, database_structure
   \ingroup drugsinteractions drugswidget
 */
 
@@ -349,9 +349,11 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
 
            "`PERIOD`                int(10)        NULL,"    // put NOT NULL
            "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
            "`DAILYSCHEME`           int(10)        NULL,"
            "`MEALSCHEME`            int(10)        NULL,"
            "`ISALD`                 bool           NULL,"
+           "`TYPEOFTREATEMENT`      int(10)        NULL,"
 
            "`MINAGE`                int(10)        NULL,"
            "`MAXAGE`                int(10)        NULL,"
@@ -368,11 +370,11 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
            "`NOTE`                  varchar(500)   NULL,"
 
            "`CIM10_LK`              varchar(150)   NULL,"
+           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
            "`EDRC_LK`               varchar(150)   NULL,"
 
            "`EXTRAS`                blob           NULL,"
-           "`USERUUID`              varchar(40)    NULL,"    // put NOT NULL
-           "`USERVALIDATOR`         varchar(40)    NULL,"
+           "`USERVALIDATOR`         varchar(200)   NULL,"
            "`CREATIONDATE`          date           NULL,"    // put NOT NULL
            "`MODIFICATIONDATE`      date           NULL,"
            "`TRANSMITTED`           date           NULL,"
@@ -406,31 +408,76 @@ void mfDrugsBase::checkDosageDatabaseVersion()
     // to the necessary updates for the dosage database.
 }
 
+/** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */
 QHash<QString, QString> mfDrugsBase::getDosageToTransmit()
 {
     QHash<QString, QString> toReturn;
-    QString req = "﻿SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);";
     QSqlDatabase DB = QSqlDatabase::database(DOSAGES_DATABASE_NAME);
     if (!DB.open()) {
         tkLog::addError(this, tr("Unable to open database %1 for dosage transmission").arg(DOSAGES_DATABASE_NAME));
         return toReturn;
     }
-    QSqlQuery query(req,DB);
-    if (query.isActive()) {
-        while (query.next()) {
-            QHash<QString,QString> toXml;
-            int i=0;
-            for (i=0;i<query.record().count();++i) {
-                // create a XML of the dosage
-                toXml.insert( query.record().field(i).name(), query.value(i).toString() );
+    QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
+    {
+        QSqlQuery query(req,DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                QHash<QString,QString> toXml;
+                int i=0;
+                for (i=0;i<query.record().count();++i) {
+                    // create a XML of the dosage
+                    toXml.insert( query.record().field(i).name(), query.value(i).toString() );
+                }
+                toReturn.insert(toXml.value("POSO_UUID"), tkGlobal::createXml(DOSAGES_TABLE_NAME,toXml,4,false) );
             }
-            toReturn.insert(toXml.value("POSO_UUID"), tkGlobal::createXml(DOSAGES_TABLE_NAME,toXml,4,false) );
-        }
-    } else
-        tkLog::addQueryError(this, query);
-    qWarning() << toReturn;
+        } else
+            tkLog::addQueryError(this, query);
+    }
+
+    req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED`<`MODIFICATIONDATE`);");
+    {
+        QSqlQuery query(req,DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                QHash<QString,QString> toXml;
+                int i=0;
+                for (i=0;i<query.record().count();++i) {
+                    // create a XML of the dosage
+                    toXml.insert( query.record().field(i).name(), query.value(i).toString() );
+                }
+                toReturn.insert(toXml.value("POSO_UUID"), tkGlobal::createXml(DOSAGES_TABLE_NAME,toXml,4,false) );
+            }
+        } else
+            tkLog::addQueryError(this, query);
+    }
     return toReturn;
 }
+
+/** Marks all dosages as transmitted now. \e dosageUuids contains dosage uuid. */
+bool mfDrugsBase::markAllDosageTransmitted( const QStringList &dosageUuids )
+{
+    if (dosageUuids.count()==0)
+        return true;
+    QSqlDatabase DB = QSqlDatabase::database(DOSAGES_DATABASE_NAME);
+    if (!DB.open()) {
+        tkLog::addError(this, tr("Unable to open database %1 for dosage transmission").arg(DOSAGES_DATABASE_NAME));
+        return false;
+    }
+    QStringList reqs;
+    foreach(const QString &s, dosageUuids) {
+        QString req = QString("UPDATE `DOSAGE` SET `TRANSMITTED`='%1' WHERE %2")
+                      .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
+                      .arg(QString("`POSO_UUID`='%1'").arg(s));
+        reqs << req;
+    }
+    if (!executeSQL(reqs,DB)) {
+        tkLog::addError(this, tr("Unable to update transmission date dosage"));
+        return false;
+    }
+    return true;
+}
+
+
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Link Tables -----------------------------------------
 //--------------------------------------------------------------------------------------------------------

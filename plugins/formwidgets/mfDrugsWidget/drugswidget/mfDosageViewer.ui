@@ -1008,6 +1008,16 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabNote">
+      <attribute name="title">
+       <string>Note</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QTextEdit" name="noteTextEdit"/>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabTodos">
       <attribute name="title">
        <string>Todos</string>
@@ -1019,34 +1029,21 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Time modulation (one intake each)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item row="1" column="0">
         <widget class="QCheckBox" name="checkBox_2">
          <property name="text">
           <string>Don't specify the form</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="2" column="0">
         <widget class="QCheckBox" name="checkBox">
          <property name="text">
           <string>INN prescription</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1058,23 +1055,6 @@
           <string>Alternate with</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox_4">
-         <property name="text">
-          <string>For all drugs of this INN always use this drug as replacement</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabNote">
-      <attribute name="title">
-       <string>Note</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QTextEdit" name="noteTextEdit"/>
        </item>
       </layout>
      </widget>
@@ -1118,7 +1098,6 @@
   <tabstop>groupBox_9</tabstop>
   <tabstop>groupBox_3</tabstop>
   <tabstop>groupBox_4</tabstop>
-  <tabstop>checkBox_4</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox</tabstop>
   <tabstop>noteTextEdit</tabstop>

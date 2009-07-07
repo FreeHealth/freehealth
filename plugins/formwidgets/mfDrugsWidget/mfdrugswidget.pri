@@ -1,6 +1,8 @@
 # This file includes common sources between
 # mfDrugsWidget plugins and DrugsInteractions
 # $${PWD}/mfDrugsWidget.h \ <-- Specific to plugins
+INCLUDEPATH *= $${PWD}
+
 HEADERS += $${PWD}/mfDrugsConstants.h \
     $${PWD}/drugsdatabase/mfDrugsBase.h \
     $${PWD}/drugsmodel/mfDrugs.h \
@@ -16,9 +18,10 @@ HEADERS += $${PWD}/mfDrugsConstants.h \
     $${PWD}/drugswidget/mfDrugsPreferences.h \
     $${PWD}/drugswidget/mfInteractionDialog.h \
     $${PWD}/drugswidget/mfDosageViewer.h \
-    $${PWD}/drugswidget/mfDosageAvailableWidget.h
-# $${PWD}/mfDrugsWidget.cpp \ <-- Specific to plugins
+    $${PWD}/drugswidget/mfDosageAvailableWidget.h \
+    $${PWD}/drugsmodel/mfDrugsIO.h
 
+# $${PWD}/mfDrugsWidget.cpp \ <-- Specific to plugins
 SOURCES += $${PWD}/drugsdatabase/mfDrugsBase.cpp \
     $${PWD}/drugsmodel/mfDrugs.cpp \
     $${PWD}/drugsmodel/mfDrugInteraction.cpp \
@@ -32,8 +35,8 @@ SOURCES += $${PWD}/drugsdatabase/mfDrugsBase.cpp \
     $${PWD}/drugswidget/mfDrugsPreferences.cpp \
     $${PWD}/drugswidget/mfInteractionDialog.cpp \
     $${PWD}/drugswidget/mfDosageViewer.cpp \
-    $${PWD}/drugswidget/mfDosageAvailableWidget.cpp
-
+    $${PWD}/drugswidget/mfDosageAvailableWidget.cpp \
+    $${PWD}/drugsmodel/mfDrugsIO.cpp
 FORMS += $${PWD}/drugswidget/mfDrugInfo.ui \
     $${PWD}/drugswidget/mfDrugSelector.ui \
     $${PWD}/drugswidget/mfDosageDialog.ui \
@@ -43,8 +46,6 @@ FORMS += $${PWD}/drugswidget/mfDrugInfo.ui \
     $${PWD}/drugswidget/mfInteractionDialog.ui \
     $${PWD}/drugswidget/mfDosageViewer.ui \
     $${PWD}/drugswidget/mfDosageAvailableWidget.ui
-
-INCLUDEPATH *= $${PWD}
 TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
 exists( $${PROTECTED_PATH} ):RESOURCES += $${PROTECTED_PATH}/drugs/drugsresources.qrc
 else:RESOURCES += $${PWD}/widget_resources.qrc

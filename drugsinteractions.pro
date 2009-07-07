@@ -3,8 +3,8 @@ TEMPLATE = subdirs
 CONFIG *= ordered
 
 SUBDIRS += \
-           libs/toolkit \
-           libs/medintuxtoolkit \
+#           libs/toolkit \
+#           libs/medintuxtoolkit \
            drugsinteractions
 
 ProjectSettings { 

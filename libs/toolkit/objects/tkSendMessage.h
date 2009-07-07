@@ -48,59 +48,46 @@ class tkSendMessagePrivate;
 /**
  * \file tkSendMessage.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 01 May 2009
+ * \version 0.0.5
+ * \date 06 July 2009
 */
 
 Q_TK_BEGIN_CONSTANTS
 
-const char * const URL_DRUGSARECORRECT = "http://www.ericmaeker.fr/FreeMedForms/FMF_Correct.php";
-const char * const URL_DRUGSAREINCORRECT = "http://www.ericmaeker.fr/FreeMedForms/FMF_Uncorrect.php";
-const char * const URL_DEVELOPPERMAILSENDING = "http://www.ericmaeker.fr/FreeMedForms/FMF_Mail.php";
+const char * const URL_DOSAGETRANSMISSION     = "http://www.ericmaeker.fr/FreeMedForms/FMF_DosagesToStore.php";
+const char * const URL_DRUGSARECORRECT        = "http://www.ericmaeker.fr/FreeMedForms/FMF_Correct.php";
+const char * const URL_DRUGSAREINCORRECT      = "http://www.ericmaeker.fr/FreeMedForms/FMF_Uncorrect.php";
+const char * const URL_DEVELOPPERMAILSENDING  = "http://www.ericmaeker.fr/FreeMedForms/FMF_Mail.php";
 
 Q_TK_END_CONSTANTS
 
-/** \brief This class is a messagesender over internet.
-  Change the enum and the Url inside member setTypeOfMessage().
-  This class should not be destructed during the sending process.
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
 class Q_TK_EXPORT tkSendMessage : public QObject
 {
     Q_OBJECT
 public:
-
     enum typeOfMessage{
         CorrectDrugsCoding,
         UncorrectDrugsCoding,
-        InformationToDevelopper
+        InformationToDevelopper,
+        DosageTransmission
     };
 
-    /** */
     tkSendMessage( QObject *parent = 0 );
     ~tkSendMessage();
 
     // setters
-    /** \brief Defines the type of message. */
     bool setTypeOfMessage( const typeOfMessage & t );
-    /** */
     void setParent( QWidget * parent );
-    /** \brief Name of the user that is sending informations. */
     void setUser( const QString & usr);
-    /** \brief Message to send. */
     void setMessage( const QString & msg );
-    /** */
     void showResultingMessageBox( bool state );
-    /** \brief The returned text of the server. */
-    QString resultMessage();
 
     // getters
-    /** */
-    QString usedUrl();
+    QString resultMessage() const;
+    QString usedUrl() const;
+    bool isSending() const;
 
     // starters
-    /** \brief Starts the posting. */
     bool postMessage();
 
 Q_SIGNALS:

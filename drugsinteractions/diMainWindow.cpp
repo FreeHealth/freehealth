@@ -53,6 +53,7 @@
 #include <drugswidget/mfDosageCreatorDialog.h>
 #include <drugswidget/mfPrescriptionViewer.h>
 #include <drugswidget/mfDrugsPreferences.h>
+#include <drugsmodel/mfDrugsIO.h>
 
 // include toolkit headers
 #include <tkGlobal.h>
@@ -82,8 +83,6 @@
 
 Q_TK_USING_CONSTANTS
 Q_TK_USING_TRANSLATIONS
-
-const char* const  DRUGINTERACTION_FILEFILTER = QT_TRANSLATE_NOOP("diMainWindow", "DrugsInteractions Prescriptions (*.di)");
 
 const char* const A_CONFIG_MEDINTUX          = "configureMedinTuxAction";
 const char* const CONFIGMEDINTUX_TEXT        = QT_TRANSLATE_NOOP("diMainWindow", "Configure MedinTux");
@@ -172,7 +171,7 @@ void diMainWindow::closeEvent( QCloseEvent *event )
     writeSettings();
     // if is a medintux plugins --> save prescription to exchange file
     if ( !diMedinTux::medintuxExchangeFileName().isEmpty() ) {
-        QString tmp = mfDrugsModel::instance()->prescriptionToHtml();
+        QString tmp = mfDrugsIO::instance()->prescriptionToHtml();
         tmp.replace("font-weight:bold;", "font-weight:600;");
         tkGlobal::saveStringToFile( tkGlobal::toHtmlAccent(tmp) , diMedinTux::medintuxExchangeFileName(), tkGlobal::DontWarnUser );
     }
@@ -183,7 +182,6 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
 {
     // if exists dosage for that drug show the dosageSelector widget
     // else show the dosage creator widget
-
     if (m_PrescriptionModel->containsDrug(CIS)) {
         tkGlobal::warningMessageBox(tr("Can not add this drug to your prescription."),
                                     tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
@@ -209,26 +207,14 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
 //    m_PrescriptionView->listview()->update();
 }
 
+/** \brief Opens mfDosageDialog with the good params */
 void diMainWindow::showDosageDialog(const QModelIndex &item)
 {
     int CIS = mfDrugsModel::instance()->index( item.row(), Drug::CIS ).data().toInt();
-//    if (!m_DosageDialog)
-//        m_DosageDialog = new mfDosageDialog( this, item.row(), 0 );
-//    else
-//        m_DosageDialog->changeRow( item.row(),0) ;
-//    m_DosageDialog->exec();
-
     if (!m_DosageDialog)
         m_DosageDialog = new mfDosageDialog(this);
     m_DosageDialog->changeRow(CIS,0) ;
     m_DosageDialog->exec();
-
-//    QDialog dlg(this);
-//    QGridLayout grid(&dlg);
-//    mfDosageViewer view(&dlg);
-//    view.useDrugsModel( CIS , item.row());
-//    grid.addWidget(&view);
-//    dlg.exec();
 }
 
 /** \brief Reads main window's settings */
@@ -267,6 +253,7 @@ void diMainWindow::createMenus()
     setMenuBar(am->menubar(MENUBAR));
 }
 
+/** \obsolete */
 void diMainWindow::createStatusBar()
 {
     statusBar()->showMessage( tkTr(READY), 2000 );
@@ -308,6 +295,7 @@ void diMainWindow::preferences()
     }
 }
 
+/** \brief Change the font of the viewing widget */
 void diMainWindow::changeFontTo( const QFont &font )
 {
     m_DrugSelector->setFont(font);
@@ -347,7 +335,7 @@ void diMainWindow::printPrescription()
                         tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
                        Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
     p.printWithDuplicata(true);
-    p.print( mfDrugsModel::instance()->prescriptionToHtml() );
+    p.print( mfDrugsIO::instance()->prescriptionToHtml() );
 }
 
 /** \brief Runs the MedinTux configurator */
@@ -359,22 +347,20 @@ void diMainWindow::configureMedinTux()
 /**
   \brief Saves a prescription.
   \sa openPrescription()
+  \sa mfDrugsIO
 */
 void diMainWindow::savePrescription()
 {
-    QString toSave = QString( "<DrugsInteractionsFile>\n"
-                              "<name>%1</name>\n"
-                              "%2\n"
-                              "</DrugsInteractionsFile>")
-            .arg( QString(patientName->text().toAscii().toBase64()) )
-            .arg( mfDrugsModel::instance()->prescriptionToXml() );
-    tkGlobal::saveStringToFile( toSave,//.toAscii().toBase64(),
-                                QDir::homePath() + "/prescription.di",
-                                tr(DRUGINTERACTION_FILEFILTER) );
+    QHash<QString, QString> hash;
+    hash.insert("NAME", diCore::patientName().toAscii().toBase64());
+    hash.insert("CLEARANCE", diCore::patientClCr().toAscii().toBase64());
+    mfDrugsIO::savePrescription(hash);
 }
 
 /**
   \brief Opens a prescription saved using savePrescription().
+  \sa savePrescription()
+  \sa mfDrugsIO
 */
 void diMainWindow::openPrescription()
 {
@@ -384,11 +370,8 @@ void diMainWindow::openPrescription()
                                              tr(DRUGINTERACTION_FILEFILTER) );
     if (f.isEmpty())
         return;
-//    QString f= "/Users/eric/Desktop/prescription.di";
-    QString serialized = tkGlobal::readTextFile(f).toAscii();
-    if (!serialized.startsWith("<DrugsInteractionsFile>"))
-        return;
-    mfDrugsModel::PrescriptionDeserializer z = mfDrugsModel::ReplacePrescription;
+//    QString f = "/Users/eric/prescription.di";
+    QHash<QString,QString> datas;
     if (m_PrescriptionModel->rowCount() > 0) {
         int r = tkGlobal::withButtonsMessageBox(
                 tr("Opening a prescription : merge or replace ?"),
@@ -396,14 +379,15 @@ void diMainWindow::openPrescription()
                 QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
                 tr("Open a prescription") + " - " + qApp->applicationName());
         if (r == 0) {
-            diMainWindowPrivate::readName(serialized);
-            this->patientName->setText( diCore::patientName() );
+            mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::ReplacePrescription);
         } else if (r==1) {
-            z = mfDrugsModel::AddPrescription;
+            mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::AppendPrescription);
         }
-    }
-    diMainWindowPrivate::readName(serialized);
-    mfDrugsModel::instance()->prescriptionFromXml(serialized, z);//diMainWindowPrivate::getClearPrescription(serialized), z );
+    } else
+            mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::ReplacePrescription);
+
+    diCore::setPatientName( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
+    patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
 }
 
 /**
@@ -424,3 +408,7 @@ void diMainWindow::on_updateFounded()
     connect(a, SIGNAL(triggered()), diCore::updateChecker(), SLOT(showUpdateInformations()));
 }
 
+void diMainWindow::on_patientName_textChanged(const QString &text)
+{
+    diCore::setPatientName(text);
+}

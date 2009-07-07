@@ -130,7 +130,7 @@ public:
             m_Mapper->addMapping( m_Parent->noteTextEdit, Prescription::Note, "plainText" );
             m_Mapper->addMapping( m_Parent->dailySchemeListView, Prescription::DailyScheme, "checkedStringList" );
 
-            m_Parent->tabWidget->removeTab(5);
+            m_Parent->tabWidget->removeTab(6);
             m_Parent->tabWidget->removeTab(4);
             m_Parent->tabWidget->removeTab(3);
             m_Parent->tabWidget->removeTab(2);

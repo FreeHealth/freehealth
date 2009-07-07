@@ -44,6 +44,7 @@
 // include drugswidget headers
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDosageModel.h>
+class mfDrugsIO;
 class mfDrugsModelPrivate;
 
 // include Qt headers
@@ -60,6 +61,7 @@ class mfDrugsModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class mfDosageModel;
+    friend class mfDrugsIO;
 
     mfDrugsModel( QObject * parent = 0 );
 
@@ -107,9 +109,7 @@ public:
     mfDosageModel *dosageModel( const QModelIndex & drugIndex );
 
     // FOR PRINTING FUNCTION
-    QString prescriptionToHtml();
-    QString prescriptionToXml();
-    void prescriptionFromXml( const QString &xml, PrescriptionDeserializer z = ReplacePrescription );
+//    QString prescriptionToHtml();
 
     void warn();
 

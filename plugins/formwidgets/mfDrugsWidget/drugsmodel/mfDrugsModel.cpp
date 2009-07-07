@@ -49,9 +49,10 @@
 #include "mfDrugsModel.h"
 
 // include drugwidgets headers
-#include "drugsdatabase/mfDrugsBase.h"
-#include "drugsmodel/mfDrugInteraction.h"
-#include "mfDrugsConstants.h"
+#include <drugsdatabase/mfDrugsBase.h>
+#include <drugsmodel/mfDrugInteraction.h>
+#include <drugsmodel/mfDrugsIO.h>
+#include <mfDrugsConstants.h>
 
 // include toolkit headers
 #include <tkGlobal.h>
@@ -69,33 +70,6 @@
 
 
 namespace mfDrugsModelConstants {
-    const char *const XML_PRESCRIPTION_MAINTAG            = "PRESCRIPTION";
-    const char *const XML_PRESCRIPTION_CIS                = "CIS";
-    const char *const XML_PRESCRIPTION_ID                 = "ID_";
-    const char *const XML_PRESCRIPTION_USEDDOSAGE         = "REF_DOSAGE";
-    const char *const XML_PRESCRIPTION_CIP                = "CIP";
-    const char *const XML_PRESCRIPTION_INTAKEFROM         = "INTAKEFROM";
-    const char *const XML_PRESCRIPTION_INTAKETO           = "INTAKETO";
-    const char *const XML_PRESCRIPTION_INTAKESCHEME       = "INTAKESCHEME";
-    const char *const XML_PRESCRIPTION_INTAKEFROMTO       = "INTAKEFROMTO";
-    const char *const XML_PRESCRIPTION_INTAKEINTERVALTIME = "INTAKEINTERVALTIME";
-    const char *const XML_PRESCRIPTION_INTAKEINTERVALSCHEME = "INTAKEINTERAVALSCHEME";
-    const char *const XML_PRESCRIPTION_INTAKEFULLSTRING   = "INTAKEFULL";
-    const char *const XML_PRESCRIPTION_DURATIONFROM       = "DURATIONFROM";
-    const char *const XML_PRESCRIPTION_DURATIONTO         = "DURATIONTO";
-    const char *const XML_PRESCRIPTION_DURATIONSCHEME     = "DURATIONSCHEME";
-    const char *const XML_PRESCRIPTION_DURATIONFROMTO     = "DURATIONFROMTO";
-    const char *const XML_PRESCRIPTION_PERIOD             = "PERIOD";
-    const char *const XML_PRESCRIPTION_PERIODSCHEME       = "PERIODSCHEME";
-    const char *const XML_PRESCRIPTION_DAILYSCHEME        = "DAILY";
-    const char *const XML_PRESCRIPTION_MEALSCHEME         = "MEALTIME";
-    const char *const XML_PRESCRIPTION_NOTE               = "NOTE";
-    const char *const XML_PRESCRIPTION_ISINN              = "INN";
-    const char *const XML_PRESCRIPTION_SPECIFYFORM        = "SPECFORM";
-    const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION = "SPECPRESENTATION";
-    const char *const XML_PRESCRIPTION_ISALD              = "ISALD";
-    const char *const XML_PRESCRIPTION_TOHTML             = "HTM";
-
     const char * const ALD_BACKGROUND_COLOR               = "khaki";
 }
 
@@ -110,30 +84,6 @@ class mfDrugsModelPrivate
 public:
     mfDrugsModelPrivate() : m_LastDrugRequiered(0)
     {
-        m_XmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
-        m_XmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
-        m_XmlTags.insert(Prescription::CIP , XML_PRESCRIPTION_CIP);
-        m_XmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
-        m_XmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
-        m_XmlTags.insert(Prescription::IntakesScheme, XML_PRESCRIPTION_INTAKESCHEME);
-        m_XmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
-        m_XmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
-        m_XmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
-        m_XmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
-        m_XmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
-        m_XmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
-        m_XmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
-        m_XmlTags.insert(Prescription::DurationUsesFromTo, XML_PRESCRIPTION_DURATIONFROMTO);
-        m_XmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
-        m_XmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
-        m_XmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
-        m_XmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
-        m_XmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
-        m_XmlTags.insert(Prescription::IsINNPrescription, XML_PRESCRIPTION_ISINN);
-        m_XmlTags.insert(Prescription::SpecifyForm, XML_PRESCRIPTION_SPECIFYFORM);
-        m_XmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
-        m_XmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
-        m_XmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
     }
 
     /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
@@ -295,25 +245,10 @@ public:
         return QVariant();
     }
 
-    /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
-    QString xmlTagForPrescriptionRow(const int row)
-    {
-        return m_XmlTags.value(row);
-    }
-
-    /** \brief For the Xml transformation of the prescription, return the mfDrugsConstants::Prescription for the xml tag \e xmltag */
-    int xmlTagToColumnIndex(const QString &xmltag)
-    {
-        if (!m_XmlTags.values().contains(xmltag))
-            return -1;
-        return m_XmlTags.key(xmltag);
-    }
-
 public:
     QDrugsList  m_DrugsList;       /*!< \brief Actual prescription drugs list */
     int m_levelOfWarning;          /*!< \brief Level of warning to use (retrieve from settings). */
     mutable QHash<int, QPointer<mfDosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
-    QHash<int,QString> m_XmlTags;  /*!< \brief Used for Xml reading/writing. Contains the translation from index to string. */
     mfDrugs *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
 
 };
@@ -691,144 +626,6 @@ void mfDrugsModel::warn()
         return;
     qWarning() << "drugs in memory" << d->m_DrugsList.count();
     qWarning() << "dosagemodels in memory" << d->m_DosageModelList.count();
-}
-
-/**
-  \brief Transform actual prescription to readable Html.
-  Prescription is automaticaaly sorted.\n
-*/
-QString mfDrugsModel::prescriptionToHtml()
-{
-    if (rowCount() <= 0)
-        return QString();
-    sort(0);
-
-    // TODO manage DCI, no Forms, FontSize from settings()
-    tkSettings *s = tkSettings::instance();
-
-    // Prepare font format
-    QFont drugsFont;
-    drugsFont.fromString(s->value( MFDRUGS_SETTING_DRUGFONT ).toString());
-    QFont prescrFont;
-    prescrFont.fromString(s->value( MFDRUGS_SETTING_PRESCRIPTIONFONT ).toString());
-
-    QString ALD, nonALD;
-    QString tmp;
-    // Add drugs
-    int i;
-    QString drugStyle, prescrStyle;
-    drugStyle = tkGlobal::fontToHtml(drugsFont, "black");
-    prescrStyle = tkGlobal::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
-    for(i=0; i < rowCount(); ++i) {
-        tmp = QString(ENCODEDHTML_DRUG);
-        tmp.replace( "{NUMBER}", QString::number(i+1));
-        tmp.replace( "{DRUGSTYLE}", drugStyle);
-        if (index(i,Prescription::IsINNPrescription).data().toBool()) {
-            tmp.replace( "{DRUG}", index(i,Drug::InnCompositionString).data().toString());
-        } else {
-            tmp.replace( "{DRUG}", index( i, Drug::Denomination ).data().toString());
-        }
-        tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
-        tmp.replace( "{PRESCRIPTION}", index( i, Prescription::ToHtml ).data().toString());
-        //        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
-
-        if (index( i, Prescription::IsALD ).data().toBool()) {
-            ALD += tmp;
-        } else {
-            nonALD += tmp;
-        }
-        tmp.clear();
-    }
-    if (!ALD.isEmpty()) {
-        tmp = s->value( MFDRUGS_SETTING_ALD_PRE_HTML ).toString();
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", ALD );
-        tmp += s->value( MFDRUGS_SETTING_ALD_POST_HTML ).toString();
-    }
-    if (!nonALD.isEmpty()) {
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", nonALD );
-    }
-
-    QString toReturn;
-    toReturn = QString(ENCODEDHTML_FULLDOC);
-    toReturn.replace("{GENERATOR}", qApp->applicationName());
-    toReturn.replace("{PRESCRIPTION}", tmp );
-    toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
-                     .arg(ENCODEDHTML_DRUGSINTERACTIONSTAG)
-                     .arg( QString(prescriptionToXml().toAscii().toBase64())) );
-    return toReturn;
-}
-
-/** \brief Transforms prescription to XML format for data saving */
-QString mfDrugsModel::prescriptionToXml()
-{
-    QString tmp;
-    QList<int> keysToSave;
-    keysToSave << Prescription::IntakesFrom << Prescription::IntakesTo
-            << Prescription::IntakesScheme << Prescription::IntakesUsesFromTo << Prescription::DurationFrom
-            << Prescription::DurationTo << Prescription::DurationScheme << Prescription::DurationUsesFromTo
-            << Prescription::Period << Prescription::PeriodScheme <<  Prescription::MealTimeSchemeIndex
-            << Prescription::Note << Prescription::IsINNPrescription << Prescription::SpecifyForm
-            << Prescription::SpecifyPresentation << Prescription::IsALD;
-    QHash<QString, QString> forXml;
-    int i;
-    for(i=0; i<rowCount() ; ++i) {
-        forXml.insert( XML_PRESCRIPTION_CIS, index(i, Drug::CIS).data().toString() );
-        foreach(int k, keysToSave) {
-            forXml.insert( d->xmlTagForPrescriptionRow(k), index(i, k).data().toString() );
-        }
-        tmp += tkGlobal::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
-    }
-    tmp.prepend( QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
-    tmp.append( QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
-    return tmp;
-}
-
-/**
-  \brief Deserialize prescription
-  You can replace the actual prescription with the desérialized one or add the deserialized one. Use the \e param.
-*/
-void mfDrugsModel::prescriptionFromXml( const QString &xml, PrescriptionDeserializer z )
-{
-    int row = 0;
-
-    // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
-    QString start = QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG);
-    QString finish = QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG);
-    int begin = xml.indexOf(start) + start.length();
-    int end = xml.indexOf(finish, begin);
-    if (begin==-1 || end==-1) {
-        tkLog::addError(this, tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
-        return;
-    }
-    QString x = xml.mid( begin, end - begin);
-
-    // split fuul prescription drug by drug
-    QString splitter = QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG);
-    QStringList drugs = x.split(splitter, QString::SkipEmptyParts );
-
-    // clear model
-    if (z==ReplacePrescription)
-        clearDrugsList();
-
-    // rebuild model with serialized prescription
-    QHash<QString, QString> hash;
-    foreach( const QString &s, drugs) {
-        if (!tkGlobal::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG),XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
-            tkLog::addError(this,tr("Unable to read xml prescription"));
-            continue;
-        }
-        if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_CIS)))
-            continue;
-        this->addDrug( hash.value(XML_PRESCRIPTION_CIS).toInt(), false );
-        hash.remove(XML_PRESCRIPTION_CIS);
-        foreach(const QString &i, hash.keys()) {
-            setData( index(row, d->xmlTagToColumnIndex(i)), hash.value(i) );
-        }
-        ++row;
-        hash.clear();
-    }
-    checkInteractions();
-    reset();
 }
 
 /** \brief Starts the interactions checking */

@@ -35,5 +35,7 @@ include( ../../plugins/formwidgets/mfDrugsWidget/mfdrugswidget.pri )
 
 # sources
 SOURCES += main.cpp \
-    IamTester.cpp
-HEADERS += IamTester.h
+    IamTester.cpp \
+    DosageSenderTester.cpp
+HEADERS += IamTester.h \
+    DosageSenderTester.h

@@ -148,7 +148,7 @@ namespace mfDrugsConstants
     const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td>{FULLPRESCRIPTION}</td></tr></table>";
     const char * const  ENCODEDHTML_DRUGSINTERACTIONSTAG = "DrugsInteractionsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
-    const char* const   XML_FULLPRESCRIPTION_TAG   = "Full_Prescription";   /*!< \brief tag that englobes the whole prescription on file saved using DrugWidget/DrugsInteractions */
+    const char* const  DRUGINTERACTION_FILEFILTER = QT_TRANSLATE_NOOP("mfDrugsConstants", "DrugsInteractions Prescriptions (*.di)");
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
@@ -363,9 +363,11 @@ namespace Dosage
 
         Period,
         PeriodScheme,
+        AdministrationScheme,
         DailyScheme,            /*!< \brief  */
         MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
         IsALD,                  /*!< \brief Prescription en ALD */
+        TypeOfTreatment,        /*!< \brief Type de traitement (chronique, aiguë...) enumerator à créer  \todo this */
 
         MinAge,                 /*!< \brief Limite d'âge en mois */
         MaxAge,                 /*!< \brief Limite d'âge en mois */
@@ -381,25 +383,12 @@ namespace Dosage
 
         Note,                   /*!< \brief note               --> varchar ( 500 ) */
 
-        CIM10Links,             /*!< \brief CIM10 codes related to the prescription. Codes are separated by a ';'. */
-        EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  */
+        CIM10Links,             /*!< \brief CIM10 codes related to the prescription. Codes are separated by a ';'. \todo this  */
+        CIM10LimitsLinks,       /*!< \brief CIM10 codes that must not be used with the prescription. Codes are separated by a ';'.  \todo this */
+        EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  \todo this  */
 
-//        MinIntakePerUnit,       /*!< \brief  */
-//        MaxIntakePerUnit,       /*!< \brief  */
-//        SelectedUnit,           /*!< \brief  */
-//        UnitDivisor,            /*!< \brief  */
-//        SelectedForm,           /*!< \brief texte de la forme sélectionnée */
-//        IntakeHourlyScheme,     /*!< \brief Schéma de prise    --> varchar ? */
-//        IntakeDailyScheme,      /*!< \brief Schéma de prise (matin,midi,soir...) cf enum --> QFlag */
-//        DurationModulator,      /*!< \brief                    --> ??? */
-
-//        Physiology,             /*!< \brief Terrain            --> int --> cf Physio       WeigtLimited */
-//        ScoredTablet,           /*!< \brief comprimé sécable   --> int cf enum Divsible */
-//        AlternateWith,          /*!< \brief link to another posology                       1/2 cp - 1/4 cp en alternance */
-
-        Extras,                 /*!< \brief blob that contains extra datas XML formatted */
-        UserUuid,               /*!< \brief Utilisateur        --> ???? */
-        ValidatorUuid,          /*!< \brief nom de celui qui a validé la posologie */
+        Extras,                 /*!< \brief blob that contains extra datas XML formatted (not used for now */
+        UserValidatorName,      /*!< \brief nom de celui qui a validé la posologie */
         CreationDate,           /*!< \brief Date création      --> date */
         ModificationDate,       /*!< \brief Date modification  --> date */
         Transmitted,            /*!< \brief Sera utilisé pour récupérer via internet les dosages référencés en local. date */

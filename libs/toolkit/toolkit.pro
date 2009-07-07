@@ -81,7 +81,8 @@ FORMS += widgets/tkDebugDialog.ui \
 
 # protected files
 exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/toolkit/objects/tkPrinter_Pro.cpp \
-    $${PROTECTED_PATH}/toolkit/objects/tkSendMessage_Pro.cpp
+    $${PROTECTED_PATH}/toolkit/objects/tkSendMessage_Pro.cpp \
+    $${PROTECTED_PATH}/toolkit/objects/tkSerialNumber_pro.cpp
 else:SOURCES += objects/tkPrinter.cpp \
     objects/tkSendMessage.cpp
 

@@ -98,6 +98,7 @@ private Q_SLOTS:
     void openPrescription();
     void savePrescription();
     void printPrescription();
+    void on_patientName_textChanged(const QString &text);
 
 private:
 //    mfDrugSelector       *m_DrugSelector;

@@ -70,10 +70,13 @@ void tkSendMessage::setUser( const QString & usr)
 void tkSendMessage::setMessage( const QString & msg )
 {}
 
-QString tkSendMessage::usedUrl()
+QString tkSendMessage::usedUrl() const
 {
     return QString();
 }
+
+bool tkSendMessage::isSending() const
+{ return false; }
 
 void tkSendMessage::showResultingMessageBox( bool state )
 {}

@@ -38,100 +38,53 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSBASE_H
-#define MFDRUGSBASE_H
+#ifndef MFDRUGSIO_H
+#define MFDRUGSIO_H
 
-// include drugswidget headers
-#include <mfDrugsConstants.h>
-class mfDrugs;
-class mfDrugInteraction;
-class mfDrugDosage;
-class mfDrugInfo;
-class mfDrugsBasePrivate;
+class mfDrugsIOPrivate;
 
-// include toolkit headers
-#include <tkDatabase.h>
-
-// include Qt headers
-#include <QVariant>
-#include <QStringList>
-#include <QMap>
-#include <QMultiHash>
+#include <QObject>
+#include <QHash>
 
 /**
- * \file mfDrugsBase.h
+ * \file mfDrugsIO.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.14
- * \date 03 July 2009
+ * \version 0.0.2
+ * \date 07 July 2009
 */
 
-using namespace mfInteractionsConstants;
-
-class mfDrugsBase : public tkDatabase
+class mfDrugsIO : public QObject
 {
     Q_OBJECT
-    mfDrugsBase( QObject *parent = 0 );
-    bool init();
-
-    friend class mfDrugsModel;
-    friend class mfPrescriptionModel;
-    friend class mfDrugsBasePrivate;
-    friend class mfDrugs;
-    friend class mfDrugInteraction;
-    friend class mfDrugInfo;
-
 public:
-    static mfDrugsBase *instance();
-    ~mfDrugsBase();
-    // INITIALIZER
-    static bool isInitialized() { return m_initialized; }
-    void checkDosageDatabaseVersion();
+    enum Loader {
+        AppendPrescription,
+        ReplacePrescription
+    };
 
-    QList<int> getLinkedCodeSubst( QList<int> & code_iam );
-    QList<int> getLinkedIamCode( QList<int> & code_subst );
-    QList<int> getLinkedSubstCode( const QString & iamDenomination );
-    int        getInnCodeForCodeMolecule(const int code);
+    static mfDrugsIO *instance(QObject *parent=0);
+    ~mfDrugsIO();
 
-    mfDrugs * getDrugByCIP( const QVariant & CIP_id );
-    mfDrugs * getDrugByCIS( const QVariant & CIS_id );
-    int       getCISFromCIP( int CIP );
-    QString   getInnDenominationFromSubstanceCode( const int code_subst );
-    QString   getInnDenomination( const int inncode );
-
-    void      logChronos( bool state );
-
-    QHash<QString, QString> getDosageToTransmit();
-    bool markAllDosageTransmitted( const QStringList &dosageUuids );
-
-//protected:
-public:
-    static const QString separator;
-
-    // managins drugs
-    bool         drugsINNIsKnown( const mfDrugs * drug );
-
-    // managing Interactions
-    bool interactions( const QList<mfDrugs*> & drugs );                 // must be called first
-    bool drugHaveInteraction( const mfDrugs * d );                      // must call first interactions()
-    Interaction::TypesOfIAM getMaximumTypeOfIAM( const mfDrugs * d );   // must call first interactions()
-    QList<mfDrugInteraction*> getInteractions( const mfDrugs * d );     // must call first interactions()
-    QList<mfDrugInteraction*> getInteractions( const int CIS );         // must call first interactions()
-    mfDrugInteraction * getLastInteractionFound();                      // must call first interactions()
-    QList<mfDrugInteraction*> getAllInteractionsFound();                // must call first interactions()
+    bool startsDosageTransmission();
+    static bool isSendingDosage();
+    static bool  prescriptionFromXml(const QString &xml, Loader loader = ReplacePrescription);
+    static bool loadPrescription(const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
+    static bool savePrescription(const QHash<QString,QString> &extraDatas);
+    static QString prescriptionToXml();
+    static QString prescriptionToHtml();
 
 private:
-    bool createDatabase(  const QString & connectionName , const QString & dbName,
-                          const QString & pathOrHostName,
-                          TypeOfAccess access, AvailableDrivers driver,
-                          const QString & /*login*/, const QString & /*pass*/,
-                          CreationOption /*createOption*/
-                          );
+    mfDrugsIO(QObject *parent);
+
+private Q_SLOTS:
+    void dosageTransmissionDone();
+
+Q_SIGNALS:
+    void transmissionDone();
 
 private:
-    // intialization state
-    static mfDrugsBase *m_Instance;
-    static bool m_initialized;
-    mfDrugsBasePrivate * d;
+    static mfDrugsIO *m_Instance;
+    mfDrugsIOPrivate *d;
 };
 
-#endif
+#endif // MFDRUGSIO_H

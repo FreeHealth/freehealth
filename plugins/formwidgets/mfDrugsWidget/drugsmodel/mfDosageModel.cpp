@@ -322,7 +322,6 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
             setData( index( createdRow, Dosage::SexLimitedIndex ) , 0 );
             setData( index( createdRow, Dosage::Note ) , QVariant() );
             setData( index( createdRow, Dosage::CreationDate ) , QDateTime::currentDateTime() );
-            setData( index( createdRow, Dosage::UserUuid ) , userUuid );
             setData( index( createdRow, Dosage::Transmitted ) , QVariant() );
         }
     }

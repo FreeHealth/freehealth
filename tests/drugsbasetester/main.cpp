@@ -1,3 +1,6 @@
+#include "IamTester.h"
+#include "DosageSenderTester.h"
+
 #include <QApplication>
 #include <QVariant>
 #include <QDebug>
@@ -9,6 +12,7 @@
 
 #include <tkGlobal.h>
 #include <tkSettings.h>
+#include <tkSendMessage.h>
 
 QDrugsList drugList;
 
@@ -122,7 +126,12 @@ int main(int argc, char *argv[])
 //    addDrugs();
 //    testDrugsModel();
 //    testIam();
-    qWarning() << mfDrugsBase::instance()->getDosageToTransmit();
 
-    return 0;//app.exec();
+    DosageSenderTester test(qApp);
+    qApp->connect(&test, SIGNAL(end()), qApp, SLOT(quit()));
+    qWarning() << "test.start";
+    test.start();
+
+
+    return app.exec();
 }
