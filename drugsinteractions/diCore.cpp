@@ -91,6 +91,8 @@ namespace diCorePrivateConstants {
     const char* const  COMMANDLINE_PATIENTCLCR        = "--clcr";
     const char* const  COMMANDLINE_CHRONOMETER        = "--chrono";
     const char* const  COMMANDLINE_CREATININ          = "--creatinin";
+    const char* const  COMMANDLINE_TRANSMITDOSAGES    = "--transmit-dosage";
+//    const char* const  COMMANDLINE_  = "--";
 //    const char* const  COMMANDLINE_  = "--";
 
     const char* const  SETTINGS_COUNTDOWN             = "transmissionCountDown";
@@ -129,6 +131,8 @@ public:
                 m_PatientCreat = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
             } else if (arg.contains(COMMANDLINE_CHRONOMETER)) {
                 m_Chrono = true;
+            } else if (arg.contains(COMMANDLINE_TRANSMITDOSAGES)) {
+                m_TransmitDosage = true;
             }
         }
 //        if (tkGlobal::isDebugCompilation())
@@ -156,6 +160,7 @@ public:
     static QString m_PatientCreat;
     static bool m_WineRunning;
     static bool m_Chrono;
+    static bool m_TransmitDosage;
 };
 
 QHash<const QMetaObject*, QObject*> diCorePrivate::mInstances;
@@ -170,6 +175,7 @@ QString diCorePrivate::m_PatientClCr = "";
 QString diCorePrivate::m_PatientCreat = "";
 bool diCorePrivate::m_WineRunning = false;
 bool diCorePrivate::m_Chrono = false;
+bool diCorePrivate::m_TransmitDosage = false;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////   PUBLIC PART   /////////////////////////////////////////////////////////
@@ -327,12 +333,12 @@ bool diCore::init()
             tkLog::logTimeElapsed(chrono, "diCore", "medintux plugins preparation");
     }
 
-    // Update countdown to transmission
+    // Update countdown to dosage transmission
     int count = settings()->value(SETTINGS_COUNTDOWN,0).toInt();
     ++count;
-    if (count) {
+    if ((count==30) || (diCorePrivate::m_TransmitDosage)) {
         settings()->setValue(SETTINGS_COUNTDOWN,0);
-//        diCorePrivate::transmitDosage();
+        diCorePrivate::transmitDosage();
     } else
         settings()->setValue(SETTINGS_COUNTDOWN,count);
 

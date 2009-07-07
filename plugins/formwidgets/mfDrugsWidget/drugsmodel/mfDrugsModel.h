@@ -53,8 +53,8 @@ class mfDrugsModelPrivate;
 /**
  * \file mfDrugsModel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.10
- * \date 28 June 2009
+ * \version 0.0.12
+ * \date 07 July 2009
 */
 
 class mfDrugsModel : public QAbstractTableModel
@@ -71,7 +71,6 @@ public:
         AddWithoutDouble,
         ReplacePrescription
     };
-
 
     static mfDrugsModel *instance();
     ~mfDrugsModel();
@@ -107,9 +106,6 @@ public:
     // FOR DOSAGE MANAGEMENT
     mfDosageModel *dosageModel( const int _CIS );
     mfDosageModel *dosageModel( const QModelIndex & drugIndex );
-
-    // FOR PRINTING FUNCTION
-//    QString prescriptionToHtml();
 
     void warn();
 

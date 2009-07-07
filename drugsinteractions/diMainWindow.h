@@ -60,8 +60,8 @@ class tkTranslators;
 /**
  * \file diMainWindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 12 May 2009
+ * \version 0.0.9
+ * \date 07 July 2009
  * \brief Mainwindow of DrugsInteractions.
    \ingroup drugsinteractions
 */
@@ -76,7 +76,6 @@ public:
 
 protected Q_SLOTS:
     void on_updateFounded();
-//    void showUpdateInformations();
 
 protected:
     void closeEvent( QCloseEvent *event );
@@ -101,9 +100,7 @@ private Q_SLOTS:
     void on_patientName_textChanged(const QString &text);
 
 private:
-//    mfDrugSelector       *m_DrugSelector;
     mfDrugsPrescriptor   *m_DrugPrescriptor;
-//    mfPrescriptionViewer *m_PrescriptionView;
     mfDrugsModel         *m_PrescriptionModel;
     mfDosageDialog       *m_DosageDialog;
     QString               m_iniPath;

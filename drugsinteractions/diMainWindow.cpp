@@ -87,19 +87,6 @@ Q_TK_USING_TRANSLATIONS
 const char* const A_CONFIG_MEDINTUX          = "configureMedinTuxAction";
 const char* const CONFIGMEDINTUX_TEXT        = QT_TRANSLATE_NOOP("diMainWindow", "Configure MedinTux");
 
-namespace diMainWindowPrivate {
-
-void readName(QString &serializedPrescription)
-{
-    int begin = serializedPrescription.indexOf("<name>") + 6;
-    int end = serializedPrescription.indexOf("</name>", begin);
-    QString name = QByteArray::fromBase64(( serializedPrescription.mid( begin, end - begin).toAscii() ));
-    diCore::setPatientName( name );
-}
-
-}  // end namespace diMainWindowPrivate
-
-
 /** \brief Constructor */
 diMainWindow::diMainWindow( QWidget *parent )
           : QMainWindow(parent),
@@ -195,16 +182,6 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
         m_PrescriptionModel->removeLastInsertedDrug();
     }
     m_PrescriptionView->listview()->update();
-
-//    if (!m_DosageDialog)
-//        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
-//    else
-//        m_DosageDialog->changeRow(drugPrescriptionRow,0);
-//
-//    int r = m_DosageDialog->exec();
-//    if ( r == QDialog::Rejected )
-//        m_PrescriptionModel->removeLastInsertedDrug();
-//    m_PrescriptionView->listview()->update();
 }
 
 /** \brief Opens mfDosageDialog with the good params */
@@ -408,6 +385,7 @@ void diMainWindow::on_updateFounded()
     connect(a, SIGNAL(triggered()), diCore::updateChecker(), SLOT(showUpdateInformations()));
 }
 
+/** \brief Alwaus keep uptodate diCore::patientName() */
 void diMainWindow::on_patientName_textChanged(const QString &text)
 {
     diCore::setPatientName(text);

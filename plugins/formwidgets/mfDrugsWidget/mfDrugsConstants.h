@@ -53,32 +53,32 @@ namespace mfDrugsConstants
 {
     // Settings names
     const char * const  MFDRUGS_SETTING_GROUP                  = "DrugsWidget";                              /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                      /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                       /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                   /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";                   /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";              /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";                /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                   /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";               /*!< \brief Key for settings. \obsolete*/
-    const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_WATERMARK_HTML         = "DrugsWidget/print/watermark/Html";           /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
+    const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_WATERMARK_HTML         = "DrugsWidget/print/watermark/Html";         /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_ALD_PRE_HTML           = "DrugsWidget/print/ALDPreHtml";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_ALD_POST_HTML          = "DrugsWidget/print/ALDPostHtml";           /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_ALD_PRE_HTML           = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_ALD_POST_HTML          = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_USERHEADER             = "DrugsWidget/user/Header";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_USERFOOTER             = "DrugsWidget/user/Footer";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_USER                   = "DrugsWidget/user/Name";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PASSWORD               = "DrugsWidget/user/Pass";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_SERIAL                 = "DrugsWidget/user/SN";           /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_USERHEADER             = "DrugsWidget/user/Header";                  /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_USERFOOTER             = "DrugsWidget/user/Footer";                  /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_USER                   = "DrugsWidget/user/Name";                    /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_PASSWORD               = "DrugsWidget/user/Pass";                    /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_SERIAL                 = "DrugsWidget/user/SN";                      /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_SEARCHMETHOD           = "DrugsWidget/searchMethod";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_HISTORYSIZE            = "DrugsWidget/historySize";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_DRUGHISTORY            = "DrugsWidget/drugsHistory";           /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_LEVELOFWARNING         = "DrugsWidget/levelOfWarning";           /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_SEARCHMETHOD           = "DrugsWidget/searchMethod";                 /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_HISTORYSIZE            = "DrugsWidget/historySize";                  /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_LEVELOFWARNING         = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";           /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
 
     // DEFAULTS SETTINGS
     const char * const  MFDRUGS_DEFAULT_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */

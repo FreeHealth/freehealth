@@ -86,6 +86,14 @@ public:
     {
     }
 
+    ~mfDrugsModelPrivate()
+    {
+        qDeleteAll( m_DosageModelList );
+        m_DosageModelList.clear();
+        qDeleteAll( m_DrugsList );
+        m_DrugsList.clear();
+    }
+
     /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
     mfDrugs *getDrug(const int CIS)
     {
@@ -274,7 +282,6 @@ mfDrugsModel::mfDrugsModel( QObject * parent )
 {
     if ( !mfDrugsBase::isInitialized() )
         return;
-    //    m_DosageModel = mfDosageModel::instance();
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
 }
@@ -282,10 +289,6 @@ mfDrugsModel::mfDrugsModel( QObject * parent )
 /** \brief Destructor */
 mfDrugsModel::~mfDrugsModel()
 {
-    qDeleteAll( d->m_DosageModelList );
-    d->m_DosageModelList.clear();
-    qDeleteAll( d->m_DrugsList );
-    d->m_DrugsList.clear();
     if (d) delete d;
     d=0;
 }
@@ -408,7 +411,6 @@ QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
         QString display;
         display = drug->toHtml();
 
-//        QDrugsList withoutThis = d->m_DrugsList;
         if ( b->drugHaveInteraction( drug ) ) {
             const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
             display.append( "<br>\n" );
