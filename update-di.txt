@@ -1,8 +1,12 @@
 version=0.0.7
 {
     * Juillet 2009 - Version bétâ
+    * Version de la base de données thérapeutique :
+      * Médicaments :  AFSSAPS - 26/06/2009
+      * Interactions : AFSSAPS - 29/06/2009
+
     * Nouvelles fonctionnalités
-      * Prescription en DCI lorsque la DCI est connue
+      * Prescription en DCI lorsque la DCI est connue (attention nécessite une vérification)
       * Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
       * Possibilité d'ajouter une prescription à une prescription en cours d'édition
       * Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine, créatinine)

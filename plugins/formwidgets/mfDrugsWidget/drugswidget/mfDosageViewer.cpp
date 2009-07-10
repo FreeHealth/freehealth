@@ -304,11 +304,15 @@ public:
             m_Parent->intakesFromSpin->setDecimals( 2 );
             m_Parent->intakesToSpin->setSingleStep( 0.25 );
             m_Parent->intakesFromSpin->setSingleStep( 0.25 );
+            m_Parent->intakesToSpin->setMinimum( 0.25 );
+            m_Parent->intakesFromSpin->setMinimum( 0.25 );
         } else {
             m_Parent->intakesToSpin->setDecimals( 0 );
             m_Parent->intakesFromSpin->setDecimals( 0 );
             m_Parent->intakesToSpin->setSingleStep( 1 );
             m_Parent->intakesFromSpin->setSingleStep( 1 );
+            m_Parent->intakesToSpin->setMinimum( 1 );
+            m_Parent->intakesFromSpin->setMinimum( 1 );
         }
         resizeTableWidget();
         if (m_DosageModel)
@@ -353,6 +357,8 @@ mfDosageViewer::mfDosageViewer( QWidget *parent )
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
     userformsButton->setIcon( tkTheme::icon(ICONEDIT) );
+    // remove last page of tabWidget (TODO page)
+    tabWidget->removeTab(tabWidget->count()-1);
 
     // this must be done here
     tkStringListModel * stringModel = new tkStringListModel( this );
@@ -409,6 +415,7 @@ void mfDosageViewer::changeCurrentRow(const int dosageRow)
     d->resetUiToDefaults();
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->m_Mapper->setCurrentIndex(dosageRow);
+    qWarning() << dosageRow << QString("%1 = %2,").arg(mfDrugsModel::instance()->drugData(d->m_CIS,Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
 }
 
 /** \brief Changes the current editing dosage */

@@ -105,44 +105,49 @@
         <translation>Configurer MednTux</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="173"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="178"/>
         <source>Can not add this drug to your prescription.</source>
         <translation>Impossible d&apos;ajouter ce médicament à la prescription.</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="174"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="179"/>
         <source>Prescription can not contains twice the sample pharmaceutical drug.
 Drug %1 is already in your prescription</source>
         <translation>La prescription ne peut pas citer deux fois le même médicament.
 Le médicament %1 est déjà dans votre prescription</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="176"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="181"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
         <translation>Si vous souhaitez modifier la posologie de ce médicament, double-cliquer dessus dans le cadre réservé à la prescription.</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="354"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="317"/>
+        <source>Made with DrugsInteractions.</source>
+        <translation>Réalisée avec DrugsInteractions.</translation>
+    </message>
+    <message>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="362"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture une prescription : ajouter ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="355"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="363"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Une prescription est déjà disponible dans l&apos;éditeur, voulez-vous remplacer cette prescription ou ajouter à cette prescription ?</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="356"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="364"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="356"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="364"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../drugsinteractions/diMainWindow.cpp" line="357"/>
+        <location filename="../../drugsinteractions/diMainWindow.cpp" line="365"/>
         <source>Open a prescription</source>
         <translation>Ouvrir une prescription</translation>
     </message>
@@ -327,64 +332,6 @@ Veuillez vous référer à la documentation.</translation>
 <context>
     <name>mfDosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="155"/>
-        <source>Drug Dosage Creator</source>
-        <translation>Créateur de posologie</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="38"/>
-        <source>DrugName</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="73"/>
-        <source>Cancel this window, all changes will be lost.</source>
-        <translation>Annuler, toutes les modifications seront perdues.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="76"/>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="83"/>
-        <source>The dosage will be used for your actual prescription,&lt;br /&gt; and it will be saved in your dosage database.</source>
-        <translation>Cette posologie sera utilisée dans votre actuelle prescription,&lt;br&gt; et sera sauvegardée en base.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="86"/>
-        <source>Save and prescribe</source>
-        <translation>Sauvegarder et prescrire</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="93"/>
-        <source>The dosage will be saved in your dosage databse, &lt;br /&gt;no cahnges will be done to your actual prescription.</source>
-        <translation>La posologie sera sauvegardée dans la base, &lt;br /&gt; aucun changement ne sera effectué sur votre prescription actuelle.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="96"/>
-        <source>Save changes</source>
-        <translation>Sauvegarder les modifications</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="103"/>
-        <source>The dosage will be used for your actual prescription,&lt;br /&gt; but will not be saved in your dosage database.</source>
-        <translation>La posologie sera utilisée pour votre prescription, &lt;br/&gt; mais ne sera sauvegardée dans la base.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="106"/>
-        <source>Only prescribe</source>
-        <translation>Prescrire seulement</translation>
-    </message>
-</context>
-<context>
-    <name>mfDosageCreatorDialogPrivate</name>
-    <message>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="94"/>
         <source>Dosage is not valid.</source>
         <translation>Dosage non valide.</translation>
@@ -392,6 +339,7 @@ Veuillez vous référer à la documentation.</translation>
     <message>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="96"/>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="118"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="155"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
@@ -404,6 +352,56 @@ Veuillez vous référer à la documentation.</translation>
         <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.cpp" line="114"/>
         <source>SQL Error : Dosage can not be added to database : %1</source>
         <translation>Erreur SQL : le dosage ne peut pas être ajouté à la base de données : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="143"/>
+        <source>DrugName</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="42"/>
+        <source>Cancel this window, all changes will be lost.</source>
+        <translation>Annuler, toutes les modifications seront perdues.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="45"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="52"/>
+        <source>The dosage will be used for your actual prescription,&lt;br /&gt; and it will be saved in your dosage database.</source>
+        <translation>Cette posologie sera utilisée dans votre actuelle prescription,&lt;br&gt; et sera sauvegardée en base.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="55"/>
+        <source>Save and prescribe</source>
+        <translation>Sauvegarder et prescrire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="62"/>
+        <source>The dosage will be saved in your dosage databse, &lt;br /&gt;no cahnges will be done to your actual prescription.</source>
+        <translation>La posologie sera sauvegardée dans la base, &lt;br /&gt; aucun changement ne sera effectué sur votre prescription actuelle.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="65"/>
+        <source>Save changes</source>
+        <translation>Sauvegarder les modifications</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="72"/>
+        <source>The dosage will be used for your actual prescription,&lt;br /&gt; but will not be saved in your dosage database.</source>
+        <translation>La posologie sera utilisée pour votre prescription, &lt;br/&gt; mais ne sera sauvegardée dans la base.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageCreatorDialog.ui" line="75"/>
+        <source>Only prescribe</source>
+        <translation>Prescrire seulement</translation>
     </message>
 </context>
 <context>
@@ -549,18 +547,18 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>mfDosageViewer</name>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="354"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="358"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="509"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="514"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="541"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfDosageViewer.cpp" line="546"/>
         <source>Linking to : </source>
         <translation>Lié à : </translation>
     </message>
@@ -1228,44 +1226,44 @@ Voulez-vous les transmettre ?</translation>
         <translation>Mauvaise réference de table dans mfDrugs::setValue().</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="231"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="233"/>
         <source>Wrong table reference parameter in mfDrugs::value().</source>
         <translation>Mauvais paramètre de table dans mfDrugs::value().</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="480"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="482"/>
         <source>No INN found.</source>
         <translation>Aucune DCI trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="485"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="487"/>
         <source>No interaction class found.</source>
         <translation>Aucune classe d&apos;interaction trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="589"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="617"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="591"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="619"/>
         <source>from</source>
         <translation>de</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="591"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="619"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="593"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="621"/>
         <source>to</source>
         <translation>à</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="606"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="608"/>
         <source>and</source>
         <translation>et</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="645"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="647"/>
         <source>each</source>
         <translation>tous les</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="647"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugs.cpp" line="649"/>
         <source>during</source>
         <translation>durant</translation>
     </message>
@@ -1313,13 +1311,13 @@ Nom de fichier : %2</translation>
         <translation>Impossible de mettre à jour les informations de transmission des posologies</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="1023"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="1026"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="749"/>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="774"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="751"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsdatabase/mfDrugsBase.cpp" line="776"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : Mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
@@ -1355,9 +1353,14 @@ Nom de fichier : %2</translation>
         <translation>Impossible de lire la prescription XML</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsIO.cpp" line="278"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsIO.cpp" line="279"/>
         <source>No file name passed to load prescription</source>
         <translation>Pas de nom de fichier passé pour charger une prescription</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugsmodel/mfDrugsIO.cpp" line="342"/>
+        <source>[INN]</source>
+        <translation>[DCI]</translation>
     </message>
 </context>
 <context>
@@ -1542,17 +1545,17 @@ Nom de fichier : %2</translation>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="284"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="283"/>
         <source>Remove this drug</source>
         <translation>Retirer la thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="285"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="284"/>
         <source>Clear this prescription</source>
         <translation>Effacer l&apos;ordonnance</translation>
     </message>
     <message>
-        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="286"/>
+        <location filename="../../plugins/formwidgets/mfDrugsWidget/drugswidget/mfPrescriptionViewer.cpp" line="285"/>
         <source>Sort this prescription</source>
         <translation>Trier l&apos;ordonnance</translation>
     </message>

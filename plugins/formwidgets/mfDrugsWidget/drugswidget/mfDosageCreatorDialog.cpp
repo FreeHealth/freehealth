@@ -91,9 +91,9 @@ public:
     {
         QStringList list = m_DosageModel->isDosageValid(row);
         if (list.count()) {
-            tkGlobal::warningMessageBox(m_Parent->tr("Dosage is not valid."),
+            tkGlobal::warningMessageBox(QCoreApplication::translate("mfDosageCreatorDialog", "Dosage is not valid."),
                                         list.join("br />"),
-                                        "", m_Parent->tr("Drug Dosage Creator"));
+                                        "", QCoreApplication::translate("mfDosageCreatorDialog", "Drug Dosage Creator"));
             return false;
         }
         return true;
@@ -109,13 +109,13 @@ public:
         m_DosageModel->database().transaction();
         if (m_DosageModel->submitAll()) {
             if (m_DosageModel->database().commit())
-                tkLog::addMessage(m_Parent, m_Parent->tr("Dosage correctly saved to base"));
+                tkLog::addMessage(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Dosage correctly saved to base"));
             else
-                tkLog::addError(m_Parent, m_Parent->tr("SQL Error : Dosage can not be added to database : %1")
+                tkLog::addError(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
                                 .arg(m_DosageModel->lastError().text()));
         } else {
             m_DosageModel->database().rollback();
-            QMessageBox::warning(m_Parent, m_Parent->tr("Drug Dosage Creator"),
+            QMessageBox::warning(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Drug Dosage Creator"),
                                  tkTr(ERROR_1_FROM_DATABASE_2)
                                  .arg(m_DosageModel->database().lastError().text())
                                  .arg(m_DosageModel->database().connectionName()));
@@ -154,9 +154,16 @@ mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *do
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
 
-    // Various model intializations
+    // Drug informations
     mfDrugsModel *m = mfDrugsModel::instance();
-    drugNameLabel->setText( m->drugData(dosageModel->drugCIS(), Drug::Denomination).toString() );
+    int CIS = dosageModel->drugCIS();
+    drugNameLabel->setText( m->drugData(CIS, Drug::Denomination).toString() );
+    QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
+    interactionIconLabel->setPixmap( m->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
+    interactionIconLabel->setToolTip( toolTip );
+    toolTip = m->drugData(CIS, Drug::CompositionString ).toString();
+    drugNameLabel->setToolTip( toolTip );
+    // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
     availableDosagesListView->setModel(dosageModel);
     availableDosagesListView->setModelColumn(Dosage::Label);

@@ -43,8 +43,8 @@
 /**
  * \file QButtonLineEdit.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 27 Feb 2009
+ * \version 0.0.3
+ * \date 08 July 2009
 */
 
 #include <tkExporter.h>

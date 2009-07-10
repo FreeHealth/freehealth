@@ -453,14 +453,17 @@ Qt::ItemFlags mfDrugsModel::flags( const QModelIndex &index ) const
 /** \brief Removes \e count drugs from the \e row. */
 bool mfDrugsModel::removeRows( int row, int count, const QModelIndex & parent )
 {
+    d->m_LastDrugRequiered = 0;
     beginRemoveRows( parent, row, row+count );
-    if ( row >= d->m_DrugsList.count() )
+    if (row >= d->m_DrugsList.count())
         return false;
-    if ( ( row + count ) > d->m_DrugsList.count() )
+    if ( (row + count) > d->m_DrugsList.count() )
         return false;
     int i;
-    for( i = 0; i < count; ++i )
-        d->m_DrugsList.removeAt( row );
+    for( i = 0; i < count; ++i ) {
+        delete d->m_DrugsList.at(row+i);
+        d->m_DrugsList.removeAt(row+i);
+    }
     checkInteractions();
     endRemoveRows();
     reset();
@@ -474,6 +477,8 @@ bool mfDrugsModel::removeRows( int row, int count, const QModelIndex & parent )
 */
 int mfDrugsModel::addDrug( mfDrugs* drug, bool automaticInteractionChecking )
 {
+    if (!drug)
+        return -1;
     // insert only once the same drug
     if (containsDrug(drug->CIS()))
         return d->m_DrugsList.indexOf(drug);
@@ -504,9 +509,9 @@ int mfDrugsModel::addDrug( const int _CIS, bool automaticInteractionChecking )
 /** \brief Clear the prescription. Clear all interactions too. */
 void mfDrugsModel::clearDrugsList()
 {
+    d->m_LastDrugRequiered = 0;
     qDeleteAll(d->m_DrugsList);
     d->m_DrugsList.clear();
-    d->m_LastDrugRequiered=0;
     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     reset();
     Q_EMIT numberOfRowsChanged();
@@ -516,6 +521,7 @@ void mfDrugsModel::clearDrugsList()
 void mfDrugsModel::setDrugsList( QDrugsList & list )
 {
     d->m_DrugsList.clear();
+    d->m_LastDrugRequiered = 0;
     d->m_DrugsList << list;
     checkInteractions();
     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
@@ -593,6 +599,7 @@ mfDosageModel *mfDrugsModel::dosageModel( const QModelIndex &drugIndex )
 int mfDrugsModel::removeDrug( const int _CIS )
 {
     // Take care that this function removes all occurence of the referenced drug
+    d->m_LastDrugRequiered = 0;
     int i = 0;
     foreach( mfDrugs * drug, d->m_DrugsList ) {
         if ( drug->CIS() == _CIS ) {
@@ -611,6 +618,7 @@ int mfDrugsModel::removeDrug( const int _CIS )
 int mfDrugsModel::removeLastInsertedDrug()
 {
     // TODO Take care if user inserted x times the same drug
+    d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
     delete d->m_DrugsList.last();

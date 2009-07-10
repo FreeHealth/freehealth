@@ -159,8 +159,8 @@ int main(int argc, char *argv[])
 //    text_Html();
 //    test_Xml();
 //    test_Translations();
-//    test_tkPrinter();
-    test_dialogs();
+    test_tkPrinter();
+//    test_dialogs();
     app.exec();
     return 0;
 }

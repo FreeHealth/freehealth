@@ -262,6 +262,7 @@ bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
         }
         hash.clear();
     }
+    m->checkInteractions();
     return true;
 }
 
@@ -303,7 +304,6 @@ bool mfDrugsIO::loadPrescription(const QString &fileName, QHash<QString,QString>
     }
     QString x = xml.mid( begin, end + finish.length() - begin);
     tkGlobal::readXml(x,XML_EXTRADATAS_TAG,extraDatas,false);
-    m->checkInteractions();
     m->reset();
     return true;
 }
@@ -339,7 +339,7 @@ QString mfDrugsIO::prescriptionToHtml()
         tmp.replace( "{NUMBER}", QString::number(i+1));
         tmp.replace( "{DRUGSTYLE}", drugStyle);
         if (m->index(i,Prescription::IsINNPrescription).data().toBool()) {
-            tmp.replace( "{DRUG}", m->index(i,Drug::InnCompositionString).data().toString());
+            tmp.replace( "{DRUG}", m->index(i,Drug::InnCompositionString).data().toString() + " - " + tr("[INN]"));
         } else {
             tmp.replace( "{DRUG}", m->index( i, Drug::Denomination ).data().toString());
         }

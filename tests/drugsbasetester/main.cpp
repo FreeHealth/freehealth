@@ -98,8 +98,23 @@ void testDrugsModel()
         list << tmp;
     }
     tkGlobal::quickDebugDialog(list);
-
 }
+
+
+void testSendDosage()
+{
+    DosageSenderTester test(qApp);
+    qApp->connect(&test, SIGNAL(end()), qApp, SLOT(quit()));
+    qWarning() << "test.start";
+    test.start();
+}
+
+void testIam()
+{
+    IamTester it;
+    it.testIam();
+}
+
 
 
 int main(int argc, char *argv[])
@@ -125,13 +140,7 @@ int main(int argc, char *argv[])
 
 //    addDrugs();
 //    testDrugsModel();
-//    testIam();
-
-    DosageSenderTester test(qApp);
-    qApp->connect(&test, SIGNAL(end()), qApp, SLOT(quit()));
-    qWarning() << "test.start";
-    test.start();
-
+    testIam();
 
     return app.exec();
 }

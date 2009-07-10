@@ -202,11 +202,10 @@ void mfPrescriptionViewer::removeTriggered()
     Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
     if (!listView->selectionModel()->hasSelection() )
         return;
-
-    const QModelIndexList & list = listView->selectionModel()->selectedRows(0);
-
-    foreach( QModelIndex index, list )
+    const QModelIndexList &list = listView->selectionModel()->selectedRows(0);
+    foreach( const QModelIndex &index, list ) {
         static_cast<mfDrugsModel*>(listView->model())->removeRows( index.row(), 1 );
+    }
 }
 
 /** \brief Moves the selected drug up. */

@@ -221,11 +221,13 @@ QVariant mfDrugs::value( const int tableref, const int fieldref ) const
         }
     case Table_COMPO :
         {
-            if ( d->m_COMPOValues.contains( fieldref ) )
+            if ( d->m_COMPOValues.contains( fieldref ) ) {
                 if ( fieldref == COMPO_IAM_CLASS_DENOMINATION )
                     return d->m_COMPOValues.value( fieldref );
-            else
+            }
+            else {
                 return d->m_COMPOValues.values( fieldref );
+            }
             return QVariant();
         }
     default: tkLog::addError( this, tr( "Wrong table reference parameter in mfDrugs::value()." ) ); break;
@@ -710,8 +712,9 @@ bool mfDrugs::lessThan( const mfDrugs *drug1, const mfDrugs *drug2 )
 /** \brief Fro debugging purpose only. Warn all values of the drug. */
 void mfDrugs::warn() const
 {
-    if (tkGlobal::isDebugCompilation())
+    if (tkGlobal::isDebugCompilation()) {
         qWarning() << warnText();
+    }
 }
 
 /** \brief Fro debugging purpose only. Warn all values of the drug. */

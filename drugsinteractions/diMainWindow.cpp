@@ -165,6 +165,11 @@ void diMainWindow::closeEvent( QCloseEvent *event )
     event->accept();
 }
 
+/**
+  \brief Slot called when is selected from the drugSelector.
+  Verify that the drug isn't already prescribed (if it is warn user and stop). \n
+  Add the drug to the mfDrugsModel and open the mfDosageCreatorDialog\n
+*/
 void diMainWindow::on_selector_drugSelected( const int CIS )
 {
     // if exists dosage for that drug show the dosageSelector widget
@@ -190,7 +195,7 @@ void diMainWindow::showDosageDialog(const QModelIndex &item)
     int CIS = mfDrugsModel::instance()->index( item.row(), Drug::CIS ).data().toInt();
     if (!m_DosageDialog)
         m_DosageDialog = new mfDosageDialog(this);
-    m_DosageDialog->changeRow(CIS,0) ;
+    m_DosageDialog->changeRow(CIS,item.row()) ;
     m_DosageDialog->exec();
 }
 
@@ -307,10 +312,13 @@ void diMainWindow::printPrescription()
     tkGlobal::replaceToken(header, TOKEN_DATEOFBIRTH, diCore::patientDateOfBirth() );
     tkGlobal::replaceToken(header, TOKEN_CLCR, diCore::patientClCr() );
     p.setHeader( header );
-    p.setFooter( diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString() );
+    header = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(tr("Made with DrugsInteractions.")));
+    p.setFooter( header );
     p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
                         tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-                       Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
+                        Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
     p.printWithDuplicata(true);
     p.print( mfDrugsIO::instance()->prescriptionToHtml() );
 }

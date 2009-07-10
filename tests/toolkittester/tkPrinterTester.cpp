@@ -14,8 +14,8 @@ tkPrinterTester::tkPrinterTester( QMainWindow *win ) :
 {
     if (!w)
         w = new QMainWindow();
-    previewerTest();
-//     test1();
+//    previewerTest();
+     test1();
 }
 
 
@@ -46,8 +46,9 @@ void tkPrinterTester::test1()
 
     tkPrinter pe;
     pe.askForPrinter();
-//    pe.addPixmapWatermark( pixWatermark, QPrinterEasy::EachPages );
     pe.addTextWatermark( "Adding a plain text\nWATERMARK", tkPrinter::EvenPages, Qt::AlignCenter, Qt::AlignCenter, QFont(), QColor("lightgrey") );
+    pe.addTextWatermark( "Printed with DrugsInteractions", tkPrinter::EvenPages, Qt::AlignBottom, Qt::AlignCenter, QFont(), QColor("lightgrey") );
+    pe.addPixmapWatermark( pixWatermark, tkPrinter::EachPages, Qt::AlignTop );
 //    pe.setHeader( header , tkPrinter::FirstPageOnly );
 //    pe.setHeader( header );
 //    pe.setHeader( header2, tkPrinter::EachPages );

@@ -725,8 +725,10 @@ mfDrugs * mfDrugsBase::getDrugByCIP( const QVariant & CIP_id )
 }
 
 /** \brief Retrieve and return the drug designed by the CIS code \e CIS_id. */
-mfDrugs * mfDrugsBase::getDrugByCIS( const QVariant & CIS_id )
+mfDrugs * mfDrugsBase::getDrugByCIS( const QVariant &CIS_id )
 {
+     if (CIS_id.toInt() < 10000000)
+         return 0;
      QTime t;
      t.start();
 
@@ -759,7 +761,7 @@ mfDrugs * mfDrugsBase::getDrugByCIS( const QVariant & CIS_id )
 
      // get COMPO table
      where.clear();
-     where.insert( COMPO_CIS, QString( "=%1" ).arg( toReturn->CIS() ) );
+     where.insert( COMPO_CIS, QString( "=%1" ).arg( CIS_id.toString() ) );
      QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
      req = select( Table_COMPO, where ) + sort;
      QSet<int> codeMols;
@@ -839,9 +841,10 @@ bool mfDrugsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QList<mfDru
                  if ( ( ! m_IamFound.contains( s2, s ) ) && ( ! m_IamFound.contains( s, s2 ) ) )
                      m_IamFound.insertMulti( s2, s );
 
-             if ( m_Iams.keys( s2 ).contains( s ) )
-                 if ( ( ! m_IamFound.contains( s2, s ) ) && ( ! m_IamFound.contains( s, s2 ) ) )
-                     m_IamFound.insertMulti( s, s2 );
+//             Not necessary because interactions are "mirrored" in the database
+//             if ( m_Iams.keys( s2 ).contains( s ) )
+//                 if ( ( ! m_IamFound.contains( s2, s ) ) && ( ! m_IamFound.contains( s, s2 ) ) )
+//                     m_IamFound.insertMulti( s, s2 );
 
              // test same molecules
              if ( ( s > 999 ) && ( s2 > 999 ) && ( s == s2 ) )

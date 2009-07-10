@@ -123,8 +123,9 @@ public:
 
     static void addMessage( const QString & object, const QString & msg )
     {
-        if (!m_MuteConsole)
+        if (!m_MuteConsole) {
             qWarning() << msg;
+        }
         addData( object, msg, QDateTime::currentDateTime(), tkDataLog::Message );
     }
 
@@ -155,8 +156,9 @@ public:
 
     static void addError( const QString & object, const QString & err )
     {
-        if (!m_MuteConsole)
+        if (!m_MuteConsole) {
             qWarning() << err;
+        }
         addData( object, err, QDateTime::currentDateTime(), tkDataLog::Error );
     }
 
@@ -180,16 +182,18 @@ public:
 
     static void addQueryError( const QObject * o, const QSqlQuery & q )
     {
-        if (!m_MuteConsole)
+        if (!m_MuteConsole) {
             qWarning() << QCoreApplication::translate( "tkLog", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
+        }
         addError(o, QCoreApplication::translate( "tkLog", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
                  .arg( o->objectName(), QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
     }
 
     static void addQueryError( const QString & o, const QSqlQuery & q )
     {
-        if (!m_MuteConsole)
+        if (!m_MuteConsole) {
             qWarning() << QCoreApplication::translate( "tkLog", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
+        }
         addError(o, QCoreApplication::translate( "tkLog", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
                 .arg( o, QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
         qWarning() << q.lastError();

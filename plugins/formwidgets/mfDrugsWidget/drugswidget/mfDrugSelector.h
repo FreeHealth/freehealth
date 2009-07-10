@@ -55,8 +55,8 @@
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 15 April 2009
+ * \version 0.0.5
+ * \date 08 July 2009
  */
 
 /**
@@ -71,6 +71,8 @@ class mfDrugSelector : public QWidget, private Ui::mfDrugSelector
 public:
     explicit mfDrugSelector( QWidget *parent = 0 );
     void setFont( const QFont & font );
+    void setFocus(Qt::FocusReason r) { searchLine->setFocus(r); }
+    void setFocus() { searchLine->setFocus(); }
 
 public Q_SLOTS:
     void retranslateUi( const QString & );
