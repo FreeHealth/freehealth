@@ -1,6 +1,6 @@
-version=0.0.7
+version=0.0.8
 {
-    * Juillet 2009 - Version bétâ
+    * Juillet 2009
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009
       * Interactions : AFSSAPS - 29/06/2009
@@ -9,6 +9,7 @@ version=0.0.7
       * Prescription en DCI lorsque la DCI est connue (attention nécessite une vérification)
       * Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
       * Possibilité d'ajouter une prescription à une prescription en cours d'édition
+      * Manuel de l'utilisateur disponible (menu À propos/Aide)
       * Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine, créatinine)
       * Nouveaux repères pour les informations patients (WEIGHT, SIZE, DATEOFBIRTH, CLCR, CREATININ)
       * Possibilité de sauvegarder son entête et pied de page dans des fichiers HTML séparés
@@ -33,7 +34,7 @@ version=0.0.7
       * Forte amélioration de l'accès à la base de données des médicaments
       * Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
       * Transformation des librairies 'toolkit' en librairies dynamiques
-      * correction de bogues
+      * Nombreuses corrections de bogues (en particulier pour la sauvegarde des prescriptions)
 }
 
 version=0.0.6

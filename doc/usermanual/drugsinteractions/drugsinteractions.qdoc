@@ -2,11 +2,11 @@
 
 L'objectif du testeur d'interactions médicamenteuses et de fournir un outil
 libre (open source), gratuit, indépendant (sans conflit d'intérêt) et multi-plateformes
-pour les professionnels de santé. La base de données thérapeutiques est synchronisée à la
-base de données de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
+pour les professionnels de santé. La base de données thérapeutiques est synchronisée à celle
+de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
 des interactions de l'AFSSAPS.\n
 Le testeur d'interactions médicamenteuses vous permet de créer des prescriptions
-intégralement paramétrable avec alertes d'interaction en temps réel. Vous pouvez
+totalement paramétrable avec alertes d'interaction en temps réel. Vous pouvez
 imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
 Le testeur d'interactions médicamenteuses peut être utilisé avec d'autres logiciels,
 les paramètres sont alors transmis par la ligne de commande.\n
@@ -18,6 +18,7 @@ Le testeur d'interactions est disponible pour :
 \li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps,
 l'installation sur clé USB est une réponse viable. Les données sont totalement compatibles
 d'un système à un autre.
+\li quelquesoit votre plateforme informatique, aucun installation annexe n'est nécessaire.
 
 \section TOC Contenu de l'aide :
 \li \ref auteurs
@@ -314,7 +315,7 @@ http://www.ericmaeker.fr/FreeMedForms/di-manual/prescrire.html
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PARAMETRER  L'APPLICATION  ////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page parametrer Paramétrer
+/** \page parametrer Paramétrer l'application
 
 \section acces_param Accéder aux paramètres utilisateur
 

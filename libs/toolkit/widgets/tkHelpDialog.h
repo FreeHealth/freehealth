@@ -41,6 +41,8 @@
 #ifndef TKHELPDIALOG_H
 #define TKHELPDIALOG_H
 
+#include <tkExporter.h>
+
 #include <QDialog>
 
 class tkHelpDialogPrivate;
@@ -53,7 +55,7 @@ class tkHelpDialogPrivate;
 */
 
 
-class tkHelpDialog : public QDialog
+class Q_TK_EXPORT tkHelpDialog : public QDialog
 {
     Q_OBJECT
 public:
