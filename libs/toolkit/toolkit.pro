@@ -1,8 +1,8 @@
 # toolkit library project file
-TEMPLATE         = lib
-TARGET           = toolkit
-PACKAGE_VERSION  = 0.1.0
-!win32:VERSION   = 0.1.0
+TEMPLATE = lib
+TARGET = toolkit
+PACKAGE_VERSION = 0.1.0
+!win32:VERSION = 0.1.0
 
 # include config file
 include( ../libsworkbench.pri )
@@ -51,7 +51,8 @@ HEADERS += objects/tkExporter.h \
     objects/tkUpdateChecker_p.h \
     objects/tkUpdateChecker.h \
     widgets/tkPrinterPreviewer_p.h \
-    objects/tkConstantTranslations.h
+    objects/tkConstantTranslations.h \
+    widgets/tkHelpDialog.h
 SOURCES += objects/tkSettings.cpp \
     objects/tkLog.cpp \
     objects/tkGlobal.cpp \
@@ -73,7 +74,8 @@ SOURCES += objects/tkSettings.cpp \
     objects/tkUpdateChecker.cpp \
     widgets/tkPrinterPreviewer_p.cpp \
     objects/tkTextDocumentExtra.cpp \
-    objects/tkConstantTranslations.cpp
+    objects/tkConstantTranslations.cpp \
+    widgets/tkHelpDialog.cpp
 FORMS += widgets/tkDebugDialog.ui \
     widgets/tkTableDialog.ui \
     widgets/tkAboutDialog.ui \

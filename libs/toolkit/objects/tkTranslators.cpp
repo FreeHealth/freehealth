@@ -103,7 +103,7 @@ bool tkTranslators::setPathToTranslations( const QString & path )
 {
     if ( QDir( path ).exists() ) {
         m_PathToTranslations = QDir::cleanPath( path );
-        tkLog::addMessage( "tkTranslators", tkTr(SETTING_1_PATH_TO_2).arg( tkTr(TRANSLATORS), QDir::cleanPath(path) ) );
+        tkLog::addMessage( "tkTranslators", tkTr(SETTING_1_PATH_TO_2).arg( tkTr(TRANSLATORS_TEXT), QDir::cleanPath(path) ) );
         return true;
     } else {
         tkLog::addError( "tkTranslators", tkTr(PATH_1_DOESNOT_EXISTS).arg( QDir::cleanPath( path ) ) );

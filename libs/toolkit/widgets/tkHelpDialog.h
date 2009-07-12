@@ -32,70 +32,45 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include <QApplication>
 
-#include <QtGui>
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef TKHELPDIALOG_H
+#define TKHELPDIALOG_H
 
-#include <tkMedintuxConfiguration.h>
-#include <tkGlobal.h>
-#include <tkDebugDialog.h>
-#include <tkSettings.h>
-#include <tkLog.h>
+#include <QDialog>
 
+class tkHelpDialogPrivate;
 
 /**
-  \brief This project is only a tester of the FreeMedForms' medintuxtoolkit lib
-  \author Eric MAEKER, MD <eric.maeker@free.fr>
+ * \file tkHelpDialog.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.2
+ * \date 11 July 2009
 */
 
-int main(int argc, char *argv[])
+
+class tkHelpDialog : public QDialog
 {
-    QApplication app(argc, argv);
-    app.setApplicationName( "tkMedintuxTester" );
-    app.setApplicationVersion( "0.0.1" );
+    Q_OBJECT
+public:
+    static void showPage(const QString &page);
+    static void showIndex() { showPage("index.html"); }
 
-    tkSettings s;
+protected:
+    explicit tkHelpDialog( const QString &page = QString::null, QWidget *parent = 0 );
+    void changeEvent(QEvent *event);
 
-    QString text = "This is [before text [TOKEN] after text] replacement.";
-    qWarning() << tkGlobal::replaceToken( text, "TOKEN", "");
-    qWarning() << text;
+private Q_SLOTS:
+    void updateWindowTitle();
+    void fullScreen();
+    void comboActivated(const QString &item);
 
-    tkMedintuxConfiguration *conf = tkMedintuxConfiguration::instance();
-    qWarning() << conf->applicationIsAMedintuxPlugins();
-    for (int i=1; i<13;++i) {
-        tkLog::addMessage(0, conf->medintuxPluginInformation( tkMedintuxConfiguration::PluginsParameters(i) ) );
-    }
-////    qWarning() << conf.findManagerBinaryPath();
-//    qWarning() << conf.setManagerBinaryPath("/Applications/MedinTux-V2.12-Mac-Intel-105/Programmes/Manager/bin/");
-//    qWarning() << conf.managerIniFileName();
-//    qWarning() << conf.drtuxIniFileName();
-//    qWarning() << conf.glossaryPath();
-//    qWarning() << conf.glossaryPath(tkMedintuxConfiguration::ChampsInsertionGlossary);
-//    qWarning() << conf.glossaryPath(tkMedintuxConfiguration::ObservationGlossary);
-//    qWarning() << conf.glossaryPath(tkMedintuxConfiguration::PrescriptionGlossary);
-//    qWarning() << conf.glossaryPath(tkMedintuxConfiguration::TerrainGlossary);
-//    qWarning() << conf.glossaryPath(tkMedintuxConfiguration::DocumentGlossary);
-//    qWarning();
-//
-//    qWarning() << conf.defaultListsPath(tkMedintuxConfiguration::DocumentDefaultList);
-//    qWarning() << conf.defaultListsPath(tkMedintuxConfiguration::PrescriptionDefaultList);
-//    qWarning() << conf.defaultListsPath(tkMedintuxConfiguration::ObservationDefaultList);
-//    qWarning() << conf.defaultListsPath(tkMedintuxConfiguration::ImageDefaultList);
-//
-//    qWarning() << conf.drtuxUserMenuPath();
-//    qWarning() << conf.drtuxResourcesPath();
+private:
+    tkHelpDialogPrivate *d;
+};
 
-
-//    QSettings s(conf.drtuxIniFileName(), QSettings::IniFormat );
-//    foreach( const QString &keys, s.allKeys() )
-//        qWarning() << keys << s.value(keys);
-    //QMainWindow w;
-    tkDebugDialog d(0,&s);
-    //w.setCentralWidget( d );
-    d.exec();
-    return 0;
-}
-
-
-
-
+#endif // TKHELPDIALOG_H

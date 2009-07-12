@@ -524,6 +524,7 @@ bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::Availa
     QTextBrowser tbrowse(&dlg);
     tbrowse.setReadOnly(true);
     QLabel appname(&dlg);
+    // Application name
     if (qApp->applicationName().isEmpty()) {
         dlg.setWindowTitle(QCoreApplication::translate("tkGlobal", "License agreement acceptation"));
         appname.setText(QString("<b>%1</b>").arg(QCoreApplication::translate("tkGlobal", "License agreement acceptation")));
@@ -532,21 +533,29 @@ bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::Availa
         appname.setText(QString("<b>%1</b>").arg(qApp->applicationName()));
     }
     appname.setAlignment(Qt::AlignCenter);
-    QLabel centered(QCoreApplication::translate("tkGlobal", "<b>Before you can use this software, you must agree its license terms</b>"));
+    // Message
+    QLabel centered;
+    if (!message.isEmpty()) {
+        centered.setText(message);
+    } else {
+        centered.setText(QCoreApplication::translate("tkGlobal", "<b>Before you can use this software, you must agree its license terms</b>"));
+    }
+    QFont bold;
+    bold.setBold(true);
+    centered.setFont(bold);
     centered.setAlignment(Qt::AlignCenter);
     tbrowse.setText( tkAboutDialog::getLicenseText(license) );
+    // Question yes/no
     QLabel question(QCoreApplication::translate("tkGlobal", "Do you agree these terms ?"));
     layout.addWidget(&appname);
-    if (!message.isEmpty()) {
-        QLabel msg(message,&dlg);
-        layout.addWidget(&msg);
-    }
     layout.addWidget(&centered);
     layout.addWidget(&tbrowse);
     layout.addWidget(&question);
     layout.addWidget(&buttonBox);
     dlg.connect(&buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()));
     dlg.connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
+    dlg.show();
+    qApp->setActiveWindow(&dlg);
     if (dlg.exec()==QDialog::Accepted)
         return true;
     return false;

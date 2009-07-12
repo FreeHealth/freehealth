@@ -91,10 +91,12 @@ const char * const  ICONFIND =         "find.png";
 // menu Navigation
 const char * const  ICONNEXT =         "next.png";
 const char * const  ICONPREVIOUS =     "previous.png";
+const char * const  ICONHOME =         "gohome.png";
 
 // menu View
 const char * const  ICONEYES =         "eyes.png";
 const char * const  ICONVIEWSIDE =     "view_sidetree.png";
+const char * const  ICONFULLSCREEN =   "view-fullscreen.png";
 
 // menu TextFormat
 const char * const  ICONBOLD =          "format-text-bold.png";

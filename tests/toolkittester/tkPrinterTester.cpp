@@ -46,6 +46,7 @@ void tkPrinterTester::test1()
 
     tkPrinter pe;
     pe.askForPrinter();
+    pe.printer()->setFromTo(3,3);
     pe.addTextWatermark( "Adding a plain text\nWATERMARK", tkPrinter::EvenPages, Qt::AlignCenter, Qt::AlignCenter, QFont(), QColor("lightgrey") );
     pe.addTextWatermark( "Printed with DrugsInteractions", tkPrinter::EvenPages, Qt::AlignBottom, Qt::AlignCenter, QFont(), QColor("lightgrey") );
     pe.addPixmapWatermark( pixWatermark, tkPrinter::EachPages, Qt::AlignTop );

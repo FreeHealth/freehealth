@@ -51,6 +51,7 @@
 #include <tkSettings.h>
 #include <tkPrinter.h>
 #include <tkLog.h>
+#include <tkHelpDialog.h>
 
 using namespace mfInteractionsConstants;
 Q_TK_USING_CONSTANTS
@@ -65,6 +66,12 @@ mfInteractionDialog::mfInteractionDialog(QWidget *parent) :
     textBrowser->setHtml( mfDrugsModel::instance()->index(0, Interaction::FullSynthesis).data().toString() );
 //    textBrowser->setHtml( mfDrugsModel::instance()->prescriptionToHtml() );
 }
+
+void mfInteractionDialog::on_helpButton_clicked()
+{
+    tkHelpDialog::showPage("iamtesteur.html#synthetiseur_iam");
+}
+
 
 void mfInteractionDialog::on_printButton_clicked()
 {

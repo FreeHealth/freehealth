@@ -75,6 +75,7 @@ private Q_SLOTS:
     void on_saveButton_clicked();
     void on_prescribeButton_clicked();
     void on_saveAndPrescribeButton_clicked();
+    void on_helpButton_clicked();
 
 private:
     mfDosageCreatorDialogPrivate *d;

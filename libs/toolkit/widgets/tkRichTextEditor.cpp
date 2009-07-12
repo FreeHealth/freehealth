@@ -799,7 +799,7 @@ void tkRichTextEditorPrivate::clipboardDataChanged()
 
 void tkRichTextEditorPrivate::about()
 {
-    QMessageBox::about( m_Parent, tkTr(ABOUT),
+    QMessageBox::about( m_Parent, tkTr(ABOUT_TEXT),
                         tr( "This rich text editor is part of FreeMedForms Project. " ) );
 }
 

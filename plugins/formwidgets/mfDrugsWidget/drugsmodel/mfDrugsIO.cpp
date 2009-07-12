@@ -74,7 +74,7 @@ namespace mfDrugsIOConstants {
     const char *const XML_PRESCRIPTION_INTAKEINTERVALTIME = "IntakeIntervalTime";
     const char *const XML_PRESCRIPTION_INTAKEINTERVALSCHEME = "IntakeIntervalScheme";
     const char *const XML_PRESCRIPTION_INTAKEFULLSTRING   = "IntakeFullString";
-    const char *const XML_PRESCRIPTION_DURATIONFROM       = "DurationString";
+    const char *const XML_PRESCRIPTION_DURATIONFROM       = "DurationFrom";
     const char *const XML_PRESCRIPTION_DURATIONTO         = "DurationTo";
     const char *const XML_PRESCRIPTION_DURATIONSCHEME     = "DurationScheme";
     const char *const XML_PRESCRIPTION_DURATIONFROMTO     = "DurationFromTo";

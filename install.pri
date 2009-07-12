@@ -19,7 +19,10 @@
 #          |   |  |- drugs                    |  |  |- drugs              <-- if user can write into bundle (for dosages)
 #          |   |  `- users                    |  |  `- users              <-- if user can write into bundle
 #          |   |                              |  |
+#          |   |- doc/application/html        |  |- doc/application/html
+#          |   |                              |  |
 #          |   |- forms                       |  |- forms
+#          |   |                              |  |
 #          |   |- pixmap                      |  |- pixmap                <-- Default Theme
 #          |   |  |- 16x16                    |  |  |- 16x16
 #          |   |  `- 32x32                    |  |  `- 32x32
@@ -98,6 +101,7 @@ else {
  PIXMAP_INSTALL_PATH         = $${RESOURCES_INSTALL_PATH}/pixmap
  FORMS_INSTALL_PATH          = $${RESOURCES_INSTALL_PATH}/forms
  QT_PLUGINS_INSTALL_PATH     = $${PLUGINS_INSTALL_PATH}/qt
+ DOC_INSTALL_PATH            = $${RESOURCES_INSTALL_PATH}/doc/$${TARGET}/html
  message( Binary : )
  message(    * $${TARGET_INSTALL_PATH} )
  message( Application libraries : )
@@ -114,6 +118,7 @@ else {
  message( Translations : $${TRANSLATIONS_INSTALL_PATH} )
  message( Database : $${DATABASES_INSTALL_PATH} )
  message( Pixmaps : $${PIXMAP_INSTALL_PATH} )
+ message( Documentation : $${DOC_INSTALL_PATH} )
 
  # Install Application Libraries
  applibs.path = $${LIBS_INSTALL_PATH}
@@ -164,6 +169,11 @@ else {
  pix64.path = $${PIXMAP_INSTALL_PATH}/64x64
  pix64.files = $${FMF_GLOBAL_RESOURCES}/pixmap/64x64/*.png
  INSTALLS+=screens pix16 pix32 pix64
+
+ # Documentation
+ docs.path=$${DOC_INSTALL_PATH}
+ docs.files=$${FMF_GLOBAL_RESOURCES}/doc/$${TARGET}/html/*
+ INSTALLS+=docs
 
  # For linux copy needed qt libs
  CONFIG(crosscompil) {

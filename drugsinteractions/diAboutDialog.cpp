@@ -49,8 +49,8 @@ Q_TK_USING_TRANSLATIONS
 
 namespace diAboutDialogPrivateConstants {
 
-const char* const  UPDATE_DRUGS       = QT_TRANSLATE_NOOP( "diAboutDialog", "Drugs updated on 29/05/2009");
-const char* const  UPDATE_IAM         = QT_TRANSLATE_NOOP( "diAboutDialog", "Interactions updated on 12/2009");
+const char* const  UPDATE_DRUGS       = QT_TRANSLATE_NOOP( "diAboutDialog", "Drugs updated on 26/06/2009");
+const char* const  UPDATE_IAM         = QT_TRANSLATE_NOOP( "diAboutDialog", "Interactions updated on 30/06/2009");
 const char* const  COPYRIGHT_YEARS    = "2008-2009";
 const char* const  COPYRIGHT_NAMES    = QT_TRANSLATE_NOOP( "diAboutDialog", "Eric MAEKER, MD and the FreeMedForms Team" );
 const tkAboutDialog::AvailableLicense  LICENCE = tkAboutDialog::BSD;

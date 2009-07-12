@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>642</height>
+    <height>320</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -73,6 +73,12 @@
     <widget class="QTextEdit" name="resultTextBrowser">
      <property name="enabled">
       <bool>false</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
      </property>
      <property name="readOnly">
       <bool>true</bool>

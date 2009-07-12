@@ -63,6 +63,7 @@ public:
 
 private Q_SLOTS:
     void on_printButton_clicked();
+    void on_helpButton_clicked();
 
 protected:
     virtual void changeEvent(QEvent *e);

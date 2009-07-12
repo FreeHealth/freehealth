@@ -64,6 +64,7 @@
 #include <tkTheme.h>
 #include <tkSettings.h>
 #include <tkConstantTranslations.h>
+#include <tkHelpDialog.h>
 
 // include Qt headers
 #include <QMessageBox>
@@ -126,7 +127,9 @@ public:
     void toPrescription()
     {
         int row = m_Parent->availableDosagesListView->listView()->currentIndex().row();
+        m_DosageModel->warn(row);
         m_DosageModel->toPrescription(row);
+        m_DosageModel->warn(row);
     }
 
 public:
@@ -223,6 +226,8 @@ void mfDosageCreatorDialog::done( int r )
 /** \brief Save the "reference dosage" to the database and reject the dialog (no prescription's done) */
 void mfDosageCreatorDialog::on_saveButton_clicked()
 {
+    // modify focus for the mapper to commit changes
+    saveButton->setFocus();
     d->saveToModel();
     QDialog::done(QDialog::Rejected);
 }
@@ -230,6 +235,8 @@ void mfDosageCreatorDialog::on_saveButton_clicked()
 /** \brief Accept the dialog (prescription's done), no changes is done on the database. */
 void mfDosageCreatorDialog::on_prescribeButton_clicked()
 {
+    // modify focus for the mapper to commit changes
+    prescribeButton->setFocus();
     d->toPrescription();
     QDialog::done(QDialog::Accepted);
 }
@@ -237,8 +244,14 @@ void mfDosageCreatorDialog::on_prescribeButton_clicked()
 /** \brief Save the "reference dosage" to the database and prescribe it then accept the dialog ( prescription's done) */
 void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
 {
+    // modify focus for the mapper to commit changes
+    saveAndPrescribeButton->setFocus();
     d->toPrescription();
     d->saveToModel();
     QDialog::done(QDialog::Accepted);
 }
 
+void mfDosageCreatorDialog::on_helpButton_clicked()
+{
+    tkHelpDialog::showPage("prescrire.html");
+}

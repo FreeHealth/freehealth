@@ -90,6 +90,7 @@ protected:
 private Q_SLOTS:
     void about();
     void preferences();
+    void help();
     void debugDialog();
     void on_selector_drugSelected( const int CIS );
     void showDosageDialog(const QModelIndex &item);

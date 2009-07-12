@@ -283,7 +283,7 @@ void tkListViewPrivate::createButtons()
         addButton->setMinimumSize( 22, 22 );
         addButton->setMaximumSize( 22, 22 );
         addButton->setIcon( tkTheme::icon(ICONADD) );
-        addButton->setToolTip( tkTr(ADD) );
+        addButton->setToolTip( tkTr(LISTADD_TEXT) );
         butLayout->addWidget( addButton );
         connect( addButton, SIGNAL(clicked()), m_Parent, SLOT(on_add_triggered()) );
     }
@@ -293,14 +293,14 @@ void tkListViewPrivate::createButtons()
         removeButton->setMinimumSize( 22, 22 );
         removeButton->setMaximumSize( 22, 22 );
         removeButton->setIcon( tkTheme::icon(ICONREMOVE) );
-        removeButton->setToolTip( tkTr(REMOVE) );
+        removeButton->setToolTip( tkTr(LISTREMOVE_TEXT) );
         butLayout->addWidget( removeButton );
         connect( removeButton, SIGNAL(clicked()), m_Parent, SLOT(on_remove_triggered()) );
     }
 
     if (m_Buttons & tkListView::MoveUpButton) {
         moveUpButton = new  QPushButton(wgtButtons);
-        moveUpButton->setToolTip( tkTr(MOVEUP) );
+        moveUpButton->setToolTip( tkTr(LISTMOVEUP_TEXT) );
         moveUpButton->setMinimumSize( 22, 22 );
         moveUpButton->setMaximumSize( 22, 22 );
         moveUpButton->setIcon( tkTheme::icon(ICONMOVEUP) );
@@ -310,7 +310,7 @@ void tkListViewPrivate::createButtons()
 
     if (m_Buttons & tkListView::MoveDownButton) {
         moveDownButton = new  QPushButton(wgtButtons);
-        moveDownButton->setToolTip( tkTr(MOVEDOWN) );
+        moveDownButton->setToolTip( tkTr(LISTMOVEDOWN_TEXT) );
         moveDownButton->setMinimumSize( 22, 22 );
         moveDownButton->setMaximumSize( 22, 22 );
         moveDownButton->setIcon( tkTheme::icon(ICONMOVEDOWN) );

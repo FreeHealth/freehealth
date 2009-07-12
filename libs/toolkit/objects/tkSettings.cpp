@@ -82,7 +82,10 @@
           |   |  |- drugs                    |  |  |- drugs
           |   |  `- users                    |  |  `- users              <-- if user can write into bundle
           |   |                              |  |
+          |   |- doc/application/html        |  |- doc/application/html  <-- user's manual
+          |   |                              |  |
           |   |- forms                       |  |- forms
+          |   |                              |  |
           |   |- pixmap                      |  |- pixmap                <-- Default Theme
           |   |  |- 16x16                    |  |  |- 16x16
           |   |  `- 32x32                    |  |  `- 32x32
@@ -146,6 +149,11 @@
  * Defines the users' resources path. This path is readable and writable for the user.
 */
 
+/*! \var tkSettings::Paths tkSettings::DocumentationPath
+ * Defines the users' manual path.
+*/
+
+
 #include "tkSettings.h"
 
 // include toolkit headers
@@ -177,6 +185,7 @@ namespace tkSettingsPrivateConstants {
     const char* const DEFAULTTHEME_PATH    = "";
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
+    const char* const USERMANUAL_PATH      = "/doc/%1/html";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
     const char* const MAC_PLUGINSPATH      = "/../plugins";
@@ -320,6 +329,10 @@ void tkSettings::setPath( const int type, const QString & absPath )
             d->m_Enum_Path.insert( MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/" );
             d->m_Enum_Path.insert( BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/" );
             d->m_Enum_Path.insert( SampleFormsPath, bundlePath + DEFAULTFORMS );
+            if (qApp->applicationName().contains(" "))
+                d->m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(qApp->applicationName().left(qApp->applicationName().indexOf(" "))) );
+            else
+                d->m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(qApp->applicationName()) );
             tkTheme::instance()->setThemeRootPath( bundlePath + DEFAULTTHEME_PATH );
             break;
         }
@@ -566,6 +579,7 @@ QTreeWidget* tkSettings::getTreeWidget( QWidget * parent ) const
     paths.insert( tr("ApplicationTempPath"), path( ApplicationTempPath ) );
     paths.insert( tr("FormsPath"), path( FormsPath ) );
     paths.insert( tr("SampleFormsPath"), path( SampleFormsPath ) );
+    paths.insert( tr("DocumentationPath"), path( DocumentationPath ) );
 
     QTreeWidgetItem * absPathsItem = new QTreeWidgetItem( tree, QStringList() << tr( "Absolute Paths" ) );
     new QTreeWidgetItem( absPathsItem, QStringList() << tr( "Using Ini File" ) << fileName() );
@@ -664,6 +678,7 @@ QString tkSettings::toString() const
     paths.insert( tr("ApplicationTempPath"), path( ApplicationTempPath ) );
     paths.insert( tr("FormsPath"), path( FormsPath ) );
     paths.insert( tr("SampleFormsPath"), path( SampleFormsPath ) );
+    paths.insert( tr("DocumentationPath"), path( DocumentationPath ) );
     paths.insert( tr("WebSiteUrl"), path( WebSiteUrl ) );
     foreach( const QString & p, paths.keys() )
         tmp += p + "\t" + paths[p] + "\n";

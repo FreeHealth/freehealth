@@ -25,6 +25,7 @@ version=0.0.7
       * Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
       * Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
       * Préparation de la gestion de la physiologie du patient (poids, taille, clairance de la créatinine, allergies)
+      * L'impression peut maintenant être annulée, et les pages à imprimer définies (de la page x à la page y).
 
     * Modifications techniques :
       * Passage à la version 4.5.2 des librairies de Qt (pour MacOs)

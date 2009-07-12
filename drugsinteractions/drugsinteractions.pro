@@ -1,7 +1,7 @@
-TEMPLATE = app
-TARGET = drugsinteractions
-mac:TARGET = $$quote(drugsinteractions)
-PACKAGE_VERSION = 0.0.7
+TEMPLATE         = app
+TARGET           = drugsinteractions
+mac:TARGET       = $$quote(drugsinteractions)
+PACKAGE_VERSION  = 0.0.8
 
 # include general configuration
 include( ../config.pri )
@@ -33,18 +33,12 @@ DEFINES *= FMF_CORE_BUILD
 # $${PACKAGE_LIBS_SOURCES}/medintuxtoolkit
 LIBS *= -L$${PACKAGE_LIBS_BIN}
 
-# CONFIG( debug, debug|release ) {
-# Debug
-# unix:LIBS *= -ltoolkit_debug \
-# -lmedintuxtoolkit_debug
-# else:LIBS *= -ltoolkit_d \
-# -lmedintuxtoolkit_d
-# }
-# else {
-# Release
-# LIBS *= -ltoolkit \
-# -lmedintuxtoolkit
-# }
+# prepare documentation
+CONFIG(release) {
+include( ../doc/di-manual.pri)
+PRE_TARGETDEPS += html_docs
+}
+
 mac:*-g++:LIBS *= -Wl,-noall_load # stop importing all symbols
 else:*-g++:LIBS *= -Wl,--no-whole-archive # stop importing all symbols
 

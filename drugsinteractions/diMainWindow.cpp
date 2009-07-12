@@ -66,6 +66,7 @@
 #include <tkActionManager.h>
 #include <tkUpdateChecker.h>
 #include <tkConstantTranslations.h>
+#include <tkHelpDialog.h>
 
 // include Qt headers
 #include <QMenuBar>
@@ -143,6 +144,7 @@ void diMainWindow::createConnections()
     connect( am->action(A_FILE_EXIT), SIGNAL( triggered() ), this, SLOT( close() ) );
 
     connect( am->action(A_PREFERENCES), SIGNAL( triggered() ), this, SLOT( preferences() ) );
+    connect( am->action(A_APPLICATIONHELP), SIGNAL( triggered() ), this, SLOT( help() ) );
     connect( am->action(A_ABOUT), SIGNAL( triggered() ), this, SLOT( about() ) );
     connect( am->action(A_DEBUGHELPER), SIGNAL( triggered() ), this, SLOT( debugDialog() ) );
     connect( am->action(A_CONFIG_MEDINTUX), SIGNAL( triggered() ), this, SLOT( configureMedinTux() ) );
@@ -252,6 +254,15 @@ void diMainWindow::about()
 }
 
 /**
+  \brief Shows the help dialog.
+  \sa tkHelpDialog
+*/
+void diMainWindow::help()
+{
+   tkHelpDialog::showIndex();
+}
+
+/**
   \brief Open the preferences dialog
   \sa mfDrugsPreferences
 */
@@ -268,7 +279,7 @@ void diMainWindow::preferences()
     connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
     l.addWidget( &prefs );
     l.addWidget( &buttonBox );
-    dlg.setWindowTitle( tkTr(PREFERENCES) + " - " + qApp->applicationName() );
+    dlg.setWindowTitle( tkTr(PREFERENCES_TEXT) + " - " + qApp->applicationName() );
 //    tkLog::logTimeElapsed(t, this->objectName(), "OpeningPreferences" );
     dlg.exec();
     if ( dlg.result() == QDialog::Accepted ) {
@@ -302,8 +313,8 @@ void diMainWindow::changeFontTo( const QFont &font )
 void diMainWindow::printPrescription()
 {
     tkPrinter p(this);
-    p.askForPrinter(this);
-    p.printWithDuplicata(true);
+    if (!p.askForPrinter(this))
+        return;
     QString header = diCore::settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
     tkGlobal::replaceToken(header, TOKEN_PATIENTNAME, patientName->text() );
     tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );

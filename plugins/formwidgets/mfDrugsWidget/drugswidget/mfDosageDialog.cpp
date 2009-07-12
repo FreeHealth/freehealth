@@ -144,8 +144,11 @@ void mfDosageDialog::changeRow( const int CIS, const int dosageRow )
   \li If the dialog is accepted, retreive the prescribed form and store it into the settings is needed.
   \todo If the dialog is accepted and no dosage exists in the dosage model --> create a dosage in the dosage model
 */
-void mfDosageDialog::done( int r )
+void mfDosageDialog::done(int r)
 {
+    // modify focus for the dosage viewer mapper to commit changes
+    drugNameButton->setFocus();
+
 //    if ( r == QDialog::Accepted ) {
 //        // test intakes forms
 //        const QStringList &pre = mfDosageModel::predeterminedForms();

@@ -54,6 +54,7 @@ namespace mfDrugsConstants
     // Settings names
     const char * const  MFDRUGS_SETTING_GROUP                  = "DrugsWidget";                              /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                   /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_RUNNINGVERSION         = "DrugsWidget/RunningVersion";               /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
@@ -106,7 +107,7 @@ namespace mfDrugsConstants
 
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONDECONSEILLEE =     "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */

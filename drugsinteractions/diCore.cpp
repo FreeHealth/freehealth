@@ -281,14 +281,20 @@ bool diCore::init()
         tkLog::logTimeElapsed(chrono, "diCore", "initializing translations");
 
     // first time runnning ?
-    if ( settings()->firstTimeRunning() ) {
+    if (settings()->firstTimeRunning()) {
         // show the license agreement dialog
         if (!tkGlobal::defaultLicenceAgreementDialog("", tkAboutDialog::BSD ))
             return false;
         showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Default Parameters..." ) );
         tkSettings *s = settings();
         s->noMoreFirstTimeRunning();
+        settings()->setValue(MFDRUGS_SETTING_RUNNINGVERSION, qApp->applicationVersion());
         mfDrugsPreferences::writeDefaultSettings(settings());
+    } else if (settings()->value(MFDRUGS_SETTING_RUNNINGVERSION, QVariant()).toString() != qApp->applicationVersion()) {
+        // show the license agreement dialog
+        if (!tkGlobal::defaultLicenceAgreementDialog(QCoreApplication::translate("diCore", "You are running a new version of DrugsInteractions, you need to renew the licence agreement."), tkAboutDialog::BSD ))
+            return false;
+        settings()->setValue(MFDRUGS_SETTING_RUNNINGVERSION, qApp->applicationVersion());
     }
 
     // intialize drugsBase

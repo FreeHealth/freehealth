@@ -63,8 +63,8 @@ class tkSettingsPrivate;
 /**
  * \file tkSettings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 06 July 2009
+ * \version 0.0.8
+ * \date 11 July 2009
 */
 
 class Q_TK_EXPORT tkSettings : public QSettings
@@ -90,6 +90,7 @@ public:
         ApplicationTempPath,
         FormsPath,
         SampleFormsPath,
+        DocumentationPath,
         WebSiteUrl
     };
 
