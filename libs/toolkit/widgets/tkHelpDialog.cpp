@@ -131,6 +131,7 @@ tkHelpDialog::tkHelpDialog(const QString &page, QWidget *parent) :
     Q_ASSERT(d);
     // create objects
     d->m_Browser = new QTextBrowser(this);
+    d->m_Browser->setOpenExternalLinks(true);
     d->m_Next = new QPushButton(this);
     d->m_Previous = new QPushButton(this);
     d->m_Home = new QPushButton(this);
