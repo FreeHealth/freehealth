@@ -293,21 +293,95 @@ Cet icône est rappelé devant le nom de médicament prescrits dans cadre de la 
 /** \page prescrire Prescrire avec le testeur d'interactions
 
 
-La documentation est en cours d'écriture, vous pouvez lire les derniers avancements sur
-l'internet à l'adresse suivante :\n\n
-http://www.ericmaeker.fr/FreeMedForms/di-manual/prescrire.html
+Le testeur d'interactions propose par défaut un module de prescription complet. Ce module repose sur
+l'idée que, pour la majorité de nos prescription, il est possible de créer une posologie standard sur laquelle
+le prescripteur puisse se reposer.\n
+Ces posologies standards se définissent soit :
+\li soit pour un médicament donné
+\li soit pour une classe DCI entière (ayant le même dosage - CLAMOXYL 1g <-> AMOXICILLINE 1g).
 
-\latexonly
+Ces posologies standard permettent :
+\li d'accélérer le processus de prescription,
+\li d'automatiser des tests selon le terrain (âge, poids, taille, clairance de créatinine, limites CIM10...)
+\li de créer des prescriptions en DCI
+
+Le testeur d'interactions offre la possiblité de mettre en commun les posologie standard que vous créez pour
+constituer une base de données complète. Il apparaît à ce stade indispensable qu'un comité scientifique se
+constitue pour vérifier et valider les posologies transmises au groupe. Nous cherchons actuellement des
+volontaires. Manifestez-vous sur notre mailing liste : freemedforms@googlegroups.com.
+
+\section dosagecreator_presentation Présentation du créateur de posologie
+
+\image html prescription1.png Zones du créateur de posologies
+
+\image html prescription2.png Particularités de la posologie
+
+\image html prescription3.png Limitations
+
+Le créateur de posologie se compose de cinq parties distinctes :
+- 1 : Rappel du médicament sélectionné, présentation des interactions potentiel (l'icône de gauche).\n
+    Vous pouvez accéder à plus d'informations concernant les médicaments en laissant la souris immobile sur
+    le nom du médicament (composition) ou sur l'cône d'interaction (liste les interactions).
+- 2 : La liste des posologies pré-enregistrées. En double-cliquant sur l'une d'elle, le visualisateur se met à jour.
+- 3 : Le libellé de la posologie standard
+- 4 : La posologie proprement dite avec :
+    - Les indications de prises
+    - Les indications de durée
+    - Les particularités : moment de la journée pour les prises, horaires (non fonctionnel), intervalle entre
+        les prises, relation de la prise avec les repas.
+    - Les limites de la prescription (non fonctionnel - en cours de développement) :
+        - Limites de diagnostic (codage CIM10, eDRC)
+        - Limites de terrain : poids, taille, surface corporelle, clairance de la créatinine...
+        - Limites pour les femmes enceintes et allaitantes
+        - Surveillance à programmer : biologie, clinique...
+    - Une note en texte libre
+    - Le caractère "DCI" de la prescription
+    - Le caratère "100%" de la prescription
+- 5 : Commandes de sauvegarde et/ou de prescription. Vous pouvez par exemple uniquement prescrire sans
+    sauvegarder la posologie en cours, sauvegarder seulement, ou faire les deux d'un clique.
+
+Ce créateur de posologie permet donc de créer des posologies standard et/ou de prescrire simplement.
+
 \section poso_std Réaliser des posologies standardisées
 
-\image html prescription1.png
+Tout d'abord, il est nécessaire de renseigner un libellé à la posologie.\n
+--> À faire : règle de libellisation des posologies.
 
-\image html prescription2.png
+Vous devez renseigner :
+- les indications de prises (première page de la posologie (4)), selon le besoin,
+- les particularités de la posologies ainsi que les limites et modalités de surveillance.
+- le caractère DCI et ALD de la prescription (certaines thérapeutiques ne sont prescrites que le cadre
+    de pathologies en ALD).
 
-\image html prescription3.png
+Ensuite, sauvegardez la posologie (et prescrivez selon).
+
+La posologie sera alors disponible à chaque ouverture du médicament ou d'un médicament "DCI-compatible".
+
+
+\section poso_exemple Exemple de posologie standardisée DCI
+
+\subsection ex1 Créer une posologie standardisée DCI
+
+Sélectionnez "AMLOR 5 mg" comme médicament.\n
+Renseignez la posologie standard suivante : "Hypertension artérielle - Mensuel" : 1 prise 1 jour durant 1 mois.\n
+Cliquez sur "<b>En faire une prescription DCI</b>", le libellé DCI apparaît alors en dessous : "amlodipine 5 mg". Ce qui
+signifie que cette posologie sera accessible à tous les médicaments contenant comme seule DCI \e l'amlodipine
+à un dosage de 5 milligrammes.\n
+Vérifiez que l'icône DCI est présent devant le libellé de la posologie dans le cadre supérieur.\n
+Sauvegardez sans prescrire.\n
+
+\image html black_dci.png Icône DCI
+
+\image html prescription_ex1.png Posologie DCI - exemple
+
+\subsection ex2 Prescrire DCI sur la base la posologie créée
+
+Sélectionnez "AMLODIP*5*mg" comme médicament.\n
+
+
 
 \section utliser_poso_std Utiliser les posologies standardisées
-\endlatexonly
+
 
 \ref index
 */
@@ -357,29 +431,29 @@ Plusieurs paramétrages sont accessibles :
 /** \page auteurs Auteurs et contributeurs
 
 - <b>Créateur et principal développeur :</b>
-- Éric Maeker, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a>.
+    - Éric Maeker, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a>.
 
 - <b>Contributeurs :</b>
-- Guillaume Denry <guillaume.denry@gmail.com> : codeur, déboggueur, conseiller informatique
-- Sébastien Belin, MD <belin.s@wanadoo.fr> : junior codeur, conseiller médical
-- Laurent Masson, MD <> : conseiller médical
+    - Guillaume Denry <guillaume.denry@gmail.com> : codeur, déboggueur, conseiller informatique
+    - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior codeur, conseiller médical
+    - Laurent Masson, MD <> : conseiller médical
 
 - <b>Aides et conseillers :</b>
--  Filipe Azevedo <pasnox@gmail.com> : aide au déboggueur, conseiller informatique.
--  David Geldreich <david.geldreich@free.fr> : conseiller informatique,
--  Jourdan Romain  <No@Mail.com> : aide au codage du moteur d'impression
+    -  Filipe Azevedo <pasnox@gmail.com> : aide au déboggueur, conseiller informatique.
+    -  David Geldreich <david.geldreich@free.fr> : conseiller informatique,
+    -  Jourdan Romain  <No@Mail.com> : aide au codage du moteur d'impression
 
 - <b>Testeurs :</b>
-- Plusieurs testeurs anonymes pour la plupart.
+    - Plusieurs testeurs anonymes pour la plupart.
 
 - <b>Traducteur :</b>
-- Éric Maeker, MD
-
-- <b>Mailing liste publique :</b>
--  <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>
+    - Éric Maeker, MD
 
 - <b>Maître toile : </b>
-- Vincent Perez, MD <vinperez@gmail.com>
+    - Vincent Perez, MD <vinperez@gmail.com>
+
+- <b>Mailing liste publique :</b>
+    -  freemedforms@googlegroups.com
 
 \ref index
 

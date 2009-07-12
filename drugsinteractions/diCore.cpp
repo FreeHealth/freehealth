@@ -242,6 +242,17 @@ bool diCore::init()
     QTime chrono;
     chrono.start();
 
+    // WINE compatibility (only for testing under ubuntu when crosscompiling)
+#ifdef Q_OS_WIN
+    // For WINE testings
+    if (QCoreApplication::arguments().contains("--wine")) {
+        diCorePrivate::m_WineRunning = true;
+        tkLog::addMessage( "diCore", "Running under Wine environnement." );
+        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
+        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
+    }
+#endif
+
     diCorePrivate::commandLineParsing();
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", "command line parsing");
@@ -252,9 +263,9 @@ bool diCore::init()
     QSplashScreen splash( tkTheme::splashScreen(DRUGSINTERACTIONS_SPLASHSCREEN) );
     splash.show();
     QFont ft( splash.font() );
-#ifndef Q_OS_WIN
-    QFont::insertSubstitution("Lucida Grande", "Arial");
-#endif
+//#ifndef Q_OS_WIN
+//    QFont::insertSubstitution("Lucida Grande", "Arial");
+//#endif
     ft.setPointSize( ft.pointSize() - 2 );
     ft.setBold( true );
     splash.setFont( ft );
@@ -303,18 +314,6 @@ bool diCore::init()
     showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Drugs database..." ) );
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", "initializing drugs base");
-
-
-    // WINE compatibility
-#ifdef Q_OS_WIN
-    // For WINE testings
-    if (QCoreApplication::arguments().contains("--wine")) {
-        diCorePrivate::m_WineRunning = true;
-        tkLog::addMessage( "diCore", "Running under Wine environnement." );
-        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
-        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
-    }
-#endif
 
     showMessage( &splash, QCoreApplication::translate( "diCore", "Checking command line parameters..." ) );
     diMedinTux::isMedinTuxPlugIns(&splash);

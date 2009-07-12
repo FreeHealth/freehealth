@@ -140,6 +140,7 @@ void diMainWindow::createConnections()
     tkActionManager *am = tkActionManager::instance();
     connect( am->action(A_FILE_OPEN), SIGNAL( triggered() ), this, SLOT( openPrescription() ) );
     connect( am->action(A_FILE_SAVE), SIGNAL( triggered() ), this, SLOT( savePrescription() ) );
+    connect( am->action(A_FILE_SAVEAS), SIGNAL( triggered() ), this, SLOT( savePrescription() ) );
     connect( am->action(A_FILE_PRINT), SIGNAL( triggered() ), this, SLOT( printPrescription() ) );
     connect( am->action(A_FILE_EXIT), SIGNAL( triggered() ), this, SLOT( close() ) );
 

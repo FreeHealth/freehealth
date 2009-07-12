@@ -154,6 +154,7 @@ public:
         // do some transformations
         if (!tmp.isEmpty()) {
             tmp.replace(",00","");
+            qWarning() << tmp;
         }
         // set the transformed dosage for the next call
         m_Dosage = tmp;

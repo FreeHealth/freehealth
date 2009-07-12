@@ -368,7 +368,7 @@ QString mfDrugs::mainInnDosage() const
     if (main != -1) {
         foreach( mfDrugComposition *compo, d->m_Compositions )
             if ((compo->m_InnCode==main) && (compo->isTheActiveSubstance()))
-                return compo->m_Dosage;
+                return compo->innDosage();
     }
 //    if (d->m_COMPOValues.values(COMPO_IAM_DENOMINATION).count()==1) {
 //        toReturn = d->m_COMPOValues.value(COMPO_DOSAGE).toString();

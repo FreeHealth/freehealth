@@ -46,6 +46,8 @@ FORMS += $${PWD}/drugswidget/mfDrugInfo.ui \
     $${PWD}/drugswidget/mfInteractionDialog.ui \
     $${PWD}/drugswidget/mfDosageViewer.ui \
     $${PWD}/drugswidget/mfDosageAvailableWidget.ui
+
 TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
+
 exists( $${PROTECTED_PATH} ):RESOURCES += $${PROTECTED_PATH}/drugs/drugsresources.qrc
 else:RESOURCES += $${PWD}/widget_resources.qrc
