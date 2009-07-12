@@ -377,8 +377,11 @@ Sauvegardez sans prescrire.\n
 \subsection ex2 Prescrire DCI sur la base la posologie créée
 
 Sélectionnez "AMLODIP*5*mg" comme médicament.\n
+Tous auront accès à la prescription nouvellement créée.
 
-
+\warning Il existe un bug avec la version 0.0.8. Pour certains de ces médicaments, la prescription DCI n'apparaît pas.
+Cela est lié au fait que le dosage de la DCI est "5,00 mg" et non "5 mg" (sans ",00"). Ce bug sera corrigé avec la
+version 0.1.0 et supra.
 
 \section utliser_poso_std Utiliser les posologies standardisées
 
