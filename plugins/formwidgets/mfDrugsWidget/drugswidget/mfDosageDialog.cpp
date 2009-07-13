@@ -76,7 +76,7 @@ public:
 
     mfDosageModel      *m_DosageModel;
     QString             m_ActualDosageUuid;
-    int m_CIS, m_DosageRow;
+    int m_CIS, m_DrugRow;
     QMenu *m_UserFormButtonPopup;
 };
 
@@ -119,18 +119,21 @@ mfDosageDialog::~mfDosageDialog()
   \brief Change the current row of the drug model
   \todo Manage dosagemodel
 */
-void mfDosageDialog::changeRow( const int CIS, const int dosageRow )
+void mfDosageDialog::changeRow( const int CIS, const int drugRow )
 {
     Q_ASSERT(mfDrugsModel::instance()->containsDrug(CIS));
     d->m_CIS = CIS;
-    d->m_DosageRow = dosageRow;
+    d->m_DrugRow = drugRow;
     mfDrugsModel *m = mfDrugsModel::instance();
-    dosageViewer->useDrugsModel(CIS, dosageRow);
+    dosageViewer->useDrugsModel(CIS, drugRow);
     innButton->setChecked(m->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
 
     // retreive drug informations before drugmodel changes
     QString name = m->drugData(CIS, Drug::Denomination).toString();
-    drugNameButton->setText(name.left( name.lastIndexOf(",")));
+    if (m->drugData(CIS, Prescription::IsINNPrescription).toBool())
+        drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+    else
+        drugNameButton->setText(name.left( name.lastIndexOf(",")));
     QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
     iconInteractionLabel->setToolTip( toolTip );
     iconInteractionLabel->setPixmap( m->drugData(CIS, Interaction::Icon ).value<QIcon>().pixmap(16,16) );
@@ -149,15 +152,9 @@ void mfDosageDialog::done(int r)
     // modify focus for the dosage viewer mapper to commit changes
     drugNameButton->setFocus();
 
-//    if ( r == QDialog::Accepted ) {
-//        // test intakes forms
-//        const QStringList &pre = mfDosageModel::predeterminedForms();
-//        const QStringList &av  = mfDrugsModel::instance()->drugData(CIS,Drug::AvailableForms).toStringList();
-//        if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
-//            ( av.indexOf(intakesCombo->currentText()) == -1 )) {
-//            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
-//        }
-//    }
+    if ( r == QDialog::Accepted ) {
+        dosageViewer->done(r);
+    }
     QDialog::done(r);
 }
 
@@ -172,7 +169,7 @@ void mfDosageDialog::on_drugNameButton_clicked()
 void mfDosageDialog::on_innButton_clicked()
 {
     mfDrugsModel *m = mfDrugsModel::instance();
-    m->setDrugData( d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
+    m->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
     if (innButton->isChecked())
         drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
     else {

@@ -196,10 +196,13 @@ void diMainWindow::on_selector_drugSelected( const int CIS )
 void diMainWindow::showDosageDialog(const QModelIndex &item)
 {
     int CIS = mfDrugsModel::instance()->index( item.row(), Drug::CIS ).data().toInt();
-    if (!m_DosageDialog)
-        m_DosageDialog = new mfDosageDialog(this);
-    m_DosageDialog->changeRow(CIS,item.row()) ;
-    m_DosageDialog->exec();
+//    if (!m_DosageDialog)
+//        m_DosageDialog = new mfDosageDialog(this);
+//    m_DosageDialog->changeRow(CIS,item.row()) ;
+//    m_DosageDialog->exec();
+    mfDosageDialog dlg(this);
+    dlg.changeRow(CIS,item.row());
+    dlg.exec();
 }
 
 /** \brief Reads main window's settings */

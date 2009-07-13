@@ -127,9 +127,7 @@ public:
     void toPrescription()
     {
         int row = m_Parent->availableDosagesListView->listView()->currentIndex().row();
-        m_DosageModel->warn(row);
         m_DosageModel->toPrescription(row);
-        m_DosageModel->warn(row);
     }
 
 public:
@@ -202,23 +200,11 @@ void mfDosageCreatorDialog::done( int r )
     if ( r == QDialog::Rejected ) {
         d->m_DosageModel->revertRow( row );
     }  else {
-//        // match the user's form for the settings
-//        const QStringList &pre = mfDosageModel::predeterminedForms();
-//        const QStringList &av  = mfDrugsModel::instance()->drugData(d->m_DosageModel->drugCIS(),Drug::AvailableForms).toStringList();
-//        if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
-//            ( av.indexOf(intakesCombo->currentText()) == -1 )) {
-//            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
-//        }
-//
+        dosageViewer->done(r);
+
 //        // ******************************************************
 //        // * TODO check validity of the dosage before submition *
 //        // ******************************************************
-//        //        if ( m_DosageModel->isDosageValid( row ) ) {
-//        // submit mapper to model
-////        d->m_Mapper->submit();
-//
-//
-//        // commit model changes to database
     }
     QDialog::done(r);
 }
@@ -229,7 +215,8 @@ void mfDosageCreatorDialog::on_saveButton_clicked()
     // modify focus for the mapper to commit changes
     saveButton->setFocus();
     d->saveToModel();
-    QDialog::done(QDialog::Rejected);
+    dosageViewer->done(QDialog::Rejected);
+    done(QDialog::Rejected);
 }
 
 /** \brief Accept the dialog (prescription's done), no changes is done on the database. */
@@ -238,7 +225,8 @@ void mfDosageCreatorDialog::on_prescribeButton_clicked()
     // modify focus for the mapper to commit changes
     prescribeButton->setFocus();
     d->toPrescription();
-    QDialog::done(QDialog::Accepted);
+    dosageViewer->done(QDialog::Accepted);
+    done(QDialog::Accepted);
 }
 
 /** \brief Save the "reference dosage" to the database and prescribe it then accept the dialog ( prescription's done) */
@@ -248,9 +236,11 @@ void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
     saveAndPrescribeButton->setFocus();
     d->toPrescription();
     d->saveToModel();
-    QDialog::done(QDialog::Accepted);
+    dosageViewer->done(QDialog::Accepted);
+    done(QDialog::Accepted);
 }
 
+/** \brief Opens a help dialog */
 void mfDosageCreatorDialog::on_helpButton_clicked()
 {
     tkHelpDialog::showPage("prescrire.html");

@@ -342,6 +342,22 @@ Le créateur de posologie se compose de cinq parties distinctes :
 
 Ce créateur de posologie permet donc de créer des posologies standard et/ou de prescrire simplement.
 
+\subsection dosagecreator_presentation_prises Les indications de prises
+
+Les indications de prises comprennent :
+- un nombre de prise minimal
+- un monbre de prise maximal
+- la possibilité de prescrire un intervalle de prises (de x à y prises par jour)
+- le texte de la prise :
+    - par défaut : \e prise(s)
+    - une liste d'intitulés standards est proposé
+    - vous pouvez saisir n'importe quel texte, le texte alors saisi (s'il n'apparatient pas aux libellés standards
+      sera alors disponible en cliquant sur licône \e personnel situé à côté (cf image).
+
+
+\image html edit.png Icône représentant les libellés de l'utilisateur
+
+
 \section poso_std Réaliser des posologies standardisées
 
 Tout d'abord, il est nécessaire de renseigner un libellé à la posologie.\n
@@ -364,7 +380,7 @@ La posologie sera alors disponible à chaque ouverture du médicament ou d'un m�
 
 Sélectionnez "AMLOR 5 mg" comme médicament.\n
 Renseignez la posologie standard suivante : "Hypertension artérielle - Mensuel" : 1 prise 1 jour durant 1 mois.\n
-Cliquez sur "<b>En faire une prescription DCI</b>", le libellé DCI apparaît alors en dessous : "amlodipine 5 mg". Ce qui
+Cliquez sur <b>En faire une prescription DCI</b>, le libellé DCI apparaît alors en dessous : "amlodipine 5 mg". Ce qui
 signifie que cette posologie sera accessible à tous les médicaments contenant comme seule DCI \e l'amlodipine
 à un dosage de 5 milligrammes.\n
 Vérifiez que l'icône DCI est présent devant le libellé de la posologie dans le cadre supérieur.\n
@@ -383,8 +399,18 @@ Tous auront accès à la prescription nouvellement créée.
 Cela est lié au fait que le dosage de la DCI est "5,00 mg" et non "5 mg" (sans ",00"). Ce bug sera corrigé avec la
 version 0.1.0 et supra.
 
-\section utliser_poso_std Utiliser les posologies standardisées
+\section prescription_to_dci Transformer une prescription en prescription DCI
 
+Tous les médicaments ne peuvent pas être prescrits en DCI. Les limitations viennent :
+- de la base de données elle-même (la DCI n'est pas connue pour toutes les molécules chimiques)
+- du médicament : seul les spécialités ne contenant qu'une seule DCI peuvent être prescrites en DCI.
+
+Double-cliquez sur le médicament prescrit dans la zone de prescription.\n
+Si le bouton "DCI" est cliquable, la spécialité peut être prescrite en DCI.\n
+Cliquez sur le bouton "DCI" qui se trouve à côté du nom du médicament puis validez.\n
+Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spécialité).
+
+\image html prescription_dci.png Passage d'une prescription normale à DCI
 
 \ref index
 */

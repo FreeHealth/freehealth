@@ -97,12 +97,12 @@ if [ $ARCH_TO_BUILD = "mac" ] ; then
    # link frameworks
    echo "*** Linking Frameworks..."
    cd $PACKAGES_PATH/mac/drugsinteractions/
-   "$MAC_SCRIPTS_PATH"/macDeploy.sh -a drugsinteractions -p sqldrivers
+   "$MAC_SCRIPTS_PATH"/macDeploy.sh -a drugsinteractions -p imageformats -p sqldrivers -p accessible
 
    # clean old dmg and create new one
    echo "*** Creating DMG archive for MacOsX..."
    rm *.dmg
-   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a drugsinteractions -p ./ -s 70
+   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a drugsinteractions -p ./ -s 100
    # move archive to right place
    mv drugsinteractions.dmg "$PACKAGES_PATH"
 

@@ -44,7 +44,10 @@
   \brief QWidget for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.\n
-  If you want to edit or modify a dosage, you must inform the widget of the row and the CIS of the drug.
+  If you want to edit or modify a dosage, you must inform the widget of the row and the CIS of the drug.\n
+
+  Please always call done() when the dialog including the mfDosageViewer is done.
+
   \ingroup drugsinteractions drugswidget
 */
 
@@ -191,7 +194,7 @@ public:
             // Intakes
             m_Parent->intakesCombo->setCurrentIndex(-1);
             m_Parent->intakesCombo->setEditText(m_DosageModel->index( row, Dosage::IntakesScheme).data().toString());
-            // Intakes scheme
+            // Period
             m_Parent->periodSpin->setValue(m_DosageModel->index( row, Dosage::Period).data().toDouble());
             m_Parent->periodSchemeCombo->setEditText(m_DosageModel->index( row, Dosage::PeriodScheme).data().toString());
             // Duration
@@ -217,14 +220,14 @@ public:
 
             // Intakes
             m_Parent->intakesCombo->setCurrentIndex(-1);
-            m_Parent->intakesCombo->setEditText(m->drugData( m_CIS, Prescription::IntakesScheme).toString());
-            // Intakes scheme
-            m_Parent->periodSpin->setValue(m->drugData( m_CIS, Prescription::Period).toDouble());
-            m_Parent->periodSchemeCombo->setEditText(m->drugData( m_CIS, Prescription::PeriodScheme).toString());
+            m_Parent->intakesCombo->setEditText(m->drugData(m_CIS, Prescription::IntakesScheme).toString());
+            // Period
+            m_Parent->periodSpin->setValue(m->drugData(m_CIS, Prescription::Period).toDouble());
+            m_Parent->periodSchemeCombo->setEditText(m->drugData(m_CIS, Prescription::PeriodScheme).toString());
             // Duration
-            m_Parent->durationCombo->setEditText(m->drugData( m_CIS, Prescription::DurationScheme).toString());
+            m_Parent->durationCombo->setEditText(m->drugData(m_CIS, Prescription::DurationScheme).toString());
             // Interval
-            m_Parent->minIntervalIntakesSpin->setValue(m->drugData( m_CIS, Prescription::IntakesIntervalOfTime).toDouble());
+            m_Parent->minIntervalIntakesSpin->setValue(m->drugData(m_CIS, Prescription::IntakesIntervalOfTime).toDouble());
 
             if (m->drugData( m_CIS, Prescription::IntakesUsesFromTo).toBool()) {
                 m_Parent->fromToIntakesCheck->setChecked(true);
@@ -254,12 +257,11 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *drugM = mfDrugsModel::instance();
-//        m_Parent->drugNameLabel->setText( drugM->drugData( CIS, Drug::Denomination).toString() );
-        m_Parent->labelOfDosageLabel->setToolTip( drugM->drugData( m_CIS, Drug::AvailableDosages).toString() );
-        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
-        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
-//        m_Parent->drugNameLabel->setToolTip( toolTip );
+        mfDrugsModel *m = mfDrugsModel::instance();
+        m_Parent->labelOfDosageLabel->setToolTip(m->drugData( m_CIS, Drug::AvailableDosages).toString() );
+//        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
+//        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
+//        dosageForAllInnCheck.setEnabled(m->drugData(CIS, Drug::AllInnsKnown ).toBool());
     }
 
     /**
@@ -425,20 +427,12 @@ void mfDosageViewer::changeCurrentRow(const QModelIndex &item )
 }
 
 /**
-   \brief Validate the dialog
-   \todo Check dosage validity before validate the dialog
+   \brief When dialog including mfDosageViewer is validate call this member with the result of the dialog.
+   It stores some values inside the users settings.
 */
 void mfDosageViewer::done(int r)
 {
-    int row = 0;
-    if (d->m_Mapper)
-        row =  d->m_Mapper->currentIndex();
-//    else
-//        QDialog::done(r);
-
-    if ( r == QDialog::Rejected ) {
-        d->m_DosageModel->revertRow( row );
-    }  else {
+    if ( r == QDialog::Accepted ) {
         // match the user's form for the settings
         const QStringList &pre = mfDosageModel::predeterminedForms();
         const QStringList &av  = mfDrugsModel::instance()->drugData(d->m_CIS,Drug::AvailableForms).toStringList();
@@ -446,18 +440,7 @@ void mfDosageViewer::done(int r)
             ( av.indexOf(intakesCombo->currentText()) == -1 )) {
             tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
         }
-
-        // ******************************************************
-        // * TODO check validity of the dosage before submition *
-        // ******************************************************
-        //        if ( m_DosageModel->isDosageValid( row ) ) {
-        // submit mapper to model
-//        d->m_Mapper->submit();
-
-
-        // commit model changes to database
     }
-//    QDialog::done(r);
 }
 
 /** \brief Used for hourly table widget resizing */
@@ -522,7 +505,11 @@ void mfDosageViewer::on_userformsButton_clicked()
     if (a == aclear) {
         tkSettings::instance()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
     } else {
-        intakesCombo->setEditText( a->text() );
+        intakesCombo->setEditText(a->text());
+        if (d->m_DosageModel)
+            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(),Dosage::IntakesScheme),a->text());
+        else
+            mfDrugsModel::instance()->setDrugData(d->m_CIS, Prescription::IntakesScheme, a->text());
     }
 }
 

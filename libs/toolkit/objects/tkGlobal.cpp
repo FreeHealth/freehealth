@@ -479,7 +479,7 @@ const bool okCancelMessageBox(const QString &text, const QString&infoText, const
     mb.setDefaultButton(QMessageBox::Ok);
     int r = mb.exec();
     qApp->setActiveWindow(parent);
-    return (r);
+    return (r==QMessageBox::Ok);
 }
 
 /** \brief Creates a messagebox for non available function.  **/

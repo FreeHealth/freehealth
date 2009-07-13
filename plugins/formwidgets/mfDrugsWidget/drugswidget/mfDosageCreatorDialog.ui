@@ -175,10 +175,12 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>availableDosagesListView</tabstop>
   <tabstop>prescribeButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>saveAndPrescribeButton</tabstop>
   <tabstop>cancelButton</tabstop>
+  <tabstop>helpButton</tabstop>
  </tabstops>
  <resources/>
  <connections>

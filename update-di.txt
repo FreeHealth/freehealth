@@ -1,5 +1,16 @@
 version=0.0.8
 {
+    * Août 2009
+    * Version de la base de données thérapeutique :
+      * Médicaments :  AFSSAPS - 26/06/2009
+      * Interactions : AFSSAPS - 29/06/2009
+
+    * Schéma de prises personnels correctement enregistrés
+    * Corrections de la prescription DCI (plus efficace cf documentation)
+}
+
+version=0.0.8
+{
     * Juillet 2009
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009

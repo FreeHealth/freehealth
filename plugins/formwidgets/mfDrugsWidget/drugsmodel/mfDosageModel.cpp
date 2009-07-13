@@ -487,6 +487,8 @@ void mfDosageModel::toPrescription(const int row)
     }
     if (index(row,Dosage::INN_LK).data().toInt() > 999) // this is an INN prescription
         M->setDrugData(m_CIS, Prescription::IsINNPrescription, true);
+    else
+        M->setDrugData(m_CIS, Prescription::IsINNPrescription, false);
     M->resetModel();
 }
 

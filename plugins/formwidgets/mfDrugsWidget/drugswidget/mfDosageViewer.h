@@ -71,6 +71,7 @@ public:
     void useDrugsModel(const int CIS, const int drugRow);
 
 public Q_SLOTS:
+    void done( int r );
     void changeCurrentRow( const int dosageRow );
     void changeCurrentRow( const QModelIndex &item );
 
@@ -78,7 +79,6 @@ private:
     void resizeEvent( QResizeEvent * event );
 
 private Q_SLOTS:
-    void done( int r );
     void on_fromToIntakesCheck_stateChanged(int state);
     void on_fromToDurationCheck_stateChanged(int state);
     void on_intakesFromSpin_valueChanged(double d);

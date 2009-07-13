@@ -116,7 +116,7 @@ public:
             if (arg.startsWith(COMMANDLINE_ISMEDINTUXPLUGINS))
                 isMedintuxPlugins = true;
             else if (arg.startsWith(COMMANDLINE_EXCHANGEFILE))
-                m_MedintuxExchangeFile = arg.mid( arg.indexOf("=") +1 ).remove("\"");
+                m_ExchangeFile = arg.mid( arg.indexOf("=") +1 ).remove("\"");
             else if (arg.contains(COMMANDLINE_PATIENTNAME)) {
                 m_PatientName = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
             } else if (arg.contains(COMMANDLINE_PATIENTDOB)) {
@@ -151,7 +151,7 @@ public:
     static QHash<const QMetaObject*, QObject*> mInstances;
     static bool isMedintuxPlugins;
     static bool isMedintuxPluginsTested;
-    static QString m_MedintuxExchangeFile;
+    static QString m_ExchangeFile;
     static QString m_PatientName;
     static QString m_PatientDOB;
     static QString m_PatientWeight;
@@ -166,7 +166,7 @@ public:
 QHash<const QMetaObject*, QObject*> diCorePrivate::mInstances;
 bool diCorePrivate::isMedintuxPlugins = false;
 bool diCorePrivate::isMedintuxPluginsTested = false;
-QString diCorePrivate::m_MedintuxExchangeFile = "";
+QString diCorePrivate::m_ExchangeFile = "";
 QString diCorePrivate::m_PatientName = "";
 QString diCorePrivate::m_PatientDOB = "";
 QString diCorePrivate::m_PatientWeight = "";
@@ -294,6 +294,7 @@ bool diCore::init()
     // first time runnning ?
     if (settings()->firstTimeRunning()) {
         // show the license agreement dialog
+        showMessage( &splash, QCoreApplication::translate( "diCore", "Needed Licence Agreement..." ) );
         if (!tkGlobal::defaultLicenceAgreementDialog("", tkAboutDialog::BSD ))
             return false;
         showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Default Parameters..." ) );
@@ -316,7 +317,14 @@ bool diCore::init()
         tkLog::logTimeElapsed(chrono, "diCore", "initializing drugs base");
 
     showMessage( &splash, QCoreApplication::translate( "diCore", "Checking command line parameters..." ) );
-    diMedinTux::isMedinTuxPlugIns(&splash);
+    if (!diMedinTux::isMedinTuxPlugIns(&splash)) {
+        if (diCorePrivate::m_ExchangeFile.isEmpty()) {
+            qWarning() << "non medintux exchange file" << diCorePrivate::m_ExchangeFile;
+        }
+            ;
+
+    }
+
 
     // show main window
     mainWindow()->show();

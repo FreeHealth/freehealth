@@ -186,6 +186,7 @@ else {
                    $${QTLIBS_PATH}/*QtGui4* \
                    $${QTLIBS_PATH}/*QtSql4* \
                    $${QTLIBS_PATH}/*QtXml4* \
+                   $${QTLIBS_PATH}/*QtSvg4* \
                    $${QTLIBS_PATH}/*QtNetwork4*
     INSTALLS += qtlibs
     message( Cross-compilation : Qt Libs will be installed from $${QTLIBS_PATH} to $${QTLIBS_INSTALL_PATH})
@@ -204,6 +205,7 @@ else {
                        $$[QT_INSTALL_LIBS]/*QtGui.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtSql.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtXml.so.4 \
+                       $$[QT_INSTALL_LIBS]/*QtSvg.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
         INSTALLS += qtlibs
         message( Unix : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH} --$${TARGET_INSTALL_PATH}/libs)
@@ -216,6 +218,7 @@ else {
                        $$[QT_INSTALL_LIBS]/*QtGui* \
                        $$[QT_INSTALL_LIBS]/*QtSql* \
                        $$[QT_INSTALL_LIBS]/*QtXml* \
+                       $$[QT_INSTALL_LIBS]/*QtSvg* \
                        $$[QT_INSTALL_LIBS]/*QtNetwork*
         INSTALLS += qtlibs
         message( Win32 : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH})
@@ -223,9 +226,13 @@ else {
  }
 
  # Install Qt plugins (SQL plugins)
- qtplugins.path = $${QT_PLUGINS_INSTALL_PATH}
- qtplugins.files = $${QTPLUGINS_PATH}/sqldrivers
- INSTALLS += qtplugins
+ qt_sqlplugins.path = $${QT_PLUGINS_INSTALL_PATH}
+ qt_sqlplugins.files = $${QTPLUGINS_PATH}/sqldrivers
+ qt_imagesplugins.path = $${QT_PLUGINS_INSTALL_PATH}
+ qt_imagesplugins.files = $${QTPLUGINS_PATH}/imageformats
+ qt_accessibleplugins.path = $${QT_PLUGINS_INSTALL_PATH}
+ qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
+ INSTALLS += qt_sqlplugins qt_imagesplugins qt_accessibleplugins
  message( Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${PLUGINS_INSTALL_PATH}/qt )
 
 }  #end if release mode

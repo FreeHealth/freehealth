@@ -518,14 +518,15 @@ void tkSettings::saveState( QMainWindow * window, const QString & prefix )
 void tkSettings::appendToValue( const QString &key, const QString &value )
 {
     QVariant q = this->value(key);
-    if (q.isNull() || q.toString().isEmpty()) {
+    if (q.isNull()) {
         this->setValue( key, value );
         return;
     }
-    if (q.toStringList().indexOf(value) != -1) {
-        return;
+    if (q.toStringList().indexOf(value) == -1) {
+        QStringList list = q.toStringList();
+        list.append(value);
+        this->setValue( key, list );
     }
-    this->setValue( key, QStringList() << this->value(key).toStringList() << value );
 }
 
 /** \brief For debugging purpose. */
