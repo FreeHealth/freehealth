@@ -131,11 +131,13 @@ void tkTheme::refrehCache()
 {
 }
 
+/** \brief Defines the max number of icons in the cache */
 void tkTheme::setCacheMaxCost( const int max )
 {
     d->m_IconCache.setMaxCost(max);
 }
 
+/** \brief Set the specific small icon path - should not be used */
 void tkTheme::setSmallIconPath( const QString &absPath )
 {
     if (QDir(absPath).exists())
@@ -144,6 +146,7 @@ void tkTheme::setSmallIconPath( const QString &absPath )
         tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) );
 }
 
+/** \brief Set the specific medium icon path - should not be used */
 void tkTheme::setMediumIconPath( const QString &absPath )
 {
     if (QDir(absPath).exists())
@@ -152,6 +155,7 @@ void tkTheme::setMediumIconPath( const QString &absPath )
         tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) );
 }
 
+/** \brief Set the specific big icon path - should not be used */
 void tkTheme::setBigIconPath( const QString &absPath )
 {
     if (QDir(absPath).exists())
@@ -160,6 +164,7 @@ void tkTheme::setBigIconPath( const QString &absPath )
         tkLog::addError(this, tkTr(PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath) );
 }
 
+/** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
 QIcon tkTheme::icon( const QString & fileName, IconSize size )
 {
     Q_ASSERT_X( m_Instance, "tkTheme::icon", "Class need to be instanciated before" );
@@ -167,6 +172,7 @@ QIcon tkTheme::icon( const QString & fileName, IconSize size )
     return m_Instance->d->icon( fileName, size );
 }
 
+/** \brief Returns the full icon's file name absolute path corresponding to the themed file name \e fileName and the size \e size */
 QString tkTheme::iconFullPath( const QString &fileName, IconSize size )
 {
     return m_Instance->d->iconFullPath(fileName,size);
@@ -233,6 +239,7 @@ QString tkThemePrivate::transformFileName( const QString & fileName, tkTheme::Ic
     return QString::null;
 }
 
+/** \brief Returns the themed splashscreen \e fileName. */
 QPixmap tkTheme::splashScreen( const QString &fileName )
 {
     if (QFile(m_Instance->d->m_AbsolutePath + "/pixmap/splashscreens/" + fileName).exists() )

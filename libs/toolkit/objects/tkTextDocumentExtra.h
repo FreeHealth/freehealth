@@ -46,7 +46,6 @@
 #include <QTextDocument>
 #include <QObject>
 #include <QVariant>
-#include <QDebug>
 
 class tkTextDocumentExtraPrivate;
 

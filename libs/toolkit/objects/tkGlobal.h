@@ -59,8 +59,8 @@ QT_END_NAMESPACE
 /**
  * \file tkGlobal.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.14
- * \date 18 Jun 2009
+ * \version 0.0.17
+ * \date 23 July 2009
 */
 
 Q_TK_BEGIN_CONSTANTS
@@ -77,11 +77,11 @@ enum Warn {
 
 
 /**  \brief Initialize the lib. Should be be called before all. Initialize : tkTranslators, tkTheme. */
-Q_TK_EXPORT const void initLib();
+Q_TK_EXPORT void initLib();
 
 // Libs and OS informations
 /**  \brief Returns informations about the librairy (version, name, date of compilation). */
-Q_TK_EXPORT const QString getLibraryInformations();
+Q_TK_EXPORT QString getLibraryInformations();
 /** \brief Return true if the application was build in debug mode. */
 Q_TK_EXPORT bool isDebugCompilation();
 /** \brief Return true if the application was build using the SVN. */
@@ -102,59 +102,59 @@ Q_TK_EXPORT QString osName();
 
 // Widget geometry
 /** \brief Center a widget into the screen. */
-Q_TK_EXPORT const void centerWidget( QWidget * win );
+Q_TK_EXPORT void centerWidget( QWidget * win );
 /** \brief Toggle a widget to fullScreen. */
-Q_TK_EXPORT const void setFullScreen( QWidget* win, bool on );
+Q_TK_EXPORT void setFullScreen( QWidget* win, bool on );
 
 // Message Boxes and default dialogs
-Q_TK_EXPORT const void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT const void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT const bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT const int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title = QString::null );
-Q_TK_EXPORT const int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title = QString::null );
-Q_TK_EXPORT const bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT const bool functionNotAvailableMessageBox( const QString &functionText );
-Q_TK_EXPORT const void quickDebugDialog( const QStringList &texts);
+Q_TK_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title = QString::null );
+Q_TK_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title = QString::null );
+Q_TK_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT bool functionNotAvailableMessageBox( const QString &functionText );
+Q_TK_EXPORT void quickDebugDialog( const QStringList &texts);
 Q_TK_EXPORT bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::AvailableLicense licence);
 
 // Dialogs for user input
-Q_TK_EXPORT const QString askUser( const QString &title, const QString &question );
+Q_TK_EXPORT QString askUser( const QString &title, const QString &question );
 
 // Working with files and dirs
-Q_TK_EXPORT const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
-Q_TK_EXPORT const QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
-Q_TK_EXPORT const bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
-Q_TK_EXPORT const bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser = WarnUser, QWidget *parent=0 );
-Q_TK_EXPORT const bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
-Q_TK_EXPORT const QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
-Q_TK_EXPORT const QString isDirExists(const QString &absPath);
-Q_TK_EXPORT const QString isFileExists(const QString &absPath);
+Q_TK_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
+Q_TK_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
+Q_TK_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
+Q_TK_EXPORT bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser = WarnUser, QWidget *parent=0 );
+Q_TK_EXPORT bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
+Q_TK_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
+Q_TK_EXPORT QString isDirExists(const QString &absPath);
+Q_TK_EXPORT QString isFileExists(const QString &absPath);
 
 // Some usefull widgets specific functions
 /** \brief Toggle the echomode of a QLineEdit. */
-Q_TK_EXPORT const void switchEchoMode( QLineEdit * l );
+Q_TK_EXPORT void switchEchoMode( QLineEdit * l );
 
 // Some functions for HTML work
-Q_TK_EXPORT const QString fontToHtml( const QFont &font, const QString &color = QString::null );
-Q_TK_EXPORT const QString textAlignmentToHtml( const Qt::Alignment &align );
-Q_TK_EXPORT const QString toHtmlAccent( const QString &html );
+Q_TK_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
+Q_TK_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
+Q_TK_EXPORT QString toHtmlAccent( const QString &html );
 
 // Some functions for XML Handling
-Q_TK_EXPORT const QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
-Q_TK_EXPORT const bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
-Q_TK_EXPORT const QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
-Q_TK_EXPORT const QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);
-Q_TK_EXPORT const int     xmlRead(const QDomElement &father, const QString &name, const int defaultValue);
-Q_TK_EXPORT const int     xmlRead(const QDomElement &father, const QString &name, const long int defaultValue);
-Q_TK_EXPORT const bool    xmlRead(const QDomElement &father, const QString &name, const bool defaultValue);
-Q_TK_EXPORT const void    xmlWrite(QDomElement &father, const QString &name, const QString &value);
-Q_TK_EXPORT const void    xmlWrite(QDomElement &father, const QString &name, char *value);
-Q_TK_EXPORT const void    xmlWrite(QDomElement &father, const QString &name, int value);
-Q_TK_EXPORT const void    xmlWrite(QDomElement &father, const QString &name, long int value);
-Q_TK_EXPORT const void    xmlWrite(QDomElement &father, const QString &name, bool value);
+Q_TK_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
+Q_TK_EXPORT bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
+Q_TK_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
+Q_TK_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);
+Q_TK_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const int defaultValue);
+Q_TK_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const long int defaultValue);
+Q_TK_EXPORT bool    xmlRead(const QDomElement &father, const QString &name, const bool defaultValue);
+Q_TK_EXPORT void    xmlWrite(QDomElement &father, const QString &name, const QString &value);
+Q_TK_EXPORT void    xmlWrite(QDomElement &father, const QString &name, char *value);
+Q_TK_EXPORT void    xmlWrite(QDomElement &father, const QString &name, int value);
+Q_TK_EXPORT void    xmlWrite(QDomElement &father, const QString &name, long int value);
+Q_TK_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool value);
 
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
-Q_TK_EXPORT const int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
+Q_TK_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 
 Q_TK_END_GLOBAL
 

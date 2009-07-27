@@ -42,6 +42,7 @@
 
 #include <tkExporter.h>
 #include <tkGlobal.h>
+#include <tkConstants.h>
 class tkThemePrivate;
 class tkSettings;
 
@@ -52,143 +53,40 @@ class tkSettings;
 /**
  * \file tkTheme.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 01 May 2009
+ * \version 0.0.7
+ * \date 16 July 2009
 */
-
-
-Q_TK_BEGIN_CONSTANTS
-
-const char * const  DRUGSINTERACTIONS_SPLASHSCREEN="drugsinteractions.png";
-const char * const  FREEMEDFORMS_SPLASHSCREEN=".png";
-
-// menu File
-const char * const  ICONFILENEW =      "filenew.png";      /*!< Icon for New File */
-const char * const  ICONOPEN =         "fileopen.png";
-const char * const  ICONSAVE =         "filesave.png";
-const char * const  ICONSAVEAS =       "filesaveas.png";
-const char * const  ICONPRINT =        "fileprint.png";
-const char * const  ICONQUIT =         "exit.png";
-const char * const  ICONEXIT =         "exit.png";
-
-// menu Edit
-const char * const  ICONEDIT =         "edit.png";
-const char * const  ICONUNDO =         "undo.png";
-const char * const  ICONREDO =         "redo.png";
-const char * const  ICONCOPY =         "editcopy.png";
-const char * const  ICONCUT =          "editcut.png";
-const char * const  ICONPASTE =        "editpaste.png";
-const char * const  ICONCLEAR =        "editclear.png";
-const char * const  ICONADD =          "add.png";
-const char * const  ICONREMOVE =       "remove.png";
-const char * const  ICONMOVEUP =       "1uparrow.png";
-const char * const  ICONMOVEDOWN =     "1downarrow.png";
-const char * const  ICONSORT =         "sort.png";
-const char * const  ICONSELECTALL =    "edit-select-all.png";
-const char * const  ICONDESELECT =     "";
-const char * const  ICONFIND =         "find.png";
-
-// menu Navigation
-const char * const  ICONNEXT =         "next.png";
-const char * const  ICONPREVIOUS =     "previous.png";
-const char * const  ICONHOME =         "gohome.png";
-
-// menu View
-const char * const  ICONEYES =         "eyes.png";
-const char * const  ICONVIEWSIDE =     "view_sidetree.png";
-const char * const  ICONFULLSCREEN =   "view-fullscreen.png";
-
-// menu TextFormat
-const char * const  ICONBOLD =          "format-text-bold.png";
-const char * const  ICONUNDERLINE =     "format-text-underline.png";
-const char * const  ICONITALIC =        "format-text-italic.png";
-const char * const  ICONSTRIKE =        "format-text-strikethrough.png";
-const char * const  ICONFONTFORMAT =    "format-fonts.png";
-const char * const  ICONFONTBIGGER =    "font-bigger.png";
-const char * const  ICONFONTSMALLER =   "font-smaller.png";
-
-const char * const  ICONALIGNLEFT =     "format-justify-left.png";
-const char * const  ICONALIGNRIGHT =    "format-justify-right.png";
-const char * const  ICONALIGNCENTER =   "format-justify-center.png";
-const char * const  ICONALIGNJUSTIFY =  "format-justify-fill.png";
-
-// menu Table
-const char * const  ICONTABLE =             "table.png";
-const char * const  ICONTABLEADDROW =       "table-add-row.png";
-const char * const  ICONTABLEADDCOLUMN =    "table-add-col.png";
-const char * const  ICONTABLEREMOVEROW =    "table-remove-row.png";
-const char * const  ICONTABLEREMOVECOLUMN = "table-remove-col.png";
-const char * const  ICONTABLEMERGECELLS =   "table-merge-cells.png";
-const char * const  ICONTABLESPLITCELLS =   "table-split-cells.png";
-
-// menu Help
-const char * const  ICONSEARCH =       "search.png";
-const char * const  ICONPREFERENCES =  "configure.png";
-const char * const  ICONHELP =         "help.png";
-const char * const  ICONABOUT =        "help.png";
-const char * const  ICONHELPTEXT =     "helptext.png";
-const char * const  ICONDEBUGHELPER =  "";
-
-// menu Extras
-const char * const  ICONCRASHRECOVER = "crashrecoverer.png";
-const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
-const char * const  ICONMEDINTUX    =  "medintux.png";
-
-// menu Users --> MediumSize
-const char * const  ICONUSER          = "user.png";
-const char * const  ICONPERSONAL      = "personal.png";
-const char * const  ICONUSERMANAGER   = "usermanager.png";
-const char * const  ICONEDITUSER      = "edituser.png";
-const char * const  ICONCLEARUSER     = "editclear.png";
-const char * const  ICONDELETEUSER    = "deleteuser.png";
-const char * const  ICONNEWUSER       = "adduser.png";
-
-Q_TK_END_CONSTANTS
 
 class Q_TK_EXPORT tkTheme : public QObject
 {
     Q_OBJECT
     friend class tkSettings;
-    friend const void tkGlobal::initLib();
+    friend void tkGlobal::initLib();
 public:
-    /** */
     enum IconSize {
         SmallIcon = 0, // 16x16 is the default
         MediumIcon,    // 32x32
         BigIcon        // 64x64
     };
 
-    /** */
     static tkTheme *instance();
-    /** */
     ~tkTheme();
 
-    /** */
     void setThemeRootPath( const QString & absPath );
-    /** */
     void setThemeRelativeRootPath( const QString & relativePathFromAppBinary );
 
-    /** */
     void refrehCache();
-    /** */
     void setCacheMaxCost( const int max );
 
-    /** */
     static QIcon icon( const QString & fileName, IconSize size = SmallIcon );
-    /** */
     static QString iconFullPath( const QString &fileName, IconSize size = SmallIcon );
-    /** */
     static QPixmap splashScreen( const QString &fileName );
 
 protected:
-    /** */
     tkTheme( QObject *parent = 0, const int cacheSize = 100 );
 
-    /** */
     void setSmallIconPath( const QString &absPath );
-    /** */
     void setMediumIconPath( const QString &absPath );
-    /** */
     void setBigIconPath( const QString &absPath );
 
 private:

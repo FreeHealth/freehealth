@@ -1,1 +1,1 @@
-#include <../widgets/tkRichTextEditor.h>
+#include <../richtexteditor/tkRichTextEditor.h>

@@ -54,8 +54,8 @@ Q_TK_END_CONSTANTS
 /**
  * \file tkUpdateChecker.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 02 June 2009
+ * \version 0.0.5
+ * \date 21 July 2009
 */
 
 class Q_TK_EXPORT tkUpdateChecker : public QObject
@@ -80,8 +80,8 @@ public Q_SLOTS:
     void showUpdateInformations();
 
 Q_SIGNALS:
-    void updateFounded(const QString &updateText);
-    void updateFounded();
+    void updateFound(const QString &updateText);
+    void updateFound();
 
 protected:
     void emitSignals();

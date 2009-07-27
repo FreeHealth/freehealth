@@ -1,0 +1,1 @@
+#include <../richtexteditor/tkRichTextTableEditor.h>

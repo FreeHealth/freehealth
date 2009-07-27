@@ -202,6 +202,9 @@ namespace tkSettingsPrivateConstants {
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
     const char* const WRITABLEDATABASE     = "/databases";
 
+    // SETTINGS
+    const char* const LICENSE_VERSION      = "License/AcceptedVersion";
+
 }
 
 using namespace tkSettingsPrivateConstants;
@@ -391,6 +394,16 @@ void tkSettings::noMoreFirstTimeRunning()
 {
     setValue( "FirstTimeRunning", false );
     d->m_FirstTime = false;
+}
+
+QString tkSettings::licenseApprovedApplicationNumber() const
+{
+    return value(LICENSE_VERSION).toString();
+}
+
+void tkSettings::setLicenseApprovedApplicationNumber(const QString &version)
+{
+    setValue(LICENSE_VERSION, version);
 }
 
 /**

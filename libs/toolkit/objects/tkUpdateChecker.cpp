@@ -39,11 +39,11 @@
   - Usage :
   \code
       tkUpdateChecker::instance()->check("http://my.url.com/update.file.txt");
-      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded()), this, SLOT(on_UpdateFounded()));
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFound()), this, SLOT(on_UpdateFound()));
       // OR
-      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded(const QString &)), this, SLOT(on_UpdateFounded(const QString &)));
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFound(const QString &)), this, SLOT(on_UpdateFound(const QString &)));
       // OR
-      connect( tkUpdateChecker::instance(), SIGNAL(updateFounded()), tkUpdateChecker::instance(), SLOT(showUpdateInformations()));
+      connect( tkUpdateChecker::instance(), SIGNAL(updateFound()), tkUpdateChecker::instance(), SLOT(showUpdateInformations()));
   \endcode
 
   - You can :
@@ -227,8 +227,8 @@ void tkUpdateCheckerPrivate::httpDone( bool error )
 /** \internal */
 void tkUpdateChecker::emitSignals()
 {
-    Q_EMIT updateFounded(d->m_UpdateText);
-    Q_EMIT updateFounded();
+    Q_EMIT updateFound(d->m_UpdateText);
+    Q_EMIT updateFound();
 }
 
 /** \brief Abort the download */

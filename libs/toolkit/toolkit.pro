@@ -1,7 +1,7 @@
 # toolkit library project file
 TEMPLATE = lib
 TARGET = toolkit
-PACKAGE_VERSION = 0.2.0
+PACKAGE_VERSION = 0.4.0
 !win32:VERSION = $${PACKAGE_VERSION}
 
 # include config file
@@ -19,6 +19,12 @@ CONFIG *= dll
 # make library exportable
 DEFINES *= TOOLKIT_CORE_BUILD
 
+#include subprojects
+include($${PWD}/richtexteditor/richtexteditor.pri)
+include($${PWD}/actionmanager/actionmanager.pri)
+include($${PWD}/contextmanager/contextmanager.pri)
+include($${PWD}/listview/listview.pri)
+
 # Core
 HEADERS += objects/tkExporter.h \
     objects/tkSendMessage.h \
@@ -32,15 +38,8 @@ HEADERS += objects/tkExporter.h \
     widgets/tkDebugDialog.h \
     widgets/tkDebugDialog_p.h \
     database/tkDatabase.h \
-    widgets/tkRichTextEditor.h \
-    widgets/tkRichTextEditor_p.h \
     objects/tkSerializer.h \
-    widgets/tkStringListView.h \
-    objects/tkStringListModel.h \
-    widgets/tkListView.h \
-    widgets/tkListView_p.h \
     objects/tkTheme.h \
-    objects/tkActionManager.h \
     widgets/tkLineEditEchoSwitcher.h \
     objects/tkTextDocumentExtra.h \
     objects/tkPrinter.h \
@@ -52,7 +51,9 @@ HEADERS += objects/tkExporter.h \
     objects/tkUpdateChecker.h \
     widgets/tkPrinterPreviewer_p.h \
     objects/tkConstantTranslations.h \
-    widgets/tkHelpDialog.h
+    widgets/tkHelpDialog.h \
+    objects/tkUniqueIdentifier.h \
+    objects/tkConstants.h
 SOURCES += objects/tkSettings.cpp \
     objects/tkLog.cpp \
     objects/tkGlobal.cpp \
@@ -60,13 +61,8 @@ SOURCES += objects/tkSettings.cpp \
     widgets/QButtonLineEdit.cpp \
     widgets/tkDebugDialog.cpp \
     database/tkDatabase.cpp \
-    widgets/tkRichTextEditor.cpp \
     objects/tkSerializer.cpp \
-    widgets/tkStringListView.cpp \
-    objects/tkStringListModel.cpp \
-    widgets/tkListView.cpp \
     objects/tkTheme.cpp \
-    objects/tkActionManager.cpp \
     widgets/tkLineEditEchoSwitcher.cpp \
     objects/tkSerialNumber.cpp \
     widgets/tkScrollingWidget.cpp \
@@ -75,9 +71,9 @@ SOURCES += objects/tkSettings.cpp \
     widgets/tkPrinterPreviewer_p.cpp \
     objects/tkTextDocumentExtra.cpp \
     objects/tkConstantTranslations.cpp \
-    widgets/tkHelpDialog.cpp
+    widgets/tkHelpDialog.cpp \
+    objects/tkUniqueIdentifier.cpp
 FORMS += widgets/tkDebugDialog.ui \
-    widgets/tkTableDialog.ui \
     widgets/tkAboutDialog.ui \
     widgets/tkPrinterPreviewer_p.ui
 

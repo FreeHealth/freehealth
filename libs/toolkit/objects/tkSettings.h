@@ -63,8 +63,8 @@ class tkSettingsPrivate;
 /**
  * \file tkSettings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 11 July 2009
+ * \version 0.0.10
+ * \date 15 July 2009
 */
 
 class Q_TK_EXPORT tkSettings : public QSettings
@@ -100,6 +100,8 @@ public:
     // first time running ?
     virtual bool firstTimeRunning() const;
     virtual void noMoreFirstTimeRunning();
+    virtual QString licenseApprovedApplicationNumber() const;
+    virtual void setLicenseApprovedApplicationNumber(const QString &version);
 
     // manage mainwindow
     virtual void restoreState( QMainWindow * window, const QString & prefix = QString::null );
@@ -119,11 +121,15 @@ public:
     // values management
     virtual void appendToValue( const QString &key, const QString &value );
 
-private:
+
+    // DO NOT INSTANCIATE TKSETTINGS THIS WAY, USE INSTANCE() INSTEAD
     tkSettings( QObject * parent = 0, const QString & appName = QString::null, const QString & fileName = QString::null );
-    QString getIniFile( const QString & name = QString::null, const QString & version = QString::null );
+    // DO NOT INSTANCIATE TKSETTINGS THIS WAY, USE INSTANCE() INSTEAD
 
 protected:
+    QString getIniFile( const QString & name = QString::null, const QString & version = QString::null );
+
+private:
     tkSettingsPrivate * d;
     static tkSettings* m_Instance;
 };

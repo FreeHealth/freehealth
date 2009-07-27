@@ -75,10 +75,10 @@ QTextEdit *tkPrinterPreviewerPrivate::watermarkEditor()
 void tkPrinterPreviewerPrivate::setHeader(const QString &html, tkPrinter::Presence p)
 {
     if (!m_EditorHeader) {
-        m_EditorHeader = new tkRichTextEditor(this, tkRichTextEditor::Full|tkRichTextEditor::WithLoad|tkRichTextEditor::WithTables|tkRichTextEditor::WithSave);
+        m_EditorHeader = new tkRichTextEditor(this, tkRichTextEditor::Full);
         editorLayout->insertWidget(0, createEditor( this, m_EditorHeader, HEADER ) );
     }
-    qWarning() << html;
+//    qWarning() << html;
     printer.setHeader(html,p);
     m_EditorHeader->textEdit()->setHtml(html);
     QComboBox *c = this->findChild<QComboBox *>( HEADER );
@@ -90,7 +90,7 @@ void tkPrinterPreviewerPrivate::setHeader(const QString &html, tkPrinter::Presen
 void tkPrinterPreviewerPrivate::setFooter(const QString &html, tkPrinter::Presence p)
 {
     if (!m_EditorFooter) {
-        m_EditorFooter = new tkRichTextEditor(this, tkRichTextEditor::Full|tkRichTextEditor::WithLoad|tkRichTextEditor::WithTables|tkRichTextEditor::WithSave);
+        m_EditorFooter = new tkRichTextEditor(this, tkRichTextEditor::Full);
         editorLayout->insertWidget(1, createEditor( this, m_EditorFooter, FOOTER ) );
     }
     printer.setFooter(html,p);
@@ -104,7 +104,7 @@ void tkPrinterPreviewerPrivate::setFooter(const QString &html, tkPrinter::Presen
 void tkPrinterPreviewerPrivate::setWatermark(const QString &html, tkPrinter::Presence p)
 {
     if (!m_EditorWatermark) {
-        m_EditorWatermark = new tkRichTextEditor(this, tkRichTextEditor::Full|tkRichTextEditor::WithLoad|tkRichTextEditor::WithTables|tkRichTextEditor::WithSave);
+        m_EditorWatermark = new tkRichTextEditor(this, tkRichTextEditor::Full);
         editorLayout->insertWidget(2, createEditor( this, m_EditorWatermark, WATERMARK ) );
     }
     printer.addHtmlWatermark(html,p);
@@ -193,7 +193,7 @@ void tkPrinterPreviewerPrivate::watermarkToPointer(tkTextDocumentExtra *extra)
 
 QVariant tkPrinterPreviewerPrivate::extraDocument()
 {
-    qWarning() << "tkPrinterPreviewerPrivate::extraDocument()";
+//    qWarning() << "tkPrinterPreviewerPrivate::extraDocument()";
     QVariantList list;
     QVariant q;
     tkTextDocumentExtra(headerToHtml(), headerPresence(), tkPrinter::First );

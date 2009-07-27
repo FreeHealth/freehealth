@@ -78,7 +78,7 @@ Q_TK_BEGIN_GLOBAL
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////   LIB AND OS FUNCTIONS   ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const void initLib()
+void initLib()
 {
     // load translator
     if ( tkTranslators::instance() )
@@ -86,11 +86,11 @@ const void initLib()
     // initialize tkTheme
     tkTheme::instance();
     // intialize tkActionManager
-    tkActionManager::instance();
+//    ActionManager::instance();
     // initialize tkSerialNumber
     tkSerialNumber::initialize();
 }
-const QString getLibraryInformations()
+QString getLibraryInformations()
 {
     return QString( "toolkit library, version : %1 %2 , compiled on : %3 %4" )
             .arg( PACKAGE_VERSION )
@@ -193,7 +193,7 @@ QString osName()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   FILES FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive )
+QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
     QFileInfoList files;
     foreach ( const QFileInfo & file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) ) {
@@ -208,7 +208,7 @@ const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool rec
     return files;
 }
 
-const QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursive )
+QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursive )
 {
     return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive );
 }
@@ -219,7 +219,7 @@ const QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursiv
    \param createIfNotExist : try to create the dir if true
    \param logDirName : logical name to use for warning (eg : "Application path")
 **/
-const bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName )
+bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName )
 {
     if ( ! QFile::exists( absPath ) ) {
         if ( createIfNotExist ) {
@@ -240,7 +240,7 @@ const bool checkDir( const QString & absPath, bool createIfNotExist, const QStri
 }
 
 /** \brief Save the string to a text file. You can choose to warn the user or not is an error is encountered. Return true if all gone good. **/
-const bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser, QWidget *parent )
+bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser, QWidget *parent )
 {
     if (toFile.isEmpty()) {
         tkLog::addError( "tkGlobal", "saveStringToFile() : fileName is empty");
@@ -280,7 +280,7 @@ const bool saveStringToFile( const QString &toSave, const QString &toFile, const
 }
 
 /** \brief Save the string to a text file. Ask user for the name of the file to save. \sa  saveStringToFile() **/
-const bool saveStringToFile( const QString &toSave, const QString &dirPath, const QString &filters, QWidget *parent )
+bool saveStringToFile( const QString &toSave, const QString &dirPath, const QString &filters, QWidget *parent )
 {
     QWidget *wgt = parent;
     if (!parent) {
@@ -295,7 +295,7 @@ const bool saveStringToFile( const QString &toSave, const QString &dirPath, cons
 }
 
 /** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
-const QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *parent )
+QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *parent )
 {
     if (toRead.isEmpty())
         return QString();
@@ -326,7 +326,7 @@ const QString readTextFile( const QString &toRead, const Warn warnUser, QWidget 
 }
 
 /** \brief Test a dir, if dir exists return the absDirName, otherwise return empty QString. **/
-const QString isDirExists(const QString &absPath)
+QString isDirExists(const QString &absPath)
 {
     if (QDir(absPath).exists())
         return QDir::cleanPath(absPath);
@@ -334,7 +334,7 @@ const QString isDirExists(const QString &absPath)
 }
 
 /** \brief Test a file, if file exists return the absFileName, otherwise return empty QString. **/
-const QString isFileExists(const QString &absPath)
+QString isFileExists(const QString &absPath)
 {
     if (QFile(absPath).exists())
         return QDir::cleanPath(absPath);
@@ -345,7 +345,7 @@ const QString isFileExists(const QString &absPath)
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Creates an informative messagebox. **/
-const void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
+void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -365,7 +365,7 @@ const void informativeMessageBox( const QString &text, const QString&infoText, c
 }
 
 /** \brief Creates a warning messagebox. **/
-const void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
+void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -385,7 +385,7 @@ const void warningMessageBox( const QString &text, const QString&infoText, const
 }
 
 /** \brief Creates a messagebox with yes / no. Return true if user clicked yes. **/
-const bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
+bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -409,7 +409,7 @@ const bool yesNoMessageBox(const QString &text, const QString&infoText, const QS
   \brief Creates a messagebox with many buttons.
   Return -1 if dialog was cancelled, or the index of the button into the stringlist.
 **/
-const int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title )
+int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title )
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -442,7 +442,7 @@ const int withButtonsMessageBox( const QString &text, const QString&infoText, co
   \brief Creates a messagebox with many standard buttons.
   Return the standard button selected.
 **/
-const int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title )
+int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title )
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -463,7 +463,7 @@ const int withButtonsMessageBox( const QString &text, const QString&infoText, co
 }
 
 /** \brief Creates a messagebox with Ok / Cancel. Return true if user clicked ok. **/
-const bool okCancelMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
+bool okCancelMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
@@ -483,7 +483,7 @@ const bool okCancelMessageBox(const QString &text, const QString&infoText, const
 }
 
 /** \brief Creates a messagebox for non available function.  **/
-const bool functionNotAvailableMessageBox( const QString &functionText )
+bool functionNotAvailableMessageBox( const QString &functionText )
 {
     tkGlobal::informativeMessageBox( functionText,
                                      QCoreApplication::translate( "tkGlobal","This function is only available to identified users."),
@@ -493,7 +493,7 @@ const bool functionNotAvailableMessageBox( const QString &functionText )
 }
 
 /** \brief Shows a full screen quick debug dialog that shows each string of the list inside a textbrowser */
-const void quickDebugDialog( const QStringList &texts)
+void quickDebugDialog( const QStringList &texts)
 {
     QDialog *dlg = new QDialog();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
@@ -556,6 +556,8 @@ bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::Availa
     dlg.connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
     dlg.show();
     qApp->setActiveWindow(&dlg);
+    dlg.activateWindow();
+    dlg.raise();
     if (dlg.exec()==QDialog::Accepted)
         return true;
     return false;
@@ -563,7 +565,7 @@ bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::Availa
 
 
 /** \brief Creates a Dialog for simple user's input.  **/
-const QString askUser( const QString &title, const QString &question )
+QString askUser( const QString &title, const QString &question )
 {
     bool ok;
     QString text = QInputDialog::getText(qApp->activeWindow(), title, question, QLineEdit::Normal, "", &ok);
@@ -576,7 +578,7 @@ const QString askUser( const QString &title, const QString &question )
 //////////////////////////////////////   WIDGETS FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Center the widget into the desktop. **/
-const void centerWidget( QWidget * win )
+void centerWidget( QWidget * win )
 {
     QPoint center = qApp->desktop()->rect().center();
     QRect rect = win->rect();
@@ -585,7 +587,7 @@ const void centerWidget( QWidget * win )
 }
 
 /** \brief Switch widget to fullscreen/non fullscreen. **/
-const void setFullScreen( QWidget* win, bool on )
+void setFullScreen( QWidget* win, bool on )
 {
     if ( bool( win->windowState() & Qt::WindowFullScreen ) == on)
         return;
@@ -604,7 +606,7 @@ const void setFullScreen( QWidget* win, bool on )
 }
 
 /** \brief Switch echo mode af a lineEdit. **/
-const void switchEchoMode( QLineEdit * l )
+void switchEchoMode( QLineEdit * l )
 {
     if ( l->echoMode() == QLineEdit::Normal )
         l->setEchoMode( QLineEdit::Password );
@@ -616,7 +618,7 @@ const void switchEchoMode( QLineEdit * l )
 ////////////////////////////////////////   HTML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Return the CSS style for a font. **/
-const QString fontToHtml( const QFont &font, const QString &color )
+QString fontToHtml( const QFont &font, const QColor &color )
 {
     QString style;
     style = QString("font-family:%1;").arg(font.family());
@@ -633,13 +635,14 @@ const QString fontToHtml( const QFont &font, const QString &color )
         style += "text-decoration:underline;";
     else
         style += "text-decoration:none;";
-    if (!color.isEmpty())
-        style += QString("color:%1;").arg( color );
+    if (color.isValid()) {
+        style += QString("color:%1;").arg( color.name() );
+    }
     return style;
 }
 
 /** \brief Transform a Qt::Alignment to html equivalent. return things like : align="center" */
-const QString textAlignmentToHtml( const Qt::Alignment &align )
+QString textAlignmentToHtml( const Qt::Alignment &align )
 {
     QString toReturn;
     if (align & Qt::AlignCenter )
@@ -657,7 +660,7 @@ const QString textAlignmentToHtml( const Qt::Alignment &align )
     return toReturn;
 }
 /** \brief Assumes a better encoding of HTML files by replacing special characters with the html code (é==&eacute;) **/
-const QString toHtmlAccent( const QString &html )
+QString toHtmlAccent( const QString &html )
 {
     if (html.isEmpty())
         return html;
@@ -767,7 +770,7 @@ const QString toHtmlAccent( const QString &html )
       // </MyXmlFirstTag>
   \endcode
 */
-const QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64  )
+QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64  )
 {
     QDomDocument doc;
     QDomElement main = doc.createElement(mainTag);
@@ -794,7 +797,7 @@ const QString createXml( const QString &mainTag, const QHash<QString,QString> &d
   \brief Reads a Xml content. Content must be like the one produced by createXml(). The \e readDatas is cleared and filled.
   \sa createXml().
 */
-const bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64 )
+bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64 )
 {
     if (!xmlContent.contains(generalTag)) {
         tkLog::addError("tkGobal",QString("Error while reading Xml : no %1 tag found").arg(generalTag));
@@ -830,7 +833,7 @@ const bool readXml( const QString &xmlContent, const QString &generalTag, QHash<
     return true;
 }
 
-const QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue)
+QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue)
 {
     QDomElement elem = father.firstChildElement(name);
 
@@ -840,13 +843,13 @@ const QString xmlRead(const QDomElement &father, const QString &name, const QStr
     return elem.text();
 }
 
-const QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue)
+QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue)
 {
     QString defaultStr(defaultValue);
     return xmlRead(father, name, defaultStr);
 }
 
-const int xmlRead(const QDomElement &father, const QString &name, const int defaultValue)
+int xmlRead(const QDomElement &father, const QString &name, const int defaultValue)
 {
     QString defaultStr = QString::number(defaultValue);
     QString strValue = xmlRead(father, name, defaultStr);
@@ -858,7 +861,7 @@ const int xmlRead(const QDomElement &father, const QString &name, const int defa
         return defaultValue;
 }
 
-const int xmlRead(const QDomElement &father, const QString &name, const long int defaultValue)
+int xmlRead(const QDomElement &father, const QString &name, const long int defaultValue)
 {
     QString defaultStr = QString::number(defaultValue);
     QString strValue = xmlRead(father, name, defaultStr);
@@ -870,7 +873,7 @@ const int xmlRead(const QDomElement &father, const QString &name, const long int
         return defaultValue;
 }
 
-const bool xmlRead(const QDomElement &father, const QString &name, const bool defaultValue)
+bool xmlRead(const QDomElement &father, const QString &name, const bool defaultValue)
 {
     QString defaultStr = QString::number((int) defaultValue);
     QString strValue = xmlRead(father, name, defaultStr);
@@ -882,7 +885,7 @@ const bool xmlRead(const QDomElement &father, const QString &name, const bool de
         return defaultValue;
 }
 
-const void xmlWrite(QDomElement &father, const QString &name, const QString &value)
+void xmlWrite(QDomElement &father, const QString &name, const QString &value)
 {
     QDomDocument document = father.ownerDocument();
 
@@ -893,32 +896,32 @@ const void xmlWrite(QDomElement &father, const QString &name, const QString &val
     elem.appendChild(t);
 }
 
-const void xmlWrite(QDomElement &father, const QString &name, char *value)
+void xmlWrite(QDomElement &father, const QString &name, char *value)
 {
     QString strValue(value);
     xmlWrite(father, name, strValue);
 }
 
-const void xmlWrite(QDomElement &father, const QString &name, int value)
+void xmlWrite(QDomElement &father, const QString &name, int value)
 {
     QString valueStr = QString::number(value);
     xmlWrite(father, name, valueStr);
 }
 
-const void xmlWrite(QDomElement &father, const QString &name, long int value)
+void xmlWrite(QDomElement &father, const QString &name, long int value)
 {
     QString valueStr = QString::number(value);
     xmlWrite(father, name, valueStr);
 }
 
-const void xmlWrite(QDomElement &father, const QString &name, bool value)
+void xmlWrite(QDomElement &father, const QString &name, bool value)
 {
     QString valueStr = QString::number((int) value);
     xmlWrite(father, name, valueStr);
 }
 
 /** \brief Replace a token into a string. */
-const int replaceToken( QString &textToAnalyse, const QString &token, const QString &value )
+int replaceToken( QString &textToAnalyse, const QString &token, const QString &value )
 {
     if (!textToAnalyse.contains(token))
         return 0;
@@ -938,7 +941,7 @@ const int replaceToken( QString &textToAnalyse, const QString &token, const QStr
             break;
         end = begin + tokenLength;
         beforeBegin = textToAnalyse.lastIndexOf( TOKEN_OPEN, begin - 1);
-        afterEnd = textToAnalyse.indexOf( TOKEN_CLOSE, end  + 1);
+        afterEnd = textToAnalyse.indexOf( TOKEN_CLOSE, end );
         if ((beforeBegin==-1) || (afterEnd==-1)) {
             tkLog::addError("tkGlobal", QApplication::translate("tkGlobal", "Token replacement error (%1). Wrong number of parentheses.")
                                                                 .arg(token));
@@ -949,11 +952,11 @@ const int replaceToken( QString &textToAnalyse, const QString &token, const QStr
             textToAnalyse.remove(beforeBegin, afterEnd-beforeBegin+1);
             ++toReturn;
         } else {
-//            QString before;
-//            before = textToAnalyse.mid(beforeBegin, begin-beforeBegin);
-//            QString after;
-//            after = textToAnalyse.mid(end, afterEnd-end);
-//            qWarning() << beforeBegin << begin << end << afterEnd;
+            QString before;
+            before = textToAnalyse.mid(beforeBegin, begin-beforeBegin);
+            QString after;
+            after = textToAnalyse.mid(end, afterEnd-end);
+//            qWarning() << beforeBegin << begin << before << end << afterEnd << after;
             textToAnalyse.remove(afterEnd,1);
             textToAnalyse.replace(begin, end-begin, value);
             textToAnalyse.remove(beforeBegin,1);

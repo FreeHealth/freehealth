@@ -72,11 +72,12 @@ tkTranslators * tkTranslators::m_Instance = 0;
 /** \brief Get the unique instance of tkTranslators */
 tkTranslators *tkTranslators::instance( QObject *parent )
 {
-    if (!m_Instance)
+    if (!m_Instance) {
         if (parent)
             m_Instance = new tkTranslators(qApp);
         else
             m_Instance = new tkTranslators(parent);
+    }
     return m_Instance;
 }
 
@@ -123,24 +124,29 @@ QString tkTranslators::pathToTranslations()
 */
 void tkTranslators::changeLanguage( const QString & lang )
 {
-    QString l = lang.left( 2 );
-    QLocale::setDefault( l );
+    QString l = lang.left(2);
+    QLocale::setDefault(l);
 
     // load translations
-    foreach( const QString & fileMask, m_Translators.keys() ) {
-        QFileInfo f( fileMask );
-        // this automatically send a QEvent::LanguageChange
-        QString path = "";
-        if ( fileMask.contains( QDir::separator() ) )
-            path = f.absolutePath();
-        else
-            path = m_PathToTranslations;
+//    if (l.toLower()=="en") {
+//        foreach(QTranslator *t, m_Translators.values())
+//            qApp->removeTranslator(t);
+//    } else {
+        foreach( const QString & fileMask, m_Translators.keys() ) {
+            QFileInfo f( fileMask );
+            // this automatically send a QEvent::LanguageChange
+            QString path = "";
+            if ( fileMask.contains( QDir::separator() ) )
+                path = f.absolutePath();
+            else
+                path = m_PathToTranslations;
 
-        if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) )
-            tkLog::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
-        else
-            tkLog::addMessage( this, tkTr(FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
-    }
+            if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) )
+                tkLog::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
+            else
+                tkLog::addMessage( this, tkTr(FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
+        }
+//    }
     emit languageChanged();
 }
 

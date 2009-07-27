@@ -465,6 +465,10 @@ private:
     QHash< QString, QString >   m_Parent;
     // END TODO
 
+    // TODO
+//    QHash<int, tkAction*> m_Context_Actions;
+    // END TODO
+
     QStringList m_Dirty;
 };
 
@@ -487,7 +491,6 @@ tkActionManager::tkActionManager( QObject *parent ) :
         QObject(parent), d(0)
 {
     setObjectName( "tkActionManager" );
-//    tkLog::instance()->addObjectWatcher(this);
     d = new tkActionManagerPrivate();
     connect( tkTranslators::instance(), SIGNAL(languageChanged()), this, SLOT( retranslate()));
 }
@@ -610,13 +613,13 @@ void tkActionManager::createDefaultAboutMenu(QWidget * parent)
 {
     if (!d->menuBarExists( MENUBAR ))
         createMenuBar( MENUBAR , qApp->activeWindow() );
-    if (d->menuExists( M_ABOUT ) )
+    if (d->menuExists( M_HELP ) )
         return;
     tkActionManager *m = this;
-    m->createMenu( M_ABOUT  , MENUBAR, M_ABOUT_TEXT, "", parent );
-    m->appendGroup( G_HELP_HELP,       M_ABOUT );
-    m->appendGroup( G_HELP_ABOUT,      M_ABOUT );
-    m->appendGroup( G_HELP_DEBUG,      M_ABOUT );
+    m->createMenu( M_HELP  , MENUBAR, M_ABOUT_TEXT, "", parent );
+    m->appendGroup( G_HELP_HELP,       M_HELP );
+    m->appendGroup( G_HELP_ABOUT,      M_HELP );
+    m->appendGroup( G_HELP_DEBUG,      M_HELP );
 }
 
 /** \brief Create the default actions for menus/groups : File, Edit, Format, About */
@@ -770,7 +773,7 @@ void tkActionManager::createDefaultConfigurationMenuActions( QObject *parent )
 /** \brief Create the default actions for menu About */
 void tkActionManager::createDefaultAboutMenuActions( QObject *parent )
 {
-    Q_ASSERT_X(d->menuExists( M_ABOUT ), "tkActionManager::createDefaultAboutMenuActions","menu about does not exists");
+    Q_ASSERT_X(d->menuExists( M_HELP ), "tkActionManager::createDefaultAboutMenuActions","menu about does not exists");
     tkActionManager *m = this;
     QAction *a = 0;
     a = m->createAction( A_ABOUT,    G_HELP_ABOUT, parent );

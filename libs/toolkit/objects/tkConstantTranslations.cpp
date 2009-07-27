@@ -64,6 +64,7 @@ Q_TK_BEGIN_TRANSLATIONS
 */
 QString tkTr(const char* toTr, const int plurials)
 {
+    Q_UNUSED(plurials);
 //    QString tmp = QCoreApplication::translate(CONSTANTS_TR_CONTEXT, toTr, "", QCoreApplication::UnicodeUTF8, plurials);
 //    if (tmp.contains("(s)")) {
 //        switch (plurials)
