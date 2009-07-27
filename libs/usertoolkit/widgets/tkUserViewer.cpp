@@ -128,7 +128,6 @@ void tkUserViewerPrivate::initialize()
     // QListView need to be managed by hand
     QStringListModel * modelspe = new QStringListModel( this );
     specialtyListView->setModel( modelspe );
-    specialtyListView->setButtons( tkListView::AllButtons );
     specialtyListView->setActions( tkListView::AllActions );
     QStringListModel * modelqual = new QStringListModel( this );
     qualificationsListView->setModel( modelqual );

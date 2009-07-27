@@ -162,8 +162,9 @@ bool tkUserBase::initialize( tkSettings * settings )
         return true;
 
     // retreive databases path (tkSettings manages OS specific paths and debug compilation)
-    QString pathToDb = settings->databasePath();
+    QString pathToDb = settings->path(tkSettings::ReadWriteDatabasesPath);
     pathToDb = QDir::cleanPath( pathToDb + "/users" );
+    QDir().mkpath(pathToDb);
 
     // test connection (create DB if not exists)
     if ( ! createConnection( USER_DB_CONNECTION, QString("%1.db").arg( USER_DB_CONNECTION ),

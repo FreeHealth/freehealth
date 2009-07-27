@@ -106,7 +106,8 @@ Q_TKUSER_USING_CONSTANTS
 
 class UserDynamicDataPrivate {
 public:
-    UserDynamicDataPrivate() : m_IsDirty(false), m_IsNull(true), m_Id(-1), m_Trace(-1), m_Doc(0), m_Type(UserDynamicData::String)
+    UserDynamicDataPrivate() :
+            m_IsDirty(false), m_IsNull(true), m_Id(-1), m_Trace(-1), m_Type(UserDynamicData::String),  m_Doc(0)
     {
         m_Language = QLocale().name().left(2);
     }
