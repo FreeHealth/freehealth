@@ -1,0 +1,102 @@
+/*!
+    \mainpage FreeMedForms a free and open source medical files manager.
+    \author    Eric Maeker, MD
+    \version   0.0.7 , released under New BSD License.
+    \date      10/07/2009
+
+
+    \section introduction Introduction
+
+    FreeMedForms is a crossplatform medical forms manager.\n
+    Actually, FreeMedForms is release <b>in early alpha stage</b> and should not be used for current practice.
+    It can be used as clinical research patient database or usual pratice patient database. \n
+    The forms of the patients' file can be defined with a simple XML file, which can use script like JavaScript. \n
+    FreeMedForms is a core application that manages forms, database and users. Forms elements are all plugins. \n
+
+    There are some derivatives like \link drugsinteractions DrugsInteractions\endlink. This application is made on the base of the
+    DrugsWidgetPlugins of FreeMedForms.
+
+   FreeMedForms and derivatives are all open source free software, released <b>under New BSD License</b>
+   (\link license_terms read the license terms\endlink),
+
+   and are availables for :
+   - Linux
+   - FreeBSD
+   - MacOs X universal
+   - Windows
+
+   \section authors Authors and contributors
+    - Creator and Main author :
+        - Éric Maeker, MD <a href="mailto:eric.maeker@free.fr"><eric.maeker@free.fr></a> : Main manager.
+
+    - Contributors :
+        - Guillaume Denry <guillaume.denry@gmail.com> : coder, debugger, informatic advisor
+        - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior coder, medical advisor
+        - Laurent Masson, MD <> : medical advisor
+
+    - Helpers :
+        -  Filipe Azevedo <pasnox@gmail.com> : coder helper, debugger helper, Qt advisor.
+        -  David Geldreich <david.geldreich@free.fr> : C++ advisor,
+        -  Jourdan Romain  <No@Mail.com> : coder helper on printer engine
+
+    - Testers :
+        - Many french anonymous testers.
+
+    - Translators :
+        - Éric Maeker, MD
+        - We need help !!!
+
+    -  French Public Mailing :
+        -  <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>
+
+    - WebMaster
+        - Vincent Perez, MD <vinperez@gmail.com>
+
+
+   \section new What's new there ?
+
+    Please read the \link whatsnew What's new page\endlink.
+
+   \section code Code
+    We exclusively use the c++ and <a href="http://www.qtsoftware.com/">Qt4.5 libs (from Nokia)</a> for this project. \n
+    Some part can be pure c++, but most of the code is c++/Qt4.5.  \n
+    All the code is cross-platform. Scripts used in forms is an ECMA Script (like Javascript).\n
+
+    If you want to participate you must read the \link coderules code rules (in french only) \endlink.\n
+    You should also read the \link freemedforms_apis FreeMedForms API documentation \endlink.\n
+
+
+   \section changelog Changelog and roadmap
+    Please find all informations about the changelog and the roadmap of developments on the web site.
+    <a href="http://www.ericmaeker.fr/FreeMedForms">http://www.ericmaeker.fr/FreeMedForms</a>
+
+
+   \section participate Participate to FreeMedForms and derivative
+    If you want to participate at this project, please let us know by sending a mail at freemedforms@googlegroups.com.
+    We are looking for :
+    - testers
+    - coders
+    - writer for documentation, howto and tutorial
+    - drugs database checking
+    - medical doctors to help us in providing a better application
+    - translators (from english to german, spanish, italian...).
+
+   \section getting Getting latest version
+    Check the website. \n
+    While you are running applications of FreeMedForms suite, please verify the menubar.\n
+    You will be automatically warned if a new version is available over the web.\n
+    \htmlonly
+     <a href="http://code.google.com/p/freemedforms/source/checkout">Checkout the SVN</a>
+    \endhtmlonly
+
+    \link build_instructions Read the build instructions\endlink
+
+
+   \section testing Testing and bug submition
+    <b>Please, before sending us a bug verify that you are using the LATEST version.</b> \n
+    You have three possibilities for bug submition :
+    - Web site : Issues
+    - Debug dialog inside the application, information sending is available only if the application detects an error
+    - The mailing list
+
+*/

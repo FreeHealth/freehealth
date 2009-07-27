@@ -31,14 +31,14 @@ PROJECT_NAME           = FreeMedForms
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 04/07/2009
+PROJECT_NUMBER         = 10/07/2009
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = doxygen
+OUTPUT_DIRECTORY       = ../doxygen
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -568,7 +568,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = 
+INPUT                  =  \
+                         ../
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -595,7 +596,8 @@ FILE_PATTERNS          = *.c \
                          *.hxx \
                          *.hpp \
                          *.h++ \
-                         *.dox
+                         *.dox \
+                         *.qdoc
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
@@ -623,7 +625,9 @@ EXCLUDE_SYMLINKS       = NO
 
 EXCLUDE_PATTERNS       = */build/* \
                          */.svn/* \
-                         */qtc-gdbmacros/*
+                         */qtc-gdbmacros/* \
+                         */afssaps_db/* \
+                         */usermanuals/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names 
 # (namespaces, classes, functions, etc.) that should be excluded from the 
@@ -1244,11 +1248,10 @@ SEARCH_INCLUDES        = YES
 # contain include files that are not input files but should be processed by 
 # the preprocessor.
 
-INCLUDE_PATH           = libs/toolkit/sdk \
-                         libs/usertoolkit/sdk \
-                         libs/medintuxtoolkit/sdk \
-                         doc \
-                         libs/medicaltoolkit/sdk
+INCLUDE_PATH           = ../libs/toolkit/sdk \
+                         api \
+                         ../libs/medintuxtoolkit/sdk \
+                         ../libs/usertoolkit/sdk
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard 
 # patterns (like *.h and *.hpp) to filter out the header-files in the 

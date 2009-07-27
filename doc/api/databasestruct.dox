@@ -1,0 +1,69 @@
+/*!
+    \page database_structure Structure of FreeMedForms and Drugs database
+    \author    Eric Maeker, MD
+
+    \section introduction Introduction
+
+    Actually FreeMedForms and DrugsInteractions only support SQLite database type.\n
+    The binary release includes the drugs.db into the resources tree. Please find it there.\n
+    The Drugs database is not available in the SVN (too big ~ 22Mo).\n
+
+    You can find more documentation for the database engine \link tkDatabase here \endlink.\n
+    Specific documentation for :
+    \li \link tkUserBase The users' database\endlink
+    \li \link mfDrugsBase The drugs and dosages databases\endlink
+
+    \section drugsdatabase_explain Drugs database explanations
+
+    Drugs are identified by an unique identifier called CIS (in french "Code Identifiant de Spécialité"). \n
+    Drug are presented in multiple presentations (30 tablets, 15 tablets...). Presentations have a unique identifier : CIP
+    (in french "Code Identifiant de la Présentation"). \n
+
+    One drug can be composed of multiples substances represented in the table COMPO (for "Composition").\n
+    Some substances are identified by their INN (International Nonproprietary Names defined by WHO; "DCI" in french).\n
+    Some INN can be classified into families : the "INN Classes". Hypotensionnal drugs, sedative drugs...\n
+
+    Interactions are calculated with the INN of the drugs and the INN Classes. There can be interactions INN Class to INN Class
+    so are the "nonsteroidal anti-inflammatory drug" or the "hypotensive drugs"... \n
+
+    \section drugsdatabase_scheme Drugs database scheme
+
+    Drugs database is made with four tables :
+    - the CIS table which contains :
+        - CIS : the CIS of the drug
+        - DENOMINATION : name of the drug with the form
+        - FORME : form of the drug
+        - ADMINISTRATION : method of administration of the drug (oral, IV...)
+        - AMM : code of the permission marketing (not used for now)
+        - AUTORISATION : type of autorisation for marketing (not used)
+        - COMMERCIALISATION : is it available or not ? O = Yes , N = No
+        - CODE_RPC : not used
+    - the CIS_CIP table :
+        - CIS
+        - CIP
+        - LIBELLE
+        - STATUT
+        - COMMERCIALISATION
+        - DATE_STR
+        - CIP_LONG
+    - the COMPO table :
+        - CIS
+        - NOM = name of the chimical molecule
+        - CODE_SUBST = identifier for the molecule
+        - DENOMINATION = name
+        - DOSAGE
+        - REF_DOSAGE
+        - NATURE = SA or FT ; SA = Active substance or FT = Transformed Substance
+        - LK_NATURE = link for the molecules SA/FT
+    - the IAM_DENOMINATION table :
+        - ID_DENOMINATION : identifier under 999 are INN Class identifiers, 1000 and over are INN molecules
+        - DENOMINATION : name of the INN or the INN Class.
+    - the IAM_IMPORT table that represents the interactions (ids are INN Molecules or INN Classes)
+        - IAM_ID : interaction identifier
+        - ID1
+        - ID2
+        - TYPE
+        - TEXT_IAM
+        - TEXT_CAT
+
+*/

@@ -1,0 +1,374 @@
+/*!
+   \page coderules FreeMedForms Code Rules
+
+\section coderule_intro Introduction
+
+Lorsque plusieurs personnes travaillent à un même ouvrage, il est important qu'ils sachent échanger,
+se faire comprendre. C'est pour cette raison que nous avons édité ces "règles de codage"
+/ "règles de bonne conduite".
+
+Avant d'entreprendre des modifications dans le code de FreeMedForms ou de ses libs, il est essentiel
+d'en discuter sur le mailing liste. Tout changement réalisé sans concertation peut induire des
+comportement non désiré sur les plugins ou les applications dérivées de FreeMedForms.
+
+
+\section entetes Entêtes de vos sources
+
+Chacun des fichiers .h et .cpp, doivent contenir l'entête de FreeMedForms,
+telle quel, que vous trouverez dans toutes les sources de ce projet.
+
+\verbatim
+/***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   eric.maeker@free.fr                                                   *
+ *                                                                         *
+ *   PLACEZ ICI LES TERMES DE LA LICENCE DE VOTRE CODE.                    *
+ ***************************************************************************/
+
+ // ou ce cadre si vous coder sur la même licence que FreeMedForms
+ /***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   eric.maeker@free.fr                                                   *
+ *   All rights reserved.                                                  *
+ *                                                                         *
+ *   This program is a free and open source software.                      *
+ *   It is released under the terms of the new BSD License.                *
+ *                                                                         *
+ *   Redistribution and use in source and binary forms, with or without    *
+ *   modification, are permitted provided that the following conditions    *
+ *   are met:                                                              *
+ *   - Redistributions of source code must retain the above copyright      *
+ *   notice, this list of conditions and the following disclaimer.         *
+ *   - Redistributions in binary form must reproduce the above copyright   *
+ *   notice, this list of conditions and the following disclaimer in the   *
+ *   documentation and/or other materials provided with the distribution.  *
+ *   - Neither the name of the FreeMedForms organization nor the names of  *
+ *   its contributors may be used to endorse or promote products derived   *
+ *   from this software without specific prior written permission.         *
+ *                                                                         *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+ *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+ *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+ *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+ *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+ *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+ *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+ *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+ *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+ *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ ***************************************************************************/
+\endverbatim
+
+Si vous vous êtes inspiré d'un projet externe à FreeMedForms pour votre code,
+vous devez le préciser dans l'entête (le .h et ce selon la licence de distribution de cette application)
+à l'intérieur d'un cadre de commentaire comme suit :
+
+\verbatim
+/***************************************************************************
+ *   This code is inspired of NAME_OF_THE_SOFTWARE, VERSION                *
+ *   URL_OF_THIS_SOFT_INSPIRATION                                          *
+ *   MAIL_ADRESS_OF_THE_ORIGINAL, NAME_OF_THIS_AUTHOR                      *
+ *   LICENSE_OF_THE_ORIGINAL                                               *
+ *                                                                         *
+ *   Adaptations to FreeMedForms by :                                      *
+ *       YOUR_NAME, YOURMAILADRESS                                         *
+ ***************************************************************************/
+\endverbatim
+
+Vous pouvez ajouter un cadre de commentaire en dessous précisant votre participation.
+
+\verbatim
+/***************************************************************************
+ *   Main Developper : NAME <MAIL@ADRESS>                                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+\endverbatim
+
+\section indentation Indentation du code
+
+Tout code présenté aux administrateurs de la suite doit répondre aux exigences d'indentation suivante :
+    - Quatre espaces d'indentation pour chaque bloc
+    - Une ligne de code trop longue est une gène pour la relecture,
+    il n'y pas de règle stricte dans ce domaine, mais n'hésitez pas à "casser"
+    votre ligne de code (retour à la ligne et indentation) lorsqu'elle dépasse environ
+    une centaine de caractères.
+    - Les parenthèses s'ouvrent sur la même ligne
+\code
+      if (test) {
+           function();
+           othertest();
+       }
+\endcode
+    - Aucun espace inutile n'est laissé sur une ligne vierge ou en fin de ligne
+    - Une instruction par ligne
+    - Éviter de modifier la valeur des variables dans un appel de fonction (`getValue( i++ ) ;` )
+
+Nous préférons :
+    - lire du code aéré et bien construit visuellement
+    - que de lire un "paquet"
+
+Les nombreuses IDE permettent en règle générale de paramétrer le style du code.\n
+N'hésitez pas à utiliser ces fonctions.\n
+Lisez le code déjà écrit et présentez votre code de la même manière.
+
+\section export Exporter/Importer pour win32
+
+Lorsque vous ajoutez une classe à freemedforms ou aux toolkits, assurez-vous d'exporter correctement votre travail.
+    - inclure le fichier d'import/export adéquat qui se nomme `xxXxxxExporter.h`
+        - `mfExporter.h` pour freemedforms
+        - `tkExporter.h` pour le toolkit principal
+        - `tkUserExporter.h` pour le toolkit utilisateur
+        - `tkMedintuxExporter.h` pour le toolkit de medintux
+    - utilisez ensuite la macro d'import/export
+        - \e Q_FMF_EXPORT pour les objects de freemedforms
+        - \e Q_TK_EXPORT pour le toolkit principal
+        - \e Q_TKUSER_EXPORT pour le toolkit utilisateur
+        - \e Q_TKMT_EXPORT pour le toolkit de medintux
+
+\code
+#include <mfExporter.h> // Pour un objet/widget de freemedforms
+
+class Q_FMF_EXPORT mfMyClass
+ {
+    [ ... ]
+};
+\endcode
+
+\code
+#include <tkExporter.h> // Pour un objet/widget du toolkit
+
+class Q_TK_EXPORT tkMyClass
+ {
+    [ ... ]
+};
+\endcode
+
+\code
+#include <tkUserExporter.h> // Pour un objet/widget du usertoolkit
+
+class Q_TKUSER_EXPORT tkUserMyClass
+ {
+    [ ... ]
+};
+\endcode
+
+
+
+\section namespaces Règle de nommage des classes, espaces de noms et données de classe
+
+Préfixe des classes selon la portée de votre code :
+    - Toutes les classes intéressant FreeMedForms ou ses plugins débutent toutes par `mf`en minuscule
+    - Toutes les classes intéressant DrugsInteractions et qui ne font pas partie du project FreeMedForms
+    débutent par `di`en minuscule. Si une classe est partagée entre une application et FreeMedForms
+    c'est `mf` qui prime
+    - Toutes les classes intéressant ToolKit débutent par `tk`
+    - Toutes les classes intéressant UserToolKit débutent par `tkUser`
+    - Toutes les classes intéressant MedintuxToolKit débutent par `tkMedintux`
+
+Nom des classes :
+    - Doivent être le plus explicite possible
+    - La première lettre de chacun des mots constituant le nom de la classe est en majuscule
+    - Stéréotypes :
+        - post-fixe pour les gestionnaires des bases de données : `Base` pour le gestionnaire de la base,
+      `Tables` pour le descripteur des tables de la base de données (ex : mfDrugsBase, mfDrugsTables)
+        - post-fixe : `Dialog` et `Model` pour les dialogues et les modèles spécifiques à une classe concrète
+
+  Les données de classes, celles déclarées dans l'entête, sont préfixées par `m_` immédiatement suivi
+  d'une majuscule. Au besoin, il est bon de rappeler dans le nom de la variable son type. \n
+  Essayer de garder aligner les noms des variables. Exemple :
+\code
+class Q_YOUR_EXPORTER mfYourObject
+{
+public:
+    mfYourObject();
+    ~ mfYourObject() {}
+    [...]
+
+private:
+    int                    m_Handler;
+    mfDrugs *              m_Drug;
+    mfOneObject &          m_OneObject;
+    QMap<QString, QString> m_MapNameSurname;
+};
+\endcode
+
+\section objects Structure des objets
+
+    - L'interface publique doit être simple et claire.
+    - Lorsqu'un membre est suffisamment général pour s'appliquer à plusieurs sous-projets de FreeMedForms,
+    celui-ci doit être introduit dans la partie globale du toolkit (`toolkit/tkGlobal.h` et `toolkit/tkGlobal.cpp`).
+    - Attention toutefois, les objets globaux (`xxGlobal`) ne doivent comprendre que des membres pas de données
+    et sont des espace de nom pas des objets.
+    - Lorsqu'un objet entier est suffisamment général pour être réutilisé par d'autres sous-projet,
+    il doit être ajouté au toolkit.
+
+\section dirs Structure des répertoires
+
+    - Tant que possible, l'arborescence sera riche est détaillée. Les répertoires regrouperont les objets
+    ayant des rôles proches.
+    - Un répertoire `sdk` devra contenir les entêtes incluant les entêtes de votre sous-projet. Exemple :
+    \code
+         Fichier sdk/mfMyObject.h
+         #include "../../path/to/the/real/mfMyObject.h"
+    \endcode
+    - Pour les librairies et certains plugins, un fichier d'inclusion de projet sera créé pour inclure
+    le répertoire de votre SDK dans la recherche des entêtes. Pour les librairies dans le répertoire `libs`
+    et pour les plugins dans le répertoire `plugins`. Ce fichier sera préfixé par `sdk_`.
+    Exemple : `libs/sdk_toolkit.pri`.
+    \code
+         # include path for toolkit
+         INCLUDEPATH *= $${PWD}/toolkit/sdk
+    \endcode
+
+
+\section codedocumentation Documentation du code
+
+  Le code sera \b obligatoirement \b documenté selon la méthode de `doxygen`.
+  Merci de vous référer à la <a href="http://www.doxygen.org">documentation de Doxygen</a>.
+  Lorsque vous écrivez une documentation à l'extérieur de vos fichiers de code, placez les dans le répertoire 'doc'.
+  Les fonctions dont le nom seul permet de comprendre son action ne sont pas forcément documentées (`mfDrugs::setValue()`).
+  Les fonctions complexes seront documentées (`mfDrugBase::createConnection()`).
+  Pour améliorer la correction de bugs merci d'ajouter ce cadre de documentation dans le fichier entête de votre code.
+
+\verbatim
+/**
+ * \file nameOfTheCurrentFile.h
+ * \author AUTHOR_NAME <MAIL@ADRESS>
+ * \version 0.03
+ * \date DATE_DD_MMM_YYYY
+*/
+\endverbatim
+
+  Un descripteur rapide de la classe est écrit en anglais dans la partie supérieure de l'entête (.h). Ex :
+\verbatim
+/**
+  \brief This class owns all informations about the structure of the drugs database.
+  All tables are described into an enum and a static stringlist.
+  Get fields and tables using : getFields() and getTables().
+  Get where clauses using getWhereClause( )
+*/
+\endverbatim
+
+
+    - Il peut être utile pour des membres complexes de documenter le code au fur et à mesure de son
+    implémentation. Les commentaires sont ajoutés à la mode C++ `//`. Pour des raison de commodité,
+    les commentaires marqués par \verbatim `/*`et `*/` \endverbatim sont utilisés par les administrateurs
+    pour neutraliser de grandes parties de code lors de tests.
+
+    - Ne commentez pas \e abusivement votre code source, cela peut nuire à la lisibilité.
+    Privilégiez des variables et des fonctions bien nommées (`mfDrugBase` plutôt que `m1`) et
+    le code devrait pouvoir se lire naturellement. Par exemple, pas la peine d'écrire en commentaire
+    que l'appel à la méthode `resetDatabase()` va remettre à zero la base de données.
+    Néanmoins, certaines portions de code compliquées méritent parfois des commentaires.
+
+    - Lorsque la documentation est riche, celle-ci sera extraite de l'implémentation et de la description
+    pour être sauvegardé dans un fichier `.dox`. Dans le cas contraire la documentation est présentée
+    dans l'implémentation.
+
+    - La documentation est rédigée en anglais. Une traduction française peut être proposée (cf : `mfObjects.dox`).
+
+    - Les INCLUDEPATH des projets peuvent rendre la lecture des inclusions difficile.
+    Pour faciliter la lecture, lors de l'inclusion des entêtes au sein de vos classes,
+    spécifiez le projet de provenance en respectant l'ordre suivant, et en espaçant chaque
+    inclusions par une ligne vierge et le commentaire présenté dans l'exemple :
+    - freemedforms headers
+    - toolkit headers
+    - usertoolkit headers
+    - medintuxtoolkit headers
+    - yourproject headers
+    - Qt headers
+\code
+// include freemedforms headers
+#include <mfCore.h>
+#include <mfSettings.h>
+
+// include toolkit headers
+#include <tkLog.h>
+#include <tkGlobal.h>
+
+// include usertoolkit headers
+#include <tkUserGlobal.h>
+#include <tkUserBase.h>
+
+// include medintuxtoolkit headers
+#include <tkMedintuxConfiguration.h>
+
+// include YOURTOOLKIT/SUBPROJECT headers
+#include <mfMyObject.h>
+#include <mfAnotherObject.h>
+
+// include Qt headers
+#include <QApplication>
+#include <QMessageBox>
+\endcode
+
+\section interactions Interface et interaction avec l'utilisateur
+
+\subsection messageboxes Utilisation des Message Box
+
+    - Les QMessageBox ne doivent pas être utilisées.
+    - Le toolkit fournit toutes les fonctions nécessaire pour vos MessageBoxes.
+    - informativeMessageBox() (juste avec Ok)
+    - yesNoMessageBox() (renvoie true si Yes)
+    - okCancelMessageBox() (renvoie true si Ok)
+    - Un texte d'une à deux phrases décrit brièvement le message à l'utilisateur.
+    - Un texte d'information et un texte détaillé accompagnent ce message.
+\code
+    // CECI EST ACCEPTE
+    tkGlobal::okCancelMessageBox( tr("Text") , tr("Informative"), tr("Detailled"), tr("Title is faculative, application name will appear if no text is passed.") );
+
+    // CECI NE L'EST PAS
+    QMessageBox[...]
+
+    // Si vous ne trouvez pas votre bonheur dans tkGlobal, merci d'enrichir sur le même modèle
+\endcode
+
+\subsection i18n Internationalisation
+
+    - Tous les textes à traduire sont écrits dans un anglais correct et simple.
+    - Les fonctions tr(), QCoreApplication::transalate() sont utilisées pour traduire le texte.
+    - Toutes les widgets doivent pouvoir être traduits lorsqu'un nouveau dictionnaire est chargé par l'application. Pour cela, utilisez l'évènement QEvent::LanguageChange qui est émis à chaque modification de dictionnaire.
+\code
+void mfMyClass::changeEvent(QEvent *e)
+{
+    if ( (e->type() == QEvent::LanguageChange) )
+        retranslate();
+}
+\endcode
+    - Les éléments de formulaire dérivent la classe mfAbstractWidget qui implémente déjà cette fonctionnalité (cf doc).
+
+\section building Gestion des OS et mode de compilation
+
+  La librairie `toolkit` propose des fonctions d'identification de l'OS :
+  `isRunningOn...()`. Lorsque cela est possible utilisez ces fontions au lieu de `#ifdef Q_OS_MAC`.
+   Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation des macros sera incontournable.
+
+  Deux fonctions permettent d'identifier le mode de compilation de l'application : `isDebugCompilation()` et
+  `isFullApplication()`. Ces fonctions utilisent des macros définies dans `config.pri` qui est utilisé par tous
+   les projets de FreeMedForms.
+
+\section optimisations Optimisations
+
+Naturellement un code optimisé est préférable à du code inutilement lourd, néanmoins de manière générale, il faut éviter d'écrire du code optimisé au détriment de la lisibilité et de l'évolutivité; nous n'écrivons pas un OS temps réel mais des outils qui ne devraient pas mettre votre machine à genoux :)
+N'utilisez pas les objets pour leurs performances mais pour leur spécificité. Par exemple, pour stocker une liste d'objets, le QList est plus indiqué que le QVector, même si ce dernier est plus performant dans certains cas.
+Gardons les idées d'optimisations pour les endroits clefs et à usage intensif des applications (comme par exemple des manipulations lourdes dans les bases de données).
+
+\subsection useforeach Utilisez foreach
+
+    - Il est préférable d'utiliser la fonction `foreach` pour parcourir un conteneur.
+    - Chaque fois qu'il est possible, utilisez comme variable du foreach une référence constante (pour limiter les copies)
+\code
+    // Ceci est correct si s n'est pas modifié dans la boucle
+    foreach( const QString & s, stringList)
+    {
+        [ ... ]
+    }
+\endcode
+
+*/

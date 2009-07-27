@@ -1,0 +1,826 @@
+/*! \mainpage Manuel de l'utilisateur - Testeur d'interactions médicamenteuses
+
+L'objectif du testeur d'interactions médicamenteuses et de fournir un outil
+libre (open source), gratuit, indépendant (sans conflit d'intérêt) et multi-plateformes
+pour les professionnels de santé. La base de données thérapeutiques est synchronisée à celle
+de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
+des interactions de l'AFSSAPS.\n
+Le testeur d'interactions médicamenteuses vous permet de créer des prescriptions
+totalement paramétrables avec alertes d'interaction en temps réel. Vous pouvez
+imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
+Le testeur d'interactions médicamenteuses peut être utilisé avec d'autres logiciels,
+les paramètres sont alors transmis par la ligne de commande.\n
+
+Le testeur d'interactions est disponible pour :
+\li les utilisateurs de Linux (compilé sous Ubuntu)
+\li les utilisateurs de MacOs (universal, à partir de OS 10.5)
+\li les utilisateurs de Windows
+\li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps ont la
+possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
+d'un système à un autre.
+\li quelquesoit votre plateforme informatique, aucun installation annexe n'est nécessaire.
+
+\section TOC Contenu de l'aide :
+\li \ref auteurs
+\li \ref installation
+\li \ref presentation
+\li \ref parametrer
+\li \ref rechercher
+\li \ref iamtesteur
+\li \ref lienpatient
+\li \ref prescrire
+\li \ref prescriptions_io
+\li \ref medintux
+\li \ref ligne_commandes
+\li \ref installation_cle_usb
+\li \ref participer
+
+\section derniere_version Dernière version
+
+\note Le testeur d'interactions est encore au stade embryonnaire de son développement.
+Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
+développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
+\li \ref versionning
+\li La version actuellement documentée est la <b>version 0.0.10 (Août 2009)</b>.
+\li Version de la base de données thérapeutiques : <b>26 Juin 2009</b>.
+\li Version de la base de données des interactions : <b>30 Juin 2009</b>.
+
+\section licence Licence de distribution et d'utilisation
+
+Le testeur d'interactions est distribué sous licence BSD révisée. Vous pouvez lire les termes
+de la licence en suivant le menu <b>À propos</b>.
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// PRESENTATION INTERFACE ////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page versionning Comprendre les numéros de version de l'application
+
+Le numéro de version de l'application respecte le code suivant :
+- trois chiffres séparés par un point (ex : 1.4.8)
+- le premier chiffre correspond à la version majeure (considérée comme stable et fonctionnelle)
+- le second chiffre correspond à la version mineure (défini une version de correction de bug avec
+ possibilités de nouvelles fonctionnalités)
+- le troisième chiffre correspond à la version de déboggage (aucune nouvelle fonctionnalité ajoutée). Lorsque
+ce chiffre est pair, il s'agit d'une version stable sinon il s'agit d'une version de test.
+    - 1.4.2 est la version stable
+    - 1.4.3 est la version instable (peut comprendre un nombre important d'erreurs ou de fonctionnalités inhibées)
+
+Les versions instables sont les versions présentes sur le dépôt de source.
+
+Les versions majeures et mineures nulles définissent des versions dites alpha (ex : 0.0.8) :
+- nombreuses dysfonctions
+- non exploitable en pratique courante
+- fournies uniquement pour les tests
+- aucune compatibilité entre les versions n'est assurée
+
+\ref index
+
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// PRESENTATION INTERFACE ////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page presentation Présentation de l'interface
+
+\image html zones.png Découpage en "zones"
+
+L'interface du testeur d'interactions est découpée en trois parties :
+\li un partie dédiée à l'<b>information du patient</b> (1 et 2)
+\li une <b>zone de recherche et de sélection des médicaments</b> (3 et 4)
+\li <b>la prescription</b> proprement dite (5 et 6)
+
+\section info_patient Les informations concernant le patient
+
+Tout patient est défini par une série de données directement ou indirectement accessible. La seule donnée
+directement accessible est le nom du patient (1). D'autres données peuvent être renseignées en cliquant
+sur le bouton se situant à côté de la zone de saisie du nom du patient (2).\n
+Les données suivantes peuvent être renseignées par la ligne de commande (\ref ligne_commandes) et/ou par l'utilisateur :
+\li le poids en kilogrammes
+\li la date de naissance (dd/MM/yyyy)
+\li la taille en centimètres
+\li le sexe (M ou F)
+\li la clairance de la créatinine en millilitres/minutes
+\li la créatininémie en milligrammes/litres
+\li la liste des allergies médicamenteuses (en DCI, séparés par un point virgule).
+
+\image html infos-patient.png Informations concernant le patient
+
+Le testeur d'interactions permet lors de la réalisation de posologies standard de définir des limites
+de prescription sur le poids, la clairance de créatinine et prochainement la surface corporelle (reportez-vous
+au chapitre ad hoc). Ces données seront alors analysées lors de la prescription.\n
+La prise en compte de ces données est prévue pour une version ultérieure de ce logiciel.
+Toute aide est la bienvenue...
+
+\section zone_recherche_medics La zone de recherche des médicaments
+
+La zone de saisie pour vos recherches (3) comprend deux boutons :
+\li celui de gauche vous permet de modifier les critères de recherche,
+\li celui de droite vous présente l'historique de vos recherche.
+
+Pour plus d'informations, référez-vous à la section : \ref rechercher
+
+\section presentation_zone_prescription La zone de prescription
+
+La zone de prescription comprend deux parties :
+\li une barre d'icône représentant les actions les plus communémment utilisées
+\li la prescription propre dite.
+
+\subsection presentation_toolbar_prescription La barre d'actions
+
+\image html prescription_toolbar.png Barre d'actions de la prescription
+
+La barre d'icône présente dans l'ordre les actions suivantes :
+\li Sauvegarder la prescription en cours
+\li Imprimer la prescription en cours
+\li Supprimer le médicament sélectionné de la prescription
+\li Effacer la prescription
+\li Monter le médicament
+\li Descendre le médicament
+\li Trier les médicaments (les 100% sont mis en premier, puis le tri se fait sur le nom)
+\li Afficher \ref synthetiseur_iam
+
+\ref index
+
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////  SAUVEGARDER / CHARGER DES PRESCRIPTIONS  ///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page prescriptions_io Sauvegarder, recharger, ajouter des prescriptions
+
+\section prescription_save Sauvegarder une prescription
+
+Après avoir réalisé votre prescription, cliquez sur l'icône "sauvegarder" ou sélectionnez le menu
+<b>Fichier/Sauvegarder sous...</b> ou tapez "CTRL+S" ("CMD+S" sur MacOs). Renseignez le nom de la
+prescription et validez.\n
+
+Les informations patients sont sauvegardés "brouillées". Il n'est pas possible de lire le nom et prénom du
+patient directement.\n
+
+L'extension de fichier reconnue par le testeur d'interactions est "*.di". Ces fichiers sont des fichiers
+XML.
+
+\section prescription_open Ouvrir une prescription
+
+Sélectionnez le menu <b>Fichier/Ouvrir</b> ou tapez "CTRL+O" ("CMD+O" sous MacOs), sélectionnez le fichier
+à ouvrir. Si une prescription est en cours il vous sera demandé de choisir :
+\li soit d'ajouter la prescription sélectionnée à celle en cours,
+\li soit de remplacer la prescription en cours par celle sélectionnée.
+
+\section prescription_add Ajouter une prescription à une prescription en cours
+
+Cf supra.
+
+\section format_fichier_di Format du fichier de sauvegarde
+
+Le fichier de sauvegarde contient du code XML. Vous ne devez en aucun cas éditer de vous même les données
+sauvegardées dans ces fichiers. Le nom du patient est brouillé.
+
+Exemple de prescription :
+\verbatim
+<?xml version="0.0.8" encoding="UTF-8"?>indique la version utilisée pour créer la prescription
+<FullPrescription>
+  <Prescription>
+    <CIS>68166740</CIS>                         code CIS du médicament pour les prescriptions non DCI
+    <INN></INN>                                 true ou false selon que ce médicament doit ou non être prescrit sous sa formulation DCI
+    <CIP></CIP>                                 code CIP (présentation)
+    <IntakeFromTo>false</IntakeFromTo>          Prises utilisent de x à y
+    <IntakeFrom>1.0</IntakeFrom>                Prises (de)
+    <IntakeTo>1.0</IntakeTo>                    Prises (à)
+    <IntakeScheme>prise(s)</IntakeScheme>       Prises libellé
+    <Period>1</Period>                          Période (tous les jours, tous les deux jours...)
+    <PeriodScheme>jour(s)</PeriodScheme>        Période
+    <DurationFromTo>false</DurationFromTo>      Durée de la prescription utilise de x à y
+    <DurationFrom>1.0</DurationFrom>            Durée (de)
+    <DurationTo>1.0</DurationTo>                Durée (à)
+    <DurationScheme>mois</DurationScheme>       Durée libellé
+    <IntakeIntervalTime>0</IntakeIntervalTime>  Intervalle entre chaque prises
+    <IntakeIntervalScheme></IntakeIntervalScheme>   Intervalle entre chaque prises libellé
+    <MealTime></MealTime>                       Relation avec le repas (codé en entier, voir documentation du code)
+    <SpecifyPresentation></SpecifyPresentation> Non utilisé
+    <SpecifyForm></SpecifyForm>                 Non utilisé
+    <Note></Note>                               Note du prescripteur (sans les caractères '<' '>' '&'
+                                                qui sont remplacés par leurs équivalents HTML)
+    <IsAld></IsAld>                             Prescription 100 % (true / false / vide==false)
+    <RefDosage>{22164613-c1eb-4736-99f5-9abecf4a9fb2}</RefDosage> Identifiant de la posologie standard utilisée pour réaliser la prescription
+  </Prescription>
+  <Prescription>                                Médicament 2 - Juste pour les tests
+    <CIS>61348441</CIS>
+    <OnlyForTest>true</OnlyForTest>             Juste pour les tests
+  </Prescription>
+  <Prescription>                                Médicament 3
+  [...]
+  </Prescription>
+  <Prescription>                                Médicament 4
+  [...]
+  </Prescription>
+</FullPrescription>
+<ExtraDatas>
+  <PatientDatas>
+    <Sex>data</Sex>                             Encodé
+    <CreatinClearance>data</CreatinClearance>   Encodé
+    <Size>data</Size>                           Encodé
+    <Creatinin>data</Creatinin>                 Encodé
+    <Weight>data</Weight>                       Encodé
+    <Name>data</Name>                           Encodé
+    <DrugsAllergies>data</DrugsAllergies>       Encodé
+  </PatientDatas>
+</ExtraDatas>
+\endverbatim
+
+Pour toutes informations sur les techniques d'encodage des données merci de vous
+référer à la documentation du code et au code lui-même.
+
+\ref index
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////  TESTER INTERACTIONS  ////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page iamtesteur Tester les interactions
+
+\section iams Définition des interactions
+
+Les définitions des interactions sont celle de l'AFSSAPS.\n
+ \li <b>Les contre-indications :</b> ont un caractère absolu et ne doivent pas être transgressée.
+ \li <b>Les associations déconseillées :</b> doivent être le plus souvent évitée, sauf après examen
+  approfondi du rapport bénéfice/risque, et impose une surveillance étroite du patient.
+ \li <b>Les précaution d'emploi :</b> sont le cas le plus fréquent. L'association est possible dès
+  lors que sont respectées, notamment en début de traitement, les recommandations simples permettant
+  d'éviter la survenue de l'interaction (adaptation posologique, renforcement de la surveillance
+  clinique, biologique, ECG, etc…).
+ \li <b>Les interactions à prendre en compte :</b> où le risque d'interaction médicamenteuse existe,
+  et correspond le plus souvent à une addition d'effets indésirables ; aucune recommandation pratique
+  ne peut être proposée. Il revient au médecin d'évaluer l'opportunité de l'association.
+
+Chaque interaction est représenté par une icône comme présentées ci-dessous.
+\image html help.png Médicament non reconnu par le testeur d'interaction
+\image html ok.png Médicament connu et sans interaction
+\image html info.png Interaction de faible niveau : DCI déjà présente
+\image html info.png Interaction de faible niveau : Précaution d'emploi
+\image html warning.png Interaction : À prendre en compte
+\image html deconseille.png Interaction : Déconseillée
+\image html critical.png Interaction : contre-indication
+
+
+\section iams_infos Informations données sur les interactions
+
+Les interactions sont détaillées. Sont présentés :
+\li <b>la nature du risque :</b> Majoration des effets indésirables ou perte d'efficacité… et mécanisme
+  d'action succinct, lorsqu'il est connu
+\li <b>le niveau de contrainte :</b> Contre-indication, association déconseillée, cf.supra…
+\li <b>la conduite à tenir :</b> Celle-ci se résume le plus souvent au seul niveau de contrainte, dans le
+ cas d'une " contre-indication " ou d'une " association déconseillée ". Dans le cas d'une " précaution d'emploi ",
+ des recommandations souvent simples à mettre en œuvre sont proposées pour éviter la survenue de l'interaction
+ (adaptation posologique, contrôles biologiques, etc…). Le niveau " à prendre en compte " est dépourvu de
+ recommandation pratique car il signale surtout une addition d'effets indésirables que seul le recours
+ à d'autres thérapeutiques pourra permettre d'éviter.
+
+\section iams_calcul Calcul et présentation des interactions médicamenteuses
+
+Les interactions sont calculées en temps réel. Cela signifie qu'à chaque ajout d'un médicament
+dans la prescription (double clique dans la partie de recherche/sélection), les interactions sont
+automatiquement recalculées. Aucune action supplémentaire de votre part n'est requise.\n
+La recherche d'interactions fait appel à l'analyse des DCI et des classes thérapeutiques définies par l'AFSSAPS.
+Une DCI peut appartenir à plusieurs classes. Les DCI et les classes sont présentées dans l'info-bulle
+qui apparaît sous le nom du médicament lorsque vous laissez la souris sans action dessus.\n
+
+\note Il aussi est possible d'ajouter des médicaments dans l'ordonnance juste à des fins de tests. Ces médicaments
+ne seront pas notifiés lors de l'impression de l'ordonnance (ceci est très pratique pour tester un traitement
+intercurrent chez un patient recevant déjà un traitement chronique). Ils seront uniquement utilisés
+pour le calcul des interactions. \ref fortextonly
+
+\warning ATTENTION : Tous les médicaments n'ont pas forcément de DCI reconnue, ou toutes leurs DCI
+ne sont pas forcément connues. Il convient donc de vérifier l'icône au moment de la prescription
+(cf supra : Médicament non reconnu).
+
+\htmlonly
+Pour toute informations sur les interactions,
+<a href="http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0">
+veuillez vous reporter au thésaurus des interactions de l'AFSSAPS et de son manuel d'utilisation</a>.
+\endhtmlonly
+\latexonly
+Pour toute informations sur les interactions, veuillez vous reporter au thésaurus des interactions de l'AFSSAPS et de son
+manuel d'utilisation : http://www.afssaps.fr.
+\endlatexonly
+
+La fenêtre des posologies vous présente l'existence ou non d'interactions médicamenteuses pour le biais
+d'un icône dans le coin supérieur gauche.\n
+
+\section synthetiseur_iam Le synthétiseur d'interactions
+
+Les informations détaillées des interactions sont disponibles en cliquant sur le nom du médicament
+dans la fenêtre de posologie ou en activant le "synthétiseur d'interactions" en cliquant sur l'icône ad hoc (la paire d'yeux).
+Le synthétiseur vous présente dans une fenêtre à part, le rappel de l'ordonnance analysée, et pour chaque
+interaction retrouvée : les DCI et médicaments en causes ainsi que toutes les informations de l'interaction.
+Cette synthèse peut être imprimée avec votre entête, pied de page et tatouage d'impression d'un clique.\n
+Le synthétiseur est un outil indispensable pour les officines ou les consultations d'analyse d'ordonnance.
+
+\image html eyes.png Activer le synhètiseur d'interactions
+
+\image html synthetiseur.png Synhètiseur d'interactions
+
+\image html interactions-icon1.png Icône d'interaction coin supérieur gauche (ne concerne que le médicament présenté)
+
+Cet icône est rappelé devant le nom de médicament prescrits dans cadre de la prescription.\n
+\image html interactions-icon2.png Icônes d'interaction (pour toute l'ordonnance)
+
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////  PRESCRIRE  ///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page prescrire Prescrire avec le testeur d'interactions
+
+
+Le testeur d'interactions propose par défaut un module de prescription complet. Ce module repose sur
+l'idée que, pour la majorité de nos prescriptions, il est possible de créer une posologie standard sur laquelle
+le prescripteur puisse se reposer.\n
+Ces posologies standards se définissent soit :
+\li soit pour un médicament donné
+\li soit pour une classe DCI entière (ayant le même dosage - CLAMOXYL 1g <-> AMOXICILLINE 1g).
+
+Ces posologies standards permettent :
+\li d'accélérer le processus de prescription,
+\li d'automatiser des tests selon le terrain (âge, poids, taille, clairance de créatinine, limites CIM10...)
+\li de créer des prescriptions en DCI
+
+Il aussi est possible d'ajouter des médicaments dans l'ordonnance juste à des fins de tests. Ces médicaments
+ne seront pas notifiés lors de l'impression de l'ordonnance (ceci est très pratique pour tester un traitement
+intercurrent chez un patient recevant déjà un traitement chronique). Ils seront uniquement utilisés
+pour le calcul des interactions. \ref fortextonly
+
+Le testeur d'interactions offre la possiblité de mettre en commun les posologie standard que vous créez pour
+constituer une base de données complète. Il apparaît à ce stade indispensable qu'un comité scientifique se
+constitue pour vérifier et valider les posologies transmises au groupe. Nous cherchons actuellement des
+volontaires. Manifestez-vous sur notre mailing liste : freemedforms@googlegroups.com.
+
+\section dosagecreator_presentation Présentation du créateur de posologie
+
+\image html prescription1.png Zones du créateur de posologies
+
+\image html prescription2.png Particularités de la posologie
+
+\image html prescription3.png Limitations
+
+Le créateur de posologie se compose de cinq parties distinctes :
+- 1 : Rappel du médicament sélectionné, présentation des interactions potentiel (l'icône de gauche).\n
+    Vous pouvez accéder à plus d'informations concernant les médicaments en laissant la souris immobile sur
+    le nom du médicament (composition) ou sur l'cône d'interaction (liste les interactions).
+- 2 : La liste des posologies pré-enregistrées. En double-cliquant sur l'une d'elle, le visualisateur se met à jour.
+- 3 : Le libellé de la posologie standard
+- 4 : La posologie proprement dite avec :
+    - Les indications de prises
+    - Les indications de durée
+    - Les particularités : moment de la journée pour les prises, horaires (non fonctionnel), intervalle entre
+        les prises, relation de la prise avec les repas.
+    - Les limites de la prescription (non fonctionnel - en cours de développement) :
+        - Limites de diagnostic (codage CIM10, eDRC)
+        - Limites de terrain : poids, taille, surface corporelle, clairance de la créatinine...
+        - Limites pour les femmes enceintes et allaitantes
+        - Surveillance à programmer : biologie, clinique...
+    - Une note en texte libre
+    - Le caractère "DCI" de la prescription
+    - Le caratère "100%" de la prescription
+- 5 : Commandes de sauvegarde et/ou de prescription. Vous pouvez par exemple uniquement prescrire sans
+    sauvegarder la posologie en cours, sauvegarder seulement, ou faire les deux d'un clique.
+
+Ce créateur de posologie permet donc de créer des posologies standard et/ou de prescrire simplement.
+
+\subsection dosagecreator_presentation_prises Les indications de prises
+
+Les indications de prises comprennent :
+- un nombre de prise minimal
+- un monbre de prise maximal
+- la possibilité de prescrire un intervalle de prises (de x à y prises par jour)
+- le texte de la prise :
+    - par défaut : \e prise(s)
+    - une liste d'intitulés standards est proposé
+    - vous pouvez saisir n'importe quel texte, le texte alors saisi (s'il n'apparatient pas aux libellés standards
+      sera alors disponible en cliquant sur licône \e personnel situé à côté (cf image).
+
+
+\image html edit.png Icône représentant les libellés de l'utilisateur
+
+
+\section poso_std Réaliser des posologies standardisées
+
+Tout d'abord, il est nécessaire de renseigner un libellé à la posologie.\n
+--> À faire : règle de libellisation des posologies.
+
+Vous devez renseigner :
+- les indications de prises (première page de la posologie (4)), selon le besoin,
+- les particularités de la posologies ainsi que les limites et modalités de surveillance.
+- le caractère DCI et ALD de la prescription (certaines thérapeutiques ne sont prescrites que le cadre
+    de pathologies en ALD).
+
+Ensuite, sauvegardez la posologie (et prescrivez selon).
+
+La posologie sera alors disponible à chaque ouverture du médicament ou d'un médicament "DCI-compatible".
+
+
+\section poso_exemple Exemple de posologie standardisée DCI
+
+\subsection ex1 Créer une posologie standardisée DCI
+
+Sélectionnez "AMLOR 5 mg" comme médicament.\n
+Renseignez la posologie standard suivante : "Hypertension artérielle - Mensuel" : 1 prise 1 jour durant 1 mois.\n
+Cliquez sur <b>En faire une prescription DCI</b>, le libellé DCI apparaît alors en dessous : "amlodipine 5 mg". Ce qui
+signifie que cette posologie sera accessible à tous les médicaments contenant comme seule DCI \e l'amlodipine
+à un dosage de 5 milligrammes.\n
+Vérifiez que l'icône DCI est présent devant le libellé de la posologie dans le cadre supérieur.\n
+Sauvegardez sans prescrire.\n
+
+\image html black_dci.png Icône DCI
+
+\image html prescription_ex1.png Posologie DCI - exemple
+
+\subsection ex2 Prescrire DCI sur la base la posologie créée
+
+Sélectionnez "AMLODIP*5*mg" comme médicament.\n
+Tous auront accès à la prescription nouvellement créée.
+
+\warning Il existe un bug avec la version 0.0.8. Pour certains de ces médicaments, la prescription DCI n'apparaît pas.
+Cela est lié au fait que le dosage de la DCI est "5,00 mg" et non "5 mg" (sans ",00"). Ce bug sera corrigé avec la
+version 0.1.0 et supra.
+
+\section prescription_to_dci Transformer une prescription en prescription DCI
+
+Tous les médicaments ne peuvent pas être prescrits en DCI. Les limitations viennent :
+- de la base de données elle-même (la DCI n'est pas connue pour toutes les molécules chimiques)
+- du médicament : seul les spécialités ne contenant qu'une seule DCI peuvent être prescrites en DCI.
+
+Double-cliquez sur le médicament prescrit dans la zone de prescription.\n
+Si le bouton "DCI" est cliquable, la spécialité peut être prescrite en DCI.\n
+Cliquez sur le bouton "DCI" qui se trouve à côté du nom du médicament puis validez.\n
+Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spécialité).
+
+\image html prescription_dci.png Passage d'une prescription normale à DCI
+
+\section fortextonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
+
+\todo écrire la doc
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////  PRESCRIRE  ///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page lienpatient Utiliser les données du patient lors de l'analyse de la prescription
+
+\ref info_patient
+
+\image html infos-patient.png Informations concernant le patient
+
+\section donneespatient Les données analysées lors de la prescription
+
+Le testeur d'interactions permet lors de la phase de prescription de vérifier l'adéquation
+médicament / patient de façon totalement automatique.\n
+Les données patients doivent être renseignés avant la prescription. Vous pouvez les vérifier en cliquant
+sur le "+" qui se trouve à côté de la ligne de saisie du nom patient.\n
+
+Cette fonctionnalité n'est pas encore disponible.
+
+\ref index
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////  PARAMETRER  L'APPLICATION  ////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page parametrer Paramétrer l'application
+
+\section acces_param Accéder aux paramètres utilisateur
+
+Les paramètres utilisateurs sont accessibles depuis le menu <b>Configuration/Préférences</b> ou
+<b>DrugsInteractions/Préférences</b> sous MacOsX.
+
+\section available_param Paramètres disponibles
+
+Plusieurs paramétrages sont accessibles :
+\li les polices de caractères pour la visualisation et l'impression
+\li le niveau d'alerte pour les interactions médicamenteuses
+\li la taille de l'historique des derniers médicaments recherchés
+\li les entête, pied de page et tatouage d'impression à utiliser
+\li marquages à utiliser pour les médicaments à 100%
+\li masquage du nom de laboratoire lors de l'impression
+
+\section polices Paramétrage des polices de caractères, niveau d'alerte, historique
+
+\image html prefs1.png
+
+\section headers Paramétrage des entête, pied de page et tatouage d'impression
+
+\image html prefs2.png
+
+\section others Texte de 100% et autres
+
+\image html prefs3.png
+
+
+Vous pouvez consulter \ref richtext_index .
+
+\ref index
+
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  AUTEURS ET CONTRIBUTEURS  ///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page auteurs Auteurs et contributeurs
+
+- <b>Créateur et principal développeur :</b>
+    - Éric Maeker, MD <eric.maeker@free.fr>.
+
+- <b>Contributeurs :</b>
+    - Guillaume Denry <guillaume.denry@gmail.com> : codeur, déboggueur, conseiller informatique
+    - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior codeur, conseiller médical
+    - Laurent Masson, MD <> : conseiller médical
+
+- <b>Aides et conseillers :</b>
+    -  Filipe Azevedo <pasnox@gmail.com> : aide au déboggueur, conseiller informatique.
+    -  David Geldreich <david.geldreich@free.fr> : conseiller informatique,
+    -  Jourdan Romain  <No@Mail.com> : aide au codage du moteur d'impression
+
+- <b>Testeurs :</b>
+    - Plusieurs testeurs anonymes pour la plupart.
+
+- <b>Traducteur :</b>
+    - Éric Maeker, MD
+
+- <b>Maître toile : </b>
+    - Vincent Perez, MD <vinperez@gmail.com>
+
+- <b>Mailing liste publique :</b>
+    -  freemedforms@googlegroups.com
+
+\ref index
+
+
+
+
+
+
+
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////  INSTALLATION / MAJ / DESINTALLATION ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page installation Installation, mise à jour et désinstallation
+
+\section install Installation
+
+L'installation du testeur d'interactions ne nécessite aucune manipulation particulière.
+Téléchargez l'archive qui correspond à votre système d'exploitation et décompressez-là
+dans le répertoire de votre choix.
+
+Les données utilisateurs (paramètres, base de données posologies) se trouvent dans votre
+répertoire personnel. Selon votre plateforme :
+\li Linux/Unix : /home/votrenom/.drugsinteractions
+\li MacOs : /Users/votrenom/.drugsinteractions
+\li Windows : %HOMEPATH%\.drugsinteractions
+
+\section maj Mise à jour
+
+Pour mettre à jour le logiciel, il suffit de remplacer le répertoire de la version obsolète
+par le répertoire de l'archive téléchargée. Aucunes données personnelles ne seront perdues.\n
+Un système d'alerte automatique de mise à disposition de nouvelle version est disponible d'office.
+Lorsqu'une mise à jour est disponible, le menu <b>Mise à jour disponible</b> apparaît.
+
+\section uninstall Désintallation
+
+Nettoyer votre répertoire personnel et effacer le répertoire où est installé le testeur d'interactions.
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  INSTALLATION CLE USB  ///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page installation_cle_usb Installation sur clé USB multi-plateforme
+
+En cours de rédaction.
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page rechercher Méthodes de recherche des médicaments
+
+La recherche des médicaments se fait dans la partie supérieure de l'interface. Pour plus d'informations voir :
+\ref presentation .
+
+\image html mode-recherche.png Sélection de la méthode de recherche des médicaments
+
+\section methode_recherche Sélection de la méthode de recherche
+
+Vous pouvez effectuer vos recherche :
+\li sur le nom commercial des médicaments,
+\li sur leur contenu chimique (molécules)
+\li ou sur leur dénomination commune internationnale (DCI).\n
+
+Pour modifier la méthode de recherche, cliquez sur le bouton
+de gauche de la zone de saisie des recherches et sélectionnez la méthode de votre choix. L'icône du bouton se met
+automatiquement à jour pour vous rappeler la méthode sélectionnée.\n
+A chaque redémarrage de l'application, la méthode de recherche sera automatiquement la dernière utilisée.\n
+Lorsque vous sélectionnez la recherche par DCI un cadre supplémentaire apparaît sur la gauche des médicaments.
+Cette zone affiche les DCI correspondantes à votre recherche.\n
+
+Quelquesoit la méthode de recherche, la liste des médicaments est mise à jour en temps réel.\n
+
+\subsection caracteres_speciaux_de_recherche Caractères spéciaux de recherche
+
+Le caractère '\%' ou '*' permet de remplacer à n'importe quel endroit de votre saisie un nombre indéfini de lettres
+ou de chiffres.\n
+Par exemple :
+\li 'FLEC*NE' fera apparaître la liste complète des médicaments FLECAINE. Vous remarquerez dans cette liste le trémas
+présent sur le I dans la forme LP. Ainsi la recherche 'FLECAI' ne présente que les formes non LP. 'FLECA' toutes les formes.
+'FLEC*NE' toutes les formes.
+\li 'AMOX*comprim' fera apparaître toutes les spécialités nommées AMOX.... en forme comprimé.
+\li 'AMOX*sach' fera apparaître toutes les spécialités nommées AMOX.... en forme sachet.
+
+\subsection historique_recherches L'historiques des recherches
+
+Vous pouvez à tout moment accéder à l'historique de vos dernières recherches en cliquant sur le bouton situé
+à droite de la zone de saisie de recherche.\n
+Le nombre de médicaments mémorisés dans cet historique est paramétrable. Référez-vous à la section \link parametrer Paramétrage\endlink.
+
+\image html historique.png Historique des recherches
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page ligne_commandes Interfacer le testeur d'interactions avec d'autres logiciels
+
+Le testeur d'interactions est pensé comme un "module" externe. Ce "module" peut étre utilisé par un grand nombre
+de logiciel propriétaires ou non. A l'heure actuel, seul MedinTux est configurable pour utiliser ce logiciel
+comme prescripteur.\n
+
+Pour interfacer un logiciel avec le testeur d'interactions, il suffit de renseigner la ligne de commande au
+moment de l'appel.
+
+\section params_ligne_commandes Paramètres de la ligne de commande
+
+Les paramètres suivants sont disponibles :
+\li \e --medintux : définit une utilisation spécifique à MedinTux.
+\li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications.
+\li \e --patientname="xx xx xx" : définit le nom du patient.
+\li \e --dateofbirth="yyyy/MM/dd" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
+\li \e --weight="dd" : définit le poids du patient (en kg)
+\li \e --size="ddd" : définit la taille du patient (en cm)
+\li \e --clcr="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
+\li \e --creatinin="dd" : définit la créatininémie du patient (en mg/l)
+\li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
+\li \e --transmit-dosage = non documenté.
+
+
+\section exchange Le fichier d'échange
+
+Lorsqu'un fichier d'échange est notifié au démarrage du testeur d'interactions, celui-ci essaie de lire
+le contenu du fichier et d'y récupérer les données de la prescription.\n
+A la fermeture de l'application, la prescription est sauvegardée dans le d'échange sous format XML. Voir \ref format_fichier_di.\n
+
+Lorsque le paramètre \e --medintux est notifié dans la ligne de commande, le format du fichier d'échange est spécifique
+à MedinTux.\n
+
+\section param_command_line_specifiques Paramètres de la ligne de commandes spécifiques à certaines actions
+
+Certaines actions nécessitent l'activation de paramètres de la ligne de commande.\n
+Pour aider au déboggage de l'application lorsque celle-ci semble ralentie : \e --chrono aide à trouver le ralentissement.\n
+Pour les rédacteurs de posologies standard, \e --transmit-dosage permet de transmettre leurs posologies au
+comité scientifique chargé de les valider.
+
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page participer Participer au testeur d'interactions
+
+Le testeur d'interactions médicamenteuses est un projet qui se veut communautaire. Plusieurs personnes ont
+déjà participé activement à l'élaboration de ce logiciel.
+
+<b>Nous recherchons des volontaires !!!</b>
+
+Quelquesoit votre domaine de compétence, votre aide peut nous être utile. Il faudra au préalable accepter
+de travailler sous licence BSD révisée et sans rémunération.
+
+Si vous souhaitez participer à ce projet, veuillez vous faire connaître sur notre mailing liste :
+\htmlonly <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>. \endhtmlonly
+\latexonly freemedforms@googlegroups.com \endlatexonly
+
+Plusieurs "postes" sont à pourvoir :
+- Rédacteur d'aide et de tutoriels
+- Testeurs d'application
+- Testeurs de la base de données des interactions (réservé médecins)
+- Rédacteur de posologies standards (réservé médecins)
+- Codeurs/Développeurs
+- Conseillers : médecins, pharmaciens, informaticiens
+- Ou simplement donnez votre avis sur le logiciel.
+
+\section redacteur_aide Rédacteur d'aide
+
+Nécessite des connaissances minimales (une dizaines de mots clés) de doxygen.\n
+Rédaction du manuel de l'utilisation, ou relecture / corrections.\n
+Ajout ou création de captures d'écrans pour illustrer la documentation.\n
+
+\section testeurs_application Testeurs d'application
+
+Nécessite du temps ! Aucune connaissance particulière ormis écrire en français ou en anglais.\n
+Tests des versions bétâset signalement des erreurs, dysfonctionnement ou corrections à faire.\n
+
+\section testeurs_interactions Testeurs des interactions
+
+Necessite du temps et des connaissances médicales.\n
+L'objectif est de tester au fur et à mesure de vos prescriptions l'exactitude des données d'interactions
+fournie par ce logiciel. Pour ce faire, vous devez télécharger le thésaurus des interactions de l'AFSSAPS,
+réaliser des prescriptions et vérifier dans le thésaurus l'exactitude des informations présentées par le
+logiciel.\n
+\htmlonly <a href="http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0">
+Lien vers le thésaurus des interactions de l'AFSSAPS</a> \endhtmlonly
+\latexonly Lien vers le thésaurus des interactions de l'AFSSAPS : http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0\endlatexonly
+
+Le retours de tests doivent seront regroupés et envoyés par mail sur la mailing liste.
+
+
+\section redacteurs_poso Rédacteurs de posologies standard
+\todo
+
+\section coders Codeurs/Développeurs
+
+Le testeur d'interactions fait parti d'un projet plus ambicieux : FreeMedForms.\n
+Les codeurs devront se référer aux règles de codage de cette suite, connaître les bases de la programmation
+C++/Qt4.5 et/ou bash et/ou php et/ou SQLite.\n
+Il est possible de travailler :
+\li à l'amélioration du code existant
+\li à la création de plugins pour la suite FreeMedForms (la documentation est disponible)
+\li à l'ajout de nouvelles fonctionnalités à l'existant
+
+Avant toutes choses, il convient de vous présenter sur notre mailing liste.
+
+\section advisors Conseillers : médecins, pharmaciens, informaticiens
+
+
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////  MEDINTUX  //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page medintux Utiliser le testeur d'interactions avec MedinTux
+
+  \section medintux_warning Attention DrugsInteractions NE FAIT PAS partie de la suite MedinTux
+
+  <b>Le testeur d'interactions est une partie du projet FreeMedForms. EN AUCUN CAS, il ne doit être
+  assimilé à la suite MedinTux.</b>\n
+  Il est possible d'interfacer MedinTux pour prescrire avec le testeur d'interactions.\n
+  Aucun des auteurs, développeurs et contributeurs au présent logiciel n'assure de support pour la
+  suite MedinTux. Si vous rencontrez un problème lié à l'utilisation avec MedinTux, en dehors d'éventuels
+  problèmes liés à l'étape de configuration automatique, merci de vous adresser aux administrateurs de la
+  suite MedinTux.\n
+
+  \section medintux_config Interfacer MedinTux avec le testeur d'interactions
+
+  La configuration de MedinTux se réalise en trois étapes :
+  \li Ouvrir l'assistant de configuration --> Menu : <b>Configuration/Configurer MedinTux</b>
+  \li Lire les informations et valider
+  \li Si l'assistant ne le détecte pas automatiquement, sélectionnez le répertoire qui abrite
+   le binaire de \b Manager (/MedinTux/Programmes/Manager/bin, en cas de problème demandez de l'aide
+   sur les forums dédiés à MedinTux)
+  \li Vérifiez l'état de configuration de MedinTux.
+  Il est nécessaire de réaliser ces étapes à chaque fois que vous modifier l'emplacement du testeur d'interactions
+  ou de votre répertoire MedinTux. Il n'est pas nécessaire de reconfigurer MedinTux lors des mises à jours
+  du testeur d'interactions, par contre il l'est pour lors des mises à jour de MedinTux.
+  <b>Merci de ne pas demander d'aide sur la mailing de FreeMedForms en cas de problème lors d'une mise à jour
+  de MedinTux. Tournez-vous vers les forums dédiés à MedinTux après avoir réitéré la configuration
+  automatique.</b>
+
+  \section medintux_utilisation Une fois configuré : l'utiliser
+
+  Vous devez redémarrer DrTux ET Manager AVANT de pouvoir profiter de DrugsInteractions.\n
+  Dans le menu utilisateur, vous trouverez un item <b>Prescrire avec DrugsInteractions</b>.
+  Cliquez ic pour créer une nouvelle ordonnance vierge.\n
+  Dans le cadre de la prescription (là où est rédigée la prescription dans MedinTux), un clique droit
+  ouvre le menu contextuel. Sélectionnez <b>Éditer avec DrugsInteractions</b> pour ré-éditer l'ordonnance en cours.
+  Attention cette manipulation ne fonctionne qu'avec des ordonnances préalablement créée avec DrugsInteractions. \n
+  Il n'est pas possible de reprendre une ordonnance créée par MedinTux.\n
+  Une fois la prescription rapatriée au sein de MedinTux, vous ne pourrait pas la modifier à la main, il faudra
+  systématiquement la rééditée avec DrugsInteractions.
+
+
+  \image html di-0.0.6-medintux1.png
+
+  \image html di-0.0.6-medintux2.png
+
+  \ref index
+*/
