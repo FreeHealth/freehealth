@@ -32,42 +32,54 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef MFDRUGSBASE_P_H
-#define MFDRUGSBASE_P_H
-class mfDrugs;
-class mfDrugInteraction;
-#include <QMultiHash>
-#include <QMap>
-#include <QMultiMap>
-#include <QList>
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef MFDOSAGECREATORDIALOG_H
+#define MFDOSAGECREATORDIALOG_H
 
-class mfDrugsBasePrivate
+// include drugwidget headers
+class mfDosageModel;
+class mfDosageCreatorDialogPrivate;
+
+// include Qt headers
+#include <QtGlobal>
+QT_BEGIN_NAMESPACE
+class QDataWidgetMapper;
+QT_END_NAMESPACE
+
+// include Ui
+#include "ui_mfDosageCreatorDialog.h"
+
+/**
+ * \file mfDosageDialog.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.6
+ * \date 24 March 2009
+*/
+
+class mfDosageCreatorDialog : public QDialog, public Ui::mfDosageCreatorDialog
 {
-public:
-    mfDrugsBasePrivate( mfDrugsBase * base );
-    // connections creator
-    bool createConnections( const QString & path, const QString & db, const QString & dbName, bool readwrite );
-
-    // Link tables
-    void retreiveLinkTables();
-
-    // private members for interactions
-    QString getIamSubst( const int & code_subst );
-    QStringList getIamClass( const int & code_subst );
-    bool checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugs );
-    mfDrugInteraction * getIAM( const int & _id1, const int & _id2 );
+    Q_OBJECT
+    Q_DISABLE_COPY( mfDosageCreatorDialog );
 
 public:
-    // These variables are used or speed improvments and database protection
-    QMultiHash< int, int >    m_Lk_iamCode_substCode;   // Link Iam_Id to Code_Subst
-    QMultiHash< int, int >    m_Lk_classCode_iamCode;   // Link ClassIam_Id to Iam_Id
-    QMap<int, int>            m_Iams;                   // All possible interactions based on Iam_Ids
+    explicit mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel );
+    ~mfDosageCreatorDialog();
 
-    QMultiMap< int, int>      m_IamFound;               // modified by checkDrugInteraction()
+private Q_SLOTS:
+    void done( int r );
+    void on_saveButton_clicked();
+    void on_prescribeButton_clicked();
+    void on_saveAndPrescribeButton_clicked();
+    void on_helpButton_clicked();
+    void on_testOnlyButton_clicked();
 
-    // cached datas for speed improvments
-    QList<mfDrugInteraction*>             m_DrugInteractionList;      // First filled by interactions()
-    QMap<int, mfDrugInteraction* >        m_Map_CIS_DrugInteraction;  // idem
-    mfDrugsBase * m_DrugsBase;
+private:
+    mfDosageCreatorDialogPrivate *d;
 };
-#endif // MFDRUGSBASE_P_H
+
+#endif // MFDOSAGECREATORDIALOG_H

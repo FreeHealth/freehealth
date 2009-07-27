@@ -42,7 +42,6 @@
 #define MFDRUGS_H
 
 // include drugswidget headers
-//#include "drugsdatabase/mfDrugsTables.h"
 #include <mfDrugsConstants.h>
 class mfDrugDosage;
 class mfDrugsBase;

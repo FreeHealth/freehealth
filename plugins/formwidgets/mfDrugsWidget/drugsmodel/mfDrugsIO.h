@@ -45,12 +45,13 @@ class mfDrugsIOPrivate;
 
 #include <QObject>
 #include <QHash>
+#include <QString>
 
 /**
  * \file mfDrugsIO.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 07 July 2009
+ * \version 0.0.3
+ * \date 13 July 2009
 */
 
 class mfDrugsIO : public QObject
@@ -68,8 +69,14 @@ public:
     bool startsDosageTransmission();
     static bool isSendingDosage();
     static bool  prescriptionFromXml(const QString &xml, Loader loader = ReplacePrescription);
+
     static bool loadPrescription(const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
-    static bool savePrescription(const QHash<QString,QString> &extraDatas);
+    static bool loadPrescription(const QString &fileName, Loader loader = ReplacePrescription);
+    static bool loadPrescription(const QString &fileName, QString &xmlExtraDatas, Loader loader = ReplacePrescription);
+
+    static bool savePrescription(const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
+    static bool savePrescription(const QString &extraDatas, const QString &toFileName = QString::null);
+
     static QString prescriptionToXml();
     static QString prescriptionToHtml();
 

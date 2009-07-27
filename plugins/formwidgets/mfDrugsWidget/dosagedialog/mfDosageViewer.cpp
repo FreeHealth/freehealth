@@ -60,6 +60,7 @@
 #include <drugsmodel/mfDosageModel.h>
 #include <drugsmodel/mfDrugsModel.h>
 #include <mfDrugsConstants.h>
+#include <mfDrugsManager.h>
 
 // include toolkit
 #include <tkLog.h>
@@ -102,7 +103,7 @@ public:
             else
                 m_DosageModel->setData( m_DosageModel->index( m_Mapper->currentIndex(), index), false );
         } else {
-            mfDrugsModel *m = mfDrugsModel::instance();
+            mfDrugsModel *m = DRUGMODEL;
             if (qtCheckState==Qt::Checked)
                 m->setDrugData( m_CIS, index, true );
             else
@@ -115,7 +116,7 @@ public:
     {
         if (!m_Mapper) {
             m_Mapper = new QDataWidgetMapper(m_Parent);
-            m_Mapper->setModel( mfDrugsModel::instance() );
+            m_Mapper->setModel( DRUGMODEL );
             m_Mapper->setSubmitPolicy( QDataWidgetMapper::AutoSubmit );
             m_Mapper->addMapping( m_Parent->intakesFromSpin, Prescription::IntakesFrom, "value" );
             m_Mapper->addMapping( m_Parent->intakesToSpin, Prescription::IntakesTo, "value" );
@@ -185,7 +186,7 @@ public:
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = mfDrugsModel::instance();
+        mfDrugsModel *m = DRUGMODEL;
         if (m_DosageModel) {
             // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
             // Need to be filled by hand the comboboxes...
@@ -212,7 +213,8 @@ public:
                 m_Parent->durationToLabel->show();
                 m_Parent->durationToSpin->show();
             }
-            m_Parent->dosageForAllInnCheck->setChecked(m_DosageModel->index( row, Dosage::INN_LK).data().toBool());
+//            m_Parent->dosageForAllInnCheck->setEnabled(DRUGMODEL->drugData(m_CIS, Drug::AllInnsKnown).toBool());
+            m_Parent->dosageForAllInnCheck->setChecked(m_DosageModel->index(row, Dosage::INN_LK).data().toBool());
             m_Parent->aldCheck->setChecked(m_DosageModel->index(row,Dosage::IsALD).data().toBool());
         } else {
             m_Parent->labelLineEdit->hide();
@@ -257,7 +259,7 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = mfDrugsModel::instance();
+        mfDrugsModel *m = DRUGMODEL;
         m_Parent->labelOfDosageLabel->setToolTip(m->drugData( m_CIS, Drug::AvailableDosages).toString() );
 //        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
 //        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
@@ -272,7 +274,7 @@ public:
     void resetUiToDefaults()
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = mfDrugsModel::instance();
+        mfDrugsModel *m = DRUGMODEL;
         m_Parent->intakesToLabel->hide();
         m_Parent->intakesToSpin->hide();
         m_Parent->durationToLabel->hide();
@@ -326,8 +328,9 @@ public:
     bool dosageCanLinkWithInn()
     {
         if (m_DosageModel) {
-            mfDrugsModel *m = mfDrugsModel::instance();
-            return (m->drugData(m_CIS, Drug::MainInnCode).toInt()!=-1);
+            mfDrugsModel *m = DRUGMODEL;
+            return ((m->drugData(m_CIS, Drug::MainInnCode).toInt()!=-1) &&
+                    (m->drugData(m_CIS,Drug::AllInnsKnown).toBool()));
         }
         return false;
     }
@@ -374,7 +377,7 @@ mfDosageViewer::mfDosageViewer( QWidget *parent )
 /** \brief Use this function to define a drugsModel behavior. */
 void mfDosageViewer::useDrugsModel(const int CIS, const int drugRow)
 {
-    Q_ASSERT(mfDrugsModel::instance()->containsDrug(CIS));
+    Q_ASSERT(DRUGMODEL->containsDrug(CIS));
     d->m_CIS = CIS;
     d->m_DosageModel = 0;
     d->resetUiToDefaults();
@@ -417,7 +420,7 @@ void mfDosageViewer::changeCurrentRow(const int dosageRow)
     d->resetUiToDefaults();
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->m_Mapper->setCurrentIndex(dosageRow);
-    qWarning() << dosageRow << QString("%1 = %2,").arg(mfDrugsModel::instance()->drugData(d->m_CIS,Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
+    qWarning() << dosageRow << QString("%1 = %2,").arg(DRUGMODEL->drugData(d->m_CIS,Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
 }
 
 /** \brief Changes the current editing dosage */
@@ -435,7 +438,7 @@ void mfDosageViewer::done(int r)
     if ( r == QDialog::Accepted ) {
         // match the user's form for the settings
         const QStringList &pre = mfDosageModel::predeterminedForms();
-        const QStringList &av  = mfDrugsModel::instance()->drugData(d->m_CIS,Drug::AvailableForms).toStringList();
+        const QStringList &av  = DRUGMODEL->drugData(d->m_CIS,Drug::AvailableForms).toStringList();
         if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
             ( av.indexOf(intakesCombo->currentText()) == -1 )) {
             tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
@@ -509,14 +512,14 @@ void mfDosageViewer::on_userformsButton_clicked()
         if (d->m_DosageModel)
             d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(),Dosage::IntakesScheme),a->text());
         else
-            mfDrugsModel::instance()->setDrugData(d->m_CIS, Prescription::IntakesScheme, a->text());
+            DRUGMODEL->setDrugData(d->m_CIS, Prescription::IntakesScheme, a->text());
     }
 }
 
 /** \brief If INN linking is available, shows the inn name and the dosage used for the link */
 void mfDosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
 {
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     if (d->m_DosageModel) {
         // INN Prescription ?
         int row = d->m_Mapper->currentIndex();

@@ -52,6 +52,7 @@
 #include <drugsdatabase/mfDrugsBase.h>
 #include <drugsmodel/mfDrugInteraction.h>
 #include <drugsmodel/mfDrugsIO.h>
+#include <interactionsmodel/mfInteractionsManager.h>
 #include <mfDrugsConstants.h>
 
 // include toolkit headers
@@ -71,6 +72,8 @@
 
 namespace mfDrugsModelConstants {
     const char * const ALD_BACKGROUND_COLOR               = "khaki";
+    const char * const FORTEST_BACKGROUND_COLOR           = "#EFEFEF";
+    const char * const FORTEST_FOREROUND_COLOR            = "#555555";
 }
 
 using namespace mfDrugsModelConstants;
@@ -82,7 +85,7 @@ using namespace mfDrugsModelConstants;
 class mfDrugsModelPrivate
 {
 public:
-    mfDrugsModelPrivate() : m_LastDrugRequiered(0)
+    mfDrugsModelPrivate() : m_LastDrugRequiered(0), m_ShowTestingDrugs(true)
     {
     }
 
@@ -92,6 +95,8 @@ public:
         m_DosageModelList.clear();
         qDeleteAll( m_DrugsList );
         m_DrugsList.clear();
+        qDeleteAll( m_TestingDrugsList );
+        m_TestingDrugsList.clear();
     }
 
     /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
@@ -120,7 +125,6 @@ public:
         if ((column < Prescription::Id) || (column > Prescription::MaxParam))
             return false;
         drug->setPrescriptionValue( column, value );
-//        qWarning() << "setdrugdata" << xmlTagForPrescriptionRow(column) << value;
         return true;
     }
 
@@ -171,8 +175,8 @@ public:
              case Drug::MainInnName :        return drug->mainInnName();
              case Drug::InnClasses :         return drug->listOfInnClasses();
              case Drug::Administration :     return QVariant();
-             case Drug::Interacts :          return mfDrugsBase::instance()->drugHaveInteraction( drug );
-             case Drug::MaximumLevelOfInteraction : return int(mfDrugsBase::instance()->getMaximumTypeOfIAM( drug ));
+             case Drug::Interacts :          return m_InteractionsManager->drugHaveInteraction( drug );
+             case Drug::MaximumLevelOfInteraction : return int(m_InteractionsManager->getMaximumTypeOfIAM( drug ));
              case Drug::CompositionString :  return drug->toHtml();
              case Drug::InnCompositionString :  return drug->innComposition();
              case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
@@ -183,12 +187,15 @@ public:
                      if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
                          tmp = drug->innComposition();
                      else tmp = drug->denomination();
+                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool())
+                         return tmp;
                      tmp += "\n";
                      tmp += drug->prescriptionToPlainText();
                      return tmp;
                  }
 
              case Prescription::UsedDosage :            return drug->prescriptionValue( Prescription::UsedDosage );
+             case Prescription::OnlyForTest :           return drug->prescriptionValue( Prescription::OnlyForTest );
              case Prescription::IntakesFrom :           return drug->prescriptionValue( Prescription::IntakesFrom );
              case Prescription::IntakesTo :             return drug->prescriptionValue( Prescription::IntakesTo );
              case Prescription::IntakesScheme :         return drug->prescriptionValue( Prescription::IntakesScheme );
@@ -211,15 +218,15 @@ public:
              case Prescription::ToHtml :                return drug->prescriptionToHtml();
 
              case Interaction::Id :     return QVariant();
-             case Interaction::Icon :   return mfDrugInteraction::iamIcon( drug, m_levelOfWarning );
-             case Interaction::Pixmap : return mfDrugInteraction::iamIcon( drug, m_levelOfWarning ).pixmap(16,16);
+             case Interaction::Icon :   return m_InteractionsManager->iamIcon( drug, m_levelOfWarning );
+             case Interaction::Pixmap : return m_InteractionsManager->iamIcon( drug, m_levelOfWarning ).pixmap(16,16);
              case Interaction::ToolTip :
                  {
                      mfDrugsBase *b = mfDrugsBase::instance();
                      QString display;
-                     if ( b->drugHaveInteraction( drug ) ) {
-                         const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
-                         display.append( mfDrugInteraction::listToHtml( list, false ) );
+                     if ( m_InteractionsManager->drugHaveInteraction( drug ) ) {
+                         const QList<mfDrugInteraction *> & list = m_InteractionsManager->getInteractions( drug );
+                         display.append( m_InteractionsManager->listToHtml( list, false ) );
                      } else if ( b->drugsINNIsKnown( drug ) ) {
                          display = drug->listOfInn().join( "<br />") + "<br />" + drug->listOfInnClasses().join( "<br />" );
                      } else
@@ -230,18 +237,18 @@ public:
              case Interaction::FullSynthesis :
                  {
                      QString display;
-                     const QList<mfDrugInteraction *> & list = mfDrugsBase::instance()->getAllInteractionsFound();
+                     const QList<mfDrugInteraction *> & list = m_InteractionsManager->getAllInteractionsFound();
                      int i = 0;
                      display.append("<p>");
                      foreach( mfDrugs *drg, m_DrugsList ) {
                          ++i;
                          display.append( QString("%1&nbsp;.&nbsp;%2<br />")
                                          .arg(i)
-                                         .arg(drg->denomination() ) );
+                                         .arg(drg->denomination()));
                      }
                      display.append("</p><p>");
                      if ( list.count() > 0 ) {
-                         display.append( mfDrugInteraction::synthesisToHtml( list, true ) );
+                         display.append( m_InteractionsManager->synthesisToHtml( list, true ) );
                      } else
                          display = QApplication::translate("mfDrugsModel","No interactions founded" );
                      display.append("</p>");
@@ -254,36 +261,34 @@ public:
     }
 
 public:
-    QDrugsList  m_DrugsList;       /*!< \brief Actual prescription drugs list */
-    int m_levelOfWarning;          /*!< \brief Level of warning to use (retrieve from settings). */
+    QDrugsList  m_DrugsList;          /*!< \brief Actual prescription drugs list */
+    QDrugsList  m_TestingDrugsList;  /*!< \brief Actual prescription drugs list */
+    int m_levelOfWarning;            /*!< \brief Level of warning to use (retrieve from settings). */
     mutable QHash<int, QPointer<mfDosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
     mfDrugs *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
-
+    mfInteractionsManager *m_InteractionsManager;
+    bool m_ShowTestingDrugs;
 };
 
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
-mfDrugsModel *mfDrugsModel::m_Instance = 0;
-
-/** \brief Unique instance of the drugs model */
-mfDrugsModel *mfDrugsModel::instance()
-{
-    if ( ! m_Instance )
-        m_Instance = new mfDrugsModel( qApp );
-    return m_Instance;
-}
 
 /** \brief Constructor */
 mfDrugsModel::mfDrugsModel( QObject * parent )
         : QAbstractTableModel( parent ),
         d(new mfDrugsModelPrivate())
 {
+    static int handler = 0;
+    ++handler;
+    setObjectName("mfDrugsModel_" + QString::number(handler));
+    tkLog::addMessage(this, "instance created");
     if ( !mfDrugsBase::isInitialized() )
         return;
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
+    d->m_InteractionsManager = new mfInteractionsManager(this);
 }
 
 /** \brief Destructor */
@@ -390,8 +395,7 @@ QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
     if (( index.row() > d->m_DrugsList.count() ) || ( index.row() < 0 ) )
         return QVariant();
 
-    mfDrugsBase *b = mfDrugsBase::instance();
-    const mfDrugs * drug = d->m_DrugsList.at( index.row() );
+    const mfDrugs *drug = d->m_DrugsList.at(index.row());
 
     if ( ( role == Qt::DisplayRole ) || ( role == Qt::EditRole ) ) {
         int col = index.column();
@@ -405,23 +409,28 @@ QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
         }
     }
     else if ( role == Qt::DecorationRole ) {
-        return mfDrugInteraction::iamIcon( drug, d->m_levelOfWarning );
+        return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
     }
     else if ( role == Qt::ToolTipRole ) {
         QString display;
         display = drug->toHtml();
 
-        if ( b->drugHaveInteraction( drug ) ) {
-            const QList<mfDrugInteraction *> & list = b->getInteractions( drug );
+        if ( d->m_InteractionsManager->drugHaveInteraction( drug ) ) {
+            const QList<mfDrugInteraction *> & list = d->m_InteractionsManager->getInteractions( drug );
             display.append( "<br>\n" );
-            display.append( mfDrugInteraction::listToHtml( list, false ) );
+            display.append( d->m_InteractionsManager->listToHtml( list, false ) );
         }
         return display;
     }
     else if ( role == Qt::BackgroundRole ) {
-        if (drug->prescriptionValue( Prescription::IsALD ).toBool()) {
+        if (drug->prescriptionValue( Prescription::IsALD ).toBool())
             return QColor(ALD_BACKGROUND_COLOR);
-        }
+        if (drug->prescriptionValue( Prescription::OnlyForTest ).toBool())
+            return QColor(FORTEST_BACKGROUND_COLOR);
+    }
+    else if ( role == Qt::ForegroundRole ) {
+        if (drug->prescriptionValue( Prescription::OnlyForTest ).toBool())
+            return QColor(FORTEST_FOREROUND_COLOR);
     }
     //     else if ( role == Qt::SizeHintRole ) {
     //         return QSize(d->m_RowSize[index.row()],d->m_RowSize[index.row()]);
@@ -435,10 +444,10 @@ QVariant mfDrugsModel::data( const QModelIndex &index, int role ) const
 */
 QVariant mfDrugsModel::drugData( const int CIS, const int column )
 {
-    mfDrugs *drug = m_Instance->d->getDrug(CIS);
+    mfDrugs *drug = d->getDrug(CIS);
     if (!drug)
         return QVariant();
-    return m_Instance->d->getDrugValue(drug, column);
+    return d->getDrugValue(drug, column);
 }
 
 /** \brief Should not be used. \internal */
@@ -460,15 +469,19 @@ bool mfDrugsModel::removeRows( int row, int count, const QModelIndex & parent )
     if ( (row + count) > d->m_DrugsList.count() )
         return false;
     int i;
+    bool toReturn = true;
     for( i = 0; i < count; ++i ) {
-        delete d->m_DrugsList.at(row+i);
-        d->m_DrugsList.removeAt(row+i);
+        mfDrugs *drug =  d->m_DrugsList.at(row+i);
+        if ((!d->m_DrugsList.removeOne(drug)) && (!d->m_TestingDrugsList.removeOne(drug)))
+            toReturn = false;
+        delete drug;
     }
+    d->m_InteractionsManager->setDrugsList(d->m_DrugsList);
     checkInteractions();
     endRemoveRows();
     reset();
     Q_EMIT numberOfRowsChanged();
-    return true;
+    return toReturn;
 }
 
 /**
@@ -483,7 +496,8 @@ int mfDrugsModel::addDrug( mfDrugs* drug, bool automaticInteractionChecking )
     if (containsDrug(drug->CIS()))
         return d->m_DrugsList.indexOf(drug);
     d->m_DrugsList << drug;
-    // check drugs interactions from mfDrugsBase
+    d->m_InteractionsManager->addDrug(drug);
+    // check drugs interactions ?
     if (automaticInteractionChecking) {
         checkInteractions();
         d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
@@ -506,23 +520,32 @@ int mfDrugsModel::addDrug( const int _CIS, bool automaticInteractionChecking )
     return addDrug( mfDrugsBase::instance()->getDrugByCIS( _CIS ), automaticInteractionChecking );
 }
 
-/** \brief Clear the prescription. Clear all interactions too. */
+/**
+  \brief Clear the prescription. Clear all interactions too.
+  Calling this causes a model reset.
+*/
 void mfDrugsModel::clearDrugsList()
 {
     d->m_LastDrugRequiered = 0;
+    d->m_InteractionsManager->clearDrugsList();
     qDeleteAll(d->m_DrugsList);
     d->m_DrugsList.clear();
+    qDeleteAll(d->m_TestingDrugsList);
+    d->m_TestingDrugsList.clear();
     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     reset();
     Q_EMIT numberOfRowsChanged();
 }
 
-/** \brief Insert a list of drugs and check interactions. */
+/**
+  \brief Insert a list of drugs and check interactions.
+  Calling this causes a model reset.
+*/
 void mfDrugsModel::setDrugsList( QDrugsList & list )
 {
-    d->m_DrugsList.clear();
-    d->m_LastDrugRequiered = 0;
-    d->m_DrugsList << list;
+    clearDrugsList();
+    d->m_DrugsList = list;
+    d->m_InteractionsManager->setDrugsList(list);
     checkInteractions();
     d->m_levelOfWarning = tkSettings::instance()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     reset();
@@ -537,14 +560,27 @@ bool mfDrugsModel::containsDrug(const int CIS) const
     return false;
 }
 
-/** \brief Sort the drugs inside prescription. \sa mfDrugs::lessThan(). */
+/** \brief Returns true if the actual prescription has interaction(s). */
+bool mfDrugsModel::prescriptionHasInteractions()
+{
+    return (d->m_InteractionsManager->getLastInteractionFound()!=0);
+}
+
+
+/**
+  \brief Sort the drugs inside prescription. \sa mfDrugs::lessThan().
+  Calling this causes a model reset.
+*/
 void mfDrugsModel::sort( int, Qt::SortOrder )
 {
     qSort(d->m_DrugsList.begin(), d->m_DrugsList.end(), mfDrugs::lessThan );
     reset();
 }
 
-/** \brief Moves a drug up. */
+/**
+  \brief Moves a drug up.
+  Calling this causes a model reset.
+*/
 bool mfDrugsModel::moveUp( const QModelIndex & item )
 {
     if ( !item.isValid() )
@@ -558,7 +594,10 @@ bool mfDrugsModel::moveUp( const QModelIndex & item )
     return false;
 }
 
-/** \brief Moves a drug down. */
+/**
+  \brief Moves a drug down.
+  Calling this causes a model reset.
+*/
 bool mfDrugsModel::moveDown( const QModelIndex & item )
 {
     if ( !item.isValid() )
@@ -570,6 +609,38 @@ bool mfDrugsModel::moveDown( const QModelIndex & item )
         return true;
     }
     return false;
+}
+
+/**
+  \brief Defines the model to show or hide the drugs only used for interaction testing only.
+  Calling this causes a model reset.
+*/
+void mfDrugsModel::showTestingDrugs(bool state)
+{
+   if (state) {
+       foreach( mfDrugs *drug, d->m_TestingDrugsList) {
+            if (!d->m_DrugsList.contains(drug))
+                d->m_DrugsList << drug;
+        }
+        d->m_TestingDrugsList.clear();
+    } else {
+        foreach( mfDrugs *drug, d->m_DrugsList) {
+            if (!drug->prescriptionValue(Prescription::OnlyForTest).toBool())
+                continue;
+            if (!d->m_TestingDrugsList.contains(drug))
+                d->m_TestingDrugsList << drug;
+            d->m_DrugsList.removeOne(drug);
+        }
+    }
+    d->m_ShowTestingDrugs = state;
+    d->m_InteractionsManager->setDrugsList(d->m_DrugsList);
+    checkInteractions();
+    reset();
+}
+
+bool mfDrugsModel::testingDrugsAreVisible() const
+{
+    return d->m_ShowTestingDrugs;
 }
 
 /** \brief Returns the dosage model for the selected drug */
@@ -595,17 +666,25 @@ mfDosageModel *mfDrugsModel::dosageModel( const QModelIndex &drugIndex )
     return dosageModel( drugIndex.data().toInt() );
 }
 
+mfInteractionsManager *mfDrugsModel::currentInteractionManger() const
+{
+    return d->m_InteractionsManager;
+}
+
 /** \brief Removes a drug from the prescription */
 int mfDrugsModel::removeDrug( const int _CIS )
 {
     // Take care that this function removes all occurence of the referenced drug
     d->m_LastDrugRequiered = 0;
+    d->m_InteractionsManager->clearDrugsList();
     int i = 0;
     foreach( mfDrugs * drug, d->m_DrugsList ) {
         if ( drug->CIS() == _CIS ) {
             d->m_DrugsList.removeAt( d->m_DrugsList.indexOf(drug) );
             delete drug;
             ++i;
+        } else {
+            d->m_InteractionsManager->addDrug(drug);
         }
     }
     checkInteractions();
@@ -621,6 +700,7 @@ int mfDrugsModel::removeLastInsertedDrug()
     d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
+    d->m_InteractionsManager->removeLastDrug();
     delete d->m_DrugsList.last();
     d->m_DrugsList.removeLast();
     checkInteractions();
@@ -641,5 +721,5 @@ void mfDrugsModel::warn()
 /** \brief Starts the interactions checking */
 void mfDrugsModel::checkInteractions() const
 {
-    mfDrugsBase::instance()->interactions( d->m_DrugsList );
+    d->m_InteractionsManager->checkInteractions();
 }

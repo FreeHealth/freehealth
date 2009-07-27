@@ -46,6 +46,7 @@
 #include <drugsmodel/mfDosageModel.h>
 class mfDrugsIO;
 class mfDrugsModelPrivate;
+class mfInteractionsManager;
 
 // include Qt headers
 #include <QAbstractTableModel>
@@ -53,8 +54,8 @@ class mfDrugsModelPrivate;
 /**
  * \file mfDrugsModel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.12
- * \date 07 July 2009
+ * \version 0.0.13
+ * \date 23 July 2009
 */
 
 class mfDrugsModel : public QAbstractTableModel
@@ -62,9 +63,6 @@ class mfDrugsModel : public QAbstractTableModel
     Q_OBJECT
     friend class mfDosageModel;
     friend class mfDrugsIO;
-
-    mfDrugsModel( QObject * parent = 0 );
-
 public:
     enum PrescriptionDeserializer {
         AddPrescription,
@@ -72,23 +70,26 @@ public:
         ReplacePrescription
     };
 
-    static mfDrugsModel *instance();
+    mfDrugsModel( QObject * parent = 0 );
     ~mfDrugsModel();
 
     // MODEL FUNCTIONS
     QModelIndex index( int row, int column, const QModelIndex & drugParent = QModelIndex() ) const;
 
+    // GETTING DATAS
     int rowCount( const QModelIndex & = QModelIndex() ) const;
     int columnCount( const QModelIndex & = QModelIndex() ) const           { return Drug::MaxParam; }
     bool removeRows( int row, int count, const QModelIndex & parent = QModelIndex() );
     bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
     QVariant data( const QModelIndex & index, int role ) const;
-    static QVariant drugData( const int CIS, const int column );
+    QVariant drugData( const int CIS, const int column );
     bool setDrugData( const int CIS, const int column, const QVariant &value);
     void resetModel();
     Qt::ItemFlags flags( const QModelIndex & index ) const;
 
-    // ADDING DRUGS / PRESCRIPTION
+    bool prescriptionHasInteractions();
+
+    // ADD / REMOVE DRUGS
     void setDrugsList( QDrugsList & list );
     const QDrugsList & drugsList() const;
     void clearDrugsList();
@@ -103,9 +104,14 @@ public:
     bool moveUp( const QModelIndex & item );
     bool moveDown( const QModelIndex & item );
 
+    // FILTERS
+    void showTestingDrugs(bool state);
+    bool testingDrugsAreVisible() const;
+
     // FOR DOSAGE MANAGEMENT
     mfDosageModel *dosageModel( const int _CIS );
     mfDosageModel *dosageModel( const QModelIndex & drugIndex );
+    mfInteractionsManager *currentInteractionManger() const;
 
     void warn();
 
@@ -119,7 +125,6 @@ protected:
     virtual void checkInteractions() const;
 
 private:
-    static mfDrugsModel *m_Instance;
     mfDrugsModelPrivate *d;
 };
 

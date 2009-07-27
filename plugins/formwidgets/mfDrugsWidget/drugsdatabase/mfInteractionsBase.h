@@ -38,47 +38,50 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDOSAGECREATORDIALOG_H
-#define MFDOSAGECREATORDIALOG_H
+#ifndef MFINTERACTIONSBASE_H
+#define MFINTERACTIONSBASE_H
 
-// include drugwidget headers
-class mfDosageModel;
-class mfDosageCreatorDialogPrivate;
+// include drugswidget headers
+class mfDrugs;
+class mfDrugInteraction;
+
+// include toolkit headers
+#include <tkDatabase.h>
 
 // include Qt headers
-#include <QtGlobal>
-QT_BEGIN_NAMESPACE
-class QDataWidgetMapper;
-QT_END_NAMESPACE
-
-// include Ui
-#include "ui_mfDosageCreatorDialog.h"
+#include <QList>
+#include <QObject>
 
 /**
- * \file mfDosageDialog.h
+ * \file mfInteractionsBase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 24 March 2009
+ * \version 0.0.2
+ * \date 24 July 2009
 */
 
-class mfDosageCreatorDialog : public QDialog, public Ui::mfDosageCreatorDialog
+class mfInteractionsBasePrivate;
+
+class mfInteractionsBase : public tkDatabase
 {
-    Q_OBJECT
-    Q_DISABLE_COPY( mfDosageCreatorDialog );
-
 public:
-    explicit mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel );
-    ~mfDosageCreatorDialog();
+    mfInteractionsBase(QObject *parent = 0);
+    ~mfInteractionsBase();
 
-private Q_SLOTS:
-    void done( int r );
-    void on_saveButton_clicked();
-    void on_prescribeButton_clicked();
-    void on_saveAndPrescribeButton_clicked();
-    void on_helpButton_clicked();
+    // INITIALIZER
+    virtual bool init();
+    bool isInitialized() const;
+    virtual void logChronos( bool state );
+
+    // link to mfDrugsBase
+    virtual int getInnCodeForCodeMolecule(const int code) const = 0;
+    virtual QList<int> getLinkedIamCode( QList<int> & code_subst ) const = 0;
+    virtual QString   getInnDenomination( const int inncode ) const = 0;
+
+    // Interactions base
+    QList<mfDrugInteraction*> calculateInteractions( const QList<mfDrugs*> & drugs );
 
 private:
-    mfDosageCreatorDialogPrivate *d;
+    mfInteractionsBasePrivate *d_interactions;
 };
 
-#endif // MFDOSAGECREATORDIALOG_H
+#endif   // MFINTERACTIONSBASE_H

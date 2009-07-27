@@ -59,33 +59,19 @@
   2. Drugs retreiver\n
   You can retreive drugs using CIS ou CIP code via getDrugByCIS() and getDrufByCIP().
 
-  3. Drugs Interactions\n
-  Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
-  getLastIAMFound() and getAllIAMFound().
-  You must always in first call interactions() with the list of drugs to test.
-  Then you can retreive interactions found using the other members.
-
-  4. Dosages retreiver / saver
+  3. Dosages retreiver / saver
 
   \todo Manage user rights when creating dosage database
 
-  \sa mfDrugInteraction, mfDrugs, mfDrugsTables, mfDrugDosage, database_structure
+  \sa database_structure
   \ingroup drugsinteractions drugswidget
 */
 
 #include "mfDrugsBase.h"
 
-// include freemedforms headers
-#ifndef DRUGS_INTERACTIONS_STANDALONE
-#    include <mfSettings.h>
-#    include <mfCore.h>
-#endif
-
 //include drugswidget headers
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDrugInteraction.h>
-//#include <drugsmodel/mfDosage.h>
-#include <drugswidget/mfDrugInfo.h>
 
 // include toolkit headers
 #include <tkGlobal.h>
@@ -121,7 +107,6 @@ public:
     mfDrugsBasePrivate( mfDrugsBase * base );
     ~mfDrugsBasePrivate()
     {
-        qDeleteAll(m_DrugInteractionList);
     }
     // connections creator
     bool createConnections( const QString & path, const QString & db, const QString & dbName, bool readwrite );
@@ -132,20 +117,13 @@ public:
     // private members for interactions
     QStringList getIamClassDenomination( const int & code_subst );
     QSet<int> getAllInnAndIamClassesIndex(const int code_subst);
-    bool checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugs );
-    mfDrugInteraction * getIAM( const int & _id1, const int & _id2 );
 
 public:
     // These variables are used or speed improvments and database protection
     QHash<int, QString>       m_IamDenominations;       /*!< INN and class denominations */
     QMultiHash< int, int >    m_Lk_iamCode_substCode;   /*!< Link Iam_Id to Code_Subst */
     QMultiHash< int, int >    m_Lk_classCode_iamCode;   /*!< Link ClassIam_Id to Iam_Id */
-    QMap<int, int>            m_Iams;                   /*!<  All possible interactions based on Iam_Ids */
-    QMultiMap< int, int>      m_IamFound;               /*!< modified by checkDrugInteraction() */
 
-    // cached datas for speed improvments
-    QList<mfDrugInteraction*>             m_DrugInteractionList;      /*!< First filled by interactions()*/
-    QMap<int, mfDrugInteraction* >        m_Map_CIS_DrugInteraction;  /*!< idem */
     mfDrugsBase * m_DrugsBase;
     bool m_LogChrono;
 };
@@ -175,7 +153,7 @@ mfDrugsBase *mfDrugsBase::instance()
    \private
 */
 mfDrugsBase::mfDrugsBase( QObject *parent )
-        : tkDatabase( parent ), d(0)
+        : mfInteractionsBase(parent), d(0)
 {
     Q_ASSERT_X( tkSettings::instance(), "mfDrugsBase", "You MUST instanciate tkSettings BEFORE mfDrugsBase" );
     d = new mfDrugsBasePrivate( this );
@@ -250,14 +228,10 @@ bool mfDrugsBase::init()
 
      QString pathToDb = "";
 
-#ifdef DRUGS_INTERACTIONS_STANDALONE
      if (tkGlobal::isRunningOnMac())
          pathToDb = tkSettings::instance()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME); //QDir::cleanPath( qApp->applicationDirPath() + "/../Resources" );
      else
          pathToDb = tkSettings::instance()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME); //QDir::cleanPath( qApp->applicationDirPath() );
-#else
-     pathToDb = QDir::cleanPath( mfCore::settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) );
-#endif
 
      if (tkGlobal::isDebugCompilation()) {
          // This is the debug mode of drugsinteractions ==> use global_resources
@@ -276,6 +250,7 @@ bool mfDrugsBase::init()
                        tkDatabase::ReadWrite, tkDatabase::SQLite, "log", "pas", tkDatabase::CreateDatabase);
 
      d->retreiveLinkTables();
+     mfInteractionsBase::init();
      m_initialized = true;
      return true;
 }
@@ -287,6 +262,7 @@ bool mfDrugsBase::init()
 void mfDrugsBase::logChronos( bool state )
 {
     d->m_LogChrono = state;
+    mfInteractionsBase::logChronos(state);
 }
 
 /**
@@ -523,7 +499,7 @@ void mfDrugsBasePrivate::retreiveLinkTables()
           }
      }
 
-     // TODO release these to files from resources to limit memory usage
+     /** \todo release these resources files to limit memory usage */
 
      QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
      if ( !DB.isOpen() )
@@ -542,6 +518,8 @@ void mfDrugsBasePrivate::retreiveLinkTables()
          else
              tkLog::addQueryError( m_DrugsBase, q );
      }
+
+
      /*
           // get m_Lk_iamCode_substCode : link table for iamCode <-> codeSubst
           {
@@ -576,23 +554,11 @@ void mfDrugsBasePrivate::retreiveLinkTables()
                     qWarning() << q.lastError().driverText() << q.lastError().databaseText() << q.lastQuery();
           }
      */
+ }
 
-     // retreive iams into m_Iams for speed improvments
-     {
-          QList<int> fields;
-          fields << IAM_ID1 << IAM_ID2;
-          QString req = m_DrugsBase->select( Table_IAM, fields );
-
-          QSqlQuery q( req , DB );
-          if ( q.isActive() )
-               while ( q.next() )
-                    m_Iams.insertMulti( q.value( 0 ).toInt(), q.value( 1 ).toInt() );
-     }
-
-}
 
 /** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> mfDrugsBase::getLinkedCodeSubst( QList<int> & code_iam )
+QList<int> mfDrugsBase::getLinkedCodeSubst( QList<int> & code_iam ) const
 {
     QList<int> toReturn;
     foreach( int i, code_iam )
@@ -601,7 +567,7 @@ QList<int> mfDrugsBase::getLinkedCodeSubst( QList<int> & code_iam )
 }
 
 /** \brief Return the list of the INN code linked to the substances code \e code_subst. */
-QList<int> mfDrugsBase::getLinkedIamCode( QList<int> & code_subst )
+QList<int> mfDrugsBase::getLinkedIamCode( QList<int> & code_subst ) const
 {
     QList<int> toReturn;
     foreach( int i, code_subst )
@@ -640,7 +606,7 @@ bool mfDrugsBase::drugsINNIsKnown( const mfDrugs * drug )
 }
 
 //--------------------------------------------------------------------------------------------------------
-//----------------------------------------- Retreive drugs from database ---------------------------------
+//-------------------------------- Retreive drugs from database ------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** \brief Returns the name of the INN for the substance code \e code_subst. */
 QString mfDrugsBase::getInnDenominationFromSubstanceCode( const int code_subst )
@@ -651,7 +617,7 @@ QString mfDrugsBase::getInnDenominationFromSubstanceCode( const int code_subst )
      return d->m_IamDenominations.value(d->m_Lk_iamCode_substCode.key(code_subst));
 }
 
-QString mfDrugsBase::getInnDenomination( const int inncode )
+QString mfDrugsBase::getInnDenomination( const int inncode ) const
 {
      return d->m_IamDenominations.value(inncode);
 }
@@ -688,7 +654,7 @@ QSet<int> mfDrugsBasePrivate::getAllInnAndIamClassesIndex(const int code_subst)
 }
 
 /** \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule. */
-int mfDrugsBase::getInnCodeForCodeMolecule(const int code)
+int mfDrugsBase::getInnCodeForCodeMolecule(const int code) const
 {
     if (d->m_Lk_iamCode_substCode.values().contains(code))
         return d->m_Lk_iamCode_substCode.key(code);
@@ -808,317 +774,3 @@ mfDrugs * mfDrugsBase::getDrugByCIS( const QVariant &CIS_id )
      return toReturn;
 }
 
-//--------------------------------------------------------------------------------------------------------
-//---------------------------------------- Managing drugs interactions -----------------------------------
-//--------------------------------------------------------------------------------------------------------
-/** \brief Return the interaction's state of a \e drug when prescribed in association with \e drugList. */
-bool mfDrugsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugsList )
-{
-     QTime t;
-     t.start();
-
-     if (drug->numberOfInn() == 0)
-         return false;
-
-//     const QList<int> &drug_iams = drug->allInnAndIamClasses();
-//     QList<int> d_iams;
-     const QSet<int> &drug_iams = drug->allInnAndIamClasses();
-     QSet<int> d_iams;
-     foreach( mfDrugs * drug2, drugsList ) {
-          if ( drug2 == drug )
-              continue;
-          foreach( const int i, drug2->allInnAndIamClasses()) {
-              if (d_iams.contains(i))
-                  continue;
-              d_iams << i;//drug2->allInnAndIamClasses().toSet();
-          }
-     }
-
-     foreach( int s, d_iams ) {
-         foreach( int s2, drug_iams )  {
-             // foreach iam subst/class test existing interactions with *drug
-             if ( m_Iams.keys( s ).contains( s2 ) )
-                 if ( ( ! m_IamFound.contains( s2, s ) ) && ( ! m_IamFound.contains( s, s2 ) ) )
-                     m_IamFound.insertMulti( s2, s );
-
-//             Not necessary because interactions are "mirrored" in the database
-//             if ( m_Iams.keys( s2 ).contains( s ) )
-//                 if ( ( ! m_IamFound.contains( s2, s ) ) && ( ! m_IamFound.contains( s, s2 ) ) )
-//                     m_IamFound.insertMulti( s, s2 );
-
-             // test same molecules
-             if ( ( s > 999 ) && ( s2 > 999 ) && ( s == s2 ) )
-                 if ( ! m_IamFound.contains( s, -1 ) )
-                     m_IamFound.insertMulti( s, -1 );
-         }
-     }
-
-     if (m_LogChrono)
-         tkLog::logTimeElapsed(t, "mfDrugsBase", QString("checkDrugInteraction : %1 ; %2")
-                           .arg(drug->denomination()).arg(drugsList.count()) );
-
-//      qWarning() << "checkDrugInteraction" << m_IamFound;
-     if ( m_IamFound.count() != 0 )
-         return true;
-     return false;
-}
-
-/**
-  \brief Return the interaction's state of a prescription represented by a list of mfDrugs \e drugs.
-  Clear all actual interactions found.\n
-  Check interactions drug by drug \sa mfDrugsBasePrivate::checkDrugInteraction()\n
-  Retreive all interactions from database \sa mfDrugsBase::getAllInteractionsFound()\n
-  Test all substances of drugs and all iammol and classes and create a cached QMap containing the CIS
-  of interacting drugs linked to the list of mfDrugInteraction.\n
-*/
-bool mfDrugsBase::interactions( const QList<mfDrugs*> & drugs )
-{
-     QTime t;
-     t.start();
-
-     // check all drugs in the list
-     // store IAM into cache members
-     bool toReturn = false;
-
-     // clear cached datas
-     qDeleteAll( d->m_DrugInteractionList );
-     d->m_DrugInteractionList.clear();
-     d->m_Map_CIS_DrugInteraction.clear();
-     d->m_IamFound.clear();
-
-     // check interactions drug by drug
-     foreach( mfDrugs * drug, drugs )
-          d->checkDrugInteraction( drug, drugs );
-//          if (!d->checkDrugInteraction( drug, drugs )
-//               toReturn = true;
-
-     // prepare cached datas
-     getAllInteractionsFound();
-//      qWarning() << "mfDrugsBase::interactions" << "drugs=" << drugs.count()
-//      << "IAM=" << m_DrugInteractionList.count() <<  m_IamFound.count();
-
-     int id1, id2, iam_subst;
-
-     // for each known drug interaction
-     foreach( mfDrugInteraction* di, d->m_DrugInteractionList ) {
-          id1 = di->value( IAM_ID1 ).toInt();
-          id2 = di->value( IAM_ID2 ).toInt();
-          // test all drugs in the list
-          foreach( mfDrugs * drg, drugs )  {
-               // test molecule by molecule
-              foreach( QVariant code_subst, drg->listOfCodeMolecules().toList()) { // ->value( Table_COMPO, COMPO_CODE_SUBST ).toList() ) {
-                    iam_subst = d->m_Lk_iamCode_substCode.key( code_subst.toInt() );
-                    const QList<int> & iam_class = d->m_Lk_classCode_iamCode.keys( iam_subst );
-
-                    // test iam_subst
-                    if (( id1 == iam_subst ) || ( id2 == iam_subst ) ) {
-                        d->m_Map_CIS_DrugInteraction.insertMulti( drg->value( Table_CIS, CIS_CIS ).toInt(), di );
-                        break;
-                    } else {
-                        // test all classes
-                        foreach( int c, iam_class ) {
-                            if (( id1 == c ) || ( id2 == c ) ) {
-                                d->m_Map_CIS_DrugInteraction.insertMulti( drg->value( Table_CIS, CIS_CIS ).toInt(), di );
-                                break;
-                            }
-                        }
-                    }
-                }
-           }
-      }
-     if (d->m_LogChrono)
-         tkLog::logTimeElapsed(t, "mfDrugsBase", QString("interactions() : %2 drugs")
-                           .arg(drugs.count()) );
-
-     return toReturn;
-}
-
-/**
- \brief Return the list of interactions of a selected \e drug. You must in first call interactions(),
-        otherwise you will have undesired behavior.
- \sa interactions()
-*/
-QList<mfDrugInteraction*> mfDrugsBase::getInteractions( const mfDrugs * drug )
-{
-     if ( d->m_IamFound.isEmpty() )
-          return d->m_DrugInteractionList;
-
-     if ( d->m_DrugInteractionList.isEmpty() )
-          return d->m_DrugInteractionList;
-
-     return d->m_Map_CIS_DrugInteraction.values( drug->value( Table_CIS, CIS_CIS ).toInt() );
-}
-
-/**
- \brief Return the list of interactions of a selected drug defined by its CIS code \e _CIS.
-        You must in first call interactions(), otherwise you will have undesired behavior.
- \sa interactions()
-*/
-QList<mfDrugInteraction*> mfDrugsBase::getInteractions( const int _CIS )
-{
-    if ( d->m_IamFound.isEmpty() )
-        return d->m_DrugInteractionList;
-
-    if ( d->m_DrugInteractionList.isEmpty() )
-        return d->m_DrugInteractionList;
-
-    return d->m_Map_CIS_DrugInteraction.values( _CIS );
-}
-
-/**
- \brief Return the maximum interaction type for a selected \e drug. You must in first call interactions(),
-        otherwise you will have undesired behavior.
- \sa interactions()
-*/
-Interaction::TypesOfIAM mfDrugsBase::getMaximumTypeOfIAM( const mfDrugs * drug )
-{
-     if ( d->m_IamFound.isEmpty() )
-          return Interaction::noIAM;
-
-     if ( d->m_DrugInteractionList.isEmpty() )
-          return Interaction::noIAM;
-
-     const QList<mfDrugInteraction*> & list
-     = d->m_Map_CIS_DrugInteraction.values( drug->value( Table_CIS, CIS_CIS ).toInt() );
-
-     Interaction::TypesOfIAM r;
-
-     foreach( mfDrugInteraction* di, list )
-         r |= di->type();
-
-     return r;
-}
-
-/**
- \brief Return true if the \e drug have interactions. You must in first call interactions(),
-        otherwise you will have undesired behavior.
- \sa interactions()
-*/
-bool mfDrugsBase::drugHaveInteraction(const  mfDrugs * drug )
-{
-     if ( d->m_IamFound.isEmpty() )
-          return false;
-     // if m_DrugInteractionList empty return it
-     if ( d->m_DrugInteractionList.isEmpty() )
-          return false;
-     return d->m_Map_CIS_DrugInteraction.values( drug->value( Table_CIS, CIS_CIS ).toInt() ).count() != 0;
-}
-
-/**
- \brief Retrieve from the database the interaction for drugs CIS : \e _id1 and \e _id2
- \sa interactions()
-*/
-mfDrugInteraction * mfDrugsBasePrivate::getIAM( const int & _id1, const int & _id2 )
-{
-    int id2 = _id2;
-    QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
-    if ( !DB.isOpen() )
-        DB.open();
-
-    mfDrugInteraction * di = 0;
-
-    // first test if IAM is an alert (value == -1)
-    if ( id2 == -1 ) {
-        di = new mfDrugInteraction();
-        di->setValue( IAM_TYPE , Interaction::Information );
-        di->setValue( IAM_ID1 , _id1 );
-        di->setValue( IAM_ID2 , _id1 );
-        di->setValue( IAM_TEXT_IAM , QCoreApplication::translate( "mfDrugsBase", "This INN is present more than one time in this prescrition." )  );
-        id2 = _id1;
-    } else {
-        // else retreive IAM from database
-        // construct where clause
-        QHashWhere where;
-        where.insert( IAM_ID1 , QString( "=%1" ).arg( _id1 ) );
-        where.insert( IAM_ID2 , QString( "=%1" ).arg( _id2 ) );
-
-        // get IAM table
-        QString req = m_DrugsBase->select( Table_IAM, where );
-//        mfDrugsTables::getQuery( conditions );
-        {
-            QSqlQuery q( req , DB );
-            if ( q.isActive() ) {
-                if ( q.next() ) {
-                    di = new mfDrugInteraction();
-                    int i;
-                    for ( i = 0; i < IAM_MaxParam; ++i )
-                        di->setValue( i, q.value( i ) );
-                }
-            } else
-                tkLog::addQueryError( "mfDrugsBase", q );
-        }
-    }
-
-    // get denomination from iam_denomination where ID1 ID2
-    QHashWhere where;
-    where.insert( IAM_DENOMINATION_ID, QString( "IN ( %1, %2 )" ).arg( _id1 ).arg( id2 ) );
-    QString req = m_DrugsBase->select( Table_IAM_DENOMINATION, where );
-    {
-        QSqlQuery q( req , DB );
-        if ( q.isActive() )  {
-            while ( q.next() )  {
-                if ( _id1 == id2 )  {
-                    di->setValue( IAM_MAIN, q.value( 1 ) );
-                    di->setValue( IAM_INTERACTOR, q.value( 1 ) );
-                    break;
-                } else {
-                    if ( q.value( 0 ).toInt() == _id1 ) {
-                        di->setValue( IAM_MAIN, q.value( 1 ) );
-                    } else {
-                        di->setValue( IAM_INTERACTOR, q.value( 1 ) );
-                    }
-                }
-            }
-        }
-        else
-            tkLog::addQueryError( "mfDrugsBase", q );
-    }
-    return di;
-}
-
-/**
- \todo Return the last interaction founded after calling interactions().
- \sa interactions()
-*/
-mfDrugInteraction * mfDrugsBase::getLastInteractionFound()
-{
-     if ( d->m_IamFound.isEmpty() )
-          return 0;
-
-     if ( ! d->m_DrugInteractionList.isEmpty() )
-          return d->m_DrugInteractionList.at( 0 );
-
-     tkLog::addError( "mfDrugsBase", "ERROR : problem with mfDrugInteraction * mfDrugsBase::getLastInteractionFound" );
-
-     QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
-     if ( !DB.isOpen() )
-          DB.open();
-
-     return d->getIAM( d->m_IamFound.begin().key(), d->m_IamFound.begin().value() );
-}
-
-/**
- \brief Returns the list of all interactions founded by interactions()
- \sa interactions()
-*/
-QList<mfDrugInteraction*> mfDrugsBase::getAllInteractionsFound()
-{
-     // if no interactions were found : return empty list
-     if ( d->m_IamFound.isEmpty() )
-          return d->m_DrugInteractionList;
-
-     // if m_DrugInteractionList not empty return it
-     if ( ! d->m_DrugInteractionList.isEmpty() )
-          return d->m_DrugInteractionList;
-
-     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if ( !DB.isOpen() )
-          DB.open();
-
-     QMap<int, int>::const_iterator i = d->m_IamFound.constBegin();
-     while ( i != d->m_IamFound.constEnd() ) {
-          d->m_DrugInteractionList << d->getIAM( i.key(), i.value() );
-          ++i;
-     }
-     return d->m_DrugInteractionList;
-}

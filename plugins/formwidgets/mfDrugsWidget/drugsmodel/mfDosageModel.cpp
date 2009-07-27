@@ -63,8 +63,8 @@
 
 // including plugins headers
 #include <drugsmodel/mfDrugs.h>
-#include <drugsmodel/mfDosage.h>
 #include <drugsmodel/mfDrugsModel.h>
+#include <mfDrugsManager.h>
 
 // including toolkit headers
 #include <tkGlobal.h>
@@ -275,7 +275,7 @@ QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
         {
 //            qWarning() << QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString();
             if (!QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString().isEmpty())
-                return tkTheme::icon(MFDRUGS_ICONSEARCHDCI);
+                return tkTheme::icon(MFDRUGS_ICONSEARCHINN);
             return tkTheme::icon(MFDRUGS_ICONSEARCHCOMMERCIAL);
         }
     }
@@ -290,7 +290,7 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     userUuid = DOSAGES_DEFAULT_USER_UUID;
 #else
-    userUuid = tkUserModel::instance()->currentUserData(User::UserUuid).toString();
+    userUuid = tkUserModel::instance()->currentUserData(User::Uuid).toString();
 #endif
     int i;
     int createdRow;
@@ -382,7 +382,7 @@ bool mfDosageModel::setDrugCIS( const int _CIS )
         return true;
     m_CIS = _CIS;
     QString filter = QString("%1=%2").arg(record().fieldName(Dosage::CIS_LK)).arg(m_CIS);
-    int inn = mfDrugsModel::drugData(_CIS,Drug::MainInnCode).toInt();
+    int inn = DRUGMODEL->drugData(_CIS,Drug::MainInnCode).toInt();
     if (inn!=-1) {
         // add INN_LK
         QString innFilter = QString::number(inn);
@@ -391,7 +391,7 @@ bool mfDosageModel::setDrugCIS( const int _CIS )
         innFilter = QString("(%1) AND (%2='%3')")
                     .arg(innFilter)
                     .arg(record().fieldName(Dosage::InnLinkedDosage))
-                    .arg(mfDrugsModel::drugData(_CIS,Drug::MainInnDosage).toString());
+                    .arg(DRUGMODEL->drugData(_CIS,Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }        
 //    qWarning() << "filter" << filter;
@@ -443,7 +443,7 @@ QStringList mfDosageModel::isDosageValid( const int row )
 bool mfDosageModel::userCanRead()
 {
     //TODO --> test
-    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::UserDrugsRights ).toInt());
+    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
     return (r & User::ReadOwn) || (r & User::ReadAll);
 }
 
@@ -451,7 +451,7 @@ bool mfDosageModel::userCanRead()
 bool mfDosageModel::userCanWrite()
 {
     //TODO  --> test
-    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::UserDrugsRights ).toInt());
+    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
     return (r & User::WriteOwn) || (r & User::WriteAll);
 }
 #endif
@@ -462,8 +462,8 @@ bool mfDosageModel::userCanWrite()
 */
 void mfDosageModel::toPrescription(const int row)
 {
-    Q_ASSERT(mfDrugsModel::instance()->containsDrug(m_CIS));
-    mfDrugsModel *M = mfDrugsModel::instance();
+    Q_ASSERT(DRUGMODEL->containsDrug(m_CIS));
+    mfDrugsModel *M = DRUGMODEL;
     QHash<int,int> prescr_dosage;
     prescr_dosage.insert( Prescription::UsedDosage ,           Dosage::Uuid );
     prescr_dosage.insert( Prescription::IntakesFrom ,          Dosage::IntakesFrom );

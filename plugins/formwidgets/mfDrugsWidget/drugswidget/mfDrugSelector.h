@@ -70,9 +70,13 @@ class mfDrugSelector : public QWidget, private Ui::mfDrugSelector
 
 public:
     explicit mfDrugSelector( QWidget *parent = 0 );
+    void initialize();
+
     void setFont( const QFont & font );
     void setFocus(Qt::FocusReason r) { searchLine->setFocus(r); }
     void setFocus() { searchLine->setFocus(); }
+
+    void setSearchMethod(int method);
 
 public Q_SLOTS:
     void retranslateUi( const QString & );
@@ -83,7 +87,6 @@ Q_SIGNALS:
 
 private:
     void createDrugsHistoryActions();
-    void createActions();
     void createToolButtons();
     void createDrugModelView();
     void createINNModelView();
@@ -91,7 +94,6 @@ private:
 
 private Q_SLOTS:
     // models slots
-    void changeDrugsModelFilter();                          // slot called by toolbutton widget to change the search method of drugs
     void updateModel();                                     // slot called by lineedit to change searched name
     void on_drugsView_doubleClicked( const QModelIndex & ); // index of m_DrugsView
     void on_InnView_clicked( const QModelIndex & index );
@@ -100,8 +102,6 @@ private Q_SLOTS:
     void historyAct_triggered( QAction * action );
 
 private:
-    enum SearchMethod { SearchByName, SearchByMols, SearchByINN };
-
     // models
     QSqlTableModel *m_DrugsModel;
     QSqlTableModel *m_InnModel;
@@ -110,14 +110,12 @@ private:
     QToolButton  *m_SearchToolButton;      // toolbutton that goes to the searchline (left)
     QToolButton  *m_DrugsHistoricButton;   // toolbutton that goes to the searchline (right)
     QActionGroup *m_HistoryAct;
-    QAction      *searchCommercialAct, *searchMoleculeAct, *searchDCIAct;
-
 
     // filter for drugs model
     QString          m_filterModel;           // '__replaceit__' must be replaced by search text.
 
     // search method and history
-    SearchMethod     m_SearchMethod;          // prepared by member changeModelFilter when activating toolbutton
+    int    m_SearchMethod;              /*!< \sa mfDrugsConstants::SearchMethod */
 };
 
 #endif // MFDRUGSELECTOR_H

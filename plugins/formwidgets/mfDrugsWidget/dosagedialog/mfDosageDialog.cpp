@@ -45,6 +45,7 @@
 #include <drugsmodel/mfDosageModel.h>
 #include <drugsmodel/mfDrugsModel.h>
 #include <drugswidget/mfDrugInfo.h>
+#include <mfDrugsManager.h>
 
 // include toolkit
 #include <tkLog.h>
@@ -101,11 +102,11 @@ mfDosageDialog::mfDosageDialog( QWidget *parent )
     setObjectName( "mfDosageDialog" );
     d = new mfDosageDialogPrivate();
     setupUi(this);
-    innButton->setIcon( tkTheme::icon(MFDRUGS_ICONSEARCHDCI));
+    innButton->setIcon( tkTheme::icon(MFDRUGS_ICONSEARCHINN));
     setWindowTitle( tr( "Drug Dosage" ) + " - " + qApp->applicationName() );
 
     // make connections
-    connect( mfDrugsModel::instance(), SIGNAL(prescriptionResultChanged(const QString &)),
+    connect( DRUGMODEL, SIGNAL(prescriptionResultChanged(const QString &)),
              resultTextBrowser, SLOT(setPlainText(const QString &)));
 }
 
@@ -121,10 +122,10 @@ mfDosageDialog::~mfDosageDialog()
 */
 void mfDosageDialog::changeRow( const int CIS, const int drugRow )
 {
-    Q_ASSERT(mfDrugsModel::instance()->containsDrug(CIS));
+    Q_ASSERT(DRUGMODEL->containsDrug(CIS));
     d->m_CIS = CIS;
     d->m_DrugRow = drugRow;
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     dosageViewer->useDrugsModel(CIS, drugRow);
     innButton->setChecked(m->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
 
@@ -168,7 +169,7 @@ void mfDosageDialog::on_drugNameButton_clicked()
 /** \todo code this */
 void mfDosageDialog::on_innButton_clicked()
 {
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     m->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
     if (innButton->isChecked())
         drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());

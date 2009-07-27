@@ -38,74 +38,113 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSWIDGET_H
-#define MFDRUGSWIDGET_H
+#ifndef MFPRESCRIPTIONVIEWERMANAGER_H
+#define MFPRESCRIPTIONVIEWERMANAGER_H
 
-// include drugswidget headers
-class mfDrugsModel;
+#include <drugswidget/mfDrugsCentralWidget.h>
+#include <drugsmodel/mfDrugsModel.h>
+class mfInteractionsManager;
 
-// include toolkit headers
-#include <QButtonLineEdit.h>
-#include <tkSettings.h>
+#include <tkContext.h>
+#include <tkUniqueIdentifier.h>
 
-// include Qt headers
 #include <QWidget>
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
-
-#ifndef DRUGS_INTERACTIONS_STANDALONE
-#include <mfObject.h>
-#include <mfFormWidgetInterface.h>
-#include <mfAbstractWidget.h>
-#endif
-
+#include <QObject>
+#include <QAction>
+#include <QPointer>
 
 /**
- * \file mfDrugsWidget.h
+ * \file mfDrugsManager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 07 Jun 2009
+ * \version 0.0.5
+ * \date 23 July  2009
+ * \internal
 */
 
-#ifndef DRUGS_INTERACTIONS_STANDALONE
-class mfDrugsWidgetPlugin : public mfFormWidgetInterface
+class mfDrugsContext : public tkContext
 {
-    Q_OBJECT
-    Q_INTERFACES( mfBaseInterface mfFormWidgetInterface );
-
 public:
-    mfDrugsWidgetPlugin();
+    mfDrugsContext(mfDrugsCentralWidget *w) : tkContext(w), wgt(w) {}
 
-    QStringList   widgets() const;
-    bool          isContainer( const int idInStringList ) const;
-    mfAbstractWidget * getWidget( mfObject * mfo, mfAbstractWidget * parent = 0 ) const;
+    void setContext(QList<int> c) { ctx = c; }
+
+    QList<int> context() const { return ctx; }
+    QWidget *widget() { return wgt; }
+private:
+    mfDrugsCentralWidget *wgt;
+    QList<int> ctx;
 };
-#endif
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------ mfDrugsWidget implementation --------------------------------------
-//--------------------------------------------------------------------------------------------------------
-class mfDrugsWidget : public mfAbstractWidget
+
+class mfDrugsActionHandler : public QObject
 {
     Q_OBJECT
 public:
-    mfDrugsWidget( mfObject * mfo, mfAbstractWidget * parent );
-    ~mfDrugsWidget();
+    mfDrugsActionHandler(QObject *parent = 0);
+    virtual ~mfDrugsActionHandler() {}
+
+    void setCurrentView(mfDrugsCentralWidget *view);
+
+public Q_SLOTS:
+    void drugsModelChanged();
 
 private Q_SLOTS:
-    void updateObject( int val );
-    void updateWidget();
-    void retranslateUi( const QString & );
-    void createDefaultSettings( tkSettings *settings );
+    void moveUp();
+    void moveDown();
+    void sortDrugs();
+    void removeItem();
+    void clear();
+    void viewInteractions();
+    void listViewItemChanged();
+    void searchActionChanged(QAction *a);
+    void printPrescription();
+    void toogleTestingDrugs();
 
 private:
-    void createConnections();
+    bool canMoveUp();
+    bool canMoveDown();
+    void updateActions();
 
-private:
-    mfDrugsModel         *m_PrescriptionModel;
-    QString               m_iniPath;
-    bool                  m_WithPrescribing, m_WithPrinting;
+protected:
+    QAction *aAddRow;
+    QAction *aRemoveRow;
+    QAction *aDown;
+    QAction *aUp;
+    QAction *aSort;
+    QAction *aEdit;
+    QAction *aClear;
+    QAction *aViewInteractions;
+    QActionGroup *gSearchMethod;
+    QAction *aSearchCommercial;
+    QAction *aSearchMolecules;
+    QAction *aSearchInn;
+    QAction *aPrintPrescription;
+    QAction *aToogleTestingDrugs;
+
+    QPointer<mfDrugsCentralWidget> m_CurrentView;
 };
 
-#endif
+
+#define DRUGMODEL  mfDrugsManager::instance()->currentDrugsModel()
+
+class mfDrugsManager : public mfDrugsActionHandler
+{
+    Q_OBJECT
+public:
+    static mfDrugsManager *instance();
+    ~mfDrugsManager() {}
+
+    mfDrugsCentralWidget  *currentView() const;
+    mfDrugsModel          *currentDrugsModel() const { return currentView()->currentDrugsModel(); }
+    mfInteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+
+private Q_SLOTS:
+    void updateContext(tkContext *object);
+
+private:
+    mfDrugsManager(QObject *parent = 0);
+    static mfDrugsManager *m_Instance;
+};
+
+
+#endif // MFPRESCRIPTIONVIEWER_H

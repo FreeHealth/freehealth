@@ -42,9 +42,9 @@
 #define MFDRUGINTERACTION_H
 
 // include drugswidget headers
-#include "drugsdatabase/mfDrugsBase.h"
 #include <mfDrugsConstants.h>
 class mfDrugs;
+class mfInteractionsBase;
 
 // include Qt headers
 #include <QIcon>
@@ -56,14 +56,15 @@ using namespace mfInteractionsConstants;
 /**
  * \file mfDrugInteraction.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 29 April 2009
+ * \version 0.0.7
+ * \date 24 July 2009
 */
 
 
 class mfDrugInteraction : public QObject
 {
-    Q_OBJECT
+    friend class mfInteractionsBase;
+    friend class mfInteractionsBasePrivate;
 public:
     mfDrugInteraction( QObject * parent = 0 )  : QObject( parent )  { setObjectName( "mfDrugsInteraction"); }
     ~mfDrugInteraction() {}
@@ -74,13 +75,8 @@ public:
     static QString synthesisToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos );
     static QString typeToString( const int t );
 
-    // viewers
-    void warn() const;
-
-    // setters
-    void setValue( const int fieldref, const QVariant & value );
-
     // getters
+    QList<mfDrugs*> drugs() const;
     QVariant value( const int fieldref ) const;
     QString typeOfIAM( const int & t ) const;
     Interaction::TypesOfIAM type() const;
@@ -88,8 +84,23 @@ public:
     QString information() const;
     QString whatToDo() const;
 
+    // viewers
+    void warn() const;
+
+
+protected:
+    // setters
+    void setValue( const int fieldref, const QVariant & value ); // ajouter CIS1 CIS2
+    void addInteractingDrug(mfDrugs *drug)
+    {
+        Q_ASSERT(drug);
+        if (!m_InteractingDrugs.contains(drug))
+            m_InteractingDrugs << drug;
+    }
+
 private:
     QHash<int, QVariant> m_Infos;
+    QList<mfDrugs *> m_InteractingDrugs;
 };
 
 #endif

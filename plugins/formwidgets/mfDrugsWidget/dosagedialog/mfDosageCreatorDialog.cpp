@@ -57,6 +57,7 @@
 #include <drugsmodel/mfDosageModel.h>
 #include <drugsmodel/mfDrugsModel.h>
 #include <mfDrugsConstants.h>
+#include <mfDrugsManager.h>
 
 // include toolkit
 #include <tkLog.h>
@@ -156,7 +157,7 @@ mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *do
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
 
     // Drug informations
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     int CIS = dosageModel->drugCIS();
     drugNameLabel->setText( m->drugData(CIS, Drug::Denomination).toString() );
     QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
@@ -244,4 +245,11 @@ void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
 void mfDosageCreatorDialog::on_helpButton_clicked()
 {
     tkHelpDialog::showPage("prescrire.html");
+}
+
+void mfDosageCreatorDialog::on_testOnlyButton_clicked()
+{
+    DRUGMODEL->setDrugData(d->m_DosageModel->drugCIS(), Prescription::OnlyForTest, true);
+    dosageViewer->done(QDialog::Accepted);
+    done(QDialog::Accepted);
 }

@@ -137,7 +137,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>mfDosageViewer</class>
    <extends>QWidget</extends>
-   <header location="global">drugswidget/mfDosageViewer.h</header>
+   <header location="global">dosagedialog/mfDosageViewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

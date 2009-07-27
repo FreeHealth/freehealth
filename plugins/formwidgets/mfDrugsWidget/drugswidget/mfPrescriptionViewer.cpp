@@ -44,11 +44,15 @@
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDrugsModel.h>
 #include <drugswidget/mfDrugInfo.h>
-#include <drugswidget/mfDosageDialog.h>
 #include <drugswidget/mfInteractionDialog.h>
+#include <dosagedialog/mfDosageCreatorDialog.h>
+#include <dosagedialog/mfDosageDialog.h>
+#include <mfDrugsManager.h>
+
 #include <tkTheme.h>
 #include <tkLog.h>
 #include <tkActionManager.h>
+#include <tkContextManager.h>
 
 #include <QFileDialog>
 #include <QPrinter>
@@ -58,17 +62,9 @@
 using namespace mfDrugsConstants;
 Q_TK_USING_CONSTANTS
 
-namespace mfPrescriptionViewerPrivateConstants {
-    const char * const  A_VIEW_INTERACTIONS     = "actionViewInteractions";
-    const char * const  VIEW_INTERACTIONS_TEXT  = QT_TRANSLATE_NOOP("mfPrescriptionViewer", "View synthetic interactions");
-}
-
-using namespace mfPrescriptionViewerPrivateConstants;
-
 /** \brief Constructor. You must call initialize() after instanciation */
 mfPrescriptionViewer::mfPrescriptionViewer(QWidget *parent) :
-        QWidget(parent), saveAct(0), clearAct(0), printAct(0), removeAct(0),
-        moveUpAct(0), moveDownAct(0), sortAct(0), viewAct(0),
+        QWidget(parent),
         m_ToolBar(0)
 {
     setObjectName("mfPrescriptionViewer");
@@ -79,7 +75,6 @@ mfPrescriptionViewer::mfPrescriptionViewer(QWidget *parent) :
 void mfPrescriptionViewer::initialize()
 {
     createActionsAndToolbar();
-    createConnections();
     verticalLayout->insertWidget( 0, m_ToolBar );
     listView->setObjectName("mfPrescriptionListView");
     setListViewPadding( 5 );
@@ -109,84 +104,49 @@ void mfPrescriptionViewer::setListViewPadding( const int pad )
 /** \brief Creates actions and toolbar */
 void mfPrescriptionViewer::createActionsAndToolbar()
 {
-    m_ToolBar = new QToolBar( this );
-    m_ToolBar->setIconSize( QSize( 16, 16 ) );
-
     tkActionManager *am = tkActionManager::instance();
-    saveAct = am->action(A_FILE_SAVE);
-    m_ToolBar->addAction( saveAct );
+    tkCommand *cmd = 0;
+    // populate toolbar
+    m_ToolBar = new QToolBar(this);
+    m_ToolBar->setIconSize(QSize(16, 16));
 
-    printAct = am->action(A_FILE_PRINT);
-    m_ToolBar->addAction( printAct );
+    QStringList actionsToAdd;
+    actionsToAdd
+            << tkConstants::A_FILE_OPEN
+            << tkConstants::A_FILE_SAVE
+            << tkConstants::A_FILE_SAVEAS
+            << mfDrugsConstants::A_PRINT_PRESCRIPTION;
 
-    removeAct = new QAction( this );
-    removeAct->setIcon( tkTheme::icon( ICONREMOVE ) );
-    removeAct->setShortcut( QKeySequence::Delete );
-    m_ToolBar->addAction( removeAct );
+    foreach(const QString &s, actionsToAdd) {
+        cmd = am->command(s);
+        m_ToolBar->addAction(cmd->action());
+    }
 
-    clearAct = new QAction( this );
-    clearAct->setIcon( tkTheme::icon( ICONCLEAR ) );
-    clearAct->setShortcut( tr( "Ctrl+W" ) );
-    m_ToolBar->addAction( clearAct );
+    actionsToAdd.clear();
+    actionsToAdd
+            << tkConstants::A_LIST_CLEAR
+            << tkConstants::A_LIST_REMOVE
+            << tkConstants::A_LIST_MOVEDOWN
+            << tkConstants::A_LIST_MOVEUP
+            << tkConstants::A_LIST_SORT
+            ;
+    m_ToolBar->addSeparator();
+    foreach(const QString &s, actionsToAdd) {
+        cmd = am->command(s);
+        m_ToolBar->addAction(cmd->action());
+    }
+    m_ToolBar->addSeparator();
 
-    moveUpAct = new QAction( this );
-    moveUpAct->setIcon( tkTheme::icon( ICONMOVEUP ) );
-    moveUpAct->setShortcut( tr( "Ctrl+W" ) );
-    moveUpAct->setEnabled(false);
-    m_ToolBar->addAction( moveUpAct );
+    actionsToAdd.clear();
+    actionsToAdd
+            << mfDrugsConstants::A_TOOGLE_TESTINGDRUGS
+            << tkConstants::A_VIEW_INTERACTIONS;
 
-    moveDownAct = new QAction( this );
-    moveDownAct->setIcon( tkTheme::icon( ICONMOVEDOWN ) );
-    moveDownAct->setShortcut( tr( "Ctrl+W" ) );
-    moveDownAct->setEnabled(false);
-    m_ToolBar->addAction( moveDownAct );
-
-    sortAct = new QAction( this );
-    sortAct->setIcon( tkTheme::icon( ICONSORT ) );
-    sortAct->setShortcut( tr( "Ctrl+W" ) );
-    m_ToolBar->addAction( sortAct );
-
-    viewAct = new QAction( this );
-    viewAct->setIcon( tkTheme::icon( ICONEYES ) );
-    viewAct->setShortcut( tr( "Ctrl+W" ) );
-    viewAct->setToolTip( tr(VIEW_INTERACTIONS_TEXT) );
-    m_ToolBar->addAction( viewAct );
-
-    retranslateActions();
-}
-
-/** \brief creates all connections */
-void mfPrescriptionViewer::createConnections()
-{
-//    connect( printAct, SIGNAL(triggered()), this, SIGNAL(printTriggered()));
-//    connect( saveAct, SIGNAL(triggered()), this, SLOT(save()));
-//    connect( saveAct, SIGNAL(triggered()), this, SIGNAL(saveTriggered()));
-    connect( clearAct, SIGNAL(triggered()), this, SLOT(clearTriggered()));
-    connect( removeAct, SIGNAL(triggered()), this, SLOT(removeTriggered()));
-    connect( moveUpAct, SIGNAL( triggered() ), this, SLOT( moveUp() ) );
-    connect( moveDownAct, SIGNAL( triggered() ), this, SLOT( moveDown() ) );
-    connect( sortAct, SIGNAL( triggered() ), this, SLOT( sortDrugs() ) );
-    connect( viewAct, SIGNAL( triggered() ), this, SLOT( viewInteractions() ) );
-    connect( listView, SIGNAL(clicked(const QModelIndex &)),
-             this, SLOT(checkMovableItem(const QModelIndex &)));
-//    connect( listView, SIGNAL(activated(const QModelIndex &)), this, SLOT(showDosageDialog(const QModelIndex&)) );
-}
-
-/** \brief */
-void mfPrescriptionViewer::checkMovableItem( const QModelIndex & current)//, const QModelIndex & )
-{
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    mfDrugsModel *m = static_cast<mfDrugsModel*>(listView->model());
-    // test moveUp
-    if (current.row() >= 1)
-        moveUpAct->setEnabled(true);
-    else
-        moveUpAct->setEnabled(false);
-    // test moveDown
-    if (current.row() < (m->rowCount()-1))
-        moveDownAct->setEnabled(true);
-    else
-        moveDownAct->setEnabled(false);
+    foreach(const QString &s, actionsToAdd) {
+        cmd = am->command(s);
+        m_ToolBar->addAction(cmd->action());
+        m_ToolBar->addSeparator();
+    }
 }
 
 /** \brief Clears the prescription */
@@ -216,7 +176,7 @@ void mfPrescriptionViewer::moveUp()
     int row = listView->currentIndex().row();
     m->moveUp(listView->currentIndex());
     listView->setCurrentIndex( m->index(row-1,0) );
-    checkMovableItem( m->index(row-1,0) );
+//    checkMovableItem( m->index(row-1,0) );
 }
 
 /** \brief Move the selected drug down. */
@@ -227,7 +187,7 @@ void mfPrescriptionViewer::moveDown()
     int row = listView->currentIndex().row();
     m->moveDown(listView->currentIndex());
     listView->setCurrentIndex( m->index(row+1,0) );
-    checkMovableItem( m->index(row+1,0) );
+//     checkMovableItem( m->index(row+1,0) );
 }
 
 /** \brief Sorts the drugs of the prescription. \sa mfDrugsModel::sort() */
@@ -246,9 +206,11 @@ void mfPrescriptionViewer::showDrugInfo(const QModelIndex &item)
 /** \brief Opens the mfDosageDialog for the selected drug. */
 void mfPrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
-//    mfDosageDialog dialog(this, item.row(), 0 );
-    mfDosageDialog dialog(this);
-    dialog.exec();
+    int CIS = DRUGMODEL->index( item.row(), Drug::CIS ).data().toInt();
+    mfDosageDialog dlg(this);
+    dlg.changeRow(CIS,item.row());
+    dlg.exec();
+//    listView->repaint();
 }
 
 /** \brief Opens the mfInteractionDialog. */
@@ -270,17 +232,9 @@ void mfPrescriptionViewer::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         retranslateUi(this);
-        retranslateActions();
+//        retranslateActions();
         break;
     default:
         break;
     }
-}
-
-/** \brief Used for translations. \internal */
-void mfPrescriptionViewer::retranslateActions()
-{
-    removeAct->setToolTip( tr("Remove this drug") );
-    clearAct->setToolTip( tr("Clear this prescription") );
-    sortAct->setToolTip( tr("Sort this prescription") );
 }

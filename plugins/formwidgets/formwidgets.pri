@@ -13,10 +13,9 @@ DEFINES         *= PLUGIN_BUILD
 PRE_TARGETDEPS	*= $${PACKAGE_PWD}/freemedforms
 
 DESTDIR          = $${FMF_PLUGINS_DIR}
-LIBS            = -L$${PACKAGE_BUILD_PATH}
 mac:*-g++:LIBS  *= -Wl,-undefined,dynamic_lookup
 
 # ubuntu hardy/debian fix
 QMAKE_LFLAGS	-= -Wl,--no-undefined
 
-win32:LIBS           += -l$${FREEMEDFORMS}
+win32:LIBS      += -l$${FREEMEDFORMS}

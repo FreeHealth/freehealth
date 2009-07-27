@@ -61,8 +61,8 @@ mfDrugsPreferences::mfDrugsPreferences(QWidget *parent) :
     // configure tkRichTextEditors
     previewer = tkPrinter::previewer(this);
     userLayout->addWidget(previewer, 0,0);
-    ALDBefore->setTypes(tkRichTextEditor::Full|tkRichTextEditor::WithLoad|tkRichTextEditor::WithTables);
-    ALDAfter->setTypes(tkRichTextEditor::Full|tkRichTextEditor::WithLoad|tkRichTextEditor::WithTables);
+    ALDBefore->setTypes(tkRichTextEditor::Full|tkRichTextEditor::Full);
+    ALDAfter->setTypes(tkRichTextEditor::Full|tkRichTextEditor::Full);
     // set icons
     drugBoldButton->setIcon( tkTheme::icon(ICONBOLD) );
     drugUnderlineButton->setIcon( tkTheme::icon(ICONUNDERLINE) );

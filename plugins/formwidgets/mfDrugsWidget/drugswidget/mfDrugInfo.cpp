@@ -36,9 +36,12 @@
 #include "mfDrugInfo_p.h"
 
 // include drugswidget headers
-#include "drugsmodel/mfDrugs.h"
-#include "drugsmodel/mfDrugsModel.h"
-#include "drugsmodel/mfDrugInteraction.h"
+#include <drugsmodel/mfDrugs.h>
+#include <drugsmodel/mfDrugsModel.h>
+#include <drugsmodel/mfDrugInteraction.h>
+#include <drugsdatabase/mfDrugsBase.h>
+#include <interactionsmodel/mfInteractionsManager.h>
+#include <mfDrugsManager.h>
 
 // include toolkit headers
 #include <tkSettings.h>
@@ -136,7 +139,7 @@ void mfDrugInfo::setDrug( const int CIS )
 {
     d->m_CIS = CIS;
     // manage drugs informations
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     d->drugName->setText( m->drugData( d->m_CIS, Drug::Denomination ).toString() );
     d->knownMols->addItems( m->drugData( d->m_CIS, Drug::Molecules ).toStringList() ); //drug->listOfMolecules() );
     d->DCI->addItems( m->drugData( d->m_CIS, Drug::Inns ).toStringList() ); //drug->listOfInn() );
@@ -149,7 +152,8 @@ void mfDrugInfo::setDrug( const int CIS )
     d->listWidgetInteractions->clear();
     QString display;
     if ( m->drugData( d->m_CIS, Drug::Interacts ).toBool() ) { //mfDrugsBase::instance()->drugHaveInteraction( m_Drug ) ) {
-        d->m_InteractionsList = mfDrugsBase::instance()->getInteractions( m->drugData( d->m_CIS, Drug::CIS ).toInt() );
+        d->m_InteractionsList = mfDrugsManager::instance()->currentInteractionManager()->getAllInteractionsFound();
+//        d->m_InteractionsList = mfDrugsBase::instance()->getInteractions( m->drugData( d->m_CIS, Drug::CIS ).toInt() );
         // populate the listwidget with founded interactions
         foreach( mfDrugInteraction * di , d->m_InteractionsList ) {
             new QListWidgetItem( m->drugData( d->m_CIS, Interaction::Icon ).value<QIcon>(), di->header(), d->listWidgetInteractions );
@@ -168,7 +172,7 @@ void mfDrugInfoPrivate::on_listWidgetInteractions_itemSelectionChanged()
 
 void mfDrugInfoPrivate::on_butIAMSend_clicked()
 {
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     if ( m->drugsList().isEmpty() )
         return;
 
@@ -226,7 +230,7 @@ void mfDrugInfoPrivate::on_butIAMSend_clicked()
 
 void mfDrugInfoPrivate::on_butSendINN_clicked()
 {
-    mfDrugsModel *m = mfDrugsModel::instance();
+    mfDrugsModel *m = DRUGMODEL;
     // prepare message to send
     QString msg;
     tkSendMessage::typeOfMessage t;

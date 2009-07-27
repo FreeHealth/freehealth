@@ -41,6 +41,8 @@
 #ifndef MFPRESCRIPTIONVIEWER_H
 #define MFPRESCRIPTIONVIEWER_H
 
+#include <tkContext.h>
+#include <tkUniqueIdentifier.h>
 class mfDrugsModel;
 
 #include <QWidget>
@@ -53,8 +55,8 @@ class mfDrugsModel;
 /**
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 01 May 2009
+ * \version 0.0.7
+ * \date 22 July 2009
  * \brief
 */
 
@@ -84,22 +86,18 @@ protected:
 
 private:
     void createActionsAndToolbar();
-    void createConnections();
-    void retranslateActions();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void clearTriggered();
     void removeTriggered();
     void moveUp();
     void moveDown();
     void sortDrugs();
-    void checkMovableItem( const QModelIndex & current);//, const QModelIndex & );
     void showDrugInfo(const QModelIndex &item);
     void showDosageDialog(const QModelIndex &item);
     void viewInteractions();
 
 private:
-    QAction *saveAct, *clearAct, *printAct, *removeAct, *moveUpAct, *moveDownAct, *sortAct, *viewAct;
     QToolBar *m_ToolBar;               // drugslist widget's toolbar
 };
 

@@ -54,9 +54,9 @@
 
 // include drugswidget headers
 #include <drugsdatabase/mfDrugsBase.h>
-#include <drugsdatabase/mfDrugsBase_p.h>
 #include <drugsmodel/mfDrugInteraction.h>
 #include <drugsmodel/mfDosageModel.h>
+#include <interactionsmodel/mfInteractionsManager.h>
 
 // include toolkit headers
 #include <tkLog.h>
@@ -370,22 +370,6 @@ QString mfDrugs::mainInnDosage() const
             if ((compo->m_InnCode==main) && (compo->isTheActiveSubstance()))
                 return compo->innDosage();
     }
-//    if (d->m_COMPOValues.values(COMPO_IAM_DENOMINATION).count()==1) {
-//        toReturn = d->m_COMPOValues.value(COMPO_DOSAGE).toString();
-//        toReturn.replace(",00", "");
-//    }
-
-//    switch (d->m_Compositions.count())
-//    {
-//        case 1 : return d->m_Compositions.value(0)->innDosage();
-//        case 2 :
-//            {
-//                if (d->m_Compositions.value(0)->isLinkedWith(d->m_Compositions.value(1)))
-//                    return d->m_Compositions.value(0)->innDosage();
-//            }
-//        default : return QString();
-//    }
-//    return toReturn;
     return QString();
 }
 
@@ -412,13 +396,6 @@ QStringList mfDrugs::dosageOfMolecules() const
     // return the list of distinct know dosage in composition of the drug
     QStringList toReturn;
     QString tmp = "";
-//    foreach( const QVariant &q, d->m_COMPOValues.values( COMPO_DOSAGE ) ) {
-//        if ( tmp != q.toString() ) {
-//            toReturn << q.toString();
-//            tmp = q.toString();
-//        }
-//    }
-
     foreach(mfDrugComposition *compo, d->m_Compositions)
         toReturn << compo->dosage();
     return toReturn;
@@ -515,9 +492,12 @@ QString mfDrugs::drugsListToHtml( const QDrugsList & list )
 {
     QString msg;
 
-    // check interactions of the drugs list
-    mfDrugsBase *b = mfDrugsBase::instance();
-    b->interactions( list );
+//    // check interactions of the drugs list
+//    mfDrugsBase *b = mfDrugsBase::instance();
+//    b->interactions( list );
+    mfInteractionsManager * im = new mfInteractionsManager();
+    im->setDrugsList(list);
+    im->checkInteractions();
 
     // title
     msg = QString( "<html>\n"
@@ -534,14 +514,16 @@ QString mfDrugs::drugsListToHtml( const QDrugsList & list )
 
     foreach( mfDrugs* d, list ) {
         msg += d->toHtml() + "<br>\n\n";
-        if ( b->drugHaveInteraction( d ) ) {
-            const QList<mfDrugInteraction *> & listDI = b->getInteractions( d );
-            msg.append( mfDrugInteraction::listToHtml( listDI, true ) );
+        if ( im->drugHaveInteraction(d) ) {
+            const QList<mfDrugInteraction *> & listDI = im->getInteractions( d );
+            msg.append( im->listToHtml( listDI, true ) );
 
             msg.append( "<br></ul>" );
         }
     }
     msg.append( "</body>\n</html>\n" );
+
+    delete im;
 
     return msg;
 }
@@ -549,6 +531,7 @@ QString mfDrugs::drugsListToHtml( const QDrugsList & list )
 /**
   \brief Transform the prescription values to an understandable string.
   You can specify if you want an html formatted or plain text using \e toHtml
+  \sa  mfDrugs::prescriptionToHtml(), mfDrugs::prescriptionToPlainText()
 */
 QString mfDrugsPrivate::prescriptionToText( bool toHtml )
 {
@@ -684,11 +667,13 @@ bool mfDrugsPrivate::usesFromTo( const QString &from, QString &to, const int pre
     return false;
 }
 
+/** \brief Transform prescription model to a understandable text formatted in HTML */
 QString mfDrugs::prescriptionToHtml() const
 {
     return d->prescriptionToText(true);
 }
 
+/** \brief Transform prescription model to a understandable plain text */
 QString mfDrugs::prescriptionToPlainText() const
 {
     return d->prescriptionToText(false);
@@ -717,7 +702,7 @@ void mfDrugs::warn() const
     }
 }
 
-/** \brief Fro debugging purpose only. Warn all values of the drug. */
+/** \brief For debugging purpose only. Warn all values of the drug. */
 QString mfDrugs::warnText() const
 {
     if (!tkGlobal::isDebugCompilation())
@@ -739,6 +724,7 @@ QString mfDrugs::warnText() const
     return tmp;
 }
 
+/** \brief For debugging purpose only. Warn all values of the drug. */
 void mfDrugs::smallDrugWarn() const
 {
     if (!tkGlobal::isDebugCompilation())

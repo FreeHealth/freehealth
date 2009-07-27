@@ -43,14 +43,12 @@
 
 // include drugswidget headers
 #include <mfDrugsConstants.h>
+#include <drugsdatabase/mfInteractionsBase.h>
 class mfDrugs;
 class mfDrugInteraction;
 class mfDrugDosage;
 class mfDrugInfo;
 class mfDrugsBasePrivate;
-
-// include toolkit headers
-#include <tkDatabase.h>
 
 // include Qt headers
 #include <QVariant>
@@ -67,18 +65,17 @@ class mfDrugsBasePrivate;
 
 using namespace mfInteractionsConstants;
 
-class mfDrugsBase : public tkDatabase
+class mfDrugsBase : public mfInteractionsBase
 {
     Q_OBJECT
     mfDrugsBase( QObject *parent = 0 );
     bool init();
 
     friend class mfDrugsModel;
-    friend class mfPrescriptionModel;
     friend class mfDrugsBasePrivate;
     friend class mfDrugs;
-    friend class mfDrugInteraction;
     friend class mfDrugInfo;
+    friend class mfDrugInteraction;
 
 public:
     static mfDrugsBase *instance();
@@ -87,16 +84,16 @@ public:
     static bool isInitialized() { return m_initialized; }
     void checkDosageDatabaseVersion();
 
-    QList<int> getLinkedCodeSubst( QList<int> & code_iam );
-    QList<int> getLinkedIamCode( QList<int> & code_subst );
+    QList<int> getLinkedCodeSubst( QList<int> & code_iam ) const;
     QList<int> getLinkedSubstCode( const QString & iamDenomination );
-    int        getInnCodeForCodeMolecule(const int code);
+    QList<int> getLinkedIamCode( QList<int> & code_subst ) const ;
+    int        getInnCodeForCodeMolecule(const int code) const;
 
     mfDrugs * getDrugByCIP( const QVariant & CIP_id );
     mfDrugs * getDrugByCIS( const QVariant & CIS_id );
     int       getCISFromCIP( int CIP );
     QString   getInnDenominationFromSubstanceCode( const int code_subst );
-    QString   getInnDenomination( const int inncode );
+    QString   getInnDenomination( const int inncode ) const;
 
     void      logChronos( bool state );
 
@@ -109,15 +106,6 @@ public:
 
     // managins drugs
     bool         drugsINNIsKnown( const mfDrugs * drug );
-
-    // managing Interactions
-    bool interactions( const QList<mfDrugs*> & drugs );                 // must be called first
-    bool drugHaveInteraction( const mfDrugs * d );                      // must call first interactions()
-    Interaction::TypesOfIAM getMaximumTypeOfIAM( const mfDrugs * d );   // must call first interactions()
-    QList<mfDrugInteraction*> getInteractions( const mfDrugs * d );     // must call first interactions()
-    QList<mfDrugInteraction*> getInteractions( const int CIS );         // must call first interactions()
-    mfDrugInteraction * getLastInteractionFound();                      // must call first interactions()
-    QList<mfDrugInteraction*> getAllInteractionsFound();                // must call first interactions()
 
 private:
     bool createDatabase(  const QString & connectionName , const QString & dbName,

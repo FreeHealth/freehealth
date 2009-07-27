@@ -43,19 +43,20 @@
 // include drugswidget headers
 #include <drugsdatabase/mfDrugsBase.h>
 #include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugSelector.h>
 #include <drugswidget/mfDrugInfo.h>
-#include <drugswidget/mfDosageDialog.h>
-#include <drugswidget/mfDosageCreatorDialog.h>
-#include <drugswidget/mfPrescriptionViewer.h>
-#include <drugswidget/mfDrugsPreferences.h>
+#include <drugspreferences/mfDrugsPreferences.h>
+#include <drugswidget/mfDrugsCentralWidget.h>
 
 // include FreeMedForms headers
 #include <mfCore.h>
 #include <mfSettings.h>
 
 // include toolkit headers
+#include <tkGlobal.h>
 #include <tkTranslators.h>
+#include <tkActionManager.h>
+#include <tkConstantTranslations.h>
+#include <tkTheme.h>
 
 // include Qt headers
 #include <QStringList>
@@ -78,10 +79,13 @@ namespace mfDrugsWidgetPluginsPrivateConstants {
 
 using namespace mfDrugsWidgetPluginsPrivateConstants;
 
+Q_TK_USING_CONSTANTS;
+Q_TK_USING_TRANSLATIONS;
+
 //using namespace mfDrugsConstants;
 //using namespace mfDosagesConstants;
 //using namespace mfInteractionsConstants;
-//
+
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget plugin interface ------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -120,11 +124,7 @@ mfAbstractWidget * mfDrugsWidgetPlugin::getWidget( mfObject * mfo, mfAbstractWid
 //--------------------------------------------------------------------------------------------------------
 mfDrugsWidget::mfDrugsWidget( mfObject * mfo, mfAbstractWidget * parent )
           : mfAbstractWidget( mfo, parent ),
-          m_DrugSelector(0),
-          m_DrugPrescriptor(0),
-          m_PrescriptionView(0),
-          m_PrescriptionModel(0),
-          m_DosageDialog(0)
+          m_PrescriptionModel(0)
 {
     // Add Translator to the Application
     mfCore::translators()->addNewTranslator( "mfDrugsWidget" );
@@ -157,27 +157,15 @@ mfDrugsWidget::mfDrugsWidget( mfObject * mfo, mfAbstractWidget * parent )
         mfDrugsPreferences::writeDefaultSettings(mfCore::settings());
 
     // create main widget
-    QWidget * wgt = new QWidget(this);
-    QGridLayout * grid = new QGridLayout( wgt );
-    grid->setSpacing(0);
-    grid->setMargin(0);
-    m_DrugSelector = new mfDrugSelector( this );
-
-    // create model view for selected drugs list
-    m_PrescriptionModel = mfDrugsModel::instance();
-    m_PrescriptionView = new mfPrescriptionViewer( this );
-    m_PrescriptionView->setModel( m_PrescriptionModel );
-    m_PrescriptionView->setModelColumn( Drug::FullPrescription );
-
-    grid->addWidget( m_DrugSelector, 0, 0 );
-    grid->addWidget( m_PrescriptionView , 2, 0);
-
-    hb->addWidget( wgt );
+    m_PrescriptionModel = new mfDrugsModel(this);
+    mfDrugsCentralWidget *centralWidget = new mfDrugsCentralWidget(this);
+    centralWidget->initialize();
+    hb->addWidget(centralWidget);
 
     createConnections();
 
-    changeFontTo( QFont(mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONT ).toString(),
-                        mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
+    centralWidget->changeFontTo( QFont(mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONT ).toString(),
+                                 mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
 
     // Connect list selection changed with mfObject value changed
     //      connect( m_Combo, SIGNAL( activated ( int ) ),
@@ -207,45 +195,12 @@ void mfDrugsWidget::createConnections()
     //    connect( am->action(A_DEBUGHELPER), SIGNAL( triggered() ), this, SLOT( debugDialog() ) );
     //    connect( am->action(A_CONFIG_MEDINTUX), SIGNAL( triggered() ), this, SLOT( configureMedinTux() ) );
     //
-    connect( m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( on_selector_drugSelected(const int) ) );
     //    connect( m_PrescriptionView, SIGNAL(printTriggered()), this, SLOT(printPrescription()));
-    connect( m_PrescriptionView->listview(), SIGNAL(activated(const QModelIndex &)), this, SLOT(showDosageDialog(const QModelIndex&)) );
 }
 
 void mfDrugsWidget::createDefaultSettings( tkSettings *settings )
 {
     mfDrugsPreferences::writeDefaultSettings(settings);
-}
-
-
-void mfDrugsWidget::on_selector_drugSelected( const int CIS )
-{
-    // if exists dosage for that drug show the dosageSelector widget
-    // else show the dosage creator widget
-
-    int drugPrescriptionRow = m_PrescriptionModel->addDrug( CIS );
-    if (!m_DosageDialog)
-        m_DosageDialog = new mfDosageDialog( this, drugPrescriptionRow, 0 );
-    else
-        m_DosageDialog->changeRow(drugPrescriptionRow,0);
-    int r = m_DosageDialog->exec();
-    if ( r == QDialog::Rejected )
-        m_PrescriptionModel->removeLastInsertedDrug();
-}
-
-void mfDrugsWidget::showDosageDialog(const QModelIndex &item)
-{
-    if (!m_DosageDialog)
-        m_DosageDialog = new mfDosageDialog( this, item.row(), 0 );
-    else
-        m_DosageDialog->changeRow( item.row(),0) ;
-    m_DosageDialog->exec();
-}
-
-void mfDrugsWidget::changeFontTo( const QFont &font )
-{
-    m_DrugSelector->setFont(font);
-    m_PrescriptionView->listview()->setFont(font);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -260,8 +215,6 @@ void mfDrugsWidget::updateWidget()
     //      connect( m_Combo,  SIGNAL( activated ( int ) ),
     //               this ,    SLOT  ( updateObject( int ) ) );
 }
-
-
 
 void mfDrugsWidget::updateObject( int )
 {

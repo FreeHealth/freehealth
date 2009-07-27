@@ -38,15 +38,26 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+   \class mfInteractionDialog
+   \brief Show a dialog that presents the synthesis of interactions.
+   Result can be printed.
+*/
+
 #include "mfInteractionDialog.h"
 
 #ifdef DRUGS_INTERACTIONS_STANDALONE
 #include <diCore.h>
+#include "diPatient.h"
 #endif
 
+// include drugswidget headers
 #include <drugsmodel/mfDrugsModel.h>
 #include <mfDrugsConstants.h>
+#include <mfDrugsManager.h>
 
+// include toolkit headers
 #include <tkTheme.h>
 #include <tkSettings.h>
 #include <tkPrinter.h>
@@ -63,7 +74,7 @@ mfInteractionDialog::mfInteractionDialog(QWidget *parent) :
     setObjectName("mfInteractionDialog");
     printButton->setIcon( tkTheme::icon(ICONPRINT) );
     setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
-    textBrowser->setHtml( mfDrugsModel::instance()->index(0, Interaction::FullSynthesis).data().toString() );
+    textBrowser->setHtml( DRUGMODEL->index(0, Interaction::FullSynthesis).data().toString() );
 //    textBrowser->setHtml( mfDrugsModel::instance()->prescriptionToHtml() );
 }
 
@@ -75,29 +86,20 @@ void mfInteractionDialog::on_helpButton_clicked()
 
 void mfInteractionDialog::on_printButton_clicked()
 {
+    /** \todo add functionnality to FMF */
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     tkPrinter p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
     QString header = tkSettings::instance()->value( MFDRUGS_SETTING_USERHEADER ).toString();
-    tkGlobal::replaceToken(header, TOKEN_PATIENTNAME, diCore::patientName() );
+    diCore::patient()->replaceTokens(header);
     tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    tkGlobal::replaceToken(header, TOKEN_WEIGHT, diCore::patientWeight() );
-    tkGlobal::replaceToken(header, TOKEN_SIZE, diCore::patientSize() );
-    tkGlobal::replaceToken(header, TOKEN_DATEOFBIRTH, diCore::patientDateOfBirth() );
-    tkGlobal::replaceToken(header, TOKEN_CLCR, diCore::patientClCr() );
-//    p.setHeader( header , tkPrinter::FirstPageOnly );
     p.setHeader( header );
-    p.setFooter( diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString() );
-//    p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-//                        tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-//                        tkPrinter::EachPages,
-//                       Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
-//                        Qt::AlignCenter );
-//    p.setContent( mfDrugsModel::instance()->prescriptionToHtml() );
-//    p.previewDialog(this);
-//    p.printWithDuplicata(true);
-//    qWarning() << mfDrugsModel::instance()->prescriptionToHtml();
+    header = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(tr("Made with DrugsInteractions.")));
+    p.setFooter( header );
+    p.addTextWatermark(tr("Made with DrugsInteractions."), tkPrinter::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
     p.print( textBrowser->toHtml() );
 #endif
 }

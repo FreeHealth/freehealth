@@ -51,10 +51,39 @@
 */
 namespace mfDrugsConstants
 {
+    // Menu and action for ActionManager
+    const char * const  DRUGCONSTANTS_TR_CONTEXT = "mfDrugsConstants";
+    const char * const  M_PLUGINS_DRUGS         =  "DrugsPlugins.menuDrugs";
+    const char * const  M_PLUGINS_SEARCH        =  "DrugsPlugins.menuSearch";
+    const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.groupDrugs";
+    const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.groupSearch";
+    const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
+    const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
+    const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
+    const char* const   A_SEARCH_MOLECULES      = "a.DrugsPlug.SearchMol";
+    const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
+    const char* const   A_PRINT_PRESCRIPTION    = "a.DrugsPlug.PrintPrescr";
+    const char* const   A_TOOGLE_TESTINGDRUGS   = "a.DrugsPlug.ToogleTestings";
+    const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
+    const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search method");
+    const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");
+    const char* const   SEARCHINN_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by INN");
+    const char* const   SEARCHMOLECULES_TEXT    = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by molecules");
+    const char* const   PRINTPRESCRIPTION_TEXT  = QT_TRANSLATE_NOOP("mfDrugsConstants", "Print prescription");
+    const char* const   TOOGLETESTINGDRUGS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toogle testing drugs");
+
+    // Search Method
+    enum SearchMethod {
+        SearchCommercial = 0,
+        SearchMolecules,
+        SearchInn
+    };
+
+
+
     // Settings names
     const char * const  MFDRUGS_SETTING_GROUP                  = "DrugsWidget";                              /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                   /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_RUNNINGVERSION         = "DrugsWidget/RunningVersion";               /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
@@ -101,9 +130,10 @@ namespace mfDrugsConstants
 #endif
 
     // ICONS
+    const char * const  ICONTOOGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
     const char * const  MFDRUGS_ICONSEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
     const char * const  MFDRUGS_ICONSEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
-    const char * const  MFDRUGS_ICONSEARCHDCI =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
+    const char * const  MFDRUGS_ICONSEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
 
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
@@ -115,11 +145,12 @@ namespace mfDrugsConstants
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // TEXT COMPLETION
-    const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";
-    const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";
-    const char * const  TOKEN_WEIGHT       ="WEIGHT";
-    const char * const  TOKEN_SIZE         ="SIZE";
-    const char * const  TOKEN_CLCR         ="CLCR";
+    const char * const  TOKEN_PATIENTAGE   ="AGE";                         /*!< /brief Tokens for diPatient::replaceTokens() */
+    const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";                      /*!< /brief Tokens for diPatient::replaceTokens() */
+    const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";                      /*!< /brief Tokens for diPatient::replaceTokens() */
+    const char * const  TOKEN_WEIGHT       ="WEIGHT";                      /*!< /brief Tokens for diPatient::replaceTokens() */
+    const char * const  TOKEN_SIZE         ="SIZE";                      /*!< /brief Tokens for diPatient::replaceTokens() */
+    const char * const  TOKEN_CLCR         ="CLCR";                      /*!< /brief Tokens for diPatient::replaceTokens() */
     const char * const  TOKEN_DATE         ="DATE";
 
     // HTML PREPARERS
@@ -287,6 +318,7 @@ namespace Prescription
         Id = 1200,
         UsedDosage,
         CIP,
+        OnlyForTest,
         IntakesFrom,
         IntakesTo,
         IntakesScheme,
