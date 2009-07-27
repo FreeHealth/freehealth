@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>formSample</name>
+	<label lang="en">Drugs' Widget plugin</label>
+	<label lang="fr">Élément de formulaire : médicaments</label>
+	<type>form</type>
+	<version>0.1</version>
+	<cdate>2008-10-16</cdate>
+	<categorie>samples</categorie>
+	
+	<MedForm>
+		<name>sampleDrugs</name>
+		<label lang="en">Drugs Widget plugin example</label>
+                <label lang="fr">Plugin médicaments N°1</label>
+		<type>drugs</type>
+	</MedForm>
+        <MedForm>
+                <name>sampleDrugs2</name>
+                <label lang="en">Drugs Widget plugin example</label>
+                <label lang="fr">Plugin médicaments N°2</label>
+                <type>drugs</type>
+        </MedForm>
+</MedForm>

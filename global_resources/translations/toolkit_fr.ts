@@ -131,59 +131,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>tkActionManager</name>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="545"/>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="577"/>
-        <source>%1 default menu can not be created into %2, because %2 does not exists.</source>
-        <translation>%1 menu par défaut ne peut pas être créé dans %2 car %2 n&apos;existe pas.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="785"/>
-        <source>Alt+Shift+D</source>
-        <comment>Shortcut keysequence for default menu About, action Debugging Tools</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="964"/>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="979"/>
-        <source>Can not add Action %1 : Group does not exist %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="983"/>
-        <source>Can not add Action %1 : Action Id already used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1005"/>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1018"/>
-        <source>Can not set Text to Action %1 : Action does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1033"/>
-        <source>Can not set ToolTip to Action %1 : Action does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1048"/>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1062"/>
-        <source>Can not set Icon to Action %1 : Action does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1076"/>
-        <source>Can not set EnabledState to Action %1 : Action does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/objects/tkActionManager.cpp" line="1088"/>
-        <source>POTENTIAL FATAL ERROR : An error occured into tkActionManager::objectToBeDestroyed : object passed does not exists</source>
-        <translation>ERREUR FATALE POTENTIELLE : Une erreur est survenue dans tkActionManager::objectToBeDestroyed : l&apos;objet passé n&apos;existe pas</translation>
-    </message>
-</context>
-<context>
     <name>tkConstants</name>
     <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="123"/>
@@ -206,261 +153,260 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="128"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="132"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="129"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="133"/>
         <source>Plugins</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="130"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="134"/>
         <source>Configuration</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="131"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="135"/>
         <source>Toolbars</source>
         <translation>Boîtes à outils</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="132"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="136"/>
         <source>Languages</source>
         <translation>Langages</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="133"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="179"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="137"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="200"/>
         <source>Interpretor</source>
         <translation>Interpréteur</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="135"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="139"/>
         <source>Update available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="138"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="142"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="139"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="143"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="140"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="144"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="141"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="145"/>
         <source>Save as</source>
         <translation>Sauvegarder sous</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="142"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="146"/>
         <source>Print...</source>
         <translation>Imprimer...</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="143"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="147"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="144"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="153"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="145"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="147"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="156"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="146"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="155"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="148"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="157"/>
         <source>Undo</source>
         <translation>Défaire</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="149"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="158"/>
         <source>Redo</source>
         <translation>Refaire</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="150"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="159"/>
         <source>Select All</source>
         <translation>Sélectionner tout</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="151"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="160"/>
         <source>Deselect</source>
         <translation>Désélectionner</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="152"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="161"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="153"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="162"/>
         <source>Previous</source>
         <translation>Précédent</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="154"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="163"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="155"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="164"/>
         <source>Add to list</source>
         <translation>Ajouter à la liste</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="156"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="165"/>
         <source>Remove of list</source>
         <translation>Enlever de la liste</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="157"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="166"/>
         <source>Move item up</source>
         <translation>Monter l&apos;item</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="158"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="167"/>
         <source>Move item down</source>
         <translation>Descendre l&apos;item</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="159"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="170"/>
         <source>Bold</source>
         <translation>Gras</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="160"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="171"/>
         <source>Italic</source>
         <translation>Italic</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="161"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="172"/>
         <source>Underline</source>
         <translation>Souligner</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="162"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="173"/>
         <source>Strike</source>
         <translation>Barré</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="163"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="174"/>
         <source>Bigger</source>
         <translation>Plus grand</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="164"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="175"/>
         <source>Smaller</source>
         <translation>Plus petit</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="165"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="176"/>
         <source>Font format</source>
         <translation>Format de police</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="166"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="178"/>
         <source>Table format</source>
         <translation>Format du tableau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="167"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="179"/>
         <source>Image format</source>
         <translation>Format de l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="168"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="180"/>
         <source>Center</source>
         <translation>Centrer</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="169"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="181"/>
         <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="170"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="182"/>
         <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="171"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="183"/>
         <source>Justify</source>
         <translation>Justifier</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="180"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="201"/>
         <source>User manager</source>
         <translation>Gestionnaire de utilisateurs</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="173"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="194"/>
         <source>About Qt</source>
         <translation>À propos de Qt</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="174"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="195"/>
         <source>About this form</source>
         <translation>À propos de ce formulaire</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="175"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="178"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="196"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="199"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="176"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="197"/>
         <source>Debugging tools</source>
         <translation>Outils de déboggage</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="177"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="198"/>
         <source>Display/Hide form&apos;s help text</source>
         <translation>Afficher/cacher les textes d&apos;aide des formulaires</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="181"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="202"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="182"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="204"/>
         <source>View update informations</source>
-        <translation>Voir les informations de déboggage</translation>
+        <translation>Voir les informations de mise à jour</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="183"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="205"/>
         <source>Print Preview</source>
         <translation>Prévisulisation de l&apos;impression</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="184"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="206"/>
         <source>Translators</source>
         <translation>Traducteurs</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="134"/>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="172"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="138"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="193"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
@@ -470,279 +416,526 @@ p, li { white-space: pre-wrap; }
         <translation>Éditer</translation>
     </message>
     <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="128"/>
+        <source>Font</source>
+        <translation>Police de caractères</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="129"/>
+        <source>Paragraph</source>
+        <translation>Paragraphes</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="130"/>
+        <source>Table</source>
+        <translation>Tableau</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="131"/>
+        <source>Image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="149"/>
+        <source>Open a prescription</source>
+        <translation>Ouvrir une prescription</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="150"/>
+        <source>Save a prescription</source>
+        <translation>Sauvegarder une prescription</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="151"/>
+        <source>Print a prescription</source>
+        <translation>Imprimer la prescription</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="154"/>
+        <source>Copy</source>
+        <translation>Copier</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="168"/>
+        <source>Clear</source>
+        <translation>Effacer</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="169"/>
+        <source>Sort</source>
+        <translation>Trier</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="177"/>
+        <source>Color</source>
+        <translation>Couleur</translation>
+    </message>
+    <message>
         <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="185"/>
+        <source>Add table</source>
+        <translation>Ajouter un tableau</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="186"/>
+        <source>Add row</source>
+        <translation>Ajouter une ligne</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="187"/>
+        <source>Remove row</source>
+        <translation>Enlever une ligne</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="188"/>
+        <source>Add colunm</source>
+        <translation>Ajouter une colonne</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="189"/>
+        <source>Remove column</source>
+        <translation>Enlever une colonne</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="190"/>
+        <source>Merge cells</source>
+        <translation>Fusionner les cellules</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="191"/>
+        <source>Split cells</source>
+        <translation>Eclater la cellule</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="203"/>
+        <source>Configure MedinTux</source>
+        <translation>Configurer MedinTux</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="207"/>
         <source>Toogle full screen</source>
         <translation>Mettre/sortir du mode plein écran</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="191"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="211"/>
+        <source>View synthetic interactions</source>
+        <translation>Voir la synthèse des interactions</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="214"/>
         <source>second(s)</source>
         <translation>seconde(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="192"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="215"/>
         <source>minute(s)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="193"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="216"/>
         <source>hour(s)</source>
         <translation>heure(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="194"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="217"/>
         <source>day(s)</source>
         <translation>jour(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="195"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="218"/>
         <source>week(s)</source>
         <translation>semaine(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="196"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="219"/>
         <source>month(s)</source>
         <translation>mois</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="197"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="220"/>
         <source>quarter(s)</source>
         <translation>trimestre(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="198"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="221"/>
         <source>years(s)</source>
         <translation>année(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="199"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="222"/>
         <source>decade(s)</source>
         <translation>décade(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="202"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="225"/>
         <source>wake up</source>
         <translation>lever</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="203"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="226"/>
         <source>morning</source>
         <translation>matin</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="204"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="227"/>
         <source>ten o&apos;clock</source>
         <translation>dix heures</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="205"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="228"/>
         <source>afternoon</source>
         <translation>après-midi</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="206"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="229"/>
         <source>tea time</source>
         <translation>goûter</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="207"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="230"/>
         <source>evening</source>
         <translation>soir</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="208"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="231"/>
         <source>bedtime</source>
         <translation>coucher</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="211"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="234"/>
         <source>no meal realation</source>
         <translation>sans relation avec le repas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="212"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="235"/>
         <source>during meal</source>
         <translation>pendant le repas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="213"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="236"/>
         <source>after meal</source>
         <translation>après le repas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="214"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="237"/>
         <source>before meal</source>
         <translation>avant le repas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="215"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="238"/>
         <source>not during meal</source>
         <translation>en dehors de repas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="218"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="241"/>
+        <source>Using library : %1</source>
+        <translation>Utilise la librairie : %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="242"/>
+        <source>Starting application at %1</source>
+        <translation>Démarre l&apos;application %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="243"/>
+        <source>Getting settings file...</source>
+        <translation>Récupère les paramètres utilisateurs...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="244"/>
+        <source>Initializing Translations...</source>
+        <translation>Intialise les traductions...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="245"/>
+        <source>Initializing libraries...</source>
+        <translation>Initialise les librairies...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="246"/>
+        <source>Needed Licence Agreement...</source>
+        <translation>Acceptation de la license requise...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="247"/>
+        <source>Checking directory structure...</source>
+        <translation>Vérifie la structure du répertoire...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="248"/>
+        <source>Initializing Default Parameters...</source>
+        <translation>Initialise les paramètres par défaut...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="249"/>
+        <source>Initializing Plugins...</source>
+        <translation>Initialise les plugins...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="250"/>
+        <source>First time running</source>
+        <translation>Premier démarrage</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="251"/>
+        <source>Settings recovered</source>
+        <translation>Paramètres récupérés</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="252"/>
+        <source>This feature is not yet implemented.</source>
+        <translation>Cette fonctionnalité n&apos;est pas encore disponible.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="253"/>
+        <source>Raising Application...</source>
+        <translation>Application au premier plan...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="254"/>
+        <source>Checking for updates...</source>
+        <translation>Vérifie les mises à jour...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="255"/>
+        <source>Initializing databases...</source>
+        <translation>Initialise les bases de données...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="258"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="219"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="259"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="220"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="260"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="221"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="261"/>
         <source>File %1 loaded</source>
         <translation>Fichier %1 chargé</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="222"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="262"/>
         <source>Message sended without error.</source>
         <translation>Message envoyé sans erreur.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="223"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="263"/>
         <source>An error occured, message was not sended.</source>
         <translation>Une erreur est survenue, le message n&apos;a pas été envoyé.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="224"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="264"/>
         <source>Informative message : %1</source>
         <translation>Information : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="225"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="265"/>
         <source>Starting task : %1</source>
         <translation>Débute la tâche : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="226"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="266"/>
         <source>posting message to : %1</source>
         <translation>envoie le message à : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="227"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="267"/>
         <source>Error %1 occured while %2</source>
         <translation>l&apos;Erreur %1 est survenue durant %2</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="228"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="268"/>
         <source>Can not create %1 : it already exists</source>
         <translation>Impossible de créer %1 : il existe déjà</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="229"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="269"/>
         <source>Can not return %1 : it does not exists</source>
         <translation>Impossible de retourner %1 : il n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="230"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="270"/>
         <source>Can not create %1 : no parent founded</source>
         <translation>Impossible de créer %1 : aucun parent trouvé</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="231"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="271"/>
         <source>%1 is not avaible</source>
         <translation>%1 n&apos;est pas disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="232"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="272"/>
         <source>%1 is not avaible and can not be created</source>
         <translation>%1 n&apos;est pas disponible et ne peut pas être créé</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="233"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="273"/>
         <source>%1 are not avaible</source>
         <translation>%1 ne sont pas disponibles</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="234"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="274"/>
         <source>Path %1 does not exist</source>
         <translation>Le chemin %1 n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="235"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="275"/>
         <source>File %1 does not exist</source>
         <translation>Fichier %1 n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="236"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="276"/>
         <source>File %1 is not readable</source>
         <translation>Fichier %1 n&apos;est pas accessible en lecture</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="237"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="277"/>
         <source>Setting %1 path to %2</source>
         <translation>Définit le répertoire de %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="238"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="278"/>
         <source>Checking for updates from %1</source>
         <translation>Vérifie les mises à jour depuis %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="239"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="279"/>
         <source>Version up to date</source>
         <translation>Version à jour</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="240"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="280"/>
         <source>Current version :</source>
         <translation>Version courante :</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="241"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="281"/>
         <source>Lastest version :</source>
         <translation>Dernière version :</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="242"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="282"/>
         <source>Update Available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="243"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="283"/>
         <source>Error %1 from database %2</source>
         <translation>L&apos;erreur %1 est survenue depuis la base de données %2</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="244"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="284"/>
         <source>Creating default settings for %1</source>
         <translation>Création des paramètres par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="247"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="285"/>
+        <source>No object to translate</source>
+        <translation>Pas d&apos;objet à traduite</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="288"/>
         <source>Creator and Main Developper</source>
         <translation>Créateur et développeur principal</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="248"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="289"/>
         <source>Developpers and Contributors</source>
         <translation>Développeurs et contributeurs</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="249"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="290"/>
         <source>Drugs Database Management</source>
         <translation>Gestionnaire de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="250"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="291"/>
         <source>Medical advisor</source>
         <translation>Conseiller médical</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="253"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="294"/>
         <source>Patient Name</source>
         <translation>Nom du patient</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="188"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="298"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="306"/>
+        <source>Ctrl+L</source>
+        <extracomment>Text Align Left shortcut key
+----------
+Text Align Left shortcut key : Mac specific</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="300"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="308"/>
+        <source>Ctrl+R</source>
+        <extracomment>Text Align Right shortcut key
+----------
+Text Align Right shortcut key : Mac specific</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="302"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="310"/>
+        <source>Ctrl+E</source>
+        <extracomment>Text Align Center shortcut key
+----------
+Text Align Center shortcut key : Mac specific</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="304"/>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="312"/>
+        <source>Ctrl+J</source>
+        <extracomment>Text Align Justify shortcut key
+----------
+Text Align Justify shortcut key : Mac specific</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="315"/>
+        <source>Ctrl+Shift+T</source>
+        <extracomment>Add table Editor shortcut key</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstantTranslations.h" line="210"/>
         <source>intake(s)</source>
         <translation>prise(s)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/listview/tkListView.cpp" line="86"/>
+        <source>List viewer</source>
+        <translation>Visualisateur de liste</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstants.h" line="296"/>
+        <source>Toogle toolbar</source>
+        <translation>Barre d&apos;outils</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstants.h" line="297"/>
+        <source>Open in editor</source>
+        <translation>Ouvrir dans l&apos;éditeur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstants.h" line="298"/>
+        <source>Save editor</source>
+        <translation>Sauvegarder l&apos;éditeur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/toolkit/objects/tkConstants.h" line="299"/>
+        <source>Rich Text Editor</source>
+        <translation>Éditeur de texte enrichi</translation>
     </message>
 </context>
 <context>
@@ -1035,17 +1228,17 @@ Using Url : %1
         <translation>Acceptez-vous les termes de la licence ?</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="595"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="597"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="600"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="602"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="943"/>
+        <location filename="../../libs/toolkit/objects/tkGlobal.cpp" line="946"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -1061,12 +1254,12 @@ Using Url : %1
 <context>
     <name>tkListView</name>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkListView.cpp" line="398"/>
+        <location filename="../../libs/toolkit/listview/tkListView.cpp" line="443"/>
         <source>tkListView can not add a row to the model %1</source>
         <translation>tkListView ne peut pas ajouter de ligne au modèle %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkListView.cpp" line="415"/>
+        <location filename="../../libs/toolkit/listview/tkListView.cpp" line="460"/>
         <source>tkListView can not remove row %1 to the model %2</source>
         <translation></translation>
     </message>
@@ -1229,138 +1422,19 @@ Ceci peut causer une utilisation intempestive du processeur.</translation>
 <context>
     <name>tkRichTextEditor</name>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="98"/>
-        <source>Open document into text editor</source>
-        <translation>Ouvrir un document dans cet éditeur</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="99"/>
-        <source>Save document of text editor</source>
-        <translation>Sauvegarder le contenu de cet éditeur</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="100"/>
-        <source>Rich Text Editor</source>
-        <translation>Éditeur de texte enrichi</translation>
-    </message>
-</context>
-<context>
-    <name>tkRichTextEditorPrivate</name>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="445"/>
-        <source>TextEditor Commands</source>
-        <translation>Commandes de l&apos;éditeur de texte</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="606"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkRichTextEditor.cpp" line="335"/>
         <source>HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)</source>
         <translation>Fichiers HTML (*.htm *.html);; Fichiers texte (*.txt);; Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="621"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkRichTextEditor.cpp" line="355"/>
         <source>HTML-Files (*.htm *.html);;All Files (*)</source>
         <translation>Fichiers HTML (*.htm *.html);; Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="638"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkRichTextEditor.cpp" line="372"/>
         <source>Font format</source>
         <translation>Format de police</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="803"/>
-        <source>This rich text editor is part of FreeMedForms Project. </source>
-        <translation>Cet éditeur de texte enrichi fait parti du projet FreeMedForms.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="993"/>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1012"/>
-        <source>&amp;Table</source>
-        <translation>&amp;Tableau</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="994"/>
-        <source>&amp;Color...</source>
-        <translation>&amp;Couleur...</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="996"/>
-        <source>Standard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="997"/>
-        <source>Bullet List (Disc)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="998"/>
-        <source>Bullet List (Circle)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="999"/>
-        <source>Bullet List (Square)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1000"/>
-        <source>Ordered List (Decimal)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1001"/>
-        <source>Ordered List (Alpha lower)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1002"/>
-        <source>Ordered List (Alpha upper)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1004"/>
-        <source>Context menu</source>
-        <translation>Menu contextuel</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1009"/>
-        <source>E&amp;xtras</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1013"/>
-        <source>Add a table</source>
-        <translation>Ajouter un tableau</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1014"/>
-        <source>Add a row</source>
-        <translation>Ajouter une ligne</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1015"/>
-        <source>Add a column</source>
-        <translation>Ajouter une colonne</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1016"/>
-        <source>Remove row(s)</source>
-        <translation>Enlever une ligne</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1017"/>
-        <source>Remove col(s)</source>
-        <translation>Enlever une colonne</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1018"/>
-        <source>Merge selected cells</source>
-        <translation>Fusionner les cellules sélectionnées</translation>
-    </message>
-    <message>
-        <location filename="../../libs/toolkit/widgets/tkRichTextEditor.cpp" line="1019"/>
-        <source>Split cell</source>
-        <translation>Exploser la cellule</translation>
     </message>
 </context>
 <context>
@@ -1375,328 +1449,328 @@ Ceci peut causer une utilisation intempestive du processeur.</translation>
 <context>
     <name>tkSettings</name>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="425"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="438"/>
         <source>Passing command line ini file : %1</source>
         <translation>Fichier de paramètres identifié dans la ligne de commande %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="434"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="447"/>
         <source>Using ini file %1.</source>
         <translation>Utilise le fichier de paramètres %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="438"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="451"/>
         <source>Ini file %1 is not writable. Can not use it.</source>
         <translation>Le fichier de paramètres %1 ne peut pas être écrit. Impossible de l&apos;utiliser.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="443"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="486"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="456"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="499"/>
         <source>Using ini file %1</source>
         <translation>Utilise le fichier de paramètres %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="447"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="460"/>
         <source>WARNING : Ini file %1 can not be used.</source>
         <translation>ATTENTION : fichier de paramètres %1 ne peut pas être utilisé.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="475"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="488"/>
         <source>Trying ini file %1</source>
         <translation>Essaie le fichier de paramètres %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="481"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="494"/>
         <source>Unable to create dir : %1, no Ini File can be used.</source>
         <translation>Impossible de créer le répertoire %1, aucun fichier de paramètres peut être utilisé.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="543"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="557"/>
         <source>System informations</source>
         <translation>Informations du système</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="544"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="558"/>
         <source>Operating System</source>
         <translation>Système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="545"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="559"/>
         <source>uname output</source>
         <translation>Sortie de uname</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="548"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="562"/>
         <source>Compilation informations</source>
         <translation>Informations de compilation</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="549"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="563"/>
         <source>Compilation Date</source>
         <translation>Date de compilation</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="550"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="564"/>
         <source>Compile Qt version</source>
         <translation>Version Qt de compilation</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="551"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="565"/>
         <source>Actual Qt version</source>
         <translation>Version actuelle de Qt</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="552"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="566"/>
         <source>Actual Application Version</source>
         <translation>Version de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="554"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="556"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="558"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="560"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="646"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="648"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="568"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="570"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="572"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="660"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="662"/>
         <source>Actual build</source>
         <translation>Version actuelle</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="554"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="568"/>
         <source>Debug</source>
         <translation>Version de déboggage</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="556"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="570"/>
         <source>Release</source>
         <translation>Version finale</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="558"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="572"/>
         <source>Full Application Build</source>
         <translation>Compilation de l&apos;application complète</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="560"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
         <source>Svn Build</source>
         <translation>Compilation du SVN</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="566"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="665"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="580"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="679"/>
         <source>Binary</source>
         <translation>Binaire</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="567"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="666"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="581"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="680"/>
         <source>Resources</source>
         <translation>Ressources</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="568"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="667"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="582"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="681"/>
         <source>Read only Databases</source>
         <translation>Base de données en lecture seule</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="569"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="668"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="583"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="682"/>
         <source>Writable databases</source>
         <translation>Base de données en écriture</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="570"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="669"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="584"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="683"/>
         <source>Bundle root path</source>
         <translation>Racine du paquet</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="571"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="670"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="585"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="684"/>
         <source>Translations path</source>
         <translation>Répertoire des traductions</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="572"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="671"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="586"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="685"/>
         <source>Qt Plugins path</source>
         <translation>Répertoire des plugins Qt</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="573"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="672"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="587"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="686"/>
         <source>Qt FrameWorks path</source>
         <translation>Répertoire du FrameWork Qt</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="574"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="673"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="588"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="687"/>
         <source>FreeMedForms PlugIns path</source>
         <translation>Répertoire des plugins de FreeMedForms</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="575"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="674"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="589"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="688"/>
         <source>SmallPixmapPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="576"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="675"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="590"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="689"/>
         <source>MediumPixmapPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="577"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="676"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="591"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="690"/>
         <source>BigPixmapPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="578"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="677"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="592"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="691"/>
         <source>SystemTempPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="579"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="678"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="593"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="692"/>
         <source>ApplicationTempPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="580"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="679"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="594"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="693"/>
         <source>FormsPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="581"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="680"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="595"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="694"/>
         <source>SampleFormsPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="582"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="681"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="596"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="695"/>
         <source>DocumentationPath</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="595"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="596"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="682"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="609"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="610"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="696"/>
         <source>WebSiteUrl</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="653"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="667"/>
         <source>Running on Linux</source>
         <translation>Utilisé sous Linux</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="654"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="668"/>
         <source>   uname returns : %1</source>
         <translation>   uname à retourné : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="657"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="671"/>
         <source>Running on MacOs</source>
         <translation>Utilisé sous MacOs</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="659"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="673"/>
         <source>Running on Windows</source>
         <translation>Utilisé sous WIndows</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="584"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="598"/>
         <source>Absolute Paths</source>
         <translation>Chemins abolus</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="585"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="588"/>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="651"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="599"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="602"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="665"/>
         <source>Using Ini File</source>
         <translation>Utilise le fichier de paramètres</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="587"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="601"/>
         <source>Relative Paths</source>
         <translation>Chemins relatifs</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="599"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="613"/>
         <source>Libs</source>
         <translation>Librairies</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="602"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="616"/>
         <source>Orphan settings</source>
         <translation>Paramètres orphelins</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="636"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="650"/>
         <source>Running version : %1
 </source>
         <translation>Version en cours : %1
 </translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="637"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="651"/>
         <source>Build date : %1 %2
 </source>
         <translation>Date de compilation : %1 %2
 </translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="638"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="652"/>
         <source>Qt Build version : %1
 </source>
         <translation>Version de Qt pour la compilation : %1
 </translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="639"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="653"/>
         <source>Qt running version : %1
 </source>
         <translation>Version courante de Qt : %1
 </translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="640"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="654"/>
         <source>Application Version : %1
 </source>
         <translation>Version de l&apos;application : %1
 </translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="642"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="656"/>
         <source>Actual build : Debug
 </source>
         <translation>Version de déboggage</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="644"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="658"/>
         <source>Actual build : Release
 </source>
         <translation>Version finale</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="646"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="660"/>
         <source>Full Application Build
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="648"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="662"/>
         <source>Svn Build
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="649"/>
+        <location filename="../../libs/toolkit/objects/tkSettings.cpp" line="663"/>
         <source>Application path : %1
 </source>
         <translation>Répertoire de l&apos;application : %1
@@ -1706,62 +1780,62 @@ Ceci peut causer une utilisation intempestive du processeur.</translation>
 <context>
     <name>tkTableDialog</name>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="23"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="23"/>
         <source>Table creation</source>
         <translation>Création de tableau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="42"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="42"/>
         <source>Rich Text Editor Table Creator</source>
         <translation>Création de tableau - Éditeur de texte enrichi</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="65"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="65"/>
         <source>Size of the table</source>
         <translation>Taille du tableau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="83"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="83"/>
         <source>Number of columns</source>
         <translation>Nombre de colonnes</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="143"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="143"/>
         <source>Number of rows</source>
         <translation>Nombre de lignes</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="200"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="200"/>
         <source>Format of the table</source>
         <translation>Format du tableau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="218"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="218"/>
         <source>Cell spacing</source>
         <translation>Espacement des cellules</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="272"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="272"/>
         <source>Cell padding</source>
         <translation>Espacement dans les cellules</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="326"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="326"/>
         <source>Border</source>
         <translation>Bordure</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="383"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="383"/>
         <source>Table headers</source>
         <translation>Entête de tableau</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="395"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="395"/>
         <source>You can define the first row as header. The table header row get repeated when a table is broken across a page boundary.</source>
         <translation>Vous pouvez définir la première ligne du tableau comme l&apos;entête. L&apos;entête de tableau est répétée lorsqu&apos;un tableau est imprimé sur plusieurs pages.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/widgets/tkTableDialog.ui" line="398"/>
+        <location filename="../../libs/toolkit/richtexteditor/tkTableDialog.ui" line="398"/>
         <source>Define the first row as header</source>
         <translation>Définir la première ligne comme entête de tableau</translation>
     </message>
@@ -1769,7 +1843,7 @@ Ceci peut causer une utilisation intempestive du processeur.</translation>
 <context>
     <name>tkTheme</name>
     <message>
-        <location filename="../../libs/toolkit/objects/tkTheme.cpp" line="220"/>
+        <location filename="../../libs/toolkit/objects/tkTheme.cpp" line="226"/>
         <source>ERROR - Theme : Unable to load icon file %1</source>
         <translation>ERREUR - Thème : impossible de charger l&apos;icône : %1</translation>
     </message>
@@ -1777,22 +1851,22 @@ Ceci peut causer une utilisation intempestive du processeur.</translation>
 <context>
     <name>tkTranslators</name>
     <message>
-        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="140"/>
+        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="145"/>
         <source>Can not load %1, path : %2</source>
         <translation>Impossible de charger %1, répertoire %2</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="177"/>
+        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="183"/>
         <source>Add Translator %1.</source>
         <translation>Ajout du traducteur %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="182"/>
+        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="188"/>
         <source>WARNING : Can not be loaded %1 or already loaded.</source>
         <translation>ATTENTION : %1 ne peut pas être chargé ou l&apos;est déjà.</translation>
     </message>
     <message>
-        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="224"/>
+        <location filename="../../libs/toolkit/objects/tkTranslators.cpp" line="230"/>
         <source>English</source>
         <translation>Français</translation>
     </message>
