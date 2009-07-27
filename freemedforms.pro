@@ -23,3 +23,5 @@ ProjectSettings {
     BUILDER = GNUMake
     COMPILER = G++
 }
+
+OTHER_FILES += update-fmf.txt

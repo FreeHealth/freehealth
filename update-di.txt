@@ -1,12 +1,26 @@
-version=0.0.8
+version=0.0.9
 {
     * Août 2009
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009
       * Interactions : AFSSAPS - 29/06/2009
 
-    * Schéma de prises personnels correctement enregistrés
-    * Corrections de la prescription DCI (plus efficace cf documentation)
+   * Nouvelles fonctionnalités :
+      * Gestion du fichier d'échange pour tout type d'application externe
+      * Possibilité d'ajouter des médicaments dans l'ordonnance uniquement à des fins de tests (ils ne seront
+        pas imprimés). Voir documentation.
+
+   * Modifications importantes :
+      * Correction du bug de récuépartion du texte des interactions (ils sont maintenant complets)
+      * Schéma de prises personnels correctement enregistrés
+
+    * Correction de bogues :
+      * Corrections de la prescription DCI (plus efficace cf documentation)
+      * Correction du crash sous MacOsX lorsque Qt4.5.2 est déjà installé
+      * Meilleure gestion des données patients (sauvegardées et chargeables)
+      * Nouvelle librairie pour les fonctions médicales pures
+      * Nouveau gestionnaire des actions et menus
+      * Refonte du moteur de recherche des interactions
 }
 
 version=0.0.8
@@ -16,7 +30,7 @@ version=0.0.8
       * Médicaments :  AFSSAPS - 26/06/2009
       * Interactions : AFSSAPS - 29/06/2009
 
-    * Nouvelles fonctionnalités
+    * Nouvelles fonctionnalités :
       * Prescription en DCI lorsque la DCI est connue (attention nécessite une vérification)
       * Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
       * Possibilité d'ajouter une prescription à une prescription en cours d'édition

@@ -5,13 +5,11 @@ version=0.0.8
     * A graphical user manager is available
     * Better management of databases
     * User interface can be thematized (icons for now)
-    * Dosage editor and drugs prescription is available
-    * Drugs database updated to AFSSAPS release of May 2009, interactions to Déc 2008
-    * Lots of improvments in DrugsWidget plugins (please see DrugsInteractions changelog)
+    * Drugs widget largely updated (please read update-di.txt)
     * New print engine with header, footer and watermark abilities
-    * MacOs X Universal binary
     * Toolkits librairies are now dynamic libs
     * Lots of speed improvments
+    * MacOs X Universal binary
     * Data saving still not available...
 }
 
