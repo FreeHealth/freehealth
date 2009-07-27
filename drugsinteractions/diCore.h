@@ -52,6 +52,7 @@
 
 // include drugsinteractions headers
 #include "diMainWindow.h"
+#include "diPatient.h"
 
 // include toolkit headers
 class tkSettings;
@@ -91,15 +92,9 @@ public:
     static mfDrugsModel *    drugsModel();
     static tkMedintuxConfiguration *medintuxConfiguration();
 
-    // Patient management
-    static QString & patientName();
-    static void setPatientName( const QString &name);
-    static QString & patientDateOfBirth();
-    static QString & patientAge();
-    static void setPatientDateOfBirth( const QString &date);
-    static QString & patientWeight();
-    static QString & patientSize();
-    static QString & patientClCr();
+    static diPatient *       patient();
+
+    static QString exchangeFileName();
 
 };
 

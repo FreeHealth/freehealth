@@ -55,18 +55,20 @@
 
 // including drugs plugins headers
 #include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugsPreferences.h>
+#include <drugspreferences/mfDrugsPreferences.h>
 #include <drugsdatabase/mfDrugsBase.h>
 #include <drugsmodel/mfDrugsIO.h>
+#include <mfDrugsManager.h>
 
 // including toolkit headers
 #include <tkGlobal.h>
 #include <tkLog.h>
 #include <tkTranslators.h>
 #include <tkSettings.h>
-//#include <tkSerialNumber.h>
 #include <tkUpdateChecker.h>
 #include <tkTheme.h>
+#include <tkActionManager.h>
+#include <tkContextManager.h>
 
 // including medintux toolkit headers
 #include <tkMedintuxConfiguration.h>
@@ -118,17 +120,17 @@ public:
             else if (arg.startsWith(COMMANDLINE_EXCHANGEFILE))
                 m_ExchangeFile = arg.mid( arg.indexOf("=") +1 ).remove("\"");
             else if (arg.contains(COMMANDLINE_PATIENTNAME)) {
-                m_PatientName = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::FullName, arg.mid( arg.indexOf("=") + 1 ).remove("\"") );
             } else if (arg.contains(COMMANDLINE_PATIENTDOB)) {
-                m_PatientDOB = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::DateOfBirth, arg.mid( arg.indexOf("=") + 1 ).remove("\""));
             } else if (arg.contains(COMMANDLINE_PATIENTWEIGHT)) {
-                m_PatientWeight = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::Weight, arg.mid( arg.indexOf("=") + 1 ).remove("\""));
             } else if (arg.contains(COMMANDLINE_PATIENTSIZE)) {
-                m_PatientSize = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::Size, arg.mid( arg.indexOf("=") + 1 ).remove("\""));
             } else if (arg.contains(COMMANDLINE_PATIENTCLCR)) {
-                m_PatientClCr = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::CreatinClearance, arg.mid( arg.indexOf("=") + 1 ).remove("\""));
             } else if (arg.contains(COMMANDLINE_CREATININ)) {
-                m_PatientCreat = arg.mid( arg.indexOf("=") + 1 ).remove("\"");
+                diCore::patient()->setValue(diPatient::Creatinin, arg.mid( arg.indexOf("=") + 1 ).remove("\""));
             } else if (arg.contains(COMMANDLINE_CHRONOMETER)) {
                 m_Chrono = true;
             } else if (arg.contains(COMMANDLINE_TRANSMITDOSAGES)) {
@@ -149,30 +151,20 @@ public:
 public:
     // instances of object
     static QHash<const QMetaObject*, QObject*> mInstances;
+    static diPatient *m_Patient;
     static bool isMedintuxPlugins;
     static bool isMedintuxPluginsTested;
     static QString m_ExchangeFile;
-    static QString m_PatientName;
-    static QString m_PatientDOB;
-    static QString m_PatientWeight;
-    static QString m_PatientSize;
-    static QString m_PatientClCr;
-    static QString m_PatientCreat;
     static bool m_WineRunning;
     static bool m_Chrono;
     static bool m_TransmitDosage;
 };
 
 QHash<const QMetaObject*, QObject*> diCorePrivate::mInstances;
+diPatient *diCorePrivate::m_Patient = 0;
 bool diCorePrivate::isMedintuxPlugins = false;
 bool diCorePrivate::isMedintuxPluginsTested = false;
 QString diCorePrivate::m_ExchangeFile = "";
-QString diCorePrivate::m_PatientName = "";
-QString diCorePrivate::m_PatientDOB = "";
-QString diCorePrivate::m_PatientWeight = "";
-QString diCorePrivate::m_PatientSize = "";
-QString diCorePrivate::m_PatientClCr = "";
-QString diCorePrivate::m_PatientCreat = "";
 bool diCorePrivate::m_WineRunning = false;
 bool diCorePrivate::m_Chrono = false;
 bool diCorePrivate::m_TransmitDosage = false;
@@ -213,11 +205,11 @@ tkUpdateChecker *diCore::updateChecker()
 
 /**
   \brief Returns the unique drugs model
-  \sa mfDrugsModel::instance()
+  \sa mfDrugsManager::DRUGMODEL
 */
 mfDrugsModel* diCore::drugsModel()
 {
-    return mfDrugsModel::instance();
+    return DRUGMODEL;
 }
 
 /**
@@ -229,6 +221,13 @@ tkMedintuxConfiguration *medintuxConfiguration()
     return tkMedintuxConfiguration::instance();  // need to be deleted
 }
 
+/** \brief Returns the unique instance of diPatient class. It represents the actual patient */
+diPatient *diCore::patient()
+{
+    if (!diCorePrivate::m_Patient)
+        diCorePrivate::m_Patient = new diPatient();
+    return diCorePrivate::m_Patient;
+}
 
 //-------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Init Function -------------------------------------------
@@ -239,6 +238,16 @@ tkMedintuxConfiguration *medintuxConfiguration()
 */
 bool diCore::init()
 {
+    tkLog::muteConsoleWarnings();
+    // Get settings
+    settings();
+    // Set application libraries
+    if (!tkGlobal::isDebugCompilation()) {
+        QApplication::setLibraryPaths( QStringList() << settings()->path(tkSettings::QtPlugInsPath) );
+    }
+    foreach( QString l, QCoreApplication::libraryPaths() )
+        tkLog::addMessage( "diCore" , tkTr(USING_LIBRARY_1).arg( l ) );
+
     QTime chrono;
     chrono.start();
 
@@ -258,8 +267,7 @@ bool diCore::init()
         tkLog::logTimeElapsed(chrono, "diCore", "command line parsing");
 
     // create splashscreen
-    tkLog::addMessage( "diCore" , QCoreApplication::translate( "diCore", "Starting application at %1" ).arg( QDateTime::currentDateTime().toString() ) );
-    settings();
+    tkLog::addMessage( "diCore" , tkTr(STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
     QSplashScreen splash( tkTheme::splashScreen(DRUGSINTERACTIONS_SPLASHSCREEN) );
     splash.show();
     QFont ft( splash.font() );
@@ -272,79 +280,84 @@ bool diCore::init()
     splash.show();
 
     // initialize the settings
-    showMessage( &splash, QCoreApplication::translate( "diCore", "Getting settings file..." ) );
+    showMessage( &splash, tkTr(GETTING_SETTINGS_FILE));
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", "settings and splash");
 
-    // log infos about libraries
-    QApplication::addLibraryPath( settings()->path(tkSettings::QtPlugInsPath) );
-    foreach( QString l, QCoreApplication::libraryPaths() )
-        tkLog::addMessage( "diCore" , QCoreApplication::translate( "diCore", "DrugInteractions using library : %1" ).arg( l ) );
-
     // init translations
-    showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Translations..." ) );
+    showMessage( &splash, tkTr(INITIALIZING_TRANSLATIONS) );
     tkTranslators *t = translators();
     t->setPathToTranslations( settings()->path( tkSettings::TranslationsPath ) );
     t->addNewTranslator( "mfDrugsWidget" );
     t->addNewTranslator( "qt" );
     tkGlobal::initLib();
     if (diCorePrivate::m_Chrono)
-        tkLog::logTimeElapsed(chrono, "diCore", "initializing translations");
+        tkLog::logTimeElapsed(chrono, "diCore", tkTr(INITIALIZING_TRANSLATIONS));
 
     // first time runnning ?
     if (settings()->firstTimeRunning()) {
         // show the license agreement dialog
-        showMessage( &splash, QCoreApplication::translate( "diCore", "Needed Licence Agreement..." ) );
+        showMessage( &splash,tkTr(NEED_LICENSE_AGREEMENT));
         if (!tkGlobal::defaultLicenceAgreementDialog("", tkAboutDialog::BSD ))
             return false;
-        showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Default Parameters..." ) );
+        showMessage( &splash, tkTr(INITIALIZING_DEFAULTS_PARAMS) );
         tkSettings *s = settings();
         s->noMoreFirstTimeRunning();
-        settings()->setValue(MFDRUGS_SETTING_RUNNINGVERSION, qApp->applicationVersion());
+        settings()->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
         mfDrugsPreferences::writeDefaultSettings(settings());
-    } else if (settings()->value(MFDRUGS_SETTING_RUNNINGVERSION, QVariant()).toString() != qApp->applicationVersion()) {
+    } else if (settings()->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         // show the license agreement dialog
         if (!tkGlobal::defaultLicenceAgreementDialog(QCoreApplication::translate("diCore", "You are running a new version of DrugsInteractions, you need to renew the licence agreement."), tkAboutDialog::BSD ))
             return false;
-        settings()->setValue(MFDRUGS_SETTING_RUNNINGVERSION, qApp->applicationVersion());
+        settings()->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
     }
 
     // intialize drugsBase
-    mfDrugsBase::instance()->logChronos( diCorePrivate::m_Chrono );
-
-    showMessage( &splash, QCoreApplication::translate( "diCore", "Initializing Drugs database..." ) );
+    showMessage( &splash, tkTr(INITIALIZATING_DATABASES) );
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", "initializing drugs base");
+    mfDrugsBase::instance()->logChronos( diCorePrivate::m_Chrono );
 
-    showMessage( &splash, QCoreApplication::translate( "diCore", "Checking command line parameters..." ) );
-    if (!diMedinTux::isMedinTuxPlugIns(&splash)) {
-        if (diCorePrivate::m_ExchangeFile.isEmpty()) {
-            qWarning() << "non medintux exchange file" << diCorePrivate::m_ExchangeFile;
-        }
-            ;
-
-    }
-
-
+    // instanciate managers
+    mainWindow();
+    tkActionManager::instance(mainWindow());
+    tkContextManager::instance(mainWindow());
+    tkContextManager::instance()->addAdditionalContext(tkUID->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS));
+    mainWindow()->initialize();
     // show main window
     mainWindow()->show();
 
+    // Manage exchange file
+    showMessage( &splash, QCoreApplication::translate( "diCore", "Checking command line parameters..." ) );
+    if (!diMedinTux::isMedinTuxPlugIns(&splash)) {
+        if (!diCorePrivate::m_ExchangeFile.isEmpty()) {
+            showMessage( &splash, QCoreApplication::translate( "diCore", "Reading exchange file..." ) );
+            QString extras;
+            mfDrugsIO::loadPrescription(diCorePrivate::m_ExchangeFile, extras);
+            patient()->fromXml(extras);
+        }
+    }
+
+    if (tkGlobal::isRunningOnMac())
+        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+
     // start update checking
-    showMessage( &splash, QCoreApplication::translate( "diCore", "Checking for updates..." ) );
-    QObject::connect(updateChecker(), SIGNAL(updateFounded()), mainWindow(), SLOT(on_updateFounded()));
+    showMessage( &splash, tkTr(CHECKING_UPDATES) );
+    QObject::connect(updateChecker(), SIGNAL(updateFound()), mainWindow(), SLOT(updateFound()));
     updateChecker()->check(DRUGSINTERACTIONS_UPDATE_URL);
     if (diCorePrivate::m_Chrono)
-        tkLog::logTimeElapsed(chrono, "diCore", "start update checker");
+        tkLog::logTimeElapsed(chrono, "diCore", tkTr(CHECKING_UPDATES));
 
     if (diMedinTux::isMedinTuxPlugIns( &splash )) {
-        showMessage( &splash, QCoreApplication::translate( "diCore", "Raising Application..." ) );
-        tkLog::addMessage( "diCore" , QCoreApplication::translate( "diCore", "Trying to raise application" ) );
+        showMessage( &splash, tkTr(RAISING_APPLICATION) );
+        tkLog::addMessage( "diCore" , tkTr(RAISING_APPLICATION) );
         qApp->setActiveWindow( mainWindow() );
         mainWindow()->activateWindow();
         mainWindow()->raise();
         if (diCorePrivate::m_Chrono)
             tkLog::logTimeElapsed(chrono, "diCore", "medintux plugins preparation");
     }
+    mfDrugsManager::instance()->drugsModelChanged();
 
     // Update countdown to dosage transmission
     int count = settings()->value(SETTINGS_COUNTDOWN,0).toInt();
@@ -367,53 +380,7 @@ bool diCore::init()
     return true;
 }
 
-/** \brief Returns the patient name. */
-QString & diCore::patientName()
+QString diCore::exchangeFileName()
 {
-    return diCorePrivate::m_PatientName;
-}
-
-/** \brief Set patient name. */
-void diCore::setPatientName( const QString &name)
-{
-    diCorePrivate::m_PatientName = name;
-}
-
-/** \brief Patient date of birth */
-QString & diCore::patientDateOfBirth()
-{
-    return diCorePrivate::m_PatientDOB;
-}
-
-/** \todo Todo */
-QString & diCore::patientAge()
-{
-    return diCorePrivate::m_PatientDOB;
-}
-
-/** \brief Patient date of birth */
-void diCore::setPatientDateOfBirth( const QString &date)
-{
-    diCorePrivate::m_PatientDOB = date;
-}
-
-/** \brief Patient weight */
-QString & diCore::patientWeight()
-{
-    return diCorePrivate::m_PatientWeight;
-}
-
-/** \brief Patient size */
-QString & diCore::patientSize()
-{
-    return diCorePrivate::m_PatientSize;
-}
-
-/**
-  \brief Patient Clearance of creatinin
-  \todo Automatically calculates clcr is possible
-*/
-QString & diCore::patientClCr()
-{
-    return diCorePrivate::m_PatientClCr;
+    return diCorePrivate::m_ExchangeFile;
 }

@@ -87,7 +87,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="sexCombo"/>
+          <widget class="QComboBox" name="sexCombo">
+           <item>
+            <property name="text">
+             <string>Unknown</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>M</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>F</string>
+            </property>
+           </item>
+          </widget>
          </item>
         </layout>
        </item>
@@ -101,7 +117,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="patientClCr"/>
+          <widget class="QSpinBox" name="patientClCr">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>200</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_6">
@@ -111,7 +134,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="patientCreatinin"/>
+          <widget class="QDoubleSpinBox" name="patientCreatinin">
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>200.000000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -133,17 +163,7 @@
      </widget>
     </item>
     <item row="2" column="0" colspan="4">
-     <widget class="mfDrugSelector" name="m_DrugSelector" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="4">
-     <widget class="mfPrescriptionViewer" name="m_PrescriptionView" native="true">
+     <widget class="mfDrugsCentralWidget" name="m_CentralWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -185,15 +205,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>mfPrescriptionViewer</class>
+   <class>mfDrugsCentralWidget</class>
    <extends>QWidget</extends>
-   <header location="global">drugswidget/mfPrescriptionViewer.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>mfDrugSelector</class>
-   <extends>QWidget</extends>
-   <header location="global">drugswidget/mfDrugSelector.h</header>
+   <header location="global">drugswidget/mfDrugsCentralWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

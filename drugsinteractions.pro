@@ -5,6 +5,7 @@ CONFIG *= ordered
 SUBDIRS += \
            libs/toolkit \
            libs/medintuxtoolkit \
+           libs/medicaltoolkit \
            drugsinteractions
 
 ProjectSettings { 

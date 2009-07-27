@@ -38,84 +38,53 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DIMAINWINDOW_H
-#define DIMAINWINDOW_H
+#ifndef DIPATIENT_H
+#define DIPATIENT_H
 
-#include <tkMainWindow.h>
+class diPatientPrivate;
 
-#include <QCloseEvent>
-#include <QListView>
-class mfDrugsModel;
-
-// include toolkit headers
-class tkSettings;
-class tkTranslators;
-
-#include "ui_diMainWindow.h"
+#include <QVariant>
 
 /**
- * \file diMainWindow.h
+ * \file diPatient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.10
- * \date 21 July 2009
- * \brief Mainwindow of DrugsInteractions.
-   \ingroup drugsinteractions
+ * \version 0.0.3
+ * \date 14 July 2009
 */
 
-class diMainWindow: public tkMainWindow , public Ui::diMainWindow
+class diPatient
 {
-    Q_OBJECT
-    friend class diCore;
 public:
-    diMainWindow( QWidget *parent = 0 );
-    ~diMainWindow();
-    void initialize();
+    enum Reference {
+        FullName = 0,
+        Sex,
+        DateOfBirth,
+        Age,
+        Weight,
+        Size,
+        IMC,
+        CreatinClearance,
+        Creatinin,
+        DrugsAllergies,     //  see tkSerializer --> string<->stringlist
+        ICD10Deceases,      //  see tkSerializer --> string<->stringlist
+    };
 
-    void refreshPatient() const;
+    diPatient();
+    ~diPatient();
 
-protected:
-    void closeEvent( QCloseEvent *event );
-    void readSettings();
-    void writeSettings();
-    void createDefaultSettings();
-    void createStatusBar();
-    void changeFontTo( const QFont &font );
+    void clear();
+    bool has(const Reference ref ) const;
 
-public Q_SLOTS:
-    bool updateFound() { return tkMainWindow::updateFound(); }
+    QVariant value( Reference ref ) const;
+    void setValue( Reference ref, const QVariant &value );
 
-private Q_SLOTS:
-    // Automatic slots for tkMainWindow // File actions
-//    bool newFile() { return false; }
-    bool openFile();
-    bool saveFile();
-    bool saveAsFile();
-    bool print();
-    bool savePrescription( const QString &fileName = QString::null );
+    QString toXml() const;
+    bool fromXml(const QString &xml);
 
-    // Automatic slots for tkMainWindow // Configuration actions
-    bool applicationPreferences();
-    bool configureMedintux();
-
-    // Automatic slots for tkMainWindow // Help actions
-    bool applicationHelp();
-    bool aboutApplication();
-    bool debugDialog();
-
-    // slots for patient's datas
-    void on_patientName_textChanged(const QString &text);
-    void on_patientWeight_valueChanged(const QString &text);
-    void on_patientSize_valueChanged(const QString &text);
-    void on_sexCombo_currentIndexChanged(const QString &text);
-    void on_patientClCr_valueChanged(const QString &text);
-    void on_patientCreatinin_valueChanged(const QString &text);
-    void on_listOfAllergies_textChanged(const QString &text);
+    void replaceTokens(QString &stringWillBeModified);
 
 private:
-    QString               m_iniPath;
-
-    QAction *prefAct, *aboutAct, *debugAct, *configureMedinTuxAct, *saveAct;
-
+    diPatientPrivate *d;
 };
 
-#endif  // DIMAINWINDOW_H
+#endif // DIPATIENT_H

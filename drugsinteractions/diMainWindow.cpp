@@ -44,16 +44,14 @@
 #include "diCore.h"
 #include "diAboutDialog.h"
 #include "diMedinTux.h"
+#include "diPatient.h"
 
 // include drugs widgets headers
-#include <drugsdatabase/mfDrugsBase.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugSelector.h>
-#include <drugswidget/mfDosageDialog.h>
-#include <drugswidget/mfDosageCreatorDialog.h>
-#include <drugswidget/mfPrescriptionViewer.h>
-#include <drugswidget/mfDrugsPreferences.h>
+#include <drugswidget/mfDrugsCentralWidget.h>
+#include <drugspreferences/mfDrugsPreferences.h>
 #include <drugsmodel/mfDrugsIO.h>
+#include <drugsmodel/mfDrugsModel.h>
+#include <mfDrugsManager.h>
 
 // include toolkit headers
 #include <tkGlobal.h>
@@ -67,6 +65,8 @@
 #include <tkUpdateChecker.h>
 #include <tkConstantTranslations.h>
 #include <tkHelpDialog.h>
+#include <tkActionManager.h>
+#include <tkContextManager.h>
 
 // include Qt headers
 #include <QMenuBar>
@@ -85,48 +85,50 @@
 Q_TK_USING_CONSTANTS
 Q_TK_USING_TRANSLATIONS
 
-const char* const A_CONFIG_MEDINTUX          = "configureMedinTuxAction";
-const char* const CONFIGMEDINTUX_TEXT        = QT_TRANSLATE_NOOP("diMainWindow", "Configure MedinTux");
-
 /** \brief Constructor */
 diMainWindow::diMainWindow( QWidget *parent )
-          : QMainWindow(parent),
-          m_DrugPrescriptor( 0 ),
-          m_PrescriptionModel(0),
-          m_DosageDialog(0),
-          prefAct(0), aboutAct(0), debugAct(0), configureMedinTuxAct(0), saveAct(0)
+        : tkMainWindow(parent),
+        prefAct(0), aboutAct(0), debugAct(0), configureMedinTuxAct(0), saveAct(0)
 {
     // some initializing
     setObjectName( "diMainWindow" );
+}
+
+void diMainWindow::initialize()
+{
+    // create menus
+    createFileMenu();
+    createFileActions(A_FileOpen | A_FileSave | A_FileSaveAs | A_FileQuit);
+    connectFileActions();
+    tkActionManager::instance()->actionContainer(MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
+
+    createConfigurationMenu();
+    createConfigurationActions(A_AppPreferences | A_ConfigureMedinTux);
+    connectConfigurationActions();
+    createHelpMenu();
+    createHelpActions(A_AppAbout| A_AppHelp | A_DebugDialog);
+    connectHelpActions();
+
     setupUi(this);
-    createMenus();
+
     readSettings();
 
     morePatientInfoButton->setIcon( tkTheme::icon(ICONADD) );
     patientInformations->hide();
-    patientName->setText( diCore::patientName() );
-    patientName->setToolTip( QString("Nom : %1<br />Date de naissance : %2<br />Poids : %3<br />"
-                                     "Taille : %4<br />Clearance : %5")
-                             .arg( diCore::patientName(), diCore::patientDateOfBirth(), diCore::patientWeight() )
-                             .arg( diCore::patientSize(), diCore::patientClCr() ));
-    patientWeight->setValue( diCore::patientWeight().toInt() );
-    patientSize->setValue( diCore::patientSize().toInt() );
-    patientClCr->setValue( diCore::patientClCr().toDouble() );
-//    patientCreatinin->setValue( diCore::patientCreatinin() );
+    refreshPatient();
 
-    // create model view for selected drugs list
-    m_PrescriptionModel = mfDrugsModel::instance();
-    m_PrescriptionView->initialize();
-    m_PrescriptionView->setModel( m_PrescriptionModel );
-    m_PrescriptionView->setModelColumn( Drug::FullPrescription );
+    mfDrugsManager::instance();
+    m_CentralWidget->initialize();
+    mfDrugsManager::instance()->setCurrentView(m_CentralWidget);
 
-    createConnections();
+    tkContextManager::instance()->updateContext();
+    tkActionManager::instance()->retranslateMenusAndActions();
 
     setWindowTitle( qApp->applicationName() + " - " + qApp->applicationVersion() );
     tkSettings *s = tkSettings::instance();
     changeFontTo( QFont(s->value( MFDRUGS_SETTING_VIEWFONT ).toString(), s->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
 
-    m_DrugSelector->setFocus();
+//    m_CentralWidget->setFocus();
 }
 
 /** \brief Destructor */
@@ -134,25 +136,27 @@ diMainWindow::~diMainWindow()
 {
 }
 
-/** \brief Creates connections */
-void diMainWindow::createConnections()
+/**
+  \brief Refresh the ui data refering to the patient
+  \sa diCore::patient(), diPatient
+*/
+void diMainWindow::refreshPatient() const
 {
-    tkActionManager *am = tkActionManager::instance();
-    connect( am->action(A_FILE_OPEN), SIGNAL( triggered() ), this, SLOT( openPrescription() ) );
-    connect( am->action(A_FILE_SAVE), SIGNAL( triggered() ), this, SLOT( savePrescription() ) );
-    connect( am->action(A_FILE_SAVEAS), SIGNAL( triggered() ), this, SLOT( savePrescription() ) );
-    connect( am->action(A_FILE_PRINT), SIGNAL( triggered() ), this, SLOT( printPrescription() ) );
-    connect( am->action(A_FILE_EXIT), SIGNAL( triggered() ), this, SLOT( close() ) );
+    patientName->setText( diCore::patient()->value(diPatient::FullName).toString() );
+    patientName->setToolTip( QString("Nom : %1<br />Date de naissance : %2<br />Poids : %3<br />"
+                                     "Taille : %4<br />Clearance : %5")
+                             .arg( diCore::patient()->value(diPatient::FullName).toString(),
+                                   diCore::patient()->value(diPatient::DateOfBirth).toString(),
+                                   diCore::patient()->value(diPatient::Weight).toString() )
+                             .arg( diCore::patient()->value(diPatient::Size).toString(),
+                                   diCore::patient()->value(diPatient::CreatinClearance).toString() ));
 
-    connect( am->action(A_PREFERENCES), SIGNAL( triggered() ), this, SLOT( preferences() ) );
-    connect( am->action(A_APPLICATIONHELP), SIGNAL( triggered() ), this, SLOT( help() ) );
-    connect( am->action(A_ABOUT), SIGNAL( triggered() ), this, SLOT( about() ) );
-    connect( am->action(A_DEBUGHELPER), SIGNAL( triggered() ), this, SLOT( debugDialog() ) );
-    connect( am->action(A_CONFIG_MEDINTUX), SIGNAL( triggered() ), this, SLOT( configureMedinTux() ) );
-
-    connect( m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( on_selector_drugSelected(const int) ) );
-    connect( m_PrescriptionView, SIGNAL(printTriggered()), this, SLOT(printPrescription()));
-    connect( m_PrescriptionView->listview(), SIGNAL(activated(const QModelIndex &)), this, SLOT(showDosageDialog(const QModelIndex&)) );
+    patientWeight->setValue( diCore::patient()->value(diPatient::Weight).toInt() );
+    patientSize->setValue( diCore::patient()->value(diPatient::Size).toInt() );
+    patientClCr->setValue( diCore::patient()->value(diPatient::CreatinClearance).toDouble() );
+    patientCreatinin->setValue( diCore::patient()->value(diPatient::Creatinin).toDouble() );
+    listOfAllergies->setText(  diCore::patient()->value(diPatient::DrugsAllergies).toString() );
+    sexCombo->setCurrentIndex( sexCombo->findText(diCore::patient()->value(diPatient::Sex).toString()) );
 }
 
 /** \brief Close the main window and the application */
@@ -160,49 +164,14 @@ void diMainWindow::closeEvent( QCloseEvent *event )
 {
     writeSettings();
     // if is a medintux plugins --> save prescription to exchange file
-    if ( !diMedinTux::medintuxExchangeFileName().isEmpty() ) {
+    if (!diMedinTux::medintuxExchangeFileName().isEmpty()) {
         QString tmp = mfDrugsIO::instance()->prescriptionToHtml();
         tmp.replace("font-weight:bold;", "font-weight:600;");
         tkGlobal::saveStringToFile( tkGlobal::toHtmlAccent(tmp) , diMedinTux::medintuxExchangeFileName(), tkGlobal::DontWarnUser );
+    } else if (!diCore::exchangeFileName().isEmpty()) {
+        savePrescription(diCore::exchangeFileName());
     }
     event->accept();
-}
-
-/**
-  \brief Slot called when is selected from the drugSelector.
-  Verify that the drug isn't already prescribed (if it is warn user and stop). \n
-  Add the drug to the mfDrugsModel and open the mfDosageCreatorDialog\n
-*/
-void diMainWindow::on_selector_drugSelected( const int CIS )
-{
-    // if exists dosage for that drug show the dosageSelector widget
-    // else show the dosage creator widget
-    if (m_PrescriptionModel->containsDrug(CIS)) {
-        tkGlobal::warningMessageBox(tr("Can not add this drug to your prescription."),
-                                    tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
-                                       "Drug %1 is already in your prescription").arg(m_PrescriptionModel->drugData(CIS,Drug::Denomination).toString()),
-                                    tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
-        return;
-    }
-    int drugPrescriptionRow = m_PrescriptionModel->addDrug(CIS);
-    mfDosageCreatorDialog dlg(this, mfDrugsModel::instance()->dosageModel(CIS));
-    if (dlg.exec()==QDialog::Rejected) {
-        m_PrescriptionModel->removeLastInsertedDrug();
-    }
-    m_PrescriptionView->listview()->update();
-}
-
-/** \brief Opens mfDosageDialog with the good params */
-void diMainWindow::showDosageDialog(const QModelIndex &item)
-{
-    int CIS = mfDrugsModel::instance()->index( item.row(), Drug::CIS ).data().toInt();
-//    if (!m_DosageDialog)
-//        m_DosageDialog = new mfDosageDialog(this);
-//    m_DosageDialog->changeRow(CIS,item.row()) ;
-//    m_DosageDialog->exec();
-    mfDosageDialog dlg(this);
-    dlg.changeRow(CIS,item.row());
-    dlg.exec();
 }
 
 /** \brief Reads main window's settings */
@@ -220,27 +189,6 @@ void diMainWindow::writeSettings()
     s->sync();
 }
 
-/** \brief Creates the menubar of the application using the tkActionManager */
-void diMainWindow::createMenus()
-{
-    tkActionManager *am = tkActionManager::instance();
-    // create menu structure
-    am->createMenuBar(MENUBAR, this);
-    am->createDefaultFileMenu(this);
-    am->createMenu( M_CONFIGURATION  ,  MENUBAR, M_CONFIGURATION_TEXT, "", this );
-    am->appendGroup( G_CONFIGURATION,   M_CONFIGURATION );
-    am->createDefaultAboutMenu(this);
-    // add default actions
-    am->createDefaultFileMenuActions(this);
-    am->createDefaultConfigurationMenuActions(this);
-    am->createDefaultAboutMenuActions(this);
-    // create specific actions
-    am->createAction(A_CONFIG_MEDINTUX, G_CONFIGURATION, this);
-    am->setActionDatas(A_CONFIG_MEDINTUX, CONFIGMEDINTUX_TEXT, CONFIGMEDINTUX_TEXT, ICONMEDINTUX);
-    am->refreshMenuBar(MENUBAR);
-    setMenuBar(am->menubar(MENUBAR));
-}
-
 /** \obsolete */
 void diMainWindow::createStatusBar()
 {
@@ -251,26 +199,28 @@ void diMainWindow::createStatusBar()
   \brief Shows the about dialog.
   \sa diAboutdialog
 */
-void diMainWindow::about()
+bool diMainWindow::aboutApplication()
 {
-   diAboutDialog dialog(this);
-   dialog.exec();
+    diAboutDialog dialog(this);
+    dialog.exec();
+    return true;
 }
 
 /**
   \brief Shows the help dialog.
   \sa tkHelpDialog
 */
-void diMainWindow::help()
+bool diMainWindow::applicationHelp()
 {
-   tkHelpDialog::showIndex();
+    tkHelpDialog::showIndex();
+    return true;
 }
 
 /**
   \brief Open the preferences dialog
   \sa mfDrugsPreferences
 */
-void diMainWindow::preferences()
+bool diMainWindow::applicationPreferences()
 {
     QTime t;
     t.start();
@@ -284,19 +234,19 @@ void diMainWindow::preferences()
     l.addWidget( &prefs );
     l.addWidget( &buttonBox );
     dlg.setWindowTitle( tkTr(PREFERENCES_TEXT) + " - " + qApp->applicationName() );
-//    tkLog::logTimeElapsed(t, this->objectName(), "OpeningPreferences" );
+    //    tkLog::logTimeElapsed(t, this->objectName(), "OpeningPreferences" );
     dlg.exec();
     if ( dlg.result() == QDialog::Accepted ) {
         prefs.saveToSettings(s);
         changeFontTo( QFont(s->value( MFDRUGS_SETTING_VIEWFONT ).toString(), s->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
     }
+    return true;
 }
 
 /** \brief Change the font of the viewing widget */
 void diMainWindow::changeFontTo( const QFont &font )
 {
-    m_DrugSelector->setFont(font);
-    m_PrescriptionView->listview()->setFont(font);
+    m_CentralWidget->changeFontTo(font);
     patientName->setFont(font);
 }
 
@@ -304,57 +254,49 @@ void diMainWindow::changeFontTo( const QFont &font )
 /**
   \brief Show the debugging dialog
   \sa tkDebugDialog
-*/void diMainWindow::debugDialog()
+*/
+bool diMainWindow::debugDialog()
 {
     tkDebugDialog dialog( this, diCore::settings() );
     dialog.exec();
+    return true;
 }
 
 /**
   \brief Prints the prescription using the header, footer and watermark.
   \sa tkPrinter
 */
-void diMainWindow::printPrescription()
+bool diMainWindow::print()
 {
-    tkPrinter p(this);
-    if (!p.askForPrinter(this))
-        return;
-    QString header = diCore::settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
-    tkGlobal::replaceToken(header, TOKEN_PATIENTNAME, patientName->text() );
-    tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    tkGlobal::replaceToken(header, TOKEN_WEIGHT, diCore::patientWeight() );
-    tkGlobal::replaceToken(header, TOKEN_SIZE, diCore::patientSize() );
-    tkGlobal::replaceToken(header, TOKEN_DATEOFBIRTH, diCore::patientDateOfBirth() );
-    tkGlobal::replaceToken(header, TOKEN_CLCR, diCore::patientClCr() );
-    p.setHeader( header );
-    header = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
-    header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with DrugsInteractions.")));
-    p.setFooter( header );
-    p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                        tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-                        Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
-    p.printWithDuplicata(true);
-    p.print( mfDrugsIO::instance()->prescriptionToHtml() );
+    return m_CentralWidget->printPrescription();
 }
 
 /** \brief Runs the MedinTux configurator */
-void diMainWindow::configureMedinTux()
+bool diMainWindow::configureMedintux()
 {
     diMedinTux::configureMedinTux();
+    return true;
+}
+
+bool diMainWindow::saveAsFile()
+{
+    return savePrescription();
+}
+
+bool diMainWindow::saveFile()
+{
+    return savePrescription();
 }
 
 /**
-  \brief Saves a prescription.
+  \brief Saves a prescription. If fileName is empty, user is ask about a file name.
   \sa openPrescription()
   \sa mfDrugsIO
 */
-void diMainWindow::savePrescription()
+bool diMainWindow::savePrescription( const QString &fileName )
 {
-    QHash<QString, QString> hash;
-    hash.insert("NAME", diCore::patientName().toAscii().toBase64());
-    hash.insert("CLEARANCE", diCore::patientClCr().toAscii().toBase64());
-    mfDrugsIO::savePrescription(hash);
+    QString xmlExtra = diCore::patient()->toXml();
+    return mfDrugsIO::savePrescription(xmlExtra, fileName);
 }
 
 /**
@@ -362,17 +304,17 @@ void diMainWindow::savePrescription()
   \sa savePrescription()
   \sa mfDrugsIO
 */
-void diMainWindow::openPrescription()
+bool diMainWindow::openFile()
 {
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(OPEN_FILE),
                                              QDir::homePath(),
                                              tr(DRUGINTERACTION_FILEFILTER) );
     if (f.isEmpty())
-        return;
-//    QString f = "/Users/eric/prescription.di";
+        return false;
+    //    QString f = "/Users/eric/prescription.di";
     QHash<QString,QString> datas;
-    if (m_PrescriptionModel->rowCount() > 0) {
+    if (DRUGMODEL->rowCount() > 0) {
         int r = tkGlobal::withButtonsMessageBox(
                 tr("Opening a prescription : merge or replace ?"),
                 tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
@@ -384,32 +326,51 @@ void diMainWindow::openPrescription()
             mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::AppendPrescription);
         }
     } else
-            mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::ReplacePrescription);
+        mfDrugsIO::loadPrescription(f, datas, mfDrugsIO::ReplacePrescription);
 
-    diCore::setPatientName( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
+    diCore::patient()->setValue(diPatient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
     patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
+    return true;
 }
 
-/**
-  \brief Slot connected to the tkUpdateChecker::updateFounded()
-  Add a menu to the menu bar and connect the only action to the update dialog.
-  \sa mfCore::init()
-*/
-void diMainWindow::on_updateFounded()
-{
-    // add a new menu to menuBar
-    tkActionManager *am = tkActionManager::instance();
-    menuBar()->addMenu(am->createMenu(M_UPDATE, MENUBAR, M_UPDATE_TEXT, "", this));
-    am->appendGroup(G_UPDATE, M_UPDATE);
-    am->createAction(A_VIEWUPDATE, G_UPDATE, this);
-    am->setActionDatas(A_VIEWUPDATE, VIEWUPDATE_TEXT, VIEWUPDATE_TEXT, ICONSOFTWAREUPDATEAVAILABLE);
-    am->refreshMenu(M_UPDATE);
-    QAction *a = am->action(A_VIEWUPDATE);
-    connect(a, SIGNAL(triggered()), diCore::updateChecker(), SLOT(showUpdateInformations()));
-}
-
-/** \brief Alwaus keep uptodate diCore::patientName() */
+/** \brief Always keep uptodate patient's datas */
 void diMainWindow::on_patientName_textChanged(const QString &text)
 {
-    diCore::setPatientName(text);
+    diCore::patient()->setValue(diPatient::FullName, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_sexCombo_currentIndexChanged(const QString &text)
+{
+    diCore::patient()->setValue(diPatient::Sex, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_patientWeight_valueChanged(const QString &text)
+{
+    diCore::patient()->setValue(diPatient::Weight, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_patientSize_valueChanged(const QString & text)
+{
+    diCore::patient()->setValue(diPatient::Size, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_patientClCr_valueChanged(const QString & text)
+{
+    diCore::patient()->setValue(diPatient::CreatinClearance, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_patientCreatinin_valueChanged(const QString & text)
+{
+    diCore::patient()->setValue(diPatient::Creatinin, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void diMainWindow::on_listOfAllergies_textChanged(const QString &text)
+{
+    diCore::patient()->setValue(diPatient::DrugsAllergies, text);
 }
