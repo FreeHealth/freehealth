@@ -122,13 +122,13 @@ tkRichTextEditor::Types mfRichTextEditor::getType( mfObject * mfo )
     // And options
     const QStringList &options = mfo->param( mfObject::Param_Options ).toStringList();
     if ( options.contains( OPTION_WITHLOAD, Qt::CaseInsensitive ) )
-        t |= tkRichTextEditor::WithLoad;
+        t |= tkRichTextEditor::WithIO;
     if ( options.contains( OPTION_WITHSAVE, Qt::CaseInsensitive ) )
-        t |= tkRichTextEditor::WithSave;
+        t |= tkRichTextEditor::WithIO;
     if ( options.contains( OPTION_WITHTABLES, Qt::CaseInsensitive ) )
         t |= tkRichTextEditor::WithTables;
     if ( options.contains( OPTION_ALLOPTIONS, Qt::CaseInsensitive ) )
-        t |= tkRichTextEditor::WithTables | tkRichTextEditor::Full | tkRichTextEditor::WithLoad | tkRichTextEditor::WithSave;
+        t = tkRichTextEditor::Full;
     return t;
 }
 

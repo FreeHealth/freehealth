@@ -13,8 +13,6 @@ TEMPLATE	= lib
 CONFIG          *= dll plugin
 PRE_TARGETDEPS	*= $${PACKAGE_PWD}/freemedforms
 
-# DEFINES	= __COVERAGESCANNER__
-LIBS            = -L$${PACKAGE_BUILD_PATH}
 mac:*-g++:LIBS  *= -Wl,-undefined,dynamic_lookup
 
 # ubuntu hardy/debian fix
