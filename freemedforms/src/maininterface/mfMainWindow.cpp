@@ -41,6 +41,8 @@
 #include <mfDialogInterpret.h>
 #include <mfPluginsManager.h>
 #include <mfSettings.h>
+#include <mfConstants.h>
+#include <mfAboutDialog.h>
 
 // include toolkit headers
 #include <tkLog.h>
@@ -48,6 +50,8 @@
 #include <tkDebugDialog.h>
 #include <tkTheme.h>
 #include <tkActionManager.h>
+#include <tkContextManager.h>
+#include <tkConstantTranslations.h>
 
 // include usertoolkit headers
 #include <tkUserManager.h>
@@ -64,20 +68,24 @@
 // #include "form_editor_window.h"
 
 Q_TK_USING_CONSTANTS
+Q_TK_USING_TRANSLATIONS
+Q_FMF_USING_CONSTANTS
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 mfMainWindow::mfMainWindow( QWidget * parent )
-          : QMainWindow(parent), toolbarMenu(0), fileToolBar(0), editToolBar(0),
+          : tkMainWindow(parent), fileToolBar(0), editToolBar(0),
           m_pRootObject(0), m_MainWidget(0), m_AutomaticSaveInterval(0), m_TimerId(0),
           m_UserManager(0)
 {
     setObjectName( "mfMainWindow" );
     recentFiles.clear();
     setWindowTitle( qApp->applicationName() );
-//    setUnifiedTitleAndToolBarOnMac( true );
+}
 
+void mfMainWindow::initialize()
+{
     // Manage window
     createMenusAndActions();
     createToolBars();
@@ -89,25 +97,14 @@ mfMainWindow::mfMainWindow( QWidget * parent )
     restoreState( windowState );
 //    refreshToolbarMenu();
 
-#ifdef DEBUG
-    setCentralWidget( mfCore::settings()->getTreeWidget( this ) );
-#endif
+    if (tkGlobal::isDebugCompilation())
+        setCentralWidget( mfCore::settings()->getTreeWidget( this ) );
 
     // Some things need to be set just after the form show
     QTimer::singleShot( 0, this, SLOT( afterTheShow() ) );
 
     // Make connections with menus/actions
     QMetaObject::connectSlotsByName(this);
-
-
-
-    // DEBUGGING FOCUS
-//    connect( qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), this, SLOT(warnFocus(QWidget*,QWidget*)));
-    // END
-
-
-
-
 }
 
 mfMainWindow::~mfMainWindow()
@@ -136,7 +133,7 @@ void mfMainWindow::showWidget()
 {
     if ( m_pRootObject == 0 )
         return;
-    m_MainWidget = new mfMainWidget( m_pRootObject, this );
+    m_MainWidget = new mfMainWidget(m_pRootObject, this);
     setCentralWidget( m_MainWidget );
     // each time a widget is added to this main window restoreState should be called
     restoreState( windowState );
@@ -154,7 +151,7 @@ void mfMainWindow::on_actionInterpretor_triggered()
     mfDialogInterpret * interpret = new mfDialogInterpret( m_pRootObject , this );
     interpret->exec();
 #else
-    QMessageBox::information( this, qApp->applicationName(), tr( "This feature is not yet implemented." ) );
+    QMessageBox::information( this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED) );
 #endif
 }
 
@@ -208,30 +205,33 @@ void mfMainWindow::documentWasModified()
     setWindowModified( true );
 }
 
-void mfMainWindow::on_actionFileNew_triggered()
+bool mfMainWindow::newFile()
 {
+    return false;
 }
 
-void mfMainWindow::on_actionFileOpen_triggered()
+bool mfMainWindow::openFile()
 {
+    /** \todo here */
     if ( maybeSave() ) {
         QString fileName = QFileDialog::getOpenFileName( this , "", mfCore::settings()->formPath() );
         if ( !fileName.isEmpty() )
-            loadFile( fileName );
+            loadFile(fileName);
     }
+    return true;
 }
 
-bool mfMainWindow::on_actionFileSave_triggered()
+bool mfMainWindow::saveFile()
 {
     if ( !m_pRootObject )
         return false;
     if ( m_CurrentFile.isEmpty() )
-        return on_actionFileSaveAs_triggered();
+        return saveAsFile();
     else
         return saveFile( m_CurrentFile );
 }
 
-bool mfMainWindow::on_actionFileSaveAs_triggered()
+bool mfMainWindow::saveAsFile()
 {
     QString fileName = QFileDialog::getSaveFileName( this );
     if ( fileName.isEmpty() )
@@ -260,12 +260,12 @@ bool mfMainWindow::saveFile( const QString &fileName )
     }
     return false;
 #else
-    QMessageBox::information( this, qApp->applicationName(), tr( "This feature is not yet implemented." ) );
+    QMessageBox::information( this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED) );
     return true;
 #endif
 }
 
-bool mfMainWindow::on_actionFilePrint_triggered()
+bool mfMainWindow::print()
 {
     if ( !m_pRootObject ) return false;
     mfPrinter printer( m_pRootObject );
@@ -285,7 +285,7 @@ bool mfMainWindow::maybeSave()
                                         QMessageBox::No,
                                         QMessageBox::Cancel | QMessageBox::Escape );
         if ( ret == QMessageBox::Yes )
-            return on_actionFileSave_triggered();
+            return saveFile();
         else
             if ( ret == QMessageBox::Cancel )
                 return false;
@@ -303,7 +303,7 @@ void mfMainWindow::openRecentFile()
 void mfMainWindow::refreshWholeUi()
 {
     // Delete all object that need to be deleted
-    if ( m_MainWidget )
+    if (m_MainWidget)
         delete m_MainWidget;
     m_MainWidget = 0;
     showWidget();
@@ -313,31 +313,25 @@ void mfMainWindow::refreshWholeUi()
 
 void mfMainWindow::loadFile( const QString &fileName )
 {
-    if ( m_pRootObject )
+    if (m_pRootObject)
         delete m_pRootObject;
     m_pRootObject = 0;
 
     mfIOInterface *ioPlugin = mfCore::pluginsManager()->currentIO();
-    if ( !ioPlugin )
-    {
+    if (!ioPlugin) {
         tkLog::addError( this, tr( "Main Window ERROR : Laoding form : no IO plugin defined." ) );
         return;
     }
 
     // Read fileName and refresh gui
     m_pRootObject = ioPlugin->loadForm( mfIOPlace::fromLocalFile( fileName ) );
-    if ( m_pRootObject )
-    {
+    if (m_pRootObject) {
         setCurrentFile( fileName );
         statusBar()->showMessage( tr( "File opened" ), 2000 );
         refreshWholeUi();
         tkLog::addMessage( this, tr ( "Main Window INFO : Form %1 correctly loaded" ).arg( fileName ) );
-    }
-    else
-    {
-        QMessageBox::warning( this, qApp->applicationName(),
-                              tr( "An error occured while reading file : %1. No elements were read." )
-                              .arg( fileName ) );
+    } else {
+        tkGlobal::warningMessageBox(tr("An error occured while reading file : %1. No elements were read.").arg(fileName) ,"","",qApp->applicationName());
         return;
     }
 
@@ -364,32 +358,33 @@ void mfMainWindow::setCurrentFile( const QString &fileName )
 
 void mfMainWindow::updateRecentFileActions()
 {
-    QMutableStringListIterator it( recentFiles );
-    // Show only existing files
-    while ( it.hasNext() )
-        if ( !QFile::exists( it.next() ) )
-            it.remove();
-
-    int numRecentFiles = qMin( recentFiles.size(), (int)MaxRecentFiles );
-
-    for ( int i = 0; i < numRecentFiles; ++i ) {
-        QString text = tr( "&%1 %2" ).arg( i + 1 ).arg( strippedName( recentFiles[i] ) );
-        recentFilesAct[i]->setText( text );
-        recentFilesAct[i]->setData( recentFiles[i] );
-        recentFilesAct[i]->setVisible( true );
-    }
-    for ( int j = numRecentFiles; j < MaxRecentFiles; ++j )
-        recentFilesAct[j]->setVisible( false );
-
+//    QMutableStringListIterator it( recentFiles );
+//    // Show only existing files
+//    while ( it.hasNext() )
+//        if ( !QFile::exists( it.next() ) )
+//            it.remove();
+//
+//    int numRecentFiles = qMin( recentFiles.size(), (int)MaxRecentFiles );
+//
+//    for ( int i = 0; i < numRecentFiles; ++i ) {
+//        QString text = tr( "&%1 %2" ).arg( i + 1 ).arg( strippedName( recentFiles[i] ) );
+//        recentFilesAct[i]->setText( text );
+//        recentFilesAct[i]->setData( recentFiles[i] );
+//        recentFilesAct[i]->setVisible( true );
+//    }
+//    for ( int j = numRecentFiles; j < MaxRecentFiles; ++j )
+//        recentFilesAct[j]->setVisible( false );
+//
 //    separatorAct->setVisible( numRecentFiles > 0 );
 }
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- Help Menu Slots --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-void mfMainWindow::on_actionAboutThisForm_triggered()
+bool mfMainWindow::aboutThisForm()
 {
-    if ( !m_pRootObject ) return;
+    if (!m_pRootObject)
+        return false;
     QString msg = "<p align=center><b>";
     QString tmp;
     msg.append( tr( "Extra-information of the Form <br />%1" )
@@ -432,27 +427,22 @@ void mfMainWindow::on_actionAboutThisForm_triggered()
     msg.append( "</ul>" );
 
     QMessageBox::information( this, qApp->applicationName(), msg );
+
+    return true;
 }
 
-void mfMainWindow::on_actionAbout_triggered()
+bool mfMainWindow::aboutApplication()
 {
-    QMessageBox::about( this, qApp->applicationName(),
-                        tr( "%1 is an early release. All features may not work and you may experiment bugs.<br>"
-                            "This software is release without any warranty.<br>"
-                            "Please refer to web site for more informations.<br>"
-                            "<a href=\"%2\">Web site</a><br><br>"
-                            "Compilation date : %3<br><br>"
-                            "Author : Eric Maeker, MD<br>"
-                            "Translators : Eric Maeker, MD<br>" )
-                        .arg( qApp->applicationName() )
-                        .arg( mfCore::settings()->webSiteUrl() )
-                        .arg( __DATE__ " " __TIME__ ) );
+    mfAboutDialog dialog(this);
+    dialog.exec();
+    return true;
 }
 
-void mfMainWindow::on_actionDebugHelper_triggered()
+bool mfMainWindow::debugDialog()
 {
     tkDebugDialog d( this, mfCore::settings() );
     d.exec();
+    return true;
 }
 
 void mfMainWindow::on_actionHelpTextToggler_triggered()
@@ -466,24 +456,25 @@ void mfMainWindow::on_actionHelpTextToggler_triggered()
     }
 }
 
+
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Creating Actions and Menus -------------------------------------
 //--------------------------------------------------------------------------------------------------------
-void mfMainWindow::on_menuToolbars_aboutToShow() //refreshToolbarMenu()
+void mfMainWindow::refreshToolbarMenu()
 {
     // clear toolbar menu then re-populate it
-    QMenu *m = mfCore::actionManager()->menu(M_TOOLBARS);
-    m->clear();
-    QList<QToolBar*> toolbars = this->findChildren<QToolBar*>();
-    foreach( QToolBar* tb, toolbars ) {
-        if ( tb->windowTitle().isEmpty() )
-            continue;
-        QAction * a = m->addAction( tb->windowTitle() );
-        a->setObjectName( tb->objectName() );
-        a->setCheckable( true );
-        a->setChecked( tb->isVisible() );
-        connect( a, SIGNAL( toggled( bool ) ), this, SLOT( toolbarToggled( bool ) ) );
-    }
+//    QMenu *m = mfCore::actionManager()->menu(M_TOOLBARS);
+//    m->clear();
+//    QList<QToolBar*> toolbars = this->findChildren<QToolBar*>();
+//    foreach( QToolBar* tb, toolbars ) {
+//        if ( tb->windowTitle().isEmpty() )
+//            continue;
+//        QAction * a = m->addAction( tb->windowTitle() );
+//        a->setObjectName( tb->objectName() );
+//        a->setCheckable( true );
+//        a->setChecked( tb->isVisible() );
+//        connect( a, SIGNAL( toggled( bool ) ), this, SLOT( toolbarToggled( bool ) ) );
+//    }
 }
 
 void mfMainWindow::formEditor()
@@ -492,78 +483,66 @@ void mfMainWindow::formEditor()
     //      window->show();
 }
 
-void mfMainWindow::switchLanguage( QAction * action )
-{
-    QString locale = action->data().toString();
-
-    // Inform the Application that language changes, and loads the dictionnaries
-    mfCore::changeLanguage( action->data().toString() );
-
-    // All GUIs will automatically refresh via changeEvent() members
-}
-
 void mfMainWindow::createMenusAndActions()
 {
-     tkActionManager *am = mfCore::actionManager();
-     am->createDefaultFileMenu(this);
-     am->createDefaultEditMenu(this);
-     am->createDefaultFormatMenu(this);
-     am->createDefaultFileMenuActions(this);
-     am->createDefaultEditMenuActions(this);
-     am->createDefaultFormatMenuActions(this);
+    createFileMenu();
+    createEditMenu();
+    createFormatMenu();
+    createConfigurationMenu();
+    createHelpMenu();
 
-    for ( int i = 0; i < MaxRecentFiles; ++i )
-    {
-        recentFilesAct[i] = new QAction( this );
-        recentFilesAct[i]->setVisible( false );
-        connect( recentFilesAct[i], SIGNAL( triggered() ), this, SLOT( openRecentFile() ) );
-        am->addAction( recentFilesAct[i], QString("RECENT%1").arg(i), G_FILE_RECENTS );
-    }
+    createFileActions(A_FileNew | A_FileOpen | A_FileSave | A_FileSaveAs | A_FilePrint | A_FileQuit);
+    createEditActions();
+    createConfigurationActions(A_AppPreferences | A_PluginsPreferences | A_LangageChange);
+    createHelpActions(A_AppAbout | A_AppHelp | A_DebugDialog | A_FormsAbout | A_QtAbout);
 
-    // Menu interpretor
-    am->createMenu(M_INTERPRETOR, MENUBAR, M_INTERPRETOR_TEXT , "", this); //interpretMenu = menuBar()->addMenu( " " );
-    am->appendGroup(G_INTERPRETOR_GENERAL, M_INTERPRETOR);
-    am->createAction( A_INTERPRETOR_GENERAL, G_INTERPRETOR_GENERAL, this );
-    am->setActionDatas( A_INTERPRETOR_GENERAL, INTERPRETOR_GENERAL_TEXT, INTERPRETOR_GENERAL_TEXT, ""); // interpretMenu->addAction( interpretationAct );
+    connectFileActions();
+    connectConfigurationActions();
+    connectHelpActions();
 
-    // Menu tools
-    am->createMenu(M_TOOLS, MENUBAR, M_TOOLS_TEXT , "", this); //interpretMenu = menuBar()->addMenu( " " );
-    am->appendGroup(G_TOOLS_GENERAL, M_TOOLS);
-    am->createAction( A_USERMANAGER, G_TOOLS_GENERAL, this );
-    am->setActionDatas( A_USERMANAGER, USERMANAGER_TEXT, USERMANAGER_TEXT, ICONUSERMANAGER ); // interpretMenu->addAction( interpretationAct );
+//    for ( int i = 0; i < MaxRecentFiles; ++i )
+//    {
+//        recentFilesAct[i] = new QAction( this );
+//        recentFilesAct[i]->setVisible( false );
+//        connect( recentFilesAct[i], SIGNAL( triggered() ), this, SLOT( openRecentFile() ) );
+//        am->addAction( recentFilesAct[i], QString("RECENT%1").arg(i), G_FILE_RECENTS );
+//    }
 
-    // Menu configuration
-    am->createDefaultConfigurationMenu(this);
-    am->createDefaultConfigurationMenuActions(this);
+//    // Menu interpretor
+//    am->createMenu(M_INTERPRETOR, MENUBAR, M_INTERPRETOR_TEXT , "", this); //interpretMenu = menuBar()->addMenu( " " );
+//    am->appendGroup(G_INTERPRETOR_GENERAL, M_INTERPRETOR);
+//    am->createAction( A_INTERPRETOR_GENERAL, G_INTERPRETOR_GENERAL, this );
+//    am->setActionDatas( A_INTERPRETOR_GENERAL, INTERPRETOR_GENERAL_TEXT, INTERPRETOR_GENERAL_TEXT, ""); // interpretMenu->addAction( interpretationAct );
+//
+//    // Menu tools
+//    am->createMenu(M_TOOLS, MENUBAR, M_TOOLS_TEXT , "", this); //interpretMenu = menuBar()->addMenu( " " );
+//    am->appendGroup(G_TOOLS_GENERAL, M_TOOLS);
+//    am->createAction( A_USERMANAGER, G_TOOLS_GENERAL, this );
+//    am->setActionDatas( A_USERMANAGER, USERMANAGER_TEXT, USERMANAGER_TEXT, ICONUSERMANAGER ); // interpretMenu->addAction( interpretationAct );
+//
+//    // Menu configuration
+//    am->createDefaultConfigurationMenu(this);
+//    am->createDefaultConfigurationMenuActions(this);
+//
+//    // Menu languages
+//    languageMenu = am->menu(M_LANGUAGES);
+//    languageActionGroup = new QActionGroup( this );
+//    connect( languageActionGroup, SIGNAL( triggered( QAction* ) ), this, SLOT( switchLanguage( QAction* ) ) );
+//    QMap<QString, QString> loc_lang = mfCore::translators()->availableLocalesAndLanguages();
+//    int i = 0;
+//    foreach( const QString &loc, loc_lang.keys() ) {
+//        i++;
+//        QAction * action = new QAction( QString( "&%1 %2" ).arg( QString::number( i ) , loc_lang.value( loc ) ), this );
+//        action->setCheckable( true );
+//        action->setData( loc );
+//        languageMenu->addAction( action );
+//        languageActionGroup->addAction( action );
+//        if ( loc == QLocale().name().left( 2 ) )
+//            action->setChecked( true );
+//    }
 
-    // Menu help
-    am->createDefaultAboutMenu(this);
-    am->createDefaultAboutMenuActions(this);
-    am->createAction( A_HELPTEXT_TOGGLER, G_HELP_HELP, this );
-    am->setActionDatas( A_HELPTEXT_TOGGLER, HELPTEXTTOGGLER_TEXT, HELPTEXTTOGGLER_TEXT, ICONHELP ); // interpretMenu->addAction( interpretationAct );
-    am->createAction( A_ABOUTFORM, G_HELP_ABOUT, this );
-    am->setActionDatas( A_ABOUTFORM, ABOUTFORM_TEXT, ABOUTFORM_TEXT, ICONHELP ); // interpretMenu->addAction( interpretationAct );
-
-    am->refreshAll();
-    setMenuBar( am->menubar(MENUBAR) );
-
-    // Menu languages
-    languageMenu = am->menu(M_LANGUAGES);
-    languageActionGroup = new QActionGroup( this );
-    connect( languageActionGroup, SIGNAL( triggered( QAction* ) ), this, SLOT( switchLanguage( QAction* ) ) );
-    QMap<QString, QString> loc_lang = mfCore::translators()->availableLocalesAndLanguages();
-    int i = 0;
-    foreach( const QString &loc, loc_lang.keys() ) {
-        i++;
-        QAction * action = new QAction( QString( "&%1 %2" ).arg( QString::number( i ) , loc_lang.value( loc ) ), this );
-        action->setCheckable( true );
-        action->setData( loc );
-        languageMenu->addAction( action );
-        languageActionGroup->addAction( action );
-        if ( loc == QLocale().name().left( 2 ) )
-            action->setChecked( true );
-    }
-
+    tkContextManager::instance()->updateContext();
+    tkActionManager::instance()->retranslateMenusAndActions();
 }
 
 
@@ -572,16 +551,16 @@ void mfMainWindow::createMenusAndActions()
 //--------------------------------------------------------------------------------------------------------
 void mfMainWindow::createToolBars()
 {
-    tkActionManager *am = mfCore::actionManager();
-    fileToolBar = addToolBar( "" );
-    fileToolBar->setObjectName( "fileToolBar" ); // objectName() is used for state save/restoration
-    fileToolBar->addAction( am->action( A_FILE_NEW ) );   //newAct );
-    fileToolBar->addAction( am->action( A_FILE_OPEN ) );  //openAct );
-    fileToolBar->addAction( am->action( A_FILE_SAVE ) );  //saveAct );
-    fileToolBar->addAction( am->action( A_FILE_PRINT ) );  //printAct );
-    fileToolBar->addAction( am->action( A_INTERPRETOR_GENERAL ) );  //interpretationAct );
-    fileToolBar->addAction( am->action( A_HELPTEXT_TOGGLER ) );  //helpTextAct );
-    fileToolBar->addAction( am->action( A_ABOUTFORM ) );  //aboutThisFormAct );
+//    tkActionManager *am = mfCore::actionManager();
+//    fileToolBar = addToolBar( "" );
+//    fileToolBar->setObjectName( "fileToolBar" ); // objectName() is used for state save/restoration
+//    fileToolBar->addAction( am->action( A_FILE_NEW ) );   //newAct );
+//    fileToolBar->addAction( am->action( A_FILE_OPEN ) );  //openAct );
+//    fileToolBar->addAction( am->action( A_FILE_SAVE ) );  //saveAct );
+//    fileToolBar->addAction( am->action( A_FILE_PRINT ) );  //printAct );
+//    fileToolBar->addAction( am->action( A_INTERPRETOR_GENERAL ) );  //interpretationAct );
+//    fileToolBar->addAction( am->action( A_HELPTEXT_TOGGLER ) );  //helpTextAct );
+//    fileToolBar->addAction( am->action( A_ABOUTFORM ) );  //aboutThisFormAct );
 }
 
 void mfMainWindow::createStatusBar()
@@ -599,48 +578,48 @@ void mfMainWindow::readSettings()
 
     // Main Application settings
     mfCore::settings()->restoreState( this );
-    recentFiles = mfCore::settings()->value( "MainApplication/recentFileList" ).toStringList();
-    m_AutomaticSaveInterval = mfCore::settings()->value( "MainApplication/AutomaticSaveInterval" , 600 ).toUInt(); // Default = 10 minutes
-    m_OpenLastOpenedForm = mfCore::settings()->value( "MainApplication/OpenLastOpenedFormAtStartup" , true ).toBool();
+    recentFiles = mfCore::settings()->value( SETTING_RECENTS ).toStringList();
+    m_AutomaticSaveInterval = mfCore::settings()->value( SETTING_SAVEINTERVAL , 600 ).toUInt(); // Default = 10 minutes
+    m_OpenLastOpenedForm = mfCore::settings()->value( SETTING_OPENLAST , true ).toBool();
+
     // Main Widget settings
-    m_HelpTextShow = mfCore::settings()->value( "MainWidget/helpTextShow", true ).toBool();
+    m_HelpTextShow = mfCore::settings()->value( SETTING_SHOWHELPTEXT, true ).toBool();
     updateRecentFileActions();
+
     // Notify
-    statusBar()->showMessage( tr( "Settings recovered" ), 2000 );
+    statusBar()->showMessage( tkTr(SETTINGS_RECOVERED), 2000 );
 }
 
 void mfMainWindow::writeSettings()
 {
     mfCore::settings()->saveState( this );
     // Main Application settings
-    mfCore::settings()->setValue( "MainApplication/recentFileList", recentFiles );
-    mfCore::settings()->setValue( "MainApplication/AutomaticSaveInterval", m_AutomaticSaveInterval );
-    mfCore::settings()->setValue( "MainApplication/OpenLastOpenedFormAtStartup", m_OpenLastOpenedForm );
+    mfCore::settings()->setValue( SETTING_RECENTS, recentFiles );
+    mfCore::settings()->setValue( SETTING_SAVEINTERVAL, m_AutomaticSaveInterval );
+    mfCore::settings()->setValue( SETTING_OPENLAST, m_OpenLastOpenedForm );
     // Main Widget settings
-    mfCore::settings()->setValue( "MainWidget/helpTextShow", m_HelpTextShow );
+    mfCore::settings()->setValue( SETTING_SHOWHELPTEXT, m_HelpTextShow );
 }
 
 QString mfMainWindow::strippedName( const QString &fullFileName )
 {
-    return QFileInfo( fullFileName ).fileName();
+    return QFileInfo(fullFileName).fileName();
 }
 
 void mfMainWindow::changeEvent( QEvent * event )
 {
-    if ( event->type() == QEvent::LanguageChange )
-    {
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
     }
     else
         QWidget::changeEvent( event );
-
 }
 
 
 void mfMainWindow::retranslateUi()
 {
-    fileToolBar->setWindowTitle( tr( "&File" ) );
+//    fileToolBar->setWindowTitle( tr( "&File" ) );
 }
 
 
@@ -664,7 +643,7 @@ void mfMainWindow::saveFormData()
     else
         tkLog::addError( this, tr( "Failure in form data saving operation." ) );
 #else
-    QMessageBox::information( this, qApp->applicationName(), tr( "This feature is not yet implemented." ) );
+    QMessageBox::information( this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED) );
 #endif
 }
 
@@ -688,6 +667,6 @@ void mfMainWindow::loadFormData()
     else
         tkLog::addError( this, tr( "Failure in form data loading operation." ) );
 #else
-    QMessageBox::information( this, qApp->applicationName(), tr( "This feature is not yet implemented." ) );
+    QMessageBox::information( this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED) );
 #endif
 }

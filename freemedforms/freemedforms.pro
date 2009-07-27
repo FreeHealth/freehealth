@@ -15,11 +15,14 @@ INSTALL_DRUGS = 1
 include( $${PACKAGE_LIBS_SOURCES}/sdk_usertoolkit.pri )
 include( $${PACKAGE_LIBS_SOURCES}/sdk_toolkit.pri )
 
+# include Doc
+!CONFIG(crosscompil) { 
+    include( ../doc/manual-fmf.pri)
+    PRE_TARGETDEPS += html_docs
+}
+
 # define CORE BUILD for fmf exporter
 DEFINES *= FMF_CORE_BUILD
-
-# add libs path
-LIBS *= -L$${PACKAGE_BUILD_PATH}
 
 # Qt definitions
 QT *= xml \
@@ -40,15 +43,17 @@ PRE_TARGETDEPS *= $${PACKAGE_LIBS_SOURCES}/toolkit \
 CONFIG( debug, debug|release ) { 
     # Debug
     unix:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-         -lquazip_debug
-#        -lquazip_debug \
-#        -ltoolkit_debug \
-#        -lusertoolkit_debug
+        -lquazip_debug
+    
+    # -lquazip_debug \
+    # -ltoolkit_debug \
+    # -lusertoolkit_debug
     else:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-         -lquazip_d
-#        -lquazip_d \
-#        -lusertoolkit_d \
-#        -ltoolkit_d
+        -lquazip_d
+    
+    # -lquazip_d \
+    # -lusertoolkit_d \
+    # -ltoolkit_d
     win32-*g++:LIBS *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
     win32-msvc*:LIBS *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib \
         -lshell32
@@ -56,10 +61,11 @@ CONFIG( debug, debug|release ) {
 else { 
     # Release
     LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-         -lquazip
-#        -lquazip \
-#        -lusertoolkit \
-#        -ltoolkit
+        -lquazip
+    
+    # -lquazip \
+    # -lusertoolkit \
+    # -ltoolkit
     win32-*g++:LIBS *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a,--enable-extra-pe-debug
     win32-msvc*:LIBS *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib \
         -lshell32
@@ -81,10 +87,10 @@ SOURCES += main.cpp \
     src/pluginsmanager/mfAbstractWidget.cpp \
     src/printmanager/mfPrinter.cpp \
     src/scriptmanager/mfScriptor.cpp \
-    src/updatemanager/mfUpdateChecker.cpp \
     src/pluginsmanager/mfPluginsManager.cpp \
     mfGlobal.cpp \
-    src/settingsmanager/mfSettings.cpp
+    src/settingsmanager/mfSettings.cpp \
+    src/aboutdialog/mfAboutDialog.cpp
 HEADERS += mfExporter.h \
     src/coremanager/mfCore.h \
     src/crashmanager/mfCrashRecovererDialog.h \
@@ -101,10 +107,11 @@ HEADERS += mfExporter.h \
     src/pluginsmanager/mfIOInterface.h \
     src/printmanager/mfPrinter.h \
     src/scriptmanager/mfScriptor.h \
-    src/updatemanager/mfUpdateChecker.h \
     src/pluginsmanager/mfPluginsManager.h \
     mfGlobal.h \
-    src/settingsmanager/mfSettings.h
+    src/settingsmanager/mfSettings.h \
+    mfConstants.h \
+    src/aboutdialog/mfAboutDialog.h
 FORMS += src/ui/mfWidgetSelector.ui \
     src/ui/mfMainWidgetUi.ui \
     src/ui/mfCrashRecoverUi.ui \
@@ -112,4 +119,3 @@ FORMS += src/ui/mfWidgetSelector.ui \
 RESOURCES = application.qrc
 TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/fmf_fr.ts \
     $${FMF_GLOBAL_RESOURCES}/translations/fmf_de.ts
-

@@ -61,17 +61,10 @@ int main( int argc, char *argv[] )
      app.setOrganizationDomain( PACKAGE_DOMAIN );
      app.setApplicationVersion( PACKAGE_VERSION );
 
-//#ifndef DEBUG
-#ifdef Q_OS_MAC
-     QDir dir( QDir::cleanPath( QApplication::applicationDirPath() + "/../plugins/qt/" ) );
-     QApplication::addLibraryPath( dir.absolutePath() );
-#endif
-//#endif
-
-     QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
+     QObject::connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
      // init core
-     if ( ! mfCore::init() ) {
+     if (!mfCore::init()) {
          tkLog::saveLog();
          return 1;
      }

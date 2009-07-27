@@ -50,7 +50,6 @@ class Q_FMF_EXPORT mfSettings : public tkSettings
 {
     Q_OBJECT
     friend class mfCore;
-
 public:
     virtual bool readSettings();
     virtual bool writeSettings();

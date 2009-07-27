@@ -43,4 +43,9 @@
 #define Q_FMF_EXPORT Q_DECL_IMPORT
 #endif
 
+
+#define Q_FMF_BEGIN_CONSTANTS namespace mfConstants {
+#define Q_FMF_END_CONSTANTS   }
+#define Q_FMF_USING_CONSTANTS using namespace mfConstants;
+
 #endif

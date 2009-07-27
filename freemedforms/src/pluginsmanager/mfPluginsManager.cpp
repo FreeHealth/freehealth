@@ -32,6 +32,11 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+   \class mfPluginsManager
+   \brief Plugins manager for FreeMedForms.
+*/
+
 #include "mfPluginsManager.h"
 
 #include <mfCore.h>
@@ -44,13 +49,19 @@
 #include <QDir>
 #include <QFileInfo>
 
+/** \brief Constructor */
 mfPluginsManager::mfPluginsManager( QObject* p )
           : QObject( p ), m_IOPlugin( 0 ), m_BaseWidget( 0 )
 {
     setObjectName( "mfPluginsManager" );
 }
 
-void mfPluginsManager::loadsPlugins()
+/**
+  \brief Load plugins from The plugins path specified by tkSettings::path() tkSettings::FMFPlugInsPath.
+  tkSettings must be instanciated BEFORE you call plugins loader.\n
+  This member automatically detects the default IO plugins and the BaseWidget plugins.
+*/
+void mfPluginsManager::loadPlugins()
 {
      tkLog::addMessage( this, tr( "Load plugins. Path : %1" ).arg( mfCore::settings()->pluginPath() ) );
      // loads static plugins
@@ -88,6 +99,7 @@ void mfPluginsManager::loadsPlugins()
 //      enableUserPlugins();
 }
 
+/** \brief Add a functionnal plugins to the plugins manager \internal*/
 bool mfPluginsManager::addPlugin( QObject* o )
 {
      // try to cast instance to BasePlugin
@@ -154,6 +166,7 @@ void mfPluginsManager::enableUserPlugins()
 }
 */
 
+/** \brief Defines the current IO plugins for forms IO */
 void mfPluginsManager::setCurrentIO( mfIOInterface * b )
 {
      // if same cancel
@@ -176,6 +189,7 @@ void mfPluginsManager::setCurrentIO( mfIOInterface * b )
 // void mfPluginsManager::manageRequested()
 // { ( new UIPluginsSettings() )->show(); }
 
+/** \brief Cleans everything */
 void mfPluginsManager::clearPlugins()
 {
      foreach ( mfBaseInterface* bp, m_Plugins ) {

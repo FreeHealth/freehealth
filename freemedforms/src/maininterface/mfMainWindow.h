@@ -41,6 +41,9 @@
 #ifndef FREEMEDFORMS_H
 #define FREEMEDFORMS_H
 
+// include toolkit headers
+#include <tkMainWindow.h>
+
 // include freemedforms headers
 #include <mfExporter.h>
 #include <mfRecovererThread.h>
@@ -52,7 +55,6 @@ class mfSettings;
 class tkUserManager;
 
 // include Qt headers
-#include <QMainWindow>
 #include <QCloseEvent>
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -63,11 +65,11 @@ QT_END_NAMESPACE
 /**
  * \file mfMainWindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>, Guillaume Denry
- * \version 0.0.7
- * \date 07 Jun 2009
+ * \version 0.0.10
+ * \date 22 July 2009
 */
 
-class Q_FMF_EXPORT mfMainWindow: public QMainWindow
+class Q_FMF_EXPORT mfMainWindow: public tkMainWindow
 {
      friend class mfCore;
      friend class mfSettings;
@@ -77,31 +79,38 @@ class Q_FMF_EXPORT mfMainWindow: public QMainWindow
 public:
      QStatusBar *statusBar();
 
+public Q_SLOTS:
+     bool updateFound() { return tkMainWindow::updateFound(); }
+
 protected:
      mfMainWindow( QWidget * parent = 0 );
+     void initialize();
      ~mfMainWindow();
      void closeEvent( QCloseEvent *event );
 
 private Q_SLOTS:
      // AutoConnect via tkActionManager
-     void on_actionFileNew_triggered();      // newFile();
-     void on_actionFileOpen_triggered();     // open();
-     bool on_actionFileSave_triggered();     // save();
-     bool on_actionFileSaveAs_triggered();   // saveAs();
-     bool on_actionFilePrint_triggered();    // print();
-     void on_actionFileExit_triggered()      { close(); }
-     void on_actionAbout_triggered();        // about();
+     bool newFile();
+     bool openFile();
+     bool saveFile();
+     bool saveAsFile();
+     bool print();
+
+     bool aboutApplication();
+     bool debugDialog();
+     bool aboutThisForm();
+
+     bool applicationHelp() { return tkMainWindow::applicationHelp(); }
+//     void switchLanguage(QAction * action) { tkMainWindow::switchLanguage(action); }
+
      void on_actionHelpTextToggler_triggered(); // helpTextHideShow();
-     void on_actionDebugHelper_triggered();  // displayDebugDialog();
-     void on_actionAboutThisForm_triggered(); // aboutThisForm();
      void on_actionInterpretor_triggered();  // showInterpretation();
      void on_actionUserManager_triggered();  // showUserManager();
 
-     void on_menuToolbars_aboutToShow();     // refreshToolbarMenu();
+     void refreshToolbarMenu();
 
      void documentWasModified();
      void openRecentFile();
-     void switchLanguage( QAction * action );
      void refreshWholeUi();
      void formEditor();
      void toolbarToggled(bool state);
@@ -115,8 +124,6 @@ private Q_SLOTS:
      void loadFormData(); // TEMPORARY, JUST FOR TESTS OF FORM DATA ROUTINES
 
 private:
-//     void addToMenu( QMenu * menu, QAction * action, QAction * before = 0 );
-
      void timerEvent(QTimerEvent *event);
      void changeEvent( QEvent * event );
      void showWidget();
@@ -137,21 +144,11 @@ private:
      void createLanguageMenu(QMenu *menu);
 //     void createConfigurationMenu();
 
-     QMenu *fileMenu;
-     QMenu *editMenu;
-     QMenu *toolbarMenu;
-     QMenu *interpretMenu;
-     QMenu *configMenu;
-     QMenu *languageMenu;
-     QMenu *helpMenu;
 
      QToolBar *fileToolBar;
      QToolBar *editToolBar;
-     QActionGroup *languageActionGroup;
 
-     QAction *recentFilesAct[MaxRecentFiles],
-      *cutAct, *copyAct, *pasteAct,
-      *previousAct, *nextAct;
+     QAction *recentFilesAct[MaxRecentFiles];
 
      QStringList recentFiles;
 

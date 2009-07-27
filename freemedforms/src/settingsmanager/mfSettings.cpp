@@ -95,4 +95,5 @@ bool mfSettings::writeSettings()
 }
 
 void mfSettings::setDefaultSettings()
-{}
+{
+}

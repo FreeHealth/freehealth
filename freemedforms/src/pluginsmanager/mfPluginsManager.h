@@ -57,13 +57,12 @@
 /**
  * \file mfPluginsManager.h
  * \author Eric MAEKER, MD <eric.maeker@free.fr>
- * \version 0.02
- * \date 14 Janvier 2009
+ * \version 0.0.3
+ * \date 14 July 2009
 */
 
 typedef QList<mfFormWidgetInterface*> WidgetPlugins;
 typedef QList<mfIOInterface*> IOPlugins;
-
 
 class Q_FMF_EXPORT mfPluginsManager : public QObject
 {
@@ -73,10 +72,12 @@ class Q_FMF_EXPORT mfPluginsManager : public QObject
 public:
      enum StateType { stAll = -1, stDisabled, stEnabled };
 
-     void loadsPlugins();
+     void loadPlugins();
 
+     /** \brief Returns all the loaded plugins. */
      QList<mfBaseInterface*> plugins() const { return m_Plugins; }
 
+     /** \brief Returns a QList of the plugins class asked. */
      template <class T>
      QList<T> plugins( mfPluginsManager::StateType t = stAll,
                        const QString& name = QString::null,
@@ -101,6 +102,7 @@ public:
      }
 
 
+     /** \brief Returns a the plugins class asked named \e name and version \e version. */
      template <class T>
      T plugin( mfPluginsManager::StateType type,
                const QString& name,
@@ -111,6 +113,7 @@ public:
           return plugins<T>( type, name, version ).value( 0 );
      }
 
+     /** \brief Returns the current BaseWidgetPlugins. */
      mfFormWidgetInterface* currentBaseWidget() const
      {
           Q_ASSERT_X( m_BaseWidget, "pluginsManager: no base widget",
@@ -121,6 +124,8 @@ public:
      }
 
      void setCurrentIO( mfIOInterface * );
+
+     /** \brief Returns the current forms' IO plugins. */
      mfIOInterface* currentIO() const
      {
           Q_ASSERT_X( m_IOPlugin, "pluginsManager: no io plugins",
@@ -130,8 +135,6 @@ public:
           return m_IOPlugin;
      }
 
-
-
 protected:
      QList<mfBaseInterface*>  m_Plugins;
      mfIOInterface*           m_IOPlugin;
@@ -139,10 +142,8 @@ protected:
 
      mfPluginsManager( QObject* = 0 );
      bool addPlugin( QObject* );
-//       void enableUserPlugins();
 
-public slots:
-//      void manageRequested();
+public Q_SLOTS:
      void clearPlugins();
 };
 

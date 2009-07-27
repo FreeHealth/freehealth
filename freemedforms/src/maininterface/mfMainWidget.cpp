@@ -145,7 +145,8 @@ void mfMainWidget::createForm( mfObject * mfo, QTreeWidgetItem * item )
      }
 
      // Analysing all children, take care to the tree !!!
-     foreach( mfObject* chd, mfo->mfChildren() ) createForm( chd, item );
+     foreach( mfObject* chd, mfo->mfChildren() )
+         createForm( chd, item );
 //      else                 createForm(mfo->children().first(), m_Item->parent());
 }
 
@@ -257,20 +258,19 @@ void mfMainWidget::createToolBar()
 {
      // find nav bar into mainwindow
      m_NavBar =  mfCore::mainWindow()->findChild<QToolBar *>( "FormNavigation" );
-     if ( !m_NavBar )
-     {
-          m_NavBar = new QToolBar( mfCore::mainWindow() );
-          m_NavBar->setObjectName( "FormNavigation" );
-          m_NavBar->setWindowTitle( tr( "Forms Navigation" ) ) ;
+     if (!m_NavBar ) {
+//          m_NavBar = new QToolBar( mfCore::mainWindow() );
+//          m_NavBar->setObjectName( "FormNavigation" );
+//          m_NavBar->setWindowTitle( tr( "Forms Navigation" ) ) ;
      }
      // add actions
-     m_NavBar->addAction( addFileAct );
-     m_NavBar->addAction( removeSubFormAct );
-     m_NavBar->addAction( hideShowTreeAct );
-     m_NavBar->addAction( previousAct );
-     m_NavBar->addAction( nextAct );
-     // add tool bar to main window
-     mfCore::mainWindow()->addToolBar( m_NavBar );
+//     m_NavBar->addAction( addFileAct );
+//     m_NavBar->addAction( removeSubFormAct );
+//     m_NavBar->addAction( hideShowTreeAct );
+//     m_NavBar->addAction( previousAct );
+//     m_NavBar->addAction( nextAct );
+//     // add tool bar to main window
+//     mfCore::mainWindow()->addToolBar( m_NavBar );
 }
 
 void mfMainWidget::retranslateUi()

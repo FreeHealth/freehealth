@@ -32,80 +32,19 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-/***************************************************************************
- *   This code is inspired of the Monkey Studio project                    *
- *   http://www.monkeystudio.org/                                          *
- *   Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>                      *
- *                                                                         *
- *   Adaptations to FreeMedForms by : Eric Maeker, MD                      *
- *   eric.maeker@free.fr                                                   *
- ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef MFCORE_H
-#define MFCORE_H
+#ifndef MFABOUTDIALOG_H
+#define MFABOUTDIALOG_H
 
-#include <QObject>
-#include <QHash>
+#include <tkAboutDialog.h>
 
-// include freemedforms headers
-#include "mfExporter.h"
-class mfSettings;
-class mfMainWindow;
-class mfMainWidget;
-class mfScriptor;
-//class mfUpdateChecker;
-class mfPluginsManager;
-
-// include toolkit headers
-class tkTranslators;
-class tkActionManager;
-class tkUpdateChecker;
-
-// include usertoolkit headers
-class tkUserModel;
-
-// include Qt headers
-QT_BEGIN_NAMESPACE
-class QTemporaryFile;
-QT_END_NAMESPACE
-
-/**
- * \file mfCore.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 07 Jun 2009
-*/
-
-/**
-  \TODO mainWindow to delete, tkUserModel to delete
-*/
-
-class Q_FMF_EXPORT mfCore : public QObject
+class mfAboutDialog : public tkAboutDialog
 {
     Q_OBJECT
-public:
-    static bool init();
-    static void endOfApplication();
+    Q_DISABLE_COPY(mfAboutDialog)
 
-    // Application objects (widgets, toolbars, specific object like updateChecker...)
-    static mfSettings*       settings();
-    static mfMainWindow*     mainWindow();
-    static mfMainWidget*     mainWidget();
-    static mfScriptor*       scriptor();
-    static tkUpdateChecker*  updateChecker();
-    static tkTranslators*    translators();
-    static mfPluginsManager* pluginsManager();
-    static void              changeLanguage( const QString & lang );
-    static void              renewTemporaryFile();
-    static QTemporaryFile *  temporaryFile();
-    static tkUserModel *     userModel();
-    static tkActionManager * actionManager();
+public:
+    explicit mfAboutDialog(QWidget *parent = 0);
 
 };
 
-#endif
+#endif // MFABOUTDIALOG_H
