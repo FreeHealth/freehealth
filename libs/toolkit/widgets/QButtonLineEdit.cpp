@@ -134,33 +134,32 @@ void QButtonLineEdit::prepareConnections()
 void QButtonLineEdit::leftTrig( QAction * action )
 {
     m_leftButton->setDefaultAction( action );
-    if ( text().isEmpty() || ( text() == m_emptyString ) )
-    {
-        setText( action->toolTip() );
+    if ( text().isEmpty() || ( text() == m_emptyString ) ) {
+        setText(action->toolTip());
         m_emptyString = action->toolTip();
         setSpecificStyleSheet( "color:gray;" );
     }
     clearFocus();
 }
 
-void QButtonLineEdit::focusInEvent ( QFocusEvent * event ) 
+void QButtonLineEdit::focusInEvent( QFocusEvent * event )
 {
-     if ( text() == m_emptyString )
-     {
+     if (text()==m_emptyString) {
          clear();
-        setSpecificStyleSheet( "color:black;" );
+         setSpecificStyleSheet( "color:black;" );
      }
      QLineEdit::focusInEvent( event );
 }
 
-void QButtonLineEdit::focusOutEvent ( QFocusEvent * event ) 
+void QButtonLineEdit::focusOutEvent( QFocusEvent * event )
 {
-    if ( text().isEmpty() )
-    {
-        setText( m_emptyString );
+    if (text().isEmpty()) {
+        bool block = blockSignals(true);
+        setText(m_emptyString);
         setSpecificStyleSheet( "color:gray;" );
+        blockSignals(block);
     }
-    QLineEdit::focusOutEvent( event );
+    QLineEdit::focusOutEvent(event);
 }
 
 /**
@@ -169,7 +168,7 @@ an empty QString is returned.
 */
 QString QButtonLineEdit::searchText() const
 {
-    if ( text() == m_emptyString ) //styleSheet().contains( "color:gray" ) )
+    if (text()==m_emptyString) //styleSheet().contains( "color:gray" ) )
         return QString::null;
     return text();
 }

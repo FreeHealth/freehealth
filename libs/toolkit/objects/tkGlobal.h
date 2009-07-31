@@ -107,12 +107,12 @@ Q_TK_EXPORT void centerWidget( QWidget * win );
 Q_TK_EXPORT void setFullScreen( QWidget* win, bool on );
 
 // Message Boxes and default dialogs
-Q_TK_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
-Q_TK_EXPORT bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+Q_TK_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+Q_TK_EXPORT bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
 Q_TK_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title = QString::null );
 Q_TK_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title = QString::null );
-Q_TK_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title = QString::null );
+Q_TK_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
 Q_TK_EXPORT bool functionNotAvailableMessageBox( const QString &functionText );
 Q_TK_EXPORT void quickDebugDialog( const QStringList &texts);
 Q_TK_EXPORT bool defaultLicenceAgreementDialog(const QString &message, tkAboutDialog::AvailableLicense licence);

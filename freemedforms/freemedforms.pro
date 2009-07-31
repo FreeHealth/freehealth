@@ -7,9 +7,9 @@ PACKAGE_VERSION = 0.0.7
 include( ../config.pri )
 
 # Prepare installation
-include( ../install.pri )
 FMF_BUILD = 1
 INSTALL_DRUGS = 1
+include( ../install.pri )
 
 # include SDKs
 include( $${PACKAGE_LIBS_SOURCES}/sdk_usertoolkit.pri )

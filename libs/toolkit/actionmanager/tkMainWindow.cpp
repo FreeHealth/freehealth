@@ -57,7 +57,7 @@ Q_TK_USING_CONSTANTS
 #include <QMenuBar>
 #include <QDebug>
 
-        tkMainWindow::tkMainWindow(QWidget *parent) :
+tkMainWindow::tkMainWindow(QWidget *parent) :
         QMainWindow(parent),
         aNew(0),
         aOpen(0),
@@ -158,6 +158,24 @@ void tkMainWindow::createFormatMenu()
     formatmenu->appendGroup(tkConstants::G_FORMAT_TABLE);
     formatmenu->appendGroup(tkConstants::G_FORMAT_IMAGE);
     formatmenu->appendGroup(tkConstants::G_FORMAT_OTHER);
+}
+
+void tkMainWindow::createPluginsMenu()
+{
+    tkActionManager *am = tkActionManager::instance();
+
+    tkActionContainer *menubar = am->actionContainer(tkConstants::MENUBAR);
+    Q_ASSERT(menubar);
+    menubar->appendGroup(tkConstants::G_PLUGINS);
+
+    tkActionContainer *confmenu = am->createMenu(tkConstants::M_PLUGINS);
+    //    confmenu->setEmptyAction(tkActionContainer::EA_Hide);
+    menubar->addMenu(confmenu, tkConstants::G_PLUGINS);
+    confmenu->setTranslations(tkConstants::M_PLUGINS_TEXT);
+    confmenu->appendGroup(tkConstants::G_PLUGINS_USERMANAGER);
+    confmenu->appendGroup(tkConstants::G_PLUGINS_DRUGS);
+    confmenu->appendGroup(tkConstants::G_PLUGINS_CALENDAR);
+    confmenu->appendGroup(tkConstants::G_PLUGINS_OTHERS);
 }
 
 /** \brief Menu is created in the global context \sa tkConstants::C_GLOBAL_ID.*/

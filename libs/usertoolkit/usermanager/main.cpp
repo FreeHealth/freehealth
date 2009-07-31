@@ -21,12 +21,14 @@
 #include <QApplication>
 
 #include <tkUserIdentifier.h>
-#include <tkUserManager.h>
+#include <UserManagerMainWindow.h>
 #include <tkUserGlobal.h>
 
 #include <tkGlobal.h>
 #include <tkSettings.h>
 #include <tkTranslators.h>
+#include <tkActionManager.h>
+#include <tkContextManager.h>
 
 #include <QDebug>
 #include <QFileDialog>
@@ -39,7 +41,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName( QCoreApplication::translate("main", "FreeMedForms' Users Manager") );
+    app.setApplicationName( QCoreApplication::translate("main", "FreeMedForms    Users Manager") );
     app.setApplicationVersion( "0.0.2" );
 
     // init settings
@@ -74,7 +76,10 @@ int main(int argc, char *argv[])
         return 123;
 
     // user manager
-    tkUserManager *tkm = new tkUserManager();
+    UserManagerMainWindow *tkm = new UserManagerMainWindow();
+    tkActionManager::instance(tkm);
+    tkContextManager::instance(tkm);
+    tkm->initialize();
     tkm->show();
 
     return app.exec();

@@ -1,1 +1,1 @@
-#include <../widgets/tkPrinterPreviewer_p.h>
+#include <../printer/tkPrinterPreviewer_p.h>

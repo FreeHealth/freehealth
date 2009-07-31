@@ -68,15 +68,15 @@ Q_DECLARE_METATYPE(tkMenuActionContainer*)
     \brief The ActionContainer class represents a menu or menu bar in Qt Creator.
 
     You don't create instances of this class directly, but instead use the
-    \l{ActionManager::createMenu()}
-    and \l{ActionManager::createMenuBar()} methods.
+    \l{tkActionManager::createMenu()}
+    and \l{tkActionManager::createMenuBar()} methods.
     Retrieve existing action containers for an ID with
-    \l{ActionManager::actionContainer()}.
+    \l{tkActionManager::actionContainer()}.
 
     Within a menu or menu bar you can group menus and items together by defining groups
-    (the order of the groups is defined by the order of the \l{ActionContainer::appendGroup()} calls), and
+    (the order of the groups is defined by the order of the \l{tkActionContainer::appendGroup()} calls), and
     adding menus/actions to these groups. If no custom groups are defined, an action container
-    has three default groups \c{Core::Constants::G_DEFAULT_ONE}, \c{Core::Constants::G_DEFAULT_TWO}
+    has three default groups \c{tkConstants::G_DEFAULT_ONE}, \c{tkConstants::G_DEFAULT_TWO}
     and \c{Core::Constants::G_DEFAULT_THREE}.
 
     You can define if the menu represented by this action container should automatically disable
@@ -408,8 +408,8 @@ bool tkMenuActionContainer::update()
             }
         }
     }
-    if (!hasitems)
-        qWarning() << "updating" << tkUID->stringForUniqueIdentifier(this->id()) << "no items --> hide = " << hasEmptyAction(EA_Hide) << "disable = "<< hasEmptyAction(EA_Disable);
+//    if (!hasitems)
+//        qWarning() << "updating" << tkUID->stringForUniqueIdentifier(this->id()) << "no items --> hide = " << hasEmptyAction(EA_Hide) << "disable = "<< hasEmptyAction(EA_Disable);
 
     if (hasEmptyAction(EA_Hide))
         m_menu->setVisible(hasitems);

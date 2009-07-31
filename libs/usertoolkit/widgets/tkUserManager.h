@@ -40,6 +40,9 @@
 #ifndef TKUSERMANAGER_H
 #define TKUSERMANAGER_H
 
+
+#include <tkMainWindow.h>
+
 // include usertoolkit headers
 #include <tkUserExporter.h>
 class tkUserManagerPrivate;
@@ -54,7 +57,7 @@ class tkUser;
  * \date 07 March 2009
 */
 
-class Q_TKUSER_EXPORT tkUserManager : public QMainWindow
+class Q_TKUSER_EXPORT tkUserManager : public tkMainWindow
 {
     Q_OBJECT
     Q_DISABLE_COPY(tkUserManager)
@@ -62,11 +65,14 @@ public:
     explicit tkUserManager( QWidget * parent = 0 ); // work with tkUserModel
     ~tkUserManager();
 
+    virtual bool initialize();
+
 protected:
     void closeEvent( QCloseEvent *event );
     
 private:
     tkUserManagerPrivate * d;
 };
+
 
 #endif // TKUSERMANAGER_H

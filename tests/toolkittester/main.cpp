@@ -30,6 +30,10 @@
 #include <tkSettings.h>
 #include <tkTranslators.h>
 #include <tkConstantTranslations.h>
+#include <tkListView.h>
+#include <tkRichTextEditor.h>
+#include <tkActionManager.h>
+#include <tkContextManager.h>
 
 #include <tkPrinterTester.h>
 
@@ -146,6 +150,38 @@ void test_dialogs()
     qWarning() << tkGlobal::defaultLicenceAgreementDialog("Smouky touky", tkAboutDialog::BSD);
 }
 
+void test_listView()
+{
+    win = new QMainWindow();
+    QWidget *w = new QWidget(win);
+    tkActionManager::instance(win);
+    tkContextManager::instance(win);
+    QStringListModel *m1 = new QStringListModel(win);
+    QStringListModel *m2 = new QStringListModel(win);
+    QStringListModel *m3 = new QStringListModel(win);
+    tkListView *v1 = new tkListView(w);
+    tkListView *v2 = new tkListView(w);
+    tkListView *v3 = new tkListView(w);
+    tkRichTextEditor *te = new tkRichTextEditor(w);
+    tkRichTextEditor *te2 = new tkRichTextEditor(w);
+
+    v1->setModel(m1);
+    v2->setModel(m2);
+    v3->setModel(m3);
+
+    QGridLayout *l = new QGridLayout(w);
+
+    l->addWidget(v1);
+    l->addWidget(v2);
+    l->addWidget(v3);
+    l->addWidget(te);
+    l->addWidget(te2);
+
+    win->setCentralWidget(w);
+    win->show();
+
+}
+
 int main(int argc, char *argv[])
 {
 //    Q_INIT_RESOURCE(toolkittester);
@@ -159,7 +195,8 @@ int main(int argc, char *argv[])
 //    text_Html();
 //    test_Xml();
 //    test_Translations();
-    test_tkPrinter();
+//    test_tkPrinter();
+    test_listView();
 //    test_dialogs();
     app.exec();
     return 0;

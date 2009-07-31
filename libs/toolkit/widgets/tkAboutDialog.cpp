@@ -66,19 +66,19 @@
 Q_TK_USING_CONSTANTS
 Q_TK_USING_TRANSLATIONS
 
-const QString m_RubrikMask =
+static const QString m_RubrikMask =
         "%1\n"
         "%2"
         "\n";
 
-const QString m_DatasMask =
+static const QString m_DatasMask =
         "  * %1, %2\n"
         "    %3\n"
         "    %4\n"
         "\n";
 
 
-const char * const LGPL_EN =
+static const char * const LGPL_EN =
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
 "<html><head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"> <title>GNU Lesser General Public License - GNU Project - Free Software Foundation (FSF)</title></head><body>"
 "<h3 style=\"text-align: center;\">GNU LESSER GENERAL PUBLIC LICENSE</h3>"
@@ -121,7 +121,7 @@ const char * const LGPL_EN =
 "<p>If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.</p>"
 "</body></html>";
 
-const char* const  GPLv3_EN =
+static const char* const  GPLv3_EN =
 " <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">  <html><head>  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">  <title>GNU General Public License - GNU Project - Free Software Foundation (FSF)</title> </head> <body> <h3 style=\"text-align: center;\">GNU GENERAL PUBLIC LICENSE</h3> <p style=\"text-align: center;\">Version 3, 29 June 2007</p>"
   "<p>Copyright &copy; 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</p>"
   "<p>  Everyone is permitted to copy and distribute verbatim copies  of this license document, but changing it is not allowed.</p>"
@@ -206,7 +206,7 @@ const char* const  GPLv3_EN =
   "<p>The GNU General Public License does not permit incorporating your program into proprietary programs.  If your program is a subroutine library, you may consider it more useful to permit linking proprietary applications with the library.  If this is what you want to do, use the GNU Lesser General Public License instead of this License.  But first, please read &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.</p>"
   "</body></html>";
 
-const char* const BSD_EN =
+static const char* const BSD_EN =
   "<p align=center><b>Terms of the BSD license.</b></p><p&nbsp;</p>"
   "<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>"
   "<ul><li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>"
@@ -215,7 +215,7 @@ const char* const BSD_EN =
   "</ul><p></p>"
   "<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>";
 
-const char* const BSD_FR =
+static const char* const BSD_FR =
   "<p align=center><b>Termes de la licence BSD.</b></p><p&nbsp;</p>"
   "<p>La redistribution et l'utilisation sous forme binaire ou de code source, avec ou sans modification, sont autoris&eacute;es &agrave; condition que les conditions suivantes soient respect&eacute;es :</p>"
   "<ul><li>Les redistributions du code source doivent conserver l'indication de copyright ci-dessus, cette liste de conditions et la renonciation suivante.</li>"

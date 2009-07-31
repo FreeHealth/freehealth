@@ -81,6 +81,35 @@ class mfCorePrivate
 {
 public:
     static bool firstTimeRunning(QSplashScreen &splash);
+    static bool identifyUser()
+    {
+        tkUserModel *m = tkUserModel::instance();
+        while (true) {
+            if (mfCore::settings()->needUserIdentification()) {
+                tkUserIdentifier ident;
+                if ( ident.exec() == QDialog::Rejected )
+                    return false;
+                mfCore::settings()->setValue(SETTING_LASTLOGIN, ident.login() );
+                mfCore::settings()->setValue(SETTING_LASTPASSWORD, ident.cryptedPassword() );
+            } else {
+                QString log = mfCore::settings()->value(SETTING_LASTLOGIN).toString();
+                QString pass = mfCore::settings()->value(SETTING_LASTPASSWORD).toString();
+                if (m->isCorrectLogin(log, pass)) {
+                    m->setCurrentUser(log, pass);
+                    break;
+                } else {
+                    mfCore::settings()->setValue(SETTING_LASTLOGIN, QVariant() );
+                    mfCore::settings()->setValue(SETTING_LASTPASSWORD, QVariant() );
+                }
+            }
+        }
+        // messageBox : Welcome User
+        tkGlobal::informativeMessageBox(tkTr(CONNECTED_AS_1)
+                                        .arg(m->currentUserData(User::Name).toString()),
+                                        tkTr(WELCOME_USER));
+
+        return true;
+    }
 public:
     // instances of object
     static QHash<const QMetaObject*, QObject*> mInstances;
@@ -233,15 +262,8 @@ bool mfCore::init()
     }
 
     // before all identify user
-    if ( settings()->needUserIdentification() ) {
-        if (true) {
-            tkUserIdentifier ident;
-            if ( ident.exec() == QDialog::Rejected )
-                return false;
-            settings()->setValue(SETTING_LASTLOGIN, ident.login() );
-            settings()->setValue(SETTING_LASTPASSWORD, ident.cryptedPassword() );
-        }
-    }
+    if (!mfCorePrivate::identifyUser())
+        return false;
 
     // check applications directories
     showMessage( &splash, tkTr(CHECKING_DIRECTORY_STRUCTURE) );

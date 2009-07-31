@@ -71,6 +71,13 @@ const char * const G_FORMAT_OTHER        = "grFormat.Other";      /*!< \brief De
 //    const char * const G_WINDOW_LIST         = "grwindow.List";
 //    const char * const G_WINDOW_FULLSCREEN   = "grwindow.Fullscreen";
 
+// Plugins groups
+const char * const G_PLUGINS              =   "grPlugins";
+const char * const G_PLUGINS_USERMANAGER  =   "grPlugins.usermanager";
+const char * const G_PLUGINS_DRUGS        =   "grPlugins.drugs";
+const char * const G_PLUGINS_CALENDAR     =   "grPlugins.calendar";
+const char * const G_PLUGINS_OTHERS       =   "grPlugins.others";
+
 // Interpretor groups
 const char * const G_INTERPRETOR_GENERAL = "grInterpretor.General";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 
@@ -277,11 +284,12 @@ const char * const  ICONNEWUSER       = "adduser.png";
 
 
 // Contexts
-const char* const   C_GLOBAL          = "context.global";
-const int           C_GLOBAL_ID       = 0;
-const char* const   C_EDITOR_BASIC    ="context.Editor";
-const char* const   C_EDITOR_TABLE    ="context.Editor.Table";
-const char* const   C_EDITOR_IO       ="context.Editor.IO";
+const char* const   C_GLOBAL             = "context.global";
+const int           C_GLOBAL_ID          = 0;
+const char* const   C_EDITOR_BASIC       = "context.Editor";
+const char* const   C_EDITOR_TABLE       = "context.Editor.Table";
+const char* const   C_EDITOR_IO          = "context.Editor.IO";
+const char* const   C_USERMANAGER        = "context.UserManager";
 
 
 
@@ -299,6 +307,9 @@ const char * const EDITOR_FILESAVE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Sav
 const char * const EDITORMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Rich Text Editor");
 
 
+// ShortCuts
+//: ShortCut for "Print prescription"
+const char* const   K_PRINT_PRESCRIPTION = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+Shift+P");
 
 
 

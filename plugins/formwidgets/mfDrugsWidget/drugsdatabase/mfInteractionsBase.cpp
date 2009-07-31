@@ -231,8 +231,7 @@ QList<mfDrugInteraction*> mfInteractionsBase::calculateInteractions( const QList
      // prepare cached datas
      toReturn = d_interactions->getAllInteractionsFound();
 
-     int id1, id2, iam_subst;
-
+     int id1, id2;
      // for each known drug interaction
      foreach( mfDrugInteraction* di, toReturn) {
          id1 = di->value( IAM_ID1 ).toInt();

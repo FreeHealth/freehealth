@@ -149,7 +149,11 @@ mfDrugsActionHandler::mfDrugsActionHandler(QObject *parent) :
         menu->setTranslations(mfDrugsConstants::DRUGSMENU_TEXT);
     }
     Q_ASSERT(menu);
+#ifdef DRUGS_INTERACTIONS_STANDALONE
     am->actionContainer(tkConstants::MENUBAR)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);
+#else
+    am->actionContainer(tkConstants::M_PLUGINS)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);
+#endif
 
     // Create local actions
     a = aClear = new QAction(this);
@@ -245,8 +249,10 @@ mfDrugsActionHandler::mfDrugsActionHandler(QObject *parent) :
     tkActionContainer *filemenu = am->actionContainer(tkConstants::M_FILE);
     a = aPrintPrescription = new QAction(this);
     a->setIcon(tkTheme::icon(tkConstants::ICONPRINT));
+    a->setShortcut(tkTr(K_PRINT_PRESCRIPTION));
     cmd = am->registerAction(a, mfDrugsConstants::A_PRINT_PRESCRIPTION, ctx);
     cmd->setTranslations(mfDrugsConstants::PRINTPRESCRIPTION_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    cmd->setKeySequence(tkTr(K_PRINT_PRESCRIPTION));
     cmd->retranslate();
     if (filemenu) {
         filemenu->addAction(cmd, tkConstants::G_FILE_PRINT);

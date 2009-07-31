@@ -54,6 +54,9 @@
 #include <tkLog.h>
 #include <tkTheme.h>
 #include <QButtonLineEdit.h>
+#include <tkContext.h>
+#include <tkContextManager.h>
+#include <tkUniqueIdentifier.h>
 
 // include usertoolkit headers
 #include <tkUser.h>
@@ -81,6 +84,25 @@
 Q_TKUSER_USING_CONSTANTS
 Q_TK_USING_CONSTANTS
 
+
+class tkUserManagerContext : public tkContext
+{
+public:
+    tkUserManagerContext(tkUserManager *parent) : tkContext(parent), wgt(parent)
+    {
+        ctx << tkUID->uniqueIdentifier(tkConstants::C_USERMANAGER);
+    }
+    ~tkUserManagerContext() {}
+
+    QList<int> context() const {return ctx;}
+    QWidget *widget() {return wgt;}
+
+private:
+    tkUserManager *wgt;
+    QList<int> ctx;
+};
+
+
 /**
   \brief Main user interface for User Manager.
   User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
@@ -90,7 +112,7 @@ Q_TK_USING_CONSTANTS
   \ingroup widget_usertoolkit usertoolkit usermanager
 */
 tkUserManager::tkUserManager( QWidget * parent )
-    : QMainWindow( parent )
+    : tkMainWindow( parent )
 {
     Q_ASSERT_X( tkUserModel::instance()->hasCurrentUser(), "tkUserManager", "NO CURRENT USER" );
     if ( ! tkUserModel::instance()->hasCurrentUser() == QVariant() )
@@ -98,6 +120,14 @@ tkUserManager::tkUserManager( QWidget * parent )
     setAttribute( Qt::WA_DeleteOnClose );
     d = new tkUserManagerPrivate(this);
     setUnifiedTitleAndToolBarOnMac(true);
+}
+
+bool tkUserManager::initialize()
+{
+    d->m_Context = new tkUserManagerContext(this);
+    tkContextManager::instance(this)->addContextObject(d->m_Context);
+    d->initialize();
+    return true;
 }
 
 /** \brief Close the usermanager. Check if modifications have to be saved and ask user. */
@@ -129,6 +159,7 @@ tkUserManager::~tkUserManager()
 {
     if (tkGlobal::isDebugCompilation())
         qWarning() << "~tkUserManager";
+    tkContextManager::instance()->removeContextObject(d->m_Context);
 }
 
 /**
@@ -142,12 +173,22 @@ tkUserManagerPrivate::tkUserManagerPrivate( QMainWindow * parent )
     m_SearchToolBut(0),
     searchByNameAct(0), searchBySurnameAct(0), searchByNameAndSurnameAct(0), searchByCityAct(0),
     m_PermanentUserName(0),
-    m_PermanentWidget(0)
+    m_PermanentWidget(0),
+    m_Context(0)
 {
     m_SearchBy = User::Name;
-    setupUi(parent);
+}
 
-    toolBar->addActions( menuUser_manager->actions() );
+bool tkUserManagerPrivate::initialize()
+{
+    setupUi(m_Parent);
+
+    toolBar->addAction(createNewUserAct);
+    toolBar->addAction(modifyUserAct);
+    toolBar->addAction(saveAct);
+    toolBar->addAction(deleteUserAct);
+    toolBar->addAction(clearModificationsAct);
+    toolBar->addAction(quitUserManagerAct);
     tkUserModel * model = tkUserModel::instance();
 
     userTableView->setEditTriggers( QAbstractItemView::NoEditTriggers );
@@ -208,7 +249,7 @@ tkUserManagerPrivate::tkUserManagerPrivate( QMainWindow * parent )
         connect(userTableView,SIGNAL(activated(QModelIndex)), this, SLOT(showUserDebugDialog(QModelIndex)));
 
     // manage theme / icons
-    parent->setWindowIcon( tkTheme::icon( ICONUSERMANAGER ) );
+    m_Parent->setWindowIcon( tkTheme::icon( ICONUSERMANAGER ) );
     saveAct->setIcon( tkTheme::icon( ICONSAVE, tkTheme::MediumIcon ) );
     createNewUserAct->setIcon( tkTheme::icon( ICONNEWUSER, tkTheme::MediumIcon ) );
     modifyUserAct->setIcon( tkTheme::icon( ICONEDITUSER, tkTheme::MediumIcon ) );
@@ -222,6 +263,7 @@ tkUserManagerPrivate::tkUserManagerPrivate( QMainWindow * parent )
     searchByCityAct->setIcon( tkTheme::icon( ICONSEARCH ) );
 
     // TODO active userTableView on currentUser
+    return true;
 }
 
 tkUserManagerPrivate::~tkUserManagerPrivate()

@@ -46,6 +46,7 @@ class QButtonLineEdit;
 // include usertoolkit headers
 class tkUser;
 class tkUserViewer;
+class tkUserManagerContext;
 
 // include Qt headers
 class QMainWindow;
@@ -66,6 +67,7 @@ class tkUserManagerPrivate : public QObject, private Ui::tkUserManager
 public:
     explicit tkUserManagerPrivate( QMainWindow * parent ); // work with usermodel
     ~tkUserManagerPrivate();
+    bool initialize();
 
 private Q_SLOTS:
     void on_searchLineEdit_textchanged();
@@ -94,6 +96,9 @@ private:
     QAction     *searchByNameAct, *searchBySurnameAct, *searchByNameAndSurnameAct, *searchByCityAct;
     QLabel      *m_PermanentUserName;
     QWidget     *m_PermanentWidget;
+
+public:
+    tkUserManagerContext *m_Context;
 };
 
 #endif // TKUSERMANAGER_P_H

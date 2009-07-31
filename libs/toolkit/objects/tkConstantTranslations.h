@@ -254,6 +254,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
         const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
 
+        // Users related msessage
+        const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
+        const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as user %1.");
+        const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConstants", "No user connected.");
+
+
         // Messages and errors
         const char* const UNKNOWN                            = QT_TRANSLATE_NOOP("tkConstants", "Unknown");
         const char* const READY                              = QT_TRANSLATE_NOOP("tkConstants", "Ready");
@@ -290,30 +296,46 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const DRUG_DATABASE_MANAGER = QT_TRANSLATE_NOOP("tkConstants", "Drugs Database Management");
         const char* const MEDICAL_ADVISOR = QT_TRANSLATE_NOOP("tkConstants", "Medical advisor");
 
+
+        // Print related
+        const char* const HEADER = QT_TRANSLATE_NOOP("tkConstants", "Header");
+        const char* const FOOTER = QT_TRANSLATE_NOOP("tkConstants", "Footer");
+        const char* const WATERMARK = QT_TRANSLATE_NOOP("tkConstants", "Watermark");
+
+
+
         // Patient related
         const char* const PATIENT_NAME = QT_TRANSLATE_NOOP("tkConstants", "Patient Name");
 
         // ShortCut keys
          /*: Text Align Left shortcut key */
         const char* const K_ALIGNLEFT                = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+L");
+
          /*: Text Align Right shortcut key */
         const char* const K_ALIGNRIGHT               = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+R");
-         /*: Text Align Center shortcut key */
+
+        /*: Text Align Center shortcut key */
         const char* const K_ALIGNCENTER              = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+E");
-         /*: Text Align Justify shortcut key */
+
+        /*: Text Align Justify shortcut key */
         const char* const K_ALIGNJUSTIFY             = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+J");
-         /*: Text Align Left shortcut key : Mac specific */
+
+        /*: Text Align Left shortcut key : Mac specific */
         const char* const K_ALIGNLEFT_MAC            = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+L");
-         /*: Text Align Right shortcut key : Mac specific */
+
+        /*: Text Align Right shortcut key : Mac specific */
         const char* const K_ALIGNRIGHT_MAC           = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+R");
-         /*: Text Align Center shortcut key : Mac specific */
+
+        /*: Text Align Center shortcut key : Mac specific */
         const char* const K_ALIGNCENTER_MAC          = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+E");
-         /*: Text Align Justify shortcut key : Mac specific */
+
+        /*: Text Align Justify shortcut key : Mac specific */
         const char* const K_ALIGNJUSTIFY_MAC         = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+J");
 
-         /*: Add table Editor shortcut key */
+        /*: Add table Editor shortcut key */
         const char* const K_EDITOR_ADDTABLE         = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+Shift+T");
-         /*: Add table Editor shortcut key : Mac specific */
+
+        /*: Add table Editor shortcut key : Mac specific */
         const char* const K_EDITOR_ADDTABLE_MAC     = QT_TRANSLATE_NOOP("tkConstants", "");
 
 

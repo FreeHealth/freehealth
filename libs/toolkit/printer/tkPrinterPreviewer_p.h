@@ -35,72 +35,71 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL>                                                       *
  ***************************************************************************/
-#ifndef TKSTRINGLISTMODEL_H
-#define TKSTRINGLISTMODEL_H
+#ifndef TKPRINTERPRIVATE_H
+#define TKPRINTERPRIVATE_H
 
-#include <tkExporter.h>
+#include <tkPrinter.h>
+class tkRichTextEditor;
 
-class tkStringListModelPrivate;
+#include <QWidget>
+#include <QPixmap>
 
-#include <QAbstractListModel>
-#include <QObject>
-class QStringList;
+#include "ui_tkPrinterPreviewer_p.h"
 
-/**
- * \file tkStringListModel.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 25 April 2009
-*/
+/** \todo create a tkPrinterEditor including the texteditor, the combo and the label with automatic translations */
 
-class Q_TK_EXPORT tkStringListModel : public QAbstractListModel
+class tkPrinterPreviewerPrivate : public tkPrinterPreviewer, private Ui::tkPrinterPreviewerPrivate
 {
     Q_OBJECT
+
 public:
-    /** */
-    tkStringListModel( QObject *parent = 0,
-                       const bool stringEditable = false,
-                       const bool checkStateEditable = true );
-    /** */
-    ~tkStringListModel();
+    explicit tkPrinterPreviewerPrivate(QWidget *parent = 0);
+    void initialize();
 
-    /** */
-    virtual int rowCount( const QModelIndex & = QModelIndex() ) const;
-    /** */
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    QTextEdit *headerEditor();
+    QTextEdit *footerEditor();
+    QTextEdit *watermarkEditor();
 
-    /** */
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-    /** */
-    virtual QVariant data( const QModelIndex & index, int role ) const;
-    /** */
-    virtual bool insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
-    /** */
-    virtual bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
+    void setHeader(const QString &html, tkPrinter::Presence p = tkPrinter::EachPages);
+    void setFooter(const QString &html, tkPrinter::Presence p = tkPrinter::EachPages);
+    void setWatermark(const QString &html, tkPrinter::Presence p = tkPrinter::EachPages);
 
-    /** */
-    void setCheckable( bool state );
-    /** */
-    void setStringEditable( bool state );
-    /** */
-    void setStringList( const QStringList & strings );
-    /** */
-    QStringList getStringList() const;
+    void setHeader(const tkTextDocumentExtra *extra);
+    void setFooter(const tkTextDocumentExtra *extra);
+    void setWatermark(const tkTextDocumentExtra *extra);
 
-    /** */
-    QStringList getCheckedItems() const;
-    /** */
-    void setCheckedItems( const QStringList & list );
+    void headerToPointer(tkTextDocumentExtra *extra);
+    void footerToPointer(tkTextDocumentExtra *extra);
+    void watermarkToPointer(tkTextDocumentExtra *extra);
 
-    /** */
-    bool moveUp( const QModelIndex & item );
-    /** */
-    bool moveDown( const QModelIndex & item );
+    QString headerToHtml();
+    QString footerToHtml();
+    QString watermarkToHtml();
+    int headerPresence();
+    int footerPresence();
+    int watermarkPresence();
+
+    void setExtraDocument(const QVariant &doc);
+    QVariant extraDocument();
+
+
+private Q_SLOTS:
+    void on_updatePreviewButton_clicked();
+    void on_automaticUpdateCheck_stateChanged( int checkstate );
+    void on_duplicataCheck_stateChanged( int state );
+    void on_pageNumberSpinBox_valueChanged( int value );
 
 private:
-    tkStringListModelPrivate *d;
+    void connectPreview( tkRichTextEditor * t );
+    void changeEvent(QEvent *e);
+
+private:
+    tkRichTextEditor *m_EditorHeader, *m_EditorFooter, *m_EditorWatermark;
+    bool m_AutoCheck;
+    tkPrinter printer;
+    QPixmap pixmap;
 };
 
-#endif // TKSTRINGLISTMODEL_H
+#endif // TKPRINTERPRIVATE_H

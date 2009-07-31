@@ -104,6 +104,10 @@ tkListViewManager::tkListViewManager(QObject *parent) : tkListViewActionHandler(
 
 void tkListViewManager::updateContext(tkContext *object)
 {
+
+    if (object)
+        qWarning() << "context" << object;
+
     tkListView *view = 0;
     do {
         if (!object) {
@@ -205,9 +209,11 @@ tkListViewActionHandler::tkListViewActionHandler(QObject *parent) :
 
 void tkListViewActionHandler::setCurrentView(tkListView *view)
 {
+    if (view)
+        qWarning() << "current view " << view;
     // disconnect old view
     if (m_CurrentView) {
-        disconnect( m_CurrentView->listView(), SIGNAL(pressed(QModelIndex)),
+        disconnect( m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                     this, SLOT(listViewItemChanged()));
     }
     m_CurrentView = view;
@@ -272,7 +278,9 @@ tkListView::tkListView(QWidget *parent,
     : QWidget(parent),
     d(0)
 {
-//    setObjectName("tkListView");
+    static int handler = 0;
+    ++handler;
+    QObject::setObjectName("tkListView_"+QString::number(handler));
     d = new tkListViewPrivate(this, actions);
 
     // Create the Manager instance and context
@@ -289,8 +297,10 @@ tkListView::tkListView(QWidget *parent,
     d->m_ListView->setContextMenuPolicy(Qt::CustomContextMenu);
     d->m_ToolBar = new QToolBar(this);
     d->m_ToolBar->setIconSize(QSize(16,16));
+    d->m_ToolBar->setFocusPolicy(Qt::ClickFocus);
     layout->addWidget(d->m_ListView, 0, 0 , 1, 2);
     layout->addWidget(d->m_ToolBar, 1, 0);
+
 
     connect(d->m_ListView, SIGNAL( customContextMenuRequested(const QPoint &)),
             this, SLOT(contextMenu(const QPoint &)));
@@ -299,7 +309,6 @@ tkListView::tkListView(QWidget *parent,
 }
 
 tkListViewPrivate::tkListViewPrivate( QWidget * parent, tkListView::AvailableActions actions ) :
-    QWidget(parent),
     m_Parent(parent),
     m_ListView(0),
     m_Actions(actions),
@@ -310,14 +319,18 @@ tkListViewPrivate::tkListViewPrivate( QWidget * parent, tkListView::AvailableAct
 
 void tkListView::focusInEvent(QFocusEvent *event)
 {
+    qWarning() << objectName() << "focus in";
     Q_UNUSED(event);
     d->m_ListView->setFocus();
+    QWidget::focusInEvent(event);
 }
 
 void tkListView::focusOutEvent(QFocusEvent *event)
 {
+    qWarning() << objectName() << "focus out";
     Q_UNUSED(event);
     this->setFocus();
+    QWidget::focusOutEvent(event);
 }
 
 
@@ -352,7 +365,6 @@ void tkListViewPrivate::populateToolbar()
 /** \brief Defines the objectName */
 void tkListView::setObjectName( const QString &name )
 {
-    d->setObjectName(name+"Private");
     d->m_ListView->setObjectName(name+"ListView");
     QWidget::setObjectName(name);
 }
@@ -379,7 +391,7 @@ void tkListView::setModelColumn( int column )
     d->m_ListView->setModelColumn( column );
 }
 
-int tkListView::modelColumn () const
+int tkListView::modelColumn() const
 {
     return d->m_ListView->modelColumn();
 }

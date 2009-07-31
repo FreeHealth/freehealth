@@ -94,6 +94,8 @@ public:
     void createEditActions();
     void connectEditActions();
 
+    void createPluginsMenu();
+
     void createConfigurationMenu();
     void createConfigurationActions(ConfigurationActions actions);
     void connectConfigurationActions();

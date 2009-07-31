@@ -102,6 +102,7 @@ public:
     {
         m_ToolBar = new QToolBar(m_Parent);
         m_ToolBar->setIconSize(QSize(16, 16));
+        m_ToolBar->setFocusPolicy(Qt::ClickFocus);
         populateToolbar();
     }
 

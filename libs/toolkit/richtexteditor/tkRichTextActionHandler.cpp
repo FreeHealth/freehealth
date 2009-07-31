@@ -76,6 +76,9 @@ namespace tkRichTextActionHandlerPrivate {
 
 using namespace tkRichTextActionHandlerPrivate;
 
+const char* const M_EDITOR_EDIT = "menu.editor.edition";
+const char* const M_EDITOR_FILE = "menu.editor.file";
+
 tkRichTextActionHandler::tkRichTextActionHandler(QObject *parent) :
         QObject(parent),
         aOpen(0), aSave(0),
@@ -99,13 +102,6 @@ tkRichTextActionHandler::tkRichTextActionHandler(QObject *parent) :
     QList<int> allContexts;
     allContexts << basicContext << ioContext << tableContext;
 
-    // register already existing menu actions
-    aUndo = registerAction(tkConstants::A_EDIT_UNDO,  allContexts, this);
-    aRedo = registerAction(tkConstants::A_EDIT_REDO,  allContexts, this);
-    aCut = registerAction(tkConstants::A_EDIT_CUT,   allContexts, this);
-    aCopy = registerAction(tkConstants::A_EDIT_COPY,  allContexts, this);
-    aPaste = registerAction(tkConstants::A_EDIT_PASTE, allContexts, this);
-
     // create specific editor menus / actions
 
     // Editor's Contextual Menu
@@ -121,15 +117,94 @@ tkRichTextActionHandler::tkRichTextActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(toogleToolbar()));
     mctx->addAction(cmd, tkConstants::G_EDITOR_CONTEXT);
 
+    // Menu structure -- rootMenu is menubar if exists otherwise it is a specific editor's menu tkConstants::M_EDITOR
+    tkActionContainer *rootMenu;
+    tkActionContainer *editMenu;
+    tkActionContainer *fileMenu;
+    if ((!am->actionContainer(tkConstants::MENUBAR)) && (!am->actionContainer(tkConstants::M_EDITOR))) {
+        rootMenu = am->createMenu(tkConstants::M_EDITOR);
+        rootMenu->appendGroup(tkConstants::G_EDIT);
+        editMenu = am->createMenu(M_EDITOR_EDIT);
+        rootMenu->addMenu(editMenu, tkConstants::G_EDIT);
+        editMenu->appendGroup(tkConstants::G_EDIT_UNDOREDO);
+        editMenu->appendGroup(tkConstants::G_EDIT_COPYPASTE);
+        editMenu->appendGroup(tkConstants::G_EDIT_FIND);
+        fileMenu = am->createMenu(M_EDITOR_FILE);
+        fileMenu->appendGroup(tkConstants::G_FILE_OPEN);
+        fileMenu->appendGroup(tkConstants::G_FILE_SAVE);
+        fileMenu->appendGroup(tkConstants::G_FILE_PRINT);
+
+        // create edition actions
+        if (!am->command(tkConstants::A_EDIT_UNDO)) {
+            QAction *a = new QAction(this);
+            a->setIcon(tkTheme::icon(tkConstants::ICONUNDO));
+            tkCommand *cmd = am->registerAction(a, tkConstants::A_EDIT_UNDO, allContexts);
+            cmd->setDefaultKeySequence(QKeySequence::Undo);
+            //    cmd->setAttribute(tkCommand::CA_UpdateText);
+            cmd->setTranslations(tkConstants::EDITUNDO_TEXT);
+            editMenu->addAction(cmd, tkConstants::G_EDIT_UNDOREDO);
+            a->setEnabled(false);
+        }
+        if (!am->command(tkConstants::A_EDIT_REDO)) {
+            a = new QAction(this);
+            a->setIcon(tkTheme::icon(tkConstants::ICONREDO));
+            cmd = am->registerAction(a, tkConstants::A_EDIT_REDO, allContexts);
+            cmd->setDefaultKeySequence(QKeySequence::Redo);
+            cmd->setTranslations( tkConstants::EDITREDO_TEXT );
+            editMenu->addAction(cmd, tkConstants::G_EDIT_UNDOREDO);
+            a->setEnabled(false);
+        }
+        if (!am->command(tkConstants::A_EDIT_CUT)) {
+            a = new QAction(this);
+            a->setIcon(tkTheme::icon(tkConstants::ICONCUT));
+            cmd = am->registerAction(a, tkConstants::A_EDIT_CUT, allContexts);
+            cmd->setDefaultKeySequence(QKeySequence::Cut);
+            cmd->setTranslations( tkConstants::EDITCUT_TEXT );
+            editMenu->addAction(cmd, tkConstants::G_EDIT_COPYPASTE);
+            a->setEnabled(false);
+        }
+        if (!am->command(tkConstants::A_EDIT_COPY)) {
+            a = new QAction(this);
+            a->setIcon(tkTheme::icon(tkConstants::ICONCOPY));
+            cmd = am->registerAction(a, tkConstants::A_EDIT_COPY, allContexts);
+            cmd->setDefaultKeySequence(QKeySequence::Copy);
+            cmd->setTranslations( tkConstants::EDITCOPY_TEXT );
+            editMenu->addAction(cmd, tkConstants::G_EDIT_COPYPASTE);
+            a->setEnabled(false);
+        }
+        if (!am->command(tkConstants::A_EDIT_PASTE)) {
+            a = new QAction(this);
+            a->setIcon(tkTheme::icon(tkConstants::ICONPASTE));
+            cmd = am->registerAction(a, tkConstants::A_EDIT_PASTE, allContexts);
+            cmd->setDefaultKeySequence(QKeySequence::Paste);
+            cmd->setTranslations( tkConstants::EDITPASTE_TEXT );
+            editMenu->addAction(cmd, tkConstants::G_EDIT_COPYPASTE);
+            a->setEnabled(false);
+        }
+    } else {
+        qWarning()<< "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx using menubar";
+        rootMenu = am->actionContainer(tkConstants::MENUBAR);
+        editMenu = am->actionContainer(tkConstants::M_EDIT);
+        fileMenu = am->actionContainer(tkConstants::M_FILE);
+    }
+
+    // register already existing menu actions
+    aUndo = registerAction(tkConstants::A_EDIT_UNDO,  allContexts, this);
+    aRedo = registerAction(tkConstants::A_EDIT_REDO,  allContexts, this);
+    aCut = registerAction(tkConstants::A_EDIT_CUT,   allContexts, this);
+    aCopy = registerAction(tkConstants::A_EDIT_COPY,  allContexts, this);
+    aPaste = registerAction(tkConstants::A_EDIT_PASTE, allContexts, this);
+
+
     // Menu Edit --> text formats
-//    tkActionContainer *medit = am->actionContainer(tkConstants::M_EDIT);
+    //    tkActionContainer *medit = am->actionContainer(tkConstants::M_EDIT);
     tkActionContainer *formatMenu = am->actionContainer(tkConstants::M_FORMAT);
     if (!formatMenu) {
-        tkActionContainer *menubar = am->createMenuBar(tkConstants::MENUBAR);
-        Q_ASSERT(menubar);
-        menubar->appendGroup(tkConstants::G_FORMAT);
+        //        tkActionContainer *menubar = am->createMenuBar(tkConstants::MENUBAR);
+        //        Q_ASSERT(menubar);
+        rootMenu->appendGroup(tkConstants::G_FORMAT);
         formatMenu = am->createMenu(tkConstants::M_FORMAT);
-        menubar->addMenu(formatMenu, tkConstants::G_FORMAT);
+        rootMenu->addMenu(formatMenu, tkConstants::G_FORMAT);
         formatMenu->setTranslations(tkConstants::M_FORMAT_TEXT);
         formatMenu->appendGroup(tkConstants::G_FORMAT_FONT);
         formatMenu->appendGroup(tkConstants::G_FORMAT_PARAGRAPH);
@@ -385,14 +460,13 @@ tkRichTextActionHandler::tkRichTextActionHandler(QObject *parent) :
 ////    connect(aNew, SIGNAL(triggered()), this, SLOT(newFile()));
 
     // Open Action
-    tkActionContainer *mfile = am->actionContainer(tkConstants::M_FILE);
     a = aOpen = new QAction(this);
     a->setObjectName("aOpen");
     a->setText(tkTr(EDITOR_FILEOPEN_TEXT));
     a->setIcon(tkTheme::icon(tkConstants::ICONOPEN));
     cmd = am->registerAction(a, tkConstants::A_EDITOR_FILEOPEN, ioContext);
     cmd->setTranslations(tkConstants::EDITOR_FILEOPEN_TEXT);
-    mfile->addAction(cmd, tkConstants::G_FILE_OPEN);
+    fileMenu->addAction(cmd, tkConstants::G_FILE_OPEN);
     connect(aOpen, SIGNAL(triggered()), this, SLOT(fileOpen()));
 
     // Save Action
@@ -403,7 +477,7 @@ tkRichTextActionHandler::tkRichTextActionHandler(QObject *parent) :
     cmd->setDefaultKeySequence(QKeySequence::Save);
     cmd->setTranslations( tkConstants::EDITOR_FILESAVE_TEXT );
     cmd->setAttribute(tkCommand::CA_UpdateText);
-    mfile->addAction(cmd, tkConstants::G_FILE_SAVE);
+    fileMenu->addAction(cmd, tkConstants::G_FILE_SAVE);
     connect(aSave, SIGNAL(triggered()), this, SLOT(saveAs()));
 
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));

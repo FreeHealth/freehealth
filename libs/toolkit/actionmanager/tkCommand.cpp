@@ -103,7 +103,10 @@ bool tkCommandPrivate::hasAttribute(CommandAttribute attr) const
 
 QString tkCommandPrivate::stringWithAppendedShortcut(const QString &str) const
 {
-    return QString("%1 <span style=\"color: darkblue; font-size: small\">%2</span>").arg(str).arg(
+    if (keySequence().isEmpty())
+        return str;
+    else
+        return QString("%1 <span style=\"color: darkblue; font-size: small\">%2</span>").arg(str).arg(
             keySequence().toString(QKeySequence::NativeText));
 }
 

@@ -4,6 +4,7 @@
 #include <tkLog.h>
 #include <tkRichTextEditor.h>
 #include <tkTextDocumentExtra.h>
+#include <tkConstantTranslations.h>
 
 #include <QGridLayout>
 #include <QLabel>
@@ -11,10 +12,7 @@
 
 namespace tkPrinterPreviewerPrivateConstants {
 
-    const char* const HEADER = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Header");
-    const char* const FOOTER = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Footer");
-    const char* const WATERMARK = QT_TRANSLATE_NOOP( "tkPrinterPreviewer", "Watermark");
-    const char* const EXAMPLE_CONTENT =
+    static const char* const EXAMPLE_CONTENT =
             "";
 
 QWidget *createEditor( QWidget *parent, tkRichTextEditor *t, const QString &title, const int defaultPresence = tkPrinter::EachPages)
@@ -76,12 +74,12 @@ void tkPrinterPreviewerPrivate::setHeader(const QString &html, tkPrinter::Presen
 {
     if (!m_EditorHeader) {
         m_EditorHeader = new tkRichTextEditor(this, tkRichTextEditor::Full);
-        editorLayout->insertWidget(0, createEditor( this, m_EditorHeader, HEADER ) );
+        editorLayout->insertWidget(0, createEditor( this, m_EditorHeader, tkTr(HEADER) ) );
     }
 //    qWarning() << html;
     printer.setHeader(html,p);
     m_EditorHeader->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( HEADER );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(HEADER) );
     if (c)
         return c->setCurrentIndex(p);
     connectPreview(m_EditorHeader);
@@ -91,11 +89,11 @@ void tkPrinterPreviewerPrivate::setFooter(const QString &html, tkPrinter::Presen
 {
     if (!m_EditorFooter) {
         m_EditorFooter = new tkRichTextEditor(this, tkRichTextEditor::Full);
-        editorLayout->insertWidget(1, createEditor( this, m_EditorFooter, FOOTER ) );
+        editorLayout->insertWidget(1, createEditor( this, m_EditorFooter, tkTr(FOOTER) ) );
     }
     printer.setFooter(html,p);
     m_EditorFooter->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( FOOTER );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(FOOTER) );
     if (c)
         return c->setCurrentIndex(p);
     connectPreview(m_EditorFooter);
@@ -105,11 +103,11 @@ void tkPrinterPreviewerPrivate::setWatermark(const QString &html, tkPrinter::Pre
 {
     if (!m_EditorWatermark) {
         m_EditorWatermark = new tkRichTextEditor(this, tkRichTextEditor::Full);
-        editorLayout->insertWidget(2, createEditor( this, m_EditorWatermark, WATERMARK ) );
+        editorLayout->insertWidget(2, createEditor( this, m_EditorWatermark, tkTr(WATERMARK) ) );
     }
     printer.addHtmlWatermark(html,p);
     m_EditorWatermark->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( WATERMARK );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(WATERMARK) );
     if (c)
         return c->setCurrentIndex(p);
     connectPreview(m_EditorWatermark);
@@ -237,7 +235,7 @@ void tkPrinterPreviewerPrivate::connectPreview( tkRichTextEditor * t )
 
 int tkPrinterPreviewerPrivate::headerPresence()
 {
-    QComboBox *c = this->findChild<QComboBox *>( HEADER );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(HEADER) );
     if (c)
         return c->currentIndex();
     return 0;
@@ -246,7 +244,7 @@ int tkPrinterPreviewerPrivate::headerPresence()
 
 int tkPrinterPreviewerPrivate::footerPresence()
 {
-    QComboBox *c = this->findChild<QComboBox *>( FOOTER );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(FOOTER) );
     if (c)
         return c->currentIndex();
     return 0;
@@ -255,7 +253,7 @@ int tkPrinterPreviewerPrivate::footerPresence()
 
 int tkPrinterPreviewerPrivate::watermarkPresence()
 {
-    QComboBox *c = this->findChild<QComboBox *>( WATERMARK );
+    QComboBox *c = this->findChild<QComboBox *>( tkTr(WATERMARK) );
     if (c)
         return c->currentIndex();
     return 0;

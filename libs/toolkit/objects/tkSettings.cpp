@@ -170,40 +170,40 @@
 
 namespace tkSettingsPrivateConstants {
 
-    const char* const WEBSITE              = "http://www.ericmaeker.fr/FreeMedForms";
+    static const char* const WEBSITE              = "http://www.ericmaeker.fr/FreeMedForms";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
 #ifdef DEBUG
-    const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
+    static const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
 #else
-    const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
+    static const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
 #endif
-    const char* const READONLYRESOURCES    = "";
-    const char* const READONLYDATABASE     = "/databases";
-    const char* const TRANSLATIONS_PATH    = "/translations";
-    const char* const DEFAULTFORMS         = "/forms";
-    const char* const DEFAULTTHEME_PATH    = "";
-    const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
-    const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
-    const char* const USERMANUAL_PATH      = "/doc/%1/html";
+    static const char* const READONLYRESOURCES    = "";
+    static const char* const READONLYDATABASE     = "/databases";
+    static const char* const TRANSLATIONS_PATH    = "/translations";
+    static const char* const DEFAULTFORMS         = "/forms";
+    static const char* const DEFAULTTHEME_PATH    = "";
+    static const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
+    static const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
+    static const char* const USERMANUAL_PATH      = "/doc/%1/html";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
-    const char* const MAC_PLUGINSPATH      = "/../plugins";
-    const char* const NONMAC_PLUGINSPATH   = "/plugins";
-    const char* const ALL_QTPLUGINSPATH    = "/qt";
-    const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
-    const char* const WIN_QTFRAMEWORKPATH  = "";
-    const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
-    const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
-    const char* const WIN_TOBUNDLEROOTPATH = "/..";
-    const char* const NUX_TOBUNDLEROOTPATH = "/..";
-    const char* const BSD_TOBUNDLEROOTPATH = "/..";
+    static const char* const MAC_PLUGINSPATH      = "/../plugins";
+    static const char* const NONMAC_PLUGINSPATH   = "/plugins";
+    static const char* const ALL_QTPLUGINSPATH    = "/qt";
+    static const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
+    static const char* const WIN_QTFRAMEWORKPATH  = "";
+    static const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
+    static const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
+    static const char* const WIN_TOBUNDLEROOTPATH = "/..";
+    static const char* const NUX_TOBUNDLEROOTPATH = "/..";
+    static const char* const BSD_TOBUNDLEROOTPATH = "/..";
 
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
-    const char* const WRITABLEDATABASE     = "/databases";
+    static const char* const WRITABLEDATABASE     = "/databases";
 
     // SETTINGS
-    const char* const LICENSE_VERSION      = "License/AcceptedVersion";
+    static const char* const LICENSE_VERSION      = "License/AcceptedVersion";
 
 }
 

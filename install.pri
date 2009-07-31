@@ -65,7 +65,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/libs
-        LIB_EXTENSION            = $${QMAKE_EXTENSION_SHLIB}
+        LIB_EXTENSION            = *.$${QMAKE_EXTENSION_SHLIB}
 
         target.path = $${TARGET_INSTALL_PATH}
         #target.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -77,7 +77,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/libs
-        LIB_EXTENSION            = so*
+        LIB_EXTENSION            = *.so*
 
         installtarget.path = $${TARGET_INSTALL_PATH}
         installtarget.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -89,7 +89,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}
-        LIB_EXTENSION            = dll
+        LIB_EXTENSION            = *.dll
 
         installtarget.path = $${TARGET_INSTALL_PATH}
         installtarget.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -122,7 +122,7 @@ else {
 
  # Install Application Libraries
  applibs.path = $${LIBS_INSTALL_PATH}
- applibs.files = $${PACKAGE_LIBS_BIN}/*.$${LIB_EXTENSION}
+ applibs.files = $${PACKAGE_LIBS_BIN}/*t.$${LIB_EXTENSION}
  INSTALLS += applibs
 
  # Install FMF plugins

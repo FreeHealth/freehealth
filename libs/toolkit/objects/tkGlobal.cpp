@@ -348,7 +348,8 @@ QString isFileExists(const QString &absPath)
 void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Information );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
@@ -369,6 +370,7 @@ void warningMessageBox( const QString &text, const QString&infoText, const QStri
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Warning );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );

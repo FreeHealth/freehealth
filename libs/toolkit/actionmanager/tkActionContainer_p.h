@@ -46,8 +46,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ACTIONCONTAINER_P_H
-#define ACTIONCONTAINER_P_H
+#ifndef TKACTIONCONTAINER_P_H
+#define TKACTIONCONTAINER_P_H
 
 #include "tkActionManager_p.h"
 #include "tkActionContainer.h"
@@ -169,4 +169,4 @@ private:
     QMenuBar *m_menuBar;
 };
 
-#endif // ACTIONCONTAINER_P_H
+#endif // TKACTIONCONTAINER_P_H

@@ -37,6 +37,7 @@
 #include <mfGlobal.h>
 #include <mfCore.h>
 #include <mfMainWindow.h>
+#include <mfConstants.h>
 
 #include <tkLog.h>
 
@@ -66,7 +67,7 @@ mfSettings::mfSettings( QObject * parent )
 
 bool mfSettings::needUserIdentification()
 {
-    if ( ! value( "Login/userLogin" ).toString().isEmpty() ) // &&
+    if (!value(mfConstants::SETTING_LASTLOGIN).toString().isEmpty()) // &&
         //         ( ! value( "Login/userPassword" ).toString().isEmpty() ) )
         return false;
     return true;

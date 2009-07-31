@@ -34,7 +34,7 @@ showHelp()
   echo $SCRIPT_NAME" is design for FreeMedForms releases."
   echo "Usage : $SCRIPT_NAME <options>"
   echo "Options :"
-  echo "          -n  do not clean before buildind (default is clean before make)"
+  echo "          -n  do not clean before building (default is clean before make)"
   echo "          -w  build win32 binary"
   echo "          -m  build macosx binary"
   echo "          -l  build linux binary"
@@ -71,50 +71,6 @@ fi
 if [ ! -e "$PACKAGES_PATH" ] ; then
    mkdir "$PACKAGES_PATH"
 fi
-
-
-#####################################
-# Resources Installer               #
-#####################################
-resourcesInstaller()
-{
-   FROM="$1"
-   TO="$2"
-   if [ ! -e "$TO" ]; then
-      mkdir "$TO"
-   else
-      rm -R "$TO"
-      mkdir "$TO"
-   fi
-
-   if [ ! -e "$TO/databases" ]; then
-       mkdir "$TO/databases"
-       echo "      Databases resources created"
-   fi
-   cp -R "$FROM/databases" "$TO"
-   rm "$TO"/databases/*.zip 
-
-   if [ ! -e "$TO/translations" ]; then
-       mkdir "$TO/translations"
-       echo "      Translations resources created"
-   fi
-   cp "$FROM"/translations/*.qm "$TO/translations"
-
-   if [ ! -e "$TO/forms" ]; then
-       mkdir "$TO/forms"
-       echo "      Forms resources created"
-   fi
-   cp "$FROM"/forms/*.xml "$TO/forms"
-
-   if [ ! -e "$TO/tmp" ]; then
-       mkdir "$TO/tmp"
-   fi
-
-   echo "*** Cleaning copied resources..."
-   target=$TO
-   find "${target}" | egrep "CVS" | xargs rm -rf
-   find "${target}" | egrep ".svn" | xargs rm -rf
-}
 
 
 #####################################
@@ -160,18 +116,11 @@ if [ $ARCH_TO_BUILD = "mac" ] ; then
    echo `$QMAKE_BIN $QMAKE $QMAKE_SPEC`> log.txt
    echo `make` > log.txt
 
-   # add all resources to bundle
-   echo "*** Installing FreeMedForms resources into the bundle..."
-   RESOURCES_PATH="bin/FreeMedForms.app/Contents/Resources"
-   resourcesInstaller ./bin "$RESOURCES_PATH"
-
-   # remove config.ini
-   find ./bin/FreeMedForms.app/ -type f -name 'config.ini' -exec rm {} \;
-   #rm "$ROOT_PATH"/bin/FreeMedForms.app/Contents/Resources/config.ini
+   echo `make install` > log.txt
 
    # link frameworks
    echo "*** Linking Frameworks..."
-   cd bin
+   cd $PACKAGES_PATH/mac/FreeMedForms/
    "$MAC_SCRIPTS_PATH"/macDeploy.sh -a FreeMedForms -p sqldrivers
 
    # clean old dmg and create new one

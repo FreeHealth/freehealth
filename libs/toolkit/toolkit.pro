@@ -24,6 +24,7 @@ include($${PWD}/richtexteditor/richtexteditor.pri)
 include($${PWD}/actionmanager/actionmanager.pri)
 include($${PWD}/contextmanager/contextmanager.pri)
 include($${PWD}/listview/listview.pri)
+include($${PWD}/printer/printer.pri)
 
 # Core
 HEADERS += objects/tkExporter.h \
@@ -41,15 +42,12 @@ HEADERS += objects/tkExporter.h \
     objects/tkSerializer.h \
     objects/tkTheme.h \
     widgets/tkLineEditEchoSwitcher.h \
-    objects/tkTextDocumentExtra.h \
-    objects/tkPrinter.h \
     objects/tkSerialNumber.h \
     widgets/tkScrollingWidget.h \
     widgets/tkAboutDialog.h \
     widgets/tkAboutDialog_p.h \
     objects/tkUpdateChecker_p.h \
     objects/tkUpdateChecker.h \
-    widgets/tkPrinterPreviewer_p.h \
     objects/tkConstantTranslations.h \
     widgets/tkHelpDialog.h \
     objects/tkUniqueIdentifier.h \
@@ -68,21 +66,16 @@ SOURCES += objects/tkSettings.cpp \
     widgets/tkScrollingWidget.cpp \
     widgets/tkAboutDialog.cpp \
     objects/tkUpdateChecker.cpp \
-    widgets/tkPrinterPreviewer_p.cpp \
-    objects/tkTextDocumentExtra.cpp \
     objects/tkConstantTranslations.cpp \
     widgets/tkHelpDialog.cpp \
     objects/tkUniqueIdentifier.cpp
 FORMS += widgets/tkDebugDialog.ui \
-    widgets/tkAboutDialog.ui \
-    widgets/tkPrinterPreviewer_p.ui
+    widgets/tkAboutDialog.ui
 
 # protected files
-exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/toolkit/objects/tkPrinter_Pro.cpp \
-    $${PROTECTED_PATH}/toolkit/objects/tkSendMessage_Pro.cpp \
+exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/toolkit/objects/tkSendMessage_Pro.cpp \
     $${PROTECTED_PATH}/toolkit/objects/tkSerialNumber_pro.cpp
-else:SOURCES += objects/tkPrinter.cpp \
-    objects/tkSendMessage.cpp
+else:SOURCES += objects/tkSendMessage.cpp
 
 # translators
 TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/toolkit_fr.ts \

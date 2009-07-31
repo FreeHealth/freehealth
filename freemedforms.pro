@@ -7,12 +7,9 @@ include( config.pri )
 CONFIG *= ordered
 
 SUBDIRS += contrib/quazip \
-           libs/toolkit \
-           libs/usertoolkit \
-           libs/medicaltoolkit \
+           libs \
            freemedforms \
-           plugins/formwidgets \
-           plugins/io
+           plugins
 
 
 ProjectSettings {

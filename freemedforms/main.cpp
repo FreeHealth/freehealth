@@ -52,9 +52,9 @@ int main( int argc, char *argv[] )
      QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
 #ifdef DEBUG
-    app.setApplicationName( QString( "%1 - %2 debug" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1 - %2 debug" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
 #else
-    app.setApplicationName( QString( "%1 - %2" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1 - %2" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
 #endif
 
      app.setOrganizationName( PACKAGE_NAME );
@@ -76,7 +76,6 @@ int main( int argc, char *argv[] )
      mfCore::endOfApplication();
 
      // return app exit code
-     tkLog::saveLog();
      return result;
 }
 

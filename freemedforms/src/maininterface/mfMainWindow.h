@@ -105,7 +105,7 @@ private Q_SLOTS:
 
      void on_actionHelpTextToggler_triggered(); // helpTextHideShow();
      void on_actionInterpretor_triggered();  // showInterpretation();
-     void on_actionUserManager_triggered();  // showUserManager();
+     void userManagerRequested();  // showUserManager();
 
      void refreshToolbarMenu();
 
@@ -149,6 +149,7 @@ private:
      QToolBar *editToolBar;
 
      QAction *recentFilesAct[MaxRecentFiles];
+     QAction *aUserManager;
 
      QStringList recentFiles;
 

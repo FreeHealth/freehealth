@@ -155,13 +155,14 @@ void mfMainWindow::on_actionInterpretor_triggered()
 #endif
 }
 
-void mfMainWindow::on_actionUserManager_triggered() // showUserManager()
+void mfMainWindow::userManagerRequested()
 {
-    if ( ! m_UserManager ) {
-        m_UserManager = new tkUserManager( this );
+    if (!m_UserManager) {
+        m_UserManager = new tkUserManager(this);
+        m_UserManager->initialize();
         m_UserManager->show();
     } else {
-        qApp->setActiveWindow( m_UserManager );
+        qApp->setActiveWindow(m_UserManager);
         m_UserManager->activateWindow();
     }
 }
@@ -488,6 +489,7 @@ void mfMainWindow::createMenusAndActions()
     createFileMenu();
     createEditMenu();
     createFormatMenu();
+    createPluginsMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -499,6 +501,22 @@ void mfMainWindow::createMenusAndActions()
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
+
+    QAction *a = 0;
+    tkCommand *cmd = 0;
+    tkActionManager *am = tkActionManager::instance();
+    QList<int> ctx = QList<int>() << tkConstants::C_GLOBAL_ID;
+    tkActionContainer *menu = am->actionContainer(tkConstants::M_PLUGINS);
+    Q_ASSERT(menu);
+    if (!menu)
+        return;
+
+    a = aUserManager = new QAction(this);
+    a->setIcon(tkTheme::icon(tkConstants::ICONUSERMANAGER));
+    cmd = am->registerAction(a, tkConstants::A_USERMANAGER, ctx);
+    cmd->setTranslations(tkConstants::USERMANAGER_TEXT);
+    menu->addAction(cmd, tkConstants::G_PLUGINS_USERMANAGER);
+    connect(aUserManager, SIGNAL(triggered()), this, SLOT(userManagerRequested()));
 
 //    for ( int i = 0; i < MaxRecentFiles; ++i )
 //    {

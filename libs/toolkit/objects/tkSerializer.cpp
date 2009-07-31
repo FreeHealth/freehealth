@@ -38,13 +38,12 @@
 #include <QApplication>
 
 Q_TK_USING_CONSTANTS
+Q_TK_BEGIN_SERIALIZER
 
-        Q_TK_BEGIN_SERIALIZER
-
-        /**
+/**
   \brief Official separator for the serializer engine.
 */
-        const QString separator()
+const QString separator()
 {
     return QString( SERIALIZER_SEPARATOR );
 }

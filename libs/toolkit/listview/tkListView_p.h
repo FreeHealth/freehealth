@@ -58,9 +58,8 @@ class QAction;
 class tkListViewContext;
 
 
-class tkListViewPrivate : public QWidget
+class tkListViewPrivate
 {
-    Q_OBJECT
 public:
     tkListViewPrivate( QWidget *parent, tkListView::AvailableActions actions );
 
@@ -73,6 +72,7 @@ public:
     tkListView::AvailableActions m_Actions;
     tkListViewContext *m_Context;
     QToolBar *m_ToolBar;
+    QString m_ContextName;
 };
 
 
@@ -149,32 +149,5 @@ private:
     static tkListViewManager *m_Instance;
 };
 
-
-
-class tkListViewFocusedPrivate : public QListView
-{
-    Q_OBJECT
-public:
-    tkListViewFocusedPrivate( QWidget * parent = 0 ) : QListView(parent) {}
-
-    void focusInEvent( QFocusEvent * event )
-    {
-        if (event->gotFocus()  ) {
-            emit focusChangedTo(true);
-        }
-    }
-
-    void focusOutEvent( QFocusEvent * event )
-    {
-        if (event->lostFocus()) {
-            emit focusChangedTo(false);
-        }
-    }
-
-    bool isEditing()  { return state() == QAbstractItemView::EditingState; }
-
-Q_SIGNALS:
-    void focusChangedTo(bool focused);
-};
 
 #endif // TKLISTVIEW_P_H
