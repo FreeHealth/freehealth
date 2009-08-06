@@ -133,6 +133,11 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>chkRemember</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>informationsWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

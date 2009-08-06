@@ -40,7 +40,7 @@
  ***************************************************************************/
 #include "diMainWindow.h"
 
-// include drugsinteractions headers
+// include freediams headers
 #include "diCore.h"
 #include "diAboutDialog.h"
 #include "diMedinTux.h"
@@ -309,7 +309,7 @@ bool diMainWindow::openFile()
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(OPEN_FILE),
                                              QDir::homePath(),
-                                             tr(DRUGINTERACTION_FILEFILTER) );
+                                             tr(FREEDIAMS_FILEFILTER) );
     if (f.isEmpty())
         return false;
     //    QString f = "/Users/eric/prescription.di";

@@ -268,7 +268,7 @@ bool diCore::init()
 
     // create splashscreen
     tkLog::addMessage( "diCore" , tkTr(STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
-    QSplashScreen splash( tkTheme::splashScreen(DRUGSINTERACTIONS_SPLASHSCREEN) );
+    QSplashScreen splash( tkTheme::splashScreen(tkConstants::FREEDIAMS_SPLASHSCREEN) );
     splash.show();
     QFont ft( splash.font() );
 //#ifndef Q_OS_WIN
@@ -307,7 +307,7 @@ bool diCore::init()
         mfDrugsPreferences::writeDefaultSettings(settings());
     } else if (settings()->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         // show the license agreement dialog
-        if (!tkGlobal::defaultLicenceAgreementDialog(QCoreApplication::translate("diCore", "You are running a new version of DrugsInteractions, you need to renew the licence agreement."), tkAboutDialog::BSD ))
+        if (!tkGlobal::defaultLicenceAgreementDialog(QCoreApplication::translate("diCore", "You are running a new version of FreeDiams, you need to renew the licence agreement."), tkAboutDialog::BSD ))
             return false;
         settings()->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
     }
@@ -344,7 +344,7 @@ bool diCore::init()
     // start update checking
     showMessage( &splash, tkTr(CHECKING_UPDATES) );
     QObject::connect(updateChecker(), SIGNAL(updateFound()), mainWindow(), SLOT(updateFound()));
-    updateChecker()->check(DRUGSINTERACTIONS_UPDATE_URL);
+    updateChecker()->check(FREEDIAMS_UPDATE_URL);
     if (diCorePrivate::m_Chrono)
         tkLog::logTimeElapsed(chrono, "diCore", tkTr(CHECKING_UPDATES));
 

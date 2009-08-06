@@ -58,8 +58,8 @@ class tkTranslators;
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.10
  * \date 21 July 2009
- * \brief Mainwindow of DrugsInteractions.
-   \ingroup drugsinteractions
+ * \brief Mainwindow of freediams.
+   \ingroup freediams
 */
 
 class diMainWindow: public tkMainWindow , public Ui::diMainWindow

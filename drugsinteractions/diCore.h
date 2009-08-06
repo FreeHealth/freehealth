@@ -50,7 +50,7 @@
 #ifndef DICORE_H
 #define DICORE_H
 
-// include drugsinteractions headers
+// include freediams headers
 #include "diMainWindow.h"
 #include "diPatient.h"
 
@@ -75,8 +75,8 @@ QT_END_NAMESPACE
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.3
  * \date 08 Jun 2009
-   \brief Core manager for DrugsInteractions
-   \ingroup drugsinteractions
+   \brief Core manager for freediams
+   \ingroup freediams
 */
 
 class diCore
