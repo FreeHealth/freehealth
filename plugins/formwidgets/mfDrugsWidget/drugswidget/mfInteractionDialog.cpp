@@ -97,9 +97,9 @@ void mfInteractionDialog::on_printButton_clicked()
     p.setHeader( header );
     header = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with DrugsInteractions.")));
+                   .arg(tr("Made with FreeDiams.")));
     p.setFooter( header );
-    p.addTextWatermark(tr("Made with DrugsInteractions."), tkPrinter::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
+    p.addTextWatermark(tr("Made with FreeDiams."), tkPrinter::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
     p.print( textBrowser->toHtml() );
 #endif
 }

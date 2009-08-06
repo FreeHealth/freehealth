@@ -58,16 +58,16 @@
 Q_TKUSER_BEGIN_GLOBAL
 
 // Lib intializer
-Q_TKUSER_EXPORT const void initLib();
+Q_TKUSER_EXPORT void initLib();
 
 // Libs informations
-Q_TKUSER_EXPORT const QString getLibraryInformations();
+Q_TKUSER_EXPORT QString getLibraryInformations();
 
 // Login and password transformations
-Q_TKUSER_EXPORT const QString crypt( const QString & toCrypt );
-Q_TKUSER_EXPORT const QString loginForSQL ( const QString & log );
-Q_TKUSER_EXPORT const QString loginFromSQL( const QVariant & sql );
-Q_TKUSER_EXPORT const QString loginFromSQL( const QString & sql );
+Q_TKUSER_EXPORT QString crypt( const QString & toCrypt );
+Q_TKUSER_EXPORT QString loginForSQL ( const QString & log );
+Q_TKUSER_EXPORT QString loginFromSQL( const QVariant & sql );
+Q_TKUSER_EXPORT QString loginFromSQL( const QString & sql );
 
 Q_TKUSER_END_GLOBAL
 

@@ -184,8 +184,10 @@ else {
     qtlibs.files = $${QTLIBS_PATH}/*mingw* \
                    $${QTLIBS_PATH}/*QtCore4* \
                    $${QTLIBS_PATH}/*QtGui4* \
-                   $${QTLIBS_PATH}/*QtSql4* \
-                   $${QTLIBS_PATH}/*QtXml4* \
+﻿                   $${QTLIBS_PATH}/*QtSql4* \
+ ﻿                   $${QTLIBS_PATH}/*QtScript4* \
+ ﻿                   $${QTLIBS_PATH}/*Qt3Support4* \
+                    $${QTLIBS_PATH}/*QtXml4* \
                    $${QTLIBS_PATH}/*QtSvg4* \
                    $${QTLIBS_PATH}/*QtNetwork4*
     INSTALLS += qtlibs
@@ -204,6 +206,8 @@ else {
         qtlibs.files = $$[QT_INSTALL_LIBS]/*QtCore.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtGui.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtSql.so.4 \
+                       $$[QT_INSTALL_LIBS]/*QtScript.so.4 \
+                       $$[QT_INSTALL_LIBS]/*Qt3Support.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtXml.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtSvg.so.4 \
                        $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
@@ -217,6 +221,8 @@ else {
         qtlibs.files = $$[QT_INSTALL_LIBS]/*QtCore* \
                        $$[QT_INSTALL_LIBS]/*QtGui* \
                        $$[QT_INSTALL_LIBS]/*QtSql* \
+                       $$[QT_INSTALL_LIBS]/*QtScript* \
+                       $$[QT_INSTALL_LIBS]/*Qt3Support* \
                        $$[QT_INSTALL_LIBS]/*QtXml* \
                        $$[QT_INSTALL_LIBS]/*QtSvg* \
                        $$[QT_INSTALL_LIBS]/*QtNetwork*

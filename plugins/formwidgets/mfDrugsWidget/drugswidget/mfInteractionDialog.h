@@ -51,7 +51,7 @@
 
 /**
   \brief Shows a dialog with all interaction text with ability to print.
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 class mfInteractionDialog : public QDialog, private Ui::mfInteractionDialog
 {

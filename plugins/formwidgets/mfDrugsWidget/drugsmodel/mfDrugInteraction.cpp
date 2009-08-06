@@ -54,7 +54,7 @@
   \li get the type of interaction with typeOfIAM() and type()
   \li get information's text of the interaction with information()
   \li get the recommandation's text with whatToDo()
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfDrugInteraction.h"

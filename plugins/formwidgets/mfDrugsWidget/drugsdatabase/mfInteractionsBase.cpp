@@ -48,7 +48,7 @@
   You must always in first call interactions() with the list of drugs to test.
   Then you can retreive interactions found using the other members.
 
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfInteractionsBase.h"

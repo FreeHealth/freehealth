@@ -48,7 +48,7 @@
 
   Please always call done() when the dialog including the mfDosageViewer is done.
 
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 

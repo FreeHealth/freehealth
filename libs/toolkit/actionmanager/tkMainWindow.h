@@ -40,6 +40,8 @@
 #ifndef TKMAINWINDOW_H
 #define TKMAINWINDOW_H
 
+#include <tkExporter.h>
+
 #include <QMainWindow>
 #include <QAction>
 
@@ -50,7 +52,7 @@
  * \date 22 July 2009
 */
 
-class tkMainWindow : public QMainWindow
+class Q_TK_EXPORT tkMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:

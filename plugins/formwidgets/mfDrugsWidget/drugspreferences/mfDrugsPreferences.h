@@ -56,7 +56,7 @@ class tkPrinterPreviewer;
 
 /**
  \brief Preferences widget for mfDrugsWidget plugins.
- \ingroup drugsinteractions drugswidget
+ \ingroup freediams drugswidget
 */
 class mfDrugsPreferences : public QWidget, private Ui::mfDrugsPreferences
 {

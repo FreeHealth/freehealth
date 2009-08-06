@@ -42,7 +42,7 @@
 /**
   \class mfDrugsIO
   \brief Manages the IO operations for the dosages and prescriptions
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfDrugsIO.h"
@@ -196,7 +196,7 @@ bool mfDrugsIO::startsDosageTransmission()
     }
     QStringList list = d->m_Datas.values();
     d->m_Sender.setMessage( list.join("\n\n") );
-    d->m_Sender.setUser( "DrugsInteractions" );
+    d->m_Sender.setUser( "FreeDiams" );
     d->m_Sender.setTypeOfMessage( tkSendMessage::DosageTransmission );
     d->m_Sender.postMessage();
     return true;
@@ -398,7 +398,7 @@ QString mfDrugsIO::prescriptionToHtml()
     toReturn.replace("{GENERATOR}", qApp->applicationName());
     toReturn.replace("{PRESCRIPTION}", tmp );
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
-                     .arg(ENCODEDHTML_DRUGSINTERACTIONSTAG)
+                     .arg(ENCODEDHTML_FREEDIAMSTAG)
                      .arg( QString(prescriptionToXml().toAscii().toBase64())) );
 
     // return to the state of the model
@@ -469,7 +469,7 @@ bool mfDrugsIO::savePrescription(const QHash<QString,QString> &extraDatas, const
     if (toFileName.isEmpty())
         return tkGlobal::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
-                                      tr(DRUGINTERACTION_FILEFILTER)) ;
+                                      tr(FREEDIAMS_FILEFILTER)) ;
     else
         return tkGlobal::saveStringToFile(xmldPrescription, toFileName, tkGlobal::DontWarnUser);
 }
@@ -493,7 +493,7 @@ bool mfDrugsIO::savePrescription(const QString &extraXmlDatas, const QString &to
     if (toFileName.isEmpty())
         return tkGlobal::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
-                                      tr(DRUGINTERACTION_FILEFILTER)) ;
+                                      tr(FREEDIAMS_FILEFILTER)) ;
     else
         return tkGlobal::saveStringToFile(xmldPrescription, toFileName, tkGlobal::DontWarnUser);
 }

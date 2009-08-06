@@ -1,7 +1,7 @@
 # first definitions
-TEMPLATE = app
-TARGET = $$quote(FreeMedForms)
-PACKAGE_VERSION = 0.0.7
+TEMPLATE         = app
+TARGET           = $$quote(FreeMedForms)
+PACKAGE_VERSION  = 0.0.8
 
 # include general configuration
 include( ../config.pri )
@@ -36,20 +36,20 @@ else:*-g++:LIBS *= -Wl,--whole-archive # import all symbols as the not used ones
 mac:*-g++:LIBS *= -dynamic
 else:unix:*-g++:LIBS *= -rdynamic
 PRE_TARGETDEPS *= $${PACKAGE_LIBS_SOURCES}/toolkit \
-    $${PACKAGE_LIBS_SOURCES}/usertoolkit \
-    $${PACKAGE_CONTRIBS}/quazip
+                  $${PACKAGE_LIBS_SOURCES}/usertoolkit
+#                  $${PACKAGE_CONTRIBS}/quazip
 
 # add compiled libs
 CONFIG( debug, debug|release ) { 
     # Debug
-    unix:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-        -lquazip_debug
+#    unix:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
+#        -lquazip_debug
     
     # -lquazip_debug \
     # -ltoolkit_debug \
     # -lusertoolkit_debug
-    else:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-        -lquazip_d
+#    else:LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
+#        -lquazip_d
     
     # -lquazip_d \
     # -lusertoolkit_d \
@@ -60,8 +60,8 @@ CONFIG( debug, debug|release ) {
 }
 else { 
     # Release
-    LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
-        -lquazip
+#    LIBS *= -L$${PACKAGE_CONTRIBS}/quazip \
+#        -lquazip
     
     # -lquazip \
     # -lusertoolkit \

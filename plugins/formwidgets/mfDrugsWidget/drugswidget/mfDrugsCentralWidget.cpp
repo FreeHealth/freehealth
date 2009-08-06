@@ -177,7 +177,7 @@ bool mfDrugsCentralWidget::printPrescription()
     tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     QString footer = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with DrugsInteractions.")));
+                   .arg(tr("Made with FreeDiams.")));
     p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
                         tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
                         Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));

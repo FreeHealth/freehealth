@@ -47,7 +47,7 @@
   \todo Write documentation
   \todo Actually inside FMF and drugwidgetplugins mfDrugs are carried via a QList of pointers. This way we can not
   use the operators with mfDrugs. May be we must redefine QList of pointers in QList of references ?
- \ingroup drugsinteractions drugswidget
+ \ingroup freediams drugswidget
 */
 
 #include "mfDrugs.h"

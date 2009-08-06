@@ -87,8 +87,8 @@ void tkContextManager::updateFocusWidget(QWidget *old, QWidget *now)
 {
     Q_UNUSED(old)
 
-    if (now)
-        qWarning() << "tkContextManager focusChanged" << now;
+//    if (now)
+//        qWarning() << "tkContextManager focusChanged" << now;
 
     // Prevent changing the context object just because the menu is activated
     if (qobject_cast<QMenuBar*>(now))

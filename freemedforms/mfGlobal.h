@@ -46,25 +46,22 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDir>
-#include <QuaZip>
 
 class QWidget;
 
 /**
  * \file mfGlobal.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.05
- * \date 23 Janvier 2009
+ * \version 0.0.6
+ * \date 05 Aug 2009
 */
 
 namespace mfGlobal
 {
     // Zip
-    Q_FMF_EXPORT const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFiles );
-    Q_FMF_EXPORT const void unzipAllFilesIntoDirs( const QStringList & paths );
+    Q_FMF_EXPORT bool unzipFile( const QString & fileName, const QString & pathToUnZippedFiles );
+    Q_FMF_EXPORT void unzipAllFilesIntoDirs( const QStringList & paths );
 
-};
-
-
+}
 
 #endif

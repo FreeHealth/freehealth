@@ -45,7 +45,7 @@
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.
   If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 

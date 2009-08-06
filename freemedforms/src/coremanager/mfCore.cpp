@@ -207,7 +207,7 @@ bool mfCore::init()
     // WINE compatibility
 #ifdef Q_OS_WIN
     // For WINE testings
-    if (QCoreApplication::arguments().contains("--wine") {
+    if (QCoreApplication::arguments().contains("--wine")) {
         mfCorePrivate::m_WineRunning = true;
         tkLog::addMessage( "mfCore", "Running under Wine environnement." );
         QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );

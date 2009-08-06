@@ -64,7 +64,7 @@
   \todo Manage user rights when creating dosage database
 
   \sa database_structure
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfDrugsBase.h"
@@ -234,7 +234,7 @@ bool mfDrugsBase::init()
          pathToDb = tkSettings::instance()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME); //QDir::cleanPath( qApp->applicationDirPath() );
 
      if (tkGlobal::isDebugCompilation()) {
-         // This is the debug mode of drugsinteractions ==> use global_resources
+         // This is the debug mode of freediams ==> use global_resources
          pathToDb = QDir::cleanPath( QString( "%1/databases/%2/" ).arg( FMF_GLOBAL_RESOURCES ).arg(DRUGS_DATABASE_NAME) );
      }
 
@@ -372,7 +372,7 @@ bool mfDrugsBase::createDatabase(  const QString & connectionName , const QStrin
 
 /**
   \brief Check the version of the doage database. Do the necessary updates for that database according to the application version number.
-  Added from drugsinteractions version 0.0.8 stable
+  Added from freediams version 0.0.8 stable
 */
 void mfDrugsBase::checkDosageDatabaseVersion()
 {

@@ -47,8 +47,8 @@
 class tkUpdateCheckerPrivate;
 
 Q_TK_BEGIN_CONSTANTS
-        const char* const  FREEMEDFORMS_UPDATE_URL        = "http://www.ericmaeker.fr/FreeMedForms/update-fmf.txt";
-        const char* const  DRUGSINTERACTIONS_UPDATE_URL   = "http://www.ericmaeker.fr/FreeMedForms/update-di.txt";
+        const char* const  FREEMEDFORMS_UPDATE_URL  = "http://www.ericmaeker.fr/FreeMedForms/update-fmf.txt";
+        const char* const  FREEDIAMS_UPDATE_URL     = "http://www.ericmaeker.fr/FreeMedForms/update-di.txt";
 Q_TK_END_CONSTANTS
 
 /**

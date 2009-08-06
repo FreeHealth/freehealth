@@ -47,7 +47,7 @@
 
 /**
  \brief Some constants for Drugs management
- \ingroup drugsinteractions drugswidget
+ \ingroup freediams drugswidget
 */
 namespace mfDrugsConstants
 {
@@ -123,11 +123,7 @@ namespace mfDrugsConstants
 //    const char * const  MFDRUGS_DEFAULT_USERFOOTER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">En cas d'urgence applez le SAMU : 112</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Veuillez signalez les demandes de visites &agrave; domicile, tant que possible, avant 10h.</span></p></body></html>";
 
 
-#ifdef DRUGS_INTERACTIONS_STANDALONE
     const char * const  MFDRUGS_SETTINGS_STATEPREFIX =   "DrugsWidget/";
-#else
-    const char * const  MFDRUGS_SETTINGS_STATEPREFIX =   "DrugsWidget/";
-#endif
 
     // ICONS
     const char * const  ICONTOOGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
@@ -160,7 +156,7 @@ namespace mfDrugsConstants
             "  <meta name=\"qrichtext\" content=\"1\" />\n"
             "  <meta name=\"charset\" content=\"UTF-8\" />\n"
             "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
-            "  <title>DrugsInteractions : Prescription</title>\n"
+            "  <title>FreeDiams : Prescription</title>\n"
             "</head>\n"
             "<body style=\"font-family:Arial;font-size:12pt\">\n"
             "<a href=\"{ENCODEDPRESCRIPTION}\">{PRESCRIPTION}</a>\n"
@@ -178,9 +174,9 @@ namespace mfDrugsConstants
             "</span>\n"
             "<br />\n";
     const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td>{FULLPRESCRIPTION}</td></tr></table>";
-    const char * const  ENCODEDHTML_DRUGSINTERACTIONSTAG = "DrugsInteractionsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
+    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
-    const char* const  DRUGINTERACTION_FILEFILTER = QT_TRANSLATE_NOOP("mfDrugsConstants", "DrugsInteractions Prescriptions (*.di)");
+    const char* const  FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("mfDrugsConstants", "FreeDiams Prescriptions (*.di)");
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
@@ -272,7 +268,7 @@ namespace mfDrugsConstants
     //--------------------------------------------------------------------------------------------------------
 /**
  \brief Used by mfDrugsModel for column representation.
- \ingroup drugsinteractions
+ \ingroup freediams
  \ingroup drugswidget
  */
 namespace Drug
@@ -308,7 +304,7 @@ namespace Drug
 
 /**
  \brief Used by mfDrugsModel for column representation.
- \ingroup drugsinteractions
+ \ingroup freediams
  \ingroup drugswidget
  */
 namespace Prescription
@@ -351,7 +347,7 @@ namespace Prescription
 
 /**
  \brief Some constants.
- \ingroup drugsinteractions
+ \ingroup freediams
  \ingroup drugswidget
 */
 namespace mfDosagesConstants
@@ -359,14 +355,11 @@ namespace mfDosagesConstants
     const char * const DOSAGES_DATABASE_NAME = "dosages";          /*!< \brief Dosage database connection name. */
     const char * const DOSAGES_DATABASE_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
     const char * const DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
-
-#ifdef DRUGS_INTERACTIONS_STANDALONE
-    const char * const DOSAGES_DEFAULT_USER_UUID = "druginteraction.default.user";  // this is only used by DrugsInteractions
-#endif
+    const char * const DOSAGES_DEFAULT_USER_UUID = "freediams.default.user";  // this is only used by DrugsInteractions
 
 /**
  \brief Used by mfDosageModel for column representation.
- \ingroup drugsinteractions
+ \ingroup freediams
  \ingroup drugswidget
 */
 namespace Dosage
@@ -437,7 +430,7 @@ namespace mfInteractionsConstants
 
 /**
  \brief Used by mfDrugsModel for column representation.
- \ingroup drugsinteractions
+ \ingroup freediams
  \ingroup drugswidget
 */
 namespace Interaction

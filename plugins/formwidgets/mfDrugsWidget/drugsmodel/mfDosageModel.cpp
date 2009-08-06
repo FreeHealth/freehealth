@@ -55,7 +55,7 @@
 
   \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
 
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 

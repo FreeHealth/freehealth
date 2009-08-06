@@ -43,7 +43,7 @@
   \brief Model asks mfDrugsBase to check interaction only while passing new *mfDrugs via addDrugs()
   or while passing QDrugsList via setDrugsList().
   \todo write code documentation
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfDrugsModel.h"

@@ -6,8 +6,8 @@ include( config.pri )
 
 CONFIG *= ordered
 
-SUBDIRS += contrib/quazip \
-           libs \
+SUBDIRS += libs \
+#           contrib/quazip \
            freemedforms \
            plugins
 

@@ -61,7 +61,7 @@
 
 /**
  \brief Creates a QWidget that contains a search line, and views to drugs and inn. Emit signal drugSelected( int ) when a drug is selected. int is the CIS of the selected drug.
- \ingroup drugsinteractions drugswidget
+ \ingroup freediams drugswidget
 */
 class mfDrugSelector : public QWidget, private Ui::mfDrugSelector
 {

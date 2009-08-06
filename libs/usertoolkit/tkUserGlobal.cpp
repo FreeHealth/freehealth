@@ -53,7 +53,7 @@
 */
 Q_TKUSER_BEGIN_GLOBAL
 
-const void initLib()
+void initLib()
 {
     tkLog::addMessage( "tkUserGlobal", "Initializing tkUser lib" );
     // load translator
@@ -67,7 +67,7 @@ const void initLib()
     tkLog::addMessage( "tkUserGlobal", "tkUser lib is initialized" );
 }
 
-const QString getLibraryInformations()
+QString getLibraryInformations()
 {
     return QString( "user toolkit library, version : %1 %2 , compiled on : %3 %4" )
             .arg( PACKAGE_VERSION )
@@ -84,20 +84,20 @@ const QString getLibraryInformations()
 /** \brief First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be
            added into database without problem - no special characters).
 */
-const QString crypt( const QString & toCrypt )
+QString crypt( const QString & toCrypt )
 {
     QCryptographicHash crypter( QCryptographicHash::Sha1 );
     crypter.addData( toCrypt.toAscii() );
     return crypter.result().toBase64();
 }
 
-const QString loginForSQL ( const QString & log )
+QString loginForSQL ( const QString & log )
 { return log.toAscii().toBase64(); }
 
-const QString loginFromSQL( const QVariant & sql )
+QString loginFromSQL( const QVariant & sql )
 { return QByteArray::fromBase64( sql.toByteArray() ); }
 
-const QString loginFromSQL( const QString & sql )
+QString loginFromSQL( const QString & sql )
 { return QByteArray::fromBase64( sql.toAscii() ); }
 
 Q_TKUSER_END_GLOBAL

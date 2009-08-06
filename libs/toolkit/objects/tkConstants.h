@@ -198,8 +198,8 @@ const char* const  A_VIEW_INTERACTIONS  = "actionViewInteractions";
 
 
 
-const char * const  DRUGSINTERACTIONS_SPLASHSCREEN="drugsinteractions.png";
-const char * const  FREEMEDFORMS_SPLASHSCREEN=".png";
+const char * const  FREEDIAMS_SPLASHSCREEN = "freediams.png";
+const char * const  FREEMEDFORMS_SPLASHSCREEN = ".png";
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";      /*!< Icon for New File */

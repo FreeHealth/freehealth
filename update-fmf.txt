@@ -1,16 +1,40 @@
 version=0.0.8
 {
-    * April 2009
-    * FreeMedForms goes multi-user capabilities
-    * A graphical user manager is available
-    * Better management of databases
-    * User interface can be thematized (icons for now)
-    * Drugs widget largely updated (please read update-di.txt)
-    * New print engine with header, footer and watermark abilities
-    * Toolkits librairies are now dynamic libs
-    * Lots of speed improvments
-    * MacOs X Universal binary
-    * Data saving still not available...
+    * August 2009
+
+    * --- English
+    * New features:
+       * Preparation of a multi-user use
+       * A user management is available
+       * Plugins prescription greatly improved
+       * New print manager with managing headers, footers and watermark (not yet fully implemented)
+       * Theming the GUI
+       * Preparation of the patient data backup
+
+    * Technical improvements
+       * Switch to Qt 4.5.2 MacOs
+       * Better management of databases
+       * Better management of user settings
+       * Additional libraries goes dynamic
+       * Many speed improvements
+       * New 'ActionManager' and 'ContextManager'
+
+    * --- French
+    * Nouvelles fonctionnalités :
+      * Préparation d'une utilisation multi-utilisateur
+      * Un gestionnaire des utilisateurs est disponible
+      * Plugins prescription très largement amélioré
+      * Nouveau gestionnaire d'impression avec gestion des entêtes, pieds de page et tatouage d'impression (non encore entièrement implémenté)
+      * Thématisation de l'interface graphique
+      * Préparation de la sauvegarde des données patient
+
+    * Améliorations techniques
+      * Passage à Qt 4.5.2 sous MacOs
+      * Meilleure gestion des bases de données
+      * Meilleure gestion des paramètres utilisateurs
+      * Librairies additionnelles dynamiques
+      * Beaucoup d'amélioration dans la rapidité d'exécution
+      * Nouveau 'ActionManager' et 'ContextManager'
 }
 
 version=0.0.6

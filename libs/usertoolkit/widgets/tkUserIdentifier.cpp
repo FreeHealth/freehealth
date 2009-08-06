@@ -105,8 +105,8 @@ void tkUserIdentifier::done( int result )
 {
     tkUserModel *m = tkUserModel::instance();
     if ( result == QDialog::Accepted ) {
-        // ask database with lgin/password couple
-        if ( ! m->isCorrectLogin(loginForSQL(d->login->lineEdit()->text() ), crypt( d->password->lineEdit()->text())) ) {
+        // ask database with login/password couple
+        if (!m->isCorrectLogin(login(), cryptedPassword())) {
             d->m_NumberOfTries++;
             if ( d->m_NumberOfTries == MaxNumberOfTries )
                 QDialog::done( QDialog::Rejected );
@@ -127,12 +127,12 @@ void tkUserIdentifier::done( int result )
     }
 }
 
-inline QString tkUserIdentifier::cryptedPassword()
+QString tkUserIdentifier::cryptedPassword()
 {
     return crypt( d->password->lineEdit()->text() );
 }
 
-inline QString tkUserIdentifier::login()
+QString tkUserIdentifier::login()
 {
     return loginForSQL( d->login->lineEdit()->text() );
 }

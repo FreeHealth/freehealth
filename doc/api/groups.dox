@@ -8,8 +8,8 @@
 // For FreeMedForms
 // freemedforms fmf_plugins fmf_plugins_formswidget fmf_plugins_interfaces
 
-// For DrugsInteractions
-// drugsinteractions
+// For freediams
+// freediams
 
 
 // FREMEDFORMS GROUPS
@@ -39,9 +39,9 @@
 
 
 
-// DRUGSINTERACTIONS GROUPS
+// FREEDIAMS GROUPS
 /**
-   \defgroup drugsinteractions DrugsInteractions
+   \defgroup freediams FreeDiams
    \ingroup derivatives
 */
 
@@ -49,9 +49,6 @@
   // TOOLKITS GROUPS
 /**
   \defgroup  toolkit ToolKit
-  \version   0.1.0, released under New BSD License
-  \authors   See headers for details
-  \date      22/06/2009
 
   \section toolkit_intro Introduction
 
@@ -146,6 +143,6 @@
 
 // FMF PLUGINS SPECIFIC
 /**
-   \defgroup drugswidget Drug Widget Plugins - see also DrugsInteractions
+   \defgroup drugswidget Drug Widget Plugins - see also freediams
    \ingroup fmf_plugins_formswidget fmf_plugins
 */

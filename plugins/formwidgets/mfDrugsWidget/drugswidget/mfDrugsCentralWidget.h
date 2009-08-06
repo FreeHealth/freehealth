@@ -52,7 +52,7 @@ class mfPrescriptionViewer;
  * \version 0.0.2
  * \date 15 July 2009
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup drugsinteractions
+   \ingroup freediams
 */
 
 class mfDrugsCentralWidget : public QWidget, private Ui::mfDrugsCentralWidget

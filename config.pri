@@ -1,6 +1,6 @@
 #define all applications name
 FREEMEDFORMS          = $$quote(FreeMedForms)
-DRUGSINTERACTIONS     = $$quote(drugsinteractions)
+FREEDIAMS             = $$quote(FreeDiams)
 
 # prepare package name // TARGET __MUST BE__ defined BEFORE this file is included
 isEmpty(TARGET) {

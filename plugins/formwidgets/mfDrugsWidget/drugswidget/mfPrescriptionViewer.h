@@ -63,7 +63,7 @@ class mfDrugsModel;
 /**
  \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
  Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
- \ingroup drugsinteractions drugswidget
+ \ingroup freediams drugswidget
   */
 class mfPrescriptionViewer : public QWidget, private Ui::mfPrescriptionViewer
 {

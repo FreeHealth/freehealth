@@ -114,8 +114,8 @@ public:
         if (uuid.isEmpty())
             return uuid;
         // make sure it is not already in the hash
-        if ( m_Uuid_UserList.keys().contains( uuid ) ) {
-            return QString::null;
+        if ( m_Uuid_UserList.keys().contains(uuid) ) {
+            return uuid;
         }
         m_Uuid_UserList.insert( uuid, tkUserBase::instance()->getUserByUuid(uuid) );
         return uuid;
@@ -153,8 +153,9 @@ tkUserModel * tkUserModel::instance( QObject *parent )
 tkUserModel::tkUserModel( QObject * parent )
         : QSqlTableModel( parent, tkUserBase::instance()->database() ), d( 0 )
 {
+    setObjectName("tkUserModel");
     d = new tkUserModelPrivate();
-    if (!parent )
+    if (!parent)
         setParent( qApp );
     QSqlTableModel::setTable( tkUserBase::instance()->table( Table_USERS ) );
     setEditStrategy( QSqlTableModel::OnManualSubmit );
@@ -203,14 +204,14 @@ bool tkUserModel::setCurrentUser( const QString & log64, const QString & cryptpa
     // change current user
     d->m_CurrentUserUuid = uuid;
     foreach( tkUser *u, d->m_Uuid_UserList.values() )
-        u->setCurrent( false );
+        u->setCurrent(false);
     // trace log
     tkUser *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
     user->setCurrent(true);
     user->setLastLogin( QDateTime::currentDateTime() );
     user->addLoginToHistory();
-    tkUserBase::instance()->saveUser( user );
-    user->setModified( false );
+    tkUserBase::instance()->saveUser(user);
+    user->setModified(false);
     d->m_CurrentUserRights = User::UserRights( user->rightsValue( USER_ROLE_USERMANAGER ).toInt() );
     emit memoryUsageChanged();
     return true;
@@ -225,11 +226,13 @@ bool tkUserModel::hasCurrentUser()
 /** \brief Return the index of the current user. */
 QModelIndex tkUserModel::currentUserIndex() const
 {
-    if ( d->m_CurrentUserUuid.isEmpty() )
+    qWarning() << "currentUserIndex" << rowCount() << d->m_CurrentUserUuid;
+    if (d->m_CurrentUserUuid.isEmpty())
         return QModelIndex();
-    QModelIndexList list = match( createIndex( 0, User::Uuid ), Qt::DisplayRole, d->m_CurrentUserUuid, 1 );
-    if ( list.count() == 1 )
+    QModelIndexList list = match( createIndex(0, User::Uuid), Qt::DisplayRole, d->m_CurrentUserUuid, 1 );
+    if (list.count() == 1) {
         return list.at(0);
+    }
     return QModelIndex();
 }
 
@@ -316,13 +319,13 @@ bool tkUserModel::insertRows( int row, int count, const QModelIndex & parent )
         // feed the QSqlTableModel with uuid and crypted empty password
         QModelIndex newIndex = index( row+i, User::Uuid );
         if ( ! QSqlTableModel::setData( newIndex, uuid, Qt::EditRole ) ) {
-            tkLog::addError( "tkUserModelPrvivate", QString( "Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
+            tkLog::addError( this, QString( "Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg( row+i ).arg( uuid ) );
             return i;
         }
         newIndex = index( row+i, User::Password );
         if ( ! QSqlTableModel::setData( newIndex, tkUserGlobal::crypt( "" ), Qt::EditRole ) ) {
-            tkLog::addError( "tkUserModelPrvivate", QString( "Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
+            tkLog::addError( this, QString( "Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg( row+i ).arg( uuid ) );
             return i;
         }

@@ -1,4 +1,4 @@
-# Prepare the user's manual for drugsinteractions
+# Prepare the user's manual for freediams
 
 # This suppose that doxygen is installed on your OS
 # On MacOs : Doxygen must be installed as bundle into the Applications directory
@@ -42,11 +42,11 @@ isEmpty(HELPGENERATOR) {
 #}
 
 # create the HTML output of Doxygen
-IN_DOXYFILE = $${PWD}/usermanual/drugsinteractions/Doxyfile
+IN_DOXYFILE = $${PWD}/usermanual/freediams/Doxyfile
 html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
 QMAKE_EXTRA_TARGETS += html_docs
 
-OTHER_FILES += $${PWD}/usermanual/drugsinteractions/drugsinteractions.qdoc \
+OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
-               $${PWD}/usermanual/drugsinteractions/Doxyfile \
-               $${PWD}/usermanual/drugsinteractions/doxygen.css
+               $${PWD}/usermanual/freediams/Doxyfile \
+               $${PWD}/usermanual/freediams/doxygen.css

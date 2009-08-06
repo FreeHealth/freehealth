@@ -47,7 +47,7 @@
   Then you can retreive interactions found using the other members.
 
   \sa mfDrugInteraction, mfDrugsBases
-  \ingroup drugsinteractions drugswidget
+  \ingroup freediams drugswidget
 */
 
 #include "mfInteractionsManager.h"

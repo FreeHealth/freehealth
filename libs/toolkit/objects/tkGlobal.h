@@ -121,6 +121,7 @@ Q_TK_EXPORT bool defaultLicenceAgreementDialog(const QString &message, tkAboutDi
 Q_TK_EXPORT QString askUser( const QString &title, const QString &question );
 
 // Working with files and dirs
+Q_TK_EXPORT bool removeDir(const QString &name, QString *error);
 Q_TK_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
 Q_TK_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
 Q_TK_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
