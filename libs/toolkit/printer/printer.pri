@@ -10,4 +10,4 @@ FORMS   += $${PWD}/tkPrinterPreviewer_p.ui
 
 # protected files
 exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/toolkit/objects/tkPrinter_Pro.cpp
-else:SOURCES += objects/tkPrinter.cpp
+else:SOURCES += $${PWD}/tkPrinter.cpp

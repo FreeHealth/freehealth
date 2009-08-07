@@ -144,6 +144,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char * const  FILESAVE_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Save");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FILESAVEAS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Save as");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FILEPRINT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Print...");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  PRINTPREVIEW_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Print preview");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Exit");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  OPENPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Open a prescription");    /*!< \brief Default action text  \ingroup constants_actionmanager */

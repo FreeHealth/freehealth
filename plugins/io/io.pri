@@ -5,6 +5,7 @@
 
 # include config file
 include( $${PWD}/../../config.pri )
+win32:include(../plugins_win32.pri)
 
 # include freemedforms framework
 # include( $${PACKAGE_PWD}/freemedforms/freemedforms.pri )
@@ -17,4 +18,3 @@ mac:*-g++:LIBS  *= -Wl,-undefined,dynamic_lookup
 
 # ubuntu hardy/debian fix
 QMAKE_LFLAGS	-= -Wl,--no-undefined
-win32:LIBS           += -l$${FREEMEDFORMS}

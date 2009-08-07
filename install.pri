@@ -65,7 +65,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/$${PACKAGE_TARGET}.app/Contents/libs
-        LIB_EXTENSION            = *.$${QMAKE_EXTENSION_SHLIB}
+        LIB_EXTENSION            = $${QMAKE_EXTENSION_SHLIB}
 
         target.path = $${TARGET_INSTALL_PATH}
         #target.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -77,7 +77,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}/libs
-        LIB_EXTENSION            = *.so*
+        LIB_EXTENSION            = so*
 
         installtarget.path = $${TARGET_INSTALL_PATH}
         installtarget.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -89,7 +89,7 @@ else {
         PLUGINS_INSTALL_PATH     = $${TARGET_INSTALL_PATH}/plugins
         RESOURCES_INSTALL_PATH   = $${TARGET_INSTALL_PATH}/Resources
         LIBS_INSTALL_PATH        = $${TARGET_INSTALL_PATH}
-        LIB_EXTENSION            = *.dll
+        LIB_EXTENSION            = dll
 
         installtarget.path = $${TARGET_INSTALL_PATH}
         installtarget.files = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}
@@ -122,7 +122,7 @@ else {
 
  # Install Application Libraries
  applibs.path = $${LIBS_INSTALL_PATH}
- applibs.files = $${PACKAGE_LIBS_BIN}/*t.$${LIB_EXTENSION}
+ applibs.files = $${PACKAGE_LIBS_BIN}/*.$${LIB_EXTENSION}
  INSTALLS += applibs
 
  # Install FMF plugins
@@ -184,10 +184,10 @@ else {
     qtlibs.files = $${QTLIBS_PATH}/*mingw* \
                    $${QTLIBS_PATH}/*QtCore4* \
                    $${QTLIBS_PATH}/*QtGui4* \
-﻿                   $${QTLIBS_PATH}/*QtSql4* \
- ﻿                   $${QTLIBS_PATH}/*QtScript4* \
- ﻿                   $${QTLIBS_PATH}/*Qt3Support4* \
-                    $${QTLIBS_PATH}/*QtXml4* \
+                   $${QTLIBS_PATH}/*QtSql4* \
+                   $${QTLIBS_PATH}/*QtScript4* \
+                   $${QTLIBS_PATH}/*Qt3Support4* \
+                   $${QTLIBS_PATH}/*QtXml4* \
                    $${QTLIBS_PATH}/*QtSvg4* \
                    $${QTLIBS_PATH}/*QtNetwork4*
     INSTALLS += qtlibs
@@ -214,7 +214,7 @@ else {
         INSTALLS += qtlibs
         message( Unix : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH} --$${TARGET_INSTALL_PATH}/libs)
      } else:win32{
-﻿        QTLIBS_INSTALL_PATH = $${TARGET_INSTALL_PATH}
+        QTLIBS_INSTALL_PATH = $${TARGET_INSTALL_PATH}
         QTLIBS_PATH = $$[QT_INSTALL_LIBS]
         QTPLUGINS_PATH = $$[QT_INSTALL_PLUGINS]
         qtlibs.path  = $${QTLIBS_INSTALL_PATH}
@@ -242,4 +242,5 @@ else {
  message( Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${PLUGINS_INSTALL_PATH}/qt )
 
 }  #end if release mode
- 
+
+

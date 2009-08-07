@@ -81,7 +81,7 @@ bool tkSendMessage::isSending() const
 void tkSendMessage::showResultingMessageBox( bool state )
 {}
 
-QString tkSendMessage::resultMessage()
+QString tkSendMessage::resultMessage() const
 {
     return QString();
 }

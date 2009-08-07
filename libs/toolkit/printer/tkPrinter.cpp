@@ -124,21 +124,21 @@ bool tkPrinter::previewDialog( QWidget *parent, bool test )
 {
     Q_UNUSED(parent);
     Q_UNUSED(test);
-    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ISNOT_AVAILABLE).arg(tkTr(PRINT_PREVIEW)) );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(tkConstants::_1_ISNOT_AVAILABLE).arg(tkTr(tkConstants::PRINTPREVIEW_TEXT)) );
     return false;
 }
 
 bool tkPrinter::print( const QTextDocument & docToPrint )
 {
     Q_UNUSED(docToPrint);
-    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(tkConstants::_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
 bool tkPrinter::print( const QString &htmlToPrint )
 {
     Q_UNUSED(htmlToPrint);
-    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(tkConstants::_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
@@ -151,7 +151,7 @@ bool tkPrinter::printWithDuplicata( bool state )
 bool tkPrinter::print( QPrinter *printer )
 {
     Q_UNUSED(printer);
-    tkGlobal::functionNotAvailableMessageBox( tkTr(_1_ARENOT_AVAILABLE).arg("Print functions") );
+    tkGlobal::functionNotAvailableMessageBox( tkTr(tkConstants::_1_ARENOT_AVAILABLE).arg("Print functions") );
     return false;
 }
 
