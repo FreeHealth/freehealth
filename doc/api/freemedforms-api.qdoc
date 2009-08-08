@@ -1,0 +1,18 @@
+/*!
+    \page freemedforms_apis FreeMedForms toolkits
+
+
+    \section fmf_libs_description FreeMedForms Librairies
+
+    There are a few libraries used by many parts of FreeMedForms and derivatives.
+
+    \li \link toolkit The ToolKit Library provides generic objects, widgets and database abstraction. \endlink
+    \li \link usertoolkit The Users' ToolKit Library provides generic objects, widgets and database abstraction for users' management into applications. \endlink
+    \li \link medintuxtoolkit The MedinTux ToolKit Library provides generic functions for MedinTux relations. \endlink
+
+    \section fmf_plugins_description Plugins
+
+    Work in progress
+
+*/
+

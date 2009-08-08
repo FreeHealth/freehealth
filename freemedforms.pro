@@ -2,7 +2,8 @@ include ( checkqtversion.pri )
 
 TEMPLATE = subdirs
 
-include( config.pri )
+include(config.pri)
+include(doc/api-doc.pri)
 
 CONFIG *= ordered
 
@@ -22,3 +23,4 @@ ProjectSettings {
 }
 
 OTHER_FILES += update-fmf.txt
+

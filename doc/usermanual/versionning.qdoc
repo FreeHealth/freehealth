@@ -1,0 +1,23 @@
+/** \page versionning Comprendre les numéros de version de l'application
+
+Le numéro de version de l'application respecte le code suivant :
+- trois chiffres séparés par un point (ex : 1.4.8)
+- le premier chiffre correspond à la version majeure (considérée comme stable et fonctionnelle)
+- le second chiffre correspond à la version mineure (défini une version de correction de bug avec
+ possibilités de nouvelles fonctionnalités)
+- le troisième chiffre correspond à la version de déboggage (aucune nouvelle fonctionnalité ajoutée). Lorsque
+ce chiffre est pair, il s'agit d'une version stable sinon il s'agit d'une version de test.
+    - 1.4.2 est la version stable
+    - 1.4.3 est la version instable (peut comprendre un nombre important d'erreurs ou de fonctionnalités inhibées)
+
+Les versions instables sont les versions présentes sur le dépôt de source.
+
+Les versions majeures et mineures nulles définissent des versions dites alpha (ex : 0.0.8) :
+- nombreuses dysfonctions
+- non exploitable en pratique courante
+- fournies uniquement pour les tests
+- aucune compatibilité entre les versions n'est assurée
+
+\ref index
+
+*/

@@ -1,0 +1,91 @@
+/*!
+    \page buildinstructions Build instructions
+
+    \section build_intro Introduction
+
+    \subsection build_intro_en English
+
+    FreeMedForms and derivatives can be build in two ways using \e qmake and \e make :
+    - in 'debug' mode for tests
+    - in 'release' mode for the current usage
+
+    \subsection build_intro_fr Français
+
+    FreeMedForms peut être compilé de deux façons en utilisant \e qmake et \e make :
+    - en mode 'debug' pour les tests
+    - en mode 'release' pour l'utilisation.
+
+    \section build_debug Build in debug mode
+
+    \subsection build_debug_fr Français
+
+En mode debug les binaires sont situés dans le répertoire \e bin. L'application utilise les resources situées dans
+<em>global_resources</em>.
+
+Trouvez :
+  - les exécutables : <em>bin</em>
+  - les librairies : <em>bin/libs</em>
+  - les plugins : <em>bin/plugins</em>
+
+Aucune instruction complémentaire à la compilation n'est nécessaire.
+
+\code
+cd svn-freemedforms
+qmake freemedforms.pro -r -config debug
+make
+cd bin
+freemedforms --config=../global_resources/config.ini
+\endcode
+
+Vous pouvez spécifier un fichier spec à qmake.
+
+
+    \subsection build_debug_en English
+
+In debug mode binaries are located in the \e bin. The application uses resources from <em>global_resources</em>.
+
+Find:
+   - Binaries: <em>bin</em>
+   - Libraries: <em>bin/libs</em>
+   - Plugins: <em>bin/plugins</em>
+
+No instruction to the compilation is required.
+
+\code
+cd svn-freemedforms
+qmake freemedforms.pro config-r-debug
+make
+cd bin
+freemedforms --config=../global_resources/config.ini
+\endcode
+
+You can specify a file spec to qmake.
+
+    \section build_release Build in release mode
+
+    \subsection build_release_fr Français
+
+En mode release, l'installation est nécessaire. Les binaires sont situés dans le répertoire \e packages après l'installation.
+
+\code
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release
+make
+make install
+cd packages/your_platform/application_builded
+\endcode
+
+    \subsection build_release_en English
+
+In the release, the installation is necessary. The binaries are located in the \e packages after installation.
+
+\code
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release
+make
+make install
+cd packages/your_platform/application_builded
+\endcode
+
+
+*/

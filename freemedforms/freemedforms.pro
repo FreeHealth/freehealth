@@ -1,7 +1,7 @@
 # first definitions
 TEMPLATE         = app
 TARGET           = $$quote(FreeMedForms)
-PACKAGE_VERSION  = 0.0.8
+PACKAGE_VERSION  = 0.0.9
 
 # include general configuration
 include( ../config.pri )

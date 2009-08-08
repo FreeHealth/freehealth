@@ -24,10 +24,10 @@ telle quel, que vous trouverez dans toutes les sources de ce projet.
  *   eric.maeker@free.fr                                                   *
  *                                                                         *
  *   PLACEZ ICI LES TERMES DE LA LICENCE DE VOTRE CODE.                    *
- ***************************************************************************/
+// ************************************************************************\/
 
  // ou ce cadre si vous coder sur la même licence que FreeMedForms
- /***************************************************************************
+ /**************************************************************************
  *   FreeMedicalForms                                                      *
  *   Copyright (C) 2008-2009 by Eric MAEKER                                *
  *   eric.maeker@free.fr                                                   *
@@ -60,7 +60,7 @@ telle quel, que vous trouverez dans toutes les sources de ce projet.
  *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
- ***************************************************************************/
+ **************************************************************************\/
 \endverbatim
 
 Si vous vous êtes inspiré d'un projet externe à FreeMedForms pour votre code,
@@ -76,7 +76,7 @@ vous devez le préciser dans l'entête (le .h et ce selon la licence de distribu
  *                                                                         *
  *   Adaptations to FreeMedForms by :                                      *
  *       YOUR_NAME, YOURMAILADRESS                                         *
- ***************************************************************************/
+ **************************************************************************\/
 \endverbatim
 
 Vous pouvez ajouter un cadre de commentaire en dessous précisant votre participation.
@@ -87,7 +87,7 @@ Vous pouvez ajouter un cadre de commentaire en dessous précisant votre particip
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
+ **************************************************************************\/
 \endverbatim
 
 \section indentation Indentation du code
@@ -242,7 +242,7 @@ private:
  * \author AUTHOR_NAME <MAIL@ADRESS>
  * \version 0.03
  * \date DATE_DD_MMM_YYYY
-*/
+*\/
 \endverbatim
 
   Un descripteur rapide de la classe est écrit en anglais dans la partie supérieure de l'entête (.h). Ex :
@@ -252,13 +252,13 @@ private:
   All tables are described into an enum and a static stringlist.
   Get fields and tables using : getFields() and getTables().
   Get where clauses using getWhereClause( )
-*/
+*\/
 \endverbatim
 
 
     - Il peut être utile pour des membres complexes de documenter le code au fur et à mesure de son
     implémentation. Les commentaires sont ajoutés à la mode C++ `//`. Pour des raison de commodité,
-    les commentaires marqués par \verbatim `/*`et `*/` \endverbatim sont utilisés par les administrateurs
+    les commentaires marqués par \verbatim `\/*`et `*\/` \endverbatim sont utilisés par les administrateurs
     pour neutraliser de grandes parties de code lors de tests.
 
     - Ne commentez pas \e abusivement votre code source, cela peut nuire à la lisibilité.
