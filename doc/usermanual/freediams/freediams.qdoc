@@ -1,0 +1,190 @@
+/*! \mainpage Manuel de l'utilisateur - \freediams
+
+L'objectif de \freediams et de fournir un outil
+libre (open source), gratuit, indépendant (sans conflit d'intérêt) et multi-plateformes
+pour les professionnels de santé. La base de données thérapeutiques est synchronisée à celle
+de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
+des interactions de l'AFSSAPS.\n
+\freediams vous permet de créer des prescriptions
+totalement paramétrables avec alertes d'interaction en temps réel. Vous pouvez
+imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
+\freediams peut être utilisé avec d'autres logiciels,
+les paramètres sont alors transmis par la ligne de commande.\n
+
+\freediams est disponible pour :
+\li les utilisateurs de Linux (compilé sous Ubuntu)
+\li les utilisateurs de MacOs (universal, à partir de OS 10.5)
+\li les utilisateurs de Windows
+\li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps ont la
+possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
+d'un système à un autre.
+\li quelquesoit votre plateforme informatique, aucune installation annexe n'est nécessaire.
+
+\section TOC Contenu de l'aide :
+\li \ref auteurs
+\li \ref installation
+\li \ref presentation
+\li \ref parametrer
+\li \ref rechercher
+\li \ref iamtesteur
+\li \ref lienpatient
+\li \ref prescrire
+\li \ref prescriptions_io
+\li \ref medintux
+\li \ref ligne_commandes
+\li \ref installation_cle_usb
+\li \ref participer
+
+\section derniere_version Dernière version
+
+\note \freediams est encore au stade embryonnaire de son développement.
+Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
+développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
+\li \ref versionning
+\li La version actuellement documentée est la <b>version 0.0.10 (Août 2009)</b>.
+\li Version de la base de données thérapeutiques : <b>26 Juin 2009</b>.
+\li Version de la base de données des interactions : <b>30 Juin 2009</b>.
+
+\section licence Licence de distribution et d'utilisation
+
+\freediams est distribué sous licence BSD révisée. Vous pouvez lire les termes
+de la licence en suivant le menu <b>À propos</b>.
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////  INSTALLATION / MAJ / DESINTALLATION ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page installation Installation, mise à jour et désinstallation
+
+\section install Installation
+
+L'installation de \freediams ne nécessite aucune manipulation particulière.
+Téléchargez l'archive qui correspond à votre système d'exploitation et décompressez-là
+dans le répertoire de votre choix.
+
+Les données utilisateurs (paramètres, base de données posologies) se trouvent dans votre
+répertoire personnel. Selon votre plateforme :
+\li Linux/Unix : /home/votrenom/.\freediams
+\li MacOs : /Users/votrenom/.\freediams
+\li Windows : %HOMEPATH%\.\freediams
+
+\section maj Mise à jour
+
+Pour mettre à jour le logiciel, il suffit de remplacer le répertoire de la version obsolète
+par le répertoire de l'archive téléchargée. Aucunes données personnelles ne seront perdues.\n
+Un système d'alerte automatique de mise à disposition de nouvelle version est disponible d'office.
+Lorsqu'une mise à jour est disponible, le menu <b>Mise à jour disponible</b> apparaît.
+
+\section uninstall Désintallation
+
+Nettoyer votre répertoire personnel et effacer le répertoire où est installé \freediams.
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  INSTALLATION CLE USB  ///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page installation_cle_usb Installation sur clé USB multi-plateforme
+
+En cours de rédaction.
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page ligne_commandes Interfacer \freediams avec d'autres logiciels
+
+\freediams est pensé comme un "module" externe. Ce "module" peut étre utilisé par un grand nombre
+de logiciel propriétaires ou non. A l'heure actuel, seul MedinTux est configurable pour utiliser ce logiciel
+comme prescripteur.\n
+
+Pour interfacer un logiciel avec \freediams, il suffit de renseigner la ligne de commande au
+moment de l'appel.
+
+\section params_ligne_commandes Paramètres de la ligne de commande
+
+Les paramètres suivants sont disponibles :
+\li \e --medintux : définit une utilisation spécifique à MedinTux.
+\li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications.
+\li \e --patientname="xx xx xx" : définit le nom du patient.
+\li \e --dateofbirth="yyyy/MM/dd" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
+\li \e --weight="dd" : définit le poids du patient (en kg)
+\li \e --size="ddd" : définit la taille du patient (en cm)
+\li \e --clcr="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
+\li \e --creatinin="dd" : définit la créatininémie du patient (en mg/l)
+\li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
+\li \e --transmit-dosage = non documenté.
+
+
+\section exchange Le fichier d'échange
+
+Lorsqu'un fichier d'échange est notifié au démarrage du testeur d'interactions, celui-ci essaie de lire
+le contenu du fichier et d'y récupérer les données de la prescription.\n
+A la fermeture de l'application, la prescription est sauvegardée dans le d'échange sous format XML. Voir \ref format_fichier_di.\n
+
+Lorsque le paramètre \e --medintux est notifié dans la ligne de commande, le format du fichier d'échange est spécifique
+à MedinTux.\n
+
+\section param_command_line_specifiques Paramètres de la ligne de commandes spécifiques à certaines actions
+
+Certaines actions nécessitent l'activation de paramètres de la ligne de commande.\n
+Pour aider au déboggage de l'application lorsque celle-ci semble ralentie : \e --chrono aide à trouver le ralentissement.\n
+Pour les rédacteurs de posologies standard, \e --transmit-dosage permet de transmettre leurs posologies au
+comité scientifique chargé de les valider.
+
+
+\ref index
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////  MEDINTUX  //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** \page medintux Utiliser \freediams avec MedinTux
+
+  \section medintux_warning Attention \freediams NE FAIT PAS partie de la suite MedinTux
+
+  <b>\freediams est une partie du projet FreeMedForms. EN AUCUN CAS, il ne doit être
+  assimilé à la suite MedinTux.</b>\n
+  Il est possible d'interfacer MedinTux pour prescrire avec \freediams.\n
+  Aucun des auteurs, développeurs et contributeurs au présent logiciel n'assure de support pour la
+  suite MedinTux. Si vous rencontrez un problème lié à l'utilisation avec MedinTux, en dehors d'éventuels
+  problèmes liés à l'étape de configuration automatique, merci de vous adresser aux administrateurs de la
+  suite MedinTux.\n
+
+  \section medintux_config Interfacer MedinTux avec \freediams
+
+  La configuration de MedinTux se réalise en trois étapes :
+  \li Ouvrir l'assistant de configuration --> Menu : <b>Configuration/Configurer MedinTux</b>
+  \li Lire les informations et valider
+  \li Si l'assistant ne le détecte pas automatiquement, sélectionnez le répertoire qui abrite
+   le binaire de \b Manager (/MedinTux/Programmes/Manager/bin, en cas de problème demandez de l'aide
+   sur les forums dédiés à MedinTux)
+  \li Vérifiez l'état de configuration de MedinTux.
+  Il est nécessaire de réaliser ces étapes à chaque fois que vous modifier l'emplacement de \freediams
+  ou de votre répertoire MedinTux. Il n'est pas nécessaire de reconfigurer MedinTux lors des mises à jours
+  de \freediams, par contre il l'est pour lors des mises à jour de MedinTux.
+  <b>Merci de ne pas demander d'aide sur la mailing de FreeMedForms en cas de problème lors d'une mise à jour
+  de MedinTux. Tournez-vous vers les forums dédiés à MedinTux après avoir réitéré la configuration
+  automatique.</b>
+
+  \section medintux_utilisation Une fois configuré : l'utiliser
+
+  Vous devez redémarrer DrTux ET Manager AVANT de pouvoir profiter de \freediams.\n
+  Dans le menu utilisateur, vous trouverez un item <b>Prescrire avec \freediams</b>.
+  Cliquez ic pour créer une nouvelle ordonnance vierge.\n
+  Dans le cadre de la prescription (là où est rédigée la prescription dans MedinTux), un clique droit
+  ouvre le menu contextuel. Sélectionnez <b>Éditer avec \freediams</b> pour ré-éditer l'ordonnance en cours.
+  Attention cette manipulation ne fonctionne qu'avec des ordonnances préalablement créée avec \freediams. \n
+  Il n'est pas possible de reprendre une ordonnance créée par MedinTux.\n
+  Une fois la prescription rapatriée au sein de MedinTux, vous ne pourrait pas la modifier à la main, il faudra
+  systématiquement la rééditée avec \freediams.
+
+
+  \image html di-0.0.6-medintux1.png
+
+  \image html di-0.0.6-medintux2.png
+
+  \ref index
+*/
