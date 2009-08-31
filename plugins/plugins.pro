@@ -1,3 +1,13 @@
 TEMPLATE = subdirs
 
-SUBDIRS = formwidgets io
+CONFIG *= ordered
+
+SUBDIRS = \
+#          coreplugin \
+          fmfcoreplugin \
+xmlioplugin \
+          basewidgetsplugin \
+aggirplugin \
+          drugsplugin \
+#          formwidgets \
+#          io
