@@ -1,0 +1,183 @@
+/**
+ * \class mfObjectFundamental
+ * \~english This class owns all mecanism for :
+              - the management of all form's elements params
+              - the management of XML tags
+              - the management of selected values
+              - fundamental mecanism for widget connections (signals / slots)
+ *
+ * \~french Cette classe offre tous les mécanisme pour :
+             - la gestion des paramètres de chacun des éléments du formulaire
+             - la gestion des tags XML
+             - la gestion des valeurs sélectionnées
+             - mécanique fondamentale de connection avec les widgets d'affichage (signals / slots)
+ *
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::setParam( const int prm, const QVariant & value, const QString & lang, const int funcSetParam )
+ * \~english Manage the param prm (enum MapParams) and set its value to value translated into lang. For Options : if it is a basic known option it is translated to Options QFlags but not stored, else the option's splitted string is stored.
+ * \~french Gère le paramètre prm (enum MapParams) et définit sa valeur à value traduite dans la langue lang. Pour les options : si il s'agit d'une option basique, elle est traduit en QFlags Option et non stockée, sinon l'option est éclatée et stockée.
+*/
+
+/**
+ * \fn QVariant mfObjectFundamental::param( const int param ) const
+ * \~english Return the param prm (enum MapParams) translated into the defined mfApplication's language. The returned QVariant is a stringList if paramIsStringList() return true, else it is a simple QString.
+ * \~french Renvoie le paramètre prm (enum MapParams) trasuit dans la langue définit dans mfApplication au moment de l'appel. Le QVariant est une stringList si la fonction paramIsStringList() renvoie true, sinon il s'agit d'une simple QString.
+*/
+
+/**
+ * \fn bool mfObjectFundamental::paramIsStringList( const int param ) const
+ * \~english Return true if the param contains a stringList false if the param is only a string.
+ * \~french Renvoie true si le paramètre contient une list de string, false si le paramètre est une simple string.
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::setAbsoluteFileName( const QString & fileName )
+ * \~english Define the absolute XML Form's file name of this mfObject. You just need to set this value for the root mfObject. absoluteFileName() returns the file name and can be called on each mfObject of each forms.
+ * \~french Définit le nom de fichier absolu du formulaire XML de cet mfObjet. Vous devez uniquement définir cette valeur pour le mfObject racine. absoluteFileName() renvoie ce nom de fichier et peut être appelé depuis n'importe quel mfObject de n'importe quel formulaire.
+*/
+
+/**
+ * \fn virtual QDateTime mfObjectFundamental::dateTime() const
+ * \~english Return the DateTime of the mfObject. If mfObject is not a Type_Date then return an empty QDateTime.
+ * \~french Renvoie la valeur DateTime du mfObject. Si l'objet n'est pas de type date alors renvoie un QDateTime vide.
+*/
+
+/**
+ * \fn virtual QString mfObjectFundamental::dateFormat() const
+ * \~english Return the DateTime format of the mfObject. If mfObject is not a Type_Date then return an empty string.
+ * \~french Renvoie le format du DateTime du mfObject. Si l'objet n'est pas de type date alors renvoie un string vide.
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::isChecked() const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::setType( int t )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::setType( const QString & t )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual int mfObjectFundamental::typeFromString( const QString & t ) const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual int mfObjectFundamental::typeOfObject() const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::isNull() const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::setRequired( bool req )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual bool mfObjectFundamental::isMultiSelection()
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::setPossibleValues( QStringList & values, const QString & lang )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::addPossibleValue( const QString & value, const QString & lang )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual int mfObjectFundamental::countPossibleValues() const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual QStringList mfObjectFundamental::possibleValues() const
+ * \~english Return all the possible values of the object.
+ * \~french Renvoie les valeurs possibles de l'objet.
+*/
+
+/**
+ * \fn virtual QString mfObjectFundamental::possibleValue( int id ) const
+ * \~english Return the possible values at index id of the object.
+ * \~french Renvoie la valeur possible à l'index id de l'objet.
+*/
+
+/**
+ * \fn virtual int mfObjectFundamental::countSelectedValues() const
+ * \~english 
+ * \~french 
+*/
+
+
+/**
+ * \fn virtual QStringList mfObjectFundamental::selectedValues() const
+ * \~english Return the selected translated interpretValues of the object.
+ * \~french Renvoie les valeurs traduites et interprétées sélectionnées de l'objet.
+*/
+
+
+
+/**
+ * \fn virtual void mfObjectFundamental::selectedValueChangedTo( const QList<int> & list )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::selectedValueChangedTo( const int & value )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::selectedValueChangedTo( const QDateTime & value )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual void mfObjectFundamental::selectedValueChangedTo( const QString & value, const bool emitChangeSignal )
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual QStringList mfObjectFundamental::interpretedValues() const
+ * \~english 
+ * \~french 
+*/
+
+/**
+ * \fn virtual QList<double> mfObjectFundamental::numericalValues() const
+ * \~english 
+ * \~french 
+*/
+
+
+
