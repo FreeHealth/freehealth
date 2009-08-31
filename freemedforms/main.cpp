@@ -34,17 +34,42 @@
  ***************************************************************************/
 #include <QtPlugin>
 #include <QApplication>
+#include <QTextCodec>
+#include <QDir>
 
-#include <mfMainWindow.h>
-#include <mfCore.h>
-#include <mfPluginsManager.h>
+#include <QDebug>
 
-#include <tkLog.h>
+#include <extensionsystem/pluginmanager.h>
+#include <extensionsystem/pluginspec.h>
+#include <extensionsystem/iplugin.h>
+
+typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
+static const char* COREPLUGINSNAME = "Core";
+
+
+static inline QStringList getPluginPaths()
+{
+    QString app = qApp->applicationDirPath();
+
+#ifdef DEBUG
+#    ifdef Q_OS_MAC
+        app = QDir::cleanPath(app+"/../../../");
+#    else
+#ifdef Q_OS_MAC
+    app = QDir::cleanPath(app+"/../");
+#endif
+#    endif
+#endif
+
+    app += "/plugins/";
+    return QStringList() << app;
+}
+
 
 int main( int argc, char *argv[] )
 {
-     Q_INIT_RESOURCE( application );
-     QT_REQUIRE_VERSION( argc, argv, "4.5.0" );
+//     Q_INIT_RESOURCE( application );
+//     QT_REQUIRE_VERSION( argc, argv, "4.5.0" );
 
      QApplication app( argc, argv );
 
@@ -52,30 +77,102 @@ int main( int argc, char *argv[] )
      QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
 #ifdef DEBUG
-     app.setApplicationName( QString( "%1 - %2 debug" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1 - %2 debug" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
 #else
-     app.setApplicationName( QString( "%1 - %2" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1 - %2" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
 #endif
 
-     app.setOrganizationName( PACKAGE_NAME );
-     app.setOrganizationDomain( PACKAGE_DOMAIN );
+     app.setOrganizationName( BINARY_NAME );
+//     app.setOrganizationDomain( PACKAGE_DOMAIN );
      app.setApplicationVersion( PACKAGE_VERSION );
 
-     QObject::connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+//     QObject::connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-     // init core
-     if (!mfCore::init()) {
-         tkLog::saveLog();
-         return 1;
-     }
+    ExtensionSystem::PluginManager pluginManager;
+    pluginManager.setFileExtension(QString("pluginspec"));
 
-     // execute application
-     int result = app.exec();
+    const QStringList pluginPaths = getPluginPaths();
+    pluginManager.setPluginPaths(pluginPaths);
 
-     // some cleanup
-     mfCore::endOfApplication();
+//    const QStringList arguments = app.arguments();
+//    QMap<QString, QString> foundAppOptions;
+//    if (arguments.size() > 1) {
+//        QMap<QString, bool> appOptions;
+//        appOptions.insert(QLatin1String(HELP_OPTION1), false);
+//        appOptions.insert(QLatin1String(HELP_OPTION2), false);
+//        appOptions.insert(QLatin1String(HELP_OPTION3), false);
+//        appOptions.insert(QLatin1String(HELP_OPTION4), false);
+//        appOptions.insert(QLatin1String(VERSION_OPTION), false);
+//        appOptions.insert(QLatin1String(CLIENT_OPTION), false);
+//        QString errorMessage;
+//        if (!pluginManager.parseOptions(arguments,
+//                                        appOptions,
+//                                        &foundAppOptions,
+//                                        &errorMessage)) {
+//            displayError(errorMessage);
+//            printHelp(QFileInfo(app.applicationFilePath()).baseName(), pluginManager);
+//            return -1;
+//        }
+//    }
 
-     // return app exit code
-     return result;
+    const PluginSpecSet plugins = pluginManager.plugins();
+    ExtensionSystem::PluginSpec *coreplugin = 0;
+    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+//        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
+        if (spec->name() == QString(COREPLUGINSNAME)) {
+            coreplugin = spec;
+            break;
+        }
+    }
+    if (!coreplugin) {
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths.join(QString(",")));
+        qWarning() << reason;
+//        displayError(msgCoreLoadFailure(reason));
+        return 1;
+    }
+    if (coreplugin->hasError()) {
+        qWarning() << coreplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
+        return 1;
+    }
+//    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
+//        printVersion(coreplugin, pluginManager);
+//        return 0;
+//    }
+//    if (foundAppOptions.contains(QLatin1String(HELP_OPTION1))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION2))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION3))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION4))) {
+//        printHelp(QFileInfo(app.applicationFilePath()).baseName(), pluginManager);
+//        return 0;
+//    }
+
+//    const bool isFirstInstance = !app.isRunning();
+//    if (!isFirstInstance && foundAppOptions.contains(QLatin1String(CLIENT_OPTION)))
+//        return sendArguments(app, pluginManager.arguments()) ? 0 : -1;
+
+//    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+//        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
+//    }
+
+    pluginManager.loadPlugins();
+    if (coreplugin->hasError()) {
+        qWarning() << coreplugin->errorString();
+        return 1;
+    }
+
+
+//    if (isFirstInstance) {
+//        // Set up lock and remote arguments for the first instance only.
+//        // Silently fallback to unconnected instances for any subsequent
+//        // instances.
+//        app.initialize();
+//        QObject::connect(&app, SIGNAL(messageReceived(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
+//    }
+//    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
+
+    // Do this after the event loop has started
+//    QTimer::singleShot(100, &pluginManager, SLOT(startTests()));
+    return app.exec();
 }
 
