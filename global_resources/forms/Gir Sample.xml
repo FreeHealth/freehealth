@@ -2,7 +2,7 @@
 <!DOCTYPE FreeMedForms>
 <MedForm>
   <name>formSample</name>
-  <label>Check Box sample</label>
+  <label>Gir plugin sample</label>
   <type>form</type>
   <version>0.2</version>
   <creationdate>27-08-2009</creationdate>
@@ -15,15 +15,9 @@
   <option>compact</option>
 
   <Item>
-    <name>sampleCheck</name>
-    <label>This is a simple scripted checkbox sample</label>
-    <type>check</type>
-    <value>
-      <numerical id="0">1</numerical>
-      <numerical id="1">2</numerical>
-      <script id="0">The box is NOT checked</script>
-      <script id="1">The box is checked</script>
-    </value>
+    <name>girwidget</name>
+    <label>Gir sample</label>
+    <type>gir</type>
     <script>
       <onload>{onload script}</onload>
       <postload>{post load}</postload>

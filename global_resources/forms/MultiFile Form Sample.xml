@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <MedForm>
-   <name lang="fr" >multiform</name>
+   <name>multiform</name>
    <type>form</type>
-   <label lang="en" >Exemple de formulaire "multifichier".</label>
-   <version lang="fr" >0.2</version>
-   <cdate lang="fr" >2009-01-20</cdate>
-   <categorie lang="fr" >samples</categorie>
-   <file>./Simple Identity Sample.xml</file>
-   <file>./Drugs Widget Plugin Sample.xml</file>
-   <file>./RichText Sample.xml</file>
+   <label>Exemple de formulaire "multifichier".</label>
+   <version>0.2</version>
+   <cdate>2009-01-20</cdate>
+   <categorie>samples</categorie>
+   <file>./BaseWidgets Sample.xml</file>
+   <file>./Gir Sample.xml</file>
 </MedForm>

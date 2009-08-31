@@ -42,6 +42,33 @@ It is developed by medical doctors and is intended for use by these same profess
 prescribe and / or test drug interactions within a prescription. It can be linked to any application thanks to its
 command line parameters. The therapeutic and interactions database are synchronized with data from the french AFSSAPS.
 
+    \subsection intro_de Deutsch
+
+FreeMedForms (FMF) ist eine multiplattform Software (verfügbar auf
+MacOS, Linux, FreeBSD und Windows), sie ist multilingual, ist free und
+open Source und veröffentlicht unter der BSD Lizenz. FreeMedForms wurde
+von Medizinern entwickelt und richtet sich an professionelle im
+Gesundheitswesen.
+Momentan ist die Sofware in Entwicklung, und steht momentan nur zu
+testzwecken zur Verfügung. Das erklärte Hauptziel von FreeMedForms ist
+die Verwaltung von elektronischen medizinischen Daten, basierend auf
+unserer medizinischen Praxis oder der Praxis die wir in klinischen
+Studien erworben haben. Ihre Eingaben sind voll anpassbar durch die
+Benutzung von Plugins. Einige Teile der Suite sind bereits voll
+benutzbar und auch in der Praxis zum Verschreiben der Rezepte nutzbar
+(FreeDiams).
+
+FreeDiams ist das Resultat der FreeMedForms Rezept Plugins, die als
+eigenständige Applikation designed wurde. FreeDiams ist eine multi-
+Plattform (MacOS, Linux, FreeBSD, Windows) Free- und Opensource
+Anwendung, die unter der neuen BSD Lizenz veröffentlicht wurde. Es ist
+von Medizinern entwickelt, und richtet sich an das professionelle
+Umfeld. Es kann benutzt werden, um Rezepte zu verschreiben, oder aber
+zum testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
+der Kommandozeile mit jedwedem Programm verknüpft werden. Die
+therapeutische und Neben/Wechselwirkungsdatenbank wird mit den Daten des
+französischen AFSSAPS synchronisiert.
+
     \subsection intro_platforms Availables platforms
 
 FreeMedForms and derivatives are availables for :
@@ -77,6 +104,7 @@ FreeMedForms and derivatives use :
 
     - Translators :
         - Éric Maeker, MD
+        - Sacha Manns (germany) <Sascha.Manns@directbox.com>
         - We need help !!!
 
     -  French Public Mailing :

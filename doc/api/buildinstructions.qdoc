@@ -1,23 +1,22 @@
-/*!
-    \page buildinstructions Build instructions
+/*! \page buildinstructions Build instructions
 
-    \section build_intro Introduction
+\section build_intro Introduction
 
-    \subsection build_intro_en English
+\subsection build_intro_en English
 
-    FreeMedForms and derivatives can be build in two ways using \e qmake and \e make :
-    - in 'debug' mode for tests
-    - in 'release' mode for the current usage
+FreeMedForms and derivatives can be build in two ways using \e qmake and \e make :
+- in 'debug' mode for tests
+- in 'release' mode for the current usage
 
-    \subsection build_intro_fr Français
+\subsection build_intro_fr Français
 
-    FreeMedForms peut être compilé de deux façons en utilisant \e qmake et \e make :
-    - en mode 'debug' pour les tests
-    - en mode 'release' pour l'utilisation.
+FreeMedForms peut être compilé de deux façons en utilisant \e qmake et \e make :
+- en mode 'debug' pour les tests
+- en mode 'release' pour l'utilisation.
 
-    \section build_debug Build in debug mode
+\section build_debug Build in debug mode
 
-    \subsection build_debug_fr Français
+\subsection build_debug_fr Français
 
 En mode debug les binaires sont situés dans le répertoire \e bin. L'application utilise les resources situées dans
 <em>global_resources</em>.
@@ -40,7 +39,7 @@ freemedforms --config=../global_resources/config.ini
 Vous pouvez spécifier un fichier spec à qmake.
 
 
-    \subsection build_debug_en English
+\subsection build_debug_en English
 
 In debug mode binaries are located in the \e bin. The application uses resources from <em>global_resources</em>.
 
@@ -61,30 +60,68 @@ freemedforms --config=../global_resources/config.ini
 
 You can specify a file spec to qmake.
 
-    \section build_release Build in release mode
 
-    \subsection build_release_fr Français
 
-En mode release, l'installation est nécessaire. Les binaires sont situés dans le répertoire \e packages après l'installation.
+\section build_release Build in release mode
+
+\subsection build_release_fr Français
+
+En mode release, l'installation est nécessaire. \n
+Pour faciliter le processus d'installation plusieurs paramètres peuvent être passés par la ligne de commande :
+- Valable seulement depuis la version 0.0.8_1
+- <em>"CONFIG+=LINUX_INTEGRATED"</em> pour une meilleure intégration au système d'exploitation. FreeMedForms utilisera
+alors les librairies de Qt installés dans votre OS. N'est valable que pour Linux.
+- <em>"INSTALL_ROOT_PATH=/usr/share/FreeMedForms"</em> permet d'indiquer au processus d'installation où installer l'application.
+Si vous ne spécifiez pas de chemin (par défault) l'application est installée dans <em>packages/YourOs/AppName</em>.
+- <em>"LINK_ROOT_PATH=/usr/bin"</em> permet de créer, s'il est spécifié, au moment de l'installation, un lien symbolique vers l'application dans
+le répertoire spécifié. Ici, un lien nommé \e FreeMedForms sera créé dans le répertoire /usr/bin et pointera vers le binaire
+de l'application installée (cf INSTALL_ROOT_PATH). N'est valable que pour Linux.
 
 \code
+# exemple de code pour une intégration parfaite à OpenSuse
 cd svn-freemedforms
-qmake freemedforms.pro -r -config release
+qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=/usr/share/FreeMedForms" "LINK_ROOT_PATH=/usr/bin"
 make
 make install
-cd packages/your_platform/application_builded
 \endcode
 
-    \subsection build_release_en English
-
-In the release, the installation is necessary. The binaries are located in the \e packages after installation.
-
 \code
+# exemple de code pour créer un package indépendant comprenant les librairies Qt
 cd svn-freemedforms
 qmake freemedforms.pro -r -config release
 make
 make install
-cd packages/your_platform/application_builded
+./packages/linux/FreeMedForms/FreeMedForms
+\endcode
+
+\subsection build_release_en English
+
+In release mode, installation is necessary.\n
+To facilitate the installation process several parameters can be passed through the command line:
+- only valid since version 0.0.8_1
+- <em>"CONFIG+=LINUX_INTEGRATED"</em> for a better integration to the operating system. FreeMedForms will then use
+the Qt libraries installed in your OS. Only valid for Linux.
+- <em>"INSTALL_ROOT_PATH=/usr/share/FreeMedForms"</em> used to tell the installation process where to install the application.
+If you do not specify a path (default) the application is installed in <em>packages/YourOs/AppName</em>. Actually only valid for Linux.
+- <em>"LINK_ROOT_PATH=/usr/bin"</em> , if specified, creates, at the time of installation, a symbolic link to the application in
+specified directory. Here a link named \e FreeMedForms will be created in the directory <em>/usr/bin</em> and point to the binary
+the installed application (see INSTALL_ROOT_PATH). Only valid for Linux.
+
+\code
+# sample code for a perfect OpenSuse integration
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=/usr/share/FreeMedForms" "LINK_ROOT_PATH=/usr/bin"
+make
+make install
+\endcode
+
+\code
+# sample code to build an independant package containing Qt libs and plugs
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release
+make
+make install
+./packages/linux/FreeMedForms/FreeMedForms
 \endcode
 
 

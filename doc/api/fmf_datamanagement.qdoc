@@ -1,0 +1,39 @@
+/*! \page fmf_datamanagement FreeMedForms Data Management
+
+   \section  fmf_datamanagement_intro Introduction
+
+FreeMedForms propose un plugins "Gestionnaire de modèles" (GM) ou "ModelManager".\n
+Ce GM gère les données du dossier médical.\n
+
+Les plugins peuvent ajouter leur propres modèles au GM pour les mettre à disposition des autre
+plugins du dossier. Les modèles sont alors référencés par le biais d'une clé QString qui doit être unique.
+L'état du modèle des plugins doit être synchrone avec l'état du plugins lui-même. \n
+
+GM doit gérer le fait que certains modèles ne peuvent pas être dupliqués (identité par ex). Il faut
+donc définir des rôles pour chaque modèle.
+
+GM fournit des modèles standards qui peuvent servir aux plugins ?
+
+GM fournit aussi des modèle RO style CIM10 / DrugsDatabase pour les utiliser dans d'autres plugins.
+
+GM propose un modèle de valeurs clés, uniques et standards :
+- Patient::Uuid
+- Patient::Name
+- Patient::SecondName
+- Patient::Surname
+- Patient::DateOfBirth
+- Patient::AuthorizedStaff  // liste des personnes autorisées à lire/écrire le dossier patient
+
+- Physiology::CurrentWeight
+
+- Biology::CurrentClearanceCreat
+
+Ces valeurs doivent être renseignées par les plugins ou utiliser un proxy model ?
+
+\section fmf_datamanagement_IO Entrées/Sorties du GM
+
+Un second plugins gère la sauvegarde et récupération des données des modèles enregistrés dans le GM.\n
+
+
+
+*/

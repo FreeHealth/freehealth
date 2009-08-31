@@ -9,4 +9,5 @@ OTHER_FILES +=  \
                api/freemedforms-api.qdoc \
                api/whatsnew.qdoc \
                api/buildinstructions.qdoc \
+               api/fmf_datamanagement.qdoc \
                api_Doxyfile
