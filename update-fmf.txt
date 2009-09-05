@@ -1,3 +1,16 @@
+version=0.0.9
+{
+    * September 2009
+    * New features :
+      * New plugin : AGGIR for french only
+      * Special build for linux integration
+
+    * Technical improvements
+      * Complete rewrite of the plugin management
+      * Some new libs
+      * New ActionManager (based on QtCreator)
+}
+
 version=0.0.8
 {
     * August 2009

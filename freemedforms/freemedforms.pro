@@ -12,8 +12,8 @@ include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 
 # include SDKs
-include( $${SOURCES_LIBS_PATH}/rpath.pri )
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 # include Doc
 # !CONFIG(crosscompil) {
