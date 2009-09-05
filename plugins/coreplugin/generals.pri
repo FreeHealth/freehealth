@@ -21,6 +21,9 @@ HEADERS += \
     $${PWD}/mfObjectFundamental.h \
     $${PWD}/iformio.h \
     $${PWD}/iformitem.h \
+    $${PWD}/iformitemspec.h \
+    $${PWD}/iformitemscripts.h \
+    $${PWD}/iformitemvalues.h \
     $${PWD}/formmanager.h \
     $${PWD}/iformitemdatafactory.h \
     $${PWD}/formglobalmodel.h

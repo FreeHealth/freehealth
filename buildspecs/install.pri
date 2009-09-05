@@ -3,16 +3,32 @@ mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
 else:win32:INSTALL_BASENAME_PATH   = win
 
+# Qt libs and plugs
+INSTALL_QT_LIBS_PATH      = $${INSTALL_BINARY_PATH}/libs
+INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
+
+# some help for file copying
+LIB_EXTENSION             = so*
+
+# These inclusions modify the default path for the installation process
+macx:include(install_mac.pri)
+win32:include(install_win.pri)
+linux*:include(install_linux.pri)
+
 # by default package is constructed inside the svn trunk under
 # packages/yourOs/Application
-isEmpty(INSTALL_ROOT_PATH){
-  INSTALL_ROOT_PATH       = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
-}
-INSTALL_BINARY_PATH       = $${INSTALL_ROOT_PATH}
-INSTALL_LIBS_PATH         = $${INSTALL_BINARY_PATH}
-INSTALL_PLUGINS_PATH      = $${INSTALL_LIBS_PATH}
-INSTALL_RESOURCES_PATH    = $${INSTALL_BINARY_PATH}/Resources
-INSTALL_DESKTOP_FILES_PATH=
+isEmpty(INSTALL_ROOT_PATH):     INSTALL_ROOT_PATH      = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
+isEmpty(INSTALL_BINARY_PATH):   INSTALL_BINARY_PATH    = $${INSTALL_ROOT_PATH}
+isEmpty(INSTALL_LIBS_PATH):     INSTALL_LIBS_PATH      = $${INSTALL_BINARY_PATH}
+isEmpty(INSTALL_PLUGINS_PATH):  INSTALL_PLUGINS_PATH   = $${INSTALL_LIBS_PATH}
+isEmpty(INSTALL_RESOURCES_PATH):INSTALL_RESOURCES_PATH = $${INSTALL_BINARY_PATH}/Resources
+isEmpty(INSTALL_DESKTOP_FILES_PATH):INSTALL_DESKTOP_FILES_PATH =
+
+DEFINES *= "INSTALL_BINARY_PATH=\"\\\"$$INSTALL_BINARY_PATH\\\"\"" \
+           "INSTALL_LIBS_PATH=\"\\\"$$INSTALL_LIBS_PATH\\\"\"" \
+           "INSTALL_PLUGINS_PATH=\"\\\"$$INSTALL_PLUGINS_PATH\\\"\"" \
+           "INSTALL_RESOURCES_PATH=\"\\\"$$INSTALL_RESOURCES_PATH\\\"\"" \
+           "INSTALL_DESKTOP_FILES_PATH=\"\\\"$$INSTALL_DESKTOP_FILES_PATH\\\"\""
 
 # resources paths
 INSTALL_TRANSLATIONS_PATH = $${INSTALL_RESOURCES_PATH}/translations
@@ -24,20 +40,8 @@ INSTALL_BIGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/64x64
 INSTALL_SPLASHPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/splashscreens
 INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}/html
 
-# Qt libs and plugs
-INSTALL_QT_LIBS_PATH      = $${INSTALL_BINARY_PATH}/libs
-INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
-
-# some help for file copying
-LIB_EXTENSION             = so*
-
 # install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
 INSTALL_QT_INSIDE_BUNDLE = true
-
-# These inclusions modify the default path for the installation process
-macx:include( install_mac.pri)
-win32:include( install_win.pri)
-linux*:include( install_linux.pri)
 
 # message the configuration
 message( Binary : )
@@ -74,13 +78,15 @@ INSTALLS += target
 # Install libs
 !isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
-applibs.files = $${BUILD_LIB_PATH}
+applibs.files = $${BUILD_LIB_PATH}/*.$${LIB_EXTENSION}
+applibs.CONFIG += no_check_exist
 INSTALLS += applibs
 }
 # Install plugins
 !isEmpty(INSTALL_PLUGINS_PATH):!isEmpty(BUILD_PLUGIN_PATH){
 plugs.path = $${INSTALL_PLUGINS_PATH}
-plugs.files = $${BUILD_PLUGIN_PATH}
+plugs.files = $${BUILD_PLUGIN_PATH}/*.$${LIB_EXTENSION}
+plugs.CONFIG += no_check_exist
 INSTALLS += plugs
 }
 
