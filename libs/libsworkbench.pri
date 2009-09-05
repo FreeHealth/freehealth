@@ -5,9 +5,11 @@ win32 {
     DLLDESTDIR = $${BUID_BINARY_PATH}
 }
 
-CONFIG *= dll plugin
+include(rpath.pri)
+
+CONFIG *= dll
 
 DESTDIR  = $${BUILD_LIB_PATH}
-include(rpath.pri)
+
 
 # TARGET = $$qtLibraryTarget($$TARGET)
