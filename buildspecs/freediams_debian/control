@@ -1,0 +1,23 @@
+Source: freediams
+Section: science
+Priority: extra
+Maintainer: Eric Maeker <eric.maeker@free.fr>
+Build-Depends: debhelper (>= 7), libqt4-dev (>= 4.5.0), doxygen (>= 1.5.8)
+Standards-Version: 3.8.0
+Homepage: http://www.ericmaeker.fr/FreeMedForms
+
+Package: freediams
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqtcore4 (>= 4.5.0), libqtgui4 (>= 4.5.0), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg
+Description: Free, open source Electronic Medical Record Manager.
+ FreeDiams prescriber is the result of FreeMedForms prescriber
+ plugins built into a standalone application. FreeDiams is a
+ multi-platform (MacOS, Linux, FreeBSD, Windows), free and open
+ source released under the new BSD license. It is developed by
+ medical doctors and is intended for use by these same
+ professionals. It can be used alone to prescribe and / or
+ test drug interactions within a prescription. It can be
+ linked to any application thanks to its command line
+ parameters. The therapeutic and interactions database
+ are synchronized with data from the french AFSSAPS.
+ homepage : http://www.ericmaeker.fr/FreeMedForms
