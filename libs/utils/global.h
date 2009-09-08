@@ -37,11 +37,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef COREGLOBAL_H
-#define COREGLOBAL_H
+#ifndef UTILSGLOBAL_H
+#define UTILSGLOBAL_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/licenseterms.h>
+#include <utils/global_exporter.h>
+#include <utils/licenseterms.h>
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -63,14 +63,12 @@ QT_END_NAMESPACE
  * \date 10 Aug 2009
 */
 
-namespace Core {
+namespace Utils {
 
 namespace Constants {
 const char* const TOKEN_OPEN   = "[";
 const char* const TOKEN_CLOSE  = "]";
 }
-
-namespace tkGlobal {
 
 enum Warn {
     WarnUser = 0,
@@ -80,82 +78,80 @@ enum Warn {
 
 // Libs and OS informations
 /** \brief Return true if the application was build in debug mode. */
-CORE_EXPORT bool isDebugCompilation();
+UTILS_EXPORT bool isDebugCompilation();
 /** \brief Return true if the application was build using the SVN. */
-CORE_EXPORT bool isSvnBuild();
+UTILS_EXPORT bool isSvnBuild();
 /** \brief Return true if the application was build with all private parts. */
-CORE_EXPORT bool isFullApplication();
+UTILS_EXPORT bool isFullApplication();
 /** \brief Return true if the application is running on MacOs. */
-CORE_EXPORT bool isRunningOnMac();
+UTILS_EXPORT bool isRunningOnMac();
 /** \brief Return true if the application is running on Windows. */
-CORE_EXPORT bool isRunningOnWin();
+UTILS_EXPORT bool isRunningOnWin();
 /** \brief Return true if the application is running on Linux. */
-CORE_EXPORT bool isRunningOnLinux();
+UTILS_EXPORT bool isRunningOnLinux();
 /** \brief Return true if the application is running on FreeBsd. */
-CORE_EXPORT bool isRunningOnFreebsd();
+UTILS_EXPORT bool isRunningOnFreebsd();
 /** \brief Returns informations of 'uname -a' command. Works on Linux, MacOs, FreeBSD */
-CORE_EXPORT QString uname();
-CORE_EXPORT QString osName();
+UTILS_EXPORT QString uname();
+UTILS_EXPORT QString osName();
 
 // Widget geometry
 /** \brief Center a widget into the screen. */
-CORE_EXPORT void centerWidget( QWidget * win );
+UTILS_EXPORT void centerWidget( QWidget * win );
 /** \brief Toggle a widget to fullScreen. */
-CORE_EXPORT void setFullScreen( QWidget* win, bool on );
+UTILS_EXPORT void setFullScreen( QWidget* win, bool on );
 
 // Message Boxes and default dialogs
-CORE_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
-CORE_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
-CORE_EXPORT bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
-CORE_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title = QString::null );
-CORE_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title = QString::null );
-CORE_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
-CORE_EXPORT bool functionNotAvailableMessageBox( const QString &functionText );
-CORE_EXPORT void quickDebugDialog( const QStringList &texts);
-CORE_EXPORT bool defaultLicenceAgreementDialog(const QString &message, Core::LicenseTerms::AvailableLicense licence);
+UTILS_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+UTILS_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+UTILS_EXPORT bool yesNoMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+UTILS_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title = QString::null );
+UTILS_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title = QString::null );
+UTILS_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
+UTILS_EXPORT bool functionNotAvailableMessageBox( const QString &functionText );
+UTILS_EXPORT void quickDebugDialog( const QStringList &texts);
+UTILS_EXPORT bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense licence);
 
 // Dialogs for user input
-CORE_EXPORT QString askUser( const QString &title, const QString &question );
+UTILS_EXPORT QString askUser( const QString &title, const QString &question );
 
 // Working with files and dirs
-CORE_EXPORT bool removeDir(const QString &name, QString *error);
-CORE_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
-CORE_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
-CORE_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
-CORE_EXPORT bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser = WarnUser, QWidget *parent=0 );
-CORE_EXPORT bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
-CORE_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
-CORE_EXPORT QString isDirExists(const QString &absPath);
-CORE_EXPORT QString isFileExists(const QString &absPath);
+UTILS_EXPORT bool removeDir(const QString &name, QString *error);
+UTILS_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
+UTILS_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
+UTILS_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
+UTILS_EXPORT bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser = WarnUser, QWidget *parent=0 );
+UTILS_EXPORT bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
+UTILS_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
+UTILS_EXPORT QString isDirExists(const QString &absPath);
+UTILS_EXPORT QString isFileExists(const QString &absPath);
 
 // Some usefull widgets specific functions
 /** \brief Toggle the echomode of a QLineEdit. */
-CORE_EXPORT void switchEchoMode( QLineEdit * l );
+UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
 // Some functions for HTML work
-CORE_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
-CORE_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
-CORE_EXPORT QString toHtmlAccent( const QString &html );
+UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
+UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
+UTILS_EXPORT QString toHtmlAccent( const QString &html );
 
 // Some functions for XML Handling
-CORE_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
-CORE_EXPORT bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
-CORE_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
-CORE_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);
-CORE_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const int defaultValue);
-CORE_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const long int defaultValue);
-CORE_EXPORT bool    xmlRead(const QDomElement &father, const QString &name, const bool defaultValue);
-CORE_EXPORT void    xmlWrite(QDomElement &father, const QString &name, const QString &value);
-CORE_EXPORT void    xmlWrite(QDomElement &father, const QString &name, char *value);
-CORE_EXPORT void    xmlWrite(QDomElement &father, const QString &name, int value);
-CORE_EXPORT void    xmlWrite(QDomElement &father, const QString &name, long int value);
-CORE_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool value);
+UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
+UTILS_EXPORT bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
+UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
+UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);
+UTILS_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const int defaultValue);
+UTILS_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const long int defaultValue);
+UTILS_EXPORT bool    xmlRead(const QDomElement &father, const QString &name, const bool defaultValue);
+UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, const QString &value);
+UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, char *value);
+UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, int value);
+UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, long int value);
+UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool value);
 
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
-CORE_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
+UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 
-}  // end tkGlobal
+}  // end Utils
 
-}  // end Core
-
-#endif  // COREGLOBAL_H
+#endif  // UTILSGLOBAL_H

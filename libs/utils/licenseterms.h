@@ -42,7 +42,7 @@
 
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/core_exporter.h>
+#include <utils/global_exporter.h>
 
 #include <QString>
 
@@ -54,9 +54,9 @@
 */
 
 
-namespace Core {
+namespace Utils {
 
-class CORE_EXPORT LicenseTerms
+class UTILS_EXPORT LicenseTerms
 {
 public:
     enum AvailableLicense {

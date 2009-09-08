@@ -33,20 +33,10 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "global.h"
-#include "constants.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 
-//// include toolkit headers
-//#include <ConstantTranslations::tkTranslators.h>
-//#include <Log.h>
-//#include <tkTheme.h>
-//#include <tkActionManager.h>
-//#include <tkSettings.h>
-//#include <tkSerialNumber.h>
-
-// include Qt headers
 #include <QApplication>
 #include <QWidget>
 #include <QDesktopWidget>
@@ -71,16 +61,15 @@
 
 
 /**
-  \namespace tkGlobal
-  \brief Global funtions for the applications.
+  \namespace Utils
+  \brief Some global funtions for the applications.
   \ingroup toolkit
   \ingroup object_toolkit
 */
 
-using namespace Core;
+using namespace Utils;
 
-namespace Core {
-namespace tkGlobal {
+namespace Utils {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////   LIB AND OS FUNCTIONS   ///////////////////////////////////////////////
@@ -144,11 +133,11 @@ bool isRunningOnFreebsd()
 QString uname()
 {
     QString system;
-    if (Core::tkGlobal::isRunningOnMac())
+    if (isRunningOnMac())
         system = "MacOs";
-    else if (Core::tkGlobal::isRunningOnLinux())
+    else if (isRunningOnLinux())
         system = "Linux";
-    else if (Core::tkGlobal::isRunningOnFreebsd())
+    else if (isRunningOnFreebsd())
         system = "FreeBSD";
     if (system.isEmpty())
         return QString();
@@ -305,7 +294,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
                                                     filters);
     if (fileName.isEmpty())
         return false;
-    return tkGlobal::saveStringToFile(toSave,fileName,WarnUser,wgt);
+    return Utils::saveStringToFile(toSave,fileName,WarnUser,wgt);
 }
 
 /** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
@@ -501,11 +490,11 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 /** \brief Creates a messagebox for non available function.  **/
 bool functionNotAvailableMessageBox( const QString &functionText )
 {
-    tkGlobal::informativeMessageBox( functionText,
-                                     QCoreApplication::translate( "tkGlobal","This function is only available to identified users."),
-                                     QCoreApplication::translate( "tkGlobal","To get your identifier please connect to the web site : %1. ")
-                                     .arg(qApp->organizationDomain()));
-//                                     .arg( tkSettings::instance()->path( tkSettings::WebSiteUrl ) ) );
+    informativeMessageBox( functionText,
+                           QCoreApplication::translate( "tkGlobal","This function is only available to identified users."),
+                           QCoreApplication::translate( "tkGlobal","To get your identifier please connect to the web site : %1. ")
+                           .arg(qApp->organizationDomain()));
+//                         .arg( tkSettings::instance()->path( tkSettings::WebSiteUrl ) ) );
     return true;
 }
 
@@ -533,7 +522,7 @@ void quickDebugDialog( const QStringList &texts)
 }
 
 /** \brief Shows a default dialog with \e license terms and a small \e message. */
-bool defaultLicenceAgreementDialog(const QString &message, Core::LicenseTerms::AvailableLicense license)
+bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense license)
 {
     QDialog dlg;
     QGridLayout layout(&dlg);
@@ -561,7 +550,7 @@ bool defaultLicenceAgreementDialog(const QString &message, Core::LicenseTerms::A
     bold.setBold(true);
     centered.setFont(bold);
     centered.setAlignment(Qt::AlignCenter);
-    tbrowse.setText( Core::LicenseTerms::getTranslatedLicenseTerms(license) );
+    tbrowse.setText( Utils::LicenseTerms::getTranslatedLicenseTerms(license) );
     // Question yes/no
     QLabel question(QCoreApplication::translate("tkGlobal", "Do you agree these terms ?"));
     layout.addWidget(&appname);
@@ -863,13 +852,13 @@ QString xmlRead(const QDomElement &father, const QString &name, const QString &d
 QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue)
 {
     QString defaultStr(defaultValue);
-    return tkGlobal::xmlRead(father, name, defaultStr);
+    return Utils::xmlRead(father, name, defaultStr);
 }
 
 int xmlRead(const QDomElement &father, const QString &name, const int defaultValue)
 {
     QString defaultStr = QString::number(defaultValue);
-    QString strValue = tkGlobal::xmlRead(father, name, defaultStr);
+    QString strValue = Utils::xmlRead(father, name, defaultStr);
     bool ok;
     int val = strValue.toInt(&ok);
     if (ok)
@@ -881,7 +870,7 @@ int xmlRead(const QDomElement &father, const QString &name, const int defaultVal
 int xmlRead(const QDomElement &father, const QString &name, const long int defaultValue)
 {
     QString defaultStr = QString::number(defaultValue);
-    QString strValue = tkGlobal::xmlRead(father, name, defaultStr);
+    QString strValue = Utils::xmlRead(father, name, defaultStr);
     bool ok;
     long int val = strValue.toLong(&ok);
     if (ok)
@@ -893,7 +882,7 @@ int xmlRead(const QDomElement &father, const QString &name, const long int defau
 bool xmlRead(const QDomElement &father, const QString &name, const bool defaultValue)
 {
     QString defaultStr = QString::number((int) defaultValue);
-    QString strValue = tkGlobal::xmlRead(father, name, defaultStr);
+    QString strValue = Utils::xmlRead(father, name, defaultStr);
     bool ok;
     int val = strValue.toInt(&ok);
     if (ok)
@@ -916,25 +905,25 @@ void xmlWrite(QDomElement &father, const QString &name, const QString &value)
 void xmlWrite(QDomElement &father, const QString &name, char *value)
 {
     QString strValue(value);
-    tkGlobal::xmlWrite(father, name, strValue);
+    Utils::xmlWrite(father, name, strValue);
 }
 
 void xmlWrite(QDomElement &father, const QString &name, int value)
 {
     QString valueStr = QString::number(value);
-    tkGlobal::xmlWrite(father, name, valueStr);
+    Utils::xmlWrite(father, name, valueStr);
 }
 
 void xmlWrite(QDomElement &father, const QString &name, long int value)
 {
     QString valueStr = QString::number(value);
-    tkGlobal::xmlWrite(father, name, valueStr);
+    Utils::xmlWrite(father, name, valueStr);
 }
 
 void xmlWrite(QDomElement &father, const QString &name, bool value)
 {
     QString valueStr = QString::number((int) value);
-    tkGlobal::xmlWrite(father, name, valueStr);
+    Utils::xmlWrite(father, name, valueStr);
 }
 
 /** \brief Replace a token into a string. */
@@ -983,5 +972,4 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
     return toReturn;
 }
 
-} // End tkGlobal
-} // End Core
+} // End Utils
