@@ -51,9 +51,9 @@
 */
 
 #include "theme.h"
-#include "log.h"
 
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 // include Qt headers
 #include <QCache>
@@ -103,10 +103,10 @@ void ThemePrivate::setThemeRootPath( const QString &absPath )
     // guesses all pixmap size paths
     if ( QDir(absPath).exists() ) {
         m_AbsolutePath = QDir::cleanPath(absPath);
-        Log::addMessage(this, QString("Setting theme path to : %1").arg(m_AbsolutePath) );
+        Utils::Log::addMessage(this, QString("Setting theme path to : %1").arg(m_AbsolutePath) );
     }
     else
-        Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) );
+        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) );
 }
 
 void ThemePrivate::setThemeRelativeRootPath( const QString & relPathFromAppBinary )
@@ -115,10 +115,10 @@ void ThemePrivate::setThemeRelativeRootPath( const QString & relPathFromAppBinar
     QString path = QDir::cleanPath(qApp->applicationDirPath() + QDir::separator() + relPathFromAppBinary);
     if ( QDir(path).exists() ) {
         m_AbsolutePath = path;
-        Log::addMessage(this, QString("INFO : theme path setted to : %1").arg(path) );
+        Utils::Log::addMessage(this, QString("INFO : theme path setted to : %1").arg(path) );
     }
     else
-        Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary) );
+        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary) );
 }
 
 void ThemePrivate::refreshCache()
@@ -138,7 +138,7 @@ void ThemePrivate::setSmallIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_SmallIconPath = absPath;
     else
-        Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) );
 }
 
 /** \brief Set the specific medium icon path - should not be used */
@@ -147,7 +147,7 @@ void ThemePrivate::setMediumIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_MediumIconPath = absPath;
     else
-        Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) );
 }
 
 /** \brief Set the specific big icon path - should not be used */
@@ -156,7 +156,7 @@ void ThemePrivate::setBigIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_BigIconPath = absPath;
     else
-        Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath) );
 }
 
 /** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
@@ -181,7 +181,7 @@ QIcon ThemePrivate::icon( const QString & fileName, IconSize size )
             m_IconCache.insert( transformedFileName, i );
             return QIcon(*i);
         } else {
-            Log::addError( "ThemePrivate", QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName) );
+            Utils::Log::addError( "ThemePrivate", QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName) );
         }
     }
     return QIcon();
@@ -219,6 +219,6 @@ QPixmap ThemePrivate::splashScreen( const QString &fileName )
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + fileName).exists() )
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + fileName );
     else
-        Log::addError( "ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName) );
+        Utils::Log::addError( "ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName) );
     return QPixmap();
 }

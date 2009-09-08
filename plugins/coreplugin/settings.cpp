@@ -156,8 +156,10 @@
 
 #include "isettings.h"
 #include "settings_p.h"
+
 #include <translationutils/constanttranslations.h>
-#include <coreplugin/log.h>
+#include <utils/log.h>
+
 #include <coreplugin/global.h>
 
 // include Qt headers
@@ -272,10 +274,11 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
         // RELEASE BUILD
         if (tkGlobal::isRunningOnMac()) {
 //            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
-            setPath( BundleResourcesPath, qApp->applicationDirPath() + "/.." );
+            setPath( BundleResourcesPath, qApp->applicationDirPath() + "/../" + QString(BUNDLERESOURCE_PATH) );
         } else {
 //            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath() + QDir::separator() + "Resources";
-            setPath( BundleResourcesPath, qApp->applicationDirPath() );
+            /** \todo manage LINUX_INTEGRATED here or in main.cpp ??? */
+            setPath( BundleResourcesPath, qApp->applicationDirPath() + QDir::separator() + QString(BUNDLERESOURCE_PATH));
         }
         m_FirstTime = value( "FirstTimeRunning", true ).toBool();
         setPath( ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath() );//QDir::homePath() + "/." + applicationName );//resourcesPath );
@@ -314,14 +317,14 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
             m_Enum_Path.insert( ReadWriteDatabasesPath, resourcesPath );
             if (!QDir(resourcesPath).exists())
                 if (!QDir().mkpath(resourcesPath))
-                    Log::addError("Settings", Trans::ConstantTranslations::tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath));
+                    Utils::Log::addError("Settings", Trans::ConstantTranslations::tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath));
             break;
         }
         case BundleResourcesPath :
         {
             if (m_Enum_Path.value(BundleResourcesPath)==QDir::cleanPath(absPath))
                 break;
-            QString bundlePath = QDir::cleanPath(absPath) + BUNDLERESOURCE_PATH;
+            QString bundlePath = QDir::cleanPath(absPath);
             m_Enum_Path.insert( BundleResourcesPath, bundlePath );
             m_Enum_Path.insert( ReadOnlyDatabasesPath, bundlePath + READONLYDATABASE );
             m_Enum_Path.insert( TranslationsPath, bundlePath + TRANSLATIONS_PATH );
@@ -438,7 +441,7 @@ QString SettingsPrivate::getIniFile( const QString & appName, const QString & fi
     if ( index != -1 ) {
         QString iniFileName = list[ index ];
         iniFileName = iniFileName.mid( iniFileName.indexOf( "=" ) + 1 );
-        Log::addMessage( "Settings", tr( "Passing command line ini file : %1" ).arg( iniFileName ) );
+        Utils::Log::addMessage( "Settings", tr( "Passing command line ini file : %1" ).arg( iniFileName ) );
 
         if ( QDir::isRelativePath( iniFileName ) )
             iniFileName.prepend( qApp->applicationDirPath() + QDir::separator() );
@@ -447,20 +450,20 @@ QString SettingsPrivate::getIniFile( const QString & appName, const QString & fi
         QFileInfo info( iniFileName );
         if ( info.exists() && info.isReadable() ) {
             if ( info.isWritable() ) {
-                Log::addMessage( "Settings", tr( "Using ini file %1." ).arg( iniFileName) );
+                Utils::Log::addMessage( "Settings", tr( "Using ini file %1." ).arg( iniFileName) );
                 return iniFileName;
             }
             else
-                Log::addError( "Settings", tr( "Ini file %1 is not writable. Can not use it." ).arg( iniFileName ) ) ;
+                Utils::Log::addError( "Settings", tr( "Ini file %1 is not writable. Can not use it." ).arg( iniFileName ) ) ;
         } else {
             // can we create and access to ini file ?
             QFile file( iniFileName );
             if ( file.open( QIODevice::ReadWrite | QIODevice::Text ) ) {
-                Log::addMessage( "Settings", tr( "Using ini file %1" ).arg( iniFileName ) );
+                Utils::Log::addMessage( "Settings", tr( "Using ini file %1" ).arg( iniFileName ) );
                 return iniFileName;
             }
             else
-                Log::addMessage( "Settings", tr( "WARNING : Ini file %1 can not be used." ).arg( iniFileName) );
+                Utils::Log::addMessage( "Settings", tr( "WARNING : Ini file %1 can not be used." ).arg( iniFileName) );
         }
     }
 
@@ -488,18 +491,18 @@ QString SettingsPrivate::getIniFile( const QString & appName, const QString & fi
 
     // Now use the $HOME path
     iniFile = QString( "%1/%2/%3" ).arg( QDir::homePath(), tmpAppName, tmpFileName);
-    Log::addMessage( "Settings", tr( "Trying ini file %1" ).arg( iniFile ) );
+    Utils::Log::addMessage( "Settings", tr( "Trying ini file %1" ).arg( iniFile ) );
     QDir dir( QFileInfo( iniFile ).absolutePath() );
 
     if (!dir.exists()) {
         dir.cdUp();
         if (!dir.mkdir(tmpAppName)) {
-            Log::addError( "Settings" , tr( "Unable to create dir : %1, no Ini File can be used.").arg( dir.absolutePath() + QDir::separator() + tmpAppName ) );
+            Utils::Log::addError( "Settings" , tr( "Unable to create dir : %1, no Ini File can be used.").arg( dir.absolutePath() + QDir::separator() + tmpAppName ) );
             return QString::null;
         }
     }
 
-    Log::addMessage( "Settings", tr( "Using ini file %1" ).arg( iniFile ) );
+    Utils::Log::addMessage( "Settings", tr( "Using ini file %1" ).arg( iniFile ) );
     return iniFile;
 }
 

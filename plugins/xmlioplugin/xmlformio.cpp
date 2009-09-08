@@ -36,9 +36,9 @@
 #include "xmlformioconstants.h"
 
 #include <extensionsystem/pluginmanager.h>
+#include <utils/log.h>
 
 #include <coreplugin/global.h>
-#include <coreplugin/log.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/formmanager.h>
 #include <coreplugin/iformitem.h>
@@ -200,7 +200,7 @@ bool XmlFormIO::canReadFile() const
     if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") == contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
         return true;
     } else {
-        Core::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(m_AbsFileName));
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(m_AbsFileName));
     }
     return false;
 }

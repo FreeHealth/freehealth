@@ -64,6 +64,7 @@ class CORE_EXPORT ISettings
 public:
 
     enum Paths {
+        /** \todo rename ResourcesPath to UserResourcesPath */
         ResourcesPath = 0,
         ApplicationPath,
         BundleRootPath,

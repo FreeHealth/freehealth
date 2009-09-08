@@ -6,7 +6,7 @@
 #include <fmfcoreplugin/appaboutpage.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
 #include <coreplugin/dialogs/commondebugpages.h>
-
+#include <coreplugin/dialogs/pluginaboutpage.h>
 
 #include <QtCore/QtPlugin>
 
@@ -61,6 +61,8 @@ void CorePlugin::extensionsInitialized()
     this->addAutoReleasedObject(new LogErrorDebugPage(this));
     this->addAutoReleasedObject(new LogMessageDebugPage(this));
     this->addAutoReleasedObject(new SettingDebugPage(this));
+    // add plugin info page
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QWidget>
 
+namespace Core {
+
 class CORE_EXPORT IContext : public QObject
 {
 public:
@@ -17,5 +19,6 @@ public:
     virtual QString contextHelpId() const { return QString(); }
 };
 
+}  // End Core
 
 #endif // ICONTEXT_H

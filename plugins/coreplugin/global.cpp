@@ -33,9 +33,10 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "global.h"
-#include "log.h"
 #include "constants.h"
+
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 //// include toolkit headers
 //#include <ConstantTranslations::tkTranslators.h>
@@ -154,9 +155,9 @@ QString uname()
     QProcess uname;
     uname.start("uname", QStringList() << "-a");
     if (!uname.waitForStarted())
-        Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
     if (!uname.waitForFinished())
-        Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
     return uname.readAll();
 }
 QString osName()
@@ -236,15 +237,15 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 {
     if ( ! QFile::exists( absPath ) ) {
         if ( createIfNotExist ) {
-            Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist. Trying to create it." )
+            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist. Trying to create it." )
                                .arg( logDirName, absPath ) );
             if ( ! QDir().mkpath( absPath ) ) {
-                Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Unable to create the %1 : %2.")
+                Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Unable to create the %1 : %2.")
                                  .arg( logDirName, absPath ) );
                 return false;
             }
         } else {
-            Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist." )
+            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist." )
                                .arg( logDirName, absPath ) );
             return false;
         }
@@ -256,7 +257,7 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser, QWidget *parent )
 {
     if (toFile.isEmpty()) {
-        Log::addError( "tkGlobal", "saveStringToFile() : fileName is empty");
+        Utils::Log::addError( "tkGlobal", "saveStringToFile() : fileName is empty");
         return false;
     }
     QWidget *wgt = parent;
@@ -271,23 +272,23 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn 
                                    QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
             QFile file( toFile );
             if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-                Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+                Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
                 return false;
             }
             file.write( toSave.toAscii() );
-            Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
+            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
         } else {
-            Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Save file aborted by user (file already exists) : " ) + toFile );
+            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Save file aborted by user (file already exists) : " ) + toFile );
             return false;
         }
     } else {
         QFile file( toFile );
         if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-            Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+            Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
             return false;
         }
         file.write( toSave.toAscii() );
-        Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
+        Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
     }
     return true;
 }
@@ -325,14 +326,14 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
     } else {
         QFile file( toRead );
         if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
-            Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to open file %2" )
+            Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to open file %2" )
                              .arg( toRead, file.errorString() ) );
             return QString::null;
         }
         QByteArray data = file.readAll();
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QString str = codec->toUnicode( data );
-        Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly read" ).arg( toRead ) );
+        Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly read" ).arg( toRead ) );
         return str;
     }
     return QString::null;
@@ -610,12 +611,12 @@ void setFullScreen( QWidget* win, bool on )
 
     if ( on ) {
         win->setWindowState( win->windowState() | Qt::WindowFullScreen);
-        Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in fullScreen Mode." ).arg( win->objectName() ) );
+        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in fullScreen Mode." ).arg( win->objectName() ) );
         //statusBar()->hide();
         //menuBar()->hide();
     } else {
         win->setWindowState( win->windowState() & ~Qt::WindowFullScreen);
-        Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in non fullScreen Mode." ).arg( win->objectName() ) );
+        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in non fullScreen Mode." ).arg( win->objectName() ) );
         //menuBar()->show();
         //statusBar()->show();
     }
@@ -816,7 +817,7 @@ QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, 
 bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64 )
 {
     if (!xmlContent.contains(generalTag)) {
-        Log::addError("tkGobal",QString("Error while reading Xml : no %1 tag found").arg(generalTag));
+        Utils::Log::addError("tkGobal",QString("Error while reading Xml : no %1 tag found").arg(generalTag));
         return false;
     }
     readDatas.clear();
@@ -959,7 +960,7 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
         beforeBegin = textToAnalyse.lastIndexOf( Constants::TOKEN_OPEN, begin - 1);
         afterEnd = textToAnalyse.indexOf( Constants::TOKEN_CLOSE, end );
         if ((beforeBegin==-1) || (afterEnd==-1)) {
-            Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Token replacement error (%1). Wrong number of parentheses.")
+            Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Token replacement error (%1). Wrong number of parentheses.")
                                                                 .arg(token));
             begin = end;
             continue;

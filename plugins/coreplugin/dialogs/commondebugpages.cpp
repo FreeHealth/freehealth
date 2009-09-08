@@ -1,10 +1,10 @@
 #include "commondebugpages.h"
 
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/log.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QTreeWidget>
@@ -25,7 +25,7 @@ LogErrorDebugPage::LogErrorDebugPage(QObject *parent) :
     layout->setMargin(0);
     tree = new QTreeWidget(m_Widget);
     tree->header()->hide();
-    Core::Log::errorsToTreeWidget(tree, true);
+    Utils::Log::errorsToTreeWidget(tree, true);
     layout->addWidget(tree);
 }
 
@@ -41,7 +41,7 @@ QString LogErrorDebugPage::category() const { return Trans::ConstantTranslations
 void LogErrorDebugPage::refreshContents()
 {
     tree->clear();
-    Core::Log::errorsToTreeWidget(tree, true);
+    Utils::Log::errorsToTreeWidget(tree, true);
 }
 
 QWidget *LogErrorDebugPage::widget()
@@ -76,7 +76,7 @@ QString LogMessageDebugPage::category() const
 void LogMessageDebugPage::refreshContents()
 {
     tree->clear();
-    Core::Log::messagesToTreeWidget(tree, true);
+    Utils::Log::messagesToTreeWidget(tree, true);
 }
 
 QWidget *LogMessageDebugPage::widget()

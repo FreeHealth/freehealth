@@ -7,6 +7,7 @@ SUBDIRS = \
           fmfcoreplugin \
 xmlioplugin \
           basewidgetsplugin \
+listviewplugin \
 aggirplugin \
           drugsplugin \
 #          formwidgets \

@@ -35,11 +35,11 @@
 #include "mainwindow.h"
 
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
-#include <coreplugin/log.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iformio.h>

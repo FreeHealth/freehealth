@@ -54,9 +54,9 @@
 */
 
 #include "translators.h"
-#include "log.h"
 
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 #include <QTranslator>
 #include <QFileInfo>
@@ -104,12 +104,12 @@ bool Translators::setPathToTranslations( const QString & path )
 {
     if ( QDir( path ).exists() ) {
         m_PathToTranslations = QDir::cleanPath( path );
-        Log::addMessage( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+        Utils::Log::addMessage( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
                          .arg( Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
                                QDir::cleanPath(path) ) );
         return true;
     } else {
-        Log::addError( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+        Utils::Log::addError( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
                        .arg( QDir::cleanPath( path ) ) );
         return false;
     }
@@ -145,9 +145,9 @@ void Translators::changeLanguage( const QString & lang )
                 path = m_PathToTranslations;
 
             if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) )
-                Log::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
+                Utils::Log::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
             else
-                Log::addMessage( this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
+                Utils::Log::addMessage( this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
         }
 //    }
     emit languageChanged();
@@ -183,12 +183,12 @@ bool Translators::addNewTranslator( const QString & fileMask, bool fromDefaultPa
         if ( !m_Translators.contains( QDir::cleanPath( fileMask ) ) ) {
             m_Translators.insert( QDir::cleanPath( fileMask ) , t );
             qApp->installTranslator( t );
-            Log::addMessage( this, tr( "Add Translator %1." ).arg( file.fileName() + "_" + lang ) );
+            Utils::Log::addMessage( this, tr( "Add Translator %1." ).arg( file.fileName() + "_" + lang ) );
             return true;
         }
     }
     else
-        Log::addMessage( this, tr( "WARNING : Can not be loaded %1 or already loaded." ).arg( file.absoluteFilePath() + "_" + lang )  );
+        Utils::Log::addMessage( this, tr( "WARNING : Can not be loaded %1 or already loaded." ).arg( file.absoluteFilePath() + "_" + lang )  );
 
     // something gone wrong so clean and exit the member
     delete t;

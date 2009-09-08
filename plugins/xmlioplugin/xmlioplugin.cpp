@@ -33,8 +33,9 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "xmlioplugin.h"
-
 #include "xmlformio.h"
+
+#include <coreplugin/dialogs/pluginaboutpage.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
@@ -61,6 +62,7 @@ bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorStr
 void XmlFormIOPlugin::extensionsInitialized()
 {
     addAutoReleasedObject(new XmlFormIO("",this));
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 

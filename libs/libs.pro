@@ -8,4 +8,5 @@ SUBDIRS +=  \
 translationutils \
 medicalutils \
 aggregation \
-extensionsystem
+extensionsystem \
+utils

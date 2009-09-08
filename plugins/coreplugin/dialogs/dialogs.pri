@@ -6,7 +6,8 @@ SOURCES += \
     $${PWD}/commondebugpages.cpp \
     $${PWD}/plugindialog.cpp \
     $${PWD}/settingsdialog.cpp \
-    $${PWD}/pluginaboutpage.cpp
+    $${PWD}/pluginaboutpage.cpp \
+    $${PWD}/helpdialog.cpp \
 
 
 HEADERS += \
@@ -16,7 +17,8 @@ HEADERS += \
     $${PWD}/commondebugpages.h \
     $${PWD}/plugindialog.h \
     $${PWD}/settingsdialog.h \
-    $${PWD}/pluginaboutpage.h
+    $${PWD}/pluginaboutpage.h \
+    $${PWD}/helpdialog.h \
 
 
 

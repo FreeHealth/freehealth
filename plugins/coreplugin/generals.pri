@@ -6,7 +6,6 @@ HEADERS += \
     $${PWD}/icore.h \
     $${PWD}/itheme.h \
     $${PWD}/theme.h \
-    $${PWD}/log.h \
     $${PWD}/translators.h \
     $${PWD}/isettings.h \
     $${PWD}/settings_p.h \
@@ -34,7 +33,6 @@ SOURCES += \
     $${PWD}/icore.cpp \
     $${PWD}/iformwidgetfactory.cpp \
     $${PWD}/theme.cpp \
-    $${PWD}/log.cpp \
     $${PWD}/translators.cpp \
     $${PWD}/settings.cpp \
     $${PWD}/global.cpp \
