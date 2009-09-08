@@ -8,6 +8,7 @@ SUBDIRS = \
 xmlioplugin \
           basewidgetsplugin \
 listviewplugin \
+texteditorplugin \
 aggirplugin \
           drugsplugin \
 #          formwidgets \
