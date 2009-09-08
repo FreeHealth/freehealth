@@ -41,6 +41,7 @@
 #define COREABOUTDIALOG_H
 
 #include <QDialog>
+#include <QHash>
 
 /**
  * \file debugdialog.h
@@ -51,6 +52,7 @@
 
 QT_BEGIN_NAMESPACE
 class QTreeWidgetItem;
+class QWidget;
 class QStackedLayout;
 QT_END_NAMESPACE
 
@@ -78,21 +80,13 @@ public:
     void setPages(const QList<IAboutPage*> pages);
     void showDialog();
 
-//    void setApplicationName(const QString &appName);
-//    void setAboutText( const QString &htmlOrPlainText );
-//    void addTeamList( const QString &title, const QList<tkAboutDatas> &list );
-//    void setLicense( AvailableLicense license );
-//    void setLicense( const QString &html );
-//    void setCopyright( const QString &years, const QString &names );
-//
-//    static QString getLicenseText(AvailableLicense license);
-
 private Q_SLOTS:
     void currentItemChanged(QTreeWidgetItem *cat);
 
 private:
     Ui::AboutDialog *m_ui;
     QStackedLayout  *m_slayout;
+    QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
 };
 
 } // End Internal

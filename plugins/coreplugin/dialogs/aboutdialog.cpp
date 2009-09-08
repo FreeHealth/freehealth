@@ -54,12 +54,12 @@
 
 Q_DECLARE_METATYPE(Core::IAboutPage*)
 
-static inline Core::IAboutPage *pageOfItem(const QTreeWidgetItem *item = 0)
-{
-    if (!item)
-        return 0;
-    return qVariantValue<Core::IAboutPage*>(item->data(0, Qt::UserRole));
-}
+//static inline QWidget *pageOfItem(const QTreeWidgetItem *item = 0)
+//{
+//    if (!item)
+//        return 0;
+//    return qVariantValue<QWidget*>(item->data(0, Qt::UserRole));
+//}
 
 using namespace Core;
 using namespace Core::Internal;
@@ -69,10 +69,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
 {
     typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
     m_ui->setupUi(this);
-    m_slayout = new QStackedLayout(m_ui->forStack);
-    m_slayout->setMargin(0);
-    m_slayout->setSpacing(0);
     m_ui->applicationNameLabel->setText(qApp->applicationName());
+    m_slayout = new QStackedLayout(m_ui->forStack);
+    m_ui->forStack->setLayout(m_slayout);
     setWindowTitle( qApp->applicationName() );
     setObjectName( "AboutDialog" );
 
@@ -92,7 +91,6 @@ void AboutDialog::setPages(const QList<IAboutPage*> pages)
     typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
 
     CategoryItemMap categories;
-    QVariant pagePtr;
 
     m_ui->tree->clear();
     foreach (IAboutPage *page, pages) {
@@ -103,18 +101,14 @@ void AboutDialog::setPages(const QList<IAboutPage*> pages)
             QTreeWidgetItem *categoryItem = new QTreeWidgetItem(m_ui->tree);
             categoryItem->setFlags(Qt::ItemIsEnabled);
             categoryItem->setText(0, page->category());
-            qVariantSetValue<IAboutPage*>(pagePtr, 0);
-            categoryItem->setData(0, Qt::UserRole, pagePtr);
             cit = categories.insert(categoryName, categoryItem);
         }
         // add item
         QTreeWidgetItem *pageItem = new QTreeWidgetItem(cit.value(), QStringList(page->name()));
-//        pageItem->setIcon(0, page->icon());
-        qVariantSetValue<IAboutPage*>(pagePtr, page);
-        pageItem->setData(0, Qt::UserRole, pagePtr);
+        QWidget *w = page->widget();
         pageItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-        m_slayout->addWidget(page->widget());
-        page->refreshContents();
+        m_Widgets.insert(pageItem,w);
+        m_slayout->addWidget(w);
     }
     m_ui->tree->sortItems(0,Qt::AscendingOrder);
 }
@@ -137,8 +131,8 @@ AboutDialog::~AboutDialog()
 
 void AboutDialog::currentItemChanged(QTreeWidgetItem *cat)
 {
-    if (IAboutPage *page = pageOfItem(cat)) {
-        m_slayout->setCurrentWidget(page->widget());
+    if (m_Widgets.keys().contains(cat)) {
+        m_slayout->setCurrentWidget(m_Widgets.value(cat));
     }
 }
 

@@ -1,3 +1,43 @@
+/***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   eric.maeker@free.fr                                                   *
+ *   All rights reserved.                                                  *
+ *                                                                         *
+ *   This program is a free and open source software.                      *
+ *   It is released under the terms of the new BSD License.                *
+ *                                                                         *
+ *   Redistribution and use in source and binary forms, with or without    *
+ *   modification, are permitted provided that the following conditions    *
+ *   are met:                                                              *
+ *   - Redistributions of source code must retain the above copyright      *
+ *   notice, this list of conditions and the following disclaimer.         *
+ *   - Redistributions in binary form must reproduce the above copyright   *
+ *   notice, this list of conditions and the following disclaimer in the   *
+ *   documentation and/or other materials provided with the distribution.  *
+ *   - Neither the name of the FreeMedForms' organization nor the names of *
+ *   its contributors may be used to endorse or promote products derived   *
+ *   from this software without specific prior written permission.         *
+ *                                                                         *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+ *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+ *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+ *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+ *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+ *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+ *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+ *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+ *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+ *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ ***************************************************************************/
+
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "commonaboutpages.h"
 
 #include <coreplugin/global.h>
@@ -25,23 +65,23 @@ BuildAboutPage::BuildAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("BuildAboutPage");
-    m_Widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(m_Widget);
-    tree = new QTreeWidget(m_Widget);
-    tree->header()->hide();
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    layout->addWidget(tree);
 }
 
 BuildAboutPage::~BuildAboutPage()
 {
-    if (m_Widget)
-        delete m_Widget;
 }
 
-void BuildAboutPage::refreshContents()
+QWidget *BuildAboutPage::widget()
 {
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    QTreeWidget *tree = new QTreeWidget(w);
+    tree->header()->hide();
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    layout->addWidget(tree);
+
+    // populate tree
     tree->clear();
     QFont f;
     f.setBold(true);
@@ -64,11 +104,8 @@ void BuildAboutPage::refreshContents()
     }
     new QTreeWidgetItem( versionItem, QStringList() << tr("Actual Qt version : %1").arg( qVersion() ));
     tree->expandAll();
-}
 
-QWidget *BuildAboutPage::widget()
-{
-    return m_Widget;
+    return w;
 }
 
 
@@ -79,32 +116,26 @@ LicenseAboutPage::LicenseAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("LicenseAboutPage");
-    m_Widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(m_Widget);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    browser = new QTextBrowser(m_Widget);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    layout->addWidget(browser);
 }
 
 LicenseAboutPage::~LicenseAboutPage()
 {
-    if (m_Widget)
-        delete m_Widget;
-}
-
-void LicenseAboutPage::refreshContents()
-{
-    browser->clear();
-    // add a generic message
-    browser->setHtml(LicenseTerms::getTranslatedLicenseTerms(LicenseTerms::BSDModified));
 }
 
 QWidget *LicenseAboutPage::widget()
 {
-    return m_Widget;
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    QTextBrowser *browser = new QTextBrowser(w);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    layout->addWidget(browser);
+    browser->clear();
+    // add a generic message
+    browser->setHtml(LicenseTerms::getTranslatedLicenseTerms(LicenseTerms::BSDModified));
+    return w;
 }
 
 
@@ -221,24 +252,23 @@ TeamAboutPage::TeamAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("TeamAboutPage");
-    m_Widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(m_Widget);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    tree = new QTreeWidget(m_Widget);
-    tree->header()->hide();
-    layout->addWidget(tree);
 }
 
 TeamAboutPage::~TeamAboutPage()
 {
-    if (m_Widget)
-        delete m_Widget;
 }
 
-void TeamAboutPage::refreshContents()
+QWidget *TeamAboutPage::widget()
 {
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    QTreeWidget *tree = new QTreeWidget(w);
+    tree->header()->hide();
+    layout->addWidget(tree);
     tree->clear();
+
     typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
     CategoryItemMap categories;
 
@@ -261,9 +291,5 @@ void TeamAboutPage::refreshContents()
         new QTreeWidgetItem(nameItem, QStringList() << t.Country);
         new QTreeWidgetItem(nameItem, QStringList() << t.UnTranslatedComment);
     }
-}
-
-QWidget *TeamAboutPage::widget()
-{
-    return m_Widget;
+    return w;
 }
