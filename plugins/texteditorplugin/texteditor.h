@@ -84,7 +84,7 @@ public:
         WithIO     = 0x04,
         Full       = Simple | WithTables | WithIO
     };
-    Q_DECLARE_FLAGS( Types, Type );
+    Q_DECLARE_FLAGS(Types, Type);
 
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();

@@ -5,4 +5,3 @@ CONFIG( debug, debug|release ) {
 } else {
     LIBS  *= -lCore
 }
-DEPENDPATH = $${PWD}

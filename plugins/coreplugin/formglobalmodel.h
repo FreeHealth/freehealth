@@ -34,10 +34,10 @@ public:
     virtual QVariant widgetData() const {return m_data;}
 
     virtual void setStorableData(const QVariant &data) {}
-    virtual QVariant storableData() const {}
+    virtual QVariant storableData() const { return QVariant(); }
 
     virtual void setScriptData(const QVariant &data) {}
-    virtual QVariant scriptData() const {}
+    virtual QVariant scriptData() const { return QVariant(); }
 
 protected:
     explicit FakeData(Core::FormItem *parent) : IFormItemData(parent) {}
@@ -53,9 +53,9 @@ public:
     FakeDataFactory(QObject *parent = 0) : IFormItemDataFactory(parent) {}
     virtual ~FakeDataFactory() {}
 
-    virtual bool initialize(const QStringList &arguments, QString *errorString) {}
-    virtual bool extensionInitialized() {}
-    virtual bool isInitialized() const {}
+    virtual bool initialize(const QStringList &arguments, QString *errorString) { return true; }
+    virtual bool extensionInitialized() { return true; }
+    virtual bool isInitialized() const { return true; }
 
     virtual QStringList providedItemDatas() const { return QStringList() << "fake"; }
     virtual Core::FakeData *createItemData(Core::FormItem *parent) { return new FakeData(parent); }
