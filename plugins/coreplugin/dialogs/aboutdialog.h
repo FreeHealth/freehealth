@@ -46,8 +46,8 @@
 /**
  * \file debugdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 15 Feb 2009
+ * \version 0.0.8
+ * \date 08 Sept 2009
 */
 
 QT_BEGIN_NAMESPACE

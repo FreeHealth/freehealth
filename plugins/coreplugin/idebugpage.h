@@ -20,8 +20,6 @@ public:
     virtual QString name() const = 0;
     virtual QString category() const = 0;
 
-    virtual void refreshContents() = 0;
-
     virtual QWidget *widget() = 0;
 };
 

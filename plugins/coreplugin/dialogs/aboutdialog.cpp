@@ -46,20 +46,12 @@
 
 #include "aboutdialog.h"
 #include "ui_AboutDialog.h"
-#include <coreplugin/iaboutpage.h>
 
 #include <extensionsystem/pluginmanager.h>
 
+#include <coreplugin/iaboutpage.h>
+
 #include <QStackedLayout>
-
-Q_DECLARE_METATYPE(Core::IAboutPage*)
-
-//static inline QWidget *pageOfItem(const QTreeWidgetItem *item = 0)
-//{
-//    if (!item)
-//        return 0;
-//    return qVariantValue<QWidget*>(item->data(0, Qt::UserRole));
-//}
 
 using namespace Core;
 using namespace Core::Internal;
@@ -99,7 +91,7 @@ void AboutDialog::setPages(const QList<IAboutPage*> pages)
         CategoryItemMap::iterator cit = categories.find(categoryName);
         if (cit == categories.end()) {
             QTreeWidgetItem *categoryItem = new QTreeWidgetItem(m_ui->tree);
-            categoryItem->setFlags(Qt::ItemIsEnabled);
+            categoryItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
             categoryItem->setText(0, page->category());
             cit = categories.insert(categoryName, categoryItem);
         }
@@ -126,6 +118,8 @@ void AboutDialog::showDialog()
 
 AboutDialog::~AboutDialog()
 {
+    // delete all widgets in use
+    qDeleteAll(m_Widgets.values());
     delete m_ui;
 }
 

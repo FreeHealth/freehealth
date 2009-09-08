@@ -41,12 +41,13 @@
 #define COREDEBUGDIALOG_H
 
 #include <QDialog>
+#include <QHash>
 
 /**
  * \file debugdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 15 Feb 2009
+ * \version 0.0.8
+ * \date 08 Sept 2009
 */
 
 QT_BEGIN_NAMESPACE
@@ -67,6 +68,7 @@ namespace Ui {
 
 class DebugDialog : public QDialog
 {
+    /** \todo reimplement send message */
     Q_OBJECT
     Q_DISABLE_COPY(DebugDialog)
 
@@ -81,7 +83,8 @@ private Q_SLOTS:
 
     void setPages(const QList<IDebugPage*> pages);
 
-//private Q_SLOTS:
+private Q_SLOTS:
+    void on_fullScreenButton_clicked();
 //    void on_butSend_clicked();
 //    void onSendMessage_done();
 //    bool on_butSave_clicked();
@@ -93,6 +96,7 @@ private Q_SLOTS:
 private:
     Ui::DebugDialog *m_ui;
     QStackedLayout  *m_slayout;
+    QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
 //    tkSendMessage   m_sender;
 //    bool            m_sending;
 //    QMessageBox *   m_infoMessageBox;

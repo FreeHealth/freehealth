@@ -42,21 +42,12 @@
 #include "debugdialog.h"
 #include "ui_DebugDialog.h"
 
-#include <coreplugin/idebugpage.h>
-
 #include <extensionsystem/pluginmanager.h>
 
+#include <coreplugin/global.h>
+#include <coreplugin/idebugpage.h>
+
 #include <QStackedLayout>
-
-
-Q_DECLARE_METATYPE(Core::IDebugPage*)
-
-static inline Core::IDebugPage *pageOfItem(const QTreeWidgetItem *item = 0)
-{
-    if (!item)
-        return 0;
-    return qVariantValue<Core::IDebugPage*>(item->data(0, Qt::UserRole));
-}
 
 using namespace Core;
 using namespace Core::Internal;
@@ -89,7 +80,6 @@ void DebugDialog::setPages(const QList<IDebugPage*> pages)
     typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
 
     CategoryItemMap categories;
-    QVariant pagePtr;
 
     m_ui->tree->clear();
     foreach (IDebugPage *page, pages) {
@@ -98,21 +88,17 @@ void DebugDialog::setPages(const QList<IDebugPage*> pages)
         CategoryItemMap::iterator cit = categories.find(categoryName);
         if (cit == categories.end()) {
             QTreeWidgetItem *categoryItem = new QTreeWidgetItem(m_ui->tree);
-            categoryItem->setFlags(Qt::ItemIsEnabled);
+            categoryItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
             categoryItem->setText(0, page->category());
-            qVariantSetValue<IDebugPage*>(pagePtr, 0);
-            categoryItem->setData(0, Qt::UserRole, pagePtr);
             cit = categories.insert(categoryName, categoryItem);
         }
         // add item
         QTreeWidgetItem *pageItem = new QTreeWidgetItem(cit.value(), QStringList(page->name()));
-//        pageItem->setIcon(0, page->icon());
-        qVariantSetValue<IDebugPage*>(pagePtr, page);
-        pageItem->setData(0, Qt::UserRole, pagePtr);
         pageItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-        if (page->widget())
-            m_slayout->addWidget(page->widget());
-        page->refreshContents();
+        QWidget *w = page->widget();
+        if (w)
+            m_slayout->addWidget(w);
+        m_Widgets.insert(pageItem,w);
     }
 }
 
@@ -133,13 +119,23 @@ void DebugDialog::showDialog()
 
 DebugDialog::~DebugDialog()
 {
+    // delete all widgets in use
+    qDeleteAll(m_Widgets.values());
     delete m_ui;
 }
 
 void DebugDialog::currentItemChanged(QTreeWidgetItem *cat)
 {
-    if (IDebugPage *page = pageOfItem(cat)) {
-        m_slayout->setCurrentWidget(page->widget());
+    if (m_Widgets.keys().contains(cat)) {
+        m_slayout->setCurrentWidget(m_Widgets.value(cat));
     }
+}
+
+void DebugDialog::on_fullScreenButton_clicked()
+{
+    static bool fullscreen = false;
+    fullscreen = !fullscreen;
+//    Core::tkGlobal::setFullScreen(this,fullscreen);
+//    this->show();
 }
 
