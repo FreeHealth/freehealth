@@ -37,8 +37,8 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
-#include <coreplugin/global.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/formmanager.h>
 #include <coreplugin/iformitem.h>
@@ -78,7 +78,7 @@ namespace {
 
 inline static void warnXmlReadError(const QString &file, const QString &msg, const int line, const int col)
 {
-    Core::tkGlobal::warningMessageBox(
+    Utils::warningMessageBox(
             Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file),
             Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
             .arg(msg).arg(line).arg(col),"",qApp->applicationName());
@@ -196,7 +196,7 @@ bool XmlFormIO::canReadFile() const
         return false;
     }
     // Check contents
-    QString contents = Core::tkGlobal::readTextFile(m_AbsFileName, Core::tkGlobal::DontWarnUser);
+    QString contents = Utils::readTextFile(m_AbsFileName, Utils::DontWarnUser);
     if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") == contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
         return true;
     } else {
@@ -216,7 +216,7 @@ bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
 {
     // Read contents if necessary
     QString contents;
-    contents = Core::tkGlobal::readTextFile(file, Core::tkGlobal::DontWarnUser);
+    contents = Utils::readTextFile(file, Utils::DontWarnUser);
     if (contents.isEmpty()) {
         warnXmlReadError(file, tr("File is empty."), 0, 0);
         /** \todo return a FormObject with a helptext that explains the error ? */

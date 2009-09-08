@@ -51,9 +51,9 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/global.h>
 
 #include <translationutils/constanttranslations.h>
+#include <utils/global.h>
 
 #include <QTextBrowser>
 #include <QPushButton>
@@ -108,7 +108,7 @@ public:
         QDir dir(Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
         QStringList files = dir.entryList(QStringList() << "*.htm" << "*.html", QDir::Files | QDir::Readable);
         foreach(const QString &f, files) {
-            QString tmp = tkGlobal::readTextFile(dir.absolutePath() + QDir::separator() + f);
+            QString tmp = Utils::readTextFile(dir.absolutePath() + QDir::separator() + f);
             if (tmp.contains("<title>")) {
                 int begin = tmp.indexOf("<title>") + 7;
                 int end = tmp.indexOf("</title");
@@ -205,7 +205,7 @@ void HelpDialog::updateWindowTitle()
 /** \brief Slot called for full screen toogler. */
 void HelpDialog::fullScreen()
 {
-    tkGlobal::setFullScreen(this, !this->isFullScreen());
+    Utils::setFullScreen(this, !this->isFullScreen());
 }
 
 void HelpDialog::comboActivated(const QString &item)

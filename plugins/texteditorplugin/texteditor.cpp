@@ -55,13 +55,13 @@
 #include "editorcontext.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/global.h>
 #include <coreplugin/uniqueidmanager.h>
 
 // include Qt headers
@@ -338,7 +338,7 @@ void TextEditor::fileOpen()
                                                QString(), tr( "HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)" ) );
     if ( file.isEmpty() )
         return;
-    QString str = Core::tkGlobal::readTextFile(file, Core::tkGlobal::WarnUser, this);
+    QString str = Utils::readTextFile(file, Utils::WarnUser, this);
     if ( Qt::mightBeRichText(str) ) {
         textEdit()->setHtml(str);
     } else {
@@ -358,8 +358,8 @@ void TextEditor::saveAs()
                                                      QString(), tr( "HTML-Files (*.htm *.html);;All Files (*)" ) );
     if ( fileName.isEmpty() )
         return ;
-    if (Core::tkGlobal::saveStringToFile( Core::tkGlobal::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
-                                    fileName, Core::tkGlobal::WarnUser, this ))
+    if (Utils::saveStringToFile( Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
+                                    fileName, Utils::WarnUser, this ))
         textEdit()->document()->setModified( false );
 }
 

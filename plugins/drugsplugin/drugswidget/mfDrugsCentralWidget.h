@@ -41,9 +41,6 @@
 #ifndef MFDRUGSCENTRALWIDGET_H
 #define MFDRUGSCENTRALWIDGET_H
 
-class mfDrugsContext;
-class mfPrescriptionViewer;
-
 #include "ui_mfDrugsCentralWidget.h"
 
 /**
@@ -54,21 +51,28 @@ class mfPrescriptionViewer;
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
    \ingroup freediams
 */
+namespace Drugs {
+namespace Internal {
+class DrugsContext;
+class PrescriptionViewer;
+class ActionHandler;
+class DrugsModel;
+}
 
-class mfDrugsCentralWidget : public QWidget, private Ui::mfDrugsCentralWidget
+class CentralWidget : public QWidget, private Ui::CentralWidget
 {
     Q_OBJECT
-    friend class mfDrugsActionHandler;
+    friend class Drugs::Internal::ActionHandler;
 
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     friend class diMainWindow;
 #endif
 
 public:
-    mfDrugsCentralWidget(QWidget *parent = 0);
+    CentralWidget(QWidget *parent = 0);
     bool initialize();
 
-    void changeFontTo( const QFont &font );
+    void changeFontTo(const QFont &font);
     mfDrugsModel *currentDrugsModel() const;
 
     QListView *prescriptionListView();
@@ -89,8 +93,10 @@ private:
     void focusInEvent(QFocusEvent *event);
 
 private:
-    mfDrugsModel   *m_CurrentDrugModel;
-    mfDrugsContext *m_Context;
+    Internal::DrugsModel   *m_CurrentDrugModel;
+    Internal::DrugsContext *m_Context;
 };
+
+}  // End Drugs
 
 #endif // MFDRUGSCENTRALWIDGET_H

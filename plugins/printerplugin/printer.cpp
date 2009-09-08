@@ -44,7 +44,7 @@
 #include "textdocumentextra.h"
 
 #include <utils/log.h>
-#include <coreplugin/global.h>
+#include <utils/global.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -857,12 +857,12 @@ bool Printer::previewDialog( QWidget *parent, bool test )
     if (!d->m_Printer)
         d->renewPrinter();
 
-    if (Core::tkGlobal::isDebugCompilation()) {
+    if (Utils::isDebugCompilation()) {
         // For test
         if ( test ) {
             QStringList list;
             list << d->content()->toHtml() << d->header(EachPages)->toHtml() <<  d->footer(EachPages)->toHtml();
-            Core::tkGlobal::quickDebugDialog(list);
+            Utils::quickDebugDialog(list);
         }
     } else
         Q_UNUSED(test);
@@ -1100,8 +1100,8 @@ void Printer::addTextWatermark( const QString & plainText,
     }
 
     QString html = QString("<html><body><p %1 style=\"%2\">%3</p></body></html>")
-                   .arg(Core::tkGlobal::textAlignmentToHtml(textAlignment))
-                   .arg(Core::tkGlobal::fontToHtml(font, color))
+                   .arg(Utils::textAlignmentToHtml(textAlignment))
+                   .arg(Utils::fontToHtml(font, color))
                    .arg(plainText);
     html.replace("\n", "<br/>");
     previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation );

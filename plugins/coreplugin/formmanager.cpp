@@ -35,9 +35,10 @@
 #include "formmanager.h"
 #include "iformitem.h"
 
-#include <coreplugin/global.h>
 #include <coreplugin/iformwidgetfactory.h>
 #include <coreplugin/uniqueidmanager.h>
+
+#include <utils/global.h>
 
 #include <QTreeWidgetItem>
 #include <QTreeWidget>

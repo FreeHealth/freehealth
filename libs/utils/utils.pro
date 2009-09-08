@@ -7,7 +7,8 @@ DEFINES *= UTILS_LIBRARY
 
 # include config file
 include(../libsworkbench.pri)
-include(../translationutils.pri)
+include(../utils_dependencies.pri)
+
 
 CONFIG *= dll sql network
 QT *= sql network
@@ -23,11 +24,14 @@ QT *= sql network
 
 HEADERS += \
     global_exporter.h \
+    global.h \
     database.h \
     log.h \
     updatechecker_p.h \
     updatechecker.h \
+    messagesender.h \
     serializer.h \
+    licenseterms.h \
     widgets/scrollingwidget.h \
     widgets/lineeditechoswitcher.h \
     widgets/QButtonLineEdit.h \
@@ -35,9 +39,12 @@ HEADERS += \
 
 
 SOURCES += \
+    global.cpp \
     database.cpp \
     log.cpp \
     updatechecker.cpp \
+    messagesender.cpp \
+    licenseterms.cpp \
     serializer.cpp \
     widgets/scrollingwidget.cpp \
     widgets/lineeditechoswitcher.cpp \

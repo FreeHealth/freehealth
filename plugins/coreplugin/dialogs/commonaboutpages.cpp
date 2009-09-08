@@ -40,11 +40,11 @@
  ***************************************************************************/
 #include "commonaboutpages.h"
 
-#include <coreplugin/global.h>
-#include <coreplugin/constants.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
-
 #include <extensionsystem/pluginmanager.h>
+
+#include <coreplugin/constants.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -88,7 +88,7 @@ QWidget *BuildAboutPage::widget()
     QTreeWidgetItem *compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS) );
     compilItem->setFont(0,f);
     new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
-    if (tkGlobal::isDebugCompilation()) {
+    if (Utils::isDebugCompilation()) {
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) );
     } else {
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
@@ -97,7 +97,7 @@ QWidget *BuildAboutPage::widget()
     QTreeWidgetItem *versionItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_INFORMATIONS) );
     versionItem->setFont(0,f);
     new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg(qApp->applicationVersion()));
-    if (tkGlobal::isFullApplication()) {
+    if (Utils::isFullApplication()) {
         new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
     } else {
         new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
@@ -134,7 +134,7 @@ QWidget *LicenseAboutPage::widget()
     layout->addWidget(browser);
     browser->clear();
     // add a generic message
-    browser->setHtml(LicenseTerms::getTranslatedLicenseTerms(LicenseTerms::BSDModified));
+    browser->setHtml(Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::BSDModified));
     return w;
 }
 

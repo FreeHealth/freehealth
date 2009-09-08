@@ -42,7 +42,7 @@
 #include <printerplugin/printer_exporter.h>
 #include <printerplugin/printer.h>
 
-#include <coreplugin/global.h>
+#include <utils/global.h>
 
 #include <QTextDocument>
 #include <QObject>

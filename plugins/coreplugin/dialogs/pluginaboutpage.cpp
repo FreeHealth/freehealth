@@ -3,7 +3,7 @@
 //#include <extensionsystem/pluginspec.h>
 
 #include <coreplugin/constants.h>
-#include <coreplugin/global.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QTreeWidget>
@@ -73,7 +73,7 @@ QWidget *PluginAboutPage::widget()
     i->setFont(0,f);
     new QTreeWidgetItem(i, QStringList() << tkTr(Trans::Constants::VERSION) + " " + m_Spec->version() );
     new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
-    if (tkGlobal::isDebugCompilation()) {
+    if (Utils::isDebugCompilation()) {
         new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DEBUG) );
     } else {
         new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_RELEASE) );

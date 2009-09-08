@@ -39,6 +39,8 @@
  ***************************************************************************/
 #include "textdocumentextra.h"
 
+#include <utils/global.h>
+
 /**
   \class TextDocumentExtra
   \brief This class is used by Printer for header/footer/watermark management.
@@ -140,8 +142,8 @@ QString TextDocumentExtra::toXml() const
     t.insert(Constants::TKDOCUMENT_PRESENCE_XML_TAG,QString::number(presence()));
     t.insert(Constants::TKDOCUMENT_PRIORITY_XML_TAG, QString::number(priority()));
     t.insert(Constants::TKDOCUMENT_EXTRA_XML_TAG, "");
-    t.insert(Constants::TKDOCUMENT_HTML_XML_TAG, Core::tkGlobal::toHtmlAccent(toHtml()));
-    return Core::tkGlobal::createXml(Constants::TKDOCUMENT_GENERAL_XML_TAG,t, 4, false);
+    t.insert(Constants::TKDOCUMENT_HTML_XML_TAG, Utils::toHtmlAccent(toHtml()));
+    return Utils::createXml(Constants::TKDOCUMENT_GENERAL_XML_TAG,t, 4, false);
 }
 
 TextDocumentExtra *TextDocumentExtra::fromXml(const QString &xml)
@@ -149,7 +151,7 @@ TextDocumentExtra *TextDocumentExtra::fromXml(const QString &xml)
     if (!xml.contains(QString("<%1>").arg(Constants::TKDOCUMENT_GENERAL_XML_TAG)))
         return new TextDocumentExtra();
     QHash<QString, QString> t;
-    if (!Core::tkGlobal::readXml(xml, Constants::TKDOCUMENT_GENERAL_XML_TAG, t, false))
+    if (!Utils::readXml(xml, Constants::TKDOCUMENT_GENERAL_XML_TAG, t, false))
         return new TextDocumentExtra();
     return new TextDocumentExtra(t.value(Constants::TKDOCUMENT_HTML_XML_TAG),
                                    Printer::Presence(t.value(Constants::TKDOCUMENT_PRESENCE_XML_TAG).toInt()),

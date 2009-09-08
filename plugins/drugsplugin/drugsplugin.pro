@@ -13,7 +13,7 @@ CONFIG *= sql plugins
 
 QT *= sql network
 
-#include( drugswidget.pri)
+include( drugswidget.pri)
 
 #HEADERS += drugswidget.h
 #SOURCES += drugswidget.cpp

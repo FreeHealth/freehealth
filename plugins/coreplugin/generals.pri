@@ -9,8 +9,6 @@ HEADERS += \
     $${PWD}/translators.h \
     $${PWD}/isettings.h \
     $${PWD}/settings_p.h \
-    $${PWD}/global.h \
-    $${PWD}/licenseterms.h \
     $${PWD}/idebugpage.h \
     $${PWD}/iaboutpage.h \
     $${PWD}/ioptionspage.h \
@@ -35,8 +33,6 @@ SOURCES += \
     $${PWD}/theme.cpp \
     $${PWD}/translators.cpp \
     $${PWD}/settings.cpp \
-    $${PWD}/global.cpp \
-    $${PWD}/licenseterms.cpp \
     $${PWD}/imainwindow.cpp \
     $${PWD}/mfObject.cpp \
     $${PWD}/mfObjectFundamental.cpp \

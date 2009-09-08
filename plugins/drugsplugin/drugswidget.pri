@@ -1,5 +1,5 @@
 # This file includes common sources between
-# mfDrugsWidget plugins and freediams
+# DrugsWidget plugins and freediams
 # $${PWD}/mfDrugsWidget.h \ <-- Specific to plugins
 INCLUDEPATH *= $${PWD}
 

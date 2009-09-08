@@ -160,7 +160,7 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 
-#include <coreplugin/global.h>
+#include <utils/global.h>
 
 // include Qt headers
 #include <QApplication>
@@ -246,17 +246,17 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
     setPath( ApplicationTempPath, QDir::tempPath() );
     setPath( SystemTempPath, QDir::tempPath() );
     setPath( WebSiteUrl, WEBSITE );
-//    if (tkGlobal::isRunningOnLinux())
+//    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
-    if (tkGlobal::isDebugCompilation()) {
+    if (Utils::isDebugCompilation()) {
         // DEBUG BUILD
         // transform defined path during compilation to relative path during execution...
 //        QDir fmfBin( QDir::cleanPath( APPLICATION_BIN_PATH ) );
 //        QString res = fmfBin.relativeFilePath( QDir::cleanPath( PACKAGE_GLOBAL_RESOURCES ) );
 //        qWarning() << "settings" << fmfBin.absolutePath() << res;
         QString res;
-        if (tkGlobal::isRunningOnMac())
+        if (Utils::isRunningOnMac())
             res = qApp->applicationDirPath() + "/../../../../global_resources";
         else
             res = qApp->applicationDirPath() + "/../global_resources";
@@ -265,14 +265,14 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
         resourcesPath = res + "/";
         setPath( ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath() );
 
-        if (tkGlobal::isRunningOnMac()) {
+        if (Utils::isRunningOnMac()) {
             setPath( BundleResourcesPath, resourcesPath );
         } else {
             setPath( BundleResourcesPath, resourcesPath );
         }
     } else {
         // RELEASE BUILD
-        if (tkGlobal::isRunningOnMac()) {
+        if (Utils::isRunningOnMac()) {
 //            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
             setPath( BundleResourcesPath, qApp->applicationDirPath() + "/../" + QString(BUNDLERESOURCE_PATH) );
         } else {
@@ -345,12 +345,12 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
             if (m_Enum_Path.value(ApplicationPath)==QDir::cleanPath(absPath))
                 break;
             m_Enum_Path.insert( ApplicationPath, absPath );
-            if (tkGlobal::isRunningOnMac()) {
+            if (Utils::isRunningOnMac()) {
                 m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH) );
                 m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH) );
                 m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
                 m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH ) );
-            } else if (tkGlobal::isRunningOnLinux()) {
+            } else if (Utils::isRunningOnLinux()) {
 #ifndef LINUX_INTEGRATED
                 m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
                 m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
@@ -360,12 +360,12 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
 #endif
                 m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + NUX_TOBUNDLEROOTPATH ) );
-            } else if (tkGlobal::isRunningOnWin()) {
+            } else if (Utils::isRunningOnWin()) {
                 m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH) );
                 m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
                 m_Enum_Path.insert( BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH ) );
-            } else if (tkGlobal::isRunningOnFreebsd()) {
+            } else if (Utils::isRunningOnFreebsd()) {
                 m_Enum_Path.insert( QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH) );
                 m_Enum_Path.insert( FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH) );
                 m_Enum_Path.insert( QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH ) );
@@ -469,7 +469,7 @@ QString SettingsPrivate::getIniFile( const QString & appName, const QString & fi
 
     // try to use 'config.ini' inside the bundle (ex : /usr/share/application/config.ini , appli.app/Resources/config.ini)
     QString iniFile;
-//    if (tkGlobal::isRunningOnMac())
+//    if (Utils::isRunningOnMac())
 //        iniFile = QDir::cleanPath( qApp->applicationDirPath() + "/../Resources" ) + QDir::separator() + tmpFileName;
 //    else
 //        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
@@ -515,7 +515,7 @@ void SettingsPrivate::restoreState( QMainWindow * window, const QString & prefix
     QString keyState = prefix + "MainWindow/State";
     if ( value( keyGeo ).toByteArray().isEmpty() ) {
         window->setGeometry( 100, 100, 600, 400 );
-        tkGlobal::centerWidget( window );
+        Utils::centerWidget( window );
     } else {
         window->restoreGeometry( value( keyGeo ).toByteArray() );
         window->restoreState( value( keyState ).toByteArray() );
@@ -568,8 +568,8 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     // add system informations
     QTreeWidgetItem * sysItem = new QTreeWidgetItem( tree, QStringList() << tr( "System informations" ) );
     sysItem->setFont(0,bold);
-    new QTreeWidgetItem( sysItem, QStringList() << tr("Operating System") << tkGlobal::osName() );
-    new QTreeWidgetItem( sysItem, QStringList() << tr("uname output") << tkGlobal::uname() );
+    new QTreeWidgetItem( sysItem, QStringList() << tr("Operating System") << Utils::osName() );
+    new QTreeWidgetItem( sysItem, QStringList() << tr("uname output") << Utils::uname() );
 
     // add compilation informations
     QTreeWidgetItem * compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS) );
@@ -578,11 +578,11 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem( compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg( QT_VERSION_STR ));
     new QTreeWidgetItem( compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg( qVersion() ));
     new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg(qApp->applicationVersion()));
-    if (tkGlobal::isDebugCompilation())
+    if (Utils::isDebugCompilation())
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) );
     else
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
-    if (tkGlobal::isFullApplication())
+    if (Utils::isFullApplication())
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
     else
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
@@ -626,7 +626,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem( absPathsItem, QStringList() << tr("WebSiteUrl") << path( WebSiteUrl ) );
 
     //add library informations
-//    new QTreeWidgetItem( tree, QStringList() << tr( "Libs" ) << tkGlobal::getLibraryInformations() );
+//    new QTreeWidgetItem( tree, QStringList() << tr( "Libs" ) << Utils::getLibraryInformations() );
 
     // add settings
     QTreeWidgetItem * settingsItem = new QTreeWidgetItem( tree, QStringList() << tr( "Settings values" ) );
@@ -676,24 +676,24 @@ QString SettingsPrivate::toString() const
     tmp += tr( "Qt Build version : %1\n").arg( QT_VERSION_STR );
     tmp += tr( "Qt running version : %1\n").arg( qVersion() );
     tmp += tr( "Application Version : %1\n").arg( qApp->applicationVersion() );
-    if (tkGlobal::isDebugCompilation())
+    if (Utils::isDebugCompilation())
         tmp += tr("Actual build : Debug\n" );
     else
         tmp += tr("Actual build : Release\n" );
-    if (tkGlobal::isFullApplication())
+    if (Utils::isFullApplication())
         tmp += tr("Actual build") + " : " + tr("Full Application Build\n");
     else
         tmp += tr("Actual build") + " : " + tr("Svn Build\n");
     tmp += tr( "Application path : %1\n").arg( qApp->applicationDirPath() );
     tmp += QString( "Ini File Name\t%2" ).arg( fileName() ) + "\n";
     tmp += tr( "Using Ini File" ) + "\t" + fileName() + "\n";
-    if (tkGlobal::isRunningOnLinux()) {
+    if (Utils::isRunningOnLinux()) {
         tmp.append( tr("Running on Linux" ) );
-        tmp += tr("   uname returns : %1").arg(tkGlobal::uname());
+        tmp += tr("   uname returns : %1").arg(Utils::uname());
     }
-    else if (tkGlobal::isRunningOnMac())
+    else if (Utils::isRunningOnMac())
         tmp.append( tr("Running on MacOs" ) );
-    else if (tkGlobal::isRunningOnWin())
+    else if (Utils::isRunningOnWin())
         tmp.append( tr("Running on Windows" ) );
 
     tmp += "\n\n";

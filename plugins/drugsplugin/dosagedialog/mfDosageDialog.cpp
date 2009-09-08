@@ -40,19 +40,16 @@
  ***************************************************************************/
 #include "mfDosageDialog.h"
 
-// include drugwidget headers
-#include <mfDrugsConstants.h>
-#include <drugsmodel/mfDosageModel.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugInfo.h>
-#include <mfDrugsManager.h>
+#include <drugsplugin/mfDrugsConstants.h>
+#include <drugsplugin/drugsmodel/mfDosageModel.h>
+#include <drugsplugin/drugsmodel/mfDrugsModel.h>
+#include <drugsplugin/drugswidget/druginfo.h>
+#include <drugsplugin/mfDrugsManager.h>
 
-// include toolkit
-#include <tkLog.h>
-#include <tkStringListModel.h>
-#include <tkSettings.h>
-#include <tkTheme.h>
-#include <tkConstantTranslations.h>
+#include <listviewplugin/stringlistmodel.h>
+
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
 
 // include Qt headers
 #include <QHeaderView>

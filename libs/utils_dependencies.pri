@@ -1,3 +1,3 @@
 include( translationutils.pri )
-CONFIG += sql
-QT += sql
+CONFIG += sql xml
+QT += sql xml

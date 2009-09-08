@@ -44,7 +44,7 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <coreplugin/global.h>
+#include <utils/global.h>
 #include <coreplugin/idebugpage.h>
 
 #include <QStackedLayout>
@@ -135,7 +135,7 @@ void DebugDialog::on_fullScreenButton_clicked()
 {
     static bool fullscreen = false;
     fullscreen = !fullscreen;
-//    Core::tkGlobal::setFullScreen(this,fullscreen);
+//    Core::Utils::setFullScreen(this,fullscreen);
 //    this->show();
 }
 

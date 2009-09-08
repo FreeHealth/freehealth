@@ -35,7 +35,7 @@
 #include "baseformwidgets.h"
 
 #include <coreplugin/iformitem.h>
-#include <coreplugin/global.h>
+#include <utils/global.h>
 
 #include <QStringList>
 #include <QMessageBox>
@@ -469,7 +469,7 @@ void BaseRadio::retranslate()
     if ( m_RadioList.size() ) {
         const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
         if ( list.count() != m_RadioList.count() ) {
-            Core::tkGlobal::warningMessageBox(
+            Utils::warningMessageBox(
                     tr("Wrong form's translations"),
                     tr("You asked to change the language of the form to %1.\n"
                        "But this an error while reading translation of %2.\n"
@@ -681,7 +681,7 @@ void BaseList::retranslate()
     if (m_List) {
         const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
         if (list.count() != m_List->count()) {
-            Core::tkGlobal::warningMessageBox(
+            Utils::warningMessageBox(
                     tr("Wrong form's translations"),
                     tr("You asked to change the language of the form to %1.\n"
                        "But this an error while reading translation of %2.\n"
@@ -764,7 +764,7 @@ void BaseCombo::retranslate()
     if (m_Combo) {
         const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
         if (list.count() != m_Combo->count()) {
-            Core::tkGlobal::warningMessageBox(
+            Utils::warningMessageBox(
                     tr("Wrong form's translations"),
                     tr("You asked to change the language of the form to %1.\n"
                        "But this an error while reading translation of %2.\n"

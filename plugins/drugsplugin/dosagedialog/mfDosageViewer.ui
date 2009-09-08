@@ -47,7 +47,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabBasics">
       <attribute name="title">
@@ -424,7 +424,7 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="intakeSchemeHorizLayout">
          <item>
-          <widget class="tkStringListView" name="dailySchemeListView" native="true"/>
+          <widget class="View::StringListView" name="dailySchemeListView" native="true"/>
          </item>
          <item>
           <widget class="QTableWidget" name="hourlyTableWidget">
@@ -1064,9 +1064,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tkStringListView</class>
+   <class>View::StringListView</class>
    <extends>QWidget</extends>
-   <header>tkStringListView.h</header>
+   <header location="global">listviewplugin/stringlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

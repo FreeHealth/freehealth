@@ -43,9 +43,9 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/formmanager.h>
-#include <coreplugin/global.h>
 
 #include <extensionsystem/pluginmanager.h>
+#include <utils/global.h>
 
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
@@ -222,7 +222,7 @@ void FormItemScripts::toTreeWidget(QTreeWidgetItem *tree)
 void FormItemScripts::warn() const
 {
     ScriptsBook *s = d->getLanguage(Constants::ALL_LANGUAGE);
-    Core::tkGlobal::quickDebugDialog(
+    Utils::quickDebugDialog(
             QStringList()
             << QString("Script_OnLoad\n") + s->m_Scripts.value(Script_OnLoad)
             << QString("Script_PostLoad\n") + s->m_Scripts.value(Script_PostLoad)
