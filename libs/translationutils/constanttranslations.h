@@ -311,6 +311,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const TEAM_DEVELOPPERS_CONTRIBUTORS = QT_TRANSLATE_NOOP("tkConstants", "Developpers and Contributors");
         const char* const TEAM_DEBUGGER_ADVISOR = QT_TRANSLATE_NOOP("tkConstants", "Debugger advisor");
         const char* const TEAM_DEVELOPPER_AND_DEBUGGER = QT_TRANSLATE_NOOP("tkConstants", "Developper and debugger advisor");
+        const char* const TEAM_PACKAGER = QT_TRANSLATE_NOOP("tkConstants", "Packager");
         const char* const TEAM_PACKAGER_FOR_1 = QT_TRANSLATE_NOOP("tkConstants", "Packager for %1");
         const char* const TEAM_DRUG_DATABASE_MANAGER = QT_TRANSLATE_NOOP("tkConstants", "Drugs Database Management");
         const char* const TEAM_MEDICAL_ADVISORS = QT_TRANSLATE_NOOP("tkConstants", "Medical advisors");

@@ -157,13 +157,6 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS)
                 )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
-                 "Sascha Manns",
-                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_GERMANY),
-                 "Sascha.Manns@directbox.com",
-                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("OpenSUSE")
-                )
-
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
@@ -205,6 +198,21 @@ static const QList<Team> m_Team = QList<Team>()
                  "eric.maeker@free.fr",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER)
                 )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER),
+                 "Sascha Manns",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_GERMANY),
+                 "Sascha.Manns@directbox.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("OpenSUSE")
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER),
+                 "Eric Maeker, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+                 "eric.maeker@free.fr",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("Debian and Ubuntu")
+                )
+
         ;
 
 
