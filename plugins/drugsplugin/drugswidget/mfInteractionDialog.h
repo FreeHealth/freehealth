@@ -45,21 +45,24 @@
 /**
  * \file mfInteractionDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.3
- * \date 17 June 2009
+ * \version 0.0.5
+ * \date 09 Sept 2009
 */
+
+namespace Drugs {
+namespace Internal {
 
 /**
   \brief Shows a dialog with all interaction text with ability to print.
   \ingroup freediams drugswidget
 */
-class mfInteractionDialog : public QDialog, private Ui::mfInteractionDialog
+class InteractionDialog : public QDialog, private Ui::InteractionDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(mfInteractionDialog)
+    Q_DISABLE_COPY(InteractionDialog)
 
 public:
-    explicit mfInteractionDialog(QWidget *parent = 0);
+    explicit InteractionDialog(QWidget *parent = 0);
 
 private Q_SLOTS:
     void on_printButton_clicked();
@@ -68,5 +71,8 @@ private Q_SLOTS:
 protected:
     virtual void changeEvent(QEvent *e);
 };
+
+}
+}  // End Drugs
 
 #endif // MFINTERACTIONDIALOG_H

@@ -66,17 +66,19 @@
 #include <drugsmodel/mfDrugsModel.h>
 #include <mfDrugsManager.h>
 
-// including toolkit headers
-#include <tkGlobal.h>
-#include <tkLog.h>
-#include <tkTheme.h>
-#include <tkConstantTranslations.h>
+#include <utils/global.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <coreplugin/itheme.h>
+#include <coreplugin/icore.h>
 
 // including usertoolkit headers (for FreeMedForms only)
 #ifndef DRUGS_INTERACTIONS_STANDALONE
-#   include <tkUserModel.h>
-#   include <tkUserConstants.h>
-using namespace tkUserConstants;
+//#   include <tkUserModel.h>
+//#   include <tkUserConstants.h>
+//using namespace tkUserConstants;
+/** \todo reimplement user management */
 #endif
 
 // including Qt headers
@@ -94,23 +96,23 @@ namespace mfDosageModelConstants {
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
 }
 
-Q_TK_USING_CONSTANTS
-Q_TK_USING_TRANSLATIONS
+using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
 using namespace mfDosageModelConstants;
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- Static Datas --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 // intialize static private members
-QStringList mfDosageModel::m_ScoredTabletScheme = QStringList();
-QStringList mfDosageModel::m_PreDeterminedForms = QStringList();
-QString     mfDosageModel::m_ActualLangage = "";
+QStringList DosageModel::m_ScoredTabletScheme = QStringList();
+QStringList DosageModel::m_PreDeterminedForms = QStringList();
+QString     DosageModel::m_ActualLangage = "";
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Translations ----------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** \brief Used to retranslate static stringlists */
-void mfDosageModel::changeEvent( QEvent * event )
+void DosageModel::changeEvent( QEvent * event )
 {
     // proceed only LangageChange events
     if ( event->type() != QEvent::LanguageChange )
@@ -119,7 +121,7 @@ void mfDosageModel::changeEvent( QEvent * event )
 }
 
 /** \brief Used to retranslate static stringlists */
-void mfDosageModel::retranslate()
+void DosageModel::retranslate()
 {
     // proceed only if needed
     if ( m_ActualLangage == QLocale().name().left(2) )
@@ -160,14 +162,14 @@ void mfDosageModel::retranslate()
 //--------------------------------------------------------------------------------------------------------
 
 /** \brief Scored tablet predetermined stringlist */
-QStringList mfDosageModel::scoredTabletScheme()
+QStringList DosageModel::scoredTabletScheme()
 {
     if ( m_ScoredTabletScheme.count() == 0 )
         retranslate();
     return m_ScoredTabletScheme;
 }
 
-QStringList mfDosageModel::predeterminedForms()
+QStringList DosageModel::predeterminedForms()
 {
     if (m_PreDeterminedForms.count()==0)
         retranslate();
@@ -178,19 +180,19 @@ QStringList mfDosageModel::predeterminedForms()
 //------------------------------------------ Dosage Model ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** \brief Constructor */
-mfDosageModel::mfDosageModel( QObject *parent )
+DosageModel::DosageModel( QObject *parent )
         : QSqlTableModel( parent, QSqlDatabase::database( DOSAGES_DATABASE_NAME ) )
 {
-    setObjectName( "mfDosageModel" );
+    setObjectName( "DosageModel" );
     QSqlTableModel::setTable( DOSAGES_TABLE_NAME );
     setEditStrategy( QSqlTableModel::OnManualSubmit );
     m_CIS = -1;
 }
 
 /** \brief Defines datas for the dosage. Database is only updated when calling submitAll(). */
-bool mfDosageModel::setData( const QModelIndex & index, const QVariant & value, int role )
+bool DosageModel::setData( const QModelIndex & index, const QVariant & value, int role )
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
     if ( ! index.isValid() )
         return false;
     if ( role == Qt::EditRole ) {
@@ -231,9 +233,9 @@ bool mfDosageModel::setData( const QModelIndex & index, const QVariant & value, 
 }
 
 /** \brief Retreive dosage's datas. */
-QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
+QVariant DosageModel::data( const QModelIndex & item, int role ) const
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::data", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::data", "before using the dosagemodel, you must specify the CIS of the related drug");
     if ( ! item.isValid() )
         return QVariant();
 
@@ -262,7 +264,7 @@ QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
             {
             case Dosage::DailyScheme : // --> is a QFlags to transform to stringList
                 {
-                    return dailySchemes( tkConstants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
+                    return dailySchemes( Trans::Constants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
                     break;
                 }
             default :
@@ -275,22 +277,23 @@ QVariant mfDosageModel::data( const QModelIndex & item, int role ) const
         {
 //            qWarning() << QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString();
             if (!QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString().isEmpty())
-                return tkTheme::icon(MFDRUGS_ICONSEARCHINN);
-            return tkTheme::icon(MFDRUGS_ICONSEARCHCOMMERCIAL);
+                return Core::ICore::instance()->theme()->icon(MFDRUGS_ICONSEARCHINN);
+            return Core::ICore::instance()->theme()->icon(MFDRUGS_ICONSEARCHCOMMERCIAL);
         }
     }
     return QVariant();
 }
 
 /** \brief Create new dosages. Defaults values of the dosages are stted here. */
-bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
+bool DosageModel::insertRows( int row, int count, const QModelIndex & parent )
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
     QString userUuid;
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     userUuid = DOSAGES_DEFAULT_USER_UUID;
 #else
-    userUuid = tkUserModel::instance()->currentUserData(User::Uuid).toString();
+    /** \todo here */
+//    userUuid = tkUserModel::instance()->currentUserData(User::Uuid).toString();
 #endif
     int i;
     int createdRow;
@@ -298,7 +301,7 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
     for (i=0; i < count; ++i) {
         createdRow = row+i;
         if ( !QSqlTableModel::insertRows( createdRow, 1, parent ) ) {
-            tkLog::addError( this, tr("Model Error : unable to insert a row") );
+            Utils::Log::addError( this, tr("Model Error : unable to insert a row") );
             toReturn = false;
         } else {
             setData( index( createdRow, Dosage::Uuid ) , QUuid::createUuid().toString() );
@@ -306,13 +309,13 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
             setData( index( createdRow, Dosage::IntakesTo ) , 1 );
             setData( index( createdRow, Dosage::IntakesFrom ) , 1 );
             setData( index( createdRow, Dosage::IntakesUsesFromTo ) , false );
-            setData( index( createdRow, Dosage::IntakesScheme ) , tkTr(INTAKES, 1) );
+            setData( index( createdRow, Dosage::IntakesScheme ) , tkTr(Trans::Constants::INTAKES, 1) );
             setData( index( createdRow, Dosage::Period ), 1 );
-            setData( index( createdRow, Dosage::PeriodScheme ) , tkTr(DAYS) );
+            setData( index( createdRow, Dosage::PeriodScheme ) , tkTr(Trans::Constants::DAYS) );
             setData( index( createdRow, Dosage::DurationTo ) , 1 );
             setData( index( createdRow, Dosage::DurationFrom ) , 1 );
             setData( index( createdRow, Dosage::DurationUsesFromTo ) , false );
-            setData( index( createdRow, Dosage::DurationScheme ) , tkTr(MONTHS) );
+            setData( index( createdRow, Dosage::DurationScheme ) , tkTr(Trans::Constants::MONTHS) );
             setData( index( createdRow, Dosage::IntakesIntervalOfTime ) , 0 );
             setData( index( createdRow, Dosage::MinAge ) , 0 );
             setData( index( createdRow, Dosage::MaxAge ) , 0 );
@@ -332,9 +335,9 @@ bool mfDosageModel::insertRows( int row, int count, const QModelIndex & parent )
   \brief Removes somes rows.
   \todo  when QSqlTableModel removes rows it may call select() and reset(),  this causes non submitted modifications deletion on the model THIS MUST BE IMPROVED
 */
-bool mfDosageModel::removeRows( int row, int count, const QModelIndex & parent )
+bool DosageModel::removeRows( int row, int count, const QModelIndex & parent )
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
     setEditStrategy( QSqlTableModel::OnRowChange );
     bool toReturn = false;
     if ( QSqlTableModel::removeRows( row, count, parent ) ) {
@@ -350,18 +353,18 @@ bool mfDosageModel::removeRows( int row, int count, const QModelIndex & parent )
 }
 
 /** \brief Revert a row */
-void mfDosageModel::revertRow( int row )
+void DosageModel::revertRow( int row )
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::revertRow", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::revertRow", "before using the dosagemodel, you must specify the CIS of the related drug");
     QSqlTableModel::revertRow( row );
     if (m_DirtyRows.contains(row))
         m_DirtyRows.remove( row );
 }
 
 /** \brief Submit model changes to database */
-bool mfDosageModel::submitAll()
+bool DosageModel::submitAll()
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
 //    warn();
     QSet<int> safe = m_DirtyRows;
     m_DirtyRows.clear();
@@ -376,7 +379,7 @@ bool mfDosageModel::submitAll()
 /**
   \brief Filter the model from the drug CIS and if possible for the inn prescriptions.
 */
-bool mfDosageModel::setDrugCIS( const int _CIS )
+bool DosageModel::setDrugCIS( const int _CIS )
 {
     if ( _CIS == m_CIS )
         return true;
@@ -401,13 +404,13 @@ bool mfDosageModel::setDrugCIS( const int _CIS )
 }
 
 /** \brief Return the actual drug's CIS */
-int mfDosageModel::drugCIS()
+int DosageModel::drugCIS()
 {
     return m_CIS;
 }
 
 /** \brief Test all the column of the selected row, if one value is dirty return true. */
-bool mfDosageModel::isDirty(const int row) const
+bool DosageModel::isDirty(const int row) const
 {
     int i;
     for(i=0;i<columnCount();++i) {
@@ -418,9 +421,9 @@ bool mfDosageModel::isDirty(const int row) const
 }
 
 /** \todo write this */
-QStringList mfDosageModel::isDosageValid( const int row )
+QStringList DosageModel::isDosageValid( const int row )
 {
-    Q_ASSERT_X( m_CIS != -1, "mfDosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X( m_CIS != -1, "DosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
     QStringList errors;
     // Label
     if (index(row, Dosage::Label).data().toString().isEmpty())
@@ -439,31 +442,32 @@ QStringList mfDosageModel::isDosageValid( const int row )
 }
 
 #ifndef DRUGS_INTERACTIONS_STANDALONE
-/** \brief Test user's permissions for the drugs read access */
-bool mfDosageModel::userCanRead()
-{
-    //TODO --> test
-    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
-    return (r & User::ReadOwn) || (r & User::ReadAll);
-}
-
-/** \brief Test user's permissions for the drugs write access */
-bool mfDosageModel::userCanWrite()
-{
-    //TODO  --> test
-    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
-    return (r & User::WriteOwn) || (r & User::WriteAll);
-}
+/** \todo here */
+///** \brief Test user's permissions for the drugs read access */
+//bool DosageModel::userCanRead()
+//{
+//    //TODO --> test
+//    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
+//    return (r & User::ReadOwn) || (r & User::ReadAll);
+//}
+//
+///** \brief Test user's permissions for the drugs write access */
+//bool DosageModel::userCanWrite()
+//{
+//    //TODO  --> test
+//    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData( User::DrugsRights ).toInt());
+//    return (r & User::WriteOwn) || (r & User::WriteAll);
+//}
 #endif
 
 /**
   \brief Transforms a dosage to a drug's prescription.
   \sa mfDrugsModel
 */
-void mfDosageModel::toPrescription(const int row)
+void DosageModel::toPrescription(const int row)
 {
     Q_ASSERT(DRUGMODEL->containsDrug(m_CIS));
-    mfDrugsModel *M = DRUGMODEL;
+    DrugsModel *M = DRUGMODEL;
     QHash<int,int> prescr_dosage;
     prescr_dosage.insert( Prescription::UsedDosage ,           Dosage::Uuid );
     prescr_dosage.insert( Prescription::IntakesFrom ,          Dosage::IntakesFrom );
@@ -493,28 +497,28 @@ void mfDosageModel::toPrescription(const int row)
 }
 
 /** \brief Transforms a model's row into XML encoded QString. This part is using the database fieldnames.*/
-QString mfDosageModel::toXml( const int row )
+QString DosageModel::toXml( const int row )
 {
     int j;
     QHash<QString,QString> datas;
     for( j=0; j < columnCount(); ++j ) {
         datas.insert( record().fieldName(j).toLower(), index( row, j ).data().toString() );
     }
-    return tkGlobal::createXml(XML_DOSAGE_MAINTAG,datas,4,false);
+    return Utils::createXml(XML_DOSAGE_MAINTAG,datas,4,false);
 }
 
 /**
   \brief Adds a XML file to the model. A verification of the drugs' CIS is done.
   \todo write this
 */
-bool mfDosageModel::addFromXml(const QString &xml)
+bool DosageModel::addFromXml(const QString &xml)
 {
 //    QHash<QString, QString> datas;
 //    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");
 //    if (n<=0)
 //        return false;
 //    foreach( const QString &s, xml.split("</"+XML_DOSAGE_MAINTAG+">")) {
-//        if (!tkGlobal::readXml(xml,XML_DOSAGE_MAINTAG,datas,false))
+//        if (!Utils::readXml(xml,XML_DOSAGE_MAINTAG,datas,false))
 //            return false;
 //        // insert row, get the index of it
 //        foreach(const QString &k, datas.keys()) {
@@ -529,9 +533,9 @@ bool mfDosageModel::addFromXml(const QString &xml)
 }
 
 /** \brief For debugging purpose only */
-void mfDosageModel::warn( const int row )
+void DosageModel::warn( const int row )
 {
-    if (!tkGlobal::isDebugCompilation())
+    if (!Utils::isDebugCompilation())
         return;
 //    qWarning() << "database connection" << database().connectionName();
 

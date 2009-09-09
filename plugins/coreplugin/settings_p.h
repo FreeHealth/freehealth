@@ -83,6 +83,7 @@ public:
     inline void setValue( const QString & key, const QVariant & value ) { QSettings::setValue(key,value); }
     inline QVariant value( const QString & key, const QVariant & defaultValue = QVariant() ) const { return QSettings::value(key,defaultValue); }
 
+    inline void sync() {QSettings::sync();}
 
     // first time running ?
     bool firstTimeRunning() const;

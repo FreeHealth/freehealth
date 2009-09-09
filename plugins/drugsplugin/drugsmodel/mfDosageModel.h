@@ -50,7 +50,10 @@
 
 using namespace mfDosagesConstants;
 
-class mfDosageModel : public QSqlTableModel
+namespace Drugs {
+namespace Internal {
+
+class DosageModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -78,7 +81,7 @@ class mfDosageModel : public QSqlTableModel
     };
 
 public:
-    mfDosageModel( QObject *parent = 0 );
+    DosageModel( QObject *parent = 0 );
 
     virtual int columnCount( const QModelIndex & = QModelIndex() ) const { return Dosage::MaxParam; }
     virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
@@ -140,5 +143,8 @@ private:
     int m_CIS;
     QSet<int> m_DirtyRows;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFDOSAGEMODEL_H

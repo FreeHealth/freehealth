@@ -271,6 +271,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const FILE_1_ISNOT_READABLE              = QT_TRANSLATE_NOOP("tkConstants", "File %1 is not readable");
         const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
         const char* const FILE_1_LOADED                      = QT_TRANSLATE_NOOP("tkConstants", "File %1 loaded");
+        const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open File");
+        const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
 
         // Messages and errors
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
@@ -282,9 +284,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const LOGGED_MESSAGES                    = QT_TRANSLATE_NOOP("tkConstants", "Logged Messages");
         const char* const ERRORS                             = QT_TRANSLATE_NOOP("tkConstants", "Errors");
         const char* const LOGGED_ERRORS                      = QT_TRANSLATE_NOOP("tkConstants", "Logged Errors");
-        const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open File");
-        const char* const MESSAGE_SENDED_OK                  = QT_TRANSLATE_NOOP("tkConstants", "Message sended without error.");
-        const char* const MESSAGE_NOT_SENDED                 = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sended.");
         const char* const INFORMATIVE_MESSAGE_1              = QT_TRANSLATE_NOOP("tkConstants", "Informative message : %1");
         const char* const STARTING_TASK_1                    = QT_TRANSLATE_NOOP("tkConstants", "Starting task : %1");
         const char* const POST_TO_1                          = QT_TRANSLATE_NOOP("tkConstants", "posting message to : %1");
@@ -297,14 +296,21 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const _1_ISNOT_AVAILABLE_CANNOTBE_CREATED = QT_TRANSLATE_NOOP("tkConstants", "%1 is not avaible and can not be created");
         const char* const _1_ARENOT_AVAILABLE                = QT_TRANSLATE_NOOP("tkConstants", "%1 are not avaible");
         const char* const SETTING_1_PATH_TO_2                = QT_TRANSLATE_NOOP("tkConstants", "Setting %1 path to %2");
+        const char* const ERROR_1_FROM_DATABASE_2            = QT_TRANSLATE_NOOP("tkConstants", "Error %1 from database %2");
+        const char* const CREATING_DEFAULT_SETTINGS_FOR_1    = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
+        const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
+        const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
+
+
+        // Sender and Updater
+        const char* const START_MESSAGE_SENDING              = QT_TRANSLATE_NOOP("tkConstants", "Starting to send message.");
+        const char* const MESSAGE_SENDED_OK                  = QT_TRANSLATE_NOOP("tkConstants", "Message sended without error.");
+        const char* const MESSAGE_NOT_SENDED                 = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sended.");
         const char* const CHECKING_UPDATE_FROM_1             = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates from %1");
         const char* const VERSION_UPTODATE                   = QT_TRANSLATE_NOOP("tkConstants", "Version up to date");
         const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkConstants", "Current version :");
         const char* const LATEST_VERSION                     = QT_TRANSLATE_NOOP("tkConstants", "Lastest version :");
         const char* const UPDATE_AVAILABLE                   = QT_TRANSLATE_NOOP("tkConstants", "Update Available");
-        const char* const ERROR_1_FROM_DATABASE_2            = QT_TRANSLATE_NOOP("tkConstants", "Error %1 from database %2");
-        const char* const CREATING_DEFAULT_SETTINGS_FOR_1    = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
-        const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
 
         // Team functions
         const char* const TEAM_CREATOR = QT_TRANSLATE_NOOP("tkConstants", "Creator and Main Developper");

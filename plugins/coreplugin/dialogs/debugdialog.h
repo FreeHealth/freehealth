@@ -42,12 +42,14 @@
 
 #include <QDialog>
 #include <QHash>
+#include <QMessageBox>
+#include <utils/messagesender.h>
 
 /**
  * \file debugdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 08 Sept 2009
+ * \version 0.0.9
+ * \date 09 Sept 2009
 */
 
 QT_BEGIN_NAMESPACE
@@ -85,9 +87,9 @@ private Q_SLOTS:
 
 private Q_SLOTS:
     void on_fullScreenButton_clicked();
-//    void on_butSend_clicked();
-//    void onSendMessage_done();
-//    bool on_butSave_clicked();
+    void on_butSend_clicked();
+    void onSendMessage_done();
+    bool on_butSave_clicked();
 //    void on_expandedMessagesButton_clicked();
 //    void on_chronologicMessagesButton_clicked();
 //    void on_expandedErrorButton_clicked();
@@ -97,10 +99,10 @@ private:
     Ui::DebugDialog *m_ui;
     QStackedLayout  *m_slayout;
     QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
-//    tkSendMessage   m_sender;
-//    bool            m_sending;
-//    QMessageBox *   m_infoMessageBox;
-//    bool            m_MessageViewExpanded, m_ErrorViewExpanded;
+    Utils::MessageSender  m_sender;
+    bool            m_sending;
+    QMessageBox *   m_infoMessageBox;
+    bool            m_MessageViewExpanded, m_ErrorViewExpanded;
 };
 
 } // End Internal

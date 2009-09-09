@@ -48,6 +48,7 @@
 
 #include <listviewplugin/stringlistmodel.h>
 
+#include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 
@@ -64,19 +65,24 @@ using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
-Q_TK_USING_CONSTANTS
-Q_TK_USING_TRANSLATIONS
+using namespace Drugs::Internal;
 
-class mfDosageDialogPrivate
+namespace Drugs {
+namespace Internal {
+
+class DosageDialogPrivate
 {
 public:
-    mfDosageDialogPrivate() : m_DosageModel(0), m_CIS(-1), m_UserFormButtonPopup(0) {}
+    DosageDialogPrivate() : m_DosageModel(0), m_CIS(-1), m_UserFormButtonPopup(0) {}
 
-    mfDosageModel      *m_DosageModel;
-    QString             m_ActualDosageUuid;
+    DosageModel*m_DosageModel;
+    QString     m_ActualDosageUuid;
     int m_CIS, m_DrugRow;
     QMenu *m_UserFormButtonPopup;
 };
+
+} // namespace Internal
+} // namespace Drugs
 
 
 /**
@@ -92,14 +98,14 @@ public:
   \param drugRow : row of the drug inside the actual model \todo Change to QPersistentModelIndex
   \param dosageRow : row of the dosage to use in the actual model \todo Change to QPersistentModelIndex
 */
-mfDosageDialog::mfDosageDialog( QWidget *parent )
+DosageDialog::DosageDialog( QWidget *parent )
     : QDialog( parent ),
     d(0)
 {
-    setObjectName( "mfDosageDialog" );
-    d = new mfDosageDialogPrivate();
+    setObjectName( "DosageDialog" );
+    d = new DosageDialogPrivate();
     setupUi(this);
-    innButton->setIcon( tkTheme::icon(MFDRUGS_ICONSEARCHINN));
+    innButton->setIcon( Core::ICore::instance()->theme()->icon(MFDRUGS_ICONSEARCHINN));
     setWindowTitle( tr( "Drug Dosage" ) + " - " + qApp->applicationName() );
 
     // make connections
@@ -108,7 +114,7 @@ mfDosageDialog::mfDosageDialog( QWidget *parent )
 }
 
 /** \brief Destructor, frees mapper */
-mfDosageDialog::~mfDosageDialog()
+DosageDialog::~DosageDialog()
 {
     if (d) delete d; d=0;
 }
@@ -117,12 +123,12 @@ mfDosageDialog::~mfDosageDialog()
   \brief Change the current row of the drug model
   \todo Manage dosagemodel
 */
-void mfDosageDialog::changeRow( const int CIS, const int drugRow )
+void DosageDialog::changeRow( const int CIS, const int drugRow )
 {
     Q_ASSERT(DRUGMODEL->containsDrug(CIS));
     d->m_CIS = CIS;
     d->m_DrugRow = drugRow;
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     dosageViewer->useDrugsModel(CIS, drugRow);
     innButton->setChecked(m->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
 
@@ -145,7 +151,7 @@ void mfDosageDialog::changeRow( const int CIS, const int drugRow )
   \li If the dialog is accepted, retreive the prescribed form and store it into the settings is needed.
   \todo If the dialog is accepted and no dosage exists in the dosage model --> create a dosage in the dosage model
 */
-void mfDosageDialog::done(int r)
+void DosageDialog::done(int r)
 {
     // modify focus for the dosage viewer mapper to commit changes
     drugNameButton->setFocus();
@@ -157,16 +163,16 @@ void mfDosageDialog::done(int r)
 }
 
 /** \brief Show the information dialog for the drug */
-void mfDosageDialog::on_drugNameButton_clicked()
+void DosageDialog::on_drugNameButton_clicked()
 {
-    mfDrugInfo dialog(d->m_CIS, this );
+    DrugInfo dialog(d->m_CIS, this );
     dialog.exec();
 }
 
 /** \todo code this */
-void mfDosageDialog::on_innButton_clicked()
+void DosageDialog::on_innButton_clicked()
 {
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     m->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
     if (innButton->isChecked())
         drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
@@ -175,3 +181,4 @@ void mfDosageDialog::on_innButton_clicked()
         drugNameButton->setText(name.left( name.lastIndexOf(",")));
     }
 }
+

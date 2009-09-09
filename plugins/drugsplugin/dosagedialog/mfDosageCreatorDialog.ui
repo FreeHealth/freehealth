@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mfDosageCreatorDialog</class>
- <widget class="QDialog" name="mfDosageCreatorDialog">
+ <class>Drugs::Internal::DosageCreatorDialog</class>
+ <widget class="QDialog" name="Drugs::Internal::DosageCreatorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -63,7 +63,7 @@
     </layout>
    </item>
    <item row="5" column="0" rowspan="2" colspan="2">
-    <widget class="mfDosageViewer" name="dosageViewer" native="true">
+    <widget class="DosageViewer" name="dosageViewer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -127,7 +127,7 @@
     </layout>
    </item>
    <item row="4" column="0">
-    <widget class="tkListView" name="availableDosagesListView">
+    <widget class="Views::ListView" name="availableDosagesListView">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -174,15 +174,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>mfDosageViewer</class>
+   <class>DosageViewer</class>
    <extends>QWidget</extends>
    <header location="global">dosagedialog/mfDosageViewer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tkListView</class>
+   <class>Views::ListView</class>
    <extends>QListView</extends>
-   <header location="global">tkListView.h</header>
+   <header location="global">listviewplugin/listview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -195,7 +195,7 @@
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>mfDosageCreatorDialog</receiver>
+   <receiver>Drugs::Internal::DosageCreatorDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

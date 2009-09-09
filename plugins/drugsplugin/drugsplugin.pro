@@ -18,5 +18,8 @@ include( drugswidget.pri)
 #HEADERS += drugswidget.h
 #SOURCES += drugswidget.cpp
 
-HEADERS += drugsplugin.h
-SOURCES += drugsplugin.cpp
+HEADERS += drugsplugin.h \
+drugswidgetfactory.h
+
+SOURCES += drugsplugin.cpp \
+drugswidgetfactory.cpp

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mfDrugSelector</class>
- <widget class="QWidget" name="mfDrugSelector">
+ <class>Drugs::Internal::DrugSelector</class>
+ <widget class="QWidget" name="Drugs::Internal::DrugSelector">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,7 +21,7 @@
     <number>-1</number>
    </property>
    <item row="0" column="0">
-    <widget class="QButtonLineEdit" name="searchLine"/>
+    <widget class="Utils::QButtonLineEdit" name="searchLine"/>
    </item>
    <item row="1" column="0">
     <widget class="QSplitter" name="splitter">
@@ -92,9 +92,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QButtonLineEdit</class>
+   <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">QButtonLineEdit.h</header>
+   <header location="global">utils/widgets/QButtonLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

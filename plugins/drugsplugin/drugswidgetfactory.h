@@ -38,44 +38,70 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGINFO_H
-#define MFDRUGINFO_H
+#ifndef DRUGSWIDGETFACTORY_H
+#define DRUGSWIDGETFACTORY_H
 
-// include drugswidget headers
-class mfDrugInfoPrivate;
+namespace Drugs {
+namespace Internal {
+class DrugsModel;
+}
+}
 
 // include Qt headers
-#include <QDialog>
-#include <QObject>
+#include <QWidget>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
+
+#include <coreplugin/iformwidgetfactory.h>
+
 
 /**
- * \file mfDrugsInfo.h
+ * \file drugswidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 01 July 2009
+ * \version 0.0.11
+ * \date 09 Sept 2009
 */
 
-/**
-  \brief Show a dialog with drugs informations and interactions founded.
-  This dialog allows user to send debugging datas.
-  \ingroup freediams drugswidget
-*/
-class mfDrugInfo : public QDialog
+namespace Drugs {
+
+class DrugsWidgetsFactory : public Core::IFormWidgetFactory
 {
     Q_OBJECT
 public:
-    mfDrugInfo( const int CIS, QWidget * parent = 0 );
-    ~mfDrugInfo() {}
+    DrugsWidgetsFactory(QObject *parent = 0);
+    ~DrugsWidgetsFactory();
 
-    void setDrug( const int CIS );
+    bool initialize(const QStringList &arguments, QString *errorString);
+    bool extensionInitialized();
 
-protected Q_SLOTS:
-    void accept();
-    void reject();
-    void done() { QDialog::done( QDialog::result() ); }
+    bool isContainer( const int idInStringList ) const;
+    QStringList providedWidgets() const;
+    bool isInitialized() const { /** \todo here */ return true; }
 
-private:
-    mfDrugInfoPrivate *d;
+    Core::IFormWidget *createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent = 0);
 };
 
-#endif
+
+//--------------------------------------------------------------------------------------------------------
+//------------------------------------ mfDrugsWidget implementation --------------------------------------
+//--------------------------------------------------------------------------------------------------------
+class DrugsWidget : public Core::IFormWidget
+{
+    Q_OBJECT
+public:
+    DrugsWidget(Core::FormItem *linkedObject, QWidget *parent);
+    ~DrugsWidget();
+
+private:
+    void createConnections();
+
+private:
+    Internal::DrugsModel *m_PrescriptionModel;
+    QString     m_iniPath;
+    bool        m_WithPrescribing, m_WithPrinting;
+};
+
+} // End Drugs
+
+#endif  // DRUGSWIDGETFACTORY_H

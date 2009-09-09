@@ -44,11 +44,6 @@
 // include drugswidget headers
 #include <mfDrugsConstants.h>
 #include <drugsdatabase/mfInteractionsBase.h>
-class mfDrugs;
-class mfDrugInteraction;
-class mfDrugDosage;
-class mfDrugInfo;
-class mfDrugsBasePrivate;
 
 // include Qt headers
 #include <QVariant>
@@ -65,21 +60,29 @@ class mfDrugsBasePrivate;
 
 using namespace mfInteractionsConstants;
 
-class mfDrugsBase : public mfInteractionsBase
+
+namespace Drugs {
+namespace Internal {
+class DrugsData;
+class DrugInteraction;
+class DrugInfo;
+class DrugsBasePrivate;
+
+class DrugsBase : public InteractionsBase
 {
     Q_OBJECT
-    mfDrugsBase( QObject *parent = 0 );
+    DrugsBase( QObject *parent = 0 );
     bool init();
 
-    friend class mfDrugsModel;
-    friend class mfDrugsBasePrivate;
-    friend class mfDrugs;
-    friend class mfDrugInfo;
-    friend class mfDrugInteraction;
+    friend class DrugsModel;
+    friend class DrugsBasePrivate;
+    friend class Drugs;
+    friend class DrugInfo;
+    friend class DrugInteraction;
 
 public:
-    static mfDrugsBase *instance();
-    ~mfDrugsBase();
+    static DrugsBase *instance();
+    ~DrugsBase();
     // INITIALIZER
     static bool isInitialized() { return m_initialized; }
     void checkDosageDatabaseVersion();
@@ -89,8 +92,8 @@ public:
     QList<int> getLinkedIamCode( QList<int> & code_subst ) const ;
     int        getInnCodeForCodeMolecule(const int code) const;
 
-    mfDrugs * getDrugByCIP( const QVariant & CIP_id );
-    mfDrugs * getDrugByCIS( const QVariant & CIS_id );
+    DrugsData * getDrugByCIP( const QVariant & CIP_id );
+    DrugsData * getDrugByCIS( const QVariant & CIS_id );
     int       getCISFromCIP( int CIP );
     QString   getInnDenominationFromSubstanceCode( const int code_subst );
     QString   getInnDenomination( const int inncode ) const;
@@ -105,7 +108,7 @@ public:
     static const QString separator;
 
     // managins drugs
-    bool         drugsINNIsKnown( const mfDrugs * drug );
+    bool         drugsINNIsKnown( const DrugsData *drug );
 
 private:
     bool createDatabase(  const QString & connectionName , const QString & dbName,
@@ -117,9 +120,12 @@ private:
 
 private:
     // intialization state
-    static mfDrugsBase *m_Instance;
+    static DrugsBase *m_Instance;
     static bool m_initialized;
-    mfDrugsBasePrivate * d;
+    DrugsBasePrivate * d;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif

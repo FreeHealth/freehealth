@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class mfInteractionsBase
+  \class InteractionsBase
   \brief This class owns the interactions mechanisms and is inherited by mfDrugsBase.
 
   Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
@@ -58,7 +58,7 @@
 #include <drugsmodel/mfDrugInteraction.h>
 
 // include toolkit headers
-#include <tkLog.h>
+#include <utils/log.h>
 
 // include Qt headers
 #include <QCoreApplication>
@@ -75,31 +75,40 @@ using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
+using namespace Drugs::Internal;
+
+
+namespace Drugs {
+namespace Internal {
+
 /**
   \brief Private part of mfDrugsBase
   \internal
 */
-class mfInteractionsBasePrivate
+class InteractionsBasePrivate
 {
 public:
-    mfInteractionsBasePrivate(mfInteractionsBase *p) :
+    InteractionsBasePrivate(InteractionsBase *p) :
             m_Parent(p), m_LogChrono(false), m_initialized(false) {}
 
-    ~mfInteractionsBasePrivate()
+    ~InteractionsBasePrivate()
     {
     }
 
-    bool checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugs );
-    mfDrugInteraction * getInteractionFromDatabase( const int & _id1, const int & _id2 );
-    QList<mfDrugInteraction*> getAllInteractionsFound();
+    bool checkDrugInteraction( DrugsData *drug, const QList<DrugsData *> & drugs );
+    DrugInteraction * getInteractionFromDatabase( const int & _id1, const int & _id2 );
+    QList<DrugInteraction*> getAllInteractionsFound();
 
 public:
-    mfInteractionsBase   *m_Parent;
+    InteractionsBase     *m_Parent;
     QMap<int, int>        m_Iams;                   /*!<  All possible interactions based on Iam_Ids */
     QMultiMap< int, int>  m_IamFound;               /*!< modified by checkDrugInteraction() */
     bool                  m_LogChrono;
     bool                  m_initialized;
 };
+
+}
+}
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -109,21 +118,21 @@ public:
    \brief Constructor.
    \private
 */
-mfInteractionsBase::mfInteractionsBase(QObject *parent)
-        : tkDatabase(parent), d_interactions(0)
+InteractionsBase::InteractionsBase(QObject *parent)
+        : Utils::Database(parent), d_interactions(0)
 {
-    d_interactions = new mfInteractionsBasePrivate(this);
+    d_interactions = new InteractionsBasePrivate(this);
 }
 
 /** \brief Destructor. */
-mfInteractionsBase::~mfInteractionsBase()
+InteractionsBase::~InteractionsBase()
 {
     if (d_interactions) delete d_interactions;
     d_interactions=0;
 }
 
 /** \brief Initializer for the database. Return the error state. */
-bool mfInteractionsBase::init()
+bool InteractionsBase::init()
 {
     // only one base can be initialized
     if ( d_interactions->m_initialized )
@@ -144,7 +153,7 @@ bool mfInteractionsBase::init()
     return true;
 }
 
-bool mfInteractionsBase::isInitialized() const
+bool InteractionsBase::isInitialized() const
 {
      return d_interactions->m_initialized;
 }
@@ -153,13 +162,13 @@ bool mfInteractionsBase::isInitialized() const
   \brief This is for debugging purpose. Log timers for some crucial functions.
   \sa checkInteractions(), getDrugsByCIS()
 */
-void mfInteractionsBase::logChronos( bool state )
+void InteractionsBase::logChronos( bool state )
 {
     d_interactions->m_LogChrono = state;
 }
 
 /** \brief Return the interaction's state of a \e drug when prescribed in association with \e drugList. */
-bool mfInteractionsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QList<mfDrugs*> & drugsList )
+bool InteractionsBasePrivate::checkDrugInteraction( DrugsData *drug, const QList<DrugsData *> &drugsList )
 {
      QTime t;
      t.start();
@@ -169,7 +178,7 @@ bool mfInteractionsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QLis
 
      const QSet<int> &drug_iams = drug->allInnAndIamClasses();
      QSet<int> d_iams;
-     foreach( mfDrugs * drug2, drugsList ) {
+     foreach( DrugsData * drug2, drugsList ) {
           if ( drug2 == drug )
               continue;
           foreach( const int i, drug2->allInnAndIamClasses()) {
@@ -199,7 +208,7 @@ bool mfInteractionsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QLis
      }
 
      if (m_LogChrono)
-         tkLog::logTimeElapsed(t, "mfDrugsBase", QString("checkDrugInteraction : %1 ; %2")
+         Utils::Log::logTimeElapsed(t, "mfDrugsBase", QString("checkDrugInteraction : %1 ; %2")
                            .arg(drug->denomination()).arg(drugsList.count()) );
 
 //      qWarning() << "checkDrugInteraction" << m_IamFound;
@@ -216,16 +225,16 @@ bool mfInteractionsBasePrivate::checkDrugInteraction( mfDrugs * drug, const QLis
   Test all substances of drugs and all iammol and classes and create a cached QMap containing the CIS
   of interacting drugs linked to the list of mfDrugInteraction.\n
 */
-QList<mfDrugInteraction*> mfInteractionsBase::calculateInteractions( const QList<mfDrugs*> & drugs )
+QList<DrugInteraction*> InteractionsBase::calculateInteractions( const QList<DrugsData *> &drugs )
 {
      QTime t;
      t.start();
 
-     QList<mfDrugInteraction*> toReturn;
+     QList<DrugInteraction*> toReturn;
      d_interactions->m_IamFound.clear();
 
      // check interactions drug by drug --> stored into d_interactions->m_IamFound
-     foreach( mfDrugs * drug, drugs )
+     foreach( DrugsData *drug, drugs )
           d_interactions->checkDrugInteraction( drug, drugs );
 
      // prepare cached datas
@@ -233,18 +242,18 @@ QList<mfDrugInteraction*> mfInteractionsBase::calculateInteractions( const QList
 
      int id1, id2;
      // for each known drug interaction
-     foreach( mfDrugInteraction* di, toReturn) {
+     foreach( DrugInteraction* di, toReturn) {
          id1 = di->value( IAM_ID1 ).toInt();
          id2 = di->value( IAM_ID2 ).toInt();
          // test all drugs in the list
-         foreach( mfDrugs * drg, drugs )  {
+         foreach( DrugsData * drg, drugs )  {
              if (drg->allInnAndIamClasses().contains(id1) || drg->allInnAndIamClasses().contains(id2)) {
                      di->addInteractingDrug(drg);
              }
          }
      }
      if (d_interactions->m_LogChrono)
-         tkLog::logTimeElapsed(t, "mfInteractionsBase", QString("interactions() : %2 drugs")
+         Utils::Log::logTimeElapsed(t, "mfInteractionsBase", QString("interactions() : %2 drugs")
                                .arg(drugs.count()) );
 
      return toReturn;
@@ -254,22 +263,22 @@ QList<mfDrugInteraction*> mfInteractionsBase::calculateInteractions( const QList
  \brief Retrieve from the database the interaction for ids : \e _id1 and \e _id2
  \sa interactions()
 */
-mfDrugInteraction * mfInteractionsBasePrivate::getInteractionFromDatabase( const int & _id1, const int & _id2 )
+DrugInteraction *InteractionsBasePrivate::getInteractionFromDatabase( const int & _id1, const int & _id2 )
 {
     int id2 = _id2;
     QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
     if ( !DB.isOpen() )
         DB.open();
 
-    mfDrugInteraction * di = 0;
+    DrugInteraction * di = 0;
 
     // first test if IAM is an alert (value == -1)
     if ( id2 == -1 ) {
-        di = new mfDrugInteraction();
+        di = new DrugInteraction();
         di->setValue( IAM_TYPE , Interaction::Information );
         di->setValue( IAM_ID1 , _id1 );
         di->setValue( IAM_ID2 , _id1 );
-        di->setValue( IAM_TEXT_IAM , QCoreApplication::translate( "mfDrugsBase", "This INN is present more than one time in this prescrition." )  );
+        di->setValue( IAM_TEXT_IAM , QCoreApplication::translate( "DrugsBase", "This INN is present more than one time in this prescrition." )  );
         id2 = _id1;
     } else {
         // else retreive IAM from database
@@ -284,13 +293,13 @@ mfDrugInteraction * mfInteractionsBasePrivate::getInteractionFromDatabase( const
             QSqlQuery q( req , DB );
             if ( q.isActive() ) {
                 if ( q.next() ) {
-                    di = new mfDrugInteraction();
+                    di = new DrugInteraction();
                     int i;
                     for ( i = 0; i < IAM_MaxParam; ++i )
                         di->setValue( i, q.value( i ) );
                 }
             } else
-                tkLog::addQueryError( "mfInteractionsBase", q );
+                Utils::Log::addQueryError( "mfInteractionsBase", q );
         }
     }
 
@@ -305,10 +314,10 @@ mfDrugInteraction * mfInteractionsBasePrivate::getInteractionFromDatabase( const
  \brief Returns the list of all interactions founded by interactions()
  \sa interactions()
 */
-QList<mfDrugInteraction*> mfInteractionsBasePrivate::getAllInteractionsFound()
+QList<DrugInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
 {
      // if no interactions were found : return empty list
-     QList<mfDrugInteraction*> toReturn;
+     QList<DrugInteraction*> toReturn;
      if ( m_IamFound.isEmpty() )
           return toReturn;
 

@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class mfDrugsIO
+  \class DrugsIO
   \brief Manages the IO operations for the dosages and prescriptions
   \ingroup freediams drugswidget
 */
@@ -51,17 +51,21 @@
 #include <drugsmodel/mfDrugsModel.h>
 #include <mfDrugsManager.h>
 
-#include <tkGlobal.h>
-#include <tkLog.h>
-#include <tkSettings.h>
-#include <tkSendMessage.h>
-#include <tkConstantTranslations.h>
+#include <utils/messagesender.h>
+
+#include <translationutils/constanttranslations.h>
+#include <utils/global.h>
+#include <utils/log.h>
+
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 
 #include <QApplication>
 #include <QHash>
 #include <QString>
+#include <QDir>
 
-namespace mfDrugsIOConstants {
+namespace DrugsIOConstants {
     const char *const XML_VERSION                         = "<?xml version=\"0.0.8\" encoding=\"UTF-8\"?>\n";
     const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
     const char *const XML_PRESCRIPTION_CIS                = "CIS";
@@ -94,17 +98,20 @@ namespace mfDrugsIOConstants {
     const char *const XML_FULLPRESCRIPTION_TAG            = "FullPrescription";
 }
 
-using namespace mfDrugsIOConstants;
+using namespace DrugsIOConstants;
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
-Q_TK_USING_CONSTANTS
-        Q_TK_USING_TRANSLATIONS
 
-        /** \brief Private part of mfDrugsIO \internal */
-        class mfDrugsIOPrivate
+using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
+
+namespace Drugs {
+namespace Internal {
+/** \brief Private part of DrugsIO \internal */
+class DrugsIOPrivate
 {
 public:
-    mfDrugsIOPrivate()
+    DrugsIOPrivate()
     {
         m_PrescriptionXmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
         m_PrescriptionXmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
@@ -150,35 +157,36 @@ public:
 
 
 public:
-    tkSendMessage          m_Sender;  /*!< \brief Message sender instance */
+    Utils::MessageSender   m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString>     m_PrescriptionXmlTags;
 };
+}
+}
 
+DrugsIO *DrugsIO::m_Instance = 0;
 
-mfDrugsIO *mfDrugsIO::m_Instance = 0;
-
-/** \brief Returns the unique instance of mfDrugsIO */
-mfDrugsIO *mfDrugsIO::instance(QObject *parent)
+/** \brief Returns the unique instance of DrugsIO */
+DrugsIO *DrugsIO::instance(QObject *parent)
 {
     if (!m_Instance) {
         if (parent)
-            m_Instance = new mfDrugsIO(parent);
+            m_Instance = new DrugsIO(parent);
         else
-            m_Instance = new mfDrugsIO(qApp);
+            m_Instance = new DrugsIO(qApp);
     }
     return m_Instance;
 }
 
 /** \brief Private constructor */
-mfDrugsIO::mfDrugsIO(QObject *parent) : QObject(parent), d(0)
+DrugsIO::DrugsIO(QObject *parent) : QObject(parent), d(0)
 {
-    setObjectName("mfDrugsIO");
-    d = new mfDrugsIOPrivate();
+    setObjectName("DrugsIO");
+    d = new DrugsIOPrivate();
 }
 
 /** \brief Destructor */
-mfDrugsIO::~mfDrugsIO()
+DrugsIO::~DrugsIO()
 {
     if (d) delete d; d=0;
 }
@@ -187,17 +195,17 @@ mfDrugsIO::~mfDrugsIO()
   \brief Start the dosage transmission over the web.
   \todo Manage user's name
 */
-bool mfDrugsIO::startsDosageTransmission()
+bool DrugsIO::startsDosageTransmission()
 {
     connect(&d->m_Sender, SIGNAL(sent()), this, SLOT(dosageTransmissionDone()));
-    d->m_Datas = mfDrugsBase::instance()->getDosageToTransmit();
+    d->m_Datas = DrugsBase::instance()->getDosageToTransmit();
     if (d->m_Datas.count()==0) {
         return false;
     }
     QStringList list = d->m_Datas.values();
     d->m_Sender.setMessage( list.join("\n\n") );
     d->m_Sender.setUser( "FreeDiams" );
-    d->m_Sender.setTypeOfMessage( tkSendMessage::DosageTransmission );
+    d->m_Sender.setTypeOfMessage( Utils::MessageSender::DosageTransmission );
     d->m_Sender.postMessage();
     return true;
 }
@@ -207,19 +215,19 @@ bool mfDrugsIO::startsDosageTransmission()
   Marks all dosage as transmitted into the database.
   \sa mfDrugsBase::markAllDosageTransmitted()
 */
-void mfDrugsIO::dosageTransmissionDone()
+void DrugsIO::dosageTransmissionDone()
 {
     if (d->m_Sender.resultMessage().contains("OK")) {
-        tkLog::addMessage(this, tr("Dosages transmitted."));
-        mfDrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
+        Utils::Log::addMessage(this, tr("Dosages transmitted."));
+        DrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
     } else
-        tkLog::addError(this, tr("Dosage not correctly transmitted"));
+        Utils::Log::addError(this, tr("Dosage not correctly transmitted"));
     d->m_Datas.clear();
     Q_EMIT transmissionDone();
 }
 
 /** \brief Return the dosage sending state */
-bool mfDrugsIO::isSendingDosage()
+bool DrugsIO::isSendingDosage()
 {
     return instance()->d->m_Sender.isSending();
 }
@@ -227,7 +235,7 @@ bool mfDrugsIO::isSendingDosage()
 /**
   \brief Transfert a XML'd prescription to the model
  */
-bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
+bool DrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
 {
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QString start = QString("<%1>").arg(XML_FULLPRESCRIPTION_TAG);
@@ -235,7 +243,7 @@ bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
     int begin = xml.indexOf(start) + start.length();
     int end = xml.indexOf(finish, begin);
     if (begin==-1 || end==-1) {
-        tkLog::addError("mfDrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
+        Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
         return false;
     }
     QString x = xml.mid( begin, end - begin);
@@ -245,7 +253,7 @@ bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
     QStringList drugs = x.split(splitter, QString::SkipEmptyParts );
 
     // clear model
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     Q_ASSERT(m);
     if (loader==ReplacePrescription)
         m->clearDrugsList();
@@ -254,8 +262,8 @@ bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
     QHash<QString, QString> hash;
     int row;
     foreach( const QString &s, drugs) {
-        if (!tkGlobal::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG),XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
-            tkLog::addError("mfDrugsIO",tr("Unable to read xml prescription"));
+        if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG),XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
+            Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"));
             continue;
         }
         if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_CIS)))
@@ -273,45 +281,45 @@ bool mfDrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
 
 /**
   \brief Load a Prescription file and assumed the transmission to the mfDrugsModel
-  You can add to or replace the actual prescription using the enumerator mfDrugsIO::Loader \e loader.\n
+  You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
   The \e extraDatas receives the extracted extra datas from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */
-bool mfDrugsIO::loadPrescription(const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader )
+bool DrugsIO::loadPrescription(const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader )
 {
     QString extras;
     if (!loadPrescription(fileName, extras, loader))
         return false;
-    tkGlobal::readXml(extras, XML_EXTRADATAS_TAG, extraDatas, false);
+    Utils::readXml(extras, XML_EXTRADATAS_TAG, extraDatas, false);
     return true;
 }
 
 
 /**
   \brief Load a Prescription file and assumed the transmission to the mfDrugsModel
-  You can add to or replace the actual prescription using the enumerator mfDrugsIO::Loader \e loader.\n
+  You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
   The \e xmlExtraDatas receives the extracted extra datas from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */
-bool mfDrugsIO::loadPrescription(const QString &fileName, QString &xmlExtraDatas, Loader loader )
+bool DrugsIO::loadPrescription(const QString &fileName, QString &xmlExtraDatas, Loader loader )
 {
     if (fileName.isEmpty()) {
-        tkLog::addError("mfDrugsIO", tr("No file name passed to load prescription"));
+        Utils::Log::addError("DrugsIO", tr("No file name passed to load prescription"));
         return false;
     }
     if (!QFile(fileName).exists()) {
-        tkLog::addError("mfDrugsIO", tkTr(FILE_1_DOESNOT_EXISTS).arg(fileName));
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
         return false;
     }
     if (!QFileInfo(fileName).isReadable()) {
-        tkLog::addError("mfDrugsIO", tkTr(FILE_1_ISNOT_READABLE).arg(fileName));
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
         return false;
     }
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     xmlExtraDatas.clear();
-    QString xml = tkGlobal::readTextFile(fileName);
+    QString xml = Utils::readTextFile(fileName);
 
     // retreive prescription
     prescriptionFromXml(xml,loader);
@@ -334,10 +342,10 @@ bool mfDrugsIO::loadPrescription(const QString &fileName, QString &xmlExtraDatas
   Prescription is automaticaaly sorted.\n
   The XML encoded prescription is added inside the HTML code.\n
 */
-QString mfDrugsIO::prescriptionToHtml()
+QString DrugsIO::prescriptionToHtml()
 {
     // clean the model (sort it, hide testing drugs)
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     if (m->rowCount() <= 0)
         return QString();
 
@@ -347,7 +355,7 @@ QString mfDrugsIO::prescriptionToHtml()
     // sort
     m->sort(0);
 
-    tkSettings *s = tkSettings::instance();
+    Core::ISettings *s = Core::ICore::instance()->settings();
 
     // Prepare font format
     QFont drugsFont;
@@ -360,8 +368,8 @@ QString mfDrugsIO::prescriptionToHtml()
     // Add drugs
     int i;
     QString drugStyle, prescrStyle;
-    drugStyle = tkGlobal::fontToHtml(drugsFont, "black");
-    prescrStyle = tkGlobal::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
+    drugStyle = Utils::fontToHtml(drugsFont, "black");
+    prescrStyle = Utils::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
     for(i=0; i < m->rowCount(); ++i) {
         tmp = QString(ENCODEDHTML_DRUG);
         tmp.replace( "{NUMBER}", QString::number(i+1));
@@ -410,11 +418,11 @@ QString mfDrugsIO::prescriptionToHtml()
 /**
   \brief Transforms the actual mfDrugsModel's prescription into a XML encoded string.
 */
-QString mfDrugsIO::prescriptionToXml()
+QString DrugsIO::prescriptionToXml()
 {
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     if (!m->testingDrugsAreVisible()) {
-        bool yes = tkGlobal::yesNoMessageBox(tr("Save test only drugs too ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too ?"),
                                   tr("Drugs added for testing only are actually hidden in this prescription.\n"
                                      "Do you want to add them to the file ?"),
                                   tr("Answering 'no' will cause definitive lost of test only drugs when "
@@ -443,7 +451,7 @@ QString mfDrugsIO::prescriptionToXml()
                 forXml.insert( instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString() );
             }
         }
-        xmldPrescription += tkGlobal::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
+        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
         forXml.clear();
     }
     xmldPrescription.prepend( QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
@@ -456,22 +464,22 @@ QString mfDrugsIO::prescriptionToXml()
   You can add \e extraDatas to the xml. \e extraDatas must be xml'd.\n
   If \e toFileName is empty, user is prompted to select a filename.
 */
-bool mfDrugsIO::savePrescription(const QHash<QString,QString> &extraDatas, const QString &toFileName)
+bool DrugsIO::savePrescription(const QHash<QString,QString> &extraDatas, const QString &toFileName)
 {
     QString xmldPrescription = prescriptionToXml();
     // add extraDatas
     if (!extraDatas.isEmpty()) {
-        QString tmp = tkGlobal::createXml(XML_EXTRADATAS_TAG,extraDatas,4,false);
+        QString tmp = Utils::createXml(XML_EXTRADATAS_TAG,extraDatas,4,false);
         xmldPrescription.append(tmp);
     }
     // add xml doc version to the beginning of the doc
     xmldPrescription.prepend(XML_VERSION);
     if (toFileName.isEmpty())
-        return tkGlobal::saveStringToFile(xmldPrescription,
+        return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
                                       tr(FREEDIAMS_FILEFILTER)) ;
     else
-        return tkGlobal::saveStringToFile(xmldPrescription, toFileName, tkGlobal::DontWarnUser);
+        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }
 
 /**
@@ -479,7 +487,7 @@ bool mfDrugsIO::savePrescription(const QHash<QString,QString> &extraDatas, const
   You can add \e extraXmlDatas to the xml. \e extraDatas must be xml'd.\n
   If \e toFileName is empty, user is prompted to select a filename.
 */
-bool mfDrugsIO::savePrescription(const QString &extraXmlDatas, const QString &toFileName)
+bool DrugsIO::savePrescription(const QString &extraXmlDatas, const QString &toFileName)
 {
     QString xmldPrescription = prescriptionToXml();
     // add extraDatas
@@ -491,10 +499,10 @@ bool mfDrugsIO::savePrescription(const QString &extraXmlDatas, const QString &to
     // add xml doc version to the beginning of the doc
     xmldPrescription.prepend(XML_VERSION);
     if (toFileName.isEmpty())
-        return tkGlobal::saveStringToFile(xmldPrescription,
+        return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
                                       tr(FREEDIAMS_FILEFILTER)) ;
     else
-        return tkGlobal::saveStringToFile(xmldPrescription, toFileName, tkGlobal::DontWarnUser);
+        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }
 

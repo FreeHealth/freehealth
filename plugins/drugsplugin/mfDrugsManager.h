@@ -38,84 +38,117 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSWIDGET_H
-#define MFDRUGSWIDGET_H
+#ifndef MFPRESCRIPTIONVIEWERMANAGER_H
+#define MFPRESCRIPTIONVIEWERMANAGER_H
 
-namespace Drugs {
-    class DrugsModel;
-}
+#include <drugswidget/mfDrugsCentralWidget.h>
+#include <drugsmodel/mfDrugsModel.h>
 
-// include Qt headers
+#include <coreplugin/contextmanager/icontext.h>
+
 #include <QWidget>
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
-
-#include <iformwidgetfactory.h>
-
+#include <QObject>
+#include <QAction>
+#include <QPointer>
 
 /**
- * \file drugswidget.h
+ * \file mfDrugsManager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 07 Jun 2009
+ * \version 0.0.7
+ * \date 09 Sept  2009
+ * \internal
 */
 
 namespace Drugs {
+namespace Internal {
+class InteractionsManager;
 
-class DrugsWidgetsFactory : public Core::IFormWidgetFactory
+class DrugsContext : public Core::IContext
 {
-    Q_OBJECT
 public:
-    DrugsWidgetsFactory(QObject *parent = 0);
-    ~DrugsWidgetsFactory();
+    DrugsContext(DrugsCentralWidget *w) : Core::IContext(w), wgt(w) {}
 
-    bool initialize(QWidget *parent = 0);
-    bool extensionInitialized(QWidget *parent = 0);
+    void setContext(QList<int> c) { ctx = c; }
 
-    bool isContainer( const int idInStringList ) const;
-    QStringList providedWidgets() const;
-    Core::IFormWidget *createWidget(QWidget *parent = 0, QObject *linkedObject = 0);
+    QList<int> context() const { return ctx; }
+    QWidget *widget() { return wgt; }
+private:
+    DrugsCentralWidget *wgt;
+    QList<int> ctx;
 };
 
-//class mfDrugsWidgetPlugin : public mfFormWidgetInterface
-//{
-//    Q_OBJECT
-//    Q_INTERFACES( mfBaseInterface mfFormWidgetInterface );
-//
-//public:
-//    mfDrugsWidgetPlugin();
-//
-//    QStringList   widgets() const;
-//    bool          isContainer( const int idInStringList ) const;
-//    mfAbstractWidget * getWidget( mfObject * mfo, mfAbstractWidget * parent = 0 ) const;
-//};
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------ mfDrugsWidget implementation --------------------------------------
-//--------------------------------------------------------------------------------------------------------
-class DrugsWidget : public Core::IFormWidget
+class DrugsActionHandler : public QObject
 {
     Q_OBJECT
 public:
-    DrugsWidget(QWidget *parent, QObject *linkedObject);
-    ~DrugsWidget();
+    DrugsActionHandler(QObject *parent = 0);
+    virtual ~DrugsActionHandler() {}
+
+    void setCurrentView(DrugsCentralWidget *view);
+
+public Q_SLOTS:
+    void drugsModelChanged();
 
 private Q_SLOTS:
-    void updateObject( int val );
-    void updateWidget();
-    void retranslateUi( const QString & );
-    void createDefaultSettings( tkSettings *settings );
+    void moveUp();
+    void moveDown();
+    void sortDrugs();
+    void removeItem();
+    void clear();
+    void viewInteractions();
+    void listViewItemChanged();
+    void searchActionChanged(QAction *a);
+    void printPrescription();
+    void toogleTestingDrugs();
 
 private:
-    void createConnections();
+    bool canMoveUp();
+    bool canMoveDown();
+    void updateActions();
 
-private:
-    mfDrugsModel         *m_PrescriptionModel;
-    QString               m_iniPath;
-    bool                  m_WithPrescribing, m_WithPrinting;
+protected:
+    QAction *aAddRow;
+    QAction *aRemoveRow;
+    QAction *aDown;
+    QAction *aUp;
+    QAction *aSort;
+    QAction *aEdit;
+    QAction *aClear;
+    QAction *aViewInteractions;
+    QActionGroup *gSearchMethod;
+    QAction *aSearchCommercial;
+    QAction *aSearchMolecules;
+    QAction *aSearchInn;
+    QAction *aPrintPrescription;
+    QAction *aToogleTestingDrugs;
+
+    QPointer<DrugsCentralWidget> m_CurrentView;
 };
 
-} // End Drugs
 
-#endif
+#define DRUGMODEL  DrugsManager::instance()->currentDrugsModel()
+
+class DrugsManager : public DrugsActionHandler
+{
+    Q_OBJECT
+public:
+    static DrugsManager *instance();
+    ~DrugsManager() {}
+
+    DrugsCentralWidget  *currentView() const;
+    DrugsModel          *currentDrugsModel() const { return currentView()->currentDrugsModel(); }
+    InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+
+private Q_SLOTS:
+    void updateContext(Core::IContext *object);
+
+private:
+    DrugsManager(QObject *parent = 0);
+    static DrugsManager *m_Instance;
+};
+
+}  // End Internal
+}  // End Drugs
+
+#endif // MFPRESCRIPTIONVIEWER_H

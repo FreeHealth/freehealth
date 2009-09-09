@@ -44,17 +44,31 @@ class mfDosageModel;
 #include <QWidget>
 #include "ui_mfDosageAvailableWidget.h"
 
-class mfDosageAvailableWidget : public QWidget, private Ui::mfDosageAvailableWidget
+/**
+ * \file mfDosageAvailableWidget.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.8
+ * \date 09 Sept 2009
+*/
+
+namespace Drugs {
+namespace Internal {
+class DosageModel;
+
+class DosageAvailableWidget : public QWidget, private Ui::DosageAvailableWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(mfDosageAvailableWidget)
+    Q_DISABLE_COPY(DosageAvailableWidget)
 
 public:
-    explicit mfDosageAvailableWidget(QWidget *parent = 0);
-    void setModel( mfDosageModel *model);
+    explicit DosageAvailableWidget(QWidget *parent = 0);
+    void setModel( DosageModel *model);
 
 protected:
     virtual void changeEvent(QEvent *e);
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFDOSAGEAVAILABLEWIDGET_H

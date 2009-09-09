@@ -43,10 +43,6 @@
 
 // include drugswidget headers
 #include <mfDrugsConstants.h>
-class mfDrugDosage;
-class mfDrugsBase;
-class mfDrugsBasePrivate;
-class mfDrugsPrivate;
 
 // include Qt headers
 #include <QObject>
@@ -59,18 +55,24 @@ class mfDrugsPrivate;
 /**
  * \file mfDrugs.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.15
- * \date 03 July 2009
+ * \version 0.0.17
+ * \date 09 Sept 2009
 */
 
 using namespace mfDrugsConstants;
 
-class mfDrugComposition
+namespace Drugs {
+namespace Internal {
+class DrugsDataPrivate;
+class DrugsBase;
+class DrugsBasePrivate;
+
+class DrugComposition
 {
 public:
 
-    mfDrugComposition() : m_InnCode(-1), m_LinkId(-1), m_Link(0) {}
-    ~mfDrugComposition() {} // Don't delete m_Link
+    DrugComposition() : m_InnCode(-1), m_LinkId(-1), m_Link(0) {}
+    ~DrugComposition() {} // Don't delete m_Link
 
     /** \brief Feed values from the database */
     void setValue(const int fieldref, const QVariant &value )
@@ -91,7 +93,7 @@ public:
     }
 
     /** \brief Set the linked mfDrugComposition (this happens when a molecule is transform to another one which is the active one */
-    void setLinkedSubstance( mfDrugComposition *link )
+    void setLinkedSubstance( DrugComposition *link )
     {
         Q_ASSERT(link);
         m_Link = link;
@@ -109,7 +111,7 @@ public:
     }
 
     /** \brief Test link relation with the \e link */
-    bool isLinkedWith( mfDrugComposition *link ) const
+    bool isLinkedWith( DrugComposition *link ) const
     {
         Q_ASSERT(link);
         return (link==m_Link);
@@ -189,29 +191,30 @@ public:
     QString m_RefDosage;
     QString m_Nature;     // SA / FT
     int m_LinkId;
-    mfDrugComposition *m_Link;
+    DrugComposition *m_Link;
 };
 
 
 
-class mfDrugs : public QObject
+class DrugsData : public QObject
 {
+    /** \todo remove QObject class from here ! */
     Q_OBJECT
-    friend class mfDrugsBase;
-    friend class mfDrugsBasePrivate;
+    friend class DrugsBase;
+    friend class DrugsBasePrivate;
 
 public:
-     mfDrugs( QObject * parent = 0 );
-     ~mfDrugs();
+     DrugsData( QObject * parent = 0 );
+     ~DrugsData();
 
      // setters
      void setPrescriptionValue( const int fieldref, const QVariant & value );
 
      // getters
-     const int         CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
+     int         CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
-     const QString     denomination() const;
+     QString     denomination() const;
      QString           form() const               { return value( Table_CIS, CIS_FORME ).toString(); }
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
@@ -240,30 +243,33 @@ public:
 
      // viewers
      QString toHtml() const;
-     static QString drugsListToHtml( const QList<mfDrugs*> & list );
+     static QString drugsListToHtml( const QList<DrugsData*> & list );
 
      void warn() const;
      QString warnText() const;
      void smallDrugWarn() const;
 
      // sorters
-     static bool lessThan( const mfDrugs *drug1, const mfDrugs *drug2 );
+     static bool lessThan( const DrugsData *drug1, const DrugsData *drug2 );
 
 protected:
      // setters
      void setValue( const int tableref, const int fieldref, const QVariant & value );
      void addInnAndIamClasses( const QSet<int> &codes );
      void addCIP( const int CIP, const QString & denomination, QDate date = QDate() );
-     void addComposition( mfDrugComposition *compo );
+     void addComposition( DrugComposition *compo );
 
      // getters
      QVariant value( const int tableref, const int fieldref ) const;
 
 private:
-     mfDrugsPrivate *d;
+     DrugsDataPrivate *d;
 };
 
+}  // End Internal
+}  // End Drugs
+
 // Q_DECLARE_METATYPE( mfDrugs )
-typedef QList<mfDrugs*> QDrugsList;
+typedef QList<Drugs::Internal::DrugsData*> QDrugsList;
 
 #endif

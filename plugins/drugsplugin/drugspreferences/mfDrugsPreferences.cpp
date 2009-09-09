@@ -42,37 +42,42 @@
 
 #include <mfDrugsConstants.h>
 
-#include <tkTheme.h>
-#include <tkPrinter.h>
-#include <tkSettings.h>
-#include <tkLog.h>
-#include <tkConstantTranslations.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+
+#include <texteditorplugin/texteditor.h>
+
+#include <printerplugin/printer.h>
 
 #include <QPixmap>
 
 using namespace mfDrugsConstants;
-Q_TK_USING_CONSTANTS
-Q_TK_USING_TRANSLATIONS
+using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
 
-mfDrugsPreferences::mfDrugsPreferences(QWidget *parent) :
+DrugsPreferences::DrugsPreferences(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    // configure tkRichTextEditors
-    previewer = tkPrinter::previewer(this);
+    Core::ITheme *th = Core::ICore::instance()->theme();
+    previewer = Print::Printer::previewer(this);
     userLayout->addWidget(previewer, 0,0);
-    ALDBefore->setTypes(tkRichTextEditor::Full|tkRichTextEditor::Full);
-    ALDAfter->setTypes(tkRichTextEditor::Full|tkRichTextEditor::Full);
+    ALDBefore->setTypes(Editor::TextEditor::Full);
+    ALDAfter->setTypes(Editor::TextEditor::Full|Editor::TextEditor::Full);
     // set icons
-    drugBoldButton->setIcon( tkTheme::icon(ICONBOLD) );
-    drugUnderlineButton->setIcon( tkTheme::icon(ICONUNDERLINE) );
-    drugItalicButton->setIcon( tkTheme::icon(ICONITALIC) );
-    prescrBoldButton->setIcon( tkTheme::icon(ICONBOLD) );
-    prescrUnderlineButton->setIcon( tkTheme::icon(ICONUNDERLINE) );
-    prescrItalicButton->setIcon( tkTheme::icon(ICONITALIC) );
+    drugBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
+    drugUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
+    drugItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
+    prescrBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
+    prescrUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
+    prescrItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
 
     // feed with actual values
-    tkSettings *s = tkSettings::instance();
+    Core::ISettings *s = Core::ICore::instance()->settings();
     //    fontSizeSpin->setValue( m_fontSize );
     QString userName = s->value(MFDRUGS_SETTING_USER).toString();
     if ( ( !userName.isEmpty() ) && ( userName.startsWith( "test_" ) ) ) {
@@ -114,17 +119,17 @@ mfDrugsPreferences::mfDrugsPreferences(QWidget *parent) :
     previewer->setHeader( s->value( MFDRUGS_SETTING_USERHEADER ).toString() );
     previewer->setFooter( s->value( MFDRUGS_SETTING_USERFOOTER ).toString() );
     previewer->setWatermark( s->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                             tkPrinter::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()) );
+                             Print::Printer::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()) );
 
     ALDBefore->textEdit()->setHtml( s->value( MFDRUGS_SETTING_ALD_PRE_HTML ).toString() );
     ALDAfter->textEdit()->setHtml( s->value( MFDRUGS_SETTING_ALD_POST_HTML ).toString() );
 }
 
-void mfDrugsPreferences::saveToSettings( tkSettings *settings )
+void DrugsPreferences::saveToSettings( Core::ISettings *settings )
 {
-    tkSettings *s;
+    Core::ISettings *s;
     if (!settings)
-        s = tkSettings::instance();
+        s = Core::ICore::instance()->settings();
     else
         s = settings;
 
@@ -171,10 +176,10 @@ void mfDrugsPreferences::saveToSettings( tkSettings *settings )
     s->setValue( MFDRUGS_SETTING_ALD_POST_HTML, ALDAfter->textEdit()->toHtml() );
 }
 
-void mfDrugsPreferences::writeDefaultSettings( tkSettings *s )
+void DrugsPreferences::writeDefaultSettings( Core::ISettings *s )
 {
 //    qWarning() << "---------> writedefaults";
-    tkLog::addMessage("mfDrugsPreferences", tkTr(CREATING_DEFAULT_SETTINGS_FOR_1).arg("mfDrugsWidget") );
+    Utils::Log::addMessage("DrugsPreferences", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget") );
     s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
     s->setValue( MFDRUGS_SETTING_VIEWFONT , QFont() );
     s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize() );
@@ -187,7 +192,7 @@ void mfDrugsPreferences::writeDefaultSettings( tkSettings *s )
 
     s->setValue( MFDRUGS_SETTING_HIDELABORATORY, false );
 
-    s->setValue( MFDRUGS_SETTING_WATERMARKPRESENCE, tkPrinter::DuplicataOnly );
+    s->setValue( MFDRUGS_SETTING_WATERMARKPRESENCE, Print::Printer::DuplicataOnly );
     s->setValue( MFDRUGS_SETTING_WATERMARKALIGNEMENT, Qt::AlignCenter );
     s->setValue( MFDRUGS_SETTING_WATERMARK_HTML, MFDRUGS_DEFAULT_WATEMARKHTML );
 
@@ -199,7 +204,7 @@ void mfDrugsPreferences::writeDefaultSettings( tkSettings *s )
     s->sync();
 }
 
-void mfDrugsPreferences::changeEvent(QEvent *e)
+void DrugsPreferences::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {

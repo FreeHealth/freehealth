@@ -44,9 +44,6 @@
 // include drugswidget headers
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDosageModel.h>
-class mfDrugsIO;
-class mfDrugsModelPrivate;
-class mfInteractionsManager;
 
 // include Qt headers
 #include <QAbstractTableModel>
@@ -54,15 +51,21 @@ class mfInteractionsManager;
 /**
  * \file mfDrugsModel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.13
- * \date 23 July 2009
+ * \version 0.0.15
+ * \date 09 Sept 2009
 */
 
-class mfDrugsModel : public QAbstractTableModel
+namespace Drugs {
+namespace Internal {
+class DrugsIO;
+class DrugsModelPrivate;
+class InteractionsManager;
+
+class DrugsModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class mfDosageModel;
-    friend class mfDrugsIO;
+    friend class DosageModel;
+    friend class DrugsIO;
 public:
     enum PrescriptionDeserializer {
         AddPrescription,
@@ -70,8 +73,8 @@ public:
         ReplacePrescription
     };
 
-    mfDrugsModel( QObject * parent = 0 );
-    ~mfDrugsModel();
+    DrugsModel( QObject * parent = 0 );
+    ~DrugsModel();
 
     // MODEL FUNCTIONS
     QModelIndex index( int row, int column, const QModelIndex & drugParent = QModelIndex() ) const;
@@ -93,7 +96,7 @@ public:
     void setDrugsList( QDrugsList & list );
     const QDrugsList & drugsList() const;
     void clearDrugsList();
-    int addDrug( mfDrugs* drug, bool automaticInteractionChecking = true );
+    int addDrug( DrugsData* drug, bool automaticInteractionChecking = true );
     int addDrug( const int _CIS, bool automaticInteractionChecking = true );
     int removeDrug( const int _CIS );
     int removeLastInsertedDrug();
@@ -109,9 +112,9 @@ public:
     bool testingDrugsAreVisible() const;
 
     // FOR DOSAGE MANAGEMENT
-    mfDosageModel *dosageModel( const int _CIS );
-    mfDosageModel *dosageModel( const QModelIndex & drugIndex );
-    mfInteractionsManager *currentInteractionManger() const;
+    DosageModel *dosageModel( const int _CIS );
+    DosageModel *dosageModel( const QModelIndex & drugIndex );
+    InteractionsManager *currentInteractionManger() const;
 
     void warn();
 
@@ -125,8 +128,10 @@ protected:
     virtual void checkInteractions() const;
 
 private:
-    mfDrugsModelPrivate *d;
+    DrugsModelPrivate *d;
 };
 
+}
+}
 
 #endif

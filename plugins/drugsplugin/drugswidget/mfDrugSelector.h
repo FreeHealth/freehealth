@@ -45,7 +45,7 @@
 #include "ui_mfDrugSelector.h"
 
 // include toolkit headers
-#include <QButtonLineEdit.h>
+//#include <utils/widgets/QButtonLineEdit.h>
 
 // include Qt headers
 #include <QSqlTableModel>
@@ -59,17 +59,20 @@
  * \date 08 July 2009
  */
 
+namespace Drugs {
+namespace Internal {
+
 /**
  \brief Creates a QWidget that contains a search line, and views to drugs and inn. Emit signal drugSelected( int ) when a drug is selected. int is the CIS of the selected drug.
  \ingroup freediams drugswidget
 */
-class mfDrugSelector : public QWidget, private Ui::mfDrugSelector
+class DrugSelector : public QWidget, private Ui::DrugSelector
 {
     Q_OBJECT
-    Q_DISABLE_COPY( mfDrugSelector );
+    Q_DISABLE_COPY(DrugSelector);
 
 public:
-    explicit mfDrugSelector( QWidget *parent = 0 );
+    explicit DrugSelector(QWidget *parent = 0);
     void initialize();
 
     void setFont( const QFont & font );
@@ -117,5 +120,9 @@ private:
     // search method and history
     int    m_SearchMethod;              /*!< \sa mfDrugsConstants::SearchMethod */
 };
+
+}  // End Internal
+}  // End Drugs
+
 
 #endif // MFDRUGSELECTOR_H

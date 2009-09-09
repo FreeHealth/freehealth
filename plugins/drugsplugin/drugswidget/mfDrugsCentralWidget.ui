@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::CentralWidget</class>
- <widget class="QWidget" name="Drugs::Internal::CentralWidget">
+ <class>Drugs::Internal::DrugsCentralWidget</class>
+ <widget class="QWidget" name="Drugs::Internal::DrugsCentralWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,7 +25,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="mfDrugSelector" name="m_DrugSelector" native="true">
+     <widget class="DrugSelector" name="m_DrugSelector" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -33,7 +33,7 @@
        </sizepolicy>
       </property>
      </widget>
-     <widget class="mfPrescriptionViewer" name="m_PrescriptionView" native="true">
+     <widget class="PrescriptionViewer" name="m_PrescriptionView" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -47,13 +47,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>mfPrescriptionViewer</class>
+   <class>PrescriptionViewer</class>
    <extends>QWidget</extends>
    <header location="global">drugswidget/mfPrescriptionViewer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>mfDrugSelector</class>
+   <class>DrugSelector</class>
    <extends>QWidget</extends>
    <header location="global">drugswidget/mfDrugSelector.h</header>
    <container>1</container>

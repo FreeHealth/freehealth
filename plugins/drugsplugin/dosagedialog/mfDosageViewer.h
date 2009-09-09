@@ -42,8 +42,6 @@
 #define MFDOSAGEVIEWER_H
 
 // include drugwidget headers
-class mfDosageModel;
-class mfDosageViewerPrivate;
 
 // include Qt headers
 #include <QWidget>
@@ -54,20 +52,25 @@ class mfDosageViewerPrivate;
 /**
  * \file mfDosageViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 30 June 2009
+ * \version 0.0.8
+ * \date 09 Sept 2009
 */
 
-class mfDosageViewer : public QWidget, public Ui::mfDosageViewer
+namespace Drugs {
+namespace Internal {
+class DosageViewerPrivate;
+class DosageModel;
+
+class DosageViewer : public QWidget, public Ui::DosageViewer
 {
     Q_OBJECT
-    Q_DISABLE_COPY( mfDosageViewer );
+    Q_DISABLE_COPY(DosageViewer);
 
 public:
-    explicit mfDosageViewer( QWidget *parent );
-    ~mfDosageViewer();
+    explicit DosageViewer( QWidget *parent );
+    ~DosageViewer();
 
-    void setDosageModel( mfDosageModel *model );
+    void setDosageModel( DosageModel *model );
     void useDrugsModel(const int CIS, const int drugRow);
 
 public Q_SLOTS:
@@ -88,7 +91,10 @@ private Q_SLOTS:
     void on_aldCheck_stateChanged(int state);
 
 private:
-    mfDosageViewerPrivate *d;
+    DosageViewerPrivate *d;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFDOSAGEVIEWER_H

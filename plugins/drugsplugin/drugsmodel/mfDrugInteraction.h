@@ -43,8 +43,6 @@
 
 // include drugswidget headers
 #include <mfDrugsConstants.h>
-class mfDrugs;
-class mfInteractionsBase;
 
 // include Qt headers
 #include <QIcon>
@@ -56,27 +54,32 @@ using namespace mfInteractionsConstants;
 /**
  * \file mfDrugInteraction.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 24 July 2009
+ * \version 0.0.8
+ * \date 09 Sept 2009
 */
 
+namespace Drugs {
+namespace Internal {
+class DrugsData;
+class InteractionsBase;
 
-class mfDrugInteraction : public QObject
+class DrugInteraction : public QObject
 {
-    friend class mfInteractionsBase;
-    friend class mfInteractionsBasePrivate;
+    /** \todo remove QObject class from here ! */
+    friend class InteractionsBase;
+    friend class InteractionsBasePrivate;
 public:
-    mfDrugInteraction( QObject * parent = 0 )  : QObject( parent )  { setObjectName( "mfDrugsInteraction"); }
-    ~mfDrugInteraction() {}
+    DrugInteraction( QObject * parent = 0 )  : QObject( parent )  { setObjectName( "mfDrugsInteraction"); }
+    ~DrugInteraction() {}
 
     // static getters and viewers
-    static QIcon iamIcon( const mfDrugs * drug, const int & levelOfWarning = 0 );  // mfDrugsBase::interactions should be called first
-    static QString listToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos );
-    static QString synthesisToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos );
+    static QIcon iamIcon( const DrugsData *drug, const int & levelOfWarning = 0 );  // mfDrugsBase::interactions should be called first
+    static QString listToHtml( const QList<DrugInteraction *> & list, bool fullInfos );
+    static QString synthesisToHtml( const QList<DrugInteraction *> & list, bool fullInfos );
     static QString typeToString( const int t );
 
     // getters
-    QList<mfDrugs*> drugs() const;
+    QList<DrugsData *> drugs() const;
     QVariant value( const int fieldref ) const;
     QString typeOfIAM( const int & t ) const;
     Interaction::TypesOfIAM type() const;
@@ -91,7 +94,7 @@ public:
 protected:
     // setters
     void setValue( const int fieldref, const QVariant & value ); // ajouter CIS1 CIS2
-    void addInteractingDrug(mfDrugs *drug)
+    void addInteractingDrug(DrugsData *drug)
     {
         Q_ASSERT(drug);
         if (!m_InteractingDrugs.contains(drug))
@@ -100,7 +103,10 @@ protected:
 
 private:
     QHash<int, QVariant> m_Infos;
-    QList<mfDrugs *> m_InteractingDrugs;
+    QList<DrugsData *> m_InteractingDrugs;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif

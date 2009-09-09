@@ -41,12 +41,8 @@
 #ifndef MFINTERACTIONSBASE_H
 #define MFINTERACTIONSBASE_H
 
-// include drugswidget headers
-class mfDrugs;
-class mfDrugInteraction;
-
 // include toolkit headers
-#include <tkDatabase.h>
+#include <utils/database.h>
 
 // include Qt headers
 #include <QList>
@@ -59,13 +55,17 @@ class mfDrugInteraction;
  * \date 24 July 2009
 */
 
-class mfInteractionsBasePrivate;
+namespace Drugs {
+namespace Internal {
+class InteractionsBasePrivate;
+class DrugInteraction;
+class DrugsData;
 
-class mfInteractionsBase : public tkDatabase
+class InteractionsBase : public Utils::Database
 {
 public:
-    mfInteractionsBase(QObject *parent = 0);
-    ~mfInteractionsBase();
+    InteractionsBase(QObject *parent = 0);
+    ~InteractionsBase();
 
     // INITIALIZER
     virtual bool init();
@@ -78,10 +78,13 @@ public:
     virtual QString   getInnDenomination( const int inncode ) const = 0;
 
     // Interactions base
-    QList<mfDrugInteraction*> calculateInteractions( const QList<mfDrugs*> & drugs );
+    QList<DrugInteraction*> calculateInteractions( const QList<DrugsData *> & drugs );
 
 private:
-    mfInteractionsBasePrivate *d_interactions;
+    InteractionsBasePrivate *d_interactions;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif   // MFINTERACTIONSBASE_H

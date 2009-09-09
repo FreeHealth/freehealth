@@ -42,20 +42,22 @@
 
 #include <drugsmodel/mfDosageModel.h>
 
-mfDosageAvailableWidget::mfDosageAvailableWidget(QWidget *parent) :
+using namespace Drugs::Internal;
+
+DosageAvailableWidget::DosageAvailableWidget(QWidget *parent) :
     QWidget(parent)
 {
     setupUi(this);
 }
 
-void mfDosageAvailableWidget::setModel( mfDosageModel *model)
+void DosageAvailableWidget::setModel( DosageModel *model)
 {
     listView->setModel(model);
     listView->update();
 }
 
 
-void mfDosageAvailableWidget::changeEvent(QEvent *e)
+void DosageAvailableWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {

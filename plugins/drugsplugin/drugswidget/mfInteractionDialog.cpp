@@ -58,53 +58,56 @@
 #include <mfDrugsManager.h>
 
 // include toolkit headers
-#include <tkTheme.h>
-#include <tkSettings.h>
-#include <tkPrinter.h>
-#include <tkLog.h>
-#include <tkHelpDialog.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/dialogs/helpdialog.h>
+
+#include <printerplugin/printer.h>
+#include <utils/log.h>
 
 using namespace mfInteractionsConstants;
-Q_TK_USING_CONSTANTS
 
-mfInteractionDialog::mfInteractionDialog(QWidget *parent) :
+using namespace Drugs::Internal;
+
+InteractionDialog::InteractionDialog(QWidget *parent) :
     QDialog(parent)
 {
     setupUi(this);
-    setObjectName("mfInteractionDialog");
-    printButton->setIcon( tkTheme::icon(ICONPRINT) );
+    setObjectName("InteractionDialog");
+    printButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONPRINT) );
     setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
     textBrowser->setHtml( DRUGMODEL->index(0, Interaction::FullSynthesis).data().toString() );
 //    textBrowser->setHtml( mfDrugsModel::instance()->prescriptionToHtml() );
 }
 
-void mfInteractionDialog::on_helpButton_clicked()
+void InteractionDialog::on_helpButton_clicked()
 {
-    tkHelpDialog::showPage("iamtesteur.html#synthetiseur_iam");
+    Core::HelpDialog::showPage("iamtesteur.html#synthetiseur_iam");
 }
 
 
-void mfInteractionDialog::on_printButton_clicked()
+void InteractionDialog::on_printButton_clicked()
 {
     /** \todo add functionnality to FMF */
 #ifdef DRUGS_INTERACTIONS_STANDALONE
-    tkPrinter p(this);
+    Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = tkSettings::instance()->value( MFDRUGS_SETTING_USERHEADER ).toString();
+    QString header = Core::Icore::instance()->settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
     diCore::patient()->replaceTokens(header);
     tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     p.setHeader( header );
-    header = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    header = Core::Icore::instance()->settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
     p.setFooter( header );
-    p.addTextWatermark(tr("Made with FreeDiams."), tkPrinter::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
+    p.addTextWatermark(tr("Made with FreeDiams."), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
     p.print( textBrowser->toHtml() );
 #endif
 }
 
-void mfInteractionDialog::changeEvent(QEvent *e)
+void InteractionDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {

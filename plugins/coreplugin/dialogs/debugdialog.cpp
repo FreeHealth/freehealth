@@ -42,37 +42,43 @@
 #include "debugdialog.h"
 #include "ui_DebugDialog.h"
 
+#include <utils/log.h>
+#include <utils/global.h>
 #include <extensionsystem/pluginmanager.h>
 
-#include <utils/global.h>
 #include <coreplugin/idebugpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
 #include <QStackedLayout>
 
 using namespace Core;
 using namespace Core::Internal;
+using namespace Trans::ConstantTranslations;
 
 DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::DebugDialog)
 {
-    typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
     m_ui->setupUi(this);
     m_slayout = new QStackedLayout(m_ui->forStack);
     m_slayout->setMargin(0);
     m_slayout->setSpacing(0);
     setWindowTitle( qApp->applicationName() );
+    resize(500,500);
     setObjectName( "DebugDialog" );
 
     m_ui->tree->header()->hide();
+
+    // connect tree navigation
     connect(m_ui->tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
         this, SLOT(currentItemChanged(QTreeWidgetItem*)));
 
+    m_sending = false;
+    if (!Utils::isDebugCompilation())
+        m_ui->butSend->setEnabled( Utils::Log::hasError() );
+
     QList<IDebugPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IDebugPage>();
     setPages(pages);
-//    m_ui->splitter->setStretchFactor(0,1);
-//    m_ui->splitter->setStretchFactor(1,3);
-//    m_ui->splitter->setSizes(QList<int>() << m_ui->tree->size().height() << );
-    this->resize(500,500);
 }
 
 void DebugDialog::setPages(const QList<IDebugPage*> pages)
@@ -139,3 +145,57 @@ void DebugDialog::on_fullScreenButton_clicked()
 //    this->show();
 }
 
+void DebugDialog::on_butSend_clicked()
+{
+    if (!Utils::isDebugCompilation()) {
+        if (!Utils::Log::hasError())  // this should never be in this member
+            return;
+    }
+    Utils::Log::addMessage(this, tkTr(Trans::Constants::START_MESSAGE_SENDING) );
+
+    QString msg = Utils::askUser( tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM) );
+    // get full log including settings and logs
+    msg += "\n\n" + Utils::Log::toString( Core::ICore::instance()->settings()->toString() );
+
+    // send informations
+    connect( &m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
+    m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDevelopper );
+    m_sender.setMessage( msg );
+    if (m_sender.postMessage()) {
+        m_sending = true;
+        // showing a messagebox
+        m_infoMessageBox = new QMessageBox(this);
+        m_infoMessageBox->setText( tr( "Sending debugging informations to dev team") );
+        m_infoMessageBox->setInformativeText( tr("Trying to send informations to dev team.\n"
+                                                 "Using Url : %1 \n"
+                                                 "Please wait..." ).arg( m_sender.usedUrl() ) );
+        m_infoMessageBox->setWindowTitle( qApp->applicationName() );
+        m_infoMessageBox->setStandardButtons( QMessageBox::Ok );
+        m_infoMessageBox->show();
+    } else {
+        m_sending = false;
+    }
+}
+
+bool DebugDialog::on_butSave_clicked()
+{
+    Core::ISettings *s = Core::ICore::instance()->settings();
+    QString fileName = s->path( Core::ISettings::ResourcesPath ) + "/logs.txt" ;
+    Utils::Log::addMessage( this, tkTr(Trans::Constants::SAVING_FILE_1).arg(fileName));
+    return Utils::saveStringToFile( Utils::Log::toString(), fileName );
+}
+
+void DebugDialog::onSendMessage_done()
+{
+    Utils::Log::addMessage( this, tr( "Debugging informations correctly sent." ) );
+    if ( m_infoMessageBox )
+    {
+        m_infoMessageBox->setInformativeText( tr("Debugging informations correctly send to dev team.\n"
+                                             "Using Url : %1 \n"
+                                             "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );
+        m_infoMessageBox->exec();
+        delete m_infoMessageBox;
+        m_infoMessageBox=0;
+    }
+    m_sending = false;
+}

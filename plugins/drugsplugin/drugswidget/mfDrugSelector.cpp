@@ -43,10 +43,10 @@
 #include <mfDrugsConstants.h>
 #include <drugsdatabase/mfDrugsBase.h>
 
-// include toolkit headers
-#include <tkSettings.h>
-#include <tkTheme.h>
-#include <tkActionManager.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <QApplication>
 #include <QSqlRecord>
@@ -54,14 +54,15 @@
 
 
 #ifndef DRUGS_INTERACTIONS_STANDALONE
-#    include <mfCore.h>
-#    include <mfSettings.h>
+/** \todo here */
+//#    include <mfCore.h>
 #endif
 
 using namespace mfDrugsConstants;
-Q_TK_USING_CONSTANTS
+using namespace Drugs;
+using namespace Drugs::Internal;
 
-mfDrugSelector::mfDrugSelector( QWidget * parent ) :
+DrugSelector::DrugSelector( QWidget * parent ) :
         QWidget( parent ),
         m_DrugsModel(0), m_InnModel(0),
         m_SearchToolButton(0),
@@ -70,7 +71,7 @@ mfDrugSelector::mfDrugSelector( QWidget * parent ) :
 {
 }
 
-void mfDrugSelector::initialize()
+void DrugSelector::initialize()
 {
     setupUi( this );
 
@@ -82,9 +83,9 @@ void mfDrugSelector::initialize()
     createConnections();
 
     // select last search method (stored into qApp MFDRUGS_SETTING_SEARCHMETHOD)
-    int m = tkSettings::instance()->value( MFDRUGS_SETTING_SEARCHMETHOD ).toInt();
+    int m = Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_SEARCHMETHOD ).toInt();
     setSearchMethod(m);
-    tkActionManager *am = tkActionManager::instance();
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     QAction *a = 0;
     switch (m)
     {
@@ -104,21 +105,21 @@ void mfDrugSelector::initialize()
     retranslateUi("");
 }
 
-void mfDrugSelector::setFont( const QFont & font )
+void DrugSelector::setFont( const QFont & font )
 {
     drugsView->setFont( font );
     InnView->setFont( font );
     searchLine->setFont( font );
 }
 
-void mfDrugSelector::createToolButtons()
+void DrugSelector::createToolButtons()
 {
     m_SearchToolButton = new QToolButton( searchLine );   // parent object will be redefined
     m_SearchToolButton->setPopupMode( QToolButton::InstantPopup );
     m_SearchToolButton->setToolTip( tr( "Select a search method using the icon on the left..." ) );
-    m_SearchToolButton->setIcon( tkTheme::icon( ICONSEARCH ) );
-    tkActionManager *am = tkActionManager::instance();
-    tkCommand *cmd = am->command(mfDrugsConstants::A_SEARCH_COMMERCIAL);
+    m_SearchToolButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONSEARCH));
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+    Core::Command *cmd = am->command(mfDrugsConstants::A_SEARCH_COMMERCIAL);
     m_SearchToolButton->addAction(cmd->action());
     cmd = am->command(mfDrugsConstants::A_SEARCH_MOLECULES);
     m_SearchToolButton->addAction(cmd->action());
@@ -128,22 +129,22 @@ void mfDrugSelector::createToolButtons()
     m_DrugsHistoricButton = new QToolButton( searchLine );
     m_DrugsHistoricButton->setPopupMode( QToolButton::InstantPopup );
     m_DrugsHistoricButton->setToolTip( tr( "Selected drugs historic." ) );
-    m_DrugsHistoricButton->setIcon( tkTheme::icon( ICONEDIT) );
+    m_DrugsHistoricButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT));
 
     // add buttons to search line
     searchLine->setLeftButton( m_SearchToolButton );
     searchLine->setRightButton( m_DrugsHistoricButton );
 }
 
-void mfDrugSelector::createDrugModelView()
+void DrugSelector::createDrugModelView()
 {
     // insert SQL drugs model and table view
     m_DrugsModel = new QSqlTableModel( this, QSqlDatabase::database( DRUGS_DATABASE_NAME ) );
-    m_DrugsModel->setTable( mfDrugsBase::instance()->table( Table_CIS ) );
+    m_DrugsModel->setTable( DrugsBase::instance()->table( Table_CIS ) );
     m_DrugsModel->setEditStrategy( QSqlTableModel::OnManualSubmit );
     QHashWhere where;
     where.insert( CIS_COMMERCIALISATION, "='O'" );
-    m_DrugsModel->setFilter( mfDrugsBase::instance()->getWhereClause( Table_CIS, where ) );
+    m_DrugsModel->setFilter( DrugsBase::instance()->getWhereClause( Table_CIS, where ) );
     m_DrugsModel->select();
     // managing model fields
 //    m_DrugsModel->removeColumns( CIS_ADMINISTRATION , 1 );
@@ -161,14 +162,14 @@ void mfDrugSelector::createDrugModelView()
     drugsView->resizeColumnsToContents();
 }
 
-void mfDrugSelector::createINNModelView()
+void DrugSelector::createINNModelView()
 {    // create model and tableview for Iam Class / INNs
     m_InnModel = new QSqlTableModel( this, QSqlDatabase::database( DRUGS_DATABASE_NAME ) );
-    m_InnModel->setTable( mfDrugsBase::instance()->table( Table_IAM_DENOMINATION ) );
+    m_InnModel->setTable( DrugsBase::instance()->table( Table_IAM_DENOMINATION ) );
     m_InnModel->setEditStrategy( QSqlTableModel::OnManualSubmit );
     QHashWhere where;
     where.insert( IAM_DENOMINATION_ID, ">999" );
-    m_InnModel->setFilter( mfDrugsBase::instance()->getWhereClause( Table_IAM_DENOMINATION, where ) );
+    m_InnModel->setFilter( DrugsBase::instance()->getWhereClause( Table_IAM_DENOMINATION, where ) );
     m_InnModel->select();
     InnView->setModel( m_InnModel );
     InnView->setColumnHidden( 0 , true );
@@ -178,13 +179,13 @@ void mfDrugSelector::createINNModelView()
     InnView->hide();
 }
 
-void mfDrugSelector::createDrugsHistoryActions()
+void DrugSelector::createDrugsHistoryActions()
 {
     if ( m_HistoryAct )
         delete m_HistoryAct;
 
     m_HistoryAct = new QActionGroup( this );
-    foreach( QString s, tkSettings::instance()->value( MFDRUGS_SETTING_DRUGHISTORY ).toStringList() ) {
+    foreach( QString s, Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_DRUGHISTORY ).toStringList() ) {
         QAction * a = new QAction( s.left( s.lastIndexOf( "," ) ).left( 70 ) + "..." , m_HistoryAct );
         a->setToolTip( s );
         m_HistoryAct->addAction ( a );
@@ -196,7 +197,7 @@ void mfDrugSelector::createDrugsHistoryActions()
     m_DrugsHistoricButton->addActions( m_HistoryAct->actions() );
 }
 
-void mfDrugSelector::createConnections()
+void DrugSelector::createConnections()
 {
     // connect line edit with model filter
     connect( searchLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( updateModel() ) );
@@ -206,7 +207,7 @@ void mfDrugSelector::createConnections()
 //    connect( searchDCIAct, SIGNAL( triggered() ), this, SLOT( changeDrugsModelFilter() ) );
 }
 
-void mfDrugSelector::historyAct_triggered( QAction * action )
+void DrugSelector::historyAct_triggered( QAction * action )
 {
     // action tooltip == full drug name
     //    searchLine->setText( action->toolTip() );
@@ -214,13 +215,13 @@ void mfDrugSelector::historyAct_triggered( QAction * action )
     QHashWhere where;
     where.insert( CIS_COMMERCIALISATION, "='O'" );
     where.insert( CIS_DENOMINATION , QString( "= \"%1\"" ).arg( action->toolTip() ) );
-    m_DrugsModel->setFilter( mfDrugsBase::instance()->getWhereClause( Table_CIS, where ));
+    m_DrugsModel->setFilter( DrugsBase::instance()->getWhereClause( Table_CIS, where ));
 }
 
 //--------------------------------------------------------------------------------------------------------
-//-------------------------------------- mfDrugSelector private slots -------------------------------------
+//-------------------------------------- DrugSelector private slots -------------------------------------
 //--------------------------------------------------------------------------------------------------------
-void mfDrugSelector::retranslateUi( const QString & )
+void DrugSelector::retranslateUi( const QString & )
 {
     if ( m_DrugsModel ) {
         m_DrugsModel->setHeaderData( 1, Qt::Horizontal, tr( "Short Name" ) );
@@ -229,7 +230,7 @@ void mfDrugSelector::retranslateUi( const QString & )
     }
 }
 
-void mfDrugSelector::setSearchMethod(int method)
+void DrugSelector::setSearchMethod(int method)
 {
     if ( method == mfDrugsConstants::SearchCommercial ) {
         m_filterModel = "";
@@ -238,7 +239,7 @@ void mfDrugSelector::setSearchMethod(int method)
         QHashWhere where;
         where.insert( CIS_COMMERCIALISATION, "='O'" );
         where.insert( CIS_DENOMINATION , "LIKE '__replaceit__%'" );
-        m_filterModel = mfDrugsBase::instance()->getWhereClause( Table_CIS, where );
+        m_filterModel = DrugsBase::instance()->getWhereClause( Table_CIS, where );
     }
     else if ( method == mfDrugsConstants::SearchMolecules ) {
         m_filterModel = "";
@@ -247,7 +248,7 @@ void mfDrugSelector::setSearchMethod(int method)
         // retreive all CIS for the searched molecule
         QHashWhere where;
         where.insert( COMPO_DENOMINATION , "LIKE '__replaceit__%'" );
-        m_filterModel = mfDrugsBase::instance()->selectDistinct( Table_COMPO, COMPO_CIS , where );
+        m_filterModel = DrugsBase::instance()->selectDistinct( Table_COMPO, COMPO_CIS , where );
 //        m_filterModel += QString( "SELECT DISTINCT %1 FROM %2 WHERE %3" )
 //                         .arg( mfDrugsTables::getField( mfDrugsTables::COMPO_CIS ) )
 //                         .arg( mfDrugsTables::getTable( mfDrugsTables::Table_COMPO ) )
@@ -256,7 +257,7 @@ void mfDrugSelector::setSearchMethod(int method)
         where.clear();
         where.insert( CIS_COMMERCIALISATION, "='O'" );
         where.insert( CIS_CIS , QString( "IN ( %1 ) " ).arg( m_filterModel ) );
-        m_filterModel = mfDrugsBase::instance()->getWhereClause( Table_CIS, where );
+        m_filterModel = DrugsBase::instance()->getWhereClause( Table_CIS, where );
     }
     else if ( method == mfDrugsConstants::SearchInn ) {
         m_filterModel = "";
@@ -267,7 +268,7 @@ void mfDrugSelector::setSearchMethod(int method)
         // retreive all CIS for the searched inn
         QHashWhere where;
         where.insert( COMPO_CODE_SUBST , "IN ( __replaceit__ )" );
-        m_filterModel += mfDrugsBase::instance()->selectDistinct( Table_COMPO, COMPO_CIS, where );
+        m_filterModel += DrugsBase::instance()->selectDistinct( Table_COMPO, COMPO_CIS, where );
 //        m_filterModel += QString( "SELECT DISTINCT %1 FROM %2 WHERE %3" )
 //                         .arg( mfDrugsTables::getField( mfDrugsTables::COMPO_CIS ) )
 //                         .arg( mfDrugsTables::getTable( mfDrugsTables::Table_COMPO ) )
@@ -276,18 +277,18 @@ void mfDrugSelector::setSearchMethod(int method)
         where.clear();
         where.insert( CIS_COMMERCIALISATION, "='O'" );
         where.insert( CIS_CIS , QString( "IN ( %1 ) " ).arg( m_filterModel ) );
-        m_filterModel = mfDrugsBase::instance()->getWhereClause( Table_CIS, where );
+        m_filterModel = DrugsBase::instance()->getWhereClause( Table_CIS, where );
     }
 
     // store search method into qApp
-    if (tkSettings::instance())
-        tkSettings::instance()->setValue( MFDRUGS_SETTING_SEARCHMETHOD, m_SearchMethod );
+    if (Core::ICore::instance()->settings())
+        Core::ICore::instance()->settings()->setValue( MFDRUGS_SETTING_SEARCHMETHOD, m_SearchMethod );
 
     // update model
     updateModel();
 }
 
-void mfDrugSelector::updateModel()
+void DrugSelector::updateModel()
 {
     if ( searchLine->searchText().isEmpty() ) {
         m_DrugsModel->setFilter( "" );
@@ -302,9 +303,9 @@ void mfDrugSelector::updateModel()
         // refresh inn view and model
         QHashWhere where;
         where.insert( IAM_DENOMINATION , QString( "LIKE '%1%' " ).arg( search ) );
-        m_InnModel->setFilter(  mfDrugsBase::instance()->getWhereClause( Table_IAM_DENOMINATION, where ) );
+        m_InnModel->setFilter(  DrugsBase::instance()->getWhereClause( Table_IAM_DENOMINATION, where ) );
         // retreive code_subst associated with searched text
-        QList<int> codes = mfDrugsBase::instance()->getLinkedSubstCode( search );
+        QList<int> codes = DrugsBase::instance()->getLinkedSubstCode( search );
         QString list = "";
         foreach( int i, codes )
             list += QString::number( i ) + ", " ;
@@ -313,7 +314,7 @@ void mfDrugSelector::updateModel()
     }
 }
 
-void mfDrugSelector::on_InnView_clicked( const QModelIndex & index )
+void DrugSelector::on_InnView_clicked( const QModelIndex & index )
 {
     if (m_SearchMethod != mfDrugsConstants::SearchInn)
         return;
@@ -324,7 +325,7 @@ void mfDrugSelector::on_InnView_clicked( const QModelIndex & index )
     QString inn = index.data().toString();
     // retreive code_subst associated with searched text
     QString tmp = m_filterModel;
-    QList<int> codes = mfDrugsBase::instance()->getLinkedSubstCode( inn );
+    QList<int> codes = DrugsBase::instance()->getLinkedSubstCode( inn );
     QString list = "";
     foreach( int i, codes )
         list += QString::number( i ) + ", " ;
@@ -332,7 +333,7 @@ void mfDrugSelector::on_InnView_clicked( const QModelIndex & index )
     m_DrugsModel->setFilter( tmp.replace( "__replaceit__", list ) );
 }
 
-void mfDrugSelector::on_drugsView_doubleClicked( const QModelIndex & index )
+void DrugSelector::on_drugsView_doubleClicked( const QModelIndex & index )
 {
     // retreive CIS of drug and emit signal
     if ( !index.isValid() )
@@ -341,12 +342,12 @@ void mfDrugSelector::on_drugsView_doubleClicked( const QModelIndex & index )
     int selectedCIS = rec.value( 0 ).toInt();
 
     // store drug into history
-    QStringList hist = tkSettings::instance()->value( MFDRUGS_SETTING_DRUGHISTORY ).toStringList();
+    QStringList hist = Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_DRUGHISTORY ).toStringList();
     hist.removeAll( index.data().toString() );
-    if (hist.count() && ( hist.count() == tkSettings::instance()->value( MFDRUGS_SETTING_HISTORYSIZE ).toInt() ) )
+    if (hist.count() && ( hist.count() == Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_HISTORYSIZE ).toInt() ) )
         hist.removeFirst();
     hist << index.data().toString();
-    tkSettings::instance()->setValue( MFDRUGS_SETTING_DRUGHISTORY, hist );
+    Core::ICore::instance()->settings()->setValue( MFDRUGS_SETTING_DRUGHISTORY, hist );
 
     // refresh drug history
     createDrugsHistoryActions();

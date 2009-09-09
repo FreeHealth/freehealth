@@ -41,10 +41,6 @@
 #ifndef MFDOSAGECREATORDIALOG_H
 #define MFDOSAGECREATORDIALOG_H
 
-// include drugwidget headers
-class mfDosageModel;
-class mfDosageCreatorDialogPrivate;
-
 // include Qt headers
 #include <QtGlobal>
 QT_BEGIN_NAMESPACE
@@ -57,18 +53,23 @@ QT_END_NAMESPACE
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 24 March 2009
+ * \version 0.0.8
+ * \date 09 Sept 2009
 */
 
-class mfDosageCreatorDialog : public QDialog, public Ui::mfDosageCreatorDialog
+namespace Drugs {
+namespace Internal {
+class DosageModel;
+class DosageCreatorDialogPrivate;
+
+class DosageCreatorDialog : public QDialog, public Ui::DosageCreatorDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY( mfDosageCreatorDialog );
+    Q_DISABLE_COPY(DosageCreatorDialog);
 
 public:
-    explicit mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel );
-    ~mfDosageCreatorDialog();
+    explicit DosageCreatorDialog( QWidget *parent, DosageModel *dosageModel );
+    ~DosageCreatorDialog();
 
 private Q_SLOTS:
     void done( int r );
@@ -79,7 +80,11 @@ private Q_SLOTS:
     void on_testOnlyButton_clicked();
 
 private:
-    mfDosageCreatorDialogPrivate *d;
+    DosageCreatorDialogPrivate *d;
 };
+
+}  // End Internal
+}  // End Drugs
+
 
 #endif // MFDOSAGECREATORDIALOG_H

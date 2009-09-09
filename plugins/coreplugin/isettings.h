@@ -101,6 +101,8 @@ public:
     virtual void setValue ( const QString & key, const QVariant & value ) = 0;
     virtual QVariant value ( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
 
+    virtual void sync() = 0;
+
     // paths
     virtual void setPath( const int type, const QString & absPath ) = 0;
     virtual QString path( const int type ) const = 0;

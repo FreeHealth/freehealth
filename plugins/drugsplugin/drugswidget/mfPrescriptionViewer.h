@@ -41,10 +41,6 @@
 #ifndef MFPRESCRIPTIONVIEWER_H
 #define MFPRESCRIPTIONVIEWER_H
 
-#include <tkContext.h>
-#include <tkUniqueIdentifier.h>
-class mfDrugsModel;
-
 #include <QWidget>
 #include <QAction>
 #include <QToolBar>
@@ -60,20 +56,24 @@ class mfDrugsModel;
  * \brief
 */
 
+namespace Drugs {
+namespace Internal {
+class DrugsModel;
+
 /**
  \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
  Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
  \ingroup freediams drugswidget
   */
-class mfPrescriptionViewer : public QWidget, private Ui::mfPrescriptionViewer
+class PrescriptionViewer : public QWidget, private Ui::PrescriptionViewer
 {
     Q_OBJECT
-    Q_DISABLE_COPY(mfPrescriptionViewer)
+    Q_DISABLE_COPY(PrescriptionViewer)
 public:
-    explicit mfPrescriptionViewer(QWidget *parent = 0);
+    explicit PrescriptionViewer(QWidget *parent = 0);
     void initialize();
     QListView *listview();
-    void setModel( mfDrugsModel *model );
+    void setModel( DrugsModel *model );
     void setModelColumn( const int col );
     void setListViewPadding( const int pad );
 
@@ -100,5 +100,8 @@ public Q_SLOTS:
 private:
     QToolBar *m_ToolBar;               // drugslist widget's toolbar
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFPRESCRIPTIONVIEWER_H

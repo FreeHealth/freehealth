@@ -55,7 +55,6 @@
 #include "mfDosageViewer.h"
 
 // include drugwidget headers
-//#include <drugsmodel/mfDosage.h>
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDosageModel.h>
 #include <drugsmodel/mfDrugsModel.h>
@@ -63,11 +62,15 @@
 #include <mfDrugsManager.h>
 
 // include toolkit
-#include <tkLog.h>
-#include <tkStringListModel.h>
-#include <tkTheme.h>
-#include <tkSettings.h>
-#include <tkConstantTranslations.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <listviewplugin/stringlistmodel.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+
 
 // include Qt headers
 #include <QHeaderView>
@@ -82,17 +85,19 @@ using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
-Q_TK_USING_CONSTANTS
-Q_TK_USING_TRANSLATIONS
+using namespace Drugs::Internal;
+
+namespace Drugs {
+namespace Internal {
 
 /**
   \brief Private part
   \internal
 */
-class mfDosageViewerPrivate
+class DosageViewerPrivate
 {
 public:
-    mfDosageViewerPrivate(mfDosageViewer *parent) :
+    DosageViewerPrivate(DosageViewer *parent) :
             m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_Parent(parent) {}
 
     void setCheckBoxStateToModel( const int index, const int qtCheckState )
@@ -103,7 +108,7 @@ public:
             else
                 m_DosageModel->setData( m_DosageModel->index( m_Mapper->currentIndex(), index), false );
         } else {
-            mfDrugsModel *m = DRUGMODEL;
+            DrugsModel *m = DRUGMODEL;
             if (qtCheckState==Qt::Checked)
                 m->setDrugData( m_CIS, index, true );
             else
@@ -186,7 +191,7 @@ public:
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = DRUGMODEL;
+        DrugsModel *m = DRUGMODEL;
         if (m_DosageModel) {
             // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
             // Need to be filled by hand the comboboxes...
@@ -259,7 +264,7 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = DRUGMODEL;
+        DrugsModel *m = DRUGMODEL;
         m_Parent->labelOfDosageLabel->setToolTip(m->drugData( m_CIS, Drug::AvailableDosages).toString() );
 //        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
 //        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
@@ -274,30 +279,30 @@ public:
     void resetUiToDefaults()
     {
         Q_ASSERT(m_Parent);
-        mfDrugsModel *m = DRUGMODEL;
+        DrugsModel *m = DRUGMODEL;
         m_Parent->intakesToLabel->hide();
         m_Parent->intakesToSpin->hide();
         m_Parent->durationToLabel->hide();
         m_Parent->durationToSpin->hide();
         // Prepare some combos
         m_Parent->durationCombo->clear();
-        m_Parent->durationCombo->addItems( periods() );
-        m_Parent->durationCombo->setCurrentIndex( Time::Months );
+        m_Parent->durationCombo->addItems( Trans::ConstantTranslations::periods() );
+        m_Parent->durationCombo->setCurrentIndex( Trans::Constants::Time::Months );
         m_Parent->periodSchemeCombo->clear();
-        m_Parent->periodSchemeCombo->addItems( periods() );
-        m_Parent->periodSchemeCombo->setCurrentIndex( Time::Days );
+        m_Parent->periodSchemeCombo->addItems( Trans::ConstantTranslations::periods() );
+        m_Parent->periodSchemeCombo->setCurrentIndex( Trans::Constants::Time::Days );
         m_Parent->intervalTimeSchemeCombo->clear();
-        m_Parent->intervalTimeSchemeCombo->addItems( periods() );
-        m_Parent->intervalTimeSchemeCombo->setCurrentIndex( Time::Days );
+        m_Parent->intervalTimeSchemeCombo->addItems( Trans::ConstantTranslations::periods() );
+        m_Parent->intervalTimeSchemeCombo->setCurrentIndex( Trans::Constants::Time::Days );
         m_Parent->intakesCombo->addItems(m->drugData(m_CIS, Drug::AvailableForms).toStringList());
         m_Parent->intakesCombo->setCurrentIndex(0);
         m_Parent->mealTimeCombo->clear();
-        m_Parent->mealTimeCombo->addItems( mealTime() );
+        m_Parent->mealTimeCombo->addItems( Trans::ConstantTranslations::mealTime() );
 
         m_Parent->minAgeCombo->clear();
-        m_Parent->minAgeCombo->addItems( preDeterminedAges() );
+        m_Parent->minAgeCombo->addItems( Trans::ConstantTranslations::preDeterminedAges() );
         m_Parent->maxAgeCombo->clear();
-        m_Parent->maxAgeCombo->addItems( preDeterminedAges() );
+        m_Parent->maxAgeCombo->addItems( Trans::ConstantTranslations::preDeterminedAges() );
 
         m_Parent->hourlyTableWidget->verticalHeader()->hide();
         m_Parent->hourlyTableWidget->horizontalHeader()->hide();
@@ -328,7 +333,7 @@ public:
     bool dosageCanLinkWithInn()
     {
         if (m_DosageModel) {
-            mfDrugsModel *m = DRUGMODEL;
+            DrugsModel *m = DRUGMODEL;
             return ((m->drugData(m_CIS, Drug::MainInnCode).toInt()!=-1) &&
                     (m->drugData(m_CIS,Drug::AllInnsKnown).toBool()));
         }
@@ -337,37 +342,39 @@ public:
 
 public:
     QDataWidgetMapper  *m_Mapper;
-    mfDosageModel      *m_DosageModel;
+    DosageModel        *m_DosageModel;
     QString             m_ActualDosageUuid;
     int                 m_CIS;
 private:
-    mfDosageViewer *m_Parent;
+    DosageViewer *m_Parent;
 };
 
+}  // End Internal
+}  // End Drugs
 
 
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
  \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
-mfDosageViewer::mfDosageViewer( QWidget *parent )
+DosageViewer::DosageViewer( QWidget *parent )
     : QWidget( parent ),
     d(0)
 {
     // some initializations
-    setObjectName( "mfDosageViewer" );
-    d = new mfDosageViewerPrivate(this);
+    setObjectName( "DosageViewer" );
+    d = new DosageViewerPrivate(this);
 
     // Ui initialization
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
-    userformsButton->setIcon( tkTheme::icon(ICONEDIT) );
+    userformsButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT) );
     // remove last page of tabWidget (TODO page)
     tabWidget->removeTab(tabWidget->count()-1);
 
     // this must be done here
-    tkStringListModel * stringModel = new tkStringListModel( this );
-    stringModel->setStringList( dailySchemeList() );
+    Views::StringListModel * stringModel = new Views::StringListModel( this );
+    stringModel->setStringList( Trans::ConstantTranslations::dailySchemeList() );
     stringModel->setCheckable(true);
     dailySchemeListView->setModel( stringModel );
     dailySchemeListView->hideButtons();
@@ -375,7 +382,7 @@ mfDosageViewer::mfDosageViewer( QWidget *parent )
 }
 
 /** \brief Use this function to define a drugsModel behavior. */
-void mfDosageViewer::useDrugsModel(const int CIS, const int drugRow)
+void DosageViewer::useDrugsModel(const int CIS, const int drugRow)
 {
     Q_ASSERT(DRUGMODEL->containsDrug(CIS));
     d->m_CIS = CIS;
@@ -387,7 +394,7 @@ void mfDosageViewer::useDrugsModel(const int CIS, const int drugRow)
 }
 
 /** \brief Use this function to define a dosageModel behavior. */
-void mfDosageViewer::setDosageModel( mfDosageModel *model )
+void DosageViewer::setDosageModel( DosageModel *model )
 {
     Q_ASSERT(model);
     d->m_DosageModel = model;
@@ -405,14 +412,14 @@ void mfDosageViewer::setDosageModel( mfDosageModel *model )
 }
 
 /** \brief Destructor */
-mfDosageViewer::~mfDosageViewer()
+DosageViewer::~DosageViewer()
 {
     if (d) delete d;
     d=0;
 }
 
 /** \brief Changes the current editing dosage */
-void mfDosageViewer::changeCurrentRow(const int dosageRow)
+void DosageViewer::changeCurrentRow(const int dosageRow)
 {
     // manage non mapped datas
     if (dosageRow==d->m_Mapper->currentIndex())
@@ -424,7 +431,7 @@ void mfDosageViewer::changeCurrentRow(const int dosageRow)
 }
 
 /** \brief Changes the current editing dosage */
-void mfDosageViewer::changeCurrentRow(const QModelIndex &item )
+void DosageViewer::changeCurrentRow(const QModelIndex &item )
 {
     changeCurrentRow(item.row());
 }
@@ -433,27 +440,27 @@ void mfDosageViewer::changeCurrentRow(const QModelIndex &item )
    \brief When dialog including mfDosageViewer is validate call this member with the result of the dialog.
    It stores some values inside the users settings.
 */
-void mfDosageViewer::done(int r)
+void DosageViewer::done(int r)
 {
     if ( r == QDialog::Accepted ) {
         // match the user's form for the settings
-        const QStringList &pre = mfDosageModel::predeterminedForms();
+        const QStringList &pre = DosageModel::predeterminedForms();
         const QStringList &av  = DRUGMODEL->drugData(d->m_CIS,Drug::AvailableForms).toStringList();
         if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
             ( av.indexOf(intakesCombo->currentText()) == -1 )) {
-            tkSettings::instance()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
+            Core::ICore::instance()->settings()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
         }
     }
 }
 
 /** \brief Used for hourly table widget resizing */
-void mfDosageViewer::resizeEvent( QResizeEvent * event )
+void DosageViewer::resizeEvent( QResizeEvent * event )
 {
     d->resizeTableWidget();
     QWidget::resizeEvent( event );
 }
 
-void mfDosageViewer::on_fromToIntakesCheck_stateChanged(int state)
+void DosageViewer::on_fromToIntakesCheck_stateChanged(int state)
 {
     if (d->m_DosageModel)
         d->setCheckBoxStateToModel( Dosage::IntakesUsesFromTo, state);
@@ -461,7 +468,7 @@ void mfDosageViewer::on_fromToIntakesCheck_stateChanged(int state)
         d->setCheckBoxStateToModel( Prescription::IntakesUsesFromTo, state);
 }
 
-void mfDosageViewer::on_fromToDurationCheck_stateChanged(int state)
+void DosageViewer::on_fromToDurationCheck_stateChanged(int state)
 {
     if (d->m_DosageModel)
         d->setCheckBoxStateToModel( Dosage::DurationUsesFromTo, state );
@@ -470,7 +477,7 @@ void mfDosageViewer::on_fromToDurationCheck_stateChanged(int state)
 }
 
 /** \brief Redefine the minimum of the "to" intakes */
-void mfDosageViewer::on_intakesFromSpin_valueChanged( double d  )
+void DosageViewer::on_intakesFromSpin_valueChanged( double d  )
 {
     if (intakesToSpin->value() < d) {
         intakesToSpin->setValue( d );
@@ -479,7 +486,7 @@ void mfDosageViewer::on_intakesFromSpin_valueChanged( double d  )
 }
 
 /** \brief Redefine the minimum of the "to" duration */
-void mfDosageViewer::on_durationFromSpin_valueChanged( double d )
+void DosageViewer::on_durationFromSpin_valueChanged( double d )
 {
     if (durationToSpin->value() < d) {
         durationToSpin->setValue( d );
@@ -488,12 +495,12 @@ void mfDosageViewer::on_durationFromSpin_valueChanged( double d )
 }
 
 /** \brief Show a menu with the user recorded forms */
-void mfDosageViewer::on_userformsButton_clicked()
+void DosageViewer::on_userformsButton_clicked()
 {
-    if (tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS, QVariant()).isNull())
+    if (Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS, QVariant()).isNull())
         return;
 
-    const QStringList &ulist = tkSettings::instance()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
+    const QStringList &ulist = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
     QList<QAction*> list;
     foreach( const QString &form, ulist ) {
         if (!form.isEmpty())
@@ -506,7 +513,7 @@ void mfDosageViewer::on_userformsButton_clicked()
     if (!a)
         return;
     if (a == aclear) {
-        tkSettings::instance()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
+        Core::ICore::instance()->settings()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
     } else {
         intakesCombo->setEditText(a->text());
         if (d->m_DosageModel)
@@ -517,9 +524,9 @@ void mfDosageViewer::on_userformsButton_clicked()
 }
 
 /** \brief If INN linking is available, shows the inn name and the dosage used for the link */
-void mfDosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
+void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
 {
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     if (d->m_DosageModel) {
         // INN Prescription ?
         int row = d->m_Mapper->currentIndex();
@@ -543,7 +550,7 @@ void mfDosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
         innCompositionLabel->hide();
 }
 
-void mfDosageViewer::on_aldCheck_stateChanged(int state)
+void DosageViewer::on_aldCheck_stateChanged(int state)
 {
     if (d->m_DosageModel)
         d->setCheckBoxStateToModel( Dosage::IsALD, state );

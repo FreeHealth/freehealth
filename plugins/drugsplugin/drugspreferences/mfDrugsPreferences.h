@@ -42,8 +42,6 @@
 #define MFDRUGSPREFERENCES_H
 
 #include <mfDrugsConstants.h>
-class tkSettings;
-class tkPrinterPreviewer;
 
 #include "ui_mfDrugsPreferences.h"
 
@@ -54,28 +52,42 @@ class tkPrinterPreviewer;
  * \date 17 June 2009
 */
 
+namespace Core {
+class ISettings;
+}
+
+namespace Print {
+class PrinterPreviewer;
+}
+
+namespace Drugs {
+namespace Internal {
+
 /**
  \brief Preferences widget for mfDrugsWidget plugins.
  \ingroup freediams drugswidget
 */
-class mfDrugsPreferences : public QWidget, private Ui::mfDrugsPreferences
+class DrugsPreferences : public QWidget, private Ui::DrugsPreferences
 {
     Q_OBJECT
-    Q_DISABLE_COPY(mfDrugsPreferences)
+    Q_DISABLE_COPY(DrugsPreferences)
 
 public:
-    explicit mfDrugsPreferences(QWidget *parent = 0);
+    explicit DrugsPreferences(QWidget *parent = 0);
 
-    static void writeDefaultSettings( tkSettings *s );
+    static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:
-    void saveToSettings( tkSettings *s = 0 );
+    void saveToSettings( Core::ISettings *s = 0 );
 
 protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    tkPrinterPreviewer *previewer;
+    Print::PrinterPreviewer *previewer;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFDRUGSPREFERENCES_H

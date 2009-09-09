@@ -41,18 +41,20 @@
 #ifndef MFDOSAGEDIALOG_H
 #define MFDOSAGEDIALOG_H
 
-// include drugwidget headers
-class mfDosageDialogPrivate;
-
 // include Ui
 #include "ui_mfDosageDialog.h"
 
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.14
- * \date 01 July 2009
+ * \version 0.0.16
+ * \date 09 Sept 2009
 */
+
+namespace Drugs {
+namespace Internal {
+class DosageDialogPrivate;
+
 
 /**
  * \brief Dialog for dosage prescription based on a standard dosage set.
@@ -62,14 +64,14 @@ class mfDosageDialogPrivate;
  * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
  \ingroup freediams drugswidget
 */
-class mfDosageDialog : public QDialog, public Ui::mfDosageDialog
+class DosageDialog : public QDialog, public Ui::DosageDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY( mfDosageDialog );
+    Q_DISABLE_COPY(DosageDialog);
 
 public:
-    explicit mfDosageDialog(QWidget *parent);
-    ~mfDosageDialog();
+    explicit DosageDialog(QWidget *parent);
+    ~DosageDialog();
 
     void changeRow( const int drugRow , const int dosageRow );
 
@@ -80,7 +82,10 @@ private Q_SLOTS:
     void on_innButton_clicked();
 
 private:
-    mfDosageDialogPrivate *d;
+    DosageDialogPrivate *d;
 };
+
+} // namespace Internal
+} // namespace Drugs
 
 #endif // MFDOSAGEDIALOG_H

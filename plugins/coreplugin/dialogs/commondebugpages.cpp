@@ -75,7 +75,7 @@ QWidget *LogErrorDebugPage::widget()
     layout->setSpacing(0);
     layout->setMargin(0);
     QTreeWidget *tree = new QTreeWidget(m_Widget);
-    tree->header()->hide();
+//    tree->header()->hide();
     Utils::Log::errorsToTreeWidget(tree, true);
     layout->addWidget(tree);
     return m_Widget;
@@ -130,7 +130,7 @@ QWidget *SettingDebugPage::widget()
     layout->setSpacing(0);
     layout->setMargin(0);
     QTreeWidget *tree = new QTreeWidget(m_Widget);
-    tree->header()->hide();
+//    tree->header()->hide();
     layout->addWidget(tree);
     Core::ICore::instance()->settings()->getTreeWidget(tree);
     return m_Widget;

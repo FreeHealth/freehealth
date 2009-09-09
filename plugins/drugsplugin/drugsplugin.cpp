@@ -1,9 +1,11 @@
 #include "drugsplugin.h"
+#include "drugswidgetfactory.h"
 
 #include <extensionsystem/pluginmanager.h>
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <QtCore/QtPlugin>
 
+#include <coreplugin/dialogs/pluginaboutpage.h>
+
+#include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Drugs::Internal;
@@ -24,6 +26,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 void DrugsPlugin::extensionsInitialized()
 {
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
+    addAutoReleasedObject(new Drugs::DrugsWidgetsFactory(this));
 }
 
 void DrugsPlugin::remoteArgument(const QString& arg)

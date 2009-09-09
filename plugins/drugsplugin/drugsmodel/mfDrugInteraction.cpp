@@ -39,7 +39,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class mfDrugInteraction
+  \class DrugInteraction
   \brief Drugs Interaction class.
   This class is a 'data class'. It only holds datas about interactions.\n
   You can statically :
@@ -63,16 +63,17 @@
 #include <drugsmodel/mfDrugs.h>
 #include <mfDrugsConstants.h>
 
-// include toolkit headers
-#include <tkLog.h>
-#include <tkTheme.h>
+#include <utils/log.h>
+#include <coreplugin/itheme.h>
 
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
+using namespace Drugs::Internal;
+
 /** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
-void mfDrugInteraction::setValue( const int fieldref, const QVariant & value )
+void DrugInteraction::setValue( const int fieldref, const QVariant & value )
 {
     if ( fieldref == IAM_TYPE )
     {
@@ -101,7 +102,7 @@ void mfDrugInteraction::setValue( const int fieldref, const QVariant & value )
 }
 
 /** \brief Get values of the interaction class. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
-QVariant mfDrugInteraction::value( const int fieldref ) const
+QVariant DrugInteraction::value( const int fieldref ) const
 {
      if ( fieldref == IAM_TYPE )
           return typeOfIAM( m_Infos.value( fieldref ).toInt() );
@@ -112,7 +113,7 @@ QVariant mfDrugInteraction::value( const int fieldref ) const
 }
 
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
-QString mfDrugInteraction::typeToString( const int t )
+QString DrugInteraction::typeToString( const int t )
 {
      QStringList tmp;
      Interaction::TypesOfIAM r = Interaction::TypesOfIAM( t );
@@ -131,13 +132,13 @@ QString mfDrugInteraction::typeToString( const int t )
 }
 
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
-QString mfDrugInteraction::typeOfIAM( const int & t ) const
+QString DrugInteraction::typeOfIAM( const int & t ) const
 {
     return typeToString(t);
 }
 
 /** \brief Returns the type of interactions. Type refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
-Interaction::TypesOfIAM mfDrugInteraction::type() const
+Interaction::TypesOfIAM DrugInteraction::type() const
 {
      if ( m_Infos.uniqueKeys().contains( IAM_TYPE ) )
           return Interaction::TypesOfIAM( m_Infos.value( IAM_TYPE ).toInt() );
@@ -145,34 +146,34 @@ Interaction::TypesOfIAM mfDrugInteraction::type() const
           return Interaction::TypesOfIAM( 0 );
 }
 
-QList<mfDrugs*> mfDrugInteraction::drugs() const
+QList<DrugsData *> DrugInteraction::drugs() const
 {
     return m_InteractingDrugs;
 }
 
 /** \brief for debugging purpose */
-void mfDrugInteraction::warn() const
+void DrugInteraction::warn() const
 {
      qWarning() << "mfDrugsInteraction Warning";
      foreach( const int i, m_Infos.keys() )
          qWarning() << i << m_Infos.value(i).toString();
-     foreach(mfDrugs* dr, m_InteractingDrugs)
+     foreach(DrugsData * dr, m_InteractingDrugs)
          qWarning() << "drug" << dr->denomination();
 }
 
-QString mfDrugInteraction::header() const
+QString DrugInteraction::header() const
 {
     return value( IAM_MAIN ).toString() + " - " + value( IAM_INTERACTOR ).toString() ;
 }
 
 /** \brief Returns the information's text of the interaction */
-QString mfDrugInteraction::information() const
+QString DrugInteraction::information() const
 {
     return value( IAM_TEXT_IAM ).toString();
 }
 
 /** \brief Returns the recommandation's text of the interaction */
-QString mfDrugInteraction::whatToDo() const
+QString DrugInteraction::whatToDo() const
 {
     return value( IAM_TEXT_CAT ).toString();
 }

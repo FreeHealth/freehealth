@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mfInteractionDialog</class>
- <widget class="QDialog" name="mfInteractionDialog">
+ <class>Drugs::Internal::InteractionDialog</class>
+ <widget class="QDialog" name="Drugs::Internal::InteractionDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -91,7 +91,7 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>mfInteractionDialog</receiver>
+   <receiver>Drugs::Internal::InteractionDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">

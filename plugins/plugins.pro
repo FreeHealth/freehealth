@@ -8,7 +8,7 @@ SUBDIRS = \
     listview \
     texteditor \
     aggir \
-#    drugs
+    drugs
 
 core.subdir = fmfcoreplugin
 

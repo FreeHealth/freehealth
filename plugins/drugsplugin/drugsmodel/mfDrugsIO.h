@@ -41,8 +41,6 @@
 #ifndef MFDRUGSIO_H
 #define MFDRUGSIO_H
 
-class mfDrugsIOPrivate;
-
 #include <QObject>
 #include <QHash>
 #include <QString>
@@ -53,8 +51,13 @@ class mfDrugsIOPrivate;
  * \version 0.0.3
  * \date 13 July 2009
 */
+namespace Drugs {
+namespace Internal {
+class DrugsData;
+class DrugsIOPrivate;
 
-class mfDrugsIO : public QObject
+
+class DrugsIO : public QObject
 {
     Q_OBJECT
 public:
@@ -63,8 +66,8 @@ public:
         ReplacePrescription
     };
 
-    static mfDrugsIO *instance(QObject *parent=0);
-    ~mfDrugsIO();
+    static DrugsIO *instance(QObject *parent=0);
+    ~DrugsIO();
 
     bool startsDosageTransmission();
     static bool isSendingDosage();
@@ -81,7 +84,7 @@ public:
     static QString prescriptionToHtml();
 
 private:
-    mfDrugsIO(QObject *parent);
+    DrugsIO(QObject *parent);
 
 private Q_SLOTS:
     void dosageTransmissionDone();
@@ -90,8 +93,11 @@ Q_SIGNALS:
     void transmissionDone();
 
 private:
-    static mfDrugsIO *m_Instance;
-    mfDrugsIOPrivate *d;
+    static DrugsIO *m_Instance;
+    DrugsIOPrivate *d;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif // MFDRUGSIO_H

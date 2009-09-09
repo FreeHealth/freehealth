@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mfDrugsPreferences</class>
- <widget class="QWidget" name="mfDrugsPreferences">
+ <class>Drugs::Internal::DrugsPreferences</class>
+ <widget class="QWidget" name="Drugs::Internal::DrugsPreferences">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -539,7 +539,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="tkRichTextEditor" name="ALDBefore" native="true"/>
+        <widget class="Editor::TextEditor" name="ALDBefore" native="true"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_16">
@@ -561,7 +561,7 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="tkRichTextEditor" name="ALDAfter" native="true"/>
+        <widget class="Editor::TextEditor" name="ALDAfter" native="true"/>
        </item>
       </layout>
      </widget>
@@ -578,9 +578,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tkRichTextEditor</class>
+   <class>Editor::TextEditor</class>
    <extends>QWidget</extends>
-   <header>tkRichTextEditor.h</header>
+   <header location="global">texteditorplugin/texteditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

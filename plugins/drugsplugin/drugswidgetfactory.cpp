@@ -38,26 +38,21 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "drugswidget.h"
+#include "drugswidgetfactory.h"
 
 // include drugswidget headers
 #include <drugsdatabase/mfDrugsBase.h>
 #include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugInfo.h>
+#include <drugswidget/druginfo.h>
 #include <drugspreferences/mfDrugsPreferences.h>
 #include <drugswidget/mfDrugsCentralWidget.h>
 
 // include FreeMedForms headers
 //#include <mfCore.h>
 #include <coreplugin/icore.h>
-//#include <mfSettings.h>
-
-//// include toolkit headers
-//#include <tkGlobal.h>
-//#include <tkTranslators.h>
-//#include <tkActionManager.h>
-//#include <tkConstantTranslations.h>
-//#include <tkTheme.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
+#include <coreplugin/iformitem.h>
 
 // include Qt headers
 #include <QStringList>
@@ -80,92 +75,93 @@ namespace mfDrugsWidgetPluginsPrivateConstants {
 
 using namespace mfDrugsWidgetPluginsPrivateConstants;
 using namespace Drugs;
+using namespace Drugs::Internal;
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget plugin interface ------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
+DrugsWidgetsFactory::DrugsWidgetsFactory(QObject *parent) :
         IFormWidgetFactory(parent)
 {
 }
 
-BaseWidgetsFactory::~BaseWidgetsFactory()
+DrugsWidgetsFactory::~DrugsWidgetsFactory()
 {
 }
 
-bool BaseWidgetsFactory::initialize(QWidget *parent)
-{
-    return true;
-}
-
-bool BaseWidgetsFactory::extensionInitialized(QWidget *parent)
+bool DrugsWidgetsFactory::initialize(const QStringList &arguments, QString *errorString)
 {
     return true;
 }
 
-
-QStringList BaseWidgetsFactory::providedWidgets() const
+bool DrugsWidgetsFactory::extensionInitialized()
 {
-     return QString("drugs");  /** \todo */
+    return true;
 }
 
-bool BaseWidgetsFactory::isContainer( const int idInStringList ) const
+
+QStringList DrugsWidgetsFactory::providedWidgets() const
+{
+     return QStringList() << "drugs";  /** \todo add more type of plugs ? */
+}
+
+bool DrugsWidgetsFactory::isContainer( const int idInStringList ) const
 {
     return false;
 }
 
-Core::IFormWidget *BaseWidgetsFactory::createWidget(QWidget *parent, QObject *linkedObject)
+Core::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent)
 {
-    return new DrugsWidget(parent,linkedObject);
+    return new DrugsWidget(linkedObject,parent);
 }
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- mfDrugsWidget implementation ------------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsWidget::DrugsWidget( QWidget *parent, QObject *linkedObject )
-          : IFormWidget(parent,linkedObject),
+DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
+          : IFormWidget(linkedObject,parent),
           m_PrescriptionModel(0)
 {
     // Add Translator to the Application
-    Core::ICore::translators()->addNewTranslator("mfDrugsWidget");
+    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 
     // Prepare Widget Layout and label
-    mfo->setParam( mfObject::Param_Options, "labelontop" );
-    QBoxLayout * hb = getBoxLayout( mfo, this );
+//    mfo->setParam( mfObject::Param_Options, "labelontop" );
+    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this );
     // Add QLabel
     hb->addWidget( m_Label );
-    if ( !( mfo->options() & mfObjectFundamental::LabelOnTop ) )
-    {
-        Qt::Alignment alignment = m_Label->alignment();
-        alignment &= ~( Qt::AlignVertical_Mask );
-        alignment |= Qt::AlignVCenter;
-        m_Label->setAlignment( alignment );
-    }
+//    if ( !( mfo->options() & mfObjectFundamental::LabelOnTop ) )
+//    {
+//        Qt::Alignment alignment = m_Label->alignment();
+//        alignment &= ~( Qt::AlignVertical_Mask );
+//        alignment |= Qt::AlignVCenter;
+//        m_Label->setAlignment( alignment );
+//    }
 
-    // Get options
-    const QStringList &options = mfo->param( mfObject::Param_Options ).toStringList();
-    if ( options.contains( OPTION_WITHPRESCRIBING, Qt::CaseInsensitive ) )
-        m_WithPrescribing = true;
-    if ( options.contains( OPTION_WITHPRINTING, Qt::CaseInsensitive ) )
-        m_WithPrinting = true;
+//    // Get options
+//    const QStringList &options = mfo->param( mfObject::Param_Options ).toStringList();
+//    if ( options.contains( OPTION_WITHPRESCRIBING, Qt::CaseInsensitive ) )
+//        m_WithPrescribing = true;
+//    if ( options.contains( OPTION_WITHPRINTING, Qt::CaseInsensitive ) )
+//        m_WithPrinting = true;
 
     // intialize drugs database
-    mfDrugsBase::instance();
+    DrugsBase::instance();
 
     // check settings
-    if (!mfCore::settings()->value(MFDRUGS_SETTING_CONFIGURED, false).toBool())
-        mfDrugsPreferences::writeDefaultSettings(mfCore::settings());
+    if (!Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_CONFIGURED, false).toBool())
+        DrugsPreferences::writeDefaultSettings(Core::ICore::instance()->settings());
 
     // create main widget
-    m_PrescriptionModel = new mfDrugsModel(this);
-    mfDrugsCentralWidget *centralWidget = new mfDrugsCentralWidget(this);
+    m_PrescriptionModel = new DrugsModel(this);
+    DrugsCentralWidget *centralWidget = new DrugsCentralWidget(this);
     centralWidget->initialize();
     hb->addWidget(centralWidget);
 
     createConnections();
 
-    centralWidget->changeFontTo( QFont(mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONT ).toString(),
-                                 mfCore::settings()->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
+    centralWidget->changeFontTo( QFont(Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_VIEWFONT ).toString(),
+                                 Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
 
     // Connect list selection changed with mfObject value changed
     //      connect( m_Combo, SIGNAL( activated ( int ) ),
@@ -178,11 +174,11 @@ DrugsWidget::DrugsWidget( QWidget *parent, QObject *linkedObject )
     //           updateWidget();
 }
 
-mfDrugsWidget::~mfDrugsWidget()
+DrugsWidget::~DrugsWidget()
 {
 }
 
-void mfDrugsWidget::createConnections()
+void DrugsWidget::createConnections()
 {
     //    tkActionManager *am = tkActionManager::instance();
     //    connect( am->action(A_FILE_OPEN), SIGNAL( triggered() ), this, SLOT( openPrescription() ) );
@@ -198,35 +194,8 @@ void mfDrugsWidget::createConnections()
     //    connect( m_PrescriptionView, SIGNAL(printTriggered()), this, SLOT(printPrescription()));
 }
 
-void mfDrugsWidget::createDefaultSettings( tkSettings *settings )
-{
-    mfDrugsPreferences::writeDefaultSettings(settings);
-}
+//void DrugsWidget::createDefaultSettings( Core::ISettings *settings )
+//{
+//    DrugsPreferences::writeDefaultSettings(settings);
+//}
 
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- mfDrugsWidget private slots -------------------------------------
-//----------------------------------------- for plugin interface -----------------------------------------
-//--------------------------------------------------------------------------------------------------------
-void mfDrugsWidget::updateWidget()
-{
-    //      if ( !m_Combo ) return;
-    //      m_Combo->disconnect();
-    //
-    //      connect( m_Combo,  SIGNAL( activated ( int ) ),
-    //               this ,    SLOT  ( updateObject( int ) ) );
-}
-
-void mfDrugsWidget::updateObject( int )
-{
-    //      m_Object->selectedValueChangedTo( id );
-}
-
-void mfDrugsWidget::retranslateUi( const QString & )
-{
-    //     if ( m_DrugsModel )
-    //     {
-    //          m_DrugsModel->setHeaderData( 1, Qt::Horizontal, tr( "Short Name" ) );
-    //          m_DrugsModel->setHeaderData( 2, Qt::Horizontal, tr( "Form" ) );
-    //          m_DrugsModel->setHeaderData( 3, Qt::Horizontal, tr( "Administration" ) );
-    //     }
-}

@@ -41,39 +41,34 @@
 #ifndef MFDRUGINFO_P_H
 #define MFDRUGINFO_P_H
 
-// include drugswidget headers
-class mfDrugs;
-class mfDrugInteraction;
-
-// include toolkit headers
-#include <tkSendMessage.h>
+#include <utils/messagesender.h>
 
 // include Qt headers
 #include <QDialog>
 #include <QObject>
 
 // include Ui
-#include "ui_mfDrugInfo.h"
+#include "ui_druginfo.h"
 
 
 /**
- * \file mfDrugsInfo.h
+ * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 31 Janv 2009
+ * \version 0.0.3
+ * \date 09 Sept 2009
 */
 
-/**
-  \brief Show a dialog with drugs informations and interactions founded.
-  This dialog allows user to send debugging datas.
-*/
+namespace Drugs {
+namespace Internal {
+class DrugsData;
+class DrugInteraction;
 
-class mfDrugInfoPrivate : public QObject, public Ui::mfDrugInfo
+class DrugInfoPrivate : public QObject, public Ui::DrugInfo
 {
      Q_OBJECT
 public:
-     mfDrugInfoPrivate( QDialog * parent );
-     ~mfDrugInfoPrivate() {}
+     DrugInfoPrivate(QDialog *parent);
+     ~DrugInfoPrivate() {}
 
      bool checkSent();
 
@@ -85,10 +80,13 @@ public Q_SLOTS:
 public:
      QDialog *m_Parent;
      int m_CIS;
-     tkSendMessage               m_Sender;
-     QList<mfDrugInteraction *>  m_InteractionsList;         // should not be deleted
-     bool                        m_INNSent, m_InteractSent;
+     Utils::MessageSender      m_Sender;
+     QList<DrugInteraction *>  m_InteractionsList;         // should not be deleted
+     bool                      m_INNSent, m_InteractSent;
 };
+
+}  // End Internal
+}  // End Drugs
 
 #endif  // MFDRUGINFO_P_H
 

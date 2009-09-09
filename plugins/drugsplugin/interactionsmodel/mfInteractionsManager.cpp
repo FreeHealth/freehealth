@@ -40,13 +40,13 @@
  ***************************************************************************/
 
 /**
-  \class mfInteractionsManager
+  \class InteractionsManager
   Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
   getLastIAMFound() and getAllIAMFound().
   You must always in first call interactions() with the list of drugs to test.
   Then you can retreive interactions found using the other members.
 
-  \sa mfDrugInteraction, mfDrugsBases
+  \sa DrugInteraction, mfDrugsBases
   \ingroup freediams drugswidget
 */
 
@@ -57,10 +57,9 @@
 #include <drugsdatabase/mfDrugsBase.h>
 #include <drugsmodel/mfDrugInteraction.h>
 
-// include toolkit headers
-#include <tkGlobal.h>
-#include <tkLog.h>
-#include <tkTheme.h>
+#include <utils/log.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 
 // include Qt headers
 #include <QCoreApplication>
@@ -81,7 +80,7 @@ using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
-namespace mfDrugInteractionConstants {
+namespace DrugInteractionConstants {
     const char* const  LIST_BASIC_INFO =
             "<tr>"
             "  <td><b>%1</b></td>\n"
@@ -105,80 +104,85 @@ namespace mfDrugInteractionConstants {
             "</table></span>\n";
 }
 
-using namespace mfDrugInteractionConstants;
+using namespace DrugInteractionConstants;
 
+using namespace Drugs::Internal;
 
+namespace Drugs {
+namespace Internal {
 
 /**
   \brief Private part of mfInteractionsManager
   \internal
 */
-class mfInteractionsManagerPrivate
+class InteractionsManagerPrivate
 {
 public:
-    mfInteractionsManagerPrivate() :
+    InteractionsManagerPrivate() :
             m_LogChrono(false)
     {
     }
 
-    ~mfInteractionsManagerPrivate()
+    ~InteractionsManagerPrivate()
     {
         qDeleteAll(m_DrugInteractionList);
     }
 
-    QList<mfDrugInteraction*> getDrugSpecificInteractions(const mfDrugs *drug) const
+    QList<DrugInteraction*> getDrugSpecificInteractions(const DrugsData *drug) const
     {
-        QList<mfDrugInteraction*> list;
-        foreach(mfDrugInteraction *i, m_DrugInteractionList) {
-            if (i->drugs().contains((mfDrugs*)drug))
+        QList<DrugInteraction*> list;
+        foreach(DrugInteraction *i, m_DrugInteractionList) {
+            if (i->drugs().contains((DrugsData*)drug))
                 list << i;
         }
         return list;
     }
 
 public:
-    QList<mfDrugInteraction*>  m_DrugInteractionList;      /*!< First filled by interactions()*/
-    QList<mfDrugs*>            m_DrugsList;
-    bool                       m_LogChrono;
+    QList<DrugInteraction*>  m_DrugInteractionList;      /*!< First filled by interactions()*/
+    QList<DrugsData *>       m_DrugsList;
+    bool                     m_LogChrono;
 };
+
+}  // End Internal
+}  // End Drugs
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------- Managing drugs interactions -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-mfInteractionsManager::mfInteractionsManager(QObject *parent) :
+InteractionsManager::InteractionsManager(QObject *parent) :
         QObject(parent), d(0)
 {
     static int handler = 0;
     ++handler;
-    d = new mfInteractionsManagerPrivate();
-    setObjectName("mfInteractionsManager_" + QString::number(handler));
-    tkLog::addMessage(this, "instance created");
+    d = new InteractionsManagerPrivate();
+    setObjectName("InteractionsManager" + QString::number(handler));
 
 }
 
-mfInteractionsManager::~mfInteractionsManager()
+InteractionsManager::~InteractionsManager()
 {
     if (d) delete d;
     d=0;
 }
 
-void mfInteractionsManager::setDrugsList(const QList<mfDrugs*> &list)
+void InteractionsManager::setDrugsList(const QList<DrugsData *> &list)
 {
     clearDrugsList();
     d->m_DrugsList = list;
 }
 
-void mfInteractionsManager::addDrug(mfDrugs *drug)
+void InteractionsManager::addDrug(DrugsData *drug)
 {
     d->m_DrugsList.append(drug);
 }
 
-void mfInteractionsManager::removeLastDrug()
+void InteractionsManager::removeLastDrug()
 {
     d->m_DrugsList.removeLast();
 }
 
-void mfInteractionsManager::clearDrugsList()
+void InteractionsManager::clearDrugsList()
 {
     d->m_DrugsList.clear();
      // clear cached datas
@@ -192,9 +196,9 @@ void mfInteractionsManager::clearDrugsList()
   Check interactions drug by drug \sa mfDrugsBasePrivate::checkDrugInteraction()\n
   Retreive all interactions from database \sa mfDrugsBase::getAllInteractionsFound()\n
   Test all substances of drugs and all iammol and classes and create a cached QMap containing the CIS
-  of interacting drugs linked to the list of mfDrugInteraction.\n
+  of interacting drugs linked to the list of DrugInteraction.\n
 */
-bool mfInteractionsManager::checkInteractions()
+bool InteractionsManager::checkInteractions()
 {
      QTime t;
      t.start();
@@ -207,10 +211,10 @@ bool mfInteractionsManager::checkInteractions()
      d->m_DrugInteractionList.clear();
 
      // get interactions list from drugsbase
-     d->m_DrugInteractionList = mfDrugsBase::instance()->calculateInteractions(d->m_DrugsList);
+     d->m_DrugInteractionList = DrugsBase::instance()->calculateInteractions(d->m_DrugsList);
 
      if (d->m_LogChrono)
-         tkLog::logTimeElapsed(t, "mfInteractionsManager", QString("interactions() : %2 drugs")
+         Utils::Log::logTimeElapsed(t, "InteractionsManager", QString("interactions() : %2 drugs")
                            .arg(d->m_DrugsList.count()) );
      return toReturn;
 }
@@ -220,7 +224,7 @@ bool mfInteractionsManager::checkInteractions()
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-QList<mfDrugInteraction*> mfInteractionsManager::getInteractions( const mfDrugs * drug ) const
+QList<DrugInteraction*> InteractionsManager::getInteractions( const DrugsData *drug ) const
 {
      if ( d->m_DrugInteractionList.isEmpty() )
           return d->m_DrugInteractionList;
@@ -232,13 +236,13 @@ QList<mfDrugInteraction*> mfInteractionsManager::getInteractions( const mfDrugs 
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-Interaction::TypesOfIAM mfInteractionsManager::getMaximumTypeOfIAM(const mfDrugs * drug) const
+Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const DrugsData *drug) const
 {
      if ( d->m_DrugInteractionList.isEmpty() )
           return Interaction::noIAM;
-     const QList<mfDrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
+     const QList<DrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
      Interaction::TypesOfIAM r;
-     foreach( mfDrugInteraction* di, list )
+     foreach( DrugInteraction* di, list )
          r |= di->type();
      return r;
 }
@@ -248,7 +252,7 @@ Interaction::TypesOfIAM mfInteractionsManager::getMaximumTypeOfIAM(const mfDrugs
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-bool mfInteractionsManager::drugHaveInteraction( const mfDrugs *drug ) const
+bool InteractionsManager::drugHaveInteraction( const DrugsData *drug ) const
 {
      if ( d->m_DrugInteractionList.isEmpty() )
           return false;
@@ -259,7 +263,7 @@ bool mfInteractionsManager::drugHaveInteraction( const mfDrugs *drug ) const
  \todo Return the last interaction founded after calling interactions().
  \sa interactions()
 */
-mfDrugInteraction *mfInteractionsManager::getLastInteractionFound() const
+DrugInteraction *InteractionsManager::getLastInteractionFound() const
 {
      if (!d->m_DrugInteractionList.isEmpty() )
           return d->m_DrugInteractionList.at(0);
@@ -270,45 +274,46 @@ mfDrugInteraction *mfInteractionsManager::getLastInteractionFound() const
  \brief Returns the list of all interactions founded by interactions()
  \sa interactions()
 */
-QList<mfDrugInteraction*> mfInteractionsManager::getAllInteractionsFound() const
+QList<DrugInteraction *> InteractionsManager::getAllInteractionsFound() const
 {
     return d->m_DrugInteractionList;
 }
 
 
 /** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
-QIcon mfInteractionsManager::iamIcon(const mfDrugs * drug, const int & levelOfWarning) const
+QIcon InteractionsManager::iamIcon(const DrugsData * drug, const int &levelOfWarning) const
 {
+    Core::ITheme *th = Core::ICore::instance()->theme();
     if ( drugHaveInteraction(drug) ) {
         Interaction::TypesOfIAM r = getMaximumTypeOfIAM( drug );
         if ( r & Interaction::ContreIndication )
-            return tkTheme::icon( INTERACTION_ICONCRITICAL );
+            return th->icon( INTERACTION_ICONCRITICAL );
         else if ( r & Interaction::Deconseille )
-            return tkTheme::icon( INTERACTION_ICONDECONSEILLEE );
+            return th->icon( INTERACTION_ICONDECONSEILLEE );
         else if ( ( r & Interaction::APrendreEnCompte ) && ( levelOfWarning <= 1 ) )
-            return tkTheme::icon( INTERACTION_ICONTAKEINTOACCOUNT );
+            return th->icon( INTERACTION_ICONTAKEINTOACCOUNT );
         else if ( ( r & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
-            return tkTheme::icon( INTERACTION_ICONPRECAUTION );
+            return th->icon( INTERACTION_ICONPRECAUTION );
         else if ( ( r & Interaction::Information ) && ( levelOfWarning == 0 ) )
-            return tkTheme::icon( INTERACTION_ICONINFORMATION );
+            return th->icon( INTERACTION_ICONINFORMATION );
         else if ( r & Interaction::noIAM )
-            return tkTheme::icon( INTERACTION_ICONOK );
+            return th->icon( INTERACTION_ICONOK );
         else
-            return tkTheme::icon( INTERACTION_ICONUNKONW );
+            return th->icon( INTERACTION_ICONUNKONW );
     } else if ( levelOfWarning <= 1 ) {
-        if ( ! mfDrugsBase::instance()->drugsINNIsKnown( drug ) )
-            return tkTheme::icon( INTERACTION_ICONUNKONW );
-        else return tkTheme::icon( INTERACTION_ICONOK );
+        if ( ! DrugsBase::instance()->drugsINNIsKnown( drug ) )
+            return th->icon( INTERACTION_ICONUNKONW );
+        else return th->icon( INTERACTION_ICONOK );
     }
     return QIcon();
 }
 
 /** \brief Transforms a list of interactions to human readable Html (static). */
-QString mfInteractionsManager::listToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos ) // static
+QString InteractionsManager::listToHtml( const QList<DrugInteraction*> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
      QList<int> id_di;
-     foreach( mfDrugInteraction * di, list ) {
+     foreach( DrugInteraction * di, list ) {
           if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
                continue;
           id_di << di->value( IAM_ID ).toInt();
@@ -337,11 +342,11 @@ QString mfInteractionsManager::listToHtml( const QList<mfDrugInteraction*> & lis
 }
 
 /** \brief Transform a list of interactions to a human readable synthesis Html */
-QString mfInteractionsManager::synthesisToHtml( const QList<mfDrugInteraction*> & list, bool fullInfos ) // static
+QString InteractionsManager::synthesisToHtml( const QList<DrugInteraction*> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
      QList<int> id_di;
-     foreach( mfDrugInteraction * di, list ) {
+     foreach( DrugInteraction * di, list ) {
           if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
                continue;
           id_di << di->value( IAM_ID ).toInt();

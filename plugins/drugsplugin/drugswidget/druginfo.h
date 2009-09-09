@@ -38,65 +38,44 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef MFDRUGINFO_H
+#define MFDRUGINFO_H
 
-#include "ui_mfDrugsCentralWidget.h"
+// include drugswidget headers
+
+// include Qt headers
+#include <QDialog>
+#include <QObject>
 
 /**
- * \file mfDrugsCentralWidget.h
+ * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 15 July 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
+ * \version 0.0.8
+ * \date 08 sept 2009
 */
 namespace Drugs {
 namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-}
+class DrugInfoPrivate;
 
-class DrugsCentralWidget : public QWidget, private Internal::Ui::DrugsCentralWidget
+class DrugInfo : public QDialog
 {
     Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-#ifdef DRUGS_INTERACTIONS_STANDALONE
-//    friend class diMainWindow;
-#endif
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    DrugInfo( const int CIS, QWidget * parent = 0 );
+    ~DrugInfo() {}
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    void setDrug( const int CIS );
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
-
-    void setCurrentSearchMethod(int method);
-
-protected:
-    void createConnections();
-    void disconnect();
-    bool printPrescription();
-
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
+protected Q_SLOTS:
+    void accept();
+    void reject();
+    void done() { QDialog::done( QDialog::result() ); }
 
 private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    Internal::DrugInfoPrivate *d;
 };
 
+}
 }  // End Drugs
 
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif

@@ -43,16 +43,16 @@
 #include <mfDrugsConstants.h>
 #include <drugsmodel/mfDrugs.h>
 #include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/mfDrugInfo.h>
+#include <drugswidget/druginfo.h>
 #include <drugswidget/mfInteractionDialog.h>
 #include <dosagedialog/mfDosageCreatorDialog.h>
 #include <dosagedialog/mfDosageDialog.h>
 #include <mfDrugsManager.h>
 
-#include <tkTheme.h>
-#include <tkLog.h>
-#include <tkActionManager.h>
-#include <tkContextManager.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <QFileDialog>
 #include <QPrinter>
@@ -60,10 +60,10 @@
 #include <QTextDocument>
 
 using namespace mfDrugsConstants;
-Q_TK_USING_CONSTANTS
+using namespace Drugs::Internal;
 
 /** \brief Constructor. You must call initialize() after instanciation */
-mfPrescriptionViewer::mfPrescriptionViewer(QWidget *parent) :
+PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
         QWidget(parent),
         m_ToolBar(0)
 {
@@ -72,7 +72,7 @@ mfPrescriptionViewer::mfPrescriptionViewer(QWidget *parent) :
 }
 
 /** \brief Creates actions, popup menus and toolbars */
-void mfPrescriptionViewer::initialize()
+void PrescriptionViewer::initialize()
 {
     createActionsAndToolbar();
     verticalLayout->insertWidget( 0, m_ToolBar );
@@ -82,39 +82,39 @@ void mfPrescriptionViewer::initialize()
 }
 
 /** \brief Defines the model to use. */
-void mfPrescriptionViewer::setModel( mfDrugsModel *model )
+void PrescriptionViewer::setModel( DrugsModel *model )
 {
-    Q_ASSERT_X( model, "mfPrescriptionViewer::setModel", "Model must be correctly setted");
+    Q_ASSERT_X( model, "PrescriptionViewer::setModel", "Model must be correctly setted");
     listView->setModel( model );
 }
 
 /** \brief Defines the model's column to use. */
-void mfPrescriptionViewer::setModelColumn( const int col )
+void PrescriptionViewer::setModelColumn( const int col )
 {
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer::setModelColumn", "model is not a mfDrugsModel*");
+    Q_ASSERT_X( static_cast<DrugsModel*>(listView->model()), "PrescriptionViewer::setModelColumn", "model is not a mfDrugsModel*");
     listView->setModelColumn(col);
 }
 
-void mfPrescriptionViewer::setListViewPadding( const int pad )
+void PrescriptionViewer::setListViewPadding( const int pad )
 {
 //    listView->setSpacing(pad);
     listView->setStyleSheet( QString("QListView#mfPrescriptionListView:item { padding: %1px; }").arg(pad) );
 }
 
 /** \brief Creates actions and toolbar */
-void mfPrescriptionViewer::createActionsAndToolbar()
+void PrescriptionViewer::createActionsAndToolbar()
 {
-    tkActionManager *am = tkActionManager::instance();
-    tkCommand *cmd = 0;
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+    Core::Command *cmd = 0;
     // populate toolbar
     m_ToolBar = new QToolBar(this);
     m_ToolBar->setIconSize(QSize(16, 16));
 
     QStringList actionsToAdd;
     actionsToAdd
-            << tkConstants::A_FILE_OPEN
-            << tkConstants::A_FILE_SAVE
-            << tkConstants::A_FILE_SAVEAS
+            << Core::Constants::A_FILE_OPEN
+            << Core::Constants::A_FILE_SAVE
+            << Core::Constants::A_FILE_SAVEAS
             << mfDrugsConstants::A_PRINT_PRESCRIPTION;
 
     foreach(const QString &s, actionsToAdd) {
@@ -124,11 +124,11 @@ void mfPrescriptionViewer::createActionsAndToolbar()
 
     actionsToAdd.clear();
     actionsToAdd
-            << tkConstants::A_LIST_CLEAR
-            << tkConstants::A_LIST_REMOVE
-            << tkConstants::A_LIST_MOVEDOWN
-            << tkConstants::A_LIST_MOVEUP
-            << tkConstants::A_LIST_SORT
+            << Core::Constants::A_LIST_CLEAR
+            << Core::Constants::A_LIST_REMOVE
+            << Core::Constants::A_LIST_MOVEDOWN
+            << Core::Constants::A_LIST_MOVEUP
+            << Core::Constants::A_LIST_SORT
             ;
     m_ToolBar->addSeparator();
     foreach(const QString &s, actionsToAdd) {
@@ -140,7 +140,7 @@ void mfPrescriptionViewer::createActionsAndToolbar()
     actionsToAdd.clear();
     actionsToAdd
             << mfDrugsConstants::A_TOOGLE_TESTINGDRUGS
-            << tkConstants::A_VIEW_INTERACTIONS;
+            << Core::Constants::A_VIEW_INTERACTIONS;
 
     foreach(const QString &s, actionsToAdd) {
         cmd = am->command(s);
@@ -150,29 +150,29 @@ void mfPrescriptionViewer::createActionsAndToolbar()
 }
 
 /** \brief Clears the prescription */
-void mfPrescriptionViewer::clearTriggered()
+void PrescriptionViewer::clearTriggered()
 {
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    static_cast<mfDrugsModel*>(listView->model())->clearDrugsList();
+    Q_ASSERT_X( static_cast<DrugsModel*>(listView->model()), "PrescriptionViewer", "model is not a DrugsModel*");
+    static_cast<DrugsModel*>(listView->model())->clearDrugsList();
 }
 
 /** \brief Remove the selected drug from the prescription.*/
-void mfPrescriptionViewer::removeTriggered()
+void PrescriptionViewer::removeTriggered()
 {
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
+    Q_ASSERT_X( static_cast<DrugsModel*>(listView->model()), "PrescriptionViewer", "model is not a DrugsModel*");
     if (!listView->selectionModel()->hasSelection() )
         return;
     const QModelIndexList &list = listView->selectionModel()->selectedRows(0);
     foreach( const QModelIndex &index, list ) {
-        static_cast<mfDrugsModel*>(listView->model())->removeRows( index.row(), 1 );
+        static_cast<DrugsModel*>(listView->model())->removeRows( index.row(), 1 );
     }
 }
 
 /** \brief Moves the selected drug up. */
-void mfPrescriptionViewer::moveUp()
+void PrescriptionViewer::moveUp()
 {
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    mfDrugsModel *m = static_cast<mfDrugsModel*>(listView->model());
+    Q_ASSERT_X( static_cast<DrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
+    DrugsModel *m = static_cast<DrugsModel*>(listView->model());
     int row = listView->currentIndex().row();
     m->moveUp(listView->currentIndex());
     listView->setCurrentIndex( m->index(row-1,0) );
@@ -180,10 +180,10 @@ void mfPrescriptionViewer::moveUp()
 }
 
 /** \brief Move the selected drug down. */
-void mfPrescriptionViewer::moveDown()
+void PrescriptionViewer::moveDown()
 {
-    Q_ASSERT_X( static_cast<mfDrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    mfDrugsModel *m = static_cast<mfDrugsModel*>(listView->model());
+    Q_ASSERT_X( static_cast<DrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
+    DrugsModel *m = static_cast<DrugsModel*>(listView->model());
     int row = listView->currentIndex().row();
     m->moveDown(listView->currentIndex());
     listView->setCurrentIndex( m->index(row+1,0) );
@@ -191,43 +191,43 @@ void mfPrescriptionViewer::moveDown()
 }
 
 /** \brief Sorts the drugs of the prescription. \sa mfDrugsModel::sort() */
-void mfPrescriptionViewer::sortDrugs()
+void PrescriptionViewer::sortDrugs()
 {
     listView->model()->sort(0);
 }
 
 /** \brief Opens the drug information dialog. \sa mfDrugInfo */
-void mfPrescriptionViewer::showDrugInfo(const QModelIndex &item)
+void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 {
-    mfDrugInfo di(item.row(), this);
+    DrugInfo di(item.row(), this);
     di.exec();
 }
 
 /** \brief Opens the mfDosageDialog for the selected drug. */
-void mfPrescriptionViewer::showDosageDialog(const QModelIndex &item)
+void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
     int CIS = DRUGMODEL->index( item.row(), Drug::CIS ).data().toInt();
-    mfDosageDialog dlg(this);
+    DosageDialog dlg(this);
     dlg.changeRow(CIS,item.row());
     dlg.exec();
 //    listView->repaint();
 }
 
 /** \brief Opens the mfInteractionDialog. */
-void mfPrescriptionViewer::viewInteractions()
+void PrescriptionViewer::viewInteractions()
 {
-     mfInteractionDialog dlg(this);
+     InteractionDialog dlg(this);
      dlg.exec();
 }
 
 /** \brief Returns the listView in use for the prescription. */
-QListView *mfPrescriptionViewer::listview()
+QListView *PrescriptionViewer::listview()
 {
     return listView;
 }
 
 /** \brief Used for translations. \internal */
-void mfPrescriptionViewer::changeEvent(QEvent *e)
+void PrescriptionViewer::changeEvent(QEvent *e)
 {
     switch (e->type()) {
     case QEvent::LanguageChange:

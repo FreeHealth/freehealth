@@ -59,13 +59,16 @@
 #include <mfDrugsConstants.h>
 #include <mfDrugsManager.h>
 
-// include toolkit
-#include <tkLog.h>
-#include <tkStringListModel.h>
-#include <tkTheme.h>
-#include <tkSettings.h>
-#include <tkConstantTranslations.h>
-#include <tkHelpDialog.h>
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constanttranslations.h>
+
+#include <listviewplugin/stringlistmodel.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/dialogs/helpdialog.h>
 
 // include Qt headers
 #include <QMessageBox>
@@ -75,17 +78,20 @@ using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
-Q_TK_USING_CONSTANTS
-Q_TK_USING_TRANSLATIONS
+using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
+
+namespace Drugs {
+namespace Internal {
 
 /**
-  \brief Private part of mfDosageDialog
+  \brief Private part of DosageDialog
   \internal
 */
-class mfDosageCreatorDialogPrivate
+class DosageCreatorDialogPrivate
 {
 public:
-    mfDosageCreatorDialogPrivate(mfDosageCreatorDialog *parent) :
+    DosageCreatorDialogPrivate(DosageCreatorDialog *parent) :
             m_DosageModel(0), m_Parent(parent) {}
 
     /** \brief Check the validity o the dosage. Warn if dosage is not valid */
@@ -93,9 +99,9 @@ public:
     {
         QStringList list = m_DosageModel->isDosageValid(row);
         if (list.count()) {
-            tkGlobal::warningMessageBox(QCoreApplication::translate("mfDosageCreatorDialog", "Dosage is not valid."),
+            Utils::warningMessageBox(QCoreApplication::translate("DosageCreatorDialog", "Dosage is not valid."),
                                         list.join("br />"),
-                                        "", QCoreApplication::translate("mfDosageCreatorDialog", "Drug Dosage Creator"));
+                                        "", QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"));
             return false;
         }
         return true;
@@ -111,14 +117,14 @@ public:
         m_DosageModel->database().transaction();
         if (m_DosageModel->submitAll()) {
             if (m_DosageModel->database().commit())
-                tkLog::addMessage(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Dosage correctly saved to base"));
+                Utils::Log::addMessage(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Dosage correctly saved to base"));
             else
-                tkLog::addError(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
+                Utils::Log::addError(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
                                 .arg(m_DosageModel->lastError().text()));
         } else {
             m_DosageModel->database().rollback();
-            QMessageBox::warning(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Drug Dosage Creator"),
-                                 tkTr(ERROR_1_FROM_DATABASE_2)
+            QMessageBox::warning(m_Parent, QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"),
+                                 tkTr(Trans::Constants::ERROR_1_FROM_DATABASE_2)
                                  .arg(m_DosageModel->database().lastError().text())
                                  .arg(m_DosageModel->database().connectionName()));
         }
@@ -132,24 +138,26 @@ public:
     }
 
 public:
-    mfDosageModel      *m_DosageModel;
-    QString             m_ActualDosageUuid;
+    DosageModel *m_DosageModel;
+    QString      m_ActualDosageUuid;
 private:
-    mfDosageCreatorDialog *m_Parent;
+    DosageCreatorDialog *m_Parent;
 };
 
+}  // End Internal
+}  // End Drugs
 
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
  \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
-mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *dosageModel )
+DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DosageModel *dosageModel )
     : QDialog( parent ),
     d(0)
 {
     // some initializations
-    setObjectName( "mfDosageCreatorDialog" );
-    d = new mfDosageCreatorDialogPrivate(this);
+    setObjectName( "DosageCreatorDialog" );
+    d = new DosageCreatorDialogPrivate(this);
     d->m_DosageModel = dosageModel;
 
     // Ui initialization
@@ -157,7 +165,7 @@ mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *do
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
 
     // Drug informations
-    mfDrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     int CIS = dosageModel->drugCIS();
     drugNameLabel->setText( m->drugData(CIS, Drug::Denomination).toString() );
     QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
@@ -184,7 +192,7 @@ mfDosageCreatorDialog::mfDosageCreatorDialog( QWidget *parent, mfDosageModel *do
 }
 
 /** \brief Destructor */
-mfDosageCreatorDialog::~mfDosageCreatorDialog()
+DosageCreatorDialog::~DosageCreatorDialog()
 {
     if (d) delete d;
     d=0;
@@ -194,7 +202,7 @@ mfDosageCreatorDialog::~mfDosageCreatorDialog()
    \brief Validate the dialog
    \todo Check dosage validity before validate the dialog
 */
-void mfDosageCreatorDialog::done( int r )
+void DosageCreatorDialog::done( int r )
 {
     int row = availableDosagesListView->listView()->currentIndex().row();
 
@@ -202,16 +210,13 @@ void mfDosageCreatorDialog::done( int r )
         d->m_DosageModel->revertRow( row );
     }  else {
         dosageViewer->done(r);
-
-//        // ******************************************************
-//        // * TODO check validity of the dosage before submition *
-//        // ******************************************************
+        /** \todo check validity of the dosage before submition */
     }
     QDialog::done(r);
 }
 
 /** \brief Save the "reference dosage" to the database and reject the dialog (no prescription's done) */
-void mfDosageCreatorDialog::on_saveButton_clicked()
+void DosageCreatorDialog::on_saveButton_clicked()
 {
     // modify focus for the mapper to commit changes
     saveButton->setFocus();
@@ -221,7 +226,7 @@ void mfDosageCreatorDialog::on_saveButton_clicked()
 }
 
 /** \brief Accept the dialog (prescription's done), no changes is done on the database. */
-void mfDosageCreatorDialog::on_prescribeButton_clicked()
+void DosageCreatorDialog::on_prescribeButton_clicked()
 {
     // modify focus for the mapper to commit changes
     prescribeButton->setFocus();
@@ -231,7 +236,7 @@ void mfDosageCreatorDialog::on_prescribeButton_clicked()
 }
 
 /** \brief Save the "reference dosage" to the database and prescribe it then accept the dialog ( prescription's done) */
-void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
+void DosageCreatorDialog::on_saveAndPrescribeButton_clicked()
 {
     // modify focus for the mapper to commit changes
     saveAndPrescribeButton->setFocus();
@@ -242,12 +247,12 @@ void mfDosageCreatorDialog::on_saveAndPrescribeButton_clicked()
 }
 
 /** \brief Opens a help dialog */
-void mfDosageCreatorDialog::on_helpButton_clicked()
+void DosageCreatorDialog::on_helpButton_clicked()
 {
-    tkHelpDialog::showPage("prescrire.html");
+    Core::HelpDialog::showPage("prescrire.html");
 }
 
-void mfDosageCreatorDialog::on_testOnlyButton_clicked()
+void DosageCreatorDialog::on_testOnlyButton_clicked()
 {
     DRUGMODEL->setDrugData(d->m_DosageModel->drugCIS(), Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);

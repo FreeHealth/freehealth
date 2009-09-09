@@ -25,8 +25,8 @@ public:
     virtual void updateContext() = 0;
 
 Q_SIGNALS:
-    void contextAboutToChange(IContext *context);
-    void contextChanged(IContext *context);
+    void contextAboutToChange(Core::IContext *context);
+    void contextChanged(Core::IContext *context);
 };
 
 } // End Core

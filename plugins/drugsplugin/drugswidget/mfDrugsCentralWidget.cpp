@@ -50,40 +50,47 @@
 #include <dosagedialog/mfDosageDialog.h>
 #include <mfDrugsManager.h>
 
-// include toolkit headers
-#include <tkGlobal.h>
-#include <tkLog.h>
-#include <tkSettings.h>
-#include <tkTheme.h>
-#include <tkConstantTranslations.h>
-#include <tkContextManager.h>
-#include <tkPrinter.h>
+#include <utils/global.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/contextmanager/contextmanager.h>
+
+#include <printerplugin/printer.h>
+
+using namespace Drugs;
+using namespace Drugs::Internal;
 
 #ifdef DRUGS_INTERACTIONS_STANDALONE
-#    include <diCore.h>
+/** \todo here */
+//#    include <diCore.h>
 #endif
 
 
 /** \brief Constructor */
-mfDrugsCentralWidget::mfDrugsCentralWidget(QWidget *parent) :
+DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
     QWidget(parent), m_CurrentDrugModel(0)
 {
-    // create instance of mfDrugsManager
-    mfDrugsManager::instance();
+    // create instance of DrugsManager
+    DrugsManager::instance();
 }
 
 /** \brief Initialize the widget after the ui was setted */
-bool mfDrugsCentralWidget::initialize()
+bool DrugsCentralWidget::initialize()
 {
     setupUi(this);
 
     // create context
-    m_Context = new mfDrugsContext(this);
-    m_Context->setContext( QList<int>() << tkUID->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS) );
-    tkContextManager::instance()->addContextObject(m_Context);
+    m_Context = new DrugsContext(this);
+    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS) );
+    Core::ICore::instance()->contextManager()->addContextObject(m_Context);
 
     // create model view for selected drugs list
-    m_CurrentDrugModel = new mfDrugsModel(this);
+    m_CurrentDrugModel = new DrugsModel(this);
     m_PrescriptionView->initialize();
     m_PrescriptionView->setModel( m_CurrentDrugModel );
     m_PrescriptionView->setModelColumn( Drug::FullPrescription );
@@ -94,42 +101,42 @@ bool mfDrugsCentralWidget::initialize()
     return true;
 }
 
-QListView *mfDrugsCentralWidget::prescriptionListView()
+QListView *DrugsCentralWidget::prescriptionListView()
 {
     return m_PrescriptionView->listview();
 }
 
-mfPrescriptionViewer *mfDrugsCentralWidget::prescriptionView()
+PrescriptionViewer *DrugsCentralWidget::prescriptionView()
 {
     return m_PrescriptionView;
 }
 
-mfDrugsModel *mfDrugsCentralWidget::currentDrugsModel() const
+DrugsModel *DrugsCentralWidget::currentDrugsModel() const
 {
     return m_CurrentDrugModel;
 }
 
-void mfDrugsCentralWidget::setCurrentSearchMethod(int method)
+void DrugsCentralWidget::setCurrentSearchMethod(int method)
 {
     m_DrugSelector->setSearchMethod(method);
 }
 
 /** \brief Creates connections */
-void mfDrugsCentralWidget::createConnections()
+void DrugsCentralWidget::createConnections()
 {
     connect(m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( selector_drugSelected(const int) ) );
     connect( prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
              m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)) );
 }
 
-void mfDrugsCentralWidget::disconnect()
+void DrugsCentralWidget::disconnect()
 {
     prescriptionListView()->disconnect( prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
              m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)) );
     m_DrugSelector->disconnect(m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( selector_drugSelected(const int) ) );
 }
 
-void mfDrugsCentralWidget::focusInEvent(QFocusEvent *event)
+void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
 {
     Q_UNUSED(event);
     m_DrugSelector->setFocus();
@@ -140,19 +147,19 @@ void mfDrugsCentralWidget::focusInEvent(QFocusEvent *event)
   Verify that the drug isn't already prescribed (if it is warn user and stop). \n
   Add the drug to the mfDrugsModel and open the mfDosageCreatorDialog\n
 */
-void mfDrugsCentralWidget::selector_drugSelected( const int CIS )
+void DrugsCentralWidget::selector_drugSelected( const int CIS )
 {
     // if exists dosage for that drug show the dosageSelector widget
     // else show the dosage creator widget
     if (m_CurrentDrugModel->containsDrug(CIS)) {
-        tkGlobal::warningMessageBox(tr("Can not add this drug to your prescription."),
+        Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
                                     tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
                                        "Drug %1 is already in your prescription").arg(m_CurrentDrugModel->drugData(CIS,Drug::Denomination).toString()),
                                     tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
     int drugPrescriptionRow = m_CurrentDrugModel->addDrug(CIS);
-    mfDosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
+    DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
     if (dlg.exec()==QDialog::Rejected) {
         m_CurrentDrugModel->removeLastInsertedDrug();
     }
@@ -160,31 +167,32 @@ void mfDrugsCentralWidget::selector_drugSelected( const int CIS )
 }
 
 /** \brief Change the font of the viewing widget */
-void mfDrugsCentralWidget::changeFontTo( const QFont &font )
+void DrugsCentralWidget::changeFontTo( const QFont &font )
 {
     m_DrugSelector->setFont(font);
     m_PrescriptionView->listview()->setFont(font);
 }
 
-bool mfDrugsCentralWidget::printPrescription()
+bool DrugsCentralWidget::printPrescription()
 {
-    tkPrinter p(this);
+    Print::Printer p(this);
     if (!p.askForPrinter(this))
         return false;
 #ifdef DRUGS_INTERACTIONS_STANDALONE
-    QString header = diCore::settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
-    diCore::patient()->replaceTokens(header);
-    tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    QString footer = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeDiams.")));
-    p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                        tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-                        Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
+    /** \todo here */
+//    QString header = diCore::settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
+//    diCore::patient()->replaceTokens(header);
+//    Utils::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
+//    QString footer = diCore::settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+//    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+//                   .arg(tr("Made with FreeDiams.")));
+//    p.addHtmlWatermark( diCore::settings()->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
+//                        tkPrinter::Presence(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
+//                        Qt::AlignmentFlag(diCore::settings()->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
 #else
     QString header = "Work in progress";
 //    diCore::patient()->replaceTokens(header);
-//    tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
+//    Utils::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     QString footer = "Work in progress";
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeMedForms.")));
@@ -192,5 +200,5 @@ bool mfDrugsCentralWidget::printPrescription()
     p.setHeader( header );
     p.setFooter( footer );
     p.printWithDuplicata(true);
-    return p.print( mfDrugsIO::instance()->prescriptionToHtml() );
+    return p.print( DrugsIO::instance()->prescriptionToHtml() );
 }

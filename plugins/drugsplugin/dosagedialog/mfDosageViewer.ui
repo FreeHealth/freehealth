@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mfDosageViewer</class>
- <widget class="QWidget" name="mfDosageViewer">
+ <class>Drugs::Internal::DosageViewer</class>
+ <widget class="QWidget" name="Drugs::Internal::DosageViewer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -424,7 +424,7 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="intakeSchemeHorizLayout">
          <item>
-          <widget class="View::StringListView" name="dailySchemeListView" native="true"/>
+          <widget class="Views::StringListView" name="dailySchemeListView" native="true"/>
          </item>
          <item>
           <widget class="QTableWidget" name="hourlyTableWidget">
@@ -1064,7 +1064,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>View::StringListView</class>
+   <class>Views::StringListView</class>
    <extends>QWidget</extends>
    <header location="global">listviewplugin/stringlistview.h</header>
    <container>1</container>
