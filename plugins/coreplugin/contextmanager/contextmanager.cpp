@@ -72,11 +72,12 @@ void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
         return;
 
     IContext *newContext = 0;
+    QWidget *p = 0;
 //    if (m_mainWindow->focusWidget()) {
     if (qApp->focusWidget()) {
         IContext *context = 0;
 //        QWidget *p = m_mainWindow->focusWidget();
-        QWidget *p = qApp->focusWidget();
+        p = qApp->focusWidget();
         while (p) {
             context = m_contextWidgets.value(p,0);
             if (context) {
@@ -87,6 +88,7 @@ void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
         }
     }
     if (newContext) {
+//        qWarning() << "   focused" << p << newContext->widget();
         updateContextObject(newContext);
     }
 }
@@ -156,7 +158,7 @@ void ContextManagerPrivate::updateContextObject(IContext *context)
         emit contextAboutToChange(context);
         updateContext();
 //        if (debugContextManagerPrivate)
-//            qDebug() << "new context object =" << context << (context ? context->widget() : 0)
+//            qWarning() << "new context object =" << context << (context ? context->widget() : 0)
 //            << (context ? context->widget()->metaObject()->className() : 0);
         emit contextChanged(context);
     }

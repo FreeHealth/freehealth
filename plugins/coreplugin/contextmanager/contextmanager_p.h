@@ -33,10 +33,6 @@ public:
 
     void updateContext();
 
-Q_SIGNALS:
-    void contextAboutToChange(IContext *context);
-    void contextChanged(IContext *context);
-
 private Q_SLOTS:
     void updateFocusWidget(QWidget *old, QWidget *now);
 
