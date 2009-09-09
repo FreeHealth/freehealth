@@ -81,8 +81,9 @@ DrugsManager::DrugsManager(QObject *parent) : DrugsActionHandler(parent)
 
 void DrugsManager::updateContext(Core::IContext *object)
 {
+//    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
 //    if (object)
-//        qWarning() << "CONTEXT" << object->widget();
+//        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();
 
     DrugsCentralWidget *view = 0;
     do {
@@ -268,8 +269,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     }
     connect(aPrintPrescription,SIGNAL(triggered()), this, SLOT(printPrescription()));
 
-    menu->retranslate();
-    searchmenu->retranslate();
+    am->retranslateMenusAndActions();
 }
 
 void DrugsActionHandler::searchActionChanged(QAction *a)
@@ -290,6 +290,8 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
     if (!view) { // this should never be the case
         return;
     }
+    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
+
     // disconnect old view
     if (m_CurrentView) {
         if (view == m_CurrentView.data())

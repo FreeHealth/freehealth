@@ -97,6 +97,7 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 //    virtual bool applicationHelp();
     bool aboutQt();
     void aboutPlugins();
+    
 
 
 public:

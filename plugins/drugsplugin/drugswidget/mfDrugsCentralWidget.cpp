@@ -98,6 +98,8 @@ bool DrugsCentralWidget::initialize()
     m_DrugSelector->initialize();
 
     m_DrugSelector->setFocus();
+
+    DrugsManager::instance()->setCurrentView(this);
     return true;
 }
 

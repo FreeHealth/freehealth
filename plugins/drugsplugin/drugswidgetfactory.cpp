@@ -126,8 +126,7 @@ DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 
     // Prepare Widget Layout and label
-//    mfo->setParam( mfObject::Param_Options, "labelontop" );
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this );
+    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this );
     // Add QLabel
     hb->addWidget( m_Label );
 //    if ( !( mfo->options() & mfObjectFundamental::LabelOnTop ) )

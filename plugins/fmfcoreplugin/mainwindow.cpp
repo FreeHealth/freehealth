@@ -219,6 +219,7 @@ bool MainWindow::openFile()
     return true;
 }
 
+
 //void MainWindow::showWidget()
 //{
 //    if ( m_pRootObject == 0 )

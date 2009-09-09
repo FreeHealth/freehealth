@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
 <MedForm>
-        <name>formSample</name>
-        <label lang="en">Drugs' Widget plugin</label>
-        <label lang="fr">Élément de formulaire : médicaments</label>
-        <type>form</type>
-        <version>0.1</version>
-        <cdate>2008-10-16</cdate>
-        <categorie>samples</categorie>
+  <name>formSample</name>
+  <label>Double Drugs plugin sample</label>
+  <type>form</type>
+  <version>0.3</version>
+  <creationdate>09-09-2009</creationdate>
+  <categorie>samples</categorie>
+  <authors>Eric Maeker, MD</authors>
+  <description>Small description here</description>
+  <bibliography>Small bibliography</bibliography>
+  <licence>Licence terms here</licence>
+  <column>1</column>
+  <option>compact</option>
 
-        <MedForm>
-                <name>sampleDrugs</name>
-                <label lang="en">Drugs Widget plugin example 1</label>
-                <label lang="fr">Exemple du plugin médicaments 1</label>
-                <type>drugs</type>
-        </MedForm>
-        <MedForm>
-                <name>sampleDrugs</name>
-                <label lang="en">Drugs Widget plugin example 2</label>
-                <label lang="fr">Exemple du plugin médicaments 2</label>
-                <type>drugs</type>
-        </MedForm>
+  <Item>
+    <name>drugsSampleOne</name>
+    <label>Make your choice</label>
+    <type>drugs</type>
+  </Item>
+
+  <Item>
+    <name>drugsSampleTwo</name>
+    <label>Make your choice</label>
+    <type>drugs</type>
+  </Item>
+
 </MedForm>
