@@ -141,7 +141,7 @@ void DebugDialog::on_fullScreenButton_clicked()
 {
     static bool fullscreen = false;
     fullscreen = !fullscreen;
-//    Core::Utils::setFullScreen(this,fullscreen);
+//    Utils::setFullScreen(this,fullscreen);
 //    this->show();
 }
 

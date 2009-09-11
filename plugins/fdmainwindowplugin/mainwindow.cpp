@@ -148,10 +148,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 //    Core::ActionManager::instance()->actionContainer(Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
 
-    readSettings();
-
-    Core::ICore::instance()->contextManager()->updateContext();
+//    Core::ICore::instance()->contextManager()->updateContext();
     Core::ICore::instance()->actionManager()->retranslateMenusAndActions();
+
+    readSettings();
 
     setWindowTitle( qApp->applicationName() + " - " + qApp->applicationVersion() );
 

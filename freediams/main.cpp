@@ -116,6 +116,7 @@ int main( int argc, char *argv[] )
 
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
+
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
@@ -155,7 +156,7 @@ int main( int argc, char *argv[] )
 
     pluginManager.loadPlugins();
     if (coreplugin->hasError()) {
-        qWarning() << coreplugin->errorString();
+        qWarning() << "main" << coreplugin->errorString();
         return 1;
     }
 

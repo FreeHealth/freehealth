@@ -775,11 +775,11 @@ bool PluginSpecPrivate::loadLibrary()
 #else //Q_NO_DEBUG
 
 #ifdef Q_OS_WIN
-    QString libName = QString("%1/%2d.dll").arg(location).arg(name);
+    QString libName = QString("%1/%2_d.dll").arg(location).arg(name);
 #elif defined(Q_OS_MAC)
     QString libName = QString("%1/lib%2_debug.dylib").arg(location).arg(name);
 #else
-    QString libName = QString("%1/lib%2.so").arg(location).arg(name);
+    QString libName = QString("%1/lib%2_debug.so").arg(location).arg(name);
 #endif
 
 #endif
