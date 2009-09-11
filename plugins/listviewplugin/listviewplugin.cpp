@@ -35,6 +35,7 @@
 #include "listviewplugin.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <utils/log.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
@@ -43,6 +44,7 @@ using namespace Views;
 
 ListViewPlugin::ListViewPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating ListViewPlugin";
 }
 
@@ -52,7 +54,8 @@ ListViewPlugin::~ListViewPlugin()
 
 bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "ListViewPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "ListViewPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     return true;
@@ -60,7 +63,8 @@ bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void ListViewPlugin::extensionsInitialized()
 {
-    qWarning() << "ListViewPlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "ListViewPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

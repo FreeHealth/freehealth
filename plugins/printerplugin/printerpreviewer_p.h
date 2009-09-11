@@ -53,7 +53,6 @@ namespace Print {
 namespace Internal {
 class PrinterPreviewerPrivate : public PrinterPreviewer, private Ui::PrinterPreviewerPrivate
 {
-    /** \todo create a tkPrinterEditor including the texteditor, the combo and the label with automatic translations */
     Q_OBJECT
 
 public:

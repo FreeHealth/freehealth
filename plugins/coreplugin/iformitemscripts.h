@@ -42,6 +42,7 @@
 
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QObject>
 #include <QString>
@@ -86,7 +87,7 @@ public:
     };
 
 
-    FormItemScripts(const QString &lang = Constants::ALL_LANGUAGE,
+    FormItemScripts(const QString &lang = Trans::Constants::ALL_LANGUAGE,
                     const QString &onLoad = QString::null,
                     const QString &postLoad = QString::null,
                     const QString &onDemand = QString::null,
@@ -96,8 +97,8 @@ public:
                     );
     ~FormItemScripts();
 
-    void setScript(const int type, const QString &script, const QString &lang = Constants::ALL_LANGUAGE);
-    QString script(const int type, const QString &lang = Constants::ALL_LANGUAGE) const;
+    void setScript(const int type, const QString &script, const QString &lang = Trans::Constants::ALL_LANGUAGE);
+    QString script(const int type, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
 
     void warn() const;
 

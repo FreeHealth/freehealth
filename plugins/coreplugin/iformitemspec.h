@@ -44,6 +44,8 @@
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/constants.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QObject>
 #include <QString>
 #include <QDateTime>
@@ -110,19 +112,19 @@ public:
     FormItemSpec();
     ~FormItemSpec();
 
-    void setValue(int type, const QVariant &val, const QString &lang = QString(Constants::ALL_LANGUAGE));
-    QVariant value(const int type, const QString &lang = QString(Constants::ALL_LANGUAGE)) const;
+    void setValue(int type, const QVariant &val, const QString &lang = QString(Trans::Constants::ALL_LANGUAGE));
+    QVariant value(const int type, const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const;
 
-    QString author(const QString &lang = QString(Constants::ALL_LANGUAGE)) const { return value(Spec_Author,lang).toString(); }
-    QString license(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_License,lang).toString();}
-    QString category(const QString &lang = QString(Constants::ALL_LANGUAGE)) const { return value(Spec_Category,lang).toString();}
-    QDateTime creationDate(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_CreationDate,lang).toDateTime();}
-    QDateTime modificationDate(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_LastModified,lang).toDateTime();}
-    QString version(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_Version,lang).toString();}
-    QString description(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_Description,lang).toString();}
-    QString bibliography(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_Bibliography,lang).toString();}
-    QString label(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_Label,lang).toString();}
-    QString pluginName(const QString &lang = QString(Constants::ALL_LANGUAGE)) const {return value(Spec_Plugin,lang).toString();}
+    QString author(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const { return value(Spec_Author,lang).toString(); }
+    QString license(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_License,lang).toString();}
+    QString category(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const { return value(Spec_Category,lang).toString();}
+    QDateTime creationDate(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_CreationDate,lang).toDateTime();}
+    QDateTime modificationDate(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_LastModified,lang).toDateTime();}
+    QString version(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_Version,lang).toString();}
+    QString description(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_Description,lang).toString();}
+    QString bibliography(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_Bibliography,lang).toString();}
+    QString label(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_Label,lang).toString();}
+    QString pluginName(const QString &lang = QString(Trans::Constants::ALL_LANGUAGE)) const {return value(Spec_Plugin,lang).toString();}
 
     void toTreeWidget(QTreeWidgetItem *tree) const;
 

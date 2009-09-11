@@ -41,14 +41,10 @@
 #define ITHEME_H
 
 #include <coreplugin/core_exporter.h>
-//#include <tkGlobal.h>
 #include <coreplugin/constants.h>
-class tkThemePrivate;
-class tkSettings;
 
 #include <QObject>
 #include <QIcon>
-#include <QPointer>
 
 /**
  * \file itheme.h

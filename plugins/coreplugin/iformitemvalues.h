@@ -43,6 +43,7 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QObject>
 #include <QString>
@@ -88,8 +89,8 @@ public:
     FormItemValues(QObject *parent);
     ~FormItemValues();
 
-    void setValue(int type, const int id, const QVariant &val, const QString &language = Core::Constants::ALL_LANGUAGE);
-    void setDefaultValue(const QVariant &val, const QString &lang = Core::Constants::ALL_LANGUAGE);
+    void setValue(int type, const int id, const QVariant &val, const QString &language = Trans::Constants::ALL_LANGUAGE);
+    void setDefaultValue(const QVariant &val, const QString &lang = Trans::Constants::ALL_LANGUAGE);
 
     // this value represents the one the user's define : text of the LineEdit, value of the spinBox...
 //    void setSelectedValue(const QVariant &val);

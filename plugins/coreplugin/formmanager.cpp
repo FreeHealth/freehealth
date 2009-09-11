@@ -199,7 +199,7 @@ bool FormManager::setFormObjects(QObject *root)
 //
 //    // First object must be a form
 //    if (rootObject->type() != mfObject::Type_Form) {
-//        Core::tkGlobal::warningMessageBox(
+//        Utils::warningMessageBox(
 //                tr("An error occured while creating the form."),
 //                tr("The first object is not a <form> type."));
 //        return false;

@@ -32,91 +32,22 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef TKMEDINTUXCONFIGURATION_H
-#define TKMEDINTUXCONFIGURATION_H
+#ifndef FREEDIAMS_MEDINTUX_H
+#define FREEDIAMS_MEDINTUX_H
 
-#include <tkMedintuxExporter.h>
-
-class QString;
-class QVariant;
-class tkMedintuxConfigurationPrivate;
-
-#include <QObject>
-
-/**
-  \ingroup medintuxtoolkit
-*/
-class Q_TKMT_EXPORT tkMedintuxConfiguration : public QObject
-{
-public:
-    enum GlossaryFor {
-        ObservationGlossary,
-        PrescriptionGlossary,
-        DocumentGlossary,
-        TerrainGlossary,
-        ChampsInsertionGlossary
-    };
-
-    enum DefaultList {
-        ObservationDefaultList,
-        PrescriptionDefaultList,
-        DocumentDefaultList,
-        ImageDefaultList
-    };
-
-    enum PluginsParameters {
-        PlugIn_IniFile = 1,
-        PlugIn_PathOfMedintuxBinary,
-        PlugIn_ExchangeFilePath,
-        PlugIn_PatientGUID,
-        PlugIn_PrimKey_Obs,
-        PlugIn_PrimKey_Terrain,
-        PlugIn_PrimKey_Ordo,
-        PlugIn_PrimKey_User,
-        PlugIn_Unused1,
-        PlugIn_Unused2,
-        PlugIn_Unused3,
-        PlugIn_NumberOfPlugInSpecificArgs,
-        PlugIn_NumberOfDrTuxArgs
-    };
-
-    static tkMedintuxConfiguration *instance();
-    ~tkMedintuxConfiguration();
-
-    // Use these functions for medintux plugins
-    bool applicationIsAMedintuxPlugins() const;
-    QString medintuxPluginIniFileName() const;
-    QString medintuxPluginIni(const QString &rubrik, const QString &key ) const;
-    QString medintuxPluginInformation( PluginsParameters info ) const;
-
-    // Use these functions if application is not a medintux plugin
-    QString findManagerBinaryPath() const;
-    QString askUserForManagerBinary() const;
-    bool    setManagerBinaryPath(const QString &absPath);
-
-    QString managerIniFileName() const;
-    QVariant managerIni( const QString &rubrik, const QString &key ) const;
-
-    QString drtuxBinaryPath() const;
-    QString drtuxIniFileName() const;
-    QVariant drtuxIni( const QString &rubrik, const QString &key ) const;
-
-    QString glossaryPath() const;
-    QString glossaryPath(GlossaryFor rubrik) const;
-    QString defaultListsPath(DefaultList rubrik) const;
-    bool deleteListCache() const;
-
-    QString drtuxUserMenuPath() const;
-    QString drtuxResourcesPath() const;
-
-    bool addUserMenu( const QString &shortTitle, const QString &title, const QString &script, const QString &iconAbsPath, const QString &keySequence );
+#include <utils/global.h>
 
 
-private:
-    tkMedintuxConfiguration( QObject *parent );
+namespace MainWin {
+namespace Internal {
 
-    static tkMedintuxConfiguration *m_Instance;
-    tkMedintuxConfigurationPrivate *d;
-};
+    const void configureMedinTux()
+    {
+        Utils::functionNotAvailableMessageBox("MedinTux configuration is not available from SVN compilation.");
+    }
 
-#endif // TKMEDINTUXCONFIGURATION_H
+}  // End Internal
+}  // End MainWin
+
+
+#endif // FREEDIAMS_MEDINTUX_H

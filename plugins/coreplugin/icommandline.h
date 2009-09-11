@@ -32,131 +32,36 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "tkMedintuxConfiguration.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef ICOMMANDLINE_H
+#define ICOMMANDLINE_H
 
-#include <tkMedintuxConfiguration.h>
+#include <coreplugin/core_exporter.h>
 
-#include <tkLog.h>
-#include <tkGlobal.h>
+#include <QVariant>
+/**
+ * \file icommandline.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.10
+ * \date 09 Aug 2009
+*/
 
-#include <QtGui>
+namespace Core {
 
-tkMedintuxConfiguration *tkMedintuxConfiguration::m_Instance = 0;
-
-tkMedintuxConfiguration *tkMedintuxConfiguration::instance()
+class CORE_EXPORT ICommandLine : public QObject
 {
-    if (!m_Instance)
-        m_Instance = new tkMedintuxConfiguration(qApp);
-    return m_Instance;
-}
+public:
+    ICommandLine() {}
+    virtual ~ICommandLine() {}
 
-tkMedintuxConfiguration::tkMedintuxConfiguration( QObject *parent ) :
-        QObject(parent), d(0)
-{
-    tkGlobal::functionNotAvailableMessageBox( tr("Medintux Configurator") );
-}
+    virtual QVariant value(int param, const QVariant &def = QVariant()) const = 0;
+    virtual QString paramName(int param) const = 0;
+};
 
-tkMedintuxConfiguration::~tkMedintuxConfiguration()
-{
-}
+} // end Core
 
-bool tkMedintuxConfiguration::applicationIsAMedintuxPlugins() const
-{
-    return false;
-}
-
-QString tkMedintuxConfiguration::medintuxPluginIniFileName() const
-{
-    return QString();
-}
-
-QString tkMedintuxConfiguration::medintuxPluginIni(const QString &rubrik, const QString &key ) const
-{
-    Q_UNUSED(rubrik);
-    Q_UNUSED(key);
-    return QString();
-}
-
-QString tkMedintuxConfiguration::medintuxPluginInformation( PluginsParameters info ) const
-{
-    Q_UNUSED(info);
-    return QString();
-}
-
-
-QString tkMedintuxConfiguration::findManagerBinaryPath() const
-{
-    return QString();
-}
-
-QString tkMedintuxConfiguration::askUserForManagerBinary() const
-{
-    return QString();
-}
-
-bool tkMedintuxConfiguration::setManagerBinaryPath(const QString &absPath)
-{
-    Q_UNUSED(absPath);
-    return false;
-}
-
-QString tkMedintuxConfiguration::managerIniFileName() const
-{
-    return QString();
-}
-
-QVariant tkMedintuxConfiguration::managerIni( const QString &rubrik, const QString &key ) const
-{
-    Q_UNUSED(rubrik);
-    Q_UNUSED(key);
-    return QVariant();
-}
-
-QString tkMedintuxConfiguration::drtuxIniFileName() const
-{
-    return QString();
-}
-
-QVariant tkMedintuxConfiguration::drtuxIni( const QString &rubrik, const QString &key ) const
-{
-    Q_UNUSED(rubrik);
-    Q_UNUSED(key);
-    return QVariant();
-}
-
-QString tkMedintuxConfiguration::glossaryPath() const
-{
-    return QString();
-}
-
-QString tkMedintuxConfiguration::glossaryPath(GlossaryFor rubrik) const
-{
-    Q_UNUSED(rubrik);
-    return QString();
-}
-
-QString tkMedintuxConfiguration::defaultListsPath(DefaultList rubrik) const
-{
-    Q_UNUSED(rubrik);
-    return QString();
-}
-
-bool tkMedintuxConfiguration::deleteListCache() const
-{
-    return false;
-}
-
-QString tkMedintuxConfiguration::drtuxBinaryPath() const
-{
-    return QString();
-}
-
-QString tkMedintuxConfiguration::drtuxUserMenuPath() const
-{
-    return QString();
-}
-
-QString tkMedintuxConfiguration::drtuxResourcesPath() const
-{
-    return QString();
-}
+#endif // ITHEME_H

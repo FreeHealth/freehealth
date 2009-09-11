@@ -12,6 +12,7 @@ HEADERS = \
     mainwindow_exporter.h \
     mainwindow.h
 
+
 SOURCES = \
     mainwindowplugin.cpp \
     mainwindow.cpp
@@ -19,3 +20,6 @@ SOURCES = \
 FORMS = mainwindow.ui
 
 OTHER_FILES = MainWindow.pluginspec
+
+exists( $${SOURCES_PROTECTED_PATH} ):HEADERS += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.h
+else:HEADERS += $${PWD}/medintux.h

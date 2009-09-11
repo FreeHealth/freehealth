@@ -196,15 +196,13 @@ public:
 
 
 
-class DrugsData : public QObject
+class DrugsData
 {
-    /** \todo remove QObject class from here ! */
-    Q_OBJECT
     friend class DrugsBase;
     friend class DrugsBasePrivate;
 
 public:
-     DrugsData( QObject * parent = 0 );
+     DrugsData();
      ~DrugsData();
 
      // setters

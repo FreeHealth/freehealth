@@ -43,6 +43,8 @@
 #include <extensionsystem/pluginspec.h>
 #include <extensionsystem/iplugin.h>
 
+#include <utils/log.h>
+
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 
@@ -169,6 +171,8 @@ int main( int argc, char *argv[] )
 
     // Do this after the event loop has started
 //    QTimer::singleShot(100, &pluginManager, SLOT(startTests()));
-    return app.exec();
+    int r = app.exec();
+//    Utils::Log::saveLog();
+    return r;
 }
 

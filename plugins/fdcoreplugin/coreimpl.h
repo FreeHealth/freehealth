@@ -94,8 +94,9 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+    CommandLine *commandLine() const;
+
     // FreeDiams specific
-    CommandLine *commandLine() const;  /** \todo share CommandLine with ICore */
     MedinTux::Configuration *medintuxConfiguration() const;
     Patient *patient() const;
 

@@ -65,7 +65,6 @@ class InteractionsBase;
 
 class DrugInteraction
 {
-    /** \todo remove QObject class from here ! */
     friend class InteractionsBase;
     friend class InteractionsBasePrivate;
 public:

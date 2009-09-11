@@ -47,6 +47,7 @@
 #include <QPointer>
 
 #include "ui_drugsviewoptionspage.h"
+#include "ui_drugsprintoptionspage.h"
 #include "ui_drugsuseroptionspage.h"
 #include "ui_drugsextraoptionspage.h"
 
@@ -79,7 +80,24 @@ public:
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:
-    void saveToSettings( Core::ISettings *s = 0 );
+    void saveToSettings(Core::ISettings *s = 0);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+};
+
+class DrugsPrintWidget : public QWidget, private Ui::DrugsPrintWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DrugsPrintWidget)
+
+public:
+    explicit DrugsPrintWidget(QWidget *parent = 0);
+
+    static void writeDefaultSettings( Core::ISettings *s );
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -96,7 +114,7 @@ public:
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:
-    void saveToSettings( Core::ISettings *s = 0 );
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -116,7 +134,7 @@ public:
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:
-    void saveToSettings( Core::ISettings *s = 0 );
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -145,6 +163,27 @@ public:
     QWidget *createPage(QWidget *parent = 0);
 private:
     QPointer<Internal::DrugsViewWidget> m_Widget;
+};
+
+class DrugsPrintOptionsPage : public Core::IOptionsPage
+{
+public:
+    DrugsPrintOptionsPage(QObject *parent = 0);
+    ~DrugsPrintOptionsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void applyChanges();
+    void finish();
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsPrintWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::DrugsPrintWidget> m_Widget;
 };
 
 class DrugsUserOptionsPage : public Core::IOptionsPage

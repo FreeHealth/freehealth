@@ -70,7 +70,6 @@ namespace Ui {
 
 class DebugDialog : public QDialog
 {
-    /** \todo reimplement send message */
     Q_OBJECT
     Q_DISABLE_COPY(DebugDialog)
 

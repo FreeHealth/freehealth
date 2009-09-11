@@ -169,7 +169,6 @@ void DosageDialog::on_drugNameButton_clicked()
     dialog.exec();
 }
 
-/** \todo code this */
 void DosageDialog::on_innButton_clicked()
 {
     DrugsModel *m = DRUGMODEL;

@@ -75,7 +75,7 @@ DrugsViewOptionsPage::~DrugsViewOptionsPage()
 
 QString DrugsViewOptionsPage::id() const { return objectName(); }
 QString DrugsViewOptionsPage::name() const { return tr("Drugs View"); }
-QString DrugsViewOptionsPage::category() const { return tkTr(Trans::Constants::PLUGINS_CATEGORY); }
+QString DrugsViewOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsViewOptionsPage::resetToDefaults()
 {
@@ -87,7 +87,7 @@ void DrugsViewOptionsPage::applyChanges()
     if (!m_Widget) {
         return;
     }
-    /** \todo here */
+    m_Widget->saveToSettings(Core::ICore::instance()->settings());
 }
 
 void DrugsViewOptionsPage::finish() { delete m_Widget; }
@@ -97,6 +97,46 @@ QWidget *DrugsViewOptionsPage::createPage(QWidget *parent)
     if (m_Widget)
         delete m_Widget;
     m_Widget = new DrugsViewWidget(parent);
+    return m_Widget;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  DrugsPrintOptionsPage  //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+DrugsPrintOptionsPage::DrugsPrintOptionsPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0) { setObjectName("DrugsPrintOptionsPage"); }
+
+DrugsPrintOptionsPage::~DrugsPrintOptionsPage()
+{
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
+}
+
+QString DrugsPrintOptionsPage::id() const { return objectName(); }
+QString DrugsPrintOptionsPage::name() const { return tr("Drugs Printing"); }
+QString DrugsPrintOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+
+void DrugsPrintOptionsPage::resetToDefaults()
+{
+    m_Widget->writeDefaultSettings(Core::ICore::instance()->settings());
+}
+
+void DrugsPrintOptionsPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
+    }
+    m_Widget->saveToSettings(Core::ICore::instance()->settings());
+}
+
+void DrugsPrintOptionsPage::finish() { delete m_Widget; }
+
+QWidget *DrugsPrintOptionsPage::createPage(QWidget *parent)
+{
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new DrugsPrintWidget(parent);
     return m_Widget;
 }
 
@@ -115,7 +155,7 @@ DrugsUserOptionsPage::~DrugsUserOptionsPage()
 
 QString DrugsUserOptionsPage::id() const { return objectName(); }
 QString DrugsUserOptionsPage::name() const { return tr("Drugs User"); }
-QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::PLUGINS_CATEGORY); }
+QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsUserOptionsPage::resetToDefaults()
 {
@@ -127,7 +167,7 @@ void DrugsUserOptionsPage::applyChanges()
     if (!m_Widget) {
         return;
     }
-    /** \todo here */
+    m_Widget->saveToSettings(Core::ICore::instance()->settings());
 }
 
 void DrugsUserOptionsPage::finish() { delete m_Widget; }
@@ -155,7 +195,7 @@ DrugsExtraOptionsPage::~DrugsExtraOptionsPage()
 
 QString DrugsExtraOptionsPage::id() const { return objectName(); }
 QString DrugsExtraOptionsPage::name() const { return tr("Drug Extras"); }
-QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::PLUGINS_CATEGORY); }
+QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsExtraOptionsPage::resetToDefaults()
 {
@@ -167,7 +207,7 @@ void DrugsExtraOptionsPage::applyChanges()
     if (!m_Widget) {
         return;
     }
-    /** \todo here */
+    m_Widget->saveToSettings(Core::ICore::instance()->settings());
 }
 
 void DrugsExtraOptionsPage::finish() { delete m_Widget; }
@@ -188,13 +228,6 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
 {
     setupUi(this);
     Core::ITheme *th = Core::ICore::instance()->theme();
-    // set icons
-    drugBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
-    drugUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
-    drugItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
-    prescrBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
-    prescrUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
-    prescrItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
 
     // feed with actual values
     Core::ISettings *s = Core::ICore::instance()->settings();
@@ -215,24 +248,6 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
 
     viewFontCombo->setCurrentFont( s->value( MFDRUGS_SETTING_VIEWFONT ).toString() );
     viewFontSizeSpin->setValue( s->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt() );
-
-    QFont drugsFont;
-    drugsFont.fromString(s->value( MFDRUGS_SETTING_DRUGFONT ).toString());
-    QFont prescrFont;
-    prescrFont.fromString(s->value( MFDRUGS_SETTING_PRESCRIPTIONFONT ).toString());
-
-    drugFontCombo->setCurrentFont( drugsFont );
-    prescriptionFontCombo->setCurrentFont( prescrFont );
-
-    prescriptionFontSizeSpin->setValue( prescrFont.pointSize() );
-    prescrBoldButton->setChecked( prescrFont.bold() );
-    prescrItalicButton->setChecked( prescrFont.italic() );
-    prescrUnderlineButton->setChecked( prescrFont.underline() );
-
-    drugFontSizeSpin->setValue( drugsFont.pointSize() );
-    drugBoldButton->setChecked( drugsFont.bold() );
-    drugUnderlineButton->setChecked( drugsFont.italic() );
-    drugItalicButton->setChecked( drugsFont.underline() );
 }
 
 void DrugsViewWidget::saveToSettings( Core::ISettings *settings )
@@ -257,21 +272,6 @@ void DrugsViewWidget::saveToSettings( Core::ISettings *settings )
     s->setValue( MFDRUGS_SETTING_DRUGHISTORY, QVariant() );
     s->setValue( MFDRUGS_SETTING_LEVELOFWARNING , levelOfWarningCombo->currentIndex() );
 
-    QFont drugsFont = drugFontCombo->currentFont();
-    drugsFont.setBold(drugBoldButton->isChecked());
-    drugsFont.setItalic(drugItalicButton->isChecked());
-    drugsFont.setUnderline(drugUnderlineButton->isChecked());
-    drugsFont.setPointSize(drugFontSizeSpin->value());
-
-    QFont prescrFont = prescriptionFontCombo->currentFont();
-    prescrFont.setBold(prescrBoldButton->isChecked());
-    prescrFont.setItalic(prescrItalicButton->isChecked());
-    prescrFont.setUnderline(prescrUnderlineButton->isChecked());
-    prescrFont.setPointSize(prescriptionFontSizeSpin->value());
-
-    s->setValue( MFDRUGS_SETTING_DRUGFONT , drugsFont.toString() );
-    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString() );
-
     s->setValue( MFDRUGS_SETTING_VIEWFONT , viewFontCombo->currentFont() );
     s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value() );
 }
@@ -293,6 +293,91 @@ void DrugsViewWidget::writeDefaultSettings( Core::ISettings *s )
 }
 
 void DrugsViewWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////  DrugsPrintWidget  ////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    setupUi(this);
+    Core::ITheme *th = Core::ICore::instance()->theme();
+    // set icons
+    drugBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
+    drugUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
+    drugItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
+    prescrBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
+    prescrUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
+    prescrItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
+
+    // feed with actual values
+    Core::ISettings *s = Core::ICore::instance()->settings();
+
+    QFont drugsFont;
+    drugsFont.fromString(s->value( MFDRUGS_SETTING_DRUGFONT ).toString());
+    QFont prescrFont;
+    prescrFont.fromString(s->value( MFDRUGS_SETTING_PRESCRIPTIONFONT ).toString());
+
+    drugFontCombo->setCurrentFont( drugsFont );
+    prescriptionFontCombo->setCurrentFont( prescrFont );
+
+    prescriptionFontSizeSpin->setValue( prescrFont.pointSize() );
+    prescrBoldButton->setChecked( prescrFont.bold() );
+    prescrItalicButton->setChecked( prescrFont.italic() );
+    prescrUnderlineButton->setChecked( prescrFont.underline() );
+
+    drugFontSizeSpin->setValue( drugsFont.pointSize() );
+    drugBoldButton->setChecked( drugsFont.bold() );
+    drugUnderlineButton->setChecked( drugsFont.italic() );
+    drugItalicButton->setChecked( drugsFont.underline() );
+}
+
+void DrugsPrintWidget::saveToSettings( Core::ISettings *settings )
+{
+    Core::ISettings *s;
+    if (!settings)
+        s = Core::ICore::instance()->settings();
+    else
+        s = settings;
+
+    QFont drugsFont = drugFontCombo->currentFont();
+    drugsFont.setBold(drugBoldButton->isChecked());
+    drugsFont.setItalic(drugItalicButton->isChecked());
+    drugsFont.setUnderline(drugUnderlineButton->isChecked());
+    drugsFont.setPointSize(drugFontSizeSpin->value());
+
+    QFont prescrFont = prescriptionFontCombo->currentFont();
+    prescrFont.setBold(prescrBoldButton->isChecked());
+    prescrFont.setItalic(prescrItalicButton->isChecked());
+    prescrFont.setUnderline(prescrUnderlineButton->isChecked());
+    prescrFont.setPointSize(prescriptionFontSizeSpin->value());
+
+    s->setValue( MFDRUGS_SETTING_DRUGFONT , drugsFont.toString() );
+    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString() );
+}
+
+void DrugsPrintWidget::writeDefaultSettings( Core::ISettings *s )
+{
+//    qWarning() << "---------> writedefaults";
+    Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget") );
+    s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
+    s->setValue( MFDRUGS_SETTING_DRUGFONT , QFont().toString() );
+    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString() );
+    s->sync();
+}
+
+void DrugsPrintWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {

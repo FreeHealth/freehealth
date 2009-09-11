@@ -36,6 +36,7 @@
 #include "mainwindow.h"
 
 #include <coreplugin/icore.h>
+#include <utils/log.h>
 
 #include <QtCore/QtPlugin>
 
@@ -46,7 +47,8 @@ using namespace MainWin;
 MainWinPlugin::MainWinPlugin()
 {
     m_MainWindow = 0;
-    qWarning() << "creating MainWinPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating MainWinPlugin";
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -57,7 +59,8 @@ MainWinPlugin::~MainWinPlugin()
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "MainWinPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     m_MainWindow = new MainWindow();
@@ -67,7 +70,8 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
-    qWarning() << "MainWinPlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWinPlugin::extensionsInitialized";
 
     m_MainWindow->initialize(QStringList(),0);
     m_MainWindow->extensionsInitialized();

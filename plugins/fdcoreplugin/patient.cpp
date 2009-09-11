@@ -210,12 +210,12 @@ bool Patient::fromXml(const QString &xml)
   - [[WEIGHT]]
   - [[SIZE]]
   - [[CLCR]]
-  \sa tkGlobal::replaceTokens(), mfDrugsConstants
+  \sa Utils::replaceTokens(), mfDrugsConstants
 */
 void Patient::replaceTokens(QString &stringWillBeModified)
 {
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(Patient::FullName).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::FullName).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(Patient::Weight).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_SIZE,        value(Patient::Size).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_DATEOFBIRTH, value(Patient::DateOfBirth).toString() );

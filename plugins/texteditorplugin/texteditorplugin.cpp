@@ -34,6 +34,8 @@
  ***************************************************************************/
 #include "texteditorplugin.h"
 
+#include <utils/log.h>
+
 #include <QtCore/QtPlugin>
 
 #include <QDebug>
@@ -42,6 +44,7 @@ using namespace Editor;
 
 TextEditorPlugin::TextEditorPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating TextEditorPlugin";
 }
 
@@ -51,7 +54,8 @@ TextEditorPlugin::~TextEditorPlugin()
 
 bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "TextEditorPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     return true;
@@ -59,7 +63,8 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
 
 void TextEditorPlugin::extensionsInitialized()
 {
-    qWarning() << "TextEditorPlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "TextEditorPlugin::extensionsInitialized";
 }
 
 

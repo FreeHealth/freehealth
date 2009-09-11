@@ -151,7 +151,9 @@ namespace mfDrugsConstants
             "  <title>FreeDiams : Prescription</title>\n"
             "</head>\n"
             "<body style=\"font-family:Arial;font-size:12pt\">\n"
-            "<a href=\"{ENCODEDPRESCRIPTION}\">{PRESCRIPTION}</a>\n"
+            "<a href=\"{ENCODEDPRESCRIPTION}\">\n"
+            "{PRESCRIPTION}\n"
+            "</a>\n"
             "</body>\n"
             "</html>\n";
     const char * const  ENCODEDHTML_DRUG =
@@ -161,7 +163,7 @@ namespace mfDrugsConstants
             "</span>\n"
             "<br />\n"
             "<span style=\"{PRESCRIPTIONSTYLE}\">\n"
-            "{PRESCRIPTION}<br />"
+            "{PRESCRIPTION}<br />\n"
 //            "&nbsp;&nbsp;&nbsp;{NOTE}\n"
             "</span>\n"
             "<br />\n";

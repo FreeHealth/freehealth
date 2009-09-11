@@ -2,6 +2,7 @@
 #include "coreimpl.h"
 
 #include <extensionsystem/pluginmanager.h>
+#include <utils/log.h>
 
 #include <fdcoreplugin/appaboutpage.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
@@ -36,7 +37,8 @@ CorePlugin::~CorePlugin()
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
-    qWarning() << "CorePlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "CorePlugin::initialize";
     return m_CoreImpl->initialize(arguments,errorMessage);
 //    Q_UNUSED(arguments);
 //    const bool success = m_mainWindow->init(errorMessage);
@@ -53,7 +55,8 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
 void CorePlugin::extensionsInitialized()
 {
-    qWarning() << "CorePlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "CorePlugin::extensionsInitialized";
     m_CoreImpl->extensionsInitialized();
     // add about pages
     this->addAutoReleasedObject(new AppAboutPage(this));

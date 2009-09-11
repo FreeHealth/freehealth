@@ -664,7 +664,6 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 /** \brief For debugging purpose. */
 QString SettingsPrivate::toString() const
 {
-    /** \todo add uname output if running on linux */
     QString tmp = "\n\n";
     tmp += "********************\n";
     tmp += "**    SETTINGS    **\n";
@@ -691,8 +690,10 @@ QString SettingsPrivate::toString() const
         tmp.append( tr("Running on Linux" ) );
         tmp += tr("   uname returns : %1").arg(Utils::uname());
     }
-    else if (Utils::isRunningOnMac())
+    else if (Utils::isRunningOnMac()) {
         tmp.append( tr("Running on MacOs" ) );
+        tmp += tr("   uname returns : %1").arg(Utils::uname());
+    }
     else if (Utils::isRunningOnWin())
         tmp.append( tr("Running on Windows" ) );
 

@@ -5,6 +5,7 @@
 
 namespace Drugs {
 class DrugsViewOptionsPage;
+class DrugsPrintOptionsPage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
 }
@@ -29,6 +30,7 @@ public slots:
 
 private:
     Drugs::DrugsViewOptionsPage *viewPage;
+    Drugs::DrugsPrintOptionsPage *printPage;
     Drugs::DrugsUserOptionsPage *userPage;
     Drugs::DrugsExtraOptionsPage *extraPage;
 };

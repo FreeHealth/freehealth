@@ -53,7 +53,7 @@ public:
 
     // Use this with precaution (only used by FreeDiams)
     virtual void setMainWindow(IMainWindow *) {}
-    virtual Patient *patient() {return 0;}
+    virtual Patient *patient() const {return 0;}
 
     virtual FormManager *formManager() const = 0;
 

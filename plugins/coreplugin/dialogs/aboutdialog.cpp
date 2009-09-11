@@ -41,7 +41,6 @@
    You can get the default licence terms using the static getLicenceTerms() function. This function manages english and french language by looking the default QLocale()::name().\n
   \ingroup toolkit
   \ingroup widget_toolkit
-  \todo add LGPLfrench, GPLv3french licence terms.
 */
 
 #include "aboutdialog.h"

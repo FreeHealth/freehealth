@@ -122,13 +122,10 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------- mfDrug constructor / destructor ------------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsData::DrugsData(QObject *parent)
-    :QObject( parent ),
-    d(new DrugsDataPrivate())
+/** \brief Constructor. All created instance are deleted by Drugs::Internal::DrugsModel. */
+DrugsData::DrugsData()
+    : d(new DrugsDataPrivate())
 {
-    // for a better memory cleaning
-    if (!parent)
-        setParent(qApp);
     d->m_NoLaboDenomination.clear();
     d->m_PrescriptionChanges = true;
 }
@@ -162,7 +159,7 @@ void DrugsData::setValue( const int tableref, const int fieldref, const QVariant
                 d->m_COMPOValues.insertMulti( fieldref, value );
             break;
         }
-    default: Utils::Log::addError( this, tr( "Wrong table reference parameter in DrugsData::setValue()." ) ); break;
+    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::setValue()."); break;
     }
 }
 
@@ -232,7 +229,7 @@ QVariant DrugsData::value( const int tableref, const int fieldref ) const
             }
             return QVariant();
         }
-    default: Utils::Log::addError( this, tr( "Wrong table reference parameter in DrugsData::value()." ) ); break;
+    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::value()."); break;
     }
     return QVariant();
 }
@@ -731,7 +728,7 @@ void DrugsData::smallDrugWarn() const
 {
     if (!Utils::isDebugCompilation())
         return;
-    Utils::Log::addMessage(this, QString("get drug: %1 \t %2 \t %3 \t %4")
+    Utils::Log::addMessage("DrugsData", QString("get drug: %1 \t %2 \t %3 \t %4")
                       .arg(this->CIS())
                       .arg( this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
 }

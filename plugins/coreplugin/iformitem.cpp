@@ -46,6 +46,8 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>
+#include <translationutils/multilingualclasstemplate.h>
+#include <translationutils/constants.h>
 
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
@@ -56,74 +58,6 @@
 
 using namespace Core;
 using namespace Core::Internal;
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////  Multilingual template private class  ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \todo deport this template class to translationsutils lib */
-template <typename T> class MultiLingualClass
-{
-public:
-    MultiLingualClass() { }
-    virtual ~MultiLingualClass()
-    {
-        qDeleteAll(m_Hash_T_Lang);
-        m_Hash_T_Lang.clear();
-    }
-
-    virtual QString categoryForTreeWiget() const = 0;
-
-    bool hasLanguage(const QString &lang)
-    {
-        return m_Hash_T_Lang.contains(lang.left(2));
-    }
-
-    T *getLanguage(const QString &lang)
-    {
-        QString tmp = lang.left(2);
-        T *s = 0;
-        if (m_Hash_T_Lang.contains(tmp)) {
-            s = m_Hash_T_Lang.value(tmp);
-        } else {
-            if (m_Hash_T_Lang.contains(Constants::ALL_LANGUAGE))
-                s = m_Hash_T_Lang.value(Constants::ALL_LANGUAGE);
-        }
-        return s;
-    }
-
-    T *createLanguage(const QString &lang)
-    {
-        QString tmp = lang.left(2);
-        T *s = 0;
-        if (m_Hash_T_Lang.contains(tmp)) {
-            s = m_Hash_T_Lang.value(tmp);
-        } else {
-            s = new T;
-            m_Hash_T_Lang.insert(tmp,s);
-        }
-        return s;
-    }
-    
-    void toTreeWidget(QTreeWidgetItem *tree) const
-    {
-        QTreeWidgetItem *l = 0;
-        QFont bold;
-        bold.setBold(true);
-        QTreeWidgetItem *v = new QTreeWidgetItem(tree, QStringList() << categoryForTreeWiget() );
-        v->setFont(0,bold);
-        foreach(const QString &lang, m_Hash_T_Lang.keys()) {
-            l = new QTreeWidgetItem(v, QStringList() << "Language" << lang );
-            l->setFont(0,bold);
-            T *s = m_Hash_T_Lang.value(lang);
-            s->toTreeWidgetItem(l);
-        }
-    }
-
-private:
-    QHash<QString, T *> m_Hash_T_Lang;
-};
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  FormItemIdentifiants  //////////////////////////////////////////////
@@ -160,7 +94,7 @@ public:
 
 namespace Core {
 namespace Internal {
-class FormItemScriptsPrivate : public MultiLingualClass<ScriptsBook>
+class FormItemScriptsPrivate : public Trans::MultiLingualClass<ScriptsBook>
 {
 public:
     FormItemScriptsPrivate() {}
@@ -208,7 +142,7 @@ void FormItemScripts::setScript(const int type, const QString &script, const QSt
 
 QString FormItemScripts::script(const int type, const QString &lang) const
 {
-    ScriptsBook *s = d->getLanguage(Constants::ALL_LANGUAGE);
+    ScriptsBook *s = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
     if (!s)
         return QString::null;
     return s->m_Scripts.value(type);
@@ -221,7 +155,7 @@ void FormItemScripts::toTreeWidget(QTreeWidgetItem *tree)
 
 void FormItemScripts::warn() const
 {
-    ScriptsBook *s = d->getLanguage(Constants::ALL_LANGUAGE);
+    ScriptsBook *s = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
     Utils::quickDebugDialog(
             QStringList()
             << QString("Script_OnLoad\n") + s->m_Scripts.value(Script_OnLoad)
@@ -267,7 +201,7 @@ public:
     QVariant m_Default;
 };
 
-class FormItemValuesPrivate : public MultiLingualClass<ValuesBook>
+class FormItemValuesPrivate : public Trans::MultiLingualClass<ValuesBook>
 {
 public:
     FormItemValuesPrivate() {}
@@ -339,7 +273,7 @@ void FormItemValues::setOptionnal(bool state)
 */
 QStringList FormItemValues::values(const int typeOfValues) const
 {
-    ValuesBook *values = d->getLanguage(Core::Constants::ALL_LANGUAGE);
+    ValuesBook *values = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
     if (!values)
         return QStringList();
     QMap<int, QVariant> map;
@@ -486,7 +420,7 @@ public:
 
 namespace Core {
 namespace Internal {
-class FormItemSpecPrivate : public MultiLingualClass<SpecsBook>
+class FormItemSpecPrivate : public Trans::MultiLingualClass<SpecsBook>
 {
 public:
     FormItemSpecPrivate() {}
@@ -527,8 +461,8 @@ QVariant FormItemSpec::value(const int type, const QString &lang) const
     if (!values)
         return QString();
     QVariant val = values->m_Specs.value(type);
-    if (val.isNull() && (lang.compare(Constants::ALL_LANGUAGE)<0)) {
-        val = value(type, Constants::ALL_LANGUAGE);
+    if (val.isNull() && (lang.compare(Trans::Constants::ALL_LANGUAGE)<0)) {
+        val = value(type, Trans::Constants::ALL_LANGUAGE);
     }
     return values->m_Specs.value(type);
 }

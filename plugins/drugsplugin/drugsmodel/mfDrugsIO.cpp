@@ -277,6 +277,7 @@ bool DrugsIO::prescriptionFromXml(const QString &xml, Loader loader)
         hash.clear();
     }
     m->checkInteractions();
+    Utils::Log::addError("DrugsIO",tr("Xml prescription correctly read."));
     return true;
 }
 

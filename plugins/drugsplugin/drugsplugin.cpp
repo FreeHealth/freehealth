@@ -18,11 +18,13 @@ using namespace Drugs;
 
 DrugsPlugin::DrugsPlugin() :
         viewPage(0),
+        printPage(0),
         userPage(0),
         extraPage(0)
 {
     setObjectName("DrugsPlugin");
-    qWarning() << "creating DrugsPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating DrugsPlugin";
 }
 
 DrugsPlugin::~DrugsPlugin()
@@ -39,11 +41,16 @@ DrugsPlugin::~DrugsPlugin()
         removeObject(extraPage);
         delete extraPage; extraPage=0;
     }
+    if (printPage) {
+        removeObject(printPage);
+        delete printPage; printPage=0;
+    }
 }
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
-    qWarning() << "DrugsPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "DrugsPlugin::initialize";
 #ifdef FREEDIAMS
     Utils::Log::addMessage(this,"Running as FreeDiams");
 #endif
@@ -54,17 +61,21 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 
 void DrugsPlugin::extensionsInitialized()
 {
-    qWarning() << "DrugsPlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "DrugsPlugin::extensionsInitialized";
     viewPage = new DrugsViewOptionsPage(this);
+    printPage = new DrugsPrintOptionsPage(this);
     userPage = new DrugsUserOptionsPage(this);
     extraPage = new DrugsExtraOptionsPage(this);
     // check settings
     if (!Core::ICore::instance()->settings()->value(mfDrugsConstants::MFDRUGS_SETTING_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        printPage->writeDefaultSettings(Core::ICore::instance()->settings());
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
     }
     addObject(viewPage);
+    addObject(printPage);
     addObject(userPage);
     addObject(extraPage);
 }

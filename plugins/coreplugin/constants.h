@@ -314,10 +314,6 @@ const char * const  TOKEN_SIZE         ="SIZE";          /*!< /brief Tokens for 
 const char * const  TOKEN_CLCR         ="CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_DATE         ="DATE";
 
-
-// FormItems constants
-const char* const ALL_LANGUAGE     = "xx";
-
 }  // end Constants
 
 } // end Core

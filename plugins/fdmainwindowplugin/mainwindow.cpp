@@ -36,6 +36,7 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -59,6 +60,9 @@
 #include <fdcoreplugin/commandlineparser.h>
 #include <fdcoreplugin/patient.h>
 
+#include <fdmainwindowplugin/medintux.h>
+
+#include <drugsplugin/mfDrugsConstants.h>
 #include <drugsplugin/drugsmodel/mfDrugsIO.h>
 #include <drugsplugin/drugsdatabase/mfDrugsBase.h>
 
@@ -151,37 +155,67 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     setWindowTitle( qApp->applicationName() + " - " + qApp->applicationVersion() );
 
-//    m_CentralWidget->setFocus();
     return true;
 }
 
 void MainWindow::extensionsInitialized()
 {
+    Core::CommandLine *cl = Core::ICore::instance()->commandLine();
+    Core::ISettings *s = Core::ICore::instance()->settings();
+
+    // Update countdown to dosage transmission
+    int count = s->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
+    ++count;
+    if ((count==30) || (cl->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
+        s->setValue(Internal::SETTINGS_COUNTDOWN,0);
+        transmitDosage();
+    } else {
+        s->setValue(Internal::SETTINGS_COUNTDOWN,count);
+    }
+
     // Initialize drugs database
     Drugs::Internal::DrugsBase::instance();
-    // Update countdown to dosage transmission
-    int count = Core::ICore::instance()->settings()->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
-    ++count;
-    if ((count==30) || (Core::ICore::instance()->commandLine()->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
-        Core::ICore::instance()->settings()->setValue(Internal::SETTINGS_COUNTDOWN,0);
-        /** \todo here */
-//        transmitDosage();
-    } else
-        Core::ICore::instance()->settings()->setValue(Internal::SETTINGS_COUNTDOWN,count);
 
+    // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
 
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD) );
     m_ui->patientInformations->hide();
-//    refreshPatient();
+    refreshPatient();
 
-//    Drugs::::Internal::DrugsManager::instance();
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
-
     show();
+
+    // If needed read exchange file
+    const QString &exfile = cl->value(Core::CommandLine::CL_ExchangeFile).toString();
+    if (!exfile.isEmpty()) {
+        if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+            Utils::Log::addMessage(this, tr( "Reading a MedinTux exchange file." ) );
+            QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
+            if (tmp.contains(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG)) {
+                int begin = tmp.indexOf(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG) + QString(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG).length();
+                int end = tmp.indexOf("\"", begin);
+                QString encoded = tmp.mid( begin, end - begin );
+                Drugs::Internal::DrugsIO::instance()->prescriptionFromXml( QByteArray::fromBase64( encoded.toAscii() ) );
+            } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
+                /** \todo Manage wrong file encoding */
+                int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
+                int end = tmp.indexOf("\"", begin);
+                QString encoded = tmp.mid( begin, end - begin );
+                Drugs::Internal::DrugsIO::instance()->prescriptionFromXml( QByteArray::fromBase64( encoded.toAscii() ) );
+            }
+        } else {
+            QString extras;
+            Drugs::Internal::DrugsIO::loadPrescription(exfile, extras);
+            Core::ICore::instance()->patient()->fromXml(extras);
+        }
+    }
+
+    Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION) );
+    raise();
 }
 
 MainWindow::~MainWindow()
@@ -215,16 +249,27 @@ void MainWindow::refreshPatient() const
 /** \brief Close the main window and the application */
 void MainWindow::closeEvent( QCloseEvent *event )
 {
+    Utils::Log::addMessage(this, "Closing MainWindow");
     writeSettings();
-    /** \todo here */
+    Core::CommandLine *cl = Core::ICore::instance()->commandLine();
+    QString exfile = cl->value(Core::CommandLine::CL_ExchangeFile).toString();
+    if (exfile.isEmpty()) {
+        event->accept();
+        return;
+    }
+    if (!QFile(exfile).exists()) {
+        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
+    }
+    Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
+    Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(cl->value(Core::CommandLine::CL_MedinTux).toString()));
     // if is a medintux plugins --> save prescription to exchange file
-//    if (!diMedinTux::medintuxExchangeFileName().isEmpty()) {
-//        QString tmp = DrugsIO::instance()->prescriptionToHtml();
-//        tmp.replace("font-weight:bold;", "font-weight:600;");
-//        tkGlobal::saveStringToFile( tkGlobal::toHtmlAccent(tmp) , diMedinTux::medintuxExchangeFileName(), tkGlobal::DontWarnUser );
-//    } else if (!diCore::exchangeFileName().isEmpty()) {
-//        savePrescription(diCore::exchangeFileName());
-//    }
+    if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+        QString tmp = Drugs::Internal::DrugsIO::instance()->prescriptionToHtml();
+        tmp.replace("font-weight:bold;", "font-weight:600;");
+        Utils::saveStringToFile( Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser );
+    } else {
+        savePrescription(exfile);
+    }
     event->accept();
 }
 
@@ -232,14 +277,14 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::readSettings()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-//    s->restoreState( this, MFDRUGS_SETTINGS_STATEPREFIX );
+    s->restoreState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
 }
 
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-//    s->saveState( this, MFDRUGS_SETTINGS_STATEPREFIX );
+    s->saveState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
     s->sync();
 }
 
@@ -274,24 +319,6 @@ bool MainWindow::applicationPreferences()
     /** \todo here */
     Core::SettingsDialog dlg(this);
     dlg.exec();
-//    QTime t;
-//    t.start();
-//    Core::ISettings *s = Core::ICore::instance()->settings();
-//    QDialog dlg(this);
-//    QVBoxLayout l(&dlg);
-//    mfDrugsPreferences prefs(&dlg);
-//    QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
-//    connect(&buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()));
-//    connect(&buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
-//    l.addWidget( &prefs );
-//    l.addWidget( &buttonBox );
-//    dlg.setWindowTitle( tkTr(PREFERENCES_TEXT) + " - " + qApp->applicationName() );
-//    //    tkLog::logTimeElapsed(t, this->objectName(), "OpeningPreferences" );
-//    dlg.exec();
-//    if ( dlg.result() == QDialog::Accepted ) {
-//        prefs.saveToSettings(s);
-//        changeFontTo( QFont(s->value( MFDRUGS_SETTING_VIEWFONT ).toString(), s->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
-//    }
     return true;
 }
 
@@ -315,7 +342,7 @@ bool MainWindow::print()
 /** \brief Runs the MedinTux configurator */
 bool MainWindow::configureMedintux()
 {
-//    diMedinTux::configureMedinTux();
+    Internal::configureMedinTux();
     return true;
 }
 

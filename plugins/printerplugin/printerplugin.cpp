@@ -34,6 +34,8 @@
  ***************************************************************************/
 #include "printerplugin.h"
 
+#include <utils/log.h>
+
 #include <QtCore/QtPlugin>
 
 #include <QDebug>
@@ -42,6 +44,7 @@ using namespace Print;
 
 PrinterPlugin::PrinterPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PrinterPlugin";
 }
 
@@ -51,7 +54,8 @@ PrinterPlugin::~PrinterPlugin()
 
 bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "PrinterPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "PrinterPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     return true;
@@ -59,7 +63,8 @@ bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void PrinterPlugin::extensionsInitialized()
 {
-    qWarning() << "PrinterPlugin::extensionsInitialized";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "PrinterPlugin::extensionsInitialized";
 }
 
 
