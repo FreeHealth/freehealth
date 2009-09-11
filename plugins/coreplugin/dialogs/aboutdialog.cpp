@@ -44,7 +44,7 @@
 */
 
 #include "aboutdialog.h"
-#include "ui_AboutDialog.h"
+#include "ui_aboutdialog.h"
 
 #include <extensionsystem/pluginmanager.h>
 

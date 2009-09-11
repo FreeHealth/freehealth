@@ -330,7 +330,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
 #ifdef Q_OS_MAC
     cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNLEFT_MAC));
 #else
-    cmd->setDefaultKeySequence(tkTr(K_ALIGNLEFT));
+    cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNLEFT));
 #endif
     connect(a, SIGNAL(triggered()), this, SLOT(textAlign()));
     pMenu->addAction(cmd, Core::Constants::G_FORMAT_PARAGRAPH);
@@ -344,7 +344,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
 #ifdef Q_OS_MAC
     cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNRIGHT_MAC));
 #else
-    cmd->setDefaultKeySequence(tkTr(K_ALIGNRIGHT));
+    cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNRIGHT));
 #endif
     connect(a, SIGNAL(triggered()), this, SLOT(textAlign()));
     pMenu->addAction(cmd, Core::Constants::G_FORMAT_PARAGRAPH);
@@ -357,7 +357,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
 #ifdef Q_OS_MAC
     cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNCENTER_MAC));
 #else
-    cmd->setDefaultKeySequence(tkTr(K_ALIGNCENTER));
+    cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNCENTER));
 #endif
     cmd->setTranslations(Trans::Constants::ALIGNCENTER_TEXT);
     connect(a, SIGNAL(triggered()), this, SLOT(textAlign()));
@@ -372,7 +372,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
 #ifdef Q_OS_MAC
     cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNJUSTIFY_MAC));
 #else
-    cmd->setDefaultKeySequence(tkTr(K_ALIGNJUSTIFY));
+    cmd->setDefaultKeySequence(tkTr(Trans::Constants::K_ALIGNJUSTIFY));
 #endif
     connect(a, SIGNAL(triggered()), this, SLOT(textAlign()));
     pMenu->addAction(cmd, Core::Constants::G_FORMAT_PARAGRAPH);

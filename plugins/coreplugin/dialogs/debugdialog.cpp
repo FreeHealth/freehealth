@@ -40,7 +40,7 @@
   \ingroup widget_toolkit
 */
 #include "debugdialog.h"
-#include "ui_DebugDialog.h"
+#include "ui_debugdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>

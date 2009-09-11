@@ -53,7 +53,7 @@ Configuration *Configuration::instance()
 Configuration::Configuration( QObject *parent ) :
         QObject(parent), d(0)
 {
-    tkGlobal::functionNotAvailableMessageBox( tr("Medintux Configurator") );
+    Utils::functionNotAvailableMessageBox( tr("Medintux Configurator") );
 }
 
 Configuration::~Configuration()

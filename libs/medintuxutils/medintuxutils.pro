@@ -1,15 +1,12 @@
 # toolkit library project file
 TEMPLATE         = lib
-TARGET           = Medintux
+TARGET           = MedinTux
 PACKAGE_VERSION  = 0.1.0
 !win32:VERSION   = $${PACKAGE_VERSION}
 
 # include config file
 include( ../libsworkbench.pri )
 include( ../medintuxutils_dependencies.pri )
-
-# include sdk
-INCLUDEPATH *= $${PWD}/sdk
 
 # define Qt
 QT *= sql
