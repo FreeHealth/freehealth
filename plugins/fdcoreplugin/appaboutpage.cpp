@@ -32,79 +32,81 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#include "appaboutpage.h"
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <fdcoreplugin/coreimpl.h>
+#include <fdcoreplugin/commandlineparser.h>
 
-/**
- * \file mfDrugsCentralWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
-*/
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QSpacerItem>
+#include <QApplication>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
+using namespace Core;
+using namespace Core::Internal;
 
-namespace Drugs {
-namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
+static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
+        "<p align=center><b>Welcome to FreeDiams</b><br />"
+        "Copyright (C) 2008-2009 by Eric MAEKER, MD</p>"
+        "<p align=left>This application is a stable release but can still contains some bugs.<br />"
+        "This software is release without any warranty and only for test purposal.<br />"
+        "Please refer to web site for more informations.<br />"
+        "<a href=\"%1\">Web site</a>"
+        "</p>"
+        );
 
-class DrugsCentralWidget : public QWidget
+AppAboutPage::AppAboutPage(QObject *parent) :
+        IAboutPage(parent)
 {
-    Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
+    setObjectName("AppAboutPage");
+}
 
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
+AppAboutPage::~AppAboutPage()
+{
+}
 
-public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+QWidget *AppAboutPage::widget()
+{
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    QLabel *label = new QLabel(w);
+    label->setWordWrap(true);
+    label->setOpenExternalLinks(true);
+    layout->addWidget(label);
+    layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    label->clear();
+    label->setText(tr(ABOUT_TEXT).arg(qApp->organizationDomain()));
+    return w;
+}
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
+QWidget *CommandLineAboutPage::widget()
+{
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    QTreeWidget *tree = new QTreeWidget(w);
+    tree->setColumnCount(2);
+    layout->addWidget(tree);
 
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
+    for(int i=0; i<CommandLine::CL_MaxParam;++i) {
+        new QTreeWidgetItem(tree, QStringList()
+                            << CoreImpl::instance()->commandLine()->paramName(i)
+                            << CoreImpl::instance()->commandLine()->value(i, QString("not defined")).toString());
+    }
+    tree->resizeColumnToContents(0);
+    tree->resizeColumnToContents(1);
+    return w;
+}
 
-protected:
-    void createConnections();
-    void disconnect();
-
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
-
-private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
-};
-
-}  // End Drugs
-
-#endif // MFDRUGSCENTRALWIDGET_H

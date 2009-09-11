@@ -42,8 +42,8 @@
 #define MFDRUGSBASE_H
 
 // include drugswidget headers
-#include <mfDrugsConstants.h>
-#include <drugsdatabase/mfInteractionsBase.h>
+#include <drugsplugin/mfDrugsConstants.h>
+#include <drugsplugin/drugsdatabase/mfInteractionsBase.h>
 
 // include Qt headers
 #include <QVariant>

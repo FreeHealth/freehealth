@@ -147,12 +147,7 @@ DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
     // intialize drugs database
     DrugsBase::instance();
 
-    // check settings
-    if (!Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_CONFIGURED, false).toBool())
-        DrugsPreferences::writeDefaultSettings(Core::ICore::instance()->settings());
-
     // create main widget
-    m_PrescriptionModel = new DrugsModel(this);
     DrugsCentralWidget *centralWidget = new DrugsCentralWidget(this);
     centralWidget->initialize();
     hb->addWidget(centralWidget);

@@ -53,6 +53,9 @@
 
 #include <fmfcoreplugin/mainwindow.h>
 
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
 
 #include <translationutils/constanttranslations.h>
@@ -69,6 +72,7 @@ static CoreImpl *m_instance = 0;
 
 using namespace Core;
 using namespace Core::Internal;
+using namespace Trans::ConstantTranslations;
 
 
 ICore* ICore::instance()
@@ -79,6 +83,14 @@ ICore* ICore::instance()
 // instance is created by Core::CorePlugin()
 CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
 {
+    // Set application libraries
+    if (!Utils::isDebugCompilation()) {
+        QApplication::setLibraryPaths( QStringList() << settings()->path(ISettings::QtPlugInsPath) );
+    }
+    foreach(const QString &l, QCoreApplication::libraryPaths() ) {
+        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+    }
+
     m_UID = new UniqueIDManager();
     m_Settings = new SettingsPrivate(this);
     m_Theme = new ThemePrivate(this);

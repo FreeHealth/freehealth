@@ -59,6 +59,7 @@ bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void PrinterPlugin::extensionsInitialized()
 {
+    qWarning() << "PrinterPlugin::extensionsInitialized";
 }
 
 

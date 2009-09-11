@@ -32,79 +32,89 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef COREIMPL_H
+#define COREIMPL_H
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <coreplugin/icore.h>
 
-/**
- * \file mfDrugsCentralWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
-*/
+namespace MedinTux {
+class Configuration;
+}
 
+namespace Core {
+    class MainWindow;
+    class ActionManager;
+    class ISettings;
+    class IMainWindow;
+    class CommandLine;
+    class Patient;
 
-namespace Drugs {
 namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
+    class ThemePrivate;
+    class ActionManagerPrivate;
+    class ContextManagerPrivate;
+    class SettingsPrivate;
 }  // End Internal
+}  // End Core
 
-class DrugsCentralWidget : public QWidget
+
+namespace Core {
+namespace Internal {
+
+class CoreImpl : public Core::ICore
 {
     Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    CoreImpl(QObject *parent);
+    ~CoreImpl();
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
+    ActionManager *actionManager() const;
+    ContextManager *contextManager() const;
+    UniqueIDManager *uniqueIDManager() const;
 
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
+    ITheme *theme() const;
+    Translators *translators() const;
 
-protected:
-    void createConnections();
-    void disconnect();
+    ISettings *settings() const;
 
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
+    IMainWindow *mainWindow() const;
+    void setMainWindow(IMainWindow *);
+
+    FormManager *formManager() const;
+
+    // initialization
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
+
+    // FreeDiams specific
+    CommandLine *commandLine() const;  /** \todo share CommandLine with ICore */
+    MedinTux::Configuration *medintuxConfiguration() const;
+    Patient *patient() const;
+
 
 private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    IMainWindow *m_MainWindow;
+    ActionManagerPrivate *m_ActionManager;
+    ContextManagerPrivate *m_ContextManager;
+    UniqueIDManager *m_UID;
+    ThemePrivate *m_Theme;
+    Translators *m_Translators;
+    SettingsPrivate *m_Settings;
+    FormManager *m_FormManager;
+    CommandLine *m_CommandLine;
+    mutable MedinTux::Configuration *m_MedinTux;
+    Patient *m_Patient;
 };
 
-}  // End Drugs
+} // namespace Internal
+} // namespace Core
 
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif // COREIMPL_H

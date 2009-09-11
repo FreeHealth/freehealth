@@ -32,79 +32,47 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef APPABOUTPAGE_H
+#define APPABOUTPAGE_H
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <coreplugin/iaboutpage.h>
 
-/**
- * \file mfDrugsCentralWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
-*/
-
-
-namespace Drugs {
+namespace Core {
 namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
 
-class DrugsCentralWidget : public QWidget
+class AppAboutPage : public IAboutPage
 {
-    Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    AppAboutPage(QObject *parent);
+    ~AppAboutPage();
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    QString id() const       { return objectName();   }
+    QString name() const     { return tr("1. General"); }
+    QString category() const { return tr("Application"); }
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
-
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
-
-protected:
-    void createConnections();
-    void disconnect();
-
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
-
-private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    QWidget *widget();
 };
 
-}  // End Drugs
+class CommandLineAboutPage : public IAboutPage
+{
+public:
+    CommandLineAboutPage(QObject *parent) : IAboutPage(parent) {}
+    ~CommandLineAboutPage() {}
 
-#endif // MFDRUGSCENTRALWIDGET_H
+    QString id() const       { return objectName();   }
+    QString name() const     { return tr("5. Command line"); }
+    QString category() const { return tr("Application"); }
+
+    QWidget *widget();
+};
+
+} // End Internal
+} // End Core
+
+#endif // APPABOUTPAGE_H

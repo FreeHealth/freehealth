@@ -47,9 +47,8 @@
 
 #include "mfInteractionDialog.h"
 
-#ifdef DRUGS_INTERACTIONS_STANDALONE
-#include <diCore.h>
-#include "diPatient.h"
+#ifdef FREEDIAMS
+#  include <fdcoreplugin/patient.h>
 #endif
 
 // include drugswidget headers
@@ -61,10 +60,12 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/dialogs/helpdialog.h>
 
 #include <printerplugin/printer.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 using namespace mfInteractionsConstants;
 
@@ -90,18 +91,19 @@ void InteractionDialog::on_helpButton_clicked()
 void InteractionDialog::on_printButton_clicked()
 {
     /** \todo add functionnality to FMF */
-#ifdef DRUGS_INTERACTIONS_STANDALONE
+    Core::ISettings *s = Core::ICore::instance()->settings();
+#ifdef FREEDIAMS
     Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = Core::Icore::instance()->settings()->value( MFDRUGS_SETTING_USERHEADER ).toString();
-    diCore::patient()->replaceTokens(header);
-    tkGlobal::replaceToken(header, TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    p.setHeader( header );
-    header = Core::Icore::instance()->settings()->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    QString header = s->value( MFDRUGS_SETTING_USERHEADER ).toString();
+    Core::ICore::instance()->patient()->replaceTokens(header);
+    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
+    p.setHeader(header);
+    header = s->value( MFDRUGS_SETTING_USERFOOTER ).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
-    p.setFooter( header );
+    p.setFooter(header);
     p.addTextWatermark(tr("Made with FreeDiams."), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
     p.print( textBrowser->toHtml() );
 #endif

@@ -43,6 +43,7 @@
 // include drugs widget headers
 #include <mfDrugsConstants.h>
 #include <drugswidget/mfDrugsCentralWidget.h>
+#include <drugswidget/mfPrescriptionViewer.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -159,7 +160,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         menu->setTranslations(mfDrugsConstants::DRUGSMENU_TEXT);
     }
     Q_ASSERT(menu);
-#ifdef DRUGS_INTERACTIONS_STANDALONE
+#ifdef FREEDIAMS
     am->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);
 #else
     am->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);

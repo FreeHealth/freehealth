@@ -35,76 +35,105 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef FREEDIAMS_MAINWINDOW_H
+#define FREEDIAMS_MAINWINDOW_H
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <coreplugin/core_exporter.h>
+#include <coreplugin/imainwindow.h>
+
+// include Qt headers
+#include <QCloseEvent>
+
+QT_BEGIN_NAMESPACE
+class QAction;
+class QMenu;
+class QTextEdit;
+QT_END_NAMESPACE
 
 /**
- * \file mfDrugsCentralWidget.h
+ * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
+ * \version 0.0.14
  * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
 */
 
-
-namespace Drugs {
+namespace Core {
 namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
 namespace Ui {
-class DrugsCentralWidget;
+class MainWindow;
 }  // End Ui
 }  // End Internal
 
-class DrugsCentralWidget : public QWidget
+class CORE_EXPORT MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
+    enum { MaxRecentFiles = 10 };
 
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    // IMainWindow Interface
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
+    void refreshPatient() const;
+void readSettings();
+void writeSettings();
+void createStatusBar();
+bool savePrescription(const QString &fileName = QString::null);
+void changeFontTo(const QFont &font);
 
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
+
+public Q_SLOTS: // Interface of MainWidowActionHandler
+//    virtual bool newFile()     {return false;}
+    bool openFile();
+    bool saveFile();
+    bool saveAsFile();
+    bool print();
+//
+    bool applicationPreferences();
+    bool configureMedintux();
+//
+//    virtual bool aboutApplication();
+    bool applicationHelp();
+//    bool aboutQt();
+    bool aboutPlugins();
+
+    // slots for patient's datas
+    void on_patientName_textChanged(const QString &text);
+    void on_patientWeight_valueChanged(const QString &text);
+    void on_patientSize_valueChanged(const QString &text);
+    void on_sexCombo_currentIndexChanged(const QString &text);
+    void on_patientClCr_valueChanged(const QString &text);
+    void on_patientCreatinin_valueChanged(const QString &text);
+    void on_listOfAllergies_textChanged(const QString &text);
 
 protected:
-    void createConnections();
-    void disconnect();
+    void closeEvent( QCloseEvent *event );
 
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
+public:
+    Internal::Ui::MainWindow *m_ui;
+    QToolBar *fileToolBar;
+    QToolBar *editToolBar;
 
-private:
-    void focusInEvent(QFocusEvent *event);
+    QAction *recentFilesAct[MaxRecentFiles];
+    QAction *aUserManager;
 
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    QStringList recentFiles;
+
+    QString           m_CurrentFile;
+    bool              m_HelpTextShow;
+    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
+    int               m_TimerId;
+    //     mfRecovererThread thread;
+    bool              m_OpenLastOpenedForm;
+    QByteArray        windowState;
 };
 
-}  // End Drugs
+} // End Core
 
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif  // FREEDIAMS_MAINWINDOW_H

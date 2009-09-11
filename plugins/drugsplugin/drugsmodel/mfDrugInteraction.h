@@ -63,13 +63,13 @@ namespace Internal {
 class DrugsData;
 class InteractionsBase;
 
-class DrugInteraction : public QObject
+class DrugInteraction
 {
     /** \todo remove QObject class from here ! */
     friend class InteractionsBase;
     friend class InteractionsBasePrivate;
 public:
-    DrugInteraction( QObject * parent = 0 )  : QObject( parent )  { setObjectName( "mfDrugsInteraction"); }
+    DrugInteraction() {}
     ~DrugInteraction() {}
 
     // static getters and viewers

@@ -32,79 +32,20 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef DIMEDINTUX_H
+#define DIMEDINTUX_H
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+class QString;
+class QSplashScreen;
 
-/**
- * \file mfDrugsCentralWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
-*/
+#define Q_DIMEDITUNTUX_BEGIN  namespace diMedinTux {
+#define Q_DIMEDITUNTUX_END    }
 
+Q_DIMEDITUNTUX_BEGIN
+    const bool isMedinTuxPlugIns(QSplashScreen *s);
+    const QString medintuxExchangeFileName();
+    const void configureMedinTux();
+    const QString prescriptionToMedinTuxHtml();
+Q_DIMEDITUNTUX_END
 
-namespace Drugs {
-namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
-
-class DrugsCentralWidget : public QWidget
-{
-    Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
-
-public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
-
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
-
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
-
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
-
-protected:
-    void createConnections();
-    void disconnect();
-
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
-
-private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
-};
-
-}  // End Drugs
-
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif // DIMEDINTUX_H

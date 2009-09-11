@@ -53,11 +53,6 @@
 #include <QHeaderView>
 
 
-#ifndef DRUGS_INTERACTIONS_STANDALONE
-/** \todo here */
-//#    include <mfCore.h>
-#endif
-
 using namespace mfDrugsConstants;
 using namespace Drugs;
 using namespace Drugs::Internal;

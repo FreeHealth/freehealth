@@ -60,6 +60,7 @@ bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void ListViewPlugin::extensionsInitialized()
 {
+    qWarning() << "ListViewPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

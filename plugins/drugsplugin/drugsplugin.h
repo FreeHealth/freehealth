@@ -4,9 +4,9 @@
 #include <extensionsystem/iplugin.h>
 
 namespace Drugs {
-namespace Internal {
-    class CoreImpl;
-}
+class DrugsViewOptionsPage;
+class DrugsUserOptionsPage;
+class DrugsExtraOptionsPage;
 }
 
 
@@ -26,6 +26,11 @@ public:
 
 public slots:
     void remoteArgument(const QString&);
+
+private:
+    Drugs::DrugsViewOptionsPage *viewPage;
+    Drugs::DrugsUserOptionsPage *userPage;
+    Drugs::DrugsExtraOptionsPage *extraPage;
 };
 
 } // namespace Internal

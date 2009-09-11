@@ -102,7 +102,7 @@ public:
     bool addFromXml(const QString &xml);
     void toPrescription(const int row);
 
-#ifdef DRUGS_INTERACTIONS_STANDALONE
+#ifdef FREEDIAMS
     bool userCanRead()   { return true; }
     bool userCanWrite()  { return true; }
 #else

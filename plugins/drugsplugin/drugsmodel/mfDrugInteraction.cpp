@@ -115,18 +115,19 @@ QVariant DrugInteraction::value( const int fieldref ) const
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 QString DrugInteraction::typeToString( const int t )
 {
+    /** \todo add translations */
      QStringList tmp;
      Interaction::TypesOfIAM r = Interaction::TypesOfIAM( t );
      if ( r & Interaction::APrendreEnCompte )
-          tmp << tr( "Take into account" );
+          tmp << ( "Take into account" );
      if ( r & Interaction::Deconseille )
-          tmp << tr( "Discouraged" );
+          tmp << ( "Discouraged" );
      if ( r & Interaction::ContreIndication )
-          tmp << tr( "Contraindication" );
+          tmp << ( "Contraindication" );
      if ( r & Interaction::Precaution )
-          tmp << tr( "Precaution for use" );
+          tmp << ( "Precaution for use" );
      if ( r & Interaction::Information )
-          tmp << tr( "Information" );
+          tmp << ( "Information" );
 
      return tmp.join( ", " );
 }

@@ -121,6 +121,8 @@ public:
     InteractionsManagerPrivate() :
             m_LogChrono(false)
     {
+        m_DrugInteractionList.clear();
+        m_DrugsList.clear();
     }
 
     ~InteractionsManagerPrivate()
@@ -200,23 +202,23 @@ void InteractionsManager::clearDrugsList()
 */
 bool InteractionsManager::checkInteractions()
 {
-     QTime t;
-     t.start();
+    QTime t;
+    t.start();
 
-     // check all drugs in the list
-     bool toReturn = false;
+    // check all drugs in the list
+    bool toReturn = false;
 
-     // clear cached datas
-     qDeleteAll(d->m_DrugInteractionList);
-     d->m_DrugInteractionList.clear();
+    // clear cached datas
+    qDeleteAll(d->m_DrugInteractionList);
+    d->m_DrugInteractionList.clear();
 
-     // get interactions list from drugsbase
-     d->m_DrugInteractionList = DrugsBase::instance()->calculateInteractions(d->m_DrugsList);
+    // get interactions list from drugsbase
+    d->m_DrugInteractionList = DrugsBase::instance()->calculateInteractions(d->m_DrugsList);
 
-     if (d->m_LogChrono)
-         Utils::Log::logTimeElapsed(t, "InteractionsManager", QString("interactions() : %2 drugs")
-                           .arg(d->m_DrugsList.count()) );
-     return toReturn;
+    if (d->m_LogChrono)
+        Utils::Log::logTimeElapsed(t, "InteractionsManager", QString("interactions() : %2 drugs")
+                                   .arg(d->m_DrugsList.count()) );
+    return toReturn;
 }
 
 /**
@@ -226,9 +228,9 @@ bool InteractionsManager::checkInteractions()
 */
 QList<DrugInteraction*> InteractionsManager::getInteractions( const DrugsData *drug ) const
 {
-     if ( d->m_DrugInteractionList.isEmpty() )
-          return d->m_DrugInteractionList;
-     return d->getDrugSpecificInteractions(drug);
+    if ( d->m_DrugInteractionList.isEmpty() )
+        return d->m_DrugInteractionList;
+    return d->getDrugSpecificInteractions(drug);
 }
 
 /**
@@ -238,13 +240,13 @@ QList<DrugInteraction*> InteractionsManager::getInteractions( const DrugsData *d
 */
 Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const DrugsData *drug) const
 {
-     if ( d->m_DrugInteractionList.isEmpty() )
-          return Interaction::noIAM;
-     const QList<DrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
-     Interaction::TypesOfIAM r;
-     foreach( DrugInteraction* di, list )
-         r |= di->type();
-     return r;
+    if ( d->m_DrugInteractionList.isEmpty() )
+        return Interaction::noIAM;
+    const QList<DrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
+    Interaction::TypesOfIAM r;
+    foreach( DrugInteraction* di, list )
+        r |= di->type();
+    return r;
 }
 
 /**
@@ -265,7 +267,8 @@ bool InteractionsManager::drugHaveInteraction( const DrugsData *drug ) const
 */
 DrugInteraction *InteractionsManager::getLastInteractionFound() const
 {
-     if (!d->m_DrugInteractionList.isEmpty() )
+    qWarning() << d->m_DrugInteractionList << d->m_DrugInteractionList.isEmpty();
+     if (!d->m_DrugInteractionList.isEmpty())
           return d->m_DrugInteractionList.at(0);
      return 0;
 }

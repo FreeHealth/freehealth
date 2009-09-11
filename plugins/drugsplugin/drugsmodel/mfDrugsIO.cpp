@@ -59,6 +59,7 @@
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/constants.h>
 
 #include <QApplication>
 #include <QHash>
@@ -477,7 +478,7 @@ bool DrugsIO::savePrescription(const QHash<QString,QString> &extraDatas, const Q
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
-                                      tr(FREEDIAMS_FILEFILTER)) ;
+                                      tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
     else
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }
@@ -501,7 +502,7 @@ bool DrugsIO::savePrescription(const QString &extraXmlDatas, const QString &toFi
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
-                                      tr(FREEDIAMS_FILEFILTER)) ;
+                                      tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
     else
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }

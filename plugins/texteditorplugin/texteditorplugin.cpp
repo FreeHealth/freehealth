@@ -59,6 +59,7 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
 
 void TextEditorPlugin::extensionsInitialized()
 {
+    qWarning() << "TextEditorPlugin::extensionsInitialized";
 }
 
 

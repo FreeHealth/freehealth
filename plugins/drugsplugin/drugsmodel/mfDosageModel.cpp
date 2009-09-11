@@ -74,7 +74,7 @@
 #include <coreplugin/icore.h>
 
 // including usertoolkit headers (for FreeMedForms only)
-#ifndef DRUGS_INTERACTIONS_STANDALONE
+#ifndef FREEDIAMS
 //#   include <tkUserModel.h>
 //#   include <tkUserConstants.h>
 //using namespace tkUserConstants;
@@ -289,7 +289,7 @@ bool DosageModel::insertRows( int row, int count, const QModelIndex & parent )
 {
     Q_ASSERT_X( m_CIS != -1, "DosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
     QString userUuid;
-#ifdef DRUGS_INTERACTIONS_STANDALONE
+#ifdef FREEDIAMS
     userUuid = DOSAGES_DEFAULT_USER_UUID;
 #else
     /** \todo here */
@@ -441,7 +441,7 @@ QStringList DosageModel::isDosageValid( const int row )
     return errors;
 }
 
-#ifndef DRUGS_INTERACTIONS_STANDALONE
+#ifndef FREEDIAMS
 /** \todo here */
 ///** \brief Test user's permissions for the drugs read access */
 //bool DosageModel::userCanRead()

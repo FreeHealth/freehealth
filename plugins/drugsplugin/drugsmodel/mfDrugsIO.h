@@ -56,7 +56,6 @@ namespace Internal {
 class DrugsData;
 class DrugsIOPrivate;
 
-
 class DrugsIO : public QObject
 {
     Q_OBJECT

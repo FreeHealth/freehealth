@@ -56,8 +56,9 @@
 */
 
 namespace Drugs {
-namespace Internal {
 class DrugsIO;
+
+namespace Internal {
 class DrugsModelPrivate;
 class InteractionsManager;
 

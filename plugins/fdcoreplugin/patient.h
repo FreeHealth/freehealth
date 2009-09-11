@@ -38,73 +38,58 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef FREEDIAMS_PATIENT_H
+#define FREEDIAMS_PATIENT_H
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+
+#include <QVariant>
 
 /**
- * \file mfDrugsCentralWidget.h
+ * \file patient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
+ * \version 0.0.5
  * \date 10 Sept 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
 */
-
-
-namespace Drugs {
+namespace Core {
 namespace Internal {
-class DrugsContext;
-class PrescriptionViewer;
-class DrugsActionHandler;
-class DrugsModel;
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
+class PatientPrivate;
+}
 
-class DrugsCentralWidget : public QWidget
+class Patient
 {
-    Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    enum Reference {
+        FullName = 0,
+        Sex,
+        DateOfBirth,
+        Age,
+        Weight,
+        Size,
+        IMC,
+        CreatinClearance,
+        Creatinin,
+        DrugsAllergies,     //  see tkSerializer --> string<->stringlist
+        ICD10Deceases,      //  see tkSerializer --> string<->stringlist
+    };
 
-    void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    Patient();
+    ~Patient();
 
-    QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
+    void clear();
+    bool has(const Reference ref ) const;
 
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
+    QVariant value( Reference ref ) const;
+    void setValue( Reference ref, const QVariant &value );
 
-protected:
-    void createConnections();
-    void disconnect();
+    QString toXml() const;
+    bool fromXml(const QString &xml);
 
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
+    void replaceTokens(QString &stringWillBeModified);
 
 private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    Internal::PatientPrivate *d;
 };
 
-}  // End Drugs
+}  // End Core
 
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif // FREEDIAMS_PATIENT_H

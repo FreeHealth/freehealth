@@ -140,14 +140,6 @@ namespace mfDrugsConstants
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
-    // TEXT COMPLETION
-    const char * const  TOKEN_PATIENTAGE   ="AGE";                         /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";                      /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";                      /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_WEIGHT       ="WEIGHT";                      /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_SIZE         ="SIZE";                      /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_CLCR         ="CLCR";                      /*!< /brief Tokens for diPatient::replaceTokens() */
-    const char * const  TOKEN_DATE         ="DATE";
 
     // HTML PREPARERS
     const char * const  ENCODEDHTML_FULLDOC =
@@ -175,8 +167,6 @@ namespace mfDrugsConstants
             "<br />\n";
     const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td>{FULLPRESCRIPTION}</td></tr></table>";
     const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
-
-    const char* const  FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("mfDrugsConstants", "FreeDiams Prescriptions (*.di)");
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
