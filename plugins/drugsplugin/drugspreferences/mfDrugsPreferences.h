@@ -42,14 +42,19 @@
 #define MFDRUGSPREFERENCES_H
 
 #include <mfDrugsConstants.h>
+#include <coreplugin/ioptionspage.h>
 
-#include "ui_mfDrugsPreferences.h"
+#include <QPointer>
+
+#include "ui_drugsviewoptionspage.h"
+#include "ui_drugsuseroptionspage.h"
+#include "ui_drugsextraoptionspage.h"
 
 /**
  * \file mfDrugsPreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 17 June 2009
+ * \version 0.0.7
+ * \date 09 Sept 2009
 */
 
 namespace Core {
@@ -63,17 +68,30 @@ class PrinterPreviewer;
 namespace Drugs {
 namespace Internal {
 
-/**
- \brief Preferences widget for mfDrugsWidget plugins.
- \ingroup freediams drugswidget
-*/
-class DrugsPreferences : public QWidget, private Ui::DrugsPreferences
+class DrugsViewWidget : public QWidget, private Ui::DrugsViewWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DrugsPreferences)
+    Q_DISABLE_COPY(DrugsViewWidget)
 
 public:
-    explicit DrugsPreferences(QWidget *parent = 0);
+    explicit DrugsViewWidget(QWidget *parent = 0);
+
+    static void writeDefaultSettings( Core::ISettings *s );
+
+public Q_SLOTS:
+    void saveToSettings( Core::ISettings *s = 0 );
+
+protected:
+    virtual void changeEvent(QEvent *e);
+};
+
+class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DrugsUserWidget)
+
+public:
+    explicit DrugsUserWidget(QWidget *parent = 0);
 
     static void writeDefaultSettings( Core::ISettings *s );
 
@@ -87,7 +105,86 @@ private:
     Print::PrinterPreviewer *previewer;
 };
 
+class DrugsExtraWidget : public QWidget, private Ui::DrugsExtraWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DrugsExtraWidget)
+
+public:
+    explicit DrugsExtraWidget(QWidget *parent = 0);
+
+    static void writeDefaultSettings( Core::ISettings *s );
+
+public Q_SLOTS:
+    void saveToSettings( Core::ISettings *s = 0 );
+
+protected:
+    virtual void changeEvent(QEvent *e);
+};
+
+
 }  // End Internal
+
+
+class DrugsViewOptionsPage : public Core::IOptionsPage
+{
+public:
+    DrugsViewOptionsPage(QObject *parent = 0);
+    ~DrugsViewOptionsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void applyChanges();
+    void finish();
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::DrugsViewWidget> m_Widget;
+};
+
+class DrugsUserOptionsPage : public Core::IOptionsPage
+{
+public:
+    DrugsUserOptionsPage(QObject *parent = 0);
+    ~DrugsUserOptionsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void applyChanges();
+    void finish();
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsUserWidget::writeDefaultSettings(s);}
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::DrugsUserWidget> m_Widget;
+};
+
+class DrugsExtraOptionsPage : public Core::IOptionsPage
+{
+public:
+    DrugsExtraOptionsPage(QObject *parent = 0);
+    ~DrugsExtraOptionsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void applyChanges();
+    void finish();
+    static void writeDefaultSettings(Core::ISettings *s)  {Internal::DrugsExtraWidget::writeDefaultSettings(s);}
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::DrugsExtraWidget> m_Widget;
+};
+
 }  // End Drugs
 
 #endif // MFDRUGSPREFERENCES_H
