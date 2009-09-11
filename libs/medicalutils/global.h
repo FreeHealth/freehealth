@@ -32,7 +32,6 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
@@ -49,19 +48,17 @@ class QDateTime;
 QT_END_NAMESPACE
 
 /**
- * \file diMainWindow.h
+ * \file global.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.1
- * \date 14 July 2009
+ * \version 0.0.2
+ * \date 09 Sept 2009
 */
 
 namespace MedicalUtils {
-namespace Globals {
 
-QString MEDICALUTILS_EXPORT readableAge(const QDateTime &DOB);
-double MEDICALUTILS_EXPORT clearanceCreatinin(const int ageYears, const int weightKg, const double creatMlMin, const bool isMale);
+MEDICALUTILS_EXPORT QString readableAge(const QDateTime &DOB);
+MEDICALUTILS_EXPORT double clearanceCreatinin(const int ageYears, const int weightKg, const double creatMlMin, const bool isMale);
 
-} // Globals
 } // MedicalUtils
 
 #endif // TKMEDICALGLOBAL_H

@@ -210,6 +210,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toogle full screen");
 
         // Drugs
+        const char* const DRUGS      = QT_TRANSLATE_NOOP("tkConstants", "drugs");
         const char* const INTAKES    = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
         const char* const VIEWINTERACTIONS_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
 

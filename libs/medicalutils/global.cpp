@@ -48,9 +48,10 @@
 #include <QVariant>
 
 using namespace MedicalUtils;
-using namespace MedicalUtils::Globals;
 using namespace Trans::Constants;
 using namespace Trans::ConstantTranslations;
+
+namespace MedicalUtils {
 
 /** \brief Returns a readable age calculated from the date to now */
 QString readableAge(const QDateTime &DOB)
@@ -92,3 +93,5 @@ double clearanceCreatinin(const int ageYears, const int weightKg, const double c
         cockroft *= 0.85;
     return cockroft;
 }
+
+}  // End MedicalUtils
