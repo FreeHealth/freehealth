@@ -58,7 +58,7 @@
      You can directly save the logs via saveLog(), or retreive a string formatted using toString().
   \ingroup toolkit
   \ingroup object_toolkit
-  \sa tkDataLog
+  \sa DataLog
 */
 
 #include "log.h"
@@ -75,49 +75,50 @@
 
 using namespace Utils;
 
-
 QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 
+bool Log::warnPluginsCreation() { return false; }
 
-    void Log::addMessage( const QObject * o, const QString & msg )
-    {
-        if (o)
-            addMessage(o->objectName(), msg );
-        else
-            addMessage( Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), msg );
-    }
 
-    void Log::addMessages( const QObject * o, const QStringList & msg )
-    {
-        if (o) {
-            foreach( const QString & m, msg )
-                addMessage(o, m);
-        } else {
-            foreach( const QString & m, msg )
-                addMessage(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m);
-        }
-    }
+void Log::addMessage( const QObject * o, const QString & msg )
+{
+    if (o)
+        addMessage(o->objectName(), msg );
+    else
+        addMessage( Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), msg );
+}
 
-    void Log::addError( const QObject * o, const QString & err )
-    {
-        if (o)
-            addError(o->objectName(), err );
-        else
-            addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), err );
+void Log::addMessages( const QObject * o, const QStringList & msg )
+{
+    if (o) {
+        foreach( const QString & m, msg )
+            addMessage(o, m);
+    } else {
+        foreach( const QString & m, msg )
+            addMessage(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m);
     }
+}
 
-    void Log::addErrors( const QObject * o, const QStringList & err )
-    {
-        if (o) {
-            foreach( const QString & m, err )
-                addError(o, m);
-        } else {
-            foreach( const QString & m, err )
-                addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m);
-        }
+void Log::addError( const QObject * o, const QString & err )
+{
+    if (o)
+        addError(o->objectName(), err );
+    else
+        addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), err );
+}
+
+void Log::addErrors( const QObject * o, const QStringList & err )
+{
+    if (o) {
+        foreach( const QString & m, err )
+            addError(o, m);
+    } else {
+        foreach( const QString & m, err )
+            addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m);
     }
+}
 
 
 /** \brief Saves the log to the file \e fileName */
@@ -128,8 +129,7 @@ QString Log::saveLog( const QString & fileName )
         f = QDir::homePath() + "/FMF_LOG.TXT";
 
     QFile file( f );
-    if ( ! file.open( QFile::WriteOnly ) )
-    {
+    if ( ! file.open( QFile::WriteOnly ) ) {
         Log::addError( "Log", QCoreApplication::translate( "Log", "Unable to save %1 : Error %2" ).arg( f , file.errorString() ) );
         return false;
     }
@@ -152,11 +152,41 @@ QString Log::toString( const QString & settingsLog )
     tmp.append( "********************\n" );
     tmp.append( QCoreApplication::translate( "Log", "********** ERRORS *********\n" ) );
     tmp.append( "********************\n\n" );
-    tmp.append( errors().join( "\n" ) );
+    QString prec;
+    foreach( const LogData &v, m_Messages) {
+        if (v.isError()) {
+            if (v.object!=prec) {
+                tmp += "\n" + v.object;
+                tmp += "\n\t";
+                prec = v.object;
+            } else {
+                tmp += "\t";
+            }
+            tmp += v.message;
+            tmp += "\t";
+            tmp += v.date.toString("dd/MM/yyyy hh:mm:ss:ms");
+            tmp += "\n";
+        }
+    }
     tmp.append( "********************\n" );
     tmp.append( QCoreApplication::translate( "Log", "********** MESSAGES *********\n" ) );
     tmp.append( "********************\n\n" );
-    tmp.append( messages().join( "\n" ) );
+    prec.clear();
+    foreach( const LogData &v, m_Messages) {
+        if (!v.isError()) {
+            if (v.object!=prec) {
+                tmp += "\n" + v.object;
+                tmp += "\n\t";
+                prec = v.object;
+            } else {
+                tmp += "\t";
+            }
+            tmp += v.message.leftJustified(100,' ');;
+            tmp += "\t";
+            tmp += v.date.toString("dd/MM/yyyy hh:mm:ss:ms");
+            tmp += "\n";
+        }
+    }
 
     // add settings
     tmp += settingsLog + "\n";

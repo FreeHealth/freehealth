@@ -144,9 +144,9 @@ QString uname()
     QProcess uname;
     uname.start("uname", QStringList() << "-a");
     if (!uname.waitForStarted())
-        Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) );
     if (!uname.waitForFinished())
-        Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) );
     return uname.readAll();
 }
 QString osName()
@@ -226,15 +226,15 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 {
     if ( ! QFile::exists( absPath ) ) {
         if ( createIfNotExist ) {
-            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist. Trying to create it." )
+            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 : %2 does not exist. Trying to create it." )
                                .arg( logDirName, absPath ) );
             if ( ! QDir().mkpath( absPath ) ) {
-                Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Unable to create the %1 : %2.")
+                Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Unable to create the %1 : %2.")
                                  .arg( logDirName, absPath ) );
                 return false;
             }
         } else {
-            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 : %2 does not exist." )
+            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 : %2 does not exist." )
                                .arg( logDirName, absPath ) );
             return false;
         }
@@ -246,7 +246,7 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser, QWidget *parent )
 {
     if (toFile.isEmpty()) {
-        Utils::Log::addError( "tkGlobal", "saveStringToFile() : fileName is empty");
+        Utils::Log::addError( "Utils", "saveStringToFile() : fileName is empty");
         return false;
     }
     QWidget *wgt = parent;
@@ -256,28 +256,28 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn 
     QFileInfo info( toFile );
     if ( info.exists() && info.isWritable() && warnUser == WarnUser ) {
         if ( QMessageBox::warning( wgt, qApp->applicationName(),
-                                   QCoreApplication::translate( "tkGlobal" ,
+                                   QCoreApplication::translate( "Utils" ,
                                                                 "File %1 already exists. Do you want de replace it ?" ).arg( toFile ),
                                    QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
             QFile file( toFile );
             if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-                Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+                Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
                 return false;
             }
             file.write( toSave.toAscii() );
-            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
+            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly saved" ).arg( toFile ) );
         } else {
-            Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Save file aborted by user (file already exists) : " ) + toFile );
+            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "Save file aborted by user (file already exists) : " ) + toFile );
             return false;
         }
     } else {
         QFile file( toFile );
         if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-            Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
             return false;
         }
         file.write( toSave.toAscii() );
-        Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly saved" ).arg( toFile ) );
+        Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly saved" ).arg( toFile ) );
     }
     return true;
 }
@@ -289,7 +289,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
     if (!parent) {
         wgt = qApp->activeWindow();
     }
-    QString fileName = QFileDialog::getSaveFileName(wgt, QCoreApplication::translate( "tkGlobal", "Save to file"),
+    QString fileName = QFileDialog::getSaveFileName(wgt, QCoreApplication::translate( "Utils", "Save to file"),
                                                     dirPath,
                                                     filters);
     if (fileName.isEmpty())
@@ -308,21 +308,21 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
     QFileInfo info( toRead );
     if (((!info.exists()) || (!info.isReadable()) ) && (warnUser == WarnUser)) {
         QMessageBox::warning( parent, qApp->applicationName(),
-                              QCoreApplication::translate( "tkGlobal" ,
+                              QCoreApplication::translate( "Utils" ,
                                                            "File %1 does not exists or is not readable." ).arg( toRead ),
                               QMessageBox::Ok );
         return QString::null;
     } else {
         QFile file( toRead );
         if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
-            Utils::Log::addError( "tkGlobal", QCoreApplication::translate( "tkGlobal", "Error %1 while trying to open file %2" )
+            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
                              .arg( toRead, file.errorString() ) );
             return QString::null;
         }
         QByteArray data = file.readAll();
-        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-        QString str = codec->toUnicode( data );
-        Utils::Log::addMessage( "tkGlobal", QCoreApplication::translate( "tkGlobal", "%1 correctly read" ).arg( toRead ) );
+        QTextCodec *codec = QTextCodec::codecForName("ISO 8859-1");
+        QString str = codec->toUnicode(data);
+        Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly read" ).arg( toRead ) );
         return str;
     }
     return QString::null;
@@ -394,6 +394,7 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Question );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
@@ -418,6 +419,7 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Question );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
@@ -434,7 +436,7 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
         else
             mb.addButton(s, QMessageBox::YesRole);
     }
-    mb.addButton(QApplication::translate("tkGlobal", "Cancel"), QMessageBox::RejectRole);
+    mb.addButton(QApplication::translate("Utils", "Cancel"), QMessageBox::RejectRole);
     mb.setDefaultButton(defaultButton);
     int r = mb.exec();
     qApp->setActiveWindow(parent);
@@ -451,6 +453,7 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Question );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
@@ -472,6 +475,7 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
+    mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Question );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
@@ -491,8 +495,8 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 bool functionNotAvailableMessageBox( const QString &functionText )
 {
     informativeMessageBox( functionText,
-                           QCoreApplication::translate( "tkGlobal","This function is only available to identified users."),
-                           QCoreApplication::translate( "tkGlobal","To get your identifier please connect to the web site : %1. ")
+                           QCoreApplication::translate( "Utils","This function is only available to identified users."),
+                           QCoreApplication::translate( "Utils","To get your identifier please connect to the web site : %1. ")
                            .arg(qApp->organizationDomain()));
 //                         .arg( tkSettings::instance()->path( tkSettings::WebSiteUrl ) ) );
     return true;
@@ -532,8 +536,8 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
     QLabel appname(&dlg);
     // Application name
     if (qApp->applicationName().isEmpty()) {
-        dlg.setWindowTitle(QCoreApplication::translate("tkGlobal", "License agreement acceptation"));
-        appname.setText(QString("<b>%1</b>").arg(QCoreApplication::translate("tkGlobal", "License agreement acceptation")));
+        dlg.setWindowTitle(QCoreApplication::translate("Utils", "License agreement acceptation"));
+        appname.setText(QString("<b>%1</b>").arg(QCoreApplication::translate("Utils", "License agreement acceptation")));
     } else {
         dlg.setWindowTitle(qApp->applicationName());
         appname.setText(QString("<b>%1</b>").arg(qApp->applicationName()));
@@ -544,7 +548,7 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
     if (!message.isEmpty()) {
         centered.setText(message);
     } else {
-        centered.setText(QCoreApplication::translate("tkGlobal", "<b>Before you can use this software, you must agree its license terms</b>"));
+        centered.setText(QCoreApplication::translate("Utils", "<b>Before you can use this software, you must agree its license terms</b>"));
     }
     QFont bold;
     bold.setBold(true);
@@ -552,7 +556,7 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
     centered.setAlignment(Qt::AlignCenter);
     tbrowse.setText( Utils::LicenseTerms::getTranslatedLicenseTerms(license) );
     // Question yes/no
-    QLabel question(QCoreApplication::translate("tkGlobal", "Do you agree these terms ?"));
+    QLabel question(QCoreApplication::translate("Utils", "Do you agree these terms ?"));
     layout.addWidget(&appname);
     layout.addWidget(&centered);
     layout.addWidget(&tbrowse);
@@ -600,12 +604,12 @@ void setFullScreen( QWidget* win, bool on )
 
     if ( on ) {
         win->setWindowState( win->windowState() | Qt::WindowFullScreen);
-        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in fullScreen Mode." ).arg( win->objectName() ) );
+        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "Utils", "%1 is now in fullScreen Mode." ).arg( win->objectName() ) );
         //statusBar()->hide();
         //menuBar()->hide();
     } else {
         win->setWindowState( win->windowState() & ~Qt::WindowFullScreen);
-        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "tkGlobal", "%1 is now in non fullScreen Mode." ).arg( win->objectName() ) );
+        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "Utils", "%1 is now in non fullScreen Mode." ).arg( win->objectName() ) );
         //menuBar()->show();
         //statusBar()->show();
     }
@@ -949,7 +953,7 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
         beforeBegin = textToAnalyse.lastIndexOf( Constants::TOKEN_OPEN, begin - 1);
         afterEnd = textToAnalyse.indexOf( Constants::TOKEN_CLOSE, end );
         if ((beforeBegin==-1) || (afterEnd==-1)) {
-            Utils::Log::addError("tkGlobal", QApplication::translate("tkGlobal", "Token replacement error (%1). Wrong number of parentheses.")
+            Utils::Log::addError("Utils", QApplication::translate("Utils", "Token replacement error (%1). Wrong number of parentheses.")
                                                                 .arg(token));
             begin = end;
             continue;

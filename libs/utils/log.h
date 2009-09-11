@@ -108,6 +108,7 @@ class UTILS_EXPORT Log
     }
 
 public:
+    static bool warnPluginsCreation();
 
     static void muteConsoleWarnings()
     { m_MuteConsole=true; }
