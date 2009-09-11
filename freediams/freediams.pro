@@ -1,60 +1,48 @@
 TEMPLATE         = app
-TARGET           = freediams
+TARGET           = FreeDiams
 mac:TARGET       = $$quote(FreeDiams)
 PACKAGE_VERSION  = 0.0.9
 
 # include general configuration
+INSTALL_DRUGS = 1
 include( ../config.pri )
+!CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 
 # include SDKs
-include ( ../plugins/sdk_drugswidget.pri)
-include ( $${PACKAGE_LIBS_SOURCES}/sdk_toolkit.pri)
-include ( $${PACKAGE_LIBS_SOURCES}/sdk_medicaltoolkit.pri)
-include ( $${PACKAGE_LIBS_SOURCES}/sdk_medintuxtoolkit.pri)
-INCLUDEPATH += $${PWD}
+include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
-# prepare installation
-INSTALL_DRUGS = 1
-include ( ../install.pri)
+# include Doc
+# !CONFIG(crosscompil) {
+include( ../doc/manual-di.pri)
+# PRE_TARGETDEPS += html_docs
+# }
+
+# define CORE BUILD for fmf exporter
+DEFINES *= CORE_BUILD
+
 QT *= sql \
     network \
     xml
-DEFINES *= DRUGS_INTERACTIONS_STANDALONE
-include ( $${PACKAGE_LIBS_SOURCES}/rpath.pri)
-
-# symbol export/import for toolkit
-DEFINES *= FMF_CORE_BUILD
-LIBS *= -L$${PACKAGE_LIBS_BIN}
-
-# prepare documentation, only when release, swap crosscompil
-# !CONFIG( debug, debug|release ) {
-!CONFIG(crosscompil) { 
-    include( ../doc/manual-di.pri)
-    PRE_TARGETDEPS += html_docs
-}
-
-# }
-mac:*-g++:LIBS *= -Wl,-noall_load # stop importing all symbols
-else:*-g++:LIBS *= -Wl,--no-whole-archive # stop importing all symbols
-
-# include mfDrugsWidgets sources/headers/ui/translations && resources
-include( ../plugins/formwidgets/mfDrugsWidget/mfdrugswidget.pri )
+DEFINES *= FREEDIAMS
 
 # sources
-SOURCES += diMainWindow.cpp \
+SOURCES += \
+#    diMainWindow.cpp \
     main.cpp \
-    diCore.cpp \
-    diAboutDialog.cpp \
-    diPatient.cpp
+#    diCore.cpp \
+#    diAboutDialog.cpp \
+#    diPatient.cpp
 
 # headers
-HEADERS += diMainWindow.h \
-    diCore.h \
-    diAboutDialog.h \
-    diMedinTux.h \
-    diPatient.h
+#HEADERS += \
+#    diMainWindow.h \
+#    diCore.h \
+#    diAboutDialog.h \
+#    diMedinTux.h \
+#    diPatient.h
 
 # check protected sources
-exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/freediams/diMedinTux_Pro.cpp
-else:SOURCES += diMedinTux.cpp
-FORMS += diMainWindow.ui
+#exists( $${PROTECTED_PATH} ):SOURCES += $${PROTECTED_PATH}/freediams/diMedinTux_Pro.cpp
+#else:SOURCES += diMedinTux.cpp
+#FORMS += diMainWindow.ui

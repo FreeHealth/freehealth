@@ -2,6 +2,11 @@ TEMPLATE = subdirs
 
 CONFIG *= ordered
 
-SUBDIRS += ../../libs/toolkit \
-           ../../libs/medicaltoolkit \
-           ../../libs/medintuxtoolkit
+SUBDIRS += \
+           ../../libs/aggregation \
+           ../../libs/extensionsystem \
+           ../../libs/translationutils \
+           ../../libs/utils \
+           ../../libs/medintuxutils \
+           ../../libs/medicalutils \
+

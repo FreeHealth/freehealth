@@ -4,7 +4,8 @@ CONFIG *= ordered
 
 SUBDIRS += \
            freediams/libs \
-           freediams
+           freediams/plugins \
+           freediams \
 
 ProjectSettings { 
     EDITOR = QMakeProjectEditor
