@@ -272,7 +272,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const FILE_1_ISNOT_READABLE              = QT_TRANSLATE_NOOP("tkConstants", "File %1 is not readable");
         const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
         const char* const FILE_1_LOADED                      = QT_TRANSLATE_NOOP("tkConstants", "File %1 loaded");
-        const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open File");
+        const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
+        const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
         const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
 
         // Messages and errors
@@ -390,6 +391,11 @@ const char * const EDITORMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Ric
 // ShortCuts
 //: ShortCut for "Print prescription"
 const char* const   K_PRINT_PRESCRIPTION = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+Shift+P");
+
+
+// For multilingual class template
+const char* const ALL_LANGUAGE = "xx";
+
 
 } // end Constants
 

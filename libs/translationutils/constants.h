@@ -311,9 +311,8 @@ const char * const EDITORMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Ric
 //: ShortCut for "Print prescription"
 const char* const   K_PRINT_PRESCRIPTION = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+Shift+P");
 
-
 }  // end Constants
 
-} // end Core
+} // end Trans
 
 #endif // TKCONSTANTS_H

@@ -14,5 +14,8 @@ CONFIG *= dll
 TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/translationutils_fr.ts \
     $${FMF_GLOBAL_RESOURCES}/translations/translationutils_de.ts
 
-HEADERS += translationutils_exporter.h constanttranslations.h
+HEADERS += translationutils_exporter.h \
+    constanttranslations.h \
+    multilingualclasstemplate.h
+
 SOURCES += constanttranslations.cpp
