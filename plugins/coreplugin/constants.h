@@ -201,6 +201,7 @@ const char* const  A_VIEW_INTERACTIONS  = "actionViewInteractions";
 
 const char * const  FREEDIAMS_SPLASHSCREEN = "freediams.png";
 const char * const  FREEMEDFORMS_SPLASHSCREEN = ".png";
+const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";      /*!< Icon for New File */
@@ -302,6 +303,16 @@ const char * const G_EDITOR_FILE         = "group.Editor.File";
 const char * const G_EDITOR_CONTEXT      = "group.Editor.Context";
 const char * const A_EDITOR_FILEOPEN     = "action.Editor.Open";
 const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
+
+
+// TEXT COMPLETION tokens
+const char * const  TOKEN_PATIENTAGE   ="AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_SIZE         ="SIZE";          /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_CLCR         ="CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_DATE         ="DATE";
 
 
 // FormItems constants

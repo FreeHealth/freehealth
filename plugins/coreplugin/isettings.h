@@ -48,13 +48,14 @@
 QT_BEGIN_NAMESPACE
 class QStringList;
 class QTreeWidget;
+class QMainWindow;
 QT_END_NAMESPACE
 
 /**
  * \file settings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.12
- * \date 10 Aug 2009
+ * \version 0.0.13
+ * \date 10 Sept 2009
 */
 
 namespace Core {
@@ -102,6 +103,10 @@ public:
     virtual QVariant value ( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
 
     virtual void sync() = 0;
+
+    // Window's states
+    virtual void restoreState( QMainWindow * window, const QString & prefix = QString::null ) = 0;
+    virtual void saveState( QMainWindow * window, const QString & prefix = QString::null ) = 0;
 
     // paths
     virtual void setPath( const int type, const QString & absPath ) = 0;

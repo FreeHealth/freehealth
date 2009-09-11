@@ -56,6 +56,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
                                const QString &pageId)
     : QDialog(parent), m_applied(false)
 {
+    m_ui = new Ui::SettingsDialog();
     m_ui->setupUi(this);
     QString initialCategory = categoryId;
     QString initialPage = pageId;

@@ -14,6 +14,8 @@ class ITheme;
 class ISettings;
 class IMainWindow;
 class FormManager;
+class CommandLine;
+class Patient;
 }
 
 namespace Core {
@@ -46,6 +48,12 @@ public:
     virtual ISettings *settings() const = 0;
 
     virtual IMainWindow *mainWindow() const = 0;
+
+    virtual CommandLine *commandLine() const = 0;
+
+    // Use this with precaution (only used by FreeDiams)
+    virtual void setMainWindow(IMainWindow *) {}
+    virtual Patient *patient() {return 0;}
 
     virtual FormManager *formManager() const = 0;
 
