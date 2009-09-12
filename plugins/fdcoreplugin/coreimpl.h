@@ -96,6 +96,8 @@ public:
 
     CommandLine *commandLine() const;
 
+    Utils::UpdateChecker *updateChecker() const;
+
     // FreeDiams specific
     MedinTux::Configuration *medintuxConfiguration() const;
     Patient *patient() const;
@@ -113,6 +115,7 @@ private:
     CommandLine *m_CommandLine;
     mutable MedinTux::Configuration *m_MedinTux;
     Patient *m_Patient;
+    Utils::UpdateChecker *m_UpdateChecker;
 };
 
 } // namespace Internal

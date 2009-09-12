@@ -58,6 +58,7 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/updatechecker.h>
 #include <medintuxutils/configuration.h>
 
 #include <QtCore/QDir>
@@ -96,6 +97,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_ContextManager(0),
         m_MedinTux(0)
 {
+    m_UpdateChecker = new Utils::UpdateChecker(this);
     m_Patient = new Patient();
     m_UID = new UniqueIDManager();
     m_Settings = new SettingsPrivate(this);
@@ -273,6 +275,11 @@ CommandLine *CoreImpl::commandLine() const
 {
     return m_CommandLine;
 }
+Utils::UpdateChecker *CoreImpl::updateChecker() const
+{
+    return m_UpdateChecker;
+}
+
 MedinTux::Configuration *CoreImpl::medintuxConfiguration() const
 {
     if (!m_MedinTux)

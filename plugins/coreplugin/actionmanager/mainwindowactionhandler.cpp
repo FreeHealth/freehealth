@@ -303,7 +303,7 @@ void MainWindowActionHandler::createFileActions(int actions)
 #if QT_VERSION >= 0x040500
         cmd->setDefaultKeySequence(QKeySequence::SaveAs);
 #else
-//        cmd->setDefaultKeySequence("Ctrl+Shift+S");
+        cmd->setDefaultKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 #endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
         cmd->setAttribute(Command::CA_UpdateText);

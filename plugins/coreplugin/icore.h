@@ -5,6 +5,10 @@
 
 #include <QtCore/QObject>
 
+namespace Utils {
+class UpdateChecker;
+}
+
 namespace Core {
 class ActionManager;
 class ContextManager;
@@ -50,6 +54,8 @@ public:
     virtual IMainWindow *mainWindow() const = 0;
 
     virtual CommandLine *commandLine() const = 0;
+
+    virtual Utils::UpdateChecker *updateChecker() const = 0;
 
     // Use this with precaution (only used by FreeDiams)
     virtual void setMainWindow(IMainWindow *) {}

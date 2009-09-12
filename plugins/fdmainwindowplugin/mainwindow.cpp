@@ -37,6 +37,7 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/updatechecker.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -217,8 +218,8 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
-//    connect(Core::ICore::instance()->updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-//    updateChecker()->check(FREEDIAMS_UPDATE_URL);
+    connect(Core::ICore::instance()->updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
+    Core::ICore::instance()->updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
 
 }
 
