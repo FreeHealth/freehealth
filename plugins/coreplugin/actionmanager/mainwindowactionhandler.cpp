@@ -300,7 +300,11 @@ void MainWindowActionHandler::createFileActions(int actions)
         a = aSaveAs = new QAction(this);
         a->setIcon(theme->icon(Constants::ICONSAVEAS));
         cmd = am->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
+#if QT_VERSION >= 0x040500
         cmd->setDefaultKeySequence(QKeySequence::SaveAs);
+#else
+        cmd->setDefaultKeySequence("Ctrl+Shift+S");
+#endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
         cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_SAVE);
