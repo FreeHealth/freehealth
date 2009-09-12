@@ -1,6 +1,6 @@
 version=0.0.9
 {
-    * Août 2009
+    * Sept 2009
     * Renommé en FreeDiams
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009
@@ -10,12 +10,16 @@ version=0.0.9
       * Gestion du fichier d'échange pour tout type d'application externe
       * Possibilité d'ajouter des médicaments dans l'ordonnance uniquement à des fins de tests (ils ne seront
         pas imprimés). Voir documentation.
+      * Nouveaux dialogues : A propos, Information de Déboggage, Préférences
 
    * Modifications importantes :
+      * Nouvelle architecture en "tout plugin" plus rapide
+      * Forte amélioration du temps d'exécution (divisé par trois lors de la lecture d'une ordonnance)
       * Correction du bug de récupération du texte des interactions (ils sont maintenant complets)
       * Schéma de prises personnels correctement enregistrés
+      * Mise à disposition d'une version Linux parfaitement intégrée au système
 
-    * Correction de bogues :
+    * Correction de bogues / Améliorations techniques :
       * Corrections de la prescription DCI (plus efficace cf documentation)
       * Correction du crash sous MacOsX lorsque Qt4.5.2 est déjà installé
       * Meilleure gestion des données patients (sauvegardées et chargeables)

@@ -107,17 +107,17 @@ namespace Internal {
 MainWindow::MainWindow( QWidget * parent )
           : Core::IMainWindow(parent)
 {
-    setObjectName( "Core::MainWindow" );
+    setObjectName("MainWindow");
 //    recentFiles.clear();
-    setWindowTitle( qApp->applicationName() );
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
     // create menus
     createFileMenu();
-    createEditMenu();
-    createPluginsMenu();
+//    createEditMenu();
+    Core::ICore::instance()->actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
+//    createPluginsMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -131,7 +131,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_PluginsPreferences |
+//            Core::MainWindowActions::A_PluginsPreferences |
             Core::MainWindowActions::A_LangageChange |
             Core::MainWindowActions::A_ConfigureMedinTux);
     actions.setHelpActions(
@@ -139,21 +139,19 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_AppHelp |
             Core::MainWindowActions::A_DebugDialog |
             Core::MainWindowActions::A_QtAbout);
-    actions.createEditActions(true);
+    actions.createEditActions(false);
     createActions(actions);
 
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
 
-//    Core::ActionManager::instance()->actionContainer(Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
-
 //    Core::ICore::instance()->contextManager()->updateContext();
     Core::ICore::instance()->actionManager()->retranslateMenusAndActions();
 
     readSettings();
 
-    setWindowTitle( qApp->applicationName() + " - " + qApp->applicationVersion() );
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     return true;
 }
@@ -187,6 +185,7 @@ void MainWindow::extensionsInitialized()
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
+    setWindowTitle(qApp->applicationName());
     show();
 
     // If needed read exchange file
@@ -292,6 +291,12 @@ void MainWindow::writeSettings()
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
+}
+
+bool MainWindow::newFile()
+{
+    /** \todo new prescription */
+    return true;
 }
 
 /**

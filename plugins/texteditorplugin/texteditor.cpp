@@ -133,6 +133,9 @@ public:
         }
 
         Core::ActionContainer *ac = am->actionContainer(Core::Constants::M_EDIT);
+        if (!ac) {
+            ac = am->actionContainer(Core::Constants::M_EDITOR_EDIT);
+        }
         if (ac) {
             foreach (QAction *action, ac->menu()->actions())
                 m_ToolBar->addAction(action);

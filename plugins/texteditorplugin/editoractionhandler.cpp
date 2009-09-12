@@ -65,9 +65,6 @@ static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject
     return a;
 }
 
-static const char* const M_EDITOR_EDIT = "menu.editor.edition";
-static const char* const M_EDITOR_FILE = "menu.editor.file";
-
 EditorActionHandler::EditorActionHandler(QObject *parent) :
         QObject(parent),
         aOpen(0), aSave(0),
@@ -112,22 +109,23 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     Core::ActionContainer *rootMenu;
     Core::ActionContainer *editMenu;
     Core::ActionContainer *fileMenu;
-    if ((!am->actionContainer(Core::Constants::MENUBAR)) && (!am->actionContainer(Core::Constants::M_EDITOR))) {
-        rootMenu = am->createMenu(Core::Constants::M_EDITOR);
+    if ((am->actionContainer(Core::Constants::MENUBAR)) && (!am->actionContainer(Core::Constants::M_EDITOR))) {
+        rootMenu = mctx;//am->createMenu(Core::Constants::M_EDITOR);
         rootMenu->appendGroup(Core::Constants::G_EDIT);
-        editMenu = am->createMenu(M_EDITOR_EDIT);
+        editMenu = am->createMenu(Core::Constants::M_EDITOR_EDIT);
+        editMenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
         rootMenu->addMenu(editMenu, Core::Constants::G_EDIT);
         editMenu->appendGroup(Core::Constants::G_EDIT_UNDOREDO);
         editMenu->appendGroup(Core::Constants::G_EDIT_COPYPASTE);
         editMenu->appendGroup(Core::Constants::G_EDIT_FIND);
-        fileMenu = am->createMenu(M_EDITOR_FILE);
+        fileMenu = am->createMenu(Core::Constants::M_EDITOR_FILE);
         fileMenu->appendGroup(Core::Constants::G_FILE_OPEN);
         fileMenu->appendGroup(Core::Constants::G_FILE_SAVE);
         fileMenu->appendGroup(Core::Constants::G_FILE_PRINT);
-
         // create edition actions
         if (!am->command(Core::Constants::A_EDIT_UNDO)) {
-            QAction *a = new QAction(this);
+            a = aUndo = new QAction(this);
+            a->setObjectName("aUndo");
             a->setIcon(th->icon(Core::Constants::ICONUNDO));
             cmd = am->registerAction(a, Core::Constants::A_EDIT_UNDO, allContexts);
             cmd->setDefaultKeySequence(QKeySequence::Undo);
@@ -137,7 +135,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             a->setEnabled(false);
         }
         if (!am->command(Core::Constants::A_EDIT_REDO)) {
-            a = new QAction(this);
+            a = aRedo = new QAction(this);
+            a->setObjectName("aRedo");
             a->setIcon(th->icon(Core::Constants::ICONREDO));
             cmd = am->registerAction(a, Core::Constants::A_EDIT_REDO, allContexts);
             cmd->setDefaultKeySequence(QKeySequence::Redo);
@@ -146,7 +145,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             a->setEnabled(false);
         }
         if (!am->command(Core::Constants::A_EDIT_CUT)) {
-            a = new QAction(this);
+            a = aCut = new QAction(this);
+            a->setObjectName("aCut");
             a->setIcon(th->icon(Core::Constants::ICONCUT));
             cmd = am->registerAction(a, Core::Constants::A_EDIT_CUT, allContexts);
             cmd->setDefaultKeySequence(QKeySequence::Cut);
@@ -155,7 +155,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             a->setEnabled(false);
         }
         if (!am->command(Core::Constants::A_EDIT_COPY)) {
-            a = new QAction(this);
+            a = aCopy = new QAction(this);
+            a->setObjectName("copy");
             a->setIcon(th->icon(Core::Constants::ICONCOPY));
             cmd = am->registerAction(a, Core::Constants::A_EDIT_COPY, allContexts);
             cmd->setDefaultKeySequence(QKeySequence::Copy);
@@ -164,7 +165,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             a->setEnabled(false);
         }
         if (!am->command(Core::Constants::A_EDIT_PASTE)) {
-            a = new QAction(this);
+            a = aPaste = new QAction(this);
+            a->setObjectName("paste");
             a->setIcon(th->icon(Core::Constants::ICONPASTE));
             cmd = am->registerAction(a, Core::Constants::A_EDIT_PASTE, allContexts);
             cmd->setDefaultKeySequence(QKeySequence::Paste);
@@ -173,19 +175,23 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             a->setEnabled(false);
         }
     } else {
-        qWarning()<< "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx using menubar";
         rootMenu = am->actionContainer(Core::Constants::MENUBAR);
         editMenu = am->actionContainer(Core::Constants::M_EDIT);
         fileMenu = am->actionContainer(Core::Constants::M_FILE);
+        // register already existing menu actions
+        aUndo = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
+        aRedo = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
+        aCut = registerAction(Core::Constants::A_EDIT_CUT,   allContexts, this);
+        aCopy = registerAction(Core::Constants::A_EDIT_COPY,  allContexts, this);
+        aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
     }
 
-    // register already existing menu actions
-    aUndo = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
-    aRedo = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
-    aCut = registerAction(Core::Constants::A_EDIT_CUT,   allContexts, this);
-    aCopy = registerAction(Core::Constants::A_EDIT_COPY,  allContexts, this);
-    aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
-
+    // Connect Edit Actions
+    connect(aUndo,SIGNAL(triggered()),this,SLOT(undo()));
+    connect(aRedo,SIGNAL(triggered()),this,SLOT(redo()));
+    connect(aCopy,SIGNAL(triggered()),this,SLOT(copy()));
+    connect(aCut,SIGNAL(triggered()),this,SLOT(cut()));
+    connect(aPaste,SIGNAL(triggered()),this,SLOT(paste()));
 
     // Menu Edit --> text formats
     //    tkActionContainer *medit = am->actionContainer(Core::Constants::M_EDIT);
@@ -405,7 +411,6 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(tableAddCol()));
     tabMenu->addAction(cmd, Core::Constants::G_FORMAT_TABLE);
 
-    
     // Remove row action
     a = aRemoveRow = new QAction(this);
     a->setObjectName("aRemoveRow");
@@ -462,6 +467,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
 
     // Save Action
     a = aSave = new QAction(this);
+    a->setObjectName("aSave");
     a->setIcon(th->icon(Core::Constants::ICONSAVE));
     a->setText(tkTr(Trans::Constants::EDITOR_FILESAVE_TEXT));
     cmd = am->registerAction(a, Core::Constants::A_EDITOR_FILESAVE, ioContext);
@@ -535,6 +541,7 @@ void EditorActionHandler::updateColorActions()
 
 void EditorActionHandler::clipboardDataChanged()
 {
+    qWarning() << "EditorActionHandler::clipboardDataChanged()";
     aPaste->setEnabled(!QApplication::clipboard()->text().isEmpty());
 }
 
@@ -631,6 +638,18 @@ void EditorActionHandler::fileOpen()
 
 void EditorActionHandler::saveAs()
 { if (m_CurrentEditor) m_CurrentEditor->saveAs(); }
+
+    void EditorActionHandler::copy()
+{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->copy(); }
+    void EditorActionHandler::cut()
+{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->cut(); }
+    void EditorActionHandler::paste()
+{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->paste(); }
+    void EditorActionHandler::undo()
+{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->undo(); }
+
+    void EditorActionHandler::redo()
+{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->redo(); }
 
 
 void EditorActionHandler::textBold()

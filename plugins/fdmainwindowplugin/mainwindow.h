@@ -89,7 +89,7 @@ void changeFontTo(const QFont &font);
 
 
 public Q_SLOTS: // Interface of MainWidowActionHandler
-//    virtual bool newFile()     {return false;}
+    bool newFile();
     bool openFile();
     bool saveFile();
     bool saveAsFile();

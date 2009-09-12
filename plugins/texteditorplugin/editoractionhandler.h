@@ -98,6 +98,12 @@ private Q_SLOTS:
     void fileOpen();
     void saveAs();
 
+    void copy();
+    void cut();
+    void paste();
+    void undo();
+    void redo();
+
     void fontBigger();
     void fontSmaller();
     void textBold();
