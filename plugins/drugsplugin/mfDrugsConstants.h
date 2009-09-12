@@ -86,6 +86,7 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                   /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM   = "DrugsWidget/view/InteractionViewer/Zoom";  /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */

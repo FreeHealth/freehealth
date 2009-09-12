@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-   \class mfInteractionDialog
+   \class InteractionDialog
    \brief Show a dialog that presents the synthesis of interactions.
    Result can be printed.
 */
@@ -77,9 +77,20 @@ InteractionDialog::InteractionDialog(QWidget *parent) :
     setupUi(this);
     setObjectName("InteractionDialog");
     printButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONPRINT) );
+    zoomIn->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTBIGGER) );
+    zoomOut->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTSMALLER) );
     setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
     textBrowser->setHtml( DRUGMODEL->index(0, Interaction::FullSynthesis).data().toString() );
-//    textBrowser->setHtml( mfDrugsModel::instance()->prescriptionToHtml() );
+    m_Zoom = Core::ICore::instance()->settings()->value(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1).toInt();
+    textBrowser->zoomIn(m_Zoom);
+    qWarning() << Core::ICore::instance()->settings()->value(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1);
+}
+
+InteractionDialog::~InteractionDialog()
+{
+    Core::ISettings *s = Core::ICore::instance()->settings();
+    s->setValue(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM, m_Zoom);
+    s->sync();
 }
 
 void InteractionDialog::on_helpButton_clicked()
@@ -107,6 +118,19 @@ void InteractionDialog::on_printButton_clicked()
     p.addTextWatermark(tr("Made with FreeDiams."), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
     p.print( textBrowser->toHtml() );
 #endif
+}
+
+void InteractionDialog::on_zoomIn_clicked()
+{
+    /** \todo save zoom factor in settings */
+    textBrowser->zoomIn(2);
+    m_Zoom += 2;
+}
+
+void InteractionDialog::on_zoomOut_clicked()
+{
+    textBrowser->zoomOut(2);
+    m_Zoom -= 2;
 }
 
 void InteractionDialog::changeEvent(QEvent *e)

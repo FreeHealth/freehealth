@@ -54,6 +54,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
+#include <fdmainwindowplugin/mainwindow.h>
+
 #include <QFileDialog>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -217,6 +219,7 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 void PrescriptionViewer::viewInteractions()
 {
      InteractionDialog dlg(this);
+     dlg.resize(Core::ICore::instance()->mainWindow()->size());
      dlg.exec();
 }
 

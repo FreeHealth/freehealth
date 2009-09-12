@@ -96,12 +96,15 @@ namespace DrugInteractionConstants {
             "  <td>%4</td>\n"
             "</tr>\n";
     const char* const LIST_MASK =
-            "<span style=\"font-size:%1pt\"><table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+            "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
             "<tr>\n"
-            "  <td colspan=2 align=center><b>%2</b></td>\n"
+            "  <td colspan=2 align=center>\n"
+            "   <span style=\"font-weight:bold\">%1\n</span>"
+            "</td>\n"
             "</tr>\n"
-            "%3\n"
-            "</table></span>\n";
+            "%2\n"
+            "</table>\n"
+            "</span>\n";
 }
 
 using namespace DrugInteractionConstants;
@@ -340,12 +343,12 @@ QString InteractionsManager::listToHtml( const QList<DrugInteraction*> & list, b
           }
      }
      toReturn.append( QString( LIST_MASK )
-                      .arg("10").arg( tr( "Interaction(s) Found : " ) , tmp ) );
+                      .arg( tr("Interaction(s) Found : ") , tmp));
      return toReturn;
 }
 
 /** \brief Transform a list of interactions to a human readable synthesis Html */
-QString InteractionsManager::synthesisToHtml( const QList<DrugInteraction*> & list, bool fullInfos ) // static
+QString InteractionsManager::synthesisToHtml( const QList<DrugInteraction *> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
      QList<int> id_di;
@@ -373,6 +376,6 @@ QString InteractionsManager::synthesisToHtml( const QList<DrugInteraction*> & li
           }
      }
      toReturn.append( QString( LIST_MASK )
-                      .arg("10").arg( tr( "Interaction(s) Found : " ) , tmp ) );
+                      .arg(tr("Interaction(s) Found : ") , tmp));
      return toReturn;
 }

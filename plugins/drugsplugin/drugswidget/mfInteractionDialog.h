@@ -45,8 +45,8 @@
 /**
  * \file mfInteractionDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 09 Sept 2009
+ * \version 0.0.6
+ * \date 12 Sept 2009
 */
 
 namespace Drugs {
@@ -63,13 +63,19 @@ class InteractionDialog : public QDialog, private Ui::InteractionDialog
 
 public:
     explicit InteractionDialog(QWidget *parent = 0);
+    ~InteractionDialog();
 
 private Q_SLOTS:
     void on_printButton_clicked();
     void on_helpButton_clicked();
+    void on_zoomIn_clicked();
+    void on_zoomOut_clicked();
 
 protected:
     virtual void changeEvent(QEvent *e);
+
+private:
+    int m_Zoom;
 };
 
 }
