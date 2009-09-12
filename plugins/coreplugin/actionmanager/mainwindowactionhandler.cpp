@@ -66,6 +66,8 @@
 #include <QMenuBar>
 #include <QWidget>
 #include <QDebug>
+#include <QKeySequence>
+#include <QLocale>
 
 using namespace Core;
 using namespace Core::Internal;

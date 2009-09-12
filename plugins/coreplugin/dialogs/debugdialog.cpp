@@ -51,6 +51,7 @@
 #include <coreplugin/isettings.h>
 
 #include <QStackedLayout>
+#include <QHeaderView>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -60,6 +61,8 @@ DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::DebugDialog)
 {
     m_ui->setupUi(this);
+    if (parent)
+        resize(parent->size());
     m_slayout = new QStackedLayout(m_ui->forStack);
     m_slayout->setMargin(0);
     m_slayout->setSpacing(0);

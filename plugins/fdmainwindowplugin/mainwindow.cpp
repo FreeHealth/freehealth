@@ -215,6 +215,11 @@ void MainWindow::extensionsInitialized()
 
     Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION) );
     raise();
+
+    // Start the update checker
+//    connect(Core::ICore::instance()->updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
+//    updateChecker()->check(FREEDIAMS_UPDATE_URL);
+
 }
 
 MainWindow::~MainWindow()

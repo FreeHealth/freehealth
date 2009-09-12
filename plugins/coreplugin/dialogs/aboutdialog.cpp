@@ -51,6 +51,7 @@
 #include <coreplugin/iaboutpage.h>
 
 #include <QStackedLayout>
+#include <QHeaderView>
 
 using namespace Core;
 using namespace Core::Internal;

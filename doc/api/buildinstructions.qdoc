@@ -1,22 +1,124 @@
 /*! \page buildinstructions Build instructions
 
-\section build_intro Introduction
+\section build_toc
 
-\subsection build_intro_en English
+In English :
+\li \ref build_intro_en
+\li \ref build_debug_en
+\li \ref build_release_en
+
+
+\section build_intro_en English introduction
+
+FreeMedForms and derivatives consists on a very small executable, some very light libs and big plugins.\n
+When application starts, the executable is loaded, some libs too. If the application starts correctly
+a plugin loader loads all needed plugins and execute them. This behavior is the same as \e QtCreator.
 
 FreeMedForms and derivatives can be build in two ways using \e qmake and \e make :
 - in 'debug' mode for tests
 - in 'release' mode for the current usage
 
-\subsection build_intro_fr Français
+\section build_debug_en Debug build
 
-FreeMedForms peut être compilé de deux façons en utilisant \e qmake et \e make :
+The debug mode is suitable for testing purpose. \n
+It includes all functionnalities, even those which are not stable or very buggy.\n
+All logged messages and errors are transmitted to the console. \n
+<b>When you build in the debug mode, the application can __NOT__ be moved or installed.</b>\n
+
+Here are some paths descriptions :
+- binaries are located in <em>svn/trunk/bin</em>.
+- plugins and libs are located in <em>svn/trunk/bin/plugins</em>
+- applications resources are located in <em>svn/trunk/global_resources</em>
+- users resources are located in your home path (you can modify this behavior using the command line of
+each FreeMedForms and derivatives : --config="../../path/to/your/config.ini").
+
+\code
+cd svn-freemedforms
+qmake-qt4 freemedforms.pro -r -config debug
+make
+cd bin
+# for Linux and Windows
+freemedforms --config=../global_resources/config.ini
+# for Mac
+FreeMedForms.app/Contents/MacOs/FreeMedForms --config=../global_resources/config.ini
+\endcode
+
+You can specify your own spec file to qmake.
+
+
+
+\section build_release_en Building in release mode
+
+When you build in release mode, all instable functions are inhibited and there are no log to the console.\n
+You __MUST__ install the application (using <em>make install</em>), otherwise application will not work. \n
+
+To facilitate the installation process several parameters can be passed through the command line,
+this is only valid since version 0.0.8_1.
+
+\subsection release_linux_integration Linux OS integration
+
+The <em>"CONFIG+=LINUX_INTEGRATED"</em> can be set for a better integration to the operating system.\n
+When setted the builded application will then use the Qt libraries installed in your OS.\n
+The libs are installed in <em>/usr/lib/ApplicationBuilded</em> and can not be moved.
+The binary is installed in <em>/usr/bin</em>.
+The application resources are installed in <em>/usr/share/ApplicationBuilded</em>
+Of course, this is only available for Linux.\n
+
+\subsection install_root_path Specify the install root path
+
+The <em>"INSTALL_ROOT_PATH=/home/me/test/"</em> used to tell the installation process
+where to install the application, libs and resources.
+If you do not specify a path the application is installed in
+<em>packages/YourOs/AppName</em>.\n
+You can combine Linux integration and root path when building a debian package
+or a rpm package.
+Actually only valid for Linux.
+
+
+\subsection build_link Create a symbolic link to the binary
+
+The <em>"LINK_ROOT_PATH=/usr/bin"</em>, if specified, creates,
+at the time of installation, a symbolic link to the application in
+specified directory. Here a link named \e FreeMedForms will be created
+in the directory <em>/usr/bin</em> and point to the binary
+the installed application (see INSTALL_ROOT_PATH). Only valid for Linux.
+
+\code
+# Command to execute when building a Linux package into a fake root system
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=%build__path/usr/share/FreeMedForms"
+make
+make install
+\endcode
+
+\code
+# sample code to build an independant package containing Qt libs and plugs
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release
+make
+make install
+./packages/linux/FreeMedForms/FreeMedForms
+\endcode
+
+
+
+*/
+
+
+/*
+In French :
+\ref build_intro_fr
+\ref build_debug_fr
+\ref build_release_fr
+
+
+\section build_intro_fr Introduction française
+
+FreeMedForms et dérivés peuvent être compilés de deux façons en utilisant \e qmake et \e make :
 - en mode 'debug' pour les tests
 - en mode 'release' pour l'utilisation.
 
-\section build_debug Build in debug mode
-
-\subsection build_debug_fr Français
+\section build_debug_fr Build en mode debug
 
 En mode debug les binaires sont situés dans le répertoire \e bin. L'application utilise les resources situées dans
 <em>global_resources</em>.
@@ -39,32 +141,7 @@ freemedforms --config=../global_resources/config.ini
 Vous pouvez spécifier un fichier spec à qmake.
 
 
-\subsection build_debug_en English
-
-In debug mode binaries are located in the \e bin. The application uses resources from <em>global_resources</em>.
-
-Find:
-   - Binaries: <em>bin</em>
-   - Libraries: <em>bin/libs</em>
-   - Plugins: <em>bin/plugins</em>
-
-No instruction to the compilation is required.
-
-\code
-cd svn-freemedforms
-qmake freemedforms.pro config-r-debug
-make
-cd bin
-freemedforms --config=../global_resources/config.ini
-\endcode
-
-You can specify a file spec to qmake.
-
-
-
-\section build_release Build in release mode
-
-\subsection build_release_fr Français
+\section build_release_fr Compilation en mode release
 
 En mode release, l'installation est nécessaire. \n
 Pour faciliter le processus d'installation plusieurs paramètres peuvent être passés par la ligne de commande :
@@ -93,36 +170,4 @@ make
 make install
 ./packages/linux/FreeMedForms/FreeMedForms
 \endcode
-
-\subsection build_release_en English
-
-In release mode, installation is necessary.\n
-To facilitate the installation process several parameters can be passed through the command line:
-- only valid since version 0.0.8_1
-- <em>"CONFIG+=LINUX_INTEGRATED"</em> for a better integration to the operating system. FreeMedForms will then use
-the Qt libraries installed in your OS. Only valid for Linux.
-- <em>"INSTALL_ROOT_PATH=/usr/share/FreeMedForms"</em> used to tell the installation process where to install the application.
-If you do not specify a path (default) the application is installed in <em>packages/YourOs/AppName</em>. Actually only valid for Linux.
-- <em>"LINK_ROOT_PATH=/usr/bin"</em> , if specified, creates, at the time of installation, a symbolic link to the application in
-specified directory. Here a link named \e FreeMedForms will be created in the directory <em>/usr/bin</em> and point to the binary
-the installed application (see INSTALL_ROOT_PATH). Only valid for Linux.
-
-\code
-# sample code for a perfect OpenSuse integration
-cd svn-freemedforms
-qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=/usr/share/FreeMedForms" "LINK_ROOT_PATH=/usr/bin"
-make
-make install
-\endcode
-
-\code
-# sample code to build an independant package containing Qt libs and plugs
-cd svn-freemedforms
-qmake freemedforms.pro -r -config release
-make
-make install
-./packages/linux/FreeMedForms/FreeMedForms
-\endcode
-
-
 */
