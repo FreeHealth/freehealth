@@ -375,7 +375,11 @@ void TextEditor::fontFormat()
     QFont font = textEdit()->textCursor().charFormat().font();
     // 2. show font dialog
     bool ok;
-    QFont selectedfont = QFontDialog::getFont( &ok, font, this, tr("Font format"), QFontDialog::DontUseNativeDialog );
+#if QT_VERSION >= 0x040500
+    QFont selectedfont = QFontDialog::getFont(&ok, font, this, tr("Font format"), QFontDialog::DontUseNativeDialog);
+#else
+    QFont selectedfont = QFontDialog::getFont(&ok, font, this, tr("Font format"));
+#endif
     // 3. apply, if accepted, font style
     if (ok) {
         QTextCharFormat fmt;
