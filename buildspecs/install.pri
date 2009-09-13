@@ -89,6 +89,13 @@ plugs.files = $${BUILD_PLUGIN_PATH}/*.$${LIB_EXTENSION}
 plugs.CONFIG += no_check_exist
 INSTALLS += plugs
 }
+# Install plugins specs
+!isEmpty(INSTALL_PLUGINS_PATH):!isEmpty(BUILD_PLUGIN_PATH){
+plugs_specs.path = $${INSTALL_PLUGINS_PATH}
+plugs_specs.files = $${BUILD_PLUGIN_PATH}/*.pluginspec
+plugs_specs.CONFIG += no_check_exist
+INSTALLS += plugs_specs
+}
 
 # Install translations
 !isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){

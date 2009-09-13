@@ -348,20 +348,19 @@ Command *ActionManagerPrivate::registerOverridableAction(QAction *action, const 
     if (!a->action()) {
         QAction *baseAction = new QAction(m_mainWnd);
         baseAction->setObjectName(id);
+        baseAction->setEnabled(false);
         baseAction->setCheckable(action->isCheckable());
+        baseAction->setChecked(action->isChecked());
         baseAction->setIcon(action->icon());
         baseAction->setIconText(action->iconText());
         baseAction->setText(action->text());
         baseAction->setToolTip(action->toolTip());
         baseAction->setStatusTip(action->statusTip());
         baseAction->setWhatsThis(action->whatsThis());
-        baseAction->setCheckable(action->isCheckable());
-        baseAction->setChecked(action->isChecked());
         baseAction->setSeparator(action->isSeparator());
         baseAction->setShortcutContext(Qt::ApplicationShortcut);
-        baseAction->setEnabled(false);
-        baseAction->setObjectName(id);
         baseAction->setParent(m_mainWnd);
+        baseAction->setMenuRole(action->menuRole());
 #ifdef Q_WS_MAC
         baseAction->setIconVisibleInMenu(false);
 #endif

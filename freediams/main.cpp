@@ -56,10 +56,12 @@ static inline QStringList getPluginPaths()
 #ifdef DEBUG
 #    ifdef Q_OS_MAC
         app = QDir::cleanPath(app+"/../../../");
-#    else
-#ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../");
+#    endif
 #endif
+
+#ifdef RELEASE
+#    ifdef Q_OS_MAC
+    app = QDir::cleanPath(app+"/../");
 #    endif
 #endif
 
@@ -82,16 +84,16 @@ int main( int argc, char *argv[] )
 #endif
 
      app.setOrganizationName( BINARY_NAME );
-//     app.setOrganizationDomain( PACKAGE_DOMAIN );
      app.setApplicationVersion( PACKAGE_VERSION );
-
-//     QObject::connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
     const QStringList pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(pluginPaths);
+
+    Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
+    Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths.join(";"));
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;

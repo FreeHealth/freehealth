@@ -24,9 +24,9 @@ CONFIG( debug, debug|release ) {
   message( Building $${BINARY_TARGET} in RELEASE )
   DEFINES  *= RELEASE
   # no warning from application
-  DEFINES  *= QT_NO_DEBUG_OUTPUT \
-              QT_NO_WARNING_OUTPUT \
-              QT_NO_DEBUG
+#  DEFINES  *= QT_NO_DEBUG_OUTPUT \
+#              QT_NO_WARNING_OUTPUT \
+#              QT_NO_DEBUG
 }
 
 DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \

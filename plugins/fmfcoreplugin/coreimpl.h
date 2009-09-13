@@ -80,6 +80,9 @@ public:
     IMainWindow *mainWindow() const;
     FormManager *formManager() const;
 
+    /** \todo here */
+    CommandLine *commandLine() const {return 0;}
+    Utils::UpdateChecker *updateChecker() const {return 0;}
 
     // initialization
     bool initialize(const QStringList &arguments, QString *errorString);

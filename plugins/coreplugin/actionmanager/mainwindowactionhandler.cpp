@@ -269,7 +269,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = am->registerAction(a, Constants::A_FILE_NEW, ctx);
         cmd->setDefaultKeySequence(QKeySequence::New);
         cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
-        cmd->setAttribute(Command::CA_UpdateText);
+//        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_NEW);
     }
 
@@ -280,7 +280,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = am->registerAction(a, Constants::A_FILE_OPEN, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Open);
         cmd->setTranslations(Trans::Constants::FILEOPEN_TEXT );
-        cmd->setAttribute(Command::CA_UpdateText);
+//        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_OPEN);
     }
 
@@ -291,7 +291,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = am->registerAction(a, Constants::A_FILE_SAVE, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Save);
         cmd->setTranslations(Trans::Constants::FILESAVE_TEXT );
-        cmd->setAttribute(Command::CA_UpdateText);
+//        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_SAVE);
     }
 
@@ -306,7 +306,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 #endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
-        cmd->setAttribute(Command::CA_UpdateText);
+//        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_SAVE);
     }
 
@@ -317,7 +317,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = am->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
-        cmd->setAttribute(Command::CA_UpdateText);
+//        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Constants::G_FILE_PRINT);
     }
 

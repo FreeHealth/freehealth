@@ -128,11 +128,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileOpen |
             Core::MainWindowActions::A_FileSave |
             Core::MainWindowActions::A_FileSaveAs |
-            Core::MainWindowActions::A_FilePrint |
+//            Core::MainWindowActions::A_FilePrint |
             Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-//            Core::MainWindowActions::A_PluginsPreferences |
             Core::MainWindowActions::A_LangageChange |
             Core::MainWindowActions::A_ConfigureMedinTux);
     actions.setHelpActions(
@@ -161,6 +160,7 @@ void MainWindow::extensionsInitialized()
 {
     Core::CommandLine *cl = Core::ICore::instance()->commandLine();
     Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
 
     // Update countdown to dosage transmission
     int count = s->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
@@ -170,6 +170,13 @@ void MainWindow::extensionsInitialized()
         transmitDosage();
     } else {
         s->setValue(Internal::SETTINGS_COUNTDOWN,count);
+    }
+
+    // Disable some actions when starting as medintux plugin
+    if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+        this->aNew->setEnabled(false);
+        this->aSave->setEnabled(false);
+        this->aMedinTux->setEnabled(false);
     }
 
     // Initialize drugs database

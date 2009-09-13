@@ -85,9 +85,7 @@ public:
         ref.insert(CL_TransmitDosage, "--transmit-dosage");
         ref.insert(CL_ConfigFile, "--config");
         ref.insert(CL_RunningUnderWine, "--wine");
-        ref.insert(CL_RunningUnderWine, "--wine");
         const QStringList &args = qApp->arguments();
-        qWarning() << "args" << args;
         foreach(const QString &a, args) {
             QString k = a;
             if (k.contains(" "))
@@ -98,6 +96,7 @@ public:
             {
                 case CL_MedinTux : params.insert(CL_MedinTux, true); break;
                 case CL_ExchangeFile : params.insert(CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+                case CL_PatientName : params.insert(CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_DateOfBirth : params.insert(CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Weight : params.insert(CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Size : params.insert(CL_Size, a.mid(a.indexOf("=")+1).remove("\"")); break;
