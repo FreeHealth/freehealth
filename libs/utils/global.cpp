@@ -320,7 +320,7 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
             return QString::null;
         }
         QByteArray data = file.readAll();
-        QTextCodec *codec = QTextCodec::codecForName("ISO 8859-1");
+        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QString str = codec->toUnicode(data);
         Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly read" ).arg( toRead ) );
         return str;

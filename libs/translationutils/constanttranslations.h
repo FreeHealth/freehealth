@@ -208,7 +208,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char * const  VIEWUPDATE_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "View update informations");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  PRINT_PREVIEW_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Print Preview");
         const char * const  TRANSLATORS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Translators");
+
         const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toogle full screen");
+        const char * const  ZOOMIN_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Zoom in");
+        const char * const  ZOOMOUT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Zoom out");
+
+        const char * const  NAVIGATION            = QT_TRANSLATE_NOOP("tkConstants", "Navigation");
 
         // Drugs
         const char* const DRUGS      = QT_TRANSLATE_NOOP("tkConstants", "drugs");

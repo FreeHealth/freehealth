@@ -11,6 +11,7 @@ version=0.0.9
       * Possibilité d'ajouter des médicaments dans l'ordonnance uniquement à des fins de tests (ils ne seront
         pas imprimés). Voir documentation.
       * Nouveaux dialogues : A propos, Information de Déboggage, Préférences
+      * Mémorise la liste des derniers fichiers ouverts
 
    * Modifications importantes :
       * Nouvelle architecture en "tout plugin" plus rapide
@@ -18,6 +19,7 @@ version=0.0.9
       * Correction du bug de récupération du texte des interactions (ils sont maintenant complets)
       * Schéma de prises personnels correctement enregistrés
       * Mise à disposition d'une version Linux parfaitement intégrée au système
+      * Amélioration visuelle du dialogue d'aide
 
     * Correction de bogues / Améliorations techniques :
       * Corrections de la prescription DCI (plus efficace cf documentation)

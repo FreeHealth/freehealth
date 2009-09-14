@@ -333,10 +333,15 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
             m_Enum_Path.insert( MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/" );
             m_Enum_Path.insert( BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/" );
             m_Enum_Path.insert( SampleFormsPath, bundlePath + DEFAULTFORMS );
-            if (qApp->applicationName().contains(" "))
-                m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(qApp->applicationName().left(qApp->applicationName().indexOf(" "))) );
-            else
-                m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(qApp->applicationName()) );
+            QString appname = qApp->applicationName();
+            if (qApp->applicationName().contains(" ")) {
+                appname = appname.left(appname.indexOf(" "));
+            }
+            if (Utils::isDebugCompilation()) {
+                if (appname.contains("_d"))
+                    appname = appname.left(appname.indexOf("_d"));
+            }
+            m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname) );
 //            tkTheme::instance()->setThemeRootPath( bundlePath + DEFAULTTHEME_PATH );
             break;
         }

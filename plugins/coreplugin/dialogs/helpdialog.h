@@ -44,12 +44,15 @@
 #include <coreplugin/core_exporter.h>
 
 #include <QDialog>
+QT_BEGIN_NAMESPACE
+class QTreeWidgetItem;
+QT_END_NAMESPACE
 
 /**
  * \file helpdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.3
- * \date 08 Sept 2009
+ * \version 0.0.4
+ * \date 14 Sept 2009
 */
 
 namespace Core {
@@ -71,7 +74,7 @@ protected:
 private Q_SLOTS:
     void updateWindowTitle();
     void fullScreen();
-    void comboActivated(const QString &item);
+    void treeActivated(QTreeWidgetItem *item);
 
 private:
     Internal::HelpDialogPrivate *d;

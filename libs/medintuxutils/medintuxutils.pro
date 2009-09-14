@@ -24,5 +24,5 @@ exists( $${SOURCES_PROTECTED_PATH} ):SOURCES += $${SOURCES_PROTECTED_PATH}/medin
 else:SOURCES += configuration.cpp
 
 # translators
-TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/medintuxtoolkit_fr.ts \
-    $${FMF_GLOBAL_RESOURCES}/translations/medintuxtoolkit_de.ts
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/medintuxtoolkit_fr.ts \
+    $${SOURCES_GLOBAL_RESOURCES}/translations/medintuxtoolkit_de.ts

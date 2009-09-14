@@ -16,7 +16,7 @@ include( $${SOURCES_LIBS_PATH}/rpath.pri )
 # include Doc
 # !CONFIG(crosscompil) {
 include( ../doc/manual-di.pri)
-# PRE_TARGETDEPS += html_docs
+PRE_TARGETDEPS += html_docs
 # }
 
 # define CORE BUILD for fmf exporter

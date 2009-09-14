@@ -11,8 +11,8 @@ include( ../libsworkbench.pri )
 CONFIG *= dll
 
 # translators
-TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/translationutils_fr.ts \
-    $${FMF_GLOBAL_RESOURCES}/translations/translationutils_de.ts
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/translationutils_fr.ts \
+    $${SOURCES_GLOBAL_RESOURCES}/translations/translationutils_de.ts
 
 HEADERS += translationutils_exporter.h \
     constanttranslations.h \

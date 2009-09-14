@@ -253,6 +253,7 @@ void MainWindowActionHandler::createFileActions(int actions)
     ITheme *theme = Core::ICore::instance()->theme();
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
     ActionContainer *mfile = am->actionContainer(Constants::M_FILE);
+    mfile->setTranslations(Trans::Constants::M_FILE_TEXT);
     Q_ASSERT(mfile);
     if (!mfile)
         return;
