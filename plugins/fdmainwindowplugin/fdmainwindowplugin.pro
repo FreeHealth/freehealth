@@ -19,6 +19,9 @@ SOURCES = \
 
 FORMS = mainwindow.ui
 
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_fr.ts \
+                $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_de.ts
+
 OTHER_FILES = MainWindow.pluginspec
 
 exists( $${SOURCES_PROTECTED_PATH} ):HEADERS += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.h

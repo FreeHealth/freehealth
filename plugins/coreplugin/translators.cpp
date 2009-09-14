@@ -161,15 +161,10 @@ void Translators::changeLanguage( const QString & lang )
  */
 bool Translators::addNewTranslator( const QString & fileMask, bool fromDefaultPath )
 {
-    // if necessary load toolkit translator
-//    if ( fileMask != "toolkit" )  // take care to infinite loop
-//        if ( m_Translators.isEmpty() )
-//            addNewTranslator( "toolkit" );
-
-    QTranslator *t = new QTranslator( qApp );
-    QString lang = QLocale().name().left( 2 );
+    QTranslator *t = new QTranslator(qApp);
+    QString lang = QLocale().name().left(2);
     QString path;
-    QFileInfo file( fileMask );
+    QFileInfo file(fileMask);
 
     // manage path
     if ( fromDefaultPath )

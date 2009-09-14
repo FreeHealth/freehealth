@@ -24,4 +24,7 @@ SOURCES += \
     appaboutpage.cpp \
     patient.cpp
 
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fdcoreplugin_fr.ts \
+                $${SOURCES_GLOBAL_RESOURCES}/translations/fdcoreplugin_de.ts
+
 #FORMS += mainwindow.ui

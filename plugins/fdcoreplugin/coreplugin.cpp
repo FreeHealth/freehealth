@@ -70,6 +70,10 @@ void CorePlugin::extensionsInitialized()
     this->addAutoReleasedObject(new SettingDebugPage(this));
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("utils");
+    Core::ICore::instance()->translators()->addNewTranslator("");
 }
 
 void CorePlugin::remoteArgument(const QString& arg)
