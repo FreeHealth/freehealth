@@ -33,106 +33,70 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   This code is inspired of the Qt example : Text Edit                   *
- *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@free.fr                                                   *
- ***************************************************************************/
-
-/***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEXTEDITOR_H
-#define TEXTEDITOR_H
+#ifndef CORE_FILEMANAGER_H
+#define CORE_FILEMANAGER_H
 
-#include <texteditorplugin/texteditor_exporter.h>
-#include <texteditorplugin/tableeditor.h>
+#include <coreplugin/core_exporter.h>
+#include <coreplugin/idebugpage.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/iformitemspec.h>
+#include <coreplugin/iformitemscripts.h>
+#include <coreplugin/iformitemvalues.h>
 
 #include <QObject>
+#include <QString>
+#include <QDateTime>
 #include <QWidget>
-#include <QTextEdit>
-#include <QFocusEvent>
-class QMenu;
+#include <QVariant>
+#include <QPointer>
+#include <QHash>
+
+
+#include <QDebug>
+
+QT_BEGIN_NAMESPACE
+class QTreeWidget;
+class QTreeWidgetItem;
+QT_END_NAMESPACE
+
 
 /**
- * \file texteditor.h
+ * \file filemanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 08 Sept 2009
+ * \version 0.0.2
+ * \date 13 Sept 2009
 */
 
-namespace Editor {
+namespace Core {
 
-namespace Internal {
-class TextEditorPrivate;
-class EditorActionHandler;
-}
-
-class EDITOR_EXPORT TextEditor : public TableEditor
+class CORE_EXPORT FileManager : public QObject
 {
-    friend class Internal::TextEditorPrivate;
-    friend class Internal::EditorActionHandler;
     Q_OBJECT
-    Q_PROPERTY( QString html READ getHtml WRITE setHtml USER true)
 
 public:
-    enum Type
-    {
-        Simple     = 0x01,
-        WithTables = 0x02,
-        WithIO     = 0x04,
-        Full       = Simple | WithTables | WithIO
-    };
-    Q_DECLARE_FLAGS(Types, Type);
+    FileManager(QObject *parent=0) : QObject(parent) {setObjectName("FileManager");}
+    virtual ~FileManager() {}
 
-    TextEditor(QWidget *parent = 0, Types type = Simple);
-    ~TextEditor();
+    // recent files
+    void getRecentFilesFromSettings();
+    void addToRecentFiles(const QString &fileName);
+    QStringList recentFiles() const;
+    void saveRecentFiles() const;
 
-    virtual QTextEdit *textEdit() const;
-
-    QString getHtml()                        { return textEdit()->toHtml(); }
-    void    setHtml(const QString & html)    { textEdit()->setHtml( html ); }
-    void    setTypes(Types type);
-
-public Q_SLOTS:
-    virtual void toogleToolbar(bool state);
-
-protected Q_SLOTS:
-    void fileOpen();
-    void saveAs();
-
-//    void undo();
-//    void redo();
-//    void copy();
-//    void paste();
-//    void cut();
-//    void selectall();
-//    void clipboardDataChanged();
-
-    void fontBigger();
-    void fontSmaller();
-    void textBold( bool checked );
-    void textUnderline( bool checked );
-    void textItalic( bool checked );
-    void textStrike( bool checked );
-    void textColor();
-    void fontFormat();
-
-    virtual void contextMenu(const QPoint &pos);
-
-protected:
-    virtual QMenu* getContextMenu();
-    virtual bool toolbarIsVisible() const;
-    virtual void hideToolbar();
+    // current file
+    void setCurrentFile(const QString &filePath);
+    QString currentFile() const;
 
 private:
-    Internal::TextEditorPrivate *d;
-
+    QStringList m_recentFiles;
+    static const int m_maxRecentFiles = 10;
+    QString m_currentFile;
 };
 
-}  // End Editor
+}  // end Core
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Editor::TextEditor::Types)
-
-#endif // TEXTEDITOR_H
+#endif  // CORE_FILEMANAGER_H

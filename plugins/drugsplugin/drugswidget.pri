@@ -16,6 +16,6 @@ HEADERS += $${PWD}/mfDrugsConstants.h \
 SOURCES += $${PWD}/mfDrugsManager.cpp
 
 # translations
-TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
 exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc
 else:RESOURCES += $${PWD}/widget_resources.qrc

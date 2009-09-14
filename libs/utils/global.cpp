@@ -289,7 +289,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
     if (!parent) {
         wgt = qApp->activeWindow();
     }
-    QString fileName = QFileDialog::getSaveFileName(wgt, QCoreApplication::translate( "Utils", "Save to file"),
+    QString fileName = QFileDialog::getSaveFileName(wgt, QCoreApplication::translate("Utils", "Save to file"),
                                                     dirPath,
                                                     filters);
     if (fileName.isEmpty())

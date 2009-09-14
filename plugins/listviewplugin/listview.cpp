@@ -82,12 +82,9 @@ using namespace Trans::ConstantTranslations;
 
 namespace ListViewConstants
 {
-    const char* const M_ListView         = "menu_ListView";
     const char* const C_BASIC            = "context.ListView.basic";
     const char* const C_BASIC_ADDREMOVE  = "context.ListView.AddRemove";
     const char* const C_BASIC_MOVE       = "context.ListView.Move";
-    const char* const G_LISTVIEW         = "group.ListView";
-    const char* const M_ListView_TEXT    = QT_TRANSLATE_NOOP("Core::Constants", "List viewer");
 }
 
 /////////////////////////////////////////////////////////////////////////// List View Manager
@@ -461,7 +458,7 @@ void ListView::addItem()
             row = 0;
     }
     if ( !d->m_ListView->model()->insertRows( row, 1 ) )
-        Utils::Log::addError( this, tr("ListView can not add a row to the model %1").arg(model()->objectName()) );
+        Utils::Log::addError( this, QString("ListView can not add a row to the model %1").arg(model()->objectName()) );
 
     // select inserted row and edit it
     if ( d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers ) {
@@ -478,7 +475,7 @@ void ListView::removeItem()
     if ( d->m_ListView->currentIndex().isValid() ) {
         d->m_ListView->closePersistentEditor( d->m_ListView->currentIndex() );
         if ( ! d->m_ListView->model()->removeRows( d->m_ListView->currentIndex().row(), 1 ) )
-            Utils::Log::addError( this, tr("ListView can not remove row %1 to the model %2")
+            Utils::Log::addError( this, QString("ListView can not remove row %1 to the model %2")
                              .arg( d->m_ListView->currentIndex().row() )
                              .arg( model()->objectName() ) );
     }

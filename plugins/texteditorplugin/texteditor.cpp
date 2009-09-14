@@ -102,14 +102,11 @@ public:
     {
         textEdit = new QTextEdit(m_Parent);
         textEdit->setContextMenuPolicy( Qt::CustomContextMenu );
-        retranslateUi();
     }
 
     ~TextEditorPrivate()
     {
     }
-
-    void retranslateUi();
 
     void createToolBar()
     {
@@ -524,53 +521,4 @@ void TextEditor::textColor()
 //    pix.fill( c );
 ////    actionTextColor->setIcon( pix );
 //}
-
-
-//--------------------------------------------------------------------------------------------------------
-//---------------------------------------------- Retranslate UI ------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-void TextEditor::changeEvent(QEvent *e)
-{
-    switch ( e->type() )
-    {
-    case QEvent::LanguageChange:
-        d->retranslateUi();
-        break;
-    default:
-        break;
-    }
-}
-
-void TextEditorPrivate::retranslateUi()
-{
-//    // Manage optionnals actions / menus
-//    if ( actionAddTable ) actionAddTable->setText( tr( "&Table" ) );
-//    actionTextColor->setText( tr( "&Color..." ) );
-//    comboStyle->clear();
-//    comboStyle->addItem( tr( "Standard" ) );
-//    comboStyle->addItem( tr( "Bullet List (Disc)" ) );
-//    comboStyle->addItem( tr( "Bullet List (Circle)" ) );
-//    comboStyle->addItem( tr( "Bullet List (Square)" ) );
-//    comboStyle->addItem( tr( "Ordered List (Decimal)" ) );
-//    comboStyle->addItem( tr( "Ordered List (Alpha lower)" ) );
-//    comboStyle->addItem( tr( "Ordered List (Alpha upper)" ) );
-//
-//    m_ContextMenu->setTitle( tr( "Context menu" ) );
-////    m_EditMenu->setTitle( tr ( "&Edition" ) );
-////    m_FormatMenu->setTitle( tr( "&Format" ) );
-//
-//    if ( m_ExtraMenu )
-//        m_ExtraMenu->setTitle( tr( "E&xtras" ) );
-//
-//    if ( m_TableMenu ) {
-//        m_TableMenu->setTitle( tr( "&Table" ) );
-//        actionAddTable->setText( tr( "Add a table" ) );
-//        actionTableAddRow->setText( tr( "Add a row" ) );
-//        actionTableAddCol->setText( tr( "Add a column" ) );
-//        actionTableRemoveRow->setText( tr( "Remove row(s)" ) );
-//        actionTableRemoveCol->setText( tr( "Remove col(s)" ) );
-//        actionTableMergeCells->setText( tr( "Merge selected cells" ) );
-//        actionTableSplitCells->setText( tr( "Split cell" ) );
-//    }
-}
 

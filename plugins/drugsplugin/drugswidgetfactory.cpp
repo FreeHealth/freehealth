@@ -122,9 +122,6 @@ DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
           : IFormWidget(linkedObject,parent),
           m_PrescriptionModel(0)
 {
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
-
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this );
     // Add QLabel

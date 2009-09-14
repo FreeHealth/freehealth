@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0">
+<context>
+    <name>Database</name>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="166"/>
+        <location filename="../../libs/utils/database.cpp" line="170"/>
+        <location filename="../../libs/utils/database.cpp" line="174"/>
+        <source>ERROR : %1 driver is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="181"/>
+        <source>WARNING : %1 database already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="193"/>
+        <location filename="../../libs/utils/database.cpp" line="198"/>
+        <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="207"/>
+        <source>ERROR : Database %1 is not readable. Path : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="216"/>
+        <source>ERROR : Database %1 is not writable. Path : %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="247"/>
+        <source>INFO : database %1 connection = %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="252"/>
+        <source>WARNING : can not open database %1 : %2 
+ %3 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="258"/>
+        <source>INFO : database %1 installed. Path : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="319"/>
+        <source>Database Scheme Error : wrong number of fields for table %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="329"/>
+        <source>Database Scheme Error : field number %1 differs : %2 instead of %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LineEditEchoSwitcher</name>
+    <message>
+        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="67"/>
+        <source>Display/Hide text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Log</name>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="127"/>
+        <location filename="../../libs/utils/log.cpp" line="136"/>
+        <source>SQL Error : Driver : %1, Database : %2, Query : %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="129"/>
+        <location filename="../../libs/utils/log.cpp" line="138"/>
+        <source>%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="146"/>
+        <source>%1 ms : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="221"/>
+        <source>Unable to save %1 : Error %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="236"/>
+        <source>Debugging informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="241"/>
+        <source>********** ERRORS *********
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/log.cpp" line="260"/>
+        <source>********** MESSAGES *********
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Serializer</name>
+    <message>
+        <location filename="../../libs/utils/serializer.cpp" line="123"/>
+        <location filename="../../libs/utils/serializer.cpp" line="184"/>
+        <source>Can not deserialize to QHash.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UpdateChecker</name>
+    <message>
+        <location filename="../../libs/utils/updatechecker.cpp" line="257"/>
+        <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utils</name>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="147"/>
+        <location filename="../../libs/utils/global.cpp" line="149"/>
+        <source>Error while retrieve informations of uname under %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="229"/>
+        <source>%1 : %2 does not exist. Trying to create it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="232"/>
+        <source>Unable to create the %1 : %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="237"/>
+        <source>%1 : %2 does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="259"/>
+        <source>File %1 already exists. Do you want de replace it ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="264"/>
+        <location filename="../../libs/utils/global.cpp" line="276"/>
+        <source>Error %1 while trying to save file %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="268"/>
+        <location filename="../../libs/utils/global.cpp" line="280"/>
+        <source>%1 correctly saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="270"/>
+        <source>Save file aborted by user (file already exists) : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="292"/>
+        <source>Save to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="311"/>
+        <source>File %1 does not exists or is not readable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="318"/>
+        <source>Error %1 while trying to open file %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="325"/>
+        <source>%1 correctly read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="439"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="498"/>
+        <source>This function is only available to identified users.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="499"/>
+        <source>To get your identifier please connect to the web site : %1. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="539"/>
+        <location filename="../../libs/utils/global.cpp" line="540"/>
+        <source>License agreement acceptation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="551"/>
+        <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="559"/>
+        <source>Do you agree these terms ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="607"/>
+        <source>%1 is now in fullScreen Mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="612"/>
+        <source>%1 is now in non fullScreen Mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="956"/>
+        <source>Token replacement error (%1). Wrong number of parentheses.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::Internal::UpdateCheckerPrivate</name>
+    <message>
+        <location filename="../../libs/utils/updatechecker.cpp" line="114"/>
+        <source>Error %1 while retreiving update file %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/updatechecker.cpp" line="138"/>
+        <source>* Updates of version : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+</TS>

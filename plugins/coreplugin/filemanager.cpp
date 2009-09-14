@@ -33,106 +33,81 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   This code is inspired of the Qt example : Text Edit                   *
- *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@free.fr                                                   *
- ***************************************************************************/
-
-/***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEXTEDITOR_H
-#define TEXTEDITOR_H
+#include "filemanager.h"
 
-#include <texteditorplugin/texteditor_exporter.h>
-#include <texteditorplugin/tableeditor.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
 
-#include <QObject>
-#include <QWidget>
-#include <QTextEdit>
-#include <QFocusEvent>
-class QMenu;
+#include <QDir>
+#include <QDebug>
 
-/**
- * \file texteditor.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 08 Sept 2009
+using namespace Core;
+using namespace Core::Internal;
+
+/*!
+    Adds the \a fileName to the list of recent files.
 */
-
-namespace Editor {
-
-namespace Internal {
-class TextEditorPrivate;
-class EditorActionHandler;
+void FileManager::addToRecentFiles(const QString &fileName)
+{
+    if (fileName.isEmpty())
+        return;
+    QString prettyFileName(QDir::toNativeSeparators(fileName));
+    m_recentFiles.removeAll(prettyFileName);
+    if (m_recentFiles.count() > m_maxRecentFiles)
+        m_recentFiles.removeLast();
+    m_recentFiles.prepend(prettyFileName);
 }
 
-class EDITOR_EXPORT TextEditor : public TableEditor
+/*!
+    Returns the list of recent files.
+*/
+QStringList FileManager::recentFiles() const
 {
-    friend class Internal::TextEditorPrivate;
-    friend class Internal::EditorActionHandler;
-    Q_OBJECT
-    Q_PROPERTY( QString html READ getHtml WRITE setHtml USER true)
+    return m_recentFiles;
+}
 
-public:
-    enum Type
-    {
-        Simple     = 0x01,
-        WithTables = 0x02,
-        WithIO     = 0x04,
-        Full       = Simple | WithTables | WithIO
-    };
-    Q_DECLARE_FLAGS(Types, Type);
+void FileManager::saveRecentFiles() const
+{
+    Core::ISettings *s = Core::ICore::instance()->settings();
+    s->beginGroup(Constants::S_RECENTFILES_GROUP);
+    s->setValue(Constants::S_RECENTFILES_KEY, m_recentFiles);
+    s->endGroup();
+}
 
-    TextEditor(QWidget *parent = 0, Types type = Simple);
-    ~TextEditor();
+void FileManager::getRecentFilesFromSettings()
+{
+    Core::ISettings *s = Core::ICore::instance()->settings();
+    m_recentFiles.clear();
+    s->beginGroup(Constants::S_RECENTFILES_GROUP);
+    m_recentFiles = s->value(Constants::S_RECENTFILES_KEY).toStringList();
+    s->endGroup();
+}
 
-    virtual QTextEdit *textEdit() const;
+/*!
+  The current file is e.g. the file currently opened when an editor is active,
+  or the selected file in case a Project Explorer is active ...
+  \sa currentFile
+  */
+void FileManager::setCurrentFile(const QString &filePath)
+{
+    if (m_currentFile == filePath)
+        return;
+    m_currentFile = filePath;
+//    emit currentFileChanged(m_currentFile);
+}
 
-    QString getHtml()                        { return textEdit()->toHtml(); }
-    void    setHtml(const QString & html)    { textEdit()->setHtml( html ); }
-    void    setTypes(Types type);
-
-public Q_SLOTS:
-    virtual void toogleToolbar(bool state);
-
-protected Q_SLOTS:
-    void fileOpen();
-    void saveAs();
-
-//    void undo();
-//    void redo();
-//    void copy();
-//    void paste();
-//    void cut();
-//    void selectall();
-//    void clipboardDataChanged();
-
-    void fontBigger();
-    void fontSmaller();
-    void textBold( bool checked );
-    void textUnderline( bool checked );
-    void textItalic( bool checked );
-    void textStrike( bool checked );
-    void textColor();
-    void fontFormat();
-
-    virtual void contextMenu(const QPoint &pos);
-
-protected:
-    virtual QMenu* getContextMenu();
-    virtual bool toolbarIsVisible() const;
-    virtual void hideToolbar();
-
-private:
-    Internal::TextEditorPrivate *d;
-
-};
-
-}  // End Editor
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Editor::TextEditor::Types)
-
-#endif // TEXTEDITOR_H
+/*!
+  Returns the absolute path of the current file
+  The current file is e.g. the file currently opened when an editor is active,
+  or the selected file in case a Project Explorer is active ...
+  \sa setCurrentFile
+  */
+QString FileManager::currentFile() const
+{
+    return m_currentFile;
+}

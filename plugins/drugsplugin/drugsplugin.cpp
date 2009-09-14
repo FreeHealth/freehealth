@@ -9,6 +9,7 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
@@ -78,6 +79,9 @@ void DrugsPlugin::extensionsInitialized()
     addObject(printPage);
     addObject(userPage);
     addObject(extraPage);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 }
 
 void DrugsPlugin::remoteArgument(const QString& arg)

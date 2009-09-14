@@ -26,4 +26,7 @@ SOURCES = texteditorplugin.cpp \
 
 FORMS = tabledialog.ui
 
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/texteditorplugin_fr.ts \
+                $${SOURCES_GLOBAL_RESOURCES}/translations/texteditorplugin_de.ts
+
 OTHER_FILES = TextEditor.pluginspec

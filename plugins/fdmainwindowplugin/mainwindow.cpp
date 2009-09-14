@@ -345,7 +345,17 @@ void MainWindow::createStatusBar()
 
 bool MainWindow::newFile()
 {
-    /** \todo new prescription */
+    if (Drugs::Internal::DRUGMODEL->drugsList().count()) {
+        bool yes = Utils::yesNoMessageBox(
+                tr("Save actual prescription ?"),
+                tr("The actual prescription is not empty. Do you want to save it before creating a new one ?"));
+        if (yes) {
+            saveFile();
+        }
+    }
+    Core::ICore::instance()->patient()->clear();
+    refreshPatient();
+    Drugs::Internal::DRUGMODEL->clearDrugsList();
     return true;
 }
 

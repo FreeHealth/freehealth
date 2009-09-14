@@ -36,6 +36,10 @@
 
 #include <utils/log.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
+
 #include <QtCore/QtPlugin>
 
 #include <QDebug>
@@ -65,6 +69,9 @@ void TextEditorPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TextEditorPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
 }
 
 
