@@ -8,6 +8,7 @@
 #include <coreplugin/dialogs/commonaboutpages.h>
 #include <coreplugin/dialogs/commondebugpages.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
