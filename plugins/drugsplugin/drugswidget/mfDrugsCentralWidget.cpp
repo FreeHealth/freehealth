@@ -89,13 +89,13 @@ bool DrugsCentralWidget::initialize()
 
     // create context
     m_Context = new DrugsContext(this);
-    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS) );
+    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS));
     Core::ICore::instance()->contextManager()->addContextObject(m_Context);
 
     // create model view for selected drugs list
     m_CurrentDrugModel = new DrugsModel(this);
     m_ui->m_PrescriptionView->initialize();
-    m_ui->m_PrescriptionView->setModel( m_CurrentDrugModel );
+    m_ui->m_PrescriptionView->setModel(m_CurrentDrugModel);
     m_ui->m_PrescriptionView->setModelColumn( Drug::FullPrescription );
 
     m_ui->m_DrugSelector->initialize();

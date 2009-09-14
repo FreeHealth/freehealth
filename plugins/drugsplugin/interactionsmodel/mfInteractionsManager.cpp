@@ -162,7 +162,7 @@ InteractionsManager::InteractionsManager(QObject *parent) :
     ++handler;
     d = new InteractionsManagerPrivate();
     setObjectName("InteractionsManager" + QString::number(handler));
-
+    Utils::Log::addMessage(this,"Instance created");
 }
 
 InteractionsManager::~InteractionsManager()

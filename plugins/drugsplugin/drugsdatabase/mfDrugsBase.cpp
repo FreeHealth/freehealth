@@ -230,7 +230,11 @@ bool DrugsBase::init()
 
     // test driver
      if ( !QSqlDatabase::isDriverAvailable( "QSQLITE" ) ) {
-         Utils::Log::addError(this, tr("FATAL ERROR : SQLite driver is not available.") ) ;
+         Utils::Log::addError(this, tr("FATAL ERROR : SQLite driver is not available."));
+         Utils::warningMessageBox(tr("Fatal Error. Application will not work properly"),
+                                  tr("The SQLite database driver is not installed or can not be found. "
+                                     "Please report this error to the developper."),
+                                  "", qApp->applicationName());
           return false;
       }
 

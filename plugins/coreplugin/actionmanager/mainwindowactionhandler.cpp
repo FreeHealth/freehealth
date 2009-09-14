@@ -43,6 +43,7 @@
 #include "actioncontainer.h"
 #include "mainwindowactions.h"
 
+#include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/uniqueidmanager.h>
@@ -50,16 +51,10 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/debugdialog.h>
 #include <coreplugin/dialogs/aboutdialog.h>
-
-#include <coreplugin/constants.h>
-
-//#include <tkUpdateChecker.h>
-//#include <tkTranslators.h>
-//#include <tkHelpDialog.h>
-//Q_TK_USING_CONSTANTS
 
 #include <QAction>
 #include <QToolBar>
@@ -576,13 +571,13 @@ void MainWindowActionHandler::createHelpActions(int actions)
         menu->addAction(cmd, Constants::G_HELP_DEBUG);
     }
 
-    //    if (actions & Core::MainWindowActions::A_PluginsAbout) {
-    //        a = aDebugDialog = new QAction(this);
-    //        a->setIcon(theme->icon(Constants::ICONHELP));
-    //        cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
-    //        cmd->setTranslations( Constants::DEBUGHELPER_TEXT );
-    //        menu->addAction(cmd, Constants::G_HELP_DEBUG);
-    //    }
+//        if (actions & Core::MainWindowActions::A_UpdateInfo) {
+//            a = aInfoUpdate = new QAction(this);
+//            a->setIcon(theme->icon(Constants::ICONHELP));
+//            cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
+//            cmd->setTranslations(Trans::Constants::VERSION_UPTODATE);
+//            menu->addAction(cmd, Constants::G_HELP_ABOUT);
+//        }
     //
     //    if (actions & Core::MainWindowActions::A_FormsAbout) {
     //        a = aDebugDialog = new QAction(this);
@@ -616,29 +611,29 @@ void MainWindowActionHandler::connectHelpActions()
 */
 bool MainWindowActionHandler::updateFound()
 {
-//    tkUpdateChecker *up = qobject_cast<tkUpdateChecker *>(sender());
-//    ITheme *theme = Core::ICore::instance()->theme();
-//    ActionManager *am = Core::ICore::instance()->actionManager();
-//    ActionContainer *menu = am->actionContainer(Constants::M_UPDATE);
-//    if (!menu) {
-//        createUpdateMenu();
-//        menu = am->actionContainer(Constants::M_UPDATE);
-//        menu->retranslate();
-//    }
-//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-//    Q_ASSERT(menu);
-//    if (!menu)
-//        return false;
-//
-//    QAction *a = aUpdateAvailable = new QAction(this);
-//    a->setIcon(theme->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
-//    Command *cmd = am->registerAction(a, Constants::A_VIEWUPDATE, ctx);
-//    cmd->setTranslations( Constants::VIEWUPDATE_TEXT );
-//    menu->addAction(cmd, Constants::G_UPDATE_AVAILABLE);
-//    cmd->retranslate();
-//    tkContextManager::instance()->updateContext();
-//    if (up)
-//        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformations()));
+    Utils::UpdateChecker *up = qobject_cast<Utils::UpdateChecker *>(sender());
+    ITheme *theme = Core::ICore::instance()->theme();
+    ActionManager *am = Core::ICore::instance()->actionManager();
+    ActionContainer *menu = am->actionContainer(Constants::M_UPDATE);
+    if (!menu) {
+        createUpdateMenu();
+        menu = am->actionContainer(Constants::M_UPDATE);
+        menu->retranslate();
+    }
+    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    Q_ASSERT(menu);
+    if (!menu)
+        return false;
+
+    QAction *a = aUpdateAvailable = new QAction(this);
+    a->setIcon(theme->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    Command *cmd = am->registerAction(a, Constants::A_VIEWUPDATE, ctx);
+    cmd->setTranslations( Trans::Constants::VIEWUPDATE_TEXT );
+    menu->addAction(cmd, Constants::G_UPDATE_AVAILABLE);
+    cmd->retranslate();
+    Core::ICore::instance()->contextManager()->updateContext();
+    if (up)
+        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformations()));
     return true;
 }
 

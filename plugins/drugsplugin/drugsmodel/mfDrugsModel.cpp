@@ -56,6 +56,7 @@
 #include <mfDrugsConstants.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <utils/serializer.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
@@ -270,8 +271,8 @@ public:
     InteractionsManager *m_InteractionsManager;
     bool m_ShowTestingDrugs;
 };
-}
-}
+}  // End Internal
+}  // End Core
 
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
@@ -286,11 +287,12 @@ DrugsModel::DrugsModel( QObject * parent )
     static int handler = 0;
     ++handler;
     setObjectName("mfDrugsModel_" + QString::number(handler));
-    if ( !DrugsBase::isInitialized() )
-        return;
+    if (!DrugsBase::isInitialized())
+        Utils::Log::addError(this,"Drugs database not intialized");
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
     d->m_InteractionsManager = new InteractionsManager(this);
+    Utils::Log::addMessage(this, "Instance created");
 }
 
 /** \brief Destructor */
@@ -565,7 +567,7 @@ bool DrugsModel::containsDrug(const int CIS) const
 /** \brief Returns true if the actual prescription has interaction(s). */
 bool DrugsModel::prescriptionHasInteractions()
 {
-    return (d->m_InteractionsManager->getLastInteractionFound()!=0);
+    return (d->m_InteractionsManager->getAllInteractionsFound().count()>0);
 }
 
 

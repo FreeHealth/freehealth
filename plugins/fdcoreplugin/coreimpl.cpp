@@ -148,9 +148,9 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     // Set application libraries
     if (!Utils::isDebugCompilation()) {
-        QApplication::setLibraryPaths( QStringList() << settings()->path(ISettings::QtPlugInsPath) );
+        QApplication::addLibraryPath(settings()->path(ISettings::QtPlugInsPath));
     }
-    foreach(const QString &l, QCoreApplication::libraryPaths() ) {
+    foreach(const QString &l, QCoreApplication::libraryPaths()) {
         Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 

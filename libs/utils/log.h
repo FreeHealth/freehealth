@@ -60,8 +60,8 @@ class QTreeWidget;
 /**
  * \file log.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.10
- * \date 13 Aug 2009
+ * \version 0.0.12
+ * \date 14 Sept 2009
 */
 
 
@@ -100,98 +100,34 @@ public:
 class UTILS_EXPORT Log
 {
 
-    static void addData( const QString &o, const QString &m, const QDateTime &d, const int t )
-    {
-        m_Messages << LogData(o,m,d,t) ;
-        if ((t == LogData::Error) || (t==LogData::CriticalError) || (t==LogData::Warning))
-            m_HasError=true;
-    }
+    static void addData( const QString &o, const QString &m, const QDateTime &d, const int t );
 
 public:
     static bool warnPluginsCreation();
 
-    static void muteConsoleWarnings()
-    { m_MuteConsole=true; }
+    static void muteConsoleWarnings();
 
     static void addMessage( const QObject * o, const QString & msg );
-    static void addMessage( const QString & object, const QString & msg )
-    {
-        if (!m_MuteConsole) {
-            qWarning() << msg;
-        }
-        addData( object, msg, QDateTime::currentDateTime(), LogData::Message );
-    }
-
+    static void addMessage( const QString & object, const QString & msg );
     static void addMessages( const QObject * o, const QStringList & msg );
-    static void addMessages( const QString &o, const QStringList & msg )
-    {
-        foreach( const QString & m, msg )
-            addMessage(o, m);
-    }
+    static void addMessages( const QString &o, const QStringList & msg );
 
     static void addError( const QObject * o, const QString & err );
-    static void addError( const QString & object, const QString & err )
-    {
-        if (!m_MuteConsole) {
-            qWarning() << err;
-        }
-        addData( object, err, QDateTime::currentDateTime(), LogData::Error );
-    }
+    static void addError( const QString & object, const QString & err );
 
     static void addErrors( const QObject * o, const QStringList & err );
-    static void addErrors( const QString &o, const QStringList & err )
-    {
-        foreach( const QString & m, err )
-            addError(o, m);
-    }
+    static void addErrors( const QString &o, const QStringList & err );
 
-
-    static void addQueryError( const QObject * o, const QSqlQuery & q )
-    {
-        if (!m_MuteConsole) {
-            qWarning() << QCoreApplication::translate( "Log", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
-        }
-        addError(o, QCoreApplication::translate( "Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
-                 .arg( o->objectName(), QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
-    }
-
-    static void addQueryError( const QString & o, const QSqlQuery & q )
-    {
-        if (!m_MuteConsole) {
-            qWarning() << QCoreApplication::translate( "Log", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
-        }
-        addError(o, QCoreApplication::translate( "Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
-                .arg( o, QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
-        qWarning() << q.lastError();
-    }
+    static void addQueryError( const QObject * o, const QSqlQuery & q );
+    static void addQueryError( const QString & o, const QSqlQuery & q );
 
     /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
-    static void logTimeElapsed( QTime &t, const QString &object, const QString &forDoingThis )
-    {
-        addMessage( "Chrono - " + object, QCoreApplication::translate( "Log", "%1 ms : %2")
-                    .arg(t.elapsed()).arg(forDoingThis));
-        t.restart();
-    }
+    static void logTimeElapsed( QTime &t, const QString &object, const QString &forDoingThis );
 
-    static bool hasError()        { return  m_HasError; }
+    static bool hasError();
 
-    static QStringList messages()
-    {
-        QStringList r;
-        foreach( const LogData &v, m_Messages)
-            if (v.type == LogData::Message)
-                r << v.toString();
-        return r;
-    }
-
-    static QStringList errors()
-    {
-        QStringList r;
-        foreach( const LogData &v, m_Messages)
-            if (v.isError())
-                r << v.toString();
-        return r;
-    }
+    static QStringList messages();
+    static QStringList errors();
 
     static QString     toString( const QString & settingsLog = QString::null );
     static QString     saveLog( const QString & fileName = QString::null );

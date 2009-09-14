@@ -82,6 +82,94 @@ bool Log::m_MuteConsole = false;
 bool Log::warnPluginsCreation() { return false; }
 
 
+    void Log::addData( const QString &o, const QString &m, const QDateTime &d, const int t )
+    {
+        m_Messages << LogData(o,m,d,t) ;
+        if ((t == LogData::Error) || (t==LogData::CriticalError) || (t==LogData::Warning))
+            m_HasError=true;
+    }
+
+    void Log::muteConsoleWarnings()
+    { m_MuteConsole=true; }
+
+    void Log::addMessage( const QString & object, const QString & msg )
+    {
+        if (!m_MuteConsole) {
+            qWarning() << object << msg;
+        }
+        addData( object, msg, QDateTime::currentDateTime(), LogData::Message );
+    }
+
+    void Log::addMessages( const QString &o, const QStringList & msg )
+    {
+        foreach( const QString & m, msg )
+            addMessage(o, m);
+    }
+
+    void Log::addError( const QString & object, const QString & err )
+    {
+        if (!m_MuteConsole) {
+            qWarning() << object << err;
+        }
+        addData( object, err, QDateTime::currentDateTime(), LogData::Error );
+    }
+
+    void Log::addErrors( const QString &o, const QStringList & err )
+    {
+        foreach( const QString & m, err )
+            addError(o, m);
+    }
+
+
+    void Log::addQueryError( const QObject * o, const QSqlQuery & q )
+    {
+        if (!m_MuteConsole) {
+            qWarning() << QCoreApplication::translate( "Log", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
+        }
+        addError(o, QCoreApplication::translate( "Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
+                 .arg( o->objectName(), QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
+    }
+
+    void Log::addQueryError( const QString & o, const QSqlQuery & q )
+    {
+        if (!m_MuteConsole) {
+            qWarning() << QCoreApplication::translate( "Log", "SQL Error : Driver : %1, Database : %2, Query : %3" ).arg( q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() );
+        }
+        addError(o, QCoreApplication::translate( "Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5" )
+                .arg( o, QDateTime::currentDateTime().toString(), q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery() ) );
+        qWarning() << q.lastError();
+    }
+
+    /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
+    void Log::logTimeElapsed( QTime &t, const QString &object, const QString &forDoingThis )
+    {
+        addMessage( "Chrono - " + object, QCoreApplication::translate( "Log", "%1 ms : %2")
+                    .arg(t.elapsed()).arg(forDoingThis));
+        t.restart();
+    }
+
+    bool Log::hasError()        { return  m_HasError; }
+
+    QStringList Log::messages()
+    {
+        QStringList r;
+        foreach( const LogData &v, m_Messages)
+            if (v.type == LogData::Message)
+                r << v.toString();
+        return r;
+    }
+
+    QStringList Log::errors()
+    {
+        QStringList r;
+        foreach( const LogData &v, m_Messages)
+            if (v.isError())
+                r << v.toString();
+        return r;
+    }
+
+
+
 void Log::addMessage( const QObject * o, const QString & msg )
 {
     if (o)

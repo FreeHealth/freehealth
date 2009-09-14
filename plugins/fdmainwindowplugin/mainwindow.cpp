@@ -189,7 +189,7 @@ void MainWindow::extensionsInitialized()
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
 
-    m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD) );
+    m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
     refreshPatient();
 

@@ -40,6 +40,9 @@
  ***************************************************************************/
 #include "appaboutpage.h"
 
+#include <utils/updatechecker.h>
+#include <translationutils/constanttranslations.h>
+
 #include <fdcoreplugin/coreimpl.h>
 #include <fdcoreplugin/commandlineparser.h>
 
@@ -52,6 +55,7 @@
 
 using namespace Core;
 using namespace Core::Internal;
+using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeDiams</b><br />"
@@ -85,7 +89,14 @@ QWidget *AppAboutPage::widget()
     layout->addWidget(label);
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
-    label->setText(tr(ABOUT_TEXT).arg(qApp->organizationDomain()));
+    Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
+    QString tmp = tr(ABOUT_TEXT).arg(qApp->organizationDomain());
+    if (up->hasUpdate()) {
+        tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
+    } else {
+        tmp.append("<br /><br />" + tkTr(Trans::Constants::VERSION_UPTODATE));
+    }
+    label->setText(tmp);
     return w;
 }
 
