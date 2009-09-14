@@ -73,7 +73,7 @@ void CorePlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("");
+    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
 }
 
 void CorePlugin::remoteArgument(const QString& arg)
