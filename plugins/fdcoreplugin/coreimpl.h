@@ -48,12 +48,12 @@ class Configuration;
 }
 
 namespace Core {
-    class MainWindow;
-    class ActionManager;
-    class ISettings;
-    class IMainWindow;
-    class CommandLine;
-    class Patient;
+//    class MainWindow;
+//    class ActionManager;
+//    class ISettings;
+//    class IMainWindow;
+//    class CommandLine;
+//    class Patient;
 
 namespace Internal {
     class ThemePrivate;
@@ -89,6 +89,7 @@ public:
     void setMainWindow(IMainWindow *);
 
     FormManager *formManager() const;
+    FileManager *fileManager() const;
 
     // initialization
     bool initialize(const QStringList &arguments, QString *errorString);
@@ -116,6 +117,7 @@ private:
     mutable MedinTux::Configuration *m_MedinTux;
     Patient *m_Patient;
     Utils::UpdateChecker *m_UpdateChecker;
+    Core::FileManager *m_FileManager;
 };
 
 } // namespace Internal

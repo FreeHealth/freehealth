@@ -41,7 +41,7 @@
 #ifndef MFDOSAGEMODEL_H
 #define MFDOSAGEMODEL_H
 
-#include <mfDrugsConstants.h>
+#include <drugsplugin/mfDrugsConstants.h>
 
 #include <QObject>
 #include <QSqlTableModel>

@@ -51,6 +51,7 @@
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/formmanager.h>
+#include <coreplugin/filemanager.h>
 
 #include <fdcoreplugin/commandlineparser.h>
 #include <fdcoreplugin/patient.h>
@@ -97,6 +98,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_ContextManager(0),
         m_MedinTux(0)
 {
+    m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
     m_Patient = new Patient();
     m_UID = new UniqueIDManager();
@@ -241,21 +243,13 @@ ITheme *CoreImpl::theme() const
     return m_Theme;
 }
 
-Translators *CoreImpl::translators() const
-{
-    return m_Translators;
-}
+Translators *CoreImpl::translators() const { return m_Translators; }
 
-ISettings *CoreImpl::settings() const
-{
-    return m_Settings;
-}
+ISettings *CoreImpl::settings() const { return m_Settings; }
 
 
-IMainWindow *CoreImpl::mainWindow() const
-{
-    return m_MainWindow;
-}
+IMainWindow *CoreImpl::mainWindow() const { return m_MainWindow; }
+
 void CoreImpl::setMainWindow(IMainWindow *win)
 {
     Q_ASSERT(m_MainWindow==0);
@@ -266,19 +260,11 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
 }
 
-FormManager *CoreImpl::formManager() const
-{
-    return m_FormManager;
-}
+FormManager *CoreImpl::formManager() const { return m_FormManager; }
+FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
-CommandLine *CoreImpl::commandLine() const
-{
-    return m_CommandLine;
-}
-Utils::UpdateChecker *CoreImpl::updateChecker() const
-{
-    return m_UpdateChecker;
-}
+CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
+Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 MedinTux::Configuration *CoreImpl::medintuxConfiguration() const
 {
@@ -286,10 +272,8 @@ MedinTux::Configuration *CoreImpl::medintuxConfiguration() const
         m_MedinTux = MedinTux::Configuration::instance();  // need to be deleted
     return m_MedinTux;
 }
-Patient *CoreImpl::patient() const
-{
-    return m_Patient;
-}
+
+Patient *CoreImpl::patient() const { return m_Patient; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {

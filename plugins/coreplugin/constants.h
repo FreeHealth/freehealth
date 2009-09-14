@@ -11,6 +11,7 @@ const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Conte
 // Menu's name
 const char * const  MENUBAR              = "menuBar";           /*!< \brief Default menubar object name  \ingroup constants_actionmanager */
 const char * const  M_FILE               = "menuFile";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
+const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_EDIT               = "menuEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char* const   M_EDITOR_EDIT        = "menu.editor.edition";
 const char* const   M_EDITOR_FILE        = "menu.editor.file";
@@ -296,7 +297,6 @@ const char* const   C_EDITOR_IO          = "context.Editor.IO";
 const char* const   C_USERMANAGER        = "context.UserManager";
 
 
-
 // EDITOR
 const char * const A_EDITOR_TOOGLETOOLBAR= "actionEditorToggleToolbar";
 const char * const M_EDITOR              = "menu.Editor";
@@ -315,6 +315,12 @@ const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for 
 const char * const  TOKEN_SIZE         ="SIZE";          /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_CLCR         ="CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_DATE         ="DATE";
+
+
+// Settings keys
+const char * const  S_RECENTFILES_GROUP ="RecentFiles";
+const char * const  S_RECENTFILES_KEY ="File";
+
 
 }  // end Constants
 

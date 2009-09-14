@@ -106,7 +106,7 @@ inline static bool populateValues(Core::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
 //    qWarning() << "Values" << root.tagName() << element.tagName();
-    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Core::Constants::ALL_LANGUAGE);
+    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE);
     while (!element.isNull()) {
         int id = element.attribute(Constants::ATTRIB_ID,0).toInt();
         QVariant val = element.text();
@@ -126,7 +126,7 @@ inline static bool populateValues(Core::FormItem *item, const QDomElement &root)
 inline static bool populateScripts(Core::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
-    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Core::Constants::ALL_LANGUAGE).left(2);
+    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE).left(2);
     while (!element.isNull()) {
         QString script = element.text();
         int type = ::m_ScriptsTypes.value(element.tagName(),Core::FormItemScripts::Script_OnDemand);
@@ -286,7 +286,7 @@ bool XmlFormIO::loadElement(Core::FormItem *item, QDomElement &rootElement)
         // Spec ?
         i = ::m_SpecsTypes.value(element.tagName(),-1);
         if (i != -1) {
-            QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Core::Constants::ALL_LANGUAGE);
+            QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
             item->spec()->setValue(::m_SpecsTypes.value(element.tagName()),element.text(), lang);
             element = element.nextSiblingElement();
             continue;

@@ -48,6 +48,7 @@
 #include <coreplugin/iformitem.h>
 #include <coreplugin/iformwidgetfactory.h>
 #include <coreplugin/formmanager.h>
+#include <coreplugin/filemanager.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -64,6 +65,7 @@
 #include <fdmainwindowplugin/medintux.h>
 
 #include <drugsplugin/mfDrugsConstants.h>
+#include <drugsplugin/mfDrugsManager.h>
 #include <drugsplugin/drugsmodel/mfDrugsIO.h>
 #include <drugsplugin/drugsdatabase/mfDrugsBase.h>
 
@@ -114,11 +116,12 @@ MainWindow::MainWindow( QWidget * parent )
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     // create menus
     createFileMenu();
-//    createEditMenu();
-    Core::ICore::instance()->actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
-//    createPluginsMenu();
+    Core::ActionContainer *fmenu = am->actionContainer(Core::Constants::M_FILE);
+    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+    am->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
     createConfigurationMenu();
     createHelpMenu();
 
@@ -232,6 +235,7 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    writeSettings();
 }
 
 /**
@@ -285,11 +289,43 @@ void MainWindow::closeEvent( QCloseEvent *event )
     event->accept();
 }
 
+/** \brief Populate recent files menu */
+void MainWindow::aboutToShowRecentFiles()
+{
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+    Core::ActionContainer *aci = am->actionContainer(Core::Constants::M_FILE_RECENTFILES);
+    Core::FileManager *fm = Core::ICore::instance()->fileManager();
+    aci->menu()->clear();
+
+    bool hasRecentFiles = false;
+    foreach (const QString &fileName, fm->recentFiles()) {
+        hasRecentFiles = true;
+        QAction *action = aci->menu()->addAction(fileName);
+        action->setData(fileName);
+        connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+    }
+    aci->menu()->setEnabled(hasRecentFiles);
+}
+
+/** \brief Opens a recent file. This solt must be called by a recent files' menu's action. */
+void MainWindow::openRecentFile()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (!action)
+        return;
+    QString fileName = action->data().toString();
+    if (!fileName.isEmpty()) {
+        readFile(fileName);
+    }
+}
+
+
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
     s->restoreState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
+    Core::ICore::instance()->fileManager()->getRecentFilesFromSettings();
 }
 
 /** \brief Writes main window's settings */
@@ -297,6 +333,7 @@ void MainWindow::writeSettings()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
     s->saveState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
+    Core::ICore::instance()->fileManager()->saveRecentFiles();
     s->sync();
 }
 
@@ -382,7 +419,7 @@ bool MainWindow::saveFile()
 bool MainWindow::savePrescription( const QString &fileName )
 {
     QString xmlExtra = Core::Internal::CoreImpl::instance()->patient()->toXml();
-//    return Drugs::DrugsIO::savePrescription(xmlExtra, fileName);
+    return Drugs::Internal::DrugsIO::savePrescription(xmlExtra, fileName);
     /** \todo here */
     return true;
 }
@@ -401,24 +438,32 @@ bool MainWindow::openFile()
     if (f.isEmpty())
         return false;
     //    QString f = "/Users/eric/prescription.di";
+    readFile(f);
+    Core::ICore::instance()->fileManager()->setCurrentFile(f);
+    Core::ICore::instance()->fileManager()->addToRecentFiles(f);
+    return true;
+}
+
+void MainWindow::readFile(const QString &file)
+{
     QHash<QString,QString> datas;
-//    if (DRUGMODEL->rowCount() > 0) {
-//        int r = Utils::withButtonsMessageBox(
-//                tr("Opening a prescription : merge or replace ?"),
-//                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
-//                QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
-//                tr("Open a prescription") + " - " + qApp->applicationName());
-//        if (r == 0) {
-//            DrugsIO::loadPrescription(f, datas, DrugsIO::ReplacePrescription);
-//        } else if (r==1) {
-//            DrugsIO::loadPrescription(f, datas, DrugsIO::AppendPrescription);
-//        }
-//    } else
-//        DrugsIO::loadPrescription(f, datas, DrugsIO::ReplacePrescription);
+    if (Drugs::Internal::DRUGMODEL->rowCount() > 0) {
+        int r = Utils::withButtonsMessageBox(
+                tr("Opening a prescription : merge or replace ?"),
+                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
+                QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
+                tr("Open a prescription") + " - " + qApp->applicationName());
+        if (r == 0) {
+            Drugs::Internal::DrugsIO::loadPrescription(file, datas, Drugs::Internal::DrugsIO::ReplacePrescription);
+        } else if (r==1) {
+            Drugs::Internal::DrugsIO::loadPrescription(file, datas, Drugs::Internal::DrugsIO::AppendPrescription);
+        }
+    } else {
+        Drugs::Internal::DrugsIO::loadPrescription(file, datas, Drugs::Internal::DrugsIO::ReplacePrescription);
+    }
     Core::Patient *p = Core::Internal::CoreImpl::instance()->patient();
     p->setValue(Core::Patient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
     m_ui->patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
-    return true;
 }
 
 /** \brief Always keep uptodate patient's datas */

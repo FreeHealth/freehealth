@@ -40,7 +40,7 @@
  ***************************************************************************/
 #ifndef MFDOSAGEAVAILABLEWIDGET_H
 #define MFDOSAGEAVAILABLEWIDGET_H
-class mfDosageModel;
+
 #include <QWidget>
 #include "ui_mfDosageAvailableWidget.h"
 

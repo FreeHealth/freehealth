@@ -41,8 +41,8 @@
 #ifndef MFPRESCRIPTIONVIEWERMANAGER_H
 #define MFPRESCRIPTIONVIEWERMANAGER_H
 
-#include <drugswidget/mfDrugsCentralWidget.h>
-#include <drugsmodel/mfDrugsModel.h>
+#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
+#include <drugsplugin/drugsmodel/mfDrugsModel.h>
 
 #include <coreplugin/contextmanager/icontext.h>
 
@@ -54,14 +54,16 @@
 /**
  * \file mfDrugsManager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 09 Sept  2009
+ * \version 0.0.8
+ * \date 14 Sept  2009
  * \internal
 */
 
 namespace Drugs {
 namespace Internal {
 class InteractionsManager;
+
+/** \todo should be outside Internal */
 
 class DrugsContext : public Core::IContext
 {

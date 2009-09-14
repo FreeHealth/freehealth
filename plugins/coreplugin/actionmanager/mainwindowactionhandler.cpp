@@ -124,13 +124,16 @@ void MainWindowActionHandler::createFileMenu()
     filemenu->setTranslations(Trans::Constants::M_FILE_TEXT);
     filemenu->appendGroup(Constants::G_FILE_NEW);
     filemenu->appendGroup(Constants::G_FILE_OPEN);
+    filemenu->appendGroup(Constants::G_FILE_RECENTS);
     filemenu->appendGroup(Constants::G_FILE_PROJECT);
     filemenu->appendGroup(Constants::G_FILE_SAVE);
     filemenu->appendGroup(Constants::G_FILE_PRINT);
-    filemenu->appendGroup(Constants::G_FILE_RECENTS);
     filemenu->appendGroup(Constants::G_FILE_OTHER);
     filemenu->appendGroup(Constants::G_FILE_CLOSE);
     filemenu->appendGroup(Constants::G_FILE_EXIT);
+    ActionContainer *recentmenu = am->createMenu(Constants::M_FILE_RECENTFILES);
+    recentmenu->setTranslations(Trans::Constants::M_FILE_RECENTFILES_TEXT);
+    filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/

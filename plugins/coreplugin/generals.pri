@@ -22,6 +22,7 @@ HEADERS += \
     $${PWD}/iformitemscripts.h \
     $${PWD}/iformitemvalues.h \
     $${PWD}/formmanager.h \
+    $${PWD}/filemanager.h \
     $${PWD}/iformitemdatafactory.h \
     $${PWD}/formglobalmodel.h
 
@@ -38,5 +39,6 @@ SOURCES += \
     $${PWD}/mfObjectFundamental.cpp \
     $${PWD}/iformitem.cpp \
     $${PWD}/formmanager.cpp \
+    $${PWD}/filemanager.cpp \
     $${PWD}/iformitemdatafactory.cpp \
     $${PWD}/formglobalmodel.cpp

@@ -42,7 +42,7 @@
 #define MFDRUGS_H
 
 // include drugswidget headers
-#include <mfDrugsConstants.h>
+#include <drugsplugin/mfDrugsConstants.h>
 
 // include Qt headers
 #include <QObject>

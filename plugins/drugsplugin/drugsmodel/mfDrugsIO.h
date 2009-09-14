@@ -56,6 +56,8 @@ namespace Internal {
 class DrugsData;
 class DrugsIOPrivate;
 
+/** \todo should be outside Internal */
+
 class DrugsIO : public QObject
 {
     Q_OBJECT

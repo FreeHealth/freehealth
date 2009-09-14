@@ -123,13 +123,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
 
         // Menus translations
         const char * const  M_FILE_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "File");               /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
+        const char * const  M_FILE_RECENTFILES_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Recent files");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
         const char * const  M_EDIT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Edit");               /*!< \brief Default text for menu Edit  \ingroup constants_actionmanager */
         const char * const  M_EDIT_SELECT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Selection");          /*!< \brief Default text for menu Selection  \ingroup constants_actionmanager */
         const char * const  M_EDIT_LIST_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "List");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
         const char * const  M_FORMAT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Format");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_FONT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Font");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_PARAGRAPH_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Paragraph");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_TABLE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Table");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_FONT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Font");               /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_PARAGRAPH_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Paragraph");     /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_TABLE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Table");              /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
         const char * const  M_FORMAT_IMAGE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Image");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
         const char * const  M_TOOLS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Tools");              /*!< \brief Default text for menu Tools  \ingroup constants_actionmanager */
         const char * const  M_PLUGINS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Plugins");            /*!< \brief Default text for menu Plugins  \ingroup constants_actionmanager */

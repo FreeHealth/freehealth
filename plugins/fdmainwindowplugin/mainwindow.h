@@ -91,6 +91,7 @@ void changeFontTo(const QFont &font);
 public Q_SLOTS: // Interface of MainWidowActionHandler
     bool newFile();
     bool openFile();
+    void readFile(const QString &file);
     bool saveFile();
     bool saveAsFile();
     bool print();
@@ -102,6 +103,10 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool applicationHelp();
 //    bool aboutQt();
     bool aboutPlugins();
+
+    void aboutToShowRecentFiles();
+    void openRecentFile();
+
 
     // slots for patient's datas
     void on_patientName_textChanged(const QString &text);

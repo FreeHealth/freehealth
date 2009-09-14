@@ -20,6 +20,7 @@ class IMainWindow;
 class FormManager;
 class CommandLine;
 class Patient;
+class FileManager;
 }
 
 namespace Core {
@@ -63,7 +64,8 @@ public:
 
     virtual FormManager *formManager() const = 0;
 
-//    virtual FileManager *fileManager() const = 0;
+    virtual FileManager *fileManager() const = 0;
+
 //    virtual MessageManager *messageManager() const = 0;
 //    virtual EditorManager *editorManager() const = 0;
 //    virtual ProgressManager *progressManager() const = 0;

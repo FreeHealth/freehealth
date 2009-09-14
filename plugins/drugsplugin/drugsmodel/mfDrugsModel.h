@@ -42,8 +42,8 @@
 #define MFDRUGSMODEL_H
 
 // include drugswidget headers
-#include <drugsmodel/mfDrugs.h>
-#include <drugsmodel/mfDosageModel.h>
+#include <drugsplugin/drugsmodel/mfDrugs.h>
+#include <drugsplugin/drugsmodel/mfDosageModel.h>
 
 // include Qt headers
 #include <QAbstractTableModel>
@@ -51,8 +51,8 @@
 /**
  * \file mfDrugsModel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.15
- * \date 09 Sept 2009
+ * \version 0.0.16
+ * \date 14 Sept 2009
 */
 
 namespace Drugs {
