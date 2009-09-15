@@ -289,6 +289,16 @@ void MainWindow::closeEvent( QCloseEvent *event )
     event->accept();
 }
 
+/** \brief Manages language changes : retranslate Ui and ActionManager. */
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type()==QEvent::LanguageChange) {
+	m_ui->retranslateUi(this);
+	Core::ICore::instance()->actionManager()->retranslateMenusAndActions();
+    }
+}
+
+
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()
 {

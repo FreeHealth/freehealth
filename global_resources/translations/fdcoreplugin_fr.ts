@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -58,12 +58,12 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="56"/>
         <source>1. General</source>
-        <translation type="unfinished"></translation>
+        <translation>1. Général</translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="57"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -71,12 +71,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="56"/>
         <source>4. Build informations</source>
-        <translation type="unfinished"></translation>
+        <translation>4. Informations de compilation</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="69"/>
         <source>5. Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>5. Ligne de commande</translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="70"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -97,32 +97,32 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="34"/>
         <source>Show debugging informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer les informations de déboggage</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="118"/>
         <source>Send to dev team</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer à l&apos;équipe de développement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="125"/>
         <source>Save log</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer le journal</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="151"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="164"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -130,12 +130,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="69"/>
         <source>3. License</source>
-        <translation type="unfinished"></translation>
+        <translation>3. Licence</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="70"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -144,7 +144,7 @@
         <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="90"/>
         <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="91"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
 </context>
 <context>
@@ -152,12 +152,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="14"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="34"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="82"/>
         <source>2. Team</source>
-        <translation type="unfinished"></translation>
+        <translation>2. Équipe</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="83"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -178,26 +178,30 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="171"/>
         <source>Sending debugging informations to dev team</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoie des informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="172"/>
         <source>Trying to send informations to dev team.
 Using Url : %1 
 Please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Essaie d&apos;envoyer les informations de déboggage à l&apos;équipe de développement.
+Sur l&apos;URL : %1 
+Veuillez patienter...</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="193"/>
         <source>Debugging informations correctly sent.</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="196"/>
         <source>Debugging informations correctly send to dev team.
 Using Url : %1 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de déboggage correctement envoyées à l&apos;équipe de développement.
+Sur l&apos;URL : %1 
+%2</translation>
     </message>
 </context>
 <context>
@@ -205,7 +209,7 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="375"/>
         <source>Form : </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -213,7 +217,7 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="502"/>
         <source>Forms : </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -221,32 +225,32 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="54"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="55"/>
         <source>Error Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails des erreurs</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="56"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="71"/>
         <source>Installed Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins installés</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="106"/>
         <source>Plugin Details of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails du plugin %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="126"/>
         <source>Plugin Errors of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreurs du plugin %1</translation>
     </message>
 </context>
 <context>
@@ -290,255 +294,261 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="574"/>
         <source>System informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations sur le système</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="576"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Système d&apos;exploitation</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="577"/>
         <source>uname output</source>
-        <translation type="unfinished"></translation>
+        <translation>sortie de uname</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="582"/>
         <source>Compilation Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de compilation</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="583"/>
         <source>Compile Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>Compilé avec la version Qt</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="584"/>
         <source>Actual Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version Qt actuelle</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="599"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="709"/>
         <source>Binary</source>
-        <translation type="unfinished"></translation>
+        <translation>Binaire</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="600"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="710"/>
         <source>Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Ressources</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="601"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="711"/>
         <source>Read only Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données en lecture seulement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="602"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="712"/>
         <source>Writable databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données inscriptibles</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="603"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="713"/>
         <source>Bundle root path</source>
-        <translation type="unfinished"></translation>
+        <translation>Racine du bundle</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="604"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="714"/>
         <source>Translations path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin vers les traductions</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="605"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="715"/>
         <source>Qt Plugins path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des plugins Qt</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="606"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="716"/>
         <source>Qt FrameWorks path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire du FrameWork Qt</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="607"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="717"/>
         <source>FreeMedForms PlugIns path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des librairies de l&apos;application</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="608"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="718"/>
         <source>SmallPixmapPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="609"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="719"/>
         <source>MediumPixmapPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="610"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="720"/>
         <source>BigPixmapPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="611"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="721"/>
         <source>SystemTempPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="612"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="722"/>
         <source>ApplicationTempPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="613"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="723"/>
         <source>FormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="614"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="724"/>
         <source>SampleFormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="615"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="725"/>
         <source>DocumentationPath</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire vers la documentation</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="617"/>
         <source>Absolute Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemins absolus</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="619"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="623"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="693"/>
         <source>Using Ini File</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilise le fichier ini</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="621"/>
         <source>Relative Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemins relatifs</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="630"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="631"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="726"/>
         <source>WebSiteUrl</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="637"/>
         <source>Settings values</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeurs des paramètres</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="640"/>
         <source>Orphan settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres orphelins</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="678"/>
         <source>Running version : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version : %1
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="679"/>
         <source>Build date : %1 %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Date de compilation : %1 %2
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="680"/>
         <source>Qt Build version : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version Qt de compilation : %1
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="681"/>
         <source>Qt running version : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version de Qt en cours : %1
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="682"/>
         <source>Application Version : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version de l&apos;application : %1
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="684"/>
         <source>Actual build : Debug
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version actuelle : de déboggage</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="686"/>
         <source>Actual build : Release
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Version actuelle : stable</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="688"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="690"/>
         <source>Actual build</source>
-        <translation type="unfinished"></translation>
+        <translation>Version actuelle</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="688"/>
         <source>Full Application Build
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Application complète</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="690"/>
         <source>Svn Build
 </source>
-        <translation type="unfinished"></translation>
+        <translation>compilation du SVN</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="691"/>
         <source>Application path : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de l&apos;application : %1
+</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="695"/>
         <source>Running on Linux</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonctionne sous Linux</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="696"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="700"/>
         <source>   uname returns : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>   retour d&apos;uname : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="699"/>
         <source>Running on MacOs</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonctionne sous MacOs</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="703"/>
         <source>Running on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonctionne sous Windows</translation>
     </message>
 </context>
 <context>
@@ -569,7 +579,7 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="228"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Français</translation>
     </message>
 </context>
 <context>
@@ -577,7 +587,7 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/constants.h" line="207"/>
         <source>FreeDiams Prescriptions (*.di)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prescription FreeDiams (*.di)</translation>
     </message>
 </context>
 </TS>

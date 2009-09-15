@@ -211,22 +211,25 @@ QStringList Translators::availableLanguages()
 /** \brief Returns the available translated languages for the application. It is based on the Qt qm files. */
 QMap<QString, QString> Translators::availableLocalesAndLanguages()
 {
-    QMap<QString, QString> toReturn;
-    toReturn.insert( "en", "English" );
+    static QMap<QString, QString> toReturn;
+    if (!toReturn.isEmpty())
+	return toReturn;
 
-    if ( m_PathToTranslations.isEmpty() )
+    toReturn.insert("en", "English");
+
+    if (m_PathToTranslations.isEmpty())
         return toReturn;
 
-    QDir dir( m_PathToTranslations );
-    QStringList fileNames = dir.entryList( QStringList( "toolkit_*.qm" ) );
+    QDir dir(m_PathToTranslations);
+    QStringList fileNames = dir.entryList(QStringList() << QString("%1_*.qm").arg(Trans::Constants::CONSTANTS_TRANSLATOR_NAME));
     foreach( QString s, fileNames ) {
         QString locale = s;
         locale.remove( 0, locale.indexOf( '_' ) + 1 );
         locale.truncate( locale.lastIndexOf( '.' ) );
         QTranslator translator;
-        translator.load( s, m_PathToTranslations );
-        QString lang = translator.translate( "Translators", "English" );
-        toReturn.insert( locale, lang );
+	translator.load(s, m_PathToTranslations);
+	QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);
+	toReturn.insert(locale, lang);
     }
     return toReturn;
 }

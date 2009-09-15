@@ -36,6 +36,8 @@
 #include "mainwindow.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <utils/log.h>
 
 #include <QtCore/QtPlugin>
@@ -72,6 +74,9 @@ void MainWinPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
 
     m_MainWindow->initialize(QStringList(),0);
     m_MainWindow->extensionsInitialized();

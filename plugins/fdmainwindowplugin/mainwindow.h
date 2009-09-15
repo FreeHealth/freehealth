@@ -119,6 +119,7 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 
 protected:
     void closeEvent( QCloseEvent *event );
+    void changeEvent(QEvent *event);
 
 public:
     Internal::Ui::MainWindow *m_ui;
