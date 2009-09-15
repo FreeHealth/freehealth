@@ -59,6 +59,7 @@ La barre d'icône présente dans l'ordre les actions suivantes :
 \li Descendre le médicament
 \li Trier les médicaments (les 100% sont mis en premier, puis le tri se fait sur le nom)
 \li Afficher \ref synthetiseur_iam
+\li Modifier toutes les durées de prescription en un clique
 
 \ref index
 
@@ -211,7 +212,7 @@ qui apparaît sous le nom du médicament lorsque vous laissez la souris sans act
 \note Il aussi est possible d'ajouter des médicaments dans l'ordonnance juste à des fins de tests. Ces médicaments
 ne seront pas notifiés lors de l'impression de l'ordonnance (ceci est très pratique pour tester un traitement
 intercurrent chez un patient recevant déjà un traitement chronique). Ils seront uniquement utilisés
-pour le calcul des interactions. \ref fortextonly
+pour le calcul des interactions. \ref fortestonly
 
 \warning ATTENTION : Tous les médicaments n'ont pas forcément de DCI reconnue, ou toutes leurs DCI
 ne sont pas forcément connues. Il convient donc de vérifier l'icône au moment de la prescription
@@ -273,7 +274,7 @@ Ces posologies standards permettent :
 Il aussi est possible d'ajouter des médicaments dans l'ordonnance juste à des fins de tests. Ces médicaments
 ne seront pas notifiés lors de l'impression de l'ordonnance (ceci est très pratique pour tester un traitement
 intercurrent chez un patient recevant déjà un traitement chronique). Ils seront uniquement utilisés
-pour le calcul des interactions. \ref fortextonly
+pour le calcul des interactions. \ref fortestonly
 
 \freediams offre la possiblité de mettre en commun les posologie standard que vous créez pour
 constituer une base de données complète. Il apparaît à ce stade indispensable qu'un comité scientifique se
@@ -382,7 +383,7 @@ Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spé
 
 \image html prescription_dci.png Passage d'une prescription normale à DCI
 
-\section fortextonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
+\section fortestonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
 
 \todo écrire la doc
 
