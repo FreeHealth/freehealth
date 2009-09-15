@@ -334,7 +334,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const TEAM_DRUG_DATABASE_MANAGER = QT_TRANSLATE_NOOP("tkConstants", "Drugs Database Management");
         const char* const TEAM_MEDICAL_ADVISORS = QT_TRANSLATE_NOOP("tkConstants", "Medical advisors");
         const char* const TEAM_MEDICAL_ADVISOR = QT_TRANSLATE_NOOP("tkConstants", "Medical advisor");
-        const char* const TEAM_WEBMASTER = QT_TRANSLATE_NOOP("tkConstants", "Webmaster");
+	const char* const TEAM_WEBMASTER = QT_TRANSLATE_NOOP("tkConstants", "Webmaster");
+	const char* const TEAM_TRANSLATORS = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
         // Build related
         const char* const BUILD_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Build informations");

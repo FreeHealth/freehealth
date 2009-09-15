@@ -14,7 +14,7 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="105"/>
         <source>Actual Qt version : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Version actuelle de Qt : %1</translation>
     </message>
 </context>
 <context>
@@ -37,7 +37,7 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="291"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle version de FreeDiams détectée, vous devez renouveler l&apos;agrément de licence.</translation>
     </message>
 </context>
 <context>
@@ -45,12 +45,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="32"/>
         <source>Application name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l&apos;application</translation>
     </message>
 </context>
 <context>

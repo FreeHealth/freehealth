@@ -7,14 +7,15 @@ freediams (0.0.10-2) jaunty; urgency=low
   * New : can add drugs only for interaction testing in prescription
   * New : refreshed dialogs : About, Preferences and Debugging informations, Help dialog
   * New : recent file manager
+  * New : multilingual support added : Fr/En/De are available
   * Changed : architecture of the application
   * Improved : interaction searching speed, prescription reading speed
-  * Bug : complete information on interaction are now available (bug is corrected)
   * Improved : better linux OS integration
-  * Bug : INN Prescription is now more functionnal
-  * Bug : crashed on MacOs if Qt already installed
   * Improved : management of patient datas
   * Improved : more command line params (see documentation)
+  * Bug : INN Prescription is now more functionnal
+  * Bug : complete information on interaction are now available (bug is corrected)
+  * Bug : crashed on MacOs if Qt already installed
 
  -- eric <eric.maeker@free.fr>  Tue, 15 Sep 2009 00:00:00 +0200
 

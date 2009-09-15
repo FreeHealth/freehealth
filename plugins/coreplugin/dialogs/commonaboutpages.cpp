@@ -244,7 +244,20 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("Debian and Ubuntu")
                 )
 
-        ;
+	<< Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
+		 "Sascha Manns",
+		 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_GERMANY),
+		 "Sascha.Manns@directbox.com",
+		 "German translation"
+		)
+
+	<< Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
+		 "Eric Maeker, MD",
+		 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+		 "eric.maeker@free.fr",
+		 "French / English"
+		)
+	;
 
 
 

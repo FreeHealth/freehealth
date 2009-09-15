@@ -77,37 +77,37 @@
         <translation>Lese ein MedinTux exchange file.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="350"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="360"/>
         <source>Save actual prescription ?</source>
         <translation>Aktuelles Rezept speichern?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="351"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="361"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation>Das aktuelle Rezept ist nicht leer. Möchten Sie es speichern bevor Sie ein neues erstellen?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="462"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="472"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Öffne ein Rezept zusammenfügen oder austauschen?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="463"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="473"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Da ist ein Rezept im Editor, wollen Sie das ersetzen oder zu einem offenen Rezept hinzufügen.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="464"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="474"/>
         <source>Replace prescription</source>
         <translation>Ersetze Rezept</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="464"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="474"/>
         <source>Add to prescription</source>
         <translation>Függe einem Rezept hinzu</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="465"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="475"/>
         <source>Open a prescription</source>
         <translation>Öffne ein Rezept</translation>
     </message>
