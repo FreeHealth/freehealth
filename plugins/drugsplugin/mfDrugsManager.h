@@ -103,6 +103,7 @@ private Q_SLOTS:
     void searchActionChanged(QAction *a);
     void printPrescription();
     void toogleTestingDrugs();
+    void changeDuration();
 
 private:
     bool canMoveUp();
@@ -124,6 +125,7 @@ protected:
     QAction *aSearchInn;
     QAction *aPrintPrescription;
     QAction *aToogleTestingDrugs;
+    QAction *aChangeDuration;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 };

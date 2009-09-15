@@ -49,6 +49,8 @@
 #include <dosagedialog/mfDosageDialog.h>
 #include <mfDrugsManager.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -63,6 +65,7 @@
 
 using namespace mfDrugsConstants;
 using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
 
 /** \brief Constructor. You must call initialize() after instanciation */
 PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
@@ -142,13 +145,15 @@ void PrescriptionViewer::createActionsAndToolbar()
     actionsToAdd.clear();
     actionsToAdd
             << mfDrugsConstants::A_TOOGLE_TESTINGDRUGS
-            << Core::Constants::A_VIEW_INTERACTIONS;
+            << Core::Constants::A_VIEW_INTERACTIONS
+            << Core::Constants::A_CHANGE_DURATION;
 
     foreach(const QString &s, actionsToAdd) {
         cmd = am->command(s);
         m_ToolBar->addAction(cmd->action());
         m_ToolBar->addSeparator();
     }
+
 }
 
 /** \brief Clears the prescription */
@@ -221,6 +226,53 @@ void PrescriptionViewer::viewInteractions()
      InteractionDialog dlg(this);
      dlg.resize(Core::ICore::instance()->mainWindow()->size());
      dlg.exec();
+}
+
+/** \brief Presents a QMenu to the user, and change duration of all drugs in the prescription */
+void PrescriptionViewer::changeDuration()
+{
+    QMenu *root = new QMenu(this);
+    QStringList subs = QStringList()
+                       << Trans::Constants::DAYS
+                       << Trans::Constants::WEEKS
+                       << Trans::Constants::MONTHS
+                       << Trans::Constants::QUARTERS;
+    QList<int> quantity = QList<int>() << 31 << 15 << 12 << 4;
+    int i = 0;
+    foreach(const QString &s, subs) {
+        QMenu *submenu = new QMenu(tkTr(s.toAscii()), root);
+        root->addMenu(submenu);
+        int j = quantity[i];
+        for(int z=0; z<j;++z) {
+            QAction *a = submenu->addAction(QString::number(z+1));
+            a->setObjectName(tkTr(s.toAscii())+":"+QString::number(z+1));
+            connect(a,SIGNAL(triggered()), this, SLOT(changeDurationTo()));
+        }
+        ++i;
+    }
+    QAction *a = Core::ICore::instance()->actionManager()->command(Core::Constants::A_CHANGE_DURATION)->action();
+    root->popup(mapToGlobal(m_ToolBar->actionGeometry(a).center()));
+}
+
+void PrescriptionViewer::changeDurationTo()
+{
+    QAction *a = qobject_cast<QAction*>(sender());
+    if (!a)
+        return;
+    QString scheme = a->objectName().left(a->objectName().indexOf(":"));
+    int duration = a->objectName().mid(a->objectName().indexOf(":")+1).toInt();
+    Drugs::Internal::DrugsModel *m = DRUGMODEL;
+    int nb = m->rowCount();
+    int col;
+
+    for(int i=0;i<nb;++i) {
+        QModelIndex idx = m->index(i,mfDrugsConstants::Prescription::DurationScheme);
+        m->setData(idx, scheme);
+        idx = m->index(i,mfDrugsConstants::Prescription::DurationFrom);
+        m->setData(idx, duration);
+        idx = m->index(i,mfDrugsConstants::Prescription::DurationUsesFromTo);
+        m->setData(idx, false);
+    }
 }
 
 /** \brief Returns the listView in use for the prescription. */

@@ -49,7 +49,7 @@
  * \file mfDrugsCentralWidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.4
- * \date 10 Sept 2009
+ * \date 15 Sept 2009
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
    \ingroup freediams
 */
@@ -70,10 +70,6 @@ class DrugsCentralWidget : public QWidget
 {
     Q_OBJECT
     friend class Drugs::Internal::DrugsActionHandler;
-
-//#ifdef DRUGS_INTERACTIONS_STANDALONE
-////    friend class diMainWindow;
-//#endif
 
 public:
     DrugsCentralWidget(QWidget *parent = 0);

@@ -96,6 +96,8 @@ public Q_SLOTS:
     void showDrugInfo(const QModelIndex &item);
     void showDosageDialog(const QModelIndex &item);
     void viewInteractions();
+    void changeDuration();
+    void changeDurationTo();
 
 private:
     QToolBar *m_ToolBar;               // drugslist widget's toolbar

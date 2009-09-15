@@ -181,7 +181,7 @@ const char * const  A_INTERPRETOR_GENERAL     = "actionInterpretor";      /*!< \
 // FreeMedForms Tools Actions
 const char * const  A_USERMANAGER     = "actionUserManager";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
-// About Menu Action's name (find icon default into tkTheme.h)
+// About Menu Action's name
 const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -189,7 +189,7 @@ const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";   /*!< \brie
 const char * const  A_DEBUGHELPER        = "actionDebugHelper";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
-// Configuration Menu Action's name (find icon default into tkTheme.h)
+// Configuration Menu Action's name
 const char * const  A_PREFERENCES        = "actionConfigure";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_PLUGINS_PREFERENCES= "actionPlugPrefs";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CONFIGURE_MEDINTUX = "actionConfMedintux";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -199,6 +199,7 @@ const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief De
 
 // Drugs specific actions' name
 const char* const  A_VIEW_INTERACTIONS  = "actionViewInteractions";
+const char* const  A_CHANGE_DURATION    = "actionChangeDuration";
 
 
 
@@ -277,6 +278,10 @@ const char * const  ICONDEBUGHELPER =  "";
 const char * const  ICONCRASHRECOVER = "crashrecoverer.png";
 const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
+
+// date and time Icons
+const char * const  ICONDATE        =  "date.png";
+
 
 // menu Users --> MediumSize
 const char * const  ICONUSER          = "user.png";

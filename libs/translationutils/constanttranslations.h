@@ -221,6 +221,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const VIEWINTERACTIONS_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
 
         // Time and periods
+        const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
         const char* const SECONDS    = QT_TRANSLATE_NOOP("tkConstants", "second(s)");
         const char* const MINUTES    = QT_TRANSLATE_NOOP("tkConstants", "minute(s)");
         const char* const HOURS      = QT_TRANSLATE_NOOP("tkConstants", "hour(s)");

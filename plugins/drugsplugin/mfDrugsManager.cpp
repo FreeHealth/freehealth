@@ -270,6 +270,13 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     }
     connect(aPrintPrescription,SIGNAL(triggered()), this, SLOT(printPrescription()));
 
+    a = aChangeDuration = new QAction(this);
+    a->setObjectName("aChangeDuration");
+    a->setIcon(th->icon(Core::Constants::ICONDATE));
+    cmd = am->registerAction(a, Core::Constants::A_CHANGE_DURATION, ctx);
+    cmd->setTranslations(Trans::Constants::DURATION);
+    connect(aChangeDuration,SIGNAL(triggered()),this,SLOT(changeDuration()));
+
     am->retranslateMenusAndActions();
 }
 
@@ -402,4 +409,10 @@ void DrugsActionHandler::toogleTestingDrugs()
 {
     if (m_CurrentView)
        m_CurrentView->currentDrugsModel()->showTestingDrugs(aToogleTestingDrugs->isChecked());
+}
+
+void DrugsActionHandler::changeDuration()
+{
+    if (m_CurrentView)
+       m_CurrentView->prescriptionView()->changeDuration();
 }
