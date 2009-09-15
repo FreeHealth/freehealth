@@ -251,10 +251,6 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
 
     if (Utils::isDebugCompilation()) {
         // DEBUG BUILD
-        // transform defined path during compilation to relative path during execution...
-//        QDir fmfBin( QDir::cleanPath( APPLICATION_BIN_PATH ) );
-//        QString res = fmfBin.relativeFilePath( QDir::cleanPath( PACKAGE_GLOBAL_RESOURCES ) );
-//        qWarning() << "settings" << fmfBin.absolutePath() << res;
         QString res;
         if (Utils::isRunningOnMac())
             res = qApp->applicationDirPath() + "/../../../../global_resources";
@@ -272,14 +268,15 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
         }
     } else {
         // RELEASE BUILD
+#ifdef LINUX_INTEGRATED
+        setPath( BundleResourcesPath, QString("/usr/share/%1").arg(qApp->applicationDirPath()) );
+#else
         if (Utils::isRunningOnMac()) {
-//            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath();
             setPath( BundleResourcesPath, qApp->applicationDirPath() + "/../" + QString(BUNDLERESOURCE_PATH) );
         } else {
-//            resourcesPath = QFileInfo( QSettings::fileName() ).absolutePath() + QDir::separator() + "Resources";
-            /** \todo manage LINUX_INTEGRATED here or in main.cpp ??? */
             setPath( BundleResourcesPath, qApp->applicationDirPath() + QDir::separator() + QString(BUNDLERESOURCE_PATH));
         }
+#endif
         m_FirstTime = value( "FirstTimeRunning", true ).toBool();
         setPath( ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath() );//QDir::homePath() + "/." + applicationName );//resourcesPath );
     }
@@ -342,7 +339,6 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
                     appname = appname.left(appname.indexOf("_d"));
             }
             m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname) );
-//            tkTheme::instance()->setThemeRootPath( bundlePath + DEFAULTTHEME_PATH );
             break;
         }
         case ApplicationPath :

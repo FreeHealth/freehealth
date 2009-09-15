@@ -51,6 +51,7 @@ static const char* COREPLUGINSNAME = "Core";
 
 static inline QStringList getPluginPaths()
 {
+    QStringList dirs;
     QString app = qApp->applicationDirPath();
 
 #ifdef DEBUG
@@ -60,13 +61,20 @@ static inline QStringList getPluginPaths()
 #endif
 
 #ifdef RELEASE
-#    ifdef Q_OS_MAC
+#  ifdef Q_OS_MAC
     app = QDir::cleanPath(app+"/../");
-#    endif
+#  endif
+#  ifdef LINUX_INTEGRATED
+    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(qApp->applicationName());
+#  endif
 #endif
 
     app += "/plugins/";
-    return QStringList() << app;
+
+    dirs << app;
+
+
+    return dirs;
 }
 
 
