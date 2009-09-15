@@ -14,7 +14,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-        qmake-qt4 -r -config release "CONFIG+=LINUX_INTEGRATED" "INSTALL_ROOT_PATH=$(CURDIR)/debian/freediams/usr/" freediams.pro
+	qmake-qt4 -r -config release "CONFIG+=LINUX_INTEGRATED" "INSTALL_ROOT_PATH=$(CURDIR)/debian/freediams/usr/" freediams.pro
 	touch configure-stamp
 
 
@@ -44,7 +44,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/freemedforms.
-        $(MAKE) DESTDIR=$(CURDIR)/debian/freediams install
+	$(MAKE) DESTDIR=$(CURDIR)/debian/freediams install
 
 
 # Build architecture-independent files here.

@@ -2,13 +2,13 @@ Source: freemedforms
 Section: science
 Priority: extra
 Maintainer: Eric Maeker <eric.maeker@free.fr>
-Build-Depends: debhelper (>= 7), libqt4-dev (>= 4.5.0), doxygen (>= 1.5.8)
+Build-Depends: debhelper (>= 7), libqt4-dev (>= 4.4.3), doxygen (>= 1.5.8)
 Standards-Version: 3.8.0
 Homepage: http://www.ericmaeker.fr/FreeMedForms
 
 Package: freemedforms
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqtcore4 (>= 4.5.0), libqtgui4 (>= 4.5.0), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqtcore4 (>= 4.4.3), libqtgui4 (>= 4.4.3), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script
 Description: Free, open source Electronic Medical Record Manager.
  FreeMedForms (FMF) is a multi-platform software
  (available on MacOS, Linux, FreeBSD, Windows),

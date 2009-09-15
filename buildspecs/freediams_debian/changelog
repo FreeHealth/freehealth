@@ -1,3 +1,23 @@
+freediams (0.0.10-2) jaunty; urgency=low
+
+  * Updating beta version before v0.1.0 release
+  * Version of the drugs database : AFSSAPS - 26/06/2009
+  * Version of the interactions database : AFSSAPS - 29/06/2009
+  * New : exchange file is managed outside MedinTux context
+  * New : can add drugs only for interaction testing in prescription
+  * New : refreshed dialogs : About, Preferences and Debugging informations, Help dialog
+  * New : recent file manager
+  * Changed : architecture of the application
+  * Improved : interaction searching speed, prescription reading speed
+  * Bug : complete information on interaction are now available (bug is corrected)
+  * Improved : better linux OS integration
+  * Bug : INN Prescription is now more functionnal
+  * Bug : crashed on MacOs if Qt already installed
+  * Improved : management of patient datas
+  * Improved : more command line params (see documentation)
+
+ -- eric <eric.maeker@free.fr>  Tue, 15 Sep 2009 00:00:00 +0200
+
 freediams (0.0.10-1) jaunty; urgency=low
 
   * Initial package release

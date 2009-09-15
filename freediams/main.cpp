@@ -65,7 +65,7 @@ static inline QStringList getPluginPaths()
     app = QDir::cleanPath(app+"/../");
 #  endif
 #  ifdef LINUX_INTEGRATED
-    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(qApp->applicationName());
+    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
 #  endif
 #endif
 
@@ -86,9 +86,9 @@ int main( int argc, char *argv[] )
      QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
 #ifdef DEBUG
-     app.setApplicationName( QString( "%1 - %2 debug" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1 debug" ).arg( BINARY_NAME) );
 #else
-     app.setApplicationName( QString( "%1 - %2" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
+     app.setApplicationName( QString( "%1" ).arg( BINARY_NAME ) );
 #endif
 
      app.setOrganizationName( BINARY_NAME );

@@ -63,7 +63,7 @@ static inline QStringList getPluginPaths()
     app = QDir::cleanPath(app+"/../");
 #  endif
 #  ifdef LINUX_INTEGRATED
-    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(qApp->applicationName());
+    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
 #  endif
 #endif
 

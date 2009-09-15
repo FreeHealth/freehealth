@@ -269,7 +269,7 @@ SettingsPrivate::SettingsPrivate( QObject *parent, const QString &appName, const
     } else {
         // RELEASE BUILD
 #ifdef LINUX_INTEGRATED
-        setPath( BundleResourcesPath, QString("/usr/share/%1").arg(qApp->applicationDirPath()) );
+	setPath( BundleResourcesPath, QString("/usr/share/%1").arg(qApp->applicationName()) );
 #else
         if (Utils::isRunningOnMac()) {
             setPath( BundleResourcesPath, qApp->applicationDirPath() + "/../" + QString(BUNDLERESOURCE_PATH) );
