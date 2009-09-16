@@ -12,7 +12,7 @@ HEADERS = printerplugin.h \
     printer.h \
     printerpreviewer_p.h \
     textdocumentextra.h \
-    textdocumentheader.h
+#    textdocumentheader.h
 
 SOURCES = printerplugin.cpp \
     printer.cpp \
