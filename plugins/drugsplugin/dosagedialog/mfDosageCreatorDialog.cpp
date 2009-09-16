@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class mfDosageCreator
+  \class DosageCreator
   \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.
@@ -80,6 +80,8 @@ using namespace mfInteractionsConstants;
 
 using namespace Drugs::Internal;
 using namespace Trans::ConstantTranslations;
+
+inline static Drugs::DrugsModel *dm() { return Drugs::DRUGMODEL; }
 
 namespace Drugs {
 namespace Internal {
@@ -165,13 +167,12 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DosageModel *dosageMo
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
 
     // Drug informations
-    DrugsModel *m = DRUGMODEL;
     int CIS = dosageModel->drugCIS();
-    drugNameLabel->setText( m->drugData(CIS, Drug::Denomination).toString() );
-    QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
-    interactionIconLabel->setPixmap( m->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
+    drugNameLabel->setText( dm()->drugData(CIS, Drug::Denomination).toString() );
+    QString toolTip = dm()->drugData(CIS, Interaction::ToolTip ).toString();
+    interactionIconLabel->setPixmap( dm()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
     interactionIconLabel->setToolTip( toolTip );
-    toolTip = m->drugData(CIS, Drug::CompositionString ).toString();
+    toolTip = dm()->drugData(CIS, Drug::CompositionString ).toString();
     drugNameLabel->setToolTip( toolTip );
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
@@ -254,7 +255,7 @@ void DosageCreatorDialog::on_helpButton_clicked()
 
 void DosageCreatorDialog::on_testOnlyButton_clicked()
 {
-    DRUGMODEL->setDrugData(d->m_DosageModel->drugCIS(), Prescription::OnlyForTest, true);
+    dm()->setDrugData(d->m_DosageModel->drugCIS(), Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
 }

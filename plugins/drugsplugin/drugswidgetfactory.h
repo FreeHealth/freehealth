@@ -42,9 +42,7 @@
 #define DRUGSWIDGETFACTORY_H
 
 namespace Drugs {
-namespace Internal {
 class DrugsModel;
-}
 }
 
 // include Qt headers
@@ -64,6 +62,7 @@ QT_END_NAMESPACE
 */
 
 namespace Drugs {
+namespace Internal {
 
 class DrugsWidgetsFactory : public Core::IFormWidgetFactory
 {
@@ -97,11 +96,12 @@ private:
     void createConnections();
 
 private:
-    Internal::DrugsModel *m_PrescriptionModel;
+    DrugsModel *m_PrescriptionModel;
     QString     m_iniPath;
     bool        m_WithPrescribing, m_WithPrinting;
 };
 
-} // End Drugs
+}  // End Internal
+}  // End Drugs
 
 #endif  // DRUGSWIDGETFACTORY_H

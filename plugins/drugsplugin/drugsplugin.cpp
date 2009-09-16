@@ -2,6 +2,7 @@
 #include "drugswidgetfactory.h"
 #include "mfDrugsConstants.h"
 #include "drugspreferences/mfDrugsPreferences.h"
+#include <drugsplugin/drugsdatabase/mfDrugsBase.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -15,7 +16,7 @@
 #include <QDebug>
 
 using namespace Drugs::Internal;
-using namespace Drugs;
+//using namespace Drugs;
 
 DrugsPlugin::DrugsPlugin() :
         viewPage(0),
@@ -56,7 +57,11 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Utils::Log::addMessage(this,"Running as FreeDiams");
 #endif
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
-    addAutoReleasedObject(new Drugs::DrugsWidgetsFactory(this));
+    addAutoReleasedObject(new DrugsWidgetsFactory(this));
+
+    // Initialize drugs database
+    DrugsBase::instance();
+
     return true;
 }
 

@@ -487,6 +487,8 @@ QString DrugsData::toHtml() const
     return msg;
 }
 
+inline static Drugs::InteractionsManager* new_im() {return new Drugs::InteractionsManager();}
+
 QString DrugsData::drugsListToHtml( const QDrugsList & list )
 {
     QString msg;
@@ -494,7 +496,7 @@ QString DrugsData::drugsListToHtml( const QDrugsList & list )
 //    // check interactions of the drugs list
 //    mfDrugsBase *b = mfDrugsBase::instance();
 //    b->interactions( list );
-    InteractionsManager * im = new InteractionsManager();
+    InteractionsManager * im = new_im();
     im->setDrugsList(list);
     im->checkInteractions();
 

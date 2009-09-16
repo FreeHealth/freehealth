@@ -67,7 +67,6 @@
 #include <drugsplugin/mfDrugsConstants.h>
 #include <drugsplugin/mfDrugsManager.h>
 #include <drugsplugin/drugsmodel/mfDrugsIO.h>
-#include <drugsplugin/drugsdatabase/mfDrugsBase.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -181,9 +180,6 @@ void MainWindow::extensionsInitialized()
         this->aSave->setEnabled(false);
         this->aMedinTux->setEnabled(false);
     }
-
-    // Initialize drugs database
-    Drugs::Internal::DrugsBase::instance();
 
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();

@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class mfDosageViewer
+  \class DosageViewer
   \brief QWidget for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.\n
@@ -87,6 +87,8 @@ using namespace mfInteractionsConstants;
 
 using namespace Drugs::Internal;
 
+inline static Drugs::DrugsModel *dm() { return Drugs::DRUGMODEL; }
+
 namespace Drugs {
 namespace Internal {
 
@@ -108,11 +110,10 @@ public:
             else
                 m_DosageModel->setData( m_DosageModel->index( m_Mapper->currentIndex(), index), false );
         } else {
-            DrugsModel *m = DRUGMODEL;
             if (qtCheckState==Qt::Checked)
-                m->setDrugData( m_CIS, index, true );
+		dm()->setDrugData( m_CIS, index, true );
             else
-                m->setDrugData( m_CIS, index, false );
+		dm()->setDrugData( m_CIS, index, false );
         }
     }
 
@@ -121,7 +122,7 @@ public:
     {
         if (!m_Mapper) {
             m_Mapper = new QDataWidgetMapper(m_Parent);
-            m_Mapper->setModel( DRUGMODEL );
+	    m_Mapper->setModel( dm() );
             m_Mapper->setSubmitPolicy( QDataWidgetMapper::AutoSubmit );
             m_Mapper->addMapping( m_Parent->intakesFromSpin, Prescription::IntakesFrom, "value" );
             m_Mapper->addMapping( m_Parent->intakesToSpin, Prescription::IntakesTo, "value" );
@@ -191,7 +192,6 @@ public:
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(m_Parent);
-        DrugsModel *m = DRUGMODEL;
         if (m_DosageModel) {
             // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
             // Need to be filled by hand the comboboxes...
@@ -227,26 +227,26 @@ public:
 
             // Intakes
             m_Parent->intakesCombo->setCurrentIndex(-1);
-            m_Parent->intakesCombo->setEditText(m->drugData(m_CIS, Prescription::IntakesScheme).toString());
+	    m_Parent->intakesCombo->setEditText(dm()->drugData(m_CIS, Prescription::IntakesScheme).toString());
             // Period
-            m_Parent->periodSpin->setValue(m->drugData(m_CIS, Prescription::Period).toDouble());
-            m_Parent->periodSchemeCombo->setEditText(m->drugData(m_CIS, Prescription::PeriodScheme).toString());
+	    m_Parent->periodSpin->setValue(dm()->drugData(m_CIS, Prescription::Period).toDouble());
+	    m_Parent->periodSchemeCombo->setEditText(dm()->drugData(m_CIS, Prescription::PeriodScheme).toString());
             // Duration
-            m_Parent->durationCombo->setEditText(m->drugData(m_CIS, Prescription::DurationScheme).toString());
+	    m_Parent->durationCombo->setEditText(dm()->drugData(m_CIS, Prescription::DurationScheme).toString());
             // Interval
-            m_Parent->minIntervalIntakesSpin->setValue(m->drugData(m_CIS, Prescription::IntakesIntervalOfTime).toDouble());
+	    m_Parent->minIntervalIntakesSpin->setValue(dm()->drugData(m_CIS, Prescription::IntakesIntervalOfTime).toDouble());
 
-            if (m->drugData( m_CIS, Prescription::IntakesUsesFromTo).toBool()) {
+	    if (dm()->drugData( m_CIS, Prescription::IntakesUsesFromTo).toBool()) {
                 m_Parent->fromToIntakesCheck->setChecked(true);
                 m_Parent->intakesToLabel->show();
                 m_Parent->intakesToSpin->show();
             }
-            if (m->drugData( m_CIS, Prescription::DurationUsesFromTo).toBool()) {
+	    if (dm()->drugData( m_CIS, Prescription::DurationUsesFromTo).toBool()) {
                 m_Parent->fromToDurationCheck->setChecked(true);
                 m_Parent->durationToLabel->show();
                 m_Parent->durationToSpin->show();
             }
-            m_Parent->aldCheck->setChecked(m->drugData(m_CIS,Prescription::IsALD).toBool());
+	    m_Parent->aldCheck->setChecked(dm()->drugData(m_CIS,Prescription::IsALD).toBool());
         }
     }
 
@@ -264,8 +264,7 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(m_Parent);
-        DrugsModel *m = DRUGMODEL;
-        m_Parent->labelOfDosageLabel->setToolTip(m->drugData( m_CIS, Drug::AvailableDosages).toString() );
+	m_Parent->labelOfDosageLabel->setToolTip(dm()->drugData( m_CIS, Drug::AvailableDosages).toString() );
 //        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
 //        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
 //        dosageForAllInnCheck.setEnabled(m->drugData(CIS, Drug::AllInnsKnown ).toBool());
@@ -279,7 +278,6 @@ public:
     void resetUiToDefaults()
     {
         Q_ASSERT(m_Parent);
-        DrugsModel *m = DRUGMODEL;
         m_Parent->intakesToLabel->hide();
         m_Parent->intakesToSpin->hide();
         m_Parent->durationToLabel->hide();
@@ -294,7 +292,7 @@ public:
         m_Parent->intervalTimeSchemeCombo->clear();
         m_Parent->intervalTimeSchemeCombo->addItems( Trans::ConstantTranslations::periods() );
         m_Parent->intervalTimeSchemeCombo->setCurrentIndex( Trans::Constants::Time::Days );
-        m_Parent->intakesCombo->addItems(m->drugData(m_CIS, Drug::AvailableForms).toStringList());
+	m_Parent->intakesCombo->addItems(dm()->drugData(m_CIS, Drug::AvailableForms).toStringList());
         m_Parent->intakesCombo->setCurrentIndex(0);
         m_Parent->mealTimeCombo->clear();
         m_Parent->mealTimeCombo->addItems( Trans::ConstantTranslations::mealTime() );
@@ -307,7 +305,7 @@ public:
         m_Parent->hourlyTableWidget->verticalHeader()->hide();
         m_Parent->hourlyTableWidget->horizontalHeader()->hide();
         m_Parent->hourlyTableWidget->resizeColumnsToContents();
-        bool isScored = m->drugData( m_CIS, Drug::IsScoredTablet ).toBool();
+	bool isScored = dm()->drugData( m_CIS, Drug::IsScoredTablet ).toBool();
         if ( isScored ) {
             m_Parent->intakesToSpin->setDecimals( 2 );
             m_Parent->intakesFromSpin->setDecimals( 2 );
@@ -333,9 +331,8 @@ public:
     bool dosageCanLinkWithInn()
     {
         if (m_DosageModel) {
-            DrugsModel *m = DRUGMODEL;
-            return ((m->drugData(m_CIS, Drug::MainInnCode).toInt()!=-1) &&
-                    (m->drugData(m_CIS,Drug::AllInnsKnown).toBool()));
+	    return ((dm()->drugData(m_CIS, Drug::MainInnCode).toInt()!=-1) &&
+		    (dm()->drugData(m_CIS,Drug::AllInnsKnown).toBool()));
         }
         return false;
     }
@@ -384,7 +381,7 @@ DosageViewer::DosageViewer( QWidget *parent )
 /** \brief Use this function to define a drugsModel behavior. */
 void DosageViewer::useDrugsModel(const int CIS, const int drugRow)
 {
-    Q_ASSERT(DRUGMODEL->containsDrug(CIS));
+    Q_ASSERT(dm()->containsDrug(CIS));
     d->m_CIS = CIS;
     d->m_DosageModel = 0;
     d->resetUiToDefaults();
@@ -526,26 +523,25 @@ void DosageViewer::on_userformsButton_clicked()
 /** \brief If INN linking is available, shows the inn name and the dosage used for the link */
 void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
 {
-    DrugsModel *m = DRUGMODEL;
     if (d->m_DosageModel) {
         // INN Prescription ?
         int row = d->m_Mapper->currentIndex();
             if ((dosageForAllInnCheck->isEnabled()) && (state==Qt::Checked)) {
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::CIS_LK), d->m_CIS );
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::CIP_LK), QVariant() );
-                d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::INN_LK), m->drugData(d->m_CIS,Drug::MainInnCode) );
-                d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::InnLinkedDosage), m->drugData(d->m_CIS,Drug::MainInnDosage) );
+		d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::INN_LK), dm()->drugData(d->m_CIS,Drug::MainInnCode) );
+		d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::InnLinkedDosage), dm()->drugData(d->m_CIS,Drug::MainInnDosage) );
             } else {
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::CIS_LK), d->m_CIS );
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::CIP_LK), QVariant() );
                 d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::INN_LK), QVariant() );
-                d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::InnLinkedDosage), m->drugData(d->m_CIS,Drug::MainInnCode) );
+		d->m_DosageModel->setData( d->m_DosageModel->index(row, Dosage::InnLinkedDosage), dm()->drugData(d->m_CIS,Drug::MainInnCode) );
             }
         innCompositionLabel->show();
         innCompositionLabel->setText( tr("Linking to : ")
-                                      + m->drugData(d->m_CIS, Drug::MainInnName).toString() + " "
+				      + dm()->drugData(d->m_CIS, Drug::MainInnName).toString() + " "
 //                                      + tr("Dosage of molecule : ")
-                                      + m->drugData(d->m_CIS, Drug::MainInnDosage).toString());
+				      + dm()->drugData(d->m_CIS, Drug::MainInnDosage).toString());
     } else
         innCompositionLabel->hide();
 }

@@ -58,9 +58,6 @@
  * \date 03 July 2009
 */
 
-using namespace mfInteractionsConstants;
-
-
 namespace Drugs {
 namespace Internal {
 class DrugsData;

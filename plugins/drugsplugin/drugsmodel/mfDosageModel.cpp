@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class mfDosageModel
+  \class DosageModel
   \brief Manages predetermined dosage.
   A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply :
   \li on a specific drug base on its CIS,
@@ -460,14 +460,15 @@ QStringList DosageModel::isDosageValid( const int row )
 //}
 #endif
 
+inline static Drugs::DrugsModel *dm() { return Drugs::DRUGMODEL; }
+
 /**
   \brief Transforms a dosage to a drug's prescription.
   \sa mfDrugsModel
 */
 void DosageModel::toPrescription(const int row)
 {
-    Q_ASSERT(DRUGMODEL->containsDrug(m_CIS));
-    DrugsModel *M = DRUGMODEL;
+    Q_ASSERT(dm()->containsDrug(m_CIS));
     QHash<int,int> prescr_dosage;
     prescr_dosage.insert( Prescription::UsedDosage ,           Dosage::Uuid );
     prescr_dosage.insert( Prescription::IntakesFrom ,          Dosage::IntakesFrom );
@@ -487,13 +488,13 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert( Prescription::MealTimeSchemeIndex ,  Dosage::MealScheme );
     prescr_dosage.insert( Prescription::IsALD ,                Dosage::IsALD );
     foreach( const int i, prescr_dosage.keys()) {
-        M->setDrugData(m_CIS, i, data(index(row, prescr_dosage.value(i))) );
+	dm()->setDrugData(m_CIS, i, data(index(row, prescr_dosage.value(i))) );
     }
     if (index(row,Dosage::INN_LK).data().toInt() > 999) // this is an INN prescription
-        M->setDrugData(m_CIS, Prescription::IsINNPrescription, true);
+	dm()->setDrugData(m_CIS, Prescription::IsINNPrescription, true);
     else
-        M->setDrugData(m_CIS, Prescription::IsINNPrescription, false);
-    M->resetModel();
+	dm()->setDrugData(m_CIS, Prescription::IsINNPrescription, false);
+    dm()->resetModel();
 }
 
 /** \brief Transforms a model's row into XML encoded QString. This part is using the database fieldnames.*/
