@@ -1,1 +1,0 @@
-#include <../objects/tkGlobal.h>
