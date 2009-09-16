@@ -153,8 +153,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     readSettings();
 
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
-
     return true;
 }
 
@@ -184,6 +182,7 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
@@ -192,7 +191,6 @@ void MainWindow::extensionsInitialized()
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
-    setWindowTitle(qApp->applicationName());
     show();
 
     // If needed read exchange file
