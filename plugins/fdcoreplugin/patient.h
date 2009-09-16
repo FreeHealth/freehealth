@@ -41,21 +41,22 @@
 #ifndef FREEDIAMS_PATIENT_H
 #define FREEDIAMS_PATIENT_H
 
+#include <coreplugin/core_exporter.h>
 
 #include <QVariant>
 
 /**
  * \file patient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 10 Sept 2009
+ * \version 0.0.6
+ * \date 16 Sept 2009
 */
 namespace Core {
 namespace Internal {
 class PatientPrivate;
 }
 
-class Patient
+class CORE_EXPORT Patient
 {
 public:
     enum Reference {

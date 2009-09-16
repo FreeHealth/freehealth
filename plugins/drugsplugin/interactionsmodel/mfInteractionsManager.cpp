@@ -109,7 +109,7 @@ namespace DrugInteractionConstants {
 
 using namespace DrugInteractionConstants;
 
-using namespace Drugs::Internal;
+using namespace Drugs;
 
 namespace Drugs {
 namespace Internal {
@@ -160,7 +160,7 @@ InteractionsManager::InteractionsManager(QObject *parent) :
 {
     static int handler = 0;
     ++handler;
-    d = new InteractionsManagerPrivate();
+    d = new Internal::InteractionsManagerPrivate();
     setObjectName("InteractionsManager" + QString::number(handler));
     Utils::Log::addMessage(this,"Instance created");
 }
@@ -171,13 +171,13 @@ InteractionsManager::~InteractionsManager()
     d=0;
 }
 
-void InteractionsManager::setDrugsList(const QList<DrugsData *> &list)
+void InteractionsManager::setDrugsList(const QList<Internal::DrugsData *> &list)
 {
     clearDrugsList();
     d->m_DrugsList = list;
 }
 
-void InteractionsManager::addDrug(DrugsData *drug)
+void InteractionsManager::addDrug(Internal::DrugsData *drug)
 {
     d->m_DrugsList.append(drug);
 }
@@ -216,7 +216,7 @@ bool InteractionsManager::checkInteractions()
     d->m_DrugInteractionList.clear();
 
     // get interactions list from drugsbase
-    d->m_DrugInteractionList = DrugsBase::instance()->calculateInteractions(d->m_DrugsList);
+    d->m_DrugInteractionList = Internal::DrugsBase::instance()->calculateInteractions(d->m_DrugsList);
 
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "InteractionsManager", QString("interactions() : %2 drugs")
@@ -229,7 +229,7 @@ bool InteractionsManager::checkInteractions()
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-QList<DrugInteraction*> InteractionsManager::getInteractions( const DrugsData *drug ) const
+QList<Internal::DrugInteraction*> InteractionsManager::getInteractions( const Internal::DrugsData *drug ) const
 {
     if ( d->m_DrugInteractionList.isEmpty() )
         return d->m_DrugInteractionList;
@@ -241,13 +241,13 @@ QList<DrugInteraction*> InteractionsManager::getInteractions( const DrugsData *d
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const DrugsData *drug) const
+Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const Internal::DrugsData *drug) const
 {
     if ( d->m_DrugInteractionList.isEmpty() )
         return Interaction::noIAM;
-    const QList<DrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
+    const QList<Internal::DrugInteraction*> & list = d->getDrugSpecificInteractions(drug);
     Interaction::TypesOfIAM r;
-    foreach( DrugInteraction* di, list )
+    foreach( Internal::DrugInteraction* di, list )
         r |= di->type();
     return r;
 }
@@ -257,7 +257,7 @@ Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const DrugsData
         otherwise you will have undesired behavior.
  \sa interactions()
 */
-bool InteractionsManager::drugHaveInteraction( const DrugsData *drug ) const
+bool InteractionsManager::drugHaveInteraction( const Internal::DrugsData *drug ) const
 {
      if ( d->m_DrugInteractionList.isEmpty() )
           return false;
@@ -268,9 +268,8 @@ bool InteractionsManager::drugHaveInteraction( const DrugsData *drug ) const
  \todo Return the last interaction founded after calling interactions().
  \sa interactions()
 */
-DrugInteraction *InteractionsManager::getLastInteractionFound() const
+Internal::DrugInteraction *InteractionsManager::getLastInteractionFound() const
 {
-    qWarning() << d->m_DrugInteractionList << d->m_DrugInteractionList.isEmpty();
      if (!d->m_DrugInteractionList.isEmpty())
           return d->m_DrugInteractionList.at(0);
      return 0;
@@ -280,14 +279,14 @@ DrugInteraction *InteractionsManager::getLastInteractionFound() const
  \brief Returns the list of all interactions founded by interactions()
  \sa interactions()
 */
-QList<DrugInteraction *> InteractionsManager::getAllInteractionsFound() const
+QList<Internal::DrugInteraction *> InteractionsManager::getAllInteractionsFound() const
 {
     return d->m_DrugInteractionList;
 }
 
 
 /** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
-QIcon InteractionsManager::iamIcon(const DrugsData * drug, const int &levelOfWarning) const
+QIcon InteractionsManager::iamIcon(const Internal::DrugsData * drug, const int &levelOfWarning) const
 {
     Core::ITheme *th = Core::ICore::instance()->theme();
     if ( drugHaveInteraction(drug) ) {
@@ -307,7 +306,7 @@ QIcon InteractionsManager::iamIcon(const DrugsData * drug, const int &levelOfWar
         else
             return th->icon( INTERACTION_ICONUNKONW );
     } else if ( levelOfWarning <= 1 ) {
-        if ( ! DrugsBase::instance()->drugsINNIsKnown( drug ) )
+	if ( ! Internal::DrugsBase::instance()->drugsINNIsKnown( drug ) )
             return th->icon( INTERACTION_ICONUNKONW );
         else return th->icon( INTERACTION_ICONOK );
     }
@@ -315,11 +314,11 @@ QIcon InteractionsManager::iamIcon(const DrugsData * drug, const int &levelOfWar
 }
 
 /** \brief Transforms a list of interactions to human readable Html (static). */
-QString InteractionsManager::listToHtml( const QList<DrugInteraction*> & list, bool fullInfos ) // static
+QString InteractionsManager::listToHtml( const QList<Internal::DrugInteraction*> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
      QList<int> id_di;
-     foreach( DrugInteraction * di, list ) {
+     foreach( Internal::DrugInteraction *di, list ) {
           if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
                continue;
           id_di << di->value( IAM_ID ).toInt();
@@ -348,11 +347,11 @@ QString InteractionsManager::listToHtml( const QList<DrugInteraction*> & list, b
 }
 
 /** \brief Transform a list of interactions to a human readable synthesis Html */
-QString InteractionsManager::synthesisToHtml( const QList<DrugInteraction *> & list, bool fullInfos ) // static
+QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugInteraction *> & list, bool fullInfos ) // static
 {
      QString tmp, toReturn;
      QList<int> id_di;
-     foreach( DrugInteraction * di, list ) {
+     foreach( Internal::DrugInteraction * di, list ) {
           if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
                continue;
           id_di << di->value( IAM_ID ).toInt();

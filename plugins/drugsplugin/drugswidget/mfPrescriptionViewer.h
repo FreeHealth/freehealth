@@ -41,6 +41,8 @@
 #ifndef MFPRESCRIPTIONVIEWER_H
 #define MFPRESCRIPTIONVIEWER_H
 
+#include <drugsplugin/drugs_exporter.h>
+
 #include <QWidget>
 #include <QAction>
 #include <QToolBar>
@@ -51,21 +53,22 @@
 /**
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 22 July 2009
+ * \version 0.0.8
+ * \date 16 Sept 2009
  * \brief
 */
 
 namespace Drugs {
-namespace Internal {
 class DrugsModel;
+namespace Internal {
+}  // End Internal
 
 /**
  \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
  Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
  \ingroup freediams drugswidget
   */
-class PrescriptionViewer : public QWidget, private Ui::PrescriptionViewer
+class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::PrescriptionViewer
 {
     Q_OBJECT
     Q_DISABLE_COPY(PrescriptionViewer)
@@ -103,7 +106,6 @@ private:
     QToolBar *m_ToolBar;               // drugslist widget's toolbar
 };
 
-}  // End Internal
 }  // End Drugs
 
 #endif // MFPRESCRIPTIONVIEWER_H

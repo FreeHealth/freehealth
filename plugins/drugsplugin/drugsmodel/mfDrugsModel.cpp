@@ -277,17 +277,18 @@ public:
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
-using namespace Drugs::Internal;
+//using namespace Drugs::Internal;
+using namespace Drugs;
 
 /** \brief Constructor */
 DrugsModel::DrugsModel( QObject * parent )
         : QAbstractTableModel( parent ),
-        d(new DrugsModelPrivate())
+	d(new Internal::DrugsModelPrivate())
 {
     static int handler = 0;
     ++handler;
     setObjectName("mfDrugsModel_" + QString::number(handler));
-    if (!DrugsBase::isInitialized())
+    if (!Internal::DrugsBase::isInitialized())
         Utils::Log::addError(this,"Drugs database not intialized");
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
@@ -349,7 +350,7 @@ bool DrugsModel::setData( const QModelIndex & index, const QVariant & value, int
     int row = index.row();
     if ((row >= d->m_DrugsList.count()) || (row < 0))
         return false;
-    DrugsData * drug = d->m_DrugsList.at(row);
+    Internal::DrugsData * drug = d->m_DrugsList.at(row);
     if (d->setDrugData(drug, index.column(), value)) {
         // inform of the modification
         Q_EMIT dataChanged(index, index);
@@ -367,7 +368,7 @@ bool DrugsModel::setData( const QModelIndex & index, const QVariant & value, int
 */
 bool DrugsModel::setDrugData( const int CIS, const int column, const QVariant &value )
 {
-    DrugsData *drug = d->getDrug(CIS);
+    Internal::DrugsData *drug = d->getDrug(CIS);
     if (!drug)
         return false;
     if (d->setDrugData(drug, column, value)) {
@@ -399,7 +400,7 @@ QVariant DrugsModel::data( const QModelIndex &index, int role ) const
     if (( index.row() > d->m_DrugsList.count() ) || ( index.row() < 0 ) )
         return QVariant();
 
-    const DrugsData *drug = d->m_DrugsList.at(index.row());
+    const Internal::DrugsData *drug = d->m_DrugsList.at(index.row());
 
     if ( ( role == Qt::DisplayRole ) || ( role == Qt::EditRole ) ) {
         int col = index.column();
@@ -420,7 +421,7 @@ QVariant DrugsModel::data( const QModelIndex &index, int role ) const
         display = drug->toHtml();
 
         if ( d->m_InteractionsManager->drugHaveInteraction( drug ) ) {
-            const QList<DrugInteraction *> & list = d->m_InteractionsManager->getInteractions( drug );
+	    const QList<Internal::DrugInteraction *> & list = d->m_InteractionsManager->getInteractions( drug );
             display.append( "<br>\n" );
             display.append( d->m_InteractionsManager->listToHtml( list, false ) );
         }
@@ -448,7 +449,7 @@ QVariant DrugsModel::data( const QModelIndex &index, int role ) const
 */
 QVariant DrugsModel::drugData( const int CIS, const int column )
 {
-    DrugsData *drug = d->getDrug(CIS);
+    Internal::DrugsData *drug = d->getDrug(CIS);
     if (!drug)
         return QVariant();
     return d->getDrugValue(drug, column);
@@ -475,7 +476,7 @@ bool DrugsModel::removeRows( int row, int count, const QModelIndex & parent )
     int i;
     bool toReturn = true;
     for( i = 0; i < count; ++i ) {
-        DrugsData *drug =  d->m_DrugsList.at(row+i);
+	Internal::DrugsData *drug =  d->m_DrugsList.at(row+i);
         if ((!d->m_DrugsList.removeOne(drug)) && (!d->m_TestingDrugsList.removeOne(drug)))
             toReturn = false;
         delete drug;
@@ -492,7 +493,7 @@ bool DrugsModel::removeRows( int row, int count, const QModelIndex & parent )
  \brief Add a drug to the prescription.
  \sa addDrug()
 */
-int DrugsModel::addDrug( DrugsData *drug, bool automaticInteractionChecking )
+int DrugsModel::addDrug( Internal::DrugsData *drug, bool automaticInteractionChecking )
 {
     if (!drug)
         return -1;
@@ -521,7 +522,7 @@ int DrugsModel::addDrug( DrugsData *drug, bool automaticInteractionChecking )
 */
 int DrugsModel::addDrug( const int _CIS, bool automaticInteractionChecking )
 {
-    return addDrug( DrugsBase::instance()->getDrugByCIS( _CIS ), automaticInteractionChecking );
+    return addDrug( Internal::DrugsBase::instance()->getDrugByCIS( _CIS ), automaticInteractionChecking );
 }
 
 /**
@@ -577,7 +578,7 @@ bool DrugsModel::prescriptionHasInteractions()
 */
 void DrugsModel::sort( int, Qt::SortOrder )
 {
-    qSort(d->m_DrugsList.begin(), d->m_DrugsList.end(), DrugsData::lessThan );
+    qSort(d->m_DrugsList.begin(), d->m_DrugsList.end(), Internal::DrugsData::lessThan );
     reset();
 }
 
@@ -622,13 +623,13 @@ bool DrugsModel::moveDown( const QModelIndex & item )
 void DrugsModel::showTestingDrugs(bool state)
 {
    if (state) {
-       foreach( DrugsData *drug, d->m_TestingDrugsList) {
+       foreach( Internal::DrugsData *drug, d->m_TestingDrugsList) {
             if (!d->m_DrugsList.contains(drug))
                 d->m_DrugsList << drug;
         }
         d->m_TestingDrugsList.clear();
     } else {
-        foreach( DrugsData *drug, d->m_DrugsList) {
+	foreach( Internal::DrugsData *drug, d->m_DrugsList) {
             if (!drug->prescriptionValue(Prescription::OnlyForTest).toBool())
                 continue;
             if (!d->m_TestingDrugsList.contains(drug))
@@ -648,20 +649,20 @@ bool DrugsModel::testingDrugsAreVisible() const
 }
 
 /** \brief Returns the dosage model for the selected drug */
-DosageModel * DrugsModel::dosageModel( const int _CIS )
+Internal::DosageModel * DrugsModel::dosageModel( const int _CIS )
 {
     if ( ! d->m_DosageModelList.keys().contains( _CIS ) ) {
-        d->m_DosageModelList.insert( _CIS, new DosageModel(this) );
+	d->m_DosageModelList.insert( _CIS, new Internal::DosageModel(this) );
         d->m_DosageModelList[_CIS]->setDrugCIS(_CIS);
     } else if ( ! d->m_DosageModelList.value(_CIS) ) {
-        d->m_DosageModelList.insert( _CIS, new DosageModel(this) );
+	d->m_DosageModelList.insert( _CIS, new Internal::DosageModel(this) );
         d->m_DosageModelList[_CIS]->setDrugCIS(_CIS);
     }
     return d->m_DosageModelList.value(_CIS);
 }
 
 /** \brief Returns the dosage model for the selected drug */
-DosageModel *DrugsModel::dosageModel( const QModelIndex &drugIndex )
+Internal::DosageModel *DrugsModel::dosageModel( const QModelIndex &drugIndex )
 {
     if ( ! drugIndex.isValid() )
         return 0;
@@ -682,7 +683,7 @@ int DrugsModel::removeDrug( const int _CIS )
     d->m_LastDrugRequiered = 0;
     d->m_InteractionsManager->clearDrugsList();
     int i = 0;
-    foreach( DrugsData * drug, d->m_DrugsList ) {
+    foreach( Internal::DrugsData * drug, d->m_DrugsList ) {
         if ( drug->CIS() == _CIS ) {
             d->m_DrugsList.removeAt( d->m_DrugsList.indexOf(drug) );
             delete drug;

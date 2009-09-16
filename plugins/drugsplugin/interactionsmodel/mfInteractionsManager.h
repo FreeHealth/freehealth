@@ -42,6 +42,7 @@
 #define MFINTERACTIONSMANAGER_H
 
 // include drugswidget headers
+#include <drugsplugin/drugs_exporter.h>
 #include <mfDrugsConstants.h>
 
 // include toolkit headers
@@ -68,38 +69,38 @@ namespace Internal {
 class DrugsData;
 class DrugInteraction;
 class InteractionsManagerPrivate;
+}  // End Internal
 
-class InteractionsManager : public QObject
+class DRUGS_EXPORT InteractionsManager : public QObject
 {
     Q_OBJECT
 public:
     InteractionsManager(QObject *parent = 0);
     ~InteractionsManager();
 
-    void addDrug(DrugsData *drug);
-    void setDrugsList(const QList<DrugsData *> &list);
+    void addDrug(Internal::DrugsData *drug);
+    void setDrugsList(const QList<Internal::DrugsData *> &list);
     void removeLastDrug();
     void clearDrugsList();
 
     bool checkInteractions();            // must be called first
 
-    bool drugHaveInteraction( const DrugsData *d ) const;                      // must call first interactions()
-    Interaction::TypesOfIAM getMaximumTypeOfIAM( const DrugsData *d ) const;   // must call first interactions()
-    QList<DrugInteraction*> getInteractions( const DrugsData *d ) const;           // must call first interactions()
-    DrugInteraction * getLastInteractionFound() const;                      // must call first interactions()
-    QList<DrugInteraction*> getAllInteractionsFound() const;                      // must call first interactions()
+    bool drugHaveInteraction( const Internal::DrugsData *d ) const;                      // must call first interactions()
+    Interaction::TypesOfIAM getMaximumTypeOfIAM( const Internal::DrugsData *d ) const;   // must call first interactions()
+    QList<Internal::DrugInteraction*> getInteractions( const Internal::DrugsData *d ) const;           // must call first interactions()
+    Internal::DrugInteraction *getLastInteractionFound() const;                      // must call first interactions()
+    QList<Internal::DrugInteraction*> getAllInteractionsFound() const;                      // must call first interactions()
 
-    QIcon iamIcon( const DrugsData *drug, const int &levelOfWarning = 0 ) const;
-    static QString listToHtml( const QList<DrugInteraction *> & list, bool fullInfos );
-    static QString synthesisToHtml( const QList<DrugInteraction *> & list, bool fullInfos );
+    QIcon iamIcon( const Internal::DrugsData *drug, const int &levelOfWarning = 0 ) const;
+    static QString listToHtml( const QList<Internal::DrugInteraction *> & list, bool fullInfos );
+    static QString synthesisToHtml( const QList<Internal::DrugInteraction *> & list, bool fullInfos );
 
 private:
     // intialization state
     static bool m_initialized;
-    InteractionsManagerPrivate * d;
+    Internal::InteractionsManagerPrivate * d;
 };
 
-}  // End Internal
 }  // End Drugs
 
 #endif   // MFINTERACTIONSMANAGER_H

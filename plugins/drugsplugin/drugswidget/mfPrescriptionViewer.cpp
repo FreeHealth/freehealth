@@ -64,7 +64,7 @@
 #include <QTextDocument>
 
 using namespace mfDrugsConstants;
-using namespace Drugs::Internal;
+using namespace Drugs;
 using namespace Trans::ConstantTranslations;
 
 /** \brief Constructor. You must call initialize() after instanciation */
@@ -206,7 +206,7 @@ void PrescriptionViewer::sortDrugs()
 /** \brief Opens the drug information dialog. \sa mfDrugInfo */
 void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 {
-    DrugInfo di(item.row(), this);
+    Internal::DrugInfo di(item.row(), this);
     di.exec();
 }
 
@@ -214,7 +214,7 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
     int CIS = DRUGMODEL->index( item.row(), Drug::CIS ).data().toInt();
-    DosageDialog dlg(this);
+    Internal::DosageDialog dlg(this);
     dlg.changeRow(CIS,item.row());
     dlg.exec();
 //    listView->repaint();
@@ -223,7 +223,7 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 /** \brief Opens the mfInteractionDialog. */
 void PrescriptionViewer::viewInteractions()
 {
-     InteractionDialog dlg(this);
+     Internal::InteractionDialog dlg(this);
      dlg.resize(Core::ICore::instance()->mainWindow()->size());
      dlg.exec();
 }
@@ -261,7 +261,7 @@ void PrescriptionViewer::changeDurationTo()
         return;
     QString scheme = a->objectName().left(a->objectName().indexOf(":"));
     int duration = a->objectName().mid(a->objectName().indexOf(":")+1).toInt();
-    Drugs::Internal::DrugsModel *m = DRUGMODEL;
+    DrugsModel *m = DRUGMODEL;
     int nb = m->rowCount();
     int col;
 

@@ -42,6 +42,7 @@
 #define MFDRUGSMODEL_H
 
 // include drugswidget headers
+#include <drugsplugin/drugs_exporter.h>
 #include <drugsplugin/drugsmodel/mfDrugs.h>
 #include <drugsplugin/drugsmodel/mfDosageModel.h>
 
@@ -54,18 +55,23 @@
  * \version 0.0.16
  * \date 14 Sept 2009
 */
-
 namespace Drugs {
 class DrugsIO;
+class InteractionsManager;
+class DosageModel;
 
 namespace Internal {
 class DrugsModelPrivate;
-class InteractionsManager;
+}  // End Internal
+}  // End Drugs
 
-class DrugsModel : public QAbstractTableModel
+
+namespace Drugs {
+
+class DRUGS_EXPORT DrugsModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class DosageModel;
+    friend class Internal::DosageModel;
     friend class DrugsIO;
 public:
     enum PrescriptionDeserializer {
@@ -97,7 +103,7 @@ public:
     void setDrugsList( QDrugsList & list );
     const QDrugsList & drugsList() const;
     void clearDrugsList();
-    int addDrug( DrugsData* drug, bool automaticInteractionChecking = true );
+    int addDrug( Internal::DrugsData* drug, bool automaticInteractionChecking = true );
     int addDrug( const int _CIS, bool automaticInteractionChecking = true );
     int removeDrug( const int _CIS );
     int removeLastInsertedDrug();
@@ -113,8 +119,8 @@ public:
     bool testingDrugsAreVisible() const;
 
     // FOR DOSAGE MANAGEMENT
-    DosageModel *dosageModel( const int _CIS );
-    DosageModel *dosageModel( const QModelIndex & drugIndex );
+    Internal::DosageModel *dosageModel( const int _CIS );
+    Internal::DosageModel *dosageModel( const QModelIndex & drugIndex );
     InteractionsManager *currentInteractionManger() const;
 
     void warn();
@@ -129,10 +135,9 @@ protected:
     virtual void checkInteractions() const;
 
 private:
-    DrugsModelPrivate *d;
+    Internal::DrugsModelPrivate *d;
 };
 
-}
-}
+}  // End Drugs
 
 #endif

@@ -103,7 +103,7 @@ using namespace DrugsIOConstants;
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
 
-using namespace Drugs::Internal;
+using namespace Drugs;
 using namespace Trans::ConstantTranslations;
 
 namespace Drugs {
@@ -183,7 +183,7 @@ DrugsIO *DrugsIO::instance(QObject *parent)
 DrugsIO::DrugsIO(QObject *parent) : QObject(parent), d(0)
 {
     setObjectName("DrugsIO");
-    d = new DrugsIOPrivate();
+    d = new Internal::DrugsIOPrivate();
 }
 
 /** \brief Destructor */
@@ -199,7 +199,7 @@ DrugsIO::~DrugsIO()
 bool DrugsIO::startsDosageTransmission()
 {
     connect(&d->m_Sender, SIGNAL(sent()), this, SLOT(dosageTransmissionDone()));
-    d->m_Datas = DrugsBase::instance()->getDosageToTransmit();
+    d->m_Datas = Internal::DrugsBase::instance()->getDosageToTransmit();
     if (d->m_Datas.count()==0) {
         return false;
     }
@@ -220,7 +220,7 @@ void DrugsIO::dosageTransmissionDone()
 {
     if (d->m_Sender.resultMessage().contains("OK")) {
         Utils::Log::addMessage(this, tr("Dosages transmitted."));
-        DrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
+	Internal::DrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
     } else
         Utils::Log::addError(this, tr("Dosage not correctly transmitted"));
     d->m_Datas.clear();

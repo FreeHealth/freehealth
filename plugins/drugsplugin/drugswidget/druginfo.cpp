@@ -59,6 +59,8 @@
 
 using namespace Drugs::Internal;
 
+inline static Drugs::DrugsModel *dm() { return Drugs::DRUGMODEL; }
+
 DrugInfo::DrugInfo( const int m_CIS,  QWidget *parent )
           : QDialog( parent ), d(0)
 {
@@ -148,11 +150,11 @@ void DrugInfo::setDrug( const int CIS )
 {
     d->m_CIS = CIS;
     // manage drugs informations
-    DrugsModel *m = DRUGMODEL;
-    d->drugName->setText( m->drugData( d->m_CIS, Drug::Denomination ).toString() );
-    d->knownMols->addItems( m->drugData( d->m_CIS, Drug::Molecules ).toStringList() ); //drug->listOfMolecules() );
-    d->DCI->addItems( m->drugData( d->m_CIS, Drug::Inns ).toStringList() ); //drug->listOfInn() );
-    d->interactClass->addItems( m->drugData( d->m_CIS, Drug::InnClasses ).toStringList() ); //drug->listOfInnClasses() );
+//    DrugsModel *m = dm();
+    d->drugName->setText( dm()->drugData( d->m_CIS, Drug::Denomination ).toString() );
+    d->knownMols->addItems( dm()->drugData( d->m_CIS, Drug::Molecules ).toStringList() ); //drug->listOfMolecules() );
+    d->DCI->addItems( dm()->drugData( d->m_CIS, Drug::Inns ).toStringList() ); //drug->listOfInn() );
+    d->interactClass->addItems( dm()->drugData( d->m_CIS, Drug::InnClasses ).toStringList() ); //drug->listOfInnClasses() );
 
     // manage interactions informations
     d->m_InteractionsList.clear();
@@ -160,12 +162,12 @@ void DrugInfo::setDrug( const int CIS )
     d->Info_textBrowser->clear();
     d->listWidgetInteractions->clear();
     QString display;
-    if ( m->drugData( d->m_CIS, Drug::Interacts ).toBool() ) { //mfDrugsBase::instance()->drugHaveInteraction( m_Drug ) ) {
+    if ( dm()->drugData( d->m_CIS, Drug::Interacts ).toBool() ) { //mfDrugsBase::instance()->drugHaveInteraction( m_Drug ) ) {
         d->m_InteractionsList = DrugsManager::instance()->currentInteractionManager()->getAllInteractionsFound();
 //        d->m_InteractionsList = mfDrugsBase::instance()->getInteractions( m->drugData( d->m_CIS, Drug::CIS ).toInt() );
         // populate the listwidget with founded interactions
         foreach( DrugInteraction * di , d->m_InteractionsList ) {
-            new QListWidgetItem( m->drugData( d->m_CIS, Interaction::Icon ).value<QIcon>(), di->header(), d->listWidgetInteractions );
+	    new QListWidgetItem( dm()->drugData( d->m_CIS, Interaction::Icon ).value<QIcon>(), di->header(), d->listWidgetInteractions );
         }
     }
 
@@ -181,14 +183,13 @@ void DrugInfoPrivate::on_listWidgetInteractions_itemSelectionChanged()
 
 void DrugInfoPrivate::on_butIAMSend_clicked()
 {
-    DrugsModel *m = DRUGMODEL;
-    if ( m->drugsList().isEmpty() )
+    if ( dm()->drugsList().isEmpty() )
         return;
 
     // prepare message to send
     QString msg;
     msg = tr( "Testing : " ) + "\n";
-    foreach( DrugsData * drug, m->drugsList() )
+    foreach( DrugsData * drug, dm()->drugsList() )
         msg += drug->denomination() + "\n";
 
     // manage INN (DCI)
@@ -223,9 +224,9 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
         ( chkAllIAMTextsOK->isChecked() ) &&
         ( chkAllCATTextsOK->isChecked() ) ) {
         msg += "\n" + tr( "Checked interactions : " ) + "\n";
-        foreach( DrugsData *drug, m->drugsList() ) {
+	foreach( DrugsData *drug, dm()->drugsList() ) {
             Q_UNUSED(drug);
-            foreach( QVariant code,  m->drugData(m_CIS,Drug::CodeMoleculesList).toList() )
+	    foreach( QVariant code,  dm()->drugData(m_CIS,Drug::CodeMoleculesList).toList() )
                 msg +=  code.toString() + "\n";
         }
     }
@@ -239,17 +240,16 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
 
 void DrugInfoPrivate::on_butSendINN_clicked()
 {
-    DrugsModel *m = DRUGMODEL;
     // prepare message to send
     QString msg;
     Utils::MessageSender::typeOfMessage t;
 
     if ( rbINNOk->isChecked() ) {
-        foreach( QVariant code,  m->drugData( m_CIS,Drug::CodeMoleculesList).toList()) //m_Drug->listOfCodeMolecules().toList() )
+	foreach( QVariant code,  dm()->drugData( m_CIS,Drug::CodeMoleculesList).toList()) //m_Drug->listOfCodeMolecules().toList() )
             msg +=  code.toString() + "\n";
         t = Utils::MessageSender::CorrectDrugsCoding;
     } else {
-        msg.append( tr( "ERROR : %1\n" ).arg( m->drugData( m_CIS,Drug::Denomination).toString() ) );
+	msg.append( tr( "ERROR : %1\n" ).arg( dm()->drugData( m_CIS,Drug::Denomination).toString() ) );
         msg.append( QString( "{\n %1 \n}\n").arg( INNMessage->toPlainText() ) );
         t = Utils::MessageSender::UncorrectDrugsCoding;
     }
@@ -261,3 +261,4 @@ void DrugInfoPrivate::on_butSendINN_clicked()
     m_Sender.postMessage();
     m_INNSent = true;
 }
+

@@ -41,6 +41,8 @@
 #ifndef MFDRUGSCENTRALWIDGET_H
 #define MFDRUGSCENTRALWIDGET_H
 
+#include <drugsplugin/drugs_exporter.h>
+
 #include <QWidget>
 #include <QObject>
 #include <QListView>
@@ -58,15 +60,17 @@
 namespace Drugs {
 namespace Internal {
 class DrugsContext;
-class PrescriptionViewer;
 class DrugsActionHandler;
-class DrugsModel;
+
 namespace Ui {
 class DrugsCentralWidget;
 }  // End Ui
 }  // End Internal
 
-class DrugsCentralWidget : public QWidget
+class PrescriptionViewer;
+class DrugsModel;
+
+class DRUGS_EXPORT DrugsCentralWidget : public QWidget
 {
     Q_OBJECT
     friend class Drugs::Internal::DrugsActionHandler;
@@ -76,10 +80,10 @@ public:
     bool initialize();
 
     void changeFontTo(const QFont &font);
-    Internal::DrugsModel *currentDrugsModel() const;
+    DrugsModel *currentDrugsModel() const;
 
     QListView *prescriptionListView();
-    Internal::PrescriptionViewer *prescriptionView();
+    PrescriptionViewer *prescriptionView();
 
     void setCurrentSearchMethod(int method);
     bool printPrescription();
@@ -97,7 +101,7 @@ private:
 
 private:
     Internal::Ui::DrugsCentralWidget *m_ui;
-    Internal::DrugsModel   *m_CurrentDrugModel;
+    DrugsModel   *m_CurrentDrugModel;
     Internal::DrugsContext *m_Context;
 };
 

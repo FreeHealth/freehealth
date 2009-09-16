@@ -41,6 +41,8 @@
 #ifndef MFPRESCRIPTIONVIEWERMANAGER_H
 #define MFPRESCRIPTIONVIEWERMANAGER_H
 
+#include <drugsplugin/drugs_exporter.h>
+
 #include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
 #include <drugsplugin/drugsmodel/mfDrugsModel.h>
 
@@ -60,10 +62,9 @@
 */
 
 namespace Drugs {
-namespace Internal {
 class InteractionsManager;
 
-/** \todo should be outside Internal */
+namespace Internal {
 
 class DrugsContext : public Core::IContext
 {
@@ -130,10 +131,15 @@ protected:
     QPointer<DrugsCentralWidget> m_CurrentView;
 };
 
+}  // End Internal
+}  // End Drugs
+
 
 #define DRUGMODEL  DrugsManager::instance()->currentDrugsModel()
 
-class DrugsManager : public DrugsActionHandler
+namespace Drugs {
+
+class DRUGS_EXPORT DrugsManager : public Internal::DrugsActionHandler
 {
     Q_OBJECT
 public:
@@ -152,7 +158,6 @@ private:
     static DrugsManager *m_Instance;
 };
 
-}  // End Internal
 }  // End Drugs
 
 #endif // MFPRESCRIPTIONVIEWER_H

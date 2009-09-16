@@ -10,8 +10,9 @@ include( $${PWD}/drugsmodel/drugsmodel.pri)
 include( $${PWD}/interactionsmodel/interactionsmodel.pri)
 include( $${PWD}/drugswidget/drugswidget.pri)
 
-HEADERS += $${PWD}/mfDrugsConstants.h \
-           $${PWD}/mfDrugsManager.h
+HEADERS += $${PWD}/drugs_exporter.h \
+	   $${PWD}/mfDrugsConstants.h \
+	   $${PWD}/mfDrugsManager.h
 
 SOURCES += $${PWD}/mfDrugsManager.cpp
 

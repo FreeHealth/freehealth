@@ -70,7 +70,6 @@
 #include "ui_mfDrugsCentralWidget.h"
 
 using namespace Drugs;
-using namespace Drugs::Internal;
 
 
 /** \brief Constructor */
@@ -88,7 +87,7 @@ bool DrugsCentralWidget::initialize()
     m_ui->setupUi(this);
 
     // create context
-    m_Context = new DrugsContext(this);
+    m_Context = new Internal::DrugsContext(this);
     m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS));
     Core::ICore::instance()->contextManager()->addContextObject(m_Context);
 
@@ -169,7 +168,7 @@ void DrugsCentralWidget::selector_drugSelected( const int CIS )
         return;
     }
     int drugPrescriptionRow = m_CurrentDrugModel->addDrug(CIS);
-    DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
+    Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
     if (dlg.exec()==QDialog::Rejected) {
         m_CurrentDrugModel->removeLastInsertedDrug();
     }
@@ -211,5 +210,5 @@ bool DrugsCentralWidget::printPrescription()
     p.setHeader( header );
     p.setFooter( footer );
     p.printWithDuplicata(true);
-    return p.print( Internal::DrugsIO::instance()->prescriptionToHtml() );
+    return p.print( DrugsIO::instance()->prescriptionToHtml() );
 }

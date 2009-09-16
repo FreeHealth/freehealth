@@ -41,6 +41,8 @@
 #ifndef MFDRUGSIO_H
 #define MFDRUGSIO_H
 
+#include <drugsplugin/drugs_exporter.h>
+
 #include <QObject>
 #include <QHash>
 #include <QString>
@@ -48,17 +50,16 @@
 /**
  * \file mfDrugsIO.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.3
- * \date 13 July 2009
+ * \version 0.0.4
+ * \date 16 Sept 2009
 */
 namespace Drugs {
 namespace Internal {
 class DrugsData;
 class DrugsIOPrivate;
+}
 
-/** \todo should be outside Internal */
-
-class DrugsIO : public QObject
+class DRUGS_EXPORT DrugsIO : public QObject
 {
     Q_OBJECT
 public:
@@ -95,10 +96,9 @@ Q_SIGNALS:
 
 private:
     static DrugsIO *m_Instance;
-    DrugsIOPrivate *d;
+    Internal::DrugsIOPrivate *d;
 };
 
-}  // End Internal
 }  // End Drugs
 
 #endif // MFDRUGSIO_H
