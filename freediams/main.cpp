@@ -49,55 +49,63 @@ typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 
 
-static inline QStringList getPluginPaths()
+static inline QString getPluginPaths()
 {
-    QStringList dirs;
     QString app = qApp->applicationDirPath();
 
 #ifdef DEBUG
 #    ifdef Q_OS_MAC
         app = QDir::cleanPath(app+"/../../../");
 #    endif
+    app += "/plugins/";
+    return app;
 #endif
 
 #ifdef RELEASE
 #  ifdef Q_OS_MAC
     app = QDir::cleanPath(app+"/../");
+    app += "/plugins/";
+    return app;
 #  endif
+
 #  ifdef LINUX_INTEGRATED
-    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
 #  endif
 #endif
-
-    app += "/plugins/";
-
-    dirs << app;
-
-
-    return dirs;
+    return QString();
 }
+
+inline static void defineLibraryPaths()
+{
+#ifndef DEBUG
+    qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
+#  endif
+}
+
 
 
 int main( int argc, char *argv[] )
 {
-     QApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
-     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
+    QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
+    QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
-     app.setApplicationName( QString( "%1" ).arg( BINARY_NAME ) );
+    app.setApplicationName( QString( "%1" ).arg( BINARY_NAME ) );
 
-     app.setOrganizationName( BINARY_NAME );
-     app.setApplicationVersion( PACKAGE_VERSION );
+    app.setOrganizationName( BINARY_NAME );
+    app.setApplicationVersion( PACKAGE_VERSION );
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
-    const QStringList pluginPaths = getPluginPaths();
-    pluginManager.setPluginPaths(pluginPaths);
+    QString pluginPaths = getPluginPaths();
+    pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
-    Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths.join(";"));
+    Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
+
+    defineLibraryPaths();
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
@@ -130,7 +138,7 @@ int main( int argc, char *argv[] )
         }
     }
     if (!coreplugin) {
-        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths.join(QString(",")));
+	const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;

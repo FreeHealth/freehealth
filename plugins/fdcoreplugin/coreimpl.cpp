@@ -146,10 +146,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 //    m_Patient->setValue(Patient::DrugsAllergies, m_CommandLine->value(CommandLine::));
 //    m_Patient->setValue(Patient::ICD10Deceases, m_CommandLine->value(CommandLine::CL_DateOfBirth));
 
-    // Set application libraries
-    if (!Utils::isDebugCompilation()) {
-        QApplication::addLibraryPath(settings()->path(ISettings::QtPlugInsPath));
-    }
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
         Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
@@ -173,35 +169,9 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     // Manage exchange file
     showMessage( &splash, QCoreApplication::translate( "Core", "Checking command line parameters..." ) );
-//    if (!medintuxConfiguration()->isMedinTuxPlugIns(&splash)) {
-//        if (!m_CommandLine->value(CommandLine::CL_Chrono).toString().isEmpty()) {
-//            showMessage( &splash, QCoreApplication::translate( "Core", "Reading exchange file..." ) );
-//            QString extras;
-//            DrugsIO::loadPrescription(m_CommandLine->value(CommandLine::CL_Chrono).toString(), extras);
-//            /** \too patient feeding */
-////            patient()->fromXml(extras);
-//        }
-//    }
 
     if (Utils::isRunningOnMac())
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
-
-    // start update checking
-    showMessage( &splash, tkTr(Trans::Constants::CHECKING_UPDATES) );
-//    QObject::connect(updateChecker(), SIGNAL(updateFound()), mainWindow(), SLOT(updateFound()));
-//    updateChecker()->check(FREEDIAMS_UPDATE_URL);
-//    if (diCorePrivate::m_Chrono)
-//        tkLog::logTimeElapsed(chrono, "diCore", tkTr(CHECKING_UPDATES));
-
-//    if (medintuxConfiguration()->isMedinTuxPlugIns( &splash )) {
-//        showMessage( &splash, tkTr(Trans::Constants::RAISING_APPLICATION) );
-//        tkLog::addMessage( "Core" , tkTr(Trans::Constants::RAISING_APPLICATION) );
-//        qApp->setActiveWindow( mainWindow() );
-//        mainWindow()->activateWindow();
-//        mainWindow()->raise();
-//        if (logChrono)
-//            Utils::Log::logTimeElapsed(chrono, "Core", "medintux plugins preparation");
-//    }
 
     // ready
     showMessage(&splash, QCoreApplication::translate("Core", "%1 v%2 Ready !").arg(qApp->applicationName(), qApp->applicationVersion()));
@@ -252,6 +222,7 @@ IMainWindow *CoreImpl::mainWindow() const { return m_MainWindow; }
 
 void CoreImpl::setMainWindow(IMainWindow *win)
 {
+    // can be called only once
     Q_ASSERT(m_MainWindow==0);
     Q_ASSERT(m_ActionManager==0);
     Q_ASSERT(m_ContextManager==0);

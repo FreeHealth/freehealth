@@ -47,32 +47,37 @@ typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 
 
-static inline QStringList getPluginPaths()
+static inline QString getPluginPaths()
 {
-    QStringList dirs;
     QString app = qApp->applicationDirPath();
 
 #ifdef DEBUG
 #    ifdef Q_OS_MAC
-        app = QDir::cleanPath(app+"/../../../");
+	app = QDir::cleanPath(app+"/../../../");
 #    endif
+    app += "/plugins/";
+    return app;
 #endif
 
 #ifdef RELEASE
 #  ifdef Q_OS_MAC
     app = QDir::cleanPath(app+"/../");
+    app += "/plugins/";
+    return app;
 #  endif
+
 #  ifdef LINUX_INTEGRATED
-    dirs << QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
 #  endif
 #endif
+    return QString();
+}
 
-    app += "/plugins/";
-
-    dirs << app;
-
-
-    return dirs;
+inline static void defineLibraryPaths()
+{
+#ifndef DEBUG
+    qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
+#  endif
 }
 
 
@@ -135,7 +140,7 @@ int main( int argc, char *argv[] )
         }
     }
     if (!coreplugin) {
-        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths.join(QString(",")));
+	const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths));
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;
