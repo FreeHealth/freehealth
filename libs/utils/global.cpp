@@ -495,9 +495,10 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 bool functionNotAvailableMessageBox( const QString &functionText )
 {
     informativeMessageBox( functionText,
-                           QCoreApplication::translate( "Utils","This function is only available to identified users."),
-                           QCoreApplication::translate( "Utils","To get your identifier please connect to the web site : %1. ")
-                           .arg(qApp->organizationDomain()));
+			   QCoreApplication::translate( "Utils","This function is not available in this version."),
+			   QCoreApplication::translate( "Utils","You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.")
+			 );
+//                           .arg(qApp->organizationDomain()));
 //                         .arg( tkSettings::instance()->path( tkSettings::WebSiteUrl ) ) );
     return true;
 }

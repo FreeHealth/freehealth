@@ -10,12 +10,14 @@ include( fdmainwindowplugin_dependencies.pri )
 HEADERS = \
     mainwindowplugin.h \
     mainwindow_exporter.h \
-    mainwindow.h
+    mainwindow.h \
+    medintux.h
 
 
 SOURCES = \
     mainwindowplugin.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    medintux.cpp
 
 FORMS = mainwindow.ui
 
@@ -24,5 +26,5 @@ TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_fr.
 
 OTHER_FILES = MainWindow.pluginspec
 
-exists( $${SOURCES_PROTECTED_PATH} ):HEADERS += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.h
+exists( $${SOURCES_PROTECTED_PATH} ):HEADERS += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.cpp
 else:HEADERS += $${PWD}/medintux.h

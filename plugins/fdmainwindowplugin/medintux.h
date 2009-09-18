@@ -35,16 +35,10 @@
 #ifndef FREEDIAMS_MEDINTUX_H
 #define FREEDIAMS_MEDINTUX_H
 
-#include <utils/global.h>
-
-
 namespace MainWin {
 namespace Internal {
 
-    const void configureMedinTux()
-    {
-        Utils::functionNotAvailableMessageBox("MedinTux configuration is not available from SVN compilation.");
-    }
+    const void configureMedinTux();
 
 }  // End Internal
 }  // End MainWin
