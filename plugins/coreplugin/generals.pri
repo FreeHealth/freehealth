@@ -14,8 +14,8 @@ HEADERS += \
     $${PWD}/ioptionspage.h \
     $${PWD}/iformwidgetfactory.h \
     $${PWD}/imainwindow.h \
-    $${PWD}/mfObject.h \
-    $${PWD}/mfObjectFundamental.h \
+#    $${PWD}/mfObject.h \
+#    $${PWD}/mfObjectFundamental.h \
     $${PWD}/iformio.h \
     $${PWD}/iformitem.h \
     $${PWD}/iformitemspec.h \
@@ -35,8 +35,8 @@ SOURCES += \
     $${PWD}/translators.cpp \
     $${PWD}/settings.cpp \
     $${PWD}/imainwindow.cpp \
-    $${PWD}/mfObject.cpp \
-    $${PWD}/mfObjectFundamental.cpp \
+#    $${PWD}/mfObject.cpp \
+#    $${PWD}/mfObjectFundamental.cpp \
     $${PWD}/iformitem.cpp \
     $${PWD}/formmanager.cpp \
     $${PWD}/filemanager.cpp \
