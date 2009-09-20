@@ -13,5 +13,8 @@ SUBDIRS += \
            freemedforms \
            plugins
 
-OTHER_FILES += update-fmf.txt
+OTHER_FILES += update-fmf.txt \
+               README \
+               COPYING \
+               INSTALL
 

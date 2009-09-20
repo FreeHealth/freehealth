@@ -7,7 +7,8 @@ SOURCES_ROOT_PATH        = $${PWD}
 include(buildspecs/config_paths.pri)
 
 macx:include(buildspecs/config_mac.pri)
-else:unix:include(buildspecs/config_linux.pri)
+else:linux:include(buildspecs/config_linux.pri)
+else:freebsd:include(buildspecs/config_freebsd.pri)
 else:win32:include(buildspecs/config_win.pri)
 
 INCLUDEPATH += $${PWD}/plugins $${PWD}/libs

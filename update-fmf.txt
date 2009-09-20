@@ -4,11 +4,12 @@ version=0.0.9
     * New features :
       * New plugin : AGGIR for french only
       * Special build for linux integration
+      * Recent file manager implemented
 
     * Technical improvements
       * Complete rewrite of the plugin management
+      * New architecture of the application
       * Some new libs
-      * New ActionManager (based on QtCreator)
 }
 
 version=0.0.8
