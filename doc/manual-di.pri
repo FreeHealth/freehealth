@@ -16,7 +16,7 @@ macx{
     DOXYGEN = $$system(locate bin/doxygen)
     HELPGENERATOR = $$[QT_INSTALL_BINS]\qhelpgenerator
     message(unix : $${DOXYGEN} $${HELPGENERATOR})
-} else:win32 {
+} else:win32{
     DOXYGEN = doxygen.exe
     HELPGENERATOR = $$[QT_INSTALL_BINS]\qhelpgenerator.exe
     message(unix : $${DOXYGEN} $${HELPGENERATOR})
