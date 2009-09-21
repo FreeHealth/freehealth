@@ -16,8 +16,8 @@ HEADERS = \
 
 SOURCES = \
     mainwindowplugin.cpp \
-    mainwindow.cpp \
-    medintux.cpp
+    mainwindow.cpp
+
 
 FORMS = mainwindow.ui
 
@@ -26,5 +26,5 @@ TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_fr.
 
 OTHER_FILES = MainWindow.pluginspec
 
-exists( $${SOURCES_PROTECTED_PATH} ):HEADERS += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.cpp
-else:HEADERS += $${PWD}/medintux.h
+exists( $${SOURCES_PROTECTED_PATH} ):SOURCES += $${SOURCES_PROTECTED_PATH}/freediams/medintux_pro.cpp
+else:SOURCES += $${PWD}/medintux.cpp
