@@ -9,11 +9,11 @@
 #
 #
 macx{
-    DOXYGEN = /Applications/Developer/Doxygen.app/Contents/Resources/doxygen
+    DOXYGEN = $$system(locate Doxygen.app/Contents/Resources/doxygen)
     HELPGENERATOR = $$[QT_INSTALL_BINS]/qhelpgenerator
     message(macos : $${DOXYGEN} $${HELPGENERATOR})
 }else:unix{
-    DOXYGEN = /usr/bin/doxygen
+    DOXYGEN = $$system(locate bin/doxygen)
     HELPGENERATOR = $$[QT_INSTALL_BINS]\qhelpgenerator
     message(unix : $${DOXYGEN} $${HELPGENERATOR})
 } else:win32 {
@@ -40,6 +40,9 @@ isEmpty(HELPGENERATOR) {
 #     warning(Path of qhelpgenerator : $${HELPGENERATOR})
 #  }
 #}
+
+
+
 
 # create the HTML output of Doxygen
 IN_DOXYFILE = $${PWD}/usermanual/freediams/Doxyfile

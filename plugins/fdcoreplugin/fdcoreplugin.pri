@@ -1,4 +1,4 @@
-include(listviewplugin_dependencies.pri)
+include(fdcoreplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
     unix:LIBS    *= -lListView_debug
     win32:LIBS   *= -lListView_d

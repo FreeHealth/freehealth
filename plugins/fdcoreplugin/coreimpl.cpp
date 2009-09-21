@@ -116,7 +116,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     splash.show();
 
     // initialize the settings
-    showMessage( &splash, tkTr(Trans::Constants::GETTING_SETTINGS_FILE));
+    showMessage( &splash, tkTr(Trans::Constants::LOADING_SETTINGS));
 
     QTime chrono;
     chrono.start();
@@ -193,31 +193,12 @@ CoreImpl::~CoreImpl()
     delete m_Patient;
 }
 
-ActionManager *CoreImpl::actionManager() const
-{
-    return m_ActionManager;
-}
-
-ContextManager *CoreImpl::contextManager() const
-{
-    return m_ContextManager;
-}
-
-UniqueIDManager *CoreImpl::uniqueIDManager() const
-{
-    return m_UID;
-}
-
-ITheme *CoreImpl::theme() const
-{
-    return m_Theme;
-}
-
+ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
+ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
+UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
+ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
-
 ISettings *CoreImpl::settings() const { return m_Settings; }
-
-
 IMainWindow *CoreImpl::mainWindow() const { return m_MainWindow; }
 
 void CoreImpl::setMainWindow(IMainWindow *win)

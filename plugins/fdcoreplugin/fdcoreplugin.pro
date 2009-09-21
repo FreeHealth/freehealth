@@ -7,6 +7,7 @@ PACKAGE_VERSION = 0.0.2
 # found in an unique pri file. The files may be included from <coreplugin/...> instead of
 # <fdcoreplugin/...>
 include(../coreplugin/common_core.pri)
+include(fdcoreplugin_dependencies.pri)
 
 # specific derivative files
 HEADERS += \

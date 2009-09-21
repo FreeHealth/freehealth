@@ -1,3 +1,5 @@
 include( ../coreplugin/coreplugin.pri )
+include( ../fdcoreplugin/fdcoreplugin.pri )
 include( ../drugsplugin/drugsplugin.pri )
 include( ../printerplugin/printerplugin.pri )
+include( $${SOURCES_LIBS_PATH}/medintuxutils.pri )
