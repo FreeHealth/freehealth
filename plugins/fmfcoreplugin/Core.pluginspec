@@ -4,7 +4,4 @@
     <license>Released under new BSD license.</license>
     <description>The main Core plugin for FreeMedForms.</description>
     <url>http://www.ericmaeker.fr/FreeMedForms/</url>
-    <dependencyList>
-        <dependency name="Drugs" version="0.0.9"/>
-    </dependencyList>
 </plugin>

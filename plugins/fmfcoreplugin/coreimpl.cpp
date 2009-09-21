@@ -50,11 +50,13 @@
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/formmanager.h>
+#include <coreplugin/filemanager.h>
 
 #include <fmfcoreplugin/mainwindow.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
 
@@ -95,10 +97,16 @@ CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
     m_Settings = new SettingsPrivate(this);
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+    createSplashScreen(m_Theme->splashScreen(Constants::FREEDIAMS_SPLASHSCREEN));
+    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+
+
     m_MainWindow = new MainWindow();
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_FormManager = new FormManager(this);
+    m_FileManager = new FileManager(this);
+    m_UpdateChecker = new Utils::UpdateChecker(this);
 
     // add translators
     m_Translators = new Translators(this);
@@ -108,6 +116,7 @@ CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
     // Core Needed Libs
     m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
 
+    finishSplashScreen(m_MainWindow);
     m_instance = this;
 }
 
@@ -128,48 +137,46 @@ CoreImpl::~CoreImpl()
 //    return m_mainwindow->showOptionsDialog(group, page, parent);
 //}
 
-
-ActionManager *CoreImpl::actionManager() const
+void CoreImpl::createSplashScreen(const QPixmap &pix)
 {
-    return m_ActionManager;
+    if (!m_Splash) {
+        m_Splash = new QSplashScreen(pix);
+        QFont ft( m_Splash->font() );
+        ft.setPointSize( ft.pointSize() - 2 );
+        ft.setBold( true );
+        m_Splash->setFont( ft );
+        m_Splash->show();
+    }
 }
 
-ContextManager *CoreImpl::contextManager() const
+void CoreImpl::finishSplashScreen(QWidget *w)
 {
-    return m_ContextManager;
+    Q_ASSERT(m_Splash);
+    if (m_Splash) {
+        m_Splash->finish(w);
+        delete m_Splash;
+        m_Splash = 0;
+    }
 }
 
-UniqueIDManager *CoreImpl::uniqueIDManager() const
+void CoreImpl::messageSplashScreen(const QString &msg)
 {
-    return m_UID;
+    Q_ASSERT(m_Splash);
+    if (m_Splash)
+        m_Splash->showMessage( msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black );
 }
 
-ITheme *CoreImpl::theme() const
-{
-    return m_Theme;
-}
-
-Translators *CoreImpl::translators() const
-{
-    return m_Translators;
-}
-
-ISettings *CoreImpl::settings() const
-{
-    return m_Settings;
-}
-
-
-IMainWindow *CoreImpl::mainWindow() const
-{
-    return m_MainWindow;
-}
-
-FormManager *CoreImpl::formManager() const
-{
-    return m_FormManager;
-}
-
+QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
+ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
+ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
+UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
+ITheme *CoreImpl::theme() const { return m_Theme; }
+Translators *CoreImpl::translators() const { return m_Translators; }
+ISettings *CoreImpl::settings() const{ return m_Settings; }
+IMainWindow *CoreImpl::mainWindow() const  { return m_MainWindow; }
+FormManager *CoreImpl::formManager() const { return m_FormManager; }
+FileManager *CoreImpl::fileManager() const { return m_FileManager; }
+Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {

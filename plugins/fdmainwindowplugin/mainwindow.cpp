@@ -110,6 +110,7 @@ MainWindow::MainWindow( QWidget * parent )
           : Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
+    Core::ICore::instance()->messageSplashScreen(tr("Creating Main Window"));
 //    recentFiles.clear();
 }
 
@@ -166,6 +167,7 @@ void MainWindow::extensionsInitialized()
     int count = s->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
     ++count;
     if ((count==30) || (cl->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
+        Core::ICore::instance()->messageSplashScreen(tr("Transmitting posologies..."));
         s->setValue(Internal::SETTINGS_COUNTDOWN,0);
         transmitDosage();
     } else {
@@ -188,16 +190,16 @@ void MainWindow::extensionsInitialized()
     m_ui->patientInformations->hide();
     refreshPatient();
 
+    Core::ICore::instance()->messageSplashScreen(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
-
-    show();
 
     // If needed read exchange file
     const QString &exfile = cl->value(Core::CommandLine::CL_ExchangeFile).toString();
     if (!exfile.isEmpty()) {
+        Core::ICore::instance()->messageSplashScreen(tr("Reading exchange file..."));
         if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
-            Utils::Log::addMessage(this, tr( "Reading a MedinTux exchange file." ) );
+            Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
             if (tmp.contains(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG) + QString(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG).length();
@@ -222,9 +224,12 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
+    Core::ICore::instance()->messageSplashScreen(tkTr(Trans::Constants::CHECKING_UPDATES));
     connect(Core::ICore::instance()->updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
     Core::ICore::instance()->updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
 
+    Core::ICore::instance()->finishSplashScreen(this);
+    show();
 }
 
 MainWindow::~MainWindow()

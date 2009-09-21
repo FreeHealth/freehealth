@@ -123,9 +123,6 @@ protected:
 
 public:
     Internal::Ui::MainWindow *m_ui;
-//    QAction *recentFilesAct[MaxRecentFiles];
-//    QStringList recentFiles;
-//    QString           m_CurrentFile;
 };
 
 } // End Core

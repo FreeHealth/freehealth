@@ -68,13 +68,17 @@ public:
     CoreImpl(QObject *parent);
     ~CoreImpl();
 
+    // Splash screen functions
+    void createSplashScreen(const QPixmap &pix);
+    void finishSplashScreen(QWidget *w);
+    void messageSplashScreen(const QString &msg);
+    QSplashScreen *splashScreen();
+
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
     UniqueIDManager *uniqueIDManager() const;
-
     ITheme *theme() const;
     Translators *translators() const;
-
     ISettings *settings() const;
 
     IMainWindow *mainWindow() const;
@@ -82,13 +86,15 @@ public:
 
     /** \todo here */
     CommandLine *commandLine() const {return 0;}
-    Utils::UpdateChecker *updateChecker() const {return 0;}
+    Utils::UpdateChecker *updateChecker() const;
+    FileManager *fileManager() const;
 
     // initialization
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
 private:
+    QSplashScreen *m_Splash;
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;
@@ -97,6 +103,8 @@ private:
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
     FormManager *m_FormManager;
+    Utils::UpdateChecker *m_UpdateChecker;
+    FileManager *m_FileManager;
 };
 
 } // namespace Internal

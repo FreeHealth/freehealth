@@ -68,6 +68,7 @@
 #include <QSplashScreen>
 #include <QFont>
 #include <QWidget>
+#include <QSplashScreen>
 
 namespace Core {
 namespace Internal {
@@ -85,38 +86,30 @@ ICore* ICore::instance()
     return m_instance;
 }
 
-inline static void showMessage( QSplashScreen* s, const QString& m )
-{
-    s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::black );
-}
-
 // instance is created by Core::CorePlugin()
 CoreImpl::CoreImpl(QObject *parent) :
         ICore(parent),
+        m_Splash(0),
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
         m_MedinTux(0)
 {
+    m_Settings = new SettingsPrivate(this);
+    m_Theme = new ThemePrivate(this);
+    m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+    createSplashScreen(m_Theme->splashScreen(Constants::FREEDIAMS_SPLASHSCREEN));
+    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
     m_Patient = new Patient();
     m_UID = new UniqueIDManager();
-    m_Settings = new SettingsPrivate(this);
-    m_Theme = new ThemePrivate(this);
-    m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
 
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
-    QSplashScreen splash( m_Theme->splashScreen(Constants::FREEDIAMS_SPLASHSCREEN) );
-    splash.show();
-    QFont ft( splash.font() );
-    ft.setPointSize( ft.pointSize() - 2 );
-    ft.setBold( true );
-    splash.setFont( ft );
-    splash.show();
 
     // initialize the settings
-    showMessage( &splash, tkTr(Trans::Constants::LOADING_SETTINGS));
+    messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     QTime chrono;
     chrono.start();
@@ -156,7 +149,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
 
     // add translators
-    showMessage( &splash, tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS) );
+    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
     m_Translators = new Translators(this);
     m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
     // Qt
@@ -168,15 +161,13 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");
 
     // Manage exchange file
-    showMessage( &splash, QCoreApplication::translate( "Core", "Checking command line parameters..." ) );
+    messageSplashScreen(QCoreApplication::translate( "Core", "Checking command line parameters..." ) );
 
     if (Utils::isRunningOnMac())
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
     // ready
-    showMessage(&splash, QCoreApplication::translate("Core", "%1 v%2 Ready !").arg(qApp->applicationName(), qApp->applicationVersion()));
-    // finish splashscreen
-    splash.finish(mainWindow());
+    messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
     Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
@@ -193,6 +184,36 @@ CoreImpl::~CoreImpl()
     delete m_Patient;
 }
 
+void CoreImpl::createSplashScreen(const QPixmap &pix)
+{
+    if (!m_Splash) {
+        m_Splash = new QSplashScreen(pix);
+        QFont ft( m_Splash->font() );
+        ft.setPointSize( ft.pointSize() - 2 );
+        ft.setBold( true );
+        m_Splash->setFont( ft );
+        m_Splash->show();
+    }
+}
+
+void CoreImpl::finishSplashScreen(QWidget *w)
+{
+    Q_ASSERT(m_Splash);
+    if (m_Splash) {
+        m_Splash->finish(w);
+        delete m_Splash;
+        m_Splash = 0;
+    }
+}
+
+void CoreImpl::messageSplashScreen(const QString &msg)
+{
+    Q_ASSERT(m_Splash);
+    if (m_Splash)
+        m_Splash->showMessage( msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black );
+}
+
+QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
 UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
