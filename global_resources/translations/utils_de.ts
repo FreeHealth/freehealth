@@ -198,42 +198,50 @@
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="498"/>
-        <source>This function is only available to identified users.</source>
-        <translation>Diese Funktion ist nur für identifizierte User verfügbar.</translation>
+        <source>This function is not available in this version.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="499"/>
-        <source>To get your identifier please connect to the web site : %1. </source>
-        <translation>Um Ihren Identifyer zu erhalten, gehen sie bitte auf die Webseite %1.</translation>
+        <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="539"/>
+        <source>This function is only available to identified users.</source>
+        <translation type="obsolete">Diese Funktion ist nur für identifizierte User verfügbar.</translation>
+    </message>
+    <message>
+        <source>To get your identifier please connect to the web site : %1. </source>
+        <translation type="obsolete">Um Ihren Identifyer zu erhalten, gehen sie bitte auf die Webseite %1.</translation>
+    </message>
+    <message>
         <location filename="../../libs/utils/global.cpp" line="540"/>
+        <location filename="../../libs/utils/global.cpp" line="541"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="551"/>
+        <location filename="../../libs/utils/global.cpp" line="552"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="559"/>
+        <location filename="../../libs/utils/global.cpp" line="560"/>
         <source>Do you agree these terms ?</source>
         <translation>Nehmen Sie diese Lizenz an?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="607"/>
+        <location filename="../../libs/utils/global.cpp" line="608"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="612"/>
+        <location filename="../../libs/utils/global.cpp" line="613"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="956"/>
+        <location filename="../../libs/utils/global.cpp" line="957"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>

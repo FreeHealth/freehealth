@@ -36,6 +36,9 @@
 
 #include <utils/log.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <QtCore/QtPlugin>
 
 #include <QDebug>
@@ -65,6 +68,8 @@ void PrinterPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PrinterPlugin::extensionsInitialized";
+    // Add translator
+    Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
 }
 
 

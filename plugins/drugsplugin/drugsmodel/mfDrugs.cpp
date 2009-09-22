@@ -74,6 +74,7 @@
 using namespace mfDrugsConstants;
 
 using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
@@ -455,12 +456,12 @@ QString DrugsData::toHtml() const
     QString textIams, textClass;
 
     if ( iams.isEmpty() )
-        textIams = QCoreApplication::translate( "mfDrugs", "No INN found." );
+        textIams = QCoreApplication::translate( "DrugsData", "No INN found." );
     else
         textIams = iams.join( "<br>" );
 
     if ( iamClass.isEmpty() )
-        textClass = QCoreApplication::translate( "mfDrugs", "No interaction class found." );
+        textClass = QCoreApplication::translate( "DrugsData", "No interaction class found." );
     else
         textClass = iamClass.join( "<br>" );
 
@@ -572,9 +573,9 @@ QString DrugsDataPrivate::prescriptionToText( bool toHtml )
     scheme = m_PrescriptionValues[Prescription::IntakesScheme].toString();
     if ( usesFromTo( from, to, Prescription::IntakesUsesFromTo ) ) {
         intakes = QString( "%1 %2 %3 %4 %5" )
-                  .arg( QCoreApplication::translate( "mfDrugs" , "from") )
+                  .arg( tkTr(Trans::Constants::FROM))
                   .arg( from )
-                  .arg( QCoreApplication::translate( "mfDrugs" ,"to") )
+                  .arg( tkTr(Trans::Constants::TO))
                   .arg( to )
                   .arg( scheme )
                   ;
@@ -589,7 +590,7 @@ QString DrugsDataPrivate::prescriptionToText( bool toHtml )
     if (daily.count() > 0) {
         QString tmp;
         tmp = QString( " %1").arg(daily.join(", "));
-        tmp.replace( tmp.lastIndexOf(", "), 2, " " + QCoreApplication::translate("mfDrugs", "and") + " " );
+        tmp.replace( tmp.lastIndexOf(", "), 2, " " + tkTr(Trans::Constants::AND) + " " );
         // replace last , to AND
         intakes += tmp;
     }
@@ -600,9 +601,9 @@ QString DrugsDataPrivate::prescriptionToText( bool toHtml )
     scheme = m_PrescriptionValues[Prescription::DurationScheme].toString();
     if ( usesFromTo( from, to, Prescription::DurationUsesFromTo ) ) {
         duration = QString( "%1 %2 %3 %4 %5" )
-                   .arg( QCoreApplication::translate( "mfDrugs" ,"from") )
+                   .arg( tkTr(Trans::Constants::FROM))
                    .arg( from )
-                   .arg( QCoreApplication::translate( "mfDrugs" ,"to") )
+                   .arg( tkTr(Trans::Constants::TO))
                    .arg( to )
                    .arg( scheme )
                    ;
@@ -628,9 +629,9 @@ QString DrugsDataPrivate::prescriptionToText( bool toHtml )
     toReturn += QString( "%1 %2 %3 %4 %5 %6 %7" )
                 .arg( paragraphBegin )
                 .arg( intakes )
-                .arg( QCoreApplication::translate( "Drugs" ,"each") )
+                .arg( tkTr(Trans::Constants::DURING))
                 .arg( period )
-                .arg( QCoreApplication::translate( "Drugs" ,"during") )
+                .arg( tkTr(Trans::Constants::EACH))
                 .arg( duration )
                 .arg( paragraphEnd )
                 ;

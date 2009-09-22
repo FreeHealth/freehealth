@@ -64,6 +64,9 @@
 #include <mfDrugsConstants.h>
 
 #include <utils/log.h>
+
+#include <translationutils/constanttranslations.h>
+
 #include <coreplugin/itheme.h>
 
 using namespace mfDrugsConstants;
@@ -71,6 +74,7 @@ using namespace mfDosagesConstants;
 using namespace mfInteractionsConstants;
 
 using namespace Drugs::Internal;
+using namespace Trans::ConstantTranslations;
 
 /** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
 void DrugInteraction::setValue( const int fieldref, const QVariant & value )
@@ -115,19 +119,18 @@ QVariant DrugInteraction::value( const int fieldref ) const
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 QString DrugInteraction::typeToString( const int t )
 {
-    /** \todo add translations */
      QStringList tmp;
      Interaction::TypesOfIAM r = Interaction::TypesOfIAM( t );
      if ( r & Interaction::APrendreEnCompte )
-          tmp << ( "Take into account" );
+          tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
      if ( r & Interaction::Deconseille )
-          tmp << ( "Discouraged" );
+          tmp << tkTr(Trans::Constants::DISCOURAGED);
      if ( r & Interaction::ContreIndication )
-          tmp << ( "Contraindication" );
+          tmp << tkTr(Trans::Constants::CONTRAINDICATION);
      if ( r & Interaction::Precaution )
-          tmp << ( "Precaution for use" );
+          tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
      if ( r & Interaction::Information )
-          tmp << ( "Information" );
+          tmp << tkTr(Trans::Constants::INFORMATION);
 
      return tmp.join( ", " );
 }

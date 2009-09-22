@@ -189,7 +189,6 @@ bool DrugsCentralWidget::printPrescription()
         return false;
     Core::ISettings *s = Core::ICore::instance()->settings();
 #ifdef FREEDIAMS
-    /** \todo here */
     QString header = s->value( MFDRUGS_SETTING_USERHEADER ).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
@@ -200,6 +199,7 @@ bool DrugsCentralWidget::printPrescription()
                         Print::Printer::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
                         Qt::AlignmentFlag(s->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
 #else
+    /** \todo here */
     QString header = "Work in progress";
 //    diCore::patient()->replaceTokens(header);
 //    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );

@@ -222,6 +222,17 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const DRUGS      = QT_TRANSLATE_NOOP("tkConstants", "drugs");
         const char* const INTAKES    = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
         const char* const VIEWINTERACTIONS_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
+        const char* const FROM       = QT_TRANSLATE_NOOP("tkConstants", "from");
+        const char* const TO       = QT_TRANSLATE_NOOP("tkConstants", "to");
+        const char* const DURING       = QT_TRANSLATE_NOOP("tkConstants", "during");
+        const char* const EACH       = QT_TRANSLATE_NOOP("tkConstants", "each");
+        const char* const AND       = QT_TRANSLATE_NOOP("tkConstants", "and");
+        // Drugs Interactions
+        const char* const TAKE_INTO_ACCOUNT  = QT_TRANSLATE_NOOP("tkConstants", "Take into account");
+        const char* const DISCOURAGED  = QT_TRANSLATE_NOOP("tkConstants", "Discouraged");
+        const char* const CONTRAINDICATION  = QT_TRANSLATE_NOOP("tkConstants", "Contraindication");
+        const char* const PRECAUTION_FOR_USE  = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
+        const char* const INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Information");
 
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
@@ -254,7 +265,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         // Splashscreen messages
         const char* const USING_LIBRARY_1                   = QT_TRANSLATE_NOOP("tkConstants", "Using library : %1");
         const char* const STARTING_APPLICATION_AT_1         = QT_TRANSLATE_NOOP("tkConstants", "Starting application at %1");
-        const char* const GETTING_SETTINGS_FILE             = QT_TRANSLATE_NOOP("tkConstants", "Getting settings file...");
         const char* const INITIALIZING_TRANSLATIONS         = QT_TRANSLATE_NOOP("tkConstants", "Initializing Translations...");
         const char* const INITIALIZING_LIBRARIES            = QT_TRANSLATE_NOOP("tkConstants", "Initializing libraries..." );
         const char* const NEED_LICENSE_AGREEMENT            = QT_TRANSLATE_NOOP("tkConstants", "Needed Licence Agreement...");
@@ -262,11 +272,17 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const INITIALIZING_DEFAULTS_PARAMS      = QT_TRANSLATE_NOOP("tkConstants", "Initializing Default Parameters..." );
         const char* const INITIALIZING_PLUGINS              = QT_TRANSLATE_NOOP("tkConstants", "Initializing Plugins...");
         const char* const FIRST_TIME_RUNNING                = QT_TRANSLATE_NOOP("tkConstants", "First time running");
-        const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
         const char* const FEATURE_NOT_IMPLEMENTED           = QT_TRANSLATE_NOOP("tkConstants", "This feature is not yet implemented.");
         const char* const RAISING_APPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Raising Application...");
         const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
         const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
+
+
+        // Settings related messages
+        const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
+        const char* const LOADING_SETTINGS                  = QT_TRANSLATE_NOOP("tkConstants", "Reading settings file");
+        const char* const SAVING_SETTINGS                   = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
+        const char* const CREATING_DEFAULT_SETTINGS_FOR_1   = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
 
         // Users related msessage
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
@@ -309,7 +325,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const _1_ARENOT_AVAILABLE                = QT_TRANSLATE_NOOP("tkConstants", "%1 are not avaible");
         const char* const SETTING_1_PATH_TO_2                = QT_TRANSLATE_NOOP("tkConstants", "Setting %1 path to %2");
         const char* const ERROR_1_FROM_DATABASE_2            = QT_TRANSLATE_NOOP("tkConstants", "Error %1 from database %2");
-        const char* const CREATING_DEFAULT_SETTINGS_FOR_1    = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
         const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
         const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
 

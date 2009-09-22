@@ -2,16 +2,30 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr">
 <context>
+    <name>BaseWidgets::Internal::BaseFormWidgetsOptionsPage</name>
+    <message>
+        <source>Form</source>
+        <translation type="obsolete">Forme</translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::DebugDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Annuler</translation>
+    </message>
+</context>
+<context>
     <name>DosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="102"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="104"/>
         <source>Dosage is not valid.</source>
         <translation>Dosage non valide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="104"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="126"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="165"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="106"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="128"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="167"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
@@ -140,18 +154,18 @@
 <context>
     <name>DosageViewer</name>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="370"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="367"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="509"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="506"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="545"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="541"/>
         <source>Linking to : </source>
         <translation>Lié à : </translation>
     </message>
@@ -159,80 +173,80 @@
 <context>
     <name>DrugInfoPrivate</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="122"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="124"/>
         <source>INN Informations will be lost.
 Do you want to send them ?</source>
         <translation>Les informations des DCI seront perdues.
 Voulez-vous les transmettre ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="190"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="191"/>
         <source>Testing : </source>
         <translation>Test : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="196"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="197"/>
         <source>All interactions found.
 </source>
         <translation>Toutes les interactions sont trouvées.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="198"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="199"/>
         <source>*** Missing interactions.
 </source>
         <translation>*** Manque des interactions.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="202"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="203"/>
         <source>All interactions are OK.
 </source>
         <translation>Toutes les interactions sont OK.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="204"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="205"/>
         <source>*** Wrong interactions.
 </source>
         <translation>*** Erreur dans les interactions.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="208"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="209"/>
         <source>IAM Text is correct.
 </source>
         <translation>Texte des interactions est correct.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="211"/>
         <source>*** IAM Text is incorrect.
 </source>
         <translation>*** Texte des interactions incorrect.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="214"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="215"/>
         <source>CAT Text is correct.
 </source>
         <translation>Texte de la CAT est correct.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="216"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="217"/>
         <source>*** CAT Text is incorrect.
 </source>
         <translation>*** Texte de la CAT est incorrect.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="219"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="220"/>
         <source>Message : </source>
         <translation>Message :</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="225"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="226"/>
         <source>Checked interactions : </source>
         <translation>Interactions saisies :</translation>
     </message>
@@ -275,14 +289,12 @@ Voulez-vous les transmettre ?</translation>
 <context>
     <name>Drugs</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="629"/>
         <source>each</source>
-        <translation>tous les</translation>
+        <translation type="obsolete">tous les</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="631"/>
         <source>during</source>
-        <translation>durant</translation>
+        <translation type="obsolete">durant</translation>
     </message>
 </context>
 <context>
@@ -1114,31 +1126,44 @@ Nom de fichier : %2</translation>
 <context>
     <name>DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="165"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="164"/>
         <source>Can not add this drug to your prescription.</source>
         <translation>Impossible d&apos;ajouter ce médicament à la prescription.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="166"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="165"/>
         <source>Prescription can not contains twice the sample pharmaceutical drug.
 Drug %1 is already in your prescription</source>
         <translation>La prescription ne peut pas citer deux fois le même médicament.
 Le médicament %1 est déjà dans votre prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="168"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="167"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
         <translation>Si vous souhaitez modifier la posologie de ce médicament, double-cliquer dessus dans le cadre réservé à la prescription.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="199"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="197"/>
         <source>Made with FreeDiams.</source>
         <translation>Réalisée avec FreeDiams.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="209"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="208"/>
         <source>Made with FreeMedForms.</source>
         <translation>Réalisée avec FreeMedForms.</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsData</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="459"/>
+        <source>No INN found.</source>
+        <translation>Aucune DCI trouvée.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="464"/>
+        <source>No interaction class found.</source>
+        <translation>Aucune classe d&apos;interaction trouvée.</translation>
     </message>
 </context>
 <context>
@@ -1229,6 +1254,13 @@ Voulez-vous les ajouter au fichier ?</translation>
     </message>
 </context>
 <context>
+    <name>Gir::Internal::GirWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="obsolete">Forme</translation>
+    </message>
+</context>
+<context>
     <name>InteractionDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="82"/>
@@ -1245,33 +1277,40 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>InteractionsManager</name>
     <message>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="332"/>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="365"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="331"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="364"/>
         <source>Nature of the risk: </source>
         <translation>Nature du risque : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="337"/>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="370"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="336"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="369"/>
         <source>What to do: </source>
         <translation>Conduite à tenir : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="346"/>
-        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="379"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="345"/>
+        <location filename="../../plugins/drugsplugin/interactionsmodel/mfInteractionsManager.cpp" line="378"/>
         <source>Interaction(s) Found : </source>
         <translation>Interaction(s) trouvée(s) :</translation>
     </message>
 </context>
 <context>
+    <name>PluginDialog</name>
+    <message>
+        <source>Close</source>
+        <translation type="obsolete">Fermer</translation>
+    </message>
+</context>
+<context>
     <name>mfDosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="120"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="122"/>
         <source>Dosage correctly saved to base</source>
         <translation>Posologie correctement sauvegardée dans la base</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="122"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="124"/>
         <source>SQL Error : Dosage can not be added to database : %1</source>
         <translation>Erreur SQL : le dosage ne peut pas être ajouté à la base de données : %1</translation>
     </message>
@@ -1279,31 +1318,24 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>mfDrugs</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="458"/>
         <source>No INN found.</source>
-        <translation>Aucune DCI trouvée.</translation>
+        <translation type="obsolete">Aucune DCI trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="463"/>
         <source>No interaction class found.</source>
-        <translation>Aucune classe d&apos;interaction trouvée.</translation>
+        <translation type="obsolete">Aucune classe d&apos;interaction trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="573"/>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="601"/>
         <source>from</source>
-        <translation>de</translation>
+        <translation type="obsolete">de</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="575"/>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="603"/>
         <source>to</source>
-        <translation>à</translation>
+        <translation type="obsolete">à</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugs.cpp" line="590"/>
         <source>and</source>
-        <translation>et</translation>
+        <translation type="obsolete">et</translation>
     </message>
 </context>
 <context>
