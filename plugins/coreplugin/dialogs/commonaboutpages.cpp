@@ -55,6 +55,8 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QFont>
+#include <QBrush>
+#include <QDesktopServices>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -300,9 +302,24 @@ QWidget *TeamAboutPage::widget()
         }
         // add item
         QTreeWidgetItem *nameItem = new QTreeWidgetItem(cit.value(), QStringList() << t.Name);
-        new QTreeWidgetItem(nameItem, QStringList() << t.Email);
+        QTreeWidgetItem *m = new QTreeWidgetItem(nameItem, QStringList() << t.Email);
+        m->setForeground(0,QBrush(Qt::blue));
+        QFont f = m->font(0);
+        f.setUnderline(true);
+        m->setFont(0,f);
         new QTreeWidgetItem(nameItem, QStringList() << t.Country);
         new QTreeWidgetItem(nameItem, QStringList() << t.UnTranslatedComment);
     }
+    connect(tree,SIGNAL(itemActivated(QTreeWidgetItem*,int)),this, SLOT(mailTo(QTreeWidgetItem*)));
     return w;
+}
+
+void TeamAboutPage::mailTo(QTreeWidgetItem *item)
+{
+    if (!item)
+        return;
+    if (item->text(0).contains("@")) {
+        QDesktopServices::openUrl(QUrl("mailto:"+item->text(0)));
+    }
+
 }

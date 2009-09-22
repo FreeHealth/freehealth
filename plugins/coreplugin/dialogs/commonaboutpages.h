@@ -42,6 +42,7 @@
 #define COMMONABOUTPAGES_H
 
 #include <coreplugin/iaboutpage.h>
+class QTreeWidgetItem;
 
 namespace Core {
 namespace Internal {
@@ -74,6 +75,7 @@ public:
 
 class TeamAboutPage : public IAboutPage
 {
+    Q_OBJECT
 public:
     TeamAboutPage(QObject *parent);
     ~TeamAboutPage();
@@ -83,6 +85,9 @@ public:
     QString category() const { return tr("Application"); }
 
     QWidget *widget();
+
+private Q_SLOTS:
+    void mailTo(QTreeWidgetItem *item);
 };
 
 
