@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/medintux.cpp" line="43"/>
         <source>Can not configure MedinTux</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann MedinTux nicht configurieren</translation>
     </message>
 </context>
 <context>
@@ -81,22 +81,22 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="113"/>
         <source>Creating Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstelle Hauptfenster</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="170"/>
         <source>Transmitting posologies...</source>
-        <translation type="unfinished"></translation>
+        <translation>Übermittle Posologie...</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="193"/>
         <source>Initializing drugs database</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisiere Medikamentendatenbank</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="200"/>
         <source>Reading exchange file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lese Exchange Datei...</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="202"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="472"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
-        <translation>Da ist ein Rezept im Editor, wollen Sie das ersetzen oder zu einem offenen Rezept hinzufügen.</translation>
+        <translation>Da ist ein Rezept im Editor, wollen Sie das ersetzen oder zu einem offenen Rezept hinzufügen ?</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="473"/>

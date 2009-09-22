@@ -406,17 +406,17 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="216"/>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Hineinzoomen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="217"/>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Herauszoomen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="219"/>
         <source>Navigation</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigation</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="222"/>
@@ -436,52 +436,52 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="225"/>
         <source>from</source>
-        <translation type="unfinished"></translation>
+        <translation>von</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="226"/>
         <source>to</source>
-        <translation type="unfinished"></translation>
+        <translation>zu</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="227"/>
         <source>during</source>
-        <translation type="unfinished"></translation>
+        <translation>während</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="228"/>
         <source>each</source>
-        <translation type="unfinished"></translation>
+        <translation>jeden</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="229"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>und</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="231"/>
         <source>Take into account</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte infos zum Account</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="232"/>
         <source>Discouraged</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermeidung</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="233"/>
         <source>Contraindication</source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenanzeigen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="234"/>
         <source>Precaution for use</source>
-        <translation type="unfinished"></translation>
+        <translation>Verordnungsplan</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="235"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="238"/>
@@ -620,7 +620,7 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="270"/>
         <source>Needed Licence Agreement...</source>
-        <translation>Benötigte Annahme der Lizenz</translation>
+        <translation>Benötigte Annahme der Lizenz...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="271"/>
@@ -630,12 +630,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="272"/>
         <source>Initializing Default Parameters...</source>
-        <translation>Initialisiere Voreinstellungs Parameter</translation>
+        <translation>Initialisiere Voreinstellungs Parameter...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="273"/>
         <source>Initializing Plugins...</source>
-        <translation>Initialisiere Plugins</translation>
+        <translation>Initialisiere Plugins...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="274"/>
@@ -656,12 +656,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="276"/>
         <source>Raising Application...</source>
-        <translation>Wecke Applikation</translation>
+        <translation>Wecke Applikation...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="277"/>
         <source>Checking for updates...</source>
-        <translation>Suche nach Updates</translation>
+        <translation>Suche nach Updates...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="278"/>
@@ -856,7 +856,7 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="283"/>
         <source>Reading settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>Lese Einstellungen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="328"/>
@@ -866,12 +866,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="329"/>
         <source>Please describe your problem.</source>
-        <translation>Bitte beschreibe dein Problem</translation>
+        <translation>Bitte beschreibe dein Problem.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="333"/>
         <source>Starting to send message.</source>
-        <translation>Starte einen Nachrichtenversand</translation>
+        <translation>Starte einen Nachrichtenversand.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="334"/>
@@ -896,12 +896,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="338"/>
         <source>Current version :</source>
-        <translation>Aktuelle Version</translation>
+        <translation>Aktuelle Version:</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="339"/>
         <source>Lastest version :</source>
-        <translation>Letzte Version</translation>
+        <translation>Letzte Version:</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="340"/>

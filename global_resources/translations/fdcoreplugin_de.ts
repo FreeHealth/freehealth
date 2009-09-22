@@ -22,7 +22,7 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="164"/>
         <source>Checking command line parameters...</source>
-        <translation>Überprüfung der Kommandozeilen Parameter.</translation>
+        <translation>Überprüfung der Kommandozeilen Parameter...</translation>
     </message>
     <message>
         <source>%1 v%2 Ready !</source>
@@ -223,7 +223,7 @@ Benutze URL: %1
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="375"/>
         <source>Form : </source>
-        <translation>Formular</translation>
+        <translation>Formular:</translation>
     </message>
 </context>
 <context>
@@ -231,7 +231,7 @@ Benutze URL: %1
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="502"/>
         <source>Forms : </source>
-        <translation>Formular</translation>
+        <translation>Formular:</translation>
     </message>
 </context>
 <context>

@@ -199,12 +199,12 @@
     <message>
         <location filename="../../libs/utils/global.cpp" line="498"/>
         <source>This function is not available in this version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="499"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kannst den Entwicklern eine Email senden und Ihnen deine Schwierigkeiten erklären: freemedforms@googlegroups.com.</translation>
     </message>
     <message>
         <source>This function is only available to identified users.</source>
