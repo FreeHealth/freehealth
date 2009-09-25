@@ -106,8 +106,8 @@ int main( int argc, char *argv[] )
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
-    const QStringList pluginPaths = getPluginPaths();
-    pluginManager.setPluginPaths(pluginPaths);
+    const QString pluginPaths = getPluginPaths();
+    pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
@@ -140,7 +140,7 @@ int main( int argc, char *argv[] )
         }
     }
     if (!coreplugin) {
-	const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths));
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;
