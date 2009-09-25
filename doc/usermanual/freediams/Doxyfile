@@ -571,6 +571,7 @@ WARN_LOGFILE           =
 INPUT                  = ../doc/usermanual/freediams \
                          ../doc/usermanual/drugswidget \
                          ../doc/usermanual/richtexteditor \
+                         ../doc/usermanual/tokensmanager \
                          ../doc/usermanual/versionning.qdoc
 
 # This tag can be used to specify the character encoding of the source files 

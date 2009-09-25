@@ -419,13 +419,21 @@ Cette fonctionnalité n'est pas encore disponible.
 
 \section available_param Paramètres disponibles
 
-Plusieurs paramétrages sont accessibles :
-\li les polices de caractères pour la visualisation et l'impression
-\li le niveau d'alerte pour les interactions médicamenteuses
-\li la taille de l'historique des derniers médicaments recherchés
-\li les entête, pied de page et tatouage d'impression à utiliser
-\li marquages à utiliser pour les médicaments à 100%
-\li masquage du nom de laboratoire lors de l'impression
+Les paramètres sont regoupés en pages selon leur porté. Les paramètres accessibles à l'utilisateur sont :
+- pour la visualisation
+    - polices et taille des polices d'affichage
+    - niveau d'alerte des interactions
+    - taille de l'historique des médicaments sélectionnés
+- pour l'impression
+    - les polices de caractères pour la visualisation et l'impression
+    - le masque pour la création de la phrase posologie
+- pour les utilisateurs
+    - entête
+    - pied de page
+    - tatouage d'impression
+- pour les extras
+    - cacher le nom du laboratoire
+    - texte des médicaments particuliers (100%)
 
 \section polices Paramétrage des polices de caractères, niveau d'alerte, historique
 
@@ -439,8 +447,51 @@ Plusieurs paramétrages sont accessibles :
 
 \image html prefs3.png
 
+\section params_poso_mask Le masque de création de la phrase posologie
 
-Vous pouvez consulter \ref richtext_index .
+Une prescription se compose d'un médicament et d'une posologie. La "phrase posologie" comprend ces deux paramètres.
+Vous pouvez modifier à volonté le contenu et l'aspect de cette phrase grâce au moteur d'étiquettes
+(voir \ref tokensmanager). \n
+Par défaut, \freediams propose une phrase type :
+\verbatim
+MEDICAMENT, forme enregistrée
+de 1 à 2 prise(s) matin, midi et soir tous les jours, pendant le repas, durant 1 à 2 semaine(s)
+note du prescripteur.
+\endverbatim
+
+Cette phrase est composée d'étiquettes imbriquées :
+\verbatim
+[[DRUG]]
+[[Q_FROM][ à [Q_TO]]] [[DAILY_SCHEME] ][[Q_SCHEME]] tous les [[PERIOD] ][[PERIOD_SCHEME]] durant [[D_FROM][ to [D_TO]]] [[D_SCHEME]][
+[NOTE]]
+\endverbatim
+
+Vous pouvez modifier à volonté la présentation de chacun des éléments,
+ajouter votre texte entre chacun des éléments,
+modifier la place des éléments. Ceci très facilement grâce au moteur d'étiquettes de \freediams.
+
+Vous pouvez à l'aide des étiquettes suivantes créer votre propre "phrase posologique".\n
+Les étiquettes utilisables sont les suivantes :
+- <em>[[DRUG]]</em> pour le nom du médicament
+- <em>[[Q_FROM]]</em> pour la quantité prescrite "de"
+- <em>[[Q_TO]]</em> pour la quantité prescrite "à"
+- <em>[[Q_SCHEME]]</em>  pour la forme prescrite (comprimé, pulvérisation, bains de bouche...)
+- <em>[[DAILY_SCHEME]]</em> pour le schéma de prise dans la journée (matin, midi et soir)
+- <em>[[PERIOD]]</em> pour la période de prise (prendre un comprime --> [une] fois par jour)
+- <em>[[PERIOD_SCHEME]]</em> pour la période de prise (texte : semaine, mois, jours)
+- <em>[[D_FROM]]</em> pour la durée prescrite "de"
+- <em>[[D_TO]]</em> pour la durée prescrite "à"
+- <em>[[D_SCHEME]]</em> pour la durée prescrite : texte
+- <em>[[NOTE]]</em>  pour la note
+- <em>[[MEAL]]</em> pour la relation avec le repas.
+
+Vous pouvez appliquer des formats de polices différents aux étiquettes, les inclure dans des tableaux...
+Tout sera respecté selon le moteur d'étiquettes (n'oubliez pas que les plages conditions avant et après
+peuvent contenir du code ascii ou HTML).
+
+Vous pouvez consulter aussi consulter :
+\li \ref richtext_index
+\li \ref tokensmanager
 
 \ref index
 
@@ -467,8 +518,13 @@ Vous pouvez consulter \ref richtext_index .
 - <b>Testeurs :</b>
     - Plusieurs testeurs anonymes pour la plupart.
 
+- <b>Packageurs :</b>
+    - Eric Maeker, MD : Debian, Ubuntu, MacOs, FreeBSD (en cours), Windows
+    - Sascha Manns : OpenSuse
+
 - <b>Traducteur :</b>
-    - Éric Maeker, MD
+    - Éric Maeker, MD (english, french)
+    - Sascha Manns (deutsch)
 
 - <b>Maître toile : </b>
     - Vincent Perez, MD <vinperez@gmail.com>
