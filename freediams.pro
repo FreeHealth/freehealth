@@ -14,4 +14,8 @@ ProjectSettings {
     COMPILER = G++
 }
 
-OTHER_FILES += update-di.txt
+OTHER_FILES += update-di.txt \
+               README \
+               COPYING \
+               INSTALL
+
