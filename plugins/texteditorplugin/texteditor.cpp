@@ -119,6 +119,7 @@ public:
     void populateToolbar()
     {
         Core::ActionManager *am = Core::ICore::instance()->actionManager();
+        m_ToolBar->clear();
 
         // IO Actions
         if (m_Type & TextEditor::WithIO) {

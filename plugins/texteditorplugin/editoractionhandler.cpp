@@ -133,6 +133,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             cmd->setTranslations(Trans::Constants::EDITUNDO_TEXT);
             editMenu->addAction(cmd, Core::Constants::G_EDIT_UNDOREDO);
             a->setEnabled(false);
+        } else {
+            aUndo = registerAction(Core::Constants::A_EDIT_UNDO, allContexts, this);
         }
         if (!am->command(Core::Constants::A_EDIT_REDO)) {
             a = aRedo = new QAction(this);
@@ -143,6 +145,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             cmd->setTranslations(Trans::Constants::EDITREDO_TEXT );
             editMenu->addAction(cmd, Core::Constants::G_EDIT_UNDOREDO);
             a->setEnabled(false);
+        } else {
+            aRedo = registerAction(Core::Constants::A_EDIT_REDO, allContexts, this);
         }
         if (!am->command(Core::Constants::A_EDIT_CUT)) {
             a = aCut = new QAction(this);
@@ -153,6 +157,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             cmd->setTranslations(Trans::Constants::EDITCUT_TEXT );
             editMenu->addAction(cmd, Core::Constants::G_EDIT_COPYPASTE);
             a->setEnabled(false);
+        } else {
+            aCut = registerAction(Core::Constants::A_EDIT_CUT, allContexts, this);
         }
         if (!am->command(Core::Constants::A_EDIT_COPY)) {
             a = aCopy = new QAction(this);
@@ -163,6 +169,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             cmd->setTranslations(Trans::Constants::EDITCOPY_TEXT );
             editMenu->addAction(cmd, Core::Constants::G_EDIT_COPYPASTE);
             a->setEnabled(false);
+        } else {
+            aCopy = registerAction(Core::Constants::A_EDIT_COPY, allContexts, this);
         }
         if (!am->command(Core::Constants::A_EDIT_PASTE)) {
             a = aPaste = new QAction(this);
@@ -173,16 +181,18 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             cmd->setTranslations(Trans::Constants::EDITPASTE_TEXT );
             editMenu->addAction(cmd, Core::Constants::G_EDIT_COPYPASTE);
             a->setEnabled(false);
+        } else {
+            aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
         }
     } else {
         rootMenu = am->actionContainer(Core::Constants::MENUBAR);
         editMenu = am->actionContainer(Core::Constants::M_EDIT);
         fileMenu = am->actionContainer(Core::Constants::M_FILE);
         // register already existing menu actions
-        aUndo = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
-        aRedo = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
-        aCut = registerAction(Core::Constants::A_EDIT_CUT,   allContexts, this);
-        aCopy = registerAction(Core::Constants::A_EDIT_COPY,  allContexts, this);
+        aUndo  = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
+        aRedo  = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
+        aCut   = registerAction(Core::Constants::A_EDIT_CUT,   allContexts, this);
+        aCopy  = registerAction(Core::Constants::A_EDIT_COPY,  allContexts, this);
         aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
     }
 
@@ -240,6 +250,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = am->registerAction(a, Core::Constants::A_FORMAT_BOLD, allContexts);
     cmd->setTranslations(Trans::Constants::FORMATBOLD_TEXT);
+    cmd->setDefaultKeySequence(QKeySequence::Bold);
     connect(a, SIGNAL(triggered()), this, SLOT(textBold()));
     fontMenu->addAction(cmd, Core::Constants::G_FORMAT_FONT);
 
@@ -251,6 +262,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = am->registerAction(a, Core::Constants::A_FORMAT_ITALIC, allContexts);
     cmd->setTranslations(Trans::Constants::FORMATITALIC_TEXT);
+    cmd->setDefaultKeySequence(QKeySequence::Italic);
     connect(a, SIGNAL(triggered()), this, SLOT(textItalic()));
     fontMenu->addAction(cmd, Core::Constants::G_FORMAT_FONT);
 
@@ -262,6 +274,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = am->registerAction(a, Core::Constants::A_FORMAT_UNDERLINE, allContexts);
     cmd->setTranslations(Trans::Constants::FORMATUNDERLINE_TEXT);
+    cmd->setDefaultKeySequence(QKeySequence::Underline);
     connect(a, SIGNAL(triggered()), this, SLOT(textUnderline()));
     fontMenu->addAction(cmd, Core::Constants::G_FORMAT_FONT);
 
@@ -541,7 +554,6 @@ void EditorActionHandler::updateColorActions()
 
 void EditorActionHandler::clipboardDataChanged()
 {
-    qWarning() << "EditorActionHandler::clipboardDataChanged()";
     aPaste->setEnabled(!QApplication::clipboard()->text().isEmpty());
 }
 
