@@ -1359,12 +1359,12 @@ Voulez-vous les ajouter au fichier ?</translation>
         <translation>Dosages disponibles</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="244"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="239"/>
         <source>No Inn founded</source>
         <translation>Pas de DCI retrouvée</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="264"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="259"/>
         <source>No interactions founded</source>
         <translation>Pas d&apos;interactions retrouvées</translation>
     </message>

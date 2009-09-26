@@ -604,10 +604,6 @@
         <translation>Start des Applikation um %1</translation>
     </message>
     <message>
-        <source>Getting settings file...</source>
-        <translation type="obsolete">Lese Einstellungen ein...</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="268"/>
         <source>Initializing Translations...</source>
         <translation>Initialisiere Übersetzungen...</translation>

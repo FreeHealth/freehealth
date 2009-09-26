@@ -100,37 +100,37 @@
         <translation>Lecture du fichier d&apos;échange MedinTux.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="359"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="361"/>
         <source>Save actual prescription ?</source>
         <translation>Sauvegarder la prescription actuelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="360"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="362"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="471"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="473"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : ajouter ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="472"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="474"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Une prescription est présente, vouez-vous la remplacer ou y ajouter la prescription à charger ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="473"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="475"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="473"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="475"/>
         <source>Add to prescription</source>
         <translation>Ajouter la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="474"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="476"/>
         <source>Open a prescription</source>
         <translation>Ouvrir la prescription</translation>
     </message>

@@ -207,14 +207,6 @@
         <translation>Du kannst den Entwicklern eine Email senden und Ihnen deine Schwierigkeiten erklären: freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <source>This function is only available to identified users.</source>
-        <translation type="obsolete">Diese Funktion ist nur für identifizierte User verfügbar.</translation>
-    </message>
-    <message>
-        <source>To get your identifier please connect to the web site : %1. </source>
-        <translation type="obsolete">Um Ihren Identifyer zu erhalten, gehen sie bitte auf die Webseite %1.</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="540"/>
         <location filename="../../libs/utils/global.cpp" line="541"/>
         <source>License agreement acceptation</source>

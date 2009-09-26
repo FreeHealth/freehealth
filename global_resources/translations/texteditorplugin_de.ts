@@ -67,18 +67,18 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="338"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="339"/>
         <source>HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)</source>
         <translation>HTML dateien (*.htm *.html);;Textdateien (*.txt);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="358"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="359"/>
         <source>HTML-Files (*.htm *.html);;All Files (*)</source>
         <translation>HTML Dateien (*htm *html);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="376"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="378"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="377"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="379"/>
         <source>Font format</source>
         <translation>Schriftformat</translation>
     </message>

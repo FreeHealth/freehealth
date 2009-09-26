@@ -12,7 +12,7 @@
 <context>
     <name>BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="105"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="107"/>
         <source>Actual Qt version : %1</source>
         <translation>Aktuelle Qt Version %1</translation>
     </message>
@@ -23,10 +23,6 @@
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="164"/>
         <source>Checking command line parameters...</source>
         <translation>Überprüfung der Kommandozeilen Parameter...</translation>
-    </message>
-    <message>
-        <source>%1 v%2 Ready !</source>
-        <translation type="obsolete">%1 v%2 Fertig !</translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="170"/>
@@ -69,12 +65,12 @@
 <context>
     <name>Core::Internal::BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="56"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
         <source>4. Build informations</source>
         <translation>4. Bauinformationen</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="58"/>
         <source>Application</source>
         <translation>Anwendung</translation>
     </message>
@@ -128,12 +124,12 @@
 <context>
     <name>Core::Internal::LicenseAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="69"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="70"/>
         <source>3. License</source>
         <translation>3. Lizenz</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="70"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="71"/>
         <source>Application</source>
         <translation>Anwendung</translation>
     </message>
@@ -163,12 +159,12 @@
 <context>
     <name>Core::Internal::TeamAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="82"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="84"/>
         <source>2. Team</source>
         <translation>2. Team</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="83"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="85"/>
         <source>Application</source>
         <translation>Anwenung</translation>
     </message>
@@ -202,20 +198,6 @@ Using Url : %1
         <translation>Debugging Informationen korrekt gesendet an das Entwicklerteam
 Benutze URL: %1
 %2</translation>
-    </message>
-</context>
-<context>
-    <name>Drugs::Internal::DosageCreatorDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-</context>
-<context>
-    <name>Drugs::Internal::InteractionDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Schließen</translation>
     </message>
 </context>
 <context>
