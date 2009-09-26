@@ -38,6 +38,7 @@ public:
     QString category() const;
 
     void resetToDefaults();
+    void checkSettingsValidity();
     void applyChanges();
     void finish();
 

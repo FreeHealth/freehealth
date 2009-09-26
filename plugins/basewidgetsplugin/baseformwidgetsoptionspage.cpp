@@ -6,6 +6,8 @@
 #include <coreplugin/constants.h>
 #include <translationutils/constanttranslations.h>
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 using namespace BaseWidgets;
 using namespace BaseWidgets::Internal;
 
@@ -18,9 +20,8 @@ BaseFormSettingsWidget::BaseFormSettingsWidget(QWidget *parent): QWidget(parent)
 {
     m_ui = new Ui::BaseFormWidgetsOptionsPage();
     m_ui->setupUi(this);
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    m_ui->marginSpin->setValue( s->value(::SETTINGS_COMPACTVIEW_MARGIN, 0).toInt() );
-    m_ui->spacingSpin->setValue( s->value(::SETTINGS_COMPACTVIEW_SPACING, 2).toInt() );
+    m_ui->marginSpin->setValue( settings()->value(::SETTINGS_COMPACTVIEW_MARGIN, 0).toInt() );
+    m_ui->spacingSpin->setValue( settings()->value(::SETTINGS_COMPACTVIEW_SPACING, 2).toInt() );
 }
 
 BaseFormSettingsWidget::~BaseFormSettingsWidget()
@@ -32,9 +33,8 @@ BaseFormSettingsWidget::~BaseFormSettingsWidget()
 
 void BaseFormSettingsWidget::applyChanges()
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    s->setValue(::SETTINGS_COMPACTVIEW_MARGIN, m_ui->marginSpin->value());
-    s->value(::SETTINGS_COMPACTVIEW_SPACING, m_ui->spacingSpin->value());
+    settings()->setValue(::SETTINGS_COMPACTVIEW_MARGIN, m_ui->marginSpin->value());
+    settings()->value(::SETTINGS_COMPACTVIEW_SPACING, m_ui->spacingSpin->value());
 }
 
 void BaseFormSettingsWidget::resetToDefaults()
@@ -83,8 +83,21 @@ void BaseFormWidgetsOptionsPage::applyChanges()
         m_Widget->applyChanges();
 }
 
+void BaseFormWidgetsOptionsPage::checkSettingsValidity()
+{
+    if (settings()->value(::SETTINGS_COMPACTVIEW_MARGIN,QVariant())==QVariant()) {
+        settings()->setValue(::SETTINGS_COMPACTVIEW_MARGIN,0);
+    }
+
+    if (settings()->value(::SETTINGS_COMPACTVIEW_SPACING,QVariant())==QVariant()) {
+        settings()->setValue(::SETTINGS_COMPACTVIEW_SPACING,2);
+    }
+}
+
 void BaseFormWidgetsOptionsPage::finish()
 {
+    if (m_Widget)
+        delete m_Widget;
 }
 
 QWidget *BaseFormWidgetsOptionsPage::createPage(QWidget *parent)

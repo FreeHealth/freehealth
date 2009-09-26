@@ -21,6 +21,7 @@ public:
     virtual QString category() const = 0;
 
     virtual void resetToDefaults() = 0;
+    virtual void checkSettingsValidity() = 0;
     virtual void applyChanges() = 0;
     virtual void finish() = 0;
 
