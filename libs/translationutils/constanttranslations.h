@@ -433,6 +433,7 @@ TRUTILS_EXPORT QStringList periods();
 TRUTILS_EXPORT QString period( int id );
 TRUTILS_EXPORT QStringList dailySchemeList();
 TRUTILS_EXPORT QStringList dailySchemes(const Trans::Constants::Time::DailySchemes dailySchemeFlag);
+TRUTILS_EXPORT QStringList dailySchemes(const int dailySchemeFlag);
 TRUTILS_EXPORT Trans::Constants::Time::DailySchemes toDailyScheme( const QStringList & list );
 TRUTILS_EXPORT QStringList preDeterminedAges();
 TRUTILS_EXPORT QStringList mealTime();

@@ -12,7 +12,7 @@
 <context>
     <name>BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="105"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="107"/>
         <source>Actual Qt version : %1</source>
         <translation>Version actuelle de Qt : %1</translation>
     </message>
@@ -65,12 +65,12 @@
 <context>
     <name>Core::Internal::BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="56"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
         <source>4. Build informations</source>
         <translation>4. Informations de compilation</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="58"/>
         <source>Application</source>
         <translation></translation>
     </message>
@@ -124,12 +124,12 @@
 <context>
     <name>Core::Internal::LicenseAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="69"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="70"/>
         <source>3. License</source>
         <translation>3. Licence</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="70"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="71"/>
         <source>Application</source>
         <translation></translation>
     </message>
@@ -159,12 +159,12 @@
 <context>
     <name>Core::Internal::TeamAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="82"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="84"/>
         <source>2. Team</source>
         <translation>2. Équipe</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="83"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="85"/>
         <source>Application</source>
         <translation></translation>
     </message>
@@ -198,20 +198,6 @@ Using Url : %1
         <translation>Informations de déboggage correctement envoyées à l&apos;équipe de développement.
 Sur l&apos;URL : %1 
 %2</translation>
-    </message>
-</context>
-<context>
-    <name>Drugs::Internal::DosageCreatorDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuler</translation>
-    </message>
-</context>
-<context>
-    <name>Drugs::Internal::InteractionDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Fermer</translation>
     </message>
 </context>
 <context>
@@ -585,10 +571,6 @@ Sur l&apos;URL : %1
         <location filename="../../plugins/coreplugin/translators.cpp" line="186"/>
         <source>WARNING : Can not be loaded %1 or already loaded.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="obsolete">Français</translation>
     </message>
 </context>
 <context>

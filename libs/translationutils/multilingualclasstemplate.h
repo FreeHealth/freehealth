@@ -42,7 +42,7 @@
 #define MULTILINGUALCLASSTEMPLATE_H
 
 #include <translationutils/translationutils_exporter.h>
-#include <translationutils/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QString>
 #include <QTreeWidgetItem>

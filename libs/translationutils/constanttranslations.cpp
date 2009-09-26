@@ -151,6 +151,12 @@ QStringList dailySchemes( const Constants::Time::DailySchemes scheme )
         list << tkTr(Constants::BEDTIME);
     return list;
 }
+/** \brief Transforms the dailyScheme QFlag mfDosageModel::DailySchemes to the corresponding QStringList \e list */
+QStringList dailySchemes( const int scheme )
+{
+    Constants::Time::DailySchemes d(scheme);
+    return dailySchemes(d);
+}
 
 /** \brief Transforms the dailyScheme \e list to the corresponding QFlag mfDosageModel::DailySchemes */
 Constants::Time::DailySchemes toDailyScheme( const QStringList & list )

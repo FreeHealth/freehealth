@@ -604,10 +604,6 @@
         <translation>Démarre l&apos;application %1</translation>
     </message>
     <message>
-        <source>Getting settings file...</source>
-        <translation type="obsolete">Récupère les paramètres utilisateurs...</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="268"/>
         <source>Initializing Translations...</source>
         <translation>Intialise les traductions...</translation>
