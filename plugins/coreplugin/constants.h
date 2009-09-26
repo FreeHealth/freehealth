@@ -243,7 +243,7 @@ const char* const  A_CHANGE_DURATION    = "actionChangeDuration";
 
 
 const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
-const char * const  FREEMEDFORMS_SPLASHSCREEN = ".png";
+const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
 const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
 
 // menu File
@@ -359,6 +359,7 @@ const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for 
 const char * const  TOKEN_SIZE         ="SIZE";          /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_CLCR         ="CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_DATE         ="DATE";
+const char * const  TOKEN_NUMBEROFDRUGS = "NBDRUGS";
 
 
 // Settings keys
@@ -367,7 +368,8 @@ const char * const  S_RECENTFILES_KEY ="File";
 const char * const  S_SAVEINTERVAL ="Core/SaveInterval";
 const char * const  S_OPENLAST ="Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
-
+const char * const  S_LASTLOGIN  = "Login/userLogin";
+const char * const  S_LASTPASSWORD  = "Login/userPassword";
 
 
 

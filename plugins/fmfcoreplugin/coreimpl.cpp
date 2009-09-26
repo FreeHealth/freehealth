@@ -64,6 +64,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
+#include <QSplashScreen>
 
 namespace Core {
 namespace Internal {
@@ -83,7 +84,7 @@ ICore* ICore::instance()
 }
 
 // instance is created by Core::CorePlugin()
-CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
+CoreImpl::CoreImpl(QObject *parent) : ICore(parent), m_Splash(0)
 {
     // Set application libraries
     if (!Utils::isDebugCompilation()) {
@@ -97,7 +98,7 @@ CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
     m_Settings = new SettingsPrivate(this);
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
-    createSplashScreen(m_Theme->splashScreen(Constants::FREEDIAMS_SPLASHSCREEN));
+    createSplashScreen(m_Theme->splashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN));
     messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
 
 
@@ -141,10 +142,10 @@ void CoreImpl::createSplashScreen(const QPixmap &pix)
 {
     if (!m_Splash) {
         m_Splash = new QSplashScreen(pix);
-        QFont ft( m_Splash->font() );
-        ft.setPointSize( ft.pointSize() - 2 );
-        ft.setBold( true );
-        m_Splash->setFont( ft );
+        QFont ft(m_Splash->font());
+        ft.setPointSize(ft.pointSize() - 2);
+        ft.setBold(true);
+        m_Splash->setFont(ft);
         m_Splash->show();
     }
 }

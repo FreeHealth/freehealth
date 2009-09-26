@@ -47,7 +47,7 @@
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>
 #include <translationutils/multilingualclasstemplate.h>
-#include <translationutils/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QTreeWidgetItem>
 #include <QTreeWidget>

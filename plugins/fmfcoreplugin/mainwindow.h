@@ -60,6 +60,7 @@ QT_END_NAMESPACE
 */
 
 namespace Core {
+class IFormIO;
 
 class CORE_EXPORT MainWindow: public Core::IMainWindow
 {
@@ -75,8 +76,6 @@ public:
     void extensionsInitialized();
 
     QStatusBar *statusBar();
-
-    void afterTheShow();
 
     void createMenusAndActions();
     void createToolBars();
@@ -97,21 +96,25 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 //    virtual bool applicationHelp();
     bool aboutQt();
     void aboutPlugins();
-    
+
+protected Q_SLOTS:
+    void aboutToShowRecentFiles();
+    void openRecentFile();
+
+
+protected:
+    void readSettings();
+    void writeSettings();
+    bool loadFile(const QString &filename, const QList<IFormIO *> &iolist = QList<IFormIO *>());
+    void closeEvent(QEvent *event);
+    void changeEvent(QEvent *event);
 
 
 public:
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
-
-    QAction *recentFilesAct[MaxRecentFiles];
     QAction *aUserManager;
 
-    QStringList recentFiles;
-
-    //     mfObject *        m_pRootObject;
-    //     mfMainWidget *    m_MainWidget;
-    QString           m_CurrentFile;
     bool              m_HelpTextShow;
     uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
     int               m_TimerId;

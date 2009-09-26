@@ -8,6 +8,10 @@ PACKAGE_VERSION = 0.0.2
 # <fmfcoreplugin/...>
 include(../coreplugin/common_core.pri)
 
+DEFINES += FREEMEDFORMS
+
+QT *= script
+
 # specific derivative files
 HEADERS += \
     coreplugin.h \

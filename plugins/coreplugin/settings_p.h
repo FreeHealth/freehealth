@@ -104,7 +104,7 @@ public:
     QString toString() const;
 
     // values management
-    void appendToValue( const QString &key, const QString &value );
+    void appendToValue( const QString &key, const QString &value );    
 
 protected:
     QString getIniFile(const QString &name = QString::null, const QString &version = QString::null);

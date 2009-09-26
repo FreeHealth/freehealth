@@ -8,7 +8,8 @@ SUBDIRS = \
     listview \
     texteditor \
     aggir \
-    drugs
+    drugs \
+    usermanager
 
 core.subdir = fmfcoreplugin
 
@@ -37,4 +38,9 @@ drugs.depends += printer
 drugs.depends += texteditor
 drugs.depends += listview
 
+usermanager.subdir   = usermanagerplugin
+usermanager.depends += core
+usermanager.depends += printer
+usermanager.depends += texteditor
+usermanager.depends += listview
 
