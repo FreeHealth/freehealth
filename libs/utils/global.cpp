@@ -947,7 +947,7 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
     int tokenLength = token.length() + QString(Constants::TOKEN_OPEN).length() + QString(Constants::TOKEN_CLOSE).length();
     int toReturn = 0;
     while (true) {
-        begin = textToAnalyse.indexOf( Constants::TOKEN_OPEN + token + Constants::TOKEN_CLOSE, begin);
+        begin = textToAnalyse.indexOf(Constants::TOKEN_OPEN + token + Constants::TOKEN_CLOSE, begin);
         if (begin==-1)
             break;
         end = begin + tokenLength;
@@ -963,10 +963,8 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
             textToAnalyse.remove(beforeBegin, afterEnd-beforeBegin+1);
             ++toReturn;
         } else {
-            QString before;
-            before = textToAnalyse.mid(beforeBegin, begin-beforeBegin);
-            QString after;
-            after = textToAnalyse.mid(end, afterEnd-end);
+            QString before = textToAnalyse.mid(beforeBegin, begin-beforeBegin);
+            QString after = textToAnalyse.mid(end, afterEnd-end);
 //            qWarning() << beforeBegin << begin << before << end << afterEnd << after;
             textToAnalyse.remove(afterEnd,1);
             textToAnalyse.replace(begin, end-begin, value);
