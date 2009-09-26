@@ -58,6 +58,8 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/serializer.h>
+#include <translationutils/constanttranslations.h>
+
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 
@@ -77,6 +79,10 @@ namespace mfDrugsModelConstants {
 }
 
 using namespace mfDrugsModelConstants;
+
+//static inline QString getFullPrescription(const Drugs::Internal::DrugsData *drug)
+//{ return Drugs::DrugsModel::getFullPrescription(drug); }
+
 
 namespace Drugs {
 namespace Internal {
@@ -185,15 +191,12 @@ public:
              case Drug::HasPrescription :    return drug->hasPrescription();
              case Drug::FullPrescription :
                  {
-                     QString tmp;
-                     if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
-                         tmp = drug->innComposition();
-                     else tmp = drug->denomination();
-                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool())
-                         return tmp;
-                     tmp += "\n";
-                     tmp += drug->prescriptionToPlainText();
-                     return tmp;
+                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool()) {
+                         if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
+                             return drug->innComposition();
+                         else return drug->denomination();
+                     }
+                     return ::Drugs::DrugsModel::getFullPrescription(drug,false);
                  }
 
              case Prescription::UsedDosage :            return drug->prescriptionValue( Prescription::UsedDosage );
@@ -217,7 +220,8 @@ public:
              case Prescription::SpecifyForm :           return drug->prescriptionValue( Prescription::SpecifyForm );
              case Prescription::SpecifyPresentation :   return drug->prescriptionValue( Prescription::SpecifyPresentation );
              case Prescription::IsALD :                 return drug->prescriptionValue( Prescription::IsALD );
-             case Prescription::ToHtml :                return drug->prescriptionToHtml();
+             case Prescription::ToHtml :
+                 return ::Drugs::DrugsModel::getFullPrescription(drug,true);
 
              case Interaction::Id :     return QVariant();
              case Interaction::Icon :   return m_InteractionsManager->iamIcon( drug, m_levelOfWarning );
@@ -356,7 +360,7 @@ bool DrugsModel::setData( const QModelIndex & index, const QVariant & value, int
         Q_EMIT dataChanged(index, index);
         QModelIndex fullPrescr = this->index(index.row(),Drug::FullPrescription);
         Q_EMIT dataChanged( fullPrescr, fullPrescr );
-        Q_EMIT prescriptionResultChanged( drug->prescriptionToPlainText() );
+        Q_EMIT prescriptionResultChanged( getFullPrescription(drug,false) );
     }
     return true;
 }
@@ -372,7 +376,7 @@ bool DrugsModel::setDrugData( const int CIS, const int column, const QVariant &v
     if (!drug)
         return false;
     if (d->setDrugData(drug, column, value)) {
-        Q_EMIT prescriptionResultChanged( drug->prescriptionToPlainText() );
+        Q_EMIT prescriptionResultChanged( getFullPrescription(drug,false) );
         return true;
     }
     return false;
@@ -727,4 +731,33 @@ void DrugsModel::warn()
 void DrugsModel::checkInteractions() const
 {
     d->m_InteractionsManager->checkInteractions();
+}
+
+QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool toHtml, const QString &mask)
+{
+    QString tmp;
+    if (mask.isEmpty()) {
+        if (!toHtml)
+            tmp = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN).toString();
+        else
+            tmp = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString();
+    }
+    else
+        tmp = mask;
+    Utils::replaceToken(tmp, "DRUG", drug->denomination());
+    Utils::replaceToken(tmp, "Q_FROM", drug->prescriptionValue(Prescription::IntakesFrom).toString() );
+    Utils::replaceToken(tmp, "Q_TO", drug->prescriptionValue(Prescription::IntakesTo).toString() );
+    Utils::replaceToken(tmp, "Q_SCHEME", drug->prescriptionValue(Prescription::IntakesScheme).toString() );
+    Utils::replaceToken(tmp, "DAILY_SCHEME", Trans::ConstantTranslations::dailySchemes(drug->prescriptionValue(Prescription::DailyScheme).toInt()).join(", ") );
+    Utils::replaceToken(tmp, "PERIOD_SCHEME", drug->prescriptionValue(Prescription::PeriodScheme).toString() );
+    Utils::replaceToken(tmp, "D_FROM", drug->prescriptionValue(Prescription::DurationFrom).toString() );
+    Utils::replaceToken(tmp, "D_TO", drug->prescriptionValue(Prescription::DurationTo).toString() );
+    Utils::replaceToken(tmp, "D_SCHEME", drug->prescriptionValue(Prescription::DurationScheme).toString() );
+    Utils::replaceToken(tmp, "NOTE", drug->prescriptionValue(Prescription::Note).toString() );
+    Utils::replaceToken(tmp, "MEAL", Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Prescription::MealTimeSchemeIndex).toInt()));
+    QString tmp2 = drug->prescriptionValue(Prescription::Period).toString();
+    if (tmp2 == "1")
+        tmp2.clear();
+    Utils::replaceToken(tmp, "PERIOD", tmp2);
+    return tmp;
 }

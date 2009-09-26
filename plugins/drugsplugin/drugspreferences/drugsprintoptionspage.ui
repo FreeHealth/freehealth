@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>509</width>
-    <height>213</height>
+    <width>513</width>
+    <height>351</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Drugs View Preferences</string>
+      <string>Drugs Printing Preferences</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -325,6 +325,39 @@
         </item>
        </layout>
       </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Prescription formatting</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1" colspan="2">
+       <widget class="Editor::TextEditor" name="prescriptionFormatting"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="QPushButton" name="defaultFormattingButton">
+        <property name="text">
+         <string>Reset to default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1" colspan="2">
+       <widget class="QTextEdit" name="formatingSample">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -343,6 +376,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Editor::TextEditor</class>
+   <extends>QTextEdit</extends>
+   <header location="global">texteditorplugin/texteditor.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

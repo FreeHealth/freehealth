@@ -68,6 +68,7 @@ class PrinterPreviewer;
 
 namespace Drugs {
 namespace Internal {
+class DrugsData;
 
 class DrugsViewWidget : public QWidget, private Ui::DrugsViewWidget
 {
@@ -98,9 +99,16 @@ public:
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
+    void resetToDefaultFormatting();
+
+private Q_SLOTS:
+    void updateFormatting();
 
 protected:
     virtual void changeEvent(QEvent *e);
+
+private:
+    DrugsData *drug;
 };
 
 class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget
@@ -155,6 +163,7 @@ public:
     QString category() const;
 
     void resetToDefaults();
+    void checkSettingsValidity();
     void applyChanges();
     void finish();
 
@@ -176,6 +185,7 @@ public:
     QString category() const;
 
     void resetToDefaults();
+    void checkSettingsValidity();
     void applyChanges();
     void finish();
 
@@ -197,6 +207,7 @@ public:
     QString category() const;
 
     void resetToDefaults();
+    void checkSettingsValidity();
     void applyChanges();
     void finish();
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsUserWidget::writeDefaultSettings(s);}
@@ -216,6 +227,7 @@ public:
     QString category() const;
 
     void resetToDefaults();
+    void checkSettingsValidity();
     void applyChanges();
     void finish();
     static void writeDefaultSettings(Core::ISettings *s)  {Internal::DrugsExtraWidget::writeDefaultSettings(s);}

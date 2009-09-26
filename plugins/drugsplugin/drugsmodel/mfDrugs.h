@@ -233,8 +233,8 @@ public:
      bool              isScoredTablet() const;
 
      QVariant          prescriptionValue( const int filedref ) const;
-     QString           prescriptionToHtml() const;
-     QString           prescriptionToPlainText() const;
+//     QString           prescriptionToHtml() const;
+//     QString           prescriptionToPlainText() const;
 
      // this need to be rewritten because there is N CIP for 1 drug
      //const int CIP()                    { return value( mfDrugsTables::CISP_CIP ).toInt(); }

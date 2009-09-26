@@ -256,6 +256,22 @@ bool DrugsData::hasPrescription() const
 */
 QVariant DrugsData::prescriptionValue( const int fieldref ) const
 {
+    // manage some particularities
+    switch (fieldref)
+    {
+        case Prescription::IntakesTo :
+        {
+            if (!d->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
+                return QVariant();
+            break;
+        }
+        case Prescription::DurationTo :
+        {
+            if (!d->m_PrescriptionValues.value(Prescription::DurationUsesFromTo,false).toBool())
+                return QVariant();
+            break;
+        }
+    }
     return d->m_PrescriptionValues.value(fieldref);
 }
 
@@ -530,156 +546,6 @@ QString DrugsData::drugsListToHtml( const QDrugsList & list )
     return msg;
 }
 
-/**
-  \brief Transform the prescription values to an understandable string.
-  You can specify if you want an html formatted or plain text using \e toHtml
-  \sa  DrugsData::prescriptionToHtml(), DrugsData::prescriptionToPlainText()
-*/
-QString DrugsDataPrivate::prescriptionToText( bool toHtml )
-{
-    // Check cached Prescriptions
-    if (!m_PrescriptionChanges) {
-        if (toHtml) {
-            if (!m_LastHtmlPrescription.isEmpty())
-                return m_LastHtmlPrescription;
-        } else {
-            if (!m_LastTxtPrescription.isEmpty())
-                return m_LastTxtPrescription;
-        }
-    }
-
-    QString toReturn;
-    QString intakes, duration, period;
-    QString paragraphBegin, paragraphEnd, linebreak, boldBegin, boldEnd;
-
-    if ( toHtml ) {
-        linebreak = "<br />";
-        boldEnd = "</b>";
-        boldBegin = "<b>";
-        paragraphBegin = "";
-        paragraphEnd = "";
-    } else {
-        linebreak = "\n";
-        boldEnd = "";
-        boldBegin = "";
-        paragraphBegin = "";
-        paragraphEnd = "";
-    }
-
-    // INTAKES
-    QString to, from, scheme;
-    to = QString::number(m_PrescriptionValues[Prescription::IntakesTo].toDouble());
-    from = QString::number(m_PrescriptionValues[Prescription::IntakesFrom].toDouble());
-    scheme = m_PrescriptionValues[Prescription::IntakesScheme].toString();
-    if ( usesFromTo( from, to, Prescription::IntakesUsesFromTo ) ) {
-        intakes = QString( "%1 %2 %3 %4 %5" )
-                  .arg( tkTr(Trans::Constants::FROM))
-                  .arg( from )
-                  .arg( tkTr(Trans::Constants::TO))
-                  .arg( to )
-                  .arg( scheme )
-                  ;
-    } else {
-        intakes = QString( "%1 %2" )
-                  .arg(from)
-                  .arg(scheme)
-                  ;
-    }
-    // Intakes daily scheme
-    const QStringList & daily = m_PrescriptionValues.value(Prescription::DailyScheme).toStringList();
-    if (daily.count() > 0) {
-        QString tmp;
-        tmp = QString( " %1").arg(daily.join(", "));
-        tmp.replace( tmp.lastIndexOf(", "), 2, " " + tkTr(Trans::Constants::AND) + " " );
-        // replace last , to AND
-        intakes += tmp;
-    }
-
-    // DURATION
-    to = QString::number(m_PrescriptionValues[Prescription::DurationTo].toDouble());
-    from = QString::number(m_PrescriptionValues[Prescription::DurationFrom].toDouble());
-    scheme = m_PrescriptionValues[Prescription::DurationScheme].toString();
-    if ( usesFromTo( from, to, Prescription::DurationUsesFromTo ) ) {
-        duration = QString( "%1 %2 %3 %4 %5" )
-                   .arg( tkTr(Trans::Constants::FROM))
-                   .arg( from )
-                   .arg( tkTr(Trans::Constants::TO))
-                   .arg( to )
-                   .arg( scheme )
-                   ;
-    } else {
-        duration = QString( "%1 %2" )
-                   .arg( from )
-                   .arg( scheme )
-                   ;
-    }
-
-    // PERIOD
-    from = QString::number(m_PrescriptionValues[Prescription::Period].toDouble());
-    scheme = m_PrescriptionValues[Prescription::PeriodScheme].toString();
-    if (from == "1")
-        period = QString( "%1" )
-        .arg( scheme );
-    else
-        period = QString( "%1 %2" )
-                 .arg( from )
-                 .arg( scheme );
-
-    // Prepare phrase
-    toReturn += QString( "%1 %2 %3 %4 %5 %6 %7" )
-                .arg( paragraphBegin )
-                .arg( intakes )
-                .arg( tkTr(Trans::Constants::DURING))
-                .arg( period )
-                .arg( tkTr(Trans::Constants::EACH))
-                .arg( duration )
-                .arg( paragraphEnd )
-                ;
-
-    int idx = m_PrescriptionValues.value(Prescription::MealTimeSchemeIndex).toInt();
-    if (idx != 0)
-        toReturn += linebreak + Trans::ConstantTranslations::mealTime(idx);
-
-    QString note = m_PrescriptionValues.value(Prescription::Note).toString();
-    if (!note.isEmpty()) {
-        if (toHtml)
-            note.replace("\n","<br />");
-        toReturn += linebreak + note;
-    }
-
-    // Assume Prescription cache
-    if (toHtml) {
-        m_LastHtmlPrescription = toReturn;
-        m_LastTxtPrescription.clear();
-        m_PrescriptionChanges = false;
-    } else {
-        m_LastTxtPrescription = toReturn;
-        m_LastHtmlPrescription.clear();
-        m_PrescriptionChanges = false;
-    }
-
-    return toReturn;
-}
-
-bool DrugsDataPrivate::usesFromTo( const QString &from, QString &to, const int prescriptionIndex )
-{
-    if ( (prescriptionIndex==Prescription::DurationUsesFromTo) ||
-         (prescriptionIndex==Prescription::IntakesUsesFromTo) )
-        return ( (!to.isEmpty()) && (to != from) && (m_PrescriptionValues.value( prescriptionIndex ).toBool()) );
-    return false;
-}
-
-/** \brief Transform prescription model to a understandable text formatted in HTML */
-QString DrugsData::prescriptionToHtml() const
-{
-    return d->prescriptionToText(true);
-}
-
-/** \brief Transform prescription model to a understandable plain text */
-QString DrugsData::prescriptionToPlainText() const
-{
-    return d->prescriptionToText(false);
-}
 
 bool DrugsData::lessThan( const DrugsData *drug1, const DrugsData *drug2 )
 {

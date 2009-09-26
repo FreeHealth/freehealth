@@ -373,16 +373,17 @@ QString DrugsIO::prescriptionToHtml()
     drugStyle = Utils::fontToHtml(drugsFont, "black");
     prescrStyle = Utils::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
     for(i=0; i < m->rowCount(); ++i) {
-        tmp = QString(ENCODEDHTML_DRUG);
-        tmp.replace( "{NUMBER}", QString::number(i+1));
-        tmp.replace( "{DRUGSTYLE}", drugStyle);
-        if (m->index(i,Prescription::IsINNPrescription).data().toBool()) {
-            tmp.replace( "{DRUG}", m->index(i,Drug::InnCompositionString).data().toString() + " - " + tr("[INN]"));
-        } else {
-            tmp.replace( "{DRUG}", m->index( i, Drug::Denomination ).data().toString());
-        }
-        tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
-        tmp.replace( "{PRESCRIPTION}", m->index( i, Prescription::ToHtml ).data().toString());
+        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString() + "</li>";
+//        tmp = QString(ENCODEDHTML_DRUG);
+//        tmp.replace( "{NUMBER}", QString::number(i+1));
+//        tmp.replace( "{DRUGSTYLE}", drugStyle);
+//        if (m->index(i,Prescription::IsINNPrescription).data().toBool()) {
+//            tmp.replace( "{DRUG}", m->index(i,Drug::InnCompositionString).data().toString() + " - " + tr("[INN]"));
+//        } else {
+//            tmp.replace( "{DRUG}", m->index( i, Drug::Denomination ).data().toString());
+//        }
+//        tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
+//        tmp.replace( "{PRESCRIPTION}", m->index( i, Prescription::ToHtml ).data().toString());
         //        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
 
         if (m->index( i, Prescription::IsALD ).data().toBool()) {

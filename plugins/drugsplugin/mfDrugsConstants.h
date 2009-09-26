@@ -90,6 +90,8 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
 
     const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
     const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */
@@ -112,6 +114,8 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
 
     // DEFAULTS SETTINGS
+    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><br /><span style=\"font-style:italic;\">[[Q_FROM]][ to [Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][<br />[NOTE]]</span></p>");
+    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]]\n[[Q_FROM]][ to [Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][\n[NOTE]]");
     const char * const  MFDRUGS_DEFAULT_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
     const char * const  MFDRUGS_DEFAULT_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
 
@@ -150,6 +154,12 @@ namespace mfDrugsConstants
             "  <meta name=\"charset\" content=\"UTF-8\" />\n"
             "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
             "  <title>FreeDiams : Prescription</title>\n"
+            "  <style type=\"text/css\">\n"
+            "    A:link {text-decoration: none}\n"
+            "    A:visited {text-decoration: none}\n"
+            "    A:active {text-decoration: none}\n"
+            "    A:hover {text-decoration: none;}\n"
+            "  </style>\n"
             "</head>\n"
             "<body style=\"font-family:Arial;font-size:12pt\">\n"
             "<a href=\"{ENCODEDPRESCRIPTION}\">\n"
@@ -157,18 +167,18 @@ namespace mfDrugsConstants
             "</a>\n"
             "</body>\n"
             "</html>\n";
-    const char * const  ENCODEDHTML_DRUG =
-//            "<p>"
-            "<span style=\"{DRUGSTYLE}\">"
-            "{NUMBER}&nbsp;.&nbsp;{DRUG}"
-            "</span>\n"
-            "<br />\n"
-            "<span style=\"{PRESCRIPTIONSTYLE}\">\n"
-            "{PRESCRIPTION}<br />\n"
-//            "&nbsp;&nbsp;&nbsp;{NOTE}\n"
-            "</span>\n"
-            "<br />\n";
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td>{FULLPRESCRIPTION}</td></tr></table>";
+//    const char * const  ENCODEDHTML_DRUG =
+////            "<p>"
+//            "<span style=\"{DRUGSTYLE}\">"
+//            "{NUMBER}&nbsp;.&nbsp;{DRUG}"
+//            "</span>\n"
+//            "<br />\n"
+//            "<span style=\"{PRESCRIPTIONSTYLE}\">\n"
+//            "{PRESCRIPTION}<br />\n"
+////            "&nbsp;&nbsp;&nbsp;{NOTE}\n"
+//            "</span>\n"
+//            "<br />\n";
+    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
     const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION

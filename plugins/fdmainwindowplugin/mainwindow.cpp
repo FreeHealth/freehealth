@@ -201,6 +201,9 @@ void MainWindow::extensionsInitialized()
         if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
             Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
+
+            qWarning() << tmp;
+
             if (tmp.contains(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG) + QString(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG).length();
                 int end = tmp.indexOf("\"", begin);
@@ -234,7 +237,6 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    writeSettings();
 }
 
 /**

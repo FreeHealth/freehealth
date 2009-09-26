@@ -195,6 +195,7 @@ bool DrugsCentralWidget::printPrescription()
     QString footer = s->value( MFDRUGS_SETTING_USERFOOTER ).toString();
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
+    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(DRUGMODEL->rowCount()+1) );
     p.addHtmlWatermark( s->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
                         Print::Printer::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
                         Qt::AlignmentFlag(s->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));

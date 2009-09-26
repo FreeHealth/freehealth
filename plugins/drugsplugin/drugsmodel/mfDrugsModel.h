@@ -123,6 +123,9 @@ public:
     Internal::DosageModel *dosageModel( const QModelIndex & drugIndex );
     InteractionsManager *currentInteractionManger() const;
 
+    // FOR PRESCRIPTION FORMATTING
+    static QString getFullPrescription(const Internal::DrugsData *drug, bool toHtml = false, const QString &mask = QString::null);
+
     void warn();
 
 Q_SIGNALS:

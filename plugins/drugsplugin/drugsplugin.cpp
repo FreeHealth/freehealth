@@ -79,7 +79,13 @@ void DrugsPlugin::extensionsInitialized()
         printPage->writeDefaultSettings(Core::ICore::instance()->settings());
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
+    } else {
+        viewPage->checkSettingsValidity();
+        printPage->checkSettingsValidity();
+        userPage->checkSettingsValidity();
+        extraPage->checkSettingsValidity();
     }
+
     addObject(viewPage);
     addObject(printPage);
     addObject(userPage);
