@@ -17,7 +17,7 @@ HEADERS += $${PWD}/drugs_exporter.h \
 SOURCES += $${PWD}/mfDrugsManager.cpp
 
 # translations
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts \
                 $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_de.ts
 
 
