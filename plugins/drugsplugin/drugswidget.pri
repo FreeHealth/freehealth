@@ -18,5 +18,8 @@ SOURCES += $${PWD}/mfDrugsManager.cpp
 
 # translations
 TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts
+                $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_de.ts
+
+
 exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc
 else:RESOURCES += $${PWD}/widget_resources.qrc
