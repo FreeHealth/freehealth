@@ -383,33 +383,32 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     setupUi(this);
     Core::ITheme *th = Core::ICore::instance()->theme();
     // set icons
-    drugBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
-    drugUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
-    drugItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
-    prescrBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
-    prescrUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
-    prescrItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
+//    drugBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
+//    drugUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
+//    drugItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
+//    prescrBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
+//    prescrUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
+//    prescrItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
+    oldGroupBox->hide();
 
     // feed with actual values
-    Core::ISettings *s = settings();
-
     QFont drugsFont;
-    drugsFont.fromString(s->value(MFDRUGS_SETTING_DRUGFONT).toString());
+    drugsFont.fromString(settings()->value(MFDRUGS_SETTING_DRUGFONT).toString());
     QFont prescrFont;
-    prescrFont.fromString(s->value(MFDRUGS_SETTING_PRESCRIPTIONFONT).toString());
+    prescrFont.fromString(settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFONT).toString());
 
-    drugFontCombo->setCurrentFont(drugsFont);
-    prescriptionFontCombo->setCurrentFont(prescrFont);
-
-    prescriptionFontSizeSpin->setValue(prescrFont.pointSize());
-    prescrBoldButton->setChecked(prescrFont.bold());
-    prescrItalicButton->setChecked(prescrFont.italic());
-    prescrUnderlineButton->setChecked(prescrFont.underline());
-
-    drugFontSizeSpin->setValue(drugsFont.pointSize());
-    drugBoldButton->setChecked(drugsFont.bold());
-    drugUnderlineButton->setChecked(drugsFont.italic());
-    drugItalicButton->setChecked(drugsFont.underline());
+//    drugFontCombo->setCurrentFont(drugsFont);
+//    prescriptionFontCombo->setCurrentFont(prescrFont);
+//
+//    prescriptionFontSizeSpin->setValue(prescrFont.pointSize());
+//    prescrBoldButton->setChecked(prescrFont.bold());
+//    prescrItalicButton->setChecked(prescrFont.italic());
+//    prescrUnderlineButton->setChecked(prescrFont.underline());
+//
+//    drugFontSizeSpin->setValue(drugsFont.pointSize());
+//    drugBoldButton->setChecked(drugsFont.bold());
+//    drugUnderlineButton->setChecked(drugsFont.italic());
+//    drugItalicButton->setChecked(drugsFont.underline());
 
     // Create a virtual drug and prescription
     drug = Internal::DrugsBase::instance()->getDrugByCIS("61266250");
@@ -417,6 +416,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::IntakesTo, 3);
     drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
     drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
+    drug->setPrescriptionValue(Prescription::DailyScheme, Trans::ConstantTranslations::dailySchemes(0x01011));
     drug->setPrescriptionValue(Prescription::Period, 2);
     drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
     drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
@@ -428,7 +428,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
     drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
 
-    prescriptionFormatting->textEdit()->setHtml(s->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString());
+    prescriptionFormatting->textEdit()->setHtml(settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
     connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
     connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
@@ -457,20 +457,20 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    QFont drugsFont = drugFontCombo->currentFont();
-    drugsFont.setBold(drugBoldButton->isChecked());
-    drugsFont.setItalic(drugItalicButton->isChecked());
-    drugsFont.setUnderline(drugUnderlineButton->isChecked());
-    drugsFont.setPointSize(drugFontSizeSpin->value());
-
-    QFont prescrFont = prescriptionFontCombo->currentFont();
-    prescrFont.setBold(prescrBoldButton->isChecked());
-    prescrFont.setItalic(prescrItalicButton->isChecked());
-    prescrFont.setUnderline(prescrUnderlineButton->isChecked());
-    prescrFont.setPointSize(prescriptionFontSizeSpin->value());
-
-    s->setValue(MFDRUGS_SETTING_DRUGFONT , drugsFont.toString());
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString());
+//    QFont drugsFont = drugFontCombo->currentFont();
+//    drugsFont.setBold(drugBoldButton->isChecked());
+//    drugsFont.setItalic(drugItalicButton->isChecked());
+//    drugsFont.setUnderline(drugUnderlineButton->isChecked());
+//    drugsFont.setPointSize(drugFontSizeSpin->value());
+//
+//    QFont prescrFont = prescriptionFontCombo->currentFont();
+//    prescrFont.setBold(prescrBoldButton->isChecked());
+//    prescrFont.setItalic(prescrItalicButton->isChecked());
+//    prescrFont.setUnderline(prescrUnderlineButton->isChecked());
+//    prescrFont.setPointSize(prescriptionFontSizeSpin->value());
+//
+//    s->setValue(MFDRUGS_SETTING_DRUGFONT , drugsFont.toString());
+//    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString());
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
     tmp = Utils::toHtmlAccent(tmp);
     int cutBegin = tmp.indexOf("<p ");
@@ -484,9 +484,10 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
     s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
-    s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
+//    s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
+//    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
+    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN);
     s->sync();
 }
 

@@ -167,6 +167,8 @@ public:
     void applyChanges();
     void finish();
 
+    QString helpPage() {return "parametrer.html";}
+
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
@@ -189,6 +191,8 @@ public:
     void applyChanges();
     void finish();
 
+    QString helpPage() {return "parametrer.html#params_poso_mask";}
+
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsPrintWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
@@ -210,6 +214,9 @@ public:
     void checkSettingsValidity();
     void applyChanges();
     void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsUserWidget::writeDefaultSettings(s);}
     QWidget *createPage(QWidget *parent = 0);
 private:
@@ -230,6 +237,9 @@ public:
     void checkSettingsValidity();
     void applyChanges();
     void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
     static void writeDefaultSettings(Core::ISettings *s)  {Internal::DrugsExtraWidget::writeDefaultSettings(s);}
     QWidget *createPage(QWidget *parent = 0);
 private:
