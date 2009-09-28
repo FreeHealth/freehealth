@@ -51,14 +51,19 @@ La zone de prescription comprend deux parties :
 \image html prescription_toolbar.png Barre d'actions de la prescription
 
 La barre d'icône présente dans l'ordre les actions suivantes :
+\li Ouvrir une prescription
 \li Sauvegarder la prescription en cours
+\li Sauvegarder sous un autre nom
 \li Imprimer la prescription en cours
-\li Supprimer le médicament sélectionné de la prescription
+\li Séparateur
 \li Effacer la prescription
+\li Supprimer le médicament sélectionné de la prescription
 \li Monter le médicament
 \li Descendre le médicament
 \li Trier les médicaments (les 100% sont mis en premier, puis le tri se fait sur le nom)
+\li Séparateur
 \li Afficher \ref synthetiseur_iam
+\li Séparateur
 \li Modifier toutes les durées de prescription en un clique
 
 \ref index
@@ -283,11 +288,13 @@ volontaires. Manifestez-vous sur notre mailing liste : freemedforms@googlegroups
 
 \section dosagecreator_presentation Présentation du créateur de posologie
 
-\image html prescription1.png Zones du créateur de posologies
+\image html poso1.png Zones du créateur de posologies
 
-\image html prescription2.png Particularités de la posologie
+\image html poso2.png Particularités de la posologie
 
-\image html prescription3.png Limitations
+\image html poso3.png Limitations
+
+\image html poso4.png note
 
 Le créateur de posologie se compose de cinq parties distinctes :
 - 1 : Rappel du médicament sélectionné, présentation des interactions potentiel (l'icône de gauche).\n
@@ -391,7 +398,7 @@ Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spé
 */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////  PRESCRIRE  ///////////////////////////////////////////////////////
+/////////////////////////////////////////////////  INFO PATIENT  //////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \page lienpatient Utiliser les données du patient lors de l'analyse de la prescription
 
@@ -492,6 +499,8 @@ peuvent contenir du code ascii ou HTML).
 Vous pouvez consulter aussi consulter :
 \li \ref richtext_index
 \li \ref tokensmanager
+
+\image html print.png Exemple d'impression
 
 \ref index
 

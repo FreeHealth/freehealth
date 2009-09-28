@@ -55,4 +55,5 @@ OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/freediams/Doxyfile \
-               $${PWD}/usermanual/freediams/doxygen.css
+               $${PWD}/usermanual/freediams/doxygen.css \
+               $${PWD}/usermanual/freediams/footer.html

@@ -1,8 +1,10 @@
 /*! \mainpage Manuel de l'utilisateur - \freediams
 
-L'objectif de \freediams et de fournir un outil
-libre (open source), gratuit, indépendant (sans conflit d'intérêt) et multi-plateformes
-pour les professionnels de santé. La base de données thérapeutiques est synchronisée à celle
+\image html screen_medium.png
+
+L'objectif de \freediams et de fournir un outil libre (open source), gratuit,
+indépendant (sans conflit d'intérêt) et multi-plateformes pour les professionnels de santé.
+La base de données thérapeutiques est synchronisée à celle
 de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
 des interactions de l'AFSSAPS.\n
 \freediams vous permet de créer des prescriptions
@@ -19,6 +21,12 @@ les paramètres sont alors transmis par la ligne de commande.\n
 possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
 d'un système à un autre.
 \li quelquesoit votre plateforme informatique, aucune installation annexe n'est nécessaire.
+
+L'interface de \freediams est disponible en différents langages : Anglais, Français, Allemand.
+A l'heure actuelle, la base de données des thérapeutiques et des interactions ne sont disponibles
+qu'en Français.
+
+\image html i18n.png Menu langage
 
 \section TOC Contenu de l'aide :
 \li \ref auteurs
@@ -41,7 +49,7 @@ d'un système à un autre.
 Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
 développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 \li \ref versionning
-\li La version actuellement documentée est la <b>version 0.0.10 (Août 2009)</b>.
+\li La version actuellement documentée est la <b>version 0.0.10 (Sept 2009)</b>.
 \li Version de la base de données thérapeutiques : <b>26 Juin 2009</b>.
 \li Version de la base de données des interactions : <b>30 Juin 2009</b>.
 
@@ -49,6 +57,8 @@ développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 
 \freediams est distribué sous licence BSD révisée. Vous pouvez lire les termes
 de la licence en suivant le menu <b>À propos</b>.
+
+\image html about.png Dialogue : à propos
 */
 
 
