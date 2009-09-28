@@ -751,7 +751,7 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     Utils::replaceToken(tmp, "Q_FROM", drug->prescriptionValue(Prescription::IntakesFrom).toString() );
     Utils::replaceToken(tmp, "Q_TO", drug->prescriptionValue(Prescription::IntakesTo).toString() );
     Utils::replaceToken(tmp, "Q_SCHEME", drug->prescriptionValue(Prescription::IntakesScheme).toString() );
-    Utils::replaceToken(tmp, "DAILY_SCHEME", Trans::ConstantTranslations::dailySchemes(drug->prescriptionValue(Prescription::DailyScheme).toInt()).join(", ") );
+    Utils::replaceToken(tmp, "DAILY_SCHEME", drug->prescriptionValue(Prescription::DailyScheme).toStringList().join(", ") );
     Utils::replaceToken(tmp, "PERIOD_SCHEME", drug->prescriptionValue(Prescription::PeriodScheme).toString() );
     Utils::replaceToken(tmp, "D_FROM", drug->prescriptionValue(Prescription::DurationFrom).toString() );
     Utils::replaceToken(tmp, "D_TO", drug->prescriptionValue(Prescription::DurationTo).toString() );
