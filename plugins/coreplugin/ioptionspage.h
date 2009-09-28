@@ -25,6 +25,8 @@ public:
     virtual void applyChanges() = 0;
     virtual void finish() = 0;
 
+    virtual QString helpPage() = 0;
+
     virtual QWidget *createPage(QWidget *parent = 0) = 0;
 };
 

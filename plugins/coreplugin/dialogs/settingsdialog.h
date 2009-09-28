@@ -57,14 +57,15 @@ public:
     // at least once
     bool execDialog();
 
-public slots:
+public Q_SLOTS:
     void done(int);
 
-private slots:
+private Q_SLOTS:
     void pageSelected();
     void accept();
     void reject();
     void apply();
+    void showHelp();
 
 private:
     Internal::Ui::SettingsDialog *m_ui;

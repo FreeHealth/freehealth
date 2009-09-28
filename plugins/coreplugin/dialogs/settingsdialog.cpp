@@ -35,6 +35,7 @@
 #include <coreplugin/isettings.h>
 
 #include <coreplugin/ioptionspage.h>
+#include <coreplugin/dialogs/helpdialog.h>
 
 #include <QHeaderView>
 #include <QPushButton>
@@ -68,6 +69,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
 
     connect(m_ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
+    connect(m_ui->buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(showHelp()));
 
     m_ui->splitter->setCollapsible(1, false);
     m_ui->pageTree->header()->setVisible(false);
@@ -174,6 +176,14 @@ void SettingsDialog::apply()
     foreach (IOptionsPage *page, m_pages)
         page->applyChanges();
     m_applied = true;
+}
+
+void SettingsDialog::showHelp()
+{
+    QTreeWidgetItem *item = m_ui->pageTree->currentItem();
+    PageData data = item->data(0, Qt::UserRole).value<PageData>();
+    int index = data.index;
+    HelpDialog::showPage(m_pages.at(index)->helpPage());
 }
 
 bool SettingsDialog::execDialog()
