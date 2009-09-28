@@ -105,6 +105,7 @@ public:
     QMultiMap< int, int>  m_IamFound;               /*!< modified by checkDrugInteraction() */
     bool                  m_LogChrono;
     bool                  m_initialized;
+    bool                  m_InteractionsDatabaseAvailable;
 };
 
 }

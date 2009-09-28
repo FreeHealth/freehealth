@@ -82,6 +82,8 @@ public:
     ~DrugsBase();
     // INITIALIZER
     static bool isInitialized() { return m_initialized; }
+    static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
+
     void checkDosageDatabaseVersion();
 
     QList<int> getLinkedCodeSubst( QList<int> & code_iam ) const;
@@ -119,6 +121,7 @@ private:
     // intialization state
     static DrugsBase *m_Instance;
     static bool m_initialized;
+    static bool m_InteractionsDatabaseAvailable;
     DrugsBasePrivate * d;
 };
 

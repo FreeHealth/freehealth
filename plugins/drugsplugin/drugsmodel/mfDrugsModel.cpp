@@ -83,6 +83,8 @@ using namespace mfDrugsModelConstants;
 //static inline QString getFullPrescription(const Drugs::Internal::DrugsData *drug)
 //{ return Drugs::DrugsModel::getFullPrescription(drug); }
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 
 namespace Drugs {
 namespace Internal {
@@ -157,8 +159,8 @@ public:
                          toReturn << QApplication::translate("mfDrugsModel", "x %1 of %2" )
                                  .arg( drug->dosageOfMolecules().at( 0 ) , drug->listOfInn().at( 0 ) );
                      }
-                     if (!Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).isNull()) {
-                         foreach( const QString &s, Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList())
+                     if (!settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).isNull()) {
+                         foreach( const QString &s, settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList())
                              if (!s.isEmpty())
                                  toReturn << s;
                      }
@@ -418,14 +420,15 @@ QVariant DrugsModel::data( const QModelIndex &index, int role ) const
         }
     }
     else if ( role == Qt::DecorationRole ) {
-        return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
+        if ((settings()->value(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION).toBool()) && (::Drugs::Internal::DrugsBase::isInteractionDatabaseAvailable()))
+            return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
     }
     else if ( role == Qt::ToolTipRole ) {
         QString display;
         display = drug->toHtml();
 
         if ( d->m_InteractionsManager->drugHaveInteraction( drug ) ) {
-	    const QList<Internal::DrugInteraction *> & list = d->m_InteractionsManager->getInteractions( drug );
+            const QList<Internal::DrugInteraction *> &list = d->m_InteractionsManager->getInteractions(drug);
             display.append( "<br>\n" );
             display.append( d->m_InteractionsManager->listToHtml( list, false ) );
         }
@@ -509,7 +512,7 @@ int DrugsModel::addDrug( Internal::DrugsData *drug, bool automaticInteractionChe
     // check drugs interactions ?
     if (automaticInteractionChecking) {
         checkInteractions();
-        d->m_levelOfWarning = Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+        d->m_levelOfWarning = settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     }
     reset();
     Q_EMIT numberOfRowsChanged();
@@ -541,7 +544,7 @@ void DrugsModel::clearDrugsList()
     d->m_DrugsList.clear();
     qDeleteAll(d->m_TestingDrugsList);
     d->m_TestingDrugsList.clear();
-    d->m_levelOfWarning = Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+    d->m_levelOfWarning = settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     reset();
     Q_EMIT numberOfRowsChanged();
 }
@@ -556,7 +559,7 @@ void DrugsModel::setDrugsList( QDrugsList & list )
     d->m_DrugsList = list;
     d->m_InteractionsManager->setDrugsList(list);
     checkInteractions();
-    d->m_levelOfWarning = Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
+    d->m_levelOfWarning = settings()->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt();
     reset();
     Q_EMIT numberOfRowsChanged();
 }
@@ -738,9 +741,9 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     QString tmp;
     if (mask.isEmpty()) {
         if (!toHtml)
-            tmp = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN).toString();
+            tmp = settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN).toString();
         else
-            tmp = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString();
+            tmp = settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString();
     }
     else
         tmp = mask;

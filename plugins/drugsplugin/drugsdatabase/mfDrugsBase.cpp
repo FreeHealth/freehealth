@@ -141,7 +141,8 @@ public:
 //--------------------------------- Initialization of static members -------------------------------------
 //--------------------------------------------------------------------------------------------------------
 DrugsBase * DrugsBase::m_Instance = 0;
-bool DrugsBase::m_initialized      = false;
+bool DrugsBase::m_initialized = false;
+bool DrugsBase::m_InteractionsDatabaseAvailable = false;
 const QString DrugsBase::separator = "|||";
 
 //--------------------------------------------------------------------------------------------------------
@@ -510,6 +511,7 @@ void DrugsBasePrivate::retreiveLinkTables()
                i++;
           }
      }
+     m_DrugsBase->m_InteractionsDatabaseAvailable = m_Lk_classCode_iamCode.count() && m_Lk_iamCode_substCode.count();
 
      /** \todo release these resources files to limit memory usage */
 

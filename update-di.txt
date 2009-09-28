@@ -12,17 +12,23 @@ version=0.0.9
         pas imprimés). Voir documentation.
       * Nouveaux dialogues : A propos, Information de Déboggage, Préférences
       * Mémorise la liste des derniers fichiers ouverts
+      * Nouveaux paramètres pour l'impression : construction de la phrase de la prescription totalement paramétrable
+      * Nouveaux tags pour ce faire. cf Documentation
+      * Nouveau tag : [[NBDRUGS]] pour le pied de page seulement
 
    * Modifications importantes :
+      * Corrections de la prescription DCI (plus efficace cf documentation)
       * Nouvelle architecture en "tout plugin" plus rapide
       * Forte amélioration du temps d'exécution (divisé par trois lors de la lecture d'une ordonnance)
       * Correction du bug de récupération du texte des interactions (ils sont maintenant complets)
       * Schéma de prises personnels correctement enregistrés
       * Mise à disposition d'une version Linux parfaitement intégrée au système
+      * Mise à disposition pour FreeBSD
       * Amélioration visuelle du dialogue d'aide
 
     * Correction de bogues / Améliorations techniques :
-      * Corrections de la prescription DCI (plus efficace cf documentation)
+      * Intégration parfaite aux distributions : Debian, Ubuntu et OpenSuse (en cours de finition)
+      * Compile et fonctionne parfaitement sous FreeBSD et dérivés (port en cours)
       * Correction du crash sous MacOsX lorsque Qt4.5.2 est déjà installé
       * Meilleure gestion des données patients (sauvegardées et chargeables)
       * Nouvelle librairie pour les fonctions médicales pures

@@ -108,6 +108,7 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(MFDRUGS_SETTING_LEVELOFWARNING, 1);
     defaultvalues.insert(MFDRUGS_SETTING_DRUGFONT,QFont());
     defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFONT,QFont());
+    defaultvalues.insert(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION,true);
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -212,7 +213,7 @@ void DrugsUserOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(MFDRUGS_SETTING_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
-    defaultvalues.insert(MFDRUGS_SETTING_WATERMARKALIGNEMENT, Qt::AlignCenter );
+    defaultvalues.insert(MFDRUGS_SETTING_WATERMARKALIGNEMENT, Qt::AlignCenter);
     defaultvalues.insert(MFDRUGS_SETTING_WATERMARK_HTML, MFDRUGS_DEFAULT_WATEMARKHTML);
     defaultvalues.insert(MFDRUGS_SETTING_USERHEADER, MFDRUGS_DEFAULT_USERHEADER);
     defaultvalues.insert(MFDRUGS_SETTING_USERFOOTER, QVariant());
@@ -253,7 +254,7 @@ QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::
 
 void DrugsExtraOptionsPage::resetToDefaults()
 {
-    m_Widget->writeDefaultSettings(Core::ICore::instance()->settings());
+    m_Widget->writeDefaultSettings(settings());
 }
 
 void DrugsExtraOptionsPage::applyChanges()
@@ -261,13 +262,13 @@ void DrugsExtraOptionsPage::applyChanges()
     if (!m_Widget) {
         return;
     }
-    m_Widget->saveToSettings(Core::ICore::instance()->settings());
+    m_Widget->saveToSettings(settings());
 }
 void DrugsExtraOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(MFDRUGS_SETTING_HIDELABORATORY, false);
-    defaultvalues.insert(MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML );
+    defaultvalues.insert(MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML);
     defaultvalues.insert(MFDRUGS_SETTING_ALD_POST_HTML, MFDRUGS_DEFAULT_ALD_POST_HTML);
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -294,68 +295,69 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    Core::ITheme *th = Core::ICore::instance()->theme();
-
     // feed with actual values
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    //    fontSizeSpin->setValue( m_fontSize );
+    Core::ISettings *s = settings();
+    //    fontSizeSpin->setValue(m_fontSize);
     QString userName = s->value(MFDRUGS_SETTING_USER).toString();
-    if ( ( !userName.isEmpty() ) && ( userName.startsWith( "test_" ) ) ) {
-        testerBox->setChecked( true );
-        userNameEdit->setText( userName );
-        userPasswordEdit->setText( s->value(MFDRUGS_SETTING_PASSWORD).toString() );
-        userPasswordEdit->setEnabled( false );
+    if ((!userName.isEmpty()) && (userName.startsWith("test_"))) {
+        testerBox->setChecked(true);
+        userNameEdit->setText(userName);
+        userPasswordEdit->setText(s->value(MFDRUGS_SETTING_PASSWORD).toString());
+        userPasswordEdit->setEnabled(false);
     }
     else
-        testerBox->setChecked( false );
+        testerBox->setChecked(false);
 
-    viewFontSizeSpin->setValue( s->value( MFDRUGS_SETTING_VIEWFONTSIZE, 12).toInt() );
-    historicSizeSpin->setValue( s->value( MFDRUGS_SETTING_HISTORYSIZE ).toInt() );
-    levelOfWarningCombo->setCurrentIndex( s->value( MFDRUGS_SETTING_LEVELOFWARNING ).toInt() );
+    viewFontSizeSpin->setValue(s->value(MFDRUGS_SETTING_VIEWFONTSIZE, 12).toInt());
+    historicSizeSpin->setValue(s->value(MFDRUGS_SETTING_HISTORYSIZE).toInt());
+    levelOfWarningCombo->setCurrentIndex(s->value(MFDRUGS_SETTING_LEVELOFWARNING).toInt());
 
-    viewFontCombo->setCurrentFont( s->value( MFDRUGS_SETTING_VIEWFONT ).toString() );
-    viewFontSizeSpin->setValue( s->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt() );
+    viewFontCombo->setCurrentFont(s->value(MFDRUGS_SETTING_VIEWFONT).toString());
+    viewFontSizeSpin->setValue(s->value(MFDRUGS_SETTING_VIEWFONTSIZE).toInt());
+    showIconsCheck->setChecked(s->value(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION).toBool());
 }
 
-void DrugsViewWidget::saveToSettings( Core::ISettings *settings )
+void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
-    if (!settings)
-        s = Core::ICore::instance()->settings();
+    if (!sets)
+        s = settings();
     else
-        s = settings;
+        s = sets;
 
     // manage font size
-    s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value() );
+    s->setValue(MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value());
     // set testers datas
-    if ( ( userNameEdit->text().startsWith( "test_" ) ) )
-        s->setValue( MFDRUGS_SETTING_USER, userNameEdit->text() );
+    if ((userNameEdit->text().startsWith("test_")))
+        s->setValue(MFDRUGS_SETTING_USER, userNameEdit->text());
 
-    if ( !userPasswordEdit->text().isEmpty() )
-        s->setValue( MFDRUGS_SETTING_PASSWORD, userPasswordEdit->text() );
+    if (!userPasswordEdit->text().isEmpty())
+        s->setValue(MFDRUGS_SETTING_PASSWORD, userPasswordEdit->text());
 
     // manage history size
-    s->setValue( MFDRUGS_SETTING_HISTORYSIZE, historicSizeSpin->value() );
-    s->setValue( MFDRUGS_SETTING_DRUGHISTORY, QVariant() );
-    s->setValue( MFDRUGS_SETTING_LEVELOFWARNING , levelOfWarningCombo->currentIndex() );
+    s->setValue(MFDRUGS_SETTING_HISTORYSIZE, historicSizeSpin->value());
+    s->setValue(MFDRUGS_SETTING_DRUGHISTORY, QVariant());
+    s->setValue(MFDRUGS_SETTING_LEVELOFWARNING , levelOfWarningCombo->currentIndex());
 
-    s->setValue( MFDRUGS_SETTING_VIEWFONT , viewFontCombo->currentFont() );
-    s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value() );
+    s->setValue(MFDRUGS_SETTING_VIEWFONT , viewFontCombo->currentFont());
+    s->setValue(MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value());
+    s->setValue(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 }
 
-void DrugsViewWidget::writeDefaultSettings( Core::ISettings *s )
+void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsViewWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget") );
-    s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
-    s->setValue( MFDRUGS_SETTING_VIEWFONT , QFont() );
-    s->setValue( MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize() );
-    s->setValue( MFDRUGS_SETTING_HISTORYSIZE, 20 );
-    s->setValue( MFDRUGS_SETTING_DRUGHISTORY, QVariant() );
-    s->setValue( MFDRUGS_SETTING_LEVELOFWARNING , 0 );
+    Utils::Log::addMessage("DrugsViewWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
+    s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
+    s->setValue(MFDRUGS_SETTING_VIEWFONT , QFont());
+    s->setValue(MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize());
+    s->setValue(MFDRUGS_SETTING_HISTORYSIZE, 20);
+    s->setValue(MFDRUGS_SETTING_DRUGHISTORY, QVariant());
+    s->setValue(MFDRUGS_SETTING_LEVELOFWARNING , 0);
+    s->setValue(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION , true);
 
-    s->setValue( MFDRUGS_SETTING_DRUGFONT , QFont().toString() );
-    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString() );
+    s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
+    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
     s->sync();
 }
 
@@ -381,50 +383,50 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     setupUi(this);
     Core::ITheme *th = Core::ICore::instance()->theme();
     // set icons
-    drugBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
-    drugUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
-    drugItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
-    prescrBoldButton->setIcon( th->icon(Core::Constants::ICONBOLD) );
-    prescrUnderlineButton->setIcon( th->icon(Core::Constants::ICONUNDERLINE) );
-    prescrItalicButton->setIcon( th->icon(Core::Constants::ICONITALIC) );
+    drugBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
+    drugUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
+    drugItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
+    prescrBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
+    prescrUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));
+    prescrItalicButton->setIcon(th->icon(Core::Constants::ICONITALIC));
 
     // feed with actual values
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
 
     QFont drugsFont;
-    drugsFont.fromString(s->value( MFDRUGS_SETTING_DRUGFONT ).toString());
+    drugsFont.fromString(s->value(MFDRUGS_SETTING_DRUGFONT).toString());
     QFont prescrFont;
-    prescrFont.fromString(s->value( MFDRUGS_SETTING_PRESCRIPTIONFONT ).toString());
+    prescrFont.fromString(s->value(MFDRUGS_SETTING_PRESCRIPTIONFONT).toString());
 
-    drugFontCombo->setCurrentFont( drugsFont );
-    prescriptionFontCombo->setCurrentFont( prescrFont );
+    drugFontCombo->setCurrentFont(drugsFont);
+    prescriptionFontCombo->setCurrentFont(prescrFont);
 
-    prescriptionFontSizeSpin->setValue( prescrFont.pointSize() );
-    prescrBoldButton->setChecked( prescrFont.bold() );
-    prescrItalicButton->setChecked( prescrFont.italic() );
-    prescrUnderlineButton->setChecked( prescrFont.underline() );
+    prescriptionFontSizeSpin->setValue(prescrFont.pointSize());
+    prescrBoldButton->setChecked(prescrFont.bold());
+    prescrItalicButton->setChecked(prescrFont.italic());
+    prescrUnderlineButton->setChecked(prescrFont.underline());
 
-    drugFontSizeSpin->setValue( drugsFont.pointSize() );
-    drugBoldButton->setChecked( drugsFont.bold() );
-    drugUnderlineButton->setChecked( drugsFont.italic() );
-    drugItalicButton->setChecked( drugsFont.underline() );
+    drugFontSizeSpin->setValue(drugsFont.pointSize());
+    drugBoldButton->setChecked(drugsFont.bold());
+    drugUnderlineButton->setChecked(drugsFont.italic());
+    drugItalicButton->setChecked(drugsFont.underline());
 
     // Create a virtual drug and prescription
     drug = Internal::DrugsBase::instance()->getDrugByCIS("61266250");
-    drug->setPrescriptionValue( Prescription::IntakesFrom, 1);
-    drug->setPrescriptionValue( Prescription::IntakesTo, 3);
-    drug->setPrescriptionValue( Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
-    drug->setPrescriptionValue( Prescription::IntakesUsesFromTo, true);
-    drug->setPrescriptionValue( Prescription::Period, 2);
-    drug->setPrescriptionValue( Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
-    drug->setPrescriptionValue( Prescription::IntakesIntervalOfTime, 2);
-    drug->setPrescriptionValue( Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAYS));
-    drug->setPrescriptionValue( Prescription::DurationFrom, 1);
-    drug->setPrescriptionValue( Prescription::DurationTo, 3);
-    drug->setPrescriptionValue( Prescription::DurationScheme, tkTr(Trans::Constants::WEEKS) );
-    drug->setPrescriptionValue( Prescription::DurationUsesFromTo, true);
-    drug->setPrescriptionValue( Prescription::MealTimeSchemeIndex, 1);
-    drug->setPrescriptionValue( Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
+    drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
+    drug->setPrescriptionValue(Prescription::IntakesTo, 3);
+    drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
+    drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
+    drug->setPrescriptionValue(Prescription::Period, 2);
+    drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
+    drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
+    drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAYS));
+    drug->setPrescriptionValue(Prescription::DurationFrom, 1);
+    drug->setPrescriptionValue(Prescription::DurationTo, 3);
+    drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEKS));
+    drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
+    drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
+    drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
 
     prescriptionFormatting->textEdit()->setHtml(s->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
@@ -435,7 +437,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
 void DrugsPrintWidget::resetToDefaultFormatting()
 {
-    prescriptionFormatting->setHtml(MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
+    prescriptionFormatting->setHtml(qApp->translate("mfDrugsConstants", MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING));
 }
 
 static inline QString getFullPrescription(Drugs::Internal::DrugsData *drug, bool toHtml, const QString &tmp)
@@ -447,13 +449,13 @@ void DrugsPrintWidget::updateFormatting()
     formatingSample->setHtml(getFullPrescription(drug,true,tmp));
 }
 
-void DrugsPrintWidget::saveToSettings( Core::ISettings *settings )
+void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
-    if (!settings)
-        s = Core::ICore::instance()->settings();
+    if (!sets)
+        s = settings();
     else
-        s = settings;
+        s = sets;
 
     QFont drugsFont = drugFontCombo->currentFont();
     drugsFont.setBold(drugBoldButton->isChecked());
@@ -467,8 +469,8 @@ void DrugsPrintWidget::saveToSettings( Core::ISettings *settings )
     prescrFont.setUnderline(prescrUnderlineButton->isChecked());
     prescrFont.setPointSize(prescriptionFontSizeSpin->value());
 
-    s->setValue( MFDRUGS_SETTING_DRUGFONT , drugsFont.toString() );
-    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString() );
+    s->setValue(MFDRUGS_SETTING_DRUGFONT , drugsFont.toString());
+    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , prescrFont.toString());
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
     tmp = Utils::toHtmlAccent(tmp);
     int cutBegin = tmp.indexOf("<p ");
@@ -477,14 +479,14 @@ void DrugsPrintWidget::saveToSettings( Core::ISettings *settings )
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
 }
 
-void DrugsPrintWidget::writeDefaultSettings( Core::ISettings *s )
+void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget") );
-    s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
-    s->setValue( MFDRUGS_SETTING_DRUGFONT , QFont().toString() );
-    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString() );
-    s->setValue( MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
+    Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
+    s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
+    s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
+    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
+    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
     s->sync();
 }
 
@@ -508,42 +510,41 @@ DrugsUserWidget::DrugsUserWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    Core::ITheme *th = Core::ICore::instance()->theme();
     previewer = Print::Printer::previewer(this);
     userLayout->addWidget(previewer, 0,0);
     // feed with actual values
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
 
-    previewer->setHeader( s->value( MFDRUGS_SETTING_USERHEADER ).toString() );
-    previewer->setFooter( s->value( MFDRUGS_SETTING_USERFOOTER ).toString() );
-    previewer->setWatermark( s->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                             Print::Printer::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()) );
+    previewer->setHeader(s->value(MFDRUGS_SETTING_USERHEADER).toString());
+    previewer->setFooter(s->value(MFDRUGS_SETTING_USERFOOTER).toString());
+    previewer->setWatermark(s->value(MFDRUGS_SETTING_WATERMARK_HTML).toString(),
+                             Print::Printer::Presence(s->value(MFDRUGS_SETTING_WATERMARKPRESENCE).toInt()));
 }
 
-void DrugsUserWidget::saveToSettings( Core::ISettings *settings )
+void DrugsUserWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
-    if (!settings)
-        s = Core::ICore::instance()->settings();
+    if (!sets)
+        s = settings();
     else
-        s = settings;
+        s = sets;
 
-    s->setValue( MFDRUGS_SETTING_USERHEADER, previewer->headerToHtml() );
-    s->setValue( MFDRUGS_SETTING_USERFOOTER, previewer->footerToHtml() );
-    s->setValue( MFDRUGS_SETTING_WATERMARKPRESENCE, previewer->watermarkPresence() );
-    s->setValue( MFDRUGS_SETTING_WATERMARK_HTML, previewer->watermarkToHtml() );
+    s->setValue(MFDRUGS_SETTING_USERHEADER, previewer->headerToHtml());
+    s->setValue(MFDRUGS_SETTING_USERFOOTER, previewer->footerToHtml());
+    s->setValue(MFDRUGS_SETTING_WATERMARKPRESENCE, previewer->watermarkPresence());
+    s->setValue(MFDRUGS_SETTING_WATERMARK_HTML, previewer->watermarkToHtml());
 }
 
-void DrugsUserWidget::writeDefaultSettings( Core::ISettings *s )
+void DrugsUserWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget") );
-    s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
-    s->setValue( MFDRUGS_SETTING_WATERMARKPRESENCE, Print::Printer::DuplicataOnly );
-    s->setValue( MFDRUGS_SETTING_WATERMARKALIGNEMENT, Qt::AlignCenter );
-    s->setValue( MFDRUGS_SETTING_WATERMARK_HTML, MFDRUGS_DEFAULT_WATEMARKHTML );
-    s->setValue( MFDRUGS_SETTING_USERHEADER, MFDRUGS_DEFAULT_USERHEADER );
-    s->setValue( MFDRUGS_SETTING_USERFOOTER, "" );
+    Utils::Log::addMessage("DrugsUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
+    s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
+    s->setValue(MFDRUGS_SETTING_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
+    s->setValue(MFDRUGS_SETTING_WATERMARKALIGNEMENT, Qt::AlignCenter);
+    s->setValue(MFDRUGS_SETTING_WATERMARK_HTML, MFDRUGS_DEFAULT_WATEMARKHTML);
+    s->setValue(MFDRUGS_SETTING_USERHEADER, MFDRUGS_DEFAULT_USERHEADER);
+    s->setValue(MFDRUGS_SETTING_USERFOOTER, "");
     s->sync();
 }
 
@@ -567,40 +568,39 @@ DrugsExtraWidget::DrugsExtraWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    Core::ITheme *th = Core::ICore::instance()->theme();
     ALDBefore->setTypes(Editor::TextEditor::Full);
     ALDAfter->setTypes(Editor::TextEditor::Full|Editor::TextEditor::Full);
     // feed with actual values
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
 
-    hideLabCheck->setChecked( s->value( MFDRUGS_SETTING_HIDELABORATORY ).toBool() );
+    hideLabCheck->setChecked(s->value(MFDRUGS_SETTING_HIDELABORATORY).toBool());
 
-    ALDBefore->textEdit()->setHtml( s->value( MFDRUGS_SETTING_ALD_PRE_HTML ).toString() );
-    ALDAfter->textEdit()->setHtml( s->value( MFDRUGS_SETTING_ALD_POST_HTML ).toString() );
+    ALDBefore->textEdit()->setHtml(s->value(MFDRUGS_SETTING_ALD_PRE_HTML).toString());
+    ALDAfter->textEdit()->setHtml(s->value(MFDRUGS_SETTING_ALD_POST_HTML).toString());
 }
 
-void DrugsExtraWidget::saveToSettings( Core::ISettings *settings )
+void DrugsExtraWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
-    if (!settings)
-        s = Core::ICore::instance()->settings();
+    if (!sets)
+        s = settings();
     else
-        s = settings;
-    s->setValue( MFDRUGS_SETTING_HIDELABORATORY, hideLabCheck->isChecked() );
+        s = sets;
+    s->setValue(MFDRUGS_SETTING_HIDELABORATORY, hideLabCheck->isChecked());
 
-    s->setValue( MFDRUGS_SETTING_ALD_PRE_HTML, ALDBefore->textEdit()->toHtml() );
-    s->setValue( MFDRUGS_SETTING_ALD_POST_HTML, ALDAfter->textEdit()->toHtml() );
+    s->setValue(MFDRUGS_SETTING_ALD_PRE_HTML, ALDBefore->textEdit()->toHtml());
+    s->setValue(MFDRUGS_SETTING_ALD_POST_HTML, ALDAfter->textEdit()->toHtml());
 }
 
-void DrugsExtraWidget::writeDefaultSettings( Core::ISettings *s )
+void DrugsExtraWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsExtraWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget") );
-    s->setValue( MFDRUGS_SETTING_CONFIGURED, true );
-    s->setValue( MFDRUGS_SETTING_HIDELABORATORY, false );
+    Utils::Log::addMessage("DrugsExtraWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
+    s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
+    s->setValue(MFDRUGS_SETTING_HIDELABORATORY, false);
 
-    s->setValue( MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML );
-    s->setValue( MFDRUGS_SETTING_ALD_POST_HTML, MFDRUGS_DEFAULT_ALD_POST_HTML );
+    s->setValue(MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML);
+    s->setValue(MFDRUGS_SETTING_ALD_POST_HTML, MFDRUGS_DEFAULT_ALD_POST_HTML);
     s->sync();
 }
 
