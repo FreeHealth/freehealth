@@ -86,13 +86,6 @@ void CorePlugin::extensionsInitialized()
     addAutoReleasedObject(new SettingDebugPage(this));
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
-    Core::ICore::instance()->translators()->addNewTranslator("medintuxutils");
-    Core::ICore::instance()->translators()->addNewTranslator("fdcoreplugin");
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

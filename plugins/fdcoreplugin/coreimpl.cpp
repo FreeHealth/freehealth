@@ -98,7 +98,32 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Settings = new SettingsPrivate(this);
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+    m_CommandLine = new CommandLine();
+
+    QTime chrono;
+    chrono.start();
+    bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
+
     createSplashScreen(m_Theme->splashScreen(Constants::FREEDIAMS_SPLASHSCREEN));
+
+    // add translators
+    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
+    m_Translators = new Translators(this);
+    m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
+    // Qt
+    m_Translators->addNewTranslator("qt");
+    // Core Needed Libs
+    m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
+    m_Translators->addNewTranslator("utils");
+    m_Translators->addNewTranslator("medicalutils");
+    m_Translators->addNewTranslator("medintuxutils");
+    m_Translators->addNewTranslator("fdcoreplugin");
+
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "translators");
+
     messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
 
     m_FileManager = new FileManager(this);
@@ -110,14 +135,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     // initialize the settings
     messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
-
-    QTime chrono;
-    chrono.start();
-
-    m_CommandLine = new CommandLine();
-    bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
-    if (logChrono)
-        Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 #ifdef Q_OS_WIN
@@ -147,18 +164,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
-
-    // add translators
-    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
-    m_Translators = new Translators(this);
-    m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
-    // Qt
-    m_Translators->addNewTranslator("qt");
-    // Core Needed Libs
-    m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
-
-    if (logChrono)
-        Utils::Log::logTimeElapsed(chrono, "Core", "translators");
 
     // Manage exchange file
     messageSplashScreen(QCoreApplication::translate( "Core", "Checking command line parameters..." ) );
