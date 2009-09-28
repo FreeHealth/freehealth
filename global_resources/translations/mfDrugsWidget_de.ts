@@ -898,27 +898,32 @@ p, li { white-space: pre-wrap; }
         <translation>Medikamenten Druckeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="56"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="344"/>
         <source>Printing</source>
         <translation>Drucken</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="71"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="75"/>
         <source>Drug font</source>
         <translation>Druckschrift</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="84"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="63"/>
+        <source>Old</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="208"/>
         <source>Prescription font</source>
         <translation>Rezeptschrift</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="337"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="359"/>
         <source>Prescription formatting</source>
         <translation>Rezeptformatierung</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="347"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="369"/>
         <source>Reset to default</source>
         <translation>Zurücksetzen</translation>
     </message>
@@ -959,47 +964,57 @@ p, li { white-space: pre-wrap; }
         <translation>Schrift</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="97"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="219"/>
+        <source>Interactions warnings</source>
+        <translation>Wechselwirkungen Warnhinweise</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="225"/>
         <source>Level of warning</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="111"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="239"/>
         <source>Maximal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="116"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="244"/>
         <source>Moderate</source>
         <translation>Annehmbar</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="121"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="249"/>
         <source>Minimal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="157"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="257"/>
+        <source>Show interactions icons in the prescription</source>
+        <translation>Show Wechselwirkungen Symbole in der Verschreibung</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="125"/>
         <source>Font size</source>
         <translation>Schriftgröße</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="164"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="132"/>
         <source>Size of historic</source>
         <translation>Größe der Historie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="187"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="155"/>
         <source>Testers</source>
         <translation>Tester</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="205"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="173"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="221"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="189"/>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
@@ -1043,27 +1058,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="233"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="234"/>
         <source>FATAL ERROR : SQLite driver is not available.</source>
         <translation>FATALER FEHLER: SQLite Treiber ist nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="234"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="235"/>
         <source>Fatal Error. Application will not work properly</source>
         <translation>Fataler Fehler: Applikation möchte nicht richtig arbeiten</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="235"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="236"/>
         <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
         <translation>Der SQLite Datenbanktreibr ist nicht installiert, oder kann nicht gefunden werden. Bitte senden sie eine Nachricht an die Entwickler.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="253"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="254"/>
         <source>Searching databases into dir %1</source>
         <translation>Durchsuchen der Datenbanken in directory %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="296"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="297"/>
         <source>Trying to create empty database. 
 Location : %1 
 FileName: %2</source>
@@ -1072,34 +1087,34 @@ Location %1
 Dateiname: %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="376"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="377"/>
         <source>Database %1 %2 correctly created</source>
         <translation>Datenbank %1 %2 korrekt erstellt</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="379"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="380"/>
         <source>ERROR : database can not be created %1 %2 %3</source>
         <translation>ERROR: datenbank kann nicht erstellt werden %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="405"/>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="451"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="406"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="452"/>
         <source>Unable to open database %1 for dosage transmission</source>
         <translation>Kann Datenbank %1 nicht zur Dosisübermittlung öffnen</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="462"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="463"/>
         <source>Unable to update transmission date dosage</source>
         <translation>Kann Dosisdatum nicht übermitteln</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="729"/>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="754"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="731"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfDrugsBase.cpp" line="756"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsdatabase/mfInteractionsBase.cpp" line="281"/>
+        <location filename="../../plugins/drugsplugin/drugsdatabase/mfInteractionsBase.cpp" line="282"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation></translation>
     </message>
@@ -1150,7 +1165,7 @@ Medikament %1 ist bereits im Rezept</translation>
 <context>
     <name>DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="251"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="252"/>
         <source>Drug Extras</source>
         <translation>Medikamenten Extras</translation>
     </message>
@@ -1208,7 +1223,7 @@ Möchten Sie es zur Datei hinzufügen?</translation>
 <context>
     <name>DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="140"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="141"/>
         <source>Drugs Printing</source>
         <translation>Medikamente drucken</translation>
     </message>
@@ -1216,7 +1231,7 @@ Möchten Sie es zur Datei hinzufügen?</translation>
 <context>
     <name>DrugsPrintWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="427"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="429"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation>Dies ist eine Notiz für Ihren Account&lt;br /&gt;geschrieben in zwei Zeilen...</translation>
     </message>
@@ -1224,7 +1239,7 @@ Möchten Sie es zur Datei hinzufügen?</translation>
 <context>
     <name>DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="195"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="196"/>
         <source>Drugs User</source>
         <translation>Medikamenten Benutzer</translation>
     </message>
@@ -1323,44 +1338,44 @@ Möchten Sie es zur Datei hinzufügen?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="117"/>
-        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ to [Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
-        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ zu [Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] alle [[PERIOD] ][[PERIOD_SCHEME]] während [[D_FROM]][ zu [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
+        <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="118"/>
+        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
+        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="118"/>
+        <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="119"/>
         <source>[[DRUG]]
-[[Q_FROM]][ to [Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][
+[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][
 [NOTE]]</source>
         <translation>[[DRUG]]
-[[Q_FROM]][ zu[Q_TO]] [[DAILY_SCHEME] ][[Q_SCHEME]] alle [[PERIOD] ][[PERIOD_SCHEME]] während [[D_FROM]][ zu [D_TO]] [[D_SCHEME]][
+[[Q_FROM]][ zu [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]] alle [[PERIOD] ][[PERIOD_SCHEME]] während [[D_FROM]][ zu [D_TO]] [[D_SCHEME]][
 [NOTE]]</translation>
     </message>
 </context>
 <context>
     <name>mfDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="154"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="156"/>
         <source>intakes</source>
         <translation>Einnahmen</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="157"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="159"/>
         <source>x %1 of %2</source>
         <translation>x %1 von %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="172"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="174"/>
         <source>Available Dosages</source>
         <translation>Verfügbare Dosierungen</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="239"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="241"/>
         <source>No Inn founded</source>
         <translation>Kein INN gefunden</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="259"/>
+        <location filename="../../plugins/drugsplugin/drugsmodel/mfDrugsModel.cpp" line="261"/>
         <source>No interactions founded</source>
         <translation>Keine Interaktionen gefunden</translation>
     </message>
