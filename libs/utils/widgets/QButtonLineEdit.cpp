@@ -45,8 +45,22 @@
 
 #include "QButtonLineEdit.h"
 #include <QApplication>
+#include <QTextDocument>
+
+#include <QDebug>
 
 using namespace Utils;
+
+static inline QString cleanString(const QString &s)
+{
+    QString ret = s;
+    if (Qt::mightBeRichText(ret)) {
+        ret.replace( QRegExp("<[^>]*>"), "" );
+        ret = ret.trimmed();
+    }
+    return ret;
+}
+
 
 QButtonLineEdit::QButtonLineEdit( QWidget * parent ) 
                 : QLineEdit( parent ), m_leftButton( 0 ), m_rightButton( 0 )
@@ -67,7 +81,7 @@ QButtonLineEdit::~QButtonLineEdit()
  Text of selected action is show in gray inside the line edit when nothing lies in. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
-    void QButtonLineEdit::setLeftButton( QToolButton * button )
+void QButtonLineEdit::setLeftButton( QToolButton * button )
 {
     button->setParent( this );
     m_leftButton = button;
@@ -83,7 +97,7 @@ QButtonLineEdit::~QButtonLineEdit()
 
     // set text to button toolTip
     setText( m_leftButton->toolTip() );
-    m_emptyString = m_leftButton->toolTip();
+    m_emptyString = cleanString(m_leftButton->toolTip());
     setSpecificStyleSheet( "color:gray;" );
     prepareConnections();
     clearFocus();
@@ -137,8 +151,8 @@ void QButtonLineEdit::leftTrig( QAction * action )
 {
     m_leftButton->setDefaultAction( action );
     if ( text().isEmpty() || ( text() == m_emptyString ) ) {
-        setText(action->toolTip());
-        m_emptyString = action->toolTip();
+        m_emptyString = cleanString(action->toolTip());
+        setText(cleanString(action->toolTip()));
         setSpecificStyleSheet( "color:gray;" );
     }
     clearFocus();

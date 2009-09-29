@@ -52,6 +52,8 @@
 #include <QSqlRecord>
 #include <QHeaderView>
 
+#include <QDebug>
+
 
 using namespace mfDrugsConstants;
 using namespace Drugs;
@@ -111,11 +113,11 @@ void DrugSelector::createToolButtons()
 {
     m_SearchToolButton = new QToolButton( searchLine );   // parent object will be redefined
     m_SearchToolButton->setPopupMode( QToolButton::InstantPopup );
-    m_SearchToolButton->setToolTip( tr( "Select a search method using the icon on the left..." ) );
     m_SearchToolButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONSEARCH));
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
     Core::Command *cmd = am->command(mfDrugsConstants::A_SEARCH_COMMERCIAL);
     m_SearchToolButton->addAction(cmd->action());
+    cmd->action()->trigger();
     cmd = am->command(mfDrugsConstants::A_SEARCH_MOLECULES);
     m_SearchToolButton->addAction(cmd->action());
     cmd = am->command(mfDrugsConstants::A_SEARCH_INN);
