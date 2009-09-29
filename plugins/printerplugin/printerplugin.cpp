@@ -36,6 +36,7 @@
 
 #include <utils/log.h>
 
+#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
@@ -70,6 +71,7 @@ void PrinterPlugin::extensionsInitialized()
         qWarning() << "PrinterPlugin::extensionsInitialized";
     // Add translator
     Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 

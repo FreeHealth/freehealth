@@ -36,6 +36,7 @@
 
 #include <utils/log.h>
 
+#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
@@ -72,6 +73,7 @@ void TextEditorPlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 
