@@ -262,7 +262,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
             return false;
         m_Settings->noMoreFirstTimeRunning();
         m_Settings->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
-//        DrugsPreferences::writeDefaultSettings(settings());
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         // show the license agreement dialog
         if (!Utils::defaultLicenceAgreementDialog(

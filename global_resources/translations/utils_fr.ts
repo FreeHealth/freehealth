@@ -131,7 +131,7 @@
         <location filename="../../libs/utils/global.cpp" line="147"/>
         <location filename="../../libs/utils/global.cpp" line="149"/>
         <source>Error while retrieve informations of uname under %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur lors de la récupération des informations de uname sous %1</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="229"/>
