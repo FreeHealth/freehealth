@@ -196,7 +196,7 @@ public:
                  {
                      if (drug->prescriptionValue(Prescription::OnlyForTest).toBool()) {
                          if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
-                             return drug->innComposition();
+                             return drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
                          else return drug->denomination();
                      }
                      return ::Drugs::DrugsModel::getFullPrescription(drug,false);
@@ -749,7 +749,7 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     else
         tmp = mask;
     if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool()) {
-        Utils::replaceToken(tmp, "DRUG", drug->innComposition() + " " + tkTr(Trans::Constants::INN));
+        Utils::replaceToken(tmp, "DRUG", drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]" );
     } else {
         /** \todo If denomination contains innComposition && hide laboratory name --> add INN */
         Utils::replaceToken(tmp, "DRUG", drug->denomination());
