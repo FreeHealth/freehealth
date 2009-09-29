@@ -79,6 +79,7 @@ namespace mfDrugsModelConstants {
 }
 
 using namespace mfDrugsModelConstants;
+using namespace Trans::ConstantTranslations;
 
 //static inline QString getFullPrescription(const Drugs::Internal::DrugsData *drug)
 //{ return Drugs::DrugsModel::getFullPrescription(drug); }
@@ -747,14 +748,27 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     }
     else
         tmp = mask;
-    Utils::replaceToken(tmp, "DRUG", drug->denomination());
-    Utils::replaceToken(tmp, "Q_FROM", drug->prescriptionValue(Prescription::IntakesFrom).toString() );
-    Utils::replaceToken(tmp, "Q_TO", drug->prescriptionValue(Prescription::IntakesTo).toString() );
+    if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool()) {
+        Utils::replaceToken(tmp, "DRUG", drug->innComposition() + " " + tkTr(Trans::Constants::INN));
+    } else {
+        /** \todo If denomination contains innComposition && hide laboratory name --> add INN */
+        Utils::replaceToken(tmp, "DRUG", drug->denomination());
+    }
+    Utils::replaceToken(tmp, "Q_FROM", QString::number(drug->prescriptionValue(Prescription::IntakesFrom).toDouble()) );
+    if (drug->prescriptionValue(Prescription::IntakesUsesFromTo).toBool())
+        Utils::replaceToken(tmp, "Q_TO", QString::number(drug->prescriptionValue(Prescription::IntakesTo).toDouble()) );
+    else
+        Utils::replaceToken(tmp, "Q_TO", QString() );
+
     Utils::replaceToken(tmp, "Q_SCHEME", drug->prescriptionValue(Prescription::IntakesScheme).toString() );
     Utils::replaceToken(tmp, "DAILY_SCHEME", drug->prescriptionValue(Prescription::DailyScheme).toStringList().join(", ") );
     Utils::replaceToken(tmp, "PERIOD_SCHEME", drug->prescriptionValue(Prescription::PeriodScheme).toString() );
-    Utils::replaceToken(tmp, "D_FROM", drug->prescriptionValue(Prescription::DurationFrom).toString() );
-    Utils::replaceToken(tmp, "D_TO", drug->prescriptionValue(Prescription::DurationTo).toString() );
+    Utils::replaceToken(tmp, "D_FROM", QString::number(drug->prescriptionValue(Prescription::DurationFrom).toDouble()) );
+    if (drug->prescriptionValue(Prescription::DurationUsesFromTo).toBool())
+        Utils::replaceToken(tmp, "D_TO", QString::number(drug->prescriptionValue(Prescription::DurationTo).toDouble()) );
+    else
+        Utils::replaceToken(tmp, "D_TO", QString() );
+
     Utils::replaceToken(tmp, "D_SCHEME", drug->prescriptionValue(Prescription::DurationScheme).toString() );
     Utils::replaceToken(tmp, "NOTE", drug->prescriptionValue(Prescription::Note).toString() );
     Utils::replaceToken(tmp, "MEAL", Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Prescription::MealTimeSchemeIndex).toInt()));
