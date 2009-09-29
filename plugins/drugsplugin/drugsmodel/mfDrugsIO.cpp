@@ -373,7 +373,7 @@ QString DrugsIO::prescriptionToHtml()
     drugStyle = Utils::fontToHtml(drugsFont, "black");
     prescrStyle = Utils::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
     for(i=0; i < m->rowCount(); ++i) {
-        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString() + "</li>";
+        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString() + "<br /></li>";
 //        tmp = QString(ENCODEDHTML_DRUG);
 //        tmp.replace( "{NUMBER}", QString::number(i+1));
 //        tmp.replace( "{DRUGSTYLE}", drugStyle);
