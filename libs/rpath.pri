@@ -12,7 +12,7 @@ macx {
 
 
      ## todo : this MUST be improved +++
-     QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/FreeMedForms
+     QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/freediams
      ## end todo
 
    }else{
