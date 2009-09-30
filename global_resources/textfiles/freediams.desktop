@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1.0
+Type=Application
+Categories=Qt;Sciences;MedicalSoftware
+Name=FreeDiams
+Comment[en]=Open source prescriber
+Comment[fr]=Prescripteur open source
+TryExec=freediams
+Exec=freediams
+Icon=freediams

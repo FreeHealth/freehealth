@@ -17,5 +17,6 @@ ProjectSettings {
 OTHER_FILES += update-di.txt \
                README \
                COPYING \
-               INSTALL
+               INSTALL \
+               global_resources/textfiles/freediams.desktop
 

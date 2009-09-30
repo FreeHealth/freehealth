@@ -23,6 +23,7 @@ isEmpty(INSTALL_LIBS_PATH):     INSTALL_LIBS_PATH      = $${INSTALL_BINARY_PATH}
 isEmpty(INSTALL_PLUGINS_PATH):  INSTALL_PLUGINS_PATH   = $${INSTALL_LIBS_PATH}
 isEmpty(INSTALL_RESOURCES_PATH):INSTALL_RESOURCES_PATH = $${INSTALL_BINARY_PATH}/Resources
 isEmpty(INSTALL_DESKTOP_FILES_PATH):INSTALL_DESKTOP_FILES_PATH =
+isEmpty(INSTALL_DESKTOP_ICON_PATH):INSTALL_DESKTOP_ICON_PATH=
 
 DEFINES *= "INSTALL_BINARY_PATH=\"\\\"$$INSTALL_BINARY_PATH\\\"\"" \
            "INSTALL_LIBS_PATH=\"\\\"$$INSTALL_LIBS_PATH\\\"\"" \
@@ -68,6 +69,8 @@ message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
 message( Pixmaps - big : $${INSTALL_SBIGPIX_PATH} )
 message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
+!isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
+!isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
 
 # Install target
 !isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUID_BINARY_PATH){
@@ -134,7 +137,17 @@ pix32.path = $${INSTALL_MEDIUMPIX_PATH}
 pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
 pix64.path = $${INSTALL_BIGPIX_PATH}/64x64
 pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
+pixsvg.path = $${INSTALL_BIGPIX_PATH}/svg
+pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
 INSTALLS+=screens pix16 pix32 pix64
+
+# Install desktop file
+!isEmpty(INSTALL_DESKTOP_FILES_PATH){
+desk.path=$${INSTALL_DESKTOP_FILES_PATH}
+desk.file=$${SOURCES_GLOBAL_RESOURCES}/textfiles/$${TARGET}.desktop
+desk_icon.path=$${INSTALL_DESKTOP_ICON_PATH}
+desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${TARGET}.svg
+}
 
 # Documentation
 !isEmpty(INSTALL_DOCS_PATH){
