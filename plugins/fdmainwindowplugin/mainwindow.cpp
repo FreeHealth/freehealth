@@ -91,6 +91,9 @@ using namespace MainWin;
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+
+
 namespace MainWin {
 namespace Internal {
     static bool transmitDosage()
@@ -228,8 +231,11 @@ void MainWindow::extensionsInitialized()
 
     // Start the update checker
     Core::ICore::instance()->messageSplashScreen(tkTr(Trans::Constants::CHECKING_UPDATES));
-    connect(Core::ICore::instance()->updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-    Core::ICore::instance()->updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
+    statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
+    statusBar()->addWidget(updateChecker()->progressBar(this),1);
+    connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
+    connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
+    updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
 
     Core::ICore::instance()->finishSplashScreen(this);
     show();
@@ -330,6 +336,14 @@ void MainWindow::openRecentFile()
     }
 }
 
+void MainWindow::updateCheckerEnd()
+{
+//    QList<QProgressBar*> list = statusBar()->findChildren<QProgressBar*>();
+//    foreach(QProgressBar *w, list)
+//        statusBar()->removeWidget(w);
+//    qDeleteAll(list);
+    delete statusBar();
+}
 
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()

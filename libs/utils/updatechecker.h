@@ -37,15 +37,16 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUPDATECHECKER_H
-#define TKUPDATECHECKER_H
+#ifndef UPDATECHECKER_H
+#define UPDATECHECKER_H
 
 #include <utils/global_exporter.h>
 
 #include <QObject>
 #include <QUrl>
 #include <QString>
-class tkUpdateCheckerPrivate;
+#include <QProgressBar>
+class QWidget;
 
 namespace Utils {
 namespace Constants {
@@ -55,10 +56,10 @@ namespace Constants {
 }
 
 /**
- * \file tkUpdateChecker.h
+ * \file updatechecker.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 08 Sept 2009
+ * \version 0.0.8
+ * \date 30 Sept 2009
 */
 
 namespace Utils {
@@ -84,12 +85,15 @@ public:
     QString lastVersion();
     QString updateText();
 
+    QProgressBar *progressBar(QWidget *parent);
+
 public Q_SLOTS:
     void showUpdateInformations();
 
 Q_SIGNALS:
     void updateFound(const QString &updateText);
     void updateFound();
+    void done(bool);
 
 protected:
     void emitSignals();
@@ -99,4 +103,4 @@ private:
 };
 }
 
-#endif  // TKUPDATECHECKER_H
+#endif  // UPDATECHECKER_H

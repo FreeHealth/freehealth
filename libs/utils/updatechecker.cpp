@@ -82,10 +82,13 @@ namespace Internal {
   \internal
 */
 UpdateCheckerPrivate::UpdateCheckerPrivate( QObject *parent )
-          : QObject(parent)
+          : QObject(parent), m_ProgressBar(0)
 {
     setObjectName( "UpdateChecker" );
-    connect( &m_Http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+    m_Http = new QHttp(this);
+    connect(m_Http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+    connect(m_Http, SIGNAL(dataReadProgress(int, int)),
+            this, SLOT(updateDataReadProgress(int, int)));
     m_FileRetreived = false;
 }
 
@@ -102,17 +105,28 @@ bool UpdateCheckerPrivate::getFile( const QUrl &url )
     if ( url.path().isEmpty() )
         return false;
     m_Url = url;
-    m_Http.setHost( m_Url.host(), m_Url.port( 80 ) );
-    m_Http.get( m_Url.path(), &m_Buffer );
-    m_Http.close();
+    m_Http->setHost( m_Url.host(), m_Url.port( 80 ) );
+    m_Http->get( m_Url.path(), &m_Buffer );
+    m_Http->close();
     return true;
 }
 
-void UpdateCheckerPrivate::httpDone( bool error )
+void UpdateCheckerPrivate::updateDataReadProgress(int bytesRead, int totalBytes)
 {
+//    if (httpRequestAborted)
+//        return;
+    if (m_ProgressBar) {
+        m_ProgressBar->setMaximum(totalBytes);
+        m_ProgressBar->setValue(bytesRead);
+    }
+}
+
+void UpdateCheckerPrivate::httpDone(bool error)
+{
+    Q_EMIT static_cast<UpdateChecker*>(parent())->done(error);
     if (error) {
         Log::addError( this, tr( "Error %1 while retreiving update file %2" )
-                         .arg(m_Http.errorString())
+                         .arg(m_Http->errorString())
                          .arg(m_Url.toString()) );
         return;
     }
@@ -157,7 +171,7 @@ void UpdateCheckerPrivate::httpDone( bool error )
 /** \brief Abort the download */
 void UpdateCheckerPrivate::cancelDownload()
 {
-    m_Http.abort();
+    m_Http->abort();
 }
 
 } // End Internal
@@ -203,6 +217,18 @@ void UpdateChecker::check( const QUrl &url )
 {
     Log::addMessage( this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg( url.toString() ) );
     d->getFile( url );
+}
+
+void UpdateChecker::cancel()
+{
+    d->cancelDownload();
+}
+
+QProgressBar *UpdateChecker::progressBar(QWidget *w)
+{
+    if (!d->m_ProgressBar)
+        d->m_ProgressBar = new QProgressBar(w);
+    return d->m_ProgressBar;
 }
 
 /**

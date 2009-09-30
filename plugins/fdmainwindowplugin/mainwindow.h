@@ -104,6 +104,8 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 //    bool aboutQt();
     bool aboutPlugins();
 
+    void updateCheckerEnd();
+
     void aboutToShowRecentFiles();
     void openRecentFile();
 

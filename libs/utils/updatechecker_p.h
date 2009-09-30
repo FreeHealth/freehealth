@@ -43,6 +43,8 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QBuffer>
+#include <QProgressBar>
+#include <QPointer>
 
 namespace Utils {
 namespace Internal {
@@ -60,14 +62,16 @@ public:
 
 private Q_SLOTS:
     void httpDone(bool error);
+    void updateDataReadProgress(int bytesRead, int totalBytes);
 
 public:
-    QHttp m_Http;
+    QHttp *m_Http;
     QBuffer m_Buffer;
     QUrl m_Url;
     QString m_UpdateText;
     QString m_LastVersion;
     bool m_FileRetreived;
+    QPointer<QProgressBar> m_ProgressBar;
 };
 
 }  // End Internal
