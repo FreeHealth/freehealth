@@ -84,7 +84,6 @@ inline static void defineLibraryPaths()
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
 #endif
-#endif
 }
 
 
