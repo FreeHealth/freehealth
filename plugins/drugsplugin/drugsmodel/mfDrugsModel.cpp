@@ -192,6 +192,7 @@ public:
              case Drug::InnCompositionString :  return drug->innComposition();
              case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
              case Drug::HasPrescription :    return drug->hasPrescription();
+             case Drug::LinkToFrenchRCP :    return drug->linkToFrenchRCP();
              case Drug::FullPrescription :
                  {
                      if (drug->prescriptionValue(Prescription::OnlyForTest).toBool()) {

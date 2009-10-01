@@ -212,7 +212,7 @@ public:
      int         CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
-     QString     denomination() const;
+     QString           denomination() const;
      QString           form() const               { return value( Table_CIS, CIS_FORME ).toString(); }
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
@@ -227,6 +227,8 @@ public:
      QString           mainInnName() const;
      QString           mainInnDosage() const;
      QString           innComposition() const;
+
+     QString           linkToFrenchRCP() const;
 
      QStringList       dosageOfMolecules() const;
      bool              hasPrescription() const;

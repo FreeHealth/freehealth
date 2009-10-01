@@ -89,6 +89,7 @@ private Q_SLOTS:
     void on_userformsButton_clicked();
     void on_dosageForAllInnCheck_stateChanged(int state);
     void on_aldCheck_stateChanged(int state);
+    void on_frenchRCPButton_clicked();
 
 private:
     DosageViewerPrivate *d;

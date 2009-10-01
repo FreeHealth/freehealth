@@ -42,6 +42,13 @@
      <item>
       <widget class="QLineEdit" name="labelLineEdit"/>
      </item>
+     <item>
+      <widget class="QPushButton" name="frenchRCPButton">
+       <property name="text">
+        <string>French RCP</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="2" column="0">

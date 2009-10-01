@@ -70,6 +70,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/dialogs/helpdialog.h>
 
 
 // include Qt headers
@@ -80,6 +81,8 @@
 #include <QSpinBox>
 #include <QDataWidgetMapper>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 using namespace mfDrugsConstants;
 using namespace mfDosagesConstants;
@@ -247,6 +250,14 @@ public:
                 m_Parent->durationToSpin->show();
             }
 	    m_Parent->aldCheck->setChecked(dm()->drugData(m_CIS,Prescription::IsALD).toBool());
+        }
+
+        // Link to French RCP
+        if (!dm()->drugData(m_CIS, Drug::LinkToFrenchRCP).isNull()) {
+            m_Parent->frenchRCPButton->setEnabled(true);
+            m_Parent->frenchRCPButton->setToolTip(dm()->drugData(m_CIS, Drug::LinkToFrenchRCP).toString());
+        } else {
+            m_Parent->frenchRCPButton->setEnabled(false);
         }
     }
 
@@ -552,4 +563,10 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
         d->setCheckBoxStateToModel( Dosage::IsALD, state );
     else
         d->setCheckBoxStateToModel( Prescription::IsALD, state );
+}
+
+void DosageViewer::on_frenchRCPButton_clicked()
+{
+//    Core::HelpDialog::showPage();
+    QDesktopServices::openUrl(QUrl(dm()->drugData(d->m_CIS, Drug::LinkToFrenchRCP).toString()));
 }

@@ -7,6 +7,7 @@ version=0.0.9
       * Interactions : AFSSAPS - 29/06/2009
 
    * Nouvelles fonctionnalités :
+      * Lien vers le RÉSUMÉ DES CARACTÉRISTIQUES DU PRODUIT lorsqu'il est disponible activable (disponible uniquement si l'ordinateur est connecté à internet)
       * Gestion du fichier d'échange pour tout type d'application externe
       * Possibilité d'ajouter des médicaments dans l'ordonnance uniquement à des fins de tests (ils ne seront
         pas imprimés). Voir documentation.

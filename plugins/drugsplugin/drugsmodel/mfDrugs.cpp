@@ -76,6 +76,8 @@ using namespace mfDrugsConstants;
 using namespace Drugs::Internal;
 using namespace Trans::ConstantTranslations;
 
+static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
+
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -442,6 +444,15 @@ QStringList DrugsData::CIPsDenominations() const
     return ret;
 }
 
+QString DrugsData::linkToFrenchRCP() const
+{
+    QString toReturn;
+    if (!value(Table_CIS, CIS_CODE_RPC).toString().isEmpty()) {
+        toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_CIS, CIS_CODE_RPC).toString().rightJustified(7,'0'));
+    }
+    return toReturn;
+}
+
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------------ Viewers -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -504,7 +515,7 @@ QString DrugsData::toHtml() const
     return msg;
 }
 
-inline static Drugs::InteractionsManager* new_im() {return new Drugs::InteractionsManager();}
+inline static Drugs::InteractionsManager *new_im() {return new Drugs::InteractionsManager();}
 
 QString DrugsData::drugsListToHtml( const QDrugsList & list )
 {

@@ -143,8 +143,9 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |
             Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_QtAbout);
+            Core::MainWindowActions::A_DebugDialog //|
+//            Core::MainWindowActions::A_QtAbout
+            );
     actions.createEditActions(false);
     createActions(actions);
 

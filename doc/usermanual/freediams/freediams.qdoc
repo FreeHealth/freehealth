@@ -14,13 +14,15 @@ imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
 les paramètres sont alors transmis par la ligne de commande.\n
 
 \freediams est disponible pour :
-\li les utilisateurs de Linux (compilé sous Ubuntu)
+\li les utilisateurs de Linux (compilé sous Ubuntu, Debian, paquet Debian-Med)
 \li les utilisateurs de MacOs (universal, à partir de OS 10.5)
 \li les utilisateurs de Windows
 \li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps ont la
 possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
 d'un système à un autre.
-\li quelquesoit votre plateforme informatique, aucune installation annexe n'est nécessaire.
+\li quelquesoit votre plateforme informatique, il est possible de travailler avec \freediams
+sans qu'aucune installation annexe ne soit requise. Pour les version spécifiques aux distributions
+Linux, les dépendances seront automatiquement installées avec le paquet.
 
 L'interface de \freediams est disponible en différents langages : Anglais, Français, Allemand.
 A l'heure actuelle, la base de données des thérapeutiques et des interactions ne sont disponibles
@@ -49,7 +51,7 @@ qu'en Français.
 Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
 développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 \li \ref versionning
-\li La version actuellement documentée est la <b>version 0.0.10 (Sept 2009)</b>.
+\li La version actuellement documentée est la <b>version 0.1.0 (Oct 2009)</b>.
 \li Version de la base de données thérapeutiques : <b>26 Juin 2009</b>.
 \li Version de la base de données des interactions : <b>30 Juin 2009</b>.
 

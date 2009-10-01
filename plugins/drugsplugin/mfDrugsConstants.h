@@ -304,6 +304,7 @@ namespace Drug
         AvailableDosages,
         HasPrescription,
         FullPrescription,
+        LinkToFrenchRCP,
         MaxParam
     };
 }  // End namespace mfDrugsConstants::Drug
