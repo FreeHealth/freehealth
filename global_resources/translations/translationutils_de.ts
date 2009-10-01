@@ -426,7 +426,7 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="223"/>
         <source>INN</source>
-        <translation type="unfinished"></translation>
+        <translation>INN</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="224"/>

@@ -905,7 +905,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="63"/>
         <source>Old</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="208"/>
@@ -915,7 +915,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="366"/>
         <source>Add a line break between drugs when printing</source>
-        <translation type="unfinished"></translation>
+        <translation>Füge einen Zeilenunbruch zwischen den Medikamenten beim Druck hinzu</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="381"/>
@@ -1340,14 +1340,16 @@ Möchten Sie es zur Datei hinzufügen?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="120"/>
         <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] alle [[PERIOD] ][[PERIOD_SCHEME]] während [[D_FROM]][ to [D_TO]] [[D_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/mfDrugsConstants.h" line="121"/>
         <source>[[DRUG]]
 [[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][
 [NOTE]]</source>
-        <translation type="unfinished"></translation>
+        <translation>[[DRUG]]
+[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] alle [[PERIOD] ][[PERIOD_SCHEME]] während [[D_FROM]][ zu [D_TO]] [[D_SCHEME]][
+[NOTE]]</translation>
     </message>
 </context>
 <context>
