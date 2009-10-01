@@ -147,6 +147,7 @@ desk.path=$${INSTALL_DESKTOP_FILES_PATH}
 desk.file=$${SOURCES_GLOBAL_RESOURCES}/textfiles/$${TARGET}.desktop
 desk_icon.path=$${INSTALL_DESKTOP_ICON_PATH}
 desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${TARGET}.svg
+INSTALLS+= desk desk_icon
 }
 
 # Documentation
