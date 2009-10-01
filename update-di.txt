@@ -15,6 +15,7 @@ version=0.0.9
       * Nouveaux paramètres pour l'impression : construction de la phrase de la prescription totalement paramétrable
       * Nouveaux tags pour ce faire. cf Documentation
       * Nouveau tag : [[NBDRUGS]] pour le pied de page seulement
+      * Barre de progression au demarrage lors de la recherche de mise à jour
 
    * Modifications importantes :
       * Corrections de la prescription DCI (plus efficace cf documentation)

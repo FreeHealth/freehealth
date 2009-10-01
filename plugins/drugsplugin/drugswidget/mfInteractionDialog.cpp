@@ -122,7 +122,6 @@ void InteractionDialog::on_printButton_clicked()
 
 void InteractionDialog::on_zoomIn_clicked()
 {
-    /** \todo save zoom factor in settings */
     textBrowser->zoomIn(2);
     m_Zoom += 2;
 }

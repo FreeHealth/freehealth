@@ -93,6 +93,8 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
+    const char * const  MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
+
 
     const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
     const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */

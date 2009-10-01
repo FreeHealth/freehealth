@@ -20,18 +20,18 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="164"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="169"/>
         <source>Checking command line parameters...</source>
         <translation>Vérification des paramètres de la ligne de commande...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="170"/>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="172"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="175"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="177"/>
         <source>Core intialization finished...</source>
         <translation>Intialisation du Core terminée...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="264"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="268"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation>Nouvelle version de FreeDiams détectée, vous devez renouveler l&apos;agrément de licence.</translation>
     </message>

@@ -157,10 +157,11 @@ void DrugsPrintOptionsPage::applyChanges()
 void DrugsPrintOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(MFDRUGS_SETTING_DRUGFONT, QFont());
-    defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFONT, QFont());
+//    defaultvalues.insert(MFDRUGS_SETTING_DRUGFONT, QFont());
+//    defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFONT, QFont());
     defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
     defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN);
+    defaultvalues.insert(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -430,6 +431,8 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
     prescriptionFormatting->textEdit()->setHtml(settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
+    lineBreakCheck->setChecked(settings()->value(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS).toBool());
+
     connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
     connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
     // formatingSample
@@ -477,6 +480,7 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     int cutEnd = tmp.indexOf("</body>");
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
+    s->setValue(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
 }
 
 void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
@@ -488,6 +492,7 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
 //    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN);
+    s->setValue(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, true);
     s->sync();
 }
 

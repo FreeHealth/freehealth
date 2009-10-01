@@ -373,8 +373,10 @@ QString DrugsIO::prescriptionToHtml()
     drugStyle = Utils::fontToHtml(drugsFont, "black");
     prescrStyle = Utils::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
     for(i=0; i < m->rowCount(); ++i) {
-        /** \todo Add to settings : LineBreakBetweenDrugsWhenPrinting */
-        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString() + "<br /></li>";
+        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
+        if (s->value(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS).toBool())
+            tmp += "<span style=\"font-size:4pt\"><br /></span>";
+        tmp += "</li>";
 //        tmp = QString(ENCODEDHTML_DRUG);
 //        tmp.replace( "{NUMBER}", QString::number(i+1));
 //        tmp.replace( "{DRUGSTYLE}", drugStyle);

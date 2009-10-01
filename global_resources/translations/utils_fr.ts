@@ -120,7 +120,7 @@
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="257"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="283"/>
         <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation>Une mise à jour est disponible. Veuillez vérifier le site internet : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
@@ -240,12 +240,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="114"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="128"/>
         <source>Error %1 while retreiving update file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="138"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="152"/>
         <source>* Updates of version : %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>
