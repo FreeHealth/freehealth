@@ -77,11 +77,15 @@ static inline QString getPluginPaths()
 
 inline static void defineLibraryPaths()
 {
-#ifndef DEBUG
+#ifdef LINUX_INTEGRATED
+    qApp->addLibraryPath(getPluginPaths());
+#else
+#  ifndef DEBUG
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
+#endif
+#endif
 }
-
 
 
 int main( int argc, char *argv[] )
