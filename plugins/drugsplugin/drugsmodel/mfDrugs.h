@@ -124,7 +124,7 @@ public:
             return true;
         if (!m_Link)
             return true;
-        return (!m_Link->isTheActiveSubstance());  // take care to infinite looping...
+        return false;//(!m_Link->isTheActiveSubstance());  // take care to infinite looping...
     }
 
     /** \brief Return the INN of the molecule. Check the linked composition for the inn name. */
