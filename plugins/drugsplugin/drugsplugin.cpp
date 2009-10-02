@@ -69,6 +69,10 @@ void DrugsPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+
     viewPage = new DrugsViewOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
     userPage = new DrugsUserOptionsPage(this);
@@ -90,9 +94,6 @@ void DrugsPlugin::extensionsInitialized()
     addObject(printPage);
     addObject(userPage);
     addObject(extraPage);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 }
 
 void DrugsPlugin::remoteArgument(const QString& arg)
