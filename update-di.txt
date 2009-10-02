@@ -1,3 +1,17 @@
+version=0.1.1
+{
+    * Oct 2009
+    * Renommé en FreeDiams
+    * Version de la base de données thérapeutique :
+      * Médicaments :  AFSSAPS - 26/06/2009
+      * Interactions : AFSSAPS - 29/06/2009
+
+   * Nouvelles fonctionnalités :
+   * Modifications importantes :
+   * Correction de bogues / Améliorations techniques :
+      * Traduction de la "phrase posologique" au premier démarrage
+      * Manuel de l'utilisateur de nouveau accessible
+}
 version=0.1.0
 {
     * Sept 2009
@@ -28,7 +42,7 @@ version=0.1.0
       * Mise à disposition pour FreeBSD
       * Amélioration visuelle du dialogue d'aide
 
-    * Correction de bogues / Améliorations techniques :
+   * Correction de bogues / Améliorations techniques :
       * Intégration parfaite aux distributions : Debian, Ubuntu et OpenSuse (en cours de finition)
       * Compile et fonctionne parfaitement sous FreeBSD et dérivés (port en cours)
       * Correction du crash sous MacOsX lorsque Qt4.5.2 est déjà installé

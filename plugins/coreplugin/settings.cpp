@@ -330,7 +330,7 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
             m_Enum_Path.insert( MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/" );
             m_Enum_Path.insert( BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/" );
             m_Enum_Path.insert( SampleFormsPath, bundlePath + DEFAULTFORMS );
-            QString appname = qApp->applicationName();
+            QString appname = qApp->applicationName().toLower();
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
             }
