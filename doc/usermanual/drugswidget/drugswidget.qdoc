@@ -442,15 +442,44 @@ Les paramètres sont regoupés en pages selon leur porté. Les paramètres acces
     - cacher le nom du laboratoire
     - texte des médicaments particuliers (100%)
 
-\section polices Paramétrage des polices de caractères, niveau d'alerte, historique
+\section params_view Paramétrage des polices de caractères, niveau d'alerte, historique
+
+Définissez ici les quelques paramètres d'affichage :
+- la police de caractère utilisée pour l'affichage des médicaments et de la prescription
+- la taille de l'historique des médicaments sélectionnés. Cet historique est accessible dans
+la zone de saisie des recherches de médicaments à droite \ref zone_recherche_medics.
+- le niveau d'alerte des interactions se décompose en trois niveaux :
+    - Maximal : toutes les interactions trouvées seront affichées
+    - Modérée
+    - Minimal : uniquement les associations déconseillées et les contre-indications
 
 \image html prefs1.png
 
-\section headers Paramétrage des entête, pied de page et tatouage d'impression
+\section params_user_papers Paramétrage des entête, pied de page et tatouage d'impression
+
+Cette section vous permet de définir votre entête, pied de page et tatouage d'impression pour vos
+ordonnances. Il est préférable de définir pour l'impression les paramètres suivants :
+- les entêtes et pieds de pages : sur toutes les pages
+- le tatouage d'impression : sur les duplicatas seulement
+Le tatouage d'impression est un texte simple ou composé, ou une image qui sera imprimé en arrière-plan.
+
+Dans l'entête vous pouvez utiliser les étiquettes suivantes (cf \ref tokensmanager) :
+- <em>[[PATIENTNAME]]</em> : nom du patient
+- <em>[[DATE]]</em> : la date de l'impression
+- <em>[[AGE]]</em> : l'âge du patient
+- <em>[[DATEOFBIRTH]]</em> : la date de naissance du patient
+- <em>[[WEIGHT]]</em> : le poids du patient
+- <em>[[SIZE]]</em> : la taille du patient
+- <em>[[CLCR]]</em> : la clairance de la créatinine du patient
+
+Dans le pied de page, vous pouvez utiliser les étiquettes suivantes  (cf \ref tokensmanager) :
+- <em>[[NBDRUGS]]</em> : le nombre total de thérapeutiques prescrites
 
 \image html prefs2.png
 
 \section others Texte de 100% et autres
+
+Le contenu de ces textes sera ajouté avant et après les prescriptions identifiées à <em>100%</em>.
 
 \image html prefs3.png
 

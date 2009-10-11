@@ -50,11 +50,15 @@ using namespace Print;
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;
 
-static const char* const EXAMPLE_CONTENT =  "";
+static const char* const EXAMPLE_CONTENT =
+        "<p align=center><b>This is a sample content for the document</b></p><p>&nbsp;</p>"
+        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>"
+        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>";
 
 static QWidget *createEditor( QWidget *parent, Editor::TextEditor *t, const QString &title, const int defaultPresence = Printer::EachPages)
 {
     QWidget *w = new QWidget(parent);
+    w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QGridLayout *grid = new QGridLayout(w);
     QLabel *l = new QLabel( "<b>"+QApplication::translate("PrinterPreviewer", title.toAscii() )+"</b>", w);
     QComboBox *c = new QComboBox(w);
@@ -78,7 +82,7 @@ static QWidget *createEditor( QWidget *parent, Editor::TextEditor *t, const QStr
 PrinterPreviewerPrivate::PrinterPreviewerPrivate(QWidget *parent) :
     PrinterPreviewer(parent), m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0), m_AutoCheck(false)
 {
-    printer.setContent("<p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p>");
+    printer.setContent(EXAMPLE_CONTENT);
     printer.setPrinter( new QPrinter(QPrinter::ScreenResolution) );
     printer.printer()->setPaperSize( QPrinter::A4 );
     printer.printer()->setPageMargins( 10., 10., 10., 10., QPrinter::Millimeter );
@@ -338,4 +342,9 @@ void PrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
     /** \todo needs modification of Printer::previewToPixmap( QPixmap &drawTo, QPrinter *printer ) to
               Printer::previewToPixmap( QPixmap &drawTo, QPrinter *printer, int pageNumber )
     */
+}
+
+void PrinterPreviewerPrivate::on_tooglePreviewButton_clicked()
+{
+    previewWidget->setVisible(!previewWidget->isVisible());
 }

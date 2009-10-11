@@ -57,8 +57,12 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
                                const QString &pageId)
     : QDialog(parent), m_applied(false)
 {
+    QSize size = qApp->activeWindow()->size();
+    if ((size.width() < 400) || (size.height() < 400))
+        size = QSize(400,400);
     m_ui = new Ui::SettingsDialog();
     m_ui->setupUi(this);
+    this->resize(size);
     QString initialCategory = categoryId;
     QString initialPage = pageId;
     if (initialCategory.isEmpty() && initialPage.isEmpty()) {

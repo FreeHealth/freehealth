@@ -11,6 +11,9 @@ version=0.1.1
    * Correction de bogues / Améliorations techniques :
       * Traduction de la "phrase posologique" au premier démarrage
       * Manuel de l'utilisateur de nouveau accessible
+      * Boucle infinie sur certains médicaments sans substance FT
+      * Redimentionne le dialogue préférences à la taille de la fenêtre principale automatiquement
+      * Possibilité de cacher la prévisualisation d'impression dans les préférences d'impression
 }
 version=0.1.0
 {
