@@ -299,7 +299,6 @@ int PrinterPreviewerPrivate::watermarkPresence()
 
 void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
 {
-    QPixmap pixmap;
     printer.clearHeaders();
     printer.clearFooters();
     printer.clearWatermark();
@@ -312,8 +311,18 @@ void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
     if (m_EditorWatermark) {
         printer.addHtmlWatermark( m_EditorWatermark->textEdit()->toHtml(), Printer::Presence(watermarkPresence()) );
     }
-    printer.previewToPixmap(pixmap, printer.printer());
-    this->previewLabel->setPixmap(pixmap);
+    printer.previewToPixmap(m_PreviewPixmap, printer.printer());
+    if (this->previewLabel->size().height() < pixmap.size().height()) {
+        m_PreviewPixmap = m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio);
+    }
+    this->previewLabel->setPixmap(m_PreviewPixmap);
+}
+
+void PrinterPreviewerPrivate::resizeEvent(QResizeEvent *e)
+{
+    if (!m_PreviewPixmap.isNull()) {
+        this->previewLabel->setPixmap(m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio));
+    }
 }
 
 void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged( int checkstate )

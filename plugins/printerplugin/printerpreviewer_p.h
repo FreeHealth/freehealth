@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL>                                                       *
  ***************************************************************************/
-#ifndef TKPRINTERPRIVATE_H
-#define TKPRINTERPRIVATE_H
+#ifndef PRINTERPREVIEWER_PRIVATE_H
+#define PRINTERPREVIEWER_PRIVATE_H
 
 #include <printerplugin/printer.h>
 
@@ -48,6 +48,13 @@
 #include <QPixmap>
 
 #include "ui_printerpreviewer_p.h"
+
+/**
+ * \file printerpreviewer_p.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.4
+ * \date 15 Oct 2009
+*/
 
 namespace Print {
 namespace Internal {
@@ -98,14 +105,15 @@ private Q_SLOTS:
 private:
     void connectPreview(Editor::TextEditor *t);
     void changeEvent(QEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     Editor::TextEditor *m_EditorHeader, *m_EditorFooter, *m_EditorWatermark;
     bool m_AutoCheck;
     Printer printer;
-    QPixmap pixmap;
+    QPixmap m_PreviewPixmap;
 };
 
 }  // End Internal
 }  // End Print
-#endif // TKPRINTERPRIVATE_H
+#endif // PRINTERPREVIEWER_PRIVATE_H

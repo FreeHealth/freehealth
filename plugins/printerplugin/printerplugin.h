@@ -46,7 +46,7 @@
 #include <QtCore/QObject>
 
 /**
- * \file emptyplugin.h
+ * \file printerplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.4
  * \date 11 Aug 2009
