@@ -14,6 +14,8 @@ version=0.1.1
       * Boucle infinie sur certains médicaments sans substance FT
       * Redimentionne le dialogue préférences à la taille de la fenêtre principale automatiquement
       * Possibilité de cacher la prévisualisation d'impression dans les préférences d'impression
+      * Raccourci clavier pour l'impression corrigé
+      * Prévisualisation des documents utilisateurs (entêtes...) se redimentionne automatiquement
 }
 version=0.1.0
 {

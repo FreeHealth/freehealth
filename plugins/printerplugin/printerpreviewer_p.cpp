@@ -312,7 +312,7 @@ void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
         printer.addHtmlWatermark( m_EditorWatermark->textEdit()->toHtml(), Printer::Presence(watermarkPresence()) );
     }
     printer.previewToPixmap(m_PreviewPixmap, printer.printer());
-    if (this->previewLabel->size().height() < pixmap.size().height()) {
+    if (this->previewLabel->size().height() < m_PreviewPixmap.size().height()) {
         m_PreviewPixmap = m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio);
     }
     this->previewLabel->setPixmap(m_PreviewPixmap);
