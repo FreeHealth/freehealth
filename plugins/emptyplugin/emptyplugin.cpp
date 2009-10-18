@@ -34,14 +34,16 @@
  ***************************************************************************/
 #include "emptyplugin.h"
 
-#include <QtCore/QtPlugin>
+#include <utils/log.h>
 
+#include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Empty;
 
 EmptyPlugin::EmptyPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating EmptyPlugin";
 }
 
@@ -51,7 +53,8 @@ EmptyPlugin::~EmptyPlugin()
 
 bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "EmptyPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "EmptyPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     return true;
@@ -59,6 +62,8 @@ bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void EmptyPlugin::extensionsInitialized()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "EmptyPlugin::extensionsInitialized";
 }
 
 

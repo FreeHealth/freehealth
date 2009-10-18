@@ -26,6 +26,10 @@
 ** contact the sales department at http://www.qtsoftware.com/contact.
 **
 **************************************************************************/
+/***************************************************************************
+ *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
+ *   eric.maeker@free.fr                                                   *
+ ***************************************************************************/
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 

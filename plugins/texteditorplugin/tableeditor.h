@@ -51,6 +51,7 @@ public:
 
 public Q_SLOTS:
     void addTable();
+    void tableProperties();
     void tableAddRow();
     void tableAddCol();
     void tableRemoveRow();

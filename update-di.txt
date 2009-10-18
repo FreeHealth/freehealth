@@ -1,12 +1,12 @@
 version=0.1.1
 {
     * Oct 2009
-    * Renommé en FreeDiams
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009
       * Interactions : AFSSAPS - 29/06/2009
 
    * Nouvelles fonctionnalités :
+      * Ajout d'un dialogue : A propos des plugins
    * Modifications importantes :
    * Correction de bogues / Améliorations techniques :
       * Traduction de la "phrase posologique" au premier démarrage
@@ -16,7 +16,10 @@ version=0.1.1
       * Possibilité de cacher la prévisualisation d'impression dans les préférences d'impression
       * Raccourci clavier pour l'impression corrigé
       * Prévisualisation des documents utilisateurs (entêtes...) se redimentionne automatiquement
+      * Dialogue d'aide reconnecté à partir du menu
+      * Linux : FreeDesktop category correction (goes now to : Office;MedicalSoftware)
 }
+
 version=0.1.0
 {
     * Sept 2009

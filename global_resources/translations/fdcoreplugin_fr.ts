@@ -576,7 +576,7 @@ Sur l&apos;URL : %1
 <context>
     <name>tkConstants</name>
     <message>
-        <location filename="../../plugins/coreplugin/constants.h" line="247"/>
+        <location filename="../../plugins/coreplugin/constants.h" line="248"/>
         <source>FreeDiams Prescriptions (*.di)</source>
         <translation>Prescription FreeDiams (*.di)</translation>
     </message>

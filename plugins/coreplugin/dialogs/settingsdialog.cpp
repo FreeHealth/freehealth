@@ -26,14 +26,18 @@
 ** contact the sales department at http://www.qtsoftware.com/contact.
 **
 **************************************************************************/
-
+/***************************************************************************
+ *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
+ *   eric.maeker@free.fr                                                   *
+ ***************************************************************************/
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
+
+#include <utils/global.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-
 #include <coreplugin/ioptionspage.h>
 #include <coreplugin/dialogs/helpdialog.h>
 
@@ -57,12 +61,15 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
                                const QString &pageId)
     : QDialog(parent), m_applied(false)
 {
-    QSize size = qApp->activeWindow()->size();
-    if ((size.width() < 400) || (size.height() < 400))
-        size = QSize(400,400);
+    QWidget *ref = qApp->topLevelWidgets().first();
     m_ui = new Ui::SettingsDialog();
     m_ui->setupUi(this);
+    // resize windows
+    QSize size = ref->size();
+    size = QSize(size.width()*0.9, size.height()*0.9);
     this->resize(size);
+    // recenter window
+    Utils::centerWidget(this, ref);
     QString initialCategory = categoryId;
     QString initialPage = pageId;
     if (initialCategory.isEmpty() && initialPage.isEmpty()) {

@@ -190,6 +190,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char * const  ALIGNJUSTIFY_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Justify");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  TABLE_ADDTABLE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Add table");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TABLE_PROPERTIES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Table properties");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  TABLE_ADDROW_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Add row");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  TABLE_REMOVEROW_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Remove row");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  TABLE_ADDCOLUMN_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Add colunm");    /*!< \brief Default action text  \ingroup constants_actionmanager */
@@ -198,6 +199,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char * const  TABLE_SPLITCELLS_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Split cells");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  ABOUT_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "About");             /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  ABOUTPLUGINS_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "About Plugins");             /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ABOUTQT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "About Qt");          /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ABOUTFORM_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "About this form");   /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  APPLICATIONHELP_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Help");              /*!< \brief Default action text  \ingroup constants_actionmanager */
@@ -229,6 +231,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const EACH       = QT_TRANSLATE_NOOP("tkConstants", "each");
         const char* const AND       = QT_TRANSLATE_NOOP("tkConstants", "and");
         // Drugs Interactions
+        const char* const INTERACTION  = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
         const char* const TAKE_INTO_ACCOUNT  = QT_TRANSLATE_NOOP("tkConstants", "Take into account");
         const char* const DISCOURAGED  = QT_TRANSLATE_NOOP("tkConstants", "Discouraged");
         const char* const CONTRAINDICATION  = QT_TRANSLATE_NOOP("tkConstants", "Contraindication");
@@ -327,6 +330,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
         const char* const SETTING_1_PATH_TO_2                = QT_TRANSLATE_NOOP("tkConstants", "Setting %1 path to %2");
         const char* const ERROR_1_FROM_DATABASE_2            = QT_TRANSLATE_NOOP("tkConstants", "Error %1 from database %2");
         const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
+        const char* const NO_1_FOUND                         = QT_TRANSLATE_NOOP("tkConstants", "No %1 found.");
         const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
 
 

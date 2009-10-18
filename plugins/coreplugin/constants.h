@@ -205,6 +205,7 @@ const char * const  A_ALIGN_JUSTIFY       = "actionAlignJustify";    /*!< \brief
 
 // Tables' actions
 const char * const  A_TABLE_ADDTABLE      = "actionAddTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_TABLEPROP     = "actionTableProperties";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TABLE_REMOVETABLE   = "actionRemoveTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TABLE_ADDROW        = "actionTableAddRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TABLE_REMOVEROW     = "actionTableRemoveRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -222,6 +223,7 @@ const char * const  A_USERMANAGER     = "actionUserManager";      /*!< \brief De
 
 // About Menu Action's name
 const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTPLUGINS       = "actionPluginsAbout";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -298,6 +300,7 @@ const char * const  ICONALIGNJUSTIFY =  "format-justify-fill.png";
 
 // menu Table
 const char * const  ICONTABLE =             "table.png";
+const char * const  ICONTABLEPROPERTIES =   "table-properties.png";
 const char * const  ICONTABLEADDROW =       "table-add-row.png";
 const char * const  ICONTABLEADDCOLUMN =    "table-add-col.png";
 const char * const  ICONTABLEREMOVEROW =    "table-remove-row.png";

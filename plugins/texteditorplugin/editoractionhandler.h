@@ -117,6 +117,7 @@ private Q_SLOTS:
     void textAlign();
 
     void addTable();
+    void tableProperties();
     void tableAddRow();
     void tableAddCol();
     void tableRemoveCol();
@@ -150,6 +151,7 @@ private:
     QAction *aJustify;
 
     QAction *aAddTable;
+    QAction *aTableProperties;
     QAction *aAddRow;
     QAction *aAddCol;
     QAction *aRemoveRow;

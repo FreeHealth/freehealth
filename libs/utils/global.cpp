@@ -68,6 +68,7 @@
 */
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 
@@ -307,22 +308,20 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
         p = qApp->activeWindow();
     QFileInfo info( toRead );
     if (((!info.exists()) || (!info.isReadable()) ) && (warnUser == WarnUser)) {
-        QMessageBox::warning( parent, qApp->applicationName(),
-                              QCoreApplication::translate( "Utils" ,
-                                                           "File %1 does not exists or is not readable." ).arg( toRead ),
-                              QMessageBox::Ok );
+        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable." ).arg(toRead),
+                                 "","", qApp->applicationName());
         return QString::null;
     } else {
         QFile file( toRead );
         if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
-            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
-                             .arg( toRead, file.errorString() ) );
+            Utils::Log::addError("Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
+                             .arg(toRead, file.errorString()));
             return QString::null;
         }
         QByteArray data = file.readAll();
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QString str = codec->toUnicode(data);
-        Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly read" ).arg( toRead ) );
+        Utils::Log::addMessage( "Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
     }
     return QString::null;
@@ -589,12 +588,14 @@ QString askUser( const QString &title, const QString &question )
 //////////////////////////////////////   WIDGETS FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Center the widget into the desktop. **/
-void centerWidget( QWidget * win )
+void centerWidget(QWidget *win, QWidget *reference)
 {
-    QPoint center = qApp->desktop()->rect().center();
+    if (!reference)
+        reference = qApp->desktop();
+    QPoint center = reference->rect().center();
     QRect rect = win->rect();
-    rect.moveCenter( center );
-    win->move( rect.topLeft() );
+    rect.moveCenter(center);
+    win->move(rect.topLeft());
 }
 
 /** \brief Switch widget to fullscreen/non fullscreen. **/

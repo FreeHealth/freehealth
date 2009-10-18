@@ -9,33 +9,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="34"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="44"/>
         <source>preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="47"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="62"/>
         <source>Show page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="54"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="58"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="83"/>
         <source>Automatic update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="65"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="111"/>
+        <source>Toogle preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="75"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
         <source>Show Duplicata</source>
         <translation type="unfinished"></translation>
     </message>

@@ -96,8 +96,8 @@ UTILS_EXPORT QString uname();
 UTILS_EXPORT QString osName();
 
 // Widget geometry
-/** \brief Center a widget into the screen. */
-UTILS_EXPORT void centerWidget( QWidget * win );
+/** \brief Center a widget \e winToCenter into the \e reference widget. If no \e reference is passed, the \e winToCenter is centered into the desktop. */
+UTILS_EXPORT void centerWidget(QWidget *winToCenter, QWidget *reference = 0);
 /** \brief Toggle a widget to fullScreen. */
 UTILS_EXPORT void setFullScreen( QWidget* win, bool on );
 

@@ -74,7 +74,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
         aItalic(0), aColor(0),
         aFontFormat(0), aFontBigger(0), aFontSmaller(0),
         aLeft(0), aCenter(0), aRight(0), aJustify(0),
-        aAddTable(0),
+        aAddTable(0), aTableProperties(0),
         aAddRow(0),aAddCol(0),
         aRemoveRow(0), aRemoveCol(0),
         aMergeCells(0), aSplitCells(0),
@@ -404,6 +404,15 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     cmd = am->registerAction(a, Core::Constants::A_TABLE_ADDTABLE, tableContext);
     cmd->setTranslations(Trans::Constants::TABLE_ADDTABLE_TEXT);
     connect(a, SIGNAL(triggered()), this, SLOT(addTable()));
+    tabMenu->addAction(cmd, Core::Constants::G_FORMAT_TABLE);
+
+    // Table properties
+    a = aTableProperties = new QAction(this);
+    a->setObjectName("aTableProperties");
+    a->setIcon(th->icon(Core::Constants::ICONTABLEPROPERTIES));
+    cmd = am->registerAction(a, Core::Constants::A_TABLE_TABLEPROP, tableContext);
+    cmd->setTranslations(Trans::Constants::TABLE_PROPERTIES_TEXT);
+    connect(a, SIGNAL(triggered()), this, SLOT(tableProperties()));
     tabMenu->addAction(cmd, Core::Constants::G_FORMAT_TABLE);
 
     // Add row action
@@ -739,6 +748,10 @@ void EditorActionHandler::textAlign()
 
 void EditorActionHandler::addTable()
 { if (m_CurrentEditor) m_CurrentEditor->addTable (); }
+
+void EditorActionHandler::tableProperties()
+{ if (m_CurrentEditor) m_CurrentEditor->tableProperties (); }
+
 void EditorActionHandler::tableAddRow()
 { if (m_CurrentEditor) m_CurrentEditor->tableAddRow (); }
 void EditorActionHandler::tableAddCol()

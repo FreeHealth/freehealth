@@ -9,34 +9,39 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="34"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="44"/>
         <source>preview</source>
         <translation>prévisualisation</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="47"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="62"/>
         <source>Show page</source>
         <translation>Voir la page</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="54"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
         <translation>Si la case est cochée alors la prévisualisation se mettra à jour à chaque changement du texte.
  Ceci peut provoquer une utilisation intensive du processeur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="58"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="83"/>
         <source>Automatic update</source>
         <translation>Mise à jour automatique</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="65"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="111"/>
+        <source>Toogle preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
         <translation>Mise à jour de la prévisualisation</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="75"/>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
         <source>Show Duplicata</source>
         <translation>Montrer un duplicata</translation>
     </message>

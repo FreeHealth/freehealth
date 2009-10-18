@@ -106,6 +106,7 @@ public Q_SLOTS: // Slots automatically to actions is requiered
     virtual bool configureMedintux()      {return false;}
 
     virtual bool aboutApplication();
+    virtual bool aboutPlugins();
     virtual bool applicationHelp();
     virtual bool aboutQt()          {return false;}
     virtual bool debugDialog();
@@ -135,6 +136,7 @@ protected:
     QActionGroup *aLanguageGroup;
 
     QAction *aAppAbout;
+    QAction *aPlugsAbout;
     QAction *aAppHelp;
     QAction *aQtAbout;
     QAction *aDebugDialog;

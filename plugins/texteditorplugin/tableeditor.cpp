@@ -74,6 +74,11 @@ void TableEditor::addTable()
     textEdit()->setTextCursor( cursor );
 }
 
+void TableEditor::tableProperties()
+{
+    /** \todo Write this code */
+}
+
 void TableEditor::tableAddRow()
 {
     QTextTable * table = textEdit()->textCursor().currentTable();

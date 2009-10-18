@@ -37,6 +37,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Core::MainWindowActionHandler
+  Core::MainWindowActionHandler is the action keeper for your main window.
+  Using the Core::MainWindowActions class, you can define which action you want to create, and then connect
+  them to the predefined slots. Slots are virtualized.
+  For code sample, please refer to MainWin::MainWindow code.
+*/
+
 #include "mainwindowactionhandler.h"
 
 #include "actionmanager.h"
@@ -55,6 +63,8 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/debugdialog.h>
 #include <coreplugin/dialogs/aboutdialog.h>
+#include <coreplugin/dialogs/plugindialog.h>
+#include <coreplugin/dialogs/helpdialog.h>
 
 #include <QAction>
 #include <QToolBar>
@@ -86,6 +96,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aMedinTux(0),
         aLanguageGroup(0),
         aAppAbout(0),
+        aPlugsAbout(0),
         aAppHelp(0),
         aQtAbout(0),
         aDebugDialog(0),
@@ -332,6 +343,7 @@ void MainWindowActionHandler::createFileActions(int actions)
     }
 }
 
+/** \brief Connect created File's menu actions to there standard slots (eg : A_FileNew -> newFile()) */
 void MainWindowActionHandler::connectFileActions()
 {
     if (aNew)
@@ -512,13 +524,14 @@ void MainWindowActionHandler::switchLanguage(QAction * action)
     Core::ICore::instance()->translators()->changeLanguage(action->data().toString());
     // All GUIs will automatically refresh via changeEvent() members
 }
-
+/** \brief Show standard Help dialog starting at index. \sa Core::HelpDialog */
 bool MainWindowActionHandler::applicationHelp()
 {
-//    tkHelpDialog::showIndex();
+    Core::HelpDialog::showIndex();
     return true;
 }
 
+/** \brief Connect created Configuration's menu actions to there standard slots (eg : A_AppPreferences -> applicationPreferences()) */
 void MainWindowActionHandler::connectConfigurationActions()
 {
     if (aAppPrefs)
@@ -547,6 +560,13 @@ void MainWindowActionHandler::createHelpActions(int actions)
         cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
+    if (actions & Core::MainWindowActions::A_PluginsAbout) {
+        a = aPlugsAbout = new QAction(this);
+        a->setIcon(theme->icon(Constants::ICONHELP));
+        cmd = am->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
+        cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
+        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+    }
     if (actions & Core::MainWindowActions::A_AppHelp) {
         a = aAppHelp = new QAction(this);
         a->setIcon(theme->icon(Constants::ICONHELP));
@@ -563,7 +583,6 @@ void MainWindowActionHandler::createHelpActions(int actions)
         cmd->setTranslations(Trans::Constants::ABOUTQT_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
-
     if (actions & Core::MainWindowActions::A_DebugDialog) {
         a = aDebugDialog = new QAction(this);
         a->setIcon(theme->icon(Constants::ICONHELP));
@@ -572,7 +591,7 @@ void MainWindowActionHandler::createHelpActions(int actions)
         menu->addAction(cmd, Constants::G_HELP_DEBUG);
     }
 
-//        if (actions & Core::MainWindowActions::A_UpdateInfo) {
+    //        if (actions & Core::MainWindowActions::A_UpdateInfo) {
 //            a = aInfoUpdate = new QAction(this);
 //            a->setIcon(theme->icon(Constants::ICONHELP));
 //            cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
@@ -590,10 +609,14 @@ void MainWindowActionHandler::createHelpActions(int actions)
 
 }
 
+/** \brief Connect created Help's menu actions to there standard slots (eg : A_AppAbout -> aboutApplication()) */
 void MainWindowActionHandler::connectHelpActions()
 {
     if (aAppAbout)
         connect(aAppAbout, SIGNAL(triggered()), this, SLOT(aboutApplication()));
+
+    if (aPlugsAbout)
+        connect(aPlugsAbout, SIGNAL(triggered()), this, SLOT(aboutPlugins()));
 
     if (aAppHelp)
         connect(aAppHelp, SIGNAL(triggered()), this, SLOT(applicationHelp()));
@@ -606,13 +629,14 @@ void MainWindowActionHandler::connectHelpActions()
 }
 
 /**
-  \brief Slot to connect with the tkUpdateChecker::updateFounded()
+  \brief Slot to connect with the Utils::UpdateChecke::updateFound() signal.
   Add a menu to the menu bar and connect the only action to the update dialog. If the sender is
-  known as a tkUpdateChecker, the action is automatically connected to the view update dialog from it.
+  known as a Utls::UpdateChecker, the action is automatically connected to the view update dialog from it.
 */
 bool MainWindowActionHandler::updateFound()
 {
     Utils::UpdateChecker *up = qobject_cast<Utils::UpdateChecker *>(sender());
+    Q_ASSERT(up);
     ITheme *theme = Core::ICore::instance()->theme();
     ActionManager *am = Core::ICore::instance()->actionManager();
     ActionContainer *menu = am->actionContainer(Constants::M_UPDATE);
@@ -638,20 +662,29 @@ bool MainWindowActionHandler::updateFound()
     return true;
 }
 
+/** \brief Shows the debug dialog. \sa Core::DebugDialog */
 bool MainWindowActionHandler::debugDialog()
 {
     DebugDialog dlg(this);
     dlg.showDialog();
     return true;
 }
-
+/** \brief Shows the standard About dialog. \sa Core::AboutDialog */
 bool MainWindowActionHandler::aboutApplication()
 {
     AboutDialog dlg(this);
     dlg.showDialog();
     return true;
 }
+/** \shows the standard About Plugins dialog. \sa Core::PluginDialog */
+bool MainWindowActionHandler::aboutPlugins()
+{
+    Core::PluginDialog dlg(this);
+    dlg.exec();
+    return true;
+}
 
+/** \brief Manage action creation. Actions are not connected. \sa Core::MainWindowActions */
 void MainWindowActionHandler::createActions(const Core::MainWindowActions &actions)
 {
     createFileActions(actions.fileActions());

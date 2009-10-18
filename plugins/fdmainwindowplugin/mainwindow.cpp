@@ -142,6 +142,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_ConfigureMedinTux);
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |
+            Core::MainWindowActions::A_PluginsAbout |
             Core::MainWindowActions::A_AppHelp |
             Core::MainWindowActions::A_DebugDialog //|
 //            Core::MainWindowActions::A_QtAbout
@@ -206,7 +207,9 @@ void MainWindow::extensionsInitialized()
             Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
 
-            qWarning() << tmp;
+            /** \todo Remove this */
+            Utils::Log::addMessage("DEBUG EXCHANGE", tmp);
+            /** \todo Remove this */
 
             if (tmp.contains(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG) + QString(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG).length();
@@ -350,7 +353,7 @@ void MainWindow::updateCheckerEnd()
 void MainWindow::readSettings()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-    s->restoreState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
+    s->restoreState(this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX);
     Core::ICore::instance()->fileManager()->getRecentFilesFromSettings();
 }
 
