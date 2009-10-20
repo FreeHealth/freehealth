@@ -34,6 +34,7 @@
  ***************************************************************************/
 #include "mainwindowplugin.h"
 #include "mainwindow.h"
+#include "mainwindowpreferences.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -57,6 +58,10 @@ MainWinPlugin::~MainWinPlugin()
 {
     if (m_MainWindow)
         delete m_MainWindow;
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -77,6 +82,12 @@ void MainWinPlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
+
+    // Add preferences pages
+    /** \todo v0.2.0 */
+//    prefPage = new Internal::MainWindowPreferencesPage();
+//    addObject(prefPage);
+    /** end todo v0.2.0 */
 
     m_MainWindow->initialize(QStringList(),0);
     m_MainWindow->extensionsInitialized();

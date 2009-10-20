@@ -49,9 +49,13 @@
 /**
  * \file MainWindowActionHandler.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 13 Aug 2009
+ * \version 0.0.8
+ * \date 20 Oct 2009
 */
+
+namespace Utils {
+class UpdateChecker;
+}
 
 namespace Core {
     class MainWindowActions;
@@ -93,9 +97,10 @@ public:
 
 public Q_SLOTS: // Usefull slots that interactions with actions and menus
     virtual bool updateFound();
+    virtual void updateCheckerEnd(bool error);
 
 
-public Q_SLOTS: // Slots automatically to actions is requiered
+public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool newFile()     {return false;}
     virtual bool openFile()    {return false;}
     virtual bool saveFile()    {return false;}
@@ -110,6 +115,7 @@ public Q_SLOTS: // Slots automatically to actions is requiered
     virtual bool applicationHelp();
     virtual bool aboutQt()          {return false;}
     virtual bool debugDialog();
+    virtual bool checkUpdate();
 
 public Q_SLOTS:
     virtual void switchLanguage(QAction * action);
@@ -141,12 +147,14 @@ protected:
     QAction *aQtAbout;
     QAction *aDebugDialog;
 
+    QAction *aCheckUpdate;
     QAction *aUpdateAvailable;
+
+    Utils::UpdateChecker *m_UpdateChecker;
 
 };
 
 }  // end Internal
-
 }  // end Core
 
 #endif // MAINWINDOWACTIONHANDLER_H

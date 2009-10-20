@@ -91,7 +91,16 @@ using namespace MainWin;
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
+// Getting the Core instances
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::Patient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
+static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
+// SplashScreen Messagers
+static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
+static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finishSplashScreen(w); }
 
 
 namespace MainWin {
@@ -113,18 +122,17 @@ MainWindow::MainWindow( QWidget * parent )
           : Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
-    Core::ICore::instance()->messageSplashScreen(tr("Creating Main Window"));
+    messageSplash(tr("Creating Main Window"));
 //    recentFiles.clear();
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     // create menus
     createFileMenu();
-    Core::ActionContainer *fmenu = am->actionContainer(Core::Constants::M_FILE);
+    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    am->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
     createConfigurationMenu();
     createHelpMenu();
 
@@ -144,7 +152,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_AppAbout |
             Core::MainWindowActions::A_PluginsAbout |
             Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog //|
+            Core::MainWindowActions::A_DebugDialog
+            /** \todo v0.2.0 */
+//             | Core::MainWindowActions::A_CheckUpdate //|
+            /** end todo */
 //            Core::MainWindowActions::A_QtAbout
             );
     actions.createEditActions(false);
@@ -155,7 +166,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectHelpActions();
 
 //    Core::ICore::instance()->contextManager()->updateContext();
-    Core::ICore::instance()->actionManager()->retranslateMenusAndActions();
+    actionManager()->retranslateMenusAndActions();
 
     readSettings();
 
@@ -164,23 +175,19 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 void MainWindow::extensionsInitialized()
 {
-    Core::CommandLine *cl = Core::ICore::instance()->commandLine();
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
-
     // Update countdown to dosage transmission
-    int count = s->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
+    int count = settings()->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
     ++count;
-    if ((count==30) || (cl->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
-        Core::ICore::instance()->messageSplashScreen(tr("Transmitting posologies..."));
-        s->setValue(Internal::SETTINGS_COUNTDOWN,0);
+    if ((count==30) || (commandLine()->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
+        messageSplash(tr("Transmitting posologies..."));
+        settings()->setValue(Internal::SETTINGS_COUNTDOWN,0);
         transmitDosage();
     } else {
-        s->setValue(Internal::SETTINGS_COUNTDOWN,count);
+        settings()->setValue(Internal::SETTINGS_COUNTDOWN,count);
     }
 
     // Disable some actions when starting as medintux plugin
-    if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+    if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
         this->aNew->setEnabled(false);
         this->aSave->setEnabled(false);
         this->aMedinTux->setEnabled(false);
@@ -195,15 +202,15 @@ void MainWindow::extensionsInitialized()
     m_ui->patientInformations->hide();
     refreshPatient();
 
-    Core::ICore::instance()->messageSplashScreen(tr("Initializing drugs database"));
+    messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
     // If needed read exchange file
-    const QString &exfile = cl->value(Core::CommandLine::CL_ExchangeFile).toString();
+    const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
     if (!exfile.isEmpty()) {
-        Core::ICore::instance()->messageSplashScreen(tr("Reading exchange file..."));
-        if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+        messageSplash(tr("Reading exchange file..."));
+        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
             Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
 
@@ -234,14 +241,17 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
-    Core::ICore::instance()->messageSplashScreen(tkTr(Trans::Constants::CHECKING_UPDATES));
-    statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-    statusBar()->addWidget(updateChecker()->progressBar(this),1);
-    connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-    connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-    updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
+    /** \todo v0.2.0 */
+//    if (settings()->value(Core::Constants::S_CHECKUPDATE,Core::Constants::S_CheckUpdate_AtStartup).toInt() == Core::Constants::S_CheckUpdate_AtStartup) {
+        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
+        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
+        statusBar()->addWidget(updateChecker()->progressBar(this),1);
+        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
+        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
+        updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
+//    }
 
-    Core::ICore::instance()->finishSplashScreen(this);
+    finishSplash(this);
     show();
 }
 
@@ -255,22 +265,21 @@ MainWindow::~MainWindow()
 */
 void MainWindow::refreshPatient() const
 {
-    Core::Patient *p = Core::Internal::CoreImpl::instance()->patient();
-    m_ui->patientName->setText( p->value(Core::Patient::FullName).toString() );
+    m_ui->patientName->setText( patient()->value(Core::Patient::FullName).toString() );
     m_ui->patientName->setToolTip( QString("Nom : %1<br />Date de naissance : %2<br />Poids : %3<br />"
                                      "Taille : %4<br />Clearance : %5")
-                             .arg( p->value(Core::Patient::FullName).toString(),
-                                   p->value(Core::Patient::DateOfBirth).toString(),
-                                   p->value(Core::Patient::Weight).toString() )
-                             .arg( p->value(Core::Patient::Size).toString(),
-                                   p->value(Core::Patient::CreatinClearance).toString() ));
+                             .arg( patient()->value(Core::Patient::FullName).toString(),
+                                   patient()->value(Core::Patient::DateOfBirth).toString(),
+                                   patient()->value(Core::Patient::Weight).toString() )
+                             .arg( patient()->value(Core::Patient::Size).toString(),
+                                   patient()->value(Core::Patient::CreatinClearance).toString() ));
 
-    m_ui->patientWeight->setValue( p->value(Core::Patient::Weight).toInt() );
-    m_ui->patientSize->setValue( p->value(Core::Patient::Size).toInt() );
-    m_ui->patientClCr->setValue( p->value(Core::Patient::CreatinClearance).toDouble() );
-    m_ui->patientCreatinin->setValue( p->value(Core::Patient::Creatinin).toDouble() );
-    m_ui->listOfAllergies->setText(  p->value(Core::Patient::DrugsAllergies).toString() );
-    m_ui->sexCombo->setCurrentIndex( m_ui->sexCombo->findText(p->value(Core::Patient::Sex).toString()) );
+    m_ui->patientWeight->setValue( patient()->value(Core::Patient::Weight).toInt() );
+    m_ui->patientSize->setValue( patient()->value(Core::Patient::Size).toInt() );
+    m_ui->patientClCr->setValue( patient()->value(Core::Patient::CreatinClearance).toDouble() );
+    m_ui->patientCreatinin->setValue( patient()->value(Core::Patient::Creatinin).toDouble() );
+    m_ui->listOfAllergies->setText(  patient()->value(Core::Patient::DrugsAllergies).toString() );
+    m_ui->sexCombo->setCurrentIndex( m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()) );
 }
 
 /** \brief Close the main window and the application */
@@ -278,8 +287,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
 {
     Utils::Log::addMessage(this, "Closing MainWindow");
     writeSettings();
-    Core::CommandLine *cl = Core::ICore::instance()->commandLine();
-    QString exfile = cl->value(Core::CommandLine::CL_ExchangeFile).toString();
+    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
     if (exfile.isEmpty()) {
         event->accept();
         return;
@@ -288,9 +296,9 @@ void MainWindow::closeEvent( QCloseEvent *event )
         Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
     }
     Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
-    Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(cl->value(Core::CommandLine::CL_MedinTux).toString()));
+    Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
     // if is a medintux plugins --> save prescription to exchange file
-    if (cl->value(Core::CommandLine::CL_MedinTux).toBool()) {
+    if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
 	QString tmp = Drugs::DrugsIO::instance()->prescriptionToHtml();
         tmp.replace("font-weight:bold;", "font-weight:600;");
         Utils::saveStringToFile( Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser );
@@ -305,7 +313,7 @@ void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
 	m_ui->retranslateUi(this);
-	Core::ICore::instance()->actionManager()->retranslateMenusAndActions();
+        actionManager()->retranslateMenusAndActions();
     }
 }
 
@@ -313,13 +321,11 @@ void MainWindow::changeEvent(QEvent *event)
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()
 {
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    Core::ActionContainer *aci = am->actionContainer(Core::Constants::M_FILE_RECENTFILES);
-    Core::FileManager *fm = Core::ICore::instance()->fileManager();
+    Core::ActionContainer *aci = actionManager()->actionContainer(Core::Constants::M_FILE_RECENTFILES);
     aci->menu()->clear();
 
     bool hasRecentFiles = false;
-    foreach (const QString &fileName, fm->recentFiles()) {
+    foreach (const QString &fileName, fileManager()->recentFiles()) {
         hasRecentFiles = true;
         QAction *action = aci->menu()->addAction(fileName);
         action->setData(fileName);
@@ -342,28 +348,22 @@ void MainWindow::openRecentFile()
 
 void MainWindow::updateCheckerEnd()
 {
-//    QList<QProgressBar*> list = statusBar()->findChildren<QProgressBar*>();
-//    foreach(QProgressBar *w, list)
-//        statusBar()->removeWidget(w);
-//    qDeleteAll(list);
     delete statusBar();
 }
 
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    s->restoreState(this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX);
-    Core::ICore::instance()->fileManager()->getRecentFilesFromSettings();
+    settings()->restoreState(this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX);
+    fileManager()->getRecentFilesFromSettings();
 }
 
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    s->saveState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
-    Core::ICore::instance()->fileManager()->saveRecentFiles();
-    s->sync();
+    settings()->saveState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
+    fileManager()->saveRecentFiles();
+    settings()->sync();
 }
 
 /** \obsolete */
@@ -382,28 +382,12 @@ bool MainWindow::newFile()
             saveFile();
         }
     }
-    Core::ICore::instance()->patient()->clear();
+    patient()->clear();
     refreshPatient();
     Drugs::DRUGMODEL->clearDrugsList();
     return true;
 }
 
-/**
-  \brief Shows the help dialog.
-  \sa tkHelpDialog
-*/
-bool MainWindow::applicationHelp()
-{
-    Core::HelpDialog::showIndex();
-    return true;
-}
-
-bool MainWindow::aboutPlugins()
-{
-    Core::PluginDialog dialog(this);
-    dialog.exec();
-    return true;
-}
 /**
   \brief Open the preferences dialog
   \sa mfDrugsPreferences
@@ -455,12 +439,10 @@ bool MainWindow::saveFile()
   \sa openPrescription()
   \sa DrugsIO
 */
-bool MainWindow::savePrescription( const QString &fileName )
+bool MainWindow::savePrescription(const QString &fileName)
 {
-    QString xmlExtra = Core::Internal::CoreImpl::instance()->patient()->toXml();
+    QString xmlExtra = patient()->toXml();
     return Drugs::DrugsIO::savePrescription(xmlExtra, fileName);
-    /** \todo here */
-    return true;
 }
 
 /**
@@ -478,8 +460,8 @@ bool MainWindow::openFile()
         return false;
     //    QString f = "/Users/eric/prescription.di";
     readFile(f);
-    Core::ICore::instance()->fileManager()->setCurrentFile(f);
-    Core::ICore::instance()->fileManager()->addToRecentFiles(f);
+    fileManager()->setCurrentFile(f);
+    fileManager()->addToRecentFiles(f);
     return true;
 }
 
@@ -500,49 +482,48 @@ void MainWindow::readFile(const QString &file)
     } else {
 	Drugs::DrugsIO::loadPrescription(file, datas, Drugs::DrugsIO::ReplacePrescription);
     }
-    Core::Patient *p = Core::Internal::CoreImpl::instance()->patient();
-    p->setValue(Core::Patient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
+    patient()->setValue(Core::Patient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
     m_ui->patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientName_textChanged(const QString &text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::FullName, text);
+    patient()->setValue(Core::Patient::FullName, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_sexCombo_currentIndexChanged(const QString &text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::Sex, text);
+    patient()->setValue(Core::Patient::Sex, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientWeight_valueChanged(const QString &text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::Weight, text);
+    patient()->setValue(Core::Patient::Weight, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientSize_valueChanged(const QString & text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::Size, text);
+    patient()->setValue(Core::Patient::Size, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientClCr_valueChanged(const QString & text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::CreatinClearance, text);
+    patient()->setValue(Core::Patient::CreatinClearance, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::Creatinin, text);
+    patient()->setValue(Core::Patient::Creatinin, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_listOfAllergies_textChanged(const QString &text)
 {
-    Core::Internal::CoreImpl::instance()->patient()->setValue(Core::Patient::DrugsAllergies, text);
+    patient()->setValue(Core::Patient::DrugsAllergies, text);
 }

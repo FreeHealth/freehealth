@@ -100,9 +100,9 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool configureMedintux();
 //
 //    virtual bool aboutApplication();
-    bool applicationHelp();
+//    bool applicationHelp();
 //    bool aboutQt();
-    bool aboutPlugins();
+//    bool aboutPlugins();
 
     void updateCheckerEnd();
 

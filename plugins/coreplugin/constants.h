@@ -236,6 +236,7 @@ const char * const  A_PLUGINS_PREFERENCES= "actionPlugPrefs";     /*!< \brief De
 const char * const  A_CONFIGURE_MEDINTUX = "actionConfMedintux";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Update Menu Actions' name
+const char * const  A_CHECKUPDATE      = "actionCheckUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Drugs specific actions' name
@@ -373,6 +374,14 @@ const char * const  S_OPENLAST ="Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
 const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
+const char * const  S_CHECKUPDATE  = "CheckUpdate";
+enum {  // Don't change the ordre of this enum
+    S_CheckUpdate_AtStartup = 0,
+    S_CheckUpdate_EachWeeks,
+    S_CheckUpdate_EachMonth,
+    S_CheckUpdate_EachQuarters,
+    S_CheckUpdate_Never
+};
 
 
 

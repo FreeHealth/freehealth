@@ -120,7 +120,7 @@
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="283"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="286"/>
         <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation>Une mise à jour est disponible. Veuillez vérifier le site internet : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
@@ -217,17 +217,17 @@
         <translation>Acceptez-vous les termes de la licence ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="607"/>
+        <location filename="../../libs/utils/global.cpp" line="609"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="612"/>
+        <location filename="../../libs/utils/global.cpp" line="614"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="956"/>
+        <location filename="../../libs/utils/global.cpp" line="958"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -235,12 +235,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="128"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="127"/>
         <source>Error %1 while retreiving update file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="152"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="151"/>
         <source>* Updates of version : %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>

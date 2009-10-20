@@ -36,94 +36,109 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MAINWINDOWACTIONS_H
-#define MAINWINDOWACTIONS_H
+#include "mainwindowpreferences.h"
 
-#include <coreplugin/core_exporter.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
-#include <QFlags>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
 
-/**
- * \file mainwindowactions.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 13 Aug 2009
-*/
+using namespace MainWin::Internal;
+using namespace Trans::ConstantTranslations;
 
-namespace Core {
 
-/** Use this class to pass informations on the desired actions to be created by the
-   Core::IMainWindow
-   \code
-       class MyMainWindow : public IMainWindow { .... }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
-       void MyMainWindow::createActionsInHandler()
-       {
-           Core::MainWindowActions actions;
-           actions.setFileActions( Core::MainWindowActions::A_FileNew );
-           actions.setHelpActions( Core::MainWindowActions::A_AppAbout );
-           IMainWindow::createActions(actions);
-       }
-   \endcode
-*/
-class CORE_EXPORT MainWindowActions
+MainWindowPreferencesPage::MainWindowPreferencesPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0)
+{ setObjectName("MainWindowPreferencesPage"); }
+
+MainWindowPreferencesPage::~MainWindowPreferencesPage()
 {
-public:
-    enum FileAction {
-        A_FileNew    = 0x01,
-        A_FileOpen   = 0x02,
-        A_FileSave   = 0x04,
-        A_FileSaveAs = 0x08,
-        A_FileClose  = 0x10,
-        A_FilePrint  = 0x11,
-        A_FileQuit   = 0x88
-    };
-    Q_DECLARE_FLAGS( FileActions, FileAction );
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
+}
 
-    enum ConfigurationAction {
-        A_AppPreferences     = 0x01,
-        A_PluginsPreferences = 0x02,
-        A_ConfigureMedinTux  = 0x04,
-        A_LangageChange      = 0x08
-    };
-    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
+QString MainWindowPreferencesPage::id() const { return objectName(); }
+QString MainWindowPreferencesPage::name() const { return tr("General"); }
+QString MainWindowPreferencesPage::category() const { return tr("General"); }
 
-    enum HelpAction {
-        A_AppAbout     = 0x01,
-        A_AppHelp      = 0x02,
-        A_QtAbout      = 0x04,
-        A_DebugDialog  = 0x08,
-        A_PluginsAbout = 0x10,
-        A_FormsAbout   = 0x20,
-        A_CheckUpdate  = 0x40
-    };
-    Q_DECLARE_FLAGS( HelpActions, HelpAction );
+void MainWindowPreferencesPage::resetToDefaults()
+{
+    m_Widget->writeDefaultSettings(settings());
+}
 
-    MainWindowActions() : file(0), config(0), help(0), edit(false) {}
-    ~MainWindowActions() {}
+void MainWindowPreferencesPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
+    }
+    m_Widget->saveToSettings(settings());
+}
 
-    void setFileActions(int actions) { file = actions; }
-    void createEditActions(bool yesOrNO) { edit = yesOrNO; }
-    void setConfigurationActions(int actions) { config = actions; }
-    void setHelpActions(int actions) { help = actions; }
+void MainWindowPreferencesPage::finish() { delete m_Widget; }
 
-    int fileActions() const { return file; }
-    bool editActionsToCreate() const { return edit; }
-    int configurationActions() const { return config; }
-    int helpActions() const { return help; }
+void MainWindowPreferencesPage::checkSettingsValidity()
+{
+    QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    foreach(const QString &k, defaultvalues.keys()) {
+        if (settings()->value(k) == QVariant())
+            settings()->setValue(k, defaultvalues.value(k));
+    }
+    settings()->sync();
+}
 
-private:
-    int file;
-    int config;
-    int help;
-    bool edit;
-};
+QWidget *MainWindowPreferencesPage::createPage(QWidget *parent)
+{
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new MainWindowPreferencesWidget(parent);
+    return m_Widget;
+}
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::FileActions )
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::ConfigurationActions )
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::HelpActions )
 
-}  // end Core
 
-#endif // MAINWINDOWACTIONS_H
+MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    setupUi(this);
+    // feed with actual values
+    updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
+}
+
+void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
+{
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
+
+    // manage font size
+    s->setValue(Core::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
+}
+
+void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+{
+//    qWarning() << "---------> writedefaults";
+    Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
+    s->setValue(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    s->sync();
+}
+
+void MainWindowPreferencesWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}

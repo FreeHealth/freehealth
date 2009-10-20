@@ -76,8 +76,9 @@ public:
      UpdateChecker(QObject *parent = 0);
     ~UpdateChecker();
 
-    void check( const QString &url );
-    void check( const QUrl &url );
+    bool isChecking() const;
+    void check(const QString &url);
+    void check(const QUrl &url);
     void cancel();
 
     bool fileRetreived();

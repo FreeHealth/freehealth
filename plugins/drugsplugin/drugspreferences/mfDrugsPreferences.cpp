@@ -382,7 +382,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    Core::ITheme *th = Core::ICore::instance()->theme();
+//    Core::ITheme *th = Core::ICore::instance()->theme();
     // set icons
 //    drugBoldButton->setIcon(th->icon(Core::Constants::ICONBOLD));
 //    drugUnderlineButton->setIcon(th->icon(Core::Constants::ICONUNDERLINE));

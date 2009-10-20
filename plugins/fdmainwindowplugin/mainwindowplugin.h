@@ -53,6 +53,10 @@
 */
 
 namespace MainWin {
+namespace Internal {
+class MainWindowPreferencesPage;
+} // End Internal
+
 class MainWindow;
 
 class MainWinPlugin : public ExtensionSystem::IPlugin
@@ -67,6 +71,7 @@ public:
 
 private:
     MainWindow *m_MainWindow;
+    Internal::MainWindowPreferencesPage *prefPage;
 };
 
 

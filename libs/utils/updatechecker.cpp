@@ -98,15 +98,14 @@ UpdateCheckerPrivate::~UpdateCheckerPrivate()
 
 bool UpdateCheckerPrivate::getFile( const QUrl &url )
 {
-    if ( !url.isValid() )
+    Log::addMessage( this, "getFile" );
+    if ((!url.isValid()) || (url.scheme() != "http") || (url.path().isEmpty())) {
+        Q_EMIT static_cast<UpdateChecker*>(parent())->done(false);
         return false;
-    if ( url.scheme() != "http" )
-        return false;
-    if ( url.path().isEmpty() )
-        return false;
+    }
     m_Url = url;
-    m_Http->setHost( m_Url.host(), m_Url.port( 80 ) );
-    m_Http->get( m_Url.path(), &m_Buffer );
+    m_Http->setHost(m_Url.host(), m_Url.port(80));
+    m_Http->get(m_Url.path(), &m_Buffer);
     m_Http->close();
     return true;
 }
@@ -182,8 +181,7 @@ void UpdateCheckerPrivate::cancelDownload()
 UpdateChecker::UpdateChecker( QObject *parent )
           : QObject(parent), d(0)
 {
-    setObjectName( "UpdateChecker" );
-//    tkLog::instance()->addObjectWatcher(this);
+    setObjectName("UpdateChecker");
     d = new Internal::UpdateCheckerPrivate(this);
 }
 
@@ -197,26 +195,31 @@ UpdateChecker::~UpdateChecker()
     }
 }
 
+bool UpdateChecker::isChecking() const
+{
+    return (d->m_Http->currentId() != 0);
+}
+
 /**
   \brief Check for update using the URL \e url.
   \li Download the selected file
   \li Find the latest version notified in it
   \li Compare with the QApplication::applicationVersion() string
 */
-void UpdateChecker::check( const QString &url )
+void UpdateChecker::check(const QString &url)
 {
-    Log::addMessage( this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg( url ) );
-    d->getFile( QUrl(url) );
+    Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url));
+    d->getFile(QUrl(url));
 }
 
 /**
   \brief Check for update using the URL \e url.
   \sa check()
 */
-void UpdateChecker::check( const QUrl &url )
+void UpdateChecker::check(const QUrl &url)
 {
-    Log::addMessage( this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg( url.toString() ) );
-    d->getFile( url );
+    Log::addMessage( this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url.toString()));
+    d->getFile(url);
 }
 
 void UpdateChecker::cancel()

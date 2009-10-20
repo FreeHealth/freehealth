@@ -260,10 +260,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *filemenu = am->actionContainer(Core::Constants::M_FILE);
     a = aPrintPrescription = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
-    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+//    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd = am->registerAction(a, mfDrugsConstants::A_PRINT_PRESCRIPTION, ctx);
     cmd->setTranslations(mfDrugsConstants::PRINTPRESCRIPTION_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+#ifdef FREEDIAMS
+    cmd->setKeySequence(QKeySequence::Print);
+#else
     cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+#endif
     cmd->retranslate();
     if (filemenu) {
         filemenu->addAction(cmd, Core::Constants::G_FILE_PRINT);

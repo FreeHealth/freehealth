@@ -68,34 +68,72 @@
     </message>
 </context>
 <context>
+    <name>MainWin::Internal::MainWindowPreferencesWidget</name>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="20"/>
+        <source>Update checking</source>
+        <translation>Vérification des mises à jour</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
+        <source>At startup</source>
+        <translation>À chaque démarrage</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
+        <source>Each weeks</source>
+        <translation>Toutes les semaines</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
+        <source>Each months</source>
+        <translation>Tous les mois</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
+        <source>Each quarters</source>
+        <translation>Tous les trimestres</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
+        <source>Never (on user&apos;s demand)</source>
+        <translation>Jamais automatiquement</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="101"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="110"/>
         <source>Preparing dosage transmission</source>
         <translation>Préparation de la transmission des posologies</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="116"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="125"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="175"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="182"/>
         <source>Transmitting posologies...</source>
         <translation>Transmission des posologies...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="198"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="205"/>
         <source>Initializing drugs database</source>
         <translation>Intialisation de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="205"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="212"/>
         <source>Reading exchange file...</source>
         <translation>Lecture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="207"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="214"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation>Lecture du fichier d&apos;échange MedinTux.</translation>
     </message>
@@ -110,29 +148,38 @@
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="491"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="475"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : ajouter ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="492"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="476"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Une prescription est présente, vouez-vous la remplacer ou y ajouter la prescription à charger ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="493"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="477"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="493"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="477"/>
         <source>Add to prescription</source>
         <translation>Ajouter la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="494"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="478"/>
         <source>Open a prescription</source>
         <translation>Ouvrir la prescription</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindowPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="67"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="68"/>
+        <source>General</source>
+        <translation>Général</translation>
     </message>
 </context>
 <context>

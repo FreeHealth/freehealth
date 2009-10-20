@@ -68,34 +68,72 @@
     </message>
 </context>
 <context>
+    <name>MainWin::Internal::MainWindowPreferencesWidget</name>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="20"/>
+        <source>Update checking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
+        <source>At startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
+        <source>Each weeks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
+        <source>Each months</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
+        <source>Each quarters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
+        <source>Never (on user&apos;s demand)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="101"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="110"/>
         <source>Preparing dosage transmission</source>
         <translation>Bereite Dosis Transmission vor</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="116"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="125"/>
         <source>Creating Main Window</source>
         <translation>Erstelle Hauptfenster</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="175"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="182"/>
         <source>Transmitting posologies...</source>
         <translation>Übermittle Posologie...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="198"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="205"/>
         <source>Initializing drugs database</source>
         <translation>Initialisiere Medikamentendatenbank</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="205"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="212"/>
         <source>Reading exchange file...</source>
         <translation>Lese Exchange Datei...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="207"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="214"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation>Lese ein MedinTux exchange file.</translation>
     </message>
@@ -110,29 +148,38 @@
         <translation>Das aktuelle Rezept ist nicht leer. Möchten Sie es speichern bevor Sie ein neues erstellen?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="491"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="475"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Öffne ein Rezept zusammenfügen oder austauschen?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="492"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="476"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Da ist ein Rezept im Editor, wollen Sie das ersetzen oder zu einem offenen Rezept hinzufügen ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="493"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="477"/>
         <source>Replace prescription</source>
         <translation>Ersetze Rezept</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="493"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="477"/>
         <source>Add to prescription</source>
         <translation>Függe einem Rezept hinzu</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="494"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="478"/>
         <source>Open a prescription</source>
         <translation>Öffne ein Rezept</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindowPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="67"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="68"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

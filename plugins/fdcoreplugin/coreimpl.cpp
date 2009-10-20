@@ -96,6 +96,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MedinTux(0)
 {
     m_Settings = new SettingsPrivate(this);
+    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);
+
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
     m_CommandLine = new CommandLine();
@@ -164,9 +166,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
-
-    // Manage exchange file
-    messageSplashScreen(QCoreApplication::translate( "Core", "Checking command line parameters..." ) );
 
     if (Utils::isRunningOnMac())
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);

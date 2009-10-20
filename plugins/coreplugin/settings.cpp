@@ -302,8 +302,13 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
     {
         case WebSiteUrl :
         {
-            m_Enum_Path.insert( type, absPath );
+            m_Enum_Path.insert(type, absPath);
             qApp->setOrganizationDomain(absPath);
+            break;
+        }
+        case UpdateUrl :
+        {
+            m_Enum_Path.insert(type, absPath);
             break;
         }
         case ResourcesPath :

@@ -7,12 +7,14 @@ version=0.1.1
 
    * Nouvelles fonctionnalités :
       * Ajout d'un dialogue : A propos des plugins
+
    * Modifications importantes :
+
    * Correction de bogues / Améliorations techniques :
       * Traduction de la "phrase posologique" au premier démarrage
       * Manuel de l'utilisateur de nouveau accessible
       * Boucle infinie sur certains médicaments sans substance FT
-      * Redimentionne le dialogue préférences à la taille de la fenêtre principale automatiquement
+      * Redimentionne le dialogue préférences automatiquement
       * Possibilité de cacher la prévisualisation d'impression dans les préférences d'impression
       * Raccourci clavier pour l'impression corrigé
       * Prévisualisation des documents utilisateurs (entêtes...) se redimentionne automatiquement

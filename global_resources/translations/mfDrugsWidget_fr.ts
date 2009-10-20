@@ -375,7 +375,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="48"/>
         <source>French RCP</source>
-        <translation type="unfinished"></translation>
+        <translation>RCP Française</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="61"/>

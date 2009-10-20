@@ -6,9 +6,13 @@ SUBDIRS = \
     printer \
     listview \
     texteditor \
-    drugs
+    drugs \
+    drugsbase
 
 core.subdir = ../../plugins/fdcoreplugin
+
+drugsbase.subdir   = ../../plugins/drugsbaseplugin
+drugsbase.depends += core
 
 mainwindow.subdir   = ../../plugins/fdmainwindowplugin
 mainwindow.depends += core

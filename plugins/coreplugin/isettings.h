@@ -85,7 +85,8 @@ public:
         FormsPath,
         SampleFormsPath,
         DocumentationPath,
-        WebSiteUrl
+        WebSiteUrl,
+        UpdateUrl
     };
 
     virtual ~ISettings() {}

@@ -59,6 +59,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/debugdialog.h>
@@ -73,9 +74,18 @@
 #include <QDebug>
 #include <QKeySequence>
 #include <QLocale>
+#include <QStatusBar>
+#include <QLabel>
 
 using namespace Core;
 using namespace Core::Internal;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 
 MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         QMainWindow(parent),
@@ -100,7 +110,9 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aAppHelp(0),
         aQtAbout(0),
         aDebugDialog(0),
-        aUpdateAvailable(0)
+        aCheckUpdate(0),
+        aUpdateAvailable(0),
+        m_UpdateChecker(0)
 {
     setObjectName("MainWindowActionHandler");
 }
@@ -112,12 +124,10 @@ MainWindowActionHandler::~MainWindowActionHandler()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
 void MainWindowActionHandler::createFileMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
     // creates menu bar
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     if (!menubar) {
-        menubar = am->createMenuBar(Constants::MENUBAR);
+        menubar = actionManager()->createMenuBar(Constants::MENUBAR);
 #ifndef Q_WS_MAC
         setMenuBar(menubar->menuBar());
 #endif
@@ -125,7 +135,7 @@ void MainWindowActionHandler::createFileMenu()
     menubar->appendGroup(Constants::G_FILE);
 
     // Create menu
-    ActionContainer *filemenu = am->createMenu(Constants::M_FILE);
+    ActionContainer *filemenu = actionManager()->createMenu(Constants::M_FILE);
     menubar->addMenu(filemenu, Constants::G_FILE);
     filemenu->setTranslations(Trans::Constants::M_FILE_TEXT);
     filemenu->appendGroup(Constants::G_FILE_NEW);
@@ -137,7 +147,7 @@ void MainWindowActionHandler::createFileMenu()
     filemenu->appendGroup(Constants::G_FILE_OTHER);
     filemenu->appendGroup(Constants::G_FILE_CLOSE);
     filemenu->appendGroup(Constants::G_FILE_EXIT);
-    ActionContainer *recentmenu = am->createMenu(Constants::M_FILE_RECENTFILES);
+    ActionContainer *recentmenu = actionManager()->createMenu(Constants::M_FILE_RECENTFILES);
     recentmenu->setTranslations(Trans::Constants::M_FILE_RECENTFILES_TEXT);
     filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
 }
@@ -145,14 +155,12 @@ void MainWindowActionHandler::createFileMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createEditMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_EDIT);
 
     // Edit Menu groups
-    ActionContainer *editmenu = am->createMenu(Constants::M_EDIT);
+    ActionContainer *editmenu = actionManager()->createMenu(Constants::M_EDIT);
     menubar->addMenu(editmenu, Constants::G_EDIT);
     editmenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
     editmenu->appendGroup(Constants::G_EDIT);
@@ -169,12 +177,10 @@ void MainWindowActionHandler::createEditMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createFormatMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_FORMAT);
-    ActionContainer *formatmenu = am->createMenu(Constants::M_FORMAT);
+    ActionContainer *formatmenu = actionManager()->createMenu(Constants::M_FORMAT);
     menubar->addMenu(formatmenu, Constants::G_FORMAT);
     formatmenu->setTranslations(Trans::Constants::M_FORMAT_TEXT);
     formatmenu->appendGroup(Constants::G_FORMAT_FONT);
@@ -186,13 +192,11 @@ void MainWindowActionHandler::createFormatMenu()
 
 void MainWindowActionHandler::createPluginsMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_PLUGINS);
 
-    ActionContainer *confmenu = am->createMenu(Constants::M_PLUGINS);
+    ActionContainer *confmenu = actionManager()->createMenu(Constants::M_PLUGINS);
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
     menubar->addMenu(confmenu, Constants::G_PLUGINS);
     confmenu->setTranslations(Trans::Constants::M_PLUGINS_TEXT);
@@ -205,13 +209,11 @@ void MainWindowActionHandler::createPluginsMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createConfigurationMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_CONFIGURATION);
 
-    ActionContainer *confmenu = am->createMenu(Constants::M_CONFIGURATION);
+    ActionContainer *confmenu = actionManager()->createMenu(Constants::M_CONFIGURATION);
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
     menubar->addMenu(confmenu, Constants::G_CONFIGURATION);
     confmenu->setTranslations(Trans::Constants::M_CONFIGURATION_TEXT);
@@ -224,32 +226,29 @@ void MainWindowActionHandler::createConfigurationMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createHelpMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_HELP);
 
-    ActionContainer *m = am->createMenu(Constants::M_HELP);
+    ActionContainer *m = actionManager()->createMenu(Constants::M_HELP);
     menubar->addMenu(m, Constants::G_HELP);
     m->setTranslations(Trans::Constants::M_ABOUT_TEXT);
     m->appendGroup(Constants::G_HELP_HELP);
     m->appendGroup(Constants::G_HELP_ABOUT);
     m->appendGroup(Constants::G_HELP_OTHER);
+    m->appendGroup(Constants::G_UPDATE);
     m->appendGroup(Constants::G_HELP_DEBUG);
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createUpdateMenu()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-
-    ActionContainer *menubar = am->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_UPDATE);
 
     // Upadate Menu groups
-    ActionContainer *upmenu = am->createMenu(Constants::M_UPDATE);
+    ActionContainer *upmenu = actionManager()->createMenu(Constants::M_UPDATE);
     menubar->addMenu(upmenu, Constants::G_UPDATE);
     upmenu->setTranslations(Trans::Constants::M_UPDATE_TEXT);
     upmenu->appendGroup(Constants::G_UPDATE_AVAILABLE);
@@ -260,10 +259,8 @@ void MainWindowActionHandler::createUpdateMenu()
 /** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
 void MainWindowActionHandler::createFileActions(int actions)
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-    ITheme *theme = Core::ICore::instance()->theme();
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-    ActionContainer *mfile = am->actionContainer(Constants::M_FILE);
+    ActionContainer *mfile = actionManager()->actionContainer(Constants::M_FILE);
     mfile->setTranslations(Trans::Constants::M_FILE_TEXT);
     Q_ASSERT(mfile);
     if (!mfile)
@@ -276,7 +273,7 @@ void MainWindowActionHandler::createFileActions(int actions)
     if (actions & Core::MainWindowActions::A_FileNew) {
         a = aNew = new QAction(this);
         a->setIcon(QIcon(Constants::ICONFILENEW));
-        cmd = am->registerAction(a, Constants::A_FILE_NEW, ctx);
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_NEW, ctx);
         cmd->setDefaultKeySequence(QKeySequence::New);
         cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
 //        cmd->setAttribute(Command::CA_UpdateText);
@@ -286,8 +283,8 @@ void MainWindowActionHandler::createFileActions(int actions)
     // Open Action
     if (actions & Core::MainWindowActions::A_FileOpen) {
         a = aOpen = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONOPEN));
-        cmd = am->registerAction(a, Constants::A_FILE_OPEN, ctx);
+        a->setIcon(theme()->icon(Constants::ICONOPEN));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_OPEN, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Open);
         cmd->setTranslations(Trans::Constants::FILEOPEN_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
@@ -297,8 +294,8 @@ void MainWindowActionHandler::createFileActions(int actions)
     // Save Action
     if (actions & Core::MainWindowActions::A_FileSave) {
         a = aSave = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONSAVE));
-        cmd = am->registerAction(a, Constants::A_FILE_SAVE, ctx);
+        a->setIcon(theme()->icon(Constants::ICONSAVE));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVE, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Save);
         cmd->setTranslations(Trans::Constants::FILESAVE_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
@@ -308,8 +305,8 @@ void MainWindowActionHandler::createFileActions(int actions)
     // SaveAs Action
     if (actions & Core::MainWindowActions::A_FileSaveAs) {
         a = aSaveAs = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONSAVEAS));
-        cmd = am->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
+        a->setIcon(theme()->icon(Constants::ICONSAVEAS));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
 #if QT_VERSION >= 0x040500
         cmd->setDefaultKeySequence(QKeySequence::SaveAs);
 #else
@@ -323,8 +320,8 @@ void MainWindowActionHandler::createFileActions(int actions)
     // Print Action
     if (actions & Core::MainWindowActions::A_FilePrint) {
         a = aPrint = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONPRINT));
-        cmd = am->registerAction(a, Constants::A_FILE_PRINT, ctx);
+        a->setIcon(theme()->icon(Constants::ICONPRINT));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
@@ -334,8 +331,8 @@ void MainWindowActionHandler::createFileActions(int actions)
     // Quit Action
     if (actions & Core::MainWindowActions::A_FileQuit) {
         a = aQuit = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONQUIT));
-        cmd = am->registerAction(a, Constants::A_FILE_EXIT, ctx);
+        a->setIcon(theme()->icon(Constants::ICONQUIT));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
         cmd->action()->setMenuRole(QAction::QuitRole);
         mfile->addAction(cmd, Constants::G_FILE_EXIT);
@@ -367,10 +364,8 @@ void MainWindowActionHandler::connectFileActions()
 
 void MainWindowActionHandler::createEditActions()
 {
-    ActionManager *am = Core::ICore::instance()->actionManager();
-    ITheme *theme = Core::ICore::instance()->theme();
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-    ActionContainer *medit = am->actionContainer(Constants::M_EDIT);
+    ActionContainer *medit = actionManager()->actionContainer(Constants::M_EDIT);
     Q_ASSERT(medit);
     if (!medit)
         return;
@@ -378,8 +373,8 @@ void MainWindowActionHandler::createEditActions()
     // Undo Action
     QAction *a = aUndo = new QAction(this);
     a->setObjectName("aUndo");
-    a->setIcon(theme->icon(Constants::ICONUNDO));
-    Command *cmd = am->registerAction(a, Constants::A_EDIT_UNDO, ctx);
+    a->setIcon(theme()->icon(Constants::ICONUNDO));
+    Command *cmd = actionManager()->registerAction(a, Constants::A_EDIT_UNDO, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Undo);
     //    cmd->setAttribute(Command::CA_UpdateText);
     cmd->setTranslations(Trans::Constants::EDITUNDO_TEXT);
@@ -389,8 +384,8 @@ void MainWindowActionHandler::createEditActions()
     // Redo Action
     a = aRedo = new QAction(this);
     a->setObjectName("aRedo");
-    a->setIcon(theme->icon(Constants::ICONREDO));
-    cmd = am->registerAction(a, Constants::A_EDIT_REDO, ctx);
+    a->setIcon(theme()->icon(Constants::ICONREDO));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_REDO, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Redo);
     //    cmd->setAttribute(Command::CA_UpdateText);
     cmd->setTranslations(Trans::Constants::EDITREDO_TEXT);
@@ -400,8 +395,8 @@ void MainWindowActionHandler::createEditActions()
     // Cut Action
     a = aCut = new QAction(this);
     a->setObjectName("aCut");
-    a->setIcon(theme->icon(Constants::ICONCUT));
-    cmd = am->registerAction(a, Constants::A_EDIT_CUT, ctx);
+    a->setIcon(theme()->icon(Constants::ICONCUT));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_CUT, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Cut);
     cmd->setTranslations(Trans::Constants::EDITCUT_TEXT );
     medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
@@ -410,8 +405,8 @@ void MainWindowActionHandler::createEditActions()
     // Copy Action
     a = aCopy = new QAction(this);
     a->setObjectName("aCopy");
-    a->setIcon(theme->icon(Constants::ICONCOPY));
-    cmd = am->registerAction(a, Constants::A_EDIT_COPY, ctx);
+    a->setIcon(theme()->icon(Constants::ICONCOPY));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_COPY, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Copy);
     cmd->setTranslations(Trans::Constants::EDITCOPY_TEXT );
     medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
@@ -420,8 +415,8 @@ void MainWindowActionHandler::createEditActions()
     // Paste Action
     a = aPaste = new QAction(this);
     a->setObjectName("aPaste");
-    a->setIcon(theme->icon(Constants::ICONPASTE));
-    cmd = am->registerAction(a, Constants::A_EDIT_PASTE, ctx);
+    a->setIcon(theme()->icon(Constants::ICONPASTE));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_PASTE, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Paste);
     cmd->setTranslations(Trans::Constants::EDITPASTE_TEXT );
     medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
@@ -430,8 +425,8 @@ void MainWindowActionHandler::createEditActions()
     // SelectAll Action
     a = aSelectAll = new QAction(this);
     a->setObjectName("aSelectAll");
-    a->setIcon(theme->icon(Constants::ICONSELECTALL));
-    cmd = am->registerAction(a, Constants::A_EDIT_SELECTALL, ctx);
+    a->setIcon(theme()->icon(Constants::ICONSELECTALL));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_SELECTALL, ctx);
     cmd->setDefaultKeySequence(QKeySequence::SelectAll);
     cmd->setTranslations(Trans::Constants::EDITSELECTALL_TEXT );
     medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
@@ -453,10 +448,8 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
 {
     QAction *a = 0;
     Command *cmd = 0;
-    ActionManager *am = Core::ICore::instance()->actionManager();
-    ITheme *theme = Core::ICore::instance()->theme();
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-    ActionContainer *menu = am->actionContainer(Constants::M_CONFIGURATION);
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_CONFIGURATION);
     Q_ASSERT(menu);
     if (!menu)
         return;
@@ -464,17 +457,17 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
     if (actions & Core::MainWindowActions::A_AppPreferences) {
         a = aAppPrefs = new QAction(this);
         a->setObjectName("aAppPrefs");
-        a->setIcon(theme->icon(Constants::ICONPREFERENCES));
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
         a->setMenuRole(QAction::PreferencesRole);
-        cmd = am->registerAction(a, Constants::A_PREFERENCES, ctx);
+        cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
         menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
     }
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
         a = aPlugsPrefs = new QAction(this);
         a->setObjectName("aPlugsPrefs");
-        a->setIcon(theme->icon(Constants::ICONPREFERENCES));
-        cmd = am->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
         cmd->setDefaultKeySequence(QKeySequence::SelectAll);
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
         menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
@@ -482,18 +475,17 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
     if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
         a = aMedinTux = new QAction(this);
         a->setObjectName("aMedinTux");
-        a->setIcon(theme->icon(Constants::ICONMEDINTUX));
-        cmd = am->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
-        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT );
+        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
+        cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
+        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
         menu->addAction(cmd, Constants::G_PREFERENCES);
     }
     if (actions & Core::MainWindowActions::A_LangageChange) {
         aLanguageGroup = new QActionGroup(this);
         // create language menu
-        ActionManager *am = Core::ICore::instance()->actionManager();
-        ActionContainer *menuconf = am->actionContainer(Constants::M_CONFIGURATION);
+        ActionContainer *menuconf = actionManager()->actionContainer(Constants::M_CONFIGURATION);
         Q_ASSERT(menuconf);
-        ActionContainer *lmenu = am->createMenu(Constants::M_LANGUAGES);
+        ActionContainer *lmenu = actionManager()->createMenu(Constants::M_LANGUAGES);
         menuconf->addMenu(lmenu, Constants::G_LANGUAGES);
         lmenu->appendGroup(Constants::G_LANGUAGES);
         lmenu->setTranslations(Trans::Constants::M_LANGUAGES_TEXT);
@@ -508,7 +500,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
             action->setObjectName(loc);
             action->setData(loc);
             action->setCheckable(true);
-            cmd = am->registerAction(action, loc, ctx);
+            cmd = actionManager()->registerAction(action, loc, ctx);
             lmenu->addAction(cmd, Constants::G_LANGUAGES);
             aLanguageGroup->addAction(action);
             if (loc == QLocale().name().left(2))
@@ -544,65 +536,63 @@ void MainWindowActionHandler::createHelpActions(int actions)
 {
     QAction *a = 0;
     Command *cmd = 0;
-    ActionManager *am = Core::ICore::instance()->actionManager();
-    ITheme *theme = Core::ICore::instance()->theme();
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-    ActionContainer *menu = am->actionContainer(Constants::M_HELP);
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_HELP);
     Q_ASSERT(menu);
     if (!menu)
         return;
 
     if (actions & Core::MainWindowActions::A_AppAbout) {
         a = aAppAbout = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONABOUT));
+        a->setIcon(theme()->icon(Constants::ICONABOUT));
         a->setMenuRole(QAction::AboutRole);
-        cmd = am->registerAction(a, Constants::A_ABOUT, ctx);
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
         cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aPlugsAbout = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONHELP));
-        cmd = am->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
         cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
     if (actions & Core::MainWindowActions::A_AppHelp) {
         a = aAppHelp = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONHELP));
-        cmd = am->registerAction(a, Constants::A_APPLICATIONHELP, ctx);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_APPLICATIONHELP, ctx);
         cmd->setDefaultKeySequence(QKeySequence::HelpContents);
         cmd->setTranslations(Trans::Constants::HELP_TEXT);
         menu->addAction(cmd, Constants::G_HELP_HELP);
     }
     if (actions & Core::MainWindowActions::A_QtAbout) {
         a = aQtAbout = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONABOUT));
+        a->setIcon(theme()->icon(Constants::ICONABOUT));
         a->setMenuRole(QAction::AboutQtRole);
-        cmd = am->registerAction(a, Constants::A_ABOUTQT, ctx);
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUTQT, ctx);
         cmd->setTranslations(Trans::Constants::ABOUTQT_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
     if (actions & Core::MainWindowActions::A_DebugDialog) {
         a = aDebugDialog = new QAction(this);
-        a->setIcon(theme->icon(Constants::ICONHELP));
-        cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_DEBUGHELPER, ctx);
         cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
         menu->addAction(cmd, Constants::G_HELP_DEBUG);
     }
 
-    //        if (actions & Core::MainWindowActions::A_UpdateInfo) {
-//            a = aInfoUpdate = new QAction(this);
-//            a->setIcon(theme->icon(Constants::ICONHELP));
-//            cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
-//            cmd->setTranslations(Trans::Constants::VERSION_UPTODATE);
-//            menu->addAction(cmd, Constants::G_HELP_ABOUT);
-//        }
-    //
+    if (actions & Core::MainWindowActions::A_CheckUpdate) {
+        a = aCheckUpdate = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
+        cmd = actionManager()->registerAction(a, Constants::A_CHECKUPDATE, ctx);
+        cmd->setTranslations(Trans::Constants::CHECKUPDATE);
+        menu->addAction(cmd, Constants::G_UPDATE);
+    }
+
     //    if (actions & Core::MainWindowActions::A_FormsAbout) {
     //        a = aDebugDialog = new QAction(this);
-    //        a->setIcon(theme->icon(Constants::ICONHELP));
-    //        cmd = am->registerAction(a, Constants::A_DEBUGHELPER, ctx);
+    //        a->setIcon(theme()->icon(Constants::ICONHELP));
+    //        cmd = actionManager()->registerAction(a, Constants::A_DEBUGHELPER, ctx);
     //        cmd->setTranslations( Constants::DEBUGHELPER_TEXT );
     //        menu->addAction(cmd, Constants::G_HELP_DEBUG);
     //    }
@@ -626,40 +616,9 @@ void MainWindowActionHandler::connectHelpActions()
 
     if (aDebugDialog)
         connect(aDebugDialog, SIGNAL(triggered()), this, SLOT(debugDialog()));
-}
 
-/**
-  \brief Slot to connect with the Utils::UpdateChecke::updateFound() signal.
-  Add a menu to the menu bar and connect the only action to the update dialog. If the sender is
-  known as a Utls::UpdateChecker, the action is automatically connected to the view update dialog from it.
-*/
-bool MainWindowActionHandler::updateFound()
-{
-    Utils::UpdateChecker *up = qobject_cast<Utils::UpdateChecker *>(sender());
-    Q_ASSERT(up);
-    ITheme *theme = Core::ICore::instance()->theme();
-    ActionManager *am = Core::ICore::instance()->actionManager();
-    ActionContainer *menu = am->actionContainer(Constants::M_UPDATE);
-    if (!menu) {
-        createUpdateMenu();
-        menu = am->actionContainer(Constants::M_UPDATE);
-        menu->retranslate();
-    }
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
-    Q_ASSERT(menu);
-    if (!menu)
-        return false;
-
-    QAction *a = aUpdateAvailable = new QAction(this);
-    a->setIcon(theme->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
-    Command *cmd = am->registerAction(a, Constants::A_VIEWUPDATE, ctx);
-    cmd->setTranslations( Trans::Constants::VIEWUPDATE_TEXT );
-    menu->addAction(cmd, Constants::G_UPDATE_AVAILABLE);
-    cmd->retranslate();
-    Core::ICore::instance()->contextManager()->updateContext();
-    if (up)
-        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformations()));
-    return true;
+    if (aCheckUpdate)
+        connect(aCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 }
 
 /** \brief Shows the debug dialog. \sa Core::DebugDialog */
@@ -692,4 +651,55 @@ void MainWindowActionHandler::createActions(const Core::MainWindowActions &actio
     createHelpActions(actions.helpActions());
     if (actions.editActionsToCreate())
         createEditActions();
+}
+
+/** \brief Check over the web if an update of the software is available */
+bool MainWindowActionHandler::checkUpdate()
+{
+    if (!updateChecker()->isChecking()) {
+        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
+        statusBar()->addWidget(updateChecker()->progressBar(this),1);
+        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
+        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
+        updateChecker()->check(settings()->path(Core::ISettings::UpdateUrl));
+    }
+    return true;
+}
+
+/**
+  \brief Slot to connect with the Utils::UpdateChecke::updateFound() signal.
+  Add a menu to the menu bar and connect the only action to the update dialog. If the sender is
+  known as a Utls::UpdateChecker, the action is automatically connected to the view update dialog from it.
+*/
+bool MainWindowActionHandler::updateFound()
+{
+    Utils::UpdateChecker *up = qobject_cast<Utils::UpdateChecker *>(sender());
+    Q_ASSERT(up);
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_UPDATE);
+    if (!menu) {
+        createUpdateMenu();
+        menu = actionManager()->actionContainer(Constants::M_UPDATE);
+        menu->retranslate();
+    }
+    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    Q_ASSERT(menu);
+    if (!menu)
+        return false;
+
+    QAction *a = aUpdateAvailable = new QAction(this);
+    a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    Command *cmd = actionManager()->registerAction(a, Constants::A_VIEWUPDATE, ctx);
+    cmd->setTranslations(Trans::Constants::VIEWUPDATE_TEXT);
+    menu->addAction(cmd, Constants::G_UPDATE_AVAILABLE);
+    cmd->retranslate();
+    Core::ICore::instance()->contextManager()->updateContext();
+    if (up)
+        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformations()));
+    return true;
+}
+
+void MainWindowActionHandler::updateCheckerEnd(bool error)
+{
+    /** \todo improve this for FreeMedForms (delete only label and progressbar) */
+    delete statusBar();
 }

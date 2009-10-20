@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUPDATECHECKERPRIVATE_H
-#define TKUPDATECHECKERPRIVATE_H
+#ifndef UPDATECHECKERPRIVATE_H
+#define UPDATECHECKERPRIVATE_H
 
 #include <QObject>
 #include <QtNetwork>
@@ -77,4 +77,4 @@ public:
 }  // End Internal
 }  // End Utils
 
-#endif  // TKUPDATECHECKERPRIVATE_H
+#endif  // UPDATECHECKERPRIVATE_H

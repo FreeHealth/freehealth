@@ -87,21 +87,21 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM   = "DrugsWidget/view/InteractionViewer/Zoom";  /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
 
 
     const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
     const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_WATERMARK_HTML         = "DrugsWidget/print/watermark/Html";         /*!< \brief Key for settings. */
 
-    const char * const  MFDRUGS_SETTING_ALD_PRE_HTML           = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_ALD_POST_HTML          = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_ALD_PRE_HTML           = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_ALD_POST_HTML          = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
 
     const char * const  MFDRUGS_SETTING_USERHEADER             = "DrugsWidget/user/Header";                  /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_USERFOOTER             = "DrugsWidget/user/Footer";                  /*!< \brief Key for settings. */
@@ -112,15 +112,15 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTING_SEARCHMETHOD           = "DrugsWidget/searchMethod";                 /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_HISTORYSIZE            = "DrugsWidget/historySize";                  /*!< \brief Key for settings. */
     const char * const  MFDRUGS_SETTING_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_LEVELOFWARNING         = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
+/**/    const char * const  MFDRUGS_SETTING_LEVELOFWARNING         = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
 
     const char * const  MFDRUGS_SETTING_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
 
     // DEFAULTS SETTINGS
-    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><br /><span style=\"font-style:italic;\">[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][<br />[NOTE]]</span></p>");
-    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]]\n[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][\n[NOTE]]");
-    const char * const  MFDRUGS_DEFAULT_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
-    const char * const  MFDRUGS_DEFAULT_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
+/**/    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><br /><span style=\"font-style:italic;\">[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][<br />[NOTE]]</span></p>");
+/**/    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]]\n[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][\n[NOTE]]");
+/**/    const char * const  MFDRUGS_DEFAULT_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
+/**/    const char * const  MFDRUGS_DEFAULT_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
 
     const char * const  MFDRUGS_DEFAULT_WATEMARKHTML           = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p align=\"center\"  style=\" font-family:'Lucida Grande'; font-size:12pt; font-weight:bold; font-style:normal; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">Duplicata ne permettant pas la d&eacute;livrance des m&eacute;dicaments</span></p>\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">A adresser &agrave; votre centre de S&eacute;curit&eacute; Sociale.</span></p></body></html>";              /*!< \brief Default value for settings. */
     const char * const  MFDRUGS_DEFAULT_USERHEADER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n"
@@ -134,23 +134,23 @@ namespace mfDrugsConstants
     const char * const  MFDRUGS_SETTINGS_STATEPREFIX =   "DrugsWidget/";
 
     // ICONS
-    const char * const  ICONTOOGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
-    const char * const  MFDRUGS_ICONSEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
-    const char * const  MFDRUGS_ICONSEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
-    const char * const  MFDRUGS_ICONSEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
+/**/    const char * const  ICONTOOGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
+/**/    const char * const  MFDRUGS_ICONSEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
+/**/    const char * const  MFDRUGS_ICONSEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
+/**/    const char * const  MFDRUGS_ICONSEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
 
     // INTERACTIONS ICONS
-    const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
+/**/    const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
 
-    // HTML PREPARERS
-    const char * const  ENCODEDHTML_FULLDOC =
+/**/    // HTML PREPARERS
+/**/    const char * const  ENCODEDHTML_FULLDOC =
             "<html>\n"
             "<head>\n"
             "  <meta name=\"qrichtext\" content=\"1\" />\n"
@@ -181,11 +181,11 @@ namespace mfDrugsConstants
 ////            "&nbsp;&nbsp;&nbsp;{NOTE}\n"
 //            "</span>\n"
 //            "<br />\n";
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
-    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
+/**/    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
+/**/    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
-    const QStringList LABOS = QStringList()
+/**/    const QStringList LABOS = QStringList()
                               << "ABBOT FRANCE " << "ACTAVIS " << "AGHETTANT " << "ALMUS " << "ALTER "
                               << "APOTEX FRANCE " << "APOTEX " << "ARROW CONSEIL " << "ARROW " <<"AEROCID"
                               << "ALPHARMA " << "ALCON " << "AGHETTANT " << "ACTAVIS " << "AENORASIS"

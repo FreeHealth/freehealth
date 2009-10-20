@@ -36,94 +36,76 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MAINWINDOWACTIONS_H
-#define MAINWINDOWACTIONS_H
+#ifndef MAINWINDOWPREFERENCES_H
+#define MAINWINDOWPREFERENCES_H
 
-#include <coreplugin/core_exporter.h>
+#include <coreplugin/ioptionspage.h>
 
-#include <QFlags>
+#include "ui_mainwindowpreferenceswidget.h"
+
+#include <QPointer>
+#include <QObject>
 
 /**
- * \file mainwindowactions.h
+ * \file mainwindowpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 13 Aug 2009
+ * \version 0.0.1
+ * \date 19 Oct 2009
 */
 
 namespace Core {
+class ISettings;
+}
 
-/** Use this class to pass informations on the desired actions to be created by the
-   Core::IMainWindow
-   \code
-       class MyMainWindow : public IMainWindow { .... }
+namespace MainWin {
+namespace Internal {
 
-       void MyMainWindow::createActionsInHandler()
-       {
-           Core::MainWindowActions actions;
-           actions.setFileActions( Core::MainWindowActions::A_FileNew );
-           actions.setHelpActions( Core::MainWindowActions::A_AppAbout );
-           IMainWindow::createActions(actions);
-       }
-   \endcode
-*/
-class CORE_EXPORT MainWindowActions
+class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPreferencesWidget
 {
+    Q_OBJECT
+    Q_DISABLE_COPY(MainWindowPreferencesWidget)
+
 public:
-    enum FileAction {
-        A_FileNew    = 0x01,
-        A_FileOpen   = 0x02,
-        A_FileSave   = 0x04,
-        A_FileSaveAs = 0x08,
-        A_FileClose  = 0x10,
-        A_FilePrint  = 0x11,
-        A_FileQuit   = 0x88
-    };
-    Q_DECLARE_FLAGS( FileActions, FileAction );
+    explicit MainWindowPreferencesWidget(QWidget *parent = 0);
 
-    enum ConfigurationAction {
-        A_AppPreferences     = 0x01,
-        A_PluginsPreferences = 0x02,
-        A_ConfigureMedinTux  = 0x04,
-        A_LangageChange      = 0x08
-    };
-    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
+    static void writeDefaultSettings(Core::ISettings *s);
 
-    enum HelpAction {
-        A_AppAbout     = 0x01,
-        A_AppHelp      = 0x02,
-        A_QtAbout      = 0x04,
-        A_DebugDialog  = 0x08,
-        A_PluginsAbout = 0x10,
-        A_FormsAbout   = 0x20,
-        A_CheckUpdate  = 0x40
-    };
-    Q_DECLARE_FLAGS( HelpActions, HelpAction );
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
 
-    MainWindowActions() : file(0), config(0), help(0), edit(false) {}
-    ~MainWindowActions() {}
-
-    void setFileActions(int actions) { file = actions; }
-    void createEditActions(bool yesOrNO) { edit = yesOrNO; }
-    void setConfigurationActions(int actions) { config = actions; }
-    void setHelpActions(int actions) { help = actions; }
-
-    int fileActions() const { return file; }
-    bool editActionsToCreate() const { return edit; }
-    int configurationActions() const { return config; }
-    int helpActions() const { return help; }
-
-private:
-    int file;
-    int config;
-    int help;
-    bool edit;
+protected:
+    virtual void changeEvent(QEvent *e);
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::FileActions )
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::ConfigurationActions )
-Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::HelpActions )
 
-}  // end Core
+class MainWindowPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    MainWindowPreferencesPage(QObject *parent = 0);
+    ~MainWindowPreferencesPage();
 
-#endif // MAINWINDOWACTIONS_H
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<MainWindowPreferencesWidget> m_Widget;
+};
+
+}  // End Internal
+}  // End MainWin
+
+#endif // MAINWINDOWPREFERENCES_H

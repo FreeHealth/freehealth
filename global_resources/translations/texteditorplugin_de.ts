@@ -65,6 +65,74 @@
     </message>
 </context>
 <context>
+    <name>Editor::Internal::TablePropertiesWidget</name>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="24"/>
+        <source>Border</source>
+        <translation type="unfinished">Rahmen</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="30"/>
+        <source>Border width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="40"/>
+        <source>Border style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="64"/>
+        <source>Spacings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="70"/>
+        <source>Cell padding</source>
+        <translation type="unfinished">Cell padding</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="80"/>
+        <source>Cell margins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="90"/>
+        <source>Adjust column size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="97"/>
+        <source>Adjust row size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="118"/>
+        <source>Colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="124"/>
+        <source>Alterning rows color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="131"/>
+        <source>Border color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="157"/>
+        <source>Cells background color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TextEditor</name>
     <message>
         <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="339"/>

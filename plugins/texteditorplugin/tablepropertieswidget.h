@@ -32,53 +32,39 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "texteditorplugin.h"
+#ifndef TABLEPROPERTIESWIDGET_H
+#define TABLEPROPERTIESWIDGET_H
 
-#include <utils/log.h>
+#include <QtGui/QWidget>
+#include <QTextTableFormat>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+namespace Editor {
+namespace Internal {
 
-
-#include <QtCore/QtPlugin>
-
-#include <QDebug>
-
-using namespace Editor;
-
-/**
-  \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
-*/
-
-TextEditorPlugin::TextEditorPlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating TextEditorPlugin";
+namespace Ui {
+class TablePropertiesWidget;
 }
 
-TextEditorPlugin::~TextEditorPlugin()
+class TablePropertiesWidget : public QWidget
 {
-}
+    Q_OBJECT
 
-bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    return true;
-}
+public:
+    TablePropertiesWidget(QWidget *parent = 0);
+    ~TablePropertiesWidget();
 
-void TextEditorPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-}
+    int cellMargin() const;
+    int cellPadding() const;
+    int borderWidth() const;
 
 
-Q_EXPORT_PLUGIN(TextEditorPlugin)
+    QTextTableFormat format() const;
+
+private:
+    Ui::TablePropertiesWidget *m_ui;
+};
+
+}  // End Internal
+}  // End Editor
+
+#endif // TABLEPROPERTIESWIDGET_H

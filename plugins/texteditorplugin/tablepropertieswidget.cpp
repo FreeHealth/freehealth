@@ -32,53 +32,59 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "texteditorplugin.h"
+#include "tablepropertieswidget.h"
+#include "ui_tablepropertieswidget.h"
 
-#include <utils/log.h>
+using namespace Editor::Internal;
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
-
-
-#include <QtCore/QtPlugin>
-
-#include <QDebug>
-
-using namespace Editor;
-
-/**
-  \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
-*/
-
-TextEditorPlugin::TextEditorPlugin()
+TablePropertiesWidget::TablePropertiesWidget(QWidget *parent) :
+    QWidget(parent),
+    m_ui(new Ui::TablePropertiesWidget)
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating TextEditorPlugin";
+    m_ui->setupUi(this);
 }
 
-TextEditorPlugin::~TextEditorPlugin()
+TablePropertiesWidget::~TablePropertiesWidget()
 {
+    delete m_ui;
 }
 
-bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
+int TablePropertiesWidget::cellPadding() const
+{ return m_ui->cellPaddingSpin->value(); }
+
+int TablePropertiesWidget::cellMargin() const
+{ return m_ui->cellMarginSpin->value(); }
+
+int TablePropertiesWidget::borderWidth() const
+{ return m_ui->borderWidthSpin->value(); }
+
+
+QTextTableFormat TablePropertiesWidget::format() const
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    return true;
+    QTextTableFormat format;
+
+    // Border
+    format.setBorder(borderWidth());
+//    format.setBorderStyle(BorderStyle style);
+
+    // Space
+    format.setCellPadding(cellPadding());
+    format.setMargin(cellMargin());
+
+    // Colors
+//    format.setBorderBrush();
+//    format.setBackground();
+
+//    format.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+//    int i = 0;
+//    QVector<QTextLength> lengths;
+//    for ( i = 0; i < cols(); i++ ) {
+//        lengths << QTextLength( QTextLength::PercentageLength, 100 / cols() );
+//    }
+//    format.setColumnWidthConstraints(lengths);
+//    if (header->isChecked())
+//        format.setHeaderRowCount(1);
+//    else
+//        format.setHeaderRowCount(0);
+    return format;
 }
-
-void TextEditorPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-}
-
-
-Q_EXPORT_PLUGIN(TextEditorPlugin)

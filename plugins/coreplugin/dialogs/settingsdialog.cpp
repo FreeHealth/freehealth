@@ -57,6 +57,8 @@ Q_DECLARE_METATYPE(::PageData);
 using namespace Core;
 using namespace Core::Internal;
 
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
                                const QString &pageId)
     : QDialog(parent), m_applied(false)
@@ -73,9 +75,8 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
     QString initialCategory = categoryId;
     QString initialPage = pageId;
     if (initialCategory.isEmpty() && initialPage.isEmpty()) {
-        ISettings *settings = ICore::instance()->settings();
-        initialCategory = settings->value("General/LastPreferenceCategory", QVariant(QString())).toString();
-        initialPage = settings->value("General/LastPreferencePage", QVariant(QString())).toString();
+        initialCategory = settings()->value("Dialogs/Settings/LastPreferenceCategory", QVariant(QString())).toString();
+        initialPage = settings()->value("Dialogs/Settings/LastPreferencePage", QVariant(QString())).toString();
     }
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -206,8 +207,7 @@ bool SettingsDialog::execDialog()
 
 void SettingsDialog::done(int val)
 {
-    ISettings *settings = ICore::instance()->settings();
-    settings->setValue("General/LastPreferenceCategory", m_currentCategory);
-    settings->setValue("General/LastPreferencePage", m_currentPage);
+    settings()->setValue("Dialogs/Settings/LastPreferenceCategory", m_currentCategory);
+    settings()->setValue("Dialogs/Settings/LastPreferencePage", m_currentPage);
     QDialog::done(val);
 }
