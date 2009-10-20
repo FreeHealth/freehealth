@@ -257,17 +257,21 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
         // show the license agreement dialog
+#ifndef LINUX_INTEGRATED
         if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::BSD ))
             return false;
+#endif
         m_Settings->noMoreFirstTimeRunning();
-        m_Settings->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
+        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         // show the license agreement dialog
+#ifndef LINUX_INTEGRATED
         if (!Utils::defaultLicenceAgreementDialog(
                 QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement."),
                 Utils::LicenseTerms::BSD ))
             return false;
-        m_Settings->setLicenseApprovedApplicationNumber( qApp->applicationVersion());
+#endif
+        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     }
 
     return true;
