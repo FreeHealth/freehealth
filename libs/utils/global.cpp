@@ -590,9 +590,13 @@ QString askUser( const QString &title, const QString &question )
 /** \brief Center the widget into the desktop. **/
 void centerWidget(QWidget *win, QWidget *reference)
 {
-    if (!reference)
+    QPoint center;
+    if (!reference) {
         reference = qApp->desktop();
-    QPoint center = reference->rect().center();
+        center = reference->rect().center();
+    } else {
+        center = reference->rect().center() + reference->pos();
+    }
     QRect rect = win->rect();
     rect.moveCenter(center);
     win->move(rect.topLeft());
