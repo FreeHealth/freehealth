@@ -61,18 +61,26 @@ static inline QString getPluginPaths()
     return app;
 #endif
 
+#ifdef RELEASE
 #ifdef LINUX_INTEGRATED
     return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
 #endif
 
-#ifdef RELEASE
+
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../");
-    app += "/plugins/";
+    app = QDir::cleanPath(app+"/../"+"/plugins/");
     return app;
 #  endif
+
+/** \todo Add FreeBSD pluginPath */
+
+#  ifdef Q_OS_WIN
+    app = QDir::cleanPath(app + "/plugins/");
+    return app;
+#  endif
+
 #endif
-    return QString();
+    return QDir::cleanPath(app + "/plugins/");
 }
 
 inline static void defineLibraryPaths()
