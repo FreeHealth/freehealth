@@ -154,6 +154,7 @@ INSTALLS+= desk desk_icon
 !isEmpty(INSTALL_DOCS_PATH){
 docs.path=$${INSTALL_DOCS_PATH}
 docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${TARGET}/html/*
+docs.CONFIG += no_check_exist
 INSTALLS+=docs
 }
 
