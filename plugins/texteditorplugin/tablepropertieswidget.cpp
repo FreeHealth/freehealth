@@ -34,14 +34,29 @@
  ***************************************************************************/
 #include "tablepropertieswidget.h"
 #include "ui_tablepropertieswidget.h"
+#include "ui_tablepropertiesdialog.h"
 
 using namespace Editor::Internal;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////           WIDGET          ///////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 TablePropertiesWidget::TablePropertiesWidget(QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::TablePropertiesWidget)
 {
     m_ui->setupUi(this);
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_None, tr("None"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Dotted, tr("Dotted"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Dashed, tr("Dashed"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Solid, tr("Solid"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Double, tr("Double"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_DotDash, tr("Dot dash"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_DotDotDash, tr("Dot dot dash"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Groove, tr("Groove"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Ridge, tr("Rigde"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Inset, tr("Inset"));
+    m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Outset, tr("Outset"));
 }
 
 TablePropertiesWidget::~TablePropertiesWidget()
@@ -49,11 +64,38 @@ TablePropertiesWidget::~TablePropertiesWidget()
     delete m_ui;
 }
 
+void TablePropertiesWidget::setFormat(const QTextTableFormat &format)
+{
+    m_ui->borderWidthSpin->setValue(format.border());
+    m_ui->borderStyleCombo->setCurrentIndex(format.borderStyle());
+    m_ui->cellPaddingSpin->setValue(format.cellPadding());
+    m_ui->cellSpacingSpin->setValue(format.cellSpacing());
+    if (format.margin()!=0) {
+        m_ui->leftMarginSpin->setValue(format.margin());
+        m_ui->rightMarginSpin->setValue(format.margin());
+        m_ui->topMarginSpin->setValue(format.margin());
+        m_ui->bottomMarginSpin->setValue(format.margin());
+    } else {
+        m_ui->leftMarginSpin->setValue(format.leftMargin());
+        m_ui->rightMarginSpin->setValue(format.rightMargin());
+        m_ui->topMarginSpin->setValue(format.topMargin());
+        m_ui->bottomMarginSpin->setValue(format.bottomMargin());
+    }
+}
+
 int TablePropertiesWidget::cellPadding() const
 { return m_ui->cellPaddingSpin->value(); }
+int TablePropertiesWidget::cellSpacing() const
+{ return m_ui->cellSpacingSpin->value(); }
 
-int TablePropertiesWidget::cellMargin() const
-{ return m_ui->cellMarginSpin->value(); }
+int TablePropertiesWidget::cellLeftMargin() const
+{ return m_ui->leftMarginSpin->value(); }
+int TablePropertiesWidget::cellRightMargin() const
+{ return m_ui->rightMarginSpin->value(); }
+int TablePropertiesWidget::cellTopMargin() const
+{ return m_ui->topMarginSpin->value(); }
+int TablePropertiesWidget::cellBottomMargin() const
+{ return m_ui->bottomMarginSpin->value(); }
 
 int TablePropertiesWidget::borderWidth() const
 { return m_ui->borderWidthSpin->value(); }
@@ -65,11 +107,14 @@ QTextTableFormat TablePropertiesWidget::format() const
 
     // Border
     format.setBorder(borderWidth());
-//    format.setBorderStyle(BorderStyle style);
+    format.setBorderStyle(QTextFrameFormat::BorderStyle(m_ui->borderStyleCombo->currentIndex()));
 
-    // Space
     format.setCellPadding(cellPadding());
-    format.setMargin(cellMargin());
+    format.setCellSpacing(cellSpacing());
+    format.setLeftMargin(cellLeftMargin());
+    format.setRightMargin(cellRightMargin());
+    format.setTopMargin(cellTopMargin());
+    format.setBottomMargin(cellBottomMargin());
 
     // Colors
 //    format.setBorderBrush();
@@ -88,3 +133,84 @@ QTextTableFormat TablePropertiesWidget::format() const
 //        format.setHeaderRowCount(0);
     return format;
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////           DIALOG          ///////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TablePropertiesDialog::TablePropertiesDialog(QWidget *parent) :
+        QDialog(parent), applyToCell(false), applyToTable(false), m_Widget(0),
+        m_ui(new Ui::TablePropertiesDialog)
+{
+    m_ui->setupUi(this);
+    m_Widget = new TablePropertiesWidget(this);
+    m_ui->verticalLayout->addWidget(m_Widget);
+}
+
+TablePropertiesDialog::~TablePropertiesDialog()
+{
+    delete m_ui;
+}
+
+void TablePropertiesDialog::setFormat(const QTextTableFormat &format)
+{
+    if (m_Widget)
+        m_Widget->setFormat(format);
+}
+
+bool TablePropertiesDialog::applyToSelectedCells() const
+{
+    return applyToCell;
+}
+
+bool TablePropertiesDialog::applyToWholeTable() const
+{
+    return applyToTable;
+}
+
+int TablePropertiesDialog::cellPadding() const
+{
+    if (m_Widget)
+        return m_Widget->cellPadding();
+}
+int TablePropertiesDialog::cellSpacing() const
+{
+    if (m_Widget)
+        return m_Widget->cellSpacing();
+}
+
+int TablePropertiesDialog::cellLeftMargin() const
+{
+    if (m_Widget)
+        return m_Widget->cellLeftMargin();
+}
+int TablePropertiesDialog::cellRightMargin() const
+{
+    if (m_Widget)
+        return m_Widget->cellRightMargin();
+}
+int TablePropertiesDialog::cellTopMargin() const
+{
+    if (m_Widget)
+        return m_Widget->cellTopMargin();
+}
+int TablePropertiesDialog::cellBottomMargin() const
+{
+    if (m_Widget)
+        return m_Widget->cellBottomMargin();
+}
+
+int TablePropertiesDialog::borderWidth() const
+{
+    if (m_Widget)
+        return m_Widget->borderWidth();
+}
+
+QTextTableFormat TablePropertiesDialog::format() const
+{
+    return m_Widget->format();
+}
+
+

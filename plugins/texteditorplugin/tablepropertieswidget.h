@@ -35,36 +35,69 @@
 #ifndef TABLEPROPERTIESWIDGET_H
 #define TABLEPROPERTIESWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+#include <QDialog>
 #include <QTextTableFormat>
 
 namespace Editor {
 namespace Internal {
-
 namespace Ui {
 class TablePropertiesWidget;
+class TablePropertiesDialog;
 }
 
 class TablePropertiesWidget : public QWidget
 {
-    Q_OBJECT
-
 public:
     TablePropertiesWidget(QWidget *parent = 0);
     ~TablePropertiesWidget();
 
-    int cellMargin() const;
+    void setFormat(const QTextTableFormat &format);
+    QTextTableFormat format() const;
+
+    int cellLeftMargin() const;
+    int cellRightMargin() const;
+    int cellTopMargin() const;
+    int cellBottomMargin() const;
+    int cellSpacing() const;
     int cellPadding() const;
     int borderWidth() const;
 
-
-    QTextTableFormat format() const;
 
 private:
     Ui::TablePropertiesWidget *m_ui;
 };
 
+
+class TablePropertiesDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    TablePropertiesDialog(QWidget *parent = 0);
+    ~TablePropertiesDialog();
+
+    void setFormat(const QTextTableFormat &format);
+    QTextTableFormat format() const;
+
+    bool applyToSelectedCells() const;
+    bool applyToWholeTable() const;
+
+    int cellLeftMargin() const;
+    int cellRightMargin() const;
+    int cellTopMargin() const;
+    int cellBottomMargin() const;
+    int cellPadding() const;
+    int cellSpacing() const;
+    int borderWidth() const;
+
+private:
+    bool applyToCell, applyToTable;
+    TablePropertiesWidget *m_Widget;
+    Ui::TablePropertiesDialog *m_ui;
+};
+
 }  // End Internal
 }  // End Editor
+
 
 #endif // TABLEPROPERTIESWIDGET_H

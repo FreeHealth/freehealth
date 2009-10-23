@@ -412,9 +412,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONTABLEPROPERTIES));
     cmd = am->registerAction(a, Core::Constants::A_TABLE_TABLEPROP, tableContext);
     cmd->setTranslations(Trans::Constants::TABLE_PROPERTIES_TEXT);
-    /** \todo v0.2.0 */
-//    connect(a, SIGNAL(triggered()), this, SLOT(tableProperties()));
-    /** \todo v0.2.0 */
+    connect(a, SIGNAL(triggered()), this, SLOT(tableProperties()));
     tabMenu->addAction(cmd, Core::Constants::G_FORMAT_TABLE);
 
     // Add row action

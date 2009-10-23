@@ -34,11 +34,15 @@
  ***************************************************************************/
 #include "tableeditor.h"
 #include "tabledialog.h"
+#include "tablepropertieswidget.h"
 
 #include <QTextEdit>
 #include <QTextCursor>
 #include <QTextTable>
 #include <QTextTableFormat>
+
+
+#include <QDebug>
 
 using namespace Editor;
 using namespace Editor::Internal;
@@ -76,13 +80,21 @@ void TableEditor::addTable()
 
 void TableEditor::tableProperties()
 {
-    /** \todo Write this code */
+    QTextTable *table = textEdit()->textCursor().currentTable();
+    if (!table)
+        return;
+    TablePropertiesDialog dlg(this);
+    dlg.setFormat(table->format());
+    if (dlg.exec()==QDialog::Accepted) {
+        table->setFormat(dlg.format());
+    }
 }
 
 void TableEditor::tableAddRow()
 {
-    QTextTable * table = textEdit()->textCursor().currentTable();
-    if ( !table ) return;
+    QTextTable *table = textEdit()->textCursor().currentTable();
+    if (!table)
+        return;
     const QTextTableCell & cell = table->cellAt( textEdit()->textCursor() );
     table->insertRows( cell.row() + 1, 1 );
 }
