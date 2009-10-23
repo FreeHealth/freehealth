@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freediams
 mac:TARGET       = $$quote(FreeDiams)
-PACKAGE_VERSION  = 0.1.2
+PACKAGE_VERSION  = 0.1.5
 
 # include general configuration
 INSTALL_DRUGS = 1
