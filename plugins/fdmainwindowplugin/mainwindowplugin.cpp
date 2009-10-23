@@ -47,9 +47,9 @@
 
 using namespace MainWin;
 
-MainWinPlugin::MainWinPlugin()
+MainWinPlugin::MainWinPlugin() :
+        m_MainWindow(0), prefsPage(0)
 {
-    m_MainWindow = 0;
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating MainWinPlugin";
 }
