@@ -16,9 +16,12 @@
 using namespace Core;
 using namespace Core::Internal;
 
-ContextManagerPrivate::ContextManagerPrivate(QMainWindow *mainWin) : ContextManager()
+ContextManagerPrivate::ContextManagerPrivate(QMainWindow *mainWin) :
+        ContextManager(),
+        m_activeContext(0)
 {
     Q_ASSERT(mainWin);
+    m_globalContext = QList<int>() << Constants::C_GLOBAL_ID;
     m_additionalContexts << Constants::C_GLOBAL_ID;
     m_mainWindow = mainWin;
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
