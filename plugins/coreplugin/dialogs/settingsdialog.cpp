@@ -37,6 +37,7 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ioptionspage.h>
 #include <coreplugin/dialogs/helpdialog.h>
@@ -63,10 +64,14 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
                                const QString &pageId)
     : QDialog(parent), m_applied(false)
 {
-    QWidget *ref = qApp->topLevelWidgets().first();
     m_ui = new Ui::SettingsDialog();
     m_ui->setupUi(this);
     // resize windows
+    QWidget *ref = 0;
+    if (Core::ICore::instance()->mainWindow())
+        ref = Core::ICore::instance()->mainWindow();
+    else
+        ref = qApp->topLevelWidgets().first();
     QSize size = ref->size();
     size = QSize(size.width()*0.9, size.height()*0.9);
     this->resize(size);

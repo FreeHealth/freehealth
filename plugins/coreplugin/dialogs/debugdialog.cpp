@@ -48,10 +48,12 @@
 
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 
 #include <QStackedLayout>
 #include <QHeaderView>
+#include <QMainWindow>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -61,13 +63,23 @@ DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::DebugDialog)
 {
     m_ui->setupUi(this);
-    if (parent)
-        resize(parent->size());
+
+    // resize windows
+    QWidget *ref = 0;
+    if (Core::ICore::instance()->mainWindow())
+        ref = Core::ICore::instance()->mainWindow();
+    else
+        ref = qApp->topLevelWidgets().first();
+    QSize size = ref->size();
+    size = QSize(size.width()*0.9, size.height()*0.9);
+    this->resize(size);
+    // recenter window
+    Utils::centerWidget(this, ref);
+
     m_slayout = new QStackedLayout(m_ui->forStack);
     m_slayout->setMargin(0);
     m_slayout->setSpacing(0);
     setWindowTitle( qApp->applicationName() );
-    resize(500,500);
     setObjectName( "DebugDialog" );
 
     m_ui->tree->header()->hide();

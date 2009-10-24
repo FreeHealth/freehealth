@@ -49,6 +49,7 @@
 #include "helpdialog.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 
@@ -214,7 +215,18 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     setWindowIcon(theme->icon(Constants::ICONHELP));
     d->populateTree();
     updateWindowTitle();
-    resize(500,500);
+
+    // resize windows
+    QWidget *ref = 0;
+    if (Core::ICore::instance()->mainWindow())
+        ref = Core::ICore::instance()->mainWindow();
+    else
+        ref = qApp->topLevelWidgets().first();
+    QSize size = ref->size();
+    size = QSize(size.width()*0.9, size.height()*0.9);
+    this->resize(size);
+    // recenter window
+    Utils::centerWidget(this, ref);
 }
 
 /** \brief Creates a new help browser */

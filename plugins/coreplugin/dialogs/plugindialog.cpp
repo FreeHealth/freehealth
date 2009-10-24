@@ -35,12 +35,17 @@
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginspec.h>
 
+#include <utils/global.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
+
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QPushButton>
-#include <QtDebug>
+#include <QApplication>
 
 using namespace Core;
 
@@ -48,6 +53,18 @@ PluginDialog::PluginDialog(QWidget *parent)
     : QDialog(parent),
       m_view(new ExtensionSystem::PluginView(ExtensionSystem::PluginManager::instance(), this))
 {
+    // resize windows
+    QWidget *ref = 0;
+    if (Core::ICore::instance()->mainWindow())
+        ref = Core::ICore::instance()->mainWindow();
+    else
+        ref = qApp->topLevelWidgets().first();
+    QSize size = ref->size();
+    size = QSize(size.width()*0.9, size.height()*0.9);
+    this->resize(size);
+    // recenter window
+    Utils::centerWidget(this, ref);
+
     QVBoxLayout *vl = new QVBoxLayout(this);
     vl->addWidget(m_view);
 
