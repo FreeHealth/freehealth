@@ -46,6 +46,7 @@ TablePropertiesWidget::TablePropertiesWidget(QWidget *parent) :
     m_ui(new Ui::TablePropertiesWidget)
 {
     m_ui->setupUi(this);
+    m_ui->tabWidget->setCurrentWidget(m_ui->tabBorders);
     m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_None, tr("None"));
     m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Dotted, tr("Dotted"));
     m_ui->borderStyleCombo->insertItem(QTextFrameFormat::BorderStyle_Dashed, tr("Dashed"));
@@ -81,6 +82,8 @@ void TablePropertiesWidget::setFormat(const QTextTableFormat &format)
         m_ui->topMarginSpin->setValue(format.topMargin());
         m_ui->bottomMarginSpin->setValue(format.bottomMargin());
     }
+    m_ui->borderColorButton->setColor(format.borderBrush().color());
+    m_ui->cellBackgroundColorButton->setColor(format.background().color());
 }
 
 int TablePropertiesWidget::cellPadding() const
@@ -116,9 +119,8 @@ QTextTableFormat TablePropertiesWidget::format() const
     format.setTopMargin(cellTopMargin());
     format.setBottomMargin(cellBottomMargin());
 
-    // Colors
-//    format.setBorderBrush();
-//    format.setBackground();
+    format.setBorderBrush(QBrush(m_ui->borderColorButton->color()));
+    format.setBackground(QBrush(m_ui->cellBackgroundColorButton->color()));
 
 //    format.setWidth(QTextLength(QTextLength::PercentageLength, 100));
 //    int i = 0;

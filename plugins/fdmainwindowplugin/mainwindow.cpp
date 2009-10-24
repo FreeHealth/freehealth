@@ -152,10 +152,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_AppAbout |
             Core::MainWindowActions::A_PluginsAbout |
             Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog
-            /** \todo v0.2.0 */
-//             | Core::MainWindowActions::A_CheckUpdate //|
-            /** end todo */
+            Core::MainWindowActions::A_DebugDialog |
+            Core::MainWindowActions::A_CheckUpdate //|
 //            Core::MainWindowActions::A_QtAbout
             );
     actions.createEditActions(false);

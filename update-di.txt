@@ -1,3 +1,20 @@
+version=0.2.0
+{
+    * Nov 2009
+    * Version de la base de données thérapeutique :
+      * Médicaments :  AFSSAPS - 26/06/2009
+      * Interactions : AFSSAPS - 29/06/2009
+   * Nouvelles fonctionnalités :
+      * Propriétés du tableau dans l'éditeur de texte enrichi
+      * Possibilité de paramétrer la fréquence des recherche de mise à jour
+      * Nouvelle action : Vérification des mises à jour dans le menu A propos
+
+   * Modifications importantes :
+
+   * Correction de bogues / Améliorations techniques :
+
+}
+
 version=0.1.4
 {
     * Oct 2009

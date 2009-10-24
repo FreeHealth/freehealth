@@ -80,15 +80,14 @@ void TableEditor::addTable()
 
 void TableEditor::tableProperties()
 {
-    /** \todo v0.2.0 */
-//    QTextTable *table = textEdit()->textCursor().currentTable();
-//    if (!table)
-//        return;
-//    TablePropertiesDialog dlg(this);
-//    dlg.setFormat(table->format());
-//    if (dlg.exec()==QDialog::Accepted) {
-//        table->setFormat(dlg.format());
-//    }
+    QTextTable *table = textEdit()->textCursor().currentTable();
+    if (!table)
+        return;
+    TablePropertiesDialog dlg(this);
+    dlg.setFormat(table->format());
+    if (dlg.exec()==QDialog::Accepted) {
+        table->setFormat(dlg.format());
+    }
 }
 
 void TableEditor::tableAddRow()

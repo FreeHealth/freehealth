@@ -36,6 +36,7 @@ HEADERS += \
     widgets/lineeditechoswitcher.h \
     widgets/QButtonLineEdit.h \
     widgets/QPixLineEdit.h \
+    widgets/colorbuttonchooser.h
 
 
 SOURCES += \
@@ -49,6 +50,7 @@ SOURCES += \
     widgets/scrollingwidget.cpp \
     widgets/lineeditechoswitcher.cpp \
     widgets/QButtonLineEdit.cpp \
+    widgets/colorbuttonchooser.cpp
 
 
 # translators

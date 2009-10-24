@@ -32,64 +32,51 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "mainwindowplugin.h"
-#include "mainwindow.h"
-#include "mainwindowpreferences.h"
+/***************************************************************************
+ *   Code inspired of fresh/pColorButton : MonkeyStudio                    *
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef COLORBUTTONCHOOSER_H
+#define COLORBUTTONCHOOSER_H
 
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <utils/global_exporter.h>
 
-#include <utils/log.h>
+#include <QPushButton>
+#include <QColor>
 
-#include <QtCore/QtPlugin>
+/**
+ * \file colorbuttonchooser.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.2
+ * \date 24 Oct 2009
+*/
 
-#include <QDebug>
+namespace Utils {
 
-using namespace MainWin;
-
-MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0)
+class UTILS_EXPORT ColorButtonChooser : public QPushButton
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating MainWinPlugin";
-}
+    Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor)
 
-MainWinPlugin::~MainWinPlugin()
-{
-    if (m_MainWindow)
-        delete m_MainWindow;
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
-}
+public:
+    ColorButtonChooser(QWidget *parent = 0);
+    ColorButtonChooser(const QColor &color, QWidget *parent = 0);
+    virtual ~ColorButtonChooser();
 
-bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
-    return true;
-}
+    const QColor &color() const;
 
-void MainWinPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::extensionsInitialized";
+public Q_SLOTS:
+    void setColor(const QColor &color);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
+protected Q_SLOTS:
+    void onClicked();
 
-    // Add preferences pages
-    prefPage = new Internal::MainWindowPreferencesPage();
-    addObject(prefPage);
+private:
+    QColor m_Color;
+};
 
-    m_MainWindow->initialize(QStringList(),0);
-    m_MainWindow->extensionsInitialized();
-}
+}  // End namespace Utils
 
-
-Q_EXPORT_PLUGIN(MainWinPlugin)
+#endif // COLORBUTTONCHOOSER_H

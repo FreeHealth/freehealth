@@ -17,9 +17,9 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabBorders">
       <attribute name="title">
        <string>Border / Space</string>
       </attribute>
@@ -133,9 +133,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabColors">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <attribute name="title">
        <string>Colors</string>
@@ -156,7 +156,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="borderColorButton">
+        <widget class="Utils::ColorButtonChooser" name="borderColorButton">
          <property name="minimumSize">
           <size>
            <width>20</width>
@@ -182,7 +182,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="cellBackgroundColorButton">
+        <widget class="Utils::ColorButtonChooser" name="cellBackgroundColorButton">
          <property name="minimumSize">
           <size>
            <width>20</width>
@@ -219,6 +219,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::ColorButtonChooser</class>
+   <extends>QPushButton</extends>
+   <header location="global">utils/widgets/colorbuttonchooser.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

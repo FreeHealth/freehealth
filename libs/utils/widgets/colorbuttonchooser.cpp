@@ -32,64 +32,55 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "mainwindowplugin.h"
-#include "mainwindow.h"
-#include "mainwindowpreferences.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#include "colorbuttonchooser.h"
 
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <QColorDialog>
 
-#include <utils/log.h>
+using namespace Utils;
 
-#include <QtCore/QtPlugin>
-
-#include <QDebug>
-
-using namespace MainWin;
-
-MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0)
+ColorButtonChooser::ColorButtonChooser(QWidget *parent)
+        : QPushButton(parent)
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating MainWinPlugin";
+    connect(this, SIGNAL(clicked()), this, SLOT(onClicked()));
+    setColor(QColor(Qt::black));
 }
 
-MainWinPlugin::~MainWinPlugin()
+ColorButtonChooser::ColorButtonChooser(const QColor& color, QWidget* parent)
+        : QPushButton(parent)
 {
-    if (m_MainWindow)
-        delete m_MainWindow;
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
+    connect(this, SIGNAL(clicked()), this, SLOT(onClicked()));
+    setColor(color);
+}
+
+ColorButtonChooser::~ColorButtonChooser()
+{
+}
+
+
+const QColor &ColorButtonChooser::color() const
+{
+    return m_Color;
+}
+
+void ColorButtonChooser::setColor(const QColor &color)
+{
+    m_Color = color;
+    QPixmap pixmap(iconSize());
+    pixmap.fill(m_Color);
+    setIcon(QIcon(pixmap));
+}
+
+void ColorButtonChooser::onClicked()
+{
+    bool ok;
+    const QRgb rgb = QColorDialog::getRgba(m_Color.rgba(), &ok, window());
+    if (ok) {
+        QColor color = QColor::fromRgba(rgb);
+        setColor(color);
     }
 }
-
-bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
-    return true;
-}
-
-void MainWinPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
-
-    // Add preferences pages
-    prefPage = new Internal::MainWindowPreferencesPage();
-    addObject(prefPage);
-
-    m_MainWindow->initialize(QStringList(),0);
-    m_MainWindow->extensionsInitialized();
-}
-
-
-Q_EXPORT_PLUGIN(MainWinPlugin)
