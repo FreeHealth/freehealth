@@ -91,6 +91,8 @@ DrugsWidgetsFactory::~DrugsWidgetsFactory()
 
 bool DrugsWidgetsFactory::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     return true;
 }
 

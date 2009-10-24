@@ -75,4 +75,5 @@ private:
 
 } // End Internal
 } // End Gir
+
 #endif // GIRWIDGET_H

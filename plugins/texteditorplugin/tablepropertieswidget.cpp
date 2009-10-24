@@ -176,43 +176,52 @@ int TablePropertiesDialog::cellPadding() const
 {
     if (m_Widget)
         return m_Widget->cellPadding();
+    return 0;
 }
 int TablePropertiesDialog::cellSpacing() const
 {
     if (m_Widget)
         return m_Widget->cellSpacing();
+    return 0;
 }
 
 int TablePropertiesDialog::cellLeftMargin() const
 {
     if (m_Widget)
         return m_Widget->cellLeftMargin();
+    return 0;
 }
 int TablePropertiesDialog::cellRightMargin() const
 {
     if (m_Widget)
         return m_Widget->cellRightMargin();
+    return 0;
 }
 int TablePropertiesDialog::cellTopMargin() const
 {
     if (m_Widget)
         return m_Widget->cellTopMargin();
+    return 0;
 }
 int TablePropertiesDialog::cellBottomMargin() const
 {
     if (m_Widget)
         return m_Widget->cellBottomMargin();
+    return 0;
 }
 
 int TablePropertiesDialog::borderWidth() const
 {
     if (m_Widget)
         return m_Widget->borderWidth();
+    return 0;
 }
 
 QTextTableFormat TablePropertiesDialog::format() const
 {
-    return m_Widget->format();
+    if (m_Widget)
+        return m_Widget->format();
+    return QTextTableFormat();
 }
 
 

@@ -42,7 +42,11 @@ public:
     void applyChanges();
     void finish();
 
+    /** \todo add help page */
+    QString helpPage() {return QString();}
+
     QWidget *createPage(QWidget *parent = 0);
+
 private:
     QPointer<BaseFormSettingsWidget> m_Widget;
 };

@@ -179,7 +179,9 @@ QStackedLayout *FormManager::formsStackedLayout(QWidget *parent) const
         delete d->m_Stack;
     d->m_Stack = new QStackedLayout(parent);
     foreach(FormMain *form, forms()) {
-        d->m_Stack->addWidget(form->formWidget());
+//        Q_ASSERT(form->formWidget());
+        if (form->formWidget())
+            d->m_Stack->addWidget(form->formWidget());
     }
     return d->m_Stack;
 }

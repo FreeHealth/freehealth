@@ -51,6 +51,8 @@ DrugsPlugin::~DrugsPlugin()
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorMessage);
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
 #ifdef FREEDIAMS
