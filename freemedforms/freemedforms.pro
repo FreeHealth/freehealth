@@ -11,8 +11,9 @@ INSTALL_DRUGS = 1
 include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 
-# include SDKs
+# include libs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/utils.pri )
 include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 # include Doc

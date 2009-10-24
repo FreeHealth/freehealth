@@ -43,6 +43,8 @@
 #include <extensionsystem/pluginspec.h>
 #include <extensionsystem/iplugin.h>
 
+#include <utils/log.h>
+
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 
@@ -53,61 +55,67 @@ static inline QString getPluginPaths()
 
 #ifdef DEBUG
 #    ifdef Q_OS_MAC
-	app = QDir::cleanPath(app+"/../../../");
+        app = QDir::cleanPath(app+"/../../../");
 #    endif
     app += "/plugins/";
     return app;
 #endif
 
 #ifdef RELEASE
+#ifdef LINUX_INTEGRATED
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
+#endif
+
+
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../");
-    app += "/plugins/";
+    app = QDir::cleanPath(app+"/../"+"/plugins/");
     return app;
 #  endif
 
-#  ifdef LINUX_INTEGRATED
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
+/** \todo Add FreeBSD pluginPath */
+
+#  ifdef Q_OS_WIN
+    app = QDir::cleanPath(app + "/plugins/");
+    return app;
 #  endif
+
 #endif
-    return QString();
+    return QDir::cleanPath(app + "/plugins/");
 }
 
 inline static void defineLibraryPaths()
 {
-#ifndef DEBUG
+#ifdef LINUX_INTEGRATED
+    qApp->addLibraryPath(getPluginPaths());
+#else
+#  ifndef DEBUG
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
+#endif
 }
 
 
 int main( int argc, char *argv[] )
 {
-//     Q_INIT_RESOURCE( application );
-//     QT_REQUIRE_VERSION( argc, argv, "4.5.0" );
-
      QApplication app( argc, argv );
 
      QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
      QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
-#ifdef DEBUG
-     app.setApplicationName( QString( "%1 - %2 debug" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
-#else
-     app.setApplicationName( QString( "%1 - %2" ).arg( BINARY_NAME, PACKAGE_VERSION ) );
-#endif
-
-     app.setOrganizationName( BINARY_NAME );
-//     app.setOrganizationDomain( PACKAGE_DOMAIN );
-     app.setApplicationVersion( PACKAGE_VERSION );
-
-//     QObject::connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+     app.setApplicationName(BINARY_NAME);
+     app.setOrganizationName(BINARY_NAME);
+     app.setApplicationVersion(PACKAGE_VERSION);
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
-    const QString pluginPaths = getPluginPaths();
+    QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
+
+    Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
+    Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
+
+    defineLibraryPaths();
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
@@ -188,6 +196,8 @@ int main( int argc, char *argv[] )
 
     // Do this after the event loop has started
 //    QTimer::singleShot(100, &pluginManager, SLOT(startTests()));
-    return app.exec();
+    int r = app.exec();
+//    Utils::Log::saveLog();
+    return r;
 }
 
