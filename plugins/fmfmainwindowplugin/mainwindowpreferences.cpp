@@ -36,103 +36,109 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICORE_H
-#define ICORE_H
+#include "mainwindowpreferences.h"
 
-#include <coreplugin/core_exporter.h>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
-#include <QtCore/QObject>
-class QSplashScreen;
-class QPixmap;
-class QWidget;
-class QString;
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
 
-namespace Utils {
-class UpdateChecker;
-}
+using namespace MainWin::Internal;
+using namespace Trans::ConstantTranslations;
 
-namespace Core {
-class ActionManager;
-class ContextManager;
-class UniqueIDManager;
-class Translators;
-class ITheme;
-class ISettings;
-class IMainWindow;
-class FormManager;
-class CommandLine;
-class Patient;
-class FileManager;
-}
 
-namespace Core {
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
-class CORE_EXPORT ICore : public QObject
+MainWindowPreferencesPage::MainWindowPreferencesPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0)
+{ setObjectName("MainWindowPreferencesPage"); }
+
+MainWindowPreferencesPage::~MainWindowPreferencesPage()
 {
-    Q_OBJECT
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
+}
 
-public:
-    ICore(QObject *parent) : QObject(parent) {}
-    virtual ~ICore() {}
+QString MainWindowPreferencesPage::id() const { return objectName(); }
+QString MainWindowPreferencesPage::name() const { return tr("General"); }
+QString MainWindowPreferencesPage::category() const { return tr("General"); }
 
-    static ICore *instance();
+void MainWindowPreferencesPage::resetToDefaults()
+{
+    m_Widget->writeDefaultSettings(settings());
+}
+
+void MainWindowPreferencesPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
+    }
+    m_Widget->saveToSettings(settings());
+}
+
+void MainWindowPreferencesPage::finish() { delete m_Widget; }
+
+void MainWindowPreferencesPage::checkSettingsValidity()
+{
+    QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    foreach(const QString &k, defaultvalues.keys()) {
+        if (settings()->value(k) == QVariant())
+            settings()->setValue(k, defaultvalues.value(k));
+    }
+    settings()->sync();
+}
+
+QWidget *MainWindowPreferencesPage::createPage(QWidget *parent)
+{
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new MainWindowPreferencesWidget(parent);
+    return m_Widget;
+}
 
 
-    // Splash screen functions
-    virtual void createSplashScreen(const QPixmap &pix) = 0;
-    virtual void finishSplashScreen(QWidget *w) = 0;
-    virtual void messageSplashScreen(const QString &msg) = 0;
-    virtual QSplashScreen *splashScreen() = 0;
 
+MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    setupUi(this);
+    // feed with actual values
+    updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
+}
 
-    virtual ActionManager *actionManager() const = 0;
-    virtual ContextManager *contextManager() const = 0;
-    virtual UniqueIDManager *uniqueIDManager() const = 0;
+void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
+{
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
 
-    virtual ITheme *theme() const = 0;
-    virtual Translators *translators() const = 0;
+    // manage font size
+    s->setValue(Core::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
+}
 
-    virtual ISettings *settings() const = 0;
+void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+{
+//    qWarning() << "---------> writedefaults";
+    Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
+    s->setValue(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    s->sync();
+}
 
-    virtual IMainWindow *mainWindow() const = 0;
-
-    virtual CommandLine *commandLine() const = 0;
-
-    virtual Utils::UpdateChecker *updateChecker() const = 0;
-
-    virtual void setMainWindow(IMainWindow *) = 0;
-
-    // Use this with precaution (only used by FreeDiams)
-    virtual Patient *patient() const {return 0;}
-
-    virtual FormManager *formManager() const = 0;
-
-    virtual FileManager *fileManager() const = 0;
-
-//    virtual MessageManager *messageManager() const = 0;
-//    virtual EditorManager *editorManager() const = 0;
-//    virtual ProgressManager *progressManager() const = 0;
-//    virtual ScriptManager *scriptManager() const = 0;
-//    virtual VariableManager *variableManager() const = 0;
-//    virtual VCSManager *vcsManager() const = 0;
-//    virtual ModeManager *modeManager() const = 0;
-//    virtual MimeDatabase *mimeDatabase() const = 0;
-//
-//    virtual QSettings *settings() const = 0;
-//    virtual SettingsDatabase *settingsDatabase() const = 0;
-//    virtual QPrinter *printer() const = 0;
-//
-//    virtual QString resourcePath() const = 0;
-
-Q_SIGNALS:
-    void coreAboutToOpen();
-    void coreOpened();
-    void saveSettingsRequested();
-    void optionsDialogRequested();
-    void coreAboutToClose();
-};
-
-} // namespace Core
-
-#endif // ICORE_H
+void MainWindowPreferencesWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}

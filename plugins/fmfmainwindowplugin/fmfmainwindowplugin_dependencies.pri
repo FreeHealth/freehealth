@@ -1,0 +1,5 @@
+include( ../coreplugin/coreplugin.pri )
+include( ../fmfcoreplugin/fmfcoreplugin.pri )
+include( ../printerplugin/printerplugin.pri )
+include( $${SOURCES_LIBS_PATH}/translationutils.pri )
+include( $${SOURCES_LIBS_PATH}/utils.pri )

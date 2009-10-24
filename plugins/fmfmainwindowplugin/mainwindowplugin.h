@@ -35,104 +35,46 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICORE_H
-#define ICORE_H
+#ifndef MAINWIN_PLUGIN_H
+#define MAINWIN_PLUGIN_H
 
-#include <coreplugin/core_exporter.h>
+#include <extensionsystem/iplugin.h>
 
 #include <QtCore/QObject>
-class QSplashScreen;
-class QPixmap;
-class QWidget;
-class QString;
 
-namespace Utils {
-class UpdateChecker;
-}
+/**
+ * \file mainwindowplugin.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.2
+ * \date 23 Oct 2009
+*/
 
-namespace Core {
-class ActionManager;
-class ContextManager;
-class UniqueIDManager;
-class Translators;
-class ITheme;
-class ISettings;
-class IMainWindow;
-class FormManager;
-class CommandLine;
-class Patient;
-class FileManager;
-}
+namespace MainWin {
+namespace Internal {
+class MainWindowPreferencesPage;
+} // End Internal
 
-namespace Core {
+class MainWindow;
 
-class CORE_EXPORT ICore : public QObject
+class MainWinPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-
 public:
-    ICore(QObject *parent) : QObject(parent) {}
-    virtual ~ICore() {}
+    MainWinPlugin();
+    ~MainWinPlugin();
 
-    static ICore *instance();
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
 
-
-    // Splash screen functions
-    virtual void createSplashScreen(const QPixmap &pix) = 0;
-    virtual void finishSplashScreen(QWidget *w) = 0;
-    virtual void messageSplashScreen(const QString &msg) = 0;
-    virtual QSplashScreen *splashScreen() = 0;
-
-
-    virtual ActionManager *actionManager() const = 0;
-    virtual ContextManager *contextManager() const = 0;
-    virtual UniqueIDManager *uniqueIDManager() const = 0;
-
-    virtual ITheme *theme() const = 0;
-    virtual Translators *translators() const = 0;
-
-    virtual ISettings *settings() const = 0;
-
-    virtual IMainWindow *mainWindow() const = 0;
-
-    virtual CommandLine *commandLine() const = 0;
-
-    virtual Utils::UpdateChecker *updateChecker() const = 0;
-
-    virtual void setMainWindow(IMainWindow *) = 0;
-
-    // Use this with precaution (only used by FreeDiams)
-    virtual Patient *patient() const {return 0;}
-
-    virtual FormManager *formManager() const = 0;
-
-    virtual FileManager *fileManager() const = 0;
-
-//    virtual MessageManager *messageManager() const = 0;
-//    virtual EditorManager *editorManager() const = 0;
-//    virtual ProgressManager *progressManager() const = 0;
-//    virtual ScriptManager *scriptManager() const = 0;
-//    virtual VariableManager *variableManager() const = 0;
-//    virtual VCSManager *vcsManager() const = 0;
-//    virtual ModeManager *modeManager() const = 0;
-//    virtual MimeDatabase *mimeDatabase() const = 0;
-//
-//    virtual QSettings *settings() const = 0;
-//    virtual SettingsDatabase *settingsDatabase() const = 0;
-//    virtual QPrinter *printer() const = 0;
-//
-//    virtual QString resourcePath() const = 0;
-
-Q_SIGNALS:
-    void coreAboutToOpen();
-    void coreOpened();
-    void saveSettingsRequested();
-    void optionsDialogRequested();
-    void coreAboutToClose();
+private:
+    MainWindow *m_MainWindow;
+    Internal::MainWindowPreferencesPage *prefPage;
 };
 
-} // namespace Core
 
-#endif // ICORE_H
+}  // End MainWin
+
+#endif  // End MAINWIN_PLUGIN_H

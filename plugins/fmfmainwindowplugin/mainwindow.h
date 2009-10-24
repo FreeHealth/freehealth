@@ -35,104 +35,102 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICORE_H
-#define ICORE_H
+#ifndef FREEMEDFORMS_MAINWINDOW_H
+#define FREEMEDFORMS_MAINWINDOW_H
 
-#include <coreplugin/core_exporter.h>
+#include <fmfmainwindowplugin/mainwindow_exporter.h>
+#include <coreplugin/imainwindow.h>
 
-#include <QtCore/QObject>
-class QSplashScreen;
-class QPixmap;
-class QWidget;
-class QString;
+// include Qt headers
+#include <QCloseEvent>
 
-namespace Utils {
-class UpdateChecker;
-}
+QT_BEGIN_NAMESPACE
+class QAction;
+class QMenu;
+class QTextEdit;
+QT_END_NAMESPACE
 
-namespace Core {
-class ActionManager;
-class ContextManager;
-class UniqueIDManager;
-class Translators;
-class ITheme;
-class ISettings;
-class IMainWindow;
-class FormManager;
-class CommandLine;
-class Patient;
-class FileManager;
-}
+/**
+ * \file mainwindow.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.1
+ * \date 23 Oct 2009
+*/
 
 namespace Core {
+class IFormIO;
+}
 
-class CORE_EXPORT ICore : public QObject
+namespace MainWin {
+namespace Internal {
+//namespace Ui {
+//class MainWindow;
+//}  // End Ui
+}  // End Internal
+
+class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
+    enum { MaxRecentFiles = 10 };
 
 public:
-    ICore(QObject *parent) : QObject(parent) {}
-    virtual ~ICore() {}
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
-    static ICore *instance();
+    // IMainWindow Interface
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
 
+    void refreshPatient() const;
+    void readSettings();
+    void writeSettings();
+    void createStatusBar();
+    QStatusBar *statusBar();
 
-    // Splash screen functions
-    virtual void createSplashScreen(const QPixmap &pix) = 0;
-    virtual void finishSplashScreen(QWidget *w) = 0;
-    virtual void messageSplashScreen(const QString &msg) = 0;
-    virtual QSplashScreen *splashScreen() = 0;
-
-
-    virtual ActionManager *actionManager() const = 0;
-    virtual ContextManager *contextManager() const = 0;
-    virtual UniqueIDManager *uniqueIDManager() const = 0;
-
-    virtual ITheme *theme() const = 0;
-    virtual Translators *translators() const = 0;
-
-    virtual ISettings *settings() const = 0;
-
-    virtual IMainWindow *mainWindow() const = 0;
-
-    virtual CommandLine *commandLine() const = 0;
-
-    virtual Utils::UpdateChecker *updateChecker() const = 0;
-
-    virtual void setMainWindow(IMainWindow *) = 0;
-
-    // Use this with precaution (only used by FreeDiams)
-    virtual Patient *patient() const {return 0;}
-
-    virtual FormManager *formManager() const = 0;
-
-    virtual FileManager *fileManager() const = 0;
-
-//    virtual MessageManager *messageManager() const = 0;
-//    virtual EditorManager *editorManager() const = 0;
-//    virtual ProgressManager *progressManager() const = 0;
-//    virtual ScriptManager *scriptManager() const = 0;
-//    virtual VariableManager *variableManager() const = 0;
-//    virtual VCSManager *vcsManager() const = 0;
-//    virtual ModeManager *modeManager() const = 0;
-//    virtual MimeDatabase *mimeDatabase() const = 0;
+public Q_SLOTS: // Interface of MainWidowActionHandler
+//    bool newFile();
+    bool openFile();
+    bool loadFile(const QString &filename, const QList<Core::IFormIO *> &iolist = QList<Core::IFormIO *>());
+//    bool saveFile();
+//    bool saveAsFile();
+//    bool print();
 //
-//    virtual QSettings *settings() const = 0;
-//    virtual SettingsDatabase *settingsDatabase() const = 0;
-//    virtual QPrinter *printer() const = 0;
+    bool applicationPreferences();
+//    bool configureMedintux();
 //
-//    virtual QString resourcePath() const = 0;
+//    virtual bool aboutApplication();
+//    bool applicationHelp();
+//    bool aboutQt();
+//    bool aboutPlugins();
 
-Q_SIGNALS:
-    void coreAboutToOpen();
-    void coreOpened();
-    void saveSettingsRequested();
-    void optionsDialogRequested();
-    void coreAboutToClose();
+    void updateCheckerEnd();
+
+    void openLastOpenedForm();
+    void aboutToShowRecentFiles();
+    void openRecentFile();
+
+protected:
+    void closeEvent( QCloseEvent *event );
+    void changeEvent(QEvent *event);
+
+public:
+    QToolBar *fileToolBar;
+    QToolBar *editToolBar;
+    QAction *aUserManager;
+
+    bool              m_HelpTextShow;
+    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
+    int               m_TimerId;
+    //     mfRecovererThread thread;
+    bool              m_OpenLastOpenedForm;
+    QByteArray        windowState;
+    //     QPointer<tkUserManager> m_UserManager;
+//    Internal::Ui::MainWindow *m_ui;
 };
 
-} // namespace Core
+} // End Core
 
-#endif // ICORE_H
+#endif  // FREEMEDFORMS_MAINWINDOW_H

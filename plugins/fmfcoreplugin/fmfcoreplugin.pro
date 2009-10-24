@@ -16,14 +16,13 @@ QT *= script
 HEADERS += \
     coreplugin.h \
     coreimpl.h \
-    mainwindow.h \
+    commandlineparser.h \
     appaboutpage.h
-#    maininterface/mainwindow.h \
 
 SOURCES += \
     coreplugin.cpp \
     coreimpl.cpp \
-    mainwindow.cpp \
+#    mainwindow.cpp \
     appaboutpage.cpp
 
 OTHER_FILES = Core.pluginspec

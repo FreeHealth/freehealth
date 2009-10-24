@@ -56,6 +56,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 static inline bool identifyUser()
 {
@@ -118,16 +119,19 @@ void UserManagerPlugin::extensionsInitialized()
 
     // add UserManager toogler action to plugin menu
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PLUGINS);
+    Q_ASSERT(menu);
     QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
     aUserManager = new QAction(this);
     aUserManager->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
     Core::Command *cmd = actionManager()->registerAction(aUserManager, Core::Constants::A_USERMANAGER, ctx);
+    Q_ASSERT(cmd);
 //    cmd->setDefaultKeySequence(QKeySequence::New);
     cmd->setTranslations(Trans::Constants::USERMANAGER_TEXT);
     menu->addAction(cmd,Core::Constants::G_PLUGINS_USERMANAGER);
+    cmd->retranslate();
     connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
     // Update context is necessary
-    Core::ICore::instance()->contextManager()->updateContext();
+    contextManager()->updateContext();
 
 }
 

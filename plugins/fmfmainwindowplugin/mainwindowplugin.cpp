@@ -32,88 +32,66 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+#include "mainwindowplugin.h"
+#include "mainwindow.h"
+#include "mainwindowpreferences.h"
 
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef FREEMEDFORMS_COREIMPL_H
-#define FREEMEDFORMS_COREIMPL_H
-
+#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
-namespace Utils {
-class UpdateChecker;
-}
+#include <utils/log.h>
 
-namespace Core {
-    class MainWindow;
-    class ActionManager;
-    class ISettings;
-    class IMainWindow;
-    class CommandLine;
+#include <QtCore/QtPlugin>
 
-namespace Internal {
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
-}
-}
+#include <QDebug>
 
+using namespace MainWin;
 
-namespace Core {
-namespace Internal {
-
-class CoreImpl : public Core::ICore
+MainWinPlugin::MainWinPlugin() :
+        m_MainWindow(0), prefPage(0)
 {
-    Q_OBJECT
-public:
-    CoreImpl(QObject *parent);
-    ~CoreImpl();
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating MainWinPlugin";
+}
 
-    // Splash screen functions
-    void createSplashScreen(const QPixmap &pix);
-    void finishSplashScreen(QWidget *w);
-    void messageSplashScreen(const QString &msg);
-    QSplashScreen *splashScreen();
+MainWinPlugin::~MainWinPlugin()
+{
+    if (m_MainWindow)
+        delete m_MainWindow;
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
+}
 
-    ActionManager *actionManager() const;
-    ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
-    ITheme *theme() const;
-    Translators *translators() const;
-    ISettings *settings() const;
+bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWinPlugin::initialize";
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
+    m_MainWindow = new MainWindow();
+    Core::ICore::instance()->setMainWindow(m_MainWindow);
+    m_MainWindow->initialize(arguments,errorString);
+    return true;
+}
 
-    IMainWindow *mainWindow() const;
-    void setMainWindow(IMainWindow *window);
-    FormManager *formManager() const;
+void MainWinPlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWinPlugin::extensionsInitialized";
 
-    CommandLine *commandLine() const;
-    Utils::UpdateChecker *updateChecker() const;
-    FileManager *fileManager() const;
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    // initialization
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
 
-private:
-    QSplashScreen *m_Splash;
-    IMainWindow *m_MainWindow;
-    ActionManagerPrivate *m_ActionManager;
-    ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
-    ThemePrivate *m_Theme;
-    Translators *m_Translators;
-    SettingsPrivate *m_Settings;
-    FormManager *m_FormManager;
-    Utils::UpdateChecker *m_UpdateChecker;
-    FileManager *m_FileManager;
-    CommandLine *m_CommandLine;
-};
+    // Add preferences pages
+    prefPage = new Internal::MainWindowPreferencesPage();
+    addObject(prefPage);
 
-} // namespace Internal
-} // namespace Core
+    m_MainWindow->extensionsInitialized();
+}
 
-#endif // COREIMPL_H
+Q_EXPORT_PLUGIN(MainWinPlugin)

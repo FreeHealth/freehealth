@@ -32,16 +32,15 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "coreimpl.h"
-
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/theme.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/actionmanager/actionmanager_p.h>
@@ -52,7 +51,7 @@
 #include <coreplugin/formmanager.h>
 #include <coreplugin/filemanager.h>
 
-#include <fmfcoreplugin/mainwindow.h>
+#include <fmfcoreplugin/commandlineparser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -84,59 +83,94 @@ ICore* ICore::instance()
 }
 
 // instance is created by Core::CorePlugin()
-CoreImpl::CoreImpl(QObject *parent) : ICore(parent), m_Splash(0)
+CoreImpl::CoreImpl(QObject *parent) :
+        ICore(parent),
+        m_Splash(0),
+        m_MainWindow(0),
+        m_ActionManager(0),
+        m_ContextManager(0)
 {
-    // Set application libraries
-    if (!Utils::isDebugCompilation()) {
-        QApplication::setLibraryPaths( QStringList() << settings()->path(ISettings::QtPlugInsPath) );
-    }
-    foreach(const QString &l, QCoreApplication::libraryPaths() ) {
-        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
-    }
-
-    m_UID = new UniqueIDManager();
+    setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
+    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEMEDFORMS_UPDATE_URL);
+
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+    m_CommandLine = new CommandLine();
+
+    QTime chrono;
+    chrono.start();
+    bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
+
     createSplashScreen(m_Theme->splashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN));
-    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
-
-
-    m_MainWindow = new MainWindow();
-    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
-    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
-    m_FormManager = new FormManager(this);
-    m_FileManager = new FileManager(this);
-    m_UpdateChecker = new Utils::UpdateChecker(this);
 
     // add translators
+    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
     m_Translators = new Translators(this);
     m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
     // Qt
     m_Translators->addNewTranslator("qt");
     // Core Needed Libs
     m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
+    m_Translators->addNewTranslator("utils");
+    m_Translators->addNewTranslator("medicalutils");
+    m_Translators->addNewTranslator("fmf    coreplugin");
 
-    finishSplashScreen(m_MainWindow);
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "translators");
+
+    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+    Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
+
+    foreach(const QString &l, QCoreApplication::libraryPaths()) {
+        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+    }
+
+    // initialize the settings
+    messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
+
+    // WINE compatibility (only for testing under ubuntu when crosscompiling)
+#ifdef Q_OS_WIN
+    // For WINE testings
+    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
+        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
+        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
+        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
+    }
+#endif
+
+//    m_MainWindow = new MainWindow();
+//    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
+//    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
+    m_FileManager = new FileManager(this);
+    m_UpdateChecker = new Utils::UpdateChecker(this);
+    m_UID = new UniqueIDManager();
+    m_FormManager = new FormManager(this);
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "managers");
+
+    if (Utils::isRunningOnMac())
+        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+
+    // ready
+    messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
+
+    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "end of core intialization");
+
     m_instance = this;
 }
 
 CoreImpl::~CoreImpl()
 {
-    delete m_MainWindow;
+    Q_EMIT coreAboutToClose();
+//    delete m_MainWindow;
     delete m_UID;
+    delete m_CommandLine;
 }
-//QStringList CoreImpl::showNewItemDialog(const QString &title,
-//                                        const QList<IWizard *> &wizards,
-//                                        const QString &defaultLocation)
-//{
-//    return m_mainwindow->showNewItemDialog(title, wizards, defaultLocation);
-//}
-//
-//bool CoreImpl::showOptionsDialog(const QString &group, const QString &page, QWidget *parent)
-//{
-//    return m_mainwindow->showOptionsDialog(group, page, parent);
-//}
 
 void CoreImpl::createSplashScreen(const QPixmap &pix)
 {
@@ -167,6 +201,18 @@ void CoreImpl::messageSplashScreen(const QString &msg)
         m_Splash->showMessage( msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black );
 }
 
+IMainWindow *CoreImpl::mainWindow() const  { return m_MainWindow; }
+void CoreImpl::setMainWindow(IMainWindow *win)
+{
+    // can be called only once
+    Q_ASSERT(m_MainWindow==0);
+    Q_ASSERT(m_ActionManager==0);
+    Q_ASSERT(m_ContextManager==0);
+    m_MainWindow = win;
+    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
+    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
+}
+
 QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
@@ -174,18 +220,39 @@ UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const{ return m_Settings; }
-IMainWindow *CoreImpl::mainWindow() const  { return m_MainWindow; }
 FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
+CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {
-    return m_MainWindow->initialize(arguments, errorString);
+    // first time runnning ?
+    if (m_Settings->firstTimeRunning()) {
+        // show the license agreement dialog
+#ifndef LINUX_INTEGRATED
+        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::BSD ))
+            return false;
+#endif
+        m_Settings->noMoreFirstTimeRunning();
+        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
+    } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
+        // show the license agreement dialog
+#ifndef LINUX_INTEGRATED
+        if (!Utils::defaultLicenceAgreementDialog(
+                QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement."),
+                Utils::LicenseTerms::BSD ))
+            return false;
+#endif
+        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
+    }
+
+    return true;
 }
 
 void CoreImpl::extensionsInitialized()
 {
-    m_MainWindow->extensionsInitialized();
+    Utils::Log::addMessage(this, "Core Opened");
+    Q_EMIT coreOpened();
 }
 

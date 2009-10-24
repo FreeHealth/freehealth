@@ -32,88 +32,16 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+#ifndef FREEDIAMS_MEDINTUX_H
+#define FREEDIAMS_MEDINTUX_H
 
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef FREEMEDFORMS_COREIMPL_H
-#define FREEMEDFORMS_COREIMPL_H
-
-#include <coreplugin/icore.h>
-
-namespace Utils {
-class UpdateChecker;
-}
-
-namespace Core {
-    class MainWindow;
-    class ActionManager;
-    class ISettings;
-    class IMainWindow;
-    class CommandLine;
-
-namespace Internal {
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
-}
-}
-
-
-namespace Core {
+namespace MainWin {
 namespace Internal {
 
-class CoreImpl : public Core::ICore
-{
-    Q_OBJECT
-public:
-    CoreImpl(QObject *parent);
-    ~CoreImpl();
+    const void configureMedinTux();
 
-    // Splash screen functions
-    void createSplashScreen(const QPixmap &pix);
-    void finishSplashScreen(QWidget *w);
-    void messageSplashScreen(const QString &msg);
-    QSplashScreen *splashScreen();
+}  // End Internal
+}  // End MainWin
 
-    ActionManager *actionManager() const;
-    ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
-    ITheme *theme() const;
-    Translators *translators() const;
-    ISettings *settings() const;
 
-    IMainWindow *mainWindow() const;
-    void setMainWindow(IMainWindow *window);
-    FormManager *formManager() const;
-
-    CommandLine *commandLine() const;
-    Utils::UpdateChecker *updateChecker() const;
-    FileManager *fileManager() const;
-
-    // initialization
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-private:
-    QSplashScreen *m_Splash;
-    IMainWindow *m_MainWindow;
-    ActionManagerPrivate *m_ActionManager;
-    ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
-    ThemePrivate *m_Theme;
-    Translators *m_Translators;
-    SettingsPrivate *m_Settings;
-    FormManager *m_FormManager;
-    Utils::UpdateChecker *m_UpdateChecker;
-    FileManager *m_FileManager;
-    CommandLine *m_CommandLine;
-};
-
-} // namespace Internal
-} // namespace Core
-
-#endif // COREIMPL_H
+#endif // FREEDIAMS_MEDINTUX_H

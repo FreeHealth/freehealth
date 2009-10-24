@@ -35,95 +35,77 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEMEDFORMSMAINWINDOW_H
-#define FREEMEDFORMSMAINWINDOW_H
+#ifndef MAINWINDOWPREFERENCES_H
+#define MAINWINDOWPREFERENCES_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/imainwindow.h>
+#include <coreplugin/ioptionspage.h>
 
-// include Qt headers
-#include <QCloseEvent>
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-QT_END_NAMESPACE
+#include "ui_mainwindowpreferenceswidget.h"
+
+#include <QPointer>
+#include <QObject>
 
 /**
- * \file mainwindow.h
+ * \file mainwindowpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.12
- * \date 09 Aug 2009
+ * \version 0.0.1
+ * \date 19 Oct 2009
 */
 
 namespace Core {
-class IFormIO;
+class ISettings;
+}
 
-class CORE_EXPORT MainWindow: public Core::IMainWindow
+namespace MainWin {
+namespace Internal {
+
+class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPreferencesWidget
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
+    Q_DISABLE_COPY(MainWindowPreferencesWidget)
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindowPreferencesWidget(QWidget *parent = 0);
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+    static void writeDefaultSettings(Core::ISettings *s);
 
-    QStatusBar *statusBar();
-
-    void createMenusAndActions();
-    void createToolBars();
-    void createStatusBar();
-    void retranslateUi();
-
-public Q_SLOTS: // Interface of MainWidowActionHandler
-//    virtual bool newFile()     {return false;}
-    bool openFile();
-//    virtual bool saveFile()    {return false;}
-//    virtual bool saveAsFile()  {return false;}
-//    virtual bool print()       {return false;}
-//
-    bool applicationPreferences();
-//    virtual bool configureMedintux()      {return false;}
-//
-//    virtual bool aboutApplication();
-//    virtual bool applicationHelp();
-    bool aboutQt();
-    void aboutPlugins();
-
-protected Q_SLOTS:
-    void aboutToShowRecentFiles();
-    void openRecentFile();
-
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
-    void readSettings();
-    void writeSettings();
-    bool loadFile(const QString &filename, const QList<IFormIO *> &iolist = QList<IFormIO *>());
-    void closeEvent(QEvent *event);
-    void changeEvent(QEvent *event);
-
-
-public:
-    QToolBar *fileToolBar;
-    QToolBar *editToolBar;
-    QAction *aUserManager;
-
-    bool              m_HelpTextShow;
-    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
-    int               m_TimerId;
-    //     mfRecovererThread thread;
-    bool              m_OpenLastOpenedForm;
-    QByteArray        windowState;
-    //     QPointer<tkUserManager> m_UserManager;
+    virtual void changeEvent(QEvent *e);
 };
 
-} // End FMFMainWindow
 
-#endif  // FREEMEDFORMSMAINWINDOW_H
+class MainWindowPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    MainWindowPreferencesPage(QObject *parent = 0);
+    ~MainWindowPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<MainWindowPreferencesWidget> m_Widget;
+};
+
+}  // End Internal
+}  // End MainWin
+
+#endif // MAINWINDOWPREFERENCES_H

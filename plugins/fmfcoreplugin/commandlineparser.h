@@ -37,102 +37,70 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICORE_H
-#define ICORE_H
+#ifndef FREEMEDFORMS_COMMANDLINEPARSER_H
+#define FREEMEDFORMS_COMMANDLINEPARSER_H
 
-#include <coreplugin/core_exporter.h>
+#include <coreplugin/icommandline.h>
 
-#include <QtCore/QObject>
-class QSplashScreen;
-class QPixmap;
-class QWidget;
-class QString;
-
-namespace Utils {
-class UpdateChecker;
-}
+#include <QHash>
+#include <QString>
+#include <QApplication>
+#include <QDebug>
 
 namespace Core {
-class ActionManager;
-class ContextManager;
-class UniqueIDManager;
-class Translators;
-class ITheme;
-class ISettings;
-class IMainWindow;
-class FormManager;
-class CommandLine;
-class Patient;
-class FileManager;
-}
-
-namespace Core {
-
-class CORE_EXPORT ICore : public QObject
+class CommandLine  : public Core::ICommandLine
 {
-    Q_OBJECT
-
 public:
-    ICore(QObject *parent) : QObject(parent) {}
-    virtual ~ICore() {}
+    enum Param {
+        CL_Chrono,
+        CL_TransmitDosage,
+        CL_ConfigFile,
+        CL_RunningUnderWine,
+        CL_MaxParam
+    };
 
-    static ICore *instance();
+    CommandLine() : ICommandLine()
+    {
+        ref.insert(CL_Chrono, "--chrono");
+        ref.insert(CL_TransmitDosage, "--transmit-dosage");
+        ref.insert(CL_ConfigFile, "--config");
+        ref.insert(CL_RunningUnderWine, "--wine");
+        const QStringList &args = qApp->arguments();
+        foreach(const QString &a, args) {
+            QString k = a;
+            if (k.contains(" "))
+                k = k.left(k.indexOf(" "));
+            if (a.contains("="))
+                k = k.left(k.indexOf("="));
+            switch (ref.key(k,-1))
+            {
+                case CL_Chrono : params.insert(CL_Chrono, true); break;
+                case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
+                case CL_ConfigFile : params.insert(CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+                case CL_RunningUnderWine : params.insert(CL_RunningUnderWine, true); break;
+                default : break;
+            }
+        }
+    }
 
+    QVariant value(int param, const QVariant &def = QVariant()) const
+    {
+        return params.value(param,def);
+    }
 
-    // Splash screen functions
-    virtual void createSplashScreen(const QPixmap &pix) = 0;
-    virtual void finishSplashScreen(QWidget *w) = 0;
-    virtual void messageSplashScreen(const QString &msg) = 0;
-    virtual QSplashScreen *splashScreen() = 0;
+    QString paramName(int param) const
+    {
+        if (ref.keys().contains(param))
+            return ref.value(param);
+        else
+            return QString::number(param);
+    }
 
-
-    virtual ActionManager *actionManager() const = 0;
-    virtual ContextManager *contextManager() const = 0;
-    virtual UniqueIDManager *uniqueIDManager() const = 0;
-
-    virtual ITheme *theme() const = 0;
-    virtual Translators *translators() const = 0;
-
-    virtual ISettings *settings() const = 0;
-
-    virtual IMainWindow *mainWindow() const = 0;
-
-    virtual CommandLine *commandLine() const = 0;
-
-    virtual Utils::UpdateChecker *updateChecker() const = 0;
-
-    virtual void setMainWindow(IMainWindow *) = 0;
-
-    // Use this with precaution (only used by FreeDiams)
-    virtual Patient *patient() const {return 0;}
-
-    virtual FormManager *formManager() const = 0;
-
-    virtual FileManager *fileManager() const = 0;
-
-//    virtual MessageManager *messageManager() const = 0;
-//    virtual EditorManager *editorManager() const = 0;
-//    virtual ProgressManager *progressManager() const = 0;
-//    virtual ScriptManager *scriptManager() const = 0;
-//    virtual VariableManager *variableManager() const = 0;
-//    virtual VCSManager *vcsManager() const = 0;
-//    virtual ModeManager *modeManager() const = 0;
-//    virtual MimeDatabase *mimeDatabase() const = 0;
-//
-//    virtual QSettings *settings() const = 0;
-//    virtual SettingsDatabase *settingsDatabase() const = 0;
-//    virtual QPrinter *printer() const = 0;
-//
-//    virtual QString resourcePath() const = 0;
-
-Q_SIGNALS:
-    void coreAboutToOpen();
-    void coreOpened();
-    void saveSettingsRequested();
-    void optionsDialogRequested();
-    void coreAboutToClose();
+private:
+    QHash<int,QVariant> params;
+    QHash<int, QString> ref;
 };
 
-} // namespace Core
+}
 
-#endif // ICORE_H
+#endif // FREEMEDFORMS_COMMANDLINEPARSER_H

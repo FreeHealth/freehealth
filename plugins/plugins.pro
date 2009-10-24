@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
     core \
+    mainwin \
     printer \
     xmlio \
     basewidgets \
@@ -12,6 +13,9 @@ SUBDIRS = \
     usermanager
 
 core.subdir = fmfcoreplugin
+
+mainwin.subdir = fmfmainwindowplugin
+mainwin.depends += core
 
 printer.subdir   = printerplugin
 printer.depends += core
