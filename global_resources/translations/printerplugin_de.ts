@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="de_DE">
 <context>
     <name>Print::Internal::PrinterPreviewerPrivate</name>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="44"/>
         <source>preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorschau</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="62"/>
         <source>Show page</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaue Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn es gecheckt wurde, wir die Vorschau alle Änderungen aktualisieren.
+Dies kann eine starke CPU Belastung sein.</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="83"/>
         <source>Automatic update</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisches Update</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="111"/>
@@ -37,12 +38,12 @@
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Updating der Vorschau</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
         <source>Show Duplicata</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach Duplikaten</translation>
     </message>
 </context>
 <context>
@@ -50,42 +51,42 @@
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="91"/>
         <source>Each Pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Jede Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="92"/>
         <source>First page only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur die erste Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="93"/>
         <source>Second page only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur die zweite Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="94"/>
         <source>Last page only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur die letzte Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="95"/>
         <source>All pages but first</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Seiten aber zuerst</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="96"/>
         <source>Odd pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungerade Seiten</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="97"/>
         <source>Even pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerade Seiten</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="98"/>
         <source>Duplicatas only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur die Duplikate</translation>
     </message>
 </context>
 <context>
@@ -93,7 +94,7 @@
     <message>
         <location filename="../../plugins/printerplugin/printer.cpp" line="777"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucke Dokument</translation>
     </message>
 </context>
 <context>
@@ -101,7 +102,7 @@
     <message>
         <location filename="../../plugins/printerplugin/printer.cpp" line="643"/>
         <source>No content to preview (simpleDraw).</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Inhalt zum vorschauen (simpleDraw)</translation>
     </message>
 </context>
 </TS>
