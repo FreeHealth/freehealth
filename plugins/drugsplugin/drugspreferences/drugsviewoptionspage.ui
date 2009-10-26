@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::DrugsViewWidget</class>
- <widget class="QWidget" name="Drugs::Internal::DrugsViewWidget">
+ <class>DrugsWidget::Internal::DrugsViewWidget</class>
+ <widget class="QWidget" name="DrugsWidget::Internal::DrugsViewWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

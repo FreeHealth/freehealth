@@ -41,14 +41,16 @@
 #include "mfDrugsCentralWidget.h"
 
 // include drugs widgets headers
-#include <drugsdatabase/mfDrugsBase.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <drugsmodel/mfDrugsIO.h>
-#include <drugswidget/mfDrugSelector.h>
-#include <drugswidget/mfPrescriptionViewer.h>
-#include <dosagedialog/mfDosageCreatorDialog.h>
-#include <dosagedialog/mfDosageDialog.h>
-#include <mfDrugsManager.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/drugsio.h>
+
+#include <drugsplugin/drugswidget/mfDrugSelector.h>
+#include <drugsplugin/drugswidget/mfPrescriptionViewer.h>
+#include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
+#include <drugsplugin/dosagedialog/mfDosageDialog.h>
+#include <drugsplugin/drugswidgetmanager.h>
+#include <drugsplugin/constants.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -69,42 +71,43 @@
 
 #include "ui_mfDrugsCentralWidget.h"
 
-using namespace Drugs;
+using namespace DrugsWidget;
 
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
     QWidget(parent), m_CurrentDrugModel(0)
 {
     // create instance of DrugsManager
-    DrugsManager::instance();
+    DrugsWidgetManager::instance();
 }
 
 /** \brief Initialize the widget after the ui was setted */
 bool DrugsCentralWidget::initialize()
 {
-    m_ui = new Drugs::Internal::Ui::DrugsCentralWidget();
+    m_ui = new DrugsWidget::Internal::Ui::DrugsCentralWidget();
     m_ui->setupUi(this);
 
     // create context
     m_Context = new Internal::DrugsContext(this);
-    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS));
+    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Constants::C_DRUGS_PLUGINS));
     Core::ICore::instance()->contextManager()->addContextObject(m_Context);
 
     // create model view for selected drugs list
-    m_CurrentDrugModel = new DrugsModel(this);
+    m_CurrentDrugModel = new DrugsDB::DrugsModel(this);
     m_ui->m_PrescriptionView->initialize();
     m_ui->m_PrescriptionView->setModel(m_CurrentDrugModel);
-    m_ui->m_PrescriptionView->setModelColumn( Drug::FullPrescription );
+    m_ui->m_PrescriptionView->setModelColumn( DrugsDB::Constants::Drug::FullPrescription );
 
     m_ui->m_DrugSelector->initialize();
 
     m_ui->m_DrugSelector->setFocus();
 
-    DrugsManager::instance()->setCurrentView(this);
+    DrugsWidgetManager::instance()->setCurrentView(this);
 
     Core::ISettings *s = Core::ICore::instance()->settings();
-    changeFontTo( QFont(s->value(mfDrugsConstants::MFDRUGS_SETTING_VIEWFONT).toString(), s->value(mfDrugsConstants::MFDRUGS_SETTING_VIEWFONTSIZE).toInt()) );
+    changeFontTo( QFont(s->value(Constants::MFDRUGS_SETTING_VIEWFONT).toString(), s->value(Constants::MFDRUGS_SETTING_VIEWFONTSIZE).toInt()) );
 
     return true;
 }
@@ -119,7 +122,7 @@ PrescriptionViewer *DrugsCentralWidget::prescriptionView()
     return m_ui->m_PrescriptionView;
 }
 
-DrugsModel *DrugsCentralWidget::currentDrugsModel() const
+DrugsDB::DrugsModel *DrugsCentralWidget::currentDrugsModel() const
 {
     return m_CurrentDrugModel;
 }
@@ -163,7 +166,8 @@ void DrugsCentralWidget::selector_drugSelected( const int CIS )
     if (m_CurrentDrugModel->containsDrug(CIS)) {
         Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
                                     tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
-                                       "Drug %1 is already in your prescription").arg(m_CurrentDrugModel->drugData(CIS,Drug::Denomination).toString()),
+                                       "Drug %1 is already in your prescription")
+                                    .arg(m_CurrentDrugModel->drugData(CIS, DrugsDB::Constants::Drug::Denomination).toString()),
                                     tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
@@ -189,16 +193,16 @@ bool DrugsCentralWidget::printPrescription()
         return false;
     Core::ISettings *s = Core::ICore::instance()->settings();
 #ifdef FREEDIAMS
-    QString header = s->value( MFDRUGS_SETTING_USERHEADER ).toString();
+    QString header = s->value( Constants::MFDRUGS_SETTING_USERHEADER ).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    QString footer = s->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    QString footer = s->value( Constants::MFDRUGS_SETTING_USERFOOTER ).toString();
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
-    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(DRUGMODEL->rowCount()) );
-    p.addHtmlWatermark( s->value( MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                        Print::Printer::Presence(s->value( MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-                        Qt::AlignmentFlag(s->value( MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
+    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(drugModel()->rowCount()) );
+    p.addHtmlWatermark( s->value( Constants::MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
+                        Print::Printer::Presence(s->value( Constants::MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
+                        Qt::AlignmentFlag(s->value( Constants::MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
 #else
     /** \todo here */
     QString header = "Work in progress";
@@ -211,5 +215,5 @@ bool DrugsCentralWidget::printPrescription()
     p.setHeader( header );
     p.setFooter( footer );
     p.printWithDuplicata(true);
-    return p.print( DrugsIO::instance()->prescriptionToHtml() );
+    return p.print( DrugsDB::DrugsIO::instance()->prescriptionToHtml(m_CurrentDrugModel) );
 }

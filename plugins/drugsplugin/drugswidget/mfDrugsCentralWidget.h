@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCENTRALWIDGET_H
-#define MFDRUGSCENTRALWIDGET_H
+#ifndef DRUGSCENTRALWIDGET_H
+#define DRUGSCENTRALWIDGET_H
 
 #include <drugsplugin/drugs_exporter.h>
 
@@ -50,14 +50,17 @@
 /**
  * \file mfDrugsCentralWidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 15 Sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
    \ingroup freediams
 */
 
+namespace DrugsDB {
+class DrugsModel;
+}
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 class DrugsContext;
 class DrugsActionHandler;
@@ -73,14 +76,14 @@ class DrugsModel;
 class DRUGS_EXPORT DrugsCentralWidget : public QWidget
 {
     Q_OBJECT
-    friend class Drugs::Internal::DrugsActionHandler;
+    friend class DrugsWidget::Internal::DrugsActionHandler;
 
 public:
     DrugsCentralWidget(QWidget *parent = 0);
     bool initialize();
 
     void changeFontTo(const QFont &font);
-    DrugsModel *currentDrugsModel() const;
+    DrugsDB::DrugsModel *currentDrugsModel() const;
 
     QListView *prescriptionListView();
     PrescriptionViewer *prescriptionView();
@@ -101,10 +104,10 @@ private:
 
 private:
     Internal::Ui::DrugsCentralWidget *m_ui;
-    DrugsModel   *m_CurrentDrugModel;
+    DrugsDB::DrugsModel   *m_CurrentDrugModel;
     Internal::DrugsContext *m_Context;
 };
 
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFDRUGSCENTRALWIDGET_H
+#endif // DRUGSCENTRALWIDGET_H

@@ -268,7 +268,7 @@ Voulez-vous les transmettre ?</translation>
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DosageAvailableWidget</name>
+    <name>DrugsWidget::Internal::DosageAvailableWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageAvailableWidget.ui" line="14"/>
         <source>Form</source>
@@ -276,7 +276,7 @@ Voulez-vous les transmettre ?</translation>
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DosageCreatorDialog</name>
+    <name>DrugsWidget::Internal::DosageCreatorDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="14"/>
         <source>Dialog</source>
@@ -339,7 +339,7 @@ Voulez-vous les transmettre ?</translation>
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DosageDialog</name>
+    <name>DrugsWidget::Internal::DosageDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageDialog.ui" line="53"/>
         <source>PushButton</source>
@@ -361,7 +361,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DosageViewer</name>
+    <name>DrugsWidget::Internal::DosageViewer</name>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="14"/>
         <source>Dialog</source>
@@ -745,7 +745,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugInfo</name>
+    <name>DrugsWidget::Internal::DrugInfo</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="14"/>
         <source>Dialog</source>
@@ -846,7 +846,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugSelector</name>
+    <name>DrugsWidget::Internal::DrugSelector</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.ui" line="14"/>
         <source>Form</source>
@@ -854,7 +854,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugsCentralWidget</name>
+    <name>DrugsWidget::Internal::DrugsCentralWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.ui" line="14"/>
         <source>Form</source>
@@ -862,7 +862,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugsExtraWidget</name>
+    <name>DrugsWidget::Internal::DrugsExtraWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="14"/>
         <source>Form</source>
@@ -890,7 +890,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugsPrintWidget</name>
+    <name>DrugsWidget::Internal::DrugsPrintWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="14"/>
         <source>Form</source>
@@ -938,7 +938,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugsUserWidget</name>
+    <name>DrugsWidget::Internal::DrugsUserWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsuseroptionspage.ui" line="14"/>
         <source>Form</source>
@@ -951,7 +951,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::DrugsViewWidget</name>
+    <name>DrugsWidget::Internal::DrugsViewWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="14"/>
         <source>Form</source>
@@ -1029,7 +1029,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::InteractionDialog</name>
+    <name>DrugsWidget::Internal::InteractionDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="14"/>
         <source>Dialog</source>
@@ -1057,7 +1057,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Drugs::Internal::PrescriptionViewer</name>
+    <name>DrugsWidget::Internal::PrescriptionViewer</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfPrescriptionViewer.ui" line="14"/>
         <source>Form</source>

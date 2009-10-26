@@ -38,12 +38,14 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "mfDrugsManager.h"
+#include "drugswidgetmanager.h"
 
 // include drugs widget headers
-#include <mfDrugsConstants.h>
-#include <drugswidget/mfDrugsCentralWidget.h>
-#include <drugswidget/mfPrescriptionViewer.h>
+#include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
+#include <drugsplugin/drugswidget/mfPrescriptionViewer.h>
+
+#include <drugsbaseplugin/drugsbasemanager.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -55,32 +57,32 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
 
-using namespace mfDrugsConstants;
-using namespace Drugs::Internal;
-using namespace Drugs;
+using namespace DrugsWidget::Constants;
+using namespace DrugsWidget;
+using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-DrugsManager *DrugsManager::m_Instance = 0;
+DrugsWidgetManager *DrugsWidgetManager::m_Instance = 0;
 
-DrugsManager *DrugsManager::instance()
+DrugsWidgetManager *DrugsWidgetManager::instance()
 {
     if (!m_Instance)
-        m_Instance = new DrugsManager(qApp);
+        m_Instance = new DrugsWidgetManager(qApp);
     return m_Instance;
 }
 
-DrugsManager::DrugsManager(QObject *parent) : DrugsActionHandler(parent)
+DrugsWidgetManager::DrugsWidgetManager(QObject *parent) : DrugsActionHandler(parent)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
-    setObjectName("DrugsManager");
+    setObjectName("DrugsWidgetManager");
     Utils::Log::addMessage(this, "Instance created");
 }
 
-void DrugsManager::updateContext(Core::IContext *object)
+void DrugsWidgetManager::updateContext(Core::IContext *object)
 {
 //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
 //    if (object)
@@ -114,7 +116,7 @@ void DrugsManager::updateContext(Core::IContext *object)
     }
 }
 
-DrugsCentralWidget *DrugsManager::currentView() const
+DrugsCentralWidget *DrugsWidgetManager::currentView() const
 {
     return DrugsActionHandler::m_CurrentView;
 }
@@ -150,20 +152,20 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(mfDrugsConstants::C_DRUGS_PLUGINS);
+    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(DrugsWidget::Constants::C_DRUGS_PLUGINS);
 
-    Core::ActionContainer *menu = am->actionContainer(mfDrugsConstants::M_PLUGINS_DRUGS);
+    Core::ActionContainer *menu = am->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
-        menu = am->createMenu(mfDrugsConstants::M_PLUGINS_DRUGS);
-        menu->appendGroup(mfDrugsConstants::G_PLUGINS_SEARCH);
-        menu->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
-        menu->setTranslations(mfDrugsConstants::DRUGSMENU_TEXT);
+        menu = am->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
+        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
+        menu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
     }
     Q_ASSERT(menu);
 #ifdef FREEDIAMS
-    am->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);
+    am->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
 #else
-    am->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, mfDrugsConstants::G_PLUGINS_DRUGS);
+    am->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
 #endif
 
     // Create local actions
@@ -171,60 +173,60 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONCLEAR));
     cmd = am->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
     cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     a = aRemoveRow = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONREMOVE));
     cmd = am->registerAction(a, Core::Constants::A_LIST_REMOVE, ctx);
     cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
     a = aDown = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONMOVEDOWN));
     cmd = am->registerAction(a, Core::Constants::A_LIST_MOVEDOWN, ctx);
     cmd->setTranslations(Trans::Constants::LISTMOVEDOWN_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(moveDown()));
 
     a = aUp = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONMOVEUP));
     cmd = am->registerAction(a, Core::Constants::A_LIST_MOVEUP, ctx);
     cmd->setTranslations(Trans::Constants::LISTMOVEUP_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(moveUp()));
 
     a = aSort = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONSORT));
     cmd = am->registerAction(a, Core::Constants::A_LIST_SORT, ctx);
     cmd->setTranslations(Trans::Constants::LISTSORT_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(sortDrugs()));
 
     a = aViewInteractions = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONEYES));
     cmd = am->registerAction(a, Core::Constants::A_VIEW_INTERACTIONS, ctx);
     cmd->setTranslations(Trans::Constants::VIEWINTERACTIONS_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(viewInteractions()));
 
     a = aToogleTestingDrugs = new QAction(this);
-    a->setIcon(th->icon(mfDrugsConstants::ICONTOOGLETESTINGDRUGS));
+    a->setIcon(th->icon(DrugsWidget::Constants::I_TOOGLETESTINGDRUGS));
     a->setCheckable(true);
     a->setChecked(true);
-    cmd = am->registerAction(a, mfDrugsConstants::A_TOOGLE_TESTINGDRUGS, ctx);
-    cmd->setTranslations(mfDrugsConstants::TOOGLETESTINGDRUGS_TEXT);
-    menu->addAction(cmd, mfDrugsConstants::G_PLUGINS_DRUGS);
+    cmd = am->registerAction(a, DrugsWidget::Constants::A_TOOGLE_TESTINGDRUGS, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::TOOGLETESTINGDRUGS_TEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(toogleTestingDrugs()));
 
     // Search method menu
-    Core::ActionContainer *searchmenu = am->actionContainer(mfDrugsConstants::M_PLUGINS_SEARCH);
+    Core::ActionContainer *searchmenu = am->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
     if (!searchmenu) {
-        searchmenu = am->createMenu(mfDrugsConstants::M_PLUGINS_SEARCH);
-        searchmenu->appendGroup(mfDrugsConstants::G_PLUGINS_SEARCH);
-        searchmenu->setTranslations(mfDrugsConstants::SEARCHMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
-        menu->addMenu(searchmenu, mfDrugsConstants::G_PLUGINS_SEARCH);
+        searchmenu = am->createMenu(DrugsWidget::Constants::M_PLUGINS_SEARCH);
+        searchmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
+        searchmenu->setTranslations(DrugsWidget::Constants::SEARCHMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
+        menu->addMenu(searchmenu, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     }
     Q_ASSERT(searchmenu);
 
@@ -232,28 +234,28 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a = aSearchCommercial = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
-    a->setIcon(th->icon(mfDrugsConstants::MFDRUGS_ICONSEARCHCOMMERCIAL));
-    cmd = am->registerAction(a, mfDrugsConstants::A_SEARCH_COMMERCIAL, ctx);
-    cmd->setTranslations(mfDrugsConstants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, mfDrugsConstants::G_PLUGINS_SEARCH);
+    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
+    cmd = am->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
 
     a = aSearchMolecules = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
-    a->setIcon(th->icon(mfDrugsConstants::MFDRUGS_ICONSEARCHMOLS));
-    cmd = am->registerAction(a, mfDrugsConstants::A_SEARCH_MOLECULES, ctx);
-    cmd->setTranslations(mfDrugsConstants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, mfDrugsConstants::G_PLUGINS_SEARCH);
+    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHMOLS));
+    cmd = am->registerAction(a, DrugsWidget::Constants::A_SEARCH_MOLECULES, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
 
     a = aSearchInn = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
-    a->setIcon(th->icon(mfDrugsConstants::MFDRUGS_ICONSEARCHINN));
-    cmd = am->registerAction(a, mfDrugsConstants::A_SEARCH_INN, ctx);
-    cmd->setTranslations(mfDrugsConstants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, mfDrugsConstants::G_PLUGINS_SEARCH);
+    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHINN));
+    cmd = am->registerAction(a, DrugsWidget::Constants::A_SEARCH_INN, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
@@ -261,8 +263,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a = aPrintPrescription = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
 //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
-    cmd = am->registerAction(a, mfDrugsConstants::A_PRINT_PRESCRIPTION, ctx);
-    cmd->setTranslations(mfDrugsConstants::PRINTPRESCRIPTION_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    cmd = am->registerAction(a, DrugsWidget::Constants::A_PRINT_PRESCRIPTION, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::PRINTPRESCRIPTION_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
 #ifdef FREEDIAMS
     cmd->setKeySequence(QKeySequence::Print);
 #else
@@ -289,20 +291,21 @@ void DrugsActionHandler::searchActionChanged(QAction *a)
     if (!m_CurrentView)
         return;
     if (a==aSearchCommercial)
-        m_CurrentView->setCurrentSearchMethod(mfDrugsConstants::SearchCommercial);
+        m_CurrentView->setCurrentSearchMethod(DrugsWidget::Constants::SearchCommercial);
     else if (a==aSearchMolecules)
-        m_CurrentView->setCurrentSearchMethod(mfDrugsConstants::SearchMolecules);
+        m_CurrentView->setCurrentSearchMethod(DrugsWidget::Constants::SearchMolecules);
     else if (a==aSearchInn)
-        m_CurrentView->setCurrentSearchMethod(mfDrugsConstants::SearchInn);
+        m_CurrentView->setCurrentSearchMethod(DrugsWidget::Constants::SearchInn);
 }
 
 void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
+        Utils::Log::addError(this, "setCurrentView : no view");
         return;
     }
-    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
+//    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
 
     // disconnect old view
     if (m_CurrentView) {
@@ -315,6 +318,9 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
                    this, SLOT(drugsModelChanged()));
     }
     m_CurrentView = view;
+
+    /** \todo ?Inform DrugsBaseManager of the current model change? */
+//    DrugsDB::DrugsBaseManager::instance()->setCurrentModel(view->currentDrugsModel());
     // reconnect some actions
     m_CurrentView->createConnections();
     connect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),

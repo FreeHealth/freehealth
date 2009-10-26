@@ -38,6 +38,13 @@
 #include <QWidget>
 #include <QTextEdit>
 
+/**
+ * \file tableeditor.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.1
+ * \date 25 Oct 2009
+*/
+
 namespace Editor {
 
 class TableEditor : public QWidget

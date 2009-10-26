@@ -64,9 +64,10 @@
 
 #include <fdmainwindowplugin/medintux.h>
 
-#include <drugsplugin/mfDrugsConstants.h>
-#include <drugsplugin/mfDrugsManager.h>
-#include <drugsplugin/drugsmodel/mfDrugsIO.h>
+#include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidgetmanager.h>
+
+#include <drugsbaseplugin/drugsio.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -98,6 +99,8 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::Patient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finishSplashScreen(w); }
@@ -108,7 +111,7 @@ namespace Internal {
     static bool transmitDosage()
     {
         Utils::Log::addMessage("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
-	Drugs::DrugsIO::instance()->startsDosageTransmission();
+        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
         return true;
     }
     static const char* const  SETTINGS_COUNTDOWN = "transmissionCountDown";
@@ -132,7 +135,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(mfDrugsConstants::G_PLUGINS_DRUGS);
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(Core::Constants::G_PLUGINS_DRUGS);
     createConfigurationMenu();
     createHelpMenu();
 
@@ -216,22 +219,22 @@ void MainWindow::extensionsInitialized()
             Utils::Log::addMessage("DEBUG EXCHANGE", tmp);
             /** \todo Remove this */
 
-            if (tmp.contains(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG)) {
-                int begin = tmp.indexOf(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG) + QString(mfDrugsConstants::ENCODEDHTML_FREEDIAMSTAG).length();
+            if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
+                int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
                 int end = tmp.indexOf("\"", begin);
                 QString encoded = tmp.mid( begin, end - begin );
-		Drugs::DrugsIO::instance()->prescriptionFromXml( QByteArray::fromBase64( encoded.toAscii() ) );
+                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
                 /** \todo Manage wrong file encoding */
                 int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
                 int end = tmp.indexOf("\"", begin);
                 QString encoded = tmp.mid( begin, end - begin );
-		Drugs::DrugsIO::instance()->prescriptionFromXml( QByteArray::fromBase64( encoded.toAscii() ) );
+                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             }
         } else {
             QString extras;
-	    Drugs::DrugsIO::loadPrescription(exfile, extras);
-            Core::ICore::instance()->patient()->fromXml(extras);
+            DrugsDB::DrugsIO::loadPrescription(drugModel(), exfile, extras);
+            patient()->fromXml(extras);
         }
     }
 
@@ -297,7 +300,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
     Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
     // if is a medintux plugins --> save prescription to exchange file
     if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
-	QString tmp = Drugs::DrugsIO::instance()->prescriptionToHtml();
+        QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
         tmp.replace("font-weight:bold;", "font-weight:600;");
         Utils::saveStringToFile( Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser );
     } else {
@@ -352,14 +355,14 @@ void MainWindow::updateCheckerEnd()
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
-    settings()->restoreState(this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX);
+    settings()->restoreState(this, DrugsWidget::Constants::MFDRUGS_SETTINGS_STATEPREFIX);
     fileManager()->getRecentFilesFromSettings();
 }
 
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
-    settings()->saveState( this, mfDrugsConstants::MFDRUGS_SETTINGS_STATEPREFIX );
+    settings()->saveState( this, DrugsWidget::Constants::MFDRUGS_SETTINGS_STATEPREFIX );
     fileManager()->saveRecentFiles();
     settings()->sync();
 }
@@ -372,7 +375,7 @@ void MainWindow::createStatusBar()
 
 bool MainWindow::newFile()
 {
-    if (Drugs::DRUGMODEL->drugsList().count()) {
+    if (drugModel()->drugsList().count()) {
         bool yes = Utils::yesNoMessageBox(
                 tr("Save actual prescription ?"),
                 tr("The actual prescription is not empty. Do you want to save it before creating a new one ?"));
@@ -382,7 +385,7 @@ bool MainWindow::newFile()
     }
     patient()->clear();
     refreshPatient();
-    Drugs::DRUGMODEL->clearDrugsList();
+    drugModel()->clearDrugsList();
     return true;
 }
 
@@ -440,7 +443,7 @@ bool MainWindow::saveFile()
 bool MainWindow::savePrescription(const QString &fileName)
 {
     QString xmlExtra = patient()->toXml();
-    return Drugs::DrugsIO::savePrescription(xmlExtra, fileName);
+    return DrugsDB::DrugsIO::savePrescription(drugModel(), xmlExtra, fileName);
 }
 
 /**
@@ -453,7 +456,7 @@ bool MainWindow::openFile()
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(Trans::Constants::OPEN_FILE),
                                              QDir::homePath(),
-                                             tr(Core::Constants::FREEDIAMS_FILEFILTER) );
+                                             tkTr(Core::Constants::FREEDIAMS_FILEFILTER) );
     if (f.isEmpty())
         return false;
     //    QString f = "/Users/eric/prescription.di";
@@ -466,19 +469,19 @@ bool MainWindow::openFile()
 void MainWindow::readFile(const QString &file)
 {
     QHash<QString,QString> datas;
-    if (Drugs::DRUGMODEL->rowCount() > 0) {
+    if (drugModel()->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
                 tr("Opening a prescription : merge or replace ?"),
                 tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
                 QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
                 tr("Open a prescription") + " - " + qApp->applicationName());
         if (r == 0) {
-	    Drugs::DrugsIO::loadPrescription(file, datas, Drugs::DrugsIO::ReplacePrescription);
+            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
         } else if (r==1) {
-	    Drugs::DrugsIO::loadPrescription(file, datas, Drugs::DrugsIO::AppendPrescription);
+            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
         }
     } else {
-	Drugs::DrugsIO::loadPrescription(file, datas, Drugs::DrugsIO::ReplacePrescription);
+        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
     patient()->setValue(Core::Patient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
     m_ui->patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );

@@ -58,8 +58,8 @@
 /**
  * \file editoractionhandler.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 08 sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
 */
 
 // Not exported because part of the internal part of TextEditor

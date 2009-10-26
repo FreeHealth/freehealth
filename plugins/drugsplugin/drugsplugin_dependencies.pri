@@ -1,4 +1,5 @@
 include( ../coreplugin/coreplugin.pri )
+include( ../drugsbaseplugin/drugsbaseplugin.pri )
 include( ../listviewplugin/listviewplugin.pri )
 include( ../texteditorplugin/texteditorplugin.pri )
 include( ../printerplugin/printerplugin.pri )

@@ -38,18 +38,18 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFINTERACTIONDIALOG_H
-#define MFINTERACTIONDIALOG_H
+#ifndef INTERACTIONDIALOG_H
+#define INTERACTIONDIALOG_H
 
 #include "ui_mfInteractionDialog.h"
 /**
  * \file mfInteractionDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 12 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 
 /**
@@ -79,6 +79,6 @@ private:
 };
 
 }
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFINTERACTIONDIALOG_H
+#endif // INTERACTIONDIALOG_H

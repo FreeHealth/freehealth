@@ -1,4 +1,4 @@
-    TEMPLATE        = lib
+TEMPLATE        = lib
 TARGET          = Drugs
 PACKAGE_VERSION = 0.0.9
 

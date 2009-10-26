@@ -40,10 +40,11 @@
  ***************************************************************************/
 #include "mfDrugsPreferences.h"
 
-#include <mfDrugsConstants.h>
-#include <drugsmodel/mfDrugs.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <drugsdatabase/mfDrugsBase.h>
+#include <drugsplugin/constants.h>
+
+#include <drugsbaseplugin/drugsdata.h>
+#include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/drugsbase.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -59,9 +60,11 @@
 
 #include <QPixmap>
 
-using namespace mfDrugsConstants;
-using namespace Drugs;
-using namespace Drugs::Internal;
+/** \todo moves preferences of DrugsDB in a specific options page */
+
+using namespace DrugsWidget;
+using namespace DrugsWidget::Internal;
+using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -105,10 +108,10 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize());
     defaultvalues.insert(MFDRUGS_SETTING_HISTORYSIZE, 20);
     defaultvalues.insert(MFDRUGS_SETTING_DRUGHISTORY, QVariant());
-    defaultvalues.insert(MFDRUGS_SETTING_LEVELOFWARNING, 1);
     defaultvalues.insert(MFDRUGS_SETTING_DRUGFONT,QFont());
     defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFONT,QFont());
-    defaultvalues.insert(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION,true);
+    defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING, 1);
+    defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -159,9 +162,9 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
 //    defaultvalues.insert(MFDRUGS_SETTING_DRUGFONT, QFont());
 //    defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFONT, QFont());
-    defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING);
-    defaultvalues.insert(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN);
-    defaultvalues.insert(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, true);
+    defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
+    defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN);
+    defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -268,9 +271,9 @@ void DrugsExtraOptionsPage::applyChanges()
 void DrugsExtraOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(MFDRUGS_SETTING_HIDELABORATORY, false);
-    defaultvalues.insert(MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML);
-    defaultvalues.insert(MFDRUGS_SETTING_ALD_POST_HTML, MFDRUGS_DEFAULT_ALD_POST_HTML);
+    defaultvalues.insert(DrugsDB::Constants::S_HIDELABORATORY, false);
+    defaultvalues.insert(DrugsDB::Constants::S_ALD_PRE_HTML, DrugsDB::Constants::S_DEF_ALD_PRE_HTML);
+    defaultvalues.insert(DrugsDB::Constants::S_ALD_POST_HTML, DrugsDB::Constants::S_DEF_ALD_POST_HTML);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -311,11 +314,11 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
 
     viewFontSizeSpin->setValue(s->value(MFDRUGS_SETTING_VIEWFONTSIZE, 12).toInt());
     historicSizeSpin->setValue(s->value(MFDRUGS_SETTING_HISTORYSIZE).toInt());
-    levelOfWarningCombo->setCurrentIndex(s->value(MFDRUGS_SETTING_LEVELOFWARNING).toInt());
+    levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING).toInt());
 
     viewFontCombo->setCurrentFont(s->value(MFDRUGS_SETTING_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(MFDRUGS_SETTING_VIEWFONTSIZE).toInt());
-    showIconsCheck->setChecked(s->value(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION).toBool());
+    showIconsCheck->setChecked(s->value(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION).toBool());
 }
 
 void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
@@ -338,11 +341,11 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     // manage history size
     s->setValue(MFDRUGS_SETTING_HISTORYSIZE, historicSizeSpin->value());
     s->setValue(MFDRUGS_SETTING_DRUGHISTORY, QVariant());
-    s->setValue(MFDRUGS_SETTING_LEVELOFWARNING , levelOfWarningCombo->currentIndex());
+    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING , levelOfWarningCombo->currentIndex());
 
     s->setValue(MFDRUGS_SETTING_VIEWFONT , viewFontCombo->currentFont());
     s->setValue(MFDRUGS_SETTING_VIEWFONTSIZE, viewFontSizeSpin->value());
-    s->setValue(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
+    s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 }
 
 void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
@@ -354,8 +357,8 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(MFDRUGS_SETTING_VIEWFONTSIZE, QFont().pointSize());
     s->setValue(MFDRUGS_SETTING_HISTORYSIZE, 20);
     s->setValue(MFDRUGS_SETTING_DRUGHISTORY, QVariant());
-    s->setValue(MFDRUGS_SETTING_LEVELOFWARNING , 0);
-    s->setValue(MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION , true);
+    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING , 0);
+    s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION , true);
 
     s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
     s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
@@ -412,7 +415,8 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 //    drugItalicButton->setChecked(drugsFont.underline());
 
     // Create a virtual drug and prescription
-    drug = Internal::DrugsBase::instance()->getDrugByCIS("61266250");
+    using namespace DrugsDB::Constants;
+    drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByCIS("61266250");
     drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
     drug->setPrescriptionValue(Prescription::IntakesTo, 3);
     drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
@@ -429,9 +433,9 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
     drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
 
-    prescriptionFormatting->textEdit()->setHtml(settings()->value(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML).toString());
+    prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
-    lineBreakCheck->setChecked(settings()->value(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS).toBool());
+    lineBreakCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS).toBool());
 
     connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
     connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
@@ -440,11 +444,11 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
 void DrugsPrintWidget::resetToDefaultFormatting()
 {
-    prescriptionFormatting->setHtml(qApp->translate("mfDrugsConstants", MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING));
+    prescriptionFormatting->setHtml(qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
 }
 
-static inline QString getFullPrescription(Drugs::Internal::DrugsData *drug, bool toHtml, const QString &tmp)
-{ return Drugs::DrugsModel::getFullPrescription(drug,toHtml,tmp); }
+static inline QString getFullPrescription(DrugsDB::Internal::DrugsData *drug, bool toHtml, const QString &tmp)
+{ return DrugsDB::DrugsModel::getFullPrescription(drug,toHtml,tmp); }
 
 void DrugsPrintWidget::updateFormatting()
 {
@@ -478,9 +482,9 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     tmp = Utils::toHtmlAccent(tmp);
     int cutBegin = tmp.indexOf("<p ");
     int cutEnd = tmp.indexOf("</body>");
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
-    s->setValue(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
+    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
 }
 
 void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
@@ -490,9 +494,11 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
 //    s->setValue(MFDRUGS_SETTING_DRUGFONT , QFont().toString());
 //    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFONT , QFont().toString());
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML, qApp->translate("mfDrugsConstants", MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING));
-    s->setValue(MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN, qApp->translate("mfDrugsConstants", MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN));
-    s->setValue(MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS, true);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
+                qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
+                qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     s->sync();
 }
 
@@ -575,14 +581,14 @@ DrugsExtraWidget::DrugsExtraWidget(QWidget *parent) :
 {
     setupUi(this);
     ALDBefore->setTypes(Editor::TextEditor::Full);
-    ALDAfter->setTypes(Editor::TextEditor::Full|Editor::TextEditor::Full);
+    ALDAfter->setTypes(Editor::TextEditor::Full);
     // feed with actual values
     Core::ISettings *s = settings();
 
-    hideLabCheck->setChecked(s->value(MFDRUGS_SETTING_HIDELABORATORY).toBool());
+    hideLabCheck->setChecked(s->value(DrugsDB::Constants::S_HIDELABORATORY).toBool());
 
-    ALDBefore->textEdit()->setHtml(s->value(MFDRUGS_SETTING_ALD_PRE_HTML).toString());
-    ALDAfter->textEdit()->setHtml(s->value(MFDRUGS_SETTING_ALD_POST_HTML).toString());
+    ALDBefore->textEdit()->setHtml(s->value(DrugsDB::Constants::S_ALD_PRE_HTML).toString());
+    ALDAfter->textEdit()->setHtml(s->value(DrugsDB::Constants::S_ALD_POST_HTML).toString());
 }
 
 void DrugsExtraWidget::saveToSettings(Core::ISettings *sets)
@@ -592,10 +598,10 @@ void DrugsExtraWidget::saveToSettings(Core::ISettings *sets)
         s = settings();
     else
         s = sets;
-    s->setValue(MFDRUGS_SETTING_HIDELABORATORY, hideLabCheck->isChecked());
+    s->setValue(DrugsDB::Constants::S_HIDELABORATORY, hideLabCheck->isChecked());
 
-    s->setValue(MFDRUGS_SETTING_ALD_PRE_HTML, ALDBefore->textEdit()->toHtml());
-    s->setValue(MFDRUGS_SETTING_ALD_POST_HTML, ALDAfter->textEdit()->toHtml());
+    s->setValue(DrugsDB::Constants::S_ALD_PRE_HTML, ALDBefore->textEdit()->toHtml());
+    s->setValue(DrugsDB::Constants::S_ALD_POST_HTML, ALDAfter->textEdit()->toHtml());
 }
 
 void DrugsExtraWidget::writeDefaultSettings(Core::ISettings *s)
@@ -603,10 +609,10 @@ void DrugsExtraWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("DrugsExtraWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
     s->setValue(MFDRUGS_SETTING_CONFIGURED, true);
-    s->setValue(MFDRUGS_SETTING_HIDELABORATORY, false);
+    s->setValue(DrugsDB::Constants::S_HIDELABORATORY, false);
 
-    s->setValue(MFDRUGS_SETTING_ALD_PRE_HTML, MFDRUGS_DEFAULT_ALD_PRE_HTML);
-    s->setValue(MFDRUGS_SETTING_ALD_POST_HTML, MFDRUGS_DEFAULT_ALD_POST_HTML);
+    s->setValue(DrugsDB::Constants::S_ALD_PRE_HTML, DrugsDB::Constants::S_DEF_ALD_PRE_HTML);
+    s->setValue(DrugsDB::Constants::S_ALD_POST_HTML, DrugsDB::Constants::S_DEF_ALD_POST_HTML);
     s->sync();
 }
 

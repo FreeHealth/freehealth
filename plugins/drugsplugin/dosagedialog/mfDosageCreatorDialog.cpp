@@ -53,11 +53,12 @@
 
 // include drugwidget headers
 //#include <drugsmodel/mfDosage.h>
-#include <drugsmodel/mfDrugs.h>
-#include <drugsmodel/mfDosageModel.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <mfDrugsConstants.h>
-#include <mfDrugsManager.h>
+#include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidgetmanager.h>
+
+#include <drugsbaseplugin/drugsdata.h>
+#include <drugsbaseplugin/dosagemodel.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -74,16 +75,16 @@
 #include <QMessageBox>
 #include <QModelIndex>
 
-using namespace mfDrugsConstants;
-using namespace mfDosagesConstants;
-using namespace mfInteractionsConstants;
+using namespace DrugsWidget::Constants;
+//using namespace mfDosagesConstants;
+//using namespace mfInteractionsConstants;
 
-using namespace Drugs::Internal;
+using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Drugs::DrugsModel *dm() { return Drugs::DRUGMODEL; }
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 
 /**
@@ -140,23 +141,24 @@ public:
     }
 
 public:
-    DosageModel *m_DosageModel;
+    DrugsDB::Internal::DosageModel *m_DosageModel;
     QString      m_ActualDosageUuid;
 private:
     DosageCreatorDialog *m_Parent;
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
  \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
-DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DosageModel *dosageModel )
+DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel )
     : QDialog( parent ),
     d(0)
 {
+    using namespace DrugsDB::Constants;
     // some initializations
     setObjectName( "DosageCreatorDialog" );
     d = new DosageCreatorDialogPrivate(this);
@@ -168,16 +170,16 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DosageModel *dosageMo
 
     // Drug informations
     int CIS = dosageModel->drugCIS();
-    drugNameLabel->setText( dm()->drugData(CIS, Drug::Denomination).toString() );
-    QString toolTip = dm()->drugData(CIS, Interaction::ToolTip ).toString();
-    interactionIconLabel->setPixmap( dm()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
+    drugNameLabel->setText( drugModel()->drugData(CIS, Drug::Denomination).toString() );
+    QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
+    interactionIconLabel->setPixmap( drugModel()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
     interactionIconLabel->setToolTip( toolTip );
-    toolTip = dm()->drugData(CIS, Drug::CompositionString ).toString();
+    toolTip = drugModel()->drugData(CIS, Drug::CompositionString ).toString();
     drugNameLabel->setToolTip( toolTip );
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
     availableDosagesListView->setModel(dosageModel);
-    availableDosagesListView->setModelColumn(Dosage::Label);
+    availableDosagesListView->setModelColumn(Dosages::Constants::Label);
     availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
     if (dosageModel->rowCount()==0) {
         dosageModel->insertRow(0);
@@ -188,7 +190,7 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DosageModel *dosageMo
 
     // Create connections
     connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),dosageViewer,SLOT(changeCurrentRow(QModelIndex)));
-    QModelIndex idx = dosageModel->index(0,Dosage::Label);
+    QModelIndex idx = dosageModel->index(0,Dosages::Constants::Label);
     availableDosagesListView->listView()->setCurrentIndex(idx);
 }
 
@@ -255,7 +257,7 @@ void DosageCreatorDialog::on_helpButton_clicked()
 
 void DosageCreatorDialog::on_testOnlyButton_clicked()
 {
-    dm()->setDrugData(d->m_DosageModel->drugCIS(), Prescription::OnlyForTest, true);
+    drugModel()->setDrugData(d->m_DosageModel->drugCIS(), DrugsDB::Constants::Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
 }

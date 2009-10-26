@@ -160,7 +160,7 @@
      </widget>
     </item>
     <item row="2" column="0" colspan="4">
-     <widget class="Drugs::DrugsCentralWidget" name="m_CentralWidget" native="true">
+     <widget class="DrugsWidget::DrugsCentralWidget" name="m_CentralWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -202,7 +202,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Drugs::DrugsCentralWidget</class>
+   <class>DrugsWidget::DrugsCentralWidget</class>
    <extends>QWidget</extends>
    <header location="global">drugsplugin/drugswidget/mfDrugsCentralWidget.h</header>
    <container>1</container>

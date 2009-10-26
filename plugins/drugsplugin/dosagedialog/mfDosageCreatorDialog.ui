@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::DosageCreatorDialog</class>
- <widget class="QDialog" name="Drugs::Internal::DosageCreatorDialog">
+ <class>DrugsWidget::Internal::DosageCreatorDialog</class>
+ <widget class="QDialog" name="DrugsWidget::Internal::DosageCreatorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -198,7 +198,7 @@
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>Drugs::Internal::DosageCreatorDialog</receiver>
+   <receiver>DrugsWidget::Internal::DosageCreatorDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -51,12 +51,12 @@
 #  include <fdcoreplugin/patient.h>
 #endif
 
-// include drugswidget headers
-#include <drugsmodel/mfDrugsModel.h>
-#include <mfDrugsConstants.h>
-#include <mfDrugsManager.h>
+#include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/constants.h>
 
-// include toolkit headers
+#include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidgetmanager.h>
+
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -64,33 +64,36 @@
 #include <coreplugin/dialogs/helpdialog.h>
 
 #include <printerplugin/printer.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 
-using namespace mfInteractionsConstants;
+using namespace DrugsWidget;
+using namespace DrugsWidget::Internal;
 
-using namespace Drugs::Internal;
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 
 InteractionDialog::InteractionDialog(QWidget *parent) :
     QDialog(parent)
 {
     setupUi(this);
     setObjectName("InteractionDialog");
-    printButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONPRINT) );
-    zoomIn->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTBIGGER) );
-    zoomOut->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTSMALLER) );
+    printButton->setIcon( theme()->icon(Core::Constants::ICONPRINT) );
+    zoomIn->setIcon( theme()->icon(Core::Constants::ICONFONTBIGGER) );
+    zoomOut->setIcon( theme()->icon(Core::Constants::ICONFONTSMALLER) );
     setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
-    textBrowser->setHtml( DRUGMODEL->index(0, Interaction::FullSynthesis).data().toString() );
-    m_Zoom = Core::ICore::instance()->settings()->value(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1).toInt();
+    textBrowser->setHtml( drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString() );
+    m_Zoom = settings()->value(Constants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1).toInt();
     textBrowser->zoomIn(m_Zoom);
-    qWarning() << Core::ICore::instance()->settings()->value(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1);
 }
 
 InteractionDialog::~InteractionDialog()
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    s->setValue(mfDrugsConstants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM, m_Zoom);
-    s->sync();
+    settings()->setValue(Constants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM, m_Zoom);
+    settings()->sync();
 }
 
 void InteractionDialog::on_helpButton_clicked()
@@ -102,16 +105,16 @@ void InteractionDialog::on_helpButton_clicked()
 void InteractionDialog::on_printButton_clicked()
 {
     /** \todo add functionnality to FMF */
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
 #ifdef FREEDIAMS
     Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = s->value( MFDRUGS_SETTING_USERHEADER ).toString();
+    QString header = s->value( Constants::MFDRUGS_SETTING_USERHEADER ).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     p.setHeader(header);
-    header = s->value( MFDRUGS_SETTING_USERFOOTER ).toString();
+    header = s->value( Constants::MFDRUGS_SETTING_USERFOOTER ).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
     p.setFooter(header);

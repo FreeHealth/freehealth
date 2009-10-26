@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::InteractionDialog</class>
- <widget class="QDialog" name="Drugs::Internal::InteractionDialog">
+ <class>DrugsWidget::Internal::InteractionDialog</class>
+ <widget class="QDialog" name="DrugsWidget::Internal::InteractionDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -133,7 +133,7 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>Drugs::Internal::InteractionDialog</receiver>
+   <receiver>DrugsWidget::Internal::InteractionDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">

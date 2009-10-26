@@ -40,21 +40,19 @@
  ***************************************************************************/
 #include "drugswidgetfactory.h"
 
-// include drugswidget headers
-#include <drugsdatabase/mfDrugsBase.h>
-#include <drugsmodel/mfDrugsModel.h>
-#include <drugswidget/druginfo.h>
-#include <drugspreferences/mfDrugsPreferences.h>
-#include <drugswidget/mfDrugsCentralWidget.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
-// include FreeMedForms headers
-//#include <mfCore.h>
+#include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidget/druginfo.h>
+#include <drugsplugin/drugspreferences/mfDrugsPreferences.h>
+#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iformitem.h>
 
-// include Qt headers
 #include <QStringList>
 #include <QSqlRecord>
 #include <QSqlQuery>
@@ -74,8 +72,11 @@ namespace mfDrugsWidgetPluginsPrivateConstants {
 }
 
 using namespace mfDrugsWidgetPluginsPrivateConstants;
-using namespace Drugs;
-using namespace Drugs::Internal;
+using namespace DrugsWidget;
+using namespace DrugsWidget::Internal;
+
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget plugin interface ------------------------------------
@@ -114,13 +115,13 @@ bool DrugsWidgetsFactory::isContainer( const int idInStringList ) const
 
 Core::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent)
 {
-    return new DrugsWidget(linkedObject,parent);
+    return new DrugsPrescriptorWidget(linkedObject,parent);
 }
 
 //--------------------------------------------------------------------------------------------------------
-//-------------------------------------- mfDrugsWidget implementation ------------------------------------
+//--------------------------------- DrugsPrescriptorWidget implementation --------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
+DrugsPrescriptorWidget::DrugsPrescriptorWidget(Core::FormItem *linkedObject, QWidget *parent)
           : IFormWidget(linkedObject,parent),
           m_PrescriptionModel(0)
 {
@@ -144,51 +145,17 @@ DrugsWidget::DrugsWidget(Core::FormItem *linkedObject, QWidget *parent)
 //        m_WithPrinting = true;
 
     // intialize drugs database
-    DrugsBase::instance();
+    drugsBase();
 
     // create main widget
     DrugsCentralWidget *centralWidget = new DrugsCentralWidget(this);
     centralWidget->initialize();
     hb->addWidget(centralWidget);
 
-    createConnections();
-
-    centralWidget->changeFontTo( QFont(Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_VIEWFONT ).toString(),
-                                 Core::ICore::instance()->settings()->value( MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
-
-    // Connect list selection changed with mfObject value changed
-    //      connect( m_Combo, SIGNAL( activated ( int ) ),
-    //               this ,   SLOT  ( updateObject( int ) ) );
-    //      connect( mfo,     SIGNAL( valueChanged() ),
-    //               this,    SLOT( updateWidget() ) );
-
-    // if selected data exists fill the widget with
-    //      if ( mfo->value() != QVariant() )
-    //           updateWidget();
+    centralWidget->changeFontTo( QFont(settings()->value( Constants::MFDRUGS_SETTING_VIEWFONT ).toString(),
+                                 settings()->value( Constants::MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
 }
 
-DrugsWidget::~DrugsWidget()
+DrugsPrescriptorWidget::~DrugsPrescriptorWidget()
 {
 }
-
-void DrugsWidget::createConnections()
-{
-    //    tkActionManager *am = tkActionManager::instance();
-    //    connect( am->action(A_FILE_OPEN), SIGNAL( triggered() ), this, SLOT( openPrescription() ) );
-    //    connect( am->action(A_FILE_SAVE), SIGNAL( triggered() ), this, SLOT( savePrescription() ) );
-    //    connect( am->action(A_FILE_PRINT), SIGNAL( triggered() ), this, SLOT( printPrescription() ) );
-    //    connect( am->action(A_FILE_EXIT), SIGNAL( triggered() ), this, SLOT( close() ) );
-    //
-    //    connect( am->action(A_PREFERENCES), SIGNAL( triggered() ), this, SLOT( preferences() ) );
-    //    connect( am->action(A_ABOUT), SIGNAL( triggered() ), this, SLOT( about() ) );
-    //    connect( am->action(A_DEBUGHELPER), SIGNAL( triggered() ), this, SLOT( debugDialog() ) );
-    //    connect( am->action(A_CONFIG_MEDINTUX), SIGNAL( triggered() ), this, SLOT( configureMedinTux() ) );
-    //
-    //    connect( m_PrescriptionView, SIGNAL(printTriggered()), this, SLOT(printPrescription()));
-}
-
-//void DrugsWidget::createDefaultSettings( Core::ISettings *settings )
-//{
-//    DrugsPreferences::writeDefaultSettings(settings);
-//}
-

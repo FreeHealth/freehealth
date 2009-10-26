@@ -55,11 +55,11 @@
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 08 July 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
  */
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 
 /**
@@ -122,7 +122,7 @@ private:
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 
 #endif // MFDRUGSELECTOR_H

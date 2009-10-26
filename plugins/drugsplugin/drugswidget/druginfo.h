@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGINFO_H
-#define MFDRUGINFO_H
+#ifndef DRUGINFO_H
+#define DRUGINFO_H
 
 // include drugswidget headers
 
@@ -50,10 +50,10 @@
 /**
  * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 08 sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
 */
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 class DrugInfoPrivate;
 
@@ -75,7 +75,7 @@ private:
     Internal::DrugInfoPrivate *d;
 };
 
-}
-}  // End Drugs
+}  // End Internal
+}  // End DrugsWidget
 
-#endif
+#endif  //  DRUGINFO

@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDOSAGEVIEWER_H
-#define MFDOSAGEVIEWER_H
+#ifndef DOSAGEVIEWER_H
+#define DOSAGEVIEWER_H
 
 // include drugwidget headers
 
@@ -52,11 +52,18 @@
 /**
  * \file mfDosageViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
-namespace Drugs {
+
+namespace DrugsDB {
+namespace Internal {
+class DosageModel;
+}
+}
+
+namespace DrugsWidget {
 namespace Internal {
 class DosageViewerPrivate;
 class DosageModel;
@@ -67,19 +74,19 @@ class DosageViewer : public QWidget, public Ui::DosageViewer
     Q_DISABLE_COPY(DosageViewer);
 
 public:
-    explicit DosageViewer( QWidget *parent );
+    explicit DosageViewer(QWidget *parent);
     ~DosageViewer();
 
-    void setDosageModel( DosageModel *model );
+    void setDosageModel(DrugsDB::Internal::DosageModel *model);
     void useDrugsModel(const int CIS, const int drugRow);
 
 public Q_SLOTS:
-    void done( int r );
-    void changeCurrentRow( const int dosageRow );
-    void changeCurrentRow( const QModelIndex &item );
+    void done(int r);
+    void changeCurrentRow(const int dosageRow);
+    void changeCurrentRow(const QModelIndex &item);
 
 private:
-    void resizeEvent( QResizeEvent * event );
+    void resizeEvent(QResizeEvent * event);
 
 private Q_SLOTS:
     void on_fromToIntakesCheck_stateChanged(int state);
@@ -96,6 +103,6 @@ private:
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFDOSAGEVIEWER_H
+#endif // DOSAGEVIEWER_H

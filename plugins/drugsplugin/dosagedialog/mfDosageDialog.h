@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDOSAGEDIALOG_H
-#define MFDOSAGEDIALOG_H
+#ifndef DOSAGEDIALOG_H
+#define DOSAGEDIALOG_H
 
 // include Ui
 #include "ui_mfDosageDialog.h"
@@ -47,11 +47,11 @@
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.16
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 class DosageDialogPrivate;
 
@@ -86,6 +86,6 @@ private:
 };
 
 } // namespace Internal
-} // namespace Drugs
+} // namespace DrugsWidget
 
-#endif // MFDOSAGEDIALOG_H
+#endif // DOSAGEDIALOG_H

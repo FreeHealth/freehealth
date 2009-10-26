@@ -41,7 +41,7 @@
 #ifndef DRUGSWIDGETFACTORY_H
 #define DRUGSWIDGETFACTORY_H
 
-namespace Drugs {
+namespace DrugsDB {
 class DrugsModel;
 }
 
@@ -57,11 +57,11 @@ QT_END_NAMESPACE
 /**
  * \file drugswidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 
 class DrugsWidgetsFactory : public Core::IFormWidgetFactory
@@ -85,23 +85,20 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class DrugsWidget : public Core::IFormWidget
+class DrugsPrescriptorWidget : public Core::IFormWidget
 {
     Q_OBJECT
 public:
-    DrugsWidget(Core::FormItem *linkedObject, QWidget *parent);
-    ~DrugsWidget();
+    DrugsPrescriptorWidget(Core::FormItem *linkedObject, QWidget *parent);
+    ~DrugsPrescriptorWidget();
 
 private:
-    void createConnections();
-
-private:
-    DrugsModel *m_PrescriptionModel;
+    DrugsDB::DrugsModel *m_PrescriptionModel;
     QString     m_iniPath;
     bool        m_WithPrescribing, m_WithPrinting;
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 #endif  // DRUGSWIDGETFACTORY_H

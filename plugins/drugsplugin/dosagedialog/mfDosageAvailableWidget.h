@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDOSAGEAVAILABLEWIDGET_H
-#define MFDOSAGEAVAILABLEWIDGET_H
+#ifndef DOSAGEAVAILABLEWIDGET_H
+#define DOSAGEAVAILABLEWIDGET_H
 
 #include <QWidget>
 #include "ui_mfDosageAvailableWidget.h"
@@ -47,11 +47,17 @@
 /**
  * \file mfDosageAvailableWidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsDB {
+namespace Internal {
+class DosageModel;
+}
+}
+
+namespace DrugsWidget {
 namespace Internal {
 class DosageModel;
 
@@ -62,13 +68,13 @@ class DosageAvailableWidget : public QWidget, private Ui::DosageAvailableWidget
 
 public:
     explicit DosageAvailableWidget(QWidget *parent = 0);
-    void setModel( DosageModel *model);
+    void setModel(DrugsDB::Internal::DosageModel *model);
 
 protected:
     virtual void changeEvent(QEvent *e);
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFDOSAGEAVAILABLEWIDGET_H
+#endif // DOSAGEAVAILABLEWIDGET_H

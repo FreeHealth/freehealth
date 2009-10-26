@@ -38,13 +38,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFPRESCRIPTIONVIEWERMANAGER_H
-#define MFPRESCRIPTIONVIEWERMANAGER_H
+#ifndef DRUGSWIDGETMANAGERMANAGER_H
+#define DRUGSWIDGETMANAGERMANAGER_H
 
 #include <drugsplugin/drugs_exporter.h>
 
 #include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
-#include <drugsplugin/drugsmodel/mfDrugsModel.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/contextmanager/icontext.h>
 
@@ -54,16 +54,15 @@
 #include <QPointer>
 
 /**
- * \file mfDrugsManager.h
+ * \file drugswidgetmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 14 Sept  2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
  * \internal
 */
 
-namespace Drugs {
+namespace DrugsWidget {
 class InteractionsManager;
-
 namespace Internal {
 
 class DrugsContext : public Core::IContext
@@ -79,7 +78,6 @@ private:
     DrugsCentralWidget *wgt;
     QList<int> ctx;
 };
-
 
 class DrugsActionHandler : public QObject
 {
@@ -132,32 +130,30 @@ protected:
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 
-#define DRUGMODEL  DrugsManager::instance()->currentDrugsModel()
+namespace DrugsWidget {
 
-namespace Drugs {
-
-class DRUGS_EXPORT DrugsManager : public Internal::DrugsActionHandler
+class DRUGS_EXPORT DrugsWidgetManager : public Internal::DrugsActionHandler
 {
     Q_OBJECT
 public:
-    static DrugsManager *instance();
-    ~DrugsManager() {}
+    static DrugsWidgetManager *instance();
+    ~DrugsWidgetManager() {}
 
-    DrugsCentralWidget  *currentView() const;
-    DrugsModel          *currentDrugsModel() const { return currentView()->currentDrugsModel(); }
-    InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+    DrugsWidget::DrugsCentralWidget  *currentView() const;
+    DrugsDB::DrugsModel          *currentDrugsModel() const { return currentView()->currentDrugsModel(); }
+    DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
 
 private:
-    DrugsManager(QObject *parent = 0);
-    static DrugsManager *m_Instance;
+    DrugsWidgetManager(QObject *parent = 0);
+    static DrugsWidgetManager *m_Instance;
 };
 
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFPRESCRIPTIONVIEWER_H
+#endif // DRUGSWIDGETMANAGERMANAGER_H

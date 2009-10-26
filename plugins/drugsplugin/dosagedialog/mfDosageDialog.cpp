@@ -40,11 +40,12 @@
  ***************************************************************************/
 #include "mfDosageDialog.h"
 
-#include <drugsplugin/mfDrugsConstants.h>
-#include <drugsplugin/drugsmodel/mfDosageModel.h>
-#include <drugsplugin/drugsmodel/mfDrugsModel.h>
+#include <drugsbaseplugin/dosagemodel.h>
+#include <drugsbaseplugin/drugsmodel.h>
+
+#include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
-#include <drugsplugin/mfDrugsManager.h>
+#include <drugsplugin/drugswidgetmanager.h>
 
 #include <listviewplugin/stringlistmodel.h>
 
@@ -61,13 +62,14 @@
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 
-using namespace mfDrugsConstants;
-using namespace mfDosagesConstants;
-using namespace mfInteractionsConstants;
+using namespace DrugsWidget::Constants;
+//using namespace mfDosagesConstants;
+//using namespace mfInteractionsConstants;
+using namespace DrugsWidget::Internal;
 
-using namespace Drugs::Internal;
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
-namespace Drugs {
+namespace DrugsWidget {
 namespace Internal {
 
 class DosageDialogPrivate
@@ -82,7 +84,7 @@ public:
 };
 
 } // namespace Internal
-} // namespace Drugs
+} // namespace DrugsWidget
 
 
 /**
@@ -105,11 +107,11 @@ DosageDialog::DosageDialog( QWidget *parent )
     setObjectName( "DosageDialog" );
     d = new DosageDialogPrivate();
     setupUi(this);
-    innButton->setIcon( Core::ICore::instance()->theme()->icon(MFDRUGS_ICONSEARCHINN));
+    innButton->setIcon( Core::ICore::instance()->theme()->icon(DrugsDB::Constants::I_SEARCHINN));
     setWindowTitle( tr( "Drug Dosage" ) + " - " + qApp->applicationName() );
 
     // make connections
-    connect( DRUGMODEL, SIGNAL(prescriptionResultChanged(const QString &)),
+    connect( drugModel(), SIGNAL(prescriptionResultChanged(const QString &)),
              resultTextBrowser, SLOT(setPlainText(const QString &)));
 }
 
@@ -125,25 +127,25 @@ DosageDialog::~DosageDialog()
 */
 void DosageDialog::changeRow( const int CIS, const int drugRow )
 {
-    Q_ASSERT(DRUGMODEL->containsDrug(CIS));
+    using namespace DrugsDB::Constants;
+    Q_ASSERT(drugModel()->containsDrug(CIS));
     d->m_CIS = CIS;
     d->m_DrugRow = drugRow;
-    DrugsModel *m = DRUGMODEL;
     dosageViewer->useDrugsModel(CIS, drugRow);
-    innButton->setChecked(m->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
+    innButton->setChecked(drugModel()->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
 
     // retreive drug informations before drugmodel changes
-    QString name = m->drugData(CIS, Drug::Denomination).toString();
-    if (m->drugData(CIS, Prescription::IsINNPrescription).toBool())
-        drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+    QString name = drugModel()->drugData(CIS, Drug::Denomination).toString();
+    if (drugModel()->drugData(CIS, Prescription::IsINNPrescription).toBool())
+        drugNameButton->setText(drugModel()->drugData(d->m_CIS, Drug::InnCompositionString).toString());
     else
         drugNameButton->setText(name.left( name.lastIndexOf(",")));
-    QString toolTip = m->drugData(CIS, Interaction::ToolTip ).toString();
+    QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
     iconInteractionLabel->setToolTip( toolTip );
-    iconInteractionLabel->setPixmap( m->drugData(CIS, Interaction::Icon ).value<QIcon>().pixmap(16,16) );
-    toolTip = m->drugData(CIS, Drug::CompositionString ).toString();
+    iconInteractionLabel->setPixmap( drugModel()->drugData(CIS, Interaction::Icon ).value<QIcon>().pixmap(16,16) );
+    toolTip = drugModel()->drugData(CIS, Drug::CompositionString ).toString();
     drugNameButton->setToolTip( toolTip );
-    innButton->setEnabled( m->drugData(CIS, Drug::AllInnsKnown ).toBool() );
+    innButton->setEnabled( drugModel()->drugData(CIS, Drug::AllInnsKnown ).toBool() );
 }
 
 /**
@@ -171,12 +173,12 @@ void DosageDialog::on_drugNameButton_clicked()
 
 void DosageDialog::on_innButton_clicked()
 {
-    DrugsModel *m = DRUGMODEL;
-    m->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
+    using namespace DrugsDB::Constants;
+    drugModel()->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
     if (innButton->isChecked())
-        drugNameButton->setText(m->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+        drugNameButton->setText(drugModel()->drugData(d->m_CIS, Drug::InnCompositionString).toString());
     else {
-        QString name = m->drugData(d->m_CIS, Drug::Denomination).toString();
+        QString name = drugModel()->drugData(d->m_CIS, Drug::Denomination).toString();
         drugNameButton->setText(name.left( name.lastIndexOf(",")));
     }
 }

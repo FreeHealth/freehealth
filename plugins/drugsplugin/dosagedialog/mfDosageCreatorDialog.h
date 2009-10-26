@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDOSAGECREATORDIALOG_H
-#define MFDOSAGECREATORDIALOG_H
+#ifndef DOSAGECREATORDIALOG_H
+#define DOSAGECREATORDIALOG_H
 
 // include Qt headers
 #include <QtGlobal>
@@ -53,11 +53,17 @@ QT_END_NAMESPACE
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsDB {
+namespace Internal {
+class DosageModel;
+}  // End Internal
+}  // End DrugsDB
+
+namespace DrugsWidget {
 namespace Internal {
 class DosageModel;
 class DosageCreatorDialogPrivate;
@@ -68,7 +74,7 @@ class DosageCreatorDialog : public QDialog, public Ui::DosageCreatorDialog
     Q_DISABLE_COPY(DosageCreatorDialog);
 
 public:
-    explicit DosageCreatorDialog( QWidget *parent, DosageModel *dosageModel );
+    explicit DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel );
     ~DosageCreatorDialog();
 
 private Q_SLOTS:
@@ -84,7 +90,7 @@ private:
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 
-#endif // MFDOSAGECREATORDIALOG_H
+#endif // DOSAGECREATORDIALOG_H

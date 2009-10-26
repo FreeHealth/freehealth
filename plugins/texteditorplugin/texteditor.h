@@ -58,8 +58,8 @@ class QMenu;
 /**
  * \file texteditor.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 08 Sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
 */
 
 namespace Editor {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::DrugsPrintWidget</class>
- <widget class="QWidget" name="Drugs::Internal::DrugsPrintWidget">
+ <class>DrugsWidget::Internal::DrugsPrintWidget</class>
+ <widget class="QWidget" name="DrugsWidget::Internal::DrugsPrintWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -348,7 +348,7 @@
        <number>10</number>
       </property>
       <item row="3" column="1" colspan="2">
-       <widget class="Editor::TextEditor" name="prescriptionFormatting"/>
+       <widget class="Editor::TextEditor" name="prescriptionFormatting" native="true"/>
       </item>
       <item row="4" column="1" colspan="2">
        <widget class="QTextEdit" name="formatingSample">
@@ -399,8 +399,9 @@
  <customwidgets>
   <customwidget>
    <class>Editor::TextEditor</class>
-   <extends>QTextEdit</extends>
+   <extends>QWidget</extends>
    <header location="global">texteditorplugin/texteditor.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

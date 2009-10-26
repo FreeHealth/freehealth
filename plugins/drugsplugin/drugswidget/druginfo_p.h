@@ -54,11 +54,18 @@
 /**
  * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.3
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 25 Oct 2009
 */
 
-namespace Drugs {
+namespace DrugsDB {
+namespace Internal {
+class DrugsInteraction;
+}
+}
+
+
+namespace DrugsWidget {
 namespace Internal {
 class DrugsData;
 class DrugInteraction;
@@ -81,12 +88,12 @@ public:
      QDialog *m_Parent;
      int m_CIS;
      Utils::MessageSender      m_Sender;
-     QList<DrugInteraction *>  m_InteractionsList;         // should not be deleted
+     QList<DrugsDB::Internal::DrugsInteraction *>  m_InteractionsList;         // should not be deleted
      bool                      m_INNSent, m_InteractSent;
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsWidget
 
 #endif  // MFDRUGINFO_P_H
 

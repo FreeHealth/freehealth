@@ -40,9 +40,9 @@
  ***************************************************************************/
 #include "mfDosageAvailableWidget.h"
 
-#include <drugsmodel/mfDosageModel.h>
+#include <drugsbaseplugin/dosagemodel.h>
 
-using namespace Drugs::Internal;
+using namespace DrugsWidget::Internal;
 
 DosageAvailableWidget::DosageAvailableWidget(QWidget *parent) :
     QWidget(parent)
@@ -50,7 +50,7 @@ DosageAvailableWidget::DosageAvailableWidget(QWidget *parent) :
     setupUi(this);
 }
 
-void DosageAvailableWidget::setModel( DosageModel *model)
+void DosageAvailableWidget::setModel(DrugsDB::Internal::DosageModel *model)
 {
     listView->setModel(model);
     listView->update();

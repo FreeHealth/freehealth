@@ -41,7 +41,6 @@
 #ifndef MFDRUGSPREFERENCES_H
 #define MFDRUGSPREFERENCES_H
 
-#include <mfDrugsConstants.h>
 #include <coreplugin/ioptionspage.h>
 
 #include <QPointer>
@@ -54,8 +53,8 @@
 /**
  * \file mfDrugsPreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.7
- * \date 09 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
 */
 
 namespace Core {
@@ -66,9 +65,14 @@ namespace Print {
 class PrinterPreviewer;
 }
 
-namespace Drugs {
+namespace DrugsDB {
 namespace Internal {
 class DrugsData;
+}
+}
+
+namespace DrugsWidget {
+namespace Internal {
 
 class DrugsViewWidget : public QWidget, private Ui::DrugsViewWidget
 {
@@ -108,7 +112,7 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    DrugsData *drug;
+    DrugsDB::Internal::DrugsData *drug;
 };
 
 class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Drugs::Internal::DosageDialog</class>
- <widget class="QDialog" name="Drugs::Internal::DosageDialog">
+ <class>DrugsWidget::Internal::DosageDialog</class>
+ <widget class="QDialog" name="DrugsWidget::Internal::DosageDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -146,7 +146,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Drugs::Internal::DosageDialog</receiver>
+   <receiver>DrugsWidget::Internal::DosageDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -162,7 +162,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Drugs::Internal::DosageDialog</receiver>
+   <receiver>DrugsWidget::Internal::DosageDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

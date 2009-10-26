@@ -38,8 +38,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFPRESCRIPTIONVIEWER_H
-#define MFPRESCRIPTIONVIEWER_H
+#ifndef PRESCRIPTIONVIEWER_H
+#define PRESCRIPTIONVIEWER_H
 
 #include <drugsplugin/drugs_exporter.h>
 
@@ -53,15 +53,16 @@
 /**
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 16 Sept 2009
+ * \version 0.2.1
+ * \date 26 Oct 2009
  * \brief
 */
 
-namespace Drugs {
+namespace DrugsDB {
 class DrugsModel;
-namespace Internal {
-}  // End Internal
+}
+
+namespace DrugsWidget {
 
 /**
  \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
@@ -76,9 +77,9 @@ public:
     explicit PrescriptionViewer(QWidget *parent = 0);
     void initialize();
     QListView *listview();
-    void setModel( DrugsModel *model );
-    void setModelColumn( const int col );
-    void setListViewPadding( const int pad );
+    void setModel(DrugsDB::DrugsModel *model);
+    void setModelColumn(const int col);
+    void setListViewPadding(const int pad);
 
 Q_SIGNALS:
     void saveTriggered();
@@ -106,6 +107,6 @@ private:
     QToolBar *m_ToolBar;               // drugslist widget's toolbar
 };
 
-}  // End Drugs
+}  // End DrugsWidget
 
-#endif // MFPRESCRIPTIONVIEWER_H
+#endif // PRESCRIPTIONVIEWER_H

@@ -38,119 +38,58 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSCONSTANTS_H
-#define MFDRUGSCONSTANTS_H
+#ifndef DRUGSBASE_CONSTANTS_H
+#define DRUGSBASE_CONSTANTS_H
 
 #include <QFlags>
 #include <QHash>
 #include <QStringList>
 
 /**
+ * \file constants.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.1
+ * \date 25 Oct 2009
+*/
+
+/**
  \brief Some constants for Drugs management
  \ingroup freediams drugswidget
 */
-namespace mfDrugsConstants
-{
-    // Menu and action for ActionManager
-    const char * const  DRUGCONSTANTS_TR_CONTEXT = "mfDrugsConstants";
-    const char * const  M_PLUGINS_DRUGS         =  "DrugsPlugins.menuDrugs";
-    const char * const  M_PLUGINS_SEARCH        =  "DrugsPlugins.menuSearch";
-    const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.groupDrugs";
-    const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.groupSearch";
-    const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
-    const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
-    const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
-    const char* const   A_SEARCH_MOLECULES      = "a.DrugsPlug.SearchMol";
-    const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
-    const char* const   A_PRINT_PRESCRIPTION    = "a.DrugsPlug.PrintPrescr";
-    const char* const   A_TOOGLE_TESTINGDRUGS   = "a.DrugsPlug.ToogleTestings";
-    const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
-    const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search method");
-    const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");
-    const char* const   SEARCHINN_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by INN");
-    const char* const   SEARCHMOLECULES_TEXT    = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by molecules");
-    const char* const   PRINTPRESCRIPTION_TEXT  = QT_TRANSLATE_NOOP("mfDrugsConstants", "Print prescription");
-    const char* const   TOOGLETESTINGDRUGS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toogle testing drugs");
 
-    // Search Method
-    enum SearchMethod {
-        SearchCommercial = 0,
-        SearchMolecules,
-        SearchInn
-    };
+namespace DrugsDB {
+namespace Constants {
 
-
-
-    // Settings names
-    const char * const  MFDRUGS_SETTING_GROUP                  = "DrugsWidget";                              /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_CONFIGURED             = "DrugsWidget/Configured";                   /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_VIEWFONT               = "DrugsWidget/view/Font";                    /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_VIEWFONTSIZE           = "DrugsWidget/view/FontSize";                /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM   = "DrugsWidget/view/InteractionViewer/Zoom";  /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_HIDELABORATORY         = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_HTML = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_PRESCRIPTIONFORMATTING_PLAIN = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
-
-
-    const char * const  MFDRUGS_SETTING_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
-    const char * const  MFDRUGS_SETTING_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_WATERMARK_HTML         = "DrugsWidget/print/watermark/Html";         /*!< \brief Key for settings. */
-
-/**/    const char * const  MFDRUGS_SETTING_ALD_PRE_HTML           = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_ALD_POST_HTML          = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
-
-    const char * const  MFDRUGS_SETTING_USERHEADER             = "DrugsWidget/user/Header";                  /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_USERFOOTER             = "DrugsWidget/user/Footer";                  /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_USER                   = "DrugsWidget/user/Name";                    /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_PASSWORD               = "DrugsWidget/user/Pass";                    /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_SERIAL                 = "DrugsWidget/user/SN";                      /*!< \brief Key for settings. */
-
-    const char * const  MFDRUGS_SETTING_SEARCHMETHOD           = "DrugsWidget/searchMethod";                 /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_HISTORYSIZE            = "DrugsWidget/historySize";                  /*!< \brief Key for settings. */
-    const char * const  MFDRUGS_SETTING_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
-/**/    const char * const  MFDRUGS_SETTING_LEVELOFWARNING         = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
-
-    const char * const  MFDRUGS_SETTING_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
-
-    // DEFAULTS SETTINGS
-/**/    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><br /><span style=\"font-style:italic;\">[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][<br />[NOTE]]</span></p>");
-/**/    const char * const  MFDRUGS_DEFAULT_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]]\n[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][\n[NOTE]]");
-/**/    const char * const  MFDRUGS_DEFAULT_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
-/**/    const char * const  MFDRUGS_DEFAULT_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
-
-    const char * const  MFDRUGS_DEFAULT_WATEMARKHTML           = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p align=\"center\"  style=\" font-family:'Lucida Grande'; font-size:12pt; font-weight:bold; font-style:normal; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">Duplicata ne permettant pas la d&eacute;livrance des m&eacute;dicaments</span></p>\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">A adresser &agrave; votre centre de S&eacute;curit&eacute; Sociale.</span></p></body></html>";              /*!< \brief Default value for settings. */
-    const char * const  MFDRUGS_DEFAULT_USERHEADER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n"
-                                                                 "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tr>\n"
-                                                                 "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-weight:600;\">Dr TRUCMUCHE Bidulle</span>\n<br /><span style=\" font-weight:600;\">M&eacute;decine Machin</span><\n<br /><br /><span style=\" font-size:10pt; font-style:italic;\">Ancien Assistant des h&ocirc;pitaux</span>\n<br /><span style=\" font-size:10pt; font-style:italic;\">Tous mes dipl&ocirc;mes</span>\n<br />----------<br />\n<span style=\" font-size:10pt;\">Mes Consultations sur rendez-vous</span>\n<br />----------\n<br /><span style=\" font-size:10pt; font-style:italic;\">Mon ADELI</span></p></td>\n<td width=\"33%\"></td>\n"
-                                                                 "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-size:9pt;\">2, rue de la M&eacute;decine\n<br />62 223 SAINT-LAURENT-BLANGY<br />docteur@trucmuche.fr<br />T&eacute;l : 03.21.00.00.00<br />Fax : 03.21.00.00.06<br />----------<br /></span>"
-                                                                 "<span style=\" font-size:12pt;font-weight:bold;\">[[PATIENTNAME]<br />][Le [DATE]]</span></p></td></tr></table></body></html>";              /*!< \brief Default value for settings. */
-//    const char * const  MFDRUGS_DEFAULT_USERFOOTER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">En cas d'urgence applez le SAMU : 112</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Veuillez signalez les demandes de visites &agrave; domicile, tant que possible, avant 10h.</span></p></body></html>";
-
-
-    const char * const  MFDRUGS_SETTINGS_STATEPREFIX =   "DrugsWidget/";
+    // SETTINGS
+    const char * const S_USERRECORDEDFORMS       = "DrugsWidget/userRecordedForms";
+    const char * const S_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
+    const char * const S_HIDELABORATORY          = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
+    const char * const S_LEVELOFWARNING          = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
+    const char * const S_PRESCRIPTIONFORMATTING_HTML      = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
+    const char * const S_PRESCRIPTIONFORMATTING_PLAIN     = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
+    const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><br /><span style=\"font-style:italic;\">[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][<br />[NOTE]]</span></p>");
+    const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]]\n[[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [DAILY_SCHEME]][ [MEAL]] each [[PERIOD] ][[PERIOD_SCHEME]] during [[D_FROM]][ to [D_TO]] [[D_SCHEME]][\n[NOTE]]");
+    const char * const S_ALD_PRE_HTML               = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
+    const char * const S_ALD_POST_HTML              = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
+    const char * const S_DEF_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
+    const char * const S_DEF_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
+    const char * const S_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
 
     // ICONS
-/**/    const char * const  ICONTOOGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
-/**/    const char * const  MFDRUGS_ICONSEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
-/**/    const char * const  MFDRUGS_ICONSEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
-/**/    const char * const  MFDRUGS_ICONSEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
-
+    const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
+    const char * const  I_SEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
+    const char * const  I_SEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
     // INTERACTIONS ICONS
-/**/    const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
-/**/    const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
-
-/**/    // HTML PREPARERS
-/**/    const char * const  ENCODEDHTML_FULLDOC =
+    // HTML MASKS
+    const char * const  ENCODEDHTML_FULLDOC =
             "<html>\n"
             "<head>\n"
             "  <meta name=\"qrichtext\" content=\"1\" />\n"
@@ -170,22 +109,11 @@ namespace mfDrugsConstants
             "</a>\n"
             "</body>\n"
             "</html>\n";
-//    const char * const  ENCODEDHTML_DRUG =
-////            "<p>"
-//            "<span style=\"{DRUGSTYLE}\">"
-//            "{NUMBER}&nbsp;.&nbsp;{DRUG}"
-//            "</span>\n"
-//            "<br />\n"
-//            "<span style=\"{PRESCRIPTIONSTYLE}\">\n"
-//            "{PRESCRIPTION}<br />\n"
-////            "&nbsp;&nbsp;&nbsp;{NOTE}\n"
-//            "</span>\n"
-//            "<br />\n";
-/**/    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
-/**/    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
+    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
+    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
-/**/    const QStringList LABOS = QStringList()
+    const QStringList LABOS = QStringList()
                               << "ABBOT FRANCE " << "ACTAVIS " << "AGHETTANT " << "ALMUS " << "ALTER "
                               << "APOTEX FRANCE " << "APOTEX " << "ARROW CONSEIL " << "ARROW " <<"AEROCID"
                               << "ALPHARMA " << "ALCON " << "AGHETTANT " << "ACTAVIS " << "AENORASIS"
@@ -307,7 +235,8 @@ namespace Drug
         LinkToFrenchRCP,
         MaxParam
     };
-}  // End namespace mfDrugsConstants::Drug
+
+}  // End namespace Drugs::Constants::Drug
 
 /**
  \brief Used by mfDrugsModel for column representation.
@@ -347,9 +276,42 @@ namespace Prescription
     };
 
 
-}  // End namespace mfDrugsConstants::Prescription
+}  // End namespace Drugs::Constants::Prescription
 
-}  // End namespace mfDrugsConstants
+/**
+ \brief Used by DrugsModel for column representation.
+ \ingroup freediams
+ \ingroup drugswidget
+*/
+namespace Interaction
+{
+    enum InteractionModelFields
+    {
+        Id = 2000,
+        Icon,
+        Pixmap,
+        ToolTip,
+        FullSynthesis,
+        MaxParam
+    };
+
+    enum TypeOfIAM
+    {
+        noIAM            = 0x00000000,
+        Precaution       = 0x00000001,
+        APrendreEnCompte = 0x00000010,
+        Deconseille      = 0x00000100,
+        ContreIndication = 0x00001000,
+        Information      = 0x00010000,
+        Unknown          = 0x00100000
+    };
+    Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );
+
+}  // End namespace Drugs::Constants::Interaction
+Q_DECLARE_OPERATORS_FOR_FLAGS( Interaction::TypesOfIAM )
+
+}  // End namespace DrugsDB::Constants
+}  // End namespace DrugsDB
 
 
 /**
@@ -357,8 +319,8 @@ namespace Prescription
  \ingroup freediams
  \ingroup drugswidget
 */
-namespace mfDosagesConstants
-{
+namespace Dosages {
+namespace Constants {
     const char * const DOSAGES_DATABASE_NAME = "dosages";          /*!< \brief Dosage database connection name. */
     const char * const DOSAGES_DATABASE_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
     const char * const DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
@@ -369,8 +331,6 @@ namespace mfDosagesConstants
  \ingroup freediams
  \ingroup drugswidget
 */
-namespace Dosage
-{
     /** \brief Used by mfDosageModel for column representation. */
     enum Dosage
     {
@@ -428,47 +388,9 @@ namespace Dosage
         MaxParam                /*!< \brief Nombre maximum de colonnes du modèle (et de la table SQL) */
     };
 
-}  // End namespace mfDosagesConstants::Dosage
-
-}  // End namespace mfDosagesConstants
-
-namespace mfInteractionsConstants
-{
-
-/**
- \brief Used by mfDrugsModel for column representation.
- \ingroup freediams
- \ingroup drugswidget
-*/
-namespace Interaction
-{
-    enum InteractionModelFields
-    {
-        Id = 2000,
-        Icon,
-        Pixmap,
-        ToolTip,
-        FullSynthesis,
-        MaxParam
-    };
-
-    enum TypeOfIAM
-    {
-        noIAM            = 0x00000000,
-        Precaution       = 0x00000001,
-        APrendreEnCompte = 0x00000010,
-        Deconseille      = 0x00000100,
-        ContreIndication = 0x00001000,
-        Information      = 0x00010000,
-        Unknown          = 0x00100000
-    };
-    Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );
-
-}  // End namespace mfInteractionsConstants::Interaction
-Q_DECLARE_OPERATORS_FOR_FLAGS( Interaction::TypesOfIAM )
-
-}  // End namespace mfInteractionsConstants
+}  // End namespace Dosages::Constants
+}  // End namespace Dosages
 
 typedef QHash<int, QString> QHashWhere;
 
-#endif // MFDRUGSCONSTANTS_H
+#endif // DRUGSBASE_CONSTANTS_H
