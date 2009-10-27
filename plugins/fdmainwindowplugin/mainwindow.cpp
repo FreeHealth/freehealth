@@ -135,7 +135,11 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->appendGroup(Core::Constants::G_PLUGINS_DRUGS);
+    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
+    pmenu->appendGroup(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
+    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
     createConfigurationMenu();
     createHelpMenu();
 
