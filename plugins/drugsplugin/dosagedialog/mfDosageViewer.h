@@ -82,6 +82,7 @@ public:
 
 public Q_SLOTS:
     void done(int r);
+    void commitToModel();
     void changeCurrentRow(const int dosageRow);
     void changeCurrentRow(const QModelIndex &item);
 
@@ -97,6 +98,7 @@ private Q_SLOTS:
     void on_dosageForAllInnCheck_stateChanged(int state);
     void on_aldCheck_stateChanged(int state);
     void on_frenchRCPButton_clicked();
+    void on_tabWidget_currentChanged(int);
 
 private:
     DosageViewerPrivate *d;

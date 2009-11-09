@@ -131,6 +131,7 @@ DrugsData::DrugsData()
     : d(new DrugsDataPrivate())
 {
     d->m_NoLaboDenomination.clear();
+    setPrescriptionValue(Prescription::IsTextualOnly, false);
     d->m_PrescriptionChanges = true;
 }
 
@@ -614,3 +615,21 @@ void DrugsData::smallDrugWarn() const
                       .arg(this->CIS())
                       .arg( this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
 }
+
+
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------- TextualDrugsData -----------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+TextualDrugsData::TextualDrugsData() :
+        DrugsData()
+{
+    setPrescriptionValue(Prescription::IsTextualOnly, true);
+    setValue(Table_CIS, CIS_CIS, -1);
+}
+
+void TextualDrugsData::setDenomination(const QString &denomination)
+{
+    setValue(Table_CIS, CIS_DENOMINATION, denomination);
+}
+
+

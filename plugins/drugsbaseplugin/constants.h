@@ -248,6 +248,7 @@ namespace Prescription
     enum Prescription
     {
         Id = 1200,
+        IsTextualOnly,    // Setted for textual drugs
         UsedDosage,
         CIP,
         OnlyForTest,

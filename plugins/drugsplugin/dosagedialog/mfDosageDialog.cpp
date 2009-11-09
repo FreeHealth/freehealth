@@ -157,6 +157,7 @@ void DosageDialog::done(int r)
 {
     // modify focus for the dosage viewer mapper to commit changes
     drugNameButton->setFocus();
+    dosageViewer->commitToModel();
 
     if ( r == QDialog::Accepted ) {
         dosageViewer->done(r);

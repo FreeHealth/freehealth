@@ -208,10 +208,10 @@ public:
      ~DrugsData();
 
      // setters
-     void setPrescriptionValue( const int fieldref, const QVariant & value );
+     void setPrescriptionValue( const int fieldref, const QVariant &value );
 
      // getters
-     int         CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
+     int               CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
      QString           denomination() const;
@@ -236,7 +236,7 @@ public:
      bool              hasPrescription() const;
      bool              isScoredTablet() const;
 
-     QVariant          prescriptionValue( const int filedref ) const;
+     QVariant          prescriptionValue(const int filedref) const;
 //     QString           prescriptionToHtml() const;
 //     QString           prescriptionToPlainText() const;
 
@@ -266,6 +266,18 @@ protected:
 
 private:
      DrugsDataPrivate *d;
+};
+
+
+class TextualDrugsData : public DrugsData
+{
+public:
+    TextualDrugsData::TextualDrugsData();
+    void setDenomination(const QString &denomination);
+//    QString denomination() const {return denomination;}
+//    void setNote(const QString &note);
+//private:
+//    QString m_Denomination;
 };
 
 }  // End Internal

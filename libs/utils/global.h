@@ -151,6 +151,7 @@ UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool val
 
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
 UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
+UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);
 
 }  // end Utils
 

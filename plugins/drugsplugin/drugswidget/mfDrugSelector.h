@@ -44,19 +44,15 @@
 // include form headers
 #include "ui_mfDrugSelector.h"
 
-// include toolkit headers
-//#include <utils/widgets/QButtonLineEdit.h>
-
-// include Qt headers
-#include <QSqlTableModel>
-#include <QToolButton>
+class QSqlTableModel;
+class QToolButton;
 
 
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.2.2
+ * \date 09 Nov 2009
  */
 
 namespace DrugsWidget {
@@ -98,8 +94,9 @@ private:
 private Q_SLOTS:
     // models slots
     void updateModel();                                     // slot called by lineedit to change searched name
-    void on_drugsView_doubleClicked( const QModelIndex & ); // index of m_DrugsView
     void on_InnView_clicked( const QModelIndex & index );
+    void on_drugsView_doubleClicked( const QModelIndex & ); // index of m_DrugsView
+    void on_textButton_clicked();
 
     // history slots
     void historyAct_triggered( QAction * action );

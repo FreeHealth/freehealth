@@ -41,8 +41,11 @@
 #include "mfDrugSelector.h"
 
 #include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidgetmanager.h>
+#include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -50,7 +53,9 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <QApplication>
+#include <QToolButton>
 #include <QSqlRecord>
+#include <QSqlTableModel>
 #include <QHeaderView>
 
 #include <QDebug>
@@ -60,9 +65,11 @@ using namespace DrugsWidget::Internal;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
-
-DrugSelector::DrugSelector(QWidget * parent) :
+DrugSelector::DrugSelector(QWidget *parent) :
         QWidget(parent),
         m_DrugsModel(0), m_InnModel(0),
         m_SearchToolButton(0),
@@ -74,6 +81,7 @@ DrugSelector::DrugSelector(QWidget * parent) :
 void DrugSelector::initialize()
 {
     setupUi(this);
+    textButton->setIcon(theme()->icon(Core::Constants::ICONPENCIL));
 
     createToolButtons();
 
@@ -85,13 +93,12 @@ void DrugSelector::initialize()
     // select last search method (stored into qApp MFDRUGS_SETTING_SEARCHMETHOD)
     int m = settings()->value(Constants::MFDRUGS_SETTING_SEARCHMETHOD).toInt();
     setSearchMethod(m);
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     QAction *a = 0;
     switch (m)
     {
-        case Constants::SearchCommercial : a = am->command(Constants::A_SEARCH_COMMERCIAL)->action(); break;
-        case Constants::SearchMolecules : a = am->command(Constants::A_SEARCH_MOLECULES)->action(); break;
-        case Constants::SearchInn : a = am->command(Constants::A_SEARCH_INN)->action(); break;
+        case Constants::SearchCommercial : a = actionManager()->command(Constants::A_SEARCH_COMMERCIAL)->action(); break;
+        case Constants::SearchMolecules : a = actionManager()->command(Constants::A_SEARCH_MOLECULES)->action(); break;
+        case Constants::SearchInn : a = actionManager()->command(Constants::A_SEARCH_INN)->action(); break;
     }
     if (a) {
         /** \todo Check the action in the menu/toolbutton... */
@@ -105,7 +112,7 @@ void DrugSelector::initialize()
     retranslateUi("");
 }
 
-void DrugSelector::setFont(const QFont & font)
+void DrugSelector::setFont(const QFont &font)
 {
     drugsView->setFont(font);
     InnView->setFont(font);
@@ -210,7 +217,7 @@ void DrugSelector::createConnections()
 //    connect(searchDCIAct, SIGNAL(triggered()), this, SLOT(changeDrugsModelFilter()));
 }
 
-void DrugSelector::historyAct_triggered(QAction * action)
+void DrugSelector::historyAct_triggered(QAction *action)
 {
     using namespace DrugsDB::Constants;
     // action tooltip == full drug name
@@ -317,7 +324,7 @@ void DrugSelector::updateModel()
     }
 }
 
-void DrugSelector::on_InnView_clicked(const QModelIndex & index)
+void DrugSelector::on_InnView_clicked(const QModelIndex &index)
 {
     if (m_SearchMethod != Constants::SearchInn)
         return;
@@ -336,7 +343,7 @@ void DrugSelector::on_InnView_clicked(const QModelIndex & index)
     m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
 }
 
-void DrugSelector::on_drugsView_doubleClicked(const QModelIndex & index)
+void DrugSelector::on_drugsView_doubleClicked(const QModelIndex &index)
 {
     // retreive CIS of drug and emit signal
     if (!index.isValid())
@@ -357,4 +364,15 @@ void DrugSelector::on_drugsView_doubleClicked(const QModelIndex & index)
 
     emit drugSelected(selectedCIS);
     emit drugSelected(index);
+}
+
+/** \brief User asked to add a textual prescription. This member creates a dialog and send the text to the model. */
+void DrugSelector::on_textButton_clicked()
+{
+    TextualPrescriptionDialog dlg(this);
+    int r = dlg.exec();
+    if (r==QDialog::Accepted) {
+        int row = drugModel()->addTextualPrescription(dlg.drugLabel(), dlg.drugNote());
+        drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
+    }
 }

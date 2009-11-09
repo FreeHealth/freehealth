@@ -6,13 +6,15 @@ version=0.2.0
       * Interactions : AFSSAPS - 29/06/2009
    * Nouvelles fonctionnalités :
       * Propriétés du tableau dans l'éditeur de texte enrichi
-      * Possibilité de paramétrer la fréquence des recherche de mise à jour
+      * Possibilité de paramétrer la fréquence des recherches de mise à jour
       * Nouvelle action : Vérification des mises à jour dans le menu A propos
 
    * Modifications importantes :
       * Division du plugin Drugs en deux : DrugsBase et Drugs
 
    * Correction de bogues / Améliorations techniques :
+      * Correction de l'affichage du tableau des horaires dans le widget prescription
+      * Schéma de prescription journalier corrigé
 
 }
 

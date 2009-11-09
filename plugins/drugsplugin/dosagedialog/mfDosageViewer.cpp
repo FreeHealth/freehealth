@@ -442,6 +442,13 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
     qWarning() << dosageRow << QString("%1 = %2,").arg(drugModel()->drugData(d->m_CIS,DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
 }
 
+/** \brief Only provided because of focus bug */
+void DosageViewer::commitToModel()
+{
+     d->m_Mapper->submit();
+}
+
+
 /** \brief Changes the current editing dosage */
 void DosageViewer::changeCurrentRow(const QModelIndex &item )
 {
@@ -576,4 +583,10 @@ void DosageViewer::on_frenchRCPButton_clicked()
 {
 //    Core::HelpDialog::showPage();
     QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::LinkToFrenchRCP).toString()));
+}
+
+void DosageViewer::on_tabWidget_currentChanged(int)
+{
+    if (tabWidget->currentWidget()==tabSchemes)
+        d->resizeTableWidget();
 }

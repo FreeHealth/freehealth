@@ -46,6 +46,7 @@
 #include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
 #include <drugsplugin/dosagedialog/mfDosageDialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
+#include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -218,9 +219,24 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
     int CIS = drugModel()->index(item.row(), DrugsDB::Constants::Drug::CIS).data().toInt();
-    Internal::DosageDialog dlg(this);
-    dlg.changeRow(CIS,item.row());
-    dlg.exec();
+    int row = item.row();
+    if (CIS!=-1) {
+        Internal::DosageDialog dlg(this);
+        dlg.changeRow(CIS, row);
+        dlg.exec();
+    } else {
+        TextualPrescriptionDialog dlg(this);
+        dlg.setDrugLabel(drugModel()->index(row,DrugsDB::Constants::Drug::Denomination).data().toString());
+        dlg.setDrugNote(drugModel()->index(row,DrugsDB::Constants::Prescription::Note).data().toString());
+        dlg.setALD(drugModel()->index(row,DrugsDB::Constants::Prescription::IsALD).data().toBool());
+        int r = dlg.exec();
+        if (r==QDialog::Accepted) {
+            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Drug::Denomination), dlg.drugLabel());
+            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::Note), dlg.drugNote());
+            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
+        }
+    }
+
 //    listView->repaint();
 }
 

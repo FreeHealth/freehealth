@@ -223,8 +223,8 @@ void DosageCreatorDialog::on_saveButton_clicked()
 {
     // modify focus for the mapper to commit changes
     saveButton->setFocus();
+    dosageViewer->commitToModel();
     d->saveToModel();
-    dosageViewer->done(QDialog::Rejected);
     done(QDialog::Rejected);
 }
 
@@ -233,6 +233,7 @@ void DosageCreatorDialog::on_prescribeButton_clicked()
 {
     // modify focus for the mapper to commit changes
     prescribeButton->setFocus();
+    dosageViewer->commitToModel();
     d->toPrescription();
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
@@ -243,6 +244,7 @@ void DosageCreatorDialog::on_saveAndPrescribeButton_clicked()
 {
     // modify focus for the mapper to commit changes
     saveAndPrescribeButton->setFocus();
+    dosageViewer->commitToModel();
     d->toPrescription();
     d->saveToModel();
     dosageViewer->done(QDialog::Accepted);

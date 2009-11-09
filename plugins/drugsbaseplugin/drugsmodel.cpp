@@ -61,8 +61,10 @@
 #include <utils/serializer.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 
 // include Qt headers
 #include <QApplication>
@@ -83,6 +85,7 @@ using namespace mfDrugsModelConstants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
@@ -133,6 +136,15 @@ public:
     bool setDrugData(DrugsData *drug, const int column, const QVariant & value)
     {
         Q_ASSERT(drug);
+        if (column == Drug::Denomination) {
+            TextualDrugsData *td = static_cast<TextualDrugsData*>(drug);
+            if (td) {
+                td->setDenomination(value.toString());
+                return true;
+            } else {
+                return false;
+            }
+        }
         if ((column < Prescription::Id) || (column > Prescription::MaxParam))
             return false;
         drug->setPrescriptionValue(column, value);
@@ -355,7 +367,7 @@ bool DrugsModel::setData(const QModelIndex & index, const QVariant & value, int 
     int row = index.row();
     if ((row >= d->m_DrugsList.count()) || (row < 0))
         return false;
-    Internal::DrugsData * drug = d->m_DrugsList.at(row);
+    Internal::DrugsData *drug = d->m_DrugsList.at(row);
     if (d->setDrugData(drug, index.column(), value)) {
         // inform of the modification
         Q_EMIT dataChanged(index, index);
@@ -419,8 +431,13 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         }
     }
     else if (role == Qt::DecorationRole) {
-        if ((settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool()) && (drugsBase()->isInteractionDatabaseAvailable()))
-            return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
+        if (settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool()) {
+        if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+            return theme()->icon(Core::Constants::ICONPENCIL);
+        } else if (drugsBase()->isInteractionDatabaseAvailable()) {
+                return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
+            }
+        }
     }
     else if (role == Qt::ToolTipRole) {
         QString display;
@@ -493,6 +510,22 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex & parent)
     reset();
     Q_EMIT numberOfRowsChanged();
     return toReturn;
+}
+
+
+/**
+ \brief Add a textual drug to the prescription.
+ \sa DrugsWidget::TextualPrescriptionDialog, DrugsWidget::Internal::DrugSelector
+*/
+int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &drugNote)
+{
+    Internal::TextualDrugsData *drug = new Internal::TextualDrugsData();
+    drug->setDenomination(drugLabel);
+    drug->setPrescriptionValue(Constants::Prescription::Note, drugNote);
+    d->m_DrugsList << drug;
+    reset();
+    Q_EMIT numberOfRowsChanged();
+    return d->m_DrugsList.indexOf(drug);
 }
 
 /**
@@ -746,33 +779,55 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     }
     else
         tmp = mask;
+
+    QHash<QString, QString> tokens_value;
+    tokens_value.insert("DRUG", "");
+    tokens_value.insert("Q_FROM", "");
+    tokens_value.insert("Q_TO", "");
+    tokens_value.insert("Q_SCHEME", "");
+    tokens_value.insert("DAILY_SCHEME", "");
+    tokens_value.insert("PERIOD_SCHEME", "");
+    tokens_value.insert("D_FROM", "");
+    tokens_value.insert("D_TO", "");
+    tokens_value.insert("D_SCHEME", "");
+    tokens_value.insert("MEAL", "");
+    tokens_value.insert("PERIOD", "");
+    tokens_value.insert("NOTE", "");
+
+    // Manage Textual drugs only
+    if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+        tokens_value["DRUG"] = drug->denomination();
+        tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
+        Utils::replaceTokens(tmp, tokens_value);
+        return tmp;
+    }
+
+    // Manage full prescriptions
     if (drug->prescriptionValue(Constants::Prescription::IsINNPrescription).toBool()) {
-        Utils::replaceToken(tmp, "DRUG", drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]");
+        tokens_value["DRUG"] = drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
     } else {
         /** \todo If denomination contains innComposition && hide laboratory name --> add INN */
-        Utils::replaceToken(tmp, "DRUG", drug->denomination());
+        tokens_value["DRUG"] =  drug->denomination();
     }
-    Utils::replaceToken(tmp, "Q_FROM", QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble()));
+    tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
     if (drug->prescriptionValue(Constants::Prescription::IntakesUsesFromTo).toBool())
-        Utils::replaceToken(tmp, "Q_TO", QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble()));
-    else
-        Utils::replaceToken(tmp, "Q_TO", QString());
+        tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
 
-    Utils::replaceToken(tmp, "Q_SCHEME", drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString());
-    Utils::replaceToken(tmp, "DAILY_SCHEME", drug->prescriptionValue(Constants::Prescription::DailyScheme).toStringList().join(", "));
-    Utils::replaceToken(tmp, "PERIOD_SCHEME", drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString());
-    Utils::replaceToken(tmp, "D_FROM", QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble()));
+    tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
+    tokens_value["DAILY_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DailyScheme).toStringList().join(", ");
+    tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
+    tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
     if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
-        Utils::replaceToken(tmp, "D_TO", QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble()));
-    else
-        Utils::replaceToken(tmp, "D_TO", QString());
+        tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
 
-    Utils::replaceToken(tmp, "D_SCHEME", drug->prescriptionValue(Constants::Prescription::DurationScheme).toString());
-    Utils::replaceToken(tmp, "NOTE", drug->prescriptionValue(Constants::Prescription::Note).toString());
-    Utils::replaceToken(tmp, "MEAL", Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt()));
+    tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
+    tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
+    tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
     if (tmp2 == "1")
         tmp2.clear();
-    Utils::replaceToken(tmp, "PERIOD", tmp2);
+    tokens_value["PERIOD"] = tmp2;
+
+    Utils::replaceTokens(tmp, tokens_value);
     return tmp;
 }

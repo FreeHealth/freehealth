@@ -321,6 +321,7 @@ const char * const  ICONDEBUGHELPER =  "";
 const char * const  ICONCRASHRECOVER = "crashrecoverer.png";
 const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
+const char * const  ICONPENCIL    =  "pencil.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
@@ -375,6 +376,7 @@ const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
 const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
 const char * const  S_CHECKUPDATE  = "CheckUpdate";
+const char * const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
 enum {  // Don't change the ordre of this enum
     S_CheckUpdate_AtStartup = 0,
     S_CheckUpdate_EachWeeks,

@@ -980,4 +980,13 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
     return toReturn;
 }
 
+int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values)
+{
+    int i = 0;
+    foreach(const QString &tok, tokens_values.keys()) {
+        i += replaceToken(textToAnalyse, tok, tokens_values.value(tok));
+    }
+    return i;
+}
+
 } // End Utils

@@ -87,26 +87,27 @@ public:
     static inline DrugsModel *activeModel() {return m_ActiveModel;}
 
     // MODEL FUNCTIONS
-    QModelIndex index( int row, int column, const QModelIndex & drugParent = QModelIndex() ) const;
+    QModelIndex index( int row, int column, const QModelIndex &drugParent = QModelIndex() ) const;
 
     // GETTING DATAS
     int rowCount( const QModelIndex & = QModelIndex() ) const;
     int columnCount( const QModelIndex & = QModelIndex() ) const { return DrugsDB::Constants::Drug::MaxParam; }
-    bool removeRows( int row, int count, const QModelIndex & parent = QModelIndex() );
-    bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-    QVariant data( const QModelIndex & index, int role ) const;
+    bool removeRows( int row, int count, const QModelIndex &parent = QModelIndex() );
+    bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+    QVariant data( const QModelIndex &index, int role ) const;
     QVariant drugData( const int CIS, const int column );
     bool setDrugData( const int CIS, const int column, const QVariant &value);
     void resetModel();
-    Qt::ItemFlags flags( const QModelIndex & index ) const;
+    Qt::ItemFlags flags( const QModelIndex &index ) const;
 
     bool prescriptionHasInteractions();
 
     // ADD / REMOVE DRUGS
-    void setDrugsList( QDrugsList & list );
+    void setDrugsList( QDrugsList &list );
     const QDrugsList & drugsList() const;
     void clearDrugsList();
-    int addDrug( Internal::DrugsData* drug, bool automaticInteractionChecking = true );
+    int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
+    int addDrug( Internal::DrugsData *drug, bool automaticInteractionChecking = true );
     int addDrug( const int _CIS, bool automaticInteractionChecking = true );
     int removeDrug( const int _CIS );
     int removeLastInsertedDrug();
@@ -114,8 +115,8 @@ public:
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
-    bool moveUp( const QModelIndex & item );
-    bool moveDown( const QModelIndex & item );
+    bool moveUp( const QModelIndex &item );
+    bool moveDown( const QModelIndex &item );
 
     // FILTERS
     void showTestingDrugs(bool state);
