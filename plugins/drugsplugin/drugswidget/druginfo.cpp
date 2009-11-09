@@ -82,8 +82,8 @@ DrugInfoPrivate::DrugInfoPrivate( QDialog *parent )
 
     // no tests abilities for instance
     Core::ISettings *s = Core::ICore::instance()->settings();
-    if ( ( s->value( MFDRUGS_SETTING_USER ).isValid() &&
-           ( !s->value( MFDRUGS_SETTING_USER ).toString().isEmpty() ) ) ) {
+    if ( ( s->value(S_USER ).isValid() &&
+           ( !s->value(S_USER ).toString().isEmpty() ) ) ) {
         //           qWarning() << qApp->property( "user" ) << qApp->property( "password" );
         groupTestINN->show();
         groupTestIAM->hide();

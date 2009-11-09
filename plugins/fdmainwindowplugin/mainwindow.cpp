@@ -364,14 +364,14 @@ void MainWindow::updateCheckerEnd()
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
-    settings()->restoreState(this, DrugsWidget::Constants::MFDRUGS_SETTINGS_STATEPREFIX);
+    settings()->restoreState(this, DrugsWidget::Constants::S_STATEPREFIX);
     fileManager()->getRecentFilesFromSettings();
 }
 
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
-    settings()->saveState( this, DrugsWidget::Constants::MFDRUGS_SETTINGS_STATEPREFIX );
+    settings()->saveState( this, DrugsWidget::Constants::S_STATEPREFIX );
     fileManager()->saveRecentFiles();
     settings()->sync();
 }

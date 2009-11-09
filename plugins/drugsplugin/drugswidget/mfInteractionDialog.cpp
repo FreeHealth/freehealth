@@ -86,13 +86,13 @@ InteractionDialog::InteractionDialog(QWidget *parent) :
     zoomOut->setIcon( theme()->icon(Core::Constants::ICONFONTSMALLER) );
     setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
     textBrowser->setHtml( drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString() );
-    m_Zoom = settings()->value(Constants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM,1).toInt();
+    m_Zoom = settings()->value(Constants::S_INTERACTIONVIEW_ZOOM,1).toInt();
     textBrowser->zoomIn(m_Zoom);
 }
 
 InteractionDialog::~InteractionDialog()
 {
-    settings()->setValue(Constants::MFDRUGS_SETTING_INTERACTIONVIEW_ZOOM, m_Zoom);
+    settings()->setValue(Constants::S_INTERACTIONVIEW_ZOOM, m_Zoom);
     settings()->sync();
 }
 
@@ -110,11 +110,11 @@ void InteractionDialog::on_printButton_clicked()
     Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = s->value( Constants::MFDRUGS_SETTING_USERHEADER ).toString();
+    QString header = s->value( Constants::S_USERHEADER ).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     p.setHeader(header);
-    header = s->value( Constants::MFDRUGS_SETTING_USERFOOTER ).toString();
+    header = s->value( Constants::S_USERFOOTER ).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
     p.setFooter(header);

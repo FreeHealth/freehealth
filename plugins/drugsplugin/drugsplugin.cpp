@@ -123,7 +123,7 @@ void DrugsPlugin::extensionsInitialized()
     userPage = new DrugsUserOptionsPage(this);
     extraPage = new DrugsExtraOptionsPage(this);
     // check settings
-    if (!Core::ICore::instance()->settings()->value(Constants::MFDRUGS_SETTING_CONFIGURED, false).toBool()) {
+    if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
         printPage->writeDefaultSettings(Core::ICore::instance()->settings());
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());

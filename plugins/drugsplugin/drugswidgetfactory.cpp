@@ -152,8 +152,8 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(Core::FormItem *linkedObject, QWi
     centralWidget->initialize();
     hb->addWidget(centralWidget);
 
-    centralWidget->changeFontTo( QFont(settings()->value( Constants::MFDRUGS_SETTING_VIEWFONT ).toString(),
-                                 settings()->value( Constants::MFDRUGS_SETTING_VIEWFONTSIZE ).toInt()) );
+    centralWidget->changeFontTo( QFont(settings()->value( Constants::S_VIEWFONT ).toString(),
+                                 settings()->value( Constants::S_VIEWFONTSIZE ).toInt()) );
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()

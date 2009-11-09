@@ -281,12 +281,12 @@ QVariant DrugsData::prescriptionValue( const int fieldref ) const
 
 /**
   \brief Return the drug denomination with or without pharmaceutical firms name
-  \sa mfrugsConstants::MFDRUGS_SETTING_HIDELABORATORY
+  \sa mfrugsConstants::S_HIDELABORATORY
 */
 QString DrugsData::denomination() const
 {
     /** \todo correct here */
-//    if (Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_HIDELABORATORY).toBool()) {
+//    if (Core::ICore::instance()->settings()->value(S_HIDELABORATORY).toBool()) {
 //        if (d->m_NoLaboDenomination.isEmpty()) {
 //            d->m_NoLaboDenomination = value( Table_CIS, CIS_DENOMINATION ).toString();
 //            foreach( const QString &name, LABOS) {

@@ -74,6 +74,7 @@
 using namespace DrugsWidget;
 
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
@@ -106,8 +107,7 @@ bool DrugsCentralWidget::initialize()
 
     DrugsWidgetManager::instance()->setCurrentView(this);
 
-    Core::ISettings *s = Core::ICore::instance()->settings();
-    changeFontTo( QFont(s->value(Constants::MFDRUGS_SETTING_VIEWFONT).toString(), s->value(Constants::MFDRUGS_SETTING_VIEWFONTSIZE).toInt()) );
+    changeFontTo( QFont(settings()->value(Constants::S_VIEWFONT).toString(), settings()->value(Constants::S_VIEWFONTSIZE).toInt()) );
 
     return true;
 }
@@ -191,18 +191,17 @@ bool DrugsCentralWidget::printPrescription()
     Print::Printer p(this);
     if (!p.askForPrinter(this))
         return false;
-    Core::ISettings *s = Core::ICore::instance()->settings();
 #ifdef FREEDIAMS
-    QString header = s->value( Constants::MFDRUGS_SETTING_USERHEADER ).toString();
+    QString header = settings()->value( Constants::S_USERHEADER ).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    QString footer = s->value( Constants::MFDRUGS_SETTING_USERFOOTER ).toString();
+    QString footer = settings()->value( Constants::S_USERFOOTER ).toString();
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
     Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(drugModel()->rowCount()) );
-    p.addHtmlWatermark( s->value( Constants::MFDRUGS_SETTING_WATERMARK_HTML ).toString(),
-                        Print::Printer::Presence(s->value( Constants::MFDRUGS_SETTING_WATERMARKPRESENCE ).toInt()),
-                        Qt::AlignmentFlag(s->value( Constants::MFDRUGS_SETTING_WATERMARKALIGNEMENT ).toInt()));
+    p.addHtmlWatermark( settings()->value( Constants::S_WATERMARK_HTML ).toString(),
+                        Print::Printer::Presence(settings()->value( Constants::S_WATERMARKPRESENCE ).toInt()),
+                        Qt::AlignmentFlag(settings()->value( Constants::S_WATERMARKALIGNEMENT ).toInt()));
 #else
     /** \todo here */
     QString header = "Work in progress";
@@ -212,8 +211,8 @@ bool DrugsCentralWidget::printPrescription()
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeMedForms.")));
 #endif
-    p.setHeader( header );
-    p.setFooter( footer );
-    p.printWithDuplicata(true);
+    p.setHeader(header);
+    p.setFooter(footer);
+    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
     return p.print( DrugsDB::DrugsIO::instance()->prescriptionToHtml(m_CurrentDrugModel) );
 }

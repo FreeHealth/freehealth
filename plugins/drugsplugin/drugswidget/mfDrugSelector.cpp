@@ -90,8 +90,8 @@ void DrugSelector::initialize()
     createDrugsHistoryActions();
     createConnections();
 
-    // select last search method (stored into qApp MFDRUGS_SETTING_SEARCHMETHOD)
-    int m = settings()->value(Constants::MFDRUGS_SETTING_SEARCHMETHOD).toInt();
+    // select last search method (stored into qApp S_SEARCHMETHOD)
+    int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
     setSearchMethod(m);
     QAction *a = 0;
     switch (m)
@@ -195,7 +195,7 @@ void DrugSelector::createDrugsHistoryActions()
         delete m_HistoryAct;
 
     m_HistoryAct = new QActionGroup(this);
-    foreach(QString s, settings()->value(Constants::MFDRUGS_SETTING_DRUGHISTORY).toStringList()) {
+    foreach(QString s, settings()->value(Constants::S_DRUGHISTORY).toStringList()) {
         QAction * a = new QAction(s.left(s.lastIndexOf(",")).left(70) + "..." , m_HistoryAct);
         a->setToolTip(s);
         m_HistoryAct->addAction(a);
@@ -292,7 +292,7 @@ void DrugSelector::setSearchMethod(int method)
     }
 
     // store search method into settings
-    settings()->setValue(Constants::MFDRUGS_SETTING_SEARCHMETHOD, m_SearchMethod);
+    settings()->setValue(Constants::S_SEARCHMETHOD, m_SearchMethod);
 
     // update model
     updateModel();
@@ -352,12 +352,12 @@ void DrugSelector::on_drugsView_doubleClicked(const QModelIndex &index)
     int selectedCIS = rec.value(0).toInt();
 
     // store drug into history
-    QStringList hist = settings()->value(Constants::MFDRUGS_SETTING_DRUGHISTORY).toStringList();
+    QStringList hist = settings()->value(Constants::S_DRUGHISTORY).toStringList();
     hist.removeAll(index.data().toString());
-    if (hist.count() && (hist.count() == settings()->value(Constants::MFDRUGS_SETTING_HISTORYSIZE).toInt()))
+    if (hist.count() && (hist.count() == settings()->value(Constants::S_HISTORYSIZE).toInt()))
         hist.removeFirst();
     hist << index.data().toString();
-    settings()->setValue(Constants::MFDRUGS_SETTING_DRUGHISTORY, hist);
+    settings()->setValue(Constants::S_DRUGHISTORY, hist);
 
     // refresh drug history
     createDrugsHistoryActions();

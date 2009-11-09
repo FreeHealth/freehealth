@@ -467,7 +467,7 @@ void DosageViewer::done(int r)
         const QStringList &av  = drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::AvailableForms).toStringList();
         if (( pre.indexOf(intakesCombo->currentText()) == -1 ) &&
             ( av.indexOf(intakesCombo->currentText()) == -1 )) {
-            Core::ICore::instance()->settings()->appendToValue( MFDRUGS_SETTING_USERRECORDEDFORMS, intakesCombo->currentText() );
+            Core::ICore::instance()->settings()->appendToValue(S_USERRECORDEDFORMS, intakesCombo->currentText() );
         }
     }
 }
@@ -516,10 +516,10 @@ void DosageViewer::on_durationFromSpin_valueChanged( double d )
 /** \brief Show a menu with the user recorded forms */
 void DosageViewer::on_userformsButton_clicked()
 {
-    if (Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS, QVariant()).isNull())
+    if (Core::ICore::instance()->settings()->value(S_USERRECORDEDFORMS, QVariant()).isNull())
         return;
 
-    const QStringList &ulist = Core::ICore::instance()->settings()->value(MFDRUGS_SETTING_USERRECORDEDFORMS).toStringList();
+    const QStringList &ulist = Core::ICore::instance()->settings()->value(S_USERRECORDEDFORMS).toStringList();
     QList<QAction*> list;
     foreach( const QString &form, ulist ) {
         if (!form.isEmpty())
@@ -532,7 +532,7 @@ void DosageViewer::on_userformsButton_clicked()
     if (!a)
         return;
     if (a == aclear) {
-        Core::ICore::instance()->settings()->setValue(MFDRUGS_SETTING_USERRECORDEDFORMS, QString() );
+        Core::ICore::instance()->settings()->setValue(S_USERRECORDEDFORMS, QString() );
     } else {
         intakesCombo->setEditText(a->text());
         if (d->m_DosageModel)

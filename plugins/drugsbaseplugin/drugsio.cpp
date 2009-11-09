@@ -361,9 +361,9 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
 
     // Prepare font format
 //    QFont drugsFont;
-//    drugsFont.fromString(s->value(MFDRUGS_SETTING_DRUGFONT).toString());
+//    drugsFont.fromString(s->value(S_DRUGFONT).toString());
 //    QFont prescrFont;
-//    prescrFont.fromString(s->value(MFDRUGS_SETTING_PRESCRIPTIONFONT).toString());
+//    prescrFont.fromString(s->value(S_PRESCRIPTIONFONT).toString());
 
     QString ALD, nonALD;
     QString tmp;
