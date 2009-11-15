@@ -53,8 +53,8 @@
 /**
  * \file userbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.9
- * \date 18 Sept 2009
+ * \version 0.0.10
+ * \date 15 Nov 2009
 */
 
 namespace UserPlugin {
@@ -123,7 +123,7 @@ private:
     bool m_IsNewlyCreated;
 };
 
-}  // End Internal
+}  // End namespace Internal
 }  // End namespace UserPlugin
 
-#endif // TKUSERBASE_H
+#endif // USERBASE_H
