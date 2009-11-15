@@ -45,6 +45,7 @@
 #include <QHash>
 #include <QString>
 #include <QApplication>
+#include <QStringList>
 #include <QDebug>
 
 namespace Core {

@@ -71,6 +71,7 @@ class USER_EXPORT UserBase : public Utils::Database
     friend class UserPlugin::UserModel;
     friend class UserModelPrivate;
     friend class UserData;
+    friend class UserIdentifier;
 
 protected:
     UserBase(QObject *parent = 0);
@@ -81,6 +82,7 @@ protected:
 
     // initialize
     bool initialize(Core::ISettings *settings);
+    bool isNewlyCreated() const;
 
     // retreivers (pointers)
     UserData *getUserById(const QVariant &_id) const;  // not used
@@ -118,6 +120,7 @@ private:
     static bool m_initialized;
     static QString  m_LastUuid, m_LastLogin, m_LastPass;
     static UserBase * m_Instance;
+    bool m_IsNewlyCreated;
 };
 
 }  // End Internal

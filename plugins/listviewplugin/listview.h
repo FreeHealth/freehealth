@@ -106,9 +106,9 @@ public Q_SLOTS:
     virtual void moveUp();
     virtual void on_edit_triggered();
 
-protected:
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
+//public:
+//    void focusInEvent(QFocusEvent *event);
+//    void focusOutEvent(QFocusEvent *event);
 
 private:
     Internal::ListViewPrivate *d;

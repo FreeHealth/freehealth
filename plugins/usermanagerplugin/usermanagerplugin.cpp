@@ -47,7 +47,10 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
+#include <extensionsystem/pluginmanager.h>
+
 #include <QtCore/QtPlugin>
+#include <QApplication>
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -84,14 +87,15 @@ static inline bool identifyUser()
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                  .arg(userModel()->currentUserData(User::Name).toString()),
                                  tkTr(Trans::Constants::WELCOME_USER));
-
     return true;
 }
 
 
-UserManagerPlugin::UserManagerPlugin() : m_UserManager(0)
+UserManagerPlugin::UserManagerPlugin() :
+        m_UserManager(0)
 {
-	qWarning() << "creating UserManagerPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating UserManagerPlugin";
 }
 
 UserManagerPlugin::~UserManagerPlugin()
@@ -106,8 +110,10 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(errorString);
 
     // Ask for User login
-    if (!identifyUser())
+    if (!identifyUser()) {
+        *errorString = tr("User is not identified.");
         return false;
+    }
 
     return true;
 }

@@ -214,16 +214,16 @@ void ListViewActionHandler::setCurrentView(ListView *view)
         qWarning() << "current view " << view;
     // disconnect old view
     if (m_CurrentView) {
-        disconnect( m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                    this, SLOT(listViewItemChanged()));
+        disconnect(m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                   this, SLOT(listViewItemChanged()));
     }
     m_CurrentView = view;
     if (!view) { // this should never be the case
         return;
     }
     // reconnect some actions
-    connect( m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(listViewItemChanged()));
+    connect(m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(listViewItemChanged()));
     updateActions();
 }
 
@@ -345,27 +345,26 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
     layout->addWidget(d->m_ToolBar, 1, 0);
 
 
-    connect(d->m_ListView, SIGNAL( customContextMenuRequested(const QPoint &)),
+    connect(d->m_ListView, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(contextMenu(const QPoint &)));
 
     d->populateToolbar();
 }
 
-void ListView::focusInEvent(QFocusEvent *event)
-{
-    qWarning() << objectName() << "focus in";
-    Q_UNUSED(event);
-    d->m_ListView->setFocus();
-    QWidget::focusInEvent(event);
-}
-
-void ListView::focusOutEvent(QFocusEvent *event)
-{
-    qWarning() << objectName() << "focus out";
-    Q_UNUSED(event);
-    this->setFocus();
-    QWidget::focusOutEvent(event);
-}
+//void ListView::focusInEvent(QFocusEvent *event)
+//{
+//    qWarning() << objectName() << "focus in";
+//    Q_UNUSED(event);
+//    QWidget::focusInEvent(event);
+//    d->m_ListView->setFocus();
+//}
+//
+//void ListView::focusOutEvent(QFocusEvent *event)
+//{
+//    qWarning() << objectName() << "focus out";
+//    Q_UNUSED(event);
+//    QWidget::focusOutEvent(event);
+//}
 
 
 /** \brief Defines the objectName */

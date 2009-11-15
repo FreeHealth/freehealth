@@ -69,8 +69,10 @@
 
 #include <usermanagerplugin/global.h>
 #include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/database/userbase.h>
 
 #include <QApplication>
+#include <QSplashScreen>
 
 #include "ui_useridentifier.h"
 
@@ -82,18 +84,27 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
 {
     // initialization
     setObjectName("UserIdentifier");
+    Core::ICore::instance()->splashScreen()->hide();
     m_ui = new Ui::UserIdentifier();
     m_ui->setupUi(this);
+    m_ui->lblAppName->setPixmap(Core::ICore::instance()->theme()->splashScreen(Core::Constants::FREEMEDFORMS_SPLASHSCREEN).scaled(QSize(400,200),Qt::KeepAspectRatio));
     m_NumberOfTries = 0;
     setWindowTitle(qApp->applicationName());
-    if (! parent)
+    if (!parent)
         Utils::centerWidget(this);
     if (informations.count()) {
         foreach(const QString &s, informations)
             new QListWidgetItem(s , m_ui->informationsWidget);
-    } else
+    } else {
         m_ui->groupInformations->hide();
-    m_ui->lblAppName->setText(qApp->applicationName());
+    }
+    if (Internal::UserBase::instance()->isNewlyCreated()) {
+        m_ui->newlyMessage->show();
+    } else {
+        m_ui->newlyMessage->hide();
+    }
+
+//    m_ui->lblAppName->setText(qApp->applicationName());
     m_ui->password->toogleEchoMode();
 }
 
@@ -114,7 +125,8 @@ void UserIdentifier::done(int result)
         } else {
             Utils::Log::addMessage(this, tr("User is identified."));
 	    m->setCurrentUser(login(), cryptedPassword());
-	    QDialog::done(QDialog::Accepted);
+            Core::ICore::instance()->splashScreen()->show();
+            QDialog::done(QDialog::Accepted);
         }
     }
     else if (result == QDialog::Rejected) {

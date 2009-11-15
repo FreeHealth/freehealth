@@ -109,6 +109,7 @@ UserBase::UserBase(QObject *parent)
 {
     setObjectName("UserBase");
     m_initialized = false;
+    m_IsNewlyCreated = false;
     // populate tables and fields of database
     addTable(Table_USERS,  "USERS");
     addTable(Table_DATAS,  "DATAS");
@@ -171,6 +172,11 @@ bool UserBase::initialize(Core::ISettings *settings)
         return false;
     m_initialized = true;
     return true;
+}
+
+bool UserBase::isNewlyCreated() const
+{
+    return m_IsNewlyCreated;
 }
 
 
@@ -466,6 +472,7 @@ bool UserBase::createDatabase( const QString & connectionName, const QString & d
     // database is readable/writable
     Utils::Log::addMessage("UserBase", QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
 
+    m_IsNewlyCreated = true;
     return true;
 }
 

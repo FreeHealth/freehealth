@@ -59,6 +59,8 @@
 #include <fmfcoreplugin/coreimpl.h>
 #include <fmfcoreplugin/commandlineparser.h>
 
+#include <usermanagerplugin/usermodel.h>
+
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -104,6 +106,8 @@ MainWindow::MainWindow( QWidget * parent )
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
+
+    setAttribute(Qt::WA_QuitOnClose);
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
@@ -163,6 +167,11 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 void MainWindow::extensionsInitialized()
 {
+    // First check if there is a logged user
+    if (!UserPlugin::UserModel::instance()->hasCurrentUser()) {
+        return;
+    }
+
     // Creating MainWindow interface
 //    m_ui = new Internal::Ui::MainWindow();
 //    m_ui->setupUi(this);
@@ -195,7 +204,7 @@ MainWindow::~MainWindow()
 }
 
 /** \brief Close the main window and the application */
-void MainWindow::closeEvent( QCloseEvent *event )
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     Utils::Log::addMessage(this, "Closing MainWindow");
     writeSettings();

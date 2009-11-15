@@ -47,6 +47,7 @@
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
+static const char* USERPLUGINSNAME = "UserManager";
 
 
 static inline QString getPluginPaths()
@@ -141,23 +142,46 @@ int main( int argc, char *argv[] )
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
-//        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
             break;
         }
     }
+
+    ExtensionSystem::PluginSpec *userplugin = 0;
+    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+        if (spec->name() == QString(USERPLUGINSNAME)) {
+            userplugin = spec;
+            break;
+        }
+    }
+
     if (!coreplugin) {
         const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;
     }
+    if (!userplugin) {
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'UserManager.pluginspec' in %1").arg(pluginPaths);
+        qWarning() << reason;
+//        displayError(msgCoreLoadFailure(reason));
+        return 1;
+    }
+
+
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
 //        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 1;
     }
+
+    if (userplugin->hasError()) {
+        qWarning() << userplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
+        return 1;
+    }
+
 //    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
 //        printVersion(coreplugin, pluginManager);
 //        return 0;
@@ -181,6 +205,11 @@ int main( int argc, char *argv[] )
     pluginManager.loadPlugins();
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
+        return 1;
+    }
+    if (userplugin->hasError()) {
+        qWarning() << userplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 1;
     }
 
