@@ -67,8 +67,6 @@ class UserModelPrivate;
 class USER_EXPORT UserModel : public QSqlTableModel
 {
     Q_OBJECT
-    friend void initLib();
-
 protected:
     UserModel(QObject *parent);
 
@@ -123,6 +121,10 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void memoryUsageChanged() const;
+    void userAboutToConnect(const QString &uuid) const;
+    void userConnected(const QString &uuid) const;
+    void userAboutToDisconnect(const QString &uuid) const;
+    void userDisconnected(const QString &uuid) const;
 
 private:
     QModelIndex createIndex(int row, int column, void * ptr = 0) const;

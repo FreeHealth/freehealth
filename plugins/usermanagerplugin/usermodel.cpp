@@ -40,11 +40,17 @@
 /**
   \class UserModel
   \brief Users are represented into a table model. Each row represents a user, each column a value.
-  \sa User, tkUserConstants
+  The current user represents the actually logged user. Before the current user can be changed (disconnection,
+  another user connection) IUserListener registered in the PluginManager are asked.
+  Set filter with setFilter().
+
+  \sa UserData
+  \sa IUserListener
+
   \todo write documentation+++
   \todo code LOCKER
-  \todo when QDataWidgetMapper (tkUserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
-  Set filter with setFilter().
+  \todo when QDataWidgetMapper (UserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
+
   \ingroup usertoolkit object_usertoolkit
   \ingroup usermanager
 */
@@ -60,6 +66,9 @@
 
 #include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/userdata.h>
+#include <usermanagerplugin/iuserlistener.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
 #include <QUuid>
@@ -70,6 +79,8 @@
 
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
+
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace UserPlugin {
 namespace Internal {
@@ -197,23 +208,45 @@ QModelIndex UserModel::createIndex(int row, int col, void * /*ptr*/) const
   \brief Defines the current user using its login and password. There can be only one current user.
   The date and time of loggin are trace into database.
   \sa tkUser::setLastLogin(), tkUser::addLoginToHistory(), UserBase::saveUser()
-  \todo save ONLY the login trace to database, not the whole user.
+
+  \todo Create a UserChangerListener +++ instead of using sig/slot
+
 */
 bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
 {
-    d->m_CurrentUserUuid.clear();
-    d->m_CurrentUserRights = User::NoRights;
+    QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
+
+    // 1. Ask all listeners to prepare the current user disconnection
+    foreach(IUserListener *l, listener) {
+        if (!l->userAboutToChange())
+            return false;
+    }
+
+    // 2. Get user from Database
     QString uuid = d->addUserFromDatabase(log64, cryptpass64);
     if (uuid.isEmpty()) {
         Utils::Log::addError(this, tr("Unable to retreive user into the model using login and password."));
         return false;
     }
-    else
-        Utils::Log::addMessage(this, tr("Setting current user uuid to %1").arg(uuid));
-    // change current user
+
+    // 3. Ask all listeners for the current user disconnection
+    foreach(IUserListener *l, listener) {
+        if (!l->currentUserAboutToDisconnect())
+            return false;
+    }
+
+    // 4. Connect new user
+    Utils::Log::addMessage(this, tr("Setting current user uuid to %1").arg(uuid));
+    if (!d->m_CurrentUserUuid.isEmpty()) {
+        Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+    }
+    d->m_CurrentUserUuid.clear();
+    d->m_CurrentUserRights = User::NoRights;
     d->m_CurrentUserUuid = uuid;
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values())
         u->setCurrent(false);
+
+    Q_EMIT(userAboutToConnect(uuid));
     // trace log
     Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
     user->setCurrent(true);
@@ -221,8 +254,10 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     user->addLoginToHistory();
     Internal::UserBase::instance()->saveUser(user);
     user->setModified(false);
+    d->m_CurrentUserUuid = uuid;
     d->m_CurrentUserRights = User::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
-    emit memoryUsageChanged();
+    Q_EMIT memoryUsageChanged();
+    Q_EMIT userConnected(uuid);
     return true;
 }
 
@@ -268,8 +303,8 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
         return false;
     bool noError = true;
     beginRemoveRows(QModelIndex(), row, row+count);
-    // TODO --> alert when user to delete is modified ?
-    // TODO --> pb when userviewer is showing the index to delete
+    /** \todo alert when user to delete is modified ? */
+    /** \todo pb when userviewer is showing the index to delete */
     int i = 0;
     for (i=0; i < count ; i++) {
         QString uuid = QSqlTableModel::index(row+i , USER_UUID).data().toString();
@@ -367,7 +402,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
             return false;
     } else if (! d->m_CurrentUserRights &User::WriteAll)
         return false;
-    // TODO --> if user if a delegate of current user
+    /** \todo if user if a delegate of current user */
 
     // set datas directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
@@ -476,7 +511,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
     if ((item.column() < User::LanguageIndex)) {
         // here we suppose that it is the currentUser the ask for datas
-        // TODO had delegates rights
+        /** \todo had delegates rights */
         if (d->m_CurrentUserRights &User::ReadAll)
             return QSqlTableModel::data(item, role);
         else if ((d->m_CurrentUserRights &User::ReadOwn) &&
@@ -496,7 +531,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             return QVariant();
     } else if (! d->m_CurrentUserRights &User::ReadAll)
             return QVariant();
-    // TODO --> if user if a delegate of current user
+    /** \todo if user if a delegate of current user */
 
     // get the requiered data
     QVariant toReturn;
@@ -635,7 +670,7 @@ bool UserModel::submitUser(const QString &uuid)
 /** \brief Reverts the model. */
 bool UserModel::revertAll()
 {
-    // TODO ?? --> ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151
+    /** \todo ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151 */
     int i = 0;
     for(i=0; i < rowCount() ; i++)
         revertRow(i);
@@ -666,7 +701,7 @@ void UserModel::revertRow(int row)
 */
 void UserModel::setFilter (const QHash<int,QString> &conditions)
 {
-    // TODO filter by name AND surname at the same time
+    /** \todo filter by name AND surname at the same time */
     QString filter = "";
     const Internal::UserBase *b = Internal::UserBase::instance();
     foreach(const int r, conditions.keys()) {
@@ -682,7 +717,7 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
     }
     filter.chop(5);
     QSqlTableModel::setFilter(filter);
-    qWarning() << filter;
+//    qWarning() << filter;
 }
 
 /** \brief Returns the number of user stored into the memory. */
@@ -697,6 +732,6 @@ void UserModel::warn()
     if (!Utils::isDebugCompilation())
         return;
     qWarning() << "UserModel Warning";
-    qWarning() << d->m_CurrentUserUuid;
-    qWarning() << d->m_Uuid_UserList;
+    qWarning() << "  * Current user uuid" << d->m_CurrentUserUuid;
+    qWarning() << "  * Current users list" << d->m_Uuid_UserList;
 }
