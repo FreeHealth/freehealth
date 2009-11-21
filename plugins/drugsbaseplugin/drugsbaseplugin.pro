@@ -1,12 +1,9 @@
-TEMPLATE        = lib
-TARGET          = DrugsBase
+TEMPLATE = lib
+TARGET = DrugsBase
 PACKAGE_VERSION = 0.0.2
-
 DEFINES += DRUGSBASE_LIBRARY
-
 include(../fmf_plugins.pri)
 include(drugsbaseplugin_dependencies.pri)
-
 HEADERS = drugsbaseplugin.h \
     drugsbase_exporter.h \
     drugsbase.h \
@@ -18,8 +15,8 @@ HEADERS = drugsbaseplugin.h \
     drugsmodel.h \
     dosagemodel.h \
     drugsio.h \
-    drugsbasemanager.h
-
+    drugsbasemanager.h \
+    globaldrugsmodel.h
 SOURCES = drugsbaseplugin.cpp \
     drugsbase.cpp \
     interactionsbase.cpp \
@@ -29,6 +26,6 @@ SOURCES = drugsbaseplugin.cpp \
     drugsmodel.cpp \
     dosagemodel.cpp \
     drugsio.cpp \
-    drugsbasemanager.cpp
-
+    drugsbasemanager.cpp \
+    globaldrugsmodel.cpp
 OTHER_FILES = DrugsBase.pluginspec

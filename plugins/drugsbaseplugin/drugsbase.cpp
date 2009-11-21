@@ -434,8 +434,9 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
                 }
                 toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DOSAGES_TABLE_NAME,toXml,4,false));
             }
-        } else
+        } else {
             Utils::Log::addQueryError(this, query);
+        }
     }
     return toReturn;
 }
@@ -462,6 +463,50 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
         return false;
     }
     return true;
+}
+
+QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
+{
+    QList<int> toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    if (!DB.open()) {
+        Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        return toReturn;
+    }
+    QString req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE`;");
+    {
+        QSqlQuery query(req,DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                toReturn << query.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addQueryError(this, query);
+        }
+    }
+    return toReturn;
+}
+
+QList<int> DrugsBase::getAllINNThatHaveRecordedDosages() const
+{
+    QList<int> toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    if (!DB.open()) {
+        Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        return toReturn;
+    }
+    QString req = QString("SELECT DISTINCT INN_LK FROM `DOSAGE`;");
+    {
+        QSqlQuery query(req,DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                toReturn << query.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addQueryError(this, query);
+        }
+    }
+    return toReturn;
 }
 
 

@@ -74,6 +74,9 @@ namespace Constants {
     const char * const S_DEF_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
     const char * const S_DEF_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial Narrow;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";              /*!< \brief Default value for settings. */
     const char * const S_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
+    const char * const S_MARKDRUGSWITHAVAILABLEDOSAGES = "DrugsWidget/MarkDrugsWithAvailableDosages";      /*!< \brief Key for settings. */
+    const char * const S_AVAILABLEDOSAGESBACKGROUNGCOLOR = "DrugsWidget/AvailableDosagesColorBackGround";      /*!< \brief Key for settings. */
+    const char * const S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR = "#dddddd";      /*!< \brief Key for settings. */
 
     // ICONS
     const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
@@ -114,38 +117,38 @@ namespace Constants {
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
-                              << "ABBOT FRANCE " << "ACTAVIS " << "AGHETTANT " << "ALMUS " << "ALTER "
-                              << "APOTEX FRANCE " << "APOTEX " << "ARROW CONSEIL " << "ARROW " <<"AEROCID"
-                              << "ALPHARMA " << "ALCON " << "AGHETTANT " << "ACTAVIS " << "AENORASIS"
-                              << "BAYER " << "BESINS-ISCOVESCO " << "BIOGARAN " << "BIOGALENIQUE " << "BOUCHARA RECORDATI "
-                              << "BGR " << "BIO VALYS " << "B.R.M. " << "BAXTER BIOSCIENCE " << "BAXTER " << "BMS"
+                              << "ABBOT FRANCE" << "ACTAVIS" << "AGHETTANT" << "ALMUS" << "ALTER"
+                              << "APOTEX FRANCE" << "APOTEX" << "ARROW CONSEIL" << "ARROW" <<"AEROCID"
+                              << "ALPHARMA" << "ALCON" << "AGHETTANT" << "ACTAVIS" << "AENORASIS"
+                              << "BAYER" << "BESINS-ISCOVESCO" << "BIOGARAN" << "BIOGALENIQUE" << "BOUCHARA RECORDATI"
+                              << "BGR" << "BIO VALYS" << "B.R.M." << "BAXTER BIOSCIENCE" << "BAXTER" << "BMS"
                               << "BOEHRINGER INGELHEIM FRANCE" << "BIOSTABILEX"
-                              << "CRISTERS " << "CCD " << "COOPER " << "CERA "
-                              << "DAKOTA PHARM " << "DAKOTA" << "DCI PHARMA "
-                              << "ETHYPHARM " << "EG " << "ENIREX " << "EVOLUPHARM " << "ELAIAPHARM"
+                              << "CRISTERS" << "CCD" << "COOPER" << "CERA"
+                              << "DAKOTA PHARM" << "DAKOTA" << "DCI PHARMA"
+                              << "ETHYPHARM" << "EG" << "ENIREX" << "EVOLUPHARM" << "ELAIAPHARM"
                               << "FERLUX"
-                              << "G GAM " << "GNR " << "GENEVRIER " << "GONNON " << "GLAXOSMITHKLINE SANTE GRAND PUBLIC"
-                              << "GSK " << "GIFRER" << "GENECEF" << "GERDA" << "GENEVAR" << "GSL" << "GENERES"
-                              << "HEXAL SANTE " << "HERMES " << "HOSPIRA " << "H3 PHARMA" << "H3 SANTE"
-                              << "IVAX " << "IDD " << "IBD3"
+                              << "G GAM" << "GNR" << "GENEVRIER" << "GONNON" << "GLAXOSMITHKLINE SANTE GRAND PUBLIC"
+                              << "GSK" << "GIFRER" << "GENECEF" << "GERDA" << "GENEVAR" << "GSL" << "GENERES"
+                              << "HEXAL SANTE" << "HERMES" << "HOSPIRA" << "H3 PHARMA" << "H3 SANTE"
+                              << "IVAX" << "IDD" << "IBD3"
                               << "LEURQUIN MEDIOLANUM"
-                              << "MERCK GENERIQUES" << "MERCK GENERICS FRANCE HOLDING" << "MERCK " << "MYLAN PHARMA " << "MYLAN " << "MEDA PHARM " << "MG PHARMA "
-                              << "MEDIPHA SANTE "
+                              << "MERCK GENERIQUES" << "MERCK GENERICS FRANCE HOLDING" << "MERCK" << "MYLAN PHARMA" << "MYLAN" << "MEDA PHARM" << "MG PHARMA"
+                              << "MEDIPHA SANTE"
                               << "NIALEX"
-                              << "PAUCOURT " << "PHARMEMMA " << "PANPHARMA" << "PHARMANOVA" << "PFIZER" << "PANPHARMA"
+                              << "PAUCOURT" << "PHARMEMMA" << "PANPHARMA" << "PHARMANOVA" << "PFIZER" << "PANPHARMA"
                               << "PIERRE FABRE" << "PROGRAPHARM" << "PAN PHARMA"
-                              << "QUALIMED " << "QUALIHEALTH " << "QUIVER "
-                              << "RANBAXY " << "RATIOPHARM CONSEIL " << "RATIOPHARM " << "RANBAXY " << "RPG " << "RENAUDIN "
-                              << "ROTTAPHARM " << "RATIO"
-                              << "SANDOZ CONSEIL " << "SANDOZ " << "STRAGEN " << "SAINT GERMAIN " << "SET " << "SUBSTIPHARM "
-                              << "SANOFI PHARMA " << "SANOFI SYNTHELABO FRANCE" << "SICOR" << "SG-PHARM" << "SPECIFAR"
+                              << "QUALIMED" << "QUALIHEALTH" << "QUIVER"
+                              << "RANBAXY" << "RATIOPHARM CONSEIL" << "RATIOPHARM" << "RANBAXY" << "RPG" << "RENAUDIN"
+                              << "ROTTAPHARM" << "RATIO"
+                              << "SANDOZ CONSEIL" << "SANDOZ" << "STRAGEN" << "SAINT GERMAIN" << "SET" << "SUBSTIPHARM"
+                              << "SANOFI PHARMA" << "SANOFI SYNTHELABO FRANCE" << "SICOR" << "SG-PHARM" << "SPECIFAR"
                               << "SMITHKLINE BEECHAM" << "SOLVAY PHARMA" << "SYNTHON"
-                              << "TEVA PHARMA" << "TEVA CONSEIL " << "TEVA " << "THERAPLIX " << "TORLAN "
-                              << "TOP PHARM " << "TRADIPHAR"
+                              << "TEVA PHARMA" << "TEVA CONSEIL" << "TEVA" << "THERAPLIX" << "TORLAN"
+                              << "TOP PHARM" << "TRADIPHAR"
                               << "TABUGEN"
                               << "VIAREF"
-                              << "WINTHROP " << "WYVERN MEDICAL" << "WYVERN"
-                              << "ZYDUS "
+                              << "WINTHROP" << "WYVERN MEDICAL" << "WYVERN"
+                              << "ZYDUS"
                               ;
 
 
@@ -201,7 +204,7 @@ namespace Constants {
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------
 /**
- \brief Used by mfDrugsModel for column representation.
+ \brief Used by DrugsModel for column representation.
  \ingroup freediams
  \ingroup drugswidget
  */
@@ -239,7 +242,7 @@ namespace Drug
 }  // End namespace Drugs::Constants::Drug
 
 /**
- \brief Used by mfDrugsModel for column representation.
+ \brief Used by DrugsModel for column representation.
  \ingroup freediams
  \ingroup drugswidget
  */

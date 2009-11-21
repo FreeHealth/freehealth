@@ -78,6 +78,7 @@ using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 
 static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
@@ -281,24 +282,23 @@ QVariant DrugsData::prescriptionValue( const int fieldref ) const
 
 /**
   \brief Return the drug denomination with or without pharmaceutical firms name
-  \sa mfrugsConstants::S_HIDELABORATORY
+  \sa DrugsDB::Constants::S_HIDELABORATORY
 */
 QString DrugsData::denomination() const
 {
-    /** \todo correct here */
-//    if (Core::ICore::instance()->settings()->value(S_HIDELABORATORY).toBool()) {
-//        if (d->m_NoLaboDenomination.isEmpty()) {
-//            d->m_NoLaboDenomination = value( Table_CIS, CIS_DENOMINATION ).toString();
-//            foreach( const QString &name, LABOS) {
-//                if (d->m_NoLaboDenomination.contains(name)) {
-//                    d->m_NoLaboDenomination.remove(name);
-//                    return d->m_NoLaboDenomination;
-//                }
-//            }
-//        }
-//        return d->m_NoLaboDenomination;
-//    }
-    return value( Table_CIS, CIS_DENOMINATION ).toString();
+    if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
+        if (d->m_NoLaboDenomination.isEmpty()) {
+            d->m_NoLaboDenomination = value(Constants::Table_CIS, Constants::CIS_DENOMINATION).toString();
+            foreach(const QString &name, LABOS) {
+                if (d->m_NoLaboDenomination.contains(" " + name + " ")) {
+                    d->m_NoLaboDenomination.remove(" " + name + " ");
+                    return d->m_NoLaboDenomination;
+                }
+            }
+        }
+        return d->m_NoLaboDenomination;
+    }
+    return value(Constants::Table_CIS,Constants::CIS_DENOMINATION ).toString();
 }
 
 /** \brief Returns the list of all the molecules' code of the drug composition */

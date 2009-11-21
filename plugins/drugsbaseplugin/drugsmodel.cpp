@@ -39,7 +39,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class mfDrugsModel
+  \class DrugsModel
   \brief Model asks DrugsBase to check interaction only while passing new *Drugs via addDrugs()
   or while passing QDrugsList via setDrugsList().
   activeModel() , setActiveModel()
@@ -304,7 +304,7 @@ DrugsModel::DrugsModel(QObject * parent)
 {
     static int handler = 0;
     ++handler;
-    setObjectName("mfDrugsModel_" + QString::number(handler));
+    setObjectName("DrugsModel_" + QString::number(handler));
     if (!drugsBase()->isInitialized())
         Utils::Log::addError(this,"Drugs database not intialized");
     d->m_DrugsList.clear();
@@ -421,7 +421,6 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
 
     if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         int col = index.column();
-
         // manage indexes for dosageModel
         if ((col >= Dosages::Constants::Id) && (col < Dosages::Constants::MaxParam)) {
             return QVariant();
@@ -431,10 +430,12 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         }
     }
     else if (role == Qt::DecorationRole) {
+        // Show/Hide interaction icon
         if (settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool()) {
-        if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
-            return theme()->icon(Core::Constants::ICONPENCIL);
-        } else if (drugsBase()->isInteractionDatabaseAvailable()) {
+            // Manage textual drugs
+            if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+                return theme()->icon(Core::Constants::ICONPENCIL);
+            } else if (drugsBase()->isInteractionDatabaseAvailable()) {
                 return d->m_InteractionsManager->iamIcon(drug, d->m_levelOfWarning);
             }
         }
@@ -451,8 +452,10 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         return display;
     }
     else if (role == Qt::BackgroundRole) {
+        // Drug is a 100% ?
         if (drug->prescriptionValue(Constants::Prescription::IsALD).toBool())
             return QColor(ALD_BACKGROUND_COLOR);
+        // Drugs only for testings
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_BACKGROUND_COLOR);
     }

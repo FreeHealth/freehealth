@@ -81,27 +81,31 @@ class DrugsBase : public InteractionsBase
 public:
     static DrugsBase *instance();
     ~DrugsBase();
-    // INITIALIZER
+
+    // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
-
     void checkDosageDatabaseVersion();
+    void logChronos( bool state );
 
+    // Manage drugs contents
     QList<int> getLinkedCodeSubst( QList<int> & code_iam ) const;
     QList<int> getLinkedSubstCode( const QString & iamDenomination );
     QList<int> getLinkedIamCode( QList<int> & code_subst ) const ;
     int        getInnCodeForCodeMolecule(const int code) const;
 
-    DrugsData * getDrugByCIP( const QVariant & CIP_id );
-    DrugsData * getDrugByCIS( const QVariant & CIS_id );
-    int       getCISFromCIP( int CIP );
-    QString   getInnDenominationFromSubstanceCode( const int code_subst );
-    QString   getInnDenomination( const int inncode ) const;
+    // Manage drugs
+    DrugsData *getDrugByCIP( const QVariant & CIP_id );
+    DrugsData *getDrugByCIS( const QVariant & CIS_id );
+    int        getCISFromCIP( int CIP );
+    QString    getInnDenominationFromSubstanceCode( const int code_subst );
+    QString    getInnDenomination( const int inncode ) const;
 
-    void      logChronos( bool state );
-
+    // Manage Dosages
     QHash<QString, QString> getDosageToTransmit();
-    bool markAllDosageTransmitted( const QStringList &dosageUuids );
+    bool markAllDosageTransmitted(const QStringList &dosageUuids);
+    QList<int> getAllCISThatHaveRecordedDosages() const;
+    QList<int> getAllINNThatHaveRecordedDosages() const;
 
 //protected:
 public:
