@@ -102,7 +102,7 @@ int main( int argc, char *argv[] )
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
-    app.setApplicationName( QString( "%1" ).arg( BINARY_NAME ) );
+    app.setApplicationName( QString("%1").arg(BINARY_NAME));
 
     app.setOrganizationName( BINARY_NAME );
     app.setApplicationVersion( PACKAGE_VERSION );
@@ -113,8 +113,18 @@ int main( int argc, char *argv[] )
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
+    // Add some debugging informations
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
+#ifdef DEBUG
+    Utils::Log::addMessage("Main", "Running debug version");
+#else
+    Utils::Log::addMessage("Main", "Running release version");
+#endif
+#ifdef LINUX_INTEGRATED
+    Utils::Log::addMessage("Main", "Linux Integrated");
+#endif
+
 
     defineLibraryPaths();
 
