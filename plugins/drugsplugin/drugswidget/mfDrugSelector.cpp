@@ -46,6 +46,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/globaldrugsmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -147,20 +148,21 @@ void DrugSelector::createDrugModelView()
 {
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
-    m_DrugsModel = new QSqlTableModel(this, QSqlDatabase::database(DRUGS_DATABASE_NAME));
-    m_DrugsModel->setTable(drugsBase()->table(Table_CIS));
-    m_DrugsModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    QHashWhere where;
-    where.insert(CIS_COMMERCIALISATION, "='O'");
-    m_DrugsModel->setFilter(drugsBase()->getWhereClause(Table_CIS, where));
-    m_DrugsModel->select();
+    m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
+//    m_DrugsModel = new QSqlTableModel(this, QSqlDatabase::database(DRUGS_DATABASE_NAME));
+//    m_DrugsModel->setTable(drugsBase()->table(Table_CIS));
+//    m_DrugsModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+//    QHashWhere where;
+//    where.insert(CIS_COMMERCIALISATION, "='O'");
+//    m_DrugsModel->setFilter(drugsBase()->getWhereClause(Table_CIS, where));
+//    m_DrugsModel->select();
     // managing model fields
-//    m_DrugsModel->removeColumns(CIS_ADMINISTRATION , 1);
-    m_DrugsModel->removeColumns(CIS_CODE_RPC , 1);
-    m_DrugsModel->removeColumns(CIS_COMMERCIALISATION , 1);
-    m_DrugsModel->removeColumns(CIS_AUTORISATION , 1);
-    m_DrugsModel->removeColumns(CIS_AMM , 1);
-    m_DrugsModel->removeColumns(CIS_FORME , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_ADMINISTRATION , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_CODE_RPC , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_COMMERCIALISATION , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AUTORISATION , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AMM , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_FORME , 1);
     // create the view
     drugsView->setModel(m_DrugsModel);
     //      drugsView->sortByColumn(1 , Qt::AscendingOrder);  // NOT SUPPORTED BY WIN32 CROSS-COMPILATION !!!!

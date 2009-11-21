@@ -112,6 +112,9 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(S_PRESCRIPTIONFONT,QFont());
     defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING, 1);
     defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
+    defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
+    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -316,6 +319,8 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE, 12).toInt());
     historicSizeSpin->setValue(s->value(S_HISTORYSIZE).toInt());
     levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING).toInt());
+    useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
+    backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
 
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
@@ -347,6 +352,10 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(S_VIEWFONT , viewFontCombo->currentFont());
     s->setValue(S_VIEWFONTSIZE, viewFontSizeSpin->value());
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
+
+    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
+    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
+
 }
 
 void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
@@ -363,6 +372,9 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
 
     s->setValue(S_DRUGFONT , QFont().toString());
     s->setValue(S_PRESCRIPTIONFONT , QFont().toString());
+
+    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
+    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     s->sync();
 }
 
@@ -455,7 +467,7 @@ static inline QString getFullPrescription(DrugsDB::Internal::DrugsData *drug, bo
 void DrugsPrintWidget::updateFormatting()
 {
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
-    formatingSample->setHtml(getFullPrescription(drug,true,tmp));
+    formatingSample->setHtml(getFullPrescription(drug, true, tmp));
 }
 
 void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
