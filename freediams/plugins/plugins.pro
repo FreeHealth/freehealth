@@ -13,9 +13,9 @@ core.subdir = ../../plugins/fdcoreplugin
 
 drugsbase.subdir   = ../../plugins/drugsbaseplugin
 drugsbase.depends += core
-drugsbase.depends += listview
-drugsbase.depends += printer
-drugsbase.depends += texteditor
+#drugsbase.depends += listview
+#drugsbase.depends += printer
+#drugsbase.depends += texteditor
 
 
 mainwindow.subdir   = ../../plugins/fdmainwindowplugin
