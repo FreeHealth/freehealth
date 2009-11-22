@@ -95,7 +95,7 @@
 #include <QList>
 #include <QSet>
 
-using namespace DrugsDB::Constants;
+using namespace DrugsDB;
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 
@@ -465,17 +465,30 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
     return true;
 }
 
+
+struct minimalCompo {
+    bool isLike(const int _inn, const QString &_dosage) const {
+        return (inn == _inn) && (dosage == _dosage);
+    }
+    int inn;
+    QString dosage;
+};
+
+/**
+  \brief Returns all CIS that have a recorded dosage. Manages INN dosage type.
+  \todo put this in a thread...
+*/
 QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
 {
     QList<int> toReturn;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
-    if (!DB.open()) {
+    QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    if ((DosageDB.isOpen()) && (!DosageDB.open())) {
         Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
         return toReturn;
     }
     QString req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE`;");
     {
-        QSqlQuery query(req,DB);
+        QSqlQuery query(req,DosageDB);
         if (query.isActive()) {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
@@ -484,23 +497,99 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
             Utils::Log::addQueryError(this, query);
         }
     }
+
+    // Get all CIS that contains INN that have available dosage
+    QMultiHash<int, QString> inn_dosageRef = getAllINNThatHaveRecordedDosages();
+
+    //    get all code_subst from INNs
+    QHash<int, QString> where;
+    QString tmp;
+    QList<int> code_subst;
+    QSqlDatabase DrugsDB = QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME);
+    if ((DrugsDB.isOpen()) && (!DrugsDB.open())) {
+        Utils::Log::addError(this, tr("Unable to open database %1").arg(Constants::DRUGS_DATABASE_NAME));
+        return toReturn;
+    }
+
+    // get all needed datas from database
+    QMultiHash<int, minimalCompo> cis_compo;
+    foreach(int inn, inn_dosageRef.keys()) {
+        foreach(int code, d->m_Lk_iamCode_substCode.values(inn)) {
+            if (!code_subst.contains(code))
+                code_subst << code;
+        }
+    }
+    foreach(int code, code_subst) {
+        tmp += QString::number(code) + ", ";
+    }
+    tmp.chop(2);
+
+    // Get all CIS that contains the substance + dosage
+    where.clear();
+    req.clear();
+    where.insert(Constants::COMPO_CODE_SUBST, QString("IN (%1)").arg(tmp));
+    req = select(Constants::Table_COMPO,
+                 QList<int>() << Constants::COMPO_CIS
+                 << Constants::COMPO_CODE_SUBST
+                 << Constants::COMPO_DOSAGE,
+                 where);
+    QSqlQuery query(req, DrugsDB);
+    if (query.isActive()) {
+        while (query.next()) {
+            int cis = query.value(0).toInt();
+            minimalCompo compo;
+            compo.inn = d->m_Lk_iamCode_substCode.key(query.value(1).toInt());
+            compo.dosage = query.value(2).toString();
+            cis_compo.insertMulti(cis, compo);
+        }
+    } else {
+        Utils::Log::addQueryError(this, query);
+    }
+
+    // now check every drugs
+    foreach(const int cis, cis_compo.uniqueKeys()) {
+        QList<int> innsOfThisDrug;
+        foreach(const minimalCompo &compo, cis_compo.values(cis)) {
+            if (!innsOfThisDrug.contains(compo.inn))
+                innsOfThisDrug << compo.inn;
+            QString d = compo.dosage;
+            QString r = inn_dosageRef.value(compo.inn);
+            // remove unneeded strings
+            if (d == r)
+                toReturn << cis;
+            else if (d.remove(",000") == r)
+                toReturn << cis;
+            else if (d.remove(",00") == r)
+                toReturn << cis;
+
+            // try unit conversion
+            if (d.replace("000 mg", " g") == r) {
+                toReturn << cis;
+            }
+            if (r.replace("000 mg", " g") == d) {
+                toReturn << cis;
+            }
+        }
+        if (innsOfThisDrug.count() > 1)
+            toReturn.removeAll(cis);
+    }
     return toReturn;
 }
 
-QList<int> DrugsBase::getAllINNThatHaveRecordedDosages() const
+QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
 {
-    QList<int> toReturn;
+    QMultiHash<int,QString> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if (!DB.open()) {
         Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
         return toReturn;
     }
-    QString req = QString("SELECT DISTINCT INN_LK FROM `DOSAGE`;");
+    QString req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE`;");
     {
         QSqlQuery query(req,DB);
         if (query.isActive()) {
             while (query.next()) {
-                toReturn << query.value(0).toInt();
+                toReturn.insertMulti(query.value(0).toInt(), query.value(1).toString());
             }
         } else {
             Utils::Log::addQueryError(this, query);
@@ -756,8 +845,10 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
      t.start();
 
      QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if (!DB.isOpen())
-          DB.open();
+     if ((!DB.open()) && (!DB.isOpen())) {
+         Utils::Log::addError(this, tr("Unable to open database %1").arg(DrugsDB::Constants::DRUGS_DATABASE_NAME));
+          return 0;
+      }
 
      // construct the where clause
      QHash<int, QString> where;

@@ -145,7 +145,7 @@ public:
         return m_IamClass;
     }
 
-    /** \breif Return the dosage of the INN */
+    /** \brief Return the corrected dosage of the INN */
     QString innDosage() const
     {
         QString tmp;
@@ -155,6 +155,7 @@ public:
             tmp = m_Link->m_Dosage; // avoid infinite loop by retreiving value directly not with the function of m_Link
         // do some transformations
         if (!tmp.isEmpty()) {
+            tmp.replace(",000","");
             tmp.replace(",00","");
         }
         // set the transformed dosage for the next call

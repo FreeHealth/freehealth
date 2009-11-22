@@ -13,7 +13,6 @@
 
 #include <QDebug>
 
-
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
@@ -25,9 +24,15 @@ class GlobalDrugsModelPrivate
 {
 public:
     GlobalDrugsModelPrivate::GlobalDrugsModelPrivate()
+    {}
+
+    void updateCachedAvailableDosage()
     {
+        /** \todo retreive all CIS from INN/QuantityDosage */
+        m_CachedAvailableDosageForCIS.clear();
+        m_CachedAvailableDosageForINN.clear();
         m_CachedAvailableDosageForCIS = drugsBase()->getAllCISThatHaveRecordedDosages();
-        m_CachedAvailableDosageForINN = drugsBase()->getAllINNThatHaveRecordedDosages();
+        qWarning() <<  drugsBase()->getAllINNThatHaveRecordedDosages();
     }
 
     bool CISHasRecordedDosage(const int CIS)
@@ -49,11 +54,20 @@ private:
 
 using namespace DrugsDB;
 
+DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::m_Instance = 0;
+DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::instance(QObject *parent)
+{
+    if (!m_Instance)
+        m_Instance = new DrugsDB::GlobalDrugsModel(parent);
+    return m_Instance;
+}
+
 GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
         QSqlTableModel(parent, QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME)),
         d(0)
 {
     d = new Internal::GlobalDrugsModelPrivate();
+    d->updateCachedAvailableDosage();
     setTable(drugsBase()->table(Constants::Table_CIS));
     setEditStrategy( QSqlTableModel::OnManualSubmit );
     QHashWhere where;
@@ -89,10 +103,7 @@ Qt::ItemFlags GlobalDrugsModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
-//bool GlobalDrugsModel::select()
-//{
-//    qWarning() << "lkjlkjlkjlkjlkjlkjlkjl SELECT";
-//    bool r = QSqlTableModel::select();
-//        qWarning() << this->tableName() << rowCount() << columnCount() << filter();
-//return r;
-//}
+void GlobalDrugsModel::updateCachedAvailableDosage()
+{
+    d->updateCachedAvailableDosage();
+}

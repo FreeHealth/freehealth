@@ -105,7 +105,7 @@ public:
     QHash<QString, QString> getDosageToTransmit();
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
     QList<int> getAllCISThatHaveRecordedDosages() const;
-    QList<int> getAllINNThatHaveRecordedDosages() const;
+    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
 //protected:
 public:
