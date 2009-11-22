@@ -59,6 +59,7 @@
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/globaldrugsmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -205,13 +206,14 @@ DosageCreatorDialog::~DosageCreatorDialog()
    \brief Validate the dialog
    \todo Check dosage validity before validate the dialog
 */
-void DosageCreatorDialog::done( int r )
+void DosageCreatorDialog::done(int r)
 {
     int row = availableDosagesListView->listView()->currentIndex().row();
 
     if ( r == QDialog::Rejected ) {
-        d->m_DosageModel->revertRow( row );
+        d->m_DosageModel->revertRow(row);
     }  else {
+        DrugsDB::GlobalDrugsModel::instance()->updateCachedAvailableDosage();
         dosageViewer->done(r);
         /** \todo check validity of the dosage before submition */
     }

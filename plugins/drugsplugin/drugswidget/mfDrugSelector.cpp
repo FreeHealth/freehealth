@@ -148,7 +148,7 @@ void DrugSelector::createDrugModelView()
 {
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
-    m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
+    m_DrugsModel = DrugsDB::GlobalDrugsModel::instance();
 //    m_DrugsModel = new QSqlTableModel(this, QSqlDatabase::database(DRUGS_DATABASE_NAME));
 //    m_DrugsModel->setTable(drugsBase()->table(Table_CIS));
 //    m_DrugsModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
