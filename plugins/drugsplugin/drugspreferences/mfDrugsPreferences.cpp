@@ -434,7 +434,8 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::IntakesTo, 3);
     drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
     drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
-    drug->setPrescriptionValue(Prescription::DailyScheme, Trans::ConstantTranslations::dailySchemes(0x01011));
+    /** \todo recode */
+//    drug->setPrescriptionValue(Prescription::DailyScheme, Trans::ConstantTranslations::dailySchemes(0x01011));
     drug->setPrescriptionValue(Prescription::Period, 2);
     drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
     drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);

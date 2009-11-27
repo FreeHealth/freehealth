@@ -126,54 +126,58 @@ QString period( int id )
 QStringList dailySchemeList()
 {
     return QStringList()
+            << tkTr(Constants::WAKEUPTIME)
+            << tkTr(Constants::BREAKFAST)
             << tkTr(Constants::MORNING)
+            << tkTr(Constants::MIDDAY)
             << tkTr(Constants::AFTERNOON)
             << tkTr(Constants::TEATIME)
+            << tkTr(Constants::DINER)
             << tkTr(Constants::EVENING)
             << tkTr(Constants::BEDTIME);
 }
 
+///** \brief Transforms the dailyScheme enum Trans::Constants::Time::DailyScheme to the corresponding QStringList \e list */
+//QStringList dailySchemes(const Constants::Time::DailyScheme scheme)
+//{
+//    if ( scheme == Constants::Time::Undefined )
+//        return QStringList();
+//    QStringList list;
+//    if ( scheme & Constants::Time::Morning )
+//        list << tkTr(Constants::MORNING);
+//    if ( scheme & Constants::Time::Afternoon )
+//        list << tkTr(Constants::AFTERNOON);
+//    if ( scheme & Constants::Time::TeaTime )
+//        list << tkTr(Constants::TEATIME);
+//    if ( scheme & Constants::Time::Evening )
+//        list << tkTr(Constants::EVENING);
+//    if ( scheme & Constants::Time::BedTime )
+//        list << tkTr(Constants::BEDTIME);
+//    return list;
+//}
+
 /** \brief Transforms the dailyScheme QFlag mfDosageModel::DailySchemes to the corresponding QStringList \e list */
-QStringList dailySchemes( const Constants::Time::DailySchemes scheme )
+QString dailyScheme(const int scheme)
 {
-    if ( scheme == Constants::Time::Undefined )
-        return QStringList();
-    QStringList list;
-    if ( scheme & Constants::Time::Morning )
-        list << tkTr(Constants::MORNING);
-    if ( scheme & Constants::Time::Afternoon )
-        list << tkTr(Constants::AFTERNOON);
-    if ( scheme & Constants::Time::TeaTime )
-        list << tkTr(Constants::TEATIME);
-    if ( scheme & Constants::Time::Evening )
-        list << tkTr(Constants::EVENING);
-    if ( scheme & Constants::Time::BedTime )
-        list << tkTr(Constants::BEDTIME);
-    return list;
-}
-/** \brief Transforms the dailyScheme QFlag mfDosageModel::DailySchemes to the corresponding QStringList \e list */
-QStringList dailySchemes( const int scheme )
-{
-    Constants::Time::DailySchemes d(scheme);
-    return dailySchemes(d);
+    return dailySchemeList().at(scheme);
 }
 
-/** \brief Transforms the dailyScheme \e list to the corresponding QFlag mfDosageModel::DailySchemes */
-Constants::Time::DailySchemes toDailyScheme( const QStringList & list )
-{
-    Constants::Time::DailySchemes r = Constants::Time::Undefined;
-    if ( list.indexOf( tkTr(Constants::MORNING) ) != -1 )
-        r |= Constants::Time::Morning;
-    if ( list.indexOf( tkTr(Constants::AFTERNOON) ) != -1 )
-        r |= Constants::Time::Afternoon;
-    if ( list.indexOf( tkTr(Constants::TEATIME) ) != -1 )
-        r |= Constants::Time::TeaTime;
-    if ( list.indexOf( tkTr(Constants::EVENING) ) != -1 )
-        r |= Constants::Time::Evening;
-    if ( list.indexOf( tkTr(Constants::BEDTIME) ) != -1 )
-        r |= Constants::Time::BedTime;
-    return r;
-}
+///** \brief Transforms the dailyScheme \e list to the corresponding QFlag mfDosageModel::DailySchemes */
+//Constants::Time::DailySchemes toDailyScheme( const QStringList & list )
+//{
+//    Constants::Time::DailySchemes r = Constants::Time::Undefined;
+//    if ( list.indexOf( tkTr(Constants::MORNING) ) != -1 )
+//        r |= Constants::Time::Morning;
+//    if ( list.indexOf( tkTr(Constants::AFTERNOON) ) != -1 )
+//        r |= Constants::Time::Afternoon;
+//    if ( list.indexOf( tkTr(Constants::TEATIME) ) != -1 )
+//        r |= Constants::Time::TeaTime;
+//    if ( list.indexOf( tkTr(Constants::EVENING) ) != -1 )
+//        r |= Constants::Time::Evening;
+//    if ( list.indexOf( tkTr(Constants::BEDTIME) ) != -1 )
+//        r |= Constants::Time::BedTime;
+//    return r;
+//}
 
 /** \brief Returns pre-determined ages translated stringlist */
 QStringList preDeterminedAges()

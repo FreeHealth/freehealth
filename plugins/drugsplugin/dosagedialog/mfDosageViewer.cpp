@@ -46,23 +46,23 @@
   If you want to create a new dosage, you must create a new row onto the model BEFORE.\n
   If you want to edit or modify a dosage, you must inform the widget of the row and the CIS of the drug.\n
 
-  Please always call done() when the dialog including the mfDosageViewer is done.
+  Please always call done() when the dialog including the DosageViewer is done.
 
   \ingroup freediams drugswidget
 */
 
 #include "mfDosageViewer.h"
 
-// include drugwidget headers
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/dailyschememodel.h>
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
-// include toolkit
 #include <utils/log.h>
+#include <utils/widgets/spinboxdelegate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <listviewplugin/stringlistmodel.h>
@@ -83,10 +83,9 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QMenu>
 
 using namespace DrugsWidget::Constants;
-//using namespace mfDosagesConstants;
-//using namespace mfInteractionsConstants;
 using namespace DrugsWidget::Internal;
 
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
@@ -102,7 +101,7 @@ class DosageViewerPrivate
 {
 public:
     DosageViewerPrivate(DosageViewer *parent) :
-            m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_Parent(parent) {}
+            m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_Parent(parent), m_SpinDelegate(0) {}
 
     void setCheckBoxStateToModel( const int index, const int qtCheckState )
     {
@@ -142,8 +141,6 @@ public:
             m_Mapper->addMapping( m_Parent->intervalTimeSchemeCombo, Prescription::IntakesIntervalScheme, "currentIndex"  );
             m_Mapper->addMapping( m_Parent->mealTimeCombo, Prescription::MealTimeSchemeIndex, "currentIndex" );
             m_Mapper->addMapping( m_Parent->noteTextEdit, Prescription::Note, "plainText" );
-            m_Mapper->addMapping( m_Parent->dailySchemeListView, Prescription::DailyScheme, "checkedStringList" );
-
             m_Parent->tabWidget->removeTab(6);
             m_Parent->tabWidget->removeTab(4);
             m_Parent->tabWidget->removeTab(3);
@@ -177,8 +174,6 @@ public:
             m_Mapper->addMapping( m_Parent->intervalTimeSchemeCombo, Dosages::Constants::IntakesIntervalScheme, "currentIndex"  );
             m_Mapper->addMapping( m_Parent->mealTimeCombo, Dosages::Constants::MealScheme, "currentIndex" );
             m_Mapper->addMapping( m_Parent->noteTextEdit, Dosages::Constants::Note, "plainText" );
-            m_Mapper->addMapping( m_Parent->dailySchemeListView, Dosages::Constants::DailyScheme, "checkedStringList" );
-
             m_Mapper->addMapping( m_Parent->minAgeSpin, Dosages::Constants::MinAge, "value" );
             m_Mapper->addMapping( m_Parent->maxAgeSpin, Dosages::Constants::MaxAge, "value" );
             m_Mapper->addMapping( m_Parent->minAgeCombo, Dosages::Constants::MinAgeReferenceIndex, "currentIndex" );
@@ -197,6 +192,7 @@ public:
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(m_Parent);
+        /** \todo transmit dailyscheme to drugsmodel */
         if (m_DosageModel) {
             // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
             // Need to be filled by hand the comboboxes...
@@ -337,6 +333,19 @@ public:
             m_Parent->intakesFromSpin->setMinimum( 1 );
         }
         resizeTableWidget();
+
+        /** \todo Delete delegate pointer before all */
+        if (m_SpinDelegate) {
+            delete m_SpinDelegate;
+            m_SpinDelegate = 0;
+        }
+        if (isScored) {
+            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,10,true);
+        } else {
+            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,10,false);
+        }
+        m_Parent->dailySchemeView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
+
         if (m_DosageModel)
             m_Parent->dosageForAllInnCheck->setEnabled(dosageCanLinkWithInn());
         else
@@ -357,6 +366,7 @@ public:
     DrugsDB::Internal::DosageModel *m_DosageModel;
     QString             m_ActualDosageUuid;
     int                 m_CIS;
+    Utils::SpinBoxDelegate *m_SpinDelegate;
 private:
     DosageViewer *m_Parent;
 };
@@ -385,11 +395,11 @@ DosageViewer::DosageViewer( QWidget *parent )
     tabWidget->removeTab(tabWidget->count()-1);
 
     // this must be done here
-    Views::StringListModel * stringModel = new Views::StringListModel( this );
-    stringModel->setStringList( Trans::ConstantTranslations::dailySchemeList() );
-    stringModel->setCheckable(true);
-    dailySchemeListView->setModel( stringModel );
-    dailySchemeListView->hideButtons();
+    DrugsDB::DailySchemeModel *model = new DrugsDB::DailySchemeModel(this);
+    dailySchemeView->setModel(model);
+    dailySchemeView->horizontalHeader()->hide();
+    dailySchemeView->verticalHeader()->hide();
+
     tabWidget->setCurrentIndex(0);
 }
 
@@ -446,6 +456,7 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
 void DosageViewer::commitToModel()
 {
      d->m_Mapper->submit();
+     /** \todo transmit dailyscheme to drugsmodel */
 }
 
 

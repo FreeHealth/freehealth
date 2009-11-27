@@ -217,8 +217,9 @@ bool DosageModel::setData( const QModelIndex & index, const QVariant & value, in
         {
         case Dosages::Constants::DailyScheme : // --> receive stringList, transform to QFlag
             {
-                if (!QSqlTableModel::setData( index, int(toDailyScheme(value.toStringList())), role))
-                    return false;
+                /** \todo recode */
+//                if (!QSqlTableModel::setData(index, int(toDailyScheme(value.toStringList())), role))
+//                    return false;
                 break;
             }
         default :
@@ -239,7 +240,7 @@ bool DosageModel::setData( const QModelIndex & index, const QVariant & value, in
 QVariant DosageModel::data( const QModelIndex & item, int role ) const
 {
     Q_ASSERT_X( m_CIS != -1, "DosageModel::data", "before using the dosagemodel, you must specify the CIS of the related drug");
-    if ( ! item.isValid() )
+    if (!item.isValid())
         return QVariant();
 
     switch (role)
@@ -267,8 +268,9 @@ QVariant DosageModel::data( const QModelIndex & item, int role ) const
             {
             case Dosages::Constants::DailyScheme : // --> is a QFlags to transform to stringList
                 {
-                    return dailySchemes( Trans::Constants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
-                    break;
+                    /** \todo recode */
+//                    return dailySchemes( Trans::Constants::Time::DailySchemes( QSqlTableModel::data(item).toInt() ) );
+//                    break;
                 }
             default :
                     //                qWarning() << record().fieldName(item.column())<<QSqlTableModel::data(item, role);

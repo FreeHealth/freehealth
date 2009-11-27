@@ -374,7 +374,7 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLabel" name="label_11">
@@ -428,10 +428,17 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="0">
         <layout class="QHBoxLayout" name="intakeSchemeHorizLayout">
          <item>
-          <widget class="Views::StringListView" name="dailySchemeListView" native="true"/>
+          <widget class="QTableView" name="dailySchemeView">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QTableWidget" name="hourlyTableWidget">
@@ -646,7 +653,7 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -659,7 +666,7 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="mealtimerelation">
@@ -1069,14 +1076,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Views::StringListView</class>
-   <extends>QWidget</extends>
-   <header location="global">listviewplugin/stringlistview.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>labelLineEdit</tabstop>
   <tabstop>fromToIntakesCheck</tabstop>

@@ -110,16 +110,20 @@ namespace Time {
 
     enum DailyScheme
     {
-        Undefined    = 0x00000000,
-        Morning      = 0x00000001,
-        Afternoon    = 0x00000010,
-        TeaTime      = 0x00000100,
-        Evening      = 0x00001000,
-        BedTime      = 0x00010000
+        DS_WakeUpTime = 0,
+        DS_Breakfast,
+        DS_Morning,
+        DS_MidDay,
+        DS_Afternoon,
+        DS_TeaTime,
+        DS_Diner,
+        DS_Evening,
+        DS_BedTime,
+        DS_MaxParam
     };
-    Q_DECLARE_FLAGS( DailySchemes, DailyScheme );
+//    Q_DECLARE_FLAGS( DailySchemes, DailyScheme );
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Time::DailySchemes)
 
 	// Used for the language menu
 	const char * const  ENGLISH             = QT_TRANSLATE_NOOP("tkConstants", "English");             /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
@@ -252,10 +256,13 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Time::DailySchemes)
 
         // Day
         const char* const WAKEUPTIME           = QT_TRANSLATE_NOOP("tkConstants", "wake up");
+        const char* const BREAKFAST            = QT_TRANSLATE_NOOP("tkConstants", "breakfast");
         const char* const MORNING              = QT_TRANSLATE_NOOP("tkConstants", "morning");
         const char* const TENOCLOCK            = QT_TRANSLATE_NOOP("tkConstants", "ten o'clock");
+        const char* const MIDDAY               = QT_TRANSLATE_NOOP("tkConstants", "midday");
         const char* const AFTERNOON            = QT_TRANSLATE_NOOP("tkConstants", "afternoon");
         const char* const TEATIME              = QT_TRANSLATE_NOOP("tkConstants", "tea time");
+        const char* const DINER                = QT_TRANSLATE_NOOP("tkConstants", "diner");
         const char* const EVENING              = QT_TRANSLATE_NOOP("tkConstants", "evening");
         const char* const BEDTIME              = QT_TRANSLATE_NOOP("tkConstants", "bedtime");
 
@@ -436,11 +443,11 @@ namespace ConstantTranslations {
 
 TRUTILS_EXPORT QString tkTr(const char* toTr, const int plurials=1);
 TRUTILS_EXPORT QStringList periods();
-TRUTILS_EXPORT QString period( int id );
+TRUTILS_EXPORT QString period(int id);
 TRUTILS_EXPORT QStringList dailySchemeList();
-TRUTILS_EXPORT QStringList dailySchemes(const Trans::Constants::Time::DailySchemes dailySchemeFlag);
-TRUTILS_EXPORT QStringList dailySchemes(const int dailySchemeFlag);
-TRUTILS_EXPORT Trans::Constants::Time::DailySchemes toDailyScheme( const QStringList & list );
+//TRUTILS_EXPORT QStringList dailySchemes(const Trans::Constants::Time::DailySchemes dailySchemeFlag);
+TRUTILS_EXPORT QString dailyScheme(const int dailySchemeFlag);
+//TRUTILS_EXPORT Trans::Constants::Time::DailySchemes toDailyScheme(const QStringList &list);
 TRUTILS_EXPORT QStringList preDeterminedAges();
 TRUTILS_EXPORT QStringList mealTime();
 TRUTILS_EXPORT QString mealTime(const int index);

@@ -1,29 +1,25 @@
 # toolkit library project file
-TEMPLATE        = lib
-TARGET          = Utils
+TEMPLATE = lib
+TARGET = Utils
 PACKAGE_VERSION = 0.1.0
-
 DEFINES *= UTILS_LIBRARY
 
 # include config file
 include(../libsworkbench.pri)
 include(../utils_dependencies.pri)
+CONFIG *= dll \
+    sql \
+    network
+QT *= sql \
+    network
 
-
-CONFIG *= dll sql network
-QT *= sql network
-
-#include subprojects
-#include($${PWD}/richtexteditor/richtexteditor.pri)  ---> plugin
-#include($${PWD}/actionmanager/actionmanager.pri)    obsolete
-#include($${PWD}/contextmanager/contextmanager.pri)  obsolete
-#include($${PWD}/listview/listview.pri)              ---> plugin
-
-
-#include($${PWD}/printer/printer.pri)                ---> plugin
-
-HEADERS += \
-    global_exporter.h \
+# include subprojects
+# include($${PWD}/richtexteditor/richtexteditor.pri) ---> plugin
+# include($${PWD}/actionmanager/actionmanager.pri) obsolete
+# include($${PWD}/contextmanager/contextmanager.pri) obsolete
+# include($${PWD}/listview/listview.pri) ---> plugin
+# include($${PWD}/printer/printer.pri) ---> plugin
+HEADERS += global_exporter.h \
     global.h \
     database.h \
     log.h \
@@ -36,11 +32,9 @@ HEADERS += \
     widgets/lineeditechoswitcher.h \
     widgets/QButtonLineEdit.h \
     widgets/QPixLineEdit.h \
-    widgets/colorbuttonchooser.h
-
-
-SOURCES += \
-    global.cpp \
+    widgets/colorbuttonchooser.h \
+    widgets/spinboxdelegate.h
+SOURCES += global.cpp \
     database.cpp \
     log.cpp \
     updatechecker.cpp \
@@ -50,8 +44,8 @@ SOURCES += \
     widgets/scrollingwidget.cpp \
     widgets/lineeditechoswitcher.cpp \
     widgets/QButtonLineEdit.cpp \
-    widgets/colorbuttonchooser.cpp
-
+    widgets/colorbuttonchooser.cpp \
+    widgets/spinboxdelegate.cpp
 
 # translators
 TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/utils_fr.ts \

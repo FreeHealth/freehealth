@@ -16,7 +16,8 @@ HEADERS = drugsbaseplugin.h \
     dosagemodel.h \
     drugsio.h \
     drugsbasemanager.h \
-    globaldrugsmodel.h
+    globaldrugsmodel.h \
+    dailyschememodel.h
 SOURCES = drugsbaseplugin.cpp \
     drugsbase.cpp \
     interactionsbase.cpp \
@@ -27,5 +28,6 @@ SOURCES = drugsbaseplugin.cpp \
     dosagemodel.cpp \
     drugsio.cpp \
     drugsbasemanager.cpp \
-    globaldrugsmodel.cpp
+    globaldrugsmodel.cpp \
+    dailyschememodel.cpp
 OTHER_FILES = DrugsBase.pluginspec
