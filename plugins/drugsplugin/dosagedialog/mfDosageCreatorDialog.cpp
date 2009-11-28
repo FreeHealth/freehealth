@@ -121,9 +121,9 @@ public:
         m_DosageModel->database().transaction();
         if (m_DosageModel->submitAll()) {
             if (m_DosageModel->database().commit())
-                Utils::Log::addMessage(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "Dosage correctly saved to base"));
+                Utils::Log::addMessage(m_Parent, QCoreApplication::translate("DosageCreatorDialog", "Dosage correctly saved to base"));
             else
-                Utils::Log::addError(m_Parent, QCoreApplication::translate("mfDosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
+                Utils::Log::addError(m_Parent, QCoreApplication::translate("DosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
                                 .arg(m_DosageModel->lastError().text()));
         } else {
             m_DosageModel->database().rollback();

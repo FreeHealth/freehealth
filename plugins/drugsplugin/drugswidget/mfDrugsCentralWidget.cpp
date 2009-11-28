@@ -203,7 +203,7 @@ bool DrugsCentralWidget::printPrescription()
                         Print::Printer::Presence(settings()->value( Constants::S_WATERMARKPRESENCE ).toInt()),
                         Qt::AlignmentFlag(settings()->value( Constants::S_WATERMARKALIGNEMENT ).toInt()));
 #else
-    /** \todo here */
+    /** \todo FreeMedForms prescription printing */
     QString header = "Work in progress";
 //    diCore::patient()->replaceTokens(header);
 //    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );

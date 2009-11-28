@@ -192,33 +192,36 @@ public:
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(m_Parent);
-        /** \todo transmit dailyscheme to drugsmodel */
         if (m_DosageModel) {
             // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
             // Need to be filled by hand the comboboxes...
             // Label
-            m_Parent->labelLineEdit->setText(m_DosageModel->index( row, Dosages::Constants::Label).data().toString());
+            m_Parent->labelLineEdit->setText(m_DosageModel->index(row, Dosages::Constants::Label).data().toString());
             // Intakes
             m_Parent->intakesCombo->setCurrentIndex(-1);
-            m_Parent->intakesCombo->setEditText(m_DosageModel->index( row, Dosages::Constants::IntakesScheme).data().toString());
+            m_Parent->intakesCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::IntakesScheme).data().toString());
             // Period
-            m_Parent->periodSpin->setValue(m_DosageModel->index( row, Dosages::Constants::Period).data().toDouble());
-            m_Parent->periodSchemeCombo->setEditText(m_DosageModel->index( row, Dosages::Constants::PeriodScheme).data().toString());
+            m_Parent->periodSpin->setValue(m_DosageModel->index(row, Dosages::Constants::Period).data().toDouble());
+            m_Parent->periodSchemeCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::PeriodScheme).data().toString());
             // Duration
-            m_Parent->durationCombo->setEditText(m_DosageModel->index( row, Dosages::Constants::DurationScheme).data().toString());
+            m_Parent->durationCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::DurationScheme).data().toString());
             // Interval
-            m_Parent->minIntervalIntakesSpin->setValue(m_DosageModel->index( row, Dosages::Constants::IntakesIntervalOfTime).data().toDouble());
+            m_Parent->minIntervalIntakesSpin->setValue(m_DosageModel->index(row, Dosages::Constants::IntakesIntervalOfTime).data().toDouble());
 
-            if (m_DosageModel->index( row, Dosages::Constants::IntakesUsesFromTo).data().toBool()) {
+            if (m_DosageModel->index(row, Dosages::Constants::IntakesUsesFromTo).data().toBool()) {
                 m_Parent->fromToIntakesCheck->setChecked(true);
                 m_Parent->intakesToLabel->show();
                 m_Parent->intakesToSpin->show();
             }
-            if (m_DosageModel->index( row, Dosages::Constants::DurationUsesFromTo).data().toBool()) {
+            if (m_DosageModel->index(row, Dosages::Constants::DurationUsesFromTo).data().toBool()) {
                 m_Parent->fromToDurationCheck->setChecked(true);
                 m_Parent->durationToLabel->show();
                 m_Parent->durationToSpin->show();
             }
+            // populate DailSchemeModel
+            DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+            Q_ASSERT(daily);
+            daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
 //            m_Parent->dosageForAllInnCheck->setEnabled(DRUGMODEL->drugData(m_CIS, Drug::AllInnsKnown).toBool());
             m_Parent->dosageForAllInnCheck->setChecked(m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toBool());
             m_Parent->aldCheck->setChecked(m_DosageModel->index(row, Dosages::Constants::IsALD).data().toBool());
@@ -248,7 +251,11 @@ public:
                 m_Parent->durationToLabel->show();
                 m_Parent->durationToSpin->show();
             }
-            m_Parent->aldCheck->setChecked(drugModel()->drugData(m_CIS,Prescription::IsALD).toBool());
+            m_Parent->aldCheck->setChecked(drugModel()->drugData(m_CIS, Prescription::IsALD).toBool());
+            // populate DailSchemeModel
+            DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+            Q_ASSERT(daily);
+            daily->setSerializedContent(drugModel()->drugData(m_CIS, Prescription::DailyScheme).toString());
         }
 
         // Link to French RCP
@@ -334,18 +341,16 @@ public:
         }
         resizeTableWidget();
 
-        /** \todo Delete delegate pointer before all */
         if (m_SpinDelegate) {
             delete m_SpinDelegate;
             m_SpinDelegate = 0;
         }
         if (isScored) {
-            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,10,true);
+            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0.0,10.0,true);
         } else {
             m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,10,false);
         }
         m_Parent->dailySchemeView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
-
         if (m_DosageModel)
             m_Parent->dosageForAllInnCheck->setEnabled(dosageCanLinkWithInn());
         else
@@ -443,7 +448,6 @@ DosageViewer::~DosageViewer()
 /** \brief Changes the current editing dosage */
 void DosageViewer::changeCurrentRow(const int dosageRow)
 {
-    // manage non mapped datas
     if (dosageRow==d->m_Mapper->currentIndex())
         return;
     d->resetUiToDefaults();
@@ -455,8 +459,20 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
 /** \brief Only provided because of focus bug */
 void DosageViewer::commitToModel()
 {
-     d->m_Mapper->submit();
-     /** \todo transmit dailyscheme to drugsmodel */
+    d->m_Mapper->submit();
+    // populate DailyShemeModel
+    DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(dailySchemeView->model());
+    Q_ASSERT(daily);
+    if (d->m_DosageModel) {
+        if (daily) {
+            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::DailyScheme), daily->serializedContent());
+        }
+    } else {
+        if (daily) {
+            drugModel()->setDrugData(d->m_CIS, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
+            drugModel()->warn();
+        }
+    }
 }
 
 

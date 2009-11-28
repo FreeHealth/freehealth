@@ -148,6 +148,12 @@ public:
         if ((column < Prescription::Id) || (column > Prescription::MaxParam))
             return false;
         drug->setPrescriptionValue(column, value);
+
+
+        if (column==Prescription::DailyScheme)
+            qWarning() << "DrugsModel::setDrugData" << column << value;
+
+
         return true;
     }
 
@@ -817,7 +823,23 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
         tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
 
     tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
-    tokens_value["DAILY_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DailyScheme).toStringList().join(", ");
+
+    // Manage Daily Scheme See DailySchemeModel::setSerializedContent
+    QString daily;
+    const QStringList &dailyTags = Trans::ConstantTranslations::dailySchemeXmlTagList();
+    const QStringList &dailySchemes = Trans::ConstantTranslations::dailySchemeList();
+    QStringList xml = drug->prescriptionValue(Constants::Prescription::DailyScheme).toString().split(">");
+    foreach(const QString &line, xml) {
+        QStringList x = line.split("=");
+        if (x.count()!=2)
+            continue;
+        daily += dailySchemes.at(dailyTags.indexOf(x[0].remove("<"))) + " : " + x.at(1) + ", ";
+    }
+    daily.chop(2);
+//    daily.prepend("(");
+//    daily.append(")");
+    tokens_value["DAILY_SCHEME"] = daily;
+
     tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
     tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
     if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())

@@ -60,8 +60,6 @@
 
 #include <QPixmap>
 
-/** \todo moves preferences of DrugsDB in a specific options page */
-
 using namespace DrugsWidget;
 using namespace DrugsWidget::Internal;
 using namespace DrugsWidget::Constants;
@@ -434,8 +432,6 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::IntakesTo, 3);
     drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
     drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
-    /** \todo recode */
-//    drug->setPrescriptionValue(Prescription::DailyScheme, Trans::ConstantTranslations::dailySchemes(0x01011));
     drug->setPrescriptionValue(Prescription::Period, 2);
     drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
     drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
@@ -446,6 +442,10 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
     drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
     drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
+    QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
+    daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
+    daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
+    drug->setPrescriptionValue(Prescription::DailyScheme, daily);
 
     prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();

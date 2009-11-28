@@ -2,6 +2,8 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 
+#include <QDebug>
+
 using namespace Utils;
 
 SpinBoxDelegate::SpinBoxDelegate(QObject *parent, double min, double max, bool isDouble)
@@ -32,13 +34,14 @@ QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
 void SpinBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-    if (spinBox) {
-        spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
+    QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+    if (doubleSpinBox) {
+        doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble());
     } else {
-        QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
-        if (doubleSpinBox)
-            doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble());
+        QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+        if (spinBox) {
+            spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
+        }
     }
 }
 
@@ -46,16 +49,15 @@ void SpinBoxDelegate::setEditorData(QWidget *editor,
 void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-    if (spinBox) {
-        spinBox->interpretText();
-        int value = spinBox->value();
+    QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+    if (doubleSpinBox) {
+        double value = doubleSpinBox->value();
         model->setData(index, value, Qt::EditRole);
     } else {
-        QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
-        if (doubleSpinBox) {
-//            doubleSpinBox->interpretText();
-            double value = doubleSpinBox->value();
+        QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+        if (spinBox) {
+            spinBox->interpretText();
+            int value = spinBox->value();
             model->setData(index, value, Qt::EditRole);
         }
     }

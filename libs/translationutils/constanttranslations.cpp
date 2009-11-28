@@ -137,6 +137,25 @@ QStringList dailySchemeList()
             << tkTr(Constants::BEDTIME);
 }
 
+QStringList dailySchemeXmlTagList()
+{
+    static QStringList tags;
+    if (tags.count())
+        return tags;
+    tags
+            << QString(Constants::WAKEUPTIME).remove(" ")
+            << QString(Constants::BREAKFAST).remove(" ")
+            << QString(Constants::MORNING).remove(" ")
+            << QString(Constants::MIDDAY).remove(" ")
+            << QString(Constants::AFTERNOON).remove(" ")
+            << QString(Constants::TEATIME).remove(" ")
+            << QString(Constants::DINER).remove(" ")
+            << QString(Constants::EVENING).remove(" ")
+            << QString(Constants::BEDTIME).remove(" ")
+            ;
+    return tags;
+}
+
 ///** \brief Transforms the dailyScheme enum Trans::Constants::Time::DailyScheme to the corresponding QStringList \e list */
 //QStringList dailySchemes(const Constants::Time::DailyScheme scheme)
 //{

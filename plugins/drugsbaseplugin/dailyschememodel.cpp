@@ -1,5 +1,7 @@
 #include "dailyschememodel.h"
 
+#include <QStringList>
+#include <QDebug>
 
 namespace {
     struct DailySchemeStruct {
@@ -21,7 +23,7 @@ public:
 
     double value(const int dayRef) const
     {
-        m_DayRef_Value.value(dayRef, 0);
+        return m_DayRef_Value.value(dayRef, 0);
     }
 
 private:
@@ -61,10 +63,29 @@ DailySchemeModel::~DailySchemeModel()
 
 QString DailySchemeModel::serializedContent() const
 {
-    return QString();
+    QString tmp;
+    const QStringList &schemes = Trans::ConstantTranslations::dailySchemeXmlTagList();
+    foreach(int k, d->m_DailySchemes.keys()) {
+        tmp += "<" + schemes.at(k) + "=" + QString::number(d->m_DailySchemes.value(k)) + ">";
+    }
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxx get" << tmp << d->m_DailySchemes;
+    return tmp;
 }
+
 void DailySchemeModel::setSerializedContent(const QString &content)
-{}
+{
+    d->m_DailySchemes.clear();
+    const QStringList &schemes = Trans::ConstantTranslations::dailySchemeXmlTagList();
+    QStringList xml = content.split(">");
+    foreach(const QString &line, xml) {
+        QStringList x = line.split("=");
+        if (x.count() != 2)
+            continue;
+        d->m_DailySchemes.insert(schemes.indexOf(x[0].remove("<")), x.at(1).toDouble());
+    }
+    reset();
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxx set" << content << d->m_DailySchemes;
+}
 
 void DailySchemeModel::setScored(bool isScored)
 {

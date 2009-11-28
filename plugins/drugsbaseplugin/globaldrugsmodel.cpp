@@ -28,11 +28,8 @@ public:
 
     void updateCachedAvailableDosage()
     {
-        /** \todo retreive all CIS from INN/QuantityDosage */
         m_CachedAvailableDosageForCIS.clear();
-        m_CachedAvailableDosageForINN.clear();
         m_CachedAvailableDosageForCIS = drugsBase()->getAllCISThatHaveRecordedDosages();
-        qWarning() <<  drugsBase()->getAllINNThatHaveRecordedDosages();
     }
 
     bool CISHasRecordedDosage(const int CIS)
@@ -40,13 +37,8 @@ public:
         return m_CachedAvailableDosageForCIS.contains(CIS);
     }
 
-    bool INNHasRecordedDosage(const int INN)
-    {
-        return m_CachedAvailableDosageForINN.contains(INN);
-    }
-
 private:
-    QList<int> m_CachedAvailableDosageForCIS, m_CachedAvailableDosageForINN;
+    QList<int> m_CachedAvailableDosageForCIS;
 
 };
 }  // End Internal
@@ -90,8 +82,6 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                     c.setAlpha(125);
                     return c;
                 }
-                //            if (d->INNHasRecordedDosage())
-                //                ;
             }
         }
     }

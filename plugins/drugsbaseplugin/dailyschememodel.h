@@ -46,7 +46,6 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-
     void setScored(bool isScored);
     void setDayRange(double min, double max);
 
