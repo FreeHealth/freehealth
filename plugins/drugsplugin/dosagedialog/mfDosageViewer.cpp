@@ -101,7 +101,7 @@ class DosageViewerPrivate
 {
 public:
     DosageViewerPrivate(DosageViewer *parent) :
-            m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_Parent(parent), m_SpinDelegate(0) {}
+            m_Mapper(0), m_DosageModel(0), m_CIS(-1), m_SpinDelegate(0), m_Parent(parent) {}
 
     void setCheckBoxStateToModel( const int index, const int qtCheckState )
     {
@@ -222,6 +222,7 @@ public:
             DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
             Q_ASSERT(daily);
             daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
+//            m_Parent->dailySchemeView->resizeColumnsToContents();
 //            m_Parent->dosageForAllInnCheck->setEnabled(DRUGMODEL->drugData(m_CIS, Drug::AllInnsKnown).toBool());
             m_Parent->dosageForAllInnCheck->setChecked(m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toBool());
             m_Parent->aldCheck->setChecked(m_DosageModel->index(row, Dosages::Constants::IsALD).data().toBool());
@@ -256,6 +257,7 @@ public:
             DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
             Q_ASSERT(daily);
             daily->setSerializedContent(drugModel()->drugData(m_CIS, Prescription::DailyScheme).toString());
+//            m_Parent->dailySchemeView->resizeColumnsToContents();
         }
 
         // Link to French RCP
@@ -346,15 +348,36 @@ public:
             m_SpinDelegate = 0;
         }
         if (isScored) {
-            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0.0,10.0,true);
+            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0.0,1.0,true);
         } else {
-            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,10,false);
+            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,1,false);
         }
         m_Parent->dailySchemeView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
         if (m_DosageModel)
             m_Parent->dosageForAllInnCheck->setEnabled(dosageCanLinkWithInn());
         else
             m_Parent->dosageForAllInnCheck->setVisible(dosageCanLinkWithInn());
+    }
+
+    void setDailyMaximum(double max)
+    {
+        DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+        Q_ASSERT(daily);
+        if (daily) {
+            daily->setMaximumDay(max);
+        }
+        if (m_SpinDelegate) {
+            m_SpinDelegate->setMaximum(max-daily->sum());
+        }
+    }
+
+    void recalculateDailySchemeMaximum()
+    {
+        if (!m_Parent->fromToIntakesCheck->isChecked()) {
+            setDailyMaximum(m_Parent->intakesFromSpin->value());
+        } else {
+            setDailyMaximum(m_Parent->intakesToSpin->value());
+        }
     }
 
     bool dosageCanLinkWithInn()
@@ -402,9 +425,9 @@ DosageViewer::DosageViewer( QWidget *parent )
     // this must be done here
     DrugsDB::DailySchemeModel *model = new DrugsDB::DailySchemeModel(this);
     dailySchemeView->setModel(model);
-    dailySchemeView->horizontalHeader()->hide();
-    dailySchemeView->verticalHeader()->hide();
-
+    dailySchemeView->resizeColumnToContents(0);
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this, SLOT(onDailySchemeModelDataChanged(QModelIndex)));
     tabWidget->setCurrentIndex(0);
 }
 
@@ -453,6 +476,7 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
     d->resetUiToDefaults();
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->m_Mapper->setCurrentIndex(dosageRow);
+    d->recalculateDailySchemeMaximum();
     qWarning() << dosageRow << QString("%1 = %2,").arg(drugModel()->drugData(d->m_CIS,DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
 }
 
@@ -512,6 +536,7 @@ void DosageViewer::on_fromToIntakesCheck_stateChanged(int state)
         d->setCheckBoxStateToModel( Dosages::Constants::IntakesUsesFromTo, state);
     else
         d->setCheckBoxStateToModel( DrugsDB::Constants::Prescription::IntakesUsesFromTo, state);
+    d->recalculateDailySchemeMaximum();
 }
 
 void DosageViewer::on_fromToDurationCheck_stateChanged(int state)
@@ -523,21 +548,23 @@ void DosageViewer::on_fromToDurationCheck_stateChanged(int state)
 }
 
 /** \brief Redefine the minimum of the "to" intakes */
-void DosageViewer::on_intakesFromSpin_valueChanged( double d  )
+void DosageViewer::on_intakesFromSpin_valueChanged(double value)
 {
-    if (intakesToSpin->value() < d) {
-        intakesToSpin->setValue( d );
+    if (intakesToSpin->value() < value) {
+        intakesToSpin->setValue(value);
     }
-    intakesToSpin->setMinimum(d);
+    intakesToSpin->setMinimum(value);
+    d->recalculateDailySchemeMaximum();
 }
 
 /** \brief Redefine the minimum of the "to" duration */
-void DosageViewer::on_durationFromSpin_valueChanged( double d )
+void DosageViewer::on_durationFromSpin_valueChanged(double value)
 {
-    if (durationToSpin->value() < d) {
-        durationToSpin->setValue( d );
+    if (durationToSpin->value() < value) {
+        durationToSpin->setValue(value);
     }
-    durationToSpin->setMinimum(d);
+    durationToSpin->setMinimum(value);
+    d->recalculateDailySchemeMaximum();
 }
 
 /** \brief Show a menu with the user recorded forms */
@@ -608,7 +635,6 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
 
 void DosageViewer::on_frenchRCPButton_clicked()
 {
-//    Core::HelpDialog::showPage();
     QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::LinkToFrenchRCP).toString()));
 }
 
@@ -617,3 +643,9 @@ void DosageViewer::on_tabWidget_currentChanged(int)
     if (tabWidget->currentWidget()==tabSchemes)
         d->resizeTableWidget();
 }
+
+void DosageViewer::onDailySchemeModelDataChanged(const QModelIndex &index)
+{
+    d->recalculateDailySchemeMaximum();
+}
+

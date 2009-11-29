@@ -47,7 +47,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     void setScored(bool isScored);
-    void setDayRange(double min, double max);
+    void setMaximumDay(double max);
+    double sum() const;
 
 private:
     Internal::DailySchemeModelPrivate *d;

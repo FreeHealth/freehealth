@@ -65,6 +65,15 @@
     </message>
 </context>
 <context>
+    <name>Editor::Internal::TablePropertiesDialog</name>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertiesdialog.ui" line="14"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertiesdialog.ui" line="32"/>
+        <source>Rich Text - Table Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Editor::Internal::TablePropertiesWidget</name>
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="14"/>
@@ -73,62 +82,130 @@
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="24"/>
+        <source>Border / Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="30"/>
         <source>Border</source>
         <translation type="unfinished">Rahmen</translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="30"/>
-        <source>Border width</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="40"/>
-        <source>Border style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="64"/>
-        <source>Spacings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="70"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="121"/>
         <source>Cell padding</source>
         <translation type="unfinished">Cell padding</translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="80"/>
-        <source>Cell margins</source>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="36"/>
+        <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="90"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="46"/>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="62"/>
         <source>Adjust column size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="97"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="72"/>
         <source>Adjust row size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="118"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="79"/>
+        <source>Margins, Padding and spacing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="99"/>
+        <source>Margins (pix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="114"/>
+        <source>Cell spacing</source>
+        <translation type="unfinished">Zellenabstand</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="141"/>
         <source>Colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="124"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="147"/>
         <source>Alterning rows color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="131"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="154"/>
         <source>Border color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="157"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="180"/>
         <source>Cells background color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TablePropertiesWidget</name>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="50"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="51"/>
+        <source>Dotted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="52"/>
+        <source>Dashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="53"/>
+        <source>Solid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="54"/>
+        <source>Double</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="55"/>
+        <source>Dot dash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="56"/>
+        <source>Dot dot dash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="57"/>
+        <source>Groove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="58"/>
+        <source>Rigde</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="59"/>
+        <source>Inset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="60"/>
+        <source>Outset</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

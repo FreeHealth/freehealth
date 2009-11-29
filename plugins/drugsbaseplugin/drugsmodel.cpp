@@ -148,12 +148,6 @@ public:
         if ((column < Prescription::Id) || (column > Prescription::MaxParam))
             return false;
         drug->setPrescriptionValue(column, value);
-
-
-        if (column==Prescription::DailyScheme)
-            qWarning() << "DrugsModel::setDrugData" << column << value;
-
-
         return true;
     }
 

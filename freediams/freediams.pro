@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freediams
 mac:TARGET       = $$quote(FreeDiams)
-PACKAGE_VERSION  = 0.1.5
+PACKAGE_VERSION  = 0.1.9
 
 # include general configuration
 INSTALL_DRUGS = 1
@@ -19,14 +19,17 @@ include( ../doc/manual-di.pri)
 PRE_TARGETDEPS += html_docs
 # }
 
-# define CORE BUILD for fmf exporter
-DEFINES *= CORE_BUILD
-
 QT *= sql \
     network \
     xml
+
 DEFINES *= FREEDIAMS
+
+macx:ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freediams.icns
+win32:RC_FILE=$${SOURCES_GLOBAL_RESOURCES}/textfiles/freediams_win32_icon.rc
 
 # sources
 SOURCES += \
     main.cpp \
+
+

@@ -10,6 +10,7 @@ version=0.2.0
       * Possibilité de paramétrer la fréquence des recherches de mise à jour
       * Nouvelle action : Vérification des mises à jour dans le menu A propos
       * Impression de duplicatas optionnelle
+      * Icone de l'application pour MacOs
 
    * Modifications importantes :
       * Division du plugin Drugs en deux : DrugsBase et Drugs
@@ -17,6 +18,7 @@ version=0.2.0
    * Correction de bogues / Améliorations techniques :
       * Correction de l'affichage du tableau des horaires dans le widget prescription (non prit en compte pour l'instant)
       * Schéma de prescription journalier corrigé
+      * Correction du retrait des noms de laboratoire des noms de médicaments (pb avec : EG <-> COTAREG)
 }
 
 version=0.1.4

@@ -26,7 +26,7 @@
         <translation>Intialisation du Core terminée...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="267"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="270"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation>Nouvelle version de FreeDiams détectée, vous devez renouveler l&apos;agrément de licence.</translation>
     </message>
@@ -167,12 +167,12 @@
 <context>
     <name>DebugDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="171"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="183"/>
         <source>Sending debugging informations to dev team</source>
         <translation>Envoie des informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="172"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="184"/>
         <source>Trying to send informations to dev team.
 Using Url : %1 
 Please wait...</source>
@@ -181,12 +181,12 @@ Sur l&apos;URL : %1
 Veuillez patienter...</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="193"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="205"/>
         <source>Debugging informations correctly sent.</source>
         <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="196"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="208"/>
         <source>Debugging informations correctly send to dev team.
 Using Url : %1 
 %2</source>
@@ -214,32 +214,32 @@ Sur l&apos;URL : %1
 <context>
     <name>PluginDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="54"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="71"/>
         <source>Details</source>
         <translation>Détails</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="55"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="72"/>
         <source>Error Details</source>
         <translation>Détails des erreurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="56"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="73"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="71"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="88"/>
         <source>Installed Plugins</source>
         <translation>Plugins installés</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="106"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="123"/>
         <source>Plugin Details of %1</source>
         <translation>Détails du plugin %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="126"/>
+        <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="143"/>
         <source>Plugin Errors of %1</source>
         <translation>Erreurs du plugin %1</translation>
     </message>

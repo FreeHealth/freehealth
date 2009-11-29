@@ -41,6 +41,7 @@
 #ifndef DRUGSINTERACTION_H
 #define DRUGSINTERACTION_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
 
 // include Qt headers
@@ -63,7 +64,7 @@ namespace Internal {
 class DrugsData;
 class InteractionsBase;
 
-class DrugsInteraction
+class DRUGSBASE_EXPORT DrugsInteraction
 {
     friend class InteractionsBase;
     friend class InteractionsBasePrivate;

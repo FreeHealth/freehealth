@@ -41,6 +41,7 @@
 #ifndef DOSAGEMODEL_H
 #define DOSAGEMODEL_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
 
 #include <QObject>
@@ -60,7 +61,7 @@ class DrugsModel;
 
 namespace Internal {
 
-class DosageModel : public QSqlTableModel
+class DRUGSBASE_EXPORT DosageModel : public QSqlTableModel
 {
     Q_OBJECT
 

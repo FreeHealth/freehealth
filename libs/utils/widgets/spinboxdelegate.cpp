@@ -11,6 +11,15 @@ SpinBoxDelegate::SpinBoxDelegate(QObject *parent, double min, double max, bool i
 {
 }
 
+void SpinBoxDelegate::setMaximum(double max)
+{
+    if (max<0) {
+        m_Max=0;
+        m_Min=0;
+    }
+    m_Max=max;    
+}
+
 QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &/* index */) const
@@ -34,11 +43,11 @@ QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
 void SpinBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+    QDoubleSpinBox *doubleSpinBox = qobject_cast<QDoubleSpinBox*>(editor);
     if (doubleSpinBox) {
         doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble());
     } else {
-        QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+        QSpinBox *spinBox = qobject_cast<QSpinBox*>(editor);
         if (spinBox) {
             spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
         }
@@ -49,12 +58,12 @@ void SpinBoxDelegate::setEditorData(QWidget *editor,
 void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
-    QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+    QDoubleSpinBox *doubleSpinBox = qobject_cast<QDoubleSpinBox*>(editor);
     if (doubleSpinBox) {
         double value = doubleSpinBox->value();
         model->setData(index, value, Qt::EditRole);
     } else {
-        QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+        QSpinBox *spinBox = qobject_cast<QSpinBox*>(editor);
         if (spinBox) {
             spinBox->interpretText();
             int value = spinBox->value();

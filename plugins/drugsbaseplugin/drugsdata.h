@@ -41,7 +41,7 @@
 #ifndef DRUGSDATA_H
 #define DRUGSDATA_H
 
-// include drugswidget headers
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
 
 // include Qt headers
@@ -199,7 +199,7 @@ public:
 
 using namespace DrugsDB::Constants;
 
-class DrugsData
+class DRUGSBASE_EXPORT DrugsData
 {
     friend class DrugsBase;
     friend class DrugsBasePrivate;
@@ -270,7 +270,7 @@ private:
 };
 
 
-class TextualDrugsData : public DrugsData
+class DRUGSBASE_EXPORT TextualDrugsData : public DrugsData
 {
 public:
     TextualDrugsData::TextualDrugsData();

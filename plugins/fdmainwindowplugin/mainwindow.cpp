@@ -96,6 +96,7 @@ using namespace Trans::ConstantTranslations;
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
 static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::Patient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
@@ -125,8 +126,9 @@ MainWindow::MainWindow( QWidget * parent )
           : Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
+    /** \todo add icon to the mainwindow */
+//    setWindowIcon(theme()->icon());
     messageSplash(tr("Creating Main Window"));
-//    recentFiles.clear();
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)

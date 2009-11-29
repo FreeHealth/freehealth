@@ -1,6 +1,8 @@
 #ifndef SPINBOXDELEGATE_H
 #define SPINBOXDELEGATE_H
 
+#include <utils/global_exporter.h>
+
 #include <QItemDelegate>
 #include <QWidget>
 #include <QObject>
@@ -11,11 +13,13 @@
 
 namespace Utils {
 
-class SpinBoxDelegate : public QItemDelegate
+class UTILS_EXPORT SpinBoxDelegate : public QItemDelegate
  {
      Q_OBJECT
  public:
      SpinBoxDelegate(QObject *parent = 0, double min = 0.0, double max = 100.0, bool isDouble = false);
+
+     void setMaximum(double max);
 
      QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const;

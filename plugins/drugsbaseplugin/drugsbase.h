@@ -41,6 +41,7 @@
 #ifndef DRUGSBASE_H
 #define DRUGSBASE_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/interactionsbase.h>
 
@@ -66,7 +67,7 @@ class DrugInteraction;
 class DrugInfo;
 class DrugsBasePrivate;
 
-class DrugsBase : public InteractionsBase
+class DRUGSBASE_EXPORT DrugsBase : public InteractionsBase
 {
     Q_OBJECT
     DrugsBase( QObject *parent = 0 );
