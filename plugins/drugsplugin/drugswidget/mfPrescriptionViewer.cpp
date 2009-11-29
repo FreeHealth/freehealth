@@ -78,7 +78,7 @@ PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
         QWidget(parent),
         m_ToolBar(0)
 {
-    setObjectName("mfPrescriptionViewer");
+    setObjectName("PrescriptionViewer");
     setupUi(this);
 }
 
@@ -109,7 +109,7 @@ void PrescriptionViewer::setModelColumn(const int col)
 void PrescriptionViewer::setListViewPadding(const int pad)
 {
 //    listView->setSpacing(pad);
-    listView->setStyleSheet(QString("QListView#mfPrescriptionListView:item { padding: %1px; }").arg(pad));
+    listView->setStyleSheet(QString("QListView#PrescriptionListView:item { padding: %1px; }").arg(pad));
 }
 
 /** \brief Creates actions and toolbar */
@@ -236,11 +236,11 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
             drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
         }
     }
-
-//    listView->repaint();
+    // This is used to force listView to redraw all rows with the good height is user changes note or whatever
+    listView->setViewMode(QListView::ListMode);
 }
 
-/** \brief Opens the mfInteractionDialog. */
+/** \brief Opens the InteractionDialog. */
 void PrescriptionViewer::viewInteractions()
 {
      Internal::InteractionDialog dlg(this);
@@ -274,6 +274,7 @@ void PrescriptionViewer::changeDuration()
     root->popup(mapToGlobal(m_ToolBar->actionGeometry(a).center()));
 }
 
+/** \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
 void PrescriptionViewer::changeDurationTo()
 {
     QAction *a = qobject_cast<QAction*>(sender());
