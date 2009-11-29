@@ -305,13 +305,13 @@ bool DrugsBase::createDatabase( const QString & connectionName , const QString &
         DB.open();
     }
     else if (driver == MySQL) {
-        // TODO : how to create a new mysql database ???
+        /** \todo how to create a new mysql database ??? */
     }
 
     // create db structure
     // before we need to inform Utils::Database of the connectionName to use
     setConnectionName(connectionName);
-    // The SQL scheme MUST BE synchronized with the mfDosageConstants Model Enumerator !!!
+    // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     if (executeSQL(QStringList()
         << "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
            "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
@@ -388,6 +388,7 @@ bool DrugsBase::createDatabase( const QString & connectionName , const QString &
 void DrugsBase::checkDosageDatabaseVersion()
 {
     Q_ASSERT(!qApp->applicationVersion().isEmpty());
+    /** \todo code here */
     QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` ASC LIMIT 1;";
 //    if (ret!=qApp->applicationVersion())
 //        Utils::Log::addError(this, tr("Dosage database need to be updated from %1 to %2").arg(ret, qApp->applicationVersion()));
@@ -501,7 +502,7 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
     // Get all CIS that contains INN that have available dosage
     QMultiHash<int, QString> inn_dosageRef = getAllINNThatHaveRecordedDosages();
 
-    //    get all code_subst from INNs
+    // get all code_subst from INNs
     QHash<int, QString> where;
     QString tmp;
     QList<int> code_subst;
@@ -553,21 +554,23 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
             if (!innsOfThisDrug.contains(compo.inn))
                 innsOfThisDrug << compo.inn;
             QString d = compo.dosage;
-            QString r = inn_dosageRef.value(compo.inn);
-            // remove unneeded strings
-            if (d == r)
-                toReturn << cis;
-            else if (d.remove(",000") == r)
-                toReturn << cis;
-            else if (d.remove(",00") == r)
-                toReturn << cis;
+            foreach(const QString &r, inn_dosageRef.values(compo.inn)) {
+                // remove unneeded strings
+                if (d == r)
+                    toReturn << cis;
+                else if (d.remove(",000") == r)
+                    toReturn << cis;
+                else if (d.remove(",00") == r)
+                    toReturn << cis;
 
-            // try unit conversion
-            if (d.replace("000 mg", " g") == r) {
-                toReturn << cis;
-            }
-            if (r.replace("000 mg", " g") == d) {
-                toReturn << cis;
+                // try unit conversion
+                if (d.replace("000 mg", " g") == r) {
+                    toReturn << cis;
+                }
+                QString t = r;
+                if (t.replace("000 mg", " g") == d) {
+                    toReturn << cis;
+                }
             }
         }
         if (innsOfThisDrug.count() > 1)
