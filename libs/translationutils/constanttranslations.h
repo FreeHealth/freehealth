@@ -100,7 +100,8 @@ namespace Time {
 
     enum MealTime
     {
-        NoRelationWiyhMeal = 0,
+        Undefined = 0,
+        NoRelationWithMeal,
         DuringMeal,
         BeforeMeal,
         AfterMeal,
@@ -113,6 +114,7 @@ namespace Time {
         DS_WakeUpTime = 0,
         DS_Breakfast,
         DS_Morning,
+        DS_10OClockBrunch,
         DS_MidDay,
         DS_Afternoon,
         DS_TeaTime,
@@ -257,8 +259,8 @@ namespace Time {
         // Day
         const char* const WAKEUPTIME           = QT_TRANSLATE_NOOP("tkConstants", "wake up");
         const char* const BREAKFAST            = QT_TRANSLATE_NOOP("tkConstants", "breakfast");
+        const char* const TENOCLOCKBRUNCH      = QT_TRANSLATE_NOOP("tkConstants", "ten o'clock brunch");
         const char* const MORNING              = QT_TRANSLATE_NOOP("tkConstants", "morning");
-        const char* const TENOCLOCK            = QT_TRANSLATE_NOOP("tkConstants", "ten o'clock");
         const char* const MIDDAY               = QT_TRANSLATE_NOOP("tkConstants", "midday");
         const char* const AFTERNOON            = QT_TRANSLATE_NOOP("tkConstants", "afternoon");
         const char* const TEATIME              = QT_TRANSLATE_NOOP("tkConstants", "tea time");

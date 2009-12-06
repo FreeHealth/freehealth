@@ -62,7 +62,7 @@
 #include <drugsplugin/drugswidgetmanager.h>
 
 #include <utils/log.h>
-#include <utils/widgets/spinboxdelegate.h>
+//#include <utils/widgets/spinboxdelegate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <listviewplugin/stringlistmodel.h>
@@ -219,7 +219,7 @@ public:
                 m_Parent->durationToSpin->show();
             }
             // populate DailSchemeModel
-            DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+            DrugsDB::DailySchemeModel *daily = m_Parent->dailyScheme->model();
             Q_ASSERT(daily);
             daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
 //            m_Parent->dailySchemeView->resizeColumnsToContents();
@@ -254,7 +254,7 @@ public:
             }
             m_Parent->aldCheck->setChecked(drugModel()->drugData(m_CIS, Prescription::IsALD).toBool());
             // populate DailSchemeModel
-            DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+            DrugsDB::DailySchemeModel *daily = m_Parent->dailyScheme->model();
             Q_ASSERT(daily);
             daily->setSerializedContent(drugModel()->drugData(m_CIS, Prescription::DailyScheme).toString());
 //            m_Parent->dailySchemeView->resizeColumnsToContents();
@@ -343,40 +343,41 @@ public:
         }
         resizeTableWidget();
 
-        if (m_SpinDelegate) {
-            delete m_SpinDelegate;
-            m_SpinDelegate = 0;
-        }
-        if (isScored) {
-            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0.0,1.0,true);
-        } else {
-            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,1,false);
-        }
-        m_Parent->dailySchemeView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
+//        if (m_SpinDelegate) {
+//            delete m_SpinDelegate;
+//            m_SpinDelegate = 0;
+//        }
+//        if (isScored) {
+//            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0.0,1.0,true);
+//        } else {
+//            m_SpinDelegate = new Utils::SpinBoxDelegate(m_Parent,0,1,false);
+//        }
+//        m_Parent->dailySchemeView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
         if (m_DosageModel)
             m_Parent->dosageForAllInnCheck->setEnabled(dosageCanLinkWithInn());
         else
             m_Parent->dosageForAllInnCheck->setVisible(dosageCanLinkWithInn());
     }
 
-    void setDailyMaximum(double max)
-    {
-        DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
-        Q_ASSERT(daily);
-        if (daily) {
-            daily->setMaximumDay(max);
-        }
-        if (m_SpinDelegate) {
-            m_SpinDelegate->setMaximum(max-daily->sum());
-        }
-    }
+//    void setDailyMaximum(double max)
+//    {
+//        DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(m_Parent->dailySchemeView->model());
+//        DrugsDB::DailySchemeModel *daily = m_Parent->dailyScheme->model();
+//        Q_ASSERT(daily);
+//        if (daily) {
+//            daily->setMaximumDay(max);
+//        }
+//        if (m_SpinDelegate) {
+//            m_SpinDelegate->setMaximum(max-daily->sum());
+//        }
+//    }
 
     void recalculateDailySchemeMaximum()
     {
         if (!m_Parent->fromToIntakesCheck->isChecked()) {
-            setDailyMaximum(m_Parent->intakesFromSpin->value());
+            m_Parent->dailyScheme->setDailyMaximum(m_Parent->intakesFromSpin->value());
         } else {
-            setDailyMaximum(m_Parent->intakesToSpin->value());
+            m_Parent->dailyScheme->setDailyMaximum(m_Parent->intakesToSpin->value());
         }
     }
 
@@ -422,13 +423,15 @@ DosageViewer::DosageViewer( QWidget *parent )
     // remove last page of tabWidget (TODO page)
     tabWidget->removeTab(tabWidget->count()-1);
 
-    // this must be done here
+    // define models
     DrugsDB::DailySchemeModel *model = new DrugsDB::DailySchemeModel(this);
-    dailySchemeView->setModel(model);
-    dailySchemeView->resizeColumnToContents(0);
+    dailyScheme->setModel(model);
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(onDailySchemeModelDataChanged(QModelIndex)));
+
+    // show first page of the tabwidget   ;;   Hide unused tables
     tabWidget->setCurrentIndex(0);
+    this->hourlyTableWidget->hide();
 }
 
 /** \brief Use this function to define a drugsModel behavior. */
@@ -485,7 +488,8 @@ void DosageViewer::commitToModel()
 {
     d->m_Mapper->submit();
     // populate DailyShemeModel
-    DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(dailySchemeView->model());
+    /** \todo Use DailySchemeViewer Properties */
+    DrugsDB::DailySchemeModel *daily = dailyScheme->model();
     Q_ASSERT(daily);
     if (d->m_DosageModel) {
         if (daily) {
@@ -494,7 +498,7 @@ void DosageViewer::commitToModel()
     } else {
         if (daily) {
             drugModel()->setDrugData(d->m_CIS, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
-            drugModel()->warn();
+//            drugModel()->warn();
         }
     }
 }

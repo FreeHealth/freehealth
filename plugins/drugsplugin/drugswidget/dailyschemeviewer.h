@@ -38,47 +38,57 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef SPINBOXDELEGATE_H
-#define SPINBOXDELEGATE_H
+#ifndef DAILYSCHEMEVIEWER_H
+#define DAILYSCHEMEVIEWER_H
 
-#include <utils/global_exporter.h>
-
-#include <QItemDelegate>
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QObject>
-#include <QModelIndex>
-#include <QStyleOptionViewItem>
-#include <QSize>
+
+/**
+ * \file dailyschemeviewer.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.0
+ * \date 05 dec 2009
+*/
 
 
 namespace Utils {
+class SpinBoxDelegate;
+}
 
-class UTILS_EXPORT SpinBoxDelegate : public QItemDelegate
- {
-     Q_OBJECT
- public:
-     SpinBoxDelegate(QObject *parent = 0, double min = 0.0, double max = 100.0, bool isDouble = false);
+namespace DrugsDB {
+class DailySchemeModel;
+}
 
-     void setMaximum(double max);
-     void setDouble(bool isDouble);
+namespace DrugsWidget {
+namespace Internal {
+class DailySchemeViewerPrivate;
 
-     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                           const QModelIndex &index) const;
+class DailySchemeViewer : public QWidget
+{
+    Q_OBJECT
+    /** \todo Add properties for the mapper ? */
 
-     void setEditorData(QWidget *editor, const QModelIndex &index) const;
-     void setModelData(QWidget *editor, QAbstractItemModel *model,
-                       const QModelIndex &index) const;
+public:
+    DailySchemeViewer(QWidget *parent = 0);
+    ~DailySchemeViewer();
 
-     void updateEditorGeometry(QWidget *editor,
-         const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setModel(DrugsDB::DailySchemeModel *model);
+    DrugsDB::DailySchemeModel *model() const;
 
- private:
-     bool m_IsDouble;
-     double m_Min, m_Max;
- };
+    void setScoredTablet(bool isScored);
+    void setDailyMaximum(double maximum);
+
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    DailySchemeViewerPrivate *d;
+};
 
 
-} // end namespace Utils
+}  // end namespace Internal
+}  // End namespace DrugsWidget
 
 
-#endif // SPINBOXDELEGATE_H
+#endif // DAILYSCHEMEVIEWER_H

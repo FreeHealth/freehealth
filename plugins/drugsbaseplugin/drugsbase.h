@@ -70,7 +70,7 @@ class DrugsBasePrivate;
 class DRUGSBASE_EXPORT DrugsBase : public InteractionsBase
 {
     Q_OBJECT
-    DrugsBase( QObject *parent = 0 );
+    DrugsBase(QObject *parent = 0);
     bool init();
 
     friend class DrugsModel;
@@ -113,15 +113,15 @@ public:
     static const QString separator;
 
     // managins drugs
-    bool         drugsINNIsKnown( const DrugsData *drug );
+    bool drugsINNIsKnown(const DrugsData *drug);
 
 private:
-    bool createDatabase(  const QString & connectionName , const QString & dbName,
-                          const QString & pathOrHostName,
-                          TypeOfAccess access, AvailableDrivers driver,
-                          const QString & /*login*/, const QString & /*pass*/,
-                          CreationOption /*createOption*/
-                          );
+    bool createDatabase(const QString & connectionName , const QString & dbName,
+                        const QString & pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString & /*login*/, const QString & /*pass*/,
+                        CreationOption /*createOption*/
+                        );
 
 private:
     // intialization state

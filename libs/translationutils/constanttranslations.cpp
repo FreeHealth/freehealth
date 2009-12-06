@@ -129,6 +129,7 @@ QStringList dailySchemeList()
             << tkTr(Constants::WAKEUPTIME)
             << tkTr(Constants::BREAKFAST)
             << tkTr(Constants::MORNING)
+            << tkTr(Constants::TENOCLOCKBRUNCH)
             << tkTr(Constants::MIDDAY)
             << tkTr(Constants::AFTERNOON)
             << tkTr(Constants::TEATIME)
@@ -146,6 +147,7 @@ QStringList dailySchemeXmlTagList()
             << QString(Constants::WAKEUPTIME).remove(" ")
             << QString(Constants::BREAKFAST).remove(" ")
             << QString(Constants::MORNING).remove(" ")
+            << QString(Constants::TENOCLOCKBRUNCH).remove(" ").remove("'")
             << QString(Constants::MIDDAY).remove(" ")
             << QString(Constants::AFTERNOON).remove(" ")
             << QString(Constants::TEATIME).remove(" ")
@@ -218,6 +220,7 @@ QStringList preDeterminedAges()
 QStringList mealTime()
 {
     return QStringList()
+           << ""
            << tkTr(Constants::NOMEALRELATION)
            << tkTr(Constants::DURINGMEAL)
            << tkTr(Constants::BEFOREMEAL)
@@ -233,7 +236,8 @@ QStringList mealTime()
 QString mealTime(const int index)
 {
     switch (index) {
-         case Constants::Time::NoRelationWiyhMeal : return tkTr(Constants::NOMEALRELATION);
+         case Constants::Time::Undefined : return QString();
+         case Constants::Time::NoRelationWithMeal : return tkTr(Constants::NOMEALRELATION);
          case Constants::Time::DuringMeal: return tkTr(Constants::DURINGMEAL);
          case Constants::Time::BeforeMeal: return tkTr(Constants::BEFOREMEAL);
          case Constants::Time::AfterMeal: return tkTr(Constants::AFTERMEAL);

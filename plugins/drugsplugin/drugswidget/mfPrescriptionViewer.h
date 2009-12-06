@@ -53,8 +53,8 @@
 /**
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.2.2
+ * \date 29 Nov 2009
  * \brief
 */
 

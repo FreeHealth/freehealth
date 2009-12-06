@@ -6,7 +6,10 @@ INCLUDEPATH *= $${PWD}
 HEADERS += $${PWD}/drugs_exporter.h \
     $${PWD}/constants.h \
     $${PWD}/drugswidgetmanager.h
+
+
 SOURCES += $${PWD}/drugswidgetmanager.cpp
+
 
 # Dosage Dialog
 HEADERS += $${PWD}/dosagedialog/mfDosageDialog.h \
@@ -37,22 +40,24 @@ HEADERS += $${PWD}/drugswidget/druginfo.h \
     $${PWD}/drugswidget/mfPrescriptionViewer.h \
     $${PWD}/drugswidget/mfInteractionDialog.h \
     $${PWD}/drugswidget/mfDrugsCentralWidget.h \
-    $${PWD}/drugswidget/textualprescriptiondialog.h
+    $${PWD}/drugswidget/textualprescriptiondialog.h \
+    $${PWD}/drugswidget/dailyschemeviewer.h
 
 SOURCES += $${PWD}/drugswidget/druginfo.cpp \
     $${PWD}/drugswidget/mfDrugSelector.cpp \
     $${PWD}/drugswidget/mfPrescriptionViewer.cpp \
     $${PWD}/drugswidget/mfInteractionDialog.cpp \
     $${PWD}/drugswidget/mfDrugsCentralWidget.cpp \
-    $${PWD}/drugswidget/textualprescriptiondialog.cpp
+    $${PWD}/drugswidget/textualprescriptiondialog.cpp \
+    $${PWD}/drugswidget/dailyschemeviewer.cpp
 
 FORMS += $${PWD}/drugswidget/druginfo.ui \
     $${PWD}/drugswidget/mfDrugSelector.ui \
     $${PWD}/drugswidget/mfPrescriptionViewer.ui \
     $${PWD}/drugswidget/mfInteractionDialog.ui \
     $${PWD}/drugswidget/mfDrugsCentralWidget.ui \
-    $${PWD}/drugswidget/textualprescriptiondialog.ui
-
+    $${PWD}/drugswidget/textualprescriptiondialog.ui \
+    $${PWD}/drugswidget/dailyschemeviewer.ui
 
 # translations
 TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts \

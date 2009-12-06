@@ -92,7 +92,7 @@ namespace Constants {
     const char * const  S_INTERACTIONVIEW_ZOOM   = "DrugsWidget/view/InteractionViewer/Zoom";  /*!< \brief Key for settings. */
     const char * const  S_DRUGFONT               = "DrugsWidget/print/drug/Font";              /*!< \brief Key for settings. */
     const char * const  S_PRESCRIPTIONFONT       = "DrugsWidget/print/prescription/Font";      /*!< \brief Key for settings. */
-    const char * const  S_PRINTDUPLICATAS                      = "DrugsWidget/PrintDuplicatas";
+    const char * const  S_PRINTDUPLICATAS        = "DrugsWidget/PrintDuplicatas";
 
     const char * const  S_WATERMARKALIGNEMENT    = "DrugsWidget/print/watermark/Alignment";    /*!< \brief Key for settings. \obsolete*/
     const char * const  S_WATERMARKPRESENCE      = "DrugsWidget/print/watermark/Presence";     /*!< \brief Key for settings. */

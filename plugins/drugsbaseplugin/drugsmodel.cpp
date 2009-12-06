@@ -55,6 +55,7 @@
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/interactionsmanager.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/dailyschememodel.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -359,7 +360,7 @@ QModelIndex DrugsModel::createIndex(int /*row*/, int /*column*/, quint32 /*id*/)
   Dosages values are not accessible from here. Use the mfDosageModel.\n
   Prescritions values are writables. Informations are transmitted using DrugsDB::setPrescriptionValue().
 */
-bool DrugsModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Q_UNUSED(role);
     if (!index.isValid())
@@ -369,7 +370,6 @@ bool DrugsModel::setData(const QModelIndex & index, const QVariant & value, int 
         return false;
     Internal::DrugsData *drug = d->m_DrugsList.at(row);
     if (d->setDrugData(drug, index.column(), value)) {
-        // inform of the modification
         Q_EMIT dataChanged(index, index);
         QModelIndex fullPrescr = this->index(index.row(), Constants::Drug::FullPrescription);
         Q_EMIT dataChanged(fullPrescr, fullPrescr);
@@ -819,20 +819,27 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
 
     // Manage Daily Scheme See DailySchemeModel::setSerializedContent
-    QString daily;
-    const QStringList &dailyTags = Trans::ConstantTranslations::dailySchemeXmlTagList();
-    const QStringList &dailySchemes = Trans::ConstantTranslations::dailySchemeList();
-    QStringList xml = drug->prescriptionValue(Constants::Prescription::DailyScheme).toString().split(">");
-    foreach(const QString &line, xml) {
-        QStringList x = line.split("=");
-        if (x.count()!=2)
-            continue;
-        daily += dailySchemes.at(dailyTags.indexOf(x[0].remove("<"))) + " : " + x.at(1) + ", ";
+    DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
+    day->setSerializedContent(drug->prescriptionValue(Constants::Prescription::DailyScheme).toString());
+//    QString daily;
+//    const QStringList &dailyTags = Trans::ConstantTranslations::dailySchemeXmlTagList();
+//    const QStringList &dailySchemes = Trans::ConstantTranslations::dailySchemeList();
+//    QStringList xml = drug->prescriptionValue(Constants::Prescription::DailyScheme).toString().split(">");
+//    foreach(const QString &line, xml) {
+//        QStringList x = line.split("=");
+//        if (x.count()!=2)
+//            continue;
+//        daily += dailySchemes.at(dailyTags.indexOf(x[0].remove("<"))) + " : " + x.at(1) + ", ";
+//    }
+//    daily.chop(2);
+    tokens_value["REPEATED_DAILY_SCHEME"] = day->humanReadableRepeatedDailyScheme();
+    tokens_value["DISTRIBUTED_DAILY_SCHEME"] = day->humanReadableDistributedDailyScheme();
+    delete day;
+    if (tokens_value.value("REPEATED_DAILY_SCHEME").isEmpty()) {
+        tokens_value["DAILY_SCHEME"] = tokens_value.value("DISTRIBUTED_DAILY_SCHEME");
+    } else {
+        tokens_value["DAILY_SCHEME"] = tokens_value.value("REPEATED_DAILY_SCHEME");
     }
-    daily.chop(2);
-//    daily.prepend("(");
-//    daily.append(")");
-    tokens_value["DAILY_SCHEME"] = daily;
 
     tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
     tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
