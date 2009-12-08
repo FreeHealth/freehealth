@@ -122,6 +122,11 @@ DailySchemeModel::~DailySchemeModel()
     }
 }
 
+void DailySchemeModel::clear()
+{
+    d->m_DailySchemes.clear();
+}
+
 void DailySchemeModel::setMethod(Method method)
 {
     if (method==d->m_Method)
@@ -146,12 +151,12 @@ QString DailySchemeModel::serializedContent() const
     const QStringList &schemes = Trans::ConstantTranslations::dailySchemeXmlTagList();
     foreach(int k, d->m_DailySchemes.keys()) {
         if (d->m_DailySchemes.value(k))
-            tmp += "<" + schemes.at(k) + "=" + QString::number(d->m_DailySchemes.value(k)) + ">";
+            tmp += "<" + schemes.at(k) + " value=" + QString::number(d->m_DailySchemes.value(k)) + "/>";
     }
     if (d->m_Method == Repeat) {
-        tmp.prepend("<Repeat>");
+        tmp.prepend("<Repeat/>");
     } else {
-        tmp.prepend("<Distribute>");
+        tmp.prepend("<Distribute/>");
     }
     return tmp;
 }
@@ -160,14 +165,17 @@ void DailySchemeModel::setSerializedContent(const QString &content)
 {
     d->m_DailySchemes.clear();
     const QStringList &schemes = Trans::ConstantTranslations::dailySchemeXmlTagList();
-    QStringList xml = content.split(">");
+    QString tmp = content;
+    tmp.remove("<Distribute/>");
+    tmp.remove("<Repeat/>");
+    QStringList xml = tmp.split("/>");
     foreach(const QString &line, xml) {
-        QStringList x = line.split("=");
+        QStringList x = line.split(" value=");
         if (x.count() != 2)
             continue;
         d->m_DailySchemes.insert(schemes.indexOf(x[0].remove("<")), x.at(1).toDouble());
     }
-    if (content.startsWith("<Repeat>")) {
+    if (content.startsWith("<Repeat/>")) {
         setMethod(Repeat);
     } else {
         setMethod(Distribute);

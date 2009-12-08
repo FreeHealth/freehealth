@@ -219,12 +219,13 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
     int CIS = drugModel()->index(item.row(), DrugsDB::Constants::Drug::CIS).data().toInt();
+    bool isTextual = drugModel()->index(item.row(), DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
     int row = item.row();
     if (CIS!=-1) {
         Internal::DosageDialog dlg(this);
         dlg.changeRow(CIS, row);
         dlg.exec();
-    } else {
+    } else if (isTextual) {
         TextualPrescriptionDialog dlg(this);
         dlg.setDrugLabel(drugModel()->index(row,DrugsDB::Constants::Drug::Denomination).data().toString());
         dlg.setDrugNote(drugModel()->index(row,DrugsDB::Constants::Prescription::Note).data().toString());

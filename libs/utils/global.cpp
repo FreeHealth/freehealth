@@ -952,18 +952,22 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
     int tokenLength = token.length() + QString(Constants::TOKEN_OPEN).length() + QString(Constants::TOKEN_CLOSE).length();
     int toReturn = 0;
     while (true) {
+        // Find '[TOKEN]'
         begin = textToAnalyse.indexOf(Constants::TOKEN_OPEN + token + Constants::TOKEN_CLOSE, begin);
         if (begin==-1)
             break;
         end = begin + tokenLength;
+        // Find text before '[ BEFORE [TOKEN]]'
         beforeBegin = textToAnalyse.lastIndexOf( Constants::TOKEN_OPEN, begin - 1);
+        // Find text after '[[TOKEN] AFTER ]'
         afterEnd = textToAnalyse.indexOf( Constants::TOKEN_CLOSE, end );
         if ((beforeBegin==-1) || (afterEnd==-1)) {
             Utils::Log::addError("Utils", QApplication::translate("Utils", "Token replacement error (%1). Wrong number of parentheses.")
-                                                                .arg(token));
+                                                                .arg(token + QString::number(beforeBegin)));
             begin = end;
             continue;
         }
+        // Replace TOKEN and manage AFTER and BEFORE
         if (value.isEmpty()) {
             textToAnalyse.remove(beforeBegin, afterEnd-beforeBegin+1);
             ++toReturn;

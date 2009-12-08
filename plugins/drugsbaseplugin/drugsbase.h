@@ -86,7 +86,6 @@ public:
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
-    void checkDosageDatabaseVersion();
     void logChronos( bool state );
 
     // Manage drugs contents
@@ -103,6 +102,8 @@ public:
     QString    getInnDenomination( const int inncode ) const;
 
     // Manage Dosages
+    void checkDosageDatabaseVersion();
+    static QString dosageCreateTableSqlQuery();
     QHash<QString, QString> getDosageToTransmit();
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
     QList<int> getAllCISThatHaveRecordedDosages() const;

@@ -97,18 +97,16 @@ public:
 /**
   \brief Constructor
   \param parent : parent QWidget
-  \param drugRow : row of the drug inside the actual model \todo Change to QPersistentModelIndex
-  \param dosageRow : row of the dosage to use in the actual model \todo Change to QPersistentModelIndex
 */
-DosageDialog::DosageDialog( QWidget *parent )
+DosageDialog::DosageDialog(QWidget *parent)
     : QDialog( parent ),
     d(0)
 {
-    setObjectName( "DosageDialog" );
+    setObjectName("DosageDialog");
     d = new DosageDialogPrivate();
     setupUi(this);
-    innButton->setIcon( Core::ICore::instance()->theme()->icon(DrugsDB::Constants::I_SEARCHINN));
-    setWindowTitle( tr( "Drug Dosage" ) + " - " + qApp->applicationName() );
+    innButton->setIcon(Core::ICore::instance()->theme()->icon(DrugsDB::Constants::I_SEARCHINN));
+    setWindowTitle(tr("Drug Dosage") + " - " + qApp->applicationName() );
 
     // make connections
     connect( drugModel(), SIGNAL(prescriptionResultChanged(const QString &)),

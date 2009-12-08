@@ -100,6 +100,18 @@ private:
     Internal::DrugsIOPrivate *d;
 };
 
+class DrugsIOUpdate
+{
+public:
+    DrugsIOUpdate() {}
+    virtual ~DrugsIOUpdate() {}
+
+    virtual QString fromVersion() const = 0;
+    virtual QString toVersion() const = 0;
+
+    virtual bool executeUpdate() const = 0;
+};
+
 }  // End DrugsDB
 
 #endif // DRUGSIO_H

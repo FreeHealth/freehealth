@@ -488,7 +488,7 @@ void DosageViewer::commitToModel()
 {
     d->m_Mapper->submit();
     // populate DailyShemeModel
-    /** \todo Use DailySchemeViewer Properties */
+    /** \todo Create and Use DailySchemeViewer Properties */
     DrugsDB::DailySchemeModel *daily = dailyScheme->model();
     Q_ASSERT(daily);
     if (d->m_DosageModel) {
@@ -498,7 +498,6 @@ void DosageViewer::commitToModel()
     } else {
         if (daily) {
             drugModel()->setDrugData(d->m_CIS, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
-//            drugModel()->warn();
         }
     }
 }

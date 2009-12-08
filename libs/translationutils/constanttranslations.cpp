@@ -131,10 +131,10 @@ QStringList dailySchemeList()
             << tkTr(Constants::MORNING)
             << tkTr(Constants::TENOCLOCKBRUNCH)
             << tkTr(Constants::MIDDAY)
-            << tkTr(Constants::AFTERNOON)
+            << tkTr(Constants::LUNCH)
             << tkTr(Constants::TEATIME)
-            << tkTr(Constants::DINER)
             << tkTr(Constants::EVENING)
+            << tkTr(Constants::DINER)
             << tkTr(Constants::BEDTIME);
 }
 
@@ -149,10 +149,10 @@ QStringList dailySchemeXmlTagList()
             << QString(Constants::MORNING).remove(" ")
             << QString(Constants::TENOCLOCKBRUNCH).remove(" ").remove("'")
             << QString(Constants::MIDDAY).remove(" ")
-            << QString(Constants::AFTERNOON).remove(" ")
+            << QString(Constants::LUNCH).remove(" ")
             << QString(Constants::TEATIME).remove(" ")
-            << QString(Constants::DINER).remove(" ")
             << QString(Constants::EVENING).remove(" ")
+            << QString(Constants::DINER).remove(" ")
             << QString(Constants::BEDTIME).remove(" ")
             ;
     return tags;

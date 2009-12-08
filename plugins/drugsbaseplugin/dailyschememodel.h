@@ -51,8 +51,8 @@
 /**
  * \file dailyschememodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 23 Nov 2009
+ * \version 0.2.1
+ * \date 07 Dec 2009
 */
 
 namespace DrugsDB {
@@ -81,6 +81,8 @@ public:
 
     DailySchemeModel(QObject * parent = 0, const QString &serializedContent = QString::null);
     ~DailySchemeModel();
+
+    void clear();
 
     void setMethod(Method method);
     Method method() const;

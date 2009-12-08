@@ -1,11 +1,13 @@
 version=0.2.0
 {
-    * Nov 2009
+    * Déc 2009
+
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 26/06/2009
       * Interactions : AFSSAPS - 29/06/2009
 
    * Nouvelles fonctionnalités :
+      * Mise à jour automatique de la base de données posologique
       * Propriétés du tableau dans l'éditeur de texte enrichi
       * Possibilité de paramétrer la fréquence des recherches de mise à jour
       * Nouvelle action : Vérification des mises à jour dans le menu A propos
@@ -19,6 +21,8 @@ version=0.2.0
       * Correction de l'affichage du tableau des horaires dans le widget prescription (non prit en compte pour l'instant)
       * Schéma de prescription journalier corrigé
       * Correction du retrait des noms de laboratoire des noms de médicaments (pb avec : EG <-> COTAREG)
+      * La répartition journalière est correctement sauvegardée
+      * Prise en compte des sauts de ligne dans la note lors de l'impression
 }
 
 version=0.1.4

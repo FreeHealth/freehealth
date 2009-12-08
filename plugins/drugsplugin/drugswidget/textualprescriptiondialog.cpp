@@ -41,6 +41,8 @@
 #include "textualprescriptiondialog.h"
 #include "ui_textualprescriptiondialog.h"
 
+#include <utils/global.h>
+
 #include <QTextEdit>
 
 using namespace DrugsWidget;
@@ -55,6 +57,17 @@ TextualPrescriptionDialog::TextualPrescriptionDialog(QWidget *parent) :
 TextualPrescriptionDialog::~TextualPrescriptionDialog()
 {
     delete m_ui;
+}
+
+void TextualPrescriptionDialog::done(int result)
+{
+    if (result==QDialog::Accepted) {
+        if (drugLabel().contains("[") || drugNote().contains("]")) {
+            Utils::warningMessageBox(tr("Text can not contain any '[' or ']'."), tr("Please remove these chars from your texts"),"","");
+            return;
+        }
+    }
+    QDialog::done(result);
 }
 
 QString TextualPrescriptionDialog::drugLabel() const

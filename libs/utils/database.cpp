@@ -203,7 +203,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     }
 
     // test read access to database
-    if (! QFileInfo(pathOrHostName + QDir::separator() + dbName ).isReadable() ) {
+    if (!QFileInfo(pathOrHostName + QDir::separator() + dbName ).isReadable()) {
         Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2" )
                          .arg(dbName, pathOrHostName));
         toReturn = false;
@@ -211,8 +211,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
 
     // test write access
     // TODO manage MySQL
-    if (driver == SQLite ) {
-        if ((access == ReadWrite)&& (! QFileInfo(pathOrHostName + QDir::separator() + dbName ).isWritable())) {
+    if (driver == SQLite) {
+        if ((access == ReadWrite) && (!QFileInfo(pathOrHostName + QDir::separator() + dbName).isWritable())) {
             Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not writable. Path : %2." )
                              .arg(dbName, pathOrHostName));
             toReturn = false;
@@ -225,17 +225,17 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     {
         case SQLite :
         {
-             DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName );
+             DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
              DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
              break;
          }
         case MySQL :
         {
-             DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName );
-             DB.setDatabaseName(dbName );
-             DB.setHostName(pathOrHostName );
-             DB.setUserName(login );
-             DB.setPassword(password );
+             DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
+             DB.setDatabaseName(dbName);
+             DB.setHostName(pathOrHostName);
+             DB.setUserName(login);
+             DB.setPassword(password);
              break;
          }
         case PostSQL :
@@ -248,18 +248,18 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                        .arg(connectionName ).arg(DB.open()));
 
     // test connection
-    if (!DB.isOpen() ) {
+    if (!DB.isOpen()) {
         Log::addError("Database", QCoreApplication::translate("Database",
                                                                     "WARNING : can not open database %1 : %2 \n %3 " )
                          .arg(connectionName, DB.lastError().driverText(), DB.lastError().databaseText()));
         toReturn = false;
     }
-    else
+    else {
         Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2" )
                            .arg(connectionName, pathOrHostName));
-
+    }
     // return boolean
-    if (toReturn )
+    if (toReturn)
         d->m_ConnectionName = connectionName;
     return toReturn;
 }

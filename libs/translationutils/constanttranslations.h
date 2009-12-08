@@ -116,10 +116,10 @@ namespace Time {
         DS_Morning,
         DS_10OClockBrunch,
         DS_MidDay,
-        DS_Afternoon,
+        DS_Lunch,
         DS_TeaTime,
-        DS_Diner,
         DS_Evening,
+        DS_Diner,
         DS_BedTime,
         DS_MaxParam
     };
@@ -262,6 +262,7 @@ namespace Time {
         const char* const TENOCLOCKBRUNCH      = QT_TRANSLATE_NOOP("tkConstants", "ten o'clock brunch");
         const char* const MORNING              = QT_TRANSLATE_NOOP("tkConstants", "morning");
         const char* const MIDDAY               = QT_TRANSLATE_NOOP("tkConstants", "midday");
+        const char* const LUNCH                = QT_TRANSLATE_NOOP("tkConstants", "lunch");
         const char* const AFTERNOON            = QT_TRANSLATE_NOOP("tkConstants", "afternoon");
         const char* const TEATIME              = QT_TRANSLATE_NOOP("tkConstants", "tea time");
         const char* const DINER                = QT_TRANSLATE_NOOP("tkConstants", "diner");
@@ -342,6 +343,7 @@ namespace Time {
         const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
         const char* const NO_1_FOUND                         = QT_TRANSLATE_NOOP("tkConstants", "No %1 found.");
         const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
+        const char* const UNABLE_TO_OPEN_DATABASE_1_ERROR_2  = QT_TRANSLATE_NOOP("tkConstants", "Unable to open database %1 : Error : %2");
 
 
         // Sender and Updater

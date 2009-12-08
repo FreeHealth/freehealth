@@ -65,8 +65,10 @@
 #include <QDir>
 
 namespace DrugsIOConstants {
-    const char *const XML_VERSION                         = "<?xml version=\"0.0.8\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_VERSION                         = "<?xml version=\"0.2.0\" encoding=\"UTF-8\"?>\n";
     const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
+    const char *const XML_PRESCRIPTION_ISTEXTUAL          = "IsTextual";
+    const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME    = "TextualDrugName";
     const char *const XML_PRESCRIPTION_CIS                = "CIS";
     const char *const XML_PRESCRIPTION_TESTONLY           = "OnlyForTest";
     const char *const XML_PRESCRIPTION_ID                 = "Id";
@@ -102,6 +104,23 @@ using namespace DrugsDB;
 using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
 
+
+namespace {
+    static inline QStringList ioVersions()
+    {
+        return QStringList() << "0.0.8" << "0.2.0";
+    }
+
+    static inline QString xmlVersion(const QString &xml)
+    {
+        if (!xml.startsWith("<?xml version=\""))
+            return QString();
+        int begin = 15;
+        int end = xml.indexOf("\"", begin);
+        return xml.mid(begin,end-begin);
+    }
+}
+
 namespace DrugsDB {
 namespace Internal {
 /** \brief Private part of DrugsIO \internal */
@@ -112,6 +131,7 @@ public:
     {
         m_PrescriptionXmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
         m_PrescriptionXmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
+        m_PrescriptionXmlTags.insert(Prescription::IsTextualOnly , XML_PRESCRIPTION_ISTEXTUAL);
         m_PrescriptionXmlTags.insert(Prescription::CIP , XML_PRESCRIPTION_CIP);
         m_PrescriptionXmlTags.insert(Prescription::OnlyForTest, XML_PRESCRIPTION_TESTONLY);
         m_PrescriptionXmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
@@ -137,6 +157,14 @@ public:
         m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
     }
 
+    void createIOUpdaters()
+    {
+//        if (m_Updaters.isEmpty()) {
+//            DrugsDB::DrugsIOUpdate *up = new IOUpdate_From_008_TO_020;
+//            m_Updaters.insert(up->fromVersion(), up);
+//        }
+    }
+
     /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
     QString xmlTagForPrescriptionRow(const int row)
     {
@@ -157,6 +185,7 @@ public:
     Utils::MessageSender   m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString>     m_PrescriptionXmlTags;
+    QMap<QString, DrugsDB::DrugsIOUpdate *> m_Updaters;
 };
 }
 }
@@ -185,7 +214,10 @@ DrugsIO::DrugsIO(QObject *parent) : QObject(parent), d(0)
 /** \brief Destructor */
 DrugsIO::~DrugsIO()
 {
-    if (d) delete d; d=0;
+    if (d) {
+        delete d;
+        d=0;
+    }
 }
 
 /**
@@ -251,29 +283,48 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xml, Lo
     QStringList drugs = x.split(splitter, QString::SkipEmptyParts );
 
     // clear model
-//    DrugsModel *m = DRUGMODEL;
     Q_ASSERT(m);
     if (loader==ReplacePrescription)
         m->clearDrugsList();
+
+    // check prescription encoding version
+    bool needUpdate = false;
+    QString version = ::xmlVersion(xml);
+    needUpdate = ((!version.isEmpty()) && (version != ::ioVersions().last()));
 
     // rebuild model with serialized prescription
     QHash<QString, QString> hash;
     int row;
     foreach( const QString &s, drugs) {
-        if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG),XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
+        // Some veriications
+        if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG), XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
             Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"));
             continue;
         }
         if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_CIS)))
             continue;
-        row = m->addDrug(hash.value(XML_PRESCRIPTION_CIS).toInt(), false);
+
+        // Add infos to the model
+        if (hash.value(XML_PRESCRIPTION_ISTEXTUAL).compare("true",Qt::CaseInsensitive) == 0) {
+            row = m->addTextualPrescription(hash.value(XML_PRESCRIPTION_TEXTUALDRUGNAME), "");
+        } else {
+            row = m->addDrug(hash.value(XML_PRESCRIPTION_CIS).toInt(), false);
+        }
         hash.remove(XML_PRESCRIPTION_CIS);
         foreach(const QString &k, hash.keys()) {
             m->setData( m->index(row, instance()->d->xmlTagToColumnIndex(k)), hash.value(k) );
         }
         hash.clear();
+
+        // Check for XML IO updates
+/////////////////////////////////////////////////////////////
     }
+
+    // check interaction, emit final signal from model for views to update
     m->checkInteractions();
+    Q_EMIT m->numberOfRowsChanged();
+
+    // small debug information
     Utils::Log::addMessage("DrugsIO",tr("Xml prescription correctly read."));
     return true;
 }
@@ -318,7 +369,6 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
         return false;
     }
-//    DrugsModel *m = DRUGMODEL;
     xmlExtraDatas.clear();
     QString xml = Utils::readTextFile(fileName);
 
@@ -347,7 +397,6 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
 {
     Q_ASSERT(m);
     // clean the model (sort it, hide testing drugs)
-//    DrugsModel *m = DRUGMODEL;
     if (m->rowCount() <= 0)
         return QString();
 
@@ -359,36 +408,15 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
 
     Core::ISettings *s = Core::ICore::instance()->settings();
 
-    // Prepare font format
-//    QFont drugsFont;
-//    drugsFont.fromString(s->value(S_DRUGFONT).toString());
-//    QFont prescrFont;
-//    prescrFont.fromString(s->value(S_PRESCRIPTIONFONT).toString());
-
     QString ALD, nonALD;
     QString tmp;
     // Add drugs
     int i;
-//    QString drugStyle, prescrStyle;
-//    drugStyle = Utils::fontToHtml(drugsFont, "black");
-//    prescrStyle = Utils::fontToHtml(prescrFont, "black");// + "margin-left:20px;";
     for(i=0; i < m->rowCount(); ++i) {
         tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
         if (s->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool())
             tmp += "<span style=\"font-size:4pt\"><br /></span>";
         tmp += "</li>";
-//        tmp = QString(ENCODEDHTML_DRUG);
-//        tmp.replace( "{NUMBER}", QString::number(i+1));
-//        tmp.replace( "{DRUGSTYLE}", drugStyle);
-//        if (m->index(i,Prescription::IsINNPrescription).data().toBool()) {
-//            tmp.replace( "{DRUG}", m->index(i,Drug::InnCompositionString).data().toString() + " - " + tr("[INN]"));
-//        } else {
-//            tmp.replace( "{DRUG}", m->index( i, Drug::Denomination ).data().toString());
-//        }
-//        tmp.replace( "{PRESCRIPTIONSTYLE}", prescrStyle );
-//        tmp.replace( "{PRESCRIPTION}", m->index( i, Prescription::ToHtml ).data().toString());
-        //        tmp.replace( "{NOTE}", index( i, Prescription::Note).data().toString());
-
         if (m->index( i, Prescription::IsALD ).data().toBool()) {
             ALD += tmp;
         } else {
@@ -427,7 +455,6 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
 QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
 {
     Q_ASSERT(m);
-//    DrugsModel *m = DRUGMODEL;
     if (!m->testingDrugsAreVisible()) {
         bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too ?"),
                                   tr("Drugs added for testing only are actually hidden in this prescription.\n"
@@ -439,14 +466,32 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     }
     QString xmldPrescription;
     QList<int> keysToSave;
-    keysToSave << Prescription::IntakesFrom << Prescription::IntakesTo
-            << Prescription::IntakesScheme << Prescription::IntakesUsesFromTo << Prescription::DurationFrom
-            << Prescription::DurationTo << Prescription::DurationScheme << Prescription::DurationUsesFromTo
-            << Prescription::Period << Prescription::PeriodScheme <<  Prescription::MealTimeSchemeIndex
-            << Prescription::Note << Prescription::IsINNPrescription << Prescription::SpecifyForm
-            << Prescription::SpecifyPresentation << Prescription::IsALD << Prescription::CIP
-            << Prescription::IntakesIntervalOfTime << Prescription::IntakesIntervalScheme
-            << Prescription::UsedDosage;
+    keysToSave
+        << Prescription::IsTextualOnly
+        << Prescription::UsedDosage
+        << Prescription::CIP
+        << Prescription::OnlyForTest
+        << Prescription::IntakesFrom
+        << Prescription::IntakesTo
+        << Prescription::IntakesScheme
+        << Prescription::IntakesUsesFromTo
+        << Prescription::IntakesFullString
+        << Prescription::DurationFrom
+        << Prescription::DurationTo
+        << Prescription::DurationScheme
+        << Prescription::DurationUsesFromTo
+        << Prescription::Period
+        << Prescription::PeriodScheme
+        << Prescription::DailyScheme
+        << Prescription::MealTimeSchemeIndex
+        << Prescription::IntakesIntervalOfTime
+        << Prescription::IntakesIntervalScheme
+        << Prescription::Note
+        << Prescription::IsINNPrescription
+        << Prescription::SpecifyForm
+        << Prescription::SpecifyPresentation
+        << Prescription::IsALD
+        ;
     QHash<QString, QString> forXml;
     int i;
     for(i=0; i<m->rowCount() ; ++i) {
@@ -458,7 +503,12 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
                 forXml.insert( instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString() );
             }
         }
-        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false); // += "[Drug]" + tkSerializer::threeCharKeyHashToString(serializeIt);
+        /** \todo Manage Textual drugs name Drug::Denomination */
+        if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
+            forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
+                          m->index(i, Drug::Denomination).data().toString());
+        }
+        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false);
         forXml.clear();
     }
     xmldPrescription.prepend( QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG));

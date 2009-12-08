@@ -73,6 +73,7 @@
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/databaseupdater.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -251,15 +252,17 @@ bool DrugsBase::init()
 
      Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
+     // Connect Drugs Database
      createConnection(DRUGS_DATABASE_NAME, DRUGS_DATABASE_FILENAME, pathToDb,
-                       Utils::Database::ReadOnly, Utils::Database::SQLite);
-     //  const QString & login = QString::null, const QString & pass = QString::null,
-     //  CreationOption createOption = WarnOnly);
+                      Utils::Database::ReadOnly, Utils::Database::SQLite);
 
+     // Connect and check Dosage Database
      createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME, Dosages::Constants::DOSAGES_DATABASE_FILENAME,
-                       Core::ICore::instance()->settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
-                       Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+                      Core::ICore::instance()->settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
+                      Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+     checkDosageDatabaseVersion();
 
+     // Initialize
      d->retreiveLinkTables();
      InteractionsBase::init();
      m_initialized = true;
@@ -276,12 +279,70 @@ void DrugsBase::logChronos(bool state)
     InteractionsBase::logChronos(state);
 }
 
+QString DrugsBase::dosageCreateTableSqlQuery()
+{
+    return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
+           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
+           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+           "`INN_LK`                int(11)        NULL,"
+           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
+           "`CIS_LK`                int(11)        NULL,"
+           "`CIP_LK`                int(11)        NULL,"
+           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
+
+           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
+           "`INTAKETO`              double         NULL,"
+           "`INTAKEFROMTO`          bool           NULL,"
+           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
+           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
+           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
+
+           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
+           "`DURATIONTO`            double         NULL,"
+           "`DURATIONFROMTO`        bool           NULL,"
+           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
+
+           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
+           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
+           "`DAILYSCHEME`           varchar(250)   NULL,"
+           "`MEALSCHEME`            int(10)        NULL,"
+           "`ISALD`                 bool           NULL,"
+           "`TYPEOFTREATEMENT`      int(10)        NULL,"
+
+           "`MINAGE`                int(10)        NULL,"
+           "`MAXAGE`                int(10)        NULL,"
+           "`MINAGEREFERENCE`       int(10)        NULL,"
+           "`MAXAGEREFERENCE`       int(10)        NULL,"
+           "`MINWEIGHT`             int(10)        NULL,"
+           "`SEXLIMIT`              int(10)        NULL,"
+           "`MINCLEARANCE`          int(10)        NULL,"
+           "`MAXCLEARANCE`          int(10)        NULL,"
+           "`PREGNANCYLIMITS`       int(10)        NULL,"
+           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
+
+           "`NOTE`                  varchar(500)   NULL,"
+
+           "`CIM10_LK`              varchar(150)   NULL,"
+           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
+           "`EDRC_LK`               varchar(150)   NULL,"
+
+           "`EXTRAS`                blob           NULL,"
+           "`USERVALIDATOR`         varchar(200)   NULL,"
+           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+           "`MODIFICATIONDATE`      date           NULL,"
+           "`TRANSMITTED`           date           NULL,"
+           "`ORDER`                 int(10)        NULL"
+           ");";
+}
+
 /**
   \brief
   \todo documentation
 */
-bool DrugsBase::createDatabase( const QString & connectionName , const QString & dbName,
-                                   const QString & pathOrHostName,
+bool DrugsBase::createDatabase( const QString &connectionName , const QString &dbName,
+                                   const QString &pathOrHostName,
                                    TypeOfAccess /*access*/, AvailableDrivers driver,
                                    const QString & /*login*/, const QString & /*pass*/,
                                    CreationOption /*createOption*/
@@ -313,60 +374,7 @@ bool DrugsBase::createDatabase( const QString & connectionName , const QString &
     setConnectionName(connectionName);
     // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     if (executeSQL(QStringList()
-        << "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
-           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
-           "`INN_LK`                int(11)        NULL,"
-           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-           "`CIS_LK`                int(11)        NULL,"
-           "`CIP_LK`                int(11)        NULL,"
-           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
-
-           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
-           "`INTAKETO`              double         NULL,"
-           "`INTAKEFROMTO`          bool           NULL,"
-           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
-           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
-
-           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
-           "`DURATIONTO`            double         NULL,"
-           "`DURATIONFROMTO`        bool           NULL,"
-           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
-
-           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
-           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
-           "`DAILYSCHEME`           int(10)        NULL,"
-           "`MEALSCHEME`            int(10)        NULL,"
-           "`ISALD`                 bool           NULL,"
-           "`TYPEOFTREATEMENT`      int(10)        NULL,"
-
-           "`MINAGE`                int(10)        NULL,"
-           "`MAXAGE`                int(10)        NULL,"
-           "`MINAGEREFERENCE`       int(10)        NULL,"
-           "`MAXAGEREFERENCE`       int(10)        NULL,"
-           "`MINWEIGHT`             int(10)        NULL,"
-           "`SEXLIMIT`              int(10)        NULL,"
-           "`MINCLEARANCE`          int(10)        NULL,"
-           "`MAXCLEARANCE`          int(10)        NULL,"
-           "`PREGNANCYLIMITS`       int(10)        NULL,"
-           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
-           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
-
-           "`NOTE`                  varchar(500)   NULL,"
-
-           "`CIM10_LK`              varchar(150)   NULL,"
-           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
-           "`EDRC_LK`               varchar(150)   NULL,"
-
-           "`EXTRAS`                blob           NULL,"
-           "`USERVALIDATOR`         varchar(200)   NULL,"
-           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
-           "`MODIFICATIONDATE`      date           NULL,"
-           "`TRANSMITTED`           date           NULL,"
-           "`ORDER`                 int(10)        NULL"
-           ");"
+        << dosageCreateTableSqlQuery()
         << "CREATE TABLE IF NOT EXISTS `VERSION` ("
            "`ACTUAL`                varchar(10)    NULL"
            ");"
@@ -387,13 +395,7 @@ bool DrugsBase::createDatabase( const QString & connectionName , const QString &
 */
 void DrugsBase::checkDosageDatabaseVersion()
 {
-    Q_ASSERT(!qApp->applicationVersion().isEmpty());
-    /** \todo code here */
-    QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` ASC LIMIT 1;";
-//    if (ret!=qApp->applicationVersion())
-//        Utils::Log::addError(this, tr("Dosage database need to be updated from %1 to %2").arg(ret, qApp->applicationVersion()));
-    // retreive the versio of database - compare to app version
-    // to the necessary updates for the dosage database.
+    DrugsDB::DatabaseUpdater::checkDosageDatabaseUpdates();
 }
 
 /** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */

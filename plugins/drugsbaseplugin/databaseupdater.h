@@ -38,40 +38,49 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEXTUALPRESCRIPTIONDIALOG_H
-#define TEXTUALPRESCRIPTIONDIALOG_H
+#ifndef DATABASEUPDATER_H
+#define DATABASEUPDATER_H
 
-#include <drugsplugin/drugs_exporter.h>
+#include <drugsbaseplugin/drugsbase_exporter.h>
 
-#include <QtGui/QDialog>
-#include <QString>
+#include <QStringList>
 
-namespace DrugsWidget {
-namespace Ui {
-    class TextualPrescriptionDialog;
-}
+/**
+ * \file databaseupdater.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.1
+ * \date 07 Dec 2009
+*/
 
-class DRUGS_EXPORT TextualPrescriptionDialog : public QDialog
+namespace DrugsDB {
+class UpdateStep
 {
-    Q_OBJECT
 public:
-    TextualPrescriptionDialog(QWidget *parent = 0);
-    ~TextualPrescriptionDialog();
+    UpdateStep() {}
+    virtual ~UpdateStep() {}
 
-    void done(int result);
+    virtual QString userMessage() const = 0;
 
-    QString drugLabel() const;
-    QString drugNote() const;
-    bool isALD() const;
+    virtual void setConnectionName(const QString &name) = 0;
 
-    void setDrugLabel(const QString &label);
-    void setDrugNote(const QString &note);
-    void setALD(const bool ald);
+    virtual QString fromVersion() const = 0;
+    virtual QString toVersion() const = 0;
 
-private:
-    Ui::TextualPrescriptionDialog *m_ui;
+    virtual bool retreiveValuesToUpdate() const = 0;
+    virtual bool updateDatabaseScheme() const = 0;
+    virtual bool saveUpdatedValuesToDatabase() const = 0;
 };
+}  // End namespace DrugsDB
 
-} // End namespace DrugsWidget
 
-#endif // TEXTUALPRESCRIPTIONDIALOG_H
+namespace DrugsDB {
+namespace DatabaseUpdater {
+
+DRUGSBASE_EXPORT QStringList dosageDatabaseVersions();
+DRUGSBASE_EXPORT bool checkDosageDatabaseUpdates();
+
+
+}  // end namespace DatabaseUpdater
+}  // end namespace DrugsDB
+
+#endif // DATABASEUPDATER_H
