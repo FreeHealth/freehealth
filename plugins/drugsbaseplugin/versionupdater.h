@@ -38,49 +38,86 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATABASEUPDATER_H
-#define DATABASEUPDATER_H
+#ifndef VERSIONUPDATER_H
+#define VERSIONUPDATER_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 
 #include <QStringList>
 
 /**
- * \file databaseupdater.h
+ * \file versionupdater.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 07 Dec 2009
+ * \version 0.2.2
+ * \date 13 Dec 2009
 */
 
 namespace DrugsDB {
-class UpdateStep
+class DrugsModel;
+
+class GenericUpdateStep
 {
 public:
-    UpdateStep() {}
-    virtual ~UpdateStep() {}
+    GenericUpdateStep() {}
+    virtual ~GenericUpdateStep() {}
+
+    virtual QString fromVersion() const = 0;
+    virtual QString toVersion() const = 0;
+};
+
+class DosageDatabaseUpdateStep : public GenericUpdateStep
+{
+public:
+    DosageDatabaseUpdateStep() {}
+    virtual ~DosageDatabaseUpdateStep() {}
 
     virtual QString userMessage() const = 0;
 
     virtual void setConnectionName(const QString &name) = 0;
 
-    virtual QString fromVersion() const = 0;
-    virtual QString toVersion() const = 0;
-
     virtual bool retreiveValuesToUpdate() const = 0;
     virtual bool updateDatabaseScheme() const = 0;
     virtual bool saveUpdatedValuesToDatabase() const = 0;
 };
-}  // End namespace DrugsDB
+
+class DrugsIOUpdateStep : public GenericUpdateStep
+{
+public:
+    DrugsIOUpdateStep() {}
+    virtual ~DrugsIOUpdateStep() {}
+
+    virtual bool updateFromXml() const = 0;
+    virtual bool executeUpdate(const QString &xml) const = 0;
+
+    virtual bool updateFromModel() const = 0;
+    virtual bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const = 0;
+};
 
 
-namespace DrugsDB {
-namespace DatabaseUpdater {
+class VersionUpdaterPrivate;
+class DRUGSBASE_EXPORT VersionUpdater
+{
+public:
+    static VersionUpdater *instance();
+    ~VersionUpdater();
 
-DRUGSBASE_EXPORT QStringList dosageDatabaseVersions();
-DRUGSBASE_EXPORT bool checkDosageDatabaseUpdates();
+    bool isDosageDatabaseUpToDate() const;
+    bool updateDosageDatabase();
+    QString lastDosageDabaseDosage() const;
 
+    bool isXmlIOUpToDate(const QString &xmlContent) const;
+    QString xmlVersion(const QString &xmlContent) const;
+    QString updateXmlIOContent(const QString &xmlcontent);
+    bool updateXmlIOModel(const QString &fromVersion, DrugsDB::DrugsModel *model, const QList<int> &rowsToUpdate);
 
-}  // end namespace DatabaseUpdater
+protected:
+    VersionUpdater();
+
+private:
+    static VersionUpdater *m_Instance;
+    VersionUpdaterPrivate *d;
+};
+
 }  // end namespace DrugsDB
 
-#endif // DATABASEUPDATER_H
+#endif // VERSIONUPDATER_H

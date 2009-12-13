@@ -49,6 +49,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/versionupdater.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -105,22 +106,6 @@ using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
 
 
-namespace {
-    static inline QStringList ioVersions()
-    {
-        return QStringList() << "0.0.8" << "0.2.0";
-    }
-
-    static inline QString xmlVersion(const QString &xml)
-    {
-        if (!xml.startsWith("<?xml version=\""))
-            return QString();
-        int begin = 15;
-        int end = xml.indexOf("\"", begin);
-        return xml.mid(begin,end-begin);
-    }
-}
-
 namespace DrugsDB {
 namespace Internal {
 /** \brief Private part of DrugsIO \internal */
@@ -157,12 +142,8 @@ public:
         m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
     }
 
-    void createIOUpdaters()
+    ~DrugsIOPrivate()
     {
-//        if (m_Updaters.isEmpty()) {
-//            DrugsDB::DrugsIOUpdate *up = new IOUpdate_From_008_TO_020;
-//            m_Updaters.insert(up->fromVersion(), up);
-//        }
     }
 
     /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
@@ -185,7 +166,6 @@ public:
     Utils::MessageSender   m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString>     m_PrescriptionXmlTags;
-    QMap<QString, DrugsDB::DrugsIOUpdate *> m_Updaters;
 };
 }
 }
@@ -264,9 +244,10 @@ bool DrugsIO::isSendingDosage()
 /**
   \brief Transfert a XML'd prescription to the model
  */
-bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xml, Loader loader)
+bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlContent, Loader loader)
 {
     Q_ASSERT(m);
+    QString xml = xmlContent;
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QString start = QString("<%1>").arg(XML_FULLPRESCRIPTION_TAG);
     QString finish = QString("</%1>").arg(XML_FULLPRESCRIPTION_TAG);
@@ -288,15 +269,20 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xml, Lo
         m->clearDrugsList();
 
     // check prescription encoding version
-    bool needUpdate = false;
-    QString version = ::xmlVersion(xml);
-    needUpdate = ((!version.isEmpty()) && (version != ::ioVersions().last()));
+    bool needUpdate = (!DrugsDB::VersionUpdater::instance()->isXmlIOUpToDate(xml));
+    QString version;
+    if (needUpdate) {
+        version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
+        qWarning() << version;
+        xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xml);
+    }
 
-    // rebuild model with serialized prescription
+    // build model with serialized prescription
     QHash<QString, QString> hash;
+    QList<int> rowsToUpdate;
     int row;
-    foreach( const QString &s, drugs) {
-        // Some veriications
+    foreach(const QString &s, drugs) {
+        // Some verifications
         if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG), XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
             Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"));
             continue;
@@ -316,8 +302,13 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xml, Lo
         }
         hash.clear();
 
-        // Check for XML IO updates
-/////////////////////////////////////////////////////////////
+        // check Model Updaters
+        if (needUpdate) {
+            rowsToUpdate.append(row);
+        }
+    }
+    if ((needUpdate) && (!version.isEmpty())){
+        DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);
     }
 
     // check interaction, emit final signal from model for views to update

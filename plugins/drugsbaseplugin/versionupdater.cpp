@@ -1,51 +1,28 @@
-/***************************************************************************
- *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
- *   eric.maeker@free.fr                                                   *
- *   All rights reserved.                                                  *
- *                                                                         *
- *   This program is a free and open source software.                      *
- *   It is released under the terms of the new BSD License.                *
- *                                                                         *
- *   Redistribution and use in source and binary forms, with or without    *
- *   modification, are permitted provided that the following conditions    *
- *   are met:                                                              *
- *   - Redistributions of source code must retain the above copyright      *
- *   notice, this list of conditions and the following disclaimer.         *
- *   - Redistributions in binary form must reproduce the above copyright   *
- *   notice, this list of conditions and the following disclaimer in the   *
- *   documentation and/or other materials provided with the distribution.  *
- *   - Neither the name of the FreeMedForms' organization nor the names of *
- *   its contributors may be used to endorse or promote products derived   *
- *   from this software without specific prior written permission.         *
- *                                                                         *
- *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
- *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
- *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
- *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
- *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
- *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
- *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
- *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
- *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
- *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
- *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
- *   POSSIBILITY OF SUCH DAMAGE.                                           *
- ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
 /**
-  \class DrugsDB::Internal::DatabaseUpdater
+  \class DrugsDB::DatabaseUpdater
   \brief This class manages drugs and dosages databases updates from versions to versions
 */
-#include "databaseupdater.h"
+
+/**
+  \class DrugsIOUpdateStep
+  \brief Interface to use for the update process of prescription files.
+  Inform the versions, then you can update two ways :
+  - after DrugsIO read the XML file and had the model informed
+  - or before this step (the update works then on the XML content)
+  These process are called in the same order each time :
+  - First : tries to update the XML content (if updateFromXml() returns true)
+  - Second : tries to update from the model (if updateFromModel() returns true)
+  - If one of these process updates the prescription, the version is setted to the toVersion().
+  - You can not update either from the XML content and from the Model.
+  \sa DrugsDb::DrugsIO
+  \ingroup freediams drugswidget
+*/
+
+#include "versionupdater.h"
 #include "constants.h"
 
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 
 #include <utils/global.h>
@@ -59,21 +36,21 @@
 #include <QMap>
 #include <QVariant>
 
-
 using namespace Trans::ConstantTranslations;
+using namespace DrugsDB;
 
 ///////////////////////////////////////////////////////////////////////
 //////////////////////////// UPDATE STEPS /////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 namespace {
-class Dosage_One : public DrugsDB::UpdateStep
+class Dosage_008_To_020 : public DrugsDB::DosageDatabaseUpdateStep
 {
 public:
     // From v 0.0.8 To v 0.2.0
     // - New Daily Scheme format (XML)
     // - Correcting MealTime Scheme (one more choice == 0 : '')
-    Dosage_One() {}
-    ~Dosage_One() {}
+    Dosage_008_To_020() : DrugsDB::DosageDatabaseUpdateStep() {}
+    ~Dosage_008_To_020() {}
 
     QString userMessage() const
     {
@@ -131,7 +108,7 @@ public:
         QStringList req;
         req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
         req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
-        req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`")
+        req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                       .arg("`POSO_ID`,"
                            "`POSO_UUID`,"
                            "`INN_LK`,"
@@ -178,14 +155,17 @@ public:
                            "`TRANSMITTED`,"
                            "`ORDER`");
         req << "DROP TABLE `OLD_DOSAGE`;";
+        req << "﻿DELETE FROM `VERSION`;";
         req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.2.0');";
         foreach(const QString &r, req) {
             QSqlQuery q(r,db);
             if (q.isActive()) {
                 q.finish();
-            } else
-                Utils::Log::addQueryError("DatabaseUpdater", q);
+            } else {
+                Utils::Log::addQueryError("VersionUpdater", q);
+            }
         }
+        Utils::Log::addMessage("VersionUpdater",QString("Dosage Database SQL update done from %1 to %2").arg("0.0.8", "0.2.0"));
         return true;
     }
 
@@ -243,6 +223,7 @@ public:
             }
             req.clear();
         }
+        Utils::Log::addMessage("VersionUpdater", QString("Dosage Database values update done from %1 to %2").arg("0.0.8", "0.2.0"));
         return true;
     }
 
@@ -252,79 +233,228 @@ private:
     mutable QMap<int, int> m_Id_MealSchemes;
 };
 
-static void createDosageDatabaseUpdateSteps(QMap<QString, DrugsDB::UpdateStep *> &map)
+class IO_Update_From_0008_To_020 : public DrugsDB::DrugsIOUpdateStep
 {
-    map.clear();
-    Dosage_One *one = new ::Dosage_One;
-    map.insert(one->fromVersion(), one);
-}
+public:
+    // Unfortunatly DailyScheme was not saved before 0.2.0 --> so no update is available
+    // MealTime scheme must be update since an empty choice has been added at index (0)
+    IO_Update_From_0008_To_020() : DrugsDB::DrugsIOUpdateStep() {}
+    ~IO_Update_From_0008_To_020() {}
 
-}  // End private namespace
+    QString fromVersion() const {return "0.0.8";}
+    QString toVersion() const {return "0.2.0";}
 
+    bool updateFromXml() const {return false;}
+    bool executeUpdate(const QString &xml) const {return true;}
+
+    bool updateFromModel() const {return true;}
+    bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
+    {
+        foreach(int r, rows) {
+            // Retreive meal time
+            int meal = model->index(r, Constants::Prescription::MealTimeSchemeIndex).data().toInt();
+            if (meal!=0) {
+                meal++;
+                model->setData(model->index(r, Constants::Prescription::MealTimeSchemeIndex),meal);
+            }
+        }
+        return true;
+    }
+};
+
+}  // End anonymous namespace
 
 namespace DrugsDB {
-namespace DatabaseUpdater {
+VersionUpdater *VersionUpdater::m_Instance = 0;
 
-QStringList dosageDatabaseVersions()
+class VersionUpdaterPrivate
 {
-    return QStringList() << "0.0.8" << "0.2.0";
+public:
+    VersionUpdaterPrivate() {}
+    ~VersionUpdaterPrivate()
+    {
+        qDeleteAll(m_Updaters);
+    }
+
+    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0"; }
+    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0"; }
+
+    QString xmlVersion(const QString &xml)
+    {
+        if (!xml.startsWith("<?xml version=\""))
+            return QString();
+        int begin = 15;
+        int end = xml.indexOf("\"", begin);
+        return xml.mid(begin,end-begin);
+    }
+
+    QMap<QString, DrugsIOUpdateStep *> ioSteps()
+    {
+        QMap<QString, DrugsIOUpdateStep *> list;
+        foreach(GenericUpdateStep *step, m_Updaters) {
+            DrugsIOUpdateStep *iostep = dynamic_cast<DrugsIOUpdateStep *>(step);
+            if (iostep)
+                list.insert(iostep->fromVersion(), iostep);
+        }
+        return list;
+    }
+
+    QMap<QString, DosageDatabaseUpdateStep *> dosageDatabaseSteps()
+    {
+        QMap<QString, DosageDatabaseUpdateStep *> list;
+        foreach(GenericUpdateStep *step, m_Updaters) {
+            DosageDatabaseUpdateStep *dbstep = dynamic_cast<DosageDatabaseUpdateStep *>(step);
+            if (dbstep)
+                list.insert(dbstep->fromVersion(), dbstep);
+        }
+        return list;
+    }
+
+    QList<GenericUpdateStep *> m_Updaters;
+    QString m_DosageDatabaseVersion;
+    QString m_IOVersion;
+};
+
+}  //  end namespace DrugsDB
+
+VersionUpdater *VersionUpdater::instance()
+{
+    if (!m_Instance)
+        m_Instance = new VersionUpdater();
+    return m_Instance;
 }
 
-bool checkDosageDatabaseUpdates()
+VersionUpdater::VersionUpdater() : d(0)
 {
+    d = new VersionUpdaterPrivate;
+    // Here is the good place to create updaters objects
+    d->m_Updaters.append(new ::Dosage_008_To_020);
+    d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
+}
+
+VersionUpdater::~VersionUpdater()
+{
+    if (d) {
+        delete d;
+        d=0;
+    }
+}
+
+bool VersionUpdater::isDosageDatabaseUpToDate() const
+{
+    if (!d->m_DosageDatabaseVersion.isEmpty())
+        return (d->m_DosageDatabaseVersion==d->dosageDatabaseVersions().last());
+
     QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if (!db.open()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()),"","","");
-        Utils::Log::addError("DatabaseUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()));
-        return false;
+        Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()));
+        return true;
     }
     QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` ASC LIMIT 1;";
-    QString version;
     QSqlQuery q(req, db);
     if (q.isActive()) {
         if (q.next()) {
-            version = q.value(0).toString();
+            d->m_DosageDatabaseVersion = q.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError("DatabaseUpdater", q);
-        return false;
+        Utils::Log::addQueryError("VersionUpdater", q);
+        return true;
     }
     q.finish();
-    if (version == dosageDatabaseVersions().last())
-        return true;
+    return (d->m_DosageDatabaseVersion==d->dosageDatabaseVersions().last());
+}
 
-    // here we have to update the dosages database
-    QMap<QString, UpdateStep *> from;
-    ::createDosageDatabaseUpdateSteps(from);
+bool VersionUpdater::updateDosageDatabase()
+{
+    QMap<QString, DosageDatabaseUpdateStep *> from = d->dosageDatabaseSteps();
     int i = 0;
-    while (version != dosageDatabaseVersions().last()) {
-        UpdateStep *step = from.value(version, 0);
+    QString version = d->m_DosageDatabaseVersion;
+    while (version != d->dosageDatabaseVersions().last()) {
+        DosageDatabaseUpdateStep *step = from.value(version, 0);
         if (!step)
             break;
         step->setConnectionName(Dosages::Constants::DOSAGES_DATABASE_NAME);
         if (!step->retreiveValuesToUpdate()) {
-            Utils::Log::addError("DatabaseUpdater", QString("Error while updating %1 from %2 to %3 : %4")
+            Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
                                  .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         if (!step->updateDatabaseScheme()) {
-            Utils::Log::addError("DatabaseUpdater", QString("Error while updating %1 from %2 to %3 : %4")
+            Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
                                  .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         if (!step->saveUpdatedValuesToDatabase()) {
-            Utils::Log::addError("DatabaseUpdater", QString("Error while updating %1 from %2 to %3 : %4")
+            Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
                                  .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         version = step->toVersion();
     }
-
-    qDeleteAll(from);
-    from.clear();
+    if (version==d->dosageDatabaseVersions().last())
+        d->m_DosageDatabaseVersion=version;
     return true;
 }
 
-}  // end namespace DatabaseUpdater
-}  // end namespace DrugsDB
+QString VersionUpdater::lastDosageDabaseDosage() const
+{
+    return d->dosageDatabaseVersions().last();
+}
 
+QString VersionUpdater::xmlVersion(const QString &xmlContent) const
+{
+    return d->xmlVersion(xmlContent);
+}
+
+bool VersionUpdater::isXmlIOUpToDate(const QString &xmlContent) const
+{
+    return (d->xmlVersion(xmlContent) == d->xmlIoVersions().last());
+}
+
+QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
+{
+    QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
+    int i = 0;
+    QString version = d->xmlVersion(xmlContent);
+    QString xml = xmlContent;
+    while (version != d->xmlIoVersions().last()) {
+        DrugsIOUpdateStep *step = from.value(version, 0);
+        if (!step)
+            break;
+        if (step->updateFromXml()) {
+            if (step->fromVersion() == version) {
+                if (!step->executeUpdate(xml))
+                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
+                else
+                    version = step->toVersion();
+            }
+        } else {
+            version = step->toVersion();
+        }
+    }
+    return xml;
+}
+
+bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::DrugsModel *model, const QList<int> &rowsToUpdate)
+{
+    QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
+    int i = 0;
+    QString version = fromVersion;
+    while (version != d->xmlIoVersions().last()) {
+        DrugsIOUpdateStep *step = from.value(version, 0);
+        if (!step)
+            break;
+        if (step->updateFromModel()) {
+            if (step->fromVersion() == version) {
+                if (!step->executeUpdate(model, rowsToUpdate))
+                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
+                else
+                    version = step->toVersion();
+            }
+        } else {
+            version = step->toVersion();
+        }
+    }
+    return true;
+}

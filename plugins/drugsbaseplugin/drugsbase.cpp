@@ -73,7 +73,7 @@
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/databaseupdater.h>
+#include <drugsbaseplugin/versionupdater.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -378,7 +378,7 @@ bool DrugsBase::createDatabase( const QString &connectionName , const QString &d
         << "CREATE TABLE IF NOT EXISTS `VERSION` ("
            "`ACTUAL`                varchar(10)    NULL"
            ");"
-        << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.0.8');"
+        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseDosage())
         , DB)) {
         Utils::Log::addMessage(this, tr("Database %1 %2 correctly created").arg(connectionName, dbName));
         return true;
@@ -395,7 +395,9 @@ bool DrugsBase::createDatabase( const QString &connectionName , const QString &d
 */
 void DrugsBase::checkDosageDatabaseVersion()
 {
-    DrugsDB::DatabaseUpdater::checkDosageDatabaseUpdates();
+    if (!DrugsDB::VersionUpdater::instance()->isDosageDatabaseUpToDate())
+        if (!DrugsDB::VersionUpdater::instance()->updateDosageDatabase())
+            Utils::Log::addError(this, "Dosage database can not be correctly updated");
 }
 
 /** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */
