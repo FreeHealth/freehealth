@@ -66,7 +66,7 @@ class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlTableModel
 public:
     static GlobalDrugsModel *instance(QObject * parent = 0);
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) { return false; }
+    bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

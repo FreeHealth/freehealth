@@ -1,7 +1,7 @@
 include(fdcoreplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lCore_debug
+    win32:LIBS   *= -lCore_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lCore
 }

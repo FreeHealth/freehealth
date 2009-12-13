@@ -108,7 +108,7 @@ QStringList DrugsWidgetsFactory::providedWidgets() const
      return QStringList() << "drugs";  /** \todo add more type of plugs ? */
 }
 
-bool DrugsWidgetsFactory::isContainer( const int idInStringList ) const
+bool DrugsWidgetsFactory::isContainer(const int) const
 {
     return false;
 }

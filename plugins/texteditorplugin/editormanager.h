@@ -58,8 +58,6 @@ public:
     static EditorManager *instance(QObject *parent = 0);
     virtual ~EditorManager();
 
-    bool registerEditor(TextEditor *editor);
-
 private Q_SLOTS:
     void updateContext(Core::IContext *context );
 

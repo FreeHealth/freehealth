@@ -82,11 +82,6 @@ EditorManager::~EditorManager()
 {
 }
 
-bool EditorManager::registerEditor(TextEditor *editor)
-{
-    return true;
-}
-
 void EditorManager::updateContext(Core::IContext *object)
 {
     TextEditor *editor = 0;

@@ -114,7 +114,7 @@ public:
     /** \brief Save the current dirty rows of the model to the database */
     void saveToModel()
     {
-        int row = m_Parent->availableDosagesListView->listView()->currentIndex().row();
+        int row = m_Parent->availableDosagesListView->currentIndex().row();
         // if Inn is checked --> clear dosage CIS, feel INN + COMPO_DOSAGE
         if (!checkDosageValidity(row))
             return;
@@ -137,7 +137,7 @@ public:
     /** \brief Transforms the "reference dialog" to a prescription */
     void toPrescription()
     {
-        int row = m_Parent->availableDosagesListView->listView()->currentIndex().row();
+        int row = m_Parent->availableDosagesListView->currentIndex().row();
         m_DosageModel->toPrescription(row);
     }
 
@@ -190,9 +190,9 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::Do
     }
 
     // Create connections
-    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),dosageViewer,SLOT(changeCurrentRow(QModelIndex)));
+    connect(availableDosagesListView, SIGNAL(activated(QModelIndex)),dosageViewer,SLOT(changeCurrentRow(QModelIndex)));
     QModelIndex idx = dosageModel->index(0,Dosages::Constants::Label);
-    availableDosagesListView->listView()->setCurrentIndex(idx);
+    availableDosagesListView->setCurrentIndex(idx);
 }
 
 /** \brief Destructor */
@@ -208,7 +208,7 @@ DosageCreatorDialog::~DosageCreatorDialog()
 */
 void DosageCreatorDialog::done(int r)
 {
-    int row = availableDosagesListView->listView()->currentIndex().row();
+    int row = availableDosagesListView->currentIndex().row();
 
     if ( r == QDialog::Rejected ) {
         d->m_DosageModel->revertRow(row);

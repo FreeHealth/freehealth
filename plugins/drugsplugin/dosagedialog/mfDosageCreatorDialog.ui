@@ -130,7 +130,7 @@
     </layout>
    </item>
    <item row="4" column="0">
-    <widget class="Views::ListView" name="availableDosagesListView">
+    <widget class="QListView" name="availableDosagesListView">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -181,11 +181,6 @@
    <extends>QWidget</extends>
    <header location="global">dosagedialog/mfDosageViewer.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Views::ListView</class>
-   <extends>QListView</extends>
-   <header location="global">listviewplugin/listview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

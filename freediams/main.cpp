@@ -45,9 +45,10 @@
 
 #include <utils/log.h>
 
+enum {WarnAllPluginSpecs=1};
+
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
-
 
 static inline QString getPluginPaths()
 {
@@ -152,6 +153,12 @@ int main( int argc, char *argv[] )
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
 
+    if (WarnAllPluginSpecs) {
+        foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+            qWarning() << "PluginSpecs :::"<< spec->filePath() << spec->name() << spec->version();
+        }
+    }
+
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
@@ -190,6 +197,11 @@ int main( int argc, char *argv[] )
 //    }
 
     pluginManager.loadPlugins();
+    if (WarnAllPluginSpecs) {
+        foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+            qWarning() << "PluginSpecs :::"<< spec->name() << "hasError:" << spec->hasError() << spec->errorString();
+        }
+    }
     if (coreplugin->hasError()) {
         qWarning() << "main" << coreplugin->errorString();
         return 1;

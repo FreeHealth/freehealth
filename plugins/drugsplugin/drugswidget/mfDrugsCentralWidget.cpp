@@ -171,7 +171,8 @@ void DrugsCentralWidget::selector_drugSelected( const int CIS )
                                     tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
-    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(CIS);
+//    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(CIS);
+    m_CurrentDrugModel->addDrug(CIS);
     Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
     if (dlg.exec()==QDialog::Rejected) {
         m_CurrentDrugModel->removeLastInsertedDrug();

@@ -426,11 +426,13 @@ void GirScore::setInterieur(const QString &val)
 // Descriptives
 void GirScore::setExterieur(const QString &val)
 {
+    Q_UNUSED(val);
     d->needNewValidityTesting();
 }
 
 void GirScore::setCommunication(const QString &val)
 {
+    Q_UNUSED(val);
     d->needNewValidityTesting();
 }
 

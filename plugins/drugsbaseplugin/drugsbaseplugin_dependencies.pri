@@ -1,7 +1,4 @@
 include( ../coreplugin/coreplugin.pri )
-#include( ../listviewplugin/listviewplugin.pri )
-#include( ../texteditorplugin/texteditorplugin.pri )
-#include( ../printerplugin/printerplugin.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri)
 include( $${SOURCES_LIBS_PATH}/translationutils.pri)
 include( $${SOURCES_LIBS_PATH}/medicalutils.pri)

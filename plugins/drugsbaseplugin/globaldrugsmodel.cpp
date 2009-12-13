@@ -128,7 +128,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
     return QSqlTableModel::data(item,role);
 }
 
-Qt::ItemFlags GlobalDrugsModel::flags(const QModelIndex &index) const
+Qt::ItemFlags GlobalDrugsModel::flags(const QModelIndex &) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }

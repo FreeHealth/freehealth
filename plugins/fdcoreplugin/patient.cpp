@@ -197,6 +197,7 @@ bool Patient::fromXml(const QString &xml)
             d->m_Values.insert(id, datas.value(k));
         }
     }
+    qWarning() << d->m_Values;
     return true;
 }
 

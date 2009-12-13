@@ -88,7 +88,7 @@ void CorePlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
-void CorePlugin::remoteArgument(const QString& arg)
+void CorePlugin::remoteArgument(const QString &arg)
 {
     qWarning() << arg;
     Q_UNUSED(arg);

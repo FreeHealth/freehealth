@@ -284,8 +284,6 @@ void PrescriptionViewer::changeDurationTo()
     QString scheme = a->objectName().left(a->objectName().indexOf(":"));
     int duration = a->objectName().mid(a->objectName().indexOf(":")+1).toInt();
     int nb = drugModel()->rowCount();
-    int col;
-
     for(int i=0;i<nb;++i) {
         QModelIndex idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationScheme);
         drugModel()->setData(idx, scheme);

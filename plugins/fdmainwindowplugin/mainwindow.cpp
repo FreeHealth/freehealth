@@ -133,6 +133,8 @@ MainWindow::MainWindow( QWidget * parent )
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     // create menus
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
@@ -479,7 +481,7 @@ bool MainWindow::openFile()
 
 void MainWindow::readFile(const QString &file)
 {
-    QHash<QString,QString> datas;
+    QString datas;
     if (drugModel()->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
                 tr("Opening a prescription : merge or replace ?"),
@@ -494,8 +496,9 @@ void MainWindow::readFile(const QString &file)
     } else {
         DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
-    patient()->setValue(Core::Patient::FullName, QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
-    m_ui->patientName->setText( QByteArray::fromBase64(datas.value("NAME").toAscii() ) );
+    qWarning() << datas;
+    patient()->fromXml(datas);
+    refreshPatient();
 }
 
 /** \brief Always keep uptodate patient's datas */

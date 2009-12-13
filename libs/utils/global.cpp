@@ -816,7 +816,7 @@ QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, 
 bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64 )
 {
     if (!xmlContent.contains(generalTag)) {
-        Utils::Log::addError("tkGobal",QString("Error while reading Xml : no %1 tag found").arg(generalTag));
+        Utils::Log::addError("Utils::readXml",QString("Error while reading Xml : tag %1 not found").arg(generalTag));
         return false;
     }
     readDatas.clear();
