@@ -217,12 +217,35 @@ QString ThemePrivate::iconFullPath( const QString &fileName, IconSize size )
 QPixmap ThemePrivate::splashScreen( const QString &fileName )
 {
     QString file = fileName;
-    if (QDate::currentDate().month() == 12) {
-        QFileInfo fi(file);
-        file = fi.baseName() + ("-christmas.") + fi.completeSuffix();
-        if (!QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
-            file = fileName;
+    QString extra;
+    switch (QDate::currentDate().month())
+    {
+        case 7:
+        case 8:
+        {
+            extra = "summer";
+            break;
+        }
+        case 10 :
+        {
+            extra = "halloween";
+            break;
+        }
+        case 12 :
+        {
+            extra = "christmas";
+            break;
+        }
     }
+    // does extra theme exists ?
+    if (!extra.isEmpty()) {
+        QFileInfo fi(file);
+        file = fi.baseName() + "-" + extra + "." + fi.completeSuffix();
+    }
+    if (!QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
+        file = fileName;
+
+    // return themed splashscreen
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists() )
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file );
     else

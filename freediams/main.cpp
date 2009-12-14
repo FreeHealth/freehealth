@@ -45,7 +45,7 @@
 
 #include <utils/log.h>
 
-enum {WarnAllPluginSpecs=1};
+enum {WarnAllPluginSpecs=0};
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
