@@ -43,6 +43,16 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
+          <widget class="QLabel" name="dobLabel">
+           <property name="text">
+            <string>DOB</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="dobDateEdit"/>
+         </item>
+         <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>Weight (kg)</string>

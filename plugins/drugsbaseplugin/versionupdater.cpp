@@ -368,7 +368,6 @@ bool VersionUpdater::isDosageDatabaseUpToDate() const
 bool VersionUpdater::updateDosageDatabase()
 {
     QMap<QString, DosageDatabaseUpdateStep *> from = d->dosageDatabaseSteps();
-    int i = 0;
     QString version = d->m_DosageDatabaseVersion;
     while (version != d->dosageDatabaseVersions().last()) {
         DosageDatabaseUpdateStep *step = from.value(version, 0);
@@ -415,7 +414,6 @@ bool VersionUpdater::isXmlIOUpToDate(const QString &xmlContent) const
 QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 {
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
-    int i = 0;
     QString version = d->xmlVersion(xmlContent);
     QString xml = xmlContent;
     while (version != d->xmlIoVersions().last()) {
@@ -439,7 +437,6 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::DrugsModel *model, const QList<int> &rowsToUpdate)
 {
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
-    int i = 0;
     QString version = fromVersion;
     while (version != d->xmlIoVersions().last()) {
         DrugsIOUpdateStep *step = from.value(version, 0);

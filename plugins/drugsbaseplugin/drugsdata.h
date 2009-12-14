@@ -273,7 +273,7 @@ private:
 class DRUGSBASE_EXPORT TextualDrugsData : public DrugsData
 {
 public:
-    TextualDrugsData::TextualDrugsData();
+    TextualDrugsData();
     void setDenomination(const QString &denomination);
 //    QString denomination() const {return denomination;}
 //    void setNote(const QString &note);

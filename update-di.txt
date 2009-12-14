@@ -3,12 +3,13 @@ version=0.2.0
     * Déc 2009
 
     * Version de la base de données thérapeutique :
-      * Médicaments :  AFSSAPS - 26/06/2009
+      * Médicaments :  AFSSAPS - 14/12/2009
       * Interactions : AFSSAPS - 29/06/2009
 
    * Nouvelles fonctionnalités :
       * 64 nouvelles DCI connues (jusqu'alors les DCI connues étaient celles qui donnent des interactions reconnues par l'AFSSAPS, maintenant le logiciel connait toutes les DCI commercialisées)
       * Mise à jour automatique de la base de données posologique
+      * Nouvelles étiquettes : [[REPEATED_DAILY_SCHEME]] et [[DISTRIBUTED_DAILY_SCHEME]]
       * Propriétés du tableau dans l'éditeur de texte enrichi
       * Possibilité de paramétrer la fréquence des recherches de mise à jour
       * Nouvelle action : Vérification des mises à jour dans le menu A propos

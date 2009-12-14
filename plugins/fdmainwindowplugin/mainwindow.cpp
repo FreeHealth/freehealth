@@ -205,6 +205,8 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
+    m_ui->dobLabel->hide();
+    m_ui->dobDateEdit->hide();
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
@@ -288,6 +290,7 @@ void MainWindow::refreshPatient() const
                              .arg( patient()->value(Core::Patient::Size).toString(),
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
 
+//    m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
     m_ui->patientWeight->setValue( patient()->value(Core::Patient::Weight).toInt() );
     m_ui->patientSize->setValue( patient()->value(Core::Patient::Size).toInt() );
     m_ui->patientClCr->setValue( patient()->value(Core::Patient::CreatinClearance).toDouble() );

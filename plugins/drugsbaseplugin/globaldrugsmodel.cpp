@@ -63,7 +63,7 @@ namespace Internal {
 class GlobalDrugsModelPrivate
 {
 public:
-    GlobalDrugsModelPrivate::GlobalDrugsModelPrivate()
+    GlobalDrugsModelPrivate()
     {}
 
     void updateCachedAvailableDosage()

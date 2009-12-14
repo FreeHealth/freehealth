@@ -34,9 +34,14 @@ Toute aide est la bienvenue...
 
 \section zone_recherche_medics La zone de recherche des médicaments
 
-La zone de saisie pour vos recherches (3) comprend deux boutons :
+La zone de saisie pour vos recherches (3) comprend trois boutons :
 \li celui de gauche vous permet de modifier les critères de recherche,
-\li celui de droite vous présente l'historique de vos recherche.
+\li celui de droite vous présente l'historique de vos recherche,
+\li celui à l'extérieur de la zone de saisie à droite pour prescrire des thérapeutiques textuelles.
+
+En dessous, la liste des médicaments de la base de données. Vous pouvez repérer rapidement les médicaments
+pour lesquels vous avez rédigé et sauvegarder une posologie, le fond apparait d'une couleur légèrement
+différente. Cette couleur peut être modifiée dans les préférences de l'application.
 
 Pour plus d'informations, référez-vous à la section : \ref rechercher
 
@@ -76,6 +81,11 @@ La barre d'icône présente dans l'ordre les actions suivantes :
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \page prescriptions_io Sauvegarder, recharger, ajouter des prescriptions
 
+\section prescription_io_problemes_connus Problèmes connus
+
+Les version 0.0.8 à 0.1.4 de \freediams ne sauvegardaient pas correctement le schéma de
+répartition journalier. Il est impossible de les récupérer. Ce bogue est corrigé depuis la version 0.2.0 de \freediams.
+
 \section prescription_save Sauvegarder une prescription
 
 Après avoir réalisé votre prescription, cliquez sur l'icône "sauvegarder" ou sélectionnez le menu
@@ -102,11 +112,11 @@ Cf supra.
 \section format_fichier_di Format du fichier de sauvegarde
 
 Le fichier de sauvegarde contient du code XML. Vous ne devez en aucun cas éditer de vous même les données
-sauvegardées dans ces fichiers. Le nom du patient est brouillé.
+sauvegardées dans ces fichiers. Les données concernant le patient sont brouillées.
 
 Exemple de prescription :
 \verbatim
-<?xml version="0.0.8" encoding="UTF-8"?>indique la version utilisée pour créer la prescription
+<?xml version="0.2.0" encoding="UTF-8"?>indique la version utilisée pour créer la prescription
 <FullPrescription>
   <Prescription>
     <CIS>68166740</CIS>                         code CIS du médicament pour les prescriptions non DCI
@@ -125,6 +135,7 @@ Exemple de prescription :
     <IntakeIntervalTime>0</IntakeIntervalTime>  Intervalle entre chaque prises
     <IntakeIntervalScheme></IntakeIntervalScheme>   Intervalle entre chaque prises libellé
     <MealTime></MealTime>                       Relation avec le repas (codé en entier, voir documentation du code)
+    <DailyScheme></DailyScheme>                 Répartition journalière des prises codée en XML
     <SpecifyPresentation></SpecifyPresentation> Non utilisé
     <SpecifyForm></SpecifyForm>                 Non utilisé
     <Note></Note>                               Note du prescripteur (sans les caractères '<' '>' '&'
@@ -190,6 +201,7 @@ Chaque interaction est représenté par une icône comme présentées ci-dessous
 \image html warning.png Interaction : À prendre en compte
 \image html deconseille.png Interaction : Déconseillée
 \image html critical.png Interaction : contre-indication
+\image html pencil.png Aucune interaction possible, il s'agit d'une prescription textuelle pure
 
 
 \section iams_infos Informations données sur les interactions
@@ -263,6 +275,11 @@ Cet icône est rappelé devant le nom de médicament prescrits dans cadre de la 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \page prescrire Prescrire avec \freediams
 
+Prescrire avec \freediams est d'une simplicité déconcertante. Vous pouvez préparer des posolgoies standardisées
+sur lesquelles vous vous reposerez pour prescrire au quotidien et, lorsque cela s'avère nécessaire, vous pouvez
+prescrire en "mode textuel pure".
+
+\section prescrire_posologies_standard Les posologies standardisées
 
 \freediams propose par défaut un module de prescription complet. Ce module repose sur
 l'idée que, pour la majorité de nos prescriptions, il est possible de créer une posologie standard sur laquelle
@@ -271,7 +288,7 @@ Ces posologies standards se définissent soit :
 \li soit pour un médicament donné
 \li soit pour une classe DCI entière (ayant le même dosage - CLAMOXYL 1g <-> AMOXICILLINE 1g).
 
-Ces posologies standards permettent :
+Ces posologies standardisées permettent :
 \li d'accélérer le processus de prescription,
 \li d'automatiser des tests selon le terrain (âge, poids, taille, clairance de créatinine, limites CIM10...)
 \li de créer des prescriptions en DCI
@@ -286,7 +303,7 @@ constituer une base de données complète. Il apparaît à ce stade indispensabl
 constitue pour vérifier et valider les posologies transmises au groupe. Nous cherchons actuellement des
 volontaires. Manifestez-vous sur notre mailing liste : freemedforms@googlegroups.com.
 
-\section dosagecreator_presentation Présentation du créateur de posologie
+\subsection dosagecreator_presentation Présentation du créateur de posologie
 
 \image html poso1.png Zones du créateur de posologies
 
@@ -336,7 +353,7 @@ Les indications de prises comprennent :
 \image html edit.png Icône représentant les libellés de l'utilisateur
 
 
-\section poso_std Réaliser des posologies standardisées
+\subsection poso_std Réaliser des posologies standardisées
 
 Tout d'abord, il est nécessaire de renseigner un libellé à la posologie.\n
 --> À faire : règle de libellisation des posologies.
@@ -352,9 +369,9 @@ Ensuite, sauvegardez la posologie (et prescrivez selon).
 La posologie sera alors disponible à chaque ouverture du médicament ou d'un médicament "DCI-compatible".
 
 
-\section poso_exemple Exemple de posologie standardisée DCI
+\subsection poso_exemple Exemple de posologie standardisée DCI
 
-\subsection ex1 Créer une posologie standardisée DCI
+\subsubsection ex1 Créer une posologie standardisée DCI
 
 Sélectionnez "AMLOR 5 mg" comme médicament.\n
 Renseignez la posologie standard suivante : "Hypertension artérielle - Mensuel" : 1 prise 1 jour durant 1 mois.\n
@@ -368,7 +385,7 @@ Sauvegardez sans prescrire.\n
 
 \image html prescription_ex1.png Posologie DCI - exemple
 
-\subsection ex2 Prescrire DCI sur la base la posologie créée
+\subsubsection ex2 Prescrire DCI sur la base la posologie créée
 
 Sélectionnez "AMLODIP*5*mg" comme médicament.\n
 Tous auront accès à la prescription nouvellement créée.
@@ -377,7 +394,7 @@ Tous auront accès à la prescription nouvellement créée.
 Cela est lié au fait que le dosage de la DCI est "5,00 mg" et non "5 mg" (sans ",00"). Ce bug sera corrigé avec la
 version 0.1.0 et supra.
 
-\section prescription_to_dci Transformer une prescription en prescription DCI
+\subsection prescription_to_dci Transformer une prescription en prescription DCI
 
 Tous les médicaments ne peuvent pas être prescrits en DCI. Les limitations viennent :
 - de la base de données elle-même (la DCI n'est pas connue pour toutes les molécules chimiques)
@@ -390,9 +407,20 @@ Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spé
 
 \image html prescription_dci.png Passage d'une prescription normale à DCI
 
-\section fortestonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
+\subsection fortestonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
 
-\todo écrire la doc
+\section prescrire_textuellement Prescrire textuellement
+
+De temps à autre, il est nécessaire de pouvoir ajouter une prescription en texte libre. \n
+\freediams gère les prescriptions dites "textuelles pures". \n
+Pour ce faire, cliquez sur le crayon dans la zone de recherche.
+\image html pencil.png Prescription Textuelle Pure
+
+Une fenêtre apparaît, il ne vous reste plus qu'à renseigner le nom du médicament et une note. Lorsque vous
+validez votre saisie l'icône "crayon" reste affiché en face des prescriptions textuelles pures.
+
+Les prochaines versions de \freediams vous permettront de sauvegarder ces prescriptions textuelles et de
+les récupérer rapidement. Ceci pour vous éviter de répéter la saisie.
 
 \ref index
 */
@@ -512,7 +540,9 @@ Les étiquettes utilisables sont les suivantes :
 - <em>[[Q_FROM]]</em> pour la quantité prescrite "de"
 - <em>[[Q_TO]]</em> pour la quantité prescrite "à"
 - <em>[[Q_SCHEME]]</em>  pour la forme prescrite (comprimé, pulvérisation, bains de bouche...)
-- <em>[[DAILY_SCHEME]]</em> pour le schéma de prise dans la journée (matin, midi et soir)
+- <em>[[DAILY_SCHEME]]</em> pour le schéma de prise dans la journée (sera soit égal à [[REPEATED_DAILY_SCHEME]] soit égal à [[DISTRIBUTED_DAILY_SCHEME]]
+- <em>[[REPEATED_DAILY_SCHEME]]</em> lorsque le schéma de prises journalières est une répétition de la quantité prescrite. Par exemple : 1 comprimé matin, midi et soir
+- <em>[[DISTRIBUTED_DAILY_SCHEME]]</em> lorsque le schéma de prises journalières est une répartition de la quantité prescrite. Par exemple : 6 comprimés par jour. 2 matin, 1 midi et 3 soir.
 - <em>[[PERIOD]]</em> pour la période de prise (prendre un comprime --> [une] fois par jour)
 - <em>[[PERIOD_SCHEME]]</em> pour la période de prise (texte : semaine, mois, jours)
 - <em>[[D_FROM]]</em> pour la durée prescrite "de"
@@ -544,14 +574,14 @@ Vous pouvez consulter aussi consulter :
     - Éric Maeker, MD <eric.maeker@free.fr>.
 
 - <b>Contributeurs :</b>
-    - Guillaume Denry <guillaume.denry@gmail.com> : codeur, déboggueur, conseiller informatique
-    - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior codeur, conseiller médical
-    - Laurent Masson, MD <> : conseiller médical
+    - Guillaume Denry : codeur, déboggueur, conseiller informatique
+    - Sébastien Belin, MD : junior codeur, conseiller médical
+    - Laurent Masson, MD : conseiller médical
 
 - <b>Aides et conseillers :</b>
-    -  Filipe Azevedo <pasnox@gmail.com> : aide au déboggueur, conseiller informatique.
-    -  David Geldreich <david.geldreich@free.fr> : conseiller informatique,
-    -  Jourdan Romain  <No@Mail.com> : aide au codage du moteur d'impression
+    -  Filipe Azevedo : aide au déboggueur, conseiller informatique.
+    -  David Geldreich : conseiller informatique,
+    -  Jourdan Romain : aide au codage du moteur d'impression
 
 - <b>Testeurs :</b>
     - Plusieurs testeurs anonymes pour la plupart.
@@ -559,13 +589,14 @@ Vous pouvez consulter aussi consulter :
 - <b>Packageurs :</b>
     - Eric Maeker, MD : Debian, Ubuntu, MacOs, FreeBSD (en cours), Windows
     - Sascha Manns : OpenSuse
+    - Debian Med Team : Debian
 
 - <b>Traducteur :</b>
     - Éric Maeker, MD (english, french)
     - Sascha Manns (deutsch)
 
 - <b>Maître toile : </b>
-    - Vincent Perez, MD <vinperez@gmail.com>
+    - Vincent Perez, MD
 
 - <b>Mailing liste publique :</b>
     -  freemedforms@googlegroups.com
