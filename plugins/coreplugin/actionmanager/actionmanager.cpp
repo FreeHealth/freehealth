@@ -487,7 +487,7 @@ void ActionManagerPrivate::initialize()
 //    settings->endArray();
 }
 
-void ActionManagerPrivate::saveSettings(QSettings *settings)
+void ActionManagerPrivate::saveSettings(QSettings */*settings*/)
 {
 //    settings->beginWriteArray(QLatin1String(settingsGroup));
 //    int count = 0;

@@ -700,6 +700,7 @@ bool MainWindowActionHandler::updateFound()
 
 void MainWindowActionHandler::updateCheckerEnd(bool error)
 {
+    Q_UNUSED(error);
     /** \todo improve this for FreeMedForms (delete only label and progressbar) */
     delete statusBar();
 }
