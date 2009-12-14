@@ -32,48 +32,33 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "drugsbaseplugin.h"
-#include "drugsdatabaseaboutpage.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef DRUGSDATABASEABOUTPAGE_H
+#define DRUGSDATABASEABOUTPAGE_H
 
-#include <utils/log.h>
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/iaboutpage.h>
 
-#include <QtCore/QtPlugin>
+namespace DrugsDB {
+namespace Internal {
 
-using namespace DrugsDB;
-
-DrugsBasePlugin::DrugsBasePlugin()
-//        : m_DrugsBaseManager(0)
+class DrugsDatabaseAboutPage : public Core::IAboutPage
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating DrugsBasePlugin";
-}
+public:
+    DrugsDatabaseAboutPage(QObject *parent);
+    ~DrugsDatabaseAboutPage();
 
-DrugsBasePlugin::~DrugsBasePlugin()
-{
-//    if (m_DrugsBaseManager) {
-//        delete m_DrugsBaseManager;
-//        m_DrugsBaseManager = 0;
-//    }
-}
+    QString id() const       { return objectName();   }
+    QString name() const;
+    QString category() const;
 
-bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DrugsBasePlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-//    m_DrugsBaseManager = DrugsBaseManager::instance();
-    return true;
-}
+    QWidget *widget();
+};
 
-void DrugsBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DrugsBasePlugin::extensionsInitialized";
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new DrugsDB::Internal::DrugsDatabaseAboutPage(this));
-}
+} // End Internal
+} // End DrugsDB
 
-
-Q_EXPORT_PLUGIN(DrugsBasePlugin)
+#endif // DRUGSDATABASEABOUTPAGE_H

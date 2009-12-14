@@ -227,6 +227,8 @@ namespace Time {
         const char * const  NAVIGATION            = QT_TRANSLATE_NOOP("tkConstants", "Navigation");
 
         // Drugs
+        const char* const DRUGS_DATABASE      = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
+        const char* const INTERACTIONS_DATABASE      = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
         const char* const DRUGS      = QT_TRANSLATE_NOOP("tkConstants", "drugs");
         const char* const INN      = QT_TRANSLATE_NOOP("tkConstants", "INN");
         const char* const INTAKES    = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
