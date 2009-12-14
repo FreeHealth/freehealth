@@ -220,6 +220,11 @@ QPixmap ThemePrivate::splashScreen( const QString &fileName )
     QString extra;
     switch (QDate::currentDate().month())
     {
+        case 1:
+        {
+            extra = "birthday";
+            break;
+        }
         case 7:
         case 8:
         {
