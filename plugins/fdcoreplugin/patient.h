@@ -64,6 +64,7 @@ public:
         Sex,
         DateOfBirth,
         Age,
+        YearsOld,
         Weight,
         Size,
         IMC,

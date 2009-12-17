@@ -245,7 +245,7 @@ public:
     QString toVersion() const {return "0.2.0";}
 
     bool updateFromXml() const {return false;}
-    bool executeUpdate(const QString &xml) const {return true;}
+    bool executeUpdate(const QString &xml) const {Q_UNUSED(xml); return true;}
 
     bool updateFromModel() const {return true;}
     bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const

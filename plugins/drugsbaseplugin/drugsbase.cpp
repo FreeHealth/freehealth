@@ -353,8 +353,8 @@ bool DrugsBase::createDatabase( const QString &connectionName , const QString &d
     // 2. to retreive dosages from internet FMF website
     if (connectionName != Dosages::Constants::DOSAGES_DATABASE_NAME)
         return false;
-    Utils::Log::addMessage(this, QCoreApplication::translate("DrugsBase", "Trying to create empty database. \nLocation : %1 \nFileName: %2")
-                       .arg(pathOrHostName, dbName));
+    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+                           .arg(dbName).arg(pathOrHostName));
         // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
@@ -406,7 +406,8 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
     QHash<QString, QString> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if (!DB.open()) {
-        Utils::Log::addError(this, tr("Unable to open database %1 for dosage transmission").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
         return toReturn;
     }
     QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
@@ -453,7 +454,8 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
         return true;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if (!DB.open()) {
-        Utils::Log::addError(this, tr("Unable to open database %1 for dosage transmission").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
         return false;
     }
     QStringList reqs;
@@ -488,7 +490,8 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
     QList<int> toReturn;
     QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if ((DosageDB.isOpen()) && (!DosageDB.open())) {
-        Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DosageDB.lastError().text()));
         return toReturn;
     }
     QString req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE`;");
@@ -512,7 +515,8 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
     QList<int> code_subst;
     QSqlDatabase DrugsDB = QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME);
     if ((DrugsDB.isOpen()) && (!DrugsDB.open())) {
-        Utils::Log::addError(this, tr("Unable to open database %1").arg(Constants::DRUGS_DATABASE_NAME));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Constants::DRUGS_DATABASE_NAME).arg(DrugsDB.lastError().text()));
         return toReturn;
     }
 
@@ -588,7 +592,8 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
     QMultiHash<int,QString> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if (!DB.open()) {
-        Utils::Log::addError(this, tr("Unable to open database %1").arg(Dosages::Constants::DOSAGES_DATABASE_NAME));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
         return toReturn;
     }
     QString req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE`;");
@@ -853,7 +858,8 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
 
      QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
      if ((!DB.open()) && (!DB.isOpen())) {
-         Utils::Log::addError(this, tr("Unable to open database %1").arg(DrugsDB::Constants::DRUGS_DATABASE_NAME));
+         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Constants::DRUGS_DATABASE_NAME).arg(DB.lastError().text()));
           return 0;
       }
 

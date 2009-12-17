@@ -9,6 +9,8 @@ version=0.2.0
    * Nouvelles fonctionnalités :
       * 64 nouvelles DCI connues (jusqu'alors les DCI connues étaient celles qui donnent des interactions reconnues par l'AFSSAPS, maintenant le logiciel connait toutes les DCI commercialisées)
       * Mise à jour automatique de la base de données posologique
+      * Ajout de la date de naissance dans les informations patient
+      * Calcul automatique de la clearance de la créatinine
       * Nouvelles étiquettes : [[REPEATED_DAILY_SCHEME]] et [[DISTRIBUTED_DAILY_SCHEME]]
       * Propriétés du tableau dans l'éditeur de texte enrichi
       * Possibilité de paramétrer la fréquence des recherches de mise à jour

@@ -130,20 +130,46 @@ bool Patient::has(const Reference ref) const
 
 
 /** \brief Get the value of the patient according to the enumerator Patient::Reference. */
-QVariant Patient::value( Reference ref ) const
+QVariant Patient::value(Reference ref) const
 {
     switch (ref)
     {
+        case YearsOld :
+        {
+            if (has(DateOfBirth)) {
+                return MedicalUtils::ageYears(d->m_Values.value(DateOfBirth).toDate());
+            }
+            break;
+        }
         case Age :
         {
             if (d->m_Values.contains(ref))
                 return d->m_Values.value(ref);
-            if (d->m_Values.contains(DateOfBirth)) {
+            if (has(DateOfBirth)) {
                 QString tmp;
                 tmp = MedicalUtils::readableAge(d->m_Values.value(DateOfBirth).toDateTime());
                 d->m_Values.insert(Age,tmp);
                 return tmp;
             }
+            break;
+        }
+        case CreatinClearance :
+        {
+            // Try to calculate Clearance
+            if (value(YearsOld).toInt()>0) {
+                if (has(Creatinin) && has(Sex) && has(Weight)) {
+                    bool isMale = d->m_Values.value(Sex).toString().startsWith("M");
+                    return MedicalUtils::clearanceCreatinin(value(YearsOld).toInt(),
+                                                            d->m_Values.value(Weight).toDouble(),
+                                                            d->m_Values.value(Creatinin).toDouble(),
+                                                            isMale);
+                }
+            } else {
+                // If we can not calculate it, then try to return the command line clearance
+                if (has(ref) && (!d->m_Values.value(ref).isNull()))
+                    return d->m_Values.value(ref);
+            }
+            break;
         }
         default :
         {
@@ -155,8 +181,13 @@ QVariant Patient::value( Reference ref ) const
 }
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
-void Patient::setValue( Reference ref, const QVariant &value )
+void Patient::setValue(Reference ref, const QVariant &value)
 {
+    if (ref==DateOfBirth) {
+        QDate date = QDate::fromString(value.toString(),"dd/MM/yyyy");
+        d->m_Values.insert(ref, date);
+        return;
+    }
     d->m_Values.insert(ref, value);
 }
 

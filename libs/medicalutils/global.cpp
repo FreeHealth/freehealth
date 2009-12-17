@@ -43,6 +43,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QDateTime>
+#include <QDate>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
@@ -84,6 +85,13 @@ QString readableAge(const QDateTime &DOB)
     return readableAge.join(" ");
 }
 
+/** \brief Returns a readable age calculated from the date to now */
+int ageYears(const QDate &DOB)
+{
+    int daysTo = DOB.daysTo(QDate::currentDate());
+    double age = daysTo / 365.242199;
+    return (int)age;
+}
 
 /** \brief Calculates clearance of creatinin using Cockroft and Goult formula */
 double clearanceCreatinin(const int ageYears, const int weightKg, const double creatMlMin, const bool isMale)

@@ -107,7 +107,7 @@ public:
 
 using namespace DrugsDB;
 
-DailySchemeModel::DailySchemeModel(QObject * parent, const QString &serializedContent) :
+DailySchemeModel::DailySchemeModel(QObject * parent, const QString &) :
         QAbstractTableModel(parent), d(0)
 {
     d = new Internal::DailySchemeModelPrivate();

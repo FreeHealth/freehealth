@@ -50,7 +50,17 @@
           </widget>
          </item>
          <item>
-          <widget class="QDateEdit" name="dobDateEdit"/>
+          <widget class="QDateEdit" name="dobDateEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_2">
@@ -62,10 +72,13 @@
          <item>
           <widget class="QSpinBox" name="patientWeight">
            <property name="minimum">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="maximum">
             <number>300</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -79,10 +92,13 @@
          <item>
           <widget class="QSpinBox" name="patientSize">
            <property name="minimum">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="maximum">
             <number>300</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -97,7 +113,7 @@
           <widget class="QComboBox" name="sexCombo">
            <item>
             <property name="text">
-             <string>Unknown</string>
+             <string/>
             </property>
            </item>
            <item>
@@ -126,10 +142,13 @@
          <item>
           <widget class="QSpinBox" name="patientClCr">
            <property name="minimum">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="maximum">
-            <number>200</number>
+            <number>170</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -143,10 +162,13 @@
          <item>
           <widget class="QDoubleSpinBox" name="patientCreatinin">
            <property name="minimum">
-            <double>1.000000000000000</double>
+            <double>0.000000000000000</double>
            </property>
            <property name="maximum">
             <double>200.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.000000000000000</double>
            </property>
           </widget>
          </item>
