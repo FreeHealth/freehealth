@@ -247,6 +247,7 @@ bool Patient::fromXml(const QString &xml)
 void Patient::replaceTokens(QString &stringWillBeModified)
 {
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(Patient::FullName).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD, value(Patient::YearsOld).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(Patient::Weight).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_SIZE,        value(Patient::Size).toString() );

@@ -47,12 +47,12 @@
 <context>
     <name>Core::Internal::AppAboutPage</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="56"/>
+        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="55"/>
         <source>1. General</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="57"/>
+        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="56"/>
         <source>Application</source>
         <translation>Anwendung</translation>
     </message>
@@ -73,12 +73,12 @@
 <context>
     <name>Core::Internal::CommandLineAboutPage</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="69"/>
+        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="68"/>
         <source>5. Command line</source>
         <translation>5. Kommandozeile</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="70"/>
+        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="69"/>
         <source>Application</source>
         <translation>Anwendung</translation>
     </message>
@@ -198,7 +198,7 @@ Benutze URL: %1
 <context>
     <name>FormMain</name>
     <message>
-        <location filename="../../plugins/coreplugin/iformitem.cpp" line="375"/>
+        <location filename="../../plugins/coreplugin/iformitem.cpp" line="376"/>
         <source>Form : </source>
         <translation>Formular:</translation>
     </message>
@@ -206,7 +206,7 @@ Benutze URL: %1
 <context>
     <name>FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/iformitem.cpp" line="502"/>
+        <location filename="../../plugins/coreplugin/iformitem.cpp" line="503"/>
         <source>Forms : </source>
         <translation>Formular:</translation>
     </message>

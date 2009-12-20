@@ -34,4 +34,9 @@ SOURCES = drugsbaseplugin.cpp \
     dailyschememodel.cpp \
     versionupdater.cpp \
     drugsdatabaseaboutpage.cpp
+
 OTHER_FILES = DrugsBase.pluginspec
+
+# translations
+TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/drugsbaseplugin_fr.ts \
+    $${SOURCES_GLOBAL_RESOURCES}/translations/drugsbaseplugin_de.ts

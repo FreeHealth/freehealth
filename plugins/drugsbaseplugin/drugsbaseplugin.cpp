@@ -37,13 +37,14 @@
 
 #include <utils/log.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 
 using namespace DrugsDB;
 
 DrugsBasePlugin::DrugsBasePlugin()
-//        : m_DrugsBaseManager(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating DrugsBasePlugin";
@@ -51,10 +52,6 @@ DrugsBasePlugin::DrugsBasePlugin()
 
 DrugsBasePlugin::~DrugsBasePlugin()
 {
-//    if (m_DrugsBaseManager) {
-//        delete m_DrugsBaseManager;
-//        m_DrugsBaseManager = 0;
-//    }
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -63,16 +60,19 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
         qWarning() << "DrugsBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-//    m_DrugsBaseManager = DrugsBaseManager::instance();
     return true;
 }
 
 void DrugsBasePlugin::extensionsInitialized()
 {
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
+
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsDatabaseAboutPage(this));
+
 }
 
 

@@ -497,6 +497,7 @@ QString DosageModel::toXml(const int row)
 */
 bool DosageModel::addFromXml(const QString &xml)
 {
+    /** \todo here */
     //    QHash<QString, QString> datas;
     //    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");
     //    if (n<=0)

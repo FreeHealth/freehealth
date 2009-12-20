@@ -73,24 +73,39 @@ class TreeItem
 {
 public:
     TreeItem(const QHash<int, QVariant> &data, TreeItem *parent = 0) :
-            parentItem(parent), itemData(data), m_IsTemplate(false)
+            m_Parent(parent), itemData(data), m_IsTemplate(false),
+            m_IsModified(false), m_NewlyCreated(false)
     {}
-    ~TreeItem() { qDeleteAll(childItems); }
+    ~TreeItem() { qDeleteAll(m_Children); }
 
-    TreeItem *child(int number) { return childItems.value(number); }
-    int childCount() const { return childItems.count(); }
+    // Genealogy management
+    TreeItem *child(int number) { return m_Children.value(number); }
+    int childCount() const { return m_Children.count(); }
     int columnCount() const { return itemData.count(); }
-    TreeItem *parent() { return parentItem; }
-    void setParent(TreeItem *parent) { parentItem = parent; }
+    TreeItem *parent() { return m_Parent; }
+    void setParent(TreeItem *parent) { m_Parent = parent; }
+    bool addChildren(TreeItem *child)
+    {
+        if (!m_Children.contains(child))
+            m_Children.append(child);
+        return true;
+    }
+    int childNumber() const
+    {
+        if (m_Parent)
+            return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+        return 0;
+    }
+
+    // For tree management
     void setHasTemplate(bool isTemplate) { m_IsTemplate=true; }
     bool isTemplate() const {return m_IsTemplate;}
 
-    bool addChildren(TreeItem *child)
-    {
-        if (!childItems.contains(child))
-            childItems.append(child);
-        return true;
-    }
+    // For database management
+    void setModified(bool state) {m_IsModified = state;}
+    bool isModified() const {return m_IsModified;}
+    void setNewlyCreated(bool state) {m_NewlyCreated = state;}
+    bool isNewlyCreated() const {return m_NewlyCreated;}
 
     bool insertColumns(int position, int columns)
     {
@@ -98,7 +113,7 @@ public:
             return false;
         for (int column = 0; column < columns; ++column)
             itemData.insert(position, QVariant());
-        foreach (TreeItem *child, childItems)
+        foreach (TreeItem *child, m_Children)
             child->insertColumns(position, columns);
         return true;
     }
@@ -112,24 +127,19 @@ public:
 //        return true;
 //    }
 
-    bool removeColumns(int position, int columns)
-    {
-        if (position < 0 || position + columns > itemData.size())
-            return false;
-        for (int column = 0; column < columns; ++column)
-            itemData.remove(position);
-        foreach (TreeItem *child, childItems)
-            child->removeColumns(position, columns);
-        return true;
-    }
+//    bool removeColumns(int position, int columns)
+//    {
+//        if (position < 0 || position + columns > itemData.size())
+//            return false;
+//        for (int column = 0; column < columns; ++column)
+//            itemData.remove(position);
+//        foreach (TreeItem *child, childItems)
+//            child->removeColumns(position, columns);
+//        return true;
+//    }
 
-    int childNumber() const
-    {
-        if (parentItem)
-            return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
-        return 0;
-    }
 
+    // For data management
     QVariant data(int column) const
     {
         return itemData.value(column);
@@ -137,17 +147,16 @@ public:
 
     bool setData(int column, const QVariant &value)
     {
-//        if (column < 0 || column >= itemData.size())
-//            return false;
-//        itemData[column] = value;
+        itemData.insert(column, value);
+        m_IsModified = true;
         return true;
     }
 
 private:
-    TreeItem *parentItem;
-    QList<TreeItem*> childItems;
+    TreeItem *m_Parent;
+    QList<TreeItem*> m_Children;
     QHash<int, QVariant> itemData;
-    bool m_IsTemplate;
+    bool m_IsTemplate, m_IsModified, m_NewlyCreated;
 };
 
 
@@ -212,7 +221,8 @@ public:
                 "`SUMMARY`                  varchar(500)   NULL,"
                 "`CONTENT`                  blob           NULL,"
                 "`DATE_CREATION`            date           NULL,"
-                "`DATE_MODIFICATION`        date           NULL"
+                "`DATE_MODIFICATION`        date           NULL,"
+                "`THEMED_ICON_FILENAME`     varchar(50)    NULL"
                 ");";
         req <<  "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
                 "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
@@ -222,7 +232,8 @@ public:
                 "`LABEL`                    varchar(300)   NULL,"
                 "`SUMMARY`                  varchar(500)   NULL,"
                 "`DATE_CREATION`            date           NULL,"
-                "`DATE_MODIFICATION`        date           NULL"
+                "`DATE_MODIFICATION`        date           NULL,"
+                "`THEMED_ICON_FILENAME`     varchar(50)    NULL"
                 ");";
         req <<  "CREATE TABLE IF NOT EXISTS `VERSION` ("
                 "`ACTUAL`                  varchar(10)"
@@ -276,13 +287,7 @@ public:
             Utils::Log::addQueryError(q, query);
         }
         query.finish();
-        // build the tree  /** \todo this can be improved */
         foreach(TreeItem *item, categories.values()) {
-//            if (item->data(TemplatesModel::Data_ParentId).toInt()==-1) {
-//                item->setParent(m_RootItem);
-//                m_RootItem->addChildren(item);
-//                continue;
-//            }
             // need to be reparented
             item->setParent(categories.value(item->data(TemplatesModel::Data_ParentId).toInt(), m_RootItem));
             // add item to the children of its parent
@@ -317,12 +322,6 @@ public:
         query.finish();
         // add templates to categories
         foreach(TreeItem *item, templates) {
-            qWarning() << item->data(TemplatesModel::Data_Label) << item->data(TemplatesModel::Data_ParentId);
-//            if (item->data(TemplatesModel::Data_ParentId).toInt()==-1) {
-//                item->setParent(m_RootItem);
-//                m_RootItem->addChildren(item);
-//                continue;
-//            }
             // need to be reparented
             item->setParent(categories.value(item->data(TemplatesModel::Data_ParentId).toInt(),m_RootItem));
             // add item to the children of its parent
@@ -464,4 +463,8 @@ Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
+
+bool TemplatesModel::setCurrentUser(const QString &uuid)
+{}
+
 

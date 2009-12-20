@@ -23,46 +23,51 @@
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="48"/>
+        <source>DOB</source>
+        <translation>DDN</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="61"/>
+        <source>dd/MM/yyyy</source>
+        <translation>dd/MM/yyyy</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="68"/>
         <source>Weight (kg)</source>
         <translation>Poids (Kg)</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="65"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="88"/>
         <source>Size (cm)</source>
         <translation>Taille (cm)</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="82"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="108"/>
         <source>Gender</source>
         <translation>Sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="90"/>
-        <source>Unknown</source>
-        <translation>Inconnu</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="95"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="121"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="100"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="126"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="112"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="138"/>
         <source>Creatinin clearance (ml/min)</source>
         <translation>Clairance de la créatinine (ml/min)</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="129"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="158"/>
         <source>Creatinin (mg/l)</source>
         <translation>Créatinine (mg/l)</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="150"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="182"/>
         <source>List of medications allergies</source>
         <translation>Liste des allergies médicamenteuses</translation>
     </message>
@@ -118,57 +123,57 @@
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="189"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="191"/>
         <source>Transmitting posologies...</source>
         <translation>Transmission des posologies...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="212"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="214"/>
         <source>Initializing drugs database</source>
         <translation>Intialisation de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="219"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="221"/>
         <source>Reading exchange file...</source>
         <translation>Lecture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="221"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="223"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation>Lecture du fichier d&apos;échange MedinTux.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="391"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="394"/>
         <source>Save actual prescription ?</source>
         <translation>Sauvegarder la prescription actuelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="392"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="395"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="485"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="488"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : ajouter ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="486"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="489"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Une prescription est présente, vouez-vous la remplacer ou y ajouter la prescription à charger ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="487"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="490"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="487"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="490"/>
         <source>Add to prescription</source>
         <translation>Ajouter la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="488"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="491"/>
         <source>Open a prescription</source>
         <translation>Ouvrir la prescription</translation>
     </message>

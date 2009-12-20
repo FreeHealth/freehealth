@@ -227,7 +227,7 @@
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="962"/>
+        <location filename="../../libs/utils/global.cpp" line="965"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -237,7 +237,7 @@
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="127"/>
         <source>Error %1 while retreiving update file %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur %1 lors du rapatriement du fichier de mise à jour %2</translation>
     </message>
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="151"/>

@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKMEDICALGLOBAL_H
-#define TKMEDICALGLOBAL_H
+#ifndef MEDICALUTILS_GLOBAL_H
+#define MEDICALUTILS_GLOBAL_H
 
 #include <medicalutils/medical_exporter.h>
 #include <medicalutils/aggir/girscore.h>
@@ -51,8 +51,8 @@ QT_END_NAMESPACE
 /**
  * \file global.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 09 Sept 2009
+ * \version 0.0.3
+ * \date 17 Dec 2009
 */
 
 namespace MedicalUtils {
@@ -64,4 +64,4 @@ MEDICALUTILS_EXPORT double clearanceCreatinin(const int ageYears, const int weig
 
 } // MedicalUtils
 
-#endif // TKMEDICALGLOBAL_H
+#endif // MEDICALUTILS_GLOBAL_H

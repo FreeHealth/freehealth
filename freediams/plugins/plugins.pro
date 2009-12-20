@@ -6,7 +6,9 @@ SUBDIRS = \
     printer \
     texteditor \
     drugs \
-    drugsbase
+    drugsbase \
+#    templates
+
 
 core.subdir = ../../plugins/fdcoreplugin
 
@@ -33,4 +35,6 @@ drugs.depends += drugsbase
 drugs.depends += core
 drugs.depends += printer
 drugs.depends += texteditor
-#drugs.depends += listview
+
+templates.subdir = ../../plugins/templatesplugin
+templates.depends += core

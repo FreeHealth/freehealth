@@ -42,13 +42,13 @@
         <translation>Medikamenten Dosis Creator</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="586"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="585"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Lösche diese Liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="624"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="623"/>
         <source>Linking to : </source>
         <translation>Verbinden mit:</translation>
     </message>
@@ -176,12 +176,12 @@ Medikament %1 ist bereits im Rezept</translation>
         <translation>Wenn Sie die Dosis dieses Medikamentes ändern möchten, doppelklicken sie bitte in die Rezept Box.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="200"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="201"/>
         <source>Made with FreeDiams.</source>
         <translation>Erstellt mit FreeDiams.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="212"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="213"/>
         <source>Made with FreeMedForms.</source>
         <translation>Erstellt mit FreeMedForms.</translation>
     </message>
@@ -1096,6 +1096,19 @@ p, li { white-space: pre-wrap; }
         <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="121"/>
         <source>Made with FreeDiams.</source>
         <translation>Erstellt mit FreeDiams.</translation>
+    </message>
+</context>
+<context>
+    <name>TextualPrescriptionDialog</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.cpp" line="66"/>
+        <source>Text can not contain any &apos;[&apos; or &apos;]&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.cpp" line="66"/>
+        <source>Please remove these chars from your texts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
