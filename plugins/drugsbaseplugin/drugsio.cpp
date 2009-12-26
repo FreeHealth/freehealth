@@ -65,6 +65,8 @@
 #include <QString>
 #include <QDir>
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 namespace DrugsIOConstants {
     const char *const XML_VERSION                         = "<?xml version=\"0.2.0\" encoding=\"UTF-8\"?>\n";
     const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
@@ -397,15 +399,13 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
     // sort
     m->sort(0);
 
-    Core::ISettings *s = Core::ICore::instance()->settings();
-
     QString ALD, nonALD;
     QString tmp;
     // Add drugs
     int i;
     for(i=0; i < m->rowCount(); ++i) {
         tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
-        if (s->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool())
+        if (settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool())
             tmp += "<span style=\"font-size:4pt\"><br /></span>";
         tmp += "</li>";
         if (m->index( i, Prescription::IsALD ).data().toBool()) {
@@ -416,9 +416,9 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
         tmp.clear();
     }
     if (!ALD.isEmpty()) {
-        tmp = s->value(S_ALD_PRE_HTML).toString();
+        tmp = settings()->value(S_ALD_PRE_HTML).toString();
         tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", ALD );
-        tmp += s->value(S_ALD_POST_HTML).toString();
+        tmp += settings()->value(S_ALD_POST_HTML).toString();
     }
     if (!nonALD.isEmpty()) {
         tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", nonALD );
@@ -433,6 +433,8 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
                      .arg(QString(prescriptionToXml(m).toAscii().toBase64())));
+
+//    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);

@@ -119,17 +119,6 @@ public:
     void setNewlyCreated(bool state) {m_NewlyCreated = state;}
     bool isNewlyCreated() const {return m_NewlyCreated;}
 
-//    bool insertColumns(int position, int columns)
-//    {
-//        if (position < 0 || position > itemData.size())
-//            return false;
-//        for (int column = 0; column < columns; ++column)
-//            itemData.insert(position, QVariant());
-//        foreach (TreeItem *child, m_Children)
-//            child->insertColumns(position, columns);
-//        return true;
-//    }
-
     bool removeChild(TreeItem *child)
     {
         if (m_Children.contains(child)) {
@@ -138,18 +127,6 @@ public:
         }
         return false;
     }
-
-//    bool removeColumns(int position, int columns)
-//    {
-//        if (position < 0 || position + columns > itemData.size())
-//            return false;
-//        for (int column = 0; column < columns; ++column)
-//            itemData.remove(position);
-//        foreach (TreeItem *child, childItems)
-//            child->removeColumns(position, columns);
-//        return true;
-//    }
-
 
     // For data management
     QVariant data(int column) const
@@ -414,13 +391,6 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
-
-//    setTable(drugsBase()->table(Constants::Table_CIS));
-//    setEditStrategy( QSqlTableModel::OnManualSubmit );
-//    QHashWhere where;
-//    where.insert(Constants::CIS_COMMERCIALISATION, "='O'");
-//    setFilter(drugsBase()->getWhereClause(Constants::Table_CIS, where));
-//    select();
 }
 
 TemplatesModel::~TemplatesModel()
@@ -435,11 +405,6 @@ bool TemplatesModel::setCurrentUser(const QString &uuid)
 {
     return true;
 }
-
-//int TemplatesModel::columnCount(const QModelIndex & /* parent */) const
-// {
-//     return d->m_RootItem->columnCount();
-// }
 
 QModelIndex TemplatesModel::index(int row, int column, const QModelIndex &parent) const
  {

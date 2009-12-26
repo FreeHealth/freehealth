@@ -12,12 +12,15 @@ HEADERS = templatesplugin.h \
     constants.h \
     templatesview.h \
     templatesview_p.h \
-    templateseditdialog.h
+    templateseditdialog.h \
+    templatespreferencespages.h
 SOURCES = templatesplugin.cpp \
     templatesmodel.cpp \
     templatesview.cpp \
-    templateseditdialog.cpp
+    templateseditdialog.cpp \
+    templatespreferencespages.cpp
 OTHER_FILES = Templates.pluginspec
 FORMS += templatesview.ui \
     templateseditdialog.ui \
-    templatescontenteditor.ui
+    templatescontenteditor.ui \
+    templatespreferenceswidget.ui

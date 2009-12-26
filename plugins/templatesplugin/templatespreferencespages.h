@@ -32,51 +32,79 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "templatesplugin.h"
-#include "templatesmodel.h"
-#include "templatesview.h"
-#include "templatesview_p.h"
-#include "templatespreferencespages.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef TEMPLATESPREFERENCESPAGES_H
+#define TEMPLATESPREFERENCESPAGES_H
 
-#include <utils/log.h>
+#include <coreplugin/ioptionspage.h>
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
+#include <QPointer>
 
-using namespace Templates;
+#include "ui_templatespreferenceswidget.h"
 
-TemplatesPlugin::TemplatesPlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating TemplatesPlugin";
-}
-
-TemplatesPlugin::~TemplatesPlugin()
-{
-}
-
-bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TemplatesPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    return true;
-}
-
-void TemplatesPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TemplatesPlugin::extensionsInitialized";
-    // Initialize TemplatesViewManager
-    Templates::Internal::TemplatesViewManager::instance(this);
-    addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
-
-    // FOR TESTS
-    TemplatesView *view = new TemplatesView();
-    view->show();
-    // END TESTS
+/**
+ * \file templatespreferencespages.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.0
+ * \date 27 Dec 2009
+*/
+namespace Core {
+class ISettings;
 }
 
 
-Q_EXPORT_PLUGIN(TemplatesPlugin)
+namespace Templates {
+namespace Internal {
+
+class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferencesWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(TemplatesPreferencesWidget)
+
+public:
+    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
+
+    static void writeDefaultSettings(Core::ISettings *s);
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+};
+
+class TemplatesPreferencesPage : public Core::IOptionsPage
+{
+public:
+    TemplatesPreferencesPage(QObject *parent = 0);
+    ~TemplatesPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::TemplatesPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
+};
+
+
+}
+}
+
+
+#endif // TEMPLATESPREFERENCESPAGES_H
