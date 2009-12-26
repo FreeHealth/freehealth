@@ -64,6 +64,7 @@ public:
     void setModelIndex(const QModelIndex &index);
 
 protected:
+    void done(int r);
     void changeEvent(QEvent *e);
 
 private:

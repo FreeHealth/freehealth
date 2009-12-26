@@ -276,7 +276,6 @@ public:
         m_ui = new Ui::TemplatesView;
         m_ui->setupUi(q);
         m_Model = new TemplatesModel(this);
-        m_Model->categoriesOnly();
         m_ui->categoryTreeView->setModel(m_Model);
         if (settings()->value(Templates::Constants::S_ALWAYSSHOWEXPANDED, true).toBool())
             m_ui->categoryTreeView->expandAll();
@@ -324,14 +323,15 @@ public Q_SLOTS:
         return actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES)->menu();
     //    return pop;
     }
-
     void contextMenu(const QPoint &p)
     {
         QMenu *pop = getContextMenu();
         pop->popup(m_ui->categoryTreeView->mapToGlobal(p));
         pop->exec();
     }
-
+    void on_ModelAboutToReset() {
+        /** \todo Store the expanded indexes of the view and restore when view resets. */
+    }
 
 public:
     TemplatesView *q;

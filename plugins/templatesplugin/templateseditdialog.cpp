@@ -114,6 +114,12 @@ public:
         QString content = m_Model->index(m_Index->row(), TemplatesModel::Data_Content).data().toString();
         m_ui->viewButton->setEnabled(content.isEmpty());
         m_ui->viewButton->setEnabled(m_Model->isTemplate(*m_Index));
+        // find parent category
+        QModelIndex idx(*m_Index);
+        while ((idx.isValid()) && (!m_Model->isCategory(idx))) {
+            idx = idx.parent();
+        }
+        m_ui->parentTreeView->setCurrentIndex(idx);
     }
 
 public:
@@ -141,6 +147,22 @@ TemplatesEditDialog::~TemplatesEditDialog()
     }
 }
 
+void TemplatesEditDialog::done(int r)
+{
+    if (r==QDialog::Rejected) {
+        d->m_Mapper->revert();
+    } else if (r==QDialog::Accepted) {
+        // submit mapper to model
+        d->m_Mapper->submit();
+        // reparent item
+        QModelIndex idx = d->m_ui->parentTreeView->selectionModel()->currentIndex();
+        if (idx.isValid()) {
+            d->m_Model->reparentIndex(*d->m_Index, idx);
+        }
+    }
+    QDialog::done(r);
+}
+
 void TemplatesEditDialog::setModel(Templates::TemplatesModel *model)
 {
     d->m_Model = model;
@@ -156,6 +178,7 @@ void TemplatesEditDialog::setModelIndex(const QModelIndex &index)
     d->m_Index = new QPersistentModelIndex(index);
     d->refreshComboCategory();
     d->createMapper();
+    d->m_Mapper->setRootIndex(index.parent());
     d->m_Mapper->setCurrentIndex(d->m_Index->row());
     d->refreshContent();
 }

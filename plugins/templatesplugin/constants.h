@@ -63,6 +63,7 @@ namespace Constants {
     const char * const  S_SPLITTER_SIZES           = "Templates/Splitter/Sizes";
 
     const char * const  S_ALWAYSSHOWEXPANDED       = "Templates/AlwaysShowExpanded";
+    const char * const  S_SAVEDATAWITHOUTPROMPTING = "Templates/SaveWithoutPrompting";
 
 
     enum TemplatesFields {

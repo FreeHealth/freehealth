@@ -103,6 +103,11 @@ public:
             return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
         return 0;
     }
+    void sortChildren()
+    {
+        qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
+    }
+
 
     // For tree management
     void setHasTemplate(bool isTemplate) { m_IsTemplate = isTemplate; }
@@ -114,25 +119,25 @@ public:
     void setNewlyCreated(bool state) {m_NewlyCreated = state;}
     bool isNewlyCreated() const {return m_NewlyCreated;}
 
-    bool insertColumns(int position, int columns)
-    {
-        if (position < 0 || position > itemData.size())
-            return false;
-        for (int column = 0; column < columns; ++column)
-            itemData.insert(position, QVariant());
-        foreach (TreeItem *child, m_Children)
-            child->insertColumns(position, columns);
-        return true;
-    }
-
-//    bool removeChildren(int position, int count)
+//    bool insertColumns(int position, int columns)
 //    {
-//        if (position < 0 || position + count > childItems.size())
+//        if (position < 0 || position > itemData.size())
 //            return false;
-//        for (int row = 0; row < count; ++row)
-//            delete childItems.takeAt(position);
+//        for (int column = 0; column < columns; ++column)
+//            itemData.insert(position, QVariant());
+//        foreach (TreeItem *child, m_Children)
+//            child->insertColumns(position, columns);
 //        return true;
 //    }
+
+    bool removeChild(TreeItem *child)
+    {
+        if (m_Children.contains(child)) {
+            m_Children.removeAll(child);
+            return true;
+        }
+        return false;
+    }
 
 //    bool removeColumns(int position, int columns)
 //    {
@@ -151,12 +156,22 @@ public:
     {
         return itemData.value(column);
     }
-
     bool setData(int column, const QVariant &value)
     {
         itemData.insert(column, value);
         m_IsModified = true;
         return true;
+    }
+
+    // For sort functions
+    static bool lessThan(TreeItem *item1, TreeItem *item2)
+    {
+        // category goes first
+        // then sort by name
+        bool sameType = (((item1->isTemplate()) && (item2->isTemplate())) || ((!item1->isTemplate()) && (!item2->isTemplate())));
+        if (sameType)
+            return item1->data(TemplatesModel::Data_Label).toString() < item2->data(TemplatesModel::Data_Label).toString();
+        return item2->isTemplate();
     }
 
 private:
@@ -350,7 +365,19 @@ public:
             // add item to the children of its parent
             item->parent()->addChildren(item);
         }
+        sortItems();
         m_ModelDatasRetreived = true;
+    }
+
+    void sortItems(TreeItem *root = 0)
+    {
+        if (!root)
+            root = m_RootItem;
+        int n = root->childCount();
+        root->sortChildren();
+        for(int i = 0; i < n; ++i) {
+            sortItems(root->child(i));
+        }
     }
 
     TreeItem *getItem(const QModelIndex &index) const
@@ -445,6 +472,28 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
      return createIndex(parentItem->childNumber(), 0, parentItem);
  }
 
+bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &parent)
+{
+    if (!item.isValid())
+        return false;
+    if (!parent.isValid())
+        return false;
+    Internal::TreeItem *childItem = d->getItem(item);
+    Internal::TreeItem *oldParentItem = childItem->parent();
+    Internal::TreeItem *newParentItem = d->getItem(parent);
+    // does item already a child of parent ?
+    if (oldParentItem==newParentItem)
+        return true;
+    // remove item from its parent children list
+    if (!oldParentItem->removeChild(childItem))
+        return false;
+    // add item to parent children
+    childItem->setParent(newParentItem);
+    newParentItem->addChildren(childItem);
+    reset();
+    return true;
+}
+
 int TemplatesModel::rowCount(const QModelIndex &parent) const
 {
     Internal::TreeItem *item = d->getItem(parent);
@@ -470,6 +519,18 @@ int TemplatesModel::columnCount(const QModelIndex &parent) const
 
 bool TemplatesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (!index.isValid())
+        return false;
+
+    Internal::TreeItem *it = d->getItem(index);
+    switch (role)
+    {
+        case Qt::EditRole :
+        case Qt::DisplayRole :
+        {
+            it->setData(index.column(),value);
+        }
+    }
     return true;
 }
 
