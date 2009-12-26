@@ -136,6 +136,7 @@ namespace Time {
         const char * const  M_EDIT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Edit");               /*!< \brief Default text for menu Edit  \ingroup constants_actionmanager */
         const char * const  M_EDIT_SELECT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Selection");          /*!< \brief Default text for menu Selection  \ingroup constants_actionmanager */
         const char * const  M_EDIT_LIST_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "List");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
+        const char * const  M_EDIT_TEMPLATES_TEXT= QT_TRANSLATE_NOOP("tkConstants", "Templates");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
         const char * const  M_FORMAT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Format");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
         const char * const  M_FORMAT_FONT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Font");               /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
         const char * const  M_FORMAT_PARAGRAPH_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Paragraph");     /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
@@ -180,6 +181,14 @@ namespace Time {
         const char * const  LISTMOVEDOWN_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Move item down"); /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  LISTCLEAR_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Clear");          /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  LISTSORT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Sort");          /*!< \brief Default action text  \ingroup constants_actionmanager */
+
+        const char * const  TEMPLATEADD_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  CATEGORYADD_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TEMPLATEEDIT_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Edit a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  CATEGORYEDIT_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Edit a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TEMPLATEREMOVE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Remove a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  CATEGORYREMOVE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Remove a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+
         const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Bold");           /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Italic");         /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FORMATUNDERLINE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Underline");      /*!< \brief Default action text  \ingroup constants_actionmanager */

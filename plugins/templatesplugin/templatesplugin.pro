@@ -10,9 +10,14 @@ HEADERS = templatesplugin.h \
     itemplates.h \
     templatesmodel.h \
     constants.h \
-    templatesview.h
+    templatesview.h \
+    templatesview_p.h \
+    templateseditdialog.h
 SOURCES = templatesplugin.cpp \
     templatesmodel.cpp \
-    templatesview.cpp
+    templatesview.cpp \
+    templateseditdialog.cpp
 OTHER_FILES = Templates.pluginspec
-FORMS += templatesview.ui
+FORMS += templatesview.ui \
+    templateseditdialog.ui \
+    templatescontenteditor.ui

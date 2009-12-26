@@ -38,74 +38,43 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESMODEL_H
-#define TEMPLATESMODEL_H
+#ifndef TEMPLATESEDITDIALOG_H
+#define TEMPLATESEDITDIALOG_H
 
-#include <templatesplugin/templates_exporter.h>
-#include <templatesplugin/itemplates.h>
-
-#include <QSqlTableModel>
-#include <QObject>
-
-/**
- * \file templatesmodel.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 23 Dec 2009
-*/
-
+#include <QDialog>
+#include <QModelIndex>
+QT_BEGIN_NAMESPACE
+class QPersistentModelIndex;
+class QTreeView;
+QT_END_NAMESPACE
 
 namespace Templates {
 namespace Internal {
-class TemplatesModelPrivate;
-}  // end namespace Internal
+class TemplatesEditDialogPrivate;
+}
+class TemplatesModel;
 
-
-class TEMPLATES_EXPORT TemplatesModel : public QAbstractItemModel
-{
+class TemplatesEditDialog : public QDialog {
     Q_OBJECT
 public:
-    enum DataRepresentation {
-        Data_Label = 0,
-        Data_Id,
-        Data_Uuid,
-        Data_UserUuid,
-        Data_ParentId,
-        Data_Summary,
-        Data_CreationDate,
-        Data_ModifDate,
-        Data_Content,
-        Data_Max_Param
-    };
+    TemplatesEditDialog(QWidget *parent = 0);
+    ~TemplatesEditDialog();
 
-    TemplatesModel(QObject * parent = 0);
-    ~TemplatesModel();
-    bool setCurrentUser(const QString &uuid);
+    void setModel(Templates::TemplatesModel *model);
+    void setModelIndex(const QModelIndex &index);
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index) const;
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    bool insertTemplate(const Templates::ITemplate *t);
-    bool removeRow(int row, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-    bool isTemplate(const QModelIndex &index) const;
-    bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
-
-    void categoriesOnly() const;
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    Internal::TemplatesModelPrivate *d;
+    void refreshComboCategory();
+private Q_SLOTS:
+    void editContent();
+
+private:
+    Internal::TemplatesEditDialogPrivate *d;
 };
 
-}  // end namespace Templates
+}  // End namespace Templates
 
-
-#endif // TEMPLATESMODEL_H
+#endif // TEMPLATESEDITDIALOG_H

@@ -7,7 +7,8 @@ SUBDIRS = \
     texteditor \
     drugs \
     drugsbase \
-#    templates
+    templates \
+    listview
 
 
 core.subdir = ../../plugins/fdcoreplugin

@@ -38,6 +38,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Templates::TemplatesModel
+  Manages the templates database in/out and link to views.
+  Datas are statically stored so that you can instanciate how many requiered models
+  as you want without consuming RAM.
+*/
+
 #include "templatesmodel.h"
 #include "itemplates.h"
 #include "constants.h"
@@ -98,7 +105,7 @@ public:
     }
 
     // For tree management
-    void setHasTemplate(bool isTemplate) { m_IsTemplate=true; }
+    void setHasTemplate(bool isTemplate) { m_IsTemplate = isTemplate; }
     bool isTemplate() const {return m_IsTemplate;}
 
     // For database management
@@ -159,11 +166,12 @@ private:
     bool m_IsTemplate, m_IsModified, m_NewlyCreated;
 };
 
-
 class TemplatesModelPrivate
 {
 public:
-    TemplatesModelPrivate(Templates::TemplatesModel *parent) : q(parent), m_RootItem(0)
+    TemplatesModelPrivate(Templates::TemplatesModel *parent) :
+            q(parent), m_RootItem(0),
+            m_ShowOnlyCategories(false)
     {
         QSqlDatabase DB;
         DB = QSqlDatabase::addDatabase("QSQLITE" , Internal::DATABASE_NAME);
@@ -184,14 +192,23 @@ public:
         }
         QHash<int, QVariant> datas;
         datas.insert(TemplatesModel::Data_Label, "ROOT");
-        m_RootItem = new TreeItem(datas,0);
+        if (!m_Tree) {
+            m_Tree = new TreeItem(datas,0);
+        }
+        m_RootItem = m_Tree;
+        ++m_Handle;
     }
 
     ~TemplatesModelPrivate()
     {
-        if (m_RootItem) {
-            delete m_RootItem;
-            m_RootItem = 0;
+        --m_Handle;
+        if (m_Handle==0) {
+            if (m_RootItem) {
+                delete m_RootItem;
+                m_RootItem = 0;
+                m_Tree = 0;
+            }
+            m_ModelDatasRetreived = false;
         }
     }
 
@@ -222,7 +239,8 @@ public:
                 "`CONTENT`                  blob           NULL,"
                 "`DATE_CREATION`            date           NULL,"
                 "`DATE_MODIFICATION`        date           NULL,"
-                "`THEMED_ICON_FILENAME`     varchar(50)    NULL"
+                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
+                "`TRANSMISSION_DATE`        date           NULL"
                 ");";
         req <<  "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
                 "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
@@ -233,7 +251,8 @@ public:
                 "`SUMMARY`                  varchar(500)   NULL,"
                 "`DATE_CREATION`            date           NULL,"
                 "`DATE_MODIFICATION`        date           NULL,"
-                "`THEMED_ICON_FILENAME`     varchar(50)    NULL"
+                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
+                "`TRANSMISSION_DATE`        date           NULL"
                 ");";
         req <<  "CREATE TABLE IF NOT EXISTS `VERSION` ("
                 "`ACTUAL`                  varchar(10)"
@@ -254,6 +273,9 @@ public:
 
     void setupModelData()
     {
+        if (m_ModelDatasRetreived)
+            return;
+
         Utils::Log::addMessage(q, "Getting Templates Categroies");
         QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
         if (!DB.open()) {
@@ -262,9 +284,9 @@ public:
                                  .arg(DB.lastError().text()));
             return;
         }
-        QHash<int, TreeItem*> categories;
 
         // get categories
+        QHash<int, TreeItem*> categories;
         QString req = "SELECT `CATEGORY_ID`, `CATEGORY_UUID`, `USER_UUID`, "
                       "`PARENT_CATEGORY`, `LABEL`, `SUMMARY`,`DATE_CREATION`, `DATE_MODIFICATION` "
                       "FROM `CATEGORIES`";
@@ -295,6 +317,7 @@ public:
         }
 
         // get templates
+        Utils::Log::addMessage(q, "Getting Templates");
         QList<TreeItem *> templates;
         req = "SELECT `TEMPLATE_ID`, `TEMPLATE_UUID`, `USER_UUID`, `ID_CATEGORY`, `LABEL`, "
                       "`SUMMARY`, `DATE_CREATION`, `DATE_MODIFICATION`"
@@ -327,7 +350,7 @@ public:
             // add item to the children of its parent
             item->parent()->addChildren(item);
         }
-
+        m_ModelDatasRetreived = true;
     }
 
     TreeItem *getItem(const QModelIndex &index) const
@@ -339,13 +362,20 @@ public:
         return m_RootItem;
     }
 
-
 private:
     Templates::TemplatesModel *q;
 
 public:
     TreeItem *m_RootItem;
+    bool m_ShowOnlyCategories;
+    static TreeItem *m_Tree;
+    static bool m_ModelDatasRetreived;
+    static int m_Handle;
 };
+
+TreeItem *TemplatesModelPrivate::m_Tree = 0;
+bool TemplatesModelPrivate::m_ModelDatasRetreived = false;
+int TemplatesModelPrivate::m_Handle = 0;
 
 }  // End Internal
 }  // End Templates
@@ -391,10 +421,11 @@ QModelIndex TemplatesModel::index(int row, int column, const QModelIndex &parent
 
      Internal::TreeItem *parentItem = d->getItem(parent);
      Internal::TreeItem *childItem = parentItem->child(row);
-     if (childItem)
-         return createIndex(row, column, childItem);
-     else
-         return QModelIndex();
+     if (childItem) {
+//         if (d->m_ShowOnlyCategories && (!childItem->isTemplate()))
+             return createIndex(row, column, childItem);
+     }
+     return QModelIndex();
  }
 
 QModelIndex TemplatesModel::parent(const QModelIndex &index) const
@@ -408,20 +439,32 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
      if (parentItem == d->m_RootItem)
          return QModelIndex();
 
+//     if (d->m_ShowOnlyCategories && (parentItem->isTemplate()))
+//         return QModelIndex();
+
      return createIndex(parentItem->childNumber(), 0, parentItem);
  }
 
 int TemplatesModel::rowCount(const QModelIndex &parent) const
 {
     Internal::TreeItem *item = d->getItem(parent);
-    if (item)
+    if (item) {
+//        if (d->m_ShowOnlyCategories) {
+//            int n = 0;
+//            for(int i = 0; i<item->childCount();++i) {
+//                if (!item->child(i)->isTemplate());
+//                ++n;
+//            }
+//            return n;
+//        }
         return item->childCount();
+    }
     return 0;
 }
 
 int TemplatesModel::columnCount(const QModelIndex &parent) const
 {
-    return Max_Param;
+    return Data_Max_Param;
 }
 
 
@@ -436,6 +479,10 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     const Internal::TreeItem *it = d->getItem(item);
+
+    if (d->m_ShowOnlyCategories && it->isTemplate())
+        return QVariant();
+
     switch (role)
     {
         case Qt::EditRole :
@@ -464,7 +511,27 @@ Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
-bool TemplatesModel::setCurrentUser(const QString &uuid)
+
+bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 {}
 
+bool TemplatesModel::removeRow(int row, const QModelIndex &parent)
+{}
+
+bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
+{}
+
+bool TemplatesModel::isTemplate(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+
+    const Internal::TreeItem *it = d->getItem(index);
+    return it->isTemplate();
+}
+
+void TemplatesModel::categoriesOnly() const
+{
+    d->m_ShowOnlyCategories = true;
+}
 

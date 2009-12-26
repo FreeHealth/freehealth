@@ -37,16 +37,6 @@ CONFIG( debug, debug|release ) {
     message( Win32 : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH})
  }
 
- # Install Qt plugins (SQL plugins)
- qt_sqlplugins.path = $${QT_PLUGINS_INSTALL_PATH}
- qt_sqlplugins.files = $${QTPLUGINS_PATH}/sqldrivers
- qt_imagesplugins.path = $${QT_PLUGINS_INSTALL_PATH}
- qt_imagesplugins.files = $${QTPLUGINS_PATH}/imageformats
- qt_accessibleplugins.path = $${QT_PLUGINS_INSTALL_PATH}
- qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
- INSTALLS += qt_sqlplugins qt_imagesplugins qt_accessibleplugins
- message( Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${PLUGINS_INSTALL_PATH}/qt )
-
 }  #end if release mode
 
 

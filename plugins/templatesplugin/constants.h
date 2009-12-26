@@ -62,6 +62,9 @@ namespace Constants {
 
     const char * const  S_SPLITTER_SIZES           = "Templates/Splitter/Sizes";
 
+    const char * const  S_ALWAYSSHOWEXPANDED       = "Templates/AlwaysShowExpanded";
+
+
     enum TemplatesFields {
         TF_Id = 0,
         TF_OwnerUuid,

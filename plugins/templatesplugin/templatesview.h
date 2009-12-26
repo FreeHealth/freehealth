@@ -42,26 +42,37 @@
 #define TEMPLATESVIEW_H
 
 #include <QtGui/QWidget>
-
+#include <QItemSelectionModel>
+QT_BEGIN_NAMESPACE
+class QMenu;
+QT_END_NAMESPACE
 
 namespace Templates {
 namespace Internal {
 class TemplatesViewPrivate;
+class TemplatesViewActionHandler;
 }  // End namespace Internal
 
 class TemplatesView : public QWidget
 {
     Q_OBJECT
     friend class Internal::TemplatesViewPrivate;
+    friend class Internal::TemplatesViewActionHandler;
 
 public:
     TemplatesView(QWidget *parent = 0);
     ~TemplatesView();
 
+    QItemSelectionModel *selectionModel() const;
+    bool currentItemIsTemplate() const;
+
     //    ITemplates *currentTemplate() const;
 
 Q_SIGNALS:
-    void currentTemplateChanged();
+    void currentItemChanged();
+
+protected Q_SLOTS:
+    void editCurrentItem();
 
 protected:
     void changeEvent(QEvent *e);

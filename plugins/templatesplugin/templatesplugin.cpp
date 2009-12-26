@@ -35,6 +35,7 @@
 #include "templatesplugin.h"
 #include "templatesmodel.h"
 #include "templatesview.h"
+#include "templatesview_p.h"
 
 #include <utils/log.h>
 
@@ -66,6 +67,8 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
+    // Initialize TemplatesViewManager
+    Templates::Internal::TemplatesViewManager::instance(this);
     TemplatesView *view = new TemplatesView();
     view->show();
 }

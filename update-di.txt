@@ -4,11 +4,12 @@ version=0.2.0
 
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 14/12/2009
-      * Interactions : AFSSAPS - 29/06/2009
+      * Interactions : AFSSAPS - 30/06/2009
 
    * Nouvelles fonctionnalités :
       * 64 nouvelles DCI connues (jusqu'alors les DCI connues étaient celles qui donnent des interactions reconnues par l'AFSSAPS, maintenant le logiciel connait toutes les DCI commercialisées)
       * Mise à jour automatique de la base de données posologique
+      * Prescription textuelle pure
       * Ajout de la date de naissance dans les informations patient
       * Calcul automatique de la clearance de la créatinine
       * Nouvelles étiquettes : [[YEARSOLD]] (pour le patient), [[REPEATED_DAILY_SCHEME]] et [[DISTRIBUTED_DAILY_SCHEME]]
@@ -17,8 +18,8 @@ version=0.2.0
       * Nouvelle action : Vérification des mises à jour dans le menu A propos
       * Impression de duplicatas optionnelle
       * Icone de l'application pour MacOs
-      * Le splash de noël
-      * Mise à jour des traduction En/Fr
+      * Le splash de noël, halloween et vacances d'été
+      * Mise à jour des traductions En/Fr
 
    * Modifications importantes :
       * Division du plugin Drugs en deux : DrugsBase et Drugs

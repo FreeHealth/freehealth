@@ -56,6 +56,7 @@ const char* const   M_EDITOR_EDIT        = "menu.editor.edition";
 const char* const   M_EDITOR_FILE        = "menu.editor.file";
 const char * const  M_EDIT_SELECT        = "menuEdit.Select";   /*!< \brief Default menu Edit/Select object name  \ingroup constants_actionmanager */
 const char * const  M_EDIT_LIST          = "menuEdit.List";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
+const char * const  M_EDIT_TEMPLATES     = "menuEdit.Templates";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT             = "menuFormat";        /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT_FONT        = "menuFormat.Font";  /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT_PARAGRAPH   = "menuFormat.Paragraph";  /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
@@ -89,6 +90,8 @@ const char * const G_EDIT_UNDOREDO       = "grEdit.UndoRedo";  /*!< \brief Defau
 const char * const G_EDIT_COPYPASTE      = "grEdit.CopyPaste"; /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_SELECT         = "grEdit.SelectAll"; /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_LIST           = "grEdit.List";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_TEMPLATES      = "grEdit.Templates"; /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_EDIT_CATEGORIES     = "grEdit.Categories"; /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_ADVANCED       = "grEdit.Advanced";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_FIND           = "grEdit.Find";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_EDITOR         = "grEdit.Editor";    /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -184,6 +187,14 @@ const char * const  A_LIST_MOVEUP         = "actionListMoveUp";     /*!< \brief 
 const char * const  A_LIST_MOVEDOWN       = "actionListMoveDown";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_LIST_CLEAR          = "actionListClear";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_LIST_SORT           = "actionListSort";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+
+// Templates actions
+const char * const  A_TEMPLATE_ADD        = "actionTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_ADD        = "actionCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_EDIT       = "actionTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_EDIT       = "actionCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
 const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -358,6 +369,7 @@ const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
 
 // TEXT COMPLETION tokens
 const char * const  TOKEN_PATIENTAGE   ="AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTYEARSOLD ="YEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
