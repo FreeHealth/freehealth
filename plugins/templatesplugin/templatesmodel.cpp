@@ -62,13 +62,16 @@
 #include <QSqlTableModel>
 #include <QDir>
 #include <QMimeData>
-
 #include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
 
 #include <QDebug>
 
 using namespace Templates;
 using namespace Trans::ConstantTranslations;
+
+enum { base64MimeDatas = true };
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
@@ -446,7 +449,7 @@ public:
         if (!index.isValid())
             return QString();
         Internal::TreeItem *item = getItem(index);
-        toReturn += "<Template content=\"" + Utils::Serializer::toString(item->datas()) + "\">";
+        toReturn += "<Template content=\"" + Utils::Serializer::toString(item->datas(), base64MimeDatas) + "\">";
         // add children
         QString tmp;
         QModelIndexList children = allChildren(index);
@@ -555,26 +558,29 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
 
 bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &parent)
 {
-    if (!item.isValid())
-        return false;
-//    if (!parent.isValid())
+    /** \todo buggy +++ */
+//    if (!item.isValid())
 //        return false;
-    if (item.parent()==parent)
-        return true;
-    int row = rowCount(parent);
-
-    // add the item
-    insertRow(row, parent);
-    for(int i=0; i<Data_Max_Param; ++i) {
-        setData(index(row, i, parent), index(item.row(), i, item.parent()).data());
-    }
+//    if ((item.parent().data().toString()==parent.data().toString()) &&
+//        (index(item.row(), Data_ParentId, item.parent()).data().toInt()==index(parent.row(), Data_Id, parent.parent()).data().toInt()))
+//        return true;
+//    int row = rowCount(parent);
+//
+//    qWarning() << "reparentIndex" << index(item.row(), Data_ParentId, item.parent()).data().toInt() << item.parent().data().toString()
+//               << "to" << index(parent.row(), Data_Id, parent.parent()).data().toInt() << parent.data().toString();
+//    qWarning() << d->getItem(item.parent()) << d->getItem(parent) << (item.parent()==parent);
+//    // add the item
+//    insertRow(row, parent);
+//    for(int i=0; i<Data_Max_Param; ++i) {
+//        setData(index(row, i, parent), index(item.row(), i, item.parent()).data());
+//    }
 
     // append its children
-    while (hasIndex(0, 0, item)) {
-        qWarning() << "reparentIndex row" << row << index(row, Data_Label, item).data().toString();
-        reparentIndex(index(0, 0, item), index(row, 0, parent));
-    }
-    removeRow(item.row(), item.parent());
+//    while (hasIndex(0, 0, item)) {
+//        qWarning() << "reparentIndex row" << row << index(row, Data_Label, item).data().toString();
+//        reparentIndex(index(0, 0, item), index(row, 0, parent));
+//    }
+//    removeRow(item.row(), item.parent());
     return true;
 }
 
@@ -742,7 +748,7 @@ static void parseMimeData(const QDomElement &element, const QModelIndex &parent,
 //            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + " : " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
             // Manage templates
             if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
-                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"));
+                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);
 //                qWarning() << e.attribute("content");
 //                qWarning() << datas;
                 datas.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
@@ -769,70 +775,45 @@ static void parseMimeData(const QDomElement &element, const QModelIndex &parent,
         }
         n = n.nextSibling();
     }
-
+    
 }
 
 bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
 //    qWarning() << "dropMimeData" << row;
     if (action == Qt::IgnoreAction)
-         return true;
-
-     if (!data->hasFormat(mimeTypes().at(0)))
-         return false;
-
-     QModelIndex parentIndex = parent;
-     while ((isTemplate(parentIndex)) || (!parentIndex.isValid())) {
-         parentIndex = parentIndex.parent();
-     }
-     int beginRow = 0;
-     if (row != -1)
-         beginRow = row;
-
-//     Internal::TreeItem *parentItem = d->getItem(parentIndex);
-//     QString encodedData = data->data(mimeTypes().at(0));
-//     QStringList newItems = encodedData.split("<Template>", QString::SkipEmptyParts);
-//     int zz = 0;
-//     foreach(const QString &s, newItems) {
-//         QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(s);
-//         datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_ParentId));
-//         insertRow(beginRow+zz, parentIndex);
-//         for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
-//             setData(index(beginRow+zz, i, parentIndex), datas.value(i,QVariant()));
-//         }
-//         ++zz;
-//     }
-
-
-//     <Template>@HASH@@#(0@||@Angine)##(1@||@4)##(2@||@iuiui)##(3@||@)##(4@||@3)##(5@||@SUM4)##(6@||@)##(7@||@)##(9@||@false)#
-//      <Child>
-//       <Template>@HASH@@#(0@||@ATBio Azithro)##(1@||@4)##(2@||@sfsdf)##(3@||@)##(4@||@4)##(5@||@)##(6@||@)##(7@||@)##(9@||@true)#</Template>
-//       <Template>@HASH@@#(0@||@ATBio C3G)##(1@||@2)##(2@||@sfqdsfdsf)##(3@||@)##(4@||@4)##(5@||@TEMPLATE2)##(6@||@)##(7@||@)##(9@||@true)#</Template>
-//       <Template>@HASH@@#(0@||@ATBio Péni)##(1@||@3)##(2@||@kkk)##(3@||@)##(4@||@4)##(5@||@liuh)##(6@||@)##(7@||@)##(9@||@true)#</Template>
-//       <Template>@HASH@@#(0@||@ATBio macrolides)##(1@||@5)##(2@||@sdfsfs)##(3@||@)##(4@||@4)##(5@||@)##(6@||@)##(7@||@)##(9@||@true)#</Template>
-//      </Child>
-//     </Template>
-
-     QDomDocument doc("mydocument");
-     {
-         QString error;
-         int errorLine, errorColumn;
-         if (!doc.setContent(data->data(mimeTypes().at(0)), &error, &errorLine, &errorColumn)) {
-             qWarning()<< "XML Error" << error << errorLine << errorColumn;
-         }
-     }
-     QDomElement docElem = doc.documentElement();
-     QDomNode n = docElem;//.firstChild();
-     QModelIndex lastParent = parent;
-     QModelIndex newItem;
-     int zz = 0;
-     while (!n.isNull()) {
-         qWarning() << "doc : " << n.toElement().tagName();
-         parseMimeData(n.toElement(), lastParent, beginRow, this);
-         n = n.nextSibling();
-     }
-     return true;
- }
+        return true;
+    
+    if (!data->hasFormat(mimeTypes().at(0)))
+        return false;
+    
+    QModelIndex parentIndex = parent;
+    while ((isTemplate(parentIndex)) || (!parentIndex.isValid())) {
+        parentIndex = parentIndex.parent();
+    }
+    int beginRow = 0;
+    if (row != -1)
+        beginRow = row;
+    
+    QDomDocument doc;
+    {
+        QString error;
+        int errorLine, errorColumn;
+        if (!doc.setContent(data->data(mimeTypes().at(0)), &error, &errorLine, &errorColumn)) {
+            Utils::Log::addError(this, QString("XML Error : %1 , line %2 , column %3 \n%4")
+                                 .arg(error)
+                                 .arg(errorLine).arg(errorColumn)
+                                 .arg(QString(data->data(mimeTypes().at(0)))));
+        }
+    }
+    QDomNode n = doc.documentElement();
+    int zz = 0;
+    while (!n.isNull()) {
+        parseMimeData(n.toElement(), parentIndex, beginRow, this);
+        n = n.nextSibling();
+    }
+    return true;
+}
 
 
 bool TemplatesModel::isTemplate(const QModelIndex &index) const
