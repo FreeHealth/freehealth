@@ -61,6 +61,7 @@ public:
     virtual ~ITemplate() {}
 
     virtual int id() const = 0;
+    virtual int parentId() const = 0;
     virtual bool isValid() const = 0;
 
     virtual QString category() const = 0;

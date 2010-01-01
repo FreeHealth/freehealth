@@ -63,6 +63,8 @@
 #include <QDir>
 #include <QMimeData>
 
+#include <QDomDocument>
+
 #include <QDebug>
 
 using namespace Templates;
@@ -212,28 +214,31 @@ public:
             q(parent), m_RootItem(0),
             m_ShowOnlyCategories(false)
     {
-        QSqlDatabase DB;
-        DB = QSqlDatabase::addDatabase("QSQLITE" , Internal::DATABASE_NAME);
-        if (!databasePath().exists()) {
-            if (!QDir().mkpath(databasePath().absolutePath())) {
-                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(databasePath().absolutePath());
+        if (!m_ModelDatasRetreived) {
+            QSqlDatabase DB;
+            DB = QSqlDatabase::addDatabase("QSQLITE" , Internal::DATABASE_NAME);
+            if (!databasePath().exists()) {
+                if (!QDir().mkpath(databasePath().absolutePath())) {
+                    tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(databasePath().absolutePath());
+                }
             }
-        }
-        DB.setDatabaseName(QDir::cleanPath(databasePath().absolutePath() + QDir::separator() + Internal::DATABASE_FILENAME));
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(Internal::DATABASE_NAME)
-                                 .arg(DB.lastError().text()));
-        }
-        // Test if database already created or need to be created
-        if (DB.tables(QSql::Tables).count() == 0) {
-            createDatabase();
-        }
-        QHash<int, QVariant> datas;
-        datas.insert(TemplatesModel::Data_Label, "ROOT");
-        datas.insert(TemplatesModel::Data_ParentId, -1);
-        if (!m_Tree) {
-            m_Tree = new TreeItem(datas,0);
+            DB.setDatabaseName(QDir::cleanPath(databasePath().absolutePath() + QDir::separator() + Internal::DATABASE_FILENAME));
+            if (!DB.open()) {
+                Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(Internal::DATABASE_NAME)
+                                     .arg(DB.lastError().text()));
+            }
+            // Test if database already created or need to be created
+            if (DB.tables(QSql::Tables).count() == 0) {
+                createDatabase();
+            }
+            QHash<int, QVariant> datas;
+            datas.insert(TemplatesModel::Data_Label, "ROOT");
+            datas.insert(TemplatesModel::Data_ParentId, -1);
+
+            if (!m_Tree) {
+                m_Tree = new TreeItem(datas,0);
+            }
         }
         m_RootItem = m_Tree;
         ++m_Handle;
@@ -335,7 +340,7 @@ public:
         }
 
         // get categories
-        QHash<int, TreeItem*> categories;
+        m_IdToCategory.clear();
         QString req = "SELECT `CATEGORY_ID`, `CATEGORY_UUID`, `USER_UUID`, "
                       "`PARENT_CATEGORY`, `LABEL`, `SUMMARY`,`DATE_CREATION`, `DATE_MODIFICATION` "
                       "FROM `CATEGORIES`";
@@ -351,16 +356,16 @@ public:
                 datas.insert(TemplatesModel::Data_Summary, query.value(5));
                 datas.insert(TemplatesModel::Data_CreationDate, query.value(6));
                 datas.insert(TemplatesModel::Data_ModifDate, query.value(7));
-                categories.insert(datas.value(TemplatesModel::Data_Id).toInt(), new TreeItem(datas,0));
+                m_IdToCategory.insert(datas.value(TemplatesModel::Data_Id).toInt(), new TreeItem(datas,0));
                 datas.clear();
             }
         } else {
             Utils::Log::addQueryError(q, query);
         }
         query.finish();
-        foreach(TreeItem *item, categories.values()) {
+        foreach(TreeItem *item, m_IdToCategory.values()) {
             // need to be reparented
-            item->setParent(categories.value(item->data(TemplatesModel::Data_ParentId).toInt(), m_RootItem));
+            item->setParent(m_IdToCategory.value(item->data(TemplatesModel::Data_ParentId).toInt(), m_RootItem));
             // add item to the children of its parent
             item->parent()->addChildren(item);
         }
@@ -395,7 +400,7 @@ public:
         // add templates to categories
         foreach(TreeItem *item, templates) {
             // need to be reparented
-            item->setParent(categories.value(item->data(TemplatesModel::Data_ParentId).toInt(),m_RootItem));
+            item->setParent(m_IdToCategory.value(item->data(TemplatesModel::Data_ParentId).toInt(),m_RootItem));
             // add item to the children of its parent
             item->parent()->addChildren(item);
         }
@@ -423,6 +428,39 @@ public:
         return m_RootItem;
     }
 
+    // For Drag and Drop
+    static QModelIndexList allChildren(const QModelIndex &item)
+    {
+        QModelIndexList toReturn;
+        const QAbstractItemModel *model = item.model();
+        int row = 0;
+        while (model->hasIndex(row,0,item)) {
+            toReturn.append(model->index(row,0,item));
+            ++row;
+        }
+        return toReturn;
+    }
+    QString itemAndChildrenMimeData(const QModelIndex &index)
+    {
+        QString toReturn;
+        if (!index.isValid())
+            return QString();
+        Internal::TreeItem *item = getItem(index);
+        toReturn += "<Template content=\"" + Utils::Serializer::toString(item->datas()) + "\">";
+        // add children
+        QString tmp;
+        QModelIndexList children = allChildren(index);
+        foreach(const QModelIndex &child, children) {
+            tmp.append(itemAndChildrenMimeData(child));
+        }
+        if (!tmp.isEmpty()) {
+            toReturn.append("\n<Child>\n");
+            toReturn.append(tmp);
+            toReturn.append("</Child>\n");
+        }
+        toReturn.append("</Template>\n");
+        return toReturn;
+    }
 
     // For debugging
     void warnTree(Internal::TreeItem *root, int indent = 0)
@@ -445,12 +483,14 @@ public:
     static bool m_ModelDatasRetreived;
     static int m_Handle;
     static QSet<TemplatesModelPrivate *> m_Handles;
+    static QHash<int, TreeItem *> m_IdToCategory;
 };
 
 TreeItem *TemplatesModelPrivate::m_Tree = 0;
 bool TemplatesModelPrivate::m_ModelDatasRetreived = false;
 int TemplatesModelPrivate::m_Handle = 0;
 QSet<TemplatesModelPrivate *> TemplatesModelPrivate::m_Handles;
+QHash<int, TreeItem *> TemplatesModelPrivate::m_IdToCategory;
 
 }  // End Internal
 }  // End Templates
@@ -517,21 +557,24 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
 {
     if (!item.isValid())
         return false;
-    if (!parent.isValid())
-        return false;
-    Internal::TreeItem *childItem = d->getItem(item);
-    Internal::TreeItem *oldParentItem = childItem->parent();
-    Internal::TreeItem *newParentItem = d->getItem(parent);
-    // does item already a child of parent ?
-    if (oldParentItem==newParentItem)
+//    if (!parent.isValid())
+//        return false;
+    if (item.parent()==parent)
         return true;
-    // remove item from its parent children list
-    if (!oldParentItem->removeChild(childItem))
-        return false;
-    // add item to parent children
-    childItem->setParent(newParentItem);
-    newParentItem->addChildren(childItem);
-    reset();
+    int row = rowCount(parent);
+
+    // add the item
+    insertRow(row, parent);
+    for(int i=0; i<Data_Max_Param; ++i) {
+        setData(index(row, i, parent), index(item.row(), i, item.parent()).data());
+    }
+
+    // append its children
+    while (hasIndex(0, 0, item)) {
+        qWarning() << "reparentIndex row" << row << index(row, Data_Label, item).data().toString();
+        reparentIndex(index(0, 0, item), index(row, 0, parent));
+    }
+    removeRow(item.row(), item.parent());
     return true;
 }
 
@@ -612,6 +655,10 @@ Qt::DropActions TemplatesModel::supportedDropActions() const
 
 bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 {
+    // find parent
+//    Internal::TreeItem *parent = d->m_IdToCategory.value(t->parentId());
+    // insertRow in parentIndex
+    // setDatas of newly created row
 //    Internal::TreeItem *parentItem = d->getItem(item)->parent();
 //    QHash<int,QVariant> datas;
 //    /** \todo manage user */
@@ -631,7 +678,7 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 
 bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << "insertRows" << row << count << parent.data();
+//    qWarning() << "insertRows" << row << count << parent.data();
     if (!parent.isValid())
         return false;
     Internal::TreeItem *parentItem = d->getItem(parent);
@@ -651,7 +698,7 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << "removeRows" << row << count;
+//    qWarning() << "removeRows" << row << count;
     if (!parent.isValid())
         return false;
     Internal::TreeItem *parentItem = d->getItem(parent);
@@ -659,7 +706,7 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = parentItem->child(row+i);
         parentItem->removeChild(item);
-        qWarning() << "removeRows deleting item" << item->data(TemplatesModel::Data_Label) << "from" << parent.data();
+        qWarning() << "removeRows deleting item" << item->data(TemplatesModel::Data_Label) << "from" << parent.data().toString();
         delete item;
         item = 0;
     }
@@ -669,22 +716,65 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
 
 QMimeData *TemplatesModel::mimeData(const QModelIndexList &indexes) const
 {
-    qWarning() << "mimeData";
     QMimeData *mimeData = new QMimeData();
     QString tmp;
-    foreach (QModelIndex index, indexes) {
-        if (index.isValid()) {
-            Internal::TreeItem *item = d->getItem(index);
-            tmp += "@Template:" + Utils::Serializer::toString(item->datas());
-        }
+    QModelIndexList fullList;
+    foreach (const QModelIndex &index, indexes) {
+        tmp += d->itemAndChildrenMimeData(index);
     }
     mimeData->setData(mimeTypes().at(0), tmp.toUtf8());
     return mimeData;
 }
 
+static void parseMimeData(const QDomElement &element, const QModelIndex &parent, const int row, QAbstractItemModel *model)
+{
+    static int indent = 0;
+    indent += 2;
+//    qWarning() << QString().fill(' ', indent) + "parse ; add to modelIndex" << parent.data().toString();
+    QDomNode n = element;
+    QDomNode child = element;
+    QModelIndex newItem = parent;
+    int zz = 0;
+
+    while (!n.isNull()) {
+        QDomElement e = n.toElement();
+        if (!e.isNull()) {
+//            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + " : " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
+            // Manage templates
+            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
+                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"));
+//                qWarning() << e.attribute("content");
+//                qWarning() << datas;
+                datas.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
+                model->insertRow(row+zz, parent);
+                for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
+                    model->setData(model->index(row+zz, i, parent), datas.value(i, QVariant()));
+                }
+                ++zz;
+            }
+            if (e.tagName().compare("Child", Qt::CaseInsensitive) == 0) {
+//                qWarning() << QString().fill(' ', indent) + "    -> Child";
+                newItem = model->index(0, 0, newItem);
+                parseMimeData(child.firstChildElement(), newItem, 0, model);
+                child = child.firstChildElement("Child");
+            }
+            // Manage all children
+            child = n.firstChildElement("Child");
+            while (!child.isNull()) {
+//                qWarning() << QString().fill(' ', indent) + "    -> Manage Child";
+                newItem = model->index(0, 0, newItem);
+                parseMimeData(child.firstChildElement("Template"), newItem, 0, model);
+                child = child.firstChildElement("Child");
+            }
+        }
+        n = n.nextSibling();
+    }
+
+}
+
 bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-    qWarning() << "dropMimeData" << row;
+//    qWarning() << "dropMimeData" << row;
     if (action == Qt::IgnoreAction)
          return true;
 
@@ -698,26 +788,52 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
      int beginRow = 0;
      if (row != -1)
          beginRow = row;
-//     else if (parentIndex.isValid())
-//         beginRow = parentIndex.row();
-//     else
-//         beginRow = 0;
 
-     Internal::TreeItem *parentItem = d->getItem(parentIndex);
-     QString encodedData = data->data(mimeTypes().at(0));
-     QStringList newItems = encodedData.split("@Template:", QString::SkipEmptyParts);
-     int zz = 0;
-     foreach(const QString &s, newItems) {
-         QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(s);
-         datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_ParentId));
-         insertRow(beginRow+zz, parentIndex);
-         for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
-             setData(index(beginRow+zz, i, parentIndex), datas.value(i,QVariant()));
+//     Internal::TreeItem *parentItem = d->getItem(parentIndex);
+//     QString encodedData = data->data(mimeTypes().at(0));
+//     QStringList newItems = encodedData.split("<Template>", QString::SkipEmptyParts);
+//     int zz = 0;
+//     foreach(const QString &s, newItems) {
+//         QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(s);
+//         datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_ParentId));
+//         insertRow(beginRow+zz, parentIndex);
+//         for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
+//             setData(index(beginRow+zz, i, parentIndex), datas.value(i,QVariant()));
+//         }
+//         ++zz;
+//     }
+
+
+//     <Template>@HASH@@#(0@||@Angine)##(1@||@4)##(2@||@iuiui)##(3@||@)##(4@||@3)##(5@||@SUM4)##(6@||@)##(7@||@)##(9@||@false)#
+//      <Child>
+//       <Template>@HASH@@#(0@||@ATBio Azithro)##(1@||@4)##(2@||@sfsdf)##(3@||@)##(4@||@4)##(5@||@)##(6@||@)##(7@||@)##(9@||@true)#</Template>
+//       <Template>@HASH@@#(0@||@ATBio C3G)##(1@||@2)##(2@||@sfqdsfdsf)##(3@||@)##(4@||@4)##(5@||@TEMPLATE2)##(6@||@)##(7@||@)##(9@||@true)#</Template>
+//       <Template>@HASH@@#(0@||@ATBio Péni)##(1@||@3)##(2@||@kkk)##(3@||@)##(4@||@4)##(5@||@liuh)##(6@||@)##(7@||@)##(9@||@true)#</Template>
+//       <Template>@HASH@@#(0@||@ATBio macrolides)##(1@||@5)##(2@||@sdfsfs)##(3@||@)##(4@||@4)##(5@||@)##(6@||@)##(7@||@)##(9@||@true)#</Template>
+//      </Child>
+//     </Template>
+
+     QDomDocument doc("mydocument");
+     {
+         QString error;
+         int errorLine, errorColumn;
+         if (!doc.setContent(data->data(mimeTypes().at(0)), &error, &errorLine, &errorColumn)) {
+             qWarning()<< "XML Error" << error << errorLine << errorColumn;
          }
-         ++zz;
+     }
+     QDomElement docElem = doc.documentElement();
+     QDomNode n = docElem;//.firstChild();
+     QModelIndex lastParent = parent;
+     QModelIndex newItem;
+     int zz = 0;
+     while (!n.isNull()) {
+         qWarning() << "doc : " << n.toElement().tagName();
+         parseMimeData(n.toElement(), lastParent, beginRow, this);
+         n = n.nextSibling();
      }
      return true;
  }
+
 
 bool TemplatesModel::isTemplate(const QModelIndex &index) const
 {
