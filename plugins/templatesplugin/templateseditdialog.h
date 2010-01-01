@@ -43,10 +43,6 @@
 
 #include <QDialog>
 #include <QModelIndex>
-QT_BEGIN_NAMESPACE
-class QPersistentModelIndex;
-class QTreeView;
-QT_END_NAMESPACE
 
 namespace Templates {
 namespace Internal {

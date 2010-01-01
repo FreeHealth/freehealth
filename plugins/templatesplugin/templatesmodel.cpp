@@ -55,11 +55,13 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/serializer.h>
 
 #include <QList>
 #include <QColor>
 #include <QSqlTableModel>
 #include <QDir>
+#include <QMimeData>
 
 #include <QDebug>
 
@@ -82,7 +84,9 @@ public:
     TreeItem(const QHash<int, QVariant> &data, TreeItem *parent = 0) :
             m_Parent(parent), itemData(data), m_IsTemplate(false),
             m_IsModified(false), m_NewlyCreated(false)
-    {}
+    {
+        setHasTemplate(data.value(TemplatesModel::Data_IsTemplate).toBool());
+    }
     ~TreeItem() { qDeleteAll(m_Children); }
 
     // Genealogy management
@@ -97,6 +101,13 @@ public:
             m_Children.append(child);
         return true;
     }
+    bool insertChild(const int row, TreeItem *child)
+    {
+        if (row > m_Children.count())
+            return false;
+        m_Children.insert(row, child);
+        return true;
+    }
     int childNumber() const
     {
         if (m_Parent)
@@ -108,9 +119,41 @@ public:
         qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
     }
 
+    // For category only tree
+    int childCategoryCount() const
+    {
+        int n = 0;
+        foreach(TreeItem *c, this->m_Children) {
+            if (!c->isTemplate())
+                ++n;
+        }
+        return n;
+    }
+    TreeItem *categoryChild(int number)
+    {
+        QList<TreeItem *> cat;
+        foreach(TreeItem *c, this->m_Children) {
+            if (!c->isTemplate())
+                cat << c;
+        }
+        return cat.value(number);
+    }
+    int categoryChildNumber() const
+    {
+        if (m_Parent) {
+            QList<TreeItem *> cat;
+            foreach(TreeItem *c, m_Parent->m_Children) {
+                if (!c->isTemplate())
+                    cat << c;
+            }
+            return cat.indexOf(const_cast<TreeItem*>(this));
+        }
+        return 0;
+    }
+
 
     // For tree management
-    void setHasTemplate(bool isTemplate) { m_IsTemplate = isTemplate; }
+    void setHasTemplate(bool isTemplate) {m_IsTemplate = isTemplate; setData(TemplatesModel::Data_IsTemplate, isTemplate); }
     bool isTemplate() const {return m_IsTemplate;}
 
     // For database management
@@ -136,9 +179,13 @@ public:
     bool setData(int column, const QVariant &value)
     {
         itemData.insert(column, value);
+        if (column==TemplatesModel::Data_IsTemplate) {
+            m_IsTemplate=value.toBool();
+        }
         m_IsModified = true;
         return true;
     }
+    QHash<int, QVariant> datas() const {return itemData;}
 
     // For sort functions
     static bool lessThan(TreeItem *item1, TreeItem *item2)
@@ -184,23 +231,33 @@ public:
         }
         QHash<int, QVariant> datas;
         datas.insert(TemplatesModel::Data_Label, "ROOT");
+        datas.insert(TemplatesModel::Data_ParentId, -1);
         if (!m_Tree) {
             m_Tree = new TreeItem(datas,0);
         }
         m_RootItem = m_Tree;
         ++m_Handle;
+        m_Handles.insert(this);
     }
 
     ~TemplatesModelPrivate()
     {
         --m_Handle;
+        m_Handles.remove(this);
         if (m_Handle==0) {
-            if (m_RootItem) {
-                delete m_RootItem;
-                m_RootItem = 0;
+            if (m_Tree) {
+                delete m_Tree;
                 m_Tree = 0;
+                m_RootItem = 0;
             }
             m_ModelDatasRetreived = false;
+        }
+    }
+
+    void resetAllInstances() const
+    {
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            pr->q->reset();
         }
     }
 
@@ -366,6 +423,18 @@ public:
         return m_RootItem;
     }
 
+
+    // For debugging
+    void warnTree(Internal::TreeItem *root, int indent = 0)
+    {
+        QString space;
+        space.fill(' ',indent);
+        qWarning() << space << root->data(TemplatesModel::Data_Label);
+        for(int i=0; i<root->childCount(); ++i) {
+            warnTree(root->child(i), indent + 2);
+        }
+    }
+
 private:
     Templates::TemplatesModel *q;
 
@@ -375,11 +444,13 @@ public:
     static TreeItem *m_Tree;
     static bool m_ModelDatasRetreived;
     static int m_Handle;
+    static QSet<TemplatesModelPrivate *> m_Handles;
 };
 
 TreeItem *TemplatesModelPrivate::m_Tree = 0;
 bool TemplatesModelPrivate::m_ModelDatasRetreived = false;
 int TemplatesModelPrivate::m_Handle = 0;
+QSet<TemplatesModelPrivate *> TemplatesModelPrivate::m_Handles;
 
 }  // End Internal
 }  // End Templates
@@ -412,10 +483,15 @@ QModelIndex TemplatesModel::index(int row, int column, const QModelIndex &parent
          return QModelIndex();
 
      Internal::TreeItem *parentItem = d->getItem(parent);
-     Internal::TreeItem *childItem = parentItem->child(row);
+     Internal::TreeItem *childItem = 0;
+     if (d->m_ShowOnlyCategories) {
+         childItem = parentItem->categoryChild(row);
+     } else {
+         childItem = parentItem->child(row);
+     }
+
      if (childItem) {
-//         if (d->m_ShowOnlyCategories && (!childItem->isTemplate()))
-             return createIndex(row, column, childItem);
+         return createIndex(row, column, childItem);
      }
      return QModelIndex();
  }
@@ -431,9 +507,9 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
      if (parentItem == d->m_RootItem)
          return QModelIndex();
 
-//     if (d->m_ShowOnlyCategories && (parentItem->isTemplate()))
-//         return QModelIndex();
-
+     if (d->m_ShowOnlyCategories) {
+         return createIndex(parentItem->categoryChildNumber(), 0, parentItem);
+     }
      return createIndex(parentItem->childNumber(), 0, parentItem);
  }
 
@@ -463,15 +539,11 @@ int TemplatesModel::rowCount(const QModelIndex &parent) const
 {
     Internal::TreeItem *item = d->getItem(parent);
     if (item) {
-//        if (d->m_ShowOnlyCategories) {
-//            int n = 0;
-//            for(int i = 0; i<item->childCount();++i) {
-//                if (!item->child(i)->isTemplate());
-//                ++n;
-//            }
-//            return n;
-//        }
-        return item->childCount();
+        if (d->m_ShowOnlyCategories) {
+            return item->childCategoryCount();
+        } else {
+            return item->childCount();
+        }
     }
     return 0;
 }
@@ -480,7 +552,6 @@ int TemplatesModel::columnCount(const QModelIndex &parent) const
 {
     return Data_Max_Param;
 }
-
 
 bool TemplatesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -505,9 +576,6 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     const Internal::TreeItem *it = d->getItem(item);
-
-    if (d->m_ShowOnlyCategories && it->isTemplate())
-        return QVariant();
 
     switch (role)
     {
@@ -534,18 +602,122 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
 
 Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
 {
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
+Qt::DropActions TemplatesModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}
 
 bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
-{}
+{
+//    Internal::TreeItem *parentItem = d->getItem(item)->parent();
+//    QHash<int,QVariant> datas;
+//    /** \todo manage user */
+//    datas.insert(TemplatesModel::Data_Label, t->label());
+//    datas.insert(TemplatesModel::Data_Id, t->id());
+//    datas.insert(TemplatesModel::Data_CreationDate, QDateTime::currentDateTime());
+//    datas.insert(TemplatesModel::Data_Content, t->content());
+//    datas.insert(TemplatesModel::Data_Summary, t->summary());
+//    datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_Id));
+//    datas.insert(TemplatesModel::Data_Uuid, QUuid());
+//    datas.insert(TemplatesModel::Data_Summary, t->summary());
+//    Internal::TreeItem *newItem = new Internal::TreeItem(datas,parentItem);
+//    /** \todo reset all instances of the model */
+//    d->resetAllInstances();
+    return true;
+}
 
-bool TemplatesModel::removeRow(int row, const QModelIndex &parent)
-{}
+bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    qWarning() << "insertRows" << row << count << parent.data();
+    if (!parent.isValid())
+        return false;
+    Internal::TreeItem *parentItem = d->getItem(parent);
+    QHash<int, QVariant> datas;
+    datas.insert(TemplatesModel::Data_Label, tr("New"));
+    datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_Id));
+    datas.insert(TemplatesModel::Data_CreationDate, QDateTime::currentDateTime());
+    beginInsertRows(parent, row, row+count-1);
+    for(int i=0; i<count; ++i) {
+        Internal::TreeItem *item = new Internal::TreeItem(datas, parentItem);
+        if (!parentItem->insertChild(row+i, item))
+            return false;
+    }
+    endInsertRows();
+    return true;
+}
 
 bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
-{}
+{
+    qWarning() << "removeRows" << row << count;
+    if (!parent.isValid())
+        return false;
+    Internal::TreeItem *parentItem = d->getItem(parent);
+    beginRemoveRows(parent, row, row+count-1);
+    for(int i=0; i<count; ++i) {
+        Internal::TreeItem *item = parentItem->child(row+i);
+        parentItem->removeChild(item);
+        qWarning() << "removeRows deleting item" << item->data(TemplatesModel::Data_Label) << "from" << parent.data();
+        delete item;
+        item = 0;
+    }
+    endRemoveRows();
+    return true;
+}
+
+QMimeData *TemplatesModel::mimeData(const QModelIndexList &indexes) const
+{
+    qWarning() << "mimeData";
+    QMimeData *mimeData = new QMimeData();
+    QString tmp;
+    foreach (QModelIndex index, indexes) {
+        if (index.isValid()) {
+            Internal::TreeItem *item = d->getItem(index);
+            tmp += "@Template:" + Utils::Serializer::toString(item->datas());
+        }
+    }
+    mimeData->setData(mimeTypes().at(0), tmp.toUtf8());
+    return mimeData;
+}
+
+bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    qWarning() << "dropMimeData" << row;
+    if (action == Qt::IgnoreAction)
+         return true;
+
+     if (!data->hasFormat(mimeTypes().at(0)))
+         return false;
+
+     QModelIndex parentIndex = parent;
+     while ((isTemplate(parentIndex)) || (!parentIndex.isValid())) {
+         parentIndex = parentIndex.parent();
+     }
+     int beginRow = 0;
+     if (row != -1)
+         beginRow = row;
+//     else if (parentIndex.isValid())
+//         beginRow = parentIndex.row();
+//     else
+//         beginRow = 0;
+
+     Internal::TreeItem *parentItem = d->getItem(parentIndex);
+     QString encodedData = data->data(mimeTypes().at(0));
+     QStringList newItems = encodedData.split("@Template:", QString::SkipEmptyParts);
+     int zz = 0;
+     foreach(const QString &s, newItems) {
+         QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(s);
+         datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_ParentId));
+         insertRow(beginRow+zz, parentIndex);
+         for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
+             setData(index(beginRow+zz, i, parentIndex), datas.value(i,QVariant()));
+         }
+         ++zz;
+     }
+     return true;
+ }
 
 bool TemplatesModel::isTemplate(const QModelIndex &index) const
 {

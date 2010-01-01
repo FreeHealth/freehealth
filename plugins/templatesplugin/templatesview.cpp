@@ -280,6 +280,9 @@ public:
         if (settings()->value(Templates::Constants::S_ALWAYSSHOWEXPANDED, true).toBool())
             m_ui->categoryTreeView->expandAll();
         m_ui->categoryTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+        m_ui->categoryTreeView->setDragEnabled(true);
+        m_ui->categoryTreeView->setAcceptDrops(true);
+        m_ui->categoryTreeView->setDropIndicatorShown(true);
         int i;
         for(i=1; i < m_ui->categoryTreeView->model()->columnCount(); ++i) {
             m_ui->categoryTreeView->setColumnHidden(i, true);

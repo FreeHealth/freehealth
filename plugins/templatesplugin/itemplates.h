@@ -41,6 +41,10 @@
 #ifndef ITEMPLATES_H
 #define ITEMPLATES_H
 
+QT_BEGIN_NAMESPACE
+class QString;
+QT_END_NAMESPACE
+
 /**
  * \file itemplates.h
  * \author Eric MAEKER <eric.maeker@free.fr>
@@ -65,6 +69,7 @@ public:
     virtual QString ownerUuid() const = 0;
 
     virtual QString label() const = 0;
+    virtual QString content() const = 0;
     virtual QString summary() const = 0;
 
 };

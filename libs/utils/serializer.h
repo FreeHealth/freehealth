@@ -67,14 +67,18 @@ namespace Utils {
 namespace Serializer {
 
 UTILS_EXPORT const QString separator();
+UTILS_EXPORT const QString openParenthese();
+UTILS_EXPORT const QString closeParenthese();
 
 // Serialize QStringList
 UTILS_EXPORT const QString toString( const QStringList & list, bool base64Protection = false );
 UTILS_EXPORT const QStringList toStringList( const QString & serialized, bool base64Protection = false );
 
 // Serialize simples QHash
-UTILS_EXPORT const QString toString( const QHash<int,QString> & hash, bool base64Protection = false );
-UTILS_EXPORT const QHash<int,QString> toHash( const QString & serialized, bool base64Protection = false );
+UTILS_EXPORT const QString toString( const QHash<int,QString> &hash, bool base64Protection = false );
+UTILS_EXPORT const QString toString( const QHash<int,QVariant> &hash, bool base64Protection = false );
+UTILS_EXPORT const QHash<int,QString> toHash( const QString &serialized, bool base64Protection = false );
+UTILS_EXPORT const QHash<int,QVariant> toVariantHash( const QString &serialized, bool base64Protection = false );
 
 // Serialize particular QHash
 UTILS_EXPORT const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, bool base64Protection = false );
