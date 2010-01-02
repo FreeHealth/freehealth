@@ -72,10 +72,14 @@ Q_SIGNALS:
     void currentItemChanged();
 
 protected Q_SLOTS:
+    void addCategory();
+    void removeItem();
+    void lock(bool state = true);
     void editCurrentItem();
 
 protected:
     void changeEvent(QEvent *e);
+    bool isLocked() const;
 
 private:
     Internal::TemplatesViewPrivate *d;

@@ -48,25 +48,28 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="handleWidth">
-      <number>3</number>
-     </property>
-     <widget class="QTreeView" name="categoryTreeView">
-      <property name="toolTip">
-       <string>Categories tree</string>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <layout class="QVBoxLayout" name="categoryLayout">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QTreeView" name="categoryTreeView">
+         <property name="toolTip">
+          <string>Categories tree</string>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QTextEdit" name="summaryTextEdit">
       <property name="toolTip">

@@ -183,12 +183,13 @@ namespace Time {
         const char * const  LISTSORT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Sort");          /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  TEMPLATES             = QT_TRANSLATE_NOOP("tkConstants", "Templates");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  TEMPLATEADD_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  CATEGORYADD_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  TEMPLATEEDIT_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Edit a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  CATEGORYEDIT_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Edit a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  TEMPLATEREMOVE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Remove a template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  CATEGORYREMOVE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Remove a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  ADDCATEGORY_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  ADD_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "Add");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  REMOVE_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Remove");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  LOCK_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "Lock");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  UNLOCK_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Unlock");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  LOCKED_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Locked");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  UNLOCKED_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Unlocked");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Bold");           /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Italic");         /*!< \brief Default action text  \ingroup constants_actionmanager */

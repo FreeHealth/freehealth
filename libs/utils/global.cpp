@@ -407,7 +407,9 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
     mb.setDefaultButton(QMessageBox::Yes);
     int r = mb.exec();
     qApp->setActiveWindow(parent);
-    return (r);
+    if (r==QMessageBox::Yes)
+        return true;
+    return false;
 }
 
 /**

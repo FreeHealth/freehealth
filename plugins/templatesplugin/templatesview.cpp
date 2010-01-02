@@ -57,9 +57,13 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QObject>
 #include <QWidget>
+#include <QToolBar>
+#include <QSpacerItem>
+
 #include <QDebug>
 
 using namespace Templates;
@@ -152,13 +156,12 @@ void TemplatesViewManager::updateContext(Core::IContext *object)
 /////////////////////////////////////////////////////////////////////////// Action Handler
 TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         QObject(parent),
-        aAddCategory (0),
-        aAddTemplate(0),
-        aRemoveCategory(0),
-        aRemoveTemplate(0),
-        aEditCategory(0),
-        aEditTemplate(0),
-        m_CurrentView(0)
+        aAdd(0),
+        aRemove(0),
+        aEdit(0),
+        aLocker(0),
+        m_CurrentView(0),
+        m_IsLocked(false)
 {
     QList<int> context = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC);
     QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
@@ -178,37 +181,30 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     }
 
     // Add
-    aAddCategory = registerAction("TemplatesView.aAddCategory", cmenu, Core::Constants::ICONADD,
-                                  Core::Constants::A_CATEGORY_ADD, Core::Constants::G_EDIT_CATEGORIES,
-                                  Trans::Constants::CATEGORYADD_TEXT, addContext, this);
-    connect(aAddCategory, SIGNAL(triggered()), this, SLOT(addCategory()));
-
-    aAddTemplate = registerAction("TemplatesView.aAddCategory", cmenu, Core::Constants::ICONADD,
-                                  Core::Constants::A_TEMPLATE_ADD, Core::Constants::G_EDIT_TEMPLATES,
-                                  Trans::Constants::TEMPLATEADD_TEXT, addContext, this);
-    connect(aAddTemplate, SIGNAL(triggered()), this, SLOT(addTemplate()));
+    aAdd = registerAction("TemplatesView.aAdd", cmenu, Core::Constants::ICONADD,
+                          Core::Constants::A_TEMPLATE_ADD, Core::Constants::G_EDIT_TEMPLATES,
+                          Trans::Constants::ADDCATEGORY_TEXT, addContext, this);
+    connect(aAdd, SIGNAL(triggered()), this, SLOT(addCategory()));
 
     // Remove
-    aRemoveTemplate = registerAction("TemplatesView.aRemoveTemplate", cmenu, Core::Constants::ICONREMOVE,
-                                     Core::Constants::A_TEMPLATE_REMOVE, Core::Constants::G_EDIT_TEMPLATES,
-                                     Trans::Constants::TEMPLATEREMOVE_TEXT, removeContext, this);
-    connect(aRemoveTemplate, SIGNAL(triggered()), this, SLOT(removeTemplate()));
-
-    aRemoveCategory = registerAction("TemplatesView.aRemoveCategory", cmenu, Core::Constants::ICONREMOVE,
-                                     Core::Constants::A_CATEGORY_REMOVE, Core::Constants::G_EDIT_CATEGORIES,
-                                     Trans::Constants::CATEGORYREMOVE_TEXT, removeContext, this);
-    connect(aRemoveCategory, SIGNAL(triggered()), this, SLOT(removeCategory()));
+    aRemove = registerAction("TemplatesView.aRemove", cmenu, Core::Constants::ICONREMOVE,
+                             Core::Constants::A_TEMPLATE_REMOVE, Core::Constants::G_EDIT_TEMPLATES,
+                             Trans::Constants::REMOVE_TEXT, removeContext, this);
+    connect(aRemove, SIGNAL(triggered()), this, SLOT(removeItem()));
 
     // Edit
-    aEditTemplate = registerAction("TemplatesView.aEditTemplate", cmenu, Core::Constants::ICONEDIT,
-                                   Core::Constants::A_TEMPLATE_EDIT, Core::Constants::G_EDIT_TEMPLATES,
-                                   Trans::Constants::TEMPLATEEDIT_TEXT, context, this);
-    connect(aEditTemplate, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
+    aEdit = registerAction("TemplatesView.aEdit", cmenu, Core::Constants::ICONEDIT,
+                           Core::Constants::A_TEMPLATE_EDIT, Core::Constants::G_EDIT_TEMPLATES,
+                           Trans::Constants::M_EDIT_TEXT, context, this);
+    connect(aEdit, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
 
-    aEditCategory = registerAction("TemplatesView.aEditCategory", cmenu, Core::Constants::ICONEDIT,
-                                   Core::Constants::A_CATEGORY_EDIT, Core::Constants::G_EDIT_CATEGORIES,
-                                   Trans::Constants::CATEGORYEDIT_TEXT, context, this);
-    connect(aEditCategory, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
+    // Locker
+    aLocker = registerAction("TemplatesView.aProtect", cmenu, Core::Constants::ICONUNLOCK,
+                           Core::Constants::A_TEMPLATE_LOCK, Core::Constants::G_EDIT_TEMPLATES,
+                           Trans::Constants::UNLOCKED_TEXT, context, this);
+//    Core::Command *cmd = actionManager()->command(Core::Constants::A_TEMPLATE_LOCK);
+//    cmd->setAttribute(Core::Command::CA_UpdateText);
+    connect(aLocker, SIGNAL(triggered()), this, SLOT(lock()));
 }
 
 void TemplatesViewActionHandler::setCurrentView(TemplatesView *view)
@@ -217,33 +213,42 @@ void TemplatesViewActionHandler::setCurrentView(TemplatesView *view)
 //        qWarning() << "TemplatesViewActionHandler" << view;
     // disconnect old view
     if (m_CurrentView) {
-        disconnect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                   this, SLOT(templatesViewItemChanged()));
+//        disconnect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+//                   this, SLOT(templatesViewItemChanged()));
     }
     m_CurrentView = view;
     if (!view) { // this should never be the case
         return;
     }
     // reconnect some actions
-    connect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(templatesViewItemChanged()));
+//    connect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+//            this, SLOT(templatesViewItemChanged()));
+    m_IsLocked = m_CurrentView->isLocked();
     updateActions();
 }
 
 void TemplatesViewActionHandler::templatesViewItemChanged()
 {
-    bool templateState = m_CurrentView->currentItemIsTemplate();
-    aAddCategory->setEnabled(!templateState);
-    aAddTemplate->setEnabled(templateState);
-    aRemoveCategory->setEnabled(!templateState);
-    aRemoveTemplate->setEnabled(templateState);
-    aEditCategory->setEnabled(!templateState);
-    aEditTemplate->setEnabled(templateState);
+//    bool templateState = m_CurrentView->currentItemIsTemplate();
+//    aAdd->setEnabled(!templateState);
+//    aRemove->setEnabled(!templateState);
+//    aEdit->setEnabled(!templateState);
 }
 
 void TemplatesViewActionHandler::updateActions()
 {
-    templatesViewItemChanged();
+    aAdd->setEnabled(!m_IsLocked);
+    aEdit->setEnabled(!m_IsLocked);
+    aRemove->setEnabled(!m_IsLocked);
+    Core::Command *cmd = actionManager()->command(Core::Constants::A_TEMPLATE_LOCK);
+    if (!m_IsLocked) {
+        cmd->setTranslations(Trans::Constants::UNLOCKED_TEXT, Trans::Constants::UNLOCKED_TEXT);
+        cmd->action()->setIcon(theme()->icon(Core::Constants::ICONUNLOCK));
+    } else {
+        cmd->setTranslations(Trans::Constants::LOCKED_TEXT, Trans::Constants::LOCKED_TEXT);
+        cmd->action()->setIcon(theme()->icon(Core::Constants::ICONLOCK));
+    }
+    cmd->retranslate();
 }
 
 void TemplatesViewActionHandler::editCurrentItem()
@@ -251,10 +256,26 @@ void TemplatesViewActionHandler::editCurrentItem()
     if (m_CurrentView)
         m_CurrentView->editCurrentItem();
 }
+void TemplatesViewActionHandler::addCategory()
+{
+    if (m_CurrentView)
+        m_CurrentView->addCategory();
+}
 
-//void TemplatesViewActionHandler::removeItem()
-//{ if (m_CurrentView) m_CurrentView->removeItem(); }
-//
+void TemplatesViewActionHandler::removeItem()
+{
+    if (m_CurrentView)
+        m_CurrentView->removeItem();
+}
+
+void TemplatesViewActionHandler::lock()
+{
+    if (m_CurrentView) {
+        m_IsLocked = !m_IsLocked;
+        m_CurrentView->lock(m_IsLocked);
+        updateActions();
+    }
+}
 
 
 namespace Templates {
@@ -263,7 +284,9 @@ class TemplatesViewPrivate : public QObject
 {
     Q_OBJECT
 public:
-    TemplatesViewPrivate(TemplatesView *parent) : QObject(parent), q(parent), m_Model(0), m_ui(0), m_Context(0)
+    TemplatesViewPrivate(TemplatesView *parent) :
+            QObject(parent), q(parent), m_Model(0), m_ui(0), m_Context(0),
+            m_ToolBar(0)
     {
         // Create Actions context
         m_Context = new Templates::Internal::TemplatesViewContext(q);
@@ -272,17 +295,29 @@ public:
         m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE));
         contextManager()->addContextObject(m_Context);
 
+        // Create toolbar
+        m_ToolBar = new QToolBar("Actions", q);
+        m_ToolBar->setIconSize(QSize(22,22));
+        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
+        m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
+        m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
+        m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
+        QWidget *w = new QWidget(m_ToolBar);
+        QSpacerItem *spacer = new QSpacerItem(20,10,QSizePolicy::Expanding, QSizePolicy::Fixed);
+        QHBoxLayout *layout = new QHBoxLayout(w);
+        layout->addSpacerItem(spacer);
+        m_ToolBar->addWidget(w);
+        m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_LOCK)->action());
+
         // Create Ui
         m_ui = new Ui::TemplatesView;
         m_ui->setupUi(q);
+        m_ui->categoryLayout->insertWidget(1, m_ToolBar);
         m_Model = new TemplatesModel(this);
         m_ui->categoryTreeView->setModel(m_Model);
         if (settings()->value(Templates::Constants::S_ALWAYSSHOWEXPANDED, true).toBool())
             m_ui->categoryTreeView->expandAll();
         m_ui->categoryTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
-        m_ui->categoryTreeView->setDragEnabled(true);
-        m_ui->categoryTreeView->setAcceptDrops(true);
-        m_ui->categoryTreeView->setDropIndicatorShown(true);
         int i;
         for(i=1; i < m_ui->categoryTreeView->model()->columnCount(); ++i) {
             m_ui->categoryTreeView->setColumnHidden(i, true);
@@ -323,8 +358,12 @@ public Q_SLOTS:
     }
     QMenu *getContextMenu()
     {
-        return actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES)->menu();
-    //    return pop;
+        QMenu *menu = new QMenu(tkTr(Trans::Constants::TEMPLATES), q);
+        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
+        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
+        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
+        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
+        return menu;
     }
     void contextMenu(const QPoint &p)
     {
@@ -341,6 +380,7 @@ public:
     TemplatesModel *m_Model;
     Ui::TemplatesView *m_ui;
     TemplatesViewContext *m_Context;
+    QToolBar *m_ToolBar;
 };
 }
 }
@@ -349,6 +389,7 @@ TemplatesView::TemplatesView(QWidget *parent) :
     QWidget(parent),
     d(new TemplatesViewPrivate(this))
 {
+    lock(false);
 }
 
 TemplatesView::~TemplatesView()
@@ -373,6 +414,48 @@ bool TemplatesView::currentItemIsTemplate() const
         return d->m_Model->isTemplate(index);
     }
     return false;
+}
+
+void TemplatesView::lock(bool toLock)
+{
+    d->m_ui->categoryTreeView->setDragEnabled(!toLock);
+    d->m_ui->categoryTreeView->setAcceptDrops(!toLock);
+    d->m_ui->categoryTreeView->setDropIndicatorShown(!toLock);
+    if (toLock) {
+        d->m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    } else {
+        d->m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
+    }
+}
+
+bool TemplatesView::isLocked() const
+{
+    return (!d->m_ui->categoryTreeView->acceptDrops());
+}
+
+void TemplatesView::addCategory()
+{
+    QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
+    if (!idx.isValid())
+        return;
+    d->m_Model->insertRow(d->m_Model->rowCount(idx), idx);
+    d->m_ui->categoryTreeView->expand(idx);
+    d->m_ui->categoryTreeView->edit(d->m_Model->index(d->m_Model->rowCount(idx)-1, 0, idx));
+}
+
+void TemplatesView::removeItem()
+{
+    QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
+    if (!idx.isValid())
+        return;
+    // Confirmation dialog
+    bool yes = Utils::yesNoMessageBox(tr("About to delete %1.").arg(idx.data().toString()),
+                           tr("Do you really want to remove %1 from your templates' list ?").arg(idx.data().toString()),
+                           tr("This action is definitive and all informations will be lost. Children of this item"
+                              " will be deleted as well."));
+    if (yes) {
+        d->m_Model->removeRow(idx.row(), idx.parent());
+    }
 }
 
 void TemplatesView::editCurrentItem()

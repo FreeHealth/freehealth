@@ -651,7 +651,7 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
 
 Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
 {
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 Qt::DropActions TemplatesModel::supportedDropActions() const
@@ -692,6 +692,7 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
     datas.insert(TemplatesModel::Data_Label, tr("New"));
     datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_Id));
     datas.insert(TemplatesModel::Data_CreationDate, QDateTime::currentDateTime());
+    datas.insert(TemplatesModel::Data_IsTemplate, false);
     beginInsertRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = new Internal::TreeItem(datas, parentItem);

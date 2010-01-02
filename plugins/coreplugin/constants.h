@@ -195,6 +195,7 @@ const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \br
 const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_EDIT       = "actionTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_EDIT       = "actionCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_LOCK       = "actionTemplateLock";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
 const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -290,6 +291,9 @@ const char * const  ICONFIND =         "find.png";
 const char * const  ICONNEXT =         "next.png";
 const char * const  ICONPREVIOUS =     "previous.png";
 const char * const  ICONHOME =         "gohome.png";
+const char * const  ICONLOCK =         "lock.png";
+const char * const  ICONUNLOCK =       "unlock.png";
+
 
 // menu View
 const char * const  ICONEYES =         "eyes.png";
