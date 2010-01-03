@@ -436,11 +436,16 @@ bool TemplatesView::isLocked() const
 void TemplatesView::addCategory()
 {
     QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
-    if (!idx.isValid())
-        return;
+    if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
+        idx = QModelIndex();
+    qWarning() << idx.isValid() << idx.data() << d->m_ui->categoryTreeView->currentIndex().data();
+//    if (!idx.isValid())
+//        return;
     d->m_Model->insertRow(d->m_Model->rowCount(idx), idx);
+    QModelIndex newItem = d->m_Model->index(d->m_Model->rowCount(idx)-1, 0, idx);
     d->m_ui->categoryTreeView->expand(idx);
-    d->m_ui->categoryTreeView->edit(d->m_Model->index(d->m_Model->rowCount(idx)-1, 0, idx));
+    d->m_ui->categoryTreeView->scrollTo(newItem);
+    d->m_ui->categoryTreeView->edit(newItem);
 }
 
 void TemplatesView::removeItem()

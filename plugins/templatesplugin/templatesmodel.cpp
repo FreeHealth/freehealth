@@ -685,9 +685,14 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "insertRows" << row << count << parent.data();
+    Internal::TreeItem *parentItem = 0;
     if (!parent.isValid())
-        return false;
-    Internal::TreeItem *parentItem = d->getItem(parent);
+        parentItem = d->m_RootItem;
+    else
+        parentItem = d->getItem(parent);
+//    if (!parent.isValid())
+//        return false;
+//    Internal::TreeItem *parentItem = d->getItem(parent);
     QHash<int, QVariant> datas;
     datas.insert(TemplatesModel::Data_Label, tr("New"));
     datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_Id));
@@ -706,9 +711,11 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "removeRows" << row << count;
+    Internal::TreeItem *parentItem = 0;
     if (!parent.isValid())
-        return false;
-    Internal::TreeItem *parentItem = d->getItem(parent);
+        parentItem = d->m_RootItem;
+    else
+        parentItem = d->getItem(parent);
     beginRemoveRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = parentItem->child(row+i);
@@ -789,7 +796,7 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
         return false;
     
     QModelIndex parentIndex = parent;
-    while ((isTemplate(parentIndex)) || (!parentIndex.isValid())) {
+    while ((isTemplate(parentIndex)) || (parentIndex.isValid())) {
         parentIndex = parentIndex.parent();
     }
     int beginRow = 0;
