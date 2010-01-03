@@ -68,6 +68,7 @@ class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferen
 
 public:
     explicit TemplatesPreferencesWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
 

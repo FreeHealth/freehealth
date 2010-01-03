@@ -87,6 +87,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
 
     connect(m_ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
     connect(m_ui->buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(showHelp()));
+    connect(m_ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), this, SLOT(restoreDefaults()));
 
     m_ui->splitter->setCollapsible(1, false);
     m_ui->pageTree->header()->setVisible(false);
@@ -193,6 +194,14 @@ void SettingsDialog::apply()
     foreach (IOptionsPage *page, m_pages)
         page->applyChanges();
     m_applied = true;
+}
+
+void SettingsDialog::restoreDefaults()
+{
+    QTreeWidgetItem *item = m_ui->pageTree->currentItem();
+    PageData data = item->data(0, Qt::UserRole).value<PageData>();
+    int index = data.index;
+    m_pages.at(index)->resetToDefaults();
 }
 
 void SettingsDialog::showHelp()

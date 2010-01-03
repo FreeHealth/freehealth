@@ -161,12 +161,11 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         aEdit(0),
         aLocker(0),
         m_CurrentView(0),
-        m_IsLocked(false)
+        m_IsLocked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool())
 {
     QList<int> context = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC);
     QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
     QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE);
-//    QList<int> moveContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_MOVE);
 
     // Edit Menu and Contextual Menu
     Core::ActionContainer *editMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
@@ -199,12 +198,11 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
 
     // Locker
-    aLocker = registerAction("TemplatesView.aProtect", cmenu, Core::Constants::ICONUNLOCK,
+    aLocker = registerAction("TemplatesView.aLocker", cmenu, Core::Constants::ICONUNLOCK,
                            Core::Constants::A_TEMPLATE_LOCK, Core::Constants::G_EDIT_TEMPLATES,
                            Trans::Constants::UNLOCKED_TEXT, context, this);
-//    Core::Command *cmd = actionManager()->command(Core::Constants::A_TEMPLATE_LOCK);
-//    cmd->setAttribute(Core::Command::CA_UpdateText);
     connect(aLocker, SIGNAL(triggered()), this, SLOT(lock()));
+    updateActions();
 }
 
 void TemplatesViewActionHandler::setCurrentView(TemplatesView *view)
@@ -389,7 +387,7 @@ TemplatesView::TemplatesView(QWidget *parent) :
     QWidget(parent),
     d(new TemplatesViewPrivate(this))
 {
-    lock(false);
+    lock(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool());
 }
 
 TemplatesView::~TemplatesView()

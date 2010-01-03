@@ -69,6 +69,7 @@ class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPrefer
 
 public:
     explicit MainWindowPreferencesWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
 

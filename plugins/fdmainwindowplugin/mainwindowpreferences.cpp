@@ -55,7 +55,10 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 
 MainWindowPreferencesPage::MainWindowPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("MainWindowPreferencesPage"); }
+{
+    setObjectName("MainWindowPreferencesPage");
+    checkSettingsValidity();
+}
 
 MainWindowPreferencesPage::~MainWindowPreferencesPage()
 {
@@ -70,6 +73,7 @@ QString MainWindowPreferencesPage::category() const { return tr("General"); }
 void MainWindowPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
+    m_Widget->setDatasToUi();
 }
 
 void MainWindowPreferencesPage::applyChanges()
@@ -107,7 +111,10 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    // feed with actual values
+}
+
+void MainWindowPreferencesWidget::setDatasToUi()
+{
     updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
 }
 

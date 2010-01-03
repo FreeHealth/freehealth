@@ -81,6 +81,7 @@ class DrugsViewWidget : public QWidget, private Ui::DrugsViewWidget
 
 public:
     explicit DrugsViewWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 
@@ -98,6 +99,7 @@ class DrugsPrintWidget : public QWidget, private Ui::DrugsPrintWidget
 
 public:
     explicit DrugsPrintWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 
@@ -122,6 +124,7 @@ class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget
 
 public:
     explicit DrugsUserWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 
@@ -142,6 +145,7 @@ class DrugsExtraWidget : public QWidget, private Ui::DrugsExtraWidget
 
 public:
     explicit DrugsExtraWidget(QWidget *parent = 0);
+    void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

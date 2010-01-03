@@ -69,6 +69,7 @@ private Q_SLOTS:
     void accept();
     void reject();
     void apply();
+    void restoreDefaults();
     void showHelp();
 
 private:

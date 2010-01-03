@@ -628,21 +628,29 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
 
     switch (role)
     {
-        case Qt::EditRole :
-        case Qt::DisplayRole :
+    case Qt::EditRole :
+    case Qt::DisplayRole :
         {
             return it->data(item.column());
         }
-        case Qt::ToolTipRole :
+    case Qt::ToolTipRole :
         {
             return it->data(TemplatesModel::Data_Summary);
         }
-        case Qt::ForegroundRole :
+    case Qt::ForegroundRole :
         {
             if (it->isTemplate()) {
                 return QColor(settings()->value(Constants::S_FOREGROUND_TEMPLATES, "#000").toString());
             } else {
                 return QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
+            }
+        }
+    case Qt::BackgroundRole :
+        {
+            if (it->isTemplate()) {
+                return QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES, "white").toString());
+            } else {
+                return QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
             }
         }
     }

@@ -61,7 +61,11 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 ///////////////////////////////  TemplatesPreferencesPages  /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 TemplatesPreferencesPage::TemplatesPreferencesPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("TemplatesPreferencesPages"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("TemplatesPreferencesPages");
+    checkSettingsValidity();
+}
 
 TemplatesPreferencesPage::~TemplatesPreferencesPage()
 {
@@ -76,6 +80,7 @@ QString TemplatesPreferencesPage::category() const { return tkTr(Trans::Constant
 void TemplatesPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
+    m_Widget->setDatasToUi();
 }
 
 void TemplatesPreferencesPage::applyChanges()
@@ -97,6 +102,7 @@ void TemplatesPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_FOREGROUND_TEMPLATES, "black");
     defaultvalues.insert(Constants::S_SPLITTER_SIZES, QVariant());
     defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, true);
+    defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, false);
     defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -121,9 +127,18 @@ TemplatesPreferencesWidget::TemplatesPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    // feed with actual values
+    setDatasToUi();
+}
+
+void TemplatesPreferencesWidget::setDatasToUi()
+{
     promptBox->setChecked(settings()->value(Constants::S_SAVEDATAWITHOUTPROMPTING).toBool());
     autoExpandBox->setChecked(settings()->value(Constants::S_ALWAYSSHOWEXPANDED).toBool());
+    lockViewBox->setChecked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool());
+    categoryBackgroundButton->setColor(QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES).toString()));
+    templateBackgroundButton->setColor(QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES).toString()));
+    categoryForegroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES).toString()));
+    templateForegroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUND_TEMPLATES).toString()));
 }
 
 void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -134,12 +149,13 @@ void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(Constants::S_BACKGROUND_CATEGORIES, "white");
-//    defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, "white");
-//    defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, "darkblue");
-//    defaultvalues.insert(Constants::S_FOREGROUND_TEMPLATES, "black");
+    defaultvalues.insert(Constants::S_BACKGROUND_CATEGORIES, categoryBackgroundButton->color().name());
+    defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, templateBackgroundButton->color().name());
+    defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, categoryForegroundButton->color().name());
+    defaultvalues.insert(Constants::S_FOREGROUND_TEMPLATES, templateForegroundButton->color().name());
     defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, promptBox->isChecked());
     defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, autoExpandBox->isChecked());
+    defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, lockViewBox->isChecked());
 
     foreach(const QString &k, defaultvalues.keys()) {
         settings()->setValue(k, defaultvalues.value(k));
@@ -156,6 +172,7 @@ void TemplatesPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     defaultvalues.insert(Constants::S_FOREGROUND_TEMPLATES, "black");
     defaultvalues.insert(Constants::S_SPLITTER_SIZES, QVariant());
     defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, true);
+    defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, false);
     defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, true);
 
     foreach(const QString &k, defaultvalues.keys()) {

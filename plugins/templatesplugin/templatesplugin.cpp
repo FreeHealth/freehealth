@@ -38,6 +38,8 @@
 #include "templatesview_p.h"
 #include "templatespreferencespages.h"
 
+#include <coreplugin/dialogs/pluginaboutpage.h>
+
 #include <utils/log.h>
 
 #include <QtCore/QtPlugin>
@@ -68,6 +70,9 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
+    // add plugin info page
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);
     addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
