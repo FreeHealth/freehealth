@@ -126,6 +126,7 @@ void PrescriptionViewer::createActionsAndToolbar()
             << Core::Constants::A_FILE_OPEN
             << Core::Constants::A_FILE_SAVE
             << Core::Constants::A_FILE_SAVEAS
+            << Core::Constants::A_TEMPLATE_CREATE
             << DrugsWidget::Constants::A_PRINT_PRESCRIPTION;
 
     foreach(const QString &s, actionsToAdd) {

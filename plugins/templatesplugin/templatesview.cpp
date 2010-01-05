@@ -286,6 +286,9 @@ public:
             QObject(parent), q(parent), m_Model(0), m_ui(0), m_Context(0),
             m_ToolBar(0)
     {
+        // Verify that Manager is instanciated
+        Templates::Internal::TemplatesViewManager::instance(this);
+
         // Create Actions context
         m_Context = new Templates::Internal::TemplatesViewContext(q);
         m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC));

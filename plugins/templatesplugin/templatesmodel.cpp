@@ -647,11 +647,16 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
         }
     case Qt::BackgroundRole :
         {
+            QColor c;
             if (it->isTemplate()) {
-                return QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES, "white").toString());
+                c = QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES, "white").toString());
             } else {
-                return QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
+                c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
             }
+            if (c.name()=="#ffffff")
+                return QVariant();
+            c.setAlpha(125);
+            return c;
         }
     }
     return QVariant();

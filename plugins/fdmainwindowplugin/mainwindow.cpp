@@ -69,6 +69,8 @@
 
 #include <drugsbaseplugin/drugsio.h>
 
+#include <templatesplugin/templatesview.h>
+
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -87,6 +89,7 @@
 #include <QHBoxLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDockWidget>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -144,6 +147,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
     pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
     pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+    createTemplatesMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -167,6 +171,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_CheckUpdate //|
 //            Core::MainWindowActions::A_QtAbout
             );
+    actions.setTemplatesActions(
+            Core::MainWindowActions::A_Templates_New );
     actions.createEditActions(false);
     createActions(actions);
 
@@ -174,7 +180,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
-//    Core::ICore::instance()->contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
     readSettings();
@@ -264,6 +269,8 @@ void MainWindow::extensionsInitialized()
         updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
         settings()->setValue(Core::Constants::S_LAST_CHECKUPDATE,QDate::currentDate());
     }
+
+    createDockWindows();
 
     finishSplash(this);
     show();
@@ -501,6 +508,17 @@ void MainWindow::readFile(const QString &file)
     patient()->fromXml(datas);
     refreshPatient();
 }
+
+void MainWindow::createDockWindows()
+{
+    QDockWidget *dock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    dock->setWidget(new Templates::TemplatesView(dock));
+    addDockWidget(Qt::RightDockWidgetArea, dock);
+    QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
+    menu->addAction(dock->toggleViewAction());
+}
+
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientName_textChanged(const QString &text)

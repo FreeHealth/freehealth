@@ -63,6 +63,7 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
         qWarning() << "TemplatesPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
     return true;
 }
 
@@ -70,17 +71,13 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
+
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);
-    addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
-
-    // FOR TESTS
-    TemplatesView *view = new TemplatesView();
-    view->show();
-    // END TESTS
 }
 
 

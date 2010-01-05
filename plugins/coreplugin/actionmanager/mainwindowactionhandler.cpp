@@ -152,6 +152,23 @@ void MainWindowActionHandler::createFileMenu()
     filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
 }
 
+void MainWindowActionHandler::createTemplatesMenu()
+{
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    Q_ASSERT(menubar);
+    menubar->appendGroup(Constants::G_TEMPLATES);
+
+    // Create menu
+    ActionContainer *menu = actionManager()->createMenu(Constants::M_TEMPLATES);
+    menubar->addMenu(menu, Constants::G_TEMPLATES);
+    menu->setTranslations(Trans::Constants::TEMPLATES);
+    menu->appendGroup(Constants::G_TEMPLATES);
+    menu->appendGroup(Constants::G_TEMPLATES_NEW);
+    menu->appendGroup(Constants::G_TEMPLATES_MANAGER);
+    menu->appendGroup(Constants::G_TEMPLATES_EXTRAS);
+    menu->appendGroup(Constants::G_TEMPLATES_OTHERS);
+}
+
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createEditMenu()
 {
@@ -621,6 +638,40 @@ void MainWindowActionHandler::connectHelpActions()
         connect(aCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 }
 
+void MainWindowActionHandler::createTemplatesActions(int actions)
+{
+    QAction *a = 0;
+    Command *cmd = 0;
+    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_TEMPLATES);
+    Q_ASSERT(menu);
+    if (!menu)
+        return;
+
+    if (actions & Core::MainWindowActions::A_Templates_New) {
+        a = new QAction(this);
+        a->setIcon(theme()->icon(Core::Constants::ICONTEMPLATES));
+        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_CREATE, ctx);
+        cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT);
+        menu->addAction(cmd, Constants::G_TEMPLATES_NEW);
+    }
+    if (actions & Core::MainWindowActions::A_Templates_Manager) {
+//        a = new QAction(this);
+//        a->setIcon(theme()->icon(Constants::ICONABOUT));
+//        a->setMenuRole(QAction::AboutRole);
+//        cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
+//        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
+//        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+    }
+    if (actions & Core::MainWindowActions::A_Templates_ToogleViewer) {
+        a = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONTEMPLATES));
+        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_TOOGLEVIEW, ctx);
+        cmd->setTranslations(Trans::Constants::TEMPLATES_TOOGLEVIEW_TEXT);
+        menu->addAction(cmd, Constants::G_TEMPLATES_EXTRAS);
+    }
+}
+
 /** \brief Shows the debug dialog. \sa Core::DebugDialog */
 bool MainWindowActionHandler::debugDialog()
 {
@@ -649,6 +700,7 @@ void MainWindowActionHandler::createActions(const Core::MainWindowActions &actio
     createFileActions(actions.fileActions());
     createConfigurationActions(actions.configurationActions());
     createHelpActions(actions.helpActions());
+    createTemplatesActions(actions.templatesActions());
     if (actions.editActionsToCreate())
         createEditActions();
 }

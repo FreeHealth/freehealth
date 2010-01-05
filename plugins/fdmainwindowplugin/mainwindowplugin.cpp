@@ -72,6 +72,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(errorString);
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
+    m_MainWindow->initialize(QStringList(),0);
     return true;
 }
 
@@ -87,7 +88,6 @@ void MainWinPlugin::extensionsInitialized()
     prefPage = new Internal::MainWindowPreferencesPage();
     addObject(prefPage);
 
-    m_MainWindow->initialize(QStringList(),0);
     m_MainWindow->extensionsInitialized();
 }
 

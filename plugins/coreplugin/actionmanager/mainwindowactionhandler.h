@@ -72,6 +72,8 @@ public:
     void createFileMenu();
     void connectFileActions();
 
+    void createTemplatesMenu();
+
     void createEditMenu();
     void createEditActions();
     void connectEditActions();
@@ -88,6 +90,7 @@ public:
     void createFileActions(int actions);
     void createConfigurationActions(int actions);
     void createHelpActions(int actions);
+    void createTemplatesActions(int actions);
 
     void createFormatMenu();
     void createUpdateMenu();

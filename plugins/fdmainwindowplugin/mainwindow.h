@@ -80,12 +80,13 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+    void createDockWindows();
     void refreshPatient() const;
-void readSettings();
-void writeSettings();
-void createStatusBar();
-bool savePrescription(const QString &fileName = QString::null);
-void changeFontTo(const QFont &font);
+    void readSettings();
+    void writeSettings();
+    void createStatusBar();
+    bool savePrescription(const QString &fileName = QString::null);
+    void changeFontTo(const QFont &font);
 
 
 public Q_SLOTS: // Interface of MainWidowActionHandler
@@ -95,14 +96,10 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool saveFile();
     bool saveAsFile();
     bool print();
-//
+
     bool applicationPreferences();
     bool configureMedintux();
-//
-//    virtual bool aboutApplication();
-//    bool applicationHelp();
-//    bool aboutQt();
-//    bool aboutPlugins();
+
 
     void updateCheckerEnd();
 

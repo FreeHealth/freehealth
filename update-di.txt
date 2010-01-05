@@ -1,3 +1,22 @@
+version=0.3.0
+{
+    * Jan 2010
+
+    * Version de la base de données thérapeutique :
+      * Médicaments :  AFSSAPS - 14/12/2009
+      * Interactions : AFSSAPS - 30/06/2009
+
+   * Nouvelles fonctionnalités :
+      * Possibilité de créer des modèles de prescriptions
+      * Nouveau gestionnaire de modèle de prescriptions
+      * Possibilité de remettre aux valeurs par défaut des préférences de l'application
+
+   * Modifications importantes :
+
+   * Correction de bogues / Améliorations techniques :
+      * une traduction erronée
+}
+
 version=0.2.0
 {
     * Déc 2009

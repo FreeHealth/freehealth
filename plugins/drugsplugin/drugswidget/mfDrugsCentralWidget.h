@@ -90,6 +90,7 @@ public:
 
     void setCurrentSearchMethod(int method);
     bool printPrescription();
+    bool createTemplate();
 
 protected:
     void createConnections();

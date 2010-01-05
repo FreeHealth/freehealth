@@ -100,23 +100,33 @@ public:
     };
     Q_DECLARE_FLAGS( HelpActions, HelpAction );
 
-    MainWindowActions() : file(0), config(0), help(0), edit(false) {}
+    enum TemplatesAction {
+        A_Templates_New          = 0x01,
+        A_Templates_Manager      = 0x02,
+        A_Templates_ToogleViewer = 0x04
+    };
+    Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
+
+    MainWindowActions() : file(0), config(0), help(0), templates(0), edit(false) {}
     ~MainWindowActions() {}
 
     void setFileActions(int actions) { file = actions; }
     void createEditActions(bool yesOrNO) { edit = yesOrNO; }
     void setConfigurationActions(int actions) { config = actions; }
     void setHelpActions(int actions) { help = actions; }
+    void setTemplatesActions(int actions) { templates = actions; }
 
     int fileActions() const { return file; }
     bool editActionsToCreate() const { return edit; }
     int configurationActions() const { return config; }
     int helpActions() const { return help; }
+    int templatesActions() const { return templates; }
 
 private:
     int file;
     int config;
     int help;
+    int templates;
     bool edit;
 };
 

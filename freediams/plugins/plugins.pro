@@ -7,8 +7,7 @@ SUBDIRS = \
     texteditor \
     drugs \
     drugsbase \
-    templates \
-    listview
+    templates
 
 
 core.subdir = ../../plugins/fdcoreplugin
@@ -20,6 +19,7 @@ mainwindow.subdir   = ../../plugins/fdmainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += drugs
 mainwindow.depends += printer
+mainwindow.depends += templates
 
 printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
@@ -39,3 +39,4 @@ drugs.depends += texteditor
 
 templates.subdir = ../../plugins/templatesplugin
 templates.depends += core
+templates.depends += mainwindow

@@ -183,6 +183,8 @@ namespace Time {
         const char * const  LISTSORT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Sort");          /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  TEMPLATES             = QT_TRANSLATE_NOOP("tkConstants", "Templates");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  CREATETEMPLATE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Create a new template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TEMPLATES_TOOGLEVIEW_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Toogle template view");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ADDCATEGORY_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ADD_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "Add");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  REMOVE_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Remove");    /*!< \brief Default action text  \ingroup constants_actionmanager */

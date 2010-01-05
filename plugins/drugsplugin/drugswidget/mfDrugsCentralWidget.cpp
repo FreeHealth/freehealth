@@ -217,3 +217,8 @@ bool DrugsCentralWidget::printPrescription()
     p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
     return p.print( DrugsDB::DrugsIO::instance()->prescriptionToHtml(m_CurrentDrugModel) );
 }
+
+bool DrugsCentralWidget::createTemplate()
+{
+    qWarning() << "DrugsCentralWidget::createTemplate()";
+}

@@ -51,6 +51,7 @@ const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Conte
 const char * const  MENUBAR              = "menuBar";           /*!< \brief Default menubar object name  \ingroup constants_actionmanager */
 const char * const  M_FILE               = "menuFile";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
+const char * const  M_TEMPLATES          = "menuTemplates";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char * const  M_EDIT               = "menuEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char* const   M_EDITOR_EDIT        = "menu.editor.edition";
 const char* const   M_EDITOR_FILE        = "menu.editor.file";
@@ -83,6 +84,14 @@ const char * const G_FILE_RECENTS        = "grFile.Recents";  /*!< \brief Defaul
 const char * const G_FILE_OTHER          = "grFile.Other";    /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FILE_CLOSE          = "grFile.Close";    /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FILE_EXIT           = "grFile.Exit";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+
+// Templates' menu groups
+const char * const G_TEMPLATES           = "grTemplates";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_NEW       = "grTemplatesNew";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_MANAGER   = "grTemplatesManager";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_EXTRAS    = "grTemplatesExtras";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_OTHERS    = "grTemplatesOthers";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+
 
 // edit menu groups
 const char * const G_EDIT                = "grEdit";           /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -189,6 +198,8 @@ const char * const  A_LIST_CLEAR          = "actionListClear";     /*!< \brief D
 const char * const  A_LIST_SORT           = "actionListSort";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Templates actions
+const char * const  A_TEMPLATE_CREATE     = "actionTemplateCreate";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_TOOGLEVIEW = "actionTemplateToogleView";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_ADD        = "actionTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_ADD        = "actionCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -269,6 +280,7 @@ const char * const  ICONSAVEAS =       "filesaveas.png";
 const char * const  ICONPRINT =        "fileprint.png";
 const char * const  ICONQUIT =         "exit.png";
 const char * const  ICONEXIT =         "exit.png";
+const char * const  ICONTEMPLATES =    "templates.png";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";

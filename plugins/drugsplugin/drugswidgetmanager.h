@@ -103,6 +103,7 @@ private Q_SLOTS:
     void printPrescription();
     void toogleTestingDrugs();
     void changeDuration();
+    void createTemplate();
 
 private:
     bool canMoveUp();
@@ -125,6 +126,7 @@ protected:
     QAction *aPrintPrescription;
     QAction *aToogleTestingDrugs;
     QAction *aChangeDuration;
+    QAction *aToTemplate;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 };

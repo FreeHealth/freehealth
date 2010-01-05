@@ -141,6 +141,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aSearchInn(0),
         aPrintPrescription(0),
         aToogleTestingDrugs(0),
+        aChangeDuration(0),
+        aToTemplate(0),
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
@@ -260,6 +262,17 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
     Core::ActionContainer *filemenu = am->actionContainer(Core::Constants::M_FILE);
+    a = aToTemplate = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONTEMPLATES));
+    cmd = am->registerAction(a, Core::Constants::A_TEMPLATE_CREATE, ctx);
+    cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT, Trans::Constants::CREATETEMPLATE_TEXT);
+//    cmd->setKeySequence();
+    cmd->retranslate();
+    if (filemenu) {
+        filemenu->addAction(cmd, Core::Constants::G_FILE_NEW);
+    }
+    connect(a, SIGNAL(triggered()), this, SLOT(createTemplate()));
+
     a = aPrintPrescription = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
 //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
@@ -425,4 +438,10 @@ void DrugsActionHandler::changeDuration()
 {
     if (m_CurrentView)
        m_CurrentView->prescriptionView()->changeDuration();
+}
+
+void DrugsActionHandler::createTemplate()
+{
+    if (m_CurrentView)
+       m_CurrentView->createTemplate();
 }
