@@ -13,14 +13,17 @@ HEADERS = templatesplugin.h \
     templatesview.h \
     templatesview_p.h \
     templateseditdialog.h \
-    templatespreferencespages.h
+    templatespreferencespages.h \
+    templatescreationdialog.h
 SOURCES = templatesplugin.cpp \
     templatesmodel.cpp \
     templatesview.cpp \
     templateseditdialog.cpp \
-    templatespreferencespages.cpp
+    templatespreferencespages.cpp \
+    templatescreationdialog.cpp
 OTHER_FILES = Templates.pluginspec
 FORMS += templatesview.ui \
     templateseditdialog.ui \
     templatescontenteditor.ui \
-    templatespreferenceswidget.ui
+    templatespreferenceswidget.ui \
+    templatescreationdialog.ui

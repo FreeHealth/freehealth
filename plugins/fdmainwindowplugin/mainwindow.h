@@ -100,7 +100,6 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool applicationPreferences();
     bool configureMedintux();
 
-
     void updateCheckerEnd();
 
     void aboutToShowRecentFiles();

@@ -48,6 +48,7 @@ class QMenu;
 QT_END_NAMESPACE
 
 namespace Templates {
+class TemplatesModel;
 namespace Internal {
 class TemplatesViewPrivate;
 class TemplatesViewActionHandler;
@@ -60,11 +61,33 @@ class TemplatesView : public QWidget
     friend class Internal::TemplatesViewActionHandler;
 
 public:
-    TemplatesView(QWidget *parent = 0);
+    enum ViewContent {
+        TemplatesAndCategories = 0,
+        CategoriesOnly
+    };
+
+    enum EditMode {
+        Add        = 0x01,
+        Remove     = 0x02,
+        Edit       = 0x04,
+        Drag       = 0x08,
+        Drop       = 0x10,
+        LockUnlock = 0x20,
+        Defaults   = Add | Remove | Edit | Drag | Drop
+    };
+    Q_DECLARE_FLAGS(EditModes, EditMode);
+
+    TemplatesView(QWidget *parent = 0, int viewContent = TemplatesAndCategories, EditModes editModes = Defaults);
     ~TemplatesView();
+
+    void setViewContent(int viewContent);
+    void setEditMode(EditModes);
 
     QItemSelectionModel *selectionModel() const;
     bool currentItemIsTemplate() const;
+    QModelIndex currentItem() const;
+
+    TemplatesModel *templatesModel() const;
 
     //    ITemplates *currentTemplate() const;
 
@@ -86,5 +109,6 @@ private:
 };
 
 }  // End namespace Templates
+Q_DECLARE_OPERATORS_FOR_FLAGS(Templates::TemplatesView::EditModes)
 
 #endif // TEMPLATESVIEW_H

@@ -65,6 +65,8 @@
 
 #include <printerplugin/printer.h>
 
+#include <templatesplugin/templatescreationdialog.h>
+
 #ifdef FREEDIAMS
 #  include <fdcoreplugin/patient.h>
 #endif
@@ -220,5 +222,12 @@ bool DrugsCentralWidget::printPrescription()
 
 bool DrugsCentralWidget::createTemplate()
 {
-    qWarning() << "DrugsCentralWidget::createTemplate()";
+    // get the template content
+    QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel);
+    // create a new template with it
+    Templates::TemplatesCreationDialog dlg(this);
+    dlg.setTemplateContent(content);
+    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel));
+    dlg.exec();
+    return true;
 }

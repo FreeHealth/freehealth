@@ -110,6 +110,7 @@ public:
     bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
 
     void categoriesOnly() const;
+    bool isCategoryOnly() const;
 
 private:
     Internal::TemplatesModelPrivate *d;

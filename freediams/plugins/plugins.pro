@@ -25,8 +25,8 @@ printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-listview.subdir   = ../../plugins/listviewplugin
-listview.depends += core
+#listview.subdir   = ../../plugins/listviewplugin
+#listview.depends += core
 
 texteditor.subdir   = ../../plugins/texteditorplugin
 texteditor.depends += core
@@ -36,6 +36,7 @@ drugs.depends += drugsbase
 drugs.depends += core
 drugs.depends += printer
 drugs.depends += texteditor
+drugs.depends += templates
 
 templates.subdir = ../../plugins/templatesplugin
 templates.depends += core

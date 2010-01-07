@@ -92,9 +92,10 @@ static inline QAction *registerAction(const QString &objName, Core::ActionContai
 
 namespace TemplatesViewConstants
 {
-    static const char* const C_BASIC              = "context.TemplatesView.basic";
+    static const char* const C_BASIC_EDIT         = "context.TemplatesView.Edit";
     static const char* const C_BASIC_ADD          = "context.TemplatesView.Add";
     static const char* const C_BASIC_REMOVE       = "context.TemplatesView.Remove";
+    static const char* const C_BASIC_LOCK         = "context.TemplatesView.Lock";
 }
 
 /////////////////////////////////////////////////////////////////////////// List View Manager
@@ -163,7 +164,8 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         m_CurrentView(0),
         m_IsLocked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool())
 {
-    QList<int> context = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC);
+    QList<int> editContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_EDIT);
+    QList<int> lockContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK);
     QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
     QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE);
 
@@ -194,13 +196,13 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     // Edit
     aEdit = registerAction("TemplatesView.aEdit", cmenu, Core::Constants::ICONEDIT,
                            Core::Constants::A_TEMPLATE_EDIT, Core::Constants::G_EDIT_TEMPLATES,
-                           Trans::Constants::M_EDIT_TEXT, context, this);
+                           Trans::Constants::M_EDIT_TEXT, editContext, this);
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
 
     // Locker
     aLocker = registerAction("TemplatesView.aLocker", cmenu, Core::Constants::ICONUNLOCK,
                            Core::Constants::A_TEMPLATE_LOCK, Core::Constants::G_EDIT_TEMPLATES,
-                           Trans::Constants::UNLOCKED_TEXT, context, this);
+                           Trans::Constants::UNLOCKED_TEXT, lockContext, this);
     connect(aLocker, SIGNAL(triggered()), this, SLOT(lock()));
     updateActions();
 }
@@ -282,7 +284,7 @@ class TemplatesViewPrivate : public QObject
 {
     Q_OBJECT
 public:
-    TemplatesViewPrivate(TemplatesView *parent) :
+    TemplatesViewPrivate(TemplatesView *parent, Templates::TemplatesView::EditModes editModes) :
             QObject(parent), q(parent), m_Model(0), m_ui(0), m_Context(0),
             m_ToolBar(0)
     {
@@ -291,15 +293,12 @@ public:
 
         // Create Actions context
         m_Context = new Templates::Internal::TemplatesViewContext(q);
-        m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC));
-        m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD));
-        m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE));
         contextManager()->addContextObject(m_Context);
 
         // Create toolbar
         m_ToolBar = new QToolBar("Actions", q);
         m_ToolBar->setIconSize(QSize(22,22));
-        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
+//        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
@@ -323,44 +322,65 @@ public:
         for(i=1; i < m_ui->categoryTreeView->model()->columnCount(); ++i) {
             m_ui->categoryTreeView->setColumnHidden(i, true);
         }
-        QList<int> sizes;
-        foreach(const QVariant &s, settings()->value(Constants::S_SPLITTER_SIZES).toList()) {
-            sizes << s.toInt();
-        }
-        if (sizes.count() == 0) {
-            sizes << 1 << 1;
-        }
-        m_ui->splitter->setSizes(sizes);
+
+        manageContexts(editModes);
+
+//        QList<int> sizes;
+//        foreach(const QVariant &s, settings()->value(Constants::S_SPLITTER_SIZES).toList()) {
+//            sizes << s.toInt();
+//        }
+//        if (sizes.count() == 0) {
+//            sizes << 1 << 1;
+//        }
+//        m_ui->splitter->setSizes(sizes);
 
         // make connections
-        connect(m_ui->categoryTreeView->selectionModel(),
-                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this,
-                SLOT(on_categoryTreeView_changed(const QModelIndex&,const QModelIndex&)));
+//        connect(m_ui->categoryTreeView->selectionModel(),
+//                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+//                this,
+//                SLOT(on_categoryTreeView_changed(const QModelIndex&,const QModelIndex&)));
         connect(m_ui->categoryTreeView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(contextMenu(QPoint)));
-        connect(m_ui->splitter, SIGNAL(splitterMoved(int,int)),
-                this, SLOT(on_splitter_move()));
+//        connect(m_ui->splitter, SIGNAL(splitterMoved(int,int)),
+//                this, SLOT(on_splitter_move()));
+        connect(m_Model,SIGNAL(modelAboutToBeReset()), this, SLOT(on_ModelAboutToReset()));
     }
     ~TemplatesViewPrivate() {}
 
+    void manageContexts(Templates::TemplatesView::EditModes editModes)
+    {
+        m_Context->clearContext();
+        if (editModes & Templates::TemplatesView::Add)
+            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD));
+        if (editModes & Templates::TemplatesView::Remove)
+            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE));
+        if (editModes & Templates::TemplatesView::Edit) {
+            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_EDIT));
+            m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
+        } else {
+            m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        }
+        if (editModes & Templates::TemplatesView::LockUnlock)
+            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK));
+    }
+
 public Q_SLOTS:
-    void on_categoryTreeView_changed(const QModelIndex &current, const QModelIndex &)
-    {
-        Q_EMIT q->currentItemChanged();
-        QModelIndex sum = m_Model->index(current.row(), TemplatesModel::Data_Summary, current.parent());
-        m_ui->summaryTextEdit->setText(sum.data().toString());
-    }
-    void on_splitter_move()
-    {
-        QList<QVariant> sizes;
-        foreach(int s, m_ui->splitter->sizes())
-            sizes << s;
-        settings()->setValue(Constants::S_SPLITTER_SIZES, sizes);
-    }
+//    void on_categoryTreeView_changed(const QModelIndex &current, const QModelIndex &)
+//    {
+//        Q_EMIT q->currentItemChanged();
+//        QModelIndex sum = m_Model->index(current.row(), TemplatesModel::Data_Summary, current.parent());
+//        m_ui->summaryTextEdit->setText(sum.data().toString());
+//    }
+//    void on_splitter_move()
+//    {
+//        QList<QVariant> sizes;
+//        foreach(int s, m_ui->splitter->sizes())
+//            sizes << s;
+//        settings()->setValue(Constants::S_SPLITTER_SIZES, sizes);
+//    }    
     QMenu *getContextMenu()
     {
         QMenu *menu = new QMenu(tkTr(Trans::Constants::TEMPLATES), q);
-        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
+//        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
@@ -386,11 +406,13 @@ public:
 }
 }
 
-TemplatesView::TemplatesView(QWidget *parent) :
+TemplatesView::TemplatesView(QWidget *parent, int viewContent, EditModes editModes) :
     QWidget(parent),
-    d(new TemplatesViewPrivate(this))
+    d(new TemplatesViewPrivate(this, editModes))
 {
     lock(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool());
+    if (viewContent == CategoriesOnly)
+        d->m_Model->categoriesOnly();
 }
 
 TemplatesView::~TemplatesView()
@@ -401,6 +423,27 @@ TemplatesView::~TemplatesView()
         delete d;
         d = 0;
     }
+}
+
+void TemplatesView::setViewContent(int viewContent)
+{
+    if (viewContent == CategoriesOnly)
+        d->m_Model->categoriesOnly();
+}
+
+void TemplatesView::setEditMode(EditModes editModes)
+{
+    d->manageContexts(editModes);
+}
+
+TemplatesModel *TemplatesView::templatesModel() const
+{
+    return d->m_Model;
+}
+
+QModelIndex TemplatesView::currentItem() const
+{
+    return d->m_ui->categoryTreeView->currentIndex();
 }
 
 QItemSelectionModel *TemplatesView::selectionModel() const

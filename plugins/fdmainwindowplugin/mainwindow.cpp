@@ -171,8 +171,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_CheckUpdate //|
 //            Core::MainWindowActions::A_QtAbout
             );
-    actions.setTemplatesActions(
-            Core::MainWindowActions::A_Templates_New );
+    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
     actions.createEditActions(false);
     createActions(actions);
 
@@ -271,7 +270,6 @@ void MainWindow::extensionsInitialized()
     }
 
     createDockWindows();
-
     finishSplash(this);
     show();
 }

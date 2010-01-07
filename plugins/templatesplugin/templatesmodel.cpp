@@ -262,11 +262,63 @@ public:
         }
     }
 
-    void resetAllInstances() const
+    void allInstancesReset() const
     {
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             pr->q->reset();
         }
+    }
+
+    void allInstancesEmitDataChangedFrom(const QModelIndex &item)
+    {
+        /** \todo improve this */
+//        bool isTemplate = q->isTemplate(item);
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
+                Q_EMIT(pr->q->dataChanged(pr->q->index(item.row(), 0, item.parent()),
+                                          pr->q->index(item.row(), TemplatesModel::Data_Max_Param, item.parent())));
+                }
+            }
+    }
+
+    void allInstancesBeginInsertRows(const QModelIndex &parent, int first, int last)
+    {
+        /** \todo improve this */
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
+                pr->q->beginInsertRows(parent,first,last);
+                }
+            }
+    }
+
+    void allInstancesEndInsertRows()
+    {
+        /** \todo improve this */
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
+                pr->q->endInsertRows();
+                }
+            }
+    }
+
+    void allInstancesBeginRemoveRows(const QModelIndex &parent, int first, int last)
+    {
+        /** \todo improve this */
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
+                pr->q->beginRemoveRows(parent,first,last);
+                }
+            }
+    }
+
+    void allInstancesEndRemoveRows()
+    {
+        /** \todo improve this */
+        foreach(TemplatesModelPrivate *pr, m_Handles) {
+            if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
+                pr->q->endRemoveRows();
+                }
+            }
     }
 
     QDir databasePath() const
@@ -608,14 +660,11 @@ bool TemplatesModel::setData(const QModelIndex &index, const QVariant &value, in
         return false;
 
     Internal::TreeItem *it = d->getItem(index);
-    switch (role)
-    {
-        case Qt::EditRole :
-        case Qt::DisplayRole :
-        {
-            it->setData(index.column(),value);
-        }
+    if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
+        it->setData(index.column(), value);
     }
+    // emit from all instances
+    d->allInstancesEmitDataChangedFrom(index);
     return true;
 }
 
@@ -711,13 +760,13 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
     datas.insert(TemplatesModel::Data_ParentId, parentItem->data(TemplatesModel::Data_Id));
     datas.insert(TemplatesModel::Data_CreationDate, QDateTime::currentDateTime());
     datas.insert(TemplatesModel::Data_IsTemplate, false);
-    beginInsertRows(parent, row, row+count-1);
+    d->allInstancesBeginInsertRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = new Internal::TreeItem(datas, parentItem);
         if (!parentItem->insertChild(row+i, item))
             return false;
     }
-    endInsertRows();
+    d->allInstancesEndInsertRows();
     return true;
 }
 
@@ -729,15 +778,14 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
         parentItem = d->m_RootItem;
     else
         parentItem = d->getItem(parent);
-    beginRemoveRows(parent, row, row+count-1);
+    d->allInstancesBeginRemoveRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = parentItem->child(row+i);
         parentItem->removeChild(item);
-        qWarning() << "removeRows deleting item" << item->data(TemplatesModel::Data_Label) << "from" << parent.data().toString();
         delete item;
         item = 0;
     }
-    endRemoveRows();
+    d->allInstancesEndRemoveRows();
     return true;
 }
 
@@ -851,3 +899,7 @@ void TemplatesModel::categoriesOnly() const
     d->m_ShowOnlyCategories = true;
 }
 
+bool TemplatesModel::isCategoryOnly() const
+{
+    return d->m_ShowOnlyCategories;
+}
