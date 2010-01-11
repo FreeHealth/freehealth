@@ -323,7 +323,9 @@ public:
             m_ui->categoryTreeView->setColumnHidden(i, true);
         }
 
+        // manage contexts and drag/drop
         manageContexts(editModes);
+        m_ui->categoryTreeView->setDragDropMode(QAbstractItemView::InternalMove);
 
 //        QList<int> sizes;
 //        foreach(const QVariant &s, settings()->value(Constants::S_SPLITTER_SIZES).toList()) {

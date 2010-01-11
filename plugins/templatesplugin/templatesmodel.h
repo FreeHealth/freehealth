@@ -43,6 +43,7 @@
 
 #include <templatesplugin/templates_exporter.h>
 #include <templatesplugin/itemplates.h>
+#include <templatesplugin/constants.h>
 
 #include <QSqlTableModel>
 #include <QStringList>
@@ -51,8 +52,8 @@
 /**
  * \file templatesmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 23 Dec 2009
+ * \version 0.2.2
+ * \date 10 Jan 2009
 */
 
 
@@ -67,20 +68,6 @@ class TEMPLATES_EXPORT TemplatesModel : public QAbstractItemModel
     Q_OBJECT
     friend class Internal::TemplatesModelPrivate;
 public:
-    enum DataRepresentation {
-        Data_Label = 0,
-        Data_Id,
-        Data_Uuid,
-        Data_UserUuid,
-        Data_ParentId,
-        Data_Summary,
-        Data_CreationDate,
-        Data_ModifDate,
-        Data_Content,
-        Data_IsTemplate,
-        Data_Max_Param
-    };
-
     TemplatesModel(QObject * parent = 0);
     ~TemplatesModel();
     bool setCurrentUser(const QString &uuid);
@@ -103,9 +90,11 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRow(int row, const QModelIndex &parent = QModelIndex()) {return removeRows(row,1,parent);}
 
-    QStringList mimeTypes() const { return QStringList() <<  "application/templates.text"; }
+    QStringList mimeTypes() const { return QStringList() <<  Constants::MIMETYPE_TEMPLATE; }
     QMimeData *mimeData(const QModelIndexList &indexes) const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    QModelIndex getTemplateId(const int id);
+
     bool isTemplate(const QModelIndex &index) const;
     bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
 

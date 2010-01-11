@@ -89,6 +89,8 @@ void PrescriptionViewer::initialize()
     verticalLayout->insertWidget(0, m_ToolBar);
     listView->setObjectName("PrescriptionListView");
     setListViewPadding(5);
+    listView->setAcceptDrops(true);
+    this->setAcceptDrops(true);
 //    listView->setMovement(QListView::Snap);
 }
 

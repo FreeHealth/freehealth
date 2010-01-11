@@ -41,42 +41,64 @@
 #ifndef ITEMPLATES_H
 #define ITEMPLATES_H
 
+#include <templatesplugin/templates_exporter.h>
+#include <templatesplugin/constants.h>
+
+#include <QString>
+#include <QVariant>
+#include <QHash>
+
 QT_BEGIN_NAMESPACE
-class QString;
+class QMimeData;
 QT_END_NAMESPACE
 
 /**
  * \file itemplates.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 30 Nov 2009
+ * \version 0.2.3
+ * \date 10 Jan 2009
 */
 
 namespace Templates {
 
-class ITemplate
+class TEMPLATES_EXPORT ITemplate
 {
 public:
-    ITemplate() {}
+    ITemplate() { setId(-1); setParentId(-1); }
+    ITemplate(const QHash<int, QVariant> &datas) : m_Datas(datas) {}
+//    ITemplate(const QHash<int, QVariant> &datas, ITemplate *parent) :
+//            m_Id(-1), m_ParentId(parent->id()), m_Datas(datas) {}
+
     virtual ~ITemplate() {}
 
-    virtual int id() const = 0;
-    virtual int parentId() const = 0;
-    virtual bool isValid() const = 0;
+    virtual void setId(const int id) {m_Datas.insert(Constants::Data_Id, id);}
+    virtual int id() const {return m_Datas.value(Constants::Data_Id).toInt();}
+    virtual void setParentId(const int id) {m_Datas.insert(Constants::Data_ParentId, id);}
+    virtual int parentId() const {return m_Datas.value(Constants::Data_ParentId).toInt();}
+    virtual bool isValid() const {return true;}
 
-    virtual QString category() const = 0;
+    virtual QVariant data(int column) const {return m_Datas.value(column, QVariant());}
+    virtual bool setData(int column, const QVariant &value) {m_Datas.insert(column, value); return true;}
+    virtual QHash<int, QVariant> datas() const {return m_Datas;}
 
-    virtual QString uuid() const = 0;
-    virtual QString ownerUuid() const = 0;
+    virtual QString uuid() const {return data(Constants::Data_Uuid).toString();}
+    virtual QString ownerUuid() const {return data(Constants::Data_UserUuid).toString();}
+    virtual QString label() const {return data(Constants::Data_Label).toString();}
+    virtual QString content() const {return data(Constants::Data_Content).toString();}
+    virtual QString summary() const {return data(Constants::Data_Summary).toString();}
 
-    virtual QString label() const = 0;
-    virtual QString content() const = 0;
-    virtual QString summary() const = 0;
+    virtual QMimeData *toMimeData();
+    virtual bool fromMimeData(QMimeData *data);
+    virtual QString serialize();
+    virtual bool deserialize(const QString &serialized);
 
+private:
+    QHash<int, QVariant> m_Datas;
 };
 
 
 }  // end namespace Templates
 
+Q_DECLARE_METATYPE(Templates::ITemplate)
 
 #endif // ITEMPLATES_H

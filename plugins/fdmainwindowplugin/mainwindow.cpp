@@ -502,7 +502,7 @@ void MainWindow::readFile(const QString &file)
     } else {
         DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
-    qWarning() << datas;
+//    qWarning() << datas;
     patient()->fromXml(datas);
     refreshPatient();
 }
@@ -510,6 +510,7 @@ void MainWindow::readFile(const QString &file)
 void MainWindow::createDockWindows()
 {
     QDockWidget *dock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
+    dock->setObjectName("templatesDock");
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     dock->setWidget(new Templates::TemplatesView(dock));
     addDockWidget(Qt::RightDockWidgetArea, dock);

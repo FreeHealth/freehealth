@@ -20,7 +20,8 @@ SOURCES = templatesplugin.cpp \
     templatesview.cpp \
     templateseditdialog.cpp \
     templatespreferencespages.cpp \
-    templatescreationdialog.cpp
+    templatescreationdialog.cpp \
+    itemplates.cpp
 OTHER_FILES = Templates.pluginspec
 FORMS += templatesview.ui \
     templateseditdialog.ui \

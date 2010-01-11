@@ -1,0 +1,80 @@
+#include "itemplates.h"
+#include "constants.h"
+
+#include <utils/global.h>
+#include <utils/serializer.h>
+
+#include <QMimeData>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QHash>
+#include <QVariant>
+
+enum { base64MimeDatas = true };
+
+using namespace Templates;
+
+//static void parseMimeData(const QDomElement &element, const QModelIndex &parent, const int row, QAbstractItemModel *model)
+//{
+//    static int indent = 0;
+//    indent += 2;
+////    qWarning() << QString().fill(' ', indent) + "parse ; add to modelIndex" << parent.data().toString();
+//    QDomNode n = element;
+//    QDomNode child = element;
+//    QModelIndex newItem = parent;
+//    int zz = 0;
+//
+//    while (!n.isNull()) {
+//        QDomElement e = n.toElement();
+//        if (!e.isNull()) {
+////            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + " : " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
+//            // Manage templates
+//            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
+//                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);
+////                qWarning() << e.attribute("content");
+////                qWarning() << datas;
+//                datas.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
+//                model->insertRow(row+zz, parent);
+//                for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
+//                    model->setData(model->index(row+zz, i, parent), datas.value(i, QVariant()));
+//                }
+//                ++zz;
+//            }
+//            if (e.tagName().compare("Child", Qt::CaseInsensitive) == 0) {
+////                qWarning() << QString().fill(' ', indent) + "    -> Child";
+//                newItem = model->index(0, 0, newItem);
+//                parseMimeData(child.firstChildElement(), newItem, 0, model);
+//                child = child.firstChildElement("Child");
+//            }
+//            // Manage all children
+//            child = n.firstChildElement("Child");
+//            while (!child.isNull()) {
+////                qWarning() << QString().fill(' ', indent) + "    -> Manage Child";
+//                newItem = model->index(0, 0, newItem);
+//                parseMimeData(child.firstChildElement("Template"), newItem, 0, model);
+//                child = child.firstChildElement("Child");
+//            }
+//        }
+//        n = n.nextSibling();
+//    }
+//
+//}
+
+QMimeData *ITemplate::toMimeData()
+{
+}
+
+bool ITemplate::fromMimeData(QMimeData *data)
+{
+}
+
+QString ITemplate::serialize()
+{
+    return Utils::Serializer::toString(m_Datas, base64MimeDatas);
+}
+
+bool ITemplate::deserialize(const QString &serialized)
+{
+    m_Datas.clear();
+    m_Datas = Utils::Serializer::toVariantHash(serialized, base64MimeDatas);
+}

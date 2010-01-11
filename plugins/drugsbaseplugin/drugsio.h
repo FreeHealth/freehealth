@@ -86,6 +86,8 @@ public:
     static QString prescriptionToXml(DrugsDB::DrugsModel *model);
     static QString prescriptionToHtml(DrugsDB::DrugsModel *model);
 
+    static QStringList prescriptionMimeTypes();
+
 private:
     DrugsIO(QObject *parent);
 

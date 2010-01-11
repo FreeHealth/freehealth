@@ -14,6 +14,7 @@ core.subdir = ../../plugins/fdcoreplugin
 
 drugsbase.subdir   = ../../plugins/drugsbaseplugin
 drugsbase.depends += core
+drugsbase.depends += templates
 
 mainwindow.subdir   = ../../plugins/fdmainwindowplugin
 mainwindow.depends += core

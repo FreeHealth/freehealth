@@ -52,8 +52,8 @@
 /**
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.2.2
+ * \date 08 Jan 2009
 */
 namespace DrugsDB {
 class DrugsIO;
@@ -121,6 +121,13 @@ public:
     // FILTERS
     void showTestingDrugs(bool state);
     bool testingDrugsAreVisible() const;
+
+    // DRAG AND DROP
+    Qt::DropActions supportedDropActions() const;
+    QStringList mimeTypes() const;
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
 
     // FOR DOSAGE MANAGEMENT
     Internal::DosageModel *dosageModel( const int _CIS );

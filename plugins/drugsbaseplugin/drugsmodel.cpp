@@ -67,6 +67,10 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
 
+#include <templatesplugin/constants.h>
+#include <templatesplugin/itemplates.h>
+#include <templatesplugin/templatesmodel.h>
+
 // include Qt headers
 #include <QApplication>
 #include <QIcon>
@@ -74,6 +78,8 @@
 #include <QHash>
 #include <QPointer>
 #include <QStringList>
+#include <QMimeData>
+#include <QDomDocument>
 
 
 namespace mfDrugsModelConstants {
@@ -863,4 +869,40 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     }
     Utils::replaceTokens(tmp, tokens_value);
     return tmp;
+}
+
+Qt::DropActions DrugsModel::supportedDropActions() const
+{
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+QStringList DrugsModel::mimeTypes() const
+{
+    return QStringList() << Templates::Constants::MIMETYPE_TEMPLATE;// DrugsDB::DrugsIO::prescriptionMimeTypes();
+}
+
+QMimeData *DrugsModel::mimeData(const QModelIndexList &indexes) const
+{
+
+}
+
+bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    qWarning() << "dropMimeData" << row << action << data->data(mimeTypes().at(0));
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    // get Indexes from the transmitted ids
+    Templates::TemplatesModel *model = new Templates::TemplatesModel(this);
+    QModelIndex idx = model->getTemplateId(data->data(mimeTypes().at(0)).toInt());
+    if (model->hasChildren(idx)) {
+        qWarning() << "NO CHILD";
+        return false;
+    }
+
+    // add content to model
+    DrugsDB::DrugsIO::prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString());
+    if (action == Qt::MoveAction)
+        return false;
+    return true;
 }

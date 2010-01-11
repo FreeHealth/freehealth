@@ -66,6 +66,14 @@ namespace Constants {
     const char * const  S_LOCKCATEGORYVIEW         = "Templates/LockCategoryView";
     const char * const  S_SAVEDATAWITHOUTPROMPTING = "Templates/SaveWithoutPrompting";
 
+    const char * const MIMETYPE_TEMPLATE           = "applcation/template";
+    const char * const MIMETYPE_CATEGORY           = "applcation/template.category";
+
+    const char * const XML_TEMPLATE_TAG            = "Template";
+    const char * const XML_TEMPLATE_CONTENT_ATTRIB = "content";
+    const char * const XML_TEMPLATE_MIME_ATTRIB    = "mime";
+    const char * const XML_TEMPLATE_CHILD_TAG      = "Child";
+
 
     enum TemplatesFields {
         TF_Id = 0,
@@ -88,12 +96,19 @@ namespace Constants {
         CF_Summary
     };
 
-    enum ModelColumns {
-        OwnerUuid = 0,
-        Type,
-        Category,
-        Label,
-        Summary
+    enum ModelDataRepresentation {
+        Data_Label = 0,
+        Data_Id,
+        Data_Uuid,
+        Data_UserUuid,
+        Data_ParentId,
+        Data_Summary,
+        Data_CreationDate,
+        Data_ModifDate,
+        Data_ContentMimeTypes,
+        Data_Content,
+        Data_IsTemplate,
+        Data_Max_Param
     };
 
 

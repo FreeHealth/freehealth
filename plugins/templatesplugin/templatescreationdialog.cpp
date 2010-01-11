@@ -33,10 +33,11 @@ void TemplatesCreationDialog::done(int r)
             return;
         }
         // model --> setDatas
-        model->setData(model->index(row, TemplatesModel::Data_IsTemplate, parent), true);
-        model->setData(model->index(row, TemplatesModel::Data_Label, parent), ui->nameLineEdit->text());
-        model->setData(model->index(row, TemplatesModel::Data_Summary, parent), ui->summaryTextEdit->toHtml());
-        model->setData(model->index(row, TemplatesModel::Data_Content, parent), m_Content);
+        model->setData(model->index(row, Constants::Data_IsTemplate, parent), true);
+        model->setData(model->index(row, Constants::Data_Label, parent), ui->nameLineEdit->text());
+        model->setData(model->index(row, Constants::Data_Summary, parent), ui->summaryTextEdit->toHtml());
+        model->setData(model->index(row, Constants::Data_Content, parent), m_Content);
+        model->setData(model->index(row, Constants::Data_ContentMimeTypes, parent), m_Mimes);
         delete model;
     }
 
@@ -46,6 +47,11 @@ void TemplatesCreationDialog::done(int r)
 void TemplatesCreationDialog::setTemplateSummary(const QString &summary)
 {
     ui->summaryTextEdit->setText(summary);
+}
+
+void TemplatesCreationDialog::setTemplateMimeTypes(const QStringList &list)
+{
+    m_Mimes = list;
 }
 
 void TemplatesCreationDialog::changeEvent(QEvent *e)

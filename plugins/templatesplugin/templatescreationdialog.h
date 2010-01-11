@@ -21,6 +21,7 @@ public:
 
     void setTemplateContent(const QString &content) {m_Content = content;}
     void setTemplateSummary(const QString &summary);
+    void setTemplateMimeTypes(const QStringList &list);
 
 protected:
     void done(int r);
@@ -29,6 +30,7 @@ protected:
 private:
     Internal::Ui::TemplatesCreationDialog *ui;
     QString m_Content;
+    QStringList m_Mimes;
 };
 
 }  // End namespace Templates

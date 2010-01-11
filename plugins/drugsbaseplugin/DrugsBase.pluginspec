@@ -5,6 +5,7 @@
     <description>The plugin does nothing. It's only an infra-structure to ease creation of new plugins.</description>
     <url>http://www.ericmaeker.fr/FreeMedForms/</url>
     <dependencyList>
-        <dependency name="Core" version="0.0.9"/>
+       <dependency name="Core" version="0.0.9"/>
+       <dependency name="Templates" version="0.0.9"/>
     </dependencyList>
 </plugin>

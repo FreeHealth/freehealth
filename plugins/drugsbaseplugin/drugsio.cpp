@@ -557,4 +557,12 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
     else
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }
+/**
+  \brief For drag and drop functionnalities, defines the mimeTypes of DrugsIO.
+  \sa DrugsDB::DrugsModel::mimeType()
+*/
+QStringList DrugsIO::prescriptionMimeTypes()
+{
+    return QStringList() << "application/prescription";
+}
 

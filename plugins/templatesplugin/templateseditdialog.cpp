@@ -42,6 +42,7 @@
 #include "templatesmodel.h"
 #include "ui_templateseditdialog.h"
 #include "ui_templatescontenteditor.h"
+#include "constants.h"
 
 #include <QPersistentModelIndex>
 #include <QTreeView>
@@ -89,7 +90,7 @@ public:
         for(int i=0; i < m_Model->columnCount(); ++i) {
             m_ui->parentTreeView->setColumnHidden(i,true);
         }
-        m_ui->parentTreeView->setColumnHidden(TemplatesModel::Data_Label, false);
+        m_ui->parentTreeView->setColumnHidden(Constants::Data_Label, false);
         m_ui->parentTreeView->setIndentation(10);
         m_ui->parentTreeView->header()->hide();
         m_ui->parentTreeView->expandAll();
@@ -104,14 +105,14 @@ public:
         if (!m_Mapper) {
             m_Mapper = new QDataWidgetMapper(q);
             m_Mapper->setModel(m_Model);
-            m_Mapper->addMapping(m_ui->nameLineEdit, Templates::TemplatesModel::Data_Label);
-            m_Mapper->addMapping(m_ui->summaryTextEdit, Templates::TemplatesModel::Data_Summary);
+            m_Mapper->addMapping(m_ui->nameLineEdit, Constants::Data_Label);
+            m_Mapper->addMapping(m_ui->summaryTextEdit, Constants::Data_Summary);
         }
     }
 
     void refreshContent()
     {
-        QString content = m_Model->index(m_Index->row(), TemplatesModel::Data_Content).data().toString();
+        QString content = m_Model->index(m_Index->row(), Constants::Data_Content).data().toString();
         m_ui->viewButton->setEnabled(content.isEmpty());
         m_ui->viewButton->setEnabled(m_Model->isTemplate(*m_Index));
         // find parent category
@@ -191,7 +192,7 @@ void TemplatesEditDialog::editContent()
     QDialog dlg(this);
     Internal::Ui::TemplatesContentEditor ui;
     ui.setupUi(&dlg);
-    QString content = d->m_Model->index(d->m_Index->row(), TemplatesModel::Data_Content).data().toString();
+    QString content = d->m_Model->index(d->m_Index->row(), Constants::Data_Content).data().toString();
     ui.contentTextEdit->setPlainText(content);
     dlg.exec();
 }
