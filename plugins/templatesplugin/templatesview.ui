@@ -42,6 +42,9 @@
        <property name="selectionMode">
         <enum>QAbstractItemView::MultiSelection</enum>
        </property>
+       <property name="autoExpandDelay">
+        <number>200</number>
+       </property>
        <property name="uniformRowHeights">
         <bool>true</bool>
        </property>

@@ -43,7 +43,6 @@
 
 #include <templatesplugin/templates_exporter.h>
 #include <templatesplugin/itemplates.h>
-#include <templatesplugin/constants.h>
 
 #include <QSqlTableModel>
 #include <QStringList>
@@ -90,7 +89,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRow(int row, const QModelIndex &parent = QModelIndex()) {return removeRows(row,1,parent);}
 
-    QStringList mimeTypes() const { return QStringList() <<  Constants::MIMETYPE_TEMPLATE; }
+    QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     QModelIndex getTemplateId(const int id);

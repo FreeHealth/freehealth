@@ -66,8 +66,8 @@ namespace Constants {
     const char * const  S_LOCKCATEGORYVIEW         = "Templates/LockCategoryView";
     const char * const  S_SAVEDATAWITHOUTPROMPTING = "Templates/SaveWithoutPrompting";
 
-    const char * const MIMETYPE_TEMPLATE           = "applcation/template";
-    const char * const MIMETYPE_CATEGORY           = "applcation/template.category";
+    const char * const MIMETYPE_TEMPLATE           = "application/template";
+    const char * const MIMETYPE_CATEGORY           = "application/template.category";
 
     const char * const XML_TEMPLATE_TAG            = "Template";
     const char * const XML_TEMPLATE_CONTENT_ATTRIB = "content";

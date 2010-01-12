@@ -480,7 +480,7 @@ public:
 
     void saveModelDatas(const QModelIndex &start = QModelIndex())
     {
-        qWarning() << "saveModelDatas :" << start.data().toString();
+//        qWarning() << "saveModelDatas :" << start.data().toString();
         QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
@@ -492,7 +492,7 @@ public:
         for(int i = 0; i< q->rowCount(start); ++i) {
             idx = q->index(i, 0, start);
             TreeItem *t = getItem(idx);
-            qWarning() << "   saving" << t->label();
+//            qWarning() << "   saving" << t->label();
             QSqlQuery query(DB);
             QString req;
             if (t->isNewlyCreated()) {
@@ -522,6 +522,14 @@ public:
                     query.bindValue(8, t->data(Constants::Data_ModifDate).toDate().toString());
                     query.bindValue(9, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(10, QVariant());
+                    query.exec();
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    } else {
+                        t->setNewlyCreated(false);
+                        t->setModified(false);
+                        allInstancesEmitDataChangedFrom(idx);
+                    }
                 } else {
                     query.prepare("INSERT INTO `CATEGORIES` ("
                                   "`CATEGORY_UUID`,"
@@ -544,13 +552,21 @@ public:
                     query.bindValue(6, t->data(Constants::Data_ModifDate).toDate().toString());
                     query.bindValue(7, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(8, QVariant());
-                }
-                query.exec();
-                if (!query.isActive()) {
-                    Utils::Log::addQueryError(q, query);
-                } else {
-                    t->setNewlyCreated(false);
-                    t->setModified(false);
+                    // save category
+                    query.exec();
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    } else {
+                        t->setNewlyCreated(false);
+                        t->setModified(false);
+                        allInstancesEmitDataChangedFrom(idx);
+                    }
+                    // retreive its id
+                    t->setId(query.lastInsertId().toInt());
+                    // inform children of the id
+                    for(int i=0; i<t->childCount(); ++i) {
+                        t->child(i)->setParentId(t->id());
+                    }
                 }
             } else if (t->isModified()) {
                 if (t->isTemplate()) {
@@ -581,19 +597,25 @@ public:
                     }
                     req.clear();
                     query.finish();
-                    query.prepare(QString("UPDATE `TEMPLATES` SET `SUMMARY` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
-                    query.bindValue(0, t->summary());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
+                        query.prepare(QString("UPDATE `TEMPLATES` SET `SUMMARY` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+                        query.bindValue(0, t->summary());
+                        query.exec();
+                        if (!query.isActive()) {
+                            Utils::Log::addQueryError(q, query);
+                        }
+                        query.finish();
                     }
-                    query.finish();
-                    query.prepare(QString("UPDATE `TEMPLATES` SET `CONTENT` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
-                    query.bindValue(0, t->content());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                    if (t->dirtyRows().contains(Constants::Data_Content)) {
+                        query.prepare(QString("UPDATE `TEMPLATES` SET `CONTENT` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+                        query.bindValue(0, t->content());
+                        query.exec();
+                        if (!query.isActive()) {
+                            Utils::Log::addQueryError(q, query);
+                        }
                     }
+                    t->setModified(false);
+                    allInstancesEmitDataChangedFrom(idx);
                 } else {
                     req = QString("UPDATE `CATEGORIES` SET "
                           "`CATEGORY_UUID`= '%1' ,"
@@ -620,18 +642,55 @@ public:
                     }
                     req.clear();
                     query.finish();
-                    query.prepare(QString("UPDATE `CATEGORIES` SET `SUMMARY` = ? WHERE `CATEGORY_ID`=%1").arg(t->id()));
-                    query.bindValue(0, t->summary());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
+                        query.prepare(QString("UPDATE `CATEGORIES` SET `SUMMARY` = ? WHERE `CATEGORY_ID`=%1").arg(t->id()));
+                        query.bindValue(0, t->summary());
+                        query.exec();
+                        if (!query.isActive()) {
+                            Utils::Log::addQueryError(q, query);
+                        }
                     }
+                    t->setModified(false);
+                    allInstancesEmitDataChangedFrom(idx);
                 }
             }
         }
         // save all its children
         for(int i = 0; i < q->rowCount(start); ++i) {
             saveModelDatas(q->index(i, 0, start));
+        }
+    }
+
+    void deleteRowsInDatabase()
+    {
+//        qWarning() << m_CategoriesToDelete << m_TemplatesToDelete;
+        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+        if (!DB.open()) {
+            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DATABASE_NAME)
+                                 .arg(DB.lastError().text()));
+            return;
+        }
+        QString req;
+        for(int i=0; i<m_CategoriesToDelete.count(); ++i) {
+            req += QString::number(m_CategoriesToDelete.at(i)) + " , ";
+        }
+        req.chop(3);
+        if (!req.isEmpty()) {
+            req = "DELETE FROM `CATEGORIES` WHERE `CATEGORY_ID` IN ( " + req + " )";
+            QSqlQuery query(req, DB);
+            if (!query.isActive())
+                Utils::Log::addQueryError(q, query);
+        }
+        for(int i=0; i<m_TemplatesToDelete.count(); ++i) {
+            req += QString::number(m_TemplatesToDelete.at(i)) + " , ";
+        }
+        req.chop(3);
+        if (!req.isEmpty()) {
+            req = "DELETE FROM `TEMPLATES` WHERE `TEMPLATE_ID` IN ( " + req + " )";
+            QSqlQuery query(req, DB);
+            if (!query.isActive())
+                Utils::Log::addQueryError(q, query);
         }
     }
 
@@ -696,12 +755,15 @@ public:
     static bool m_ModelDatasRetreived;
     static QSet<TemplatesModelPrivate *> m_Handles;
     static QHash<int, TreeItem *> m_IdToCategory;
+    static QVector<int> m_TemplatesToDelete, m_CategoriesToDelete;
 };
 
 TreeItem *TemplatesModelPrivate::m_Tree = 0;
 bool TemplatesModelPrivate::m_ModelDatasRetreived = false;
 QSet<TemplatesModelPrivate *> TemplatesModelPrivate::m_Handles;
 QHash<int, TreeItem *> TemplatesModelPrivate::m_IdToCategory;
+QVector<int> TemplatesModelPrivate::m_TemplatesToDelete;
+QVector<int> TemplatesModelPrivate::m_CategoriesToDelete;
 
 }  // End Internal
 }  // End Templates
@@ -778,9 +840,9 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
 //               << "to" << treeParent->label() << treeParent->id() << (treeItemParent == treeParent);
 
     if (treeItemParent == treeParent)
-        return true;
+        return false;
     if (treeItem == treeParent)
-        return true;
+        return false;
 
     int row = rowCount(parent);
     // add the item
@@ -946,12 +1008,22 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
     d->allInstancesBeginRemoveRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
         Internal::TreeItem *item = parentItem->child(row+i);
+        int id = item->id();
+        if (item->isTemplate() && !d->m_TemplatesToDelete.contains(id))
+            d->m_TemplatesToDelete.append(id);
+        else if (!item->isTemplate()  && (d->m_CategoriesToDelete.contains(id)))
+            d->m_CategoriesToDelete.append(id);
         parentItem->removeChild(item);
         delete item;
         item = 0;
     }
     d->allInstancesEndRemoveRows();
     return true;
+}
+
+QStringList TemplatesModel::mimeTypes() const
+{
+    return QStringList() <<  Constants::MIMETYPE_TEMPLATE;
 }
 
 /**
@@ -1006,9 +1078,19 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
         beginRow = row;
 
     QList<QPersistentModelIndex> list = getIndexesFromMimeData(data);
-    foreach(const QPersistentModelIndex &id, list) {
-        reparentIndex(id, parentIndex);
+    foreach(const QPersistentModelIndex &idx, list) {
+        int id = d->getItem(idx)->id();
+        bool isTemplate = d->getItem(idx)->isTemplate();
+        if (!reparentIndex(idx, parentIndex))
+            return false;
+        if (isTemplate && d->m_TemplatesToDelete.contains(id))
+            d->m_TemplatesToDelete.remove(d->m_TemplatesToDelete.indexOf(id));
+        else if (!isTemplate && d->m_CategoriesToDelete.contains(id))
+            d->m_CategoriesToDelete.remove(d->m_CategoriesToDelete.indexOf(id));
+//        qWarning() << d->m_CategoriesToDelete << d->m_TemplatesToDelete << id;
     }
+
+
 
 //    d->saveModelDatas();
 
@@ -1043,20 +1125,20 @@ QList<QPersistentModelIndex> TemplatesModel::getIndexesFromMimeData(const QMimeD
             pos += rx.matchedLength();
         }
     }
-    qWarning() << "Templates" << s;
+//    qWarning() << "Templates" << s;
 
     // Manage categories
     s = mime->data(mimeTypes().at(0));
     s = s.mid(catBegin);
-    qWarning() << "cat" << s;
+//    qWarning() << "cat" << s;
     pos = 0;
     while ((pos = rx.indexIn(s, pos)) != -1) {
         list << QPersistentModelIndex(d->findIndex(rx.cap(1).toInt(), false));
         pos += rx.matchedLength();
     }
-    foreach(QPersistentModelIndex id, list) {
-        qWarning() << id.data().toString();
-    }
+//    foreach(QPersistentModelIndex id, list) {
+//        qWarning() << id.data().toString();
+//    }
 
     return list;
 }
@@ -1083,5 +1165,6 @@ bool TemplatesModel::isCategoryOnly() const
 bool TemplatesModel::submit()
 {
     d->saveModelDatas();
+    d->deleteRowsInDatabase();
     return true;
 }

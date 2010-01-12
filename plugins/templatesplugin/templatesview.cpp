@@ -542,7 +542,6 @@ void TemplatesView::editCurrentItem()
 void TemplatesView::saveModel()
 {
     d->m_Model->submit();
-    qWarning() << "SAVE MODEL";
 }
 
 void TemplatesView::changeEvent(QEvent *e)

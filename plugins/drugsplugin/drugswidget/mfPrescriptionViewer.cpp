@@ -90,7 +90,9 @@ void PrescriptionViewer::initialize()
     listView->setObjectName("PrescriptionListView");
     setListViewPadding(5);
     listView->setAcceptDrops(true);
-    this->setAcceptDrops(true);
+    listView->setDragDropMode(QAbstractItemView::DropOnly);
+    listView->setDropIndicatorShown(true);
+//    this->setAcceptDrops(true);
 //    listView->setMovement(QListView::Snap);
 }
 
@@ -164,6 +166,20 @@ void PrescriptionViewer::createActionsAndToolbar()
     }
 
 }
+
+//void PrescriptionViewer::dragEnterEvent(QDragEnterEvent *event)
+// {
+//    qWarning() << event->mimeData()->formats() << drugModel()->mimeTypes() << event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0));
+//     if (event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0)))
+//         event->acceptProposedAction();
+// }
+//
+//void PrescriptionViewer::dragMoveEvent(QDragMoveEvent *event)
+//{
+//    qWarning() << "dragMoveEvent";
+//    qWarning() << event->mimeData()->formats() << drugModel()->mimeTypes() << event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0));
+//    event->acceptProposedAction();
+//}
 
 /** \brief Clears the prescription */
 void PrescriptionViewer::clearTriggered()

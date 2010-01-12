@@ -435,7 +435,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
                      .arg(QString(prescriptionToXml(m).toAscii().toBase64())));
 
-    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
+//    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);
