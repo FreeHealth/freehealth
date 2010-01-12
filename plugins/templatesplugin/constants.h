@@ -103,11 +103,14 @@ namespace Constants {
         Data_UserUuid,
         Data_ParentId,
         Data_Summary,
-        Data_CreationDate,
-        Data_ModifDate,
         Data_ContentMimeTypes,
         Data_Content,
+        Data_ThemedIcon,
+        Data_CreationDate,
+        Data_ModifDate,
+        Data_TransmissionDate,
         Data_IsTemplate,
+        Data_IsNewlyCreated,
         Data_Max_Param
     };
 

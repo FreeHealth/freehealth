@@ -110,13 +110,24 @@ namespace Constants {
             "    A:hover {text-decoration: none;}\n"
             "  </style>\n"
             "</head>\n"
-            "<body style=\"font-family:Arial;font-size:12pt\">\n"
+            "<body style=\"font-family:Arial;font-size:12pt\">\n\n"
             "<a href=\"{ENCODEDPRESCRIPTION}\">\n"
             "{PRESCRIPTION}\n"
-            "</a>\n"
+            "</a>\n\n"
             "</body>\n"
             "</html>\n";
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION     = "<table border=0><tr><td><ol>{FULLPRESCRIPTION}</ol></td></tr></table>";
+
+    const char * const  ENCODEDHTML_FULLPRESCRIPTION     =
+            "<table border=0>\n"
+            " <tr>\n"
+            "   <td>\n"
+            "     <ol>\n"
+            "{FULLPRESCRIPTION}\n"
+            "     </ol>\n"
+            "   </td>\n"
+            " </tr>\n"
+            "</table>\n";
+
     const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION

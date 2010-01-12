@@ -88,8 +88,9 @@ class TreeItem : public Templates::ITemplate
 public:
     TreeItem(const QHash<int, QVariant> &datas, TreeItem *parent = 0) :
             ITemplate(datas),
-            m_Parent(parent), m_IsTemplate(false),
-            m_IsModified(false), m_NewlyCreated(false)
+            m_Parent(parent),
+            m_IsTemplate(false),
+            m_IsModified(false)
     {
         setHasTemplate(datas.value(Constants::Data_IsTemplate).toBool());
     }
@@ -157,16 +158,20 @@ public:
         return 0;
     }
 
-
     // For tree management
     void setHasTemplate(bool isTemplate) {m_IsTemplate = isTemplate; setData(Constants::Data_IsTemplate, isTemplate); }
     bool isTemplate() const {return m_IsTemplate;}
 
     // For database management
-    void setModified(bool state) {m_IsModified = state;}
+    void setModified(bool state)
+    {
+        m_IsModified = state;
+        if (!state)
+            m_DirtyRows.clear();
+    }
     bool isModified() const {return m_IsModified;}
-    void setNewlyCreated(bool state) {m_NewlyCreated = state;}
-    bool isNewlyCreated() const {return m_NewlyCreated;}
+    void setNewlyCreated(bool state) {setData(Constants::Data_IsNewlyCreated, state); }
+    bool isNewlyCreated() const {return data(Constants::Data_IsNewlyCreated).toBool();}
 
     bool removeChild(TreeItem *child)
     {
@@ -180,12 +185,22 @@ public:
     // For data management
     bool setData(int column, const QVariant &value)
     {
+//        qWarning()<< data(column) << value << (data(column)==value);
+        if (data(column)==value)
+            return true;
         ITemplate::setData(column, value);
         if (column==Constants::Data_IsTemplate) {
             m_IsTemplate=value.toBool();
         }
         m_IsModified = true;
+        if (!m_DirtyRows.contains(column))
+            m_DirtyRows.append(column);
         return true;
+    }
+
+    QVector<int> dirtyRows() const
+    {
+        return m_DirtyRows;
     }
 
     // For sort functions
@@ -202,7 +217,8 @@ public:
 private:
     TreeItem *m_Parent;
     QList<TreeItem*> m_Children;
-    bool m_IsTemplate, m_IsModified, m_NewlyCreated;
+    QVector<int> m_DirtyRows;
+    bool m_IsTemplate, m_IsModified;
 };
 
 class TemplatesModelPrivate
@@ -417,14 +433,15 @@ public:
             item->setParent(m_IdToCategory.value(item->data(Constants::Data_ParentId).toInt(), m_RootItem));
             // add item to the children of its parent
             item->parent()->addChildren(item);
+            item->setModified(false);
         }
 
         // get templates
         Utils::Log::addMessage(q, "Getting Templates");
         QList<TreeItem *> templates;
         req = "SELECT `TEMPLATE_ID`, `TEMPLATE_UUID`, `USER_UUID`, `ID_CATEGORY`, `LABEL`, "
-                      "`SUMMARY`, `DATE_CREATION`, `DATE_MODIFICATION`, `CONTENT_MIMETYPES` "
-                      "FROM `TEMPLATES`";
+                      "`SUMMARY`, `CONTENT`, `CONTENT_MIMETYPES`, `DATE_CREATION`, `DATE_MODIFICATION`, "
+                      "`THEMED_ICON_FILENAME`  FROM `TEMPLATES`";
         query.exec(req);
         if (query.isActive()) {
             QHash<int, QVariant> datas;
@@ -435,9 +452,11 @@ public:
                 datas.insert(Constants::Data_ParentId, query.value(3));
                 datas.insert(Constants::Data_Label, query.value(4));
                 datas.insert(Constants::Data_Summary, query.value(5));
-                datas.insert(Constants::Data_CreationDate, query.value(6));
-                datas.insert(Constants::Data_ModifDate, query.value(7));
-                datas.insert(Constants::Data_ContentMimeTypes, query.value(8));
+                datas.insert(Constants::Data_Content, query.value(6));
+                datas.insert(Constants::Data_ContentMimeTypes, query.value(7));
+                datas.insert(Constants::Data_CreationDate, query.value(8));
+                datas.insert(Constants::Data_ModifDate, query.value(9));
+                datas.insert(Constants::Data_ThemedIcon, query.value(10));
                 TreeItem *it = new TreeItem(datas,0);
                 it->setHasTemplate(true);
                 templates.insert(datas.value(Constants::Data_Id).toInt(), it);
@@ -453,9 +472,167 @@ public:
             item->setParent(m_IdToCategory.value(item->data(Constants::Data_ParentId).toInt(),m_RootItem));
             // add item to the children of its parent
             item->parent()->addChildren(item);
+            item->setModified(false);
         }
         sortItems();
         m_ModelDatasRetreived = true;
+    }
+
+    void saveModelDatas(const QModelIndex &start = QModelIndex())
+    {
+        qWarning() << "saveModelDatas :" << start.data().toString();
+        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+        if (!DB.open()) {
+            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DATABASE_NAME)
+                                 .arg(DB.lastError().text()));
+            return;
+        }
+        QModelIndex idx = start;
+        for(int i = 0; i< q->rowCount(start); ++i) {
+            idx = q->index(i, 0, start);
+            TreeItem *t = getItem(idx);
+            qWarning() << "   saving" << t->label();
+            QSqlQuery query(DB);
+            QString req;
+            if (t->isNewlyCreated()) {
+                if (t->isTemplate()) {
+                    query.prepare("INSERT INTO `TEMPLATES` ("
+                                  "`TEMPLATE_UUID`,"
+                                  "`USER_UUID`,"
+                                  "`ID_CATEGORY`,"
+                                  "`LABEL`,"
+                                  "`SUMMARY`,"
+                                  "`CONTENT`,"
+                                  "`CONTENT_MIMETYPES`,"
+                                  "`DATE_CREATION`,"
+                                  "`DATE_MODIFICATION`,"
+                                  "`THEMED_ICON_FILENAME`,"
+                                  "`TRANSMISSION_DATE`"
+                                  ") "
+                                  "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+                    query.bindValue(0, t->uuid());
+                    query.bindValue(1, t->ownerUuid());
+                    query.bindValue(2, t->parentId());
+                    query.bindValue(3, t->label());
+                    query.bindValue(4, t->summary());
+                    query.bindValue(5, t->content());
+                    query.bindValue(6, t->contentMimeTypes().join(";"));
+                    query.bindValue(7, t->data(Constants::Data_CreationDate).toDate().toString());
+                    query.bindValue(8, t->data(Constants::Data_ModifDate).toDate().toString());
+                    query.bindValue(9, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(10, QVariant());
+                } else {
+                    query.prepare("INSERT INTO `CATEGORIES` ("
+                                  "`CATEGORY_UUID`,"
+                                  "`USER_UUID`,"
+                                  "`PARENT_CATEGORY`,"
+                                  "`LABEL`,"
+                                  "`SUMMARY`,"
+                                  "`DATE_CREATION`,"
+                                  "`DATE_MODIFICATION`,"
+                                  "`THEMED_ICON_FILENAME`,"
+                                  "`TRANSMISSION_DATE`"
+                                  ") "
+                                  "VALUES (?,?,?,?,?,?,?,?,?);");
+                    query.bindValue(0, t->uuid());
+                    query.bindValue(1, t->ownerUuid());
+                    query.bindValue(2, t->parentId());
+                    query.bindValue(3, t->label());
+                    query.bindValue(4, t->summary());
+                    query.bindValue(5, t->data(Constants::Data_CreationDate).toDate().toString());
+                    query.bindValue(6, t->data(Constants::Data_ModifDate).toDate().toString());
+                    query.bindValue(7, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(8, QVariant());
+                }
+                query.exec();
+                if (!query.isActive()) {
+                    Utils::Log::addQueryError(q, query);
+                } else {
+                    t->setNewlyCreated(false);
+                    t->setModified(false);
+                }
+            } else if (t->isModified()) {
+                if (t->isTemplate()) {
+                    req = QString("UPDATE `TEMPLATES` SET "
+                          "`TEMPLATE_UUID`= '%1' ,"
+                          "`USER_UUID`= '%2',"
+                          "`ID_CATEGORY`= %3 ,"
+                          "`LABEL`= '%4' ,"
+                          "`CONTENT_MIMETYPES`= '%5',"
+                          "`DATE_CREATION`= '%6',"
+                          "`DATE_MODIFICATION`= '%7',"
+                          "`THEMED_ICON_FILENAME`= '%8',"
+                          "`TRANSMISSION_DATE`= '%9' "
+                          "WHERE (`TEMPLATE_ID`= %10 )")
+                            .arg(t->uuid())
+                            .arg(t->ownerUuid())
+                            .arg(t->parentId())
+                            .arg(t->label())
+                            .arg(t->contentMimeTypes().join(";"))
+                            .arg(t->data(Constants::Data_CreationDate).toDate().toString())
+                            .arg(t->data(Constants::Data_ModifDate).toDate().toString())
+                            .arg(t->data(Constants::Data_ThemedIcon).toString())
+                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString())
+                            .arg(t->id());
+                    query.exec(req);
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    }
+                    req.clear();
+                    query.finish();
+                    query.prepare(QString("UPDATE `TEMPLATES` SET `SUMMARY` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+                    query.bindValue(0, t->summary());
+                    query.exec();
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    }
+                    query.finish();
+                    query.prepare(QString("UPDATE `TEMPLATES` SET `CONTENT` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+                    query.bindValue(0, t->content());
+                    query.exec();
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    }
+                } else {
+                    req = QString("UPDATE `CATEGORIES` SET "
+                          "`CATEGORY_UUID`= '%1' ,"
+                          "`USER_UUID`= '%2',"
+                          "`PARENT_CATEGORY`= %3 ,"
+                          "`LABEL`= '%4' ,"
+                          "`DATE_CREATION`= '%5',"
+                          "`DATE_MODIFICATION`= '%6',"
+                          "`THEMED_ICON_FILENAME`= '%7',"
+                          "`TRANSMISSION_DATE`= '%8' "
+                          "WHERE (`CATEGORY_ID`= %9 )")
+                            .arg(t->uuid())
+                            .arg(t->ownerUuid())
+                            .arg(t->parentId())
+                            .arg(t->label())
+                            .arg(t->data(Constants::Data_CreationDate).toDate().toString())
+                            .arg(t->data(Constants::Data_ModifDate).toDate().toString())
+                            .arg(t->data(Constants::Data_ThemedIcon).toString())
+                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString())
+                            .arg(t->id());
+                    query.exec(req);
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    }
+                    req.clear();
+                    query.finish();
+                    query.prepare(QString("UPDATE `CATEGORIES` SET `SUMMARY` = ? WHERE `CATEGORY_ID`=%1").arg(t->id()));
+                    query.bindValue(0, t->summary());
+                    query.exec();
+                    if (!query.isActive()) {
+                        Utils::Log::addQueryError(q, query);
+                    }
+                }
+            }
+        }
+        // save all its children
+        for(int i = 0; i < q->rowCount(start); ++i) {
+            saveModelDatas(q->index(i, 0, start));
+        }
     }
 
     void sortItems(TreeItem *root = 0)
@@ -498,44 +675,6 @@ public:
         return QModelIndex();
     }
 
-    // For Drag and Drop
-//    static QModelIndexList allChildren(const QModelIndex &item)
-//    {
-//        QModelIndexList toReturn;
-//        const QAbstractItemModel *model = item.model();
-//        int row = 0;
-//        while (model->hasIndex(row,0,item)) {
-//            toReturn.append(model->index(row,0,item));
-//            ++row;
-//        }
-//        return toReturn;
-//    }
-//    QString itemAndChildrenMimeData(const QModelIndex &index, int indent = 0)
-//    {
-//        if (!index.isValid())
-//            return QString();
-//        Internal::TreeItem *item = getItem(index);
-//        QString toReturn = QString("%1<%2 %3=\"%4\"")
-//                           .arg(QString().fill(' ',indent))
-//                           .arg(Constants::XML_TEMPLATE_TAG, Constants::XML_TEMPLATE_CONTENT_ATTRIB)
-//                           .arg(item->serialize());
-//        // add children
-//        QString tmp;
-//        QModelIndexList children = allChildren(index);
-//        foreach(const QModelIndex &child, children) {
-//            tmp.append(itemAndChildrenMimeData(child, indent + 6));
-//        }
-//        if (!tmp.isEmpty()) {
-//            toReturn.append(QString(">\n%1<%2>\n").arg(QString().fill(' ',indent+3)).arg(Constants::XML_TEMPLATE_CHILD_TAG));
-//            toReturn.append(tmp);
-//            toReturn.append(QString(">\n%1</%2>\n").arg(QString().fill(' ',indent+3)).arg(Constants::XML_TEMPLATE_CHILD_TAG));
-//            toReturn.append("</Template>\n");
-//        } else {
-//            toReturn.append("/>\n");
-//        }
-//        return toReturn;
-//    }
-
     // For debugging
     void warnTree(Internal::TreeItem *root, int indent = 0)
     {
@@ -574,6 +713,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
+    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
 }
 
 TemplatesModel::~TemplatesModel()
@@ -627,29 +767,37 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
 
 bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &parent)
 {
-    /** \todo buggy +++ */
-//    if (!item.isValid())
-//        return false;
-//    if ((item.parent().data().toString()==parent.data().toString()) &&
-//        (index(item.row(), Data_ParentId, item.parent()).data().toInt()==index(parent.row(), Data_Id, parent.parent()).data().toInt()))
-//        return true;
-//    int row = rowCount(parent);
-//
-//    qWarning() << "reparentIndex" << index(item.row(), Data_ParentId, item.parent()).data().toInt() << item.parent().data().toString()
-//               << "to" << index(parent.row(), Data_Id, parent.parent()).data().toInt() << parent.data().toString();
-//    qWarning() << d->getItem(item.parent()) << d->getItem(parent) << (item.parent()==parent);
-//    // add the item
-//    insertRow(row, parent);
-//    for(int i=0; i<Data_Max_Param; ++i) {
-//        setData(index(row, i, parent), index(item.row(), i, item.parent()).data());
-//    }
+    if (!item.isValid())
+        return false;
+
+    Internal::TreeItem *treeItem = d->getItem(item);
+    Internal::TreeItem *treeItemParent = d->getItem(item.parent());
+    Internal::TreeItem *treeParent = d->getItem(parent);
+
+//    qWarning() << "reparentIndex" << treeItem->label() << treeItem->id()
+//               << "to" << treeParent->label() << treeParent->id() << (treeItemParent == treeParent);
+
+    if (treeItemParent == treeParent)
+        return true;
+    if (treeItem == treeParent)
+        return true;
+
+    int row = rowCount(parent);
+    // add the item
+    insertRow(row, parent);
+    for(int i=0; i<Constants::Data_Max_Param; ++i) {
+        setData(index(row, i, parent), index(item.row(), i, item.parent()).data());
+    }
+    setData(index(row, Constants::Data_ParentId, parent), treeParent->id());
 
     // append its children
-//    while (hasIndex(0, 0, item)) {
-//        qWarning() << "reparentIndex row" << row << index(row, Data_Label, item).data().toString();
-//        reparentIndex(index(0, 0, item), index(row, 0, parent));
-//    }
-//    removeRow(item.row(), item.parent());
+    row = 0;
+    while (hasIndex(0, 0, item)) {
+//        qWarning() << "reparentIndex row" << row << index(row, Constants::Data_Label, item).data().toString();
+        reparentIndex(index(0, 0, item), index(0, 0, parent));
+        ++row;
+    }
+    removeRow(item.row(), item.parent());
     return true;
 }
 
@@ -718,6 +866,12 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
                 c = QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES, "white").toString());
             } else {
                 c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
+            }
+            if (it->isNewlyCreated()) {
+                c = QColor(Qt::blue);
+            } else
+                if (it->isModified()) {
+                c = QColor(Qt::red);
             }
             if (c.name()=="#ffffff")
                 return QVariant();
@@ -800,63 +954,35 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+/**
+  \brief Creates the MimeData from the selection to drag
+  You can retreive the corresponding indexes using getIndexesFromMimeData()
+*/
 QMimeData *TemplatesModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *mimeData = new QMimeData();
-    QString tmp;
+    QString tmp, cat;
     QModelIndexList fullList;
     foreach (const QModelIndex &index, indexes) {
         Internal::TreeItem *it = d->getItem(index);
-        tmp += QString::number(it->id()) + ";";
-//        tmp += d->itemAndChildrenMimeData(index);
+        if (it->isTemplate())
+            tmp += QString::number(it->id()) + " ";
+        else
+            cat += QString::number(it->id()) + " ";
     }
     tmp.chop(1);
+    cat.chop(1);
+    if (!tmp.isEmpty()) {
+        tmp.prepend("T(");
+        tmp.append(")");
+    }
+    if (!cat.isEmpty()) {
+        cat.prepend("C(");
+        cat.append(")");
+    }
+    tmp += cat;
     mimeData->setData(mimeTypes().at(0), tmp.toUtf8());
     return mimeData;
-}
-
-static void parseMimeData(const QDomElement &element, const QModelIndex &parent, const int row, QAbstractItemModel *model)
-{
-    static int indent = 0;
-    indent += 2;
-//    qWarning() << QString().fill(' ', indent) + "parse ; add to modelIndex" << parent.data().toString();
-    QDomNode n = element;
-    QDomNode child = element;
-    QModelIndex newItem = parent;
-    int zz = 0;
-
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            // Manage templates
-            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
-                ITemplate *t = new ITemplate();
-                t->deserialize(e.attribute("content"));
-                t->setData(Constants::Data_ParentId, model->index(parent.row(), Constants::Data_Id, parent.parent()).data());
-                model->insertRow(row+zz, parent);
-                for(int i=0; i<Constants::Data_Max_Param; ++i) {
-                    model->setData(model->index(row+zz, i, parent), t->data(i));
-                }
-                ++zz;
-            }
-            if (e.tagName().compare("Child", Qt::CaseInsensitive) == 0) {
-//                qWarning() << QString().fill(' ', indent) + "    -> Child";
-                newItem = model->index(0, 0, newItem);
-                parseMimeData(child.firstChildElement(), newItem, 0, model);
-                child = child.firstChildElement(Constants::XML_TEMPLATE_CONTENT_ATTRIB);
-            }
-            // Manage all children
-            child = n.firstChildElement("Child");
-            while (!child.isNull()) {
-//                qWarning() << QString().fill(' ', indent) + "    -> Manage Child";
-                newItem = model->index(0, 0, newItem);
-                parseMimeData(child.firstChildElement(Constants::XML_TEMPLATE_TAG), newItem, 0, model);
-                child = child.firstChildElement(Constants::XML_TEMPLATE_CONTENT_ATTRIB);
-            }
-        }
-        n = n.nextSibling();
-    }
-    
 }
 
 bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
@@ -872,40 +998,67 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
         return false;
     
     QModelIndex parentIndex = parent;
-    if (isTemplate(parentIndex)) {
+    while (isTemplate(parentIndex)) {
         parentIndex = parentIndex.parent();
     }
     int beginRow = 0;
     if (row != -1)
         beginRow = row;
 
-//    qWarning() << data->data(mimeTypes().at(0));
-    
-    QDomDocument doc;
-    {
-        QString error;
-        int errorLine, errorColumn;
-        if (!doc.setContent(data->data(mimeTypes().at(0)), &error, &errorLine, &errorColumn)) {
-            Utils::Log::addError(this, QString("XML Error : %1 , line %2 , column %3 \n%4")
-                                 .arg(error)
-                                 .arg(errorLine).arg(errorColumn)
-                                 .arg(QString(data->data(mimeTypes().at(0)))));
-        }
+    QList<QPersistentModelIndex> list = getIndexesFromMimeData(data);
+    foreach(const QPersistentModelIndex &id, list) {
+        reparentIndex(id, parentIndex);
     }
-    QDomNode n = doc.documentElement();
-    int zz = 0;
-    while (!n.isNull()) {
-        parseMimeData(n.toElement(), parentIndex, beginRow, this);
-        n = n.nextSibling();
-    }
+
+//    d->saveModelDatas();
+
     return true;
 }
 
 QModelIndex TemplatesModel::getTemplateId(const int id)
 {
-    QModelIndex idx = d->findIndex(id, true);
-    qWarning() << "TemplatesModel::getTemplateId" << idx.data().toString();
-    return idx;
+//    QModelIndex idx = d->findIndex(id, true);
+//    qWarning() << "TemplatesModel::getTemplateId" << idx.data().toString();
+    return d->findIndex(id, true);;
+}
+
+QList<QPersistentModelIndex> TemplatesModel::getIndexesFromMimeData(const QMimeData *mime)
+{
+//    qWarning() << "TemplatesModel::getIndexesFromMimeData" << mime->data(mimeTypes().at(0));
+    Q_ASSERT(mime);
+    QList<QPersistentModelIndex> list;
+    if (!mime)
+        return list;
+    // mimeData looks like "T(1,2)C(3)" T for templates C for categories
+    QRegExp rx("(\\d+)+");
+    QString s = mime->data(mimeTypes().at(0));
+    int catBegin = 0;
+    // Manage templates
+    int pos = 0;
+    if (s.contains("T(")) {
+        catBegin = s.indexOf(")")+1;
+        s = s.mid(0, catBegin);
+        while ((pos = rx.indexIn(s, pos)) != -1) {
+            list << QPersistentModelIndex(d->findIndex(rx.cap(1).toInt(), true));
+            pos += rx.matchedLength();
+        }
+    }
+    qWarning() << "Templates" << s;
+
+    // Manage categories
+    s = mime->data(mimeTypes().at(0));
+    s = s.mid(catBegin);
+    qWarning() << "cat" << s;
+    pos = 0;
+    while ((pos = rx.indexIn(s, pos)) != -1) {
+        list << QPersistentModelIndex(d->findIndex(rx.cap(1).toInt(), false));
+        pos += rx.matchedLength();
+    }
+    foreach(QPersistentModelIndex id, list) {
+        qWarning() << id.data().toString();
+    }
+
+    return list;
 }
 
 bool TemplatesModel::isTemplate(const QModelIndex &index) const
@@ -925,4 +1078,10 @@ void TemplatesModel::categoriesOnly() const
 bool TemplatesModel::isCategoryOnly() const
 {
     return d->m_ShowOnlyCategories;
+}
+
+bool TemplatesModel::submit()
+{
+    d->saveModelDatas();
+    return true;
 }

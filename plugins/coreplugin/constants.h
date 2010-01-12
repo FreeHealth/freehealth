@@ -201,6 +201,7 @@ const char * const  A_LIST_SORT           = "actionListSort";     /*!< \brief De
 const char * const  A_TEMPLATE_CREATE     = "actionTemplateCreate";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_TOOGLEVIEW = "actionTemplateToogleView";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_ADD        = "actionTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_SAVE       = "actionTemplateSave";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_ADD        = "actionCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */

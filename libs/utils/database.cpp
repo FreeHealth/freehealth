@@ -58,15 +58,15 @@
     enum TABLE2FIELDS { TAB2_FIELD1=0, TAB2_FIELD2... };
 
     // In constructor populate tables' names and fields' names in the same order they appear in database/table.
-    addTable( Table_TABLE1, "FIRST_TABLE" );
-    addField( Table_TABLE1, TAB1_FIELD1, "FIRST_FIELD_OF_TABLE1", FieldIsInteger, "NULL" );
-    addField( Table_TABLE1, TAB1_FIELD2, "SECOND_FIELD_OF_TABLE1", FieldIsInteger, "NULL" );
+    addTable( Table_TABLE1, "FIRST_TABLE");
+    addField( Table_TABLE1, TAB1_FIELD1, "FIRST_FIELD_OF_TABLE1", FieldIsInteger, "NULL");
+    addField( Table_TABLE1, TAB1_FIELD2, "SECOND_FIELD_OF_TABLE1", FieldIsInteger, "NULL");
     ...
-    addTable( Table_TABLE2, "SECOND_TABLE" );
-    addField( Table_TABLE2, TAB2_FIELD1, "FIRST_FIELD_OF_TABLE2", FieldIsInteger, "NULL" );
+    addTable( Table_TABLE2, "SECOND_TABLE");
+    addField( Table_TABLE2, TAB2_FIELD1, "FIRST_FIELD_OF_TABLE2", FieldIsInteger, "NULL");
     ...
     // In constructor call createConnection()
-    createConnection( "users", "users.db", databasePath(), ReadWrite, SQLite );
+    createConnection( "users", "users.db", databasePath(), ReadWrite, SQLite);
     // That's done, now you can work with enums instead of magic strings...
     // If you want to create database if it doesn't exist define the member createDatabase() in your superclass.
 
@@ -96,7 +96,7 @@ class DatabasePrivate
 public:
     DatabasePrivate();
     ~DatabasePrivate() {}
-    QString getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver );
+    QString getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver);
     QString getTypeOfField(const int & fieldref, const Database::AvailableDrivers)const;
 
 public:
@@ -113,7 +113,7 @@ public:
 }
 
 
-Database::Database(QObject * parent )
+Database::Database(QObject * parent)
         : QObject(parent), d(0)
 {
     d = new DatabasePrivate();
@@ -138,7 +138,7 @@ DatabasePrivate::DatabasePrivate()
   \brief Return the pointer to the QSqlDatabase in use.
 */
 QSqlDatabase Database::database() const
-{ return QSqlDatabase::database(d->m_ConnectionName ); }
+{ return QSqlDatabase::database(d->m_ConnectionName); }
 
 /**
   \brief Create the connection to the database. If database does not exists createDatabase() is called.
@@ -156,55 +156,55 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                                    TypeOfAccess access, AvailableDrivers driver,
                                    const QString & login, const QString & password,
                                    CreationOption createOption
-                                   )
+                                  )
 {
     bool toReturn = true;
     d->m_ConnectionName = "";
 
     // does driver is available
-    if ((driver == SQLite) && (! QSqlDatabase::isDriverAvailable("QSQLITE")) ) {
+    if ((driver == SQLite) && (! QSqlDatabase::isDriverAvailable("QSQLITE"))) {
         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available" ).arg("SQLite"));
+                                                                    "ERROR : %1 driver is not available").arg("SQLite"));
         return false;
-    } else if ((driver == MySQL) && (! QSqlDatabase::isDriverAvailable("QMYSQL")) ) {
+    } else if ((driver == MySQL) && (! QSqlDatabase::isDriverAvailable("QMYSQL"))) {
         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available" ).arg("MySQL"));
+                                                                    "ERROR : %1 driver is not available").arg("MySQL"));
         return false;
-    } else if ((driver == PostSQL) && (! QSqlDatabase::isDriverAvailable("QPSQL")) ) {
+    } else if ((driver == PostSQL) && (! QSqlDatabase::isDriverAvailable("QPSQL"))) {
         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available" ).arg("PostGreSQL"));
+                                                                    "ERROR : %1 driver is not available").arg("PostGreSQL"));
         return false;
     }
 
     // does connection already exists ?
     if (QSqlDatabase::contains(connectionName)) {
         Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                      "WARNING : %1 database already in use" ).arg(connectionName));
+                                                                      "WARNING : %1 database already in use").arg(connectionName));
         d->m_ConnectionName = connectionName;
         return true;
     }
 
     // test dbname file if user if asking SQLite driver
-    if (driver == SQLite ) {
-        if ((! QFile(pathOrHostName + QDir::separator() + dbName ).exists())||
-             (QFileInfo(pathOrHostName + QDir::separator() + dbName ).size() == 0)) {
+    if (driver == SQLite) {
+        if ((! QFile(pathOrHostName + QDir::separator() + dbName).exists())||
+             (QFileInfo(pathOrHostName + QDir::separator() + dbName).size() == 0)) {
             if (createOption == CreateDatabase){
                 if (! createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
                     Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2" ).arg(dbName, pathOrHostName));
+                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                     return false;
                 }
             } else { // Warn Only
                     Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2" ).arg(dbName, pathOrHostName));
+                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                     return false;
             }
         }
     }
 
     // test read access to database
-    if (!QFileInfo(pathOrHostName + QDir::separator() + dbName ).isReadable()) {
-        Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2" )
+    if (!QFileInfo(pathOrHostName + QDir::separator() + dbName).isReadable()) {
+        Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
                          .arg(dbName, pathOrHostName));
         toReturn = false;
     }
@@ -213,7 +213,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     // TODO manage MySQL
     if (driver == SQLite) {
         if ((access == ReadWrite) && (!QFileInfo(pathOrHostName + QDir::separator() + dbName).isWritable())) {
-            Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not writable. Path : %2." )
+            Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not writable. Path : %2.")
                              .arg(dbName, pathOrHostName));
             toReturn = false;
         }
@@ -244,18 +244,18 @@ bool Database::createConnection(const QString & connectionName, const QString & 
              break;
     }
 
-    Log::addMessage("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2" )
-                       .arg(connectionName ).arg(DB.open()));
+    Log::addMessage("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
+                       .arg(connectionName).arg(DB.open()));
 
     // test connection
     if (!DB.isOpen()) {
         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "WARNING : can not open database %1 : %2 \n %3 " )
+                                                                    "WARNING : can not open database %1 : %2 \n %3 ")
                          .arg(connectionName, DB.lastError().driverText(), DB.lastError().databaseText()));
         toReturn = false;
     }
     else {
-        Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2" )
+        Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
                            .arg(connectionName, pathOrHostName));
     }
     // return boolean
@@ -271,14 +271,14 @@ QString Database::connectionName() const
 }
 
 /** \brief Set connectionName to \e c */
-void Database::setConnectionName(const QString & c )
+void Database::setConnectionName(const QString & c)
 { d->m_ConnectionName = c; }
 
 /** \brief Add a table \e name to the database scheme with the index \e ref */
-int Database::addTable(const int & ref, const QString & name )
+int Database::addTable(const int & ref, const QString & name)
 {
-    d->m_Tables.insert(ref, name );
-    return d->m_Tables.key(name );
+    d->m_Tables.insert(ref, name);
+    return d->m_Tables.key(name);
 }
 
 /** \brief Add a field \e name to the database scheme with the index \e fieldref into table indexed \e tableref.\n
@@ -286,14 +286,14 @@ int Database::addTable(const int & ref, const QString & name )
     Please take care that \e name can not exceed 50 chars.
     \sa createTables(), createTable()
 */
-int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue )
+int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
-    Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars" );
+    Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
     int ref = fieldref + (tableref * 1000);
-    d->m_Tables_Fields.insertMulti(tableref, ref );
-    d->m_Fields.insert(ref , name );
-    d->m_TypeOfField.insert(ref , type );
-    d->m_DefaultFieldValue.insert(ref, defaultValue );
+    d->m_Tables_Fields.insertMulti(tableref, ref);
+    d->m_Fields.insert(ref , name);
+    d->m_TypeOfField.insert(ref , type);
+    d->m_DefaultFieldValue.insert(ref, defaultValue);
     return d->m_Fields.key(name)- (tableref * 1000);
 }
 
@@ -301,33 +301,33 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
 bool Database::checkDatabaseScheme()
 {
     /** \todo need to be tested */
-    if (d->m_ConnectionName.isEmpty() )
+    if (d->m_ConnectionName.isEmpty())
         return false;
-    if (d->m_Tables.keys().count() == 0 )
+    if (d->m_Tables.keys().count() == 0)
         return false;
-    if (d->m_Tables_Fields.keys().count() == 0 )
+    if (d->m_Tables_Fields.keys().count() == 0)
         return false;
 
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName );
+    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
     DB.open();
 
     QList<int> list = d->m_Tables.keys();
-    qSort(list );
-    foreach(int i, list ) {
+    qSort(list);
+    foreach(int i, list) {
         QSqlRecord rec = DB.record(d->m_Tables.value(i));
-        if (rec.count() != d->m_Tables_Fields.values(i ).count() ) {
-            Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : wrong number of fields for table %1" )
-                                   .arg(d->m_Tables.value(i)) );
+        if (rec.count() != d->m_Tables_Fields.values(i).count()) {
+            Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : wrong number of fields for table %1")
+                                   .arg(d->m_Tables.value(i)));
             return false;
         }
-        QList<int> fields = d->m_Tables_Fields.values(i );
-        qSort(fields );
+        QList<int> fields = d->m_Tables_Fields.values(i);
+        qSort(fields);
         int id = 0;
-        foreach(int f, fields ) {
-            if (d->m_Fields.value(f)!= rec.field(id ).name() )
+        foreach(int f, fields) {
+            if (d->m_Fields.value(f)!= rec.field(id).name())
             {
-                Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3" )
-                                   .arg(id ).arg(d->m_Fields.value(f ), rec.field(id ).name()));
+                Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3")
+                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name()));
                 return false;
             }
             id++;
@@ -346,7 +346,7 @@ QString Database::field(const int & tableref, const int & fieldref)const
     if (! d->m_Fields.keys().contains(fieldref + (tableref * 1000)))
         return QString::null;
 
-    return d->m_Fields.value(fieldref + (tableref * 1000) );
+    return d->m_Fields.value(fieldref + (tableref * 1000));
 }
 
 QStringList Database::fields(const int & tableref)const
@@ -356,11 +356,11 @@ QStringList Database::fields(const int & tableref)const
     if (! d->m_Tables_Fields.keys().contains(tableref))
         return QStringList();
 
-    QList<int> list = d->m_Tables_Fields.values(tableref );
-    qSort(list );
+    QList<int> list = d->m_Tables_Fields.values(tableref);
+    qSort(list);
     QStringList toReturn;
-    foreach(int i, list )
-       toReturn << d->m_Fields.value(i );
+    foreach(int i, list)
+       toReturn << d->m_Fields.value(i);
     return toReturn;
 }
 
@@ -368,7 +368,7 @@ QString Database::table(const int & tableref)const
 {
     if (! d->m_Tables.contains(tableref))
         return QString::null;
-    return d->m_Tables.value(tableref );
+    return d->m_Tables.value(tableref);
 }
 
 QStringList Database::tables() const
@@ -386,20 +386,20 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
         i.next();
         if (!d->m_Fields.keys().contains(i.key() + (tableref * 1000)))
             continue;
-        where.append(QString(" (`%1`.`%2` %3) AND " )
-                      .arg(d->m_Tables[tableref] )
+        where.append(QString(" (`%1`.`%2` %3) AND ")
+                      .arg(d->m_Tables[tableref])
                       .arg(d->m_Fields.value(i.key() + (tableref * 1000)), i.value()));
     }
     where.chop(5);
     if (conditions.count() > 1)
-        where = QString("(%1 )" ).arg(where );
+        where = QString("(%1)").arg(where);
     return where;
 }
 
 QString Database::select(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions)const
 {
     QString toReturn;
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3" )
+    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
             .arg(field(tableref, fieldref))
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
@@ -408,7 +408,7 @@ QString Database::select(const int & tableref, const int & fieldref, const QHash
 
 QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions)const
 {
-    return select(tableref, fieldref, conditions ).replace("SELECT", "SELECT DISTINCT" );
+    return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
 }
 
 
@@ -418,11 +418,11 @@ QString Database::select(const int & tableref, const QList<int> &fieldsref, cons
     QString tmp;
     foreach(const int & i, fieldsref)
         tmp += "`" + field(tableref, i)+ "`, ";
-    if (tmp.isEmpty() )
+    if (tmp.isEmpty())
         return QString::null;
-    tmp.chop(2 );
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3" )
-            .arg(tmp )
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+            .arg(tmp)
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
     return toReturn;
@@ -434,10 +434,10 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
     QString tmp;
     foreach(const int & i, fieldsref)
         tmp += "`" + field(tableref, i)+ "`, ";
-    if (tmp.isEmpty() )
+    if (tmp.isEmpty())
         return QString::null;
-    tmp.chop(2 );
-    toReturn = QString("SELECT %1 FROM `%2`" )
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2`")
             .arg(tmp)
             .arg(table(tableref));
     return toReturn;
@@ -447,32 +447,32 @@ QString Database::select(const int & tableref, const QHash<int, QString> & condi
 {
     QString toReturn;
     QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref );
-    qSort(list );
-    foreach(const int & i, list )
+    QList<int> list = d->m_Tables_Fields.values(tableref);
+    qSort(list);
+    foreach(const int & i, list)
         tmp += "`" + d->m_Fields.value(i)+ "`, ";
-    if (tmp.isEmpty() )
+    if (tmp.isEmpty())
         return QString::null;
-    tmp.chop(2 );
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3" )
-            .arg(tmp )
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+            .arg(tmp)
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
     return toReturn;
 }
 
-QString Database::select(const int & tableref ) const
+QString Database::select(const int & tableref) const
 {
     QString toReturn;
     QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref );
+    QList<int> list = d->m_Tables_Fields.values(tableref);
     qSort(list);
-    foreach(const int & i, list )
+    foreach(const int & i, list)
         tmp += "`" + d->m_Fields.value(i)+ "`, ";
-    if (tmp.isEmpty() )
+    if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2`" )
+    toReturn = QString("SELECT %1 FROM `%2`")
             .arg(tmp)
             .arg(table(tableref));
     return toReturn;
@@ -483,26 +483,26 @@ QString Database::prepareInsertQuery(const int & tableref)const
     QString toReturn;
     QString fields;
     QString numbers;
-    QList<int> list = d->m_Tables_Fields.values(tableref );
-    qSort(list );
-    foreach(const int & i, list )
+    QList<int> list = d->m_Tables_Fields.values(tableref);
+    qSort(list);
+    foreach(const int & i, list)
     {
-        fields.append("`"+ d->m_Fields.value(i) + "`, " );
-        numbers.append("? , " );
+        fields.append("`"+ d->m_Fields.value(i) + "`, ");
+        numbers.append("? , ");
     }
     fields.chop(2);
     numbers.chop(2);
-    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES(%3 );" )
+    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES(%3);")
             .arg(table(tableref))
-            .arg(fields )
-            .arg(numbers );
+            .arg(fields)
+            .arg(numbers);
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<int, QString> conditions )
+QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<int, QString> conditions)
 {
     QString toReturn;
-    toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4" )
+    toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4")
                .arg(table(tableref))
                .arg(field(tableref, fieldref))
                .arg(getWhereClause(tableref, conditions));
@@ -512,16 +512,16 @@ QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<i
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> conditions )
+QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> conditions)
 {
     QString toReturn;
     QString tmp;
     foreach(const QString & f, fields(tableref))
-        tmp += QString ("`%1`=? , " ).arg(f );
+        tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
-    toReturn = QString("UPDATE `%1` \nSET %2 \nWHERE %4" )
+    toReturn = QString("UPDATE `%1` \nSET %2 \nWHERE %4")
                .arg(table(tableref))
-               .arg(tmp )
+               .arg(tmp)
                .arg(getWhereClause(tableref, conditions));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
@@ -531,13 +531,12 @@ QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> c
 
 bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)const
 {
-    foreach(const QString & r, list )
+    foreach(const QString & r, list)
     {
         if (r.isEmpty())continue;
-        QSqlQuery q(r, DB );
-        if (! q.isActive() )
-        {
-            Log::addQueryError("Database", q );
+        QSqlQuery q(r, DB);
+        if (! q.isActive()) {
+            Log::addQueryError("Database", q);
             return false;
         }
     }
@@ -546,12 +545,11 @@ bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)cons
 
 bool Database::executeSQL(const QString & req, const QSqlDatabase & DB)const
 {
-    if (req.isEmpty() )
+    if (req.isEmpty())
         return false;
-    QSqlQuery q(req, DB );
-    if (! q.isActive() )
-    {
-        Log::addQueryError("Database", q );
+    QSqlQuery q(req, DB);
+    if (! q.isActive()) {
+        Log::addQueryError("Database", q);
         return false;
     }
     return true;
@@ -563,45 +561,45 @@ bool Database::createTable(const int & tableref)const
         return false;
     if (! d->m_Tables_Fields.keys().contains(tableref))
         return false;
-    if (d->m_ConnectionName.isEmpty() )
+    if (d->m_ConnectionName.isEmpty())
         return false;
 
     // get database and open
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName );
-    if (!DB.open() )
+    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    if (!DB.open())
         return false;
 
     // create query
     QString req;
-    req = d->getSQLCreateTable(tableref, SQLite );
+    req = d->getSQLCreateTable(tableref, SQLite);
 
-    return executeSQL(QStringList() << req, DB );
+    return executeSQL(QStringList() << req, DB);
 }
 
 bool Database::createTables() const
 {
     bool toReturn = true;
     QList<int> list = d->m_Tables.keys();
-    qSort(list );
-    foreach(const int & i, list )
+    qSort(list);
+    foreach(const int & i, list)
         if(! createTable(i))
             toReturn = false;
     return toReturn;
 }
 
 
-QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver )
+QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver)
 {
     QString toReturn;
-    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n" ).arg(m_Tables.value(tableref));
-    QList<int> list = m_Tables_Fields.values(tableref );
-    qSort(list );
-    foreach(int i, list )
+    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
+    QList<int> list = m_Tables_Fields.values(tableref);
+    qSort(list);
+    foreach(int i, list)
         toReturn.append(QString("%1 \t %2 %3, \n")
-                         .arg(QString("`%1`" ).arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                         .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                          .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
-                         .arg(m_DefaultFieldValue.value(i)) );
-    toReturn.chop(3 );
+                         .arg(m_DefaultFieldValue.value(i)));
+    toReturn.chop(3);
     toReturn.append("\n); \n\n");
     return toReturn;
 }
@@ -609,7 +607,7 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
 QString DatabasePrivate::getTypeOfField(const int & fieldref, const Database::AvailableDrivers)const
 {
     QString toReturn;
-    switch (Database::TypeOfField(m_TypeOfField.value(fieldref)) )
+    switch (Database::TypeOfField(m_TypeOfField.value(fieldref)))
     {
         case Database::FieldIsUUID :
             toReturn = "varchar(40)";
@@ -649,10 +647,10 @@ QString DatabasePrivate::getTypeOfField(const int & fieldref, const Database::Av
     return toReturn;
 }
 
-QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions )
+QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
 {
     QString toReturn;
-    toReturn = QString("DELETE FROM `%1` \n WHERE %2" )
+    toReturn = QString("DELETE FROM `%1` \n WHERE %2")
                .arg(table(tableref))
                .arg(getWhereClause(tableref, conditions));
     return toReturn;
@@ -661,21 +659,21 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
 /** \brief Used for the debugging. */
 void Database::warn() const
 {
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName );
-    Log::addMessage("Database", QString("Connection name : %1, Database Name : %2, Driver : %3, Opened : %4, Can open : %5 " )
-                       .arg(d->m_ConnectionName, DB.databaseName(), DB.driverName() )
-                       .arg(DB.isOpen() )
+    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    Log::addMessage("Database", QString("Connection name : %1, Database Name : %2, Driver : %3, Opened : %4, Can open : %5 ")
+                       .arg(d->m_ConnectionName, DB.databaseName(), DB.driverName())
+                       .arg(DB.isOpen())
                        .arg(DB.open()));
 
-    foreach(int i, d->m_Tables.keys() )
+    foreach(int i, d->m_Tables.keys())
     {
-        Log::addMessage("Database", QString("Tables = %1 : %2" ).arg(i ).arg(d->m_Tables[i]));
-        QList<int> list = d->m_Tables_Fields.values(i );
-        qSort(list );
-        foreach(int f, list )
-            Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4" )
-                               .arg(f )
-                               .arg(d->m_Fields[f], d->getTypeOfField(f, SQLite ), d->m_DefaultFieldValue[i]));
+        Log::addMessage("Database", QString("Tables = %1 : %2").arg(i).arg(d->m_Tables[i]));
+        QList<int> list = d->m_Tables_Fields.values(i);
+        qSort(list);
+        foreach(int f, list)
+            Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4")
+                               .arg(f)
+                               .arg(d->m_Fields[f], d->getTypeOfField(f, SQLite), d->m_DefaultFieldValue[i]));
 
     }
 }

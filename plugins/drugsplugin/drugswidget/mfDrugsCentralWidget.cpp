@@ -75,8 +75,11 @@
 
 using namespace DrugsWidget;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
+static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
+
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
@@ -94,8 +97,8 @@ bool DrugsCentralWidget::initialize()
 
     // create context
     m_Context = new Internal::DrugsContext(this);
-    m_Context->setContext( QList<int>() << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Constants::C_DRUGS_PLUGINS));
-    Core::ICore::instance()->contextManager()->addContextObject(m_Context);
+    m_Context->setContext(QList<int>() << uid()->uniqueIdentifier(Constants::C_DRUGS_PLUGINS));
+    contextManager()->addContextObject(m_Context);
 
     // create model view for selected drugs list
     m_CurrentDrugModel = new DrugsDB::DrugsModel(this);
@@ -109,7 +112,7 @@ bool DrugsCentralWidget::initialize()
 
     DrugsWidgetManager::instance()->setCurrentView(this);
 
-    changeFontTo( QFont(settings()->value(Constants::S_VIEWFONT).toString(), settings()->value(Constants::S_VIEWFONTSIZE).toInt()) );
+    changeFontTo(QFont(settings()->value(Constants::S_VIEWFONT).toString(), settings()->value(Constants::S_VIEWFONTSIZE).toInt()));
 
     return true;
 }
@@ -134,7 +137,6 @@ void DrugsCentralWidget::setCurrentSearchMethod(int method)
     m_ui->m_DrugSelector->setSearchMethod(method);
 }
 
-/** \brief Creates connections */
 void DrugsCentralWidget::createConnections()
 {
     connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( selector_drugSelected(const int) ) );
@@ -224,7 +226,6 @@ bool DrugsCentralWidget::createTemplate()
 {
     // get the template content
     QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel);
-//    qWarning() << content;
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);

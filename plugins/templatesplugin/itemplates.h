@@ -45,6 +45,7 @@
 #include <templatesplugin/constants.h>
 
 #include <QString>
+#include <QStringList>
 #include <QVariant>
 #include <QHash>
 
@@ -71,21 +72,22 @@ public:
 
     virtual ~ITemplate() {}
 
-    virtual void setId(const int id) {m_Datas.insert(Constants::Data_Id, id);}
-    virtual int id() const {return m_Datas.value(Constants::Data_Id).toInt();}
-    virtual void setParentId(const int id) {m_Datas.insert(Constants::Data_ParentId, id);}
-    virtual int parentId() const {return m_Datas.value(Constants::Data_ParentId).toInt();}
     virtual bool isValid() const {return true;}
 
     virtual QVariant data(int column) const {return m_Datas.value(column, QVariant());}
     virtual bool setData(int column, const QVariant &value) {m_Datas.insert(column, value); return true;}
     virtual QHash<int, QVariant> datas() const {return m_Datas;}
 
+    virtual void setId(const int id) {m_Datas.insert(Constants::Data_Id, id);}
+    virtual int id() const {return m_Datas.value(Constants::Data_Id).toInt();}
+    virtual void setParentId(const int id) {m_Datas.insert(Constants::Data_ParentId, id);}
+    virtual int parentId() const {return m_Datas.value(Constants::Data_ParentId).toInt();}
     virtual QString uuid() const {return data(Constants::Data_Uuid).toString();}
     virtual QString ownerUuid() const {return data(Constants::Data_UserUuid).toString();}
     virtual QString label() const {return data(Constants::Data_Label).toString();}
     virtual QString content() const {return data(Constants::Data_Content).toString();}
     virtual QString summary() const {return data(Constants::Data_Summary).toString();}
+    virtual QStringList contentMimeTypes() const {return data(Constants::Data_ContentMimeTypes).toStringList();}
 
     virtual QMimeData *toMimeData();
     virtual bool fromMimeData(QMimeData *data);

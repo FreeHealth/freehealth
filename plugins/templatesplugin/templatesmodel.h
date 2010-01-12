@@ -94,12 +94,16 @@ public:
     QMimeData *mimeData(const QModelIndexList &indexes) const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     QModelIndex getTemplateId(const int id);
+    QList<QPersistentModelIndex> getIndexesFromMimeData(const QMimeData *mime);
 
     bool isTemplate(const QModelIndex &index) const;
     bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
 
     void categoriesOnly() const;
     bool isCategoryOnly() const;
+
+public Q_SLOTS:
+    bool submit();
 
 private:
     Internal::TemplatesModelPrivate *d;

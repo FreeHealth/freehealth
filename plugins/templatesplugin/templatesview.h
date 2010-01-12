@@ -73,7 +73,8 @@ public:
         Drag       = 0x08,
         Drop       = 0x10,
         LockUnlock = 0x20,
-        Defaults   = Add | Remove | Edit | Drag | Drop
+        Save       = 0x40,
+        Defaults   = Add | Remove | Edit | Drag | Drop | Save
     };
     Q_DECLARE_FLAGS(EditModes, EditMode);
 
@@ -97,8 +98,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void addCategory();
     void removeItem();
-    void lock(bool state = true);
     void editCurrentItem();
+    void saveModel();
+    void lock(bool state = true);
 
 protected:
     void changeEvent(QEvent *e);

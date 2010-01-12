@@ -881,28 +881,39 @@ QStringList DrugsModel::mimeTypes() const
     return QStringList() << Templates::Constants::MIMETYPE_TEMPLATE;// DrugsDB::DrugsIO::prescriptionMimeTypes();
 }
 
-QMimeData *DrugsModel::mimeData(const QModelIndexList &indexes) const
-{
-
-}
+//QMimeData *DrugsModel::mimeData(const QModelIndexList &indexes) const
+//{
+//
+//}
 
 bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     qWarning() << "dropMimeData" << row << action << data->data(mimeTypes().at(0));
+
     if (action == Qt::IgnoreAction)
         return true;
 
-    // get Indexes from the transmitted ids
-    Templates::TemplatesModel *model = new Templates::TemplatesModel(this);
-    QModelIndex idx = model->getTemplateId(data->data(mimeTypes().at(0)).toInt());
-    if (model->hasChildren(idx)) {
-        qWarning() << "NO CHILD";
+    // only one template can be added once
+    if (data->data(mimeTypes().at(0)).contains(";"))
         return false;
-    }
 
-    // add content to model
-    DrugsDB::DrugsIO::prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString());
+    // get index from the transmitted ids
+    Templates::TemplatesModel *model = new Templates::TemplatesModel(this);
+
+    QList<QPersistentModelIndex> list = model->getIndexesFromMimeData(data);
+
+    foreach(const QPersistentModelIndex &idx, list) {
+        // do not accept templates with children (that should never be the case)
+        if (model->hasChildren(idx))
+            continue;
+        if (model->isCategory(idx))
+            continue;
+        // add content to model
+        DrugsDB::DrugsIO::prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString());
+    }
+    // never move templates but copy them
     if (action == Qt::MoveAction)
         return false;
+
     return true;
 }

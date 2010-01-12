@@ -38,6 +38,7 @@ void TemplatesCreationDialog::done(int r)
         model->setData(model->index(row, Constants::Data_Summary, parent), ui->summaryTextEdit->toHtml());
         model->setData(model->index(row, Constants::Data_Content, parent), m_Content);
         model->setData(model->index(row, Constants::Data_ContentMimeTypes, parent), m_Mimes);
+        model->setData(model->index(row, Constants::Data_IsNewlyCreated, parent), true);
         delete model;
     }
 

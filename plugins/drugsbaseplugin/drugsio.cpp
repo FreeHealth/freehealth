@@ -386,7 +386,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
   Prescription is automatically sorted.\n
   The XML encoded prescription is added inside the HTML code.\n
 */
-QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
+QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
 {
     Q_ASSERT(m);
     // clean the model (sort it, hide testing drugs)
@@ -401,14 +401,15 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
 
     QString ALD, nonALD;
     QString tmp;
+    bool lineBreak = settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool();
     // Add drugs
     int i;
     for(i=0; i < m->rowCount(); ++i) {
         tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
-        if (settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool())
+        if (lineBreak)
             tmp += "<span style=\"font-size:4pt\"><br /></span>";
         tmp += "</li>";
-        if (m->index( i, Prescription::IsALD ).data().toBool()) {
+        if (m->index(i, Prescription::IsALD).data().toBool()) {
             ALD += tmp;
         } else {
             nonALD += tmp;
@@ -417,15 +418,15 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
     }
     if (!ALD.isEmpty()) {
         tmp = settings()->value(S_ALD_PRE_HTML).toString();
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", ALD );
+        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace("{FULLPRESCRIPTION}", ALD);
         tmp += settings()->value(S_ALD_POST_HTML).toString();
     }
     if (!nonALD.isEmpty()) {
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace( "{FULLPRESCRIPTION}", nonALD );
+        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace("{FULLPRESCRIPTION}", nonALD);
     }
 
     // show all drugs (including testing to get the testing drugs)
-    m->showTestingDrugs(true);
+    m->showTestingDrugs(testingDrugsVisible);
     QString toReturn;
     toReturn = QString(ENCODEDHTML_FULLDOC);
     toReturn.replace("{GENERATOR}", qApp->applicationName());
@@ -434,7 +435,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m)
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
                      .arg(QString(prescriptionToXml(m).toAscii().toBase64())));
 
-//    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
+    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);

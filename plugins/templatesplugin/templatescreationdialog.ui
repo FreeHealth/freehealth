@@ -108,6 +108,13 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>userLineEdit</tabstop>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>summaryTextEdit</tabstop>
+  <tabstop>viewButton_2</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

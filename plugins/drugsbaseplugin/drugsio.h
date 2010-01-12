@@ -68,6 +68,12 @@ public:
         AppendPrescription,
         ReplacePrescription
     };
+    enum HtmlVersion {
+        MedinTuxVersion = 0,
+        NormalVersion,
+        SimpleVersion,
+        DrugsOnlyVersion
+    };
 
     static DrugsIO *instance(QObject *parent=0);
     ~DrugsIO();
@@ -84,7 +90,8 @@ public:
     static bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
 
     static QString prescriptionToXml(DrugsDB::DrugsModel *model);
-    static QString prescriptionToHtml(DrugsDB::DrugsModel *model);
+
+    static QString prescriptionToHtml(DrugsDB::DrugsModel *model, int version = MedinTuxVersion);
 
     static QStringList prescriptionMimeTypes();
 

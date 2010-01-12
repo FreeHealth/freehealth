@@ -106,7 +106,7 @@ public:
             m_Mapper = new QDataWidgetMapper(q);
             m_Mapper->setModel(m_Model);
             m_Mapper->addMapping(m_ui->nameLineEdit, Constants::Data_Label);
-            m_Mapper->addMapping(m_ui->summaryTextEdit, Constants::Data_Summary);
+            m_Mapper->addMapping(m_ui->summaryTextEdit, Constants::Data_Summary, "html");
         }
     }
 
@@ -153,6 +153,8 @@ void TemplatesEditDialog::done(int r)
     if (r==QDialog::Rejected) {
         d->m_Mapper->revert();
     } else if (r==QDialog::Accepted) {
+        // modify focus in order to the mapper to get the changes done
+        d->m_ui->buttonBox->setFocus();
         // submit mapper to model
         d->m_Mapper->submit();
         // reparent item
