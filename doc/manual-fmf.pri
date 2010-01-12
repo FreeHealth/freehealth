@@ -47,5 +47,6 @@ html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
 QMAKE_EXTRA_TARGETS += html_docs
 
 OTHER_FILES += $${PWD}/usermanual/freemedforms/freemedforms.qdoc \
+               $${PWD}/usermanual/usermanager/usermanager.qdoc \
                $${PWD}/usermanual/freemedforms/Doxyfile \
                $${PWD}/usermanual/freemedforms/doxygen.css

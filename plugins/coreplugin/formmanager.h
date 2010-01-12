@@ -99,9 +99,13 @@ public:
          return parent;
      }
 
+     // Preparators
+     /** \todo void formsAreCompleted(); */
+
      // Uis members
      QTreeWidget *formsTreeWidget(QWidget *parent = 0) const;
      QStackedLayout *formsStackedLayout(QWidget *parent = 0) const;
+//     void toogleTreeWidget();
 
 public Q_SLOTS:
      bool translateForms();
@@ -112,54 +116,6 @@ public Q_SLOTS:
  private:
      Internal::FormManagerPrivate *d;
 
-//private:
-//     enum ForTreeView { LabelColumn = 0, StateColumn, MaxColumn };
-//
-//     mfAbstractWidget * getWidget( mfObject * mfo, mfAbstractWidget * parent);
-//
-//     void createForm( mfObject * mfo, QTreeWidgetItem * item = 0 );
-//     void createActions();
-//     void createToolBar();
-//     void retranslateUi();
-//     void changeEvent( QEvent * event );
-//     void translateTreeItem( QTreeWidgetItem * item );
-//     bool previousIsPossible() const;
-//     bool nextIsPossible() const;
-//
-//
-//private slots:
-//     void treeToStack( QTreeWidgetItem * );
-//     void createTreePopup( const QPoint & );
-//     void addNewFile();
-//     void removeSubForm();
-//     void hideShowTree();
-//     void gotoPrevious();
-//     void gotoNext();
-//     void aboutToShowAddMenu();
-//     void addRootForm();
-//
-//private:
-//     mfObject *              m_RootObject;
-//     QWidget *               m_Parent;
-//
-//     QTreeWidgetItem *       m_Item;              /*!< the id in m_FormList / m_Stack is stored into
-//                                                       data(LabelColumn, Qt::UserRole) */
-//     QWidget *               m_WidgetToStack;
-//     QList<mfObject *>       m_FormList;          /*!< contains the mfObject linked to treeitems */
-//     QList<QTreeWidgetItem*> m_FormNavList;
-//     int                     m_FormNavOffset;
-//     bool                    m_FormNavRecord;
-//
-//     QMenu *                 m_Pop;               /*!< Popup menu for the treewidget */
-//     QAction *addFileAct, *removeSubFormAct,
-//             *hideShowTreeAct,
-//             *previousAct,
-//             *nextAct;
-//
-//     QMenu *                 m_addMenu;
-//     QToolBar *              m_NavBar;
-//
-//     WidgetPlugins           m_widgetPlugins;
 };
 
 } // End Core

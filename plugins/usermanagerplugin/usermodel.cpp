@@ -217,7 +217,7 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
     // 1. Ask all listeners to prepare the current user disconnection
-    foreach(IUserListener *l, listener) {
+    foreach(IUserListener *l, listeners) {
         if (!l->userAboutToChange())
             return false;
     }
@@ -230,7 +230,7 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     }
 
     // 3. Ask all listeners for the current user disconnection
-    foreach(IUserListener *l, listener) {
+    foreach(IUserListener *l, listeners) {
         if (!l->currentUserAboutToDisconnect())
             return false;
     }

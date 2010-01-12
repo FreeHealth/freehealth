@@ -73,6 +73,7 @@ QT_END_NAMESPACE
 
 namespace Core {
 class IFormWidget;
+class IFormItemData;
 class FormItemIdentifiants;
 class FormPage;
 class FormMain;
@@ -95,41 +96,50 @@ class FormMainDebugPage;
 class CORE_EXPORT FormItem : public Core::FormItemIdentifiants
 {
     Q_OBJECT
-    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
+//    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
     FormItem(QObject *parent=0) :
             FormItemIdentifiants(parent),
             m_Spec(new FormItemSpec),
             m_Scripts(new FormItemScripts),
-            m_Values(new FormItemValues(this))
+            m_Values(new FormItemValues(this)),
+            m_ItemDatas(0)
             {}
 
     virtual ~FormItem()
     {
-        if (m_Spec) delete m_Spec;
-        m_Spec = 0;
-        if (m_Scripts) delete m_Scripts;
-        m_Scripts = 0;
+        if (m_Spec) {
+            delete m_Spec;
+            m_Spec = 0;
+        }
+        if (m_Scripts) {
+            delete m_Scripts;
+            m_Scripts = 0;
+        }
     }
 
     Core::FormItemSpec *spec() const {return m_Spec;}
     Core::FormItemScripts *scripts() const {return m_Scripts;}
     Core::FormItemValues *valueReferences() const {return m_Values;}
 
+    // Access to database values. Pointer will not be deleted
+    void setItemDatas(Core::IFormItemData *data) {m_ItemDatas = data;}
+    Core::IFormItemData *itemDatas() {return m_ItemDatas;}
+
+    // Access to the user's widget
     virtual void setFormWidget(Core::IFormWidget *w) {m_FormWidget=w;}
     virtual IFormWidget *formWidget() {return m_FormWidget;}
 
+    // Access to the FormItem tree
     virtual FormItem *createChildItem(const QString &uuid = QString::null);
-    virtual FormPage *createPage(const QString &uuid = QString::null) {return 0;}
+    virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
     virtual QList<FormItem*> formItemChildren() const;
 
+    // FormIO extra datas
     virtual void addExtraData(const QString &id, const QString &data);
     virtual QHash<QString,QString> extraDatas() const {return m_ExtraDatas;}
     virtual void clearExtraDatas() {m_ExtraDatas.clear();}
-
-    virtual void setValue(const QVariant &value) {}
-    virtual QVariant value() const { return QVariant(); }
 
 public Q_SLOTS:
     virtual void languageChanged();
@@ -139,6 +149,7 @@ private:
     Core::FormItemScripts *m_Scripts;
     Core::FormItemValues *m_Values;
     Core::IFormWidget *m_FormWidget;
+    Core::IFormItemData *m_ItemDatas;
     QHash<QString, QString> m_ExtraDatas;
 };
 inline QList<Core::FormItem*> Core::FormItem::formItemChildren() const
@@ -162,7 +173,7 @@ public:
             FormItem(parent) {}
     ~FormPage() {}
 
-    virtual FormPage *createPage(const QString &uuid = QString::null) {return 0;}
+    virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
 
     virtual void languageChanged();
 

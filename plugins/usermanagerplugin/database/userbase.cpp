@@ -350,7 +350,7 @@ bool UserBase::checkLogin(const QString & login, const QString & cryptedPassword
 /**
   \brief Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs.
 */
-QString UserBase::getUuid(const QString & log64, const QString cryptpass64)
+QString UserBase::getUuid(const QString & log64, const QString &cryptpass64)
 {
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
         return m_LastUuid;

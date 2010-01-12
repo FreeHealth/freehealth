@@ -77,22 +77,20 @@ protected:
     UserBase(QObject *parent = 0);
 
     // Constructor
-    static UserBase *instance(); // before calling this you should have created one instance of tkSettings
+    static UserBase *instance();
     virtual ~UserBase() {}
 
     // initialize
     bool initialize(Core::ISettings *settings);
     bool isNewlyCreated() const;
 
-    // retreivers (pointers)
+    // retreivers
     UserData *getUserById(const QVariant &_id) const;  // not used
     UserData *getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const;
-
-    // retreivers (references)
     UserData *getUserByUuid(const QString &uuid) const;
 
     // datas retrievers
-    QString getUuid(const QString &log64, const QString cryptpass64);
+    QString getUuid(const QString &log64, const QString &cryptpass64);
     QString createNewUuid();
 
     // savers

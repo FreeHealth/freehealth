@@ -43,27 +43,12 @@
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
 #include <QStackedLayout>
-
-// include freemedforms headers
-//#include <mfCore.h>
-//#include <mfSettings.h>
-//#include <mfPluginsManager.h>
-//#include <mfObject.h>
-//#include <mfAbstractWidget.h>
-//#include <mfMainWindow.h>
-
-// include toolkit headers
-//#include <tkLog.h>
-//#include <tkTheme.h>
-
-// include Qt headers
 #include <QSplitter>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QPointer>
-
-//Q_TK_USING_CONSTANTS
+#include <QMap>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -76,13 +61,17 @@ public:
     FormManagerPrivate() {}
     ~FormManagerPrivate()
     {
-        if (m_UuidManager) delete m_UuidManager;
-        m_UuidManager = 0;
+        if (m_UuidManager) {
+            delete m_UuidManager;
+            m_UuidManager = 0;
+        }
+        /** \todo Delete FormItem ?? */
     }
     QPointer<QStackedLayout> m_Stack;
     QPointer<QTreeWidget> m_Tree;
     Core::UniqueIDManager *m_UuidManager;
-    QList<Core::FormMain*> m_OrderedForms;
+    QMap<int, Core::FormMain *> m_MappedForms;
+
 private:
 };
 } // End Internal
@@ -97,8 +86,10 @@ FormManager::FormManager(QObject *parent)
 
 FormManager::~FormManager()
 {
-    if (d) delete d;
-    d = 0;
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
 UniqueIDManager *FormManager::uuidManager() const
@@ -116,13 +107,13 @@ FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
         f = new FormMain(this);
     if (!uuid.isEmpty())
         f->setUuid(uuid);
-    d->m_OrderedForms.append(f);
+    d->m_MappedForms.insert(f->uuid(), f);
     return f;
 }
 
 QList<FormMain*> FormManager::forms() const
 {
-    return d->m_OrderedForms;
+    return d->m_MappedForms.values();
 }
 
 bool FormManager::hasForm(const QString &uuid) const
@@ -137,11 +128,7 @@ FormMain *FormManager::form(const QString &uuid) const
     if (!hasForm(uuid))
         return 0;
     int id = d->m_UuidManager->uniqueIdentifier(uuid);
-    foreach(FormMain *form, d->m_OrderedForms) {
-        if (form->uuid()==id)
-            return form;
-    }
-    return 0;
+    return d->m_MappedForms.value(id, 0);
 }
 
 QTreeWidget *FormManager::formsTreeWidget(QWidget *parent) const
@@ -191,6 +178,7 @@ void FormManager::changeStackedLayoutTo(QTreeWidgetItem *item)
     int id = item->data(0,Qt::UserRole).toInt();
     d->m_Stack->setCurrentIndex(id);
 }
+
 
 bool FormManager::setFormObjects(QObject *root)
 {
@@ -258,198 +246,6 @@ bool FormManager::translateForms()
 //    retranslateUi();
     return true;
 }
-
-
-//void FormManager::createForm( mfObject * mfo, QTreeWidgetItem * item )
-//{
-//    // Create children recursively
-//    if ( mfo->type() == mfObject::Type_Form )
-//    {
-//        // Create a new Widget with a vbox and put the label
-//        m_WidgetToStack = getWidget( mfo, 0 );
-//        m_WidgetToStack->setParent( this );
-//
-//        // Add form name to treewidget
-//        if ( item == 0 )
-//        { item = new QTreeWidgetItem( m_Tree ); }
-//        else
-//        { item = new QTreeWidgetItem( item ); }
-//        item->setText( LabelColumn, mfo->label() );
-//        item->setText( 1, QString::number( mfo->mfChildren().count() ) );
-//        m_Tree->expandItem( item );
-//
-//        // All this goes into a scrollarea
-//        QScrollArea * area = new QScrollArea( m_Stack );
-//        area->setWidget( m_WidgetToStack );
-//        area->setWidgetResizable( true );
-//
-//        // Add widget to stack
-//        int id = m_Stack->addWidget( area );
-//        m_FormList.append( mfo );
-//        // save id in treeitem with Qt::UserRole
-//        item->setData( LabelColumn, Qt::UserRole, id );
-//    }
-//
-//    // Analysing all children, take care to the tree !!!
-//    foreach( mfObject* chd, mfo->mfChildren() )
-//        createForm( chd, item );
-//    //      else                 createForm(mfo->children().first(), m_Item->parent());
-//}
-
-
-//mfAbstractWidget * mfMainWidget::getWidget( mfObject * mfo, mfAbstractWidget * parent )
-//{
-//    mfAbstractWidget * toReturn = 0;   // Widget that will be returned
-//    mfFormWidgetInterface * plug = 0;  // Interface to plugins
-//    int widgetId = -1;                 // Id in widgets list of the plugin
-//
-//    // Fing the good plugin
-//    if ( mfo->type() != mfObject::Type_Undefined )
-//    {
-//        plug = m_widgetPlugins[0];   // Take the static library
-//        widgetId = mfo->type();                // Id is easy to get
-//    }
-//    else
-//    {
-//        int i = -1;
-//        foreach( mfFormWidgetInterface* plugin, m_widgetPlugins )
-//        {
-//            i++;
-//            if ( i == 0 ) continue;
-//            if ( plugin->widgets().contains( mfo->param( mfObject::Param_Type ).toString(),
-//                                             Qt::CaseInsensitive ) )
-//            {
-//                plug = plugin;
-//                widgetId = plug->widgets().indexOf( mfo->param( mfObject::Param_Type ).toString(),
-//                                                    Qt::CaseInsensitive );
-//                break;
-//            }
-//        }
-//    }
-//
-//    // Get the widget
-//    if ( !plug )
-//    {
-//        tkLog::addError( this , tr( "Can not find plugin for object named : %1 , type : %2" )
-//                         .arg( mfo->name(), mfo->type() ) );
-//        return 0;
-//    }
-//
-//    toReturn = plug->getWidget( mfo, parent );
-//
-//    if ( plug->isContainer( widgetId ) )
-//    {
-//        foreach( mfObject * chd, mfo->mfChildren() )
-//        {
-//            mfAbstractWidget * chdWgt = getWidget( chd, toReturn );
-//            if ( chdWgt )
-//                toReturn->addWidgetToContainer( chdWgt );
-//        }
-//    }
-//
-//    return toReturn;
-//}
-
-
-//void mfMainWidget::treeToStack( QTreeWidgetItem * item )
-//{
-//    if ( !item ) return;
-//
-//    int index = item->data( LabelColumn, Qt::UserRole ).toInt();
-//
-//    if ( index == m_Stack->currentIndex() )
-//        return;
-//
-//    m_Stack->setCurrentIndex( index );
-//
-//    if ( m_FormNavRecord )
-//    {
-//        // record in the navigation stack
-//        while ( m_FormNavList.count() - 1 > m_FormNavOffset )
-//            m_FormNavList.removeLast();
-//
-//        m_FormNavList << item;
-//
-//        m_FormNavOffset++;
-//    }
-//}
-
-//void mfMainWidget::createActions()
-//{
-//    // Navigation actions
-//    previousAct = new QAction( this );
-//    previousAct->setIcon( tkTheme::icon( ICONPREVIOUS ) );
-//    previousAct->setEnabled( false );
-//    connect( previousAct, SIGNAL( triggered() ), this, SLOT( gotoPrevious() ) );
-//
-//    nextAct = new QAction( this );
-//    nextAct->setIcon( tkTheme::icon( ICONNEXT ) );
-//    nextAct->setEnabled( false );
-//    connect( nextAct, SIGNAL( triggered() ), this, SLOT( gotoNext() ) );
-//
-//    addFileAct = new QAction( this );
-//    connect( addFileAct, SIGNAL( triggered() ), this , SLOT( addNewFile() ) );
-//    addFileAct->setIcon( tkTheme::icon( ICONADD ) );
-//
-//    removeSubFormAct  = new QAction( this );
-//    connect( removeSubFormAct, SIGNAL( triggered() ), this , SLOT( removeSubForm() ) );
-//    removeSubFormAct->setIcon( tkTheme::icon( ICONREMOVE ) );
-//
-//    hideShowTreeAct = new QAction( this );
-//    connect ( hideShowTreeAct, SIGNAL( triggered() ), this, SLOT( hideShowTree() ) );
-//    hideShowTreeAct->setIcon( tkTheme::icon( ICONVIEWSIDE ) );
-//}
-
-//void mfMainWidget::createToolBar()
-//{
-//    // find nav bar into mainwindow
-//    m_NavBar =  mfCore::mainWindow()->findChild<QToolBar *>( "FormNavigation" );
-//    if (!m_NavBar ) {
-//        //          m_NavBar = new QToolBar( mfCore::mainWindow() );
-//        //          m_NavBar->setObjectName( "FormNavigation" );
-//        //          m_NavBar->setWindowTitle( tr( "Forms Navigation" ) ) ;
-//    }
-//    // add actions
-//    //     m_NavBar->addAction( addFileAct );
-//    //     m_NavBar->addAction( removeSubFormAct );
-//    //     m_NavBar->addAction( hideShowTreeAct );
-//    //     m_NavBar->addAction( previousAct );
-//    //     m_NavBar->addAction( nextAct );
-//    //     // add tool bar to main window
-//    //     mfCore::mainWindow()->addToolBar( m_NavBar );
-//}
-
-//void mfMainWidget::retranslateUi()
-//{
-//    // Translate the actions
-//    if ( addFileAct ) addFileAct->setText( tr( "Add a form here" ) );
-//    if ( hideShowTreeAct ) hideShowTreeAct->setText( tr ( "Display form's tree" ) );
-//    previousAct->setText( tr( "Previous" ) );
-//    previousAct->setShortcut( tr( "Alt+P" ) );
-//    nextAct->setText( tr( "Next" ) );
-//    nextAct->setShortcut( tr( "Alt+N" ) );
-//    if ( m_NavBar ) m_NavBar->setWindowTitle( tr( "Forms Navigation" ) );
-//}
-
-//void mfMainWidget::changeEvent( QEvent * event )
-//{
-//    if ( event->type() == QEvent::LanguageChange )
-//    {
-//        retranslateUi();
-//        event->accept();
-//    }
-//    else
-//        QWidget::changeEvent( event );
-//
-//}
-
-
-//void mfMainWidget::createTreePopup( const QPoint & pos )
-//{
-//    m_Pop = new QMenu ( tr( "Tree Menu" ), this );
-//    m_Pop->addAction ( addFileAct );
-//    m_Pop->popup( m_Tree->mapToGlobal( pos ) );
-//}
 
 //void mfMainWidget::addNewFile()
 //{
