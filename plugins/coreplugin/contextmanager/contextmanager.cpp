@@ -16,6 +16,8 @@
 using namespace Core;
 using namespace Core::Internal;
 
+enum { WarnContextUpdates=false };
+
 ContextManagerPrivate::ContextManagerPrivate(QMainWindow *mainWin) :
         ContextManager(),
         m_activeContext(0)
@@ -65,10 +67,14 @@ void ContextManagerPrivate::removeContextObject(IContext *context)
 
 void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
 {
-    Q_UNUSED(old)
+    Q_UNUSED(old);
 
-//    if (now)
-//        qWarning() << "ContextManagerPrivate focusChanged" << now;
+    if (WarnContextUpdates) {
+        if (now)
+            qWarning() << "ContextManager focusChanged" << now;
+        else
+            qWarning() << "ContextManager focusChanged to unsetted widget";
+    }
 
     // Prevent changing the context object just because the menu is activated
     if (qobject_cast<QMenuBar*>(now))
@@ -91,7 +97,8 @@ void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
         }
     }
     if (newContext) {
-//        qWarning() << "   focused" << p << newContext->widget();
+        if (WarnContextUpdates)
+            qWarning() << "ContextManager focused" << p << newContext->widget();
         updateContextObject(newContext);
     }
 }
@@ -157,12 +164,26 @@ void ContextManagerPrivate::updateContextObject(IContext *context)
         return;
     IContext *oldContext = m_activeContext;
     m_activeContext = context;
+
+
+    if (WarnContextUpdates) {
+        if (context) {
+            QString tmp = context->widget()->objectName();
+            if (oldContext) {
+                tmp += " " + oldContext->widget()->objectName();
+            }
+            qWarning() << "updateContextObject" << tmp;
+        } else
+            qWarning() << "updateContextObject 0 0";
+    }
+
+
     if (!context || oldContext != m_activeContext) {
         emit contextAboutToChange(context);
         updateContext();
-//        if (debugContextManagerPrivate)
-//            qWarning() << "new context object =" << context << (context ? context->widget() : 0)
-//            << (context ? context->widget()->metaObject()->className() : 0);
+        if (WarnContextUpdates)
+            qWarning() << "new context object =" << context << (context ? context->widget() : 0)
+            << (context ? context->widget()->metaObject()->className() : 0);
         emit contextChanged(context);
     }
 }

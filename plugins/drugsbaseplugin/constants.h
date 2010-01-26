@@ -96,7 +96,7 @@ namespace Constants {
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // HTML MASKS
-    const char * const  ENCODEDHTML_FULLDOC =
+    const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
             "<html>\n"
             "<head>\n"
             "  <meta name=\"qrichtext\" content=\"1\" />\n"
@@ -117,7 +117,27 @@ namespace Constants {
             "</body>\n"
             "</html>\n";
 
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION     =
+        const char * const  ENCODEDHTML_FULLDOC_NON_MEDINTUX =
+                "<html>\n"
+                "<head>\n"
+                "  <meta name=\"qrichtext\" content=\"1\" />\n"
+                "  <meta name=\"charset\" content=\"UTF-8\" />\n"
+                "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
+                "  <meta name=\"prescription\" content=\"{ENCODEDPRESCRIPTION}\" />\n"
+                "  <title>FreeDiams : Prescription</title>\n"
+                "  <style type=\"text/css\">\n"
+                "    A:link {text-decoration: none}\n"
+                "    A:visited {text-decoration: none}\n"
+                "    A:active {text-decoration: none}\n"
+                "    A:hover {text-decoration: none;}\n"
+                "  </style>\n"
+                "</head>\n"
+                "<body style=\"font-family:Arial;font-size:12pt\">\n\n"
+                "{PRESCRIPTION}\n"
+                "</body>\n"
+                "</html>\n";
+
+    const char * const  ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX =
             "<table border=0>\n"
             " <tr>\n"
             "   <td>\n"
@@ -127,6 +147,11 @@ namespace Constants {
             "   </td>\n"
             " </tr>\n"
             "</table>\n";
+
+    const char * const  ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX =
+            "<ol style=\"font-size:10pt;font-weight:bold;\">\n"
+            "{FULLPRESCRIPTION}\n"
+            "</ol>\n";
 
     const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 

@@ -125,8 +125,9 @@ namespace Internal {
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-MainWindow::MainWindow( QWidget * parent )
-          : Core::IMainWindow(parent)
+MainWindow::MainWindow( QWidget * parent ) :
+        Core::IMainWindow(parent),
+        m_TemplatesDock(0)
 {
     setObjectName("MainWindow");
     /** \todo add icon to the mainwindow */
@@ -276,6 +277,9 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    // avoid a bug with contextManager updateContext
+    delete m_TemplatesDock;
+    m_TemplatesDock = 0;
 }
 
 /**
@@ -509,7 +513,7 @@ void MainWindow::readFile(const QString &file)
 
 void MainWindow::createDockWindows()
 {
-    QDockWidget *dock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
+    QDockWidget *dock = m_TemplatesDock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
     dock->setObjectName("templatesDock");
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     dock->setWidget(new Templates::TemplatesView(dock));

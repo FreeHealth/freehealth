@@ -77,6 +77,7 @@ public:
     virtual QVariant data(int column) const {return m_Datas.value(column, QVariant());}
     virtual bool setData(int column, const QVariant &value) {m_Datas.insert(column, value); return true;}
     virtual QHash<int, QVariant> datas() const {return m_Datas;}
+    virtual bool setDatas(const QHash<int, QVariant> &datas) {m_Datas.clear(); m_Datas = datas; return true;}
 
     virtual void setId(const int id) {m_Datas.insert(Constants::Data_Id, id);}
     virtual int id() const {return m_Datas.value(Constants::Data_Id).toInt();}

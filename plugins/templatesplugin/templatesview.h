@@ -41,8 +41,12 @@
 #ifndef TEMPLATESVIEW_H
 #define TEMPLATESVIEW_H
 
+#include <templatesplugin/templates_exporter.h>
+
 #include <QtGui/QWidget>
 #include <QItemSelectionModel>
+#include <QAbstractItemView>
+
 QT_BEGIN_NAMESPACE
 class QMenu;
 QT_END_NAMESPACE
@@ -54,7 +58,7 @@ class TemplatesViewPrivate;
 class TemplatesViewActionHandler;
 }  // End namespace Internal
 
-class TemplatesView : public QWidget
+class TEMPLATES_EXPORT TemplatesView : public QWidget
 {
     Q_OBJECT
     friend class Internal::TemplatesViewPrivate;
@@ -74,7 +78,7 @@ public:
         Drop       = 0x10,
         LockUnlock = 0x20,
         Save       = 0x40,
-        Defaults   = Add | Remove | Edit | Drag | Drop | Save
+        Defaults   = Add | Remove | Edit | Drag | Drop | LockUnlock | Save
     };
     Q_DECLARE_FLAGS(EditModes, EditMode);
 
@@ -89,6 +93,8 @@ public:
     QModelIndex currentItem() const;
 
     TemplatesModel *templatesModel() const;
+    void expandAll() const;
+    void setSelectionMode(QAbstractItemView::SelectionMode mode);
 
     //    ITemplates *currentTemplate() const;
 

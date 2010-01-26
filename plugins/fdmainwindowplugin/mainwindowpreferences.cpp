@@ -90,6 +90,7 @@ void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -111,6 +112,7 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
+    setDatasToUi();
 }
 
 void MainWindowPreferencesWidget::setDatasToUi()

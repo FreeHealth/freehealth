@@ -496,9 +496,9 @@ QVariant DrugsModel::drugData(const int CIS, const int column)
 Qt::ItemFlags DrugsModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
-    return QAbstractItemModel::flags(index);
+    return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
 }
 
 /** \brief Removes \e count drugs from the \e row. */

@@ -121,6 +121,7 @@ protected:
 
 public:
     Internal::Ui::MainWindow *m_ui;
+    QDockWidget *m_TemplatesDock;
 };
 
 } // End Core

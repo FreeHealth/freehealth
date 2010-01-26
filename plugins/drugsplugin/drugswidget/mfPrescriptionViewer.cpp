@@ -164,22 +164,8 @@ void PrescriptionViewer::createActionsAndToolbar()
         m_ToolBar->addAction(cmd->action());
         m_ToolBar->addSeparator();
     }
-
+    m_ToolBar->setFocusPolicy(Qt::ClickFocus);
 }
-
-//void PrescriptionViewer::dragEnterEvent(QDragEnterEvent *event)
-// {
-//    qWarning() << event->mimeData()->formats() << drugModel()->mimeTypes() << event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0));
-//     if (event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0)))
-//         event->acceptProposedAction();
-// }
-//
-//void PrescriptionViewer::dragMoveEvent(QDragMoveEvent *event)
-//{
-//    qWarning() << "dragMoveEvent";
-//    qWarning() << event->mimeData()->formats() << drugModel()->mimeTypes() << event->mimeData()->hasFormat(drugModel()->mimeTypes().at(0));
-//    event->acceptProposedAction();
-//}
 
 /** \brief Clears the prescription */
 void PrescriptionViewer::clearTriggered()

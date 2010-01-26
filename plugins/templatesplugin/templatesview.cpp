@@ -325,6 +325,7 @@ public:
         layout->addSpacerItem(spacer);
         m_ToolBar->addWidget(w);
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_LOCK)->action());
+        m_ToolBar->setFocusPolicy(Qt::ClickFocus);
 
         // Create Ui
         m_ui = new Ui::TemplatesView;
@@ -343,30 +344,24 @@ public:
         // manage contexts and drag/drop
         manageContexts(editModes);
 
-//        QList<int> sizes;
-//        foreach(const QVariant &s, settings()->value(Constants::S_SPLITTER_SIZES).toList()) {
-//            sizes << s.toInt();
-//        }
-//        if (sizes.count() == 0) {
-//            sizes << 1 << 1;
-//        }
-//        m_ui->splitter->setSizes(sizes);
-
-        // make connections
-//        connect(m_ui->categoryTreeView->selectionModel(),
-//                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-//                this,
-//                SLOT(on_categoryTreeView_changed(const QModelIndex&,const QModelIndex&)));
-        connect(m_ui->categoryTreeView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(contextMenu(QPoint)));
-//        connect(m_ui->splitter, SIGNAL(splitterMoved(int,int)),
-//                this, SLOT(on_splitter_move()));
-        connect(m_Model,SIGNAL(modelAboutToBeReset()), this, SLOT(on_ModelAboutToReset()));
+        connect(m_ui->categoryTreeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+//        connect(m_Model,SIGNAL(modelAboutToBeReset()), this, SLOT(on_ModelAboutToReset()));
+        connect(m_Model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(model_rowInserted(const QModelIndex &, int, int)));
     }
-    ~TemplatesViewPrivate() {}
+    ~TemplatesViewPrivate()
+    {
+        contextManager()->removeContextObject(m_Context);
+        delete m_Context;
+        m_Context = 0;
+    }
 
     void manageContexts(Templates::TemplatesView::EditModes editModes)
     {
         m_Context->clearContext();
+        if (editModes==0) {
+            this->m_ToolBar->hide();
+            return;
+        }
         if (editModes & Templates::TemplatesView::Save)
             m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_SAVE));
         if (editModes & Templates::TemplatesView::Add)
@@ -384,23 +379,9 @@ public:
     }
 
 public Q_SLOTS:
-//    void on_categoryTreeView_changed(const QModelIndex &current, const QModelIndex &)
-//    {
-//        Q_EMIT q->currentItemChanged();
-//        QModelIndex sum = m_Model->index(current.row(), TemplatesModel::Data_Summary, current.parent());
-//        m_ui->summaryTextEdit->setText(sum.data().toString());
-//    }
-//    void on_splitter_move()
-//    {
-//        QList<QVariant> sizes;
-//        foreach(int s, m_ui->splitter->sizes())
-//            sizes << s;
-//        settings()->setValue(Constants::S_SPLITTER_SIZES, sizes);
-//    }    
     QMenu *getContextMenu()
     {
         QMenu *menu = new QMenu(tkTr(Trans::Constants::TEMPLATES), q);
-//        Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
         menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
@@ -414,6 +395,12 @@ public Q_SLOTS:
     }
     void on_ModelAboutToReset() {
         /** \todo Store the expanded indexes of the view and restore when view resets. */
+    }
+    void model_rowInserted(const QModelIndex &parent, int start, int count)
+    {
+        this->m_ui->categoryTreeView->setExpanded(parent, false);
+        this->m_ui->categoryTreeView->expand(parent);
+        this->m_ui->categoryTreeView->scrollTo(m_Model->index(m_Model->rowCount(parent), 0, parent), QAbstractItemView::EnsureVisible);
     }
 
 public:
@@ -471,6 +458,16 @@ QItemSelectionModel *TemplatesView::selectionModel() const
     return d->m_ui->categoryTreeView->selectionModel();
 }
 
+void TemplatesView::expandAll() const
+{
+    d->m_ui->categoryTreeView->expandAll();
+}
+
+void TemplatesView::setSelectionMode(QAbstractItemView::SelectionMode mode)
+{
+    d->m_ui->categoryTreeView->setSelectionMode(mode);
+}
+
 bool TemplatesView::currentItemIsTemplate() const
 {
     QModelIndex index = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
@@ -482,7 +479,7 @@ bool TemplatesView::currentItemIsTemplate() const
 
 void TemplatesView::lock(bool toLock)
 {
-    d->m_ui->categoryTreeView->setDragEnabled(!toLock);
+//    d->m_ui->categoryTreeView->setDragEnabled(!toLock);
     d->m_ui->categoryTreeView->setAcceptDrops(!toLock);
     d->m_ui->categoryTreeView->setDropIndicatorShown(!toLock);
     if (toLock) {
@@ -499,12 +496,16 @@ bool TemplatesView::isLocked() const
 
 void TemplatesView::addCategory()
 {
-    QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
+    QModelIndex idx = d->m_ui->categoryTreeView->currentIndex();
     if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
         idx = QModelIndex();
 //    qWarning() << idx.isValid() << idx.data() << d->m_ui->categoryTreeView->currentIndex().data();
 //    if (!idx.isValid())
 //        return;
+    while (!d->m_Model->isCategory(idx)) {
+        idx = idx.parent();
+    }
+
     d->m_Model->insertRow(d->m_Model->rowCount(idx), idx);
     d->m_Model->setData(d->m_Model->index(d->m_Model->rowCount(idx)-1, Constants::Data_IsNewlyCreated, idx), true);
     QModelIndex newItem = d->m_Model->index(d->m_Model->rowCount(idx)-1, 0, idx);
@@ -514,17 +515,37 @@ void TemplatesView::addCategory()
 }
 
 void TemplatesView::removeItem()
-{
-    QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
-    if (!idx.isValid())
+{    
+    QModelIndexList list1 = d->m_ui->categoryTreeView->selectionModel()->selectedIndexes();
+    if (!list1.count())
         return;
+    QList<QPersistentModelIndex> list2;
+    QString names;
+    QModelIndex last;
+    foreach(const QModelIndex &idx, list1) {
+        if ((last.row() == idx.row()) && (last.parent()==idx.parent()))
+            continue;
+        last = idx;
+        if (idx.isValid()) {
+            list2 << QPersistentModelIndex(idx);
+            names.append(d->m_Model->index(idx.row(), Constants::Data_Label, idx.parent()).data().toString() + ", ");
+        }
+    }
+    names.chop(2);
+
     // Confirmation dialog
-    bool yes = Utils::yesNoMessageBox(tr("About to delete %1.").arg(idx.data().toString()),
-                           tr("Do you really want to remove %1 from your templates' list ?").arg(idx.data().toString()),
-                           tr("This action is definitive and all informations will be lost. Children of this item"
-                              " will be deleted as well."));
+    bool yes = true;
+    if (!settings()->value(Constants::S_PROMPTFORDELETION).toBool()) {
+        yes = Utils::yesNoMessageBox(tr("About to delete %1.").arg(names),
+                                          tr("Do you really want to remove %1 from your templates' list ?").arg(names),
+                                          tr("This action is definitive and all informations will be lost. Children of this item"
+                                             " will be deleted as well."));
+    }
     if (yes) {
-        d->m_Model->removeRow(idx.row(), idx.parent());
+        foreach(const QPersistentModelIndex &idx, list2) {
+            if (idx.isValid())
+                d->m_Model->removeRow(idx.row(), idx.parent());
+        }
     }
 }
 

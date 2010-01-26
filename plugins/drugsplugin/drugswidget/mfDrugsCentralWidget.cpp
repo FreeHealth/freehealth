@@ -224,12 +224,14 @@ bool DrugsCentralWidget::printPrescription()
 
 bool DrugsCentralWidget::createTemplate()
 {
+    if (!m_CurrentDrugModel->rowCount())
+        return false;
     // get the template content
     QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel);
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
-    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel));
+    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, DrugsDB::DrugsIO::SimpleVersion));
     dlg.setTemplateMimeTypes(m_CurrentDrugModel->mimeTypes());
     dlg.exec();
     return true;

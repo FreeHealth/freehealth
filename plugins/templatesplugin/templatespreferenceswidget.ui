@@ -27,6 +27,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="deletionBox">
+        <property name="text">
+         <string>Always ask for confirmation before deletion</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

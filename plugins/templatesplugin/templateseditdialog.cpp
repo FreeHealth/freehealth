@@ -44,6 +44,8 @@
 #include "ui_templatescontenteditor.h"
 #include "constants.h"
 
+#include <translationutils/constanttranslations.h>
+
 #include <QPersistentModelIndex>
 #include <QTreeView>
 #include <QDataWidgetMapper>
@@ -52,6 +54,7 @@
 #include <QDebug>
 
 using namespace Templates;
+using namespace Trans::ConstantTranslations;
 
 namespace Templates {
 namespace Internal {
@@ -74,6 +77,10 @@ public:
             delete m_Index;
             m_Index = 0;
         }
+        if (m_Mapper) {
+            delete m_Mapper;
+            m_Mapper = 0;
+        }
     }
 
     void refreshComboCategory()
@@ -83,7 +90,7 @@ public:
         if (!m_Model)
             return;
         if (!m_ui->parentTreeView->model()) {
-            Templates::TemplatesModel *model = new Templates::TemplatesModel(m_ui->parentTreeView);
+            Templates::TemplatesModel *model = new Templates::TemplatesModel(q);
             model->categoriesOnly();
             m_ui->parentTreeView->setModel(model);
         }
@@ -115,12 +122,10 @@ public:
         QString content = m_Model->index(m_Index->row(), Constants::Data_Content).data().toString();
         m_ui->viewButton->setEnabled(content.isEmpty());
         m_ui->viewButton->setEnabled(m_Model->isTemplate(*m_Index));
-        // find parent category
-        QModelIndex idx(*m_Index);
-        while ((idx.isValid()) && (!m_Model->isCategory(idx))) {
-            idx = idx.parent();
-        }
+        QModelIndex idx = m_Index->parent();
         m_ui->parentTreeView->setCurrentIndex(idx);
+        /** \todo scrollTo is buggy... */
+        m_ui->parentTreeView->scrollTo(idx);
     }
 
 public:
@@ -130,8 +135,29 @@ public:
     QPersistentModelIndex *m_Index;
     QDataWidgetMapper *m_Mapper;
 };
-}
-}
+
+class TemplatesContentEditor : public QDialog, private Ui::TemplatesContentEditor
+{
+public:
+    TemplatesContentEditor(QWidget *parent) : QDialog(parent), Ui::TemplatesContentEditor()
+    {
+        setupUi(this);
+
+    }
+
+    void setContent(const QString &content)
+    {
+        this->contentTextEdit->setPlainText(content);
+    }
+
+    void done(int r)
+    {
+        QDialog::done(r);
+    }
+};
+
+}  // End Internal
+}  // End Templates
 
 
 TemplatesEditDialog::TemplatesEditDialog(QWidget *parent) :
@@ -153,12 +179,16 @@ void TemplatesEditDialog::done(int r)
     if (r==QDialog::Rejected) {
         d->m_Mapper->revert();
     } else if (r==QDialog::Accepted) {
+        if (d->m_ui->nameLineEdit->text().isEmpty()) {
+            d->m_ui->nameLineEdit->setFocus();
+            d->m_ui->nameLineEdit->setText(tkTr(Trans::Constants::FILENEW_TEXT));
+        }
         // modify focus in order to the mapper to get the changes done
         d->m_ui->buttonBox->setFocus();
         // submit mapper to model
         d->m_Mapper->submit();
         // reparent item
-        QModelIndex idx = d->m_ui->parentTreeView->selectionModel()->currentIndex();
+        QModelIndex idx = d->m_ui->parentTreeView->currentIndex();
         if (idx.isValid()) {
             d->m_Model->reparentIndex(*d->m_Index, idx);
         }
@@ -181,22 +211,20 @@ void TemplatesEditDialog::setModelIndex(const QModelIndex &index)
         delete d->m_Index;
         d->m_Index = 0;
     }
-    d->m_Index = new QPersistentModelIndex(index);
+    d->m_Index = new QPersistentModelIndex(d->m_Model->index(index.row(), Constants::Data_Label, index.parent()));
     d->refreshComboCategory();
     d->createMapper();
-    d->m_Mapper->setRootIndex(index.parent());
+    d->m_Mapper->setRootIndex(d->m_Index->parent());
     d->m_Mapper->setCurrentIndex(d->m_Index->row());
     d->refreshContent();
 }
 
 void TemplatesEditDialog::editContent()
 {
-    QDialog dlg(this);
-    Internal::Ui::TemplatesContentEditor ui;
-    ui.setupUi(&dlg);
-    QString content = d->m_Model->index(d->m_Index->row(), Constants::Data_Content).data().toString();
-    ui.contentTextEdit->setPlainText(content);
+    Internal::TemplatesContentEditor dlg(this);
+    dlg.setContent(d->m_Model->index(d->m_Index->row(), Constants::Data_Content, d->m_Index->parent()).data().toString());
     dlg.exec();
+    /** \todo Manage changes done to the content */
 }
 
 void TemplatesEditDialog::changeEvent(QEvent *e)

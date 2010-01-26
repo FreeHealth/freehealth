@@ -98,7 +98,7 @@ public:
     bool isTemplate(const QModelIndex &index) const;
     bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
 
-    void categoriesOnly() const;
+    void categoriesOnly();
     bool isCategoryOnly() const;
 
 public Q_SLOTS:

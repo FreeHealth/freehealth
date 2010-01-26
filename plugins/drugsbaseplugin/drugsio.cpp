@@ -50,6 +50,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>
+#include <drugsbaseplugin/dailyschememodel.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -275,7 +276,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString version;
     if (needUpdate) {
         version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
-        qWarning() << version;
+        Utils::Log::addMessage("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
+//        qWarning() << version;
         xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xml);
     }
 
@@ -404,31 +406,95 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
     bool lineBreak = settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool();
     // Add drugs
     int i;
-    for(i=0; i < m->rowCount(); ++i) {
-        tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
-        if (lineBreak)
-            tmp += "<span style=\"font-size:4pt\"><br /></span>";
-        tmp += "</li>";
-        if (m->index(i, Prescription::IsALD).data().toBool()) {
-            ALD += tmp;
-        } else {
-            nonALD += tmp;
+    switch (version)
+    {
+    case MedinTuxVersion :
+        {
+            for(i=0; i < m->rowCount(); ++i) {
+                tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
+                if (lineBreak)
+                    tmp += "<span style=\"font-size:4pt\"><br /></span>";
+                tmp += "</li>";
+                if (m->index(i, Prescription::IsALD).data().toBool()) {
+                    ALD += tmp;
+                } else {
+                    nonALD += tmp;
+                }
+                tmp.clear();
+            }
+            break;
         }
-        tmp.clear();
+    case SimpleVersion :
+        {
+            QHash<QString, QString> tokens_value;
+            for(i=0; i < m->rowCount(); ++i) {
+                tokens_value.insert("DRUG", m->index(i, Drug::Denomination).data().toString());
+                tokens_value.insert("Q_FROM", m->index(i, Prescription::IntakesFrom).data().toString());
+                tokens_value.insert("Q_TO", m->index(i, Prescription::IntakesTo).data().toString());
+                tokens_value.insert("Q_SCHEME", m->index(i, Prescription::IntakesScheme).data().toString());
+                // Manage Daily Scheme See DailySchemeModel::setSerializedContent
+                DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
+                day->setSerializedContent(m->index(i, Prescription::DailyScheme).data().toString());
+                QString d = day->humanReadableDistributedDailyScheme();
+                if (d.isEmpty())
+                    d = day->humanReadableRepeatedDailyScheme();
+                tokens_value.insert("DAILY_SCHEME", d);
+                tmp = "<li>[[DRUG]], [[Q_FROM]][ - [Q_TO]][ [Q_SCHEME]][ [DAILY_SCHEME]]";
+                Utils::replaceTokens(tmp, tokens_value);
+                if (lineBreak)
+                    tmp += "<span style=\"font-size:4pt\"><br /></span>";
+                tmp += "</li>";
+                if (m->index(i, Prescription::IsALD).data().toBool()) {
+                    ALD += tmp;
+                } else {
+                    nonALD += tmp;
+                }
+                tmp.clear();
+            }
+            break;
+
+        }
+    case DrugsOnlyVersion :
+        {
+            for(i=0; i < m->rowCount(); ++i) {
+                tmp = m->index(i, Drug::Denomination).data().toString();
+                tmp = tmp.mid(0, tmp.indexOf(","));
+                tmp.prepend("<li>");
+                tmp.append("</li>\n");
+                if (m->index(i, Prescription::IsALD).data().toBool()) {
+                    ALD += tmp;
+                } else {
+                    nonALD += tmp;
+                }
+                tmp.clear();
+            }
+            break;
+        }
     }
+
     if (!ALD.isEmpty()) {
         tmp = settings()->value(S_ALD_PRE_HTML).toString();
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace("{FULLPRESCRIPTION}", ALD);
+        if (version==MedinTuxVersion)
+            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
+        else
+            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
         tmp += settings()->value(S_ALD_POST_HTML).toString();
     }
     if (!nonALD.isEmpty()) {
-        tmp += QString(ENCODEDHTML_FULLPRESCRIPTION).replace("{FULLPRESCRIPTION}", nonALD);
+        if (version==MedinTuxVersion)
+            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
+        else
+            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
     }
 
     // show all drugs (including testing to get the testing drugs)
     m->showTestingDrugs(testingDrugsVisible);
     QString toReturn;
-    toReturn = QString(ENCODEDHTML_FULLDOC);
+    if (version==MedinTuxVersion)
+        toReturn = QString(ENCODEDHTML_FULLDOC_MEDINTUX);
+    else
+        toReturn = QString(ENCODEDHTML_FULLDOC_NON_MEDINTUX);
+
     toReturn.replace("{GENERATOR}", qApp->applicationName());
     toReturn.replace("{PRESCRIPTION}", tmp );
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
@@ -505,8 +571,8 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
         xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false);
         forXml.clear();
     }
-    xmldPrescription.prepend( QString("<%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
-    xmldPrescription.append( QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+    xmldPrescription.prepend(QString("%1<%2>\n").arg(XML_VERSION, XML_FULLPRESCRIPTION_TAG));
+    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
     return xmldPrescription;
 }
 

@@ -3,9 +3,12 @@
 
 #include <templatesplugin/templatesmodel.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QDebug>
 
 using namespace Templates;
+using namespace Trans::ConstantTranslations;
 
 TemplatesCreationDialog::TemplatesCreationDialog(QWidget *parent) :
     QDialog(parent),
@@ -15,6 +18,8 @@ TemplatesCreationDialog::TemplatesCreationDialog(QWidget *parent) :
     setWindowTitle(qApp->applicationName() + " - " + ui->label->text());
     ui->parentCategory->setViewContent(TemplatesView::CategoriesOnly);
     ui->parentCategory->setEditMode(TemplatesView::Add | TemplatesView::Edit);
+    ui->parentCategory->expandAll();
+    ui->parentCategory->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 TemplatesCreationDialog::~TemplatesCreationDialog()
@@ -25,6 +30,11 @@ TemplatesCreationDialog::~TemplatesCreationDialog()
 void TemplatesCreationDialog::done(int r)
 {
     if (r==QDialog::Accepted) {
+        // Do not accept templates witout content
+        if (m_Content.isEmpty()) {
+            QDialog::done(QDialog::Rejected);
+            return;
+        }
         // model --> insert row in parent index
         TemplatesModel *model = new TemplatesModel(this);
         QModelIndex parent = ui->parentCategory->currentItem();
@@ -34,7 +44,10 @@ void TemplatesCreationDialog::done(int r)
         }
         // model --> setDatas
         model->setData(model->index(row, Constants::Data_IsTemplate, parent), true);
-        model->setData(model->index(row, Constants::Data_Label, parent), ui->nameLineEdit->text());
+        QString tmp = ui->nameLineEdit->text();
+        if (tmp.isEmpty())
+            tmp = tkTr(Trans::Constants::FILENEW_TEXT);
+        model->setData(model->index(row, Constants::Data_Label, parent), tmp);
         model->setData(model->index(row, Constants::Data_Summary, parent), ui->summaryTextEdit->toHtml());
         model->setData(model->index(row, Constants::Data_Content, parent), m_Content);
         model->setData(model->index(row, Constants::Data_ContentMimeTypes, parent), m_Mimes);

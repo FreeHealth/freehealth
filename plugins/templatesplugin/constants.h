@@ -65,6 +65,7 @@ namespace Constants {
     const char * const  S_ALWAYSSHOWEXPANDED       = "Templates/AlwaysShowExpanded";
     const char * const  S_LOCKCATEGORYVIEW         = "Templates/LockCategoryView";
     const char * const  S_SAVEDATAWITHOUTPROMPTING = "Templates/SaveWithoutPrompting";
+    const char * const  S_PROMPTFORDELETION        = "Templates/PromptForDeletion";
 
     const char * const MIMETYPE_TEMPLATE           = "application/template";
     const char * const MIMETYPE_CATEGORY           = "application/template.category";

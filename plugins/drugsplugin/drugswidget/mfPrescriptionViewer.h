@@ -81,9 +81,6 @@ public:
     void setModelColumn(const int col);
     void setListViewPadding(const int pad);
 
-//    void dragEnterEvent(QDragEnterEvent *event);
-//    void dragMoveEvent(QDragMoveEvent *event);
-
 Q_SIGNALS:
     void saveTriggered();
     void printTriggered();

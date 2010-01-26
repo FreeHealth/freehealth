@@ -8,8 +8,8 @@ version=0.3.0
 
    * Nouvelles fonctionnalités :
       * Possibilité de créer des modèles de prescriptions
-      * Nouveau gestionnaire de modèle de prescriptions
-      * Possibilité de remettre aux valeurs par défaut des préférences de l'application
+      * Nouveau gestionnaire de modèles de prescriptions
+      * Possibilité de remettre aux valeurs par défaut les préférences de l'application
 
    * Modifications importantes :
 
