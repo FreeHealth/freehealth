@@ -60,7 +60,6 @@ FORMS += $${PWD}/drugswidget/druginfo.ui \
     $${PWD}/drugswidget/dailyschemeviewer.ui
 
 # translations
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/mfDrugsWidget_de.ts
-exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc
-else:RESOURCES += $${PWD}/widget_resources.qrc
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/mfDrugsWidget_fr.ts \
+                $${SOURCES_TRANSLATIONS}/mfDrugsWidget_de.ts \
+                $${SOURCES_TRANSLATIONS}/mfDrugsWidget_es.ts

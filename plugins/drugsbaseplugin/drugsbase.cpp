@@ -627,7 +627,7 @@ void DrugsBasePrivate::retreiveLinkTables()
 
      QString tmp;
      {
-          QFile file(":/done.csv");
+          QFile file(":/inns_molecules_link.csv");
           if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
                return;
           tmp = file.readAll();

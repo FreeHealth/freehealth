@@ -4,6 +4,7 @@ PACKAGE_VERSION = 0.0.2
 DEFINES += DRUGSBASE_LIBRARY
 include(../fmf_plugins.pri)
 include(drugsbaseplugin_dependencies.pri)
+
 HEADERS = drugsbaseplugin.h \
     drugsbase_exporter.h \
     drugsbase.h \
@@ -20,6 +21,7 @@ HEADERS = drugsbaseplugin.h \
     dailyschememodel.h \
     versionupdater.h \
     drugsdatabaseaboutpage.h
+
 SOURCES = drugsbaseplugin.cpp \
     drugsbase.cpp \
     interactionsbase.cpp \
@@ -37,6 +39,11 @@ SOURCES = drugsbaseplugin.cpp \
 
 OTHER_FILES = DrugsBase.pluginspec
 
-# translations
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/drugsbaseplugin_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/drugsbaseplugin_de.ts
+# Translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/drugsbaseplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/drugsbaseplugin_es.ts
+
+# protected
+exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc
+else:RESOURCES += $${PWD}/resources.qrc

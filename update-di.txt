@@ -1,9 +1,9 @@
 version=0.3.0
 {
-    * Jan 2010
+    * Fev 2010
 
     * Version de la base de données thérapeutique :
-      * Médicaments :  AFSSAPS - 14/12/2009
+      * Médicaments :  AFSSAPS - 28/01/2009
       * Interactions : AFSSAPS - 30/06/2009
 
    * Nouvelles fonctionnalités :
@@ -15,6 +15,7 @@ version=0.3.0
 
    * Correction de bogues / Améliorations techniques :
       * une traduction erronée
+      * certaines interactions n'étaient plus retrouvées (APRANAX / IBUPROFENE)
 }
 
 version=0.2.0
