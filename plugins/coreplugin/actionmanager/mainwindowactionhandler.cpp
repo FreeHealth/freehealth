@@ -453,12 +453,12 @@ void MainWindowActionHandler::createEditActions()
 /** \todo actually does nothing usefull */
 void MainWindowActionHandler::connectEditActions()
 {
-    if (aUndo) {}
-    if (aRedo) {}
-    if (aCut) {}
-    if (aCopy) {}
-    if (aPaste) {}
-    if (aSelectAll) {}
+//    if (aUndo) {}
+//    if (aRedo) {}
+//    if (aCut) {}
+//    if (aCopy) {}
+//    if (aPaste) {}
+//    if (aSelectAll) {}
 }
 
 void MainWindowActionHandler::createConfigurationActions(int actions)

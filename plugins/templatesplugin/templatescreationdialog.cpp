@@ -17,7 +17,7 @@ TemplatesCreationDialog::TemplatesCreationDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + ui->label->text());
     ui->parentCategory->setViewContent(TemplatesView::CategoriesOnly);
-    ui->parentCategory->setEditMode(TemplatesView::Add | TemplatesView::Edit);
+    ui->parentCategory->setEditMode(TemplatesView::None);
     ui->parentCategory->expandAll();
     ui->parentCategory->setSelectionMode(QAbstractItemView::SingleSelection);
 }

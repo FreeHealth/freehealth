@@ -50,12 +50,14 @@
 #include "constants.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/icorelistener.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/serializer.h>
+#include <utils/global.h>
 
 #include <QList>
 #include <QColor>
@@ -92,6 +94,36 @@ namespace Internal {
     static const char *const DATABASE_FILENAME = "templates.db";
     static const char *const DATABASE_ACTUAL_VERSION = "0.3.0";
 
+class TemplatesCoreListener : public Core::ICoreListener
+{
+public:
+    TemplatesCoreListener(Templates::TemplatesModel *parent)
+    {
+        Q_ASSERT(parent);
+        m_Model = parent;
+    }
+    ~TemplatesCoreListener() {}
+
+    bool coreAboutToClose()
+    {
+        if (m_Model->isDirty()) {
+            bool yes = Utils::yesNoMessageBox(tr("Save templates ."),
+                                   tr("Some datas are not actually saved into database."
+                                      "Do you want to save them ?\n Answering 'No' will cause definitive data lose."),
+                                   "",);
+            if (yes) {
+                return m_Model->submit();
+            } else {
+                return m_Model->revert();
+            }
+        }
+        return false;
+    }
+
+private:
+    Templates::TemplatesModel *m_Model;
+};
+
 
 class TreeItem : public Templates::ITemplate
 {
@@ -102,6 +134,7 @@ public:
             m_IsTemplate(false),
             m_IsModified(false)
     {
+        setData(Constants::Data_UserUuid, "FreeDiams");
         setHasTemplate(datas.value(Constants::Data_IsTemplate).toBool());
     }
     ~TreeItem() { qDeleteAll(m_Children); }
@@ -310,7 +343,7 @@ public:
         /** \todo improve this */
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
-                pr->q->beginInsertRows(parent,first,last);
+                pr->q->beginInsertRows(parent, first, last);
                 }
             }
     }
@@ -849,10 +882,19 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 
 TemplatesModel::~TemplatesModel()
 {
+    /** \todo improve this with coreListener */
+    submit();
+
     if (d) {
         delete d;
         d = 0;
     }
+}
+
+bool TemplatesModel::isDirty() const
+{
+    /** \todo code here  */
+    return false;
 }
 
 bool TemplatesModel::setCurrentUser(const QString &uuid)
@@ -1012,11 +1054,13 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
             } else {
                 c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
             }
-            if (it->isNewlyCreated()) {
-                c = QColor(Qt::blue);
-            } else
-                if (it->isModified()) {
-                c = QColor(Qt::red);
+            if (Utils::isDebugCompilation()) {
+                if (it->isNewlyCreated()) {
+                    c = QColor(Qt::blue);
+                } else
+                    if (it->isModified()) {
+                    c = QColor(Qt::red);
+                }
             }
             if (c.name()=="#ffffff")
                 return QVariant();

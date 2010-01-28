@@ -298,37 +298,51 @@ void MainWindow::refreshPatient() const
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
 
     m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
-    m_ui->patientWeight->setValue( patient()->value(Core::Patient::Weight).toInt() );
-    m_ui->patientSize->setValue( patient()->value(Core::Patient::Size).toInt() );
-    m_ui->patientClCr->setValue( patient()->value(Core::Patient::CreatinClearance).toDouble() );
-    m_ui->patientCreatinin->setValue( patient()->value(Core::Patient::Creatinin).toDouble() );
-    m_ui->listOfAllergies->setText(  patient()->value(Core::Patient::DrugsAllergies).toString() );
-    m_ui->sexCombo->setCurrentIndex( m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()) );
+    m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
+    m_ui->patientSize->setValue(patient()->value(Core::Patient::Size).toInt());
+    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
+    m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinin).toDouble());
+    m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAllergies).toString());
+    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
 }
 
-/** \brief Close the main window and the application */
+/**
+  \brief Close the main window and the application
+  \todo Add  ICoreListener
+*/
 void MainWindow::closeEvent( QCloseEvent *event )
 {
     Utils::Log::addMessage(this, "Closing MainWindow");
-    writeSettings();
+    Core::ICore::instance()->requestSaveSettings();
+
+    //    const QList<ICoreListener *> listeners =
+    //        ExtensionSystem::PluginManager::instance()->getObjects<Core::ICoreListener>();
+    //    foreach (Core::ICoreListener *listener, listeners) {
+    //        if (!listener->coreAboutToClose()) {
+    //            event->ignore();
+    //            return;
+    //        }
+    //    }
+
+    // Save exchange file
     QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
-    if (exfile.isEmpty()) {
-        event->accept();
-        return;
-    }
-    if (!QFile(exfile).exists()) {
+    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
         Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
+    } else if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
+        Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
+        Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
+        // if is a medintux plugins --> save prescription to exchange file
+        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
+            tmp.replace("font-weight:bold;", "font-weight:600;");
+            Utils::saveStringToFile(Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser);
+        } else {
+            savePrescription(exfile);
+        }
     }
-    Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
-    Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
-    // if is a medintux plugins --> save prescription to exchange file
-    if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
-        QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
-        tmp.replace("font-weight:bold;", "font-weight:600;");
-        Utils::saveStringToFile( Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser );
-    } else {
-        savePrescription(exfile);
-    }
+
+    Core::ICore::instance()->coreIsAboutToClose();
+    writeSettings();
     event->accept();
 }
 

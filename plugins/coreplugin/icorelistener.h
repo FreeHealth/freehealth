@@ -36,81 +36,62 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESMODEL_H
-#define TEMPLATESMODEL_H
+#ifndef ICORELISTENER_H
+#define ICORELISTENER_H
 
-#include <templatesplugin/templates_exporter.h>
-#include <templatesplugin/itemplates.h>
+#include <coreplugin/core_exporter.h>
 
-#include <QSqlTableModel>
-#include <QStringList>
-#include <QObject>
+#include <QtCore/QObject>
+class QSplashScreen;
+class QPixmap;
+class QWidget;
+class QString;
 
 /**
- * \file templatesmodel.h
+ * \file icorelistener.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.2
- * \date 10 Jan 2009
+ * \version 0.3.0
+ * \date 28 Jan 2010
 */
 
+/**
+  \class Core::ICoreListener
 
-namespace Templates {
-namespace Internal {
-class TemplatesModelPrivate;
-}  // end namespace Internal
+  \brief Provides a hook for plugins to veto on certain events emitted from
+the core plugin.
 
+  You implement this interface if you want to prevent certain events from
+  occurring, e.g.  if you want to prevent the closing of the whole application
+  or to prevent the closing of an editor window under certain conditions.
 
-class TEMPLATES_EXPORT TemplatesModel : public QAbstractItemModel
+  If e.g. the application window requests a close, then first
+  ICoreListener::coreAboutToClose() is called (in arbitrary order) on all
+  registered objects implementing this interface. If one if these calls returns
+  false, the process is aborted and the event is ignored.  If all calls return
+  true, the corresponding signal is emitted and the event is accepted/performed.
+
+  Guidelines for implementing:
+  \list
+  \o Return false from the implemented method if you want to prevent the event.
+  \o You need to add your implementing object to the plugin managers objects:
+     ExtensionSystem::PluginManager::instance()->addObject(yourImplementingObject);
+  \o Don't forget to remove the object again at deconstruction (e.g. in the destructor of
+     your plugin).
+*/
+
+namespace Core {
+
+class CORE_EXPORT ICoreListener : public QObject
 {
     Q_OBJECT
-    friend class Internal::TemplatesModelPrivate;
 public:
-    TemplatesModel(QObject * parent = 0);
-    ~TemplatesModel();
-    bool setCurrentUser(const QString &uuid);
+    ICoreListener(QObject *parent) : QObject(parent) {}
+    virtual ~ICoreListener() {}
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index) const;
-    bool reparentIndex(const QModelIndex &item, const QModelIndex &parent);
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    Qt::DropActions supportedDropActions() const;
-
-    bool insertTemplate(const Templates::ITemplate *t);
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool insertRow(int row, const QModelIndex &parent = QModelIndex()) {return insertRows(row,1,parent);}
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRow(int row, const QModelIndex &parent = QModelIndex()) {return removeRows(row,1,parent);}
-
-    QStringList mimeTypes() const;
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    QModelIndex getTemplateId(const int id);
-    QList<QPersistentModelIndex> getIndexesFromMimeData(const QMimeData *mime);
-
-    bool isTemplate(const QModelIndex &index) const;
-    bool isCategory(const QModelIndex &index) const {return !isTemplate(index);}
-
-    void categoriesOnly();
-    bool isCategoryOnly() const;
-
-    bool isDirty() const;
-
-public Q_SLOTS:
-    bool submit();
-
-private:
-    Internal::TemplatesModelPrivate *d;
+    virtual bool coreAboutToClose() {return true;}
 };
 
-}  // end namespace Templates
+} // namespace Core
 
-
-#endif // TEMPLATESMODEL_H
+#endif // ICORELISTENER_H

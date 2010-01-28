@@ -48,6 +48,14 @@ class QPixmap;
 class QWidget;
 class QString;
 
+/**
+ * \file icore.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.3.0
+ * \date 28 Jan 2010
+*/
+
+
 namespace Utils {
 class UpdateChecker;
 }
@@ -124,6 +132,9 @@ public:
 //    virtual QPrinter *printer() const = 0;
 //
 //    virtual QString resourcePath() const = 0;
+
+    void coreIsAboutToClose() { Q_EMIT coreAboutToClose(); }
+    void requestSaveSettings() { Q_EMIT saveSettingsRequested(); }
 
 Q_SIGNALS:
     void coreAboutToOpen();

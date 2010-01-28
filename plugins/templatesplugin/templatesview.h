@@ -71,6 +71,7 @@ public:
     };
 
     enum EditMode {
+        None       = 0x00,
         Add        = 0x01,
         Remove     = 0x02,
         Edit       = 0x04,

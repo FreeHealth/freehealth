@@ -4,6 +4,7 @@ HEADERS += \
     $${PWD}/constants.h \
     $${PWD}/uniqueidmanager.h \
     $${PWD}/icore.h \
+    $${PWD}/icorelistener.h \
     $${PWD}/itheme.h \
     $${PWD}/theme.h \
     $${PWD}/translators.h \
@@ -14,8 +15,6 @@ HEADERS += \
     $${PWD}/ioptionspage.h \
     $${PWD}/iformwidgetfactory.h \
     $${PWD}/imainwindow.h \
-#    $${PWD}/mfObject.h \
-#    $${PWD}/mfObjectFundamental.h \
     $${PWD}/iformio.h \
     $${PWD}/iformitem.h \
     $${PWD}/iformitemspec.h \

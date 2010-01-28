@@ -382,16 +382,29 @@ public Q_SLOTS:
     QMenu *getContextMenu()
     {
         QMenu *menu = new QMenu(tkTr(Trans::Constants::TEMPLATES), q);
-        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
-        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
-        menu->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
-        return menu;
+        QList<QAction *> list;
+        list    << actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action()
+                << actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action()
+                << actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action();
+        bool returnMenu = false;
+        foreach(QAction *action, list) {
+            if (action->isEnabled()) {
+                returnMenu = true;
+                break;
+            }
+        }
+        if (returnMenu)
+            return menu;
+        else
+            return 0;
     }
     void contextMenu(const QPoint &p)
     {
         QMenu *pop = getContextMenu();
-        pop->popup(m_ui->categoryTreeView->mapToGlobal(p));
-        pop->exec();
+        if (pop) {
+            pop->popup(m_ui->categoryTreeView->mapToGlobal(p));
+            pop->exec();
+        }
     }
     void on_ModelAboutToReset() {
         /** \todo Store the expanded indexes of the view and restore when view resets. */
