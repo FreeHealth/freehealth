@@ -11,7 +11,6 @@
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="108"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="130"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="170"/>
         <source>Drug Dosage Creator</source>
         <translation>Medikamenten Dosis Creator</translation>
     </message>
@@ -27,203 +26,64 @@
     </message>
 </context>
 <context>
-    <name>DosageDialog</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageDialog.cpp" line="109"/>
-        <source>Drug Dosage</source>
-        <translation>Medikamenten Dosis</translation>
-    </message>
-</context>
-<context>
-    <name>DosageViewer</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="421"/>
-        <source>Drug Dosage Creator</source>
-        <translation>Medikamenten Dosis Creator</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="585"/>
-        <source>Clear this list</source>
-        <comment>Clear the user&apos;s intakes recorded forms</comment>
-        <translation>Lösche diese Liste</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="623"/>
-        <source>Linking to : </source>
-        <translation>Verbinden mit:</translation>
-    </message>
-</context>
-<context>
-    <name>DrugInfoPrivate</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="127"/>
-        <source>INN Informations will be lost.
-Do you want to send them ?</source>
-        <translation>INN Informationen werden verschwinden.
-Möchten sie diese senden?</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="194"/>
-        <source>Testing : </source>
-        <translation>Testen:</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="200"/>
-        <source>All interactions found.
-</source>
-        <translation>Alle Interaktionen gefunden.
-</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="202"/>
-        <source>*** Missing interactions.
-</source>
-        <translation>*** Fehlende Interaktionen.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="206"/>
-        <source>All interactions are OK.
-</source>
-        <translation>Alle Interaktionen sind OK.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="208"/>
-        <source>*** Wrong interactions.
-</source>
-        <translation>*** Falsche Interaktionen.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="212"/>
-        <source>IAM Text is correct.
-</source>
-        <translation>IAM Text ist korrekt.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="214"/>
-        <source>*** IAM Text is incorrect.
-</source>
-        <translation>*** IAM Text ist nicht korrekt.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="218"/>
-        <source>CAT Text is correct.
-</source>
-        <translation>CAT Text ist korrekt.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="220"/>
-        <source>*** CAT Text is incorrect.
-</source>
-        <translation>*** CAT Text ist nicht korrekt.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="223"/>
-        <source>Message : </source>
-        <translation>Nachricht:</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="229"/>
-        <source>Checked interactions : </source>
-        <translation>Gecheckte Interaktionen:</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="255"/>
-        <source>ERROR : %1
-</source>
-        <translation>ERROR: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DrugSelector</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="139"/>
-        <source>Selected drugs historic.</source>
-        <translation>Gewählte Medikamentenhistorie.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="240"/>
-        <source>Short Name</source>
-        <translation>Kurzer Name</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="241"/>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="242"/>
-        <source>Administration</source>
-        <translation>Administration</translation>
-    </message>
-</context>
-<context>
-    <name>DrugsCentralWidget</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="167"/>
-        <source>Can not add this drug to your prescription.</source>
-        <translation>Kann dieses Medikament nicht zu dem Rezept hinzufügen.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="168"/>
-        <source>Prescription can not contains twice the sample pharmaceutical drug.
-Drug %1 is already in your prescription</source>
-        <translation>Rezept kann nicht 2 Mal das selbe Medikament beinhalten
-Medikament %1 ist bereits im Rezept</translation>
-    </message>
+    <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="171"/>
+        <source>Can not add this drug to your prescription.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="172"/>
+        <source>Prescription can not contains twice the sample pharmaceutical drug.
+Drug %1 is already in your prescription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="175"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
-        <translation>Wenn Sie die Dosis dieses Medikamentes ändern möchten, doppelklicken sie bitte in die Rezept Box.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="201"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="205"/>
         <source>Made with FreeDiams.</source>
-        <translation>Erstellt mit FreeDiams.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="213"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="217"/>
         <source>Made with FreeMedForms.</source>
-        <translation>Erstellt mit FreeMedForms.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>DrugsExtraOptionsPage</name>
+    <name>DrugsWidget::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="258"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="261"/>
         <source>Drug Extras</source>
-        <translation>Medikamenten Extras</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>DrugsPrintOptionsPage</name>
+    <name>DrugsWidget::DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="145"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="146"/>
         <source>Drugs Printing</source>
-        <translation>Medikamente drucken</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>DrugsPrintWidget</name>
+    <name>DrugsWidget::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="444"/>
-        <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
-        <translation>Dies ist eine Notiz für Ihren Account&lt;br /&gt;geschrieben in zwei Zeilen...</translation>
-    </message>
-</context>
-<context>
-    <name>DrugsUserOptionsPage</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="202"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="204"/>
         <source>Drugs User</source>
-        <translation>Medikamenten Benutzer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>DrugsViewOptionsPage</name>
+    <name>DrugsWidget::DrugsViewOptionsPage</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="84"/>
         <source>Drugs View</source>
-        <translation>Medikamentenübersicht</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -314,6 +174,11 @@ Medikament %1 ist bereits im Rezept</translation>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="170"/>
+        <source>Drug Dosage Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::Internal::DosageDialog</name>
@@ -339,6 +204,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageDialog.cpp" line="109"/>
+        <source>Drug Dosage</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -724,6 +594,22 @@ p, li { white-space: pre-wrap; }
         <source>Alternate with</source>
         <translation>Austauschbar mit</translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="421"/>
+        <source>Drug Dosage Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="585"/>
+        <source>Clear this list</source>
+        <comment>Clear the user&apos;s intakes recorded forms</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="623"/>
+        <source>Linking to : </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::Internal::DrugInfo</name>
@@ -827,11 +713,105 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>DrugsWidget::Internal::DrugInfoPrivate</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="127"/>
+        <source>INN Informations will be lost.
+Do you want to send them ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="194"/>
+        <source>Testing : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="200"/>
+        <source>All interactions found.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="202"/>
+        <source>*** Missing interactions.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="206"/>
+        <source>All interactions are OK.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="208"/>
+        <source>*** Wrong interactions.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="212"/>
+        <source>IAM Text is correct.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="214"/>
+        <source>*** IAM Text is incorrect.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="218"/>
+        <source>CAT Text is correct.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="220"/>
+        <source>*** CAT Text is incorrect.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="223"/>
+        <source>Message : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="229"/>
+        <source>Checked interactions : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="255"/>
+        <source>ERROR : %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::Internal::DrugSelector</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.ui" line="14"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="241"/>
         <source>Form</source>
         <translation>Formular</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="139"/>
+        <source>Selected drugs historic.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="240"/>
+        <source>Short Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="242"/>
+        <source>Administration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -920,6 +900,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="397"/>
         <source>Print duplicatas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="425"/>
+        <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1048,8 +1033,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="82"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="87"/>
         <source>Synthetic interactions</source>
         <translation>Künstliche Interaktionen</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="119"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="121"/>
+        <source>Made with FreeDiams.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1083,23 +1075,6 @@ p, li { white-space: pre-wrap; }
         <source>100%</source>
         <translation type="unfinished">100%</translation>
     </message>
-</context>
-<context>
-    <name>InteractionDialog</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="87"/>
-        <source>Synthetic interactions</source>
-        <translation>Künstliche Interaktionen</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="119"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="121"/>
-        <source>Made with FreeDiams.</source>
-        <translation>Erstellt mit FreeDiams.</translation>
-    </message>
-</context>
-<context>
-    <name>TextualPrescriptionDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.cpp" line="66"/>
         <source>Text can not contain any &apos;[&apos; or &apos;]&apos;.</source>

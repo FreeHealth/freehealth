@@ -39,6 +39,8 @@
 #include "templatespreferencespages.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
 #include <utils/log.h>
 
@@ -71,6 +73,10 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

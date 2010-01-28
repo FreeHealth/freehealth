@@ -21,8 +21,10 @@ SOURCES = mainwindowplugin.cpp \
 FORMS = mainwindow.ui \
     mainwindowpreferenceswidget.ui
 
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/fdmainwindowplugin_de.ts
+# Translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_es.ts
 
 OTHER_FILES = MainWindow.pluginspec
 

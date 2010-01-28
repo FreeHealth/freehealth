@@ -150,9 +150,6 @@
         <source>Cells background color</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>TablePropertiesWidget</name>
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="50"/>
         <source>None</source>
@@ -210,22 +207,22 @@
     </message>
 </context>
 <context>
-    <name>TextEditor</name>
+    <name>Editor::TextEditor</name>
     <message>
         <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="339"/>
         <source>HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)</source>
-        <translation>HTML dateien (*.htm *.html);;Textdateien (*.txt);;Alle Dateien (*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="359"/>
         <source>HTML-Files (*.htm *.html);;All Files (*)</source>
-        <translation>HTML Dateien (*htm *html);;Alle Dateien (*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="377"/>
         <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="379"/>
         <source>Font format</source>
-        <translation>Schriftformat</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

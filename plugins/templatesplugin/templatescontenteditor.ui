@@ -23,7 +23,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Content Editor</string>
+      <string>Content editor</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

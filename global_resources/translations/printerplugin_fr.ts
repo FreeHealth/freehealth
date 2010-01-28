@@ -88,13 +88,10 @@
         <source>Duplicatas only</source>
         <translation>Duplicatas seulement</translation>
     </message>
-</context>
-<context>
-    <name>Printer</name>
     <message>
         <location filename="../../plugins/printerplugin/printer.cpp" line="777"/>
         <source>Print Document</source>
-        <translation>Imprimer le document</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

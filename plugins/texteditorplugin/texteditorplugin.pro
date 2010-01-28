@@ -22,6 +22,9 @@ SOURCES = texteditorplugin.cpp \
 FORMS = tabledialog.ui \
     tablepropertieswidget.ui \
     tablepropertiesdialog.ui
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/texteditorplugin_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/texteditorplugin_de.ts
+
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/texteditorplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/texteditorplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/texteditorplugin_es.ts
+
 OTHER_FILES = TextEditor.pluginspec

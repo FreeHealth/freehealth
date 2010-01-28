@@ -111,18 +111,11 @@
 <context>
     <name>Serializer</name>
     <message>
-        <location filename="../../libs/utils/serializer.cpp" line="123"/>
-        <location filename="../../libs/utils/serializer.cpp" line="184"/>
+        <location filename="../../libs/utils/serializer.cpp" line="283"/>
+        <location filename="../../libs/utils/serializer.cpp" line="344"/>
+        <location filename="../../libs/utils/serializer.cpp" line="402"/>
         <source>Can not deserialize to QHash.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UpdateChecker</name>
-    <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="286"/>
-        <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation>Une mise à jour est disponible. Veuillez vérifier le site internet : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -186,48 +179,48 @@
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="438"/>
+        <location filename="../../libs/utils/global.cpp" line="440"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="497"/>
+        <location filename="../../libs/utils/global.cpp" line="499"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="498"/>
+        <location filename="../../libs/utils/global.cpp" line="500"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer votre problème : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="539"/>
-        <location filename="../../libs/utils/global.cpp" line="540"/>
+        <location filename="../../libs/utils/global.cpp" line="541"/>
+        <location filename="../../libs/utils/global.cpp" line="542"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="551"/>
+        <location filename="../../libs/utils/global.cpp" line="553"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="559"/>
+        <location filename="../../libs/utils/global.cpp" line="561"/>
         <source>Do you agree these terms ?</source>
         <translation>Acceptez-vous les termes de la licence ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="613"/>
+        <location filename="../../libs/utils/global.cpp" line="615"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="618"/>
+        <location filename="../../libs/utils/global.cpp" line="620"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="965"/>
+        <location filename="../../libs/utils/global.cpp" line="967"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -243,6 +236,14 @@
         <location filename="../../libs/utils/updatechecker.cpp" line="151"/>
         <source>* Updates of version : %1</source>
         <translation>* Mises à jour de la version : %1</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::UpdateChecker</name>
+    <message>
+        <location filename="../../libs/utils/updatechecker.cpp" line="286"/>
+        <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0" language="es_ES">
 <context>
     <name>MedinTux::Configuration</name>
     <message>
@@ -49,12 +49,12 @@
     <message>
         <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="227"/>
         <source>MedinTux Detected : Starting as a MedinTux Plugin</source>
-        <translation>MedinTux détecté : Démarre comme plugins de MedinTux</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="229"/>
         <source>MedinTux Detected : Using ini file %1</source>
-        <translation>MedinTux détecté : Utilise le fichier de paramètres %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -22,7 +22,9 @@ SOURCES = printerplugin.cpp \
 
 FORMS = printerpreviewer_p.ui
 
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/printerplugin_fr.ts \
-                $${SOURCES_GLOBAL_RESOURCES}/translations/printerplugin_de.ts
+# Translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/printerplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/printerplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/printerplugin_es.ts
 
 OTHER_FILES = Printer.pluginspec

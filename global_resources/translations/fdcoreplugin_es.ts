@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.0" language="es_ES">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.cpp" line="60"/>
         <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeDiams&lt;/b&gt;&lt;br /&gt;Copyright (C) 2008-2009 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This application is a stable release but can still contains some bugs.&lt;br /&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more informations.&lt;br /&gt;&lt;a href=&quot;%1&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=center&gt;&lt;b&gt;Willkommen zu FreeDiams&lt;/b&gt;&lt;br /&gt;Copyright (C) 2008-2009 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;Diese Applikation ist ein Stabiles Release aber es kann noch einige Bugs beinhalten&lt;br /&gt;Diese Software wurde ohne jegliche Gewährleistung  und nur zu Testzwecken veröffentlicht.&lt;br /&gt;Bitte schauen Sie auf der Webseite nach weiteren Informationen&lt;br /&gt;&lt;a href=&quot;%1&quot;&gt;Webseite&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15,12 +15,12 @@
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="174"/>
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="176"/>
         <source>Core intialization finished...</source>
-        <translation>Kern Initialisierung beendet...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="270"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
-        <translation>Sie benutzen eine neue Version von FreeDiams, bitte bestätigen Sie die Lizentbestimmungen erneut.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="32"/>
         <source>Application name</source>
-        <translation>Anwendungsname</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -57,12 +57,12 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="55"/>
         <source>1. General</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="56"/>
         <source>Application</source>
-        <translation>Anwendung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -78,12 +78,12 @@
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="68"/>
         <source>5. Command line</source>
-        <translation>5. Kommandozeile</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="69"/>
         <source>Application</source>
-        <translation>Anwendung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -91,32 +91,32 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="34"/>
         <source>Show debugging informations</source>
-        <translation>Schaue debugging Informationen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="118"/>
         <source>Send to dev team</source>
-        <translation>Sende an das Entwicklerteam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="125"/>
         <source>Save log</source>
-        <translation>Speichere Log</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="151"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="164"/>
         <source>Ok</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="183"/>
@@ -148,12 +148,12 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="14"/>
         <source>Options</source>
-        <translation>Optionen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="34"/>
         <source>0</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -504,7 +504,7 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/theme.cpp" line="184"/>
         <source>ERROR - Theme : Unable to load icon file %1</source>
-        <translation>Error Thema Kann die Icon Datei nicht verwenden %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

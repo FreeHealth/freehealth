@@ -14,120 +14,205 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     </message>
 </context>
 <context>
-    <name>DosageModel</name>
+    <name>DrugsBase</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="878"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="903"/>
+        <source>ERROR : will retreiving %1. Wrong number of fields</source>
+        <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="278"/>
+        <source>This INN is present more than one time in this prescrition.</source>
+        <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsDB::DrugsIO</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="233"/>
+        <source>Dosages transmitted.</source>
+        <translation>Posologies transmises.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="236"/>
+        <source>Dosage not correctly transmitted</source>
+        <translation>Posologies incorrectement transmises</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="260"/>
+        <source>Unable to load XML prescription : tag %1 is missing</source>
+        <translation>Impossible d&apos;ouvrir la prescription XML : le tag %1 est manquant</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="291"/>
+        <source>Unable to read xml prescription</source>
+        <translation>Impossible de lire la prescription XML</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="323"/>
+        <source>Xml prescription correctly read.</source>
+        <translation>Prescription XML correctement ouverte.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="356"/>
+        <source>No file name passed to load prescription</source>
+        <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="519"/>
+        <source>Save test only drugs too ?</source>
+        <translation>Sauvegarder les médicaments tests aussi ?</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="520"/>
+        <source>Drugs added for testing only are actually hidden in this prescription.
+Do you want to add them to the file ?</source>
+        <translation>Les médicaments tests sont actuellement cachés dans la prescription.
+Voulez-vous les ajouter au fichier ?</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="522"/>
+        <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
+        <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsDB::InteractionsManager</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="327"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="361"/>
+        <source>Nature of the risk: </source>
+        <translation>Nature du risque : </translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="332"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="366"/>
+        <source>What to do: </source>
+        <translation>Conduite à tenir : </translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="341"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="375"/>
+        <source>Interaction(s) Found : </source>
+        <translation>Interactions trouvées : </translation>
+    </message>
+</context>
+<context>
+    <name>DrugsDB::Internal::DosageModel</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="137"/>
         <source>complet tab.</source>
-        <translation>comprimé complet.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="138"/>
         <source>half tab.</source>
-        <translation>demi-comprimé.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="139"/>
         <source>quater tab.</source>
-        <translation>quart de comprimé.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="143"/>
         <source>dose per kilograms</source>
-        <translation>dose par kilogrammes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="144"/>
         <source>reference spoon</source>
-        <translation>cuillère-mesure</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="145"/>
         <source>2.5 ml spoon</source>
-        <translation>cuillère à café (2,5 ml)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="146"/>
         <source>5 ml spoon</source>
-        <translation>cuillère à soupe (5 ml)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="147"/>
         <source>puffs</source>
-        <translation>boufféées</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="148"/>
         <source>dose</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="149"/>
         <source>mouthwash</source>
-        <translation>bain de bouche</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="150"/>
         <source>inhalation</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="151"/>
         <source>application</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="152"/>
         <source>washing</source>
-        <translation>lavage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="153"/>
         <source>shampooing</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="154"/>
         <source>eyewash</source>
-        <translation>lavement oculaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="155"/>
         <source>instillation</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="156"/>
         <source>pulverization</source>
-        <translation>pulvérisation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="284"/>
         <source>Model Error : unable to insert a row</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="413"/>
         <source>The dosage must be labelled.</source>
-        <translation>La posologie doit être nommée.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="416"/>
         <source>The intakes&apos; scheme must be defined.</source>
-        <translation>Le schéma de prise doit être renseigné.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="418"/>
         <source>The period&apos;s scheme must be defined.</source>
-        <translation>La période doit être renseignée.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="421"/>
         <source>The duration&apos;s scheme must be defined.</source>
-        <translation>La durée doit être renseignée.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>DrugsBase</name>
+    <name>DrugsDB::Internal::DrugsBase</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="233"/>
         <source>FATAL ERROR : SQLite driver is not available.</source>
@@ -141,7 +226,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="235"/>
         <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
-        <translation>Le pilote de base de données SQLite n&apos;est pas installé ou est introuvable. Veuillez reporter cette erreur à l&apos;équipe de développement.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="253"/>
@@ -163,17 +248,6 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
         <source>Unable to update transmission date dosage</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="878"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="903"/>
-        <source>ERROR : will retreiving %1. Wrong number of fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="278"/>
-        <source>This INN is present more than one time in this prescrition.</source>
-        <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
-    </message>
 </context>
 <context>
     <name>DrugsData</name>
@@ -189,87 +263,16 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     </message>
 </context>
 <context>
-    <name>DrugsIO</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="230"/>
-        <source>Dosages transmitted.</source>
-        <translation>Posologies transmises.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="233"/>
-        <source>Dosage not correctly transmitted</source>
-        <translation>Posologies ne sont pas correctement transmises</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="257"/>
-        <source>Unable to load XML prescription : tag %1 is missing</source>
-        <translation>Impossible de lire la prescription XML : le tag %1 est manquant</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="287"/>
-        <source>Unable to read xml prescription</source>
-        <translation>Impossible de lire la prescription XML</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="319"/>
-        <source>Xml prescription correctly read.</source>
-        <translation>La prescription XML a été correctement lue.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="352"/>
-        <source>No file name passed to load prescription</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="450"/>
-        <source>Save test only drugs too ?</source>
-        <translation>Sauvegarder les médicaments tests aussi ?</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="451"/>
-        <source>Drugs added for testing only are actually hidden in this prescription.
-Do you want to add them to the file ?</source>
-        <translation>Les médicaments qui ont été ajoutés à visée de tests uniquement sont cachés.
-Voulez-vous les ajouter à la sauvegarde ?</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="453"/>
-        <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
-        <translation>En répondant &apos;non&apos; vous perdrez définitivement les médicaments tests lors du prochain chargement de cette prescription.</translation>
-    </message>
-</context>
-<context>
     <name>DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="178"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="184"/>
         <source>x %1 of %2</source>
         <translation>x %1 de %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="193"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="199"/>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
-    </message>
-</context>
-<context>
-    <name>InteractionsManager</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="327"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="361"/>
-        <source>Nature of the risk: </source>
-        <translation>Nature du risque :</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="332"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="366"/>
-        <source>What to do: </source>
-        <translation>Conduite à tenir :</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="341"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="375"/>
-        <source>Interaction(s) Found : </source>
-        <translation>Interaction(s) trouvée(s) :</translation>
     </message>
 </context>
 <context>
@@ -277,7 +280,7 @@ Voulez-vous les ajouter à la sauvegarde ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="72"/>
         <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ tous les [[PERIOD] ][PERIOD_SCHEME] ][ pendant [D_FROM]][ à [D_TO]][ [D_SCHEME]][&lt;br /&gt;Répartition journalière : [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ tous les [[PERIOD] ][PERIOD_SCHEME] ][ pendant [D_FROM]][ à [D_TO]][ [D_SCHEME]][&lt;br /&gt;Répartition journalière : [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="73"/>

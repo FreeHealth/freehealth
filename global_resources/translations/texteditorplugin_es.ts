@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0" language="es_ES">
 <context>
     <name>Editor::Internal::TableDialog</name>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="23"/>
         <source>Table creation</source>
-        <translation>Création de tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="42"/>
         <source>Rich Text Editor Table Creator</source>
-        <translation>Assistant de création de tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="65"/>
         <source>Size of the table</source>
-        <translation>Taille du tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="83"/>
         <source>Number of columns</source>
-        <translation>Nombre de colonnes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="143"/>
         <source>Number of rows</source>
-        <translation>Nombre de lignes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="200"/>
         <source>Format of the table</source>
-        <translation>Format du tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="218"/>
         <source>Cell spacing</source>
-        <translation>Espacement des cellules</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="272"/>
         <source>Cell padding</source>
-        <translation>Espacement dans la cellule</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="326"/>
         <source>Border</source>
-        <translation>Bordure</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="383"/>
         <source>Table headers</source>
-        <translation>Entête de tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="395"/>
         <source>You can define the first row as header. The table header row get repeated when a table is broken across a page boundary.</source>
-        <translation>Vous pouvez définir la première ligne du tableau comme entête de tableau. Cette entête sera répétée si tableau se trouve coupé par un saut de page.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tabledialog.ui" line="398"/>
         <source>Define the first row as header</source>
-        <translation>Définir la première ligne comme entête de tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -88,12 +88,7 @@
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="30"/>
         <source>Border</source>
-        <translation type="unfinished">Bordure</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="121"/>
-        <source>Cell padding</source>
-        <translation type="unfinished">Espacement dans la cellule</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="36"/>
@@ -128,7 +123,12 @@
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="114"/>
         <source>Cell spacing</source>
-        <translation type="unfinished">Espacement des cellules</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="121"/>
+        <source>Cell padding</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/texteditorplugin/tablepropertieswidget.ui" line="141"/>

@@ -48,5 +48,6 @@ SOURCES += global.cpp \
     widgets/spinboxdelegate.cpp
 
 # translators
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/utils_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/utils_de.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
+                $${SOURCES_TRANSLATIONS}/utils_de.ts \
+                $${SOURCES_TRANSLATIONS}/utils_es.ts

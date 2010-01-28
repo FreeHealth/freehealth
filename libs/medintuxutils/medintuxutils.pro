@@ -23,6 +23,7 @@ HEADERS += configuration.h \
 exists( $${SOURCES_PROTECTED_PATH} ):SOURCES += $${SOURCES_PROTECTED_PATH}/medintuxtoolkit/configuration_pro.cpp
 else:SOURCES += configuration.cpp
 
-# translators
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/medintuxtoolkit_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/medintuxtoolkit_de.ts
+# Translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/medintuxtoolkit_fr.ts \
+                $${SOURCES_TRANSLATIONS}/medintuxtoolkit_de.ts \
+                $${SOURCES_TRANSLATIONS}/medintuxtoolkit_es.ts

@@ -10,12 +10,14 @@ include( ../libsworkbench.pri )
 
 CONFIG *= dll
 
-# translators
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/translationutils_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/translationutils_de.ts
-
-HEADERS += translationutils_exporter.h \
+HEADERS += \
+    translationutils_exporter.h \
     constanttranslations.h \
     multilingualclasstemplate.h
 
 SOURCES += constanttranslations.cpp
+
+# translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/translationutils_fr.ts \
+                $${SOURCES_TRANSLATIONS}/translationutils_de.ts \
+                $${SOURCES_TRANSLATIONS}/translationutils_es.ts

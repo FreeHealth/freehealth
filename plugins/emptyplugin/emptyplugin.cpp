@@ -36,6 +36,10 @@
 
 #include <utils/log.h>
 
+#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
@@ -64,6 +68,10 @@ void EmptyPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 

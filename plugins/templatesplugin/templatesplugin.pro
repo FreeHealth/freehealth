@@ -28,3 +28,8 @@ FORMS += templatesview.ui \
     templatescontenteditor.ui \
     templatespreferenceswidget.ui \
     templatescreationdialog.ui
+
+# Translators
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/templatesplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/templatesplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/templatesplugin_es.ts

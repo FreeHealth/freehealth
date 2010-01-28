@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.0" language="es_ES">
 <context>
     <name>MainWin</name>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/medintux.cpp" line="43"/>
         <source>Can not configure MedinTux</source>
-        <translation>Kann MedinTux nicht configurieren</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14,12 +14,12 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="24"/>
         <source>Patient Name</source>
-        <translation>Patienten Name</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="34"/>
         <source>Patient informations</source>
-        <translation>Patienteninformationen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="48"/>
@@ -34,42 +34,42 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="68"/>
         <source>Weight (kg)</source>
-        <translation>Gewicht (kg)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="88"/>
         <source>Size (cm)</source>
-        <translation>Umfang (cm)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="108"/>
         <source>Gender</source>
-        <translation>Geschlecht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="121"/>
         <source>M</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="126"/>
         <source>F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="138"/>
         <source>Creatinin clearance (ml/min)</source>
-        <translation>Kreatinin clearance (ml/min)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="158"/>
         <source>Creatinin (mg/l)</source>
-        <translation>Kreatinin (mg/l)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="182"/>
         <source>List of medications allergies</source>
-        <translation>Liste der unverträglichen Medikamente</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -187,7 +187,7 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="117"/>
         <source>Preparing dosage transmission</source>
-        <translation>Bereite Dosis Transmission vor</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -195,81 +195,77 @@
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="62"/>
         <source>Automatic configuration for MedinTux usage</source>
-        <translation>Automatische konfiguration für MedinTux</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="63"/>
         <source>This assistant will create a new entrie into the users&apos; menu of DrTux.
 You can create a new prescription by clicking this menu.
 Please take care that if DrTux&apos; location changes, or if FreeDiams&apos; location changes, you must reconfigure DrTux with this assitant.</source>
-        <translation>Der Assistent wird ein neuen Eintrag im Anwendermenü von DrTux anlegen.
-Sie können ein neues Rezept durch anklicken des Menüs erstellen.
-Bitte achten sie auf die lokalen Änderungen von DrTux oder FreeDiams.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="68"/>
         <source>This assistant will try to find your MedinTux path. If it doesn&apos;t, you will be asked about this place. Then it will configure a new user&apos;s menu for DrTux and create a new list in your prescription&apos;s default list.
 Please refer to the documentation.</source>
-        <translation>Der assistent wird versuchen MedinTux zu finden. Wenn er nichts findet werden sie gefragt werden.Dann werden anpassungen in DrTux gemacht.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="83"/>
         <source>Please select Manager&apos;s binary path</source>
-        <translation>Bitte wählen sie den Managers Pfad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="94"/>
         <source>Unable to configure MedinTux : Resources path does not exists. Path to DrTux binary : %1</source>
-        <translation>Kann MedinTux nicht konfigurieren Resources Pfad existiert nicht. Pfad zu DrTux binary %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="98"/>
         <source>Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1</source>
-        <translation>Kann MedinTux nicht konfigurieren. Menüpfad existiert nicht und kann nichr angelegt werden. Pfad zu Dr.Tux binary %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="109"/>
         <source>Can not deleted old DrugsInteractions menu entry %1</source>
-        <translation>Kann nicht alten DrugsInteraktions Menüeintrag löschen %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="115"/>
         <source>Unable to configure MedinTux : DrugsInteractions menu does not exists and can not be created. Path to DrTux binary : %1</source>
-        <translation>Kann MedinTux nicht konfigurieren.DrugsInteractions Menü existiert nicht und kann necht angelegt werden. Pfad zu DrTux binary %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="191"/>
         <source>DrTux is now fully configured for %1.</source>
-        <translation>DrTux ist nun voll konfiguriert für %1.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="192"/>
         <source>You can run %1 using DrTux User&apos;s Menu.</source>
-        <translation>Sie können %1 mit DrTux User&apos;s Menü benutzen.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="193"/>
         <source>If you encounter difficulties with DrTux integration, please refer to documentation of both applications.
 %1</source>
-        <translation>Wenn Schwierigkeiten bei der Dr Tux Intergration auftauchen, lesen sie die Bedienungsanleitung beider Applikationen
-%1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="195"/>
         <source>DrTux is not correctly configured.</source>
-        <translation>Dr Tux ist nicht korrekt konfiguriert.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="196"/>
         <source>This assitant encountered errors during its process.</source>
-        <translation>Der Assistent hatte Probleme während seines Prozesses.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="197"/>
         <source>This is the log of the processes 
 %1</source>
-        <translation>Dies ist der Log der Prozesse
-%1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -277,7 +273,7 @@ Please refer to the documentation.</source>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="25"/>
         <source>Prescribe with FreeDiams</source>
-        <translation>Verschreiben mit FreeDiams</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
