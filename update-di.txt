@@ -12,6 +12,7 @@ version=0.3.0
       * Possibilité de remettre aux valeurs par défaut les préférences de l'application
 
    * Modifications importantes :
+      * Préparation de l'application pour les traductions en espagnol
 
    * Correction de bogues / Améliorations techniques :
       * une traduction erronée

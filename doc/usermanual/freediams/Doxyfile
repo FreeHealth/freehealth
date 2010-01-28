@@ -572,6 +572,7 @@ INPUT                  = ../doc/usermanual/freediams \
                          ../doc/usermanual/drugswidget \
                          ../doc/usermanual/richtexteditor \
                          ../doc/usermanual/tokensmanager \
+                         ../doc/usermanual/templates \
                          ../doc/usermanual/versionning.qdoc
 
 # This tag can be used to specify the character encoding of the source files 
@@ -657,6 +658,7 @@ EXAMPLE_RECURSIVE      = NO
 
 IMAGE_PATH             = ../doc/usermanual/freediams \
                          ../doc/usermanual/drugswidget \
+                         ../doc/usermanual/templates \
                          ../global_resources/pixmap/16x16 \
                          ../doc/usermanual/richtexteditor
 

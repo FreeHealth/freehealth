@@ -1,0 +1,78 @@
+/** \page templates Utilisation des modèles de documents
+
+\section templates_general Les modèles
+
+Les applicatifs de FreeMedForms mettent à votre disposition un gestionnaire de modèles de documents.
+Ces modèles peuvent êetre hiérarchisés et stockés dans une base de données. \n
+L'exemple de \freediams permet de mieux comprendre leur utilité.
+Vous pouvez par exemple créer des catégories et y ajouter des  prescriptions
+types " complète (comprenant plusieurs médicaments).
+
+\image html templates_presentation.png Présentation du gestionnaire de modèles dans \freediams
+
+Le gestionnaire de modèles est accessible depuis le menu <b>Modèles/Modèles</b>. Le gestionnaire apparaît
+alors. Vous pouvez le déplacer à droite, à gauche ou à l'extérieur de la fenêtre de l'application.
+
+Vous pouvez vérouiller le gestionnaire grâce à l'icône 'Verrou' dans la barre inférieure du gestionnaire.
+
+\image html lock.png Gestionnaire vérouillé - cliquez pour dévérouiller
+\image html unlock.png Gestionnaire dévérouillé - cliquez pour vérouiller
+
+Lorsque le gestionnaire est vérouillé, l'utilisateur peut attraper des modèles et les déplacer dans
+les plugins adéquats, mais l'utilisateur ne peut plus déplacer les catégories/modèles au sein du
+gestionnaire, ni les supprimer ou les modifier. Utiliser le vérouillage lorsque l'édition des modèles est
+terminée afin d'assurer un meilleur fonctionnement du gestionnaire.
+
+
+\section templates_creation Création de modèles
+
+Chaque plugin permettant l'utilisation de modèles possède une action "Créer un modèle".
+\image html templates.png Créer un modèle
+
+Vous devez avant tout créer le document dans le plugin et ensuite lui demander de créer un nouveau modèle
+en cliquant sur cet icône. Dans l'exemple de \freediams, saisissez une prescription complète puis cliquez sur
+l'icône. \n
+Un dialogue apparaît alors. Renseignez le nom du modèle, la catégorie dans laquelle ranger ce modèle,
+et le résumé.
+
+\image html templates_creation.png Création d'un modèle dans \freediams
+
+
+\section templates_utilisation Utilisation des modèles
+
+Pour activer un modèle dans un plugin, attrapez avec la souris le (ou les) modèle(s) souhaité(s)
+et déposez les dans le fenêtre du plugin. Dans l'exemple de \freediams, déposez les modèles
+dans la vue de la prescription.
+
+\subsection templates_moving Déplacer les modèles / catégories
+
+Vous pouvez modifier votre hiérarchie grâce à la technique du glisser-déposer (drag and drop)
+ en déplaçant les modèles ou catégories. Pour ce faire, attrapez
+avec la souris l'item à déplacer, sans relâcher la souris déplacer l'item jusqu'à l'endroit souhaité, puis
+relâcher le bouton de la souris.
+glisser-déposer (drag and drop)
+
+Vous pouvez déplacer tout un tronçon de l'arborescence ou un item à la fois.
+
+
+\section templates_modification Éditer les modèles
+
+Sélectionnez le modèle ou la catégorie à modifier, cliquez droit ou cliquez sur l'icône d'édition.
+Le dialogue est semblable à celui de la création.
+
+
+\section templates_contentviewing Visualiser le contenu du modèle
+
+Vous pouvez visualiser le contenu du modèle mais pas le modifier à la main.\n
+Sélectionnez l'item, clique-droit puis Éditer enfin cliquez sur le bouton : 'Voir le contenu'.
+
+\section templates_preferences Les préférences du gestionnaire de modèles
+
+Le gestionnaire de modèles possède ses propres préférences. \n
+Ouvrez le dialogue préférences de l'application, pusi sélectionnez <b>Modèles</b>.
+
+\image html templates_preferences.png Préférences du gestionnaire de modèles
+
+\ref index
+*/
+

@@ -74,6 +74,7 @@
   \todo Don't get the contents of templates to memory
   \todo Detect corrupted templates database --> ask user what to do
   \todo Add user filter, MimeType filter
+  \todo Add a coreListener --> save templates database before closing application
 */
 
 

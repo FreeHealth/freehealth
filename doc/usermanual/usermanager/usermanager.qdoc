@@ -1,0 +1,24 @@
+/** \page usermanager_index Le gestionnaire d'utilisateur
+
+FreeMedForms est une application multi-utilisateur. Chaque utilisateur bénéficie de sa propre
+configuration. Cette configuration est disponible dans le gestionnaire d'utilisateur.
+
+\section usermanager_shortintro Introduction
+
+Le gestionnaire d'utilisateur permet de :
+- Créer un utilisateur
+- Renseigner l'identité et la fonction
+- Définir les droits de l'utilisateur
+- Définir les documents pour l'impression (entête, pied de page, tatouage d'impression)
+- Définir des utilisateurs délégués
+
+Il existe par défaut un super-utilisateur dont les droits sont universels. Cet utilisateur peut :
+- Créer de nouveaux utilisateurs
+- Supprimer des utilisateurs
+- Redéfinir des droits de tous les utilisateurs
+- Modifier le mot de passe de tous les utilisateurs
+- Laisser un message d'alerte aux utilisateurs (qui sera présenté au moment de l'identification)
+
+\ref index
+
+*/
