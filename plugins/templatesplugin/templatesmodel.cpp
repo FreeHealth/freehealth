@@ -97,7 +97,7 @@ namespace Internal {
 class TemplatesCoreListener : public Core::ICoreListener
 {
 public:
-    TemplatesCoreListener(Templates::TemplatesModel *parent)
+    TemplatesCoreListener(Templates::TemplatesModel *parent) : Core::ICoreListener(parent)
     {
         Q_ASSERT(parent);
         m_Model = parent;
@@ -110,11 +110,12 @@ public:
             bool yes = Utils::yesNoMessageBox(tr("Save templates ."),
                                    tr("Some datas are not actually saved into database."
                                       "Do you want to save them ?\n Answering 'No' will cause definitive data lose."),
-                                   "",);
+                                   "");
             if (yes) {
                 return m_Model->submit();
             } else {
-                return m_Model->revert();
+                m_Model->revert();
+                return true;
             }
         }
         return false;
