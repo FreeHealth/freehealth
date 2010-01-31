@@ -34,6 +34,7 @@
  ***************************************************************************/
 #include "drugsbaseplugin.h"
 #include "drugsdatabaseaboutpage.h"
+#include "drugstemplateprinter.h"
 
 #include <utils/log.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -46,8 +47,13 @@ using namespace DrugsDB;
 
 DrugsBasePlugin::DrugsBasePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating DrugsBasePlugin";
+    if (Utils::Log::warnPluginsCreation()) {
+#ifdef FREEDIAMS
+        qWarning() << "creating FREEDIAMS::DrugsBasePlugin";
+#else
+        qWarning() << "creating FREEMEDFORMS::DrugsBasePlugin";
+#endif
+    }
 }
 
 DrugsBasePlugin::~DrugsBasePlugin()
@@ -72,7 +78,7 @@ void DrugsBasePlugin::extensionsInitialized()
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsDatabaseAboutPage(this));
-
+    addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
 }
 
 

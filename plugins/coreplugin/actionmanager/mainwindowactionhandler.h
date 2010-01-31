@@ -130,6 +130,7 @@ protected:
     QAction *aSave;
     QAction *aSaveAs;
     QAction *aPrint;
+    QAction *aPrintPreview;
     QAction *aQuit;
 
     QAction *aUndo;

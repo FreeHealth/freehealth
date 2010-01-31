@@ -38,75 +38,97 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESPREFERENCESPAGES_H
-#define TEMPLATESPREFERENCESPAGES_H
+#ifndef TEMPLATEVIEW_P_H
+#define TEMPLATEVIEW_P_H
 
-#include <coreplugin/ioptionspage.h>
+#include <templatesplugin/templatesview.h>
 
+#include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/contextmanager/icontext.h>
+
+#include <QObject>
 #include <QPointer>
-
-#include "ui_templatespreferenceswidget.h"
-
-/**
- * \file templatespreferencespages.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 27 Dec 2009
-*/
-namespace Core {
-class ISettings;
-}
-
+#include <QDebug>
 
 namespace Templates {
 namespace Internal {
+class TemplatesViewContext : public Core::IContext
+{
+public:
+    TemplatesViewContext(Templates::TemplatesView *parent) : Core::IContext(parent), w(parent)
+    {
+    }
 
-class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferencesWidget
+    void addContext(int uid)
+    {
+        if (!m_Context.contains(uid))
+            m_Context.append(uid);
+    }
+    void clearContext() { m_Context.clear(); }
+
+    QList<int> context() const { return m_Context; }
+    QWidget *widget()          { return w; }
+
+private:
+    Templates::TemplatesView *w;
+    QList<int> m_Context;
+};
+
+
+
+class TemplatesViewActionHandler : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TemplatesPreferencesWidget)
-
 public:
-    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    TemplatesViewActionHandler(QObject *parent = 0);
+    virtual ~TemplatesViewActionHandler() {}
 
-    static void writeDefaultSettings(Core::ISettings *s);
-    static void appliFontToViews(const QFont &font);
+    void setCurrentView(Templates::TemplatesView *view);
 
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
+
+private Q_SLOTS:
+    void addCategory();
+    void removeItem();
+    void editCurrentItem();
+    void saveModel();
+    void print();
+    void lock();
+    void templatesViewItemChanged();
+
+private:
+//    bool canMoveUp();
+//    bool canMoveDown();
+    void updateActions();
 
 protected:
-    virtual void changeEvent(QEvent *e);
+    QAction *aAdd;
+    QAction *aRemove;
+    QAction *aEdit;
+    QAction *aPrint;
+    QAction *aSave;
+    QAction *aLocker;
+    QPointer<Templates::TemplatesView> m_CurrentView;
+    bool m_IsLocked;
 };
 
-class TemplatesPreferencesPage : public Core::IOptionsPage
+
+
+class TemplatesViewManager : public TemplatesViewActionHandler
 {
+    Q_OBJECT
 public:
-    TemplatesPreferencesPage(QObject *parent = 0);
-    ~TemplatesPreferencesPage();
+    static TemplatesViewManager *instance(QObject *parent);
+    ~TemplatesViewManager() {}
 
-    QString id() const;
-    QString name() const;
-    QString category() const;
+private Q_SLOTS:
+    void updateContext(Core::IContext *object);
 
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::TemplatesPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
+    TemplatesViewManager(QObject *parent = 0);
+    static TemplatesViewManager *m_Instance;
 };
 
+}  // End namespace Internal
+}  // End namespace Templates
 
-}
-}
-
-
-#endif // TEMPLATESPREFERENCESPAGES_H
+#endif // TEMPLATEVIEW_P_H

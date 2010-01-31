@@ -13,7 +13,8 @@ SUBDIRS = \
     drugsbase \
     usermanager \
     patientbase \
-    alerts
+    alerts \
+    templates
 
 core.subdir = fmfcoreplugin
 
@@ -45,12 +46,14 @@ aggir.depends += core
 drugs.subdir   = drugsplugin
 drugs.depends += core
 drugs.depends += drugsbase
-drugs.depends += printer
+#drugs.depends += printer
 drugs.depends += texteditor
-drugs.depends += listview
+drugs.depends += templates
 
 drugsbase.subdir = drugsbaseplugin
 drugsbase.depends += core
+drugsbase.depends += templates
+drugsbase.depends += printer
 
 usermanager.subdir   = usermanagerplugin
 usermanager.depends += core
@@ -63,3 +66,7 @@ patientbase.depends += core
 
 alerts.subdir = alertsplugin
 alerts.depends += core
+
+templates.subdir = templatesplugin
+templates.depends += core
+#templates.depends += mainwindow

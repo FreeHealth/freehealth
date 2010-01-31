@@ -48,11 +48,14 @@
 /**
  * \file printerplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.3.0
+ * \date 30 Jan 2010
 */
 
 namespace Print {
+namespace Internal {
+class PrinterPreferencesPage;
+}
 
 class PrinterPlugin : public ExtensionSystem::IPlugin
 {
@@ -63,6 +66,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    Print::Internal::PrinterPreferencesPage *prefPage;
 };
 
 

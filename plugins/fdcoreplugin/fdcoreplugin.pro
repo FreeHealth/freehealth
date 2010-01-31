@@ -30,4 +30,4 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdcoreplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/fdcoreplugin_de.ts \
                 $${SOURCES_TRANSLATIONS}/fdcoreplugin_es.ts
 
-#FORMS += mainwindow.ui
+OTHER_FILES += $${PWD}/Core.pluginspec

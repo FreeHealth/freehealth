@@ -110,11 +110,11 @@ void InteractionDialog::on_printButton_clicked()
     Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = s->value( Constants::S_USERHEADER ).toString();
+    QString header = s->value(DrugsDB::Constants::S_USERHEADER).toString();
     Core::ICore::instance()->patient()->replaceTokens(header);
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
     p.setHeader(header);
-    header = s->value( Constants::S_USERFOOTER ).toString();
+    header = s->value(DrugsDB::Constants::S_USERFOOTER).toString();
     header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeDiams.")));
     p.setFooter(header);

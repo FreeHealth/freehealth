@@ -41,6 +41,7 @@
 #include "mfDrugsPreferences.h"
 
 #include <drugsplugin/constants.h>
+#include <drugsplugin/drugswidgetmanager.h>
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -168,7 +169,7 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN);
     defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
-    defaultvalues.insert(Constants::S_PRINTDUPLICATAS, true);
+    defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -221,11 +222,11 @@ void DrugsUserOptionsPage::applyChanges()
 void DrugsUserOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
-    defaultvalues.insert(S_WATERMARKALIGNEMENT, Qt::AlignCenter);
-    defaultvalues.insert(S_WATERMARK_HTML, S_DEF_WATEMARKHTML);
-    defaultvalues.insert(S_USERHEADER, S_DEF_USERHEADER);
-    defaultvalues.insert(S_USERFOOTER, QVariant());
+    defaultvalues.insert(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
+    defaultvalues.insert(DrugsDB::Constants::S_WATERMARKALIGNEMENT, Qt::AlignCenter);
+    defaultvalues.insert(DrugsDB::Constants::S_WATERMARK_HTML, DrugsDB::Constants::S_DEF_WATEMARKHTML);
+    defaultvalues.insert(DrugsDB::Constants::S_USERHEADER, DrugsDB::Constants::S_DEF_USERHEADER);
+    defaultvalues.insert(DrugsDB::Constants::S_USERFOOTER, QVariant());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -357,6 +358,10 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
 
     s->setValue(S_VIEWFONT , viewFontCombo->currentFont());
     s->setValue(S_VIEWFONTSIZE, viewFontSizeSpin->value());
+    QFont font = viewFontCombo->currentFont();
+    font.setPointSize(viewFontSizeSpin->value());
+    DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
+
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
@@ -445,7 +450,7 @@ void DrugsPrintWidget::setDatasToUi()
     prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
     lineBreakCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS).toBool());
-    printDuplicataCheck->setChecked(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+    printDuplicataCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTDUPLICATAS).toBool());
 }
 
 void DrugsPrintWidget::resetToDefaultFormatting()
@@ -477,7 +482,7 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
-    s->setValue(Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
+    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
     s->sync();
 }
 
@@ -491,7 +496,7 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
                 qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
-    s->setValue(Constants::S_PRINTDUPLICATAS, true);
+    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
     s->sync();
 }
 
@@ -523,10 +528,10 @@ DrugsUserWidget::DrugsUserWidget(QWidget *parent) :
 void DrugsUserWidget::setDatasToUi()
 {
     Core::ISettings *s = settings();
-    previewer->setHeader(s->value(S_USERHEADER).toString());
-    previewer->setFooter(s->value(S_USERFOOTER).toString());
-    previewer->setWatermark(s->value(S_WATERMARK_HTML).toString(),
-                             Print::Printer::Presence(s->value(S_WATERMARKPRESENCE).toInt()));
+    previewer->setHeader(s->value(DrugsDB::Constants::S_USERHEADER).toString());
+    previewer->setFooter(s->value(DrugsDB::Constants::S_USERFOOTER).toString());
+    previewer->setWatermark(s->value(DrugsDB::Constants::S_WATERMARK_HTML).toString(),
+                             Print::Printer::Presence(s->value(DrugsDB::Constants::S_WATERMARKPRESENCE).toInt()));
 }
 
 void DrugsUserWidget::saveToSettings(Core::ISettings *sets)
@@ -537,10 +542,10 @@ void DrugsUserWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    s->setValue(S_USERHEADER, previewer->headerToHtml());
-    s->setValue(S_USERFOOTER, previewer->footerToHtml());
-    s->setValue(S_WATERMARKPRESENCE, previewer->watermarkPresence());
-    s->setValue(S_WATERMARK_HTML, previewer->watermarkToHtml());
+    s->setValue(DrugsDB::Constants::S_USERHEADER, previewer->headerToHtml());
+    s->setValue(DrugsDB::Constants::S_USERFOOTER, previewer->footerToHtml());
+    s->setValue(DrugsDB::Constants::S_WATERMARKPRESENCE, previewer->watermarkPresence());
+    s->setValue(DrugsDB::Constants::S_WATERMARK_HTML, previewer->watermarkToHtml());
 }
 
 void DrugsUserWidget::writeDefaultSettings(Core::ISettings *s)
@@ -548,11 +553,11 @@ void DrugsUserWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("DrugsUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
     s->setValue(S_CONFIGURED, true);
-    s->setValue(S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
-    s->setValue(S_WATERMARKALIGNEMENT, Qt::AlignCenter);
-    s->setValue(S_WATERMARK_HTML, S_DEF_WATEMARKHTML);
-    s->setValue(S_USERHEADER, S_DEF_USERHEADER);
-    s->setValue(S_USERFOOTER, "");
+    s->setValue(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
+    s->setValue(DrugsDB::Constants::S_WATERMARKALIGNEMENT, Qt::AlignCenter);
+    s->setValue(DrugsDB::Constants::S_WATERMARK_HTML, DrugsDB::Constants::S_DEF_WATEMARKHTML);
+    s->setValue(DrugsDB::Constants::S_USERHEADER, DrugsDB::Constants::S_DEF_USERHEADER);
+    s->setValue(DrugsDB::Constants::S_USERFOOTER, "");
     s->sync();
 }
 

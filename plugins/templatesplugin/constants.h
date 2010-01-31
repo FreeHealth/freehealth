@@ -67,6 +67,8 @@ namespace Constants {
     const char * const  S_SAVEDATAWITHOUTPROMPTING = "Templates/SaveWithoutPrompting";
     const char * const  S_PROMPTFORDELETION        = "Templates/PromptForDeletion";
 
+    const char * const  S_FONT                     = "Templates/Font";
+
     const char * const MIMETYPE_TEMPLATE           = "application/template";
     const char * const MIMETYPE_CATEGORY           = "application/template.category";
 

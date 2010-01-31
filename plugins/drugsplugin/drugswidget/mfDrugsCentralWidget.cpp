@@ -63,8 +63,6 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
-#include <printerplugin/printer.h>
-
 #include <templatesplugin/templatescreationdialog.h>
 
 #ifdef FREEDIAMS
@@ -75,7 +73,7 @@
 
 using namespace DrugsWidget;
 
-static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
@@ -185,7 +183,7 @@ void DrugsCentralWidget::selector_drugSelected( const int CIS )
 }
 
 /** \brief Change the font of the viewing widget */
-void DrugsCentralWidget::changeFontTo( const QFont &font )
+void DrugsCentralWidget::changeFontTo(const QFont &font)
 {
     m_ui->m_DrugSelector->setFont(font);
     m_ui->m_PrescriptionView->listview()->setFont(font);
@@ -193,33 +191,7 @@ void DrugsCentralWidget::changeFontTo( const QFont &font )
 
 bool DrugsCentralWidget::printPrescription()
 {
-    Print::Printer p(this);
-    if (!p.askForPrinter(this))
-        return false;
-#ifdef FREEDIAMS
-    QString header = settings()->value( Constants::S_USERHEADER ).toString();
-    Core::ICore::instance()->patient()->replaceTokens(header);
-    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    QString footer = settings()->value( Constants::S_USERFOOTER ).toString();
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeDiams.")));
-    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(drugModel()->rowCount()) );
-    p.addHtmlWatermark( settings()->value( Constants::S_WATERMARK_HTML ).toString(),
-                        Print::Printer::Presence(settings()->value( Constants::S_WATERMARKPRESENCE ).toInt()),
-                        Qt::AlignmentFlag(settings()->value( Constants::S_WATERMARKALIGNEMENT ).toInt()));
-#else
-    /** \todo FreeMedForms prescription printing */
-    QString header = "Work in progress";
-//    diCore::patient()->replaceTokens(header);
-//    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    QString footer = "Work in progress";
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeMedForms.")));
-#endif
-    p.setHeader(header);
-    p.setFooter(footer);
-    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-    return p.print( DrugsDB::DrugsIO::instance()->prescriptionToHtml(m_CurrentDrugModel) );
+    return DrugsDB::DrugsIO::printPrescription(m_CurrentDrugModel);
 }
 
 bool DrugsCentralWidget::createTemplate()
@@ -232,7 +204,7 @@ bool DrugsCentralWidget::createTemplate()
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
     dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, DrugsDB::DrugsIO::SimpleVersion));
-    dlg.setTemplateMimeTypes(m_CurrentDrugModel->mimeTypes());
+    dlg.setTemplateMimeTypes(DrugsDB::DrugsIO::prescriptionMimeTypes());
     dlg.exec();
     return true;
 }

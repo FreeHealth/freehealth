@@ -40,8 +40,10 @@
  ***************************************************************************/
 #include "templatespreferencespages.h"
 #include "constants.h"
+#include "templatesview.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 
@@ -96,6 +98,7 @@ void TemplatesPreferencesPage::finish() { delete m_Widget; }
 void TemplatesPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(Constants::S_FONT, QFont());
     defaultvalues.insert(Constants::S_BACKGROUND_CATEGORIES, "white");
     defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, "white");
     defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, "darkblue");
@@ -141,6 +144,10 @@ void TemplatesPreferencesWidget::setDatasToUi()
     templateBackgroundButton->setColor(QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES).toString()));
     categoryForegroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES).toString()));
     templateForegroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUND_TEMPLATES).toString()));
+    QFont font;
+    font.fromString(settings()->value(Constants::S_FONT).toString());
+    fontBox->setCurrentFont(font);
+    sizeSpin->setValue(font.pointSize());
 }
 
 void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -150,7 +157,11 @@ void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
         s = settings();
     else
         s = sets;
+    QFont font = fontBox->currentFont();
+    font.setPointSize(sizeSpin->value());
+    appliFontToViews(font);
     QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(Constants::S_FONT, font);
     defaultvalues.insert(Constants::S_BACKGROUND_CATEGORIES, categoryBackgroundButton->color().name());
     defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, templateBackgroundButton->color().name());
     defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, categoryForegroundButton->color().name());
@@ -165,10 +176,19 @@ void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
     }
 }
 
+void TemplatesPreferencesWidget::appliFontToViews(const QFont &font)
+{
+    QList<Templates::TemplatesView *> allViews = Core::ICore::instance()->mainWindow()->findChildren<Templates::TemplatesView *>();
+    for(int i = 0; i < allViews.count(); ++i) {
+        allViews.at(i)->setFont(font);
+    }
+}
+
 void TemplatesPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Utils::Log::addMessage("TemplatesPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("TemplatesPreferencesWidget"));
     QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(Constants::S_FONT, QFont());
     defaultvalues.insert(Constants::S_BACKGROUND_CATEGORIES, "white");
     defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, "white");
     defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, "darkblue");
@@ -183,6 +203,7 @@ void TemplatesPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
         settings()->setValue(k, defaultvalues.value(k));
     }
     s->sync();
+    appliFontToViews(QFont());
 }
 
 void TemplatesPreferencesWidget::changeEvent(QEvent *e)

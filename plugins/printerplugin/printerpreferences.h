@@ -38,40 +38,40 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESPREFERENCESPAGES_H
-#define TEMPLATESPREFERENCESPAGES_H
+#ifndef PRINTERPREFERENCES_H
+#define PRINTERPREFERENCES_H
 
 #include <coreplugin/ioptionspage.h>
 
-#include <QPointer>
+#include "ui_printerpreferences.h"
 
-#include "ui_templatespreferenceswidget.h"
+#include <QPointer>
+#include <QObject>
 
 /**
- * \file templatespreferencespages.h
+ * \file printerpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 27 Dec 2009
+ * \version 0.3.0
+ * \date 30 Jan 2010
 */
+
 namespace Core {
 class ISettings;
 }
 
-
-namespace Templates {
+namespace Print {
 namespace Internal {
 
-class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferencesWidget
+class PrinterPreferencesWidget : public QWidget, private Ui::PrinterPreferences
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TemplatesPreferencesWidget)
+    Q_DISABLE_COPY(PrinterPreferencesWidget)
 
 public:
-    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
+    explicit PrinterPreferencesWidget(QWidget *parent = 0);
     void setDatasToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
-    static void appliFontToViews(const QFont &font);
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
@@ -80,11 +80,13 @@ protected:
     virtual void changeEvent(QEvent *e);
 };
 
-class TemplatesPreferencesPage : public Core::IOptionsPage
+
+class PrinterPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
-    TemplatesPreferencesPage(QObject *parent = 0);
-    ~TemplatesPreferencesPage();
+    PrinterPreferencesPage(QObject *parent = 0);
+    ~PrinterPreferencesPage();
 
     QString id() const;
     QString name() const;
@@ -97,16 +99,14 @@ public:
 
     QString helpPage() {return "parametrer.html";}
 
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::TemplatesPreferencesWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {PrinterPreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
+    QPointer<PrinterPreferencesWidget> m_Widget;
 };
 
+}  // End Internal
+}  // End Printer
 
-}
-}
-
-
-#endif // TEMPLATESPREFERENCESPAGES_H
+#endif // PRINTERPREFERENCES_H

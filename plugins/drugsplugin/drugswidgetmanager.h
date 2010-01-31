@@ -145,7 +145,7 @@ public:
     ~DrugsWidgetManager() {}
 
     DrugsWidget::DrugsCentralWidget  *currentView() const;
-    DrugsDB::DrugsModel          *currentDrugsModel() const { return currentView()->currentDrugsModel(); }
+    DrugsDB::DrugsModel          *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
     DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
 
 private Q_SLOTS:

@@ -848,7 +848,7 @@ void Printer::setPaperSize(QPrinter::PaperSize size)
         d->renewPrinter();
     d->m_Printer->setPaperSize(size);
     // TODO Manage Margins
-    d->setTextWidth( d->pageWidth() );
+    d->setTextWidth(d->pageWidth());
 }
 
 /** \brief Shows the print preview dialog. \e test param should only be used for debugging. */

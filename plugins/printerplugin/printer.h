@@ -57,8 +57,8 @@ class QTextEdit;
 /**
  * \file printer.h
  * \author Eric Maeker and the QPrinterEasy Team
- * \version 0.0.11
- * \date 08 Sept 2009
+ * \version 0.0.12
+ * \date 30 Jan 2010
 */
 
 

@@ -94,6 +94,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aSave(0),
         aSaveAs(0),
         aPrint(0),
+        aPrintPreview(0),
         aQuit(0),
         aUndo(0),
         aRedo(0),
@@ -341,7 +342,16 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
-//        cmd->setAttribute(Command::CA_UpdateText);
+        mfile->addAction(cmd, Constants::G_FILE_PRINT);
+    }
+
+    // Print Preview
+    if (actions & Core::MainWindowActions::A_FilePrintPreview) {
+        a = aPrintPreview = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONPRINTPREVIEW));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINTPREVIEW, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::Print);
+        cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT );
         mfile->addAction(cmd, Constants::G_FILE_PRINT);
     }
 
@@ -640,6 +650,8 @@ void MainWindowActionHandler::connectHelpActions()
 
 void MainWindowActionHandler::createTemplatesActions(int actions)
 {
+    if (!actions)
+        return;
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;

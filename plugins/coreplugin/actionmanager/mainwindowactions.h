@@ -76,7 +76,8 @@ public:
         A_FileSave   = 0x04,
         A_FileSaveAs = 0x08,
         A_FileClose  = 0x10,
-        A_FilePrint  = 0x11,
+        A_FilePrint  = 0x20,
+        A_FilePrintPreview = 0x40,
         A_FileQuit   = 0x88
     };
     Q_DECLARE_FLAGS( FileActions, FileAction );

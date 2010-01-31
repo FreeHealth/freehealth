@@ -8,6 +8,7 @@ QT += sql
 HEADERS = templatesplugin.h \
     templates_exporter.h \
     itemplates.h \
+    itemplateprinter.h \
     templatesmodel.h \
     constants.h \
     templatesview.h \

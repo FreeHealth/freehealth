@@ -1,5 +1,5 @@
-<plugin name="Drugs" version="0.0.9" compatVersion="0.0.9">
-    <vendor>FreeMedForms</vendor>
+<plugin name="Drugs" version="0.3.0" compatVersion="0.0.9">
+    <vendor>FreeDiams</vendor>
     <copyright>(C) 2008-2009 Eric Maeker, MD</copyright>
     <license>Released under new BSD license.</license>
     <description>The drugs manager plugin for FreeMedForms.</description>
@@ -8,7 +8,6 @@
         <dependency name="Core" version="0.0.9"/>
         <dependency name="DrugsBase" version="0.0.9"/>
         <dependency name="Templates" version="0.0.9"/>
-        <dependency name="Printer" version="0.0.9"/>
         <dependency name="TextEditor" version="0.0.9"/>
     </dependencyList>
 </plugin>

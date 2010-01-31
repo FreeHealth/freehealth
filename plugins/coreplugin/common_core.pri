@@ -4,7 +4,7 @@
 include(../fmf_plugins.pri)
 
 # include libs SDKs
-include( coreplugin_dependencies.pri )
+include(coreplugin_dependencies.pri)
 
 # define exporter
 DEFINES += CORE_LIBRARY

@@ -12,9 +12,10 @@ SUBDIRS = \
 
 core.subdir = ../../plugins/fdcoreplugin
 
-drugsbase.subdir   = ../../plugins/drugsbaseplugin
+drugsbase.subdir   = fddrugsbaseplugin
 drugsbase.depends += core
 drugsbase.depends += templates
+drugsbase.depends += printer
 
 mainwindow.subdir   = ../../plugins/fdmainwindowplugin
 mainwindow.depends += core
@@ -35,10 +36,10 @@ texteditor.depends += core
 drugs.subdir   = fddrugsplugin
 drugs.depends += drugsbase
 drugs.depends += core
-drugs.depends += printer
+#drugs.depends += printer
 drugs.depends += texteditor
 drugs.depends += templates
 
 templates.subdir = ../../plugins/templatesplugin
 templates.depends += core
-templates.depends += mainwindow
+#templates.depends += mainwindow

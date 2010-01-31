@@ -47,10 +47,13 @@
 
 #include "drugsio.h"
 
+#include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/dailyschememodel.h>
+
+#include <printerplugin/printer.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -60,6 +63,10 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+
+#ifdef FREEDIAMS
+#  include <fdcoreplugin/patient.h>
+#endif
 
 #include <QApplication>
 #include <QHash>
@@ -624,6 +631,46 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
     else
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
 }
+
+bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
+//                                const QString &header, const QString &footer,
+//                                const QString &watermark, const int watermarkPresence,
+//                                const Qt::AlignmentFlag watermarkAlign, bool withDuplicata)
+{
+    Print::Printer p;
+    if (!p.askForPrinter(qApp->activeWindow()))
+        return false;
+#ifdef FREEDIAMS
+    Core::Patient *patient = Core::ICore::instance()->patient();
+    p.printer()->setDocName("FreeDiams - " + patient->value(Core::Patient::FullName).toString().leftJustified(50,'_'));
+    QString header = settings()->value(Constants::S_USERHEADER).toString();
+    patient->replaceTokens(header);
+    /** \todo Create a prefs for Date format */
+    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
+    QString footer = settings()->value(Constants::S_USERFOOTER).toString();
+    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(tr("Made with FreeDiams.")));
+    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
+    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
+                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
+                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
+#else
+    /** \todo FreeMedForms prescription printing */
+    QString header = "Work in progress";
+//    diCore::patient()->replaceTokens(header);
+//    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
+    QString footer = "Work in progress";
+    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(tr("Made with FreeMedForms.")));
+#endif
+    p.setHeader(header);
+    p.setFooter(footer);
+    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+    /** \todo Use NormalVersion instead of MedinTuxversion */
+    return p.print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
+}
+
+
 /**
   \brief For drag and drop functionnalities, defines the mimeTypes of DrugsIO.
   \sa DrugsDB::DrugsModel::mimeType()

@@ -43,6 +43,7 @@
 #include "ui_templatesview.h"
 #include "templatesmodel.h"
 #include "itemplates.h"
+#include "itemplateprinter.h"
 #include "constants.h"
 #include "templateseditdialog.h"
 
@@ -58,6 +59,8 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QObject>
 #include <QWidget>
@@ -96,6 +99,7 @@ namespace TemplatesViewConstants
     static const char* const C_BASIC_ADD          = "context.TemplatesView.Add";
     static const char* const C_BASIC_REMOVE       = "context.TemplatesView.Remove";
     static const char* const C_BASIC_SAVE         = "context.TemplatesView.Save";
+    static const char* const C_BASIC_PRINT        = "context.TemplatesView.Print";
     static const char* const C_BASIC_LOCK         = "context.TemplatesView.Lock";
 }
 
@@ -161,6 +165,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         aAdd(0),
         aRemove(0),
         aEdit(0),
+        aPrint(0),
         aSave(0),
         aLocker(0),
         m_CurrentView(0),
@@ -171,6 +176,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
     QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE);
     QList<int> saveContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_SAVE);
+    QList<int> printContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_PRINT);
 
     // Edit Menu and Contextual Menu
     Core::ActionContainer *editMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
@@ -201,6 +207,13 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                            Core::Constants::A_TEMPLATE_EDIT, Core::Constants::G_EDIT_TEMPLATES,
                            Trans::Constants::M_EDIT_TEXT, editContext, this);
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
+
+    // Edit
+    aPrint = registerAction("TemplatesView.aPrint", cmenu, Core::Constants::ICONPRINT,
+                            Core::Constants::A_TEMPLATE_PRINT, Core::Constants::G_EDIT_TEMPLATES,
+                            Trans::Constants::FILEPRINT_TEXT, printContext, this);
+    connect(aPrint, SIGNAL(triggered()), this, SLOT(print()));
+
 
     // Save
     aSave = registerAction("TemplatesView.aSave", cmenu, Core::Constants::ICONSAVE,
@@ -283,6 +296,13 @@ void TemplatesViewActionHandler::saveModel()
         m_CurrentView->saveModel();
 }
 
+void TemplatesViewActionHandler::print()
+{
+    if (m_CurrentView) {
+        m_CurrentView->printTemplate();
+    }
+}
+
 void TemplatesViewActionHandler::lock()
 {
     if (m_CurrentView) {
@@ -317,6 +337,8 @@ public:
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action());
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action());
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action());
+        m_ToolBar->addSeparator();
+        m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_PRINT)->action());
         m_ToolBar->addSeparator();
         m_ToolBar->addAction(actionManager()->command(Core::Constants::A_TEMPLATE_SAVE)->action());
         QWidget *w = new QWidget(m_ToolBar);
@@ -374,6 +396,8 @@ public:
         } else {
             m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         }
+        if (editModes & Templates::TemplatesView::Print)
+            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_PRINT));
         if (editModes & Templates::TemplatesView::LockUnlock)
             m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK));
     }
@@ -385,7 +409,8 @@ public Q_SLOTS:
         QList<QAction *> list;
         list    << actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action()
                 << actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action()
-                << actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action();
+                << actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action()
+                << actionManager()->command(Core::Constants::A_TEMPLATE_PRINT)->action();
         bool returnMenu = false;
         foreach(QAction *action, list) {
             if (action->isEnabled()) {
@@ -393,9 +418,10 @@ public Q_SLOTS:
                 break;
             }
         }
-        if (returnMenu)
+        if (returnMenu) {
+            menu->addActions(list);
             return menu;
-        else
+        } else
             return 0;
     }
     void contextMenu(const QPoint &p)
@@ -433,6 +459,9 @@ TemplatesView::TemplatesView(QWidget *parent, int viewContent, EditModes editMod
     lock(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool());
     if (viewContent == CategoriesOnly)
         d->m_Model->categoriesOnly();
+    QFont font;
+    font.fromString(settings()->value(Constants::S_FONT).toString());
+    setFont(font);
 }
 
 TemplatesView::~TemplatesView()
@@ -577,6 +606,40 @@ void TemplatesView::saveModel()
 {
     d->m_Model->submit();
 }
+
+bool TemplatesView::printTemplate()
+{
+    // Get selected items
+    if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
+        return true;
+    QList<const ITemplate *> selection;
+    foreach(const QModelIndex &idx, d->m_ui->categoryTreeView->selectionModel()->selectedRows(0)) {
+        const ITemplate *t = d->m_Model->getTemplate(idx);
+        if (!selection.contains(t))
+            selection << t;
+    }
+
+    // Get all ITemplatePrinter object from pluginsManager
+    QList<ITemplatePrinter *> printers = ExtensionSystem::PluginManager::instance()->getObjects<ITemplatePrinter>();
+
+    // Ask mime of each
+    QMultiHash<const ITemplatePrinter *, const ITemplate *> printer_templates;
+    foreach(const ITemplate *t, selection) {
+        foreach(const ITemplatePrinter *prt, printers) {
+            if (t->contentMimeTypes().contains(prt->mimeType())) {
+                printer_templates.insertMulti(prt, t);
+                break;
+            }
+        }
+    }
+    // Print the selected templates
+    foreach(const ITemplatePrinter *prt, printer_templates.keys()) {
+        if (!prt->printTemplates(printer_templates.values(prt)))
+            return false;
+    }
+    return true;
+}
+
 
 void TemplatesView::changeEvent(QEvent *e)
 {

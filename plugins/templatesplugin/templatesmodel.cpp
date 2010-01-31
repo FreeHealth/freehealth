@@ -1309,6 +1309,12 @@ bool TemplatesModel::isCategoryOnly() const
     return d->m_ShowOnlyCategories;
 }
 
+const ITemplate *TemplatesModel::getTemplate(const QModelIndex &item) const
+{
+    return d->getItem(item);
+}
+
+
 bool TemplatesModel::submit()
 {
     d->saveModelDatas();

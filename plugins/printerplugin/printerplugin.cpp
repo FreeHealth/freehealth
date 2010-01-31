@@ -33,6 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "printerplugin.h"
+#include "printerpreferences.h"
 
 #include <utils/log.h>
 
@@ -46,7 +47,8 @@
 
 using namespace Print;
 
-PrinterPlugin::PrinterPlugin()
+PrinterPlugin::PrinterPlugin() :
+        prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PrinterPlugin";
@@ -54,6 +56,10 @@ PrinterPlugin::PrinterPlugin()
 
 PrinterPlugin::~PrinterPlugin()
 {
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
 }
 
 bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -72,6 +78,10 @@ void PrinterPlugin::extensionsInitialized()
     // Add translator
     Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Add preferences pages
+    prefPage = new Print::Internal::PrinterPreferencesPage(this);
+    addObject(prefPage);
 }
 
 

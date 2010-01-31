@@ -103,6 +103,8 @@ public:
 
     bool isDirty() const;
 
+    const ITemplate *getTemplate(const QModelIndex &item) const;
+
 public Q_SLOTS:
     bool submit();
 

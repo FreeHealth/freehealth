@@ -38,75 +38,29 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESPREFERENCESPAGES_H
-#define TEMPLATESPREFERENCESPAGES_H
+#ifndef DRUGSTEMPLATEPRINTER_H
+#define DRUGSTEMPLATEPRINTER_H
 
-#include <coreplugin/ioptionspage.h>
+#include <drugsbaseplugin/drugsbase_exporter.h>
+#include <templatesplugin/itemplateprinter.h>
 
-#include <QPointer>
+namespace DrugsDB {
+class DrugsModel;
 
-#include "ui_templatespreferenceswidget.h"
-
-/**
- * \file templatespreferencespages.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 27 Dec 2009
-*/
-namespace Core {
-class ISettings;
-}
-
-
-namespace Templates {
 namespace Internal {
 
-class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferencesWidget
+class DrugsTemplatePrinter : public Templates::ITemplatePrinter
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TemplatesPreferencesWidget)
-
 public:
-    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    DrugsTemplatePrinter(QObject *parent) : Templates::ITemplatePrinter(parent) {}
+    ~ DrugsTemplatePrinter() {}
 
-    static void writeDefaultSettings(Core::ISettings *s);
-    static void appliFontToViews(const QFont &font);
-
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-
-protected:
-    virtual void changeEvent(QEvent *e);
+    QString mimeType() const;
+    bool printTemplates(const QList<const Templates::ITemplate *> iTemplates) const;
 };
 
-class TemplatesPreferencesPage : public Core::IOptionsPage
-{
-public:
-    TemplatesPreferencesPage(QObject *parent = 0);
-    ~TemplatesPreferencesPage();
+}  // End namespace Internal
+}  // End namespace DrugsDB
 
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::TemplatesPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
-};
-
-
-}
-}
-
-
-#endif // TEMPLATESPREFERENCESPAGES_H
+#endif // DRUGSTEMPLATEPRINTER_H

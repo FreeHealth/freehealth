@@ -79,7 +79,8 @@ public:
         Drop       = 0x10,
         LockUnlock = 0x20,
         Save       = 0x40,
-        Defaults   = Add | Remove | Edit | Drag | Drop | LockUnlock | Save
+        Print      = 0x80,
+        Defaults   = Add | Remove | Edit | Drag | Drop | LockUnlock | Save | Print
     };
     Q_DECLARE_FLAGS(EditModes, EditMode);
 
@@ -97,6 +98,7 @@ public:
     void expandAll() const;
     void setSelectionMode(QAbstractItemView::SelectionMode mode);
 
+
     //    ITemplates *currentTemplate() const;
 
 Q_SIGNALS:
@@ -108,6 +110,7 @@ protected Q_SLOTS:
     void editCurrentItem();
     void saveModel();
     void lock(bool state = true);
+    bool printTemplate();
 
 protected:
     void changeEvent(QEvent *e);

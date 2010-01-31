@@ -69,7 +69,11 @@ DrugsPlugin::DrugsPlugin() :
 {
     setObjectName("DrugsPlugin");
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating DrugsPlugin";
+#ifdef FREEDIAMS
+        qWarning() << "creating FREEDIAMS::DrugsPlugin";
+#else
+        qWarning() << "creating FREEMEDFORMS::DrugsPlugin";
+#endif
 }
 
 DrugsPlugin::~DrugsPlugin()

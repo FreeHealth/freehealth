@@ -829,7 +829,6 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     if (drug->prescriptionValue(Constants::Prescription::IsINNPrescription).toBool()) {
         tokens_value["DRUG"] = drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
     } else {
-        /** \todo If denomination contains innComposition && hide laboratory name --> add INN */
         tokens_value["DRUG"] =  drug->denomination();
     }
     tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
@@ -874,11 +873,13 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
 Qt::DropActions DrugsModel::supportedDropActions() const
 {
     return Qt::MoveAction | Qt::CopyAction;
+//    return Qt::CopyAction;
 }
 
 QStringList DrugsModel::mimeTypes() const
 {
     return QStringList() << Templates::Constants::MIMETYPE_TEMPLATE;// DrugsDB::DrugsIO::prescriptionMimeTypes();
+//    return QStringList() << DrugsDB::DrugsIO::prescriptionMimeTypes();
 }
 
 //QMimeData *DrugsModel::mimeData(const QModelIndexList &indexes) const
@@ -888,7 +889,7 @@ QStringList DrugsModel::mimeTypes() const
 
 bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-    qWarning() << "dropMimeData" << row << action << data->data(mimeTypes().at(0));
+//    qWarning() << "dropMimeData" << row << action << data->data(mimeTypes().at(0));
 
     if (action == Qt::IgnoreAction)
         return true;
@@ -911,6 +912,7 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         // add content to model
         DrugsDB::DrugsIO::prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
     }
+
     // never move templates but copy them
     if (action == Qt::MoveAction)
         return false;

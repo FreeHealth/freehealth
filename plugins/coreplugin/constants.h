@@ -177,6 +177,7 @@ const char * const  A_FILE_SAVEAS         = "actionFileSaveAs"; /*!< \brief Defa
 const char * const  A_FILE_PRINT          = "actionFilePrint";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_PRINTFORM          = "actionFilePrintForm";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_PRINTPRESCRIPTION  = "actionFilePrintPrescription";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINTPREVIEW  = "actionFilePrintPreview";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_EXIT           = "actionFileExit";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Edit Menu Action's name (find icon default into tkTheme.h)
@@ -202,6 +203,7 @@ const char * const  A_TEMPLATE_CREATE     = "actionTemplateCreate";        /*!< 
 const char * const  A_TEMPLATE_TOOGLEVIEW = "actionTemplateToogleView";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_ADD        = "actionTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_SAVE       = "actionTemplateSave";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_PRINT      = "actionTemplatePrint";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_ADD        = "actionCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
@@ -279,6 +281,7 @@ const char * const  ICONOPEN =         "fileopen.png";
 const char * const  ICONSAVE =         "filesave.png";
 const char * const  ICONSAVEAS =       "filesaveas.png";
 const char * const  ICONPRINT =        "fileprint.png";
+const char * const  ICONPRINTPREVIEW = "fileprintpreview.png";
 const char * const  ICONQUIT =         "exit.png";
 const char * const  ICONEXIT =         "exit.png";
 const char * const  ICONTEMPLATES =    "templates.png";
@@ -406,6 +409,8 @@ const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
 const char * const  S_CHECKUPDATE  = "CheckUpdate";
 const char * const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
+const char * const  S_DEFAULT_PRINTER = "DefaultPrinter";
+
 enum {  // Don't change the ordre of this enum
     S_CheckUpdate_AtStartup = 0,
     S_CheckUpdate_EachWeeks,

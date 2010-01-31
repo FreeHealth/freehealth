@@ -332,8 +332,7 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
     }
     m_CurrentView = view;
 
-    /** \todo ?Inform DrugsBaseManager of the current model change? */
-//    DrugsDB::DrugsBaseManager::instance()->setCurrentModel(view->currentDrugsModel());
+    DrugsDB::DrugsModel::setActiveModel(view->currentDrugsModel());
     // reconnect some actions
     m_CurrentView->createConnections();
     connect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),

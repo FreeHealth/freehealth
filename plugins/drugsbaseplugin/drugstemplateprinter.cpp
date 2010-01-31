@@ -38,75 +38,54 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TEMPLATESPREFERENCESPAGES_H
-#define TEMPLATESPREFERENCESPAGES_H
+#include "drugstemplateprinter.h"
+#include "drugsmodel.h"
+#include "drugsio.h"
 
-#include <coreplugin/ioptionspage.h>
+#include <utils/global.h>
 
-#include <QPointer>
+using namespace DrugsDB;
+using namespace DrugsDB::Internal;
 
-#include "ui_templatespreferenceswidget.h"
-
-/**
- * \file templatespreferencespages.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 27 Dec 2009
-*/
-namespace Core {
-class ISettings;
-}
-
-
-namespace Templates {
-namespace Internal {
-
-class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferencesWidget
+QString DrugsTemplatePrinter::mimeType() const
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(TemplatesPreferencesWidget)
+    return DrugsIO::prescriptionMimeTypes().at(0);
+}
 
-public:
-    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
-
-    static void writeDefaultSettings(Core::ISettings *s);
-    static void appliFontToViews(const QFont &font);
-
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-
-protected:
-    virtual void changeEvent(QEvent *e);
-};
-
-class TemplatesPreferencesPage : public Core::IOptionsPage
+bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate *> iTemplates) const
 {
-public:
-    TemplatesPreferencesPage(QObject *parent = 0);
-    ~TemplatesPreferencesPage();
+//    qWarning() << iTemplates;
+    int n = iTemplates.count();
+    if (!n)
+        return true;
+    if (n > 1) {
+        // Ask user : print separately or merge into an unique prescription
+        int r = Utils::withButtonsMessageBox(tr("Print separately or merge printing."),
+                               tr("You have selected multiple templates, would you "
+                                  "print them separately or merge templates for printing"
+                                  "on a single order ?"), "",
+                               QStringList() << "Print separately" << "Merge and print");
+        if (r==1) {
+            DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
+            foreach(const Templates::ITemplate *t, iTemplates) {
+                DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
+            }
+            bool r = DrugsIO::printPrescription(model);//, "CACA", "BOUDIN", "WM", 1, Qt::AlignCenter, true);
+            delete model;
+            model = 0;
+            return r;
+        } else if (r==-1) {
+            return false;
+        }
+    }
 
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::TemplatesPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
-};
-
-
+    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
+    /** \todo ask for the printer to use just once */
+    foreach(const Templates::ITemplate *t, iTemplates) {
+        DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
+        DrugsIO::printPrescription(model);//, "CACA", "BOUDIN", "WM", 1, Qt::AlignCenter, true);
+    }
+    delete model;
+    model = 0;
+    return true;
 }
-}
-
-
-#endif // TEMPLATESPREFERENCESPAGES_H
