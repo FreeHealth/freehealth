@@ -104,11 +104,12 @@ public Q_SLOTS: // Usefull slots that interactions with actions and menus
 
 
 public Q_SLOTS: // Slots automatically connected to actions is requiered
-    virtual bool newFile()     {return false;}
-    virtual bool openFile()    {return false;}
-    virtual bool saveFile()    {return false;}
-    virtual bool saveAsFile()  {return false;}
-    virtual bool print()       {return false;}
+    virtual bool newFile()      {return false;}
+    virtual bool openFile()     {return false;}
+    virtual bool saveFile()     {return false;}
+    virtual bool saveAsFile()   {return false;}
+    virtual bool print()        {return false;}
+    virtual bool printPreview() {return false;}
 
     virtual bool applicationPreferences() {return false;}
     virtual bool configureMedintux()      {return false;}

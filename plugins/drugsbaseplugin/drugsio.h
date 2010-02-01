@@ -96,6 +96,7 @@ public:
 //                                  const QString &header, const QString &footer,
 //                                  const QString &watermark, const int watermarkPresence,
 //                                  const Qt::AlignmentFlag watermarkAlign, bool withDuplicata);
+    static void prescriptionPreview(DrugsDB::DrugsModel *model);
 
     static QStringList prescriptionMimeTypes();
 

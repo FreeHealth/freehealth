@@ -194,6 +194,11 @@ bool DrugsCentralWidget::printPrescription()
     return DrugsDB::DrugsIO::printPrescription(m_CurrentDrugModel);
 }
 
+void DrugsCentralWidget::printPreview()
+{
+    return DrugsDB::DrugsIO::prescriptionPreview(m_CurrentDrugModel);
+}
+
 bool DrugsCentralWidget::createTemplate()
 {
     if (!m_CurrentDrugModel->rowCount())

@@ -622,7 +622,7 @@ public:
                     }
                     // retreive its id
                     t->setId(query.lastInsertId().toInt());
-                    qWarning() << "created" << t->label() << t->id();
+//                    qWarning() << "created" << t->label() << t->id();
                     // inform children of the id
                     for(int i=0; i<t->childCount(); ++i) {
                         t->child(i)->setParentId(t->id());
@@ -985,7 +985,7 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
         d->m_CategoriesToDelete.remove(d->m_CategoriesToDelete.indexOf(id));
     }
 
-    qWarning() << "End reparent \n";
+//    qWarning() << "End reparent \n";
     return true;
 }
 
@@ -1150,7 +1150,7 @@ bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
 
     d->allInstancesEndRemoveRows();
 
-    qWarning() << "removeRows" << d->m_CategoriesToDelete << d->m_TemplatesToDelete;
+//    qWarning() << "removeRows" << d->m_CategoriesToDelete << d->m_TemplatesToDelete;
     return true;
 }
 

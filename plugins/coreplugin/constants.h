@@ -275,6 +275,9 @@ const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
 const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
 const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
 
+// application icons
+const char * const  ICONFREEDIAMS = "freediams.png";
+
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";
 const char * const  ICONOPEN =         "fileopen.png";

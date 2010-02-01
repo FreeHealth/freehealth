@@ -350,7 +350,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         a = aPrintPreview = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONPRINTPREVIEW));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINTPREVIEW, ctx);
-        cmd->setDefaultKeySequence(QKeySequence::Print);
+//        cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT );
         mfile->addAction(cmd, Constants::G_FILE_PRINT);
     }
@@ -384,6 +384,9 @@ void MainWindowActionHandler::connectFileActions()
 
     if (aPrint)
         connect(aPrint, SIGNAL(triggered()), this, SLOT(print()));
+
+    if (aPrintPreview)
+        connect(aPrintPreview, SIGNAL(triggered()), this, SLOT(printPreview()));
 
     if (aQuit)
         connect(aQuit, SIGNAL(triggered()), this, SLOT(close()));

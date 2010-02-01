@@ -856,6 +856,7 @@ bool Printer::previewDialog( QWidget *parent, bool test )
 {
     if (!d->m_Printer)
         d->renewPrinter();
+    qWarning() << d->m_Printer << d->m_Printer->resolution() << d->m_Printer->pageSize();
 
     if (Utils::isDebugCompilation()) {
         // For test
@@ -868,7 +869,7 @@ bool Printer::previewDialog( QWidget *parent, bool test )
         Q_UNUSED(test);
 
     QPrintPreviewDialog dialog(d->m_Printer, parent);
-    connect( &dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)) );
+    connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)));
     dialog.exec();
     return true;
 }

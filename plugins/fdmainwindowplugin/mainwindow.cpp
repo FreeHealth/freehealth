@@ -130,8 +130,7 @@ MainWindow::MainWindow( QWidget * parent ) :
         m_TemplatesDock(0)
 {
     setObjectName("MainWindow");
-    /** \todo add icon to the mainwindow */
-//    setWindowIcon(theme()->icon());
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDIAMS));
     messageSplash(tr("Creating Main Window"));
 }
 
@@ -158,7 +157,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileOpen |
             Core::MainWindowActions::A_FileSave |
             Core::MainWindowActions::A_FileSaveAs |
-//            Core::MainWindowActions::A_FilePrint |
+            Core::MainWindowActions::A_FilePrintPreview |
             Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |

@@ -104,6 +104,7 @@ private Q_SLOTS:
     void toogleTestingDrugs();
     void changeDuration();
     void createTemplate();
+    void printPreview();
 
 private:
     bool canMoveUp();
@@ -124,6 +125,7 @@ protected:
     QAction *aSearchMolecules;
     QAction *aSearchInn;
     QAction *aPrintPrescription;
+    QAction *aPrintPreview;
     QAction *aToogleTestingDrugs;
     QAction *aChangeDuration;
     QAction *aToTemplate;

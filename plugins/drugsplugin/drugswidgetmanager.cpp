@@ -140,6 +140,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aSearchMolecules(0),
         aSearchInn(0),
         aPrintPrescription(0),
+        aPrintPreview(0),
         aToogleTestingDrugs(0),
         aChangeDuration(0),
         aToTemplate(0),
@@ -262,16 +263,16 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
     Core::ActionContainer *filemenu = am->actionContainer(Core::Constants::M_FILE);
-    a = aToTemplate = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONTEMPLATES));
-    cmd = am->registerAction(a, Core::Constants::A_TEMPLATE_CREATE, ctx);
-    cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT, Trans::Constants::CREATETEMPLATE_TEXT);
-//    cmd->setKeySequence();
-    cmd->retranslate();
-    if (filemenu) {
-        filemenu->addAction(cmd, Core::Constants::G_FILE_NEW);
-    }
-    connect(a, SIGNAL(triggered()), this, SLOT(createTemplate()));
+//    a = aToTemplate = new QAction(this);
+//    a->setIcon(th->icon(Core::Constants::ICONTEMPLATES));
+//    cmd = am->registerAction(a, Core::Constants::A_TEMPLATE_CREATE, ctx);
+//    cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT, Trans::Constants::CREATETEMPLATE_TEXT);
+////    cmd->setKeySequence();
+//    cmd->retranslate();
+//    if (filemenu) {
+//        filemenu->addAction(cmd, Core::Constants::G_FILE_NEW);
+//    }
+//    connect(a, SIGNAL(triggered()), this, SLOT(createTemplate()));
 
     a = aPrintPrescription = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
@@ -288,6 +289,17 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         filemenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
     }
     connect(aPrintPrescription,SIGNAL(triggered()), this, SLOT(printPrescription()));
+
+    a = aPrintPreview = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+//    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    cmd = am->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
+    cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
+    cmd->retranslate();
+    if (filemenu) {
+        filemenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
+    }
+    connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
 
     a = aChangeDuration = new QAction(this);
     a->setObjectName("aChangeDuration");
@@ -443,4 +455,11 @@ void DrugsActionHandler::createTemplate()
 {
     if (m_CurrentView)
        m_CurrentView->createTemplate();
+}
+
+void DrugsActionHandler::printPreview()
+{
+    if (m_CurrentView) {
+        m_CurrentView->printPreview();
+    }
 }
