@@ -856,7 +856,6 @@ bool Printer::previewDialog( QWidget *parent, bool test )
 {
     if (!d->m_Printer)
         d->renewPrinter();
-    qWarning() << d->m_Printer << d->m_Printer->resolution() << d->m_Printer->pageSize();
 
     if (Utils::isDebugCompilation()) {
         // For test
