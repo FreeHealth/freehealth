@@ -23,7 +23,7 @@ public:
     bool extensionInitialized() {return true;}
     bool isInitialized() const {return true;}
 
-    bool isContainer(const int idInStringList) const {return false;}
+    bool isContainer(const int idInStringList) const {Q_UNUSED(idInStringList); return false;}
     QStringList providedWidgets() const {return QStringList() << "aggir" << "gir";}
     Core::IFormWidget *createWidget(const QString &name, Core::FormItem *object, QWidget *parent = 0);
 };

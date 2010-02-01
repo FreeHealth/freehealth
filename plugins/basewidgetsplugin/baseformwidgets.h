@@ -127,7 +127,7 @@ public:
     bool isContainer() const {return true;}
 
     void setValue(const QVariant &) {}
-    QVariant value() const { /** \todo this */ }
+    QVariant value() const { return QVariant(); /** \todo this */ }
 
 public Q_SLOTS:
     void retranslate();
@@ -175,7 +175,7 @@ public:
     ~BaseRadio();
 
     void setValue(const QVariant &) {}
-    QVariant value() const {}
+    QVariant value() const {return QVariant();}
 
 public Q_SLOTS:
     void retranslate();

@@ -674,7 +674,6 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
                        Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
 #else
     /** \todo FreeMedForms prescription printing */
-    QString header = "Work in progress";
     footer = "<body><p>Work in progress</p></body>";
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(tr("Made with FreeMedForms.")));

@@ -65,7 +65,7 @@
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
 
-#include "ui_mainwindow.h"
+//#include "ui_mainwindow.h"
 
 // include Qt headers
 #include <QTextEdit>
