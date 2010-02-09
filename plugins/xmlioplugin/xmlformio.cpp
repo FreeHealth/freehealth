@@ -44,8 +44,6 @@
 #include <coreplugin/iformitem.h>
 #include <coreplugin/iformwidgetfactory.h>
 
-//#include <coreplugin/mfObject.h>
-
 #include <translationutils/constanttranslations.h>
 
 // including Qt headers
@@ -76,19 +74,26 @@ namespace {
     static QHash<QString, int> m_SpecsTypes;
 }
 
-inline static void warnXmlReadError(const QString &file, const QString &msg, const int line, const int col)
+inline static Core::FormManager *formManager() {return Core::ICore::instance()->formManager();}
+inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+
+inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
 {
+    Utils::Log::addError("XmlFormIO",
+                         Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
+                         Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                         .arg(msg).arg(line).arg(col));
+
     Utils::warningMessageBox(
             Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file),
             Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
             .arg(msg).arg(line).arg(col),"",qApp->applicationName());
 }
-inline static Core::FormManager *fm() {return Core::ICore::instance()->formManager();}
-inline static ExtensionSystem::PluginManager *pm() {return ExtensionSystem::PluginManager::instance();}
+
 inline static void refreshPlugsFactories()
 {
     ::m_PlugsFactories.clear();
-    foreach(Core::IFormWidgetFactory *fact, pm()->getObjects<Core::IFormWidgetFactory>()) {
+    foreach(Core::IFormWidgetFactory *fact, pluginManager()->getObjects<Core::IFormWidgetFactory>()) {
         foreach(const QString &widgetname, fact->providedWidgets()) {
             ::m_PlugsFactories.insert(widgetname,fact);
         }
@@ -98,8 +103,8 @@ inline static void refreshPlugsFactories()
 inline static Core::FormMain *createNewForm(const QDomElement &element, Core::FormItem *item = 0)
 {
     QString name = element.firstChildElement(Constants::TAG_NAME).text();
-    Core::FormMain *parent = fm()->getParent<Core::FormMain>(item);
-    return fm()->createForm(name, parent);
+    Core::FormMain *parent = formManager()->getParent<Core::FormMain>(item);
+    return formManager()->createForm(name, parent);
 }
 
 inline static bool populateValues(Core::FormItem *item, const QDomElement &root)
@@ -218,7 +223,7 @@ bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
     QString contents;
     contents = Utils::readTextFile(file, Utils::DontWarnUser);
     if (contents.isEmpty()) {
-        warnXmlReadError(file, tr("File is empty."), 0, 0);
+        warnXmlReadError(file, tr("File is empty."));
         /** \todo return a FormObject with a helptext that explains the error ? */
         return false;
     }
@@ -233,8 +238,18 @@ bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
 
     // Check doctype name
     if (document.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
-        warnXmlReadError(file, tr("This file is not a FreeMedForms XML file. Document type name mismatch."), 0, 0);
+        warnXmlReadError(file, tr("This file is not a FreeMedForms XML file. Document type name mismatch."));
         return false;
+    }
+
+    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
+        warnXmlReadError(file, tr("No version number defined"));
+        return false;
+    } else {
+//        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
+//        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
+//        QString version = contents.mid(beg, end-beg).simplified();
+        /** \todo check version of the file */
     }
 
     // Check root element --> must be a form type
@@ -242,7 +257,7 @@ bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
     if (!rootForm) {
         if ((root.tagName().compare(Constants::TAG_NEW_FORM)!=0) && (root.tagName().compare(Constants::TAG_ADDFILE)!=0)) {
-            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM), 0, 0);
+            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
             return false;
         }
         rootForm = createNewForm(root,0);
@@ -331,7 +346,7 @@ bool XmlFormIO::createElement(Core::FormItem *item, QDomElement &element)
     // new form
     if (element.tagName().compare(Constants::TAG_NEW_FORM, Qt::CaseInsensitive)==0) {
         // create a new form
-        item = fm()->createForm(element.firstChildElement(Constants::TAG_NAME).text());
+        item = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text());
         if (item) {
             loadElement(item, element);
             // read specific form's datas
@@ -434,7 +449,7 @@ bool XmlFormIO::createFormWidget(Core::FormMain *form)
 bool XmlFormIO::createWidgets()
 {
     // foreach Forms in FormManager
-    foreach(Core::FormMain *form, fm()->forms()) {
+    foreach(Core::FormMain *form, formManager()->forms()) {
         // create the form
         createFormWidget(form);
     }

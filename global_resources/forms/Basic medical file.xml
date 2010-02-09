@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MedForm>
+        <version>0.0.8</version>
         <name>basicMedicalFile</name>
         <label lang="fr">Dossier médical basic</label>
         <label lang="en">Basic medical file</label>
 	<type>form</type>
-        <version>0.0.8</version>
         <cdate>2009-08-04</cdate>
 	<categorie>examples</categorie>
 	
