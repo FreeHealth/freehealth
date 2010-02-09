@@ -181,13 +181,18 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
-    if (settings()->value(Core::Constants::S_CHECKUPDATE,Core::Constants::S_CheckUpdate_AtStartup).toInt() == Core::Constants::S_CheckUpdate_AtStartup) {
+    int chk = settings()->value(Core::Constants::S_CHECKUPDATE,Core::Constants::S_CheckUpdate_AtStartup).toInt();
+    QDate last = settings()->value(Core::Constants::S_LAST_CHECKUPDATE,QDate::currentDate()).toDate();
+    if ((chk == Core::Constants::S_CheckUpdate_AtStartup)
+       || ((chk == Core::Constants::S_CheckUpdate_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
+       || ((chk == Core::Constants::S_CheckUpdate_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
+       || ((chk == Core::Constants::S_CheckUpdate_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
+        updateChecker()->check(Utils::Constants::FREEMEDFORMS_UPDATE_URL);
     }
 
     // Open Last Opened Forms is necessary
