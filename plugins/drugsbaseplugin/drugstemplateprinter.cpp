@@ -62,15 +62,15 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
         // Ask user : print separately or merge into an unique prescription
         int r = Utils::withButtonsMessageBox(tr("Print separately or merge printing."),
                                tr("You have selected multiple templates, would you "
-                                  "print them separately or merge templates for printing"
+                                  "print them separately or merge templates for printing "
                                   "on a single order ?"), "",
-                               QStringList() << "Print separately" << "Merge and print");
+                               QStringList() << tr("Print separately") << tr("Merge and print"));
         if (r==1) {
             DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
             foreach(const Templates::ITemplate *t, iTemplates) {
                 DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
             }
-            bool r = DrugsIO::printPrescription(model);//, "CACA", "BOUDIN", "WM", 1, Qt::AlignCenter, true);
+            bool r = DrugsIO::printPrescription(model);
             delete model;
             model = 0;
             return r;
@@ -80,10 +80,9 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     }
 
     DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
-    /** \todo ask for the printer to use just once */
     foreach(const Templates::ITemplate *t, iTemplates) {
         DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
-        DrugsIO::printPrescription(model);//, "CACA", "BOUDIN", "WM", 1, Qt::AlignCenter, true);
+        DrugsIO::printPrescription(model);
     }
     delete model;
     model = 0;

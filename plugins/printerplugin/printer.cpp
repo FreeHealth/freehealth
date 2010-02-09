@@ -42,6 +42,10 @@
 #include "printer.h"
 #include "printerpreviewer_p.h"
 #include "textdocumentextra.h"
+#include "constants.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -146,6 +150,8 @@ static const int FOOTER_BOTTOM_MARGIN = 10;
 using namespace Print;
 using namespace Print::Internal;
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 namespace Print {
 namespace Internal {
 
@@ -189,6 +195,7 @@ public:
     /**  \brief Return the first know header of the list. \sa simpleDraw() */
     QTextDocument *header(Printer::Presence p) // Returns 0 if there is no header for the presence
     {
+        Q_UNUSED(p);
         // this function should only be used by simpleDraw
         if (m_Headers.count() < 1)
             return 0;
@@ -211,6 +218,7 @@ public:
     /** \brief Return the first known footer \sa simpleDraw() */
     QTextDocument *footer(Printer::Presence p) // Returns 0 if there is no footer for the presence
     {
+        Q_UNUSED(p);
         // this function should only be used by simpleDraw
         if (m_Footers.count() < 1)
             return 0;
@@ -766,11 +774,38 @@ void Printer::clearWatermark()
     d->m_WatermarkPresence = Printer::EachPages;
 }
 
+/** \brief Get the printer as setted in application's settings */
+bool Printer::getUserPrinter()
+{
+    delete d->m_Printer;
+    d->m_Printer = 0;
+    QString name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
+    if (name == "System") {
+        d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(),
+                                    QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+    } else if (name == "User") {
+        askForPrinter(qApp->activeWindow());
+    } else {
+        foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
+            if (info.printerName() == name) {
+                d->m_Printer = new QPrinter(info,
+                                            QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+                break;
+            }
+        }
+    }
+    if (d->m_Printer) {
+        d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
+        return true;
+    }
+    return false;
+}
+
 /**
   \brief Shows the print dialog, and ask user to select the printer to use.
   The printing process is not started.
 */
-bool Printer::askForPrinter( QWidget *parent )
+bool Printer::askForPrinter(QWidget *parent)
 {
     d->renewPrinter();
     QPrintDialog dialog(d->m_Printer, parent);

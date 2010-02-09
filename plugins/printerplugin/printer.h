@@ -57,8 +57,8 @@ class QTextEdit;
 /**
  * \file printer.h
  * \author Eric Maeker and the QPrinterEasy Team
- * \version 0.0.12
- * \date 30 Jan 2010
+ * \version 0.3.0
+ * \date 05 Fev 2010
 */
 
 
@@ -111,6 +111,7 @@ public:
     Printer( QObject * parent = 0 );
     ~Printer();
 
+    bool getUserPrinter();
     bool askForPrinter( QWidget *parent = 0 );
     bool useDefaultPrinter();
     void setPrinter( QPrinter * printer );

@@ -437,9 +437,11 @@ public Q_SLOTS:
     }
     void model_rowInserted(const QModelIndex &parent, int start, int count)
     {
-        this->m_ui->categoryTreeView->setExpanded(parent, false);
-        this->m_ui->categoryTreeView->expand(parent);
-        this->m_ui->categoryTreeView->scrollTo(m_Model->index(m_Model->rowCount(parent), 0, parent), QAbstractItemView::EnsureVisible);
+        Q_UNUSED(start);
+        Q_UNUSED(count);
+        m_ui->categoryTreeView->setExpanded(parent, false);
+        m_ui->categoryTreeView->expand(parent);
+        m_ui->categoryTreeView->scrollTo(m_Model->index(m_Model->rowCount(parent), 0, parent), QAbstractItemView::EnsureVisible);
     }
 
 public:
@@ -632,8 +634,9 @@ bool TemplatesView::printTemplate()
             }
         }
     }
+
     // Print the selected templates
-    foreach(const ITemplatePrinter *prt, printer_templates.keys()) {
+    foreach(const ITemplatePrinter *prt, printer_templates.uniqueKeys()) {
         if (!prt->printTemplates(printer_templates.values(prt)))
             return false;
     }

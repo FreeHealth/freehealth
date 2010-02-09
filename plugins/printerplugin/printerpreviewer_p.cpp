@@ -55,8 +55,9 @@ static const char* const EXAMPLE_CONTENT =
         "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>"
         "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>";
 
-static QWidget *createEditor( QWidget *parent, Editor::TextEditor *t, const QString &title, const int defaultPresence = Printer::EachPages)
+static QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &title, const int defaultPresence = Printer::EachPages)
 {
+    Q_UNUSED(defaultPresence);
     QWidget *w = new QWidget(parent);
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QGridLayout *grid = new QGridLayout(w);
@@ -320,6 +321,7 @@ void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
 
 void PrinterPreviewerPrivate::resizeEvent(QResizeEvent *e)
 {
+    Q_UNUSED(e);
     if (!m_PreviewPixmap.isNull()) {
         this->previewLabel->setPixmap(m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio));
     }

@@ -57,6 +57,10 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
+/**
+  \todo no singleton otherwise search filter is applied to all views.
+*/
+
 namespace DrugsDB {
 namespace Internal {
 

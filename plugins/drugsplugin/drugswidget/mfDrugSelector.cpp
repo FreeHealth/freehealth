@@ -89,7 +89,6 @@ void DrugSelector::initialize()
     createDrugModelView();
     createINNModelView();
     createDrugsHistoryActions();
-    createConnections();
 
     // select last search method (stored into qApp S_SEARCHMETHOD)
     int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
@@ -149,13 +148,6 @@ void DrugSelector::createDrugModelView()
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
     m_DrugsModel = DrugsDB::GlobalDrugsModel::instance();
-//    m_DrugsModel = new QSqlTableModel(this, QSqlDatabase::database(DRUGS_DATABASE_NAME));
-//    m_DrugsModel->setTable(drugsBase()->table(Table_CIS));
-//    m_DrugsModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-//    QHashWhere where;
-//    where.insert(CIS_COMMERCIALISATION, "='O'");
-//    m_DrugsModel->setFilter(drugsBase()->getWhereClause(Table_CIS, where));
-//    m_DrugsModel->select();
     // managing model fields
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_ADMINISTRATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_CODE_RPC , 1);
@@ -209,14 +201,14 @@ void DrugSelector::createDrugsHistoryActions()
     m_DrugsHistoricButton->addActions(m_HistoryAct->actions());
 }
 
-void DrugSelector::createConnections()
+void DrugSelector::connectFilter()
 {
-    // connect line edit with model filter
-    connect(searchLine, SIGNAL(textChanged(const QString &)), this, SLOT(updateModel()));
-    // connect search tool button actions
-//    connect(searchCommercialAct, SIGNAL(triggered()), this, SLOT(changeDrugsModelFilter()));
-//    connect(searchMoleculeAct, SIGNAL(triggered()), this, SLOT(changeDrugsModelFilter()));
-//    connect(searchDCIAct, SIGNAL(triggered()), this, SLOT(changeDrugsModelFilter()));
+    connect(searchLine, SIGNAL(textChanged(const QString &)), this, SLOT(updateModelFilter()));
+}
+
+void DrugSelector::disconnectFilter()
+{
+    disconnect(searchLine, SIGNAL(textChanged(const QString &)), this, SLOT(updateModelFilter()));
 }
 
 void DrugSelector::historyAct_triggered(QAction *action)
@@ -297,10 +289,10 @@ void DrugSelector::setSearchMethod(int method)
     settings()->setValue(Constants::S_SEARCHMETHOD, m_SearchMethod);
 
     // update model
-    updateModel();
+    updateModelFilter();
 }
 
-void DrugSelector::updateModel()
+void DrugSelector::updateModelFilter()
 {
     if (searchLine->searchText().isEmpty()) {
         m_DrugsModel->setFilter("");

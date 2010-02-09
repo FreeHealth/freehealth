@@ -649,6 +649,7 @@ void DosageViewer::on_tabWidget_currentChanged(int)
 
 void DosageViewer::onDailySchemeModelDataChanged(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     d->recalculateDailySchemeMaximum();
 }
 

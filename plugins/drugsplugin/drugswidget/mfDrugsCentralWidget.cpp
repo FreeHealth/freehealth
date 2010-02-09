@@ -125,6 +125,11 @@ PrescriptionViewer *DrugsCentralWidget::prescriptionView()
     return m_ui->m_PrescriptionView;
 }
 
+Internal::DrugSelector *DrugsCentralWidget::drugSelector()
+{
+    return m_ui->m_DrugSelector;
+}
+
 DrugsDB::DrugsModel *DrugsCentralWidget::currentDrugsModel() const
 {
     return m_CurrentDrugModel;
@@ -201,7 +206,7 @@ void DrugsCentralWidget::printPreview()
 
 bool DrugsCentralWidget::createTemplate()
 {
-    if (!m_CurrentDrugModel->rowCount())
+    if (m_CurrentDrugModel->rowCount() == 0)
         return false;
     // get the template content
     QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel);

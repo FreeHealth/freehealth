@@ -28,36 +28,26 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="171"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="169"/>
         <source>Can not add this drug to your prescription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="172"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="170"/>
         <source>Prescription can not contains twice the sample pharmaceutical drug.
 Drug %1 is already in your prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="175"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="173"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="205"/>
-        <source>Made with FreeDiams.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="217"/>
-        <source>Made with FreeMedForms.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DrugsWidget::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="261"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="262"/>
         <source>Drug Extras</source>
         <translation type="unfinished"></translation>
     </message>
@@ -65,7 +55,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="146"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="147"/>
         <source>Drugs Printing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -73,7 +63,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="204"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="205"/>
         <source>Drugs User</source>
         <translation type="unfinished"></translation>
     </message>
@@ -81,7 +71,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsViewOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="84"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="85"/>
         <source>Drugs View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -177,7 +167,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="170"/>
         <source>Drug Dosage Creator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Créateur de posologie</translation>
     </message>
 </context>
 <context>
@@ -593,7 +583,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="421"/>
         <source>Drug Dosage Creator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Créateur de posologie</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="585"/>
@@ -899,7 +889,7 @@ Do you want to send them ?</source>
         <translation>Imprimer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="425"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="430"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation type="unfinished"></translation>
     </message>

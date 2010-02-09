@@ -333,7 +333,7 @@ DrugsModel::~DrugsModel()
 }
 
 /** \brief count the number of selected drugs */
-int DrugsModel::rowCount(const QModelIndex & parent) const
+int DrugsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->m_DrugsList.count();
@@ -345,7 +345,7 @@ const QDrugsList & DrugsModel::drugsList() const
     return d->m_DrugsList;
 }
 
-QModelIndex DrugsModel::index(int row, int column, const QModelIndex & parent) const
+QModelIndex DrugsModel::index(int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     if (row < d->m_DrugsList.count())

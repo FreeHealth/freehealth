@@ -1,5 +1,16 @@
 /** \page templates Utilisation des modèles de documents
 
+\section templates_index Index
+
+\ref templates_general
+\ref templates_creation
+\ref templates_utilisation
+\ref templates_quicklyprinting
+\ref templates_moving
+\ref templates_modification
+\ref templates_contentviewing
+\ref templates_preferences
+
 \section templates_general Les modèles
 
 Les applicatifs de FreeMedForms mettent à votre disposition un gestionnaire de modèles de documents.
@@ -38,6 +49,17 @@ et le résumé.
 \image html templates_creation.png Création d'un modèle dans \freediams
 
 
+\section templates_quicklyprinting Impression rapide avec les modèles
+
+Vous pouvez lorsque cela est possible directement imprimer le contenu de plusieurs modèles en même temps. \n
+Chaque plugin propose ses propres options d'impression. Par exemple, \freediams propose lorsque vous sélectionnez
+plusieurs modèles pour l'impression, de les imprimer soit ensemble dans un mêeme document soit séparement.
+
+Pour cela, sélectionnez les modèles à imprimer (la touche Ctrl vous permet de sélectionner plusieurs modèles) et
+cliquez sur l'icône imprimer du gestionnaire de modèles ou sélectionnez imprimer dans le menu clique-droit.
+
+
+
 \section templates_utilisation Utilisation des modèles
 
 Pour activer un modèle dans un plugin, attrapez avec la souris le (ou les) modèle(s) souhaité(s)
@@ -55,16 +77,20 @@ glisser-déposer (drag and drop)
 Vous pouvez déplacer tout un tronçon de l'arborescence ou un item à la fois.
 
 
+
 \section templates_modification Éditer les modèles
 
 Sélectionnez le modèle ou la catégorie à modifier, cliquez droit ou cliquez sur l'icône d'édition.
 Le dialogue est semblable à celui de la création.
 
 
+
 \section templates_contentviewing Visualiser le contenu du modèle
 
 Vous pouvez visualiser le contenu du modèle mais pas le modifier à la main.\n
 Sélectionnez l'item, clique-droit puis Éditer enfin cliquez sur le bouton : 'Voir le contenu'.
+
+
 
 \section templates_preferences Les préférences du gestionnaire de modèles
 

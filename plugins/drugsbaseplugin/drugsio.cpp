@@ -54,6 +54,7 @@
 #include <drugsbaseplugin/dailyschememodel.h>
 
 #include <printerplugin/printer.h>
+#include <printerplugin/constants.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -662,8 +663,9 @@ static QString prepareFooter(DrugsDB::DrugsModel *model)
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 {
     Print::Printer p;
-    if (!p.askForPrinter(qApp->activeWindow()))
-        return false;
+    if (!p.getUserPrinter())
+        if (!p.askForPrinter(qApp->activeWindow()))
+            return false;
     QString footer;
 #ifdef FREEDIAMS
     Core::Patient *patient = Core::ICore::instance()->patient();
@@ -691,6 +693,7 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     Print::Printer p;
     QPrinter *printer = new QPrinter;
     printer->setPageSize(QPrinter::A4);
+    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
     p.setPrinter(printer);
     QString footer;
 #ifdef FREEDIAMS

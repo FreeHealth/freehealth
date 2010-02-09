@@ -254,6 +254,8 @@ Patient *CoreImpl::patient() const { return m_Patient; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
         // show the license agreement dialog

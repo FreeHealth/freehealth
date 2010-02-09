@@ -51,8 +51,8 @@ class QToolButton;
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.2
- * \date 09 Nov 2009
+ * \version 0.3.0
+ * \date 09 Feb 2010
  */
 
 namespace DrugsWidget {
@@ -77,6 +77,9 @@ public:
 
     void setSearchMethod(int method);
 
+    void connectFilter();
+    void disconnectFilter();
+
 public Q_SLOTS:
     void retranslateUi( const QString & );
 
@@ -89,13 +92,12 @@ private:
     void createToolButtons();
     void createDrugModelView();
     void createINNModelView();
-    void createConnections();
 
 private Q_SLOTS:
     // models slots
-    void updateModel();                                     // slot called by lineedit to change searched name
+    void updateModelFilter();
     void on_InnView_clicked( const QModelIndex & index );
-    void on_drugsView_doubleClicked( const QModelIndex & ); // index of m_DrugsView
+    void on_drugsView_doubleClicked( const QModelIndex & );
     void on_textButton_clicked();
 
     // history slots

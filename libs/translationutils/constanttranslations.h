@@ -238,6 +238,7 @@ namespace Time {
         const char * const  ZOOMOUT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Zoom out");
 
         const char * const  NAVIGATION            = QT_TRANSLATE_NOOP("tkConstants", "Navigation");
+        const char * const  DEFAULTS              = QT_TRANSLATE_NOOP("tkConstants", "Defaults");
 
         // Drugs
         const char* const DRUGS_DATABASE      = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
@@ -401,6 +402,8 @@ namespace Time {
         const char* const HEADER = QT_TRANSLATE_NOOP("tkConstants", "Header");
         const char* const FOOTER = QT_TRANSLATE_NOOP("tkConstants", "Footer");
         const char* const WATERMARK = QT_TRANSLATE_NOOP("tkConstants", "Watermark");
+        const char* const PRINTING = QT_TRANSLATE_NOOP("tkConstants", "Printing");
+
 
         // Plugins related
         const char* const PLUGINS_CATEGORY = QT_TRANSLATE_NOOP("tkConstants", "Plugins");

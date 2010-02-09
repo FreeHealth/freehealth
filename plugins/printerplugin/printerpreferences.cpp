@@ -39,6 +39,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "printerpreferences.h"
+#include "constants.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -68,8 +69,8 @@ PrinterPreferencesPage::~PrinterPreferencesPage()
 }
 
 QString PrinterPreferencesPage::id() const { return objectName(); }
-QString PrinterPreferencesPage::name() const { return tr("Defaults"); }
-QString PrinterPreferencesPage::category() const { return tkTr("Printing"); }
+QString PrinterPreferencesPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
+QString PrinterPreferencesPage::category() const { return tkTr(Trans::Constants::PRINTING); }
 
 void PrinterPreferencesPage::resetToDefaults()
 {
@@ -90,7 +91,11 @@ void PrinterPreferencesPage::finish() { delete m_Widget; }
 void PrinterPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Core::Constants::S_DEFAULT_PRINTER, QString("System"));
+    defaultvalues.insert(Print::Constants::S_DEFAULT_PRINTER, QString("System"));
+    defaultvalues.insert(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
+    defaultvalues.insert(Print::Constants::S_RESOLUTION, QPrinter::PrinterResolution);
+    defaultvalues.insert(Print::Constants::S_KEEP_PDF, false);
+    defaultvalues.insert(Print::Constants::S_PDF_FOLDER, QVariant());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -118,7 +123,8 @@ PrinterPreferencesWidget::PrinterPreferencesWidget(QWidget *parent) :
 
 void PrinterPreferencesWidget::setDatasToUi()
 {
-    QString select = settings()->value(Core::Constants::S_DEFAULT_PRINTER).toString();
+    printerList->clear();
+    QString select = settings()->value(Print::Constants::S_DEFAULT_PRINTER).toString();
     foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
         QListWidgetItem *item = new QListWidgetItem(printerList);
         QString name = info.printerName();
@@ -141,10 +147,26 @@ void PrinterPreferencesWidget::setDatasToUi()
 
     QListWidgetItem *system = new QListWidgetItem(tr("Always use system's default printer"), printerList);
     system->setData(Qt::UserRole, "System");
+    if (select == "System")
+        system->setSelected(true);
     QListWidgetItem *user = new QListWidgetItem(tr("Always ask user for the printer"), printerList);
-    system->setData(Qt::UserRole, "User");
+    user->setData(Qt::UserRole, "User");
+    if (select == "User")
+        user->setSelected(true);
 
-//    updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
+    // Color print
+    if (settings()->value(Print::Constants::S_COLOR_PRINT).toInt() == QPrinter::Color) {
+        colorBox->setChecked(true);
+    } else {
+        grayBox->setChecked(true);
+    }
+
+    // Resolution
+    resolutionCombo->setCurrentIndex(settings()->value(Print::Constants::S_RESOLUTION).toInt());
+
+    // Pdf
+    keepPdfBox->setChecked(settings()->value(Print::Constants::S_KEEP_PDF).toBool());
+//    S_PDF_FOLDER
 }
 
 void PrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -155,15 +177,37 @@ void PrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    // manage font size
-    /** \todo write here and manage in printer.cpp */
-//    s->setValue(Core::Constants::S_DEFAULT_PRINTER, updateCheckingCombo->currentIndex());
+    // Default printer
+    QListWidgetItem *sel = printerList->selectedItems().at(0);
+    if (sel) {
+        if (!sel->data(Qt::UserRole).toString().isEmpty()) {
+            s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->data(Qt::UserRole));
+        } else {
+            s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->text());
+        }
+    }
+    // Color Print
+    if (colorBox->isChecked())
+        s->setValue(Print::Constants::S_COLOR_PRINT, QPrinter::Color);
+    else
+        s->setValue(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
+
+    // Resolution
+    s->setValue(Print::Constants::S_RESOLUTION, resolutionCombo->currentIndex());
+
+    // Pdf
+    s->setValue(Print::Constants::S_KEEP_PDF, keepPdfBox->isChecked());
+    //    S_PDF_FOLDER
 }
 
 void PrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Utils::Log::addMessage("PrinterPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("Printer"));
-    s->setValue(Core::Constants::S_DEFAULT_PRINTER, QString("System"));
+    s->setValue(Print::Constants::S_DEFAULT_PRINTER, QString("System"));
+    s->setValue(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
+    s->setValue(Print::Constants::S_RESOLUTION, QPrinter::PrinterResolution);
+    s->setValue(Print::Constants::S_KEEP_PDF, false);
+    s->setValue(Print::Constants::S_PDF_FOLDER, QVariant());
     s->sync();
 }
 

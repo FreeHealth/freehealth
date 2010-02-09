@@ -412,7 +412,6 @@ const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
 const char * const  S_CHECKUPDATE  = "CheckUpdate";
 const char * const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
-const char * const  S_DEFAULT_PRINTER = "DefaultPrinter";
 
 enum {  // Don't change the ordre of this enum
     S_CheckUpdate_AtStartup = 0,

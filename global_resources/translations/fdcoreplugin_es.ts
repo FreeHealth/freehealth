@@ -18,7 +18,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="270"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="272"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>

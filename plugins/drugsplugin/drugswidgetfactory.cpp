@@ -115,7 +115,7 @@ bool DrugsWidgetsFactory::isContainer(const int) const
 
 Core::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent)
 {
-    return new DrugsPrescriptorWidget(linkedObject,parent);
+    return new DrugsPrescriptorWidget(linkedObject, parent);
 }
 
 //--------------------------------------------------------------------------------------------------------

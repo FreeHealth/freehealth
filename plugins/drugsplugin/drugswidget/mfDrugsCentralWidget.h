@@ -64,6 +64,7 @@ namespace DrugsWidget {
 namespace Internal {
 class DrugsContext;
 class DrugsActionHandler;
+class DrugSelector;
 
 namespace Ui {
 class DrugsCentralWidget;
@@ -87,6 +88,7 @@ public:
 
     QListView *prescriptionListView();
     PrescriptionViewer *prescriptionView();
+    Internal::DrugSelector *drugSelector();
 
     void setCurrentSearchMethod(int method);
     bool printPrescription();

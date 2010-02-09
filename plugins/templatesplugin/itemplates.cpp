@@ -62,10 +62,12 @@ using namespace Templates;
 
 QMimeData *ITemplate::toMimeData()
 {
+    return 0;
 }
 
-bool ITemplate::fromMimeData(QMimeData *data)
+bool ITemplate::fromMimeData(QMimeData *)
 {
+    return false;
 }
 
 QString ITemplate::serialize()
@@ -77,4 +79,5 @@ bool ITemplate::deserialize(const QString &serialized)
 {
     m_Datas.clear();
     m_Datas = Utils::Serializer::toVariantHash(serialized, base64MimeDatas);
+    return true;
 }

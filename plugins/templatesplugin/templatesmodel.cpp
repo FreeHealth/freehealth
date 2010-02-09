@@ -83,7 +83,19 @@
 using namespace Templates;
 using namespace Trans::ConstantTranslations;
 
-enum { base64MimeDatas = true };
+enum { base64MimeDatas = true  };
+
+#ifdef DEBUG
+enum {
+    WarnDragAndDrop = false,
+    WarnReparentItem = false
+   };
+#else
+enum {
+    WarnDragAndDrop = false,
+    WarnReparentItem = false
+   };
+#endif
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
@@ -941,6 +953,10 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
 
 bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &parent)
 {
+    if (WarnReparentItem)
+        if (!item.isValid())
+            qWarning() << "TemplatesModel::reparentIndex item invalid";
+
     if (!item.isValid())
         return false;
 
@@ -950,8 +966,9 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
     bool isTemplate = treeItem->isTemplate();
     int id = treeItem->id();
 
-//    qWarning() << "\n reparentIndex" << treeItem->label() << treeItem->id()
-//               << "to" << treeParent->label() << treeParent->id() << (treeItemParent == treeParent);
+    if (WarnReparentItem)
+        qWarning() << "\n reparentIndex" << treeItem->label() << treeItem->id()
+        << "to" << treeParent->label() << treeParent->id() << (treeItemParent == treeParent);
 
     if (treeItemParent == treeParent)
         return false;
@@ -970,8 +987,9 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
     // append its children
     row = 0;
     while (hasIndex(0, 0, item)) {
-//        qWarning() << "reparentIndex row" << row << index(0, 0, item).data().toString()
-//                << "to" << index(0, 0, parent).data().toString() << "or" << newParent.data().toString();
+        if (WarnReparentItem)
+            qWarning() << "reparentIndex row" << row << index(0, 0, item).data().toString()
+            << "to" << index(0, 0, parent).data().toString() << "or" << newParent.data().toString();
         reparentIndex(index(0, 0, item), newParent);
         ++row;
     }
@@ -985,7 +1003,8 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
         d->m_CategoriesToDelete.remove(d->m_CategoriesToDelete.indexOf(id));
     }
 
-//    qWarning() << "End reparent \n";
+    if (WarnReparentItem)
+        qWarning() << "End reparent \n";
     return true;
 }
 
@@ -1004,6 +1023,7 @@ int TemplatesModel::rowCount(const QModelIndex &parent) const
 
 int TemplatesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return Constants::Data_Max_Param;
 }
 
@@ -1074,6 +1094,7 @@ QVariant TemplatesModel::data(const QModelIndex &item, int role) const
 
 Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
@@ -1183,13 +1204,17 @@ QMimeData *TemplatesModel::mimeData(const QModelIndexList &indexes) const
     }
     tmp += cat;
     mimeData->setData(mimeTypes().at(0), tmp.toUtf8());
-//    qWarning() << "mime" << tmp;
+    if (WarnDragAndDrop)
+        qWarning() << "TemplatesModel creating mimeData" << tmp;
     return mimeData;
 }
 
 bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-//    qWarning() << "dropMimeData" << row << action;
+    Q_UNUSED(column)
+    if (WarnDragAndDrop)
+        qWarning() << "TemplatesModel dropMimeData row" << row << "Action" << action << "parent" << parent.data().toString();
+
     if (action == Qt::IgnoreAction)
         return true;
 
@@ -1215,8 +1240,8 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
 
     if  (action == Qt::MoveAction) {
         foreach(const QPersistentModelIndex &idx, list) {
-            int id = d->getItem(idx)->id();
-            bool isTemplate = d->getItem(idx)->isTemplate();
+//            int id = d->getItem(idx)->id();
+//            bool isTemplate = d->getItem(idx)->isTemplate();
             /** \todo removes templates children from the temp list */
             if (!reparentIndex(idx, parentIndex))
                 return false;
@@ -1248,7 +1273,9 @@ QModelIndex TemplatesModel::getTemplateId(const int id)
 
 QList<QPersistentModelIndex> TemplatesModel::getIndexesFromMimeData(const QMimeData *mime)
 {
-//    qWarning() << "TemplatesModel::getIndexesFromMimeData" << mime->data(mimeTypes().at(0));
+    if (WarnDragAndDrop)
+        qWarning() << "TemplatesModel::getIndexesFromMimeData" << mime->data(mimeTypes().at(0));
+
     Q_ASSERT(mime);
     QList<QPersistentModelIndex> list;
     if (!mime)
@@ -1261,7 +1288,8 @@ QList<QPersistentModelIndex> TemplatesModel::getIndexesFromMimeData(const QMimeD
     int pos = catBegin;
 
     // Manage categories
-//        qWarning() << "cat" << s;
+    if (WarnDragAndDrop)
+        qWarning() << "Categories" << s;
     while ((pos = rx.indexIn(s, pos)) != -1) {
         list << QPersistentModelIndex(d->findIndex(rx.cap(1).toInt(), false));
         pos += rx.matchedLength();
@@ -1278,7 +1306,8 @@ QList<QPersistentModelIndex> TemplatesModel::getIndexesFromMimeData(const QMimeD
             pos += rx.matchedLength();
         }
     }
-//    qWarning() << "Templates" << s;
+    if (WarnDragAndDrop)
+        qWarning() << "Templates" << s;
 
 //    foreach(QPersistentModelIndex id, list) {
 //        qWarning() << id.data().toString();
