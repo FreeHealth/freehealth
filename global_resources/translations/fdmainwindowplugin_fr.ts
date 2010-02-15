@@ -263,7 +263,7 @@ Merci de prendre connaissance de la documentation.</translation>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="196"/>
         <source>This assitant encountered errors during its process.</source>
-        <translation>Cet assistant à rencontrer des erreurs pendant la configuration.</translation>
+        <translation>Cet assistant a rencontré des erreurs pendant la configuration.</translation>
     </message>
     <message>
         <location filename="../../_protected/freediams/medintux_pro.cpp" line="197"/>

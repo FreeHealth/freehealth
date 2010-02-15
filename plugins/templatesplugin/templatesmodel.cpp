@@ -88,12 +88,14 @@ enum { base64MimeDatas = true  };
 #ifdef DEBUG
 enum {
     WarnDragAndDrop = false,
-    WarnReparentItem = false
+    WarnReparentItem = false,
+    WarnDatabaseSaving = false
    };
 #else
 enum {
     WarnDragAndDrop = false,
-    WarnReparentItem = false
+    WarnReparentItem = false,
+    WarnDatabaseSaving = false
    };
 #endif
 
@@ -282,7 +284,8 @@ class TemplatesModelPrivate
 public:
     TemplatesModelPrivate(Templates::TemplatesModel *parent) :
             q(parent), m_RootItem(0),
-            m_ShowOnlyCategories(false)
+            m_ShowOnlyCategories(false),
+            m_ReadOnly(false)
     {
         q->setObjectName("TemplatesModel");
         if (!m_ModelDatasRetreived) {
@@ -549,7 +552,8 @@ public:
 
     void saveModelDatas(const QModelIndex &start = QModelIndex())
     {
-//        qWarning() << "saveModelDatas :" << start.data().toString();
+        if (WarnDatabaseSaving)
+            qWarning() << "saveModelDatas :" << start.data().toString();
         QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
@@ -561,7 +565,10 @@ public:
         for(int i = 0; i< q->rowCount(start); ++i) {
             idx = q->index(i, 0, start);
             TreeItem *t = getItem(idx);
-//            qWarning() << "   saving" << t->label();
+            if (WarnDatabaseSaving) {
+                qWarning() << "   saving" << t->label().leftJustified(50,' ') << "user" << t->ownerUuid().leftJustified(50,' ') << "parent" << t->parent()->label().leftJustified(50,' ');
+                qWarning() << "   newly" << t->isNewlyCreated() << "modified" << t->isModified();
+            }
             QSqlQuery query(DB);
             QString req;
             if (t->isNewlyCreated()) {
@@ -866,6 +873,7 @@ private:
 public:
     TreeItem *m_RootItem;
     bool m_ShowOnlyCategories;
+    bool m_ReadOnly;
     static TreeItem *m_Tree;
     static bool m_ModelDatasRetreived;
     static QSet<TemplatesModelPrivate *> m_Handles;
@@ -953,6 +961,9 @@ QModelIndex TemplatesModel::parent(const QModelIndex &index) const
 
 bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &parent)
 {
+    if (d->m_ReadOnly)
+        return false;
+
     if (WarnReparentItem)
         if (!item.isValid())
             qWarning() << "TemplatesModel::reparentIndex item invalid";
@@ -1029,6 +1040,9 @@ int TemplatesModel::columnCount(const QModelIndex &parent) const
 
 bool TemplatesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (d->m_ReadOnly)
+        return false;
+
     if (!index.isValid())
         return false;
 
@@ -1105,6 +1119,9 @@ Qt::DropActions TemplatesModel::supportedDropActions() const
 
 bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 {
+    if (d->m_ReadOnly)
+        return false;
+
     // find parent
     Internal::TreeItem *parent = d->m_IdToCategory.value(t->parentId(), 0);
     if (!parent)
@@ -1123,6 +1140,9 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "insertRows" << row << count << parent.data();
+    if (d->m_ReadOnly)
+        return false;
+
     Internal::TreeItem *parentItem = 0;
     if (!parent.isValid())
         parentItem = d->m_RootItem;
@@ -1149,6 +1169,9 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 bool TemplatesModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "removeRows" << row << count;
+    if (d->m_ReadOnly)
+        return false;
+
     Internal::TreeItem *parentItem = 0;
     if (!parent.isValid())
         parentItem = d->m_RootItem;
@@ -1212,6 +1235,9 @@ QMimeData *TemplatesModel::mimeData(const QModelIndexList &indexes) const
 bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(column)
+    if (d->m_ReadOnly)
+        return false;
+
     if (WarnDragAndDrop)
         qWarning() << "TemplatesModel dropMimeData row" << row << "Action" << action << "parent" << parent.data().toString();
 
@@ -1338,6 +1364,10 @@ bool TemplatesModel::isCategoryOnly() const
     return d->m_ShowOnlyCategories;
 }
 
+void TemplatesModel::setReadOnly(const bool state)
+{
+    d->m_ReadOnly = true;
+}
 const ITemplate *TemplatesModel::getTemplate(const QModelIndex &item) const
 {
     return d->getItem(item);
@@ -1346,6 +1376,9 @@ const ITemplate *TemplatesModel::getTemplate(const QModelIndex &item) const
 
 bool TemplatesModel::submit()
 {
+    if (d->m_ReadOnly)
+        return false;
+
     d->saveModelDatas();
     d->deleteRowsInDatabase();
     return true;

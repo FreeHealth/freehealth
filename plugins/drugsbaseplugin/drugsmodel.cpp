@@ -872,8 +872,11 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
 
 Qt::DropActions DrugsModel::supportedDropActions() const
 {
+#if QT_VERSION >= 0x040600
+    return Qt::CopyAction;
+#else
     return Qt::MoveAction | Qt::CopyAction;
-//    return Qt::CopyAction;
+#endif
 }
 
 QStringList DrugsModel::mimeTypes() const
@@ -889,7 +892,10 @@ QStringList DrugsModel::mimeTypes() const
 
 bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-//    qWarning() << "dropMimeData" << row << action << data->data(mimeTypes().at(0));
+//    if (action == Qt::MoveAction)
+//        qWarning() << "DrugsModel::dropMimeData Move" << row << data->data(mimeTypes().at(0));
+//    else if (action == Qt::CopyAction)
+//        qWarning() << "DrugsModel::dropMimeData Copy" << row << data->data(mimeTypes().at(0));
 
     if (action == Qt::IgnoreAction)
         return true;

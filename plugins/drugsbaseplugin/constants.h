@@ -60,6 +60,8 @@
 namespace DrugsDB {
 namespace Constants {
 
+    const char * const FREEDIAMS_DEFAULT_USER_UUID = "freediams.default.user";  // this is only used by DrugsInteractions
+
     // SETTINGS
     const char * const S_USERRECORDEDFORMS       = "DrugsWidget/userRecordedForms";
     const char * const S_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
@@ -385,7 +387,6 @@ namespace Constants {
     const char * const DOSAGES_DATABASE_NAME = "dosages";          /*!< \brief Dosage database connection name. */
     const char * const DOSAGES_DATABASE_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
     const char * const DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
-    const char * const DOSAGES_DEFAULT_USER_UUID = "freediams.default.user";  // this is only used by DrugsInteractions
 
 /**
  \brief Used by mfDosageModel for column representation.

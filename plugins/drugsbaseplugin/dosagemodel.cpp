@@ -271,9 +271,9 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     Q_ASSERT_X(m_CIS != -1, "DosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
     QString userUuid;
 #ifdef FREEDIAMS
-    userUuid = Dosages::Constants::DOSAGES_DEFAULT_USER_UUID;
+    userUuid = DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID;
 #else
-    /** \todo here */
+    /** \todo FMF : add user */
     //    userUuid = tkUserModel::instance()->currentUserData(User::Uuid).toString();
 #endif
     int i;

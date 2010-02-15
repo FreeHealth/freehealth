@@ -92,6 +92,7 @@ public:
         if (!m_ui->parentTreeView->model()) {
             Templates::TemplatesModel *model = new Templates::TemplatesModel(q);
             model->categoriesOnly();
+            model->setReadOnly(true);
             m_ui->parentTreeView->setModel(model);
         }
         for(int i=0; i < m_Model->columnCount(); ++i) {
@@ -112,6 +113,7 @@ public:
         if (!m_Mapper) {
             m_Mapper = new QDataWidgetMapper(q);
             m_Mapper->setModel(m_Model);
+            m_Mapper->addMapping(m_ui->userLineEdit, Constants::Data_UserUuid);
             m_Mapper->addMapping(m_ui->nameLineEdit, Constants::Data_Label);
             m_Mapper->addMapping(m_ui->summaryTextEdit, Constants::Data_Summary, "html");
         }
@@ -142,7 +144,6 @@ public:
     TemplatesContentEditor(QWidget *parent) : QDialog(parent), Ui::TemplatesContentEditor()
     {
         setupUi(this);
-
     }
 
     void setContent(const QString &content)

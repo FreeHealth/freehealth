@@ -14,7 +14,7 @@ version=0.3.0
 
    * Modifications importantes :
       * Préparation de l'application pour les traductions en espagnol
-      * Passage à Qt4.6.1 pour la version Mac
+      * Passage à Qt4.6.1 pour la version Mac et Windows
 
    * Correction de bogues / Améliorations techniques :
       * une traduction erronée

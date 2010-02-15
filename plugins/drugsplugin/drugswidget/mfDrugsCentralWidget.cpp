@@ -215,6 +215,11 @@ bool DrugsCentralWidget::createTemplate()
     dlg.setTemplateContent(content);
     dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, DrugsDB::DrugsIO::SimpleVersion));
     dlg.setTemplateMimeTypes(DrugsDB::DrugsIO::prescriptionMimeTypes());
+#ifdef FREEDIAMS
+    dlg.setUserUuid(DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID);
+#else
+    /** \todo FMF : add user uuid */
+#endif
     dlg.exec();
     return true;
 }

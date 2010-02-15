@@ -80,6 +80,8 @@ public:
     bool loadForm();
     bool saveForm(QObject *treeRoot) { return true; }
 
+    static QString lastestXmlVersion();
+
 private:
     bool loadForm(const QString &file, Core::FormMain *rootForm);
     bool loadElement(Core::FormItem *item, QDomElement &rootElement);

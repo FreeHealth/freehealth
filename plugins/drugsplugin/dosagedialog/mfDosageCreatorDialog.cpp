@@ -52,7 +52,6 @@
 #include "mfDosageCreatorDialog.h"
 
 // include drugwidget headers
-//#include <drugsmodel/mfDosage.h>
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
@@ -65,8 +64,6 @@
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
-#include <listviewplugin/stringlistmodel.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
@@ -77,9 +74,6 @@
 #include <QModelIndex>
 
 using namespace DrugsWidget::Constants;
-//using namespace mfDosagesConstants;
-//using namespace mfInteractionsConstants;
-
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 

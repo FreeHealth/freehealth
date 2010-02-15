@@ -100,6 +100,7 @@ public:
 
     void categoriesOnly();
     bool isCategoryOnly() const;
+    void setReadOnly(const bool state);
 
     bool isDirty() const;
 

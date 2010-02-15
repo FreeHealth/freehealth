@@ -103,7 +103,7 @@ namespace Constants {
 
     const char * const  S_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
 
-    const char * const  S_STATEPREFIX =   "DrugsWidget/";
+    const char * const  S_STATEPREFIX            = "DrugsWidget/";
 
 
 }  // End namespace DrugsWidget::Constants

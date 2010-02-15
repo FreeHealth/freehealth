@@ -47,8 +47,6 @@
 #include <drugsplugin/drugswidget/druginfo.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
-#include <listviewplugin/stringlistmodel.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>

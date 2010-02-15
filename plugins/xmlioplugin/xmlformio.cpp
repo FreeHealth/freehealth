@@ -176,6 +176,11 @@ XmlFormIO::~XmlFormIO()
 {
 }
 
+QString XmlFormIO::lastestXmlVersion()
+{
+    return "0.3.0";
+}
+
 QStringList XmlFormIO::fileFilters() const
 {
     return QStringList() << tr("FreeMedForms Form File (*.%1)").arg(Constants::DOCTYPE_EXTENSION);

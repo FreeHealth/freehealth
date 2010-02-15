@@ -15,13 +15,14 @@
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="122"/>
         <source>Save templates .</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder les modèles.</translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="123"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certaines données ne sont pas encore sauvegardées dans la base de données. Voulez-vous les sauvegarder ?
+Répondre &apos;Non&apos; causera une perte de données définitive.</translation>
     </message>
 </context>
 <context>
@@ -83,7 +84,7 @@
     <message>
         <location filename="../../plugins/templatesplugin/templateseditdialog.ui" line="57"/>
         <source>Parent category</source>
-        <translation>Dans la catégroie</translation>
+        <translation>Dans la catégorie</translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templateseditdialog.ui" line="64"/>
@@ -121,7 +122,7 @@
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="74"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Police de caractères</translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="89"/>
@@ -152,7 +153,7 @@
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="14"/>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="26"/>
         <source>Templates preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Préférences des modèles</translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="96"/>

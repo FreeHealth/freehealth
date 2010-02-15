@@ -62,10 +62,7 @@
 #include <drugsplugin/drugswidgetmanager.h>
 
 #include <utils/log.h>
-//#include <utils/widgets/spinboxdelegate.h>
 #include <translationutils/constanttranslations.h>
-
-#include <listviewplugin/stringlistmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

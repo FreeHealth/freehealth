@@ -96,6 +96,7 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool saveFile();
     bool saveAsFile();
     bool print();
+    bool printPreview();
 
     bool applicationPreferences();
     bool configureMedintux();

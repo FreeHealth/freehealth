@@ -454,6 +454,12 @@ bool MainWindow::print()
     return m_ui->m_CentralWidget->printPrescription();
 }
 
+bool MainWindow::printPreview()
+{
+    m_ui->m_CentralWidget->printPreview();
+    return true;
+}
+
 /** \brief Runs the MedinTux configurator */
 bool MainWindow::configureMedintux()
 {
