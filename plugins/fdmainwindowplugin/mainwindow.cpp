@@ -214,7 +214,6 @@ void MainWindow::extensionsInitialized()
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
     refreshPatient();
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxx";
 
     messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
@@ -299,7 +298,6 @@ void MainWindow::refreshPatient()
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
     QString sex = patient()->value(Core::Patient::Sex).toString();
 //    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
-    qWarning() << "sex" << sex;
     if (sex.isEmpty())
         m_ui->sexCombo->setCurrentIndex(0);
     else if (sex == "M")
