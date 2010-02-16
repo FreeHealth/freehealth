@@ -107,6 +107,8 @@ En cours de rédaction.
 */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////  COMMAND LINE  ////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \page ligne_commandes Interfacer \freediams avec d'autres logiciels
 
 \freediams est pensé comme un "module" externe. Ce "module" peut étre utilisé par un grand nombre
@@ -119,6 +121,7 @@ moment de l'appel.
 \section params_ligne_commandes Paramètres de la ligne de commande
 
 Les paramètres suivants sont disponibles :
+\li \e --version , -version , -v : affiche la version actuelle de FreeDiams.
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
 \li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications.
 \li \e --patientname="xx xx xx" : définit le nom du patient.
