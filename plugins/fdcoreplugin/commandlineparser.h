@@ -56,6 +56,7 @@ public:
         CL_MedinTux = 0,
         CL_ExchangeFile,
         CL_PatientName,
+        CL_PatientGender,
         CL_DateOfBirth,
         CL_Weight,
         CL_Size,
@@ -75,6 +76,7 @@ public:
         ref.insert(CL_MedinTux, "--medintux");
         ref.insert(CL_ExchangeFile, "--exchange");
         ref.insert(CL_PatientName, "--patientname");
+        ref.insert(CL_PatientGender, "--gender");
         ref.insert(CL_DateOfBirth, "--dateofbirth");
         ref.insert(CL_Weight, "--weight");
         ref.insert(CL_Size, "--size");
@@ -98,6 +100,7 @@ public:
                 case CL_MedinTux : params.insert(CL_MedinTux, true); break;
                 case CL_ExchangeFile : params.insert(CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_PatientName : params.insert(CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
+                case CL_PatientGender : params.insert(CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_DateOfBirth : params.insert(CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Weight : params.insert(CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Size : params.insert(CL_Size, a.mid(a.indexOf("=")+1).remove("\"")); break;

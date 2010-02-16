@@ -155,6 +155,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Patient->setValue(Patient::Weight, m_CommandLine->value(CommandLine::CL_Weight));
     m_Patient->setValue(Patient::Creatinin, m_CommandLine->value(CommandLine::CL_Creatinin));
     m_Patient->setValue(Patient::FullName, m_CommandLine->value(CommandLine::CL_PatientName));
+    m_Patient->setValue(Patient::Sex, m_CommandLine->value(CommandLine::CL_PatientGender));
 //    m_Patient->setValue(Patient::DrugsAllergies, m_CommandLine->value(CommandLine::));
 //    m_Patient->setValue(Patient::ICD10Deceases, m_CommandLine->value(CommandLine::CL_DateOfBirth));
 

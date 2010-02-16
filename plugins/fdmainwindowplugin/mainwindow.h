@@ -81,7 +81,7 @@ public:
     void extensionsInitialized();
 
     void createDockWindows();
-    void refreshPatient() const;
+    void refreshPatient();
     void readSettings();
     void writeSettings();
     void createStatusBar();

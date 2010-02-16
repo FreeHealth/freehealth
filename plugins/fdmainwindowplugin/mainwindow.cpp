@@ -214,6 +214,7 @@ void MainWindow::extensionsInitialized()
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
     refreshPatient();
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxx";
 
     messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
@@ -261,6 +262,7 @@ void MainWindow::extensionsInitialized()
        || ((chk == Core::Constants::S_CheckUpdate_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
        || ((chk == Core::Constants::S_CheckUpdate_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
+        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
@@ -285,7 +287,7 @@ MainWindow::~MainWindow()
   \brief Refresh the ui data refering to the patient
   \sa Core::Internal::CoreImpl::instance()->patient(), diPatient
 */
-void MainWindow::refreshPatient() const
+void MainWindow::refreshPatient()
 {
     m_ui->patientName->setText( patient()->value(Core::Patient::FullName).toString() );
     m_ui->patientName->setToolTip( QString("Nom : %1<br />Date de naissance : %2<br />Poids : %3<br />"
@@ -295,14 +297,21 @@ void MainWindow::refreshPatient() const
                                    patient()->value(Core::Patient::Weight).toString() )
                              .arg( patient()->value(Core::Patient::Size).toString(),
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
-
+    QString sex = patient()->value(Core::Patient::Sex).toString();
+//    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
+    qWarning() << "sex" << sex;
+    if (sex.isEmpty())
+        m_ui->sexCombo->setCurrentIndex(0);
+    else if (sex == "M")
+        m_ui->sexCombo->setCurrentIndex(1);
+    else
+        m_ui->sexCombo->setCurrentIndex(2);
     m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
     m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
     m_ui->patientSize->setValue(patient()->value(Core::Patient::Size).toInt());
     m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
     m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinin).toDouble());
     m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAllergies).toString());
-    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
 }
 
 /**
@@ -349,8 +358,11 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
+        QVariant sex = patient()->value(Core::Patient::Sex);
 	m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
+        patient()->setValue(Core::Patient::Sex, sex);
+        refreshPatient();
     }
 }
 
