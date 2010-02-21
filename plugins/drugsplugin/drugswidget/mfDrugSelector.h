@@ -51,8 +51,8 @@ class QToolButton;
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.3.0
- * \date 09 Feb 2010
+ * \version 0.3.1
+ * \date 15 Feb 2010
  */
 
 namespace DrugsWidget {
@@ -71,7 +71,7 @@ public:
     explicit DrugSelector(QWidget *parent = 0);
     void initialize();
 
-    void setFont( const QFont & font );
+    void setFont(const QFont &font);
     void setFocus(Qt::FocusReason r) { searchLine->setFocus(r); }
     void setFocus() { searchLine->setFocus(); }
 
@@ -81,11 +81,11 @@ public:
     void disconnectFilter();
 
 public Q_SLOTS:
-    void retranslateUi( const QString & );
+    void retranslateUi(const QString &);
 
 Q_SIGNALS:
-    void drugSelected( int CIS );
-    void drugSelected( const QModelIndex & index );
+    void drugSelected(int CIS);
+    void drugSelected(const QModelIndex &index);
 
 private:
     void createDrugsHistoryActions();

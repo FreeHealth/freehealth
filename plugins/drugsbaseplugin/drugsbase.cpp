@@ -851,8 +851,8 @@ DrugsData *DrugsBase::getDrugByCIP(const QVariant & CIP_id)
 /** \brief Retrieve and return the drug designed by the CIS code \e CIS_id. */
 DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
 {
-     if (CIS_id.toInt() < 10000000)
-         return 0;
+//     if (CIS_id.toInt() < 10000000)
+//         return 0;
      QTime t;
      t.start();
 
@@ -927,7 +927,8 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
          toReturn->addInnAndIamClasses(d->getAllInnAndIamClassesIndex(i)) ;
      }
 
-//     toReturn->warn();
+     if (toReturn)
+         toReturn->warn();
 
      if (d->m_LogChrono)
          Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByCIS");

@@ -97,7 +97,9 @@ public:
         m_Tree = new QTreeWidget(dlg);
 //        m_Combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_ToolBar = new QToolBar(tkTr(Trans::Constants::NAVIGATION), dlg);
+#if QT_VERSION < 0x040600
         m_ToolBar->setIconSize(QSize(16,16));
+#endif
         aNext = new QAction(dlg);
         aPrevious = new QAction(dlg);
         aHome = new QAction(dlg);

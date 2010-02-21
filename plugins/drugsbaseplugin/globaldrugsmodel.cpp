@@ -70,33 +70,36 @@ public:
     GlobalDrugsModelPrivate()
     {}
 
-    void updateCachedAvailableDosage()
+    static void updateCachedAvailableDosage()
     {
         m_CachedAvailableDosageForCIS.clear();
         m_CachedAvailableDosageForCIS = drugsBase()->getAllCISThatHaveRecordedDosages();
     }
 
-    bool CISHasRecordedDosage(const int CIS)
+    static bool CISHasRecordedDosage(const int CIS)
     {
         return m_CachedAvailableDosageForCIS.contains(CIS);
     }
 
 private:
-    QList<int> m_CachedAvailableDosageForCIS;
-
+    static QList<int> m_CachedAvailableDosageForCIS;
 };
+
+/** \todo clear static cachedCISDosage when no entity of this object left */
+QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForCIS;
+
 }  // End Internal
 }  // End DrugsDB
 
 using namespace DrugsDB;
 
-DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::m_Instance = 0;
-DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::instance(QObject *parent)
-{
-    if (!m_Instance)
-        m_Instance = new DrugsDB::GlobalDrugsModel(parent);
-    return m_Instance;
-}
+//DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::m_Instance = 0;
+//DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::instance(QObject *parent)
+//{
+//    if (!m_Instance)
+//        m_Instance = new DrugsDB::GlobalDrugsModel(parent);
+//    return m_Instance;
+//}
 
 GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
         QSqlTableModel(parent, QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME)),

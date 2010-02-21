@@ -44,6 +44,7 @@ qu'en Français.
 \li \ref medintux
 \li \ref ligne_commandes
 \li \ref installation_cle_usb
+\li \ref drugsdatabaseschema
 \li \ref participer
 
 \section derniere_version Dernière version
@@ -125,6 +126,7 @@ Les paramètres suivants sont disponibles :
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
 \li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications.
 \li \e --patientname="xx xx xx" : définit le nom du patient.
+\li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
 \li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
 \li \e --weight="dd" : définit le poids du patient (en kg)
 \li \e --size="ddd" : définit la taille du patient (en cm)

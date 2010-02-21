@@ -61,6 +61,12 @@
 
 #include <QDebug>
 
+#ifdef DEBUG
+enum { WarnSearchFilter = false };
+#else
+enum { WarnSearchFilter = false };
+#endif
+
 using namespace DrugsWidget;
 using namespace DrugsWidget::Internal;
 
@@ -147,13 +153,13 @@ void DrugSelector::createDrugModelView()
 {
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
-    m_DrugsModel = DrugsDB::GlobalDrugsModel::instance();
+    m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
     // managing model fields
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_ADMINISTRATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_CODE_RPC , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_COMMERCIALISATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AUTORISATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AMM , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_ADMINISTRATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_FORME , 1);
     // create the view
     drugsView->setModel(m_DrugsModel);
@@ -228,11 +234,11 @@ void DrugSelector::historyAct_triggered(QAction *action)
 //--------------------------------------------------------------------------------------------------------
 void DrugSelector::retranslateUi(const QString &)
 {
-    if (m_DrugsModel) {
-        m_DrugsModel->setHeaderData(1, Qt::Horizontal, tr("Short Name"));
-        m_DrugsModel->setHeaderData(2, Qt::Horizontal, tr("Form"));
-        m_DrugsModel->setHeaderData(3, Qt::Horizontal, tr("Administration"));
-    }
+//    if (m_DrugsModel) {
+//        m_DrugsModel->setHeaderData(1, Qt::Horizontal, tr("Short Name"));
+//        m_DrugsModel->setHeaderData(2, Qt::Horizontal, tr("Form"));
+//        m_DrugsModel->setHeaderData(3, Qt::Horizontal, tr("Administration"));
+//    }
 }
 
 void DrugSelector::setSearchMethod(int method)
@@ -295,14 +301,18 @@ void DrugSelector::setSearchMethod(int method)
 void DrugSelector::updateModelFilter()
 {
     if (searchLine->searchText().isEmpty()) {
+        if (WarnSearchFilter)
+            qWarning() << "No search filter";
         m_DrugsModel->setFilter("");
         return;
     }
     QString tmp = m_filterModel;
     QString search = searchLine->searchText().replace("*", "%");
-    if (m_SearchMethod != Constants::SearchInn)
+    if (m_SearchMethod != Constants::SearchInn) {
         m_DrugsModel->setFilter(tmp.replace("__replaceit__", search));
-    else {
+        if (WarnSearchFilter)
+            qWarning() << "Search filter" << tmp;
+    } else {
         // Search By INN
         // refresh inn view and model
         QHashWhere where;
@@ -315,6 +325,8 @@ void DrugSelector::updateModelFilter()
             list += QString::number(i) + ", " ;
         list.chop(2);
         m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
+        if (WarnSearchFilter)
+            qWarning() << "Search filter" << tmp;
     }
 }
 

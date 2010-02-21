@@ -1,0 +1,214 @@
+/**
+\~french \page drugsdatabaseschema Schéma de la base de données de \freediams
+\~english \page drugsdatabaseschema Database schema of \freediams
+
+\~french
+Cette section est essentiellement rédigée pour les développeurs. \freediams est programmé pour gérer plusieurs
+bases de données thérapeutiques. Pour ajouter une source de données, il vous suffit de créer une base de
+données répondant aux critères ci-dessous décrits.
+
+\~english
+This section is written primarily for developers. \freediams is programmed to manage multiple
+therapeutic databases. To add a data source, you just need to create a database
+data meeting the criteria described below.
+
+\~french \section drugsdb La base de données thérapeutiques
+\~english \section drugsdb Drugs database
+
+\~french \subsection drugsdb_tables Les tables de la base de données
+\~english \subsection drugsdb_tables Tables of the database
+
+\~french
+Les base de données doivent comporter plusieurs tables liées entre elles par le biais de
+clés primaires. \n
+Il existe pour chaque médicament un <b>numéro d'identifiant unique (UID)</b>. Ce numéro d'identifiant unique
+peut posséder une dénomination particulière (CIS pour la France, PZN en Allemagne...). Cette dénomination
+peut être renseignée dans le champs VERSION.VERSION (cf infra).
+
+Les différentes tables sont :
+- DRUGS : contient l'UID, le nom commercial du médicament et des informations concernant sa commercialisation ;
+- COMPOSITION : contient le descriptif des différentes molécules composant le médicament
+- PACKAGING : contient le mode de présentation du traitement (la boîte)
+
+Jusqu'à présent, \freediams ne prend pas en compte la table PACKAGING qui peut donc rester vide.
+
+\~english
+
+\~french \subsection drugsdb_table_drugs La table DRUGS
+\~english \subsection drugsdb_table_drugs The DRUGS table
+
+\~french
+Schéma :
+- UID : Identifiant unique des médicaments : CIS en France
+- NAME : nom commercial du médicament
+- FORM : forme du médicament (gélule, comprimé, gél...)
+- ROUTE : voie d'administration
+- ATC : code ATC du médicament
+- TYPE_MP (optionnel) : type d'AMM
+- AUTORIZATION (optionnal) : type d'autorisation d'AMM
+- MARKETTED : Oui = 1 ; Non = 0
+- CODE_RPC : lien internet vers le RPC
+
+\~english
+Schema :
+- UID : Unique Identifier for Drug, typically per-country
+- NAME : Commercial, "brand" name of the drug
+- FORM : Form of the drug (e.g. tablet, capsule, powder, solution, cream, soap bar)
+- ROUTE : route of administration (e.g. oral, intravenous, ophthalmic, rectal, topical)
+- ATC : drug's Anatomical Therapeutic Chemical classification system code
+- TYPE_MP (optional) : marketing permission (AMM in French)
+- AUTORIZATION (optional) : type of authorisation
+- MARKETTED : Yes = 1 ; No = 0
+- CODE_RPC (optionnal) : internet link a the "summary of product characteristics"
+
+
+\~french \subsection drugsdb_table_composition La table COMPOSITION
+\~english \subsection drugsdb_table_composition The COMPOSITION table
+
+\~french
+Un médicament peut contenir plusieurs molécules. Certaines molécules sont présentes sous une forme et métabolisées
+en une autre (voir NATURE, LK_NATURE).
+
+Schéma:
+- UID : Identifiant unique des médicaments : CIS en France
+- MOLECULE_FORM : forme de la molécule (comprimé, gél...)
+- MOLECULE_CODE : unique identifiant de la molécule
+- MOLECULE_NAME : nom de la molécule
+- DOSAGE : dosage de la molécule (ex : 10 mg)
+- DOSAGE_REF : référence pour le dosage (ex : 1 cp == 10 mg par cp)
+    - SA (can be used as default value) : Active substance
+    - FT : Tranformed substance
+- LK_NATURE :
+    - Link from SA to FT
+
+\~english
+A drug can contain multiple molecules. One molecule can be present in a specific form and be
+metabilized into another (see NATURE / LK_NATURE).
+
+Schema:
+- UID : UID of the drug
+- MOLECULE_FORM : form of the drug (redundant with DRUGS.FORM)
+- MOLECULE_CODE : unique identifiant of the molecule
+- MOLECULE_NAME : name of the molecule
+- DOSAGE : dosage of the molecule (eg 10 mg)
+- DOSAGE_REF : reference for the dosage (eg 1 tablet == 10 mg per tablet)
+- NATURE : must be one of two kinds :
+    - SA (can be used as default value) : name of Active substance
+    - FT : name of Tranformed substance
+- LK_NATURE :
+    - Link from SA to FT
+
+\~french \subsection drugsdb_table_pack La table PACKAGING
+\~english \subsection drugsdb_table_pack The PACKAGING table
+
+\~french
+Cette table est actuellement \em optionnelle. \n
+
+Schéma :
+- UID : UID du médicament (le CIS en France)
+- MAIN_CODE : Code principal (en France correspond au CIP court)
+- LABEL : intitulé de la présentation
+- STATUS
+    - Présentation active  -> A
+    - Présentation abrogée -> B
+- MARKETING
+    - Déclaration d'arrêt de commercialisation -> A
+    - Déclaration de commercialisation non communiquée -> N
+    - Déclaration de commercialisation -> C
+    - Déclaration de suspension de commercialisation -> S
+- DATE : most recent commercial update
+- OPTIONAL_CODE: Code optionnel (en France correspond au CIP long)
+
+
+
+\~english
+This table is \em optional. \n
+
+Schema :
+- UID : UID of the Drug
+- MAIN_CODE : UID of the packaging
+- LABEL : label of the packaging
+- STATUS :
+    - Active packaging  -> A
+    - Non-active packaging -> B
+- MARKETING :
+    - Marketing cancelled  -> A
+    - Unknown Marketing date -> N
+    - Commercialized -> C
+    - Suspended Marketing -> S
+- DATE : most recent commercial update
+- OPTIONAL_CODE : can complete the MAIN_CODE
+
+\~french \section interactionsdb Base de données des interactions
+\~english \section interactionsdb Interactions database
+
+\~french
+Jusqu'à présent la base de données des interactions n'est disponible qu'en français. Une équipe de
+traducteur pourrait assurer les versions anglaises et allemandes.
+
+\~english
+Till now, interactions' database is french only. May be a translator team can ensure english and deutsch
+versions.
+
+\~french \subsection interactionsdb_table_IAM Table IAM
+\~english \subsection interactionsdb_table_IAM Table IAM
+
+- IAM_ID : id of the interaction
+- ID1 : id of the first interacting INN
+- ID2 : id of the second interacting INN
+- TYPE : nature of the risk (encoded)
+    - 0001 = Precaution
+    - 0010 = Take in account
+    - 0100 = Inadvisable
+    - 1000 = contraindication
+- TEXT_IAM : Nature of the risk
+- TEXT_CAT : What to do in case of an interaction
+
+\~french \subsection interactionsdb_table_IAM Table IAM
+\~english \subsection interactionsdb_table_IAM Table IAM
+
+This part need to be clarified...
+
+
+\~french \section db_infos Informations concernant la base de données
+\~english \section db_infos Database informations
+
+\~french
+Les base de données sont présentes dans le répertoire <em>/Resources/databases/drugs</em>.\n
+Le nom doit être formaté de la sorte : <em>drugs-XX.db</em> où \e XX correspond au code ISO du pays :
+fr, us, de, sp...
+
+\~english
+Drugs databases are stored inside <em>/Resources/databases/drugs</em>.\n
+Name must formatted as above : <em>drugs-XX.db</em> where \e XX correspond to the two letters ISO encoded country :
+fr, us, de, sp...
+
+\~french
+La base de données doit comprendre une table VERSION avec un champs unique VERSION.\n
+Ce champs <em>VERSION.VERSION</em> comprend un code XML formatté comme suit.
+
+\~english
+The database must contain a table VERSION with an unique field VERSION.\n
+This field <em>VERSION.VERSION</em> contains a XML formatted code as follow.
+
+\~
+\verbatim
+<FreeDiams>
+  <DrugsDatabase>
+    <Version database="0.4.0" freediamscompat="0.3.0/>
+    <Name lang="fr">Base de données française</Name>
+    <Name lang="en">French Drugs Database</Name>
+    <Provider name="AFSSAPS" link="http://...."/>
+    <License></License>
+    <FreeDiamsAuthor></FreeDiamsAuthor>
+    <Date></Date>
+  </DrugsDatabase>
+</FreeDiams>
+\endverbatim
+
+\~french
+\~english
+
+\ref index
+*/
+

@@ -3,11 +3,11 @@ version=0.3.1
     * Fev 2010
 
     * Version de la base de données thérapeutique :
-      * Médicaments :  AFSSAPS - 28/01/2009
+      * Médicaments :  AFSSAPS - 28/01/2010
       * Interactions : AFSSAPS - 30/06/2009
 
     * Nouvelles fonctionnalités :
-      * Nouveau paramètre pour ligne de commande : '--version'
+      * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender'
 
     * Modifications importantes :
 
@@ -19,7 +19,7 @@ version=0.3.0
     * Fev 2010
 
     * Version de la base de données thérapeutique :
-      * Médicaments :  AFSSAPS - 28/01/2009
+      * Médicaments :  AFSSAPS - 28/01/2010
       * Interactions : AFSSAPS - 30/06/2009
 
    * Nouvelles fonctionnalités :

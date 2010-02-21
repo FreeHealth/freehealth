@@ -1,4 +1,4 @@
-include ( checkqtversion.pri )
+include (checkqtversion.pri)
 
 TEMPLATE = subdirs
 
