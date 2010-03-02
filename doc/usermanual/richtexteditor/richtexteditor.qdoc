@@ -1,6 +1,10 @@
-/*! \page richtext_index Manuel de l'utilisateur - L'éditeur de texte
+/*!
+
+\~french \page richtext_index Manuel de l'utilisateur - L'éditeur de texte
+\~english \page richtext_index RichTextEditor user manual
 
 
+\~french
 L'éditeur de texte enrichi vous permet d'éditer des textes structurés et complexes. Vous pouvez
 modifier l'apparence du texte (gras, italique, souligné, couleur...), l'apparence des paragraphes
 (alignement) et ajouter/modifier des tableaux (il est possible d'imbriquer des tableaux). \n
@@ -12,9 +16,22 @@ l'application),
 - depuis un menu contextuel,
 - depuis des racourcis claviers.
 
+\~english
+The rich text editor allows you to edit structured and complex text. You can
+change the appearance of text (bold, italics, underline, color ...), the appearance of paragraphs
+(alignment) and add / modify tables (it is possible to nest tables). \n
+Its appearance is an area of text entry on multiple lines.\n
+The functions of the editor are available:
+- From the main menu of the application (if the editor is contained in the main window
+application)
+- From a toolbar maskable located below the input area,
+- From a menu,
+- From keyboard shortcuts.
 
-\section richtext_context Le menu contextuel
+\~french \section richtext_context Le menu contextuel
+\~english \section richtext_context The contextual menu
 
+\~french
 Appelez le menu contextuel à l'aide du clique-droit dans la zone de saisie (ou <em>Ctrl+clique</em> sous MacOs).\n
 Celui-ci vous permet d'accéder rapidement aux commandes :
 - accès aux fichiers (ouvrir, sauvegarder)
@@ -24,17 +41,35 @@ Celui-ci vous permet d'accéder rapidement aux commandes :
 - des tableaux.
 Le menu contextuel se présente de la même façon que le menu d'application.
 
+\~english
+Call the context menu using right-click inside the text box (or <em>Ctrl+click</em> for MacOS). \n
+This allows you quick access to commands:
+- File access (open, save)
+- Editing (copy, paste, cut, undo, redo)
+- Text formatting (bold, italic ...),
+- Text alignment,
+- Tables.
+The menu appears in the same way as the application menu.
 
-\section richtext_toolbar La barre d'outils
+\~french \section richtext_toolbar La barre d'outils
+\~english \section richtext_toolbar The tool bar
 
+\~french
 Pour afficher la barre d'outils, appelez le menu contextuel (clique droit ou <em>Ctrl+clique</em> sous MacOs)
 et cliquez sur "Afficher/cacher la barre d'outils".\n
 Pour connaître la fonction des icones, placez la souris sur l'icone et attendez, une info-bulle apparaîtra.
 
+\~english
+To display the toolbar, call the context menu (right click or <em>Ctrl+click</em> for MacOS)
+and click on "Show / hide the toolbar". \n
+To know the function of icons, place the mouse over the icon and wait, a tooltip will appear.
+
 \image html toolbar.png
 
-\section richtext_shortcuts Les raccourcis claviers de l'éditeur de texte
+\~french \section richtext_shortcuts Les raccourcis claviers de l'éditeur de texte
+\~english  \section richtext_shortcuts Keyboard shorcuts
 
+\~french
 Lorsque le curseur est situé à l'intérieur d'un éditeur de texte, vous pouvez activer certaines
 fonctions directement depuis le clavier.
 
@@ -62,6 +97,36 @@ fonctions directement depuis le clavier.
 - Fusionner les cellules :         <em></em>
 - Eclater une cellule :            <em></em>
 - Format du tableau :              <em></em>
+
+
+\~english
+functions directly from the keyboard.
+
+<b>Toolbar: </b> \n
+- Show / hide the toolbar:
+
+<b>The format of fonts: </b> \n
+- Bold: <em>Ctrl+B</em> (B Bold)
+- Italic: <em>Ctrl+I </em>
+- Underline: <em>Ctrl+U</em> (U for Underline)
+- Strikethrough a draft: <em> </em>
+- Change color: <em> </em>
+- Change the font: <em> </em>
+
+<b>Alignment of text: </b>
+- Align Right: <em>Ctrl+R</em> (R for Right)
+- Align Left <em>Ctrl+L</em> (L for Left)
+- Center: <em>Ctrl+E </em>
+- Justify: <em>Ctrl+J </em>
+
+<b>Tables: </b>
+- Add a picture: <em> Ctrl Shift T </em>
+- Add a line: <em> </em>
+- Add a column: <em> </em>
+- Merge cells: <em> </em>
+- Explode a cell <em> </em>
+- Size Chart: <em> </em>
+
 
 \ref index
 

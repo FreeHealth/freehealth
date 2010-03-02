@@ -1,11 +1,15 @@
-/*! \mainpage Manuel de l'utilisateur - \freediams
+/*!
+\~french \mainpage Manuel de l'utilisateur - \freediams
+\~english \mainpage User manual - \freediams
 
 \image html screen_medium.png
 
+\~french
 L'objectif de \freediams est de fournir un outil libre (open source), gratuit,
 indépendant (sans conflit d'intérêt) et multi-plateformes pour les professionnels de santé.
-La base de données thérapeutiques est synchronisée à celle
-de l'AFSSAPS. Les interactions sont calculées sur la base du thésaurus
+Les base de données thérapeutiques sont multiples et recouvrent l'utilisation
+pour les pays suivant : France, Canada et États-Unis d'Amérique.
+Les interactions sont calculées sur la base du thésaurus
 des interactions de l'AFSSAPS.\n
 \freediams vous permet de créer des prescriptions
 totalement paramétrables avec alertes d'interaction en temps réel. Vous pouvez
@@ -14,9 +18,10 @@ imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
 les paramètres sont alors transmis par la ligne de commande.\n
 
 \freediams est disponible pour :
-\li les utilisateurs de Linux (compilé sous Ubuntu, Debian, paquet Debian-Med)
-\li les utilisateurs de MacOs (universal, à partir de OS 10.5)
-\li les utilisateurs de Windows
+\li Linux (compilé sous Ubuntu, Debian, paquet Debian-Med)
+\li MacOs (universal, à partir de OS 10.5)
+\li FreeBSD (nécessite la recompilation des sources)
+\li Windows
 \li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps ont la
 possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
 d'un système à un autre.
@@ -24,13 +29,40 @@ d'un système à un autre.
 sans qu'aucune installation annexe ne soit requise. Pour les version spécifiques aux distributions
 Linux, les dépendances seront automatiquement installées avec le paquet.
 
-L'interface de \freediams est disponible en différents langages : Anglais, Français, Allemand.
-A l'heure actuelle, la base de données des thérapeutiques et des interactions ne sont disponibles
-qu'en Français.
+L'interface de \freediams est disponible en différents langages : Anglais, Français, Allemand, Espagnol.
+
+
+\~english
+The objective of \freediams is to provide a free tool (open source), no cost,
+independent (no conflict of interest) and multi-platform support for health professionals.
+The database is multi-therapeutic use and cover for the following countries:
+France, Canada and United States of America.
+Interactions are calculated on the basis of the thesaurus
+interactions AFSSAPS. \n
+\freediams allows you to create prescriptions
+fully configurable with real time interaction alerts. You can
+print your prescriptions with your own headers, footers and tattooing. \n
+\freediams can be used with other software
+parameters are then transmitted by the command line. \n
+
+\freediams is available for:
+\li Linux (compiled under Ubuntu, Debian package Debian-Med)
+\li Mac OS (Universal, from OS 10.5)
+\li FreeBSD (need recompilation of the sources)
+\li Windows
+\li user "nomadic" working on multiple operating systems simultaneously have the
+ability to install on a USB key all versions of the software. The data are fully compatible
+from one system to another.
+\li fact whatever your platform, it is possible to work with \freediams
+without any requirements. For version-specific distributions
+Linux, dependencies are automatically installed with the package.
+
+The interface of \freediams is available in different languages: English, French, German, spanish.
 
 \image html i18n.png Menu langage
 
-\section TOC Contenu de l'aide :
+\~french \section TOC Contenu du manuel
+\~english \section TOC Content of the user manual
 \li \ref auteurs
 \li \ref installation
 \li \ref presentation
@@ -47,20 +79,37 @@ qu'en Français.
 \li \ref drugsdatabaseschema
 \li \ref participer
 
-\section derniere_version Dernière version
+\~french \section derniere_version Dernière version
+\~english \section derniere_version Last version
 
+\~french
 \note \freediams est encore au stade embryonnaire de son développement.
 Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
 développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 \li \ref versionning
-\li La version actuellement documentée est la <b>version 0.3.0 (Fev 2010)</b>.
+\li La version actuellement documentée est la <b>version 0.4.0 (Avril 2010)</b>.
 \li Version de la base de données thérapeutiques : <b>28 Jan 2010</b>.
 \li Version de la base de données des interactions : <b>30 Juin 2009</b>.
 
-\section licence Licence de distribution et d'utilisation
+\~english
+\freediams is still at an embryonic stage of development.
+You can find flaws or errors. Thank you for the report to
+developers on public mailing list: freemedforms@googlegroups.com.
+\li \ref versionning
+\li The current version is documented <b> version 0.4.0 (April 2010) </b>.
+\li version of the interactions database: <b>June 30, 2009 </b>.
 
+
+\~french \section licence Licence de distribution et d'utilisation
+\~english \section licence License of release and usage
+
+\~french
 \freediams est distribué sous licence BSD révisée. Vous pouvez lire les termes
 de la licence en suivant le menu <b>À propos</b>.
+
+\~english
+\freediams is available under BSD revised license. You can read terms of the license
+from the <b>About</b> menu.
 
 \image html about.png Dialogue : à propos
 */
@@ -69,30 +118,54 @@ de la licence en suivant le menu <b>À propos</b>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  INSTALLATION / MAJ / DESINTALLATION ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page installation Installation, mise à jour et désinstallation
+/**
+\~french \page installation Installation, mise à jour et désinstallation
+\~english \page installation Installation, update and uninstallation
 
-\section install Installation
+\~french \section install Installation
+\~english \section install Installation
 
+\~french
 L'installation de \freediams ne nécessite aucune manipulation particulière.
 Téléchargez l'archive qui correspond à votre système d'exploitation et décompressez-là
 dans le répertoire de votre choix.
 
 Les données utilisateurs (paramètres, base de données posologies) se trouvent dans votre
 répertoire personnel. Selon votre plateforme :
+
+\~english
+Installing \freediams requires no special handling.
+Download the archive that corresponds to your operating system and unpack it in
+the directory of your choice.
+
+User data (parameter, database doses) are in your home
+directory. Depending on your platform:
+
+\~
 \li Linux/Unix : /home/votrenom/.\freediams
 \li MacOs : /Users/votrenom/.\freediams
 \li Windows : %HOMEPATH%\.\freediams
 
-\section maj Mise à jour
+\~french \section maj Mise à jour
+\~english \section maj Update
 
+\~french
 Pour mettre à jour le logiciel, il suffit de remplacer le répertoire de la version obsolète
-par le répertoire de l'archive téléchargée. Aucunes données personnelles ne seront perdues.\n
+par le répertoire de l'archive téléchargée. <b>Aucunes données personnelles ne seront perdues.</b>\n
 Un système d'alerte automatique de mise à disposition de nouvelle version est disponible d'office.
 Lorsqu'une mise à jour est disponible, le menu <b>Mise à jour disponible</b> apparaît.
 
-\section uninstall Désintallation
+\~english
+To update the software, simply replace the directory of the outdated version with
+the directory of the downloaded archive. <b>No personal data will be lost.</b> \n
+An automatic warning system for the provision of new version is automatically available.
+When an update is available, the menu <b>Update Available</b> appears.
 
-Nettoyer votre répertoire personnel et effacer le répertoire où est installé \freediams.
+\~french \section uninstall Désinstallation
+\~english \section uninstall Uninstallation
+
+\~french Nettoyer votre répertoire personnel et effacer le répertoire où est installé \freediams.
+\~english Clean the application path and your personnal path.
 
 \ref index
 */
@@ -110,21 +183,33 @@ En cours de rédaction.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////  COMMAND LINE  ////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page ligne_commandes Interfacer \freediams avec d'autres logiciels
+/**
+\~french \page ligne_commandes Interfacer \freediams avec d'autres logiciels
+\~english \page ligne_commandes Using \freediams with another software (EMR)
 
+\~french
 \freediams est pensé comme un "module" externe. Ce "module" peut étre utilisé par un grand nombre
-de logiciel propriétaires ou non. A l'heure actuel, seul MedinTux est configurable pour utiliser ce logiciel
-comme prescripteur.\n
+de logiciel propriétaires ou non. A l'heure actuel, seul MedinTux et GNUMed sont configurables
+pour utiliser ce logiciel comme prescripteur.\n
 
-Pour interfacer un logiciel avec \freediams, il suffit de renseigner la ligne de commande au
-moment de l'appel.
+Pour interfacer un logiciel avec \freediams, il suffit de renseigner les paramètres de la ligne de commande.
 
-\section params_ligne_commandes Paramètres de la ligne de commande
+\~english
+\freediams is thought as an external "module". This "module" can be used by many
+software. At present, only MedinTux and GNUMed are configurable to use this software
+as a prescriber. \n
 
+In order to interface software with \freediams, just learn the command line
+params.
+
+\~french \section params_ligne_commandes Paramètres de la ligne de commande
+\~english \section params_ligne_commandes Params of the command line
+
+\~french
 Les paramètres suivants sont disponibles :
 \li \e --version , -version , -v : affiche la version actuelle de FreeDiams.
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
-\li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications.
+\li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications. Le fichier doit exister.
 \li \e --patientname="xx xx xx" : définit le nom du patient.
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
 \li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
@@ -135,9 +220,26 @@ Les paramètres suivants sont disponibles :
 \li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
 \li \e --transmit-dosage = non documenté.
 
+\~english
+The following settings are available:
+\li \e --version,-version,-v: Displays the current version of FreeDiams.
+\li \e --medintux: defines a specific user MedinTux.
+\li \e --exchange="xxx" : "xxx" identifies the exchange file between the two applications. File must exist.
+\li \e --patientname="xx xx xx" defines the name of the patient.
+\li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
+\li \e --DateOfBirth="dd/MM/yyyy" defines the data of birth of patient (date must be transmitted in the form dd/mm/yyyy)
+\li \e --weight="dd" defines the patient's weight (kg)
+\li \e --size="ddd": sets the size of the patient (cm)
+\li \e --crcl="dd.d" defines the clearance of creatinine of the patient (ml/min)
+\li \e --creatinin = "dd" defines the patient's serum creatinine (mg/l)
+\li \e --chrono: log chronos on various functions of the tester interactions (proposed for debugging)
+\li \e --transmit-dosage = undocumented.
 
-\section exchange Le fichier d'échange
 
+\~french \section exchange Le fichier d'échange
+\~english \section exchange The exchange file
+
+\~french
 Lorsqu'un fichier d'échange est notifié au démarrage du testeur d'interactions, celui-ci essaie de lire
 le contenu du fichier et d'y récupérer les données de la prescription.\n
 A la fermeture de l'application, la prescription est sauvegardée dans le d'échange sous format XML. Voir \ref format_fichier_di.\n
@@ -145,12 +247,29 @@ A la fermeture de l'application, la prescription est sauvegardée dans le d'éch
 Lorsque le paramètre \e --medintux est notifié dans la ligne de commande, le format du fichier d'échange est spécifique
 à MedinTux.\n
 
-\section param_command_line_specifiques Paramètres de la ligne de commandes spécifiques à certaines actions
+\~english
+When a swap file is notified to start the tester interaction, it tries to read
+the file contents and to retrieve data from the prescription.\n
+At the close of the application, the prescription is stored in the exchange format XML.
+See \ref format_fichier_di. \n
 
+When the \e --medintux is notified in the command line, the format of the paging file is specific
+to MedinTux. \n
+
+\~french \section param_command_line_specifiques Paramètres de la ligne de commandes spécifiques à certaines actions
+\~english \section param_command_line_specifiques Command line specific params
+
+\~french
 Certaines actions nécessitent l'activation de paramètres de la ligne de commande.\n
 Pour aider au déboggage de l'application lorsque celle-ci semble ralentie : \e --chrono aide à trouver le ralentissement.\n
 Pour les rédacteurs de posologies standard, \e --transmit-dosage permet de transmettre leurs posologies au
 comité scientifique chargé de les valider.
+
+\~english
+Some actions require the activation parameters of the command line. \n
+To assist in debugging the application when it seems slow: \e --chrono help to find the slowdown. \n
+The editors of standard dosages, can transmit their dosages to
+scientific committee to confirm with the \e --transmit-determination param.
 
 
 \ref index

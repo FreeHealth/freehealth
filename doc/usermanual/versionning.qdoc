@@ -1,5 +1,8 @@
-/** \page versionning Comprendre les numéros de version de l'application
+/**
+\~french \page versionning Comprendre les numéros de version de l'application
+\~english \page versionning Understand application version number
 
+\~french
 Le numéro de version de l'application respecte le code suivant :
 - trois chiffres séparés par un point (ex : 1.4.8)
 - le premier chiffre correspond à la version majeure (considérée comme stable et fonctionnelle)
@@ -14,9 +17,27 @@ Les versions instables sont les versions présentes sur le dépôt de source.
 
 Les versions majeures et mineures nulles définissent des versions dites alpha (ex : 0.0.8) :
 - nombreuses dysfonctions
-- non exploitable en pratique courante
-- fournies uniquement pour les tests
+- exploitable en pratique courante avec risque de perte de données
+- officiellement fournies pour les tests uniquement
 - aucune compatibilité entre les versions n'est assurée
+
+\~english
+The version number of the application complies with the following code:
+- Three numbers separated by points (eg 1.4.8)
+- The first digit corresponds to the major version (considered as stable and functional)
+- The second number is the minor version (set a fix version with bug opportunities for new features)
+- The third digit corresponds to the debug version (no new functionality added). When
+this figure is even, it is a stable version if it is a test version.
+    - 1.4.2 is the stable version
+    - Version 1.4.3 is unstable (may include a significant number of errors or functionality inhibited)
+
+The unstable versions are the versions on the source repository.
+
+The major and minor versions null set called alpha versions (eg 0.0.8):
+- Many dysfunctions
+- Usable in practice but with risk of data lose
+- Officially provided only for testing
+- No compatibility between versions is ensured
 
 \ref index
 
