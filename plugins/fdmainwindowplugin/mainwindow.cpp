@@ -298,12 +298,15 @@ void MainWindow::refreshPatient()
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
     QString sex = patient()->value(Core::Patient::Sex).toString();
 //    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
-    if (sex.isEmpty())
-        m_ui->sexCombo->setCurrentIndex(0);
-    else if (sex == "M")
+    if (sex == "M")
         m_ui->sexCombo->setCurrentIndex(1);
-    else
+    else if (sex == "F")
         m_ui->sexCombo->setCurrentIndex(2);
+    else if (sex == "H")
+        m_ui->sexCombo->setCurrentIndex(3);
+    else
+        m_ui->sexCombo->setCurrentIndex(0);
+
     m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
     m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
     m_ui->patientSize->setValue(patient()->value(Core::Patient::Size).toInt());

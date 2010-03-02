@@ -126,6 +126,11 @@
              <string>F</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>H</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
