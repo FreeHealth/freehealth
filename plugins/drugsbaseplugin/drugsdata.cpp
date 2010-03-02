@@ -451,7 +451,10 @@ QString DrugsData::linkToSCP() const
 {
     QString toReturn;
     if (!value(Table_DRUGS, DRUGS_LINK_SPC).toString().isEmpty()) {
-        toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_DRUGS, DRUGS_LINK_SPC).toString().rightJustified(7,'0'));
+        if (Internal::DrugsBase::instance()->actualDatabaseInformations().identifiant == Constants::DEFAULT_DATABASE_IDENTIFIANT)
+            toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_DRUGS, DRUGS_LINK_SPC).toString().rightJustified(7,'0'));
+        else
+            toReturn = value(Table_DRUGS, DRUGS_LINK_SPC).toString();
     }
     return toReturn;
 }
