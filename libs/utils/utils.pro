@@ -13,12 +13,6 @@ CONFIG *= dll \
 QT *= sql \
     network
 
-# include subprojects
-# include($${PWD}/richtexteditor/richtexteditor.pri) ---> plugin
-# include($${PWD}/actionmanager/actionmanager.pri) obsolete
-# include($${PWD}/contextmanager/contextmanager.pri) obsolete
-# include($${PWD}/listview/listview.pri) ---> plugin
-# include($${PWD}/printer/printer.pri) ---> plugin
 HEADERS += global_exporter.h \
     global.h \
     database.h \
@@ -34,6 +28,7 @@ HEADERS += global_exporter.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
     widgets/spinboxdelegate.h
+
 SOURCES += global.cpp \
     database.cpp \
     log.cpp \

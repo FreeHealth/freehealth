@@ -105,6 +105,7 @@ private Q_SLOTS:
     void changeDuration();
     void createTemplate();
     void printPreview();
+    void showDatabaseInformations();
 
 private:
     bool canMoveUp();
@@ -129,6 +130,7 @@ protected:
     QAction *aToogleTestingDrugs;
     QAction *aChangeDuration;
     QAction *aToTemplate;
+    QAction *aDatabaseInformations;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 };

@@ -52,8 +52,8 @@
 /**
  * \file dosagemodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 23 Fev 2010
 */
 
 namespace DrugsDB {
@@ -91,19 +91,19 @@ class DRUGSBASE_EXPORT DosageModel : public QSqlTableModel
 public:
     explicit DosageModel(DrugsDB::DrugsModel *parent = 0);
 
-    virtual int columnCount( const QModelIndex & = QModelIndex() ) const { return Dosages::Constants::MaxParam; }
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-    virtual QVariant data( const QModelIndex & item, int role = Qt::DisplayRole ) const;
-    virtual bool insertRows( int row, int count, const QModelIndex & parent = QModelIndex() );
-    virtual bool removeRows( int row, int count, const QModelIndex & parent = QModelIndex() );
-    virtual void revertRow( int row );
+    virtual int columnCount(const QModelIndex & = QModelIndex()) const { return Dosages::Constants::MaxParam; }
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    virtual QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
+    virtual bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
+    virtual void revertRow(int row);
 
-    void setTable ( const QString & ) {}
+    void setTable (const QString &) {}
 
-    virtual bool setDrugCIS( const int _CIS );
-    int drugCIS();
+    virtual bool setDrugUID(const int uid);
+    int drugUID();
 
-    QStringList isDosageValid( const int row );
+    QStringList isDosageValid(const int row);
     bool isDirty(const int row) const;
 
     QString toXml(const int row);
@@ -135,10 +135,10 @@ public:
     QStringList        forms();
 
     // Debugging Informations
-    void warn( const int row = -1 );
+    void warn(const int row = -1);
 
 private Q_SLOTS:
-    void changeEvent( QEvent * event );
+    void changeEvent(QEvent * event);
     static void retranslate();
 
     //--------------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ private:
     static QStringList   m_ScoredTabletScheme;
     static QStringList   m_PreDeterminedForms;
     static QString       m_ActualLangage;
-    int m_CIS;
+    int m_UID;
     QSet<int> m_DirtyRows;
 };
 

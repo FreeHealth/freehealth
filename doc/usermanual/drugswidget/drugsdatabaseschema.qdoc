@@ -44,10 +44,10 @@ Schéma :
 - FORM : forme du médicament (gélule, comprimé, gél...)
 - ROUTE : voie d'administration
 - ATC : code ATC du médicament
-- TYPE_MP (optionnel) : type d'AMM
-- AUTORIZATION (optionnal) : type d'autorisation d'AMM
-- MARKETTED : Oui = 1 ; Non = 0
-- CODE_RPC : lien internet vers le RPC
+- TYPE_MP (optionnel) : type d'AMM , schedule in CA
+- AUTHORIZATION (optionnal) : type d'autorisation d'AMM
+- MARKETED : Booléen :: Oui = 1 ; Non = 0
+- LINK_SPC (optionnel) : lien internet vers le RPC
 
 \~english
 Schema :
@@ -56,10 +56,10 @@ Schema :
 - FORM : Form of the drug (e.g. tablet, capsule, powder, solution, cream, soap bar)
 - ROUTE : route of administration (e.g. oral, intravenous, ophthalmic, rectal, topical)
 - ATC : drug's Anatomical Therapeutic Chemical classification system code
-- TYPE_MP (optional) : marketing permission (AMM in French)
-- AUTORIZATION (optional) : type of authorisation
-- MARKETTED : Yes = 1 ; No = 0
-- CODE_RPC (optionnal) : internet link a the "summary of product characteristics"
+- TYPE_MP (optional) : marketing permission (AMM in French, Schedule in CA)
+- AUTHORIZATION (optional) : type of authorisation
+- MARKETED : Boolean :: Yes = 1 ; No = 0
+- LINK_SPC (optional) : internet link to a "summary of product characteristics"
 
 
 \~french \subsection drugsdb_table_composition La table COMPOSITION
@@ -88,7 +88,7 @@ metabilized into another (see NATURE / LK_NATURE).
 Schema:
 - UID : UID of the drug
 - MOLECULE_FORM : form of the drug (redundant with DRUGS.FORM)
-- MOLECULE_CODE : unique identifiant of the molecule
+- MOLECULE_CODE : unique identifier of the molecule
 - MOLECULE_NAME : name of the molecule
 - DOSAGE : dosage of the molecule (eg 10 mg)
 - DOSAGE_REF : reference for the dosage (eg 1 tablet == 10 mg per tablet)
@@ -106,7 +106,7 @@ Cette table est actuellement \em optionnelle. \n
 
 Schéma :
 - UID : UID du médicament (le CIS en France)
-- MAIN_CODE : Code principal (en France correspond au CIP court)
+- PACKAGE_UID : Code principal (en France correspond au CIP court)
 - LABEL : intitulé de la présentation
 - STATUS
     - Présentation active  -> A
@@ -119,18 +119,16 @@ Schéma :
 - DATE : most recent commercial update
 - OPTIONAL_CODE: Code optionnel (en France correspond au CIP long)
 
-
-
 \~english
 This table is \em optional. \n
 
 Schema :
 - UID : UID of the Drug
-- MAIN_CODE : UID of the packaging
+- PACKAGE_UID : UID of the packaging
 - LABEL : label of the packaging
 - STATUS :
     - Active packaging  -> A
-    - Non-active packaging -> B
+    - Inactive packaging -> B
 - MARKETING :
     - Marketing cancelled  -> A
     - Unknown Marketing date -> N
@@ -138,6 +136,45 @@ Schema :
     - Suspended Marketing -> S
 - DATE : most recent commercial update
 - OPTIONAL_CODE : can complete the MAIN_CODE
+
+\~french \subsection drugsdb_table_info La table INFORMATIONS
+\~english \subsection drugsdb_table_info The INFORMATIONS table
+
+\~french
+ Schéma :
+
+
+\~english
+Schema :
+- VERSION : Version of the db (please be read the page : \ref versionning). See this as a primary key. \freediams will
+read the first selected row of the database as database informations.
+- NAME : Name of the database to display to the user. Translations are supported using syntax
+'two-character ISO language code=name', unquoted, without any egal sign in the name and with line breaks
+delimiting multiple languages (see below).
+    - \verbatim
+fr=French name
+en=English name
+sp=Spanish
+de=Deutsch
+xx=All other languages
+\endverbatim
+- IDENTIFIANT : unique identifiant for \freediams.
+    - This identifiant must be unique for all drugs databases provided for \freediams
+    - French AFFSSAPS database = "FR_AFSSAPS"
+    - FDA database = "USA_FDA";
+    - Canadian database = "CANADIAN";
+- COMPAT_VERSION : FreeDiams application version dependency
+- PROVIDER : Provider of the datas (eg FDA)
+- WEBLINK : Web site of the provider
+- AUTHOR : Author of the database (eg Me)
+- LICENSE :
+- DATE : Date of release; format MUST BE formatted : yyyy-MM-dd
+- DRUG_UID_NAME : Name to use for the drug UID
+- PACK_MAIN_CODE_NAME : Name to for the packaging main code
+- ATC : boolean ; ATC is available for each drugs in the database
+- INTERACTIONS : boolean : manages interactions
+- AUTHOR_COMMENTS : place to hold your comment
+- COUNTRY : two letter ISO encoded country name, for drugs database country specific
 
 \~french \section interactionsdb Base de données des interactions
 \~english \section interactionsdb Interactions database
@@ -183,31 +220,18 @@ Drugs databases are stored inside <em>/Resources/databases/drugs</em>.\n
 Name must formatted as above : <em>drugs-XX.db</em> where \e XX correspond to the two letters ISO encoded country :
 fr, us, de, sp...
 
-\~french
-La base de données doit comprendre une table VERSION avec un champs unique VERSION.\n
-Ce champs <em>VERSION.VERSION</em> comprend un code XML formatté comme suit.
 
-\~english
-The database must contain a table VERSION with an unique field VERSION.\n
-This field <em>VERSION.VERSION</em> contains a XML formatted code as follow.
+\~french \section drugs_sql Schéma SQL : Base de données thérapeutique
+\~english \section drugs_sql SQL Schema : Drugs database
 
-\~
-\verbatim
-<FreeDiams>
-  <DrugsDatabase>
-    <Version database="0.4.0" freediamscompat="0.3.0/>
-    <Name lang="fr">Base de données française</Name>
-    <Name lang="en">French Drugs Database</Name>
-    <Provider name="AFSSAPS" link="http://...."/>
-    <License></License>
-    <FreeDiamsAuthor></FreeDiamsAuthor>
-    <Date></Date>
-  </DrugsDatabase>
-</FreeDiams>
-\endverbatim
+\include sql/drugs_schema.sql
 
-\~french
-\~english
+
+\~french \section iam_sql Schéma SQL : Base de données interactions
+\~english \section iam_sql SQL Schema : Interactions database
+
+\include sql/iam_schema.sql
+
 
 \ref index
 */

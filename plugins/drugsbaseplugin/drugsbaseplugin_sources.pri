@@ -1,8 +1,6 @@
 DEFINES += DRUGSBASE_LIBRARY
-
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/drugsbaseplugin_dependencies.pri )
-
 HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsbase_exporter.h \
     $${PWD}/drugsbase.h \
@@ -19,8 +17,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/dailyschememodel.h \
     $${PWD}/versionupdater.h \
     $${PWD}/drugsdatabaseaboutpage.h \
-    $${PWD}/drugstemplateprinter.h
-
+    $${PWD}/drugstemplateprinter.h \
+    $${PWD}/drugsdatabaseselector.h
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/interactionsbase.cpp \
@@ -35,7 +33,8 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/dailyschememodel.cpp \
     $${PWD}/versionupdater.cpp \
     $${PWD}/drugsdatabaseaboutpage.cpp \
-    $${PWD}/drugstemplateprinter.cpp
+    $${PWD}/drugstemplateprinter.cpp \
+    $${PWD}/drugsdatabaseselector.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \

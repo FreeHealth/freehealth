@@ -51,8 +51,8 @@
 /**
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 07 Sept 2009
+ * \version 0.4.0
+ * \date 23 Fev 2010
 */
 namespace Utils {
 
@@ -61,9 +61,8 @@ class DatabasePrivate;
 }
 
 
-class UTILS_EXPORT Database : public QObject
+class UTILS_EXPORT Database
 {
-    Q_OBJECT
 public:
 
     /** */
@@ -114,7 +113,7 @@ public:
         FieldIsReal
     };
 
-    Database( QObject * parent = 0 );
+    Database();
     virtual ~Database();
 
     // connection

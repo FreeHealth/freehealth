@@ -96,7 +96,7 @@ public:
 
     DrugsDataPrivate()
     {
-        m_CISValues.reserve(CIS_MaxParam);
+        m_CISValues.reserve(DRUGS_MaxParam);
         m_PrescriptionValues.reserve(Prescription::MaxParam - Prescription::Id);
     }
 
@@ -154,7 +154,7 @@ void DrugsData::setValue( const int tableref, const int fieldref, const QVariant
 {
     switch(tableref)
     {
-    case Table_CIS : d->m_CISValues[fieldref] = value; break;
+    case Table_DRUGS : d->m_CISValues[fieldref] = value; break;
     case Table_COMPO :
         {
             if ( fieldref == COMPO_IAM_DENOMINATION )
@@ -170,7 +170,7 @@ void DrugsData::setValue( const int tableref, const int fieldref, const QVariant
 }
 
 /** \brief Add a composition class description to this drug */
-void DrugsData::addComposition( DrugComposition *compo )
+void DrugsData::addComposition(DrugComposition *compo)
 {
     d->m_Compositions.append(compo);
 }
@@ -218,7 +218,7 @@ QVariant DrugsData::value( const int tableref, const int fieldref ) const
 {
     switch (tableref)
     {
-    case Table_CIS :
+    case Table_DRUGS :
         {
             if ( d->m_CISValues.contains( fieldref ) )
                 return d->m_CISValues.value(fieldref);
@@ -288,7 +288,7 @@ QString DrugsData::denomination() const
 {
     if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
         if (d->m_NoLaboDenomination.isEmpty()) {
-            d->m_NoLaboDenomination = value(Constants::Table_CIS, Constants::CIS_DENOMINATION).toString();
+            d->m_NoLaboDenomination = value(Constants::Table_DRUGS, Constants::DRUGS_NAME).toString();
             foreach(const QString &name, LABOS) {
                 if (d->m_NoLaboDenomination.contains(" " + name + " ")) {
                     d->m_NoLaboDenomination.remove(" " + name + " ");
@@ -298,7 +298,7 @@ QString DrugsData::denomination() const
         }
         return d->m_NoLaboDenomination;
     }
-    return value(Constants::Table_CIS,Constants::CIS_DENOMINATION ).toString();
+    return value(Constants::Table_DRUGS,Constants::DRUGS_NAME ).toString();
 }
 
 /** \brief Returns the list of all the molecules' code of the drug composition */
@@ -447,11 +447,11 @@ QStringList DrugsData::CIPsDenominations() const
     return ret;
 }
 
-QString DrugsData::linkToFrenchRCP() const
+QString DrugsData::linkToSCP() const
 {
     QString toReturn;
-    if (!value(Table_CIS, CIS_CODE_RPC).toString().isEmpty()) {
-        toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_CIS, CIS_CODE_RPC).toString().rightJustified(7,'0'));
+    if (!value(Table_DRUGS, DRUGS_LINK_SPC).toString().isEmpty()) {
+        toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_DRUGS, DRUGS_LINK_SPC).toString().rightJustified(7,'0'));
     }
     return toReturn;
 }
@@ -471,7 +471,7 @@ QString DrugsData::innComposition() const
     if (!toReturn.isEmpty()) {
         toReturn.chop(3);
         toReturn = toReturn.toUpper();
-        toReturn += " , " + d->m_CISValues.value(CIS_FORME).toString();
+        toReturn += " , " + d->m_CISValues.value(DRUGS_FORM).toString();
     }
     return toReturn;
 }
@@ -511,7 +511,7 @@ QString DrugsData::toHtml() const
                     " </tr>\n"
                     "</table>\n\n" )
             .arg( denomination() )
-            .arg( value( Table_CIS, CIS_CIS ).toString() )
+            .arg( value(Table_DRUGS, DRUGS_UID).toString() )
             .arg( mols.join( "<br>" ) )
             .arg( textIams )
             .arg( textClass );
@@ -592,7 +592,7 @@ QString DrugsData::warnText() const
     QString tmp;
     foreach( const int i, d->m_CISValues.keys() )
         tmp += QString( "CIS : %1 == %2\n" )
-                           .arg( DrugsBase::instance()->field( Table_CIS, i ) )
+                           .arg( DrugsBase::instance()->field(Table_DRUGS, i) )
                            .arg( d->m_CISValues[i].toString() );
     foreach( DrugComposition *compo, d->m_Compositions )
         tmp += compo->warnText();
@@ -612,7 +612,7 @@ void DrugsData::smallDrugWarn() const
     if (!Utils::isDebugCompilation())
         return;
     Utils::Log::addMessage("DrugsData", QString("get drug: %1 \t %2 \t %3 \t %4")
-                      .arg(this->CIS())
+                      .arg(this->UID())
                       .arg( this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
 }
 
@@ -624,12 +624,12 @@ TextualDrugsData::TextualDrugsData() :
         DrugsData()
 {
     setPrescriptionValue(Prescription::IsTextualOnly, true);
-    setValue(Table_CIS, CIS_CIS, -1);
+    setValue(Table_DRUGS, DRUGS_UID, -1);
 }
 
 void TextualDrugsData::setDenomination(const QString &denomination)
 {
-    setValue(Table_CIS, CIS_DENOMINATION, denomination);
+    setValue(Table_DRUGS, DRUGS_NAME, denomination);
 }
 
 

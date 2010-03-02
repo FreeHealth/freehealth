@@ -258,9 +258,9 @@ public:
         }
 
         // Link to French RCP
-        if (!drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToFrenchRCP).isNull()) {
+        if (!drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToSCP).isNull()) {
             m_Parent->frenchRCPButton->setEnabled(true);
-            m_Parent->frenchRCPButton->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToFrenchRCP).toString());
+            m_Parent->frenchRCPButton->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToSCP).toString());
         } else {
             m_Parent->frenchRCPButton->setEnabled(false);
         }
@@ -448,7 +448,7 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
 {
     Q_ASSERT(model);
     d->m_DosageModel = model;
-    d->m_CIS = model->drugCIS();
+    d->m_CIS = model->drugUID();
     d->resetUiToDefaults();
     d->fillDrugsData();
     d->createDosageMapper();
@@ -635,7 +635,7 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
 
 void DosageViewer::on_frenchRCPButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::LinkToFrenchRCP).toString()));
+    QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::LinkToSCP).toString()));
 }
 
 void DosageViewer::on_tabWidget_currentChanged(int)

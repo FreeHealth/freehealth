@@ -48,8 +48,8 @@
   \e IamCode or \e INN are the INN codes and names.\n
   \e IamClass are the classes that regroups INNs into classes of pharmaceutics family.\n
   \e CIP : presentation code of a drug. A drug can be presented into different presentation (15 pills, 30 pills a box...).\n
-  \e CIS : speciality code of a drug. Everything is base on this code.
-     One CIS code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
+  \e UID : speciality code of a drug. Everything is base on this code.
+     One UID code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
 
   1. Initialization\n
   This class is pure static, so you can not instanciate it. To initialize datas, just do once : init().
@@ -57,7 +57,7 @@
   These two members returns true if all is ok.
 
   2. Drugs retreiver\n
-  You can retreive drugs using CIS ou CIP code via getDrugByCIS() and getDrufByCIP().
+  You can retreive drugs using UID ou CIP code via getDrugByUID() and getDrufByCIP().
 
   3. Dosages retreiver / saver
 
@@ -74,6 +74,7 @@
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/versionupdater.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -100,6 +101,10 @@ using namespace DrugsDB;
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
+
 namespace DrugsDB {
 namespace Internal {
 /**
@@ -116,20 +121,10 @@ public:
     // connections creator
     bool createConnections(const QString & path, const QString & db, const QString & dbName, bool readwrite);
 
-    // Link tables
-    void retreiveLinkTables();
-
-    // private members for interactions
-    QStringList getIamClassDenomination(const int & code_subst);
-    QSet<int> getAllInnAndIamClassesIndex(const int code_subst);
 
 public:
-    // These variables are used or speed improvments and database protection
-    QHash<int, QString>       m_IamDenominations;       /*!< INN and class denominations */
-    QMultiHash< int, int >    m_Lk_iamCode_substCode;   /*!< Link Iam_Id to Code_Subst */
-    QMultiHash< int, int >    m_Lk_classCode_iamCode;   /*!< Link ClassIam_Id to Iam_Id */
-
     DrugsBase *m_DrugsBase;
+    DatabaseInfos *m_ActualDBInfos;
     bool m_LogChrono;
 };
 }  // End Internal
@@ -141,8 +136,6 @@ public:
 //--------------------------------------------------------------------------------------------------------
 DrugsBase * DrugsBase::m_Instance = 0;
 bool DrugsBase::m_initialized = false;
-bool DrugsBase::m_InteractionsDatabaseAvailable = false;
-const QString DrugsBase::separator = "|||";
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
@@ -162,53 +155,61 @@ DrugsBase *DrugsBase::instance()
    \private
 */
 DrugsBase::DrugsBase(QObject *parent)
-        : InteractionsBase(parent), d(0)
+    : QObject(parent), InteractionsBase(), Utils::Database(), d(0)
 {
     d = new DrugsBasePrivate(this);
     setObjectName("DrugsBase");
 
     // DRUGS DATABASE
-    addTable(Table_CIS, "CIS");
-    addTable(Table_COMPO, "COMPO");
-    addTable(Table_CIS_CIP, "CIS_CIP");
-    addTable(Table_IAM, "IAM_IMPORT");
-    addTable(Table_IAM_DENOMINATION, "IAM_DENOMINATION");
+    addTable(Table_DRUGS, "DRUGS");
+    addTable(Table_COMPO, "COMPOSITION");
+    addTable(Table_PACKAGING, "PACKAGING");
+    addTable(Table_INFORMATION, "INFORMATIONS");
 
-    addField(Table_CIS, CIS_CIS ,            "CIS");
-    addField(Table_CIS, CIS_DENOMINATION ,   "DENOMINATION");
-    addField(Table_CIS, CIS_FORME,           "FORME");
-    addField(Table_CIS, CIS_ADMINISTRATION,  "ADMINISTRATION");
-    addField(Table_CIS, CIS_AMM,              "AMM");
-    addField(Table_CIS, CIS_AUTORISATION,     "AUTORISATION");
-    addField(Table_CIS, CIS_COMMERCIALISATION,"COMMERCIALISATION");
-    addField(Table_CIS, CIS_CODE_RPC,         "CODE_RPC");
+    addField(Table_DRUGS, DRUGS_UID ,           "UID");
+    addField(Table_DRUGS, DRUGS_NAME ,          "NAME");
+    addField(Table_DRUGS, DRUGS_FORM,           "FORM");
+    addField(Table_DRUGS, DRUGS_ROUTE,          "ROUTE");
+    addField(Table_DRUGS, DRUGS_ATC,            "ATC");
+    addField(Table_DRUGS, DRUGS_TYPE_MP,        "TYPE_MP");
+    addField(Table_DRUGS, DRUGS_AUTHORIZATION,  "AUTHORIZATION");
+    addField(Table_DRUGS, DRUGS_MARKET,         "MARKETED");
+    addField(Table_DRUGS, DRUGS_LINK_SPC,       "LINK_SPC");
 
-    addField(Table_CIS_CIP, CISP_CIS,         "CIS");
-    addField(Table_CIS_CIP, CISP_CIP,         "CIP");
-    addField(Table_CIS_CIP, CISP_LIBELLE,     "LIBELLE");
-    addField(Table_CIS_CIP, CISP_STATUT,      "STATUT");
-    addField(Table_CIS_CIP, CISP_COMMERCIALISATION, "COMMERCIALISATION");
-    addField(Table_CIS_CIP, CISP_DATE,        "DATE_STR");
-    addField(Table_CIS_CIP, CISP_CIPLONG,     "CIP_LONG");
+    addField(Table_PACKAGING, PACK_DRUG_UID,    "UID");
+    addField(Table_PACKAGING, PACK_PACK_UID,    "PACKAGE_UID");
+    addField(Table_PACKAGING, PACK_LABEL,       "LABEL");
+    addField(Table_PACKAGING, PACK_STATUS,      "STATUS");
+    addField(Table_PACKAGING, PACK_MARKET,      "MARKETING");
+    addField(Table_PACKAGING, PACK_DATE,        "DATE");
+    addField(Table_PACKAGING, PACK_OPTION_CODE, "OPTIONAL_CODE");
 
-    addField(Table_COMPO, COMPO_CIS,          "CIS");
-    addField(Table_COMPO, COMPO_NOM,          "NOM");
-    addField(Table_COMPO, COMPO_CODE_SUBST,   "CODE_SUBST");
-    addField(Table_COMPO, COMPO_DENOMINATION, "DENOMINATION");
+    addField(Table_COMPO, COMPO_UID,          "UID");
+    addField(Table_COMPO, COMPO_MOL_FORM,     "MOLECULE_FORM");
+    addField(Table_COMPO, COMPO_MOL_CODE,     "MOLECULE_CODE");
+    addField(Table_COMPO, COMPO_MOL_NAME,     "MOLECULE_NAME");
     addField(Table_COMPO, COMPO_DOSAGE,       "DOSAGE");
-    addField(Table_COMPO, COMPO_REF_DOSAGE,   "REF_DOSAGE");
+    addField(Table_COMPO, COMPO_REF_DOSAGE,   "DOSAGE_REF");
     addField(Table_COMPO, COMPO_NATURE,       "NATURE");
     addField(Table_COMPO, COMPO_LK_NATURE,    "LK_NATURE");
 
-    addField(Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, "ID_DENOMINATION");
-    addField(Table_IAM_DENOMINATION, IAM_DENOMINATION,    "DENOMINATION");
+    addField(Table_INFORMATION, INFO_VERSION,           "VERSION");
+    addField(Table_INFORMATION, INFO_NAME,              "NAME");
+    addField(Table_INFORMATION, INFO_IDENTIFIANT,       "IDENTIFIANT");
+    addField(Table_INFORMATION, INFO_COMPAT_VERSION,    "COMPAT_VERSION");
+    addField(Table_INFORMATION, INFO_PROVIDER,          "PROVIDER");
+    addField(Table_INFORMATION, INFO_WEBLINK,           "WEBLINK");
+    addField(Table_INFORMATION, INFO_AUTHOR,            "AUTHOR");
+    addField(Table_INFORMATION, INFO_LICENSE,           "LICENSE");
+    addField(Table_INFORMATION, INFO_LICENSE_TERMS,     "LICENSE_TERMS");
+    addField(Table_INFORMATION, INFO_DATE,              "DATE");
+    addField(Table_INFORMATION, INFO_DRUG_UID_NAME,     "DRUG_UID_NAME");
+    addField(Table_INFORMATION, INFO_PACK_MAIN_CODE_NAME, "PACK_MAIN_CODE_NAME");
+    addField(Table_INFORMATION, INFO_ATC,               "ATC");
+    addField(Table_INFORMATION, INFO_INTERACTIONS,      "INTERACTIONS");
+    addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
+    addField(Table_INFORMATION, INFO_COUNTRY,           "COUNTRY");
 
-    addField(Table_IAM, IAM_ID,       "IAM_ID");
-    addField(Table_IAM, IAM_ID1,      "ID1");
-    addField(Table_IAM, IAM_ID2,      "ID2");
-    addField(Table_IAM, IAM_TYPE,     "TYPE");
-    addField(Table_IAM, IAM_TEXT_IAM, "TEXT_IAM");
-    addField(Table_IAM, IAM_TEXT_CAT, "TEXT_CAT");
 }
 
 /** \brief Destructor. */
@@ -219,7 +220,7 @@ DrugsBase::~DrugsBase()
 }
 
 DrugsBasePrivate::DrugsBasePrivate(DrugsBase * base)
-        : m_DrugsBase(base), m_LogChrono(false) {}
+        : m_DrugsBase(base), m_ActualDBInfos(0), m_LogChrono(false) {}
 
 /** \brief Initializer for the database. Return the error state. */
 bool DrugsBase::init()
@@ -238,23 +239,29 @@ bool DrugsBase::init()
           return false;
       }
 
-     QString pathToDb = "";
+     QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
 
-     if (Utils::isRunningOnMac())
-         pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME); //QDir::cleanPath(qApp->applicationDirPath() + "/../Resources");
-     else
-         pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME); //QDir::cleanPath(qApp->applicationDirPath());
-
-//     if (Utils::isDebugCompilation()) {
-//         // This is the debug mode of freediams ==> use global_resources
-//         pathToDb = QDir::cleanPath(QString("%1/databases/%2/").arg(FMF_GLOBAL_RESOURCES).arg(DRUGS_DATABASE_NAME));
-//     }
+     if ((dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT) || (dbFileName.isEmpty())) {
+         m_IsDefaultDB = true;
+         if (Utils::isRunningOnMac())
+             dbFileName = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + ".db";
+         else
+             dbFileName = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + ".db";
+     } else {
+         m_IsDefaultDB = false;
+     }
+     QString pathToDb = QFileInfo(dbFileName).absolutePath();
 
      Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
      // Connect Drugs Database
-     createConnection(DRUGS_DATABASE_NAME, DRUGS_DATABASE_FILENAME, pathToDb,
-                      Utils::Database::ReadOnly, Utils::Database::SQLite);
+     if (createConnection(DRUGS_DATABASE_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
+                          Utils::Database::ReadOnly, Utils::Database::SQLite)) {
+         d->m_ActualDBInfos = getDatabaseInformations(DRUGS_DATABASE_NAME);
+     } else {
+         /** \todo try to connect default database */
+         return false;
+     }
 
      // Connect and check Dosage Database
      createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME, Dosages::Constants::DOSAGES_DATABASE_FILENAME,
@@ -263,7 +270,6 @@ bool DrugsBase::init()
      checkDosageDatabaseVersion();
 
      // Initialize
-     d->retreiveLinkTables();
      InteractionsBase::init();
      m_initialized = true;
      return true;
@@ -271,7 +277,7 @@ bool DrugsBase::init()
 
 /**
   \brief This is for debugging purpose. Log timers for some crucial functions.
-  \sa checkInteractions(), getDrugsByCIS()
+  \sa checkInteractions(), getDrugsByUID()
 */
 void DrugsBase::logChronos(bool state)
 {
@@ -279,11 +285,71 @@ void DrugsBase::logChronos(bool state)
     InteractionsBase::logChronos(state);
 }
 
+const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
+{
+    return d->m_ActualDBInfos;
+}
+
+bool DrugsBase::isDatabaseTheDefaultOne() const
+{
+    return m_IsDefaultDB;
+}
+
+DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
+{
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.open())
+        return 0;
+
+    // check table INFORMATIONS
+    if (!db.tables().contains(DrugsDB::Internal::DrugsBase::instance()->table(Constants::Table_INFORMATION))) {
+        Utils::Log::addMessage(this, "Database " + connectionName + " does not contain a INFORMATION Table");
+        return 0;
+    }
+
+    // read last row of table INFORMATIONS
+    DatabaseInfos *info = 0;
+    QString req = select(Constants::Table_INFORMATION);
+    req += " LIMIT 1";
+    QSqlQuery q(req,db);
+    if (q.isActive()) {
+        Utils::Log::addMessage(this, "Drugs database informations correctly read " + connectionName);
+        if (q.next()) {
+            info = new DatabaseInfos;
+            info->version = q.value(Constants::INFO_VERSION).toString();
+            info->name = q.value(Constants::INFO_NAME).toString();
+            info->identifiant = q.value(Constants::INFO_IDENTIFIANT).toString();
+            info->compatVersion = q.value(Constants::INFO_COMPAT_VERSION).toString();
+            info->provider = q.value(Constants::INFO_PROVIDER).toString();
+            info->weblink = q.value(Constants::INFO_WEBLINK).toString();
+            info->author = q.value(Constants::INFO_AUTHOR).toString();
+            info->license = q.value(Constants::INFO_LICENSE).toString();
+            info->licenseTerms = q.value(Constants::INFO_LICENSE_TERMS).toString();
+            info->date = q.value(Constants::INFO_DATE).toDate();
+            info->drugsUidName = q.value(Constants::INFO_DRUG_UID_NAME).toString();
+            info->packUidName = q.value(Constants::INFO_PACK_MAIN_CODE_NAME).toString();
+            info->atcCompatible = q.value(Constants::INFO_ATC).toBool();
+            info->iamCompatible = q.value(Constants::INFO_INTERACTIONS).toBool();
+            info->authorComments = q.value(Constants::INFO_AUTHOR_COMMENTS).toString();
+            info->country = q.value(Constants::INFO_COUNTRY).toString();
+            info->connectionName = db.connectionName();
+            if (db.driverName() == "QSQLITE") {
+                info->fileName = db.databaseName();
+            }
+        }
+    } else {
+        Utils::Log::addQueryError(this, q);
+    }
+    return info;
+}
+
+
 QString DrugsBase::dosageCreateTableSqlQuery()
 {
     return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
            "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
            "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+           "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
            "`INN_LK`                int(11)        NULL,"
            "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
            "`CIS_LK`                int(11)        NULL,"
@@ -485,7 +551,7 @@ struct minimalCompo {
   \brief Returns all CIS that have a recorded dosage. Manages INN dosage type.
   \todo put this in a thread...
 */
-QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
+QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 {
     QList<int> toReturn;
     QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
@@ -494,7 +560,14 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
                              .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DosageDB.lastError().text()));
         return toReturn;
     }
-    QString req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE`;");
+    QString req;
+    if (m_IsDefaultDB) {
+        req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+              .arg(Constants::DEFAULT_DATABASE_IDENTIFIANT);
+    } else {
+        req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+              .arg(actualDatabaseInformations()->identifiant);
+    }
     {
         QSqlQuery query(req,DosageDB);
         if (query.isActive()) {
@@ -523,7 +596,8 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
     // get all needed datas from database
     QMultiHash<int, minimalCompo> cis_compo;
     foreach(int inn, inn_dosageRef.keys()) {
-        foreach(int code, d->m_Lk_iamCode_substCode.values(inn)) {
+//            foreach(int code, d->m_Lk_iamCode_substCode.values(inn)) {
+            foreach(int code, getLinkedCodeSubst(inn)) {
             if (!code_subst.contains(code))
                 code_subst << code;
         }
@@ -533,13 +607,13 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
     }
     tmp.chop(2);
 
-    // Get all CIS that contains the substance + dosage
+    // Get all Drugs UID that contains the substance + dosage
     where.clear();
     req.clear();
-    where.insert(Constants::COMPO_CODE_SUBST, QString("IN (%1)").arg(tmp));
+    where.insert(Constants::COMPO_MOL_CODE, QString("IN (%1)").arg(tmp));
     req = select(Constants::Table_COMPO,
-                 QList<int>() << Constants::COMPO_CIS
-                 << Constants::COMPO_CODE_SUBST
+                 QList<int>() << Constants::COMPO_UID
+                 << Constants::COMPO_MOL_CODE
                  << Constants::COMPO_DOSAGE,
                  where);
     QSqlQuery query(req, DrugsDB);
@@ -547,7 +621,8 @@ QList<int> DrugsBase::getAllCISThatHaveRecordedDosages() const
         while (query.next()) {
             int cis = query.value(0).toInt();
             minimalCompo compo;
-            compo.inn = d->m_Lk_iamCode_substCode.key(query.value(1).toInt());
+//            compo.inn = d->m_Lk_iamCode_substCode.key(query.value(1).toInt());
+            compo.inn = getLinkedIamCode(query.value(1).toInt()).at(0);
             compo.dosage = query.value(2).toString();
             cis_compo.insertMulti(cis, compo);
         }
@@ -596,7 +671,14 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
                              .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
         return toReturn;
     }
-    QString req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE`;");
+    QString req;
+    if (m_IsDefaultDB) {
+        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+              .arg(Constants::DEFAULT_DATABASE_IDENTIFIANT);
+    } else {
+        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+              .arg(actualDatabaseInformations()->identifiant);
+    }
     {
         QSqlQuery query(req,DB);
         if (query.isActive()) {
@@ -614,151 +696,14 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Link Tables -----------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/**
-  \brief Retrieve many values into cached lists.
-  Get the link tables that are protected from the SVN diffusion.\n
-  Retrieve all iam denomination for speed improvments. \n
-  Retrieve all iamids from IAM_EXPORT fro speed improvments.\n
-*/
-void DrugsBasePrivate::retreiveLinkTables()
-{
-     if ((!m_Lk_iamCode_substCode.isEmpty()) && (!m_Lk_classCode_iamCode.isEmpty()))
-         return;
-
-     QString tmp;
-     {
-          QFile file(":/inns_molecules_link.csv");
-          if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-               return;
-          tmp = file.readAll();
-          QStringList lines = tmp.split("\n");
-          int i = 0;
-          foreach(QString l, lines) {
-               if (!l.contains(DrugsBase::separator)) continue;
-               QStringList val = l.split(DrugsBase::separator);
-               m_Lk_iamCode_substCode.insertMulti(val[0].toInt(), val[1].toInt());
-               i++;
-          }
-     }
-
-     {
-          QFile file(":/link-class-substances.csv");
-          if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-               return;
-          tmp = file.readAll();
-          QStringList lines = tmp.split("\n");
-          int i = 0;
-          foreach(QString l, lines) {
-               if (!l.contains(DrugsBase::separator)) continue;
-               QStringList val = l.split(DrugsBase::separator);
-               m_Lk_classCode_iamCode.insertMulti(val[0].toInt(), val[1].toInt());
-               i++;
-          }
-     }
-     m_DrugsBase->m_InteractionsDatabaseAvailable = m_Lk_classCode_iamCode.count() && m_Lk_iamCode_substCode.count();
-
-     /** \todo release these resources files to limit memory usage */
-
-     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if (!DB.isOpen())
-          DB.open();
-
-     // get m_IamDenominations : all iam denominations known
-     {
-         QHashWhere where;
-         QString req = m_DrugsBase->select(Table_IAM_DENOMINATION);
-
-         QSqlQuery q(req , DB);
-         if (q.isActive()) {
-             while (q.next())
-                 m_IamDenominations.insert(q.value(0).toInt(), q.value(1).toString());
-         }
-         else
-             Utils::Log::addQueryError(m_DrugsBase, q);
-     }
-
-
-     /*
-          // get m_Lk_iamCode_substCode : link table for iamCode <-> codeSubst
-          {
-               QString req = "SELECT `ID_IAM_SUBST`, `ID_CODE_SUBST` "
-                             " FROM `IAM_SUBST_L_CODE_SUBST` "
-                             " ORDER BY `ID_IAM_SUBST`;";
-
-               QSqlQuery q(req , DB);
-               if (q.isActive())
-               {
-                    while (q.next())
-                         m_Lk_iamCode_substCode.insertMulti(q.value(0).toInt(), q.value(1).toInt());
-               }
-               else
-                    qWarning() << q.lastError().driverText() << q.lastError().databaseText() << q.lastQuery();
-          }
-
-
-          // get m_Lk_classCode_iamCode : link table for iamCode <-> codeSubst
-          {
-               QString req = "SELECT `ID_IAM_CLASS`, `ID_IAM_SUBST` "
-                             "FROM `IAM_CLASS_L_SUBST` "
-                             "ORDER BY `ID_IAM_CLASS`;";
-
-               QSqlQuery q(req , DB);
-               if (q.isActive())
-               {
-                    while (q.next())
-                         m_Lk_classCode_iamCode.insertMulti(q.value(0).toInt(), q.value(1).toInt());
-               }
-               else
-                    qWarning() << q.lastError().driverText() << q.lastError().databaseText() << q.lastQuery();
-          }
-     */
- }
-
-
-/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> DrugsBase::getLinkedCodeSubst(QList<int> & code_iam) const
-{
-    QList<int> toReturn;
-    foreach(int i, code_iam)
-        toReturn << d->m_Lk_iamCode_substCode.values(i);
-    return toReturn;
-}
-
-/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
-QList<int> DrugsBase::getLinkedIamCode(QList<int> & code_subst) const
-{
-    QList<int> toReturn;
-    foreach(int i, code_subst)
-        toReturn << d->m_Lk_iamCode_substCode.keys(i);
-    return toReturn;
-}
-
-/** \brief Retreive from database the Substances Codes where denomination of the INN is like 'iamDenomination%' */
-QList<int> DrugsBase::getLinkedSubstCode(const QString & iamDenomination)
-{
-     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if (!DB.isOpen())
-          DB.open();
-
-     // get iamSubstCode
-     QString tmp = iamDenomination;
-     QHash<int, QString> where;
-     where.insert(IAM_DENOMINATION, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     QList<int> iamCode;
-     QString req = this->select(Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, where);
-     QSqlQuery q(req , DB);
-     if (q.isActive())
-         while (q.next())
-             iamCode << q.value(0).toInt();
-     return getLinkedCodeSubst(iamCode);
-}
 
 /** \brief Return true if all the INNs of the drug are known. */
 bool DrugsBase::drugsINNIsKnown(const DrugsData *drug)
 {
-    const QList<QVariant> & list = drug->listOfCodeMolecules().toList(); //->value(Table_COMPO, COMPO_CODE_SUBST).toList();
+    const QList<QVariant> & list = drug->listOfCodeMolecules().toList(); //->value(Table_COMPO, COMPO_MOL_CODE).toList();
     foreach(QVariant q, list)
-        if (d->m_Lk_iamCode_substCode.keys(q.toInt()).count() == 0)
+        if (getLinkedIamCode(q.toInt()).count() == 0)
+//            if (d->m_Lk_iamCode_substCode.key(q.toInt()).count() == 0)
             return false;
     return true;
 }
@@ -766,70 +711,17 @@ bool DrugsBase::drugsINNIsKnown(const DrugsData *drug)
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------- Retreive drugs from database ------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the name of the INN for the substance code \e code_subst. */
-QString DrugsBase::getInnDenominationFromSubstanceCode(const int code_subst)
-{
-     // if molecule is not associated with a dci exit
-     if (!d->m_Lk_iamCode_substCode.values().contains(code_subst))
-          return QString::null;
-     return d->m_IamDenominations.value(d->m_Lk_iamCode_substCode.key(code_subst));
-}
-
-QString DrugsBase::getInnDenomination(const int inncode) const
-{
-     return d->m_IamDenominations.value(inncode);
-}
-
-/** \brief Returns the name of the INN for the substance code \e code_subst. */
-QStringList DrugsBasePrivate::getIamClassDenomination(const int & code_subst)
-{
-     // if molecule is not associated with a dci exit
-     if (!m_Lk_iamCode_substCode.values().contains(code_subst))
-          return QStringList();
-
-     // if molecule is not associated with a class exit
-     QList<int> list = m_Lk_classCode_iamCode.keys(m_Lk_iamCode_substCode.key(code_subst));
-     if (list.isEmpty())
-          return QStringList();
-     QStringList toReturn;
-     foreach(int i, list)
-         toReturn << m_IamDenominations.value(i);
-
-     return toReturn;
-}
-
-/**
-  \brief Returns all INN and IAM classes of MOLECULE \e code_subst.
-  \sa getDrugByCIS()
-*/
-QSet<int> DrugsBasePrivate::getAllInnAndIamClassesIndex(const int code_subst)
-{
-    QSet<int> toReturn;
-    toReturn = m_Lk_classCode_iamCode.keys(m_Lk_iamCode_substCode.key(code_subst)).toSet();
-    if (m_Lk_iamCode_substCode.values().contains(code_subst))
-        toReturn << m_Lk_iamCode_substCode.key(code_subst);
-    return toReturn;
-}
-
-/** \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule. */
-int DrugsBase::getInnCodeForCodeMolecule(const int code) const
-{
-    if (d->m_Lk_iamCode_substCode.values().contains(code))
-        return d->m_Lk_iamCode_substCode.key(code);
-    return -1;
-}
-
 /** \brief Returns the unique code CIS for the CIP code \e CIP. */
-int DrugsBase::getCISFromCIP(int CIP)
+int DrugsBase::getUIDFromCIP(int CIP)
 {
     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
     if (!DB.isOpen())
         DB.open();
     // prepare where clause
     QHash<int, QString> where;
-    where.insert(CISP_CIP, "=" + QString::number(CIP));
+    where.insert(PACK_PACK_UID, "=" + QString::number(CIP));
     // prepare query
-    QString req = this->select(Table_CIS_CIP, CISP_CIS, where);
+    QString req = this->select(Table_PACKAGING, PACK_DRUG_UID, where);
     QSqlQuery q(req , DB);
     if (q.isActive())
         if (q.next())
@@ -841,18 +733,16 @@ int DrugsBase::getCISFromCIP(int CIP)
 DrugsData *DrugsBase::getDrugByCIP(const QVariant & CIP_id)
 {
     // retreive corresponding CIS
-    int CIS = getCISFromCIP(CIP_id.toInt());
-    if (CIS == -1) return 0;
+    int u = getUIDFromCIP(CIP_id.toInt());
+    if (u == -1) return 0;
 
     // retreive drugs from CIS
-    return getDrugByCIS(CIS);
+    return getDrugByUID(u);
 }
 
-/** \brief Retrieve and return the drug designed by the CIS code \e CIS_id. */
-DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
+/** \brief Retrieve and return the drug designed by the UID code \e drug_UID. */
+DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
 {
-//     if (CIS_id.toInt() < 10000000)
-//         return 0;
      QTime t;
      t.start();
 
@@ -865,30 +755,47 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
 
      // construct the where clause
      QHash<int, QString> where;
-     where.insert(CIS_CIS, QString("=%1").arg(CIS_id.toString()));
+     int newUID = drug_UID.toInt();
+     if (newUID == -1) {
+         QString req = select(Table_DRUGS, DRUGS_UID, where);
+         req = req.remove("WHERE ") + " LIMIT 1";
+         QSqlQuery q(req,DB);
+         if (q.isActive()) {
+             if (q.next()) {
+                 newUID = q.value(0).toInt();
+             }
+         } else {
+             Utils::Log::addError(this, "Can find a valid DRUGS_UID in getDrugByUID where uid==-1");
+             Utils::Log::addQueryError("DrugsBase", q);
+             return 0;
+         }
+     }
+     where.insert(DRUGS_UID, QString("=%1").arg(newUID));
 
-     // get CIS table
-     QString req = select(Table_CIS, where);
+     // get DRUGS table
+     QString req = select(Table_DRUGS, where);
      DrugsData * toReturn = 0;
      {
           QSqlQuery q(req , DB);
           if (q.isActive()) {
                if (q.next()) {
-                    if (q.record().count() != CIS_MaxParam)
+                    if (q.record().count() != DRUGS_MaxParam)
                          Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
                                    "ERROR : will retreiving %1. Wrong number of fields")
-                                          .arg("drugs/CIS"));
+                                          .arg("DRUGS table"));
                     int i = 0;
                     toReturn = new DrugsData();
-                    for (i = 0; i < CIS_MaxParam; ++i)
-                         toReturn->setValue(Table_CIS, i, q.value(i));
+                    for (i = 0; i < DRUGS_MaxParam; ++i)
+                         toReturn->setValue(Table_DRUGS, i, q.value(i));
                }
-          }
+           } else {
+               Utils::Log::addQueryError(this, q);
+           }
       }
 
      // get COMPO table
      where.clear();
-     where.insert(COMPO_CIS, QString("=%1").arg(CIS_id.toString()));
+     where.insert(COMPO_UID, QString("=%1").arg(newUID));
      QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
      req = select(Table_COMPO, where) + sort;
      QSet<int> codeMols;
@@ -902,16 +809,16 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
                     if (q.record().count() != COMPO_MaxParam)
                          Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
                                    "ERROR : will retreiving %1. Wrong number of fields")
-                                          .arg("drugs composition"));
+                                          .arg("COMPOSITION table"));
                     compo = new DrugComposition();
                     int i = 0;
                     for (i = 0; i < COMPO_MaxParam; ++i)
                          compo->setValue(i, q.value(i));
                     compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->m_CodeMolecule));
-                    compo->setValue(COMPO_IAM_CLASS_DENOMINATION, d->getIamClassDenomination(compo->m_CodeMolecule));
-                    compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_CODE_SUBST).toInt()));
+                    compo->setValue(COMPO_IAM_CLASS_DENOMINATION, getIamClassDenomination(compo->m_CodeMolecule));
+                    compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_MOL_CODE).toInt()));
                     list << compo;
-                    codeMols << q.value(COMPO_CODE_SUBST).toInt();
+                    codeMols << q.value(COMPO_MOL_CODE).toInt();
                     if (precedent) {
                         if (q.value(COMPO_LK_NATURE) == precedent->linkId()) {
                             compo->setLinkedSubstance(list.at(list.count()-2));
@@ -921,17 +828,19 @@ DrugsData *DrugsBase::getDrugByCIS(const QVariant &CIS_id)
                }
                foreach(DrugComposition *c, list)
                    toReturn->addComposition(c);
-          }
+           } else {
+               Utils::Log::addQueryError(this, q);
+           }
       }
      foreach(const int i, codeMols) {
-         toReturn->addInnAndIamClasses(d->getAllInnAndIamClassesIndex(i)) ;
+         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
      }
 
-     if (toReturn)
-         toReturn->warn();
+//     if (toReturn)
+//         toReturn->warn();
 
      if (d->m_LogChrono)
-         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByCIS");
+         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");
 
      return toReturn;
 }

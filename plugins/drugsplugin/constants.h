@@ -65,6 +65,7 @@ namespace Constants {
     const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
     const char* const   A_PRINT_PRESCRIPTION    = "a.DrugsPlug.PrintPrescr";
     const char* const   A_TOOGLE_TESTINGDRUGS   = "a.DrugsPlug.ToogleTestings";
+    const char* const   A_DATABASE_INFORMATIONS = "a.DrugsPlug.DbInfos";
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search method");
     const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");

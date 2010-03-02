@@ -218,17 +218,8 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     d->populateTree();
     updateWindowTitle();
 
-    // resize windows
-    QWidget *ref = 0;
-    if (Core::ICore::instance()->mainWindow())
-        ref = Core::ICore::instance()->mainWindow();
-    else
-        ref = qApp->topLevelWidgets().first();
-    QSize size = ref->size();
-    size = QSize(size.width()*0.9, size.height()*0.9);
-    this->resize(size);
-    // recenter window
-    Utils::centerWidget(this, ref);
+    // resize and center windows
+    Utils::resizeAndCenter(this);
 }
 
 /** \brief Creates a new help browser */

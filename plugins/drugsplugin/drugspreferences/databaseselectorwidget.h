@@ -38,81 +38,95 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGSCENTRALWIDGET_H
-#define DRUGSCENTRALWIDGET_H
+#ifndef DATABASESELECTORWIDGET_H
+#define DATABASESELECTORWIDGET_H
 
-#include <drugsplugin/drugs_exporter.h>
+#include <coreplugin/ioptionspage.h>
 
+#include <QPointer>
 #include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <QStringListModel>
 
 /**
- * \file mfDrugsCentralWidget.h
+ * \file databaseselectorwidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
+ * \version 0.4.0
+ * \date 02 Mar 2010
 */
 
+
 namespace DrugsDB {
-class DrugsModel;
+class DatabaseInfos;
+}
+
+namespace Core {
+class ISettings;
 }
 
 namespace DrugsWidget {
 namespace Internal {
-class DrugsContext;
-class DrugsActionHandler;
-class DrugSelector;
-
+class DatabaseSelectorWidgetPrivate;
 namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
+class DatabaseSelectorWidget;
+}
 
-class PrescriptionViewer;
-class DrugsModel;
-
-class DRUGS_EXPORT DrugsCentralWidget : public QWidget
+class DatabaseSelectorWidget : public QWidget
 {
     Q_OBJECT
-    friend class DrugsWidget::Internal::DrugsActionHandler;
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    DatabaseSelectorWidget(QWidget *parent = 0);
+    ~DatabaseSelectorWidget();
 
-    void changeFontTo(const QFont &font);
-    DrugsDB::DrugsModel *currentDrugsModel() const;
+    void setDatasToUi();
+    static void writeDefaultSettings(Core::ISettings *s = 0);
 
-    QListView *prescriptionListView();
-    PrescriptionViewer *prescriptionView();
-    Internal::DrugSelector *drugSelector();
-
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
-    void printPreview();
-    bool createTemplate();
-    void showDatabaseInformations();
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
-    void createConnections();
-    void disconnect();
+    void changeEvent(QEvent *e);
 
 private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
+    void getAllAvailableDatabases();
+    void updateDatabaseInfos(int row);
+    void addPath();
+    void removePath();
+    void tooglePaths();
 
 private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    DrugsDB::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    Ui::DatabaseSelectorWidget *ui;
+    DatabaseSelectorWidgetPrivate *d;
 };
 
-}  // End DrugsWidget
+}  // End namespace Internal
 
-#endif // DRUGSCENTRALWIDGET_H
+
+class DrugsDatabaseSelectorPage : public Core::IOptionsPage
+{
+public:
+    DrugsDatabaseSelectorPage(QObject *parent = 0);
+    ~DrugsDatabaseSelectorPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "multiple_drugs_databases.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DatabaseSelectorWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+
+private:
+    QPointer<Internal::DatabaseSelectorWidget> m_Widget;
+};
+
+}  // End namespace DrugsWidget
+
+
+#endif // DATABASESELECTORWIDGET_H

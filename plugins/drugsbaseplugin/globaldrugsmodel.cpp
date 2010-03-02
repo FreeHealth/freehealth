@@ -72,21 +72,21 @@ public:
 
     static void updateCachedAvailableDosage()
     {
-        m_CachedAvailableDosageForCIS.clear();
-        m_CachedAvailableDosageForCIS = drugsBase()->getAllCISThatHaveRecordedDosages();
+        m_CachedAvailableDosageForUID.clear();
+        m_CachedAvailableDosageForUID = drugsBase()->getAllUIDThatHaveRecordedDosages();
     }
 
-    static bool CISHasRecordedDosage(const int CIS)
+    static bool UIDHasRecordedDosage(const int uid)
     {
-        return m_CachedAvailableDosageForCIS.contains(CIS);
+        return m_CachedAvailableDosageForUID.contains(uid);
     }
 
 private:
-    static QList<int> m_CachedAvailableDosageForCIS;
+    static QList<int> m_CachedAvailableDosageForUID;
 };
 
 /** \todo clear static cachedCISDosage when no entity of this object left */
-QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForCIS;
+QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
 
 }  // End Internal
 }  // End DrugsDB
@@ -107,11 +107,11 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
 {
     d = new Internal::GlobalDrugsModelPrivate();
     d->updateCachedAvailableDosage();
-    setTable(drugsBase()->table(Constants::Table_CIS));
+    setTable(drugsBase()->table(Constants::Table_DRUGS));
     setEditStrategy( QSqlTableModel::OnManualSubmit );
     QHashWhere where;
-    where.insert(Constants::CIS_COMMERCIALISATION, "='O'");
-    setFilter(drugsBase()->getWhereClause(Constants::Table_CIS, where));
+    where.insert(Constants::DRUGS_MARKET, "=1");
+    setFilter(drugsBase()->getWhereClause(Constants::Table_DRUGS, where));
     select();
 }
 
@@ -121,10 +121,10 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     if (role == Qt::BackgroundRole) {
-        if (item.column() == Constants::CIS_DENOMINATION) {
+        if (item.column() == Constants::DRUGS_NAME) {
             if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
-                QModelIndex cis = index(item.row(), Constants::CIS_CIS);
-                if (d->CISHasRecordedDosage(cis.data().toInt())) {
+                QModelIndex cis = index(item.row(), Constants::DRUGS_UID);
+                if (d->UIDHasRecordedDosage(cis.data().toInt())) {
                     QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
                     c.setAlpha(125);
                     return c;

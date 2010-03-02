@@ -43,6 +43,110 @@ using namespace DrugsDB;
 //////////////////////////// UPDATE STEPS /////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 namespace {
+
+    class Dosage_030_To_040 : public DrugsDB::DosageDatabaseUpdateStep
+    {
+    public:
+        // From v 0.0.8 To v 0.2.0
+        // - Adding DRUGS_DATABASE_FILENAME
+        Dosage_030_To_040() : DrugsDB::DosageDatabaseUpdateStep() {}
+        ~Dosage_030_To_040() {}
+
+        QString userMessage() const
+        {
+            return QApplication::translate("DatabaseUpdater", "Your dosage database needs to be "
+                                           "updated from version 0.2.0 to version 0.4.0.\n"
+                                           "This will be automatically done.");
+        }
+
+        QString fromVersion() const { return "0.2.0"; }
+        QString toVersion() const { return "0.4.0"; }
+
+        void setConnectionName(const QString &name) { m_Name = name; }
+
+        bool retreiveValuesToUpdate() const  {return true;}
+
+        bool updateDatabaseScheme() const
+        {
+            // these versions only use SQLite
+            QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+            if (!db.open()) {
+                return false;
+            }
+            QStringList req;
+            req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
+            req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+            req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
+                          .arg("`POSO_ID`,"
+                               "`POSO_UUID`,"
+                               // "`DRUGS_DATABASE_IDENTIFIANT`,"
+                               "`INN_LK`,"
+                               "`INN_DOSAGE`,"
+                               "`CIS_LK`,"
+                               "`CIP_LK`,"
+                               "`LABEL`,"
+                               "`INTAKEFROM`,"
+                               "`INTAKETO`,"
+                               "`INTAKEFROMTO`,"
+                               "`INTAKESCHEME`,"
+                               "`INTAKESINTERVALOFTIME`,"
+                               "`INTAKESINTERVALSCHEME`,"
+                               "`DURATIONFROM`,"
+                               "`DURATIONTO`,"
+                               "`DURATIONFROMTO`,"
+                               "`DURATIONSCHEME`,"
+                               "`PERIOD`,"
+                               "`PERIODSCHEME`,"
+                               "`ADMINCHEME`,"
+                               "`DAILYSCHEME`,"
+                               "`MEALSCHEME`,"
+                               "`ISALD`,"
+                               "`TYPEOFTREATEMENT`,"
+                               "`MINAGE`,"
+                               "`MAXAGE`,"
+                               "`MINAGEREFERENCE`,"
+                               "`MAXAGEREFERENCE`,"
+                               "`MINWEIGHT`,"
+                               "`SEXLIMIT`,"
+                               "`MINCLEARANCE`,"
+                               "`MAXCLEARANCE`,"
+                               "`PREGNANCYLIMITS`,"
+                               "`BREASTFEEDINGLIMITS`,"
+                               "`PHYSIOLOGICALLIMITS`,"
+                               "`NOTE`,"
+                               "`CIM10_LK`,"
+                               "`CIM10_LIMITS_LK`,"
+                               "`EDRC_LK`,"
+                               "`EXTRAS`,"
+                               "`USERVALIDATOR`,"
+                               "`CREATIONDATE`,"
+                               "`MODIFICATIONDATE`,"
+                               "`TRANSMITTED`,"
+                               "`ORDER`");
+            req << QString("UPDATE `DOSAGE` SET `DRUGS_DATABASE_IDENTIFIANT`=\"%1\";").arg(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT);
+            req << "DROP TABLE `OLD_DOSAGE`;";
+            req << "﻿DELETE FROM `VERSION`;";
+            req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.4.0');";
+            foreach(const QString &r, req) {
+                QSqlQuery q(r,db);
+                if (q.isActive()) {
+                    q.finish();
+                } else {
+                    Utils::Log::addQueryError("VersionUpdater", q);
+                }
+            }
+            Utils::Log::addMessage("VersionUpdater",QString("Dosage Database SQL update done from %1 to %2").arg("0.2.0", "0.4.0"));
+            return true;
+        }
+
+        bool saveUpdatedValuesToDatabase() const {return true;}
+
+    private:
+        QString m_Name;
+        mutable QMap<int, int> m_Id_DailySchemes;
+        mutable QMap<int, int> m_Id_MealSchemes;
+    };
+
 class Dosage_008_To_020 : public DrugsDB::DosageDatabaseUpdateStep
 {
 public:
@@ -276,7 +380,7 @@ public:
         qDeleteAll(m_Updaters);
     }
 
-    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0"; }
+    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0"; }
     static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0"; }
 
     QString xmlVersion(const QString &xml)
@@ -329,6 +433,7 @@ VersionUpdater::VersionUpdater() : d(0)
     d = new VersionUpdaterPrivate;
     // Here is the good place to create updaters objects
     d->m_Updaters.append(new ::Dosage_008_To_020);
+    d->m_Updaters.append(new ::Dosage_030_To_040);
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
 }
 
@@ -351,7 +456,7 @@ bool VersionUpdater::isDosageDatabaseUpToDate() const
         Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()));
         return true;
     }
-    QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` ASC LIMIT 1;";
+    QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` LIMIT 1;";
     QSqlQuery q(req, db);
     if (q.isActive()) {
         if (q.next()) {

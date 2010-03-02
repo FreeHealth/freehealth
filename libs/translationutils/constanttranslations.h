@@ -241,17 +241,18 @@ namespace Time {
         const char * const  DEFAULTS              = QT_TRANSLATE_NOOP("tkConstants", "Defaults");
 
         // Drugs
-        const char* const DRUGS_DATABASE      = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
-        const char* const INTERACTIONS_DATABASE      = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
-        const char* const DRUGS      = QT_TRANSLATE_NOOP("tkConstants", "drugs");
-        const char* const INN      = QT_TRANSLATE_NOOP("tkConstants", "INN");
-        const char* const INTAKES    = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
-        const char* const VIEWINTERACTIONS_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
-        const char* const FROM       = QT_TRANSLATE_NOOP("tkConstants", "from");
-        const char* const TO       = QT_TRANSLATE_NOOP("tkConstants", "to");
-        const char* const DURING       = QT_TRANSLATE_NOOP("tkConstants", "during");
-        const char* const EACH       = QT_TRANSLATE_NOOP("tkConstants", "each");
-        const char* const AND       = QT_TRANSLATE_NOOP("tkConstants", "and");
+        const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
+        const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
+        const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
+        const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "drugs");
+        const char* const INN                           = QT_TRANSLATE_NOOP("tkConstants", "INN");
+        const char* const INTAKES                       = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
+        const char* const VIEWINTERACTIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
+        const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
+        const char* const TO                            = QT_TRANSLATE_NOOP("tkConstants", "to");
+        const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants", "during");
+        const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
+        const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
         // Drugs Interactions
         const char* const INTERACTION  = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
         const char* const TAKE_INTO_ACCOUNT  = QT_TRANSLATE_NOOP("tkConstants", "Take into account");
@@ -337,8 +338,12 @@ namespace Time {
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
         const char* const VERSION                            = QT_TRANSLATE_NOOP("tkConstants", "Version");
         const char* const DESCRIPTION                        = QT_TRANSLATE_NOOP("tkConstants", "Description");
+        const char* const AUTHOR                             = QT_TRANSLATE_NOOP("tkConstants", "Author");
+        const char* const PROVIDER                           = QT_TRANSLATE_NOOP("tkConstants", "Provider");
         const char* const UNKNOWN                            = QT_TRANSLATE_NOOP("tkConstants", "Unknown");
         const char* const READY                              = QT_TRANSLATE_NOOP("tkConstants", "Ready");
+        const char* const AVAILABLE                          = QT_TRANSLATE_NOOP("tkConstants", "Available");
+        const char* const UNAVAILABLE                        = QT_TRANSLATE_NOOP("tkConstants", "Unavailable");
         const char* const MESSAGES                           = QT_TRANSLATE_NOOP("tkConstants", "Messages");
         const char* const LOGGED_MESSAGES                    = QT_TRANSLATE_NOOP("tkConstants", "Logged Messages");
         const char* const ERRORS                             = QT_TRANSLATE_NOOP("tkConstants", "Errors");

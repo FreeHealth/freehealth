@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="122"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="124"/>
         <source>Save templates .</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="123"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
@@ -42,22 +42,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="53"/>
+        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="57"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="63"/>
+        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="67"/>
         <source>Parent category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="73"/>
+        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="77"/>
         <source>Summary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="85"/>
+        <location filename="../../plugins/templatesplugin/templatescreationdialog.ui" line="89"/>
         <source>View content</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,7 +176,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1135"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1155"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,17 +184,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="583"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="586"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="584"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="587"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="585"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="588"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>

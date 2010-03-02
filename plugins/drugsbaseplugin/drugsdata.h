@@ -55,8 +55,8 @@
 /**
  * \file drugdata.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 02 Mar 2010
 */
 
 /** \todo Some parts should not be Internals */
@@ -80,9 +80,9 @@ public:
         using namespace DrugsDB::Constants;
         switch (fieldref)
         {
-            case COMPO_NOM : m_Form = value.toString(); break;
-            case COMPO_DENOMINATION : m_MoleculeName = value.toString(); break;
-            case COMPO_CODE_SUBST : m_CodeMolecule = value.toInt(); break;
+            case COMPO_MOL_FORM : m_Form = value.toString(); break;
+            case COMPO_MOL_NAME : m_MoleculeName = value.toString(); break;
+            case COMPO_MOL_CODE : m_CodeMolecule = value.toInt(); break;
             case COMPO_DOSAGE : m_Dosage = value.toString(); break;
             case COMPO_REF_DOSAGE : m_RefDosage = value.toString(); break;
             case COMPO_NATURE : m_Nature = value.toString(); break;
@@ -212,11 +212,11 @@ public:
      void setPrescriptionValue( const int fieldref, const QVariant &value );
 
      // getters
-     int               CIS() const                { return value( Table_CIS, CIS_CIS ).toInt();  }
+     int               UID() const                { return value( Table_DRUGS, DRUGS_UID ).toInt();  }
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
      QString           denomination() const;
-     QString           form() const               { return value( Table_CIS, CIS_FORME ).toString(); }
+     QString           form() const               { return value( Table_DRUGS, DRUGS_FORM ).toString(); }
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
      QStringList       listOfMolecules() const;
@@ -231,18 +231,16 @@ public:
      QString           mainInnDosage() const;
      QString           innComposition() const;
 
-     QString           linkToFrenchRCP() const;
+     QString           linkToSCP() const;
 
      QStringList       dosageOfMolecules() const;
      bool              hasPrescription() const;
      bool              isScoredTablet() const;
 
      QVariant          prescriptionValue(const int filedref) const;
-//     QString           prescriptionToHtml() const;
-//     QString           prescriptionToPlainText() const;
 
      // this need to be rewritten because there is N CIP for 1 drug
-     //const int CIP()                    { return value( mfDrugsTables::CISP_CIP ).toInt(); }
+     //const int CIP()                    { return value( mfDrugsTables::PACK_CIP ).toInt(); }
 
      // viewers
      QString toHtml() const;
@@ -275,10 +273,6 @@ class DRUGSBASE_EXPORT TextualDrugsData : public DrugsData
 public:
     TextualDrugsData();
     void setDenomination(const QString &denomination);
-//    QString denomination() const {return denomination;}
-//    void setNote(const QString &note);
-//private:
-//    QString m_Denomination;
 };
 
 }  // End Internal

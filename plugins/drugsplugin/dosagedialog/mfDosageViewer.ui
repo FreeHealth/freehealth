@@ -44,8 +44,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="frenchRCPButton">
+       <property name="toolTip">
+        <string>View the summary of product characteristics</string>
+       </property>
        <property name="text">
-        <string>French RCP</string>
+        <string>View SPC</string>
        </property>
       </widget>
      </item>
@@ -54,7 +57,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>6</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabBasics">
       <attribute name="title">
@@ -95,7 +98,7 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="fromToIntakesCheck">
             <property name="text">
-             <string>From x To y</string>
+             <string>Range x to y</string>
             </property>
            </widget>
           </item>
@@ -110,7 +113,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>From</string>
+               <string>Take</string>
               </property>
              </widget>
             </item>
@@ -248,7 +251,7 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="fromToDurationCheck">
             <property name="text">
-             <string>From x To y</string>
+             <string>Range x to y</string>
             </property>
            </widget>
           </item>
@@ -263,7 +266,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>From</string>
+               <string>During</string>
               </property>
              </widget>
             </item>

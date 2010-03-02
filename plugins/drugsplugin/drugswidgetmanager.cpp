@@ -147,6 +147,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aToogleTestingDrugs(0),
         aChangeDuration(0),
         aToTemplate(0),
+        aDatabaseInformations(0),
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
@@ -311,6 +312,19 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(Trans::Constants::DURATION);
     connect(aChangeDuration,SIGNAL(triggered()),this,SLOT(changeDuration()));
 
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP);
+    a = aDatabaseInformations = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DATABASE_INFORMATIONS, ctx);
+    cmd->setTranslations(Trans::Constants::DRUGS_DATABASE_INFORMATIONS);
+    cmd->retranslate();
+    if (hmenu) {
+        hmenu->addAction(cmd, Core::Constants::G_HELP_ABOUT);
+    }
+    connect(aDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDatabaseInformations()));
+
+
+
     actionManager()->retranslateMenusAndActions();
 }
 
@@ -466,5 +480,12 @@ void DrugsActionHandler::printPreview()
 {
     if (m_CurrentView) {
         m_CurrentView->printPreview();
+    }
+}
+
+void DrugsActionHandler::showDatabaseInformations()
+{
+    if (m_CurrentView) {
+        m_CurrentView->showDatabaseInformations();
     }
 }

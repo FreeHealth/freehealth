@@ -57,6 +57,7 @@ class DrugsViewOptionsPage;
 class DrugsPrintOptionsPage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
+class DrugsDatabaseSelectorPage;
 }
 
 
@@ -82,6 +83,7 @@ private:
     DrugsWidget::DrugsPrintOptionsPage *printPage;
     DrugsWidget::DrugsUserOptionsPage *userPage;
     DrugsWidget::DrugsExtraOptionsPage *extraPage;
+    DrugsWidget::DrugsDatabaseSelectorPage *databaseSelectorPage;
 };
 
 } // namespace Internal

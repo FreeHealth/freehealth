@@ -42,6 +42,7 @@
 #include "drugswidgetfactory.h"
 #include "constants.h"
 #include "drugspreferences/mfDrugsPreferences.h"
+#include "drugspreferences/databaseselectorwidget.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -65,7 +66,9 @@ DrugsPlugin::DrugsPlugin() :
         viewPage(0),
         printPage(0),
         userPage(0),
-        extraPage(0)
+        extraPage(0),
+        databaseSelectorPage(0)
+
 {
     setObjectName("DrugsPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -94,6 +97,10 @@ DrugsPlugin::~DrugsPlugin()
         removeObject(printPage);
         delete printPage; printPage=0;
     }
+    if (databaseSelectorPage) {
+        removeObject(databaseSelectorPage);
+        delete databaseSelectorPage; databaseSelectorPage=0;
+    }
 }
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -108,7 +115,34 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
 
-    // Initialize drugs database
+    viewPage = new DrugsViewOptionsPage(this);
+    printPage = new DrugsPrintOptionsPage(this);
+    userPage = new DrugsUserOptionsPage(this);
+    extraPage = new DrugsExtraOptionsPage(this);
+    databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
+
+    // check settings
+    if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
+        viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        printPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        userPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
+    } else {
+        viewPage->checkSettingsValidity();
+        printPage->checkSettingsValidity();
+        userPage->checkSettingsValidity();
+        extraPage->checkSettingsValidity();
+        databaseSelectorPage->checkSettingsValidity();
+    }
+
+    addObject(viewPage);
+    addObject(printPage);
+    addObject(userPage);
+    addObject(extraPage);
+    addObject(databaseSelectorPage);
+
+    // Initialize drugs database after the settings where checked
     drugsBase();
 
     return true;
@@ -121,33 +155,11 @@ void DrugsPlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
-
-    viewPage = new DrugsViewOptionsPage(this);
-    printPage = new DrugsPrintOptionsPage(this);
-    userPage = new DrugsUserOptionsPage(this);
-    extraPage = new DrugsExtraOptionsPage(this);
-    // check settings
-    if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
-        viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
-        printPage->writeDefaultSettings(Core::ICore::instance()->settings());
-        userPage->writeDefaultSettings(Core::ICore::instance()->settings());
-        extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
-    } else {
-        viewPage->checkSettingsValidity();
-        printPage->checkSettingsValidity();
-        userPage->checkSettingsValidity();
-        extraPage->checkSettingsValidity();
-    }
-
-    addObject(viewPage);
-    addObject(printPage);
-    addObject(userPage);
-    addObject(extraPage);
 }
 
 void DrugsPlugin::remoteArgument(const QString& arg)
 {
-    qWarning() << "drugplugin" << arg;
+//    qWarning() << "drugplugin" << arg;
     // An empty argument is sent to trigger activation
     // of the window via QtSingleApplication. It should be
     // the last of a sequence.

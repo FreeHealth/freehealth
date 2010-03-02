@@ -53,12 +53,14 @@
 
 #include "interactionsbase.h"
 
-//include drugswidget headers
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 
-// include toolkit headers
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <utils/log.h>
+#include <utils/global.h>
 
 // include Qt headers
 #include <QCoreApplication>
@@ -69,13 +71,18 @@
 #include <QSqlField>
 #include <QMap>
 #include <QMultiMap>
+#include <QMultiHash>
 #include <QSet>
+#include <QFile>
+#include <QDir>
 
 using namespace DrugsDB::Constants;
 using namespace DrugsDB::Internal;
 
 namespace DrugsDB {
 namespace Internal {
+
+    const char * const SEPARATOR = "|||";
 
 /**
   \brief Private part of mfDrugsBase
@@ -85,11 +92,117 @@ class InteractionsBasePrivate
 {
 public:
     InteractionsBasePrivate(InteractionsBase *p) :
-            m_Parent(p), m_LogChrono(false), m_initialized(false) {}
+            m_Parent(p), m_DB(0), m_LogChrono(false), m_initialized(false) {}
 
     ~InteractionsBasePrivate()
     {
+        if (m_DB) {
+            delete m_DB;
+            m_DB=0;
+        }
     }
+
+    // Link tables
+    /**
+      \brief Retrieve many values into cached lists.
+      Get the link tables that are protected from the SVN diffusion.\n
+      Retrieve all iam denomination for speed improvments. \n
+      Retrieve all iamids from IAM_EXPORT fro speed improvments.\n
+    */
+    void retreiveLinkTables()
+    {
+         if ((!m_Lk_iamCode_substCode.isEmpty()) && (!m_Lk_classCode_iamCode.isEmpty()))
+             return;
+
+         QString tmp;
+         {
+              QFile file(":/inns_molecules_link.csv");
+              if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+                   return;
+              tmp = file.readAll();
+              QStringList lines = tmp.split("\n");
+              int i = 0;
+              foreach(QString l, lines) {
+                   if (!l.contains(SEPARATOR)) continue;
+                   QStringList val = l.split(SEPARATOR);
+                   m_Lk_iamCode_substCode.insertMulti(val[0].toInt(), val[1].toInt());
+                   i++;
+              }
+         }
+
+         {
+              QFile file(":/link-class-substances.csv");
+              if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+                   return;
+              tmp = file.readAll();
+              QStringList lines = tmp.split("\n");
+              int i = 0;
+              foreach(QString l, lines) {
+                   if (!l.contains(SEPARATOR)) continue;
+                   QStringList val = l.split(SEPARATOR);
+                   m_Lk_classCode_iamCode.insertMulti(val[0].toInt(), val[1].toInt());
+                   i++;
+              }
+         }
+         InteractionsBase::m_InteractionsDatabaseAvailable = m_Lk_classCode_iamCode.count() && m_Lk_iamCode_substCode.count();
+
+         /** \todo release these resources files to limit memory usage */
+
+         QSqlDatabase DB = QSqlDatabase::database(IAM_DATABASE_NAME);
+         if (!DB.isOpen())
+              DB.open();
+
+         // get m_IamDenominations : all iam denominations known
+         {
+             QHashWhere where;
+             QString req = m_DB->select(Table_IAM_DENOMINATION);
+
+             QSqlQuery q(req , DB);
+             if (q.isActive()) {
+                 while (q.next())
+                     m_IamDenominations.insert(q.value(0).toInt(), q.value(1).toString());
+             }
+             else
+                 Utils::Log::addQueryError("DrugsBase", q);
+         }
+
+         /*
+              // get m_Lk_iamCode_substCode : link table for iamCode <-> codeSubst
+              {
+                   QString req = "SELECT `ID_IAM_SUBST`, `ID_CODE_SUBST` "
+                                 " FROM `IAM_SUBST_L_CODE_SUBST` "
+                                 " ORDER BY `ID_IAM_SUBST`;";
+
+                   QSqlQuery q(req , DB);
+                   if (q.isActive())
+                   {
+                        while (q.next())
+                             m_Lk_iamCode_substCode.insertMulti(q.value(0).toInt(), q.value(1).toInt());
+                   }
+                   else
+                        qWarning() << q.lastError().driverText() << q.lastError().databaseText() << q.lastQuery();
+              }
+
+
+              // get m_Lk_classCode_iamCode : link table for iamCode <-> codeSubst
+              {
+                   QString req = "SELECT `ID_IAM_CLASS`, `ID_IAM_SUBST` "
+                                 "FROM `IAM_CLASS_L_SUBST` "
+                                 "ORDER BY `ID_IAM_CLASS`;";
+
+                   QSqlQuery q(req , DB);
+                   if (q.isActive())
+                   {
+                        while (q.next())
+                             m_Lk_classCode_iamCode.insertMulti(q.value(0).toInt(), q.value(1).toInt());
+                   }
+                   else
+                        qWarning() << q.lastError().driverText() << q.lastError().databaseText() << q.lastQuery();
+              }
+         */
+     }
+
+
 
     bool checkDrugInteraction( DrugsData *drug, const QList<DrugsData *> & drugs );
     DrugsInteraction * getInteractionFromDatabase( const int & _id1, const int & _id2 );
@@ -97,15 +210,24 @@ public:
 
 public:
     InteractionsBase     *m_Parent;
+    Utils::Database      *m_DB;
     QMap<int, int>        m_Iams;                   /*!<  All possible interactions based on Iam_Ids */
     QMultiMap< int, int>  m_IamFound;               /*!< modified by checkDrugInteraction() */
     bool                  m_LogChrono;
     bool                  m_initialized;
-    bool                  m_InteractionsDatabaseAvailable;
+
+    // These variables are used or speed improvments and database protection
+    QHash<int, QString>       m_IamDenominations;       /*!< INN and class denominations */
+    QMultiHash< int, int >    m_Lk_iamCode_substCode;   /*!< Link Iam_Id to Code_Subst */
+    QMultiHash< int, int >    m_Lk_classCode_iamCode;   /*!< Link ClassIam_Id to Iam_Id */
+
 };
 
 }  // End Internal
 }  // End Drugs
+
+
+bool InteractionsBase::m_InteractionsDatabaseAvailable = false;
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -115,53 +237,94 @@ public:
    \brief Constructor.
    \private
 */
-InteractionsBase::InteractionsBase(QObject *parent)
-        : Utils::Database(parent), d_interactions(0)
+InteractionsBase::InteractionsBase()
+        : di(0)
 {
-    d_interactions = new InteractionsBasePrivate(this);
+    di = new InteractionsBasePrivate(this);
+    di->m_DB = new Utils::Database();
+
+    di->m_DB->addTable(Table_IAM, "IAM_IMPORT");
+    di->m_DB->addTable(Table_IAM_DENOMINATION, "IAM_DENOMINATION");
+
+    di->m_DB->addField(Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, "ID_DENOMINATION");
+    di->m_DB->addField(Table_IAM_DENOMINATION, IAM_DENOMINATION,    "DENOMINATION");
+
+    di->m_DB->addField(Table_IAM, IAM_ID,       "IAM_ID");
+    di->m_DB->addField(Table_IAM, IAM_ID1,      "ID1");
+    di->m_DB->addField(Table_IAM, IAM_ID2,      "ID2");
+    di->m_DB->addField(Table_IAM, IAM_TYPE,     "TYPE");
+    di->m_DB->addField(Table_IAM, IAM_TEXT_IAM, "TEXT_IAM");
+    di->m_DB->addField(Table_IAM, IAM_TEXT_CAT, "TEXT_CAT");
 }
 
 /** \brief Destructor. */
 InteractionsBase::~InteractionsBase()
 {
-    if (d_interactions) delete d_interactions;
-    d_interactions=0;
+    if (di) {
+        delete di;
+        di=0;
+    }
 }
 
 /** \brief Initializer for the database. Return the error state. */
 bool InteractionsBase::init()
 {
     // only one base can be initialized
-    if ( d_interactions->m_initialized )
+    if (di->m_initialized)
         return true;
 
-     // retreive iams into m_Iams for speed improvments
-    QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
-    if ( !DB.isOpen() )
-        DB.open();
+    QString pathToDb = "";
+
+    if (Utils::isRunningOnMac())
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME);
+    else
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME);
+
+    di->m_DB->createConnection(IAM_DATABASE_NAME, IAM_DATABASE_FILENAME, pathToDb,
+                               Utils::Database::ReadOnly, Utils::Database::SQLite);
+
+    // retreive iams into m_Iams for speed improvements
+    if (!di->m_DB->database().isOpen())
+        if (!di->m_DB->database().open())
+            Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()));
+
     QList<int> fields;
     fields << IAM_ID1 << IAM_ID2;
-    QString req = select( Table_IAM, fields );
-    QSqlQuery q(req , DB);
+    QString req = di->m_DB->select(Table_IAM, fields);
+    QSqlQuery q(req , di->m_DB->database());
     if (q.isActive())
         while (q.next())
-            d_interactions->m_Iams.insertMulti( q.value(0).toInt(), q.value(1).toInt());
-    d_interactions->m_initialized = true;
+            di->m_Iams.insertMulti( q.value(0).toInt(), q.value(1).toInt());
+
+    // retreive links tables for speed improvements
+    di->retreiveLinkTables();
+
+    di->m_initialized = true;
     return true;
 }
 
 bool InteractionsBase::isInitialized() const
 {
-     return d_interactions->m_initialized;
+     return di->m_initialized;
 }
 
 /**
   \brief This is for debugging purpose. Log timers for some crucial functions.
   \sa checkInteractions(), getDrugsByCIS()
 */
-void InteractionsBase::logChronos( bool state )
+void InteractionsBase::logChronos(bool state)
 {
-    d_interactions->m_LogChrono = state;
+    di->m_LogChrono = state;
+}
+
+QString InteractionsBase::iamTable(const int ref) const
+{
+    return di->m_DB->table(ref);
+}
+
+QString InteractionsBase::getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const
+{
+    return di->m_DB->getWhereClause(tableref, conditions);
 }
 
 /** \brief Return the interaction's state of a \e drug when prescribed in association with \e drugList. */
@@ -228,14 +391,14 @@ QList<DrugsInteraction*> InteractionsBase::calculateInteractions( const QList<Dr
      t.start();
 
      QList<DrugsInteraction*> toReturn;
-     d_interactions->m_IamFound.clear();
+     di->m_IamFound.clear();
 
-     // check interactions drug by drug --> stored into d_interactions->m_IamFound
+     // check interactions drug by drug --> stored into di->m_IamFound
      foreach( DrugsData *drug, drugs )
-          d_interactions->checkDrugInteraction( drug, drugs );
+          di->checkDrugInteraction( drug, drugs );
 
      // prepare cached datas
-     toReturn = d_interactions->getAllInteractionsFound();
+     toReturn = di->getAllInteractionsFound();
 
      int id1, id2;
      // for each known drug interaction
@@ -249,7 +412,7 @@ QList<DrugsInteraction*> InteractionsBase::calculateInteractions( const QList<Dr
              }
          }
      }
-     if (d_interactions->m_LogChrono)
+     if (di->m_LogChrono)
          Utils::Log::logTimeElapsed(t, "mfInteractionsBase", QString("interactions() : %2 drugs")
                                .arg(drugs.count()) );
 
@@ -263,19 +426,19 @@ QList<DrugsInteraction*> InteractionsBase::calculateInteractions( const QList<Dr
 DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase( const int & _id1, const int & _id2 )
 {
     int id2 = _id2;
-    QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
-    if ( !DB.isOpen() )
+    QSqlDatabase DB = m_DB->database();
+    if (!DB.isOpen())
         DB.open();
 
-    DrugsInteraction *di = 0;
+    DrugsInteraction *dint = 0;
 
     // first test if IAM is an alert (value == -1)
     if ( id2 == -1 ) {
-        di = new DrugsInteraction();
-        di->setValue( IAM_TYPE , Interaction::Information );
-        di->setValue( IAM_ID1 , _id1 );
-        di->setValue( IAM_ID2 , _id1 );
-        di->setValue( IAM_TEXT_IAM , QCoreApplication::translate( "DrugsBase", "This INN is present more than one time in this prescrition." )  );
+        dint = new DrugsInteraction();
+        dint->setValue( IAM_TYPE , Interaction::Information );
+        dint->setValue( IAM_ID1 , _id1 );
+        dint->setValue( IAM_ID2 , _id1 );
+        dint->setValue( IAM_TEXT_IAM , QCoreApplication::translate( "DrugsBase", "This INN is present more than one time in this prescrition." )  );
         id2 = _id1;
     } else {
         // else retreive IAM from database
@@ -285,15 +448,15 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase( const int
         where.insert( IAM_ID2 , QString( "=%1" ).arg( _id2 ) );
 
         // get IAM table
-        QString req = m_Parent->select( Table_IAM, where );
+        QString req = m_DB->select( Table_IAM, where );
         {
             QSqlQuery q( req , DB );
             if ( q.isActive() ) {
                 if ( q.next() ) {
-                    di = new DrugsInteraction();
+                    dint = new DrugsInteraction();
                     int i;
                     for ( i = 0; i < IAM_MaxParam; ++i )
-                        di->setValue( i, q.value( i ) );
+                        dint->setValue( i, q.value( i ) );
                 }
             } else
                 Utils::Log::addQueryError( "mfInteractionsBase", q );
@@ -301,10 +464,10 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase( const int
     }
 
     // get denomination from iam_denomination where ID1 ID2
-    di->setValue( IAM_MAIN, m_Parent->getInnDenomination(_id1));
-    di->setValue( IAM_INTERACTOR, m_Parent->getInnDenomination(id2));
+    dint->setValue(IAM_MAIN, m_Parent->getInnDenomination(_id1));
+    dint->setValue(IAM_INTERACTOR, m_Parent->getInnDenomination(id2));
     
-    return di;
+    return dint;
 }
 
 /**
@@ -319,13 +482,117 @@ QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
           return toReturn;
 
      QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if ( !DB.isOpen() )
+     if (!DB.isOpen())
           DB.open();
 
      QMap<int, int>::const_iterator i = m_IamFound.constBegin();
-     while ( i != m_IamFound.constEnd() ) {
-          toReturn << getInteractionFromDatabase( i.key(), i.value() );
+     while (i != m_IamFound.constEnd()) {
+          toReturn << getInteractionFromDatabase(i.key(), i.value());
           ++i;
      }
      return toReturn;
+}
+
+QString InteractionsBase::getInnDenomination(const int inncode) const
+{
+     return di->m_IamDenominations.value(inncode);
+}
+
+/** \brief Returns the name of the INN for the substance code \e code_subst. */
+QString InteractionsBase::getInnDenominationFromSubstanceCode(const int code_subst) const
+{
+     // if molecule is not associated with a dci exit
+     if (!di->m_Lk_iamCode_substCode.values().contains(code_subst))
+          return QString::null;
+     return di->m_IamDenominations.value(di->m_Lk_iamCode_substCode.key(code_subst));
+}
+
+
+/** \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule. */
+int InteractionsBase::getInnCodeForCodeMolecule(const int code) const
+{
+    if (di->m_Lk_iamCode_substCode.values().contains(code))
+        return di->m_Lk_iamCode_substCode.key(code);
+    return -1;
+}
+
+/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+QList<int> InteractionsBase::getLinkedCodeSubst(QList<int> &code_iam) const
+{
+    QList<int> toReturn;
+    foreach(int i, code_iam)
+        toReturn << di->m_Lk_iamCode_substCode.values(i);
+    return toReturn;
+}
+
+/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+QList<int> InteractionsBase::getLinkedCodeSubst(const int code_iam) const
+{
+    return di->m_Lk_iamCode_substCode.values(code_iam);
+}
+
+/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
+QList<int> InteractionsBase::getLinkedIamCode(QList<int> &code_subst) const
+{
+    QList<int> toReturn;
+    foreach(int i, code_subst)
+        toReturn << di->m_Lk_iamCode_substCode.keys(i);
+    return toReturn;
+}
+
+/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
+QList<int> InteractionsBase::getLinkedIamCode(const int code_subst) const
+{
+    return di->m_Lk_iamCode_substCode.keys(code_subst);
+}
+
+/** \brief Retreive from database the Substances Codes where denomination of the INN is like 'iamDenomination%' */
+QList<int> InteractionsBase::getLinkedSubstCode(const QString &iamDenomination) const
+{
+     QSqlDatabase DB = di->m_DB->database();
+     if (!DB.isOpen())
+          DB.open();
+
+     // get iamSubstCode
+     QString tmp = iamDenomination;
+     QHash<int, QString> where;
+     where.insert(IAM_DENOMINATION, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+     QList<int> iamCode;
+     QString req = di->m_DB->select(Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, where);
+     QSqlQuery q(req , di->m_DB->database());
+     if (q.isActive())
+         while (q.next())
+             iamCode << q.value(0).toInt();
+     return getLinkedCodeSubst(iamCode);
+}
+
+/** \brief Returns the name of the INN for the substance code \e code_subst. */
+QStringList InteractionsBase::getIamClassDenomination(const int & code_subst)
+{
+     // if molecule is not associated with a dci exit
+     if (!di->m_Lk_iamCode_substCode.values().contains(code_subst))
+          return QStringList();
+
+     // if molecule is not associated with a class exit
+     QList<int> list = di->m_Lk_classCode_iamCode.keys(di->m_Lk_iamCode_substCode.key(code_subst));
+     if (list.isEmpty())
+          return QStringList();
+     QStringList toReturn;
+     foreach(int i, list)
+         toReturn << di->m_IamDenominations.value(i);
+
+     return toReturn;
+}
+
+/**
+  \brief Returns all INN and IAM classes of MOLECULE \e code_subst.
+  \sa getDrugByUID()
+*/
+QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int code_subst)
+{
+    QSet<int> toReturn;
+    toReturn = di->m_Lk_classCode_iamCode.keys(di->m_Lk_iamCode_substCode.key(code_subst)).toSet();
+    if (di->m_Lk_iamCode_substCode.values().contains(code_subst))
+        toReturn << di->m_Lk_iamCode_substCode.key(code_subst);
+    return toReturn;
 }

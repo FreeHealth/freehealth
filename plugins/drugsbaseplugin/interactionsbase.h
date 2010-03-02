@@ -41,18 +41,15 @@
 #ifndef INTERACTIONSBASE_H
 #define INTERACTIONSBASE_H
 
-// include toolkit headers
 #include <utils/database.h>
 
-// include Qt headers
 #include <QList>
-#include <QObject>
 
 /**
  * \file interactionsbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 23 Fev 2010
 */
 
 /** \todo Some parts should not be Internals */
@@ -64,27 +61,41 @@ class InteractionsBasePrivate;
 class DrugsInteraction;
 class DrugsData;
 
-class InteractionsBase : public Utils::Database
+class InteractionsBase
 {
+    friend class InteractionsBasePrivate;
 public:
-    InteractionsBase(QObject *parent = 0);
-    ~InteractionsBase();
+    InteractionsBase();
+    virtual ~InteractionsBase();
 
     // INITIALIZER
     virtual bool init();
     bool isInitialized() const;
-    virtual void logChronos( bool state );
+    static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
+    virtual void logChronos(bool state);
+    QString iamTable(const int ref) const;
+    QString getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const;
 
     // link to mfDrugsBase
-    virtual int getInnCodeForCodeMolecule(const int code) const = 0;
-    virtual QList<int> getLinkedIamCode( QList<int> & code_subst ) const = 0;
-    virtual QString   getInnDenomination( const int inncode ) const = 0;
+    int getInnCodeForCodeMolecule(const int code) const;
+    QString getInnDenomination(const int inncode) const;
+    QString getInnDenominationFromSubstanceCode(const int code_subst) const;
+
+    QStringList getIamClassDenomination(const int & code_subst);
+    QSet<int> getAllInnAndIamClassesIndex(const int code_subst);
 
     // Interactions base
-    QList<DrugsInteraction*> calculateInteractions( const QList<DrugsData *> & drugs );
+    QList<DrugsInteraction*> calculateInteractions(const QList<DrugsData *> &drugs);
+
+    QList<int> getLinkedCodeSubst(QList<int> & code_iam) const;
+    QList<int> getLinkedCodeSubst(const int code_iam) const;
+    QList<int> getLinkedSubstCode(const QString &iamDenomination) const;
+    QList<int> getLinkedIamCode(QList<int> & code_subst) const;
+    QList<int> getLinkedIamCode(const int code_subst) const;
 
 private:
-    InteractionsBasePrivate *d_interactions;
+    InteractionsBasePrivate *di;
+    static bool m_InteractionsDatabaseAvailable;
 };
 
 }  // End Internal

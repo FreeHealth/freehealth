@@ -50,6 +50,8 @@
 
 #include <coreplugin/iaboutpage.h>
 
+#include <utils/global.h>
+
 #include <QStackedLayout>
 #include <QHeaderView>
 
@@ -64,8 +66,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
     m_ui->applicationNameLabel->setText(qApp->applicationName());
     m_slayout = new QStackedLayout(m_ui->forStack);
     m_ui->forStack->setLayout(m_slayout);
-    setWindowTitle( qApp->applicationName() );
-    setObjectName( "AboutDialog" );
+    setWindowTitle(qApp->applicationName());
+    setObjectName("AboutDialog");
 
     m_ui->tree->header()->hide();
     connect(m_ui->tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
@@ -75,7 +77,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     setPages(pages);
 //    m_ui->splitter->setStretchFactor(0,1);
 //    m_ui->splitter->setStretchFactor(1,3);
-    this->adjustSize();
+
+    // resize and center window
+    Utils::resizeAndCenter(this);
 }
 
 void AboutDialog::setPages(const QList<IAboutPage*> pages)

@@ -902,7 +902,7 @@ bool Printer::previewDialog( QWidget *parent, bool test )
     } else
         Q_UNUSED(test);
 
-    QPrintPreviewDialog dialog(d->m_Printer, parent);
+    QPrintPreviewDialog dialog(d->m_Printer, parent, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)));
     dialog.exec();
     return true;

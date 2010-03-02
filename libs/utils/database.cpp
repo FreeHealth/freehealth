@@ -113,8 +113,8 @@ public:
 }
 
 
-Database::Database(QObject * parent)
-        : QObject(parent), d(0)
+Database::Database()
+        : d(0)
 {
     d = new DatabasePrivate();
 }

@@ -80,7 +80,7 @@ public:
         ref.insert(CL_DateOfBirth, "--dateofbirth");
         ref.insert(CL_Weight, "--weight");
         ref.insert(CL_Size, "--size");
-        ref.insert(CL_ClCr, "--clcr");
+        ref.insert(CL_ClCr, "--crcl");
         ref.insert(CL_Chrono, "--chrono");
         ref.insert(CL_Creatinin, "--creatinin");
         ref.insert(CL_DrugsAllergies, "--notdrugs");

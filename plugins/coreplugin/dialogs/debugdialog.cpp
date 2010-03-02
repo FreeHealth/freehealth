@@ -64,18 +64,6 @@ DebugDialog::DebugDialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
-    // resize windows
-    QWidget *ref = 0;
-    if (Core::ICore::instance()->mainWindow())
-        ref = Core::ICore::instance()->mainWindow();
-    else
-        ref = qApp->topLevelWidgets().first();
-    QSize size = ref->size();
-    size = QSize(size.width()*0.9, size.height()*0.9);
-    this->resize(size);
-    // recenter window
-    Utils::centerWidget(this, ref);
-
     m_slayout = new QStackedLayout(m_ui->forStack);
     m_slayout->setMargin(0);
     m_slayout->setSpacing(0);
@@ -94,6 +82,9 @@ DebugDialog::DebugDialog(QWidget *parent) :
 
     QList<IDebugPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IDebugPage>();
     setPages(pages);
+
+    // resize and center windows
+    Utils::resizeAndCenter(this);
 }
 
 void DebugDialog::setPages(const QList<IDebugPage*> pages)

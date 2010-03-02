@@ -164,7 +164,7 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::Do
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
 
     // Drug informations
-    int CIS = dosageModel->drugCIS();
+    int CIS = dosageModel->drugUID();
     drugNameLabel->setText( drugModel()->drugData(CIS, Drug::Denomination).toString() );
     QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
     interactionIconLabel->setPixmap( drugModel()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
@@ -256,7 +256,7 @@ void DosageCreatorDialog::on_helpButton_clicked()
 
 void DosageCreatorDialog::on_testOnlyButton_clicked()
 {
-    drugModel()->setDrugData(d->m_DosageModel->drugCIS(), DrugsDB::Constants::Prescription::OnlyForTest, true);
+    drugModel()->setDrugData(d->m_DosageModel->drugUID(), DrugsDB::Constants::Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
 }

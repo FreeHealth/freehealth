@@ -147,37 +147,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="416"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="426"/>
         <source>Save actual prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="417"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="427"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="510"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="526"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="511"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="527"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="512"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="528"/>
         <source>Replace prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="512"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="528"/>
         <source>Add to prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="513"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="529"/>
         <source>Open a prescription</source>
         <translation type="unfinished"></translation>
     </message>

@@ -48,8 +48,8 @@
 /**
  * \file constants.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 02 Mar 2010
 */
 
 /**
@@ -89,8 +89,8 @@ namespace Constants {
 
     const char * const S_PRESCRIPTIONFORMATTING_HTML      = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
     const char * const S_PRESCRIPTIONFORMATTING_PLAIN     = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
-    const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><span style=\"font-style:italic;\">[<br />[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />[NOTE]]</span></p>");
-    const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]][\n[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][\nDaily Distribution: [DISTRIBUTED_DAILY_SCHEME]][\n[NOTE] ]");
+    const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><span style=\"font-style:italic;\">[<br />[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />[NOTE]]</span></p>");
+    const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]][\n[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][\nDaily Distribution: [DISTRIBUTED_DAILY_SCHEME]][\n[NOTE] ]");
 
     const char * const S_ALD_PRE_HTML               = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
     const char * const S_ALD_POST_HTML              = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
@@ -100,6 +100,9 @@ namespace Constants {
     const char * const S_MARKDRUGSWITHAVAILABLEDOSAGES = "DrugsWidget/MarkDrugsWithAvailableDosages";      /*!< \brief Key for settings. */
     const char * const S_AVAILABLEDOSAGESBACKGROUNGCOLOR = "DrugsWidget/AvailableDosagesColorBackGround";      /*!< \brief Key for settings. */
     const char * const S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR = "#ffdddd";
+
+    const char * const S_DATABASE_PATHS                 ="DrugsWidget/DatabaseSearchPaths";
+    const char * const S_SELECTED_DATABASE_FILENAME     ="DrugsWidget/SelectedDatabaseFileName";
 
     // ICONS
     const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
@@ -213,7 +216,10 @@ namespace Constants {
 
     // DATABASE
     const char * const DRUGS_DATABASE_NAME     = "drugs";            /*!< \brief Drugs database connection name. */
+    const char * const IAM_DATABASE_NAME       = "iam";            /*!< \brief Drugs database connection name. */
     const char * const DRUGS_DATABASE_FILENAME = "drugs.db";         /*!< \brief Drug database file name (for SQLite). */
+    const char * const IAM_DATABASE_FILENAME   = "iam.db";         /*!< \brief Drug database file name (for SQLite). */
+    const char * const DEFAULT_DATABASE_IDENTIFIANT  = "FR_AFSSAPS";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------ Enums for Database Management -------------------------------------
@@ -221,30 +227,37 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables
     {
-        Table_CIS=0, Table_COMPO, Table_CIS_CIP, Table_CPAM, Table_INTERACT,
+        Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_INFORMATION,
         Table_IAM, Table_IAM_DENOMINATION, Table_DOSAGE,
         Table_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table CIS */
-    enum CISfields
-    { CIS_CIS = 0,CIS_DENOMINATION, CIS_FORME, CIS_ADMINISTRATION, CIS_AMM,
-      CIS_AUTORISATION, CIS_COMMERCIALISATION, CIS_CODE_RPC,
-      CIS_MaxParam
+    enum DRUGSfields
+    { DRUGS_UID = 0, DRUGS_NAME, DRUGS_FORM, DRUGS_ROUTE, DRUGS_ATC, DRUGS_TYPE_MP,
+      DRUGS_AUTHORIZATION, DRUGS_MARKET, DRUGS_LINK_SPC,
+      DRUGS_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table CIP */
-    enum CISPfields // table CIS_CIP
-    { CISP_CIS = 0, CISP_CIP, CISP_LIBELLE, CISP_STATUT, CISP_COMMERCIALISATION,
-      CISP_DATE, CISP_CIPLONG,
-      CISP_MaxParam
+    enum PACKAGINGfields // table CIS_CIP
+    { PACK_DRUG_UID = 0, PACK_PACK_UID, PACK_LABEL, PACK_STATUS, PACK_MARKET,
+      PACK_DATE, PACK_OPTION_CODE,
+      PACK_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table COMPO */
-    enum COMPOfields
-    { COMPO_CIS = 0, COMPO_NOM, COMPO_CODE_SUBST, COMPO_DENOMINATION, COMPO_DOSAGE, COMPO_REF_DOSAGE,
+    enum COMPOSITIONfields
+    { COMPO_UID = 0, COMPO_MOL_FORM, COMPO_MOL_CODE, COMPO_MOL_NAME, COMPO_DOSAGE, COMPO_REF_DOSAGE,
       COMPO_NATURE, COMPO_LK_NATURE,
       COMPO_MaxParam, COMPO_IAM_DENOMINATION, COMPO_IAM_CLASS_DENOMINATION, COMPO_VeryMaxParam
+    };
+
+    enum INFOfields
+    { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK,
+      INFO_AUTHOR, INFO_LICENSE, INFO_LICENSE_TERMS, INFO_DATE, INFO_DRUG_UID_NAME, INFO_PACK_MAIN_CODE_NAME,
+      INFO_ATC, INFO_INTERACTIONS, INFO_AUTHOR_COMMENTS, INFO_COUNTRY,
+      INFO_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table IAM_DENOMINATION */
@@ -294,7 +307,7 @@ namespace Drug
         AvailableDosages,
         HasPrescription,
         FullPrescription,
-        LinkToFrenchRCP,
+        LinkToSCP,
         MaxParam
     };
 
@@ -398,6 +411,7 @@ namespace Constants {
     {
         Id = 0,                 /*!< \brief Identifiant du dosage. integer. */
         Uuid,                   /*!< \brief Identifiant unique --> varchar(40) */
+        DrugsDatabaseIdentifiant,    /*!< \brief Unique FreeDiams identifiant */
         INN_LK,                 /*!< \brief Si la prescription est la même pour toutes les DCI alors le champs est renseigné, sinon laissé à -1. integer */
         InnLinkedDosage,        /*!< \brief Linked dosage of the Inn. */
         CIS_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */

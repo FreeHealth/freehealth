@@ -52,8 +52,8 @@
 /**
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.2
- * \date 08 Jan 2009
+ * \version 0.4.0
+ * \date 23 Fev 2010
 */
 namespace DrugsDB {
 class DrugsIO;
@@ -108,10 +108,10 @@ public:
     void clearDrugsList();
     int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
     int addDrug( Internal::DrugsData *drug, bool automaticInteractionChecking = true );
-    int addDrug( const int _CIS, bool automaticInteractionChecking = true );
-    int removeDrug( const int _CIS );
+    int addDrug( const int uid, bool automaticInteractionChecking = true );
+    int removeDrug(const int uid);
     int removeLastInsertedDrug();
-    bool containsDrug(const int CIS) const;
+    bool containsDrug(const int uid) const;
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );

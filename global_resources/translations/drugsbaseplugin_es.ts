@@ -14,13 +14,13 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="878"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="903"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="666"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="693"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="278"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="441"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -217,37 +217,37 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="233"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="209"/>
         <source>FATAL ERROR : SQLite driver is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="234"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="210"/>
         <source>Fatal Error. Application will not work properly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="235"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="211"/>
         <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="253"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="229"/>
         <source>Searching databases into dir %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="383"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="359"/>
         <source>Database %1 %2 correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="386"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="362"/>
         <source>ERROR : database can not be created %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="469"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="445"/>
         <source>Unable to update transmission date dosage</source>
         <translation type="unfinished"></translation>
     </message>
@@ -312,14 +312,14 @@ Do you want to add them to the file ?</source>
 <context>
     <name>mfDrugsConstants</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="90"/>
-        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="92"/>
+        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="91"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="93"/>
         <source>[[DRUG]][
-[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][
+[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME] ][[MEAL] ][ each [[PERIOD] ][PERIOD_SCHEME] ][during [D_FROM]][ to [D_TO]][ [D_SCHEME]][
 Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][
 [NOTE] ]</source>
         <translation type="unfinished"></translation>

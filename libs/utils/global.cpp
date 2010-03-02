@@ -623,6 +623,19 @@ void setFullScreen( QWidget* win, bool on )
     }
 }
 
+void resizeAndCenter(QWidget *widget, QWidget *reference)
+{
+    // resize windows
+    QWidget *ref = reference;
+    if (!reference)
+        ref = qApp->activeWindow();
+    QSize size = ref->size();
+    size = QSize(size.width()*0.9, size.height()*0.9);
+    widget->resize(size);
+    // recenter window
+    centerWidget(widget, ref);
+}
+
 /** \brief Switch echo mode af a lineEdit. **/
 void switchEchoMode( QLineEdit * l )
 {

@@ -53,18 +53,6 @@ PluginDialog::PluginDialog(QWidget *parent)
     : QDialog(parent),
       m_view(new ExtensionSystem::PluginView(ExtensionSystem::PluginManager::instance(), this))
 {
-    // resize windows
-    QWidget *ref = 0;
-    if (Core::ICore::instance()->mainWindow())
-        ref = Core::ICore::instance()->mainWindow();
-    else
-        ref = qApp->topLevelWidgets().first();
-    QSize size = ref->size();
-    size = QSize(size.width()*0.9, size.height()*0.9);
-    this->resize(size);
-    // recenter window
-    Utils::centerWidget(this, ref);
-
     QVBoxLayout *vl = new QVBoxLayout(this);
     vl->addWidget(m_view);
 
@@ -84,7 +72,6 @@ PluginDialog::PluginDialog(QWidget *parent)
 
     vl->addLayout(hl);
 
-    resize(650, 400);
     setWindowTitle(tr("Installed Plugins"));
 
     connect(m_view, SIGNAL(currentPluginChanged(ExtensionSystem::PluginSpec*)),
@@ -95,6 +82,9 @@ PluginDialog::PluginDialog(QWidget *parent)
     connect(m_errorDetailsButton, SIGNAL(clicked()), this, SLOT(openErrorDetails()));
     connect(m_closeButton, SIGNAL(clicked()), this, SLOT(accept()));
     updateButtons();
+
+    // resize and center window
+    Utils::resizeAndCenter(this);
 }
 
 void PluginDialog::updateButtons()

@@ -12,13 +12,13 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="174"/>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="176"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="175"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="177"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="272"/>
+        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="273"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>

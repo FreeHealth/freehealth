@@ -51,7 +51,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+
+#include <translationutils/constanttranslations.h>
 
 #include <QApplication>
 #include <QToolButton>
@@ -69,6 +72,7 @@ enum { WarnSearchFilter = false };
 
 using namespace DrugsWidget;
 using namespace DrugsWidget::Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
@@ -155,12 +159,13 @@ void DrugSelector::createDrugModelView()
     // insert SQL drugs model and table view
     m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
     // managing model fields
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_CODE_RPC , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_COMMERCIALISATION , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AUTORISATION , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_AMM , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_ADMINISTRATION , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::CIS_FORME , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_LINK_SPC , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_MARKET , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_AUTHORIZATION , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_TYPE_MP , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ATC , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ROUTE , 1);
+    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_FORM , 1);
     // create the view
     drugsView->setModel(m_DrugsModel);
     //      drugsView->sortByColumn(1 , Qt::AscendingOrder);  // NOT SUPPORTED BY WIN32 CROSS-COMPILATION !!!!
@@ -174,12 +179,12 @@ void DrugSelector::createINNModelView()
 {
     using namespace DrugsDB::Constants;
     // create model and tableview for Iam Class / INNs
-    m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(DRUGS_DATABASE_NAME));
-    m_InnModel->setTable(drugsBase()->table(Table_IAM_DENOMINATION));
+    m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(IAM_DATABASE_NAME));
+    m_InnModel->setTable(drugsBase()->iamTable(Table_IAM_DENOMINATION));
     m_InnModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     QHashWhere where;
     where.insert(IAM_DENOMINATION_ID, ">999");
-    m_InnModel->setFilter(drugsBase()->getWhereClause(Table_IAM_DENOMINATION, where));
+    m_InnModel->setFilter(drugsBase()->getIamWhereClause(Table_IAM_DENOMINATION, where));
     m_InnModel->select();
     InnView->setModel(m_InnModel);
     InnView->setColumnHidden(0 , true);
@@ -224,9 +229,9 @@ void DrugSelector::historyAct_triggered(QAction *action)
     //    searchLine->setText(action->toolTip());
     drugsView->setFocus();
     QHashWhere where;
-    where.insert(CIS_COMMERCIALISATION, "='O'");
-    where.insert(CIS_DENOMINATION , QString("= \"%1\"").arg(action->toolTip()));
-    m_DrugsModel->setFilter(drugsBase()->getWhereClause(Table_CIS, where));
+    where.insert(DRUGS_MARKET, "=1");
+    where.insert(DRUGS_NAME , QString("= \"%1\"").arg(action->toolTip()));
+    m_DrugsModel->setFilter(drugsBase()->getWhereClause(Table_DRUGS, where));
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -244,33 +249,36 @@ void DrugSelector::retranslateUi(const QString &)
 void DrugSelector::setSearchMethod(int method)
 {
     if (method == Constants::SearchCommercial) {
+        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHCOMMERCIAL_TEXT));
         m_filterModel = "";
         InnView->hide();
         m_SearchMethod = method;
         QHashWhere where;
-        where.insert(DrugsDB::Constants::CIS_COMMERCIALISATION, "='O'");
-        where.insert(DrugsDB::Constants::CIS_DENOMINATION , "LIKE '__replaceit__%'");
-        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_CIS, where);
+        where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
+        where.insert(DrugsDB::Constants::DRUGS_NAME , "LIKE '__replaceit__%'");
+        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
     }
     else if (method == Constants::SearchMolecules) {
+        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHMOLECULES_TEXT));
         m_filterModel = "";
         InnView->hide();
         m_SearchMethod = method;
         // retreive all CIS for the searched molecule
         QHashWhere where;
-        where.insert(DrugsDB::Constants::COMPO_DENOMINATION , "LIKE '__replaceit__%'");
-        m_filterModel = drugsBase()->selectDistinct(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_CIS , where);
+        where.insert(DrugsDB::Constants::COMPO_MOL_NAME, "LIKE '__replaceit__%'");
+        m_filterModel = drugsBase()->selectDistinct(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_UID , where);
 //        m_filterModel += QString("SELECT DISTINCT %1 FROM %2 WHERE %3")
-//                         .arg(mfDrugsTables::getField(mfDrugsTables::COMPO_CIS))
+//                         .arg(mfDrugsTables::getField(mfDrugsTables::COMPO_UID))
 //                         .arg(mfDrugsTables::getTable(mfDrugsTables::Table_COMPO))
 //                         .arg(mfDrugsTables::getWhereClause(map2));
         // retreive drug name
         where.clear();
-        where.insert(DrugsDB::Constants::CIS_COMMERCIALISATION, "='O'");
-        where.insert(DrugsDB::Constants::CIS_CIS , QString("IN (%1) ").arg(m_filterModel));
-        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_CIS, where);
+        where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
+        where.insert(DrugsDB::Constants::DRUGS_UID , QString("IN (%1) ").arg(m_filterModel));
+        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
     }
     else if (method == Constants::SearchInn) {
+        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHINN_TEXT));
         m_filterModel = "";
         // show inn model and view
         InnView->show();
@@ -278,17 +286,17 @@ void DrugSelector::setSearchMethod(int method)
         m_SearchMethod = method;
         // retreive all CIS for the searched inn
         QHashWhere where;
-        where.insert(DrugsDB::Constants::COMPO_CODE_SUBST , "IN (__replaceit__)");
-        m_filterModel += drugsBase()->selectDistinct(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_CIS, where);
+        where.insert(DrugsDB::Constants::COMPO_MOL_CODE , "IN (__replaceit__)");
+        m_filterModel += drugsBase()->selectDistinct(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_UID, where);
 //        m_filterModel += QString("SELECT DISTINCT %1 FROM %2 WHERE %3")
-//                         .arg(mfDrugsTables::getField(mfDrugsTables::COMPO_CIS))
+//                         .arg(mfDrugsTables::getField(mfDrugsTables::COMPO_UID))
 //                         .arg(mfDrugsTables::getTable(mfDrugsTables::Table_COMPO))
 //                         .arg(mfDrugsTables::getWhereClause(map2));
         // retreive drug name
         where.clear();
-        where.insert(DrugsDB::Constants::CIS_COMMERCIALISATION, "='O'");
-        where.insert(DrugsDB::Constants::CIS_CIS , QString("IN (%1) ").arg(m_filterModel));
-        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_CIS, where);
+        where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
+        where.insert(DrugsDB::Constants::DRUGS_UID , QString("IN (%1) ").arg(m_filterModel));
+        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
     }
 
     // store search method into settings
@@ -317,7 +325,7 @@ void DrugSelector::updateModelFilter()
         // refresh inn view and model
         QHashWhere where;
         where.insert(DrugsDB::Constants::IAM_DENOMINATION , QString("LIKE '%1%' ").arg(search));
-        m_InnModel->setFilter( drugsBase()->getWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
+        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
         // retreive code_subst associated with searched text
         QList<int> codes = drugsBase()->getLinkedSubstCode(search);
         QString list = "";

@@ -82,7 +82,7 @@ DrugsViewOptionsPage::~DrugsViewOptionsPage()
 }
 
 QString DrugsViewOptionsPage::id() const { return objectName(); }
-QString DrugsViewOptionsPage::name() const { return tr("Drugs View"); }
+QString DrugsViewOptionsPage::name() const { return tr("View"); }
 QString DrugsViewOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsViewOptionsPage::resetToDefaults()
@@ -144,7 +144,7 @@ DrugsPrintOptionsPage::~DrugsPrintOptionsPage()
 }
 
 QString DrugsPrintOptionsPage::id() const { return objectName(); }
-QString DrugsPrintOptionsPage::name() const { return tr("Drugs Printing"); }
+QString DrugsPrintOptionsPage::name() const { return tr("Printing"); }
 QString DrugsPrintOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsPrintOptionsPage::resetToDefaults()
@@ -202,7 +202,7 @@ DrugsUserOptionsPage::~DrugsUserOptionsPage()
 }
 
 QString DrugsUserOptionsPage::id() const { return objectName(); }
-QString DrugsUserOptionsPage::name() const { return tr("Drugs User"); }
+QString DrugsUserOptionsPage::name() const { return tr("User's documents"); }
 QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsUserOptionsPage::resetToDefaults()
@@ -259,7 +259,7 @@ DrugsExtraOptionsPage::~DrugsExtraOptionsPage()
 }
 
 QString DrugsExtraOptionsPage::id() const { return objectName(); }
-QString DrugsExtraOptionsPage::name() const { return tr("Drug Extras"); }
+QString DrugsExtraOptionsPage::name() const { return tr("Extras"); }
 QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsExtraOptionsPage::resetToDefaults()
@@ -413,30 +413,35 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
     // Create a virtual drug and prescription
     using namespace DrugsDB::Constants;
-    drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByCIS("61266250");
-    drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
-    drug->setPrescriptionValue(Prescription::IntakesTo, 3);
-    drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
-    drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
-    drug->setPrescriptionValue(Prescription::Period, 2);
-    drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
-    drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
-    drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAYS));
-    drug->setPrescriptionValue(Prescription::DurationFrom, 1);
-    drug->setPrescriptionValue(Prescription::DurationTo, 3);
-    drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEKS));
-    drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
-    drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
-    drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
-    QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
-    daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
-    daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
-    drug->setPrescriptionValue(Prescription::DailyScheme, daily);
+    /** \todo Change the UID */
+    drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByUID("-1");
+    if (!drug) {
+        Utils::Log::addError(this, "Unable to retreive a drug from the database");
+    } else {
+        drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
+        drug->setPrescriptionValue(Prescription::IntakesTo, 3);
+        drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
+        drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
+        drug->setPrescriptionValue(Prescription::Period, 2);
+        drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
+        drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
+        drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAYS));
+        drug->setPrescriptionValue(Prescription::DurationFrom, 1);
+        drug->setPrescriptionValue(Prescription::DurationTo, 3);
+        drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEKS));
+        drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
+        drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
+        drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
+        QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
+        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
+        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
+        drug->setPrescriptionValue(Prescription::DailyScheme, daily);
 
-    setDatasToUi();
+        setDatasToUi();
 
-    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
-    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
+        connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
+        connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
+    }
     // formatingSample
 }
 

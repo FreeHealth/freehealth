@@ -54,20 +54,22 @@
 /**
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 01 Mar 2010
 */
 
 /** \todo Some parts should not be Internals */
 
 namespace DrugsDB {
+class DatabaseInfos;
+
 namespace Internal {
 class DrugsData;
 class DrugInteraction;
 class DrugInfo;
 class DrugsBasePrivate;
 
-class DRUGSBASE_EXPORT DrugsBase : public InteractionsBase
+class DRUGSBASE_EXPORT DrugsBase : public QObject, public InteractionsBase, public Utils::Database
 {
     Q_OBJECT
     DrugsBase(QObject *parent = 0);
@@ -85,28 +87,22 @@ public:
 
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
-    static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
-    void logChronos( bool state );
-
-    // Manage drugs contents
-    QList<int> getLinkedCodeSubst( QList<int> & code_iam ) const;
-    QList<int> getLinkedSubstCode( const QString & iamDenomination );
-    QList<int> getLinkedIamCode( QList<int> & code_subst ) const ;
-    int        getInnCodeForCodeMolecule(const int code) const;
+    void logChronos(bool state);
+    const DatabaseInfos *actualDatabaseInformations() const;
+    DatabaseInfos *getDatabaseInformations(const QString &connectionName);
+    bool isDatabaseTheDefaultOne() const;
 
     // Manage drugs
-    DrugsData *getDrugByCIP( const QVariant & CIP_id );
-    DrugsData *getDrugByCIS( const QVariant & CIS_id );
-    int        getCISFromCIP( int CIP );
-    QString    getInnDenominationFromSubstanceCode( const int code_subst );
-    QString    getInnDenomination( const int inncode ) const;
+    DrugsData *getDrugByCIP(const QVariant & CIP_id);
+    DrugsData *getDrugByUID(const QVariant &UID);
+    int        getUIDFromCIP(int CIP);
 
     // Manage Dosages
     void checkDosageDatabaseVersion();
     static QString dosageCreateTableSqlQuery();
     QHash<QString, QString> getDosageToTransmit();
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
-    QList<int> getAllCISThatHaveRecordedDosages() const;
+    QList<int> getAllUIDThatHaveRecordedDosages() const;
     QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
 //protected:
@@ -122,17 +118,17 @@ private:
                         TypeOfAccess access, AvailableDrivers driver,
                         const QString & /*login*/, const QString & /*pass*/,
                         CreationOption /*createOption*/
-                        );
+                       );
 
 private:
     // intialization state
     static DrugsBase *m_Instance;
     static bool m_initialized;
-    static bool m_InteractionsDatabaseAvailable;
-    DrugsBasePrivate * d;
+    DrugsBasePrivate *d;
+    bool m_IsDefaultDB;
 };
 
 }  // End Internal
-}  // End Drugs
+}  // End DrugsDB
 
 #endif

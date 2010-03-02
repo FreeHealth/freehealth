@@ -99,7 +99,8 @@ UTILS_EXPORT QString osName();
 /** \brief Center a widget \e winToCenter into the \e reference widget. If no \e reference is passed, the \e winToCenter is centered into the desktop. */
 UTILS_EXPORT void centerWidget(QWidget *winToCenter, QWidget *reference = 0);
 /** \brief Toggle a widget to fullScreen. */
-UTILS_EXPORT void setFullScreen( QWidget* win, bool on );
+UTILS_EXPORT void setFullScreen( QWidget *win, bool on );
+UTILS_EXPORT void resizeAndCenter(QWidget *widget, QWidget *reference = 0);
 
 // Message Boxes and default dialogs
 UTILS_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );

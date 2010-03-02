@@ -130,7 +130,7 @@ Les paramètres suivants sont disponibles :
 \li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
 \li \e --weight="dd" : définit le poids du patient (en kg)
 \li \e --size="ddd" : définit la taille du patient (en cm)
-\li \e --clcr="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
+\li \e --crcl="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
 \li \e --creatinin="dd" : définit la créatininémie du patient (en mg/l)
 \li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
 \li \e --transmit-dosage = non documenté.

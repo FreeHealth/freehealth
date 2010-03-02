@@ -116,7 +116,7 @@ sauvegardées dans ces fichiers. Les données concernant le patient sont brouill
 
 Exemple de prescription :
 \verbatim
-<?xml version="0.2.0" encoding="UTF-8"?>indique la version utilisée pour créer la prescription
+<?xml version="0.2.0" encoding="UTF-8"?>        indique la version utilisée pour créer la prescription
 <FullPrescription>
   <Prescription>
     <CIS>68166740</CIS>                         code CIS du médicament pour les prescriptions non DCI
@@ -724,3 +724,11 @@ Avant toutes choses, il convient de vous présenter sur notre mailing liste.
 \ref index
 */
 
+/**
+\~french \page multiple_drugs_databases Utiliser plusieurs base de données thérapeutiques
+\~english \page multiple_drugs_databases Using multiple drugs databases
+
+
+
+\ref index
+*/

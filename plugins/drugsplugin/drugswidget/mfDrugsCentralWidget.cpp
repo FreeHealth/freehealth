@@ -44,6 +44,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <drugsplugin/drugswidget/mfDrugSelector.h>
 #include <drugsplugin/drugswidget/mfPrescriptionViewer.h>
@@ -70,6 +71,7 @@
 #endif
 
 #include "ui_mfDrugsCentralWidget.h"
+#include <QTreeWidget>
 
 using namespace DrugsWidget;
 
@@ -166,21 +168,21 @@ void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
   Verify that the drug isn't already prescribed (if it is warn user and stop). \n
   Add the drug to the mfDrugsModel and open the mfDosageCreatorDialog\n
 */
-void DrugsCentralWidget::selector_drugSelected( const int CIS )
+void DrugsCentralWidget::selector_drugSelected(const int uid)
 {
     // if exists dosage for that drug show the dosageSelector widget
     // else show the dosage creator widget
-    if (m_CurrentDrugModel->containsDrug(CIS)) {
+    if (m_CurrentDrugModel->containsDrug(uid)) {
         Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
                                     tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
                                        "Drug %1 is already in your prescription")
-                                    .arg(m_CurrentDrugModel->drugData(CIS, DrugsDB::Constants::Drug::Denomination).toString()),
+                                    .arg(m_CurrentDrugModel->drugData(uid, DrugsDB::Constants::Drug::Denomination).toString()),
                                     tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
-//    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(CIS);
-    m_CurrentDrugModel->addDrug(CIS);
-    Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(CIS));
+//    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
+    m_CurrentDrugModel->addDrug(uid);
+    Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));
     if (dlg.exec()==QDialog::Rejected) {
         m_CurrentDrugModel->removeLastInsertedDrug();
     }
@@ -222,4 +224,20 @@ bool DrugsCentralWidget::createTemplate()
 #endif
     dlg.exec();
     return true;
+}
+
+void DrugsCentralWidget::showDatabaseInformations()
+{
+    const DrugsDB::DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->actualDatabaseInformations();
+    if (!info)
+        return;
+    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    info->toTreeWidget(&tree);
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }

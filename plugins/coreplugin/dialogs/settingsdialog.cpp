@@ -66,17 +66,6 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
 {
     m_ui = new Ui::SettingsDialog();
     m_ui->setupUi(this);
-    // resize windows
-    QWidget *ref = 0;
-    if (Core::ICore::instance()->mainWindow())
-        ref = Core::ICore::instance()->mainWindow();
-    else
-        ref = qApp->topLevelWidgets().first();
-    QSize size = ref->size();
-    size = QSize(size.width()*0.9, size.height()*0.9);
-    this->resize(size);
-    // recenter window
-    Utils::centerWidget(this, ref);
     QString initialCategory = categoryId;
     QString initialPage = pageId;
     if (initialCategory.isEmpty() && initialPage.isEmpty()) {
@@ -156,6 +145,9 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
 
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->pageTree), 0);
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->layoutWidget), 1);
+
+    // resize and center window
+    Utils::resizeAndCenter(this);
 }
 
 SettingsDialog::~SettingsDialog()

@@ -38,81 +38,77 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGSCENTRALWIDGET_H
-#define DRUGSCENTRALWIDGET_H
+#ifndef DRUGSDATABASESELECTOR_H
+#define DRUGSDATABASESELECTOR_H
 
-#include <drugsplugin/drugs_exporter.h>
+#include <drugsbaseplugin/drugsbase_exporter.h>
 
-#include <QWidget>
-#include <QObject>
-#include <QListView>
+#include <QString>
+#include <QDate>
+#include <QStringList>
 
-/**
- * \file mfDrugsCentralWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
-*/
+QT_BEGIN_NAMESPACE
+class QTreeWidget;
+QT_END_NAMESPACE
 
 namespace DrugsDB {
-class DrugsModel;
+namespace Internal {
+//class DatabaseInfosPrivate;
+class DrugsDatabaseSelectorPrivate;
 }
 
-namespace DrugsWidget {
-namespace Internal {
-class DrugsContext;
-class DrugsActionHandler;
-class DrugSelector;
-
-namespace Ui {
-class DrugsCentralWidget;
-}  // End Ui
-}  // End Internal
-
-class PrescriptionViewer;
-class DrugsModel;
-
-class DRUGS_EXPORT DrugsCentralWidget : public QWidget
+class DRUGSBASE_EXPORT DatabaseInfos
 {
-    Q_OBJECT
-    friend class DrugsWidget::Internal::DrugsActionHandler;
-
 public:
-    DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    void warn();
+    QString translatedName() const;
+    QHash<QString, QString> names() const;
+    void toTreeWidget(QTreeWidget *tree) const;
 
-    void changeFontTo(const QFont &font);
-    DrugsDB::DrugsModel *currentDrugsModel() const;
-
-    QListView *prescriptionListView();
-    PrescriptionViewer *prescriptionView();
-    Internal::DrugSelector *drugSelector();
-
-    void setCurrentSearchMethod(int method);
-    bool printPrescription();
-    void printPreview();
-    bool createTemplate();
-    void showDatabaseInformations();
-
-protected:
-    void createConnections();
-    void disconnect();
-
-private Q_SLOTS:
-    // drugs slots
-    void selector_drugSelected( const int CIS );
-
-private:
-    void focusInEvent(QFocusEvent *event);
-
-private:
-    Internal::Ui::DrugsCentralWidget *m_ui;
-    DrugsDB::DrugsModel   *m_CurrentDrugModel;
-    Internal::DrugsContext *m_Context;
+    QString name, identifiant, fileName, version, compatVersion, country, connectionName;
+    QString provider, author, license, drugsUidName, packUidName;
+    QString weblink, authorComments, licenseTerms;
+    bool atcCompatible, iamCompatible;
+    QDate date;
 };
 
-}  // End DrugsWidget
 
-#endif // DRUGSCENTRALWIDGET_H
+class DRUGSBASE_EXPORT DrugsDatabaseSelector
+{
+    DrugsDatabaseSelector();
+public:
+    static DrugsDatabaseSelector *instance();
+    ~DrugsDatabaseSelector();
+
+    void getAllDatabaseInformations(const QStringList &paths = QStringList()) const;
+    bool setCurrentDatabase(const QString &fileName);
+    DatabaseInfos currentDatabase() const;
+    QVector<DatabaseInfos *> availableDatabases() const;
+
+private:
+    static DrugsDatabaseSelector *m_Instance;
+    Internal::DrugsDatabaseSelectorPrivate *d;
+};
+
+
+
+//class DRUGSBASE_EXPORT DrugsDatabaseInfoModel : public QAbstractItemModel
+//{
+//    Q_OBJECT
+//public:
+//    DrugsDatabaseInfoModel(QObject *parent = 0);
+//    ~DrugsDatabaseInfoModel();
+//
+//    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+//    int	rowCount (const QModelIndex &parent = QModelIndex()) const;
+//
+//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+//    Qt::ItemFlags flags(const QModelIndex &index) const;
+//
+//private:
+//
+//};
+
+}  // End namespace DrugsDB
+
+#endif // DRUGSDATABASESELECTOR_H

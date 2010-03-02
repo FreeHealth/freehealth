@@ -121,16 +121,16 @@ public:
     }
 
     /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
-    DrugsData *getDrug(const int CIS)
+    DrugsData *getDrug(const int uid)
     {
         if (m_LastDrugRequiered) {
-            if (m_LastDrugRequiered->CIS() == CIS) {
+            if (m_LastDrugRequiered->UID() == uid) {
                 return m_LastDrugRequiered;
             }
         }
         m_LastDrugRequiered = 0;
         foreach(DrugsData *drug, m_DrugsList) {
-            if (drug->CIS()==CIS)
+            if (drug->UID()==uid)
                 m_LastDrugRequiered = drug;
         }
         return m_LastDrugRequiered;
@@ -140,7 +140,7 @@ public:
        \brief Set drugs' data directly into the private drugsList
        \sa DrugsModel::setData()
     */
-    bool setDrugData(DrugsData *drug, const int column, const QVariant & value)
+    bool setDrugData(DrugsData *drug, const int column, const QVariant &value)
     {
         Q_ASSERT(drug);
         if (column == Drug::Denomination) {
@@ -172,7 +172,7 @@ public:
         switch (column)
         {
              case Drug::Denomination : return drug->denomination();
-             case Drug::CIS : return drug->CIS();
+             case Drug::CIS : return drug->UID();
              case Drug::CIPs : return drug->CIPs();
              case Drug::Form :  return drug->form();
              case Drug::AvailableForms :
@@ -216,7 +216,7 @@ public:
              case Drug::InnCompositionString :  return drug->innComposition();
              case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
              case Drug::HasPrescription :    return drug->hasPrescription();
-             case Drug::LinkToFrenchRCP :    return drug->linkToFrenchRCP();
+             case Drug::LinkToSCP :          return drug->linkToSCP();
              case Drug::FullPrescription :
                  {
                      if (drug->prescriptionValue(Prescription::OnlyForTest).toBool()) {
@@ -552,7 +552,7 @@ int DrugsModel::addDrug(Internal::DrugsData *drug, bool automaticInteractionChec
     if (!drug)
         return -1;
     // insert only once the same drug
-    if (containsDrug(drug->CIS()))
+    if (containsDrug(drug->UID()))
         return d->m_DrugsList.indexOf(drug);
     d->m_DrugsList << drug;
     d->m_InteractionsManager->addDrug(drug);
@@ -574,9 +574,9 @@ int DrugsModel::addDrug(Internal::DrugsData *drug, bool automaticInteractionChec
    Return the index of the inserted drug into the list or -1 if no drug was inserted.
    \sa addDrug()
 */
-int DrugsModel::addDrug(const int _CIS, bool automaticInteractionChecking)
+int DrugsModel::addDrug(const int uid, bool automaticInteractionChecking)
 {
-    return addDrug(drugsBase()->getDrugByCIS(_CIS), automaticInteractionChecking);
+    return addDrug(drugsBase()->getDrugByUID(uid), automaticInteractionChecking);
 }
 
 /**
@@ -600,7 +600,7 @@ void DrugsModel::clearDrugsList()
   \brief Insert a list of drugs and check interactions.
   Calling this causes a model reset.
 */
-void DrugsModel::setDrugsList(QDrugsList & list)
+void DrugsModel::setDrugsList(QDrugsList &list)
 {
     clearDrugsList();
     d->m_DrugsList = list;
@@ -612,9 +612,9 @@ void DrugsModel::setDrugsList(QDrugsList & list)
 }
 
 /** \brief Returns true if the drug is already in the prescription */
-bool DrugsModel::containsDrug(const int CIS) const
+bool DrugsModel::containsDrug(const int uid) const
 {
-    if (d->getDrug(CIS))
+    if (d->getDrug(uid))
         return true;
     return false;
 }
@@ -640,7 +640,7 @@ void DrugsModel::sort(int, Qt::SortOrder)
   \brief Moves a drug up.
   Calling this causes a model reset.
 */
-bool DrugsModel::moveUp(const QModelIndex & item)
+bool DrugsModel::moveUp(const QModelIndex &item)
 {
     if (!item.isValid())
         return false;
@@ -657,7 +657,7 @@ bool DrugsModel::moveUp(const QModelIndex & item)
   \brief Moves a drug down.
   Calling this causes a model reset.
 */
-bool DrugsModel::moveDown(const QModelIndex & item)
+bool DrugsModel::moveDown(const QModelIndex &item)
 {
     if (!item.isValid())
         return false;
@@ -703,16 +703,16 @@ bool DrugsModel::testingDrugsAreVisible() const
 }
 
 /** \brief Returns the dosage model for the selected drug */
-Internal::DosageModel * DrugsModel::dosageModel(const int _CIS)
+Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 {
-    if (! d->m_DosageModelList.keys().contains(_CIS)) {
-        d->m_DosageModelList.insert(_CIS, new Internal::DosageModel(this));
-        d->m_DosageModelList[_CIS]->setDrugCIS(_CIS);
-    } else if (! d->m_DosageModelList.value(_CIS)) {
-        d->m_DosageModelList.insert(_CIS, new Internal::DosageModel(this));
-        d->m_DosageModelList[_CIS]->setDrugCIS(_CIS);
+    if (! d->m_DosageModelList.keys().contains(uid)) {
+        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
+        d->m_DosageModelList[uid]->setDrugUID(uid);
+    } else if (! d->m_DosageModelList.value(uid)) {
+        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
+        d->m_DosageModelList[uid]->setDrugUID(uid);
     }
-    return d->m_DosageModelList.value(_CIS);
+    return d->m_DosageModelList.value(uid);
 }
 
 /** \brief Returns the dosage model for the selected drug */
@@ -731,14 +731,14 @@ InteractionsManager *DrugsModel::currentInteractionManger() const
 }
 
 /** \brief Removes a drug from the prescription */
-int DrugsModel::removeDrug(const int _CIS)
+int DrugsModel::removeDrug(const int uid)
 {
     // Take care that this function removes all occurence of the referenced drug
     d->m_LastDrugRequiered = 0;
     d->m_InteractionsManager->clearDrugsList();
     int i = 0;
     foreach(Internal::DrugsData * drug, d->m_DrugsList) {
-        if (drug->CIS() == _CIS) {
+        if (drug->UID() == uid) {
             d->m_DrugsList.removeAt(d->m_DrugsList.indexOf(drug));
             delete drug;
             ++i;

@@ -35,6 +35,8 @@
 #include "drugsbaseplugin.h"
 #include "drugsdatabaseaboutpage.h"
 #include "drugstemplateprinter.h"
+#include "drugsbase.h"
+#include "drugsdatabaseselector.h"
 
 #include <utils/log.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -66,6 +68,13 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
         qWarning() << "DrugsBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+//    DrugsDatabaseSelector::instance();
+//    DrugsDatabaseSelector::instance()->getAllDatabaseInformations();
+
+    // initialize DrugsBase
+    Internal::DrugsBase::instance();
+
     return true;
 }
 

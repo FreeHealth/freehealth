@@ -77,9 +77,11 @@
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace DrugsIOConstants {
+    /** \todo update to version 0.4.0 --> XML_PRESCRIPTION_DRUGSBASENAME */
     const char *const XML_VERSION                         = "<?xml version=\"0.2.0\" encoding=\"UTF-8\"?>\n";
     const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
     const char *const XML_PRESCRIPTION_ISTEXTUAL          = "IsTextual";
+    const char *const XML_PRESCRIPTION_DRUGSBASENAME      = "DrugsBaseName";
     const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME    = "TextualDrugName";
     const char *const XML_PRESCRIPTION_CIS                = "CIS";
     const char *const XML_PRESCRIPTION_TESTONLY           = "OnlyForTest";
