@@ -287,7 +287,7 @@ namespace Time {
         const char* const BEDTIME              = QT_TRANSLATE_NOOP("tkConstants", "bedtime");
 
         // Meal time relations
-        const char* const NOMEALRELATION      = QT_TRANSLATE_NOOP("tkConstants", "no meal realation");
+        const char* const NOMEALRELATION      = QT_TRANSLATE_NOOP("tkConstants", "no meal relation");
         const char* const DURINGMEAL          = QT_TRANSLATE_NOOP("tkConstants", "during meal");
         const char* const AFTERMEAL           = QT_TRANSLATE_NOOP("tkConstants", "after meal");
         const char* const BEFOREMEAL          = QT_TRANSLATE_NOOP("tkConstants", "before meal");

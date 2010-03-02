@@ -40,7 +40,7 @@ INSTALL_SMALLPIX_PATH     = $${INSTALL_RESOURCES_PATH}/pixmap/16x16
 INSTALL_MEDIUMPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/32x32
 INSTALL_BIGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/64x64
 INSTALL_SPLASHPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/splashscreens
-INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}/html
+INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}
 
 # install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
 INSTALL_QT_INSIDE_BUNDLE = true
@@ -153,7 +153,7 @@ INSTALLS+= desk desk_icon
 # Documentation
 !isEmpty(INSTALL_DOCS_PATH){
 docs.path=$${INSTALL_DOCS_PATH}
-docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${TARGET}/html/*
+docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${TARGET}
 docs.CONFIG += no_check_exist
 INSTALLS+=docs
 }

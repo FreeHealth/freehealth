@@ -1,17 +1,30 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// PRESENTATION INTERFACE ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page presentation Présentation de l'interface
+/**
+\~french \page presentation Présentation de l'interface
+\~english \page presentation Presentation of the interface
 
-\image html zones.png Découpage en "zones"
+\~french \image html zones.png Découpage en "zones"
+\~english \image html zones.png Cutting into "areas"
 
+\~french
 L'interface de \freediams est découpée en trois parties :
 \li un partie dédiée à l'<b>information du patient</b> (1 et 2)
 \li une <b>zone de recherche et de sélection des médicaments</b> (3 et 4)
 \li <b>la prescription</b> proprement dite (5 et 6)
 
-\section info_patient Les informations concernant le patient
+\~english
+\freediams interface is cutted into three main areas :
+\li one part dedicated to the <b>patient's datas</b> (1 and 2)
+\li one part dedicated to the <b>drugs database searching and viewing</b> (3 and 4)
+\li the <b>prescription</b> itself (5 and 6)
 
+
+\~french \section info_patient Les informations concernant le patient
+\~english \section info_patient Patient's datas
+
+\~french
 Tout patient est défini par une série de données directement ou indirectement accessible. La seule donnée
 directement accessible est le nom du patient (1). D'autres données peuvent être renseignées en cliquant
 sur le bouton se situant à côté de la zone de saisie du nom du patient (2).\n
@@ -24,16 +37,41 @@ Les données suivantes peuvent être renseignées par la ligne de commande (\ref
 \li la créatininémie en milligrammes/litres
 \li la liste des allergies médicamenteuses (en DCI, séparés par un point virgule).
 
-\image html infos-patient.png Informations concernant le patient
+\~english
+Every patient is defined by a series of data available directly or indirectly. The only data
+accessible is the name of the patient (1). Other data may be informed by clicking
+button located next to the input area of the patient's name (2). \ n
+The following data may be informed by the command line (\ref cmdline) and / or user:
+\li weight in kilograms
+\li date of birth (dd / mm / yyyy)
+\li size in centimeters
+\li sex (M, F or H - H for Hermaphrodism)
+\li the creatinine clearance in milliliters per minute
+\li creatinine in milligrams / liter
+\li list of drug allergies (in DCI, separated by a semicolon).
 
+
+\~french \image html infos-patient.png Informations concernant le patient
+\~english \image html infos-patient.png Patient's informations
+
+\~french
 \freediams permet lors de la réalisation de posologies standard de définir des limites
 de prescription sur le poids, la clairance de créatinine et prochainement la surface corporelle (reportez-vous
 au chapitre ad hoc). Ces données seront alors analysées lors de la prescription.\n
 La prise en compte de ces données est prévue pour une version ultérieure de ce logiciel.
 Toute aide est la bienvenue...
 
-\section zone_recherche_medics La zone de recherche des médicaments
+\~english
+\freediams allows at the completion of standard dosages define limits
+limitation on weight, creatinine clearance and soon the body surface (see
+Chapter ad hoc). These data will be analyzed when prescribing. \n
+The inclusion of these data is scheduled for a later version of this software.
+All help is welcome...
 
+\~french \section zone_recherche_medics La zone de recherche des médicaments
+\~english \section zone_recherche_medics Drugs searching area
+
+\~french
 La zone de saisie pour vos recherches (3) comprend trois boutons :
 \li celui de gauche vous permet de modifier les critères de recherche,
 \li celui de droite vous présente l'historique de vos recherche,
@@ -45,8 +83,23 @@ différente. Cette couleur peut être modifiée dans les préférences de l'appl
 
 Pour plus d'informations, référez-vous à la section : \ref rechercher
 
-\section presentation_zone_prescription La zone de prescription
+\~english
+The search's text box (3) includes three buttons:
+\li with the left you can change the search criteria
+\li the right one presents the history of your research,
+\li the one outside the input box to the right can be used to prescribe "textually".
 
+Below the list of drugs in the database. You can quickly identify drugs
+for which you have written and save a dosage, the background color to appear slightly
+different. This color can be changed in the application preferences.
+
+For more information, refer to section \ref search
+
+
+\~french \section presentation_zone_prescription La zone de prescription
+\~english \section presentation_zone_prescription The prescription area
+
+\~french
 La zone de prescription comprend deux parties :
 \li une barre d'icône représentant les actions les plus communémment utilisées
 \li la prescription propre dite.
@@ -60,6 +113,7 @@ La barre d'icône présente dans l'ordre les actions suivantes :
 \li Sauvegarder la prescription en cours
 \li Sauvegarder sous un autre nom
 \li Imprimer la prescription en cours
+\li Aperçu d'impression
 \li Séparateur
 \li Effacer la prescription
 \li Supprimer le médicament sélectionné de la prescription
@@ -71,6 +125,32 @@ La barre d'icône présente dans l'ordre les actions suivantes :
 \li Séparateur
 \li Modifier toutes les durées de prescription en un clique
 
+\~english
+The prescription area has two parts:
+\li bar icon representing the most used actions
+\li prescription itself.
+
+\subsection presentation_toolbar_prescription The tool bar
+
+\image html prescription_toolbar.png Toolbar of prescription
+
+The toolbar icon in order, the following actions:
+\li Open a prescription
+\li Save the prescription being
+\li Save under a different name
+\li print the prescription being
+\li print preview
+\li Separator
+\li Delete prescription
+\li Delete selected drug prescribing
+\li Mount medication
+\li off the drug
+\li Sort drugs (100% are put first, then sorting is done on the name)
+\li Separator
+\li See \ ref synthetiseur_iam
+\li Separator
+\li Edit all periods of limitation in one click
+
 \ref index
 
 */
@@ -79,15 +159,26 @@ La barre d'icône présente dans l'ordre les actions suivantes :
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////  SAUVEGARDER / CHARGER DES PRESCRIPTIONS  ///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page prescriptions_io Sauvegarder, recharger, ajouter des prescriptions
+/**
+\~french \page prescriptions_io Sauvegarder, recharger, ajouter des prescriptions
+\~english \page prescriptions_io Save, load and add prescriptions
 
-\section prescription_io_problemes_connus Problèmes connus
+\~french \section prescription_io_problemes_connus Problèmes connus
+\~english \section prescription_io_problemes_connus Known issues
 
+\~french
 Les version 0.0.8 à 0.1.4 de \freediams ne sauvegardaient pas correctement le schéma de
 répartition journalier. Il est impossible de les récupérer. Ce bogue est corrigé depuis la version 0.2.0 de \freediams.
 
-\section prescription_save Sauvegarder une prescription
+\~english
+\freediam versions untill v0.1.4 does not save correctly the daily scheme. It is impossible to recocer it.
+This bug is corrected since v0.2.0 of \freediams.
 
+
+\~french \section prescription_save Sauvegarder une prescription
+\~english \section prescription_save Save a prescription
+
+\~french
 Après avoir réalisé votre prescription, cliquez sur l'icône "sauvegarder" ou sélectionnez le menu
 <b>Fichier/Sauvegarder sous...</b> ou tapez "CTRL+S" ("CMD+S" sur MacOs). Renseignez le nom de la
 prescription et validez.\n
@@ -98,19 +189,45 @@ patient directement.\n
 L'extension de fichier reconnue par \freediams est "*.di". Ces fichiers sont des fichiers
 XML.
 
-\section prescription_open Ouvrir une prescription
+\~english
+After making your prescription, click the "save" or select the menu
+<b>File / Save As...</ b> or type CTRL + S ("CMD + S" on MacOS). Fill in the name of the
+prescription and validate.\n
 
+The patient's informations are encoded. It is not possible to read the full name of
+patient directly. \n
+
+The file extensions recognized by \freediams is "*. di". These files are files
+XML.
+
+\~french \section prescription_open Ouvrir une prescription
+\~english \section prescription_open Open a prescription
+
+\~french
 Sélectionnez le menu <b>Fichier/Ouvrir</b> ou tapez "CTRL+O" ("CMD+O" sous MacOs), sélectionnez le fichier
 à ouvrir. Si une prescription est en cours il vous sera demandé de choisir :
 \li soit d'ajouter la prescription sélectionnée à celle en cours,
 \li soit de remplacer la prescription en cours par celle sélectionnée.
 
-\section prescription_add Ajouter une prescription à une prescription en cours
+\~english
+Select menu <b>File / Open</b> or type "CTRL + O" ("CMD + O" under Mac OS), select the file
+to open. If a prescription is underway you will be asked to choose:
+\li to add the prescription
+\li or to replace the current prescription.
 
+\~french \section prescription_add Ajouter une prescription à une prescription en cours
+\~english \section prescription_add Add a prescription to the underway prescription
+
+\~
 Cf supra.
 
-\section format_fichier_di Format du fichier de sauvegarde
+\~french \section format_fichier_di Format du fichier de sauvegarde
+\~english \section format_fichier_di Prescription file format
 
+\~
+\note The format of the prescription file will be update since cervion 0.4.0
+
+\~french
 Le fichier de sauvegarde contient du code XML. Vous ne devez en aucun cas éditer de vous même les données
 sauvegardées dans ces fichiers. Les données concernant le patient sont brouillées.
 
@@ -170,6 +287,66 @@ Exemple de prescription :
 Pour toutes informations sur les techniques d'encodage des données merci de vous
 référer à la documentation du code et au code lui-même.
 
+\~english
+The prescription file contains XML code. You should in any case you edit the same data
+stored in these files. The patient datas are scrambled.
+
+Sample prescription:
+\verbatim
+<?xml version = "0.2.0" encoding = "UTF-8"?>    indicates the version used to create prescription
+<FullPrescription>
+  <Prescription>
+    <CIS>68166740</CIS>                           CIS Code of drug prescriptions for non-IBD
+    <INN></Inn>                                   true or false depending on whether the drug should or should not be prescribed in its INN's formulation
+    <CIP></CIP>                                   CIP code (packaging)
+    <IntakeFromTo>False</IntakeFromTo>            intakes uses range x to y
+    <IntakeFrom>1.0</IntakeFrom>                  intake
+    <IntakeTo>1.0</IntakeTo>                      intake
+    <IntakeScheme>Intake(s)</IntakeScheme>        Intakes scheme
+    <Period>1</Period>                            Period (daily, every two days ...)
+    <PeriodScheme>Day(s)</PeriodScheme>           Period
+    <DurationFromTo>False</DurationFromTo>        Duration of prescription use of x to y
+    <DurationFrom>1.0</DurationFrom>              Duration
+    <DurationTo>1.0</DurationTo>                  Duration
+    <DurationScheme>Month</DurationScheme>        Duration
+    <IntakeIntervalTime>0</IntakeIntervalTime>    Interval between each intake
+    <IntakeIntervalScheme></IntakeIntervalScheme> interval between each intake
+    <MealTime></Mealtime>                         Relationship with the meal (coded, see code documentation)
+    <DailyScheme></DailyScheme>                   Breakdown daily XML encoded
+    <SpecifyPresentation></SpecifyPresentation>   Not used
+    <SpecifyForm></SpecifyForm>                   Not used
+    <Note></Note>                                 Note the prescriber (not the characters '<' '>' '&'
+                                                  are replaced by their equivalent HTML)
+    <IsAld></IsAld>                               Prescription with 100% reimbursement (true / false / empty == false)
+    <RefDosage>xxxxxx</RefDosage>                 identifier of the standard dose used to achieve the prescription
+  </Prescription>
+  <Prescription>                                  Drug 2 - Just for testing
+    <CIS> 61348441 </ CIS>
+    <OnlyForTest> True </ OnlyForTest>            Just for testing
+  </Prescription>
+  <Prescription>                                  Drug 3
+  [...]
+  </Prescription>
+  <Prescription>                                  Drug 4
+  [...]
+  </Prescription>
+</ FullPrescription>
+<ExtraDatas>
+  <PatientDatas>
+    <Sex> Data </ Sex> Encoded
+    <CreatinClearance> Data </ CreatinClearance> Encoded
+    <Size> Data </ Size> Encoded
+    <Creatinin> Data </ creatinine> Encoded
+    <Weight> Data </ Weight> Encoded
+    <Name> Data </ Name> Encoded
+    <DrugsAllergies> Data </ DrugsAllergies> Encoded
+  </ PatientDatas>
+</ ExtraData>
+\ endverbatim
+
+For all information on technical data encoding thank you for you
+refer to the documentation of the code and the code itself.
+
 \ref index
 */
 
@@ -177,7 +354,10 @@ référer à la documentation du code et au code lui-même.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////  TESTER INTERACTIONS  ////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page iamtesteur Tester les interactions
+/**
+\~english \page iamtesteur Tester les interactions
+\~french \page iamtesteur Interactions testing
+\~
 
 \section iams Définition des interactions
 
@@ -497,7 +677,7 @@ Dans l'entête vous pouvez utiliser les étiquettes suivantes (cf \ref tokensman
 - <em>[[AGE]]</em> : l'âge du patient
 - <em>[[DATEOFBIRTH]]</em> : la date de naissance du patient
 - <em>[[WEIGHT]]</em> : le poids du patient
-- <em>[[SIZE]]</em> : la taille du patient
+- <em>[[HEIGHT]]</em> : la taille du patient
 - <em>[[CLCR]]</em> : la clairance de la créatinine du patient
 
 Dans le pied de page, vous pouvez utiliser les étiquettes suivantes  (cf \ref tokensmanager) :
@@ -577,6 +757,7 @@ Vous pouvez consulter aussi consulter :
     - Guillaume Denry : codeur, déboggueur, conseiller informatique
     - Sébastien Belin, MD : junior codeur, conseiller médical
     - Laurent Masson, MD : conseiller médical
+    - Jim Busser : conseiller médical
 
 - <b>Aides et conseillers :</b>
     -  Filipe Azevedo : aide au déboggueur, conseiller informatique.

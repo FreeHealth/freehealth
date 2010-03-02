@@ -111,7 +111,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     if (!fileName.isEmpty()) {
         QTreeWidgetItem *file = new QTreeWidgetItem(tree, QStringList() << "File name and identifiant");
         file->setFont(0, bold);
-        if (fileName == DrugsDB::Constants::RESOURCE_TAG) {
+        if (fileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT) {
             new QTreeWidgetItem(file, QStringList() << "File" << Trans::Constants::DEFAULTS);
         } else {
             QDir dir;

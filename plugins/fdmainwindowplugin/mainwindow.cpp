@@ -294,7 +294,7 @@ void MainWindow::refreshPatient()
                              .arg( patient()->value(Core::Patient::FullName).toString(),
                                    patient()->value(Core::Patient::DateOfBirth).toString(),
                                    patient()->value(Core::Patient::Weight).toString() )
-                             .arg( patient()->value(Core::Patient::Size).toString(),
+                             .arg( patient()->value(Core::Patient::Height).toString(),
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
     QString sex = patient()->value(Core::Patient::Sex).toString();
 //    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
@@ -309,7 +309,7 @@ void MainWindow::refreshPatient()
 
     m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
     m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
-    m_ui->patientSize->setValue(patient()->value(Core::Patient::Size).toInt());
+    m_ui->patientSize->setValue(patient()->value(Core::Patient::Height).toInt());
     m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
     m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinin).toDouble());
     m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAllergies).toString());
@@ -578,7 +578,7 @@ void MainWindow::on_patientWeight_valueChanged(const QString &text)
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientSize_valueChanged(const QString & text)
 {
-    patient()->setValue(Core::Patient::Size, text);
+    patient()->setValue(Core::Patient::Height, text);
     refreshPatient();
 }
 

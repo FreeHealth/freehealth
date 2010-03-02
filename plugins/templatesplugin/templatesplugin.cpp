@@ -76,7 +76,6 @@ void TemplatesPlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

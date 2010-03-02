@@ -74,7 +74,7 @@ public:
         m_XmlTags.insert(Patient::Sex , "Sex" );
         m_XmlTags.insert(Patient::DateOfBirth , "DateOfbirth");
         m_XmlTags.insert(Patient::Weight , "Weight");
-        m_XmlTags.insert(Patient::Size , "Size" );
+        m_XmlTags.insert(Patient::Height , "Height" );
         m_XmlTags.insert(Patient::CreatinClearance , "CreatinClearance" );
         m_XmlTags.insert(Patient::ICD10Deceases , "ICD10Deceases");
         m_XmlTags.insert(Patient::DrugsAllergies , "DrugsAllergies" );
@@ -240,7 +240,7 @@ bool Patient::fromXml(const QString &xml)
   - [[DATEOFBIRTH]]
   - [[AGE]]
   - [[WEIGHT]]
-  - [[SIZE]]
+  - [[HEIGHT]]
   - [[CLCR]]
   \sa Utils::replaceTokens(), mfDrugsConstants
 */
@@ -250,7 +250,7 @@ void Patient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD, value(Patient::YearsOld).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(Patient::Weight).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_SIZE,        value(Patient::Size).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,        value(Patient::Height).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_DATEOFBIRTH, value(Patient::DateOfBirth).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,        value(Patient::CreatinClearance).toString() );
 }

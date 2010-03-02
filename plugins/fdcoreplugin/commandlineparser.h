@@ -59,7 +59,7 @@ public:
         CL_PatientGender,
         CL_DateOfBirth,
         CL_Weight,
-        CL_Size,
+        CL_Height,
         CL_ClCr,
         CL_Creatinin,
         CL_DrugsAllergies,
@@ -79,7 +79,7 @@ public:
         ref.insert(CL_PatientGender, "--gender");
         ref.insert(CL_DateOfBirth, "--dateofbirth");
         ref.insert(CL_Weight, "--weight");
-        ref.insert(CL_Size, "--size");
+        ref.insert(CL_Height, "--height");
         ref.insert(CL_ClCr, "--crcl");
         ref.insert(CL_Chrono, "--chrono");
         ref.insert(CL_Creatinin, "--creatinin");
@@ -103,7 +103,7 @@ public:
                 case CL_PatientGender : params.insert(CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_DateOfBirth : params.insert(CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Weight : params.insert(CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_Size : params.insert(CL_Size, a.mid(a.indexOf("=")+1).remove("\"")); break;
+                case CL_Height : params.insert(CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_ClCr : params.insert(CL_ClCr, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Creatinin : params.insert(CL_Creatinin, a.mid(a.indexOf("=")+1).remove("\"")); break;
                 case CL_Chrono : params.insert(CL_Chrono, true); break;

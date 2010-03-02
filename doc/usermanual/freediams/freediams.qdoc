@@ -63,6 +63,8 @@ The interface of \freediams is available in different languages: English, French
 
 \~french \section TOC Contenu du manuel
 \~english \section TOC Content of the user manual
+
+\~
 \li \ref auteurs
 \li \ref installation
 \li \ref presentation
@@ -96,7 +98,7 @@ développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 You can find flaws or errors. Thank you for the report to
 developers on public mailing list: freemedforms@googlegroups.com.
 \li \ref versionning
-\li The current version is documented <b> version 0.4.0 (April 2010) </b>.
+\li The current documented version is <b> version 0.4.0 (April 2010) </b>.
 \li version of the interactions database: <b>June 30, 2009 </b>.
 
 
@@ -214,7 +216,7 @@ Les paramètres suivants sont disponibles :
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
 \li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
 \li \e --weight="dd" : définit le poids du patient (en kg)
-\li \e --size="ddd" : définit la taille du patient (en cm)
+\li \e --height="ddd" : définit la taille du patient (en cm)
 \li \e --crcl="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
 \li \e --creatinin="dd" : définit la créatininémie du patient (en mg/l)
 \li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
@@ -227,9 +229,9 @@ The following settings are available:
 \li \e --exchange="xxx" : "xxx" identifies the exchange file between the two applications. File must exist.
 \li \e --patientname="xx xx xx" defines the name of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
-\li \e --DateOfBirth="dd/MM/yyyy" defines the data of birth of patient (date must be transmitted in the form dd/mm/yyyy)
+\li \e --dateofbirth="dd/MM/yyyy" defines the data of birth of patient (date must be transmitted in the form dd/mm/yyyy)
 \li \e --weight="dd" defines the patient's weight (kg)
-\li \e --size="ddd": sets the size of the patient (cm)
+\li \e --height="ddd": sets the size of the patient (cm)
 \li \e --crcl="dd.d" defines the clearance of creatinine of the patient (ml/min)
 \li \e --creatinin = "dd" defines the patient's serum creatinine (mg/l)
 \li \e --chrono: log chronos on various functions of the tester interactions (proposed for debugging)

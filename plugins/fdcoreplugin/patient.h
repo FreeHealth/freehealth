@@ -66,7 +66,7 @@ public:
         Age,
         YearsOld,
         Weight,
-        Size,
+        Height,
         IMC,
         CreatinClearance,
         Creatinin,
