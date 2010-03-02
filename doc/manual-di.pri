@@ -45,9 +45,13 @@ isEmpty(HELPGENERATOR) {
 
 
 # create the HTML output of Doxygen
-IN_DOXYFILE = $${PWD}/usermanual/freediams/Doxyfile
-html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
-QMAKE_EXTRA_TARGETS += html_docs
+IN_DOXYFILE_EN = $${PWD}/usermanual/freediams/Doxyfile_en
+en_html_docs.commands = $$DOXYGEN $${IN_DOXYFILE_EN}
+QMAKE_EXTRA_TARGETS += en_html_docs
+
+IN_DOXYFILE_FR = $${PWD}/usermanual/freediams/Doxyfile_fr
+fr_html_docs.commands = $$DOXYGEN $${IN_DOXYFILE_FR}
+QMAKE_EXTRA_TARGETS += fr_html_docs
 
 OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/versionning.qdoc \
@@ -56,6 +60,7 @@ OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/templates/templates.qdoc \
-               $${PWD}/usermanual/freediams/Doxyfile \
+               $${PWD}/usermanual/freediams/Doxyfile_en \
+               $${PWD}/usermanual/freediams/Doxyfile_fr \
                $${PWD}/usermanual/freediams/doxygen.css \
                $${PWD}/usermanual/freediams/footer.html

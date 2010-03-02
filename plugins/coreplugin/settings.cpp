@@ -187,7 +187,7 @@ namespace SettingsPrivateConstants {
     static const char* const DEFAULTTHEME_PATH    = "";
     static const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     static const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
-    static const char* const USERMANUAL_PATH      = "/doc/%1/html";
+    static const char* const USERMANUAL_PATH      = "/doc/%1";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
 #ifdef DEBUG
@@ -343,7 +343,7 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
                 if (appname.contains("_d"))
                     appname = appname.left(appname.indexOf("_d"));
             }
-            m_Enum_Path.insert( DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname) );
+            m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
             break;
         }
         case ApplicationPath :
@@ -384,9 +384,19 @@ void SettingsPrivate::setPath( const int type, const QString & absPath )
 }
 
 /** \brief Returns the path according to the enumerator Settings::Paths */
-QString SettingsPrivate::path( const int type ) const
+QString SettingsPrivate::path(const int type) const
 {
-    return m_Enum_Path.value( type );
+    if (type == ISettings::DocumentationPath) {
+        QString tmp = m_Enum_Path.value(type);
+        QString translatedPath = tmp + QDir::separator() + QLocale().name().left(2) + "/html";
+        qWarning() << tmp << translatedPath;
+        if (QDir(translatedPath).exists())
+            return translatedPath;
+        else
+            return tmp + "/en/html";
+
+    }
+    return m_Enum_Path.value(type);
 }
 
 /**
