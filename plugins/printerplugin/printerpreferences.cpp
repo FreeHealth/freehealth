@@ -124,6 +124,20 @@ PrinterPreferencesWidget::PrinterPreferencesWidget(QWidget *parent) :
 void PrinterPreferencesWidget::setDatasToUi()
 {
     printerList->clear();
+    if (QPrinterInfo::availablePrinters().count()) {
+        QListWidgetItem *item = new QListWidgetItem(printerList);
+        QFont bold;
+        bold.setBold(true);
+        item->setBackgroundColor(QColor("yellow"));
+        item->setForeground(QColor("red"));
+        item->setFont(bold);
+        item->setText(tr("WARNING !\n"
+                         "No configurated printer found on your system.\n"
+                         "Printing and print preview should not work at all.\n"
+                         "Please configure a printer.\n"
+                         "Refer to your operating system documentation."));
+        return;
+    }
     QString select = settings()->value(Print::Constants::S_DEFAULT_PRINTER).toString();
     foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
         QListWidgetItem *item = new QListWidgetItem(printerList);
@@ -178,13 +192,17 @@ void PrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
         s = sets;
 
     // Default printer
-    QListWidgetItem *sel = printerList->selectedItems().at(0);
-    if (sel) {
-        if (!sel->data(Qt::UserRole).toString().isEmpty()) {
-            s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->data(Qt::UserRole));
-        } else {
-            s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->text());
+    if (printerList->selectedItems().count()) {
+        QListWidgetItem *sel = printerList->selectedItems().at(0);
+        if (sel) {
+            if (!sel->data(Qt::UserRole).toString().isEmpty()) {
+                s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->data(Qt::UserRole));
+            } else {
+                s->setValue(Print::Constants::S_DEFAULT_PRINTER, sel->text());
+            }
         }
+    } else {
+        s->setValue(Print::Constants::S_DEFAULT_PRINTER, "system");
     }
     // Color Print
     if (colorBox->isChecked())

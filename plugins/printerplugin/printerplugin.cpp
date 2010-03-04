@@ -36,12 +36,14 @@
 #include "printerpreferences.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
+#include <QPrinterInfo>
 
 #include <QDebug>
 
@@ -50,6 +52,7 @@ using namespace Print;
 PrinterPlugin::PrinterPlugin() :
         prefPage(0)
 {
+    setObjectName("PrinterPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PrinterPlugin";
 }
@@ -82,6 +85,16 @@ void PrinterPlugin::extensionsInitialized()
     // Add preferences pages
     prefPage = new Print::Internal::PrinterPreferencesPage(this);
     addObject(prefPage);
+
+    // Check system for existing printers
+//    if (QPrinterInfo::availablePrinters().count()) {
+    if (QPrinterInfo::availablePrinters().isEmpty()) {
+        Utils::Log::addError(this, "No printer installed in this system.");
+        Utils::warningMessageBox(tr("No printer"),
+                                 tr("No printer is configured in your system. The print preview and printing will not work."),
+                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
+                                 qApp->applicationName());
+    }
 }
 
 

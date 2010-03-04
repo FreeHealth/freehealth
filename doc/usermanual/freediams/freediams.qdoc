@@ -53,9 +53,8 @@ parameters are then transmitted by the command line. \n
 \li user "nomadic" working on multiple operating systems simultaneously have the
 ability to install on a USB key all versions of the software. The data are fully compatible
 from one system to another.
-\li fact whatever your platform, it is possible to work with \freediams
-without any requirements. For version-specific distributions
-Linux, dependencies are automatically installed with the package.
+\li fact whatever your platform, it is possible to work with \freediams without any requirements.
+For version-specific distributions Linux, dependencies are automatically installed with the package.
 
 The interface of \freediams is available in different languages: English, French, German, spanish.
 
@@ -113,6 +112,7 @@ de la licence en suivant le menu <b>À propos</b>.
 \freediams is available under BSD revised license. You can read terms of the license
 from the <b>About</b> menu.
 
+\~
 \image html about.png Dialogue : à propos
 */
 
@@ -169,6 +169,7 @@ When an update is available, the menu <b>Update Available</b> appears.
 \~french Nettoyer votre répertoire personnel et effacer le répertoire où est installé \freediams.
 \~english Clean the application path and your personnal path.
 
+\~
 \ref index
 */
 
@@ -273,14 +274,16 @@ To assist in debugging the application when it seems slow: \e --chrono help to f
 The editors of standard dosages, can transmit their dosages to
 scientific committee to confirm with the \e --transmit-determination param.
 
-
+\~
 \ref index
 */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////  MEDINTUX  //////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page medintux Utiliser \freediams avec MedinTux
+/**
+\~
+\page medintux Utiliser \freediams avec MedinTux
 
   \section medintux_warning Attention \freediams NE FAIT PAS partie de la suite MedinTux
 

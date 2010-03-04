@@ -887,20 +887,21 @@ void Printer::setPaperSize(QPrinter::PaperSize size)
 }
 
 /** \brief Shows the print preview dialog. \e test param should only be used for debugging. */
-bool Printer::previewDialog( QWidget *parent, bool test )
+bool Printer::previewDialog(QWidget *parent, bool test)
 {
     if (!d->m_Printer)
-        d->renewPrinter();
+        d->m_Printer = new QPrinter(QPrinter::ScreenResolution);
 
     if (Utils::isDebugCompilation()) {
         // For test
-        if ( test ) {
+        if (test) {
             QStringList list;
             list << d->content()->toHtml() << d->header(EachPages)->toHtml() <<  d->footer(EachPages)->toHtml();
             Utils::quickDebugDialog(list);
         }
-    } else
+    } else {
         Q_UNUSED(test);
+    }
 
     QPrintPreviewDialog dialog(d->m_Printer, parent, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)));

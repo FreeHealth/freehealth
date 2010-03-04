@@ -90,8 +90,8 @@ Schema:
 - MOLECULE_FORM : form of the drug (redundant with DRUGS.FORM)
 - MOLECULE_CODE : unique identifier of the molecule
 - MOLECULE_NAME : name of the molecule
-- DOSAGE : dosage of the molecule (eg 10 mg)
-- DOSAGE_REF : reference for the dosage (eg 1 tablet == 10 mg per tablet)
+- DOSAGE : molecule amount (per amount of form) e.g. "325 mg"
+- DOSAGE_REF : reference amount of form e.g. "1 tablet",  "2 mL suspension"
 - NATURE : must be one of two kinds :
     - SA (can be used as default value) : name of Active substance
     - FT : name of Tranformed substance
@@ -140,11 +140,7 @@ Schema :
 \~french \subsection drugsdb_table_info La table INFORMATIONS
 \~english \subsection drugsdb_table_info The INFORMATIONS table
 
-\~french
- Schéma :
-
-
-\~english
+\~
 Schema :
 - VERSION : Version of the db (please be read the page : \ref versionning). See this as a primary key. \freediams will
 read the first selected row of the database as database informations.
@@ -174,7 +170,11 @@ xx=All other languages
 - ATC : boolean ; ATC is available for each drugs in the database
 - INTERACTIONS : boolean : manages interactions
 - AUTHOR_COMMENTS : place to hold your comment
-- COUNTRY : two letter ISO encoded country name, for drugs database country specific
+- LANGUAGE_COUNTRY : language and country specificity. Format = language_country where :
+    - language is a lowercase, two-letter, ISO 639 language code,
+    - territory is an uppercase, two-letter, ISO 3166 country code,
+    - and codeset and modifier are ignored.
+
 
 \~french \section interactionsdb Base de données des interactions
 \~english \section interactionsdb Interactions database
@@ -204,6 +204,7 @@ versions.
 \~french \subsection interactionsdb_table_IAM Table IAM
 \~english \subsection interactionsdb_table_IAM Table IAM
 
+\~
 This part need to be clarified...
 
 
@@ -224,12 +225,14 @@ fr, us, de, sp...
 \~french \section drugs_sql Schéma SQL : Base de données thérapeutique
 \~english \section drugs_sql SQL Schema : Drugs database
 
+\~
 \include sql/drugs_schema.sql
 
 
 \~french \section iam_sql Schéma SQL : Base de données interactions
 \~english \section iam_sql SQL Schema : Interactions database
 
+\~
 \include sql/iam_schema.sql
 
 

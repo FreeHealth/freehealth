@@ -81,6 +81,7 @@
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/constants.h>
 
 // include Qt headers
 #include <QCoreApplication>
@@ -208,7 +209,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_ATC,               "ATC");
     addField(Table_INFORMATION, INFO_INTERACTIONS,      "INTERACTIONS");
     addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
-    addField(Table_INFORMATION, INFO_COUNTRY,           "COUNTRY");
+    addField(Table_INFORMATION, INFO_LANGUAGE_COUNTRY,  "LANGUAGE_COUNTRY");
 
 }
 
@@ -240,6 +241,9 @@ bool DrugsBase::init()
       }
 
      QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
+     if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
+         dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+     }
 
      if ((dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT) || (dbFileName.isEmpty())) {
          m_IsDefaultDB = true;
@@ -331,7 +335,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
             info->atcCompatible = q.value(Constants::INFO_ATC).toBool();
             info->iamCompatible = q.value(Constants::INFO_INTERACTIONS).toBool();
             info->authorComments = q.value(Constants::INFO_AUTHOR_COMMENTS).toString();
-            info->country = q.value(Constants::INFO_COUNTRY).toString();
+            info->lang_country = q.value(Constants::INFO_LANGUAGE_COUNTRY).toString();
             info->connectionName = db.connectionName();
             if (db.driverName() == "QSQLITE") {
                 info->fileName = db.databaseName();

@@ -164,8 +164,6 @@ void DrugsPrintOptionsPage::applyChanges()
 void DrugsPrintOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(S_DRUGFONT, QFont());
-//    defaultvalues.insert(S_PRESCRIPTIONFONT, QFont());
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN);
     defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
@@ -174,6 +172,16 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
+    }
+
+    QTextDocument t;
+    t.setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
+    if (settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN).isNull() ||
+        settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).isNull() ||
+        t.toPlainText().simplified().isEmpty()) {
+        Utils::Log::addMessage(this, "Restoring prescription sentence to its defaults");
+        settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN);
+        settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
     }
     settings()->sync();
 }

@@ -226,11 +226,7 @@ void MainWindow::extensionsInitialized()
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
             Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
-
-            /** \todo Remove this */
-            Utils::Log::addMessage("DEBUG EXCHANGE", tmp);
-            /** \todo Remove this */
-
+            Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
             if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
                 int end = tmp.indexOf("\"", begin);
@@ -250,7 +246,6 @@ void MainWindow::extensionsInitialized()
         }
     }
 
-    Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION) );
     raise();
 
     // Start the update checker

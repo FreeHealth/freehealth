@@ -149,11 +149,12 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 
     QTreeWidgetItem *countryItem = new QTreeWidgetItem(tree, QStringList() << "Country");
     countryItem->setFont(0, bold);
-    if (country.isEmpty()) {
+    if (lang_country.isEmpty()) {
         new QTreeWidgetItem(countryItem, QStringList() << "Not specific");
     } else {
-        QLocale l(country);
-        new QTreeWidgetItem(countryItem, QStringList() << "Specific to" << QLocale::countryToString(l.country()));
+        QLocale l(lang_country);
+        new QTreeWidgetItem(countryItem, QStringList() << "Language Specific" << QLocale::languageToString(l.language()));
+        new QTreeWidgetItem(countryItem, QStringList() << "Country Specific" << QLocale::countryToString(l.country()));
     }
 
     QTreeWidgetItem *authorItem = new QTreeWidgetItem(tree,QStringList() << "Provider, Author and License");
@@ -190,7 +191,7 @@ void DatabaseInfos::warn()
     qWarning() << "DatabaseInfos"
             << "\n  Name" << tmp.replace("\n", "   ;;   ")
             << "\n  Translated name"  << translatedName()
-            << "\n  Country" << country
+            << "\n  Country" << lang_country
             << "\n  FileName" << fileName
             << "\n  Version" << version
             << "\n  CompatVersion" << compatVersion
@@ -316,6 +317,6 @@ DatabaseInfos DrugsDatabaseSelector::currentDatabase() const
 
 QVector<DatabaseInfos *> DrugsDatabaseSelector::availableDatabases() const
 {
-    qWarning() << d->m_FileName_Infos << d->m_FileName_Infos.values().toVector();
+//    qWarning() << d->m_FileName_Infos << d->m_FileName_Infos.values().toVector();
     return d->m_FileName_Infos.values().toVector();
 }

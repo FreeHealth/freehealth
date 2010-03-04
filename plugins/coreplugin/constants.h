@@ -422,6 +422,9 @@ enum {  // Don't change the ordre of this enum
 };
 
 
+// Some path tags
+const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";
+
 
 }  // end Constants
 } // end Core

@@ -41,7 +41,7 @@ Les données suivantes peuvent être renseignées par la ligne de commande (\ref
 Every patient is defined by a series of data available directly or indirectly. The only data
 accessible is the name of the patient (1). Other data may be informed by clicking
 button located next to the input area of the patient's name (2). \ n
-The following data may be informed by the command line (\ref cmdline) and / or user:
+The following data may be informed by the command line (\ref ligne_commandes) and / or user:
 \li weight in kilograms
 \li date of birth (dd / mm / yyyy)
 \li size in centimeters
@@ -93,7 +93,7 @@ Below the list of drugs in the database. You can quickly identify drugs
 for which you have written and save a dosage, the background color to appear slightly
 different. This color can be changed in the application preferences.
 
-For more information, refer to section \ref search
+For more information, refer to section \ref rechercher
 
 
 \~french \section presentation_zone_prescription La zone de prescription
@@ -151,6 +151,7 @@ The toolbar icon in order, the following actions:
 \li Separator
 \li Edit all periods of limitation in one click
 
+\~
 \ref index
 
 */
@@ -171,7 +172,7 @@ Les version 0.0.8 à 0.1.4 de \freediams ne sauvegardaient pas correctement le s
 répartition journalier. Il est impossible de les récupérer. Ce bogue est corrigé depuis la version 0.2.0 de \freediams.
 
 \~english
-\freediam versions untill v0.1.4 does not save correctly the daily scheme. It is impossible to recocer it.
+\freediams versions untill v0.1.4 does not save correctly the daily scheme. It is impossible to recocer it.
 This bug is corrected since v0.2.0 of \freediams.
 
 
@@ -191,7 +192,7 @@ XML.
 
 \~english
 After making your prescription, click the "save" or select the menu
-<b>File / Save As...</ b> or type CTRL + S ("CMD + S" on MacOS). Fill in the name of the
+<b>File / Save As...</b> or type CTRL + S ("CMD + S" on MacOS). Fill in the name of the
 prescription and validate.\n
 
 The patient's informations are encoded. It is not possible to read the full name of
@@ -321,8 +322,8 @@ Sample prescription:
     <RefDosage>xxxxxx</RefDosage>                 identifier of the standard dose used to achieve the prescription
   </Prescription>
   <Prescription>                                  Drug 2 - Just for testing
-    <CIS> 61348441 </ CIS>
-    <OnlyForTest> True </ OnlyForTest>            Just for testing
+    <CIS> 61348441 </CIS>
+    <OnlyForTest> True </OnlyForTest>             Just for testing
   </Prescription>
   <Prescription>                                  Drug 3
   [...]
@@ -330,22 +331,24 @@ Sample prescription:
   <Prescription>                                  Drug 4
   [...]
   </Prescription>
-</ FullPrescription>
+</FullPrescription>
 <ExtraDatas>
   <PatientDatas>
-    <Sex> Data </ Sex> Encoded
-    <CreatinClearance> Data </ CreatinClearance> Encoded
-    <Size> Data </ Size> Encoded
-    <Creatinin> Data </ creatinine> Encoded
-    <Weight> Data </ Weight> Encoded
-    <Name> Data </ Name> Encoded
-    <DrugsAllergies> Data </ DrugsAllergies> Encoded
-  </ PatientDatas>
-</ ExtraData>
-\ endverbatim
+    <Sex> Data </Sex> Encoded
+    <CreatinClearance> Data </CreatinClearance> Encoded
+    <Size> Data </Size> Encoded
+    <Creatinin> Data </creatinine> Encoded
+    <Weight> Data </Weight> Encoded
+    <Name> Data </Name> Encoded
+    <DrugsAllergies> Data </DrugsAllergies> Encoded
+  </PatientDatas>
+</ExtraData>
+\endverbatim
 
 For all information on technical data encoding thank you for you
 refer to the documentation of the code and the code itself.
+
+\~
 
 \ref index
 */
@@ -355,12 +358,13 @@ refer to the documentation of the code and the code itself.
 ////////////////////////////////////////////////  TESTER INTERACTIONS  ////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
-\~english \page iamtesteur Tester les interactions
-\~french \page iamtesteur Interactions testing
-\~
+\~french \page iamtesteur Tester les interactions
+\~english \page iamtesteur Interactions testing
 
-\section iams Définition des interactions
+\~french \section iams Définition des interactions
+\~english  \section iams Defining interactions
 
+\~french
 Les définitions des interactions sont celle de l'AFSSAPS.\n
  \li <b>Les contre-indications :</b> ont un caractère absolu et ne doivent pas être transgressée.
  \li <b>Les associations déconseillées :</b> doivent être le plus souvent évitée, sauf après examen
@@ -374,18 +378,42 @@ Les définitions des interactions sont celle de l'AFSSAPS.\n
   ne peut être proposée. Il revient au médecin d'évaluer l'opportunité de l'association.
 
 Chaque interaction est représenté par une icône comme présentées ci-dessous.
-\image html help.png Médicament non reconnu par \freediams
+\image html help.png Médicament non reconnu par \freediams (interactions non calculables)
 \image html ok.png Médicament connu et sans interaction
 \image html info.png Interaction de faible niveau : DCI déjà présente
 \image html info.png Interaction de faible niveau : Précaution d'emploi
 \image html warning.png Interaction : À prendre en compte
 \image html deconseille.png Interaction : Déconseillée
 \image html critical.png Interaction : contre-indication
-\image html pencil.png Aucune interaction possible, il s'agit d'une prescription textuelle pure
+\image html pencil.png Aucune interaction calculable, il s'agit d'une prescription textuelle pure
+
+\~english
+The definitions of interactions are those of the AFSSAPS. \n
+ \li <b>The contraindications: </b> are absolute and must not be transgressed.
+ \li <b>Discouraged associations: </b> must be avoided in most cases, except after review
+  depth of the benefit / risk and requires close monitoring of the patient.
+ \li <b>Precautions for use: </b> are the most frequent case. The association is possible from
+  there is compliance, especially in early treatment recommendations for simple
+  avoid the occurrence of interaction (titration, strengthening clinical surveillance, biological, etc ...).
+ \li <b>Take into account: </b> where the potential drug interaction exists,
+  and usually corresponds to the addition of side effects and no practical recommendation
+  can be proposed. It is the physician to assess the appropriateness of the association.
+
+Each interaction is represented by an icon as shown below.
+\image html help.png Unrecognized drug (no interactions can be calculated)
+\image html ok.png Known drug without any interactions
+\image html info.png Low level of interaction : INN already present in the prescription
+\image html info.png Low level of interaction : Precautions of use
+\image html warning.png Interaction : Take into account
+\image html deconseille.png Interaction : Discouraged associations
+\image html critical.png Interaction : Contraindication
+\image html pencil.png Pure textual prescription, interactions can not be calculated.
 
 
-\section iams_infos Informations données sur les interactions
+\~french \section iams_infos Informations données sur les interactions
+\~english \section iams_infos Informations for the interactions
 
+\~french
 Les interactions sont détaillées. Sont présentés :
 \li <b>la nature du risque :</b> Majoration des effets indésirables ou perte d'efficacité… et mécanisme
   d'action succinct, lorsqu'il est connu
@@ -397,8 +425,17 @@ Les interactions sont détaillées. Sont présentés :
  recommandation pratique car il signale surtout une addition d'effets indésirables que seul le recours
  à d'autres thérapeutiques pourra permettre d'éviter.
 
-\section iams_calcul Calcul et présentation des interactions médicamenteuses
+\~english
+The interactions are detailed. Are presented:
+\li <b>nature of risk: </b> Major side effects or loss of efficacy and mechanism... Action summary, when available
+\li <b>level of stress: </b> Contraindication, Association recommended, see above...
+\li <b>to behave</b>.
+These informations are actually only available in french.
 
+\~french \section iams_calcul Calcul et présentation des interactions médicamenteuses
+\~english  \section iams_calcul Calculating and presenting drugs interactions
+
+\~french
 Les interactions sont calculées en temps réel. Cela signifie qu'à chaque ajout d'un médicament
 dans la prescription (double clique dans la partie de recherche/sélection), les interactions sont
 automatiquement recalculées. Aucune action supplémentaire de votre part n'est requise.\n
@@ -428,8 +465,41 @@ manuel d'utilisation : http://www.afssaps.fr.
 La fenêtre des posologies vous présente l'existence ou non d'interactions médicamenteuses pour le biais
 d'un icône dans le coin supérieur gauche.\n
 
-\section synthetiseur_iam Le synthétiseur d'interactions
+\~english
+The interactions are calculated in real time. This means that every addition of a drug
+in the prescription (double click in the search / selection), interactions are
+automatically recalculated. No additional action on your part is required. \n
+The search for interactions involves analysis of INN and therapeutic classes defined by AFSSAPS.
+The INN can belong to several classes. The INN and the classes are presented in the tooltip
+that appears under the name of the drug when you leave the mouse over without action. \n
 
+\note It is also possible to add drugs just for testing purposes. These drugs
+will not be notified when printing the prescription (this is useful to test intercurrent
+treatment in patients already receiving chronic treatment). They will only be used
+for calculating the interactions. \ref fortestonly
+
+\warning WARNING: All medications are not necessarily recognized INN, INN or all of their
+are not necessarily known. It is therefore necessary to check the icon when prescribing
+(see above: Unrecognized drugs).
+
+\htmlonly
+For information on interactions,
+<a href="http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0">
+please refer to the thesaurus interactions AFSSAPS and its user manual (french only)</a>.
+\endhtmlonly
+\latexonly
+For information on interactions, please refer to the thesaurus interactions AFSSAPS and its
+manual (french only): http://www.afssaps.fr.
+\endlatexonly
+
+The window dosages presents the existence or non-drug interaction for the bias
+an icon in the upper left corner. \n
+
+
+\~french \section synthetiseur_iam Le synthétiseur d'interactions
+\~english \section synthetiseur_iam Le synthétiseur d'interactions
+
+\~french
 Les informations détaillées des interactions sont disponibles en cliquant sur le nom du médicament
 dans la fenêtre de posologie ou en activant le "synthétiseur d'interactions" en cliquant sur l'icône ad hoc (la paire d'yeux).
 Le synthétiseur vous présente dans une fenêtre à part, le rappel de l'ordonnance analysée, et pour chaque
@@ -444,178 +514,48 @@ Le synthétiseur est un outil indispensable pour les officines ou les consultati
 \image html interactions-icon1.png Icône d'interaction coin supérieur gauche (ne concerne que le médicament présenté)
 
 Cet icône est rappelé devant le nom de médicament prescrits dans cadre de la prescription.\n
+
 \image html interactions-icon2.png Icônes d'interaction (pour toute l'ordonnance)
 
+\~english
+The details of interactions are available by clicking on the name of the drug
+in the dosage windowor by activating the "interactions' synthesizer" by clicking on the ad hoc (one pair of eyes).
+The synthesizer present you, in a separate window, recalling the order analyzed, and each
+interaction found: INN and drug cases and all information interaction.
+The summary can be printed with your header, footer and watermark printing with a click. \n
+The synthesizer is an indispensable tool for pharmacies or prescription's analysis consultations.
 
-\ref index
-*/
+\image html eyes.png Enable the interactions' synthesizer
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////  PRESCRIRE  ///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page prescrire Prescrire avec \freediams
+\image html synthetiseur.png Interactions' synthesizer
 
-Prescrire avec \freediams est d'une simplicité déconcertante. Vous pouvez préparer des posolgoies standardisées
-sur lesquelles vous vous reposerez pour prescrire au quotidien et, lorsque cela s'avère nécessaire, vous pouvez
-prescrire en "mode textuel pure".
+\image html interactions-icon1.png Top left corner icon (only concerning the submitted drug)
 
-\section prescrire_posologies_standard Les posologies standardisées
+This icon is recalled before the name of medication prescribed under prescription. \n
 
-\freediams propose par défaut un module de prescription complet. Ce module repose sur
-l'idée que, pour la majorité de nos prescriptions, il est possible de créer une posologie standard sur laquelle
-le prescripteur puisse se reposer.\n
-Ces posologies standards se définissent soit :
-\li soit pour un médicament donné
-\li soit pour une classe DCI entière (ayant le même dosage - CLAMOXYL 1g <-> AMOXICILLINE 1g).
+\image html interactions-icon2.png Icons (whole prescription)
 
-Ces posologies standardisées permettent :
-\li d'accélérer le processus de prescription,
-\li d'automatiser des tests selon le terrain (âge, poids, taille, clairance de créatinine, limites CIM10...)
-\li de créer des prescriptions en DCI
-
-Il aussi est possible d'ajouter des médicaments dans l'ordonnance juste à des fins de tests. Ces médicaments
-ne seront pas notifiés lors de l'impression de l'ordonnance (ceci est très pratique pour tester un traitement
-intercurrent chez un patient recevant déjà un traitement chronique). Ils seront uniquement utilisés
-pour le calcul des interactions. \ref fortestonly
-
-\freediams offre la possiblité de mettre en commun les posologie standard que vous créez pour
-constituer une base de données complète. Il apparaît à ce stade indispensable qu'un comité scientifique se
-constitue pour vérifier et valider les posologies transmises au groupe. Nous cherchons actuellement des
-volontaires. Manifestez-vous sur notre mailing liste : freemedforms@googlegroups.com.
-
-\subsection dosagecreator_presentation Présentation du créateur de posologie
-
-\image html poso1.png Zones du créateur de posologies
-
-\image html poso2.png Particularités de la posologie
-
-\image html poso3.png Limitations
-
-\image html poso4.png note
-
-Le créateur de posologie se compose de cinq parties distinctes :
-- 1 : Rappel du médicament sélectionné, présentation des interactions potentiel (l'icône de gauche).\n
-    Vous pouvez accéder à plus d'informations concernant les médicaments en laissant la souris immobile sur
-    le nom du médicament (composition) ou sur l'cône d'interaction (liste les interactions).
-- 2 : La liste des posologies pré-enregistrées. En double-cliquant sur l'une d'elle, le visualisateur se met à jour.
-- 3 : Le libellé de la posologie standard
-- 4 : La posologie proprement dite avec :
-    - Les indications de prises
-    - Les indications de durée
-    - Les particularités : moment de la journée pour les prises, horaires (non fonctionnel), intervalle entre
-        les prises, relation de la prise avec les repas.
-    - Les limites de la prescription (non fonctionnel - en cours de développement) :
-        - Limites de diagnostic (codage CIM10, eDRC)
-        - Limites de terrain : poids, taille, surface corporelle, clairance de la créatinine...
-        - Limites pour les femmes enceintes et allaitantes
-        - Surveillance à programmer : biologie, clinique...
-    - Une note en texte libre
-    - Le caractère "DCI" de la prescription
-    - Le caratère "100%" de la prescription
-- 5 : Commandes de sauvegarde et/ou de prescription. Vous pouvez par exemple uniquement prescrire sans
-    sauvegarder la posologie en cours, sauvegarder seulement, ou faire les deux d'un clique.
-
-Ce créateur de posologie permet donc de créer des posologies standard et/ou de prescrire simplement.
-
-\subsection dosagecreator_presentation_prises Les indications de prises
-
-Les indications de prises comprennent :
-- un nombre de prise minimal
-- un monbre de prise maximal
-- la possibilité de prescrire un intervalle de prises (de x à y prises par jour)
-- le texte de la prise :
-    - par défaut : \e prise(s)
-    - une liste d'intitulés standards est proposé
-    - vous pouvez saisir n'importe quel texte, le texte alors saisi (s'il n'apparatient pas aux libellés standards
-      sera alors disponible en cliquant sur licône \e personnel situé à côté (cf image).
-
-
-\image html edit.png Icône représentant les libellés de l'utilisateur
-
-
-\subsection poso_std Réaliser des posologies standardisées
-
-Tout d'abord, il est nécessaire de renseigner un libellé à la posologie.\n
---> À faire : règle de libellisation des posologies.
-
-Vous devez renseigner :
-- les indications de prises (première page de la posologie (4)), selon le besoin,
-- les particularités de la posologies ainsi que les limites et modalités de surveillance.
-- le caractère DCI et ALD de la prescription (certaines thérapeutiques ne sont prescrites que le cadre
-    de pathologies en ALD).
-
-Ensuite, sauvegardez la posologie (et prescrivez selon).
-
-La posologie sera alors disponible à chaque ouverture du médicament ou d'un médicament "DCI-compatible".
-
-
-\subsection poso_exemple Exemple de posologie standardisée DCI
-
-\subsubsection ex1 Créer une posologie standardisée DCI
-
-Sélectionnez "AMLOR 5 mg" comme médicament.\n
-Renseignez la posologie standard suivante : "Hypertension artérielle - Mensuel" : 1 prise 1 jour durant 1 mois.\n
-Cliquez sur <b>En faire une prescription DCI</b>, le libellé DCI apparaît alors en dessous : "amlodipine 5 mg". Ce qui
-signifie que cette posologie sera accessible à tous les médicaments contenant comme seule DCI \e l'amlodipine
-à un dosage de 5 milligrammes.\n
-Vérifiez que l'icône DCI est présent devant le libellé de la posologie dans le cadre supérieur.\n
-Sauvegardez sans prescrire.\n
-
-\image html black_dci.png Icône DCI
-
-\image html prescription_ex1.png Posologie DCI - exemple
-
-\subsubsection ex2 Prescrire DCI sur la base la posologie créée
-
-Sélectionnez "AMLODIP*5*mg" comme médicament.\n
-Tous auront accès à la prescription nouvellement créée.
-
-\warning Il existe un bug avec la version 0.0.8. Pour certains de ces médicaments, la prescription DCI n'apparaît pas.
-Cela est lié au fait que le dosage de la DCI est "5,00 mg" et non "5 mg" (sans ",00"). Ce bug sera corrigé avec la
-version 0.1.0 et supra.
-
-\subsection prescription_to_dci Transformer une prescription en prescription DCI
-
-Tous les médicaments ne peuvent pas être prescrits en DCI. Les limitations viennent :
-- de la base de données elle-même (la DCI n'est pas connue pour toutes les molécules chimiques)
-- du médicament : seul les spécialités ne contenant qu'une seule DCI peuvent être prescrites en DCI.
-
-Double-cliquez sur le médicament prescrit dans la zone de prescription.\n
-Si le bouton "DCI" est cliquable, la spécialité peut être prescrite en DCI.\n
-Cliquez sur le bouton "DCI" qui se trouve à côté du nom du médicament puis validez.\n
-Vérifier le nom de la DCI qui se sera prescrit (elle remplace le nom de la spécialité).
-
-\image html prescription_dci.png Passage d'une prescription normale à DCI
-
-\subsection fortestonly Ajouter des médicaments dans l'ordonnance uniquement à des fins de tests
-
-\section prescrire_textuellement Prescrire textuellement
-
-De temps à autre, il est nécessaire de pouvoir ajouter une prescription en texte libre. \n
-\freediams gère les prescriptions dites "textuelles pures". \n
-Pour ce faire, cliquez sur le crayon dans la zone de recherche.
-\image html pencil.png Prescription Textuelle Pure
-
-Une fenêtre apparaît, il ne vous reste plus qu'à renseigner le nom du médicament et une note. Lorsque vous
-validez votre saisie l'icône "crayon" reste affiché en face des prescriptions textuelles pures.
-
-Les prochaines versions de \freediams vous permettront de sauvegarder ces prescriptions textuelles et de
-les récupérer rapidement. Ceci pour vous éviter de répéter la saisie.
-
+\~
 \ref index
 */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////  INFO PATIENT  //////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page lienpatient Utiliser les données du patient lors de l'analyse de la prescription
+/**
+\~
+\~french \page lienpatient Utiliser les données du patient lors de l'analyse de la prescription
+\~english \page lienpatient Using patient's datas when prescribing
 
+\~
 \ref info_patient
 
 \image html infos-patient.png Informations concernant le patient
 
-\section donneespatient Les données analysées lors de la prescription
+\~french \section donneespatient Les données analysées lors de la prescription
+\~english \section donneespatient Patient's datas anayzed while prescribing
 
+\~french
 \freediams permet lors de la phase de prescription de vérifier l'adéquation
 médicament / patient de façon totalement automatique.\n
 Les données patients doivent être renseignés avant la prescription. Vous pouvez les vérifier en cliquant
@@ -623,6 +563,15 @@ sur le "+" qui se trouve à côté de la ligne de saisie du nom patient.\n
 
 Cette fonctionnalité n'est pas encore disponible.
 
+\~english
+\freediams allows you, during the prescription phase, to verify the adequacy between
+the drug and the patient automatically. \n
+The patient's data must be completed before prescribing. You can check this by clicking
+on the "+" located next to the entry line named patient. \n
+
+This feature is not yet available.
+
+\~
 \ref index
 */
 
@@ -630,7 +579,9 @@ Cette fonctionnalité n'est pas encore disponible.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PARAMETRER  L'APPLICATION  ////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page parametrer Paramétrer l'application
+/**
+\~
+\page parametrer Paramétrer l'application
 
 \section available_param Paramètres disponibles
 
@@ -748,35 +699,50 @@ Vous pouvez consulter aussi consulter :
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////  AUTEURS ET CONTRIBUTEURS  ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page auteurs Auteurs et contributeurs
+/**
+\~french \page auteurs Auteurs et contributeurs
+\~english  \page auteurs Authors and contributors
 
-- <b>Créateur et principal développeur :</b>
+\~french - <b>Créateur et principal développeur :</b>
+\~english - <b>Creator and main developper:</b>
+\~
     - Éric Maeker, MD <eric.maeker@free.fr>.
 
-- <b>Contributeurs :</b>
+\~french - <b>Contributeurs :</b>
+\~english - <b>Contributors :</b>
+\~
     - Guillaume Denry : codeur, déboggueur, conseiller informatique
     - Sébastien Belin, MD : junior codeur, conseiller médical
     - Laurent Masson, MD : conseiller médical
     - Jim Busser : conseiller médical
 
-- <b>Aides et conseillers :</b>
+\~french - <b>Aides et conseillers :</b>
+\~english - <b>Helpers and advisors:</b>
+\~
     -  Filipe Azevedo : aide au déboggueur, conseiller informatique.
     -  David Geldreich : conseiller informatique,
     -  Jourdan Romain : aide au codage du moteur d'impression
 
-- <b>Testeurs :</b>
+\~french - <b>Testeurs :</b>
+\~english - <b>Testers :</b>
+\~
     - Plusieurs testeurs anonymes pour la plupart.
 
-- <b>Packageurs :</b>
+\~french - <b>Packageurs :</b>
+\~english - <b>Packagers :</b>
+\~
     - Eric Maeker, MD : Debian, Ubuntu, MacOs, FreeBSD (en cours), Windows
     - Sascha Manns : OpenSuse
     - Debian Med Team : Debian
 
-- <b>Traducteur :</b>
+\~french - <b>Traducteur :</b>
+\~english - <b>Translators :</b>\~
     - Éric Maeker, MD (english, french)
     - Sascha Manns (deutsch)
 
-- <b>Maître toile : </b>
+\~french - <b>Maître toile : </b>
+\~english - <b>WebMaster : </b>
+\~
     - Vincent Perez, MD
 
 - <b>Mailing liste publique :</b>
@@ -788,15 +754,23 @@ Vous pouvez consulter aussi consulter :
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page rechercher Méthodes de recherche des médicaments
+/**
+\~french \page rechercher Méthodes de recherche des médicaments
+\~english \page rechercher Drugs search method
 
+\~french
 La recherche des médicaments se fait dans la partie supérieure de l'interface. Pour plus d'informations voir :
+\~english
+The drugs search is located in the upper area of the interface. For more informations please refer to :
+\~
 \ref presentation .
 
 \image html mode-recherche.png Sélection de la méthode de recherche des médicaments
 
-\section methode_recherche Sélection de la méthode de recherche
+\~french \section methode_recherche Sélection de la méthode de recherche
+\~english \section methode_recherche Selecting the search method
 
+\~french
 Vous pouvez effectuer vos recherche :
 \li sur le nom commercial des médicaments,
 \li sur leur contenu chimique (molécules)
@@ -811,7 +785,24 @@ Cette zone affiche les DCI correspondantes à votre recherche.\n
 
 Quelquesoit la méthode de recherche, la liste des médicaments est mise à jour en temps réel.\n
 
-\subsection caracteres_speciaux_de_recherche Caractères spéciaux de recherche
+\~english
+You can conduct your search:
+\li on brand name of the drugs,
+\li on their chemical content (molecules)
+\li or the INN (International Nonproprietary Names). \n
+
+To change the search method, click the button
+left of the research's entry field and select the method of your choice.
+The icon button always remembers you the selected method. \n
+At each restart of the application, the search method will automatically select the last used. \n
+When you select Search by INN an additional view appears on the left of the drugs.
+This area displays the matching INN of your search.\n
+
+Whatever method of research, the drug list is updated in real time. \n
+
+
+\~french \subsection caracteres_speciaux_de_recherche Caractères spéciaux de recherche
+\~english \subsection caracteres_speciaux_de_recherche Wildcards
 
 Le caractère '\%' ou '*' permet de remplacer à n'importe quel endroit de votre saisie un nombre indéfini de lettres
 ou de chiffres.\n
@@ -822,21 +813,39 @@ présent sur le I dans la forme LP. Ainsi la recherche 'FLECAI' ne présente que
 \li 'AMOX*comprim' fera apparaître toutes les spécialités nommées AMOX.... en forme comprimé.
 \li 'AMOX*sach' fera apparaître toutes les spécialités nommées AMOX.... en forme sachet.
 
-\subsection historique_recherches L'historiques des recherches
+\~english
+The character '\%' or '*' can replace, anywhere, any number of letters or figures. \n
+For example:
+\li 'FLEC*NE' will show the complete list of drug flecainide.
+\li '*AMOX*tab' will show all specialties named AMOX .... in tablet form.
+\li '*AMOX*po*' will show all specialties named AMOX .... shaped pouch.
 
+\~french \subsection historique_recherches L'historiques des recherches
+\~english \subsection historique_recherches Research historic
+
+\~french
 Vous pouvez à tout moment accéder à l'historique de vos dernières recherches en cliquant sur le bouton situé
 à droite de la zone de saisie de recherche.\n
 Le nombre de médicaments mémorisés dans cet historique est paramétrable. Référez-vous à la section \link parametrer Paramétrage\endlink.
 
 \image html historique.png Historique des recherches
+\~english
+You can always access the history of your recent search by clicking on the button
+right of the input area of research. \n
+The number of drugs stored in this history is configurable. Refer to section \link parametrer Settings \endlink.
+
+\~
 
 \ref index
 */
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page participer Participer à \freediams
+/**
+\~french \page participer Participer à \freediams
+\~english \page participer Participer à \freediams
 
+\~french
 \freediams est un projet qui se veut communautaire. Plusieurs personnes ont
 déjà participé activement à l'élaboration de ce logiciel.
 
@@ -858,20 +867,57 @@ Plusieurs "postes" sont à pourvoir :
 - Conseillers : médecins, pharmaciens, informaticiens
 - Ou simplement donnez votre avis sur le logiciel.
 
-\section redacteur_aide Rédacteur d'aide
+\~english
+\freediams is a project that seeks community. Several people are
+already actively involved in developing this software.
 
+<b>We are looking for volunteers !!!</b>
+
+Fact whatever your expertise, your help can be useful. We must first accept
+to work under the new BSD license and without compensation.
+
+If you want to participate in this project, please subscribe and present yourself to our mailing list:
+\htmlonly <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com </a>. \endhtmlonly
+\latexonly freemedforms@googlegroups.com \endlatexonly
+
+Several works are to be filled:
+- Help and tutorials writters
+- Application Testers
+- Interactions database testers (only doctors)
+- Standard dosages writters (only doctors)
+- Encoders / Developers
+- Consultants: doctors, pharmacists, computer
+- Or simply give your opinion on the software.
+
+
+\~french \section redacteur_aide Rédacteur d'aide
+\~english \section redacteur_aide Help and tutorial writters
+
+\~french
 Nécessite des connaissances minimales (une dizaines de mots clés) de doxygen.\n
 Rédaction du manuel de l'utilisation, ou relecture / corrections.\n
 Ajout ou création de captures d'écrans pour illustrer la documentation.\n
 
-\section testeurs_application Testeurs d'application
+\~english
+Requires minimal knowledge (a dozen key words) of doxygen. \n
+Writing the user's manual or proofreading / corrections. \n
+Adding or creating screenshots to illustrate the documentation. \n
 
+\~french \section testeurs_application Testeurs d'application
+\~english \section testeurs_application Testers
+
+\~french
 Nécessite du temps ! Aucune connaissance particulière ormis écrire en français ou en anglais.\n
-Tests des versions bétâset signalement des erreurs, dysfonctionnement ou corrections à faire.\n
+Tests des versions bétâs et signalement des erreurs, dysfonctionnement ou corrections à faire.\n
 
-\section testeurs_interactions Testeurs des interactions
+\~english
+Takes time! No special requirements, you should write in French or English. \n
+Test versions betas and reporting errors, malfunctions or corrections. \n
 
-Necessite du temps et des connaissances médicales.\n
+\~french \section testeurs_interactions Testeurs des interactions
+\~english \section testeurs_interactions Drugs interactions testers
+
+Nécessite du temps et des connaissances médicales.\n
 L'objectif est de tester au fur et à mesure de vos prescriptions l'exactitude des données d'interactions
 fournie par ce logiciel. Pour ce faire, vous devez télécharger le thésaurus des interactions de l'AFSSAPS,
 réaliser des prescriptions et vérifier dans le thésaurus l'exactitude des informations présentées par le
@@ -882,11 +928,26 @@ Lien vers le thésaurus des interactions de l'AFSSAPS</a> \endhtmlonly
 
 Le retours de tests doivent seront regroupés et envoyés par mail sur la mailing liste.
 
+\~english
+Requires time and medical knowledge. \n
+The objective is to test the interactions data
+provided by this software. To do this, you must download the french thesaurus of interactions rom the AFSSAPS website,
+make prescriptions and check the thesaurus in the accuracy of information submitted by the
+software. \n
+\htmlonly <a href="http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0">
+Link to the thesaurus interactions AFSSAPS </a> \endhtmlonly
+\latexonly link thesaurus interactions AFSSAPS: http://www.afssaps.fr/Dossiers-thematiques/Interactions-medicamenteuses/Interactions-medicamenteuses/(offset)/0 \endlatexonly
 
-\section redacteurs_poso Rédacteurs de posologies standard
-\todo
+The test must be assembled and sent by mail to the mailing list.
 
-\section coders Codeurs/Développeurs
+/~french \section redacteurs_poso Rédacteurs de posologies standard
+/~english \section redacteurs_poso Standard dosages writters (only doctors)
+
+\~
+Please write to our mailing list.
+
+\~french \section coders Codeurs/Développeurs
+\~english \section coders Coders/Developpers
 
 \freediams fait parti d'un projet plus ambicieux : FreeMedForms.\n
 Les codeurs devront se référer aux règles de codage de cette suite, connaître les bases de la programmation
@@ -898,18 +959,23 @@ Il est possible de travailler :
 
 Avant toutes choses, il convient de vous présenter sur notre mailing liste.
 
-\section advisors Conseillers : médecins, pharmaciens, informaticiens
+\~english
 
+\freediams is part of a larger project: FreeMedForms. \n
+Coders should refer to the coding rules of this series, learn the basics of programming
+C + + / Qt4.5 and / or bash and / or php and / or SQLite. \n
+You can work:
+\li on improving existing code
+\li on creating plugins for the following FreeMedForms (documentation available)
+\li on adding new features to the existing
 
+Above all, it should show you on our mailing list.
 
-\ref index
-*/
+\~french \section advisors Conseillers : médecins, pharmaciens, informaticiens
+\~english \section advisors Advisors : doctors, pharmacists, computer workers
 
-/**
-\~french \page multiple_drugs_databases Utiliser plusieurs base de données thérapeutiques
-\~english \page multiple_drugs_databases Using multiple drugs databases
-
-
+\~
+Please write to our mailing list.
 
 \ref index
 */

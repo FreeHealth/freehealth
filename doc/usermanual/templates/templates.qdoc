@@ -2,24 +2,27 @@
 \~french \page templates Utilisation des modèles de documents
 \~english \page templates Usage of document templates
 
+\~
 \section templates_index Index
 
-\ref templates_general
-\ref templates_creation
-\ref templates_utilisation
-\ref templates_quicklyprinting
-\ref templates_moving
-\ref templates_modification
-\ref templates_contentviewing
-\ref templates_preferences
+\li \ref templates_general
+\li \ref templates_creation
+\li \ref templates_utilisation
+\li \ref templates_quicklyprinting
+\li \ref templates_moving
+\li \ref templates_modification
+\li \ref templates_contentviewing
+\li \ref templates_preferences
 
-\section templates_general Les modèles
+\~french \section templates_general Les modèles
+\~english \section templates_general Les modèles
 
+\~french
 Les applicatifs de FreeMedForms mettent à votre disposition un gestionnaire de modèles de documents.
-Ces modèles peuvent êetre hiérarchisés et stockés dans une base de données. \n
+Ces modèles peuvent être hiérarchisés et stockés dans une base de données personnelle. \n
 L'exemple de \freediams permet de mieux comprendre leur utilité.
 Vous pouvez par exemple créer des catégories et y ajouter des  prescriptions
-types " complète (comprenant plusieurs médicaments).
+types complètes (comprenant plusieurs médicaments).
 
 \image html templates_presentation.png Présentation du gestionnaire de modèles dans \freediams
 
@@ -36,9 +39,34 @@ les plugins adéquats, mais l'utilisateur ne peut plus déplacer les catégories
 gestionnaire, ni les supprimer ou les modifier. Utiliser le vérouillage lorsque l'édition des modèles est
 terminée afin d'assurer un meilleur fonctionnement du gestionnaire.
 
+\~english
+The applications of FreeMedForms comes with a templates manager.
+These models can be prioritized and stored in a personnal database. \n
+The example of \freediams shows their usefulness.
+For example you can create categories and add protocolized prescriptions (including multiple medications).
 
-\section templates_creation Création de modèles
+\image html templates_presentation.png Templates manager in \freediams
 
+The template manager is accessible from the menu <b>Templates/Templates</b>. The manager appears
+then. You can move the manager right, left or outside the application window.
+
+You can lock the manager with the 'lock' icon on the bottom bar manager.
+
+\image html lock.png Manager is locked - Click to unlock
+\image html unlock.png Manager is unlocked - click to lock
+
+When the manager is locked, the user can get templates and move them to
+the adequate plugins, but the user can not move categories / templates within the
+manager, or delete or modify. Use locking when editing templates is
+completed to ensure a better functioning of the manager.
+
+
+
+
+\~french \section templates_creation Création de modèles
+\~english \section templates_creation Creating templates
+
+\~french
 Chaque plugin permettant l'utilisation de modèles possède une action "Créer un modèle".
 \image html templates.png Créer un modèle
 
@@ -50,57 +78,124 @@ et le résumé.
 
 \image html templates_creation.png Création d'un modèle dans \freediams
 
+\~english
+Each plugin allowing the use of templates has an action "Create Template".
+\image html templates.png Create a template
 
-\section templates_quicklyprinting Impression rapide avec les modèles
+You must first create the document in the plugin and then ask him to create a new template
+clicking this icon. In the example of \freediams, enter a full prescription then click
+the icon. \n
+A dialog appears. Fill the template's name, the category in which it will be stored,
+and its abstract.
 
+\image html templates_creation.png Creating a template in \ freediams
+
+
+
+
+\~french \section templates_quicklyprinting Impression rapide avec les modèles
+\~english \section templates_quicklyprinting Templates quick printing
+
+\~french
 Vous pouvez lorsque cela est possible directement imprimer le contenu de plusieurs modèles en même temps. \n
 Chaque plugin propose ses propres options d'impression. Par exemple, \freediams propose lorsque vous sélectionnez
-plusieurs modèles pour l'impression, de les imprimer soit ensemble dans un mêeme document soit séparement.
+plusieurs modèles pour l'impression, de les imprimer soit ensemble dans un même document soit séparement.
 
-Pour cela, sélectionnez les modèles à imprimer (la touche Ctrl vous permet de sélectionner plusieurs modèles) et
+Pour cela, sélectionnez les modèles à imprimer (la touche Ctrl+clique-gauche vous permet de sélectionner plusieurs modèles) et
 cliquez sur l'icône imprimer du gestionnaire de modèles ou sélectionnez imprimer dans le menu clique-droit.
 
+\~english
+You can, where possible, directly print the contents of several templates simultaneously. \n
+Each plugin has its own printing options. For example, \freediams offers when you select
+several templates to print, the print is set in a unique document or separately.
+
+To do this, select the print models (the Ctrl+left-click key lets you select several templates) and
+click the templates manager print icon or select Print from the contextual menu.
 
 
-\section templates_utilisation Utilisation des modèles
 
+
+\~french \section templates_utilisation Utilisation des modèles
+\~english \section templates_utilisation Utilisation des modèles
+
+\~french
 Pour activer un modèle dans un plugin, attrapez avec la souris le (ou les) modèle(s) souhaité(s)
 et déposez les dans le fenêtre du plugin. Dans l'exemple de \freediams, déposez les modèles
 dans la vue de la prescription.
 
-\subsection templates_moving Déplacer les modèles / catégories
+\~english
+To activate a template in a plugin, grab with the mouse the wanted templates
+and drop them in the plugin window. In the example of \freediams, drop templates
+in view of the prescription.
 
+\~french \subsection templates_moving Déplacer les modèles / catégories
+\~english \subsection templates_moving Moving templates and categories
+
+\~french
 Vous pouvez modifier votre hiérarchie grâce à la technique du glisser-déposer (drag and drop)
  en déplaçant les modèles ou catégories. Pour ce faire, attrapez
 avec la souris l'item à déplacer, sans relâcher la souris déplacer l'item jusqu'à l'endroit souhaité, puis
 relâcher le bouton de la souris.
-glisser-déposer (drag and drop)
 
 Vous pouvez déplacer tout un tronçon de l'arborescence ou un item à la fois.
 
+\~english
+You can change your hierarchy of categories using the technique of drag and drop
+moving templates and/or categories. To do this, grab
+with the mouse the item to move, without releasing the mouse move the item to the desired point, then
+release the mouse button.
+
+You can move an entire section of the tree or an item at a time.
 
 
-\section templates_modification Éditer les modèles
 
+
+\~french \section templates_modification Éditer les modèles
+\~english \section templates_modification Éditing templates
+
+\~french
 Sélectionnez le modèle ou la catégorie à modifier, cliquez droit ou cliquez sur l'icône d'édition.
 Le dialogue est semblable à celui de la création.
 
+\~english
+Select the template or category to modify, right-click or click the edit icon.
+The dialogue is similar to that of creation.
 
 
-\section templates_contentviewing Visualiser le contenu du modèle
 
+
+\~french \section templates_contentviewing Visualiser le contenu du modèle
+\~english \section templates_contentviewing Viewing templates content
+
+\~french
+Le contenu est différent du résumé. Le contenu représente l'information que le plugin va utiliser
+pour reconstruire le document sauvegardé dans le modèle.
 Vous pouvez visualiser le contenu du modèle mais pas le modifier à la main.\n
 Sélectionnez l'item, clique-droit puis Éditer enfin cliquez sur le bouton : 'Voir le contenu'.
 
+\~english
+The content is different from the abstract. The content represents informations that the plugin will use
+to reconstruct the document stored in the template.
+You can view the contents of the template but not edit it by hand. \n
+Select the item, right-click Edit and then finally click on 'View Content'.
 
 
-\section templates_preferences Les préférences du gestionnaire de modèles
+\~french \section templates_preferences Les préférences du gestionnaire de modèles
+\~english \section templates_preferences Templates manager preferences
 
+\~french
 Le gestionnaire de modèles possède ses propres préférences. \n
-Ouvrez le dialogue préférences de l'application, pusi sélectionnez <b>Modèles</b>.
+Ouvrez le dialogue préférences de l'application, puis sélectionnez <b>Modèles</b>.
 
 \image html templates_preferences.png Préférences du gestionnaire de modèles
 
+\~english
+The templates manager uses its own preferences.\n
+Open the Preferences dialog and select <b>Templates</b>.
+
+\image html templates_preferences.png Templates manager preferences
+
+\~
 \ref index
 */
 

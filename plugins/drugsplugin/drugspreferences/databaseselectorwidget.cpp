@@ -81,7 +81,7 @@ DrugsDatabaseSelectorPage::~DrugsDatabaseSelectorPage()
 }
 
 QString DrugsDatabaseSelectorPage::id() const { return objectName(); }
-QString DrugsDatabaseSelectorPage::name() const { return tr("Databases selector"); }
+QString DrugsDatabaseSelectorPage::name() const { return tr("Database selector"); }
 QString DrugsDatabaseSelectorPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 
 void DrugsDatabaseSelectorPage::resetToDefaults()
@@ -151,6 +151,9 @@ DatabaseSelectorWidget::DatabaseSelectorWidget(QWidget *parent) :
 {
     d = new Internal::DatabaseSelectorWidgetPrivate;
     d->m_SelectedDatabaseFileName = settings()->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString();
+    if (d->m_SelectedDatabaseFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
+        d->m_SelectedDatabaseFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+    }
 
     ui->setupUi(this);
     ui->pathView->hide();
@@ -191,12 +194,10 @@ void DatabaseSelectorWidget::setDatasToUi()
     foreach(DrugsDB::DatabaseInfos *info, d->m_Infos) {
         ui->databaseList->addItem(info->translatedName());
         if (info->fileName == actual->fileName) {
-            /** \todo this does not work */
             ui->databaseList->setCurrentRow(row, QItemSelectionModel::Select);
         }
         ++row;
     }
-    ui->databaseList->setCurrentRow(0);
 }
 
 void DatabaseSelectorWidget::getAllAvailableDatabases()
@@ -231,7 +232,7 @@ void DatabaseSelectorWidget::addPath()
     int row = d->m_PathModel->rowCount();
     d->m_PathModel->insertRow(row);
     d->m_PathModel->setData(d->m_PathModel->index(row,0), dir);
-    // UPDATE AVAIALBLE DATABASES
+    setDatasToUi();
 }
 
 void DatabaseSelectorWidget::removePath()
@@ -239,6 +240,7 @@ void DatabaseSelectorWidget::removePath()
     if (!ui->pathView->selectionModel()->hasSelection())
         return;
     d->m_PathModel->removeRow(ui->pathView->selectionModel()->currentIndex().row());
+    setDatasToUi();
 }
 
 void DatabaseSelectorWidget::tooglePaths()
@@ -256,7 +258,7 @@ void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
     if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != QString(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)) {
         Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database that the actual selected one. "
+                                 tr("You have selected a different drugs database than the currently-opened on. "
                                     "You need to restart the application."),
                                  "", tr("Drugs database selection"));
     }
@@ -272,7 +274,7 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     }
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, d->m_PathModel->stringList());
 
-    /** \todo manage drugsdatabases form the applicationResourcePath */
+    /** \todo manage drugsdatabases from the applicationResourcePath --> replace path with a specific TAG. */
 
     // 0. if selected DB is the default one --> change selected to RESOURCE_TAG
     QString tmp = d->m_SelectedDatabaseFileName;
@@ -280,14 +282,19 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     if (tmp == defaultDbFileName)
         tmp = DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT;
 
-    // 1. check if user changes the database
+    // 1. manage application resource path
+    if (tmp.startsWith(settings()->path(Core::ISettings::ReadOnlyDatabasesPath))) {
+        tmp.replace(settings()->path(Core::ISettings::ReadOnlyDatabasesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
+    }
+
+    // 2. check if user changes the database
     if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != tmp) {
         Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database that the actual selected one. "
+                                 tr("You have selected a different drugs database than the currently-opened on. "
                                     "You need to restart the application."),
                                  "", tr("Drugs database selection"));
     }
-    // 2. save the value
+    // 3. save the value
     set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, tmp);
 }
 

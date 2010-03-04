@@ -56,7 +56,9 @@ QMAKE_EXTRA_TARGETS += fr_html_docs
 OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/versionning.qdoc \
                $${PWD}/usermanual/drugswidget/drugswidget.qdoc \
+               $${PWD}/usermanual/drugswidget/drugsprescribe.qdoc \
                $${PWD}/usermanual/drugswidget/drugsdatabaseschema.qdoc \
+               $${PWD}/usermanual/drugswidget/multipledrugsdatabase.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/templates/templates.qdoc \
