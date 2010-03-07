@@ -157,15 +157,18 @@ void DrugSelector::createDrugModelView()
 {
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
-    m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
+    if (!m_DrugsModel)
+        m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
     // managing model fields
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_LINK_SPC , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_MARKET , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_AUTHORIZATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_TYPE_MP , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ATC , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ROUTE , 1);
-    m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_FORM , 1);
+    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool())
+        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ROUTE , 1);
+    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool())
+        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_FORM , 1);
     // create the view
     drugsView->setModel(m_DrugsModel);
     //      drugsView->sortByColumn(1 , Qt::AscendingOrder);  // NOT SUPPORTED BY WIN32 CROSS-COMPILATION !!!!

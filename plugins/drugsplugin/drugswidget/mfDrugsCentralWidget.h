@@ -80,9 +80,14 @@ class DRUGS_EXPORT DrugsCentralWidget : public QWidget
     friend class DrugsWidget::Internal::DrugsActionHandler;
 
 public:
+    enum Modes {
+        Prescriber = 0,
+        SelectOnly
+    };
+
     DrugsCentralWidget(QWidget *parent = 0);
     bool initialize();
-    void enterSelectionOnlyMode();
+    void setMode(Modes mode);
 
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;

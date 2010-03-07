@@ -1,19 +1,36 @@
 /**
-\~french \page drugsdatabaseschema Schéma de la base de données de \freediams
-\~english \page drugsdatabaseschema Database schema of \freediams
+\~french \page drugsdatabaseschema Schéma de la base de données thérapeutique de \freediams
+\~english \page drugsdatabaseschema Drugs database schema of \freediams
 
 \~french
 Cette section est essentiellement rédigée pour les développeurs. \freediams est programmé pour gérer plusieurs
 bases de données thérapeutiques. Pour ajouter une source de données, il vous suffit de créer une base de
-données répondant aux critères ci-dessous décrits.
+données répondant aux critères ci-dessous décrits sous SQLite.
 
 \~english
 This section is written primarily for developers. \freediams is programmed to manage multiple
 therapeutic databases. To add a data source, you just need to create a database
-data meeting the criteria described below.
+data meeting the criteria described below with SQLite.
 
 \~french \section drugsdb La base de données thérapeutiques
 \~english \section drugsdb Drugs database
+
+\~french \section drugsdbname Nom de fichier pour la base de données thérapeutiques
+\~english \section drugsdbname Name of the Drugs database file
+
+\~french
+Toutes les bases de données thérapeutiques doivent utiliser le schéma suivant pour leur nom de fichier :
+- Pas de suffixe préfixé
+- Nom de fichier 'drugs' interdit
+- Extension obligatoire : db
+- Exemple : <em>drugs-france.db</em>
+
+\~english
+All drugs databases must use the above schema for their filename:
+- No specific suffixe
+- 'drugs' filename forbidden
+- Mandatory extension : db
+- Example : <em>drugs-usa.db</em>
 
 \~french \subsection drugsdb_tables Les tables de la base de données
 \~english \subsection drugsdb_tables Tables of the database
@@ -39,14 +56,14 @@ Jusqu'à présent, \freediams ne prend pas en compte la table PACKAGING qui peut
 
 \~french
 Schéma :
-- UID : Identifiant unique des médicaments : CIS en France
+- UID : Identifiant unique des médicaments : le CIS en France (AFSSAPS)
 - NAME : nom commercial du médicament
 - FORM : forme du médicament (gélule, comprimé, gél...)
 - ROUTE : voie d'administration
 - ATC : code ATC du médicament
 - TYPE_MP (optionnel) : type d'AMM , schedule in CA
 - AUTHORIZATION (optionnal) : type d'autorisation d'AMM
-- MARKETED : Booléen :: Oui = 1 ; Non = 0
+- MARKETED : commercialisé : Booléen :: Oui = 1 ; Non = 0
 - LINK_SPC (optionnel) : lien internet vers le RPC
 
 \~english

@@ -143,7 +143,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
-    pmenu->appendGroup(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
     pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
     pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
     pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
@@ -221,8 +221,16 @@ void MainWindow::extensionsInitialized()
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
     // SelectionOnly ?
-    if (commandLine()->value(Core::CommandLine::CL_SelectionOnly).toBool())
-        enterSelectionOnlyMode();
+    if (commandLine()->value(Core::CommandLine::CL_SelectionOnly).toBool()) {
+        // Log mode
+        Utils::Log::addMessage(this, tr("Entering selection mode"));
+        // Unable some actions in menus
+    //    aPrint->setEnabled(false);
+    //    aPrintPreview->setEnabled(false);
+        /** \todo Change the window title */
+        // Inform the widgets
+        m_ui->m_CentralWidget->setMode(DrugsWidget::DrugsCentralWidget::SelectOnly);
+    }
 
     // If needed read exchange file
     const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
@@ -273,18 +281,6 @@ void MainWindow::extensionsInitialized()
     createDockWindows();
     finishSplash(this);
     show();
-}
-
-void MainWindow::enterSelectionOnlyMode()
-{
-    // Log mode
-    Utils::Log::addMessage(this, tr("Entering selection mode"));
-    // Unable some actions in menus
-//    aPrint->setEnabled(false);
-    aPrintPreview->setEnabled(false);
-    /** \todo Change the window title */
-    // Inform the widgets
-    DrugsWidget::DrugsWidgetManager::instance()->enterSelectionOnlyMode();
 }
 
 MainWindow::~MainWindow()

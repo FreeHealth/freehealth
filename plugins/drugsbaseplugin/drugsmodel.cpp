@@ -707,6 +707,7 @@ bool DrugsModel::testingDrugsAreVisible() const
 void DrugsModel::setSelectionOnlyMode(bool b)
 {
     d->m_SelectionOnlyMode = b;
+    reset();
 }
 
 /** \brief Returns the dosage model for the selected drug */

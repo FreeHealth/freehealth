@@ -105,7 +105,6 @@ bool DrugsCentralWidget::initialize()
     m_CurrentDrugModel = new DrugsDB::DrugsModel(this);
     m_ui->m_PrescriptionView->initialize();
     m_ui->m_PrescriptionView->setModel(m_CurrentDrugModel);
-    m_ui->m_PrescriptionView->setModelColumn(DrugsDB::Constants::Drug::FullPrescription);
 
     m_ui->m_DrugSelector->initialize();
 
@@ -143,10 +142,34 @@ void DrugsCentralWidget::setCurrentSearchMethod(int method)
     m_ui->m_DrugSelector->setSearchMethod(method);
 }
 
-void DrugsCentralWidget::enterSelectionOnlyMode()
+void DrugsCentralWidget::setMode(Modes mode)
 {
-    m_SelectionOnlyMode = true;
-    m_CurrentDrugModel->setSelectionOnlyMode(true);
+    // no change
+    if (mode==SelectOnly && m_SelectionOnlyMode)
+        return;
+    if (mode==Prescriber && !m_SelectionOnlyMode)
+        return;
+    // ask user
+    if (m_CurrentDrugModel->rowCount() > 0) {
+        bool yes;
+        yes = Utils::yesNoMessageBox(tr("Prescription is not empty. Clear it ?"),
+                                     tr("You select another editing mode than the actual one. "
+                                        "Changing of mode during edition may cause prescription lose.\n"
+                                        "Do you really want to change the editing mode ?"));
+        if (yes) {
+           m_CurrentDrugModel->clearDrugsList();
+       } else {
+           return;
+       }
+    }
+    // change the mode
+    if (mode == SelectOnly) {
+        m_SelectionOnlyMode = true;
+        m_CurrentDrugModel->setSelectionOnlyMode(true);
+    } else {
+        m_SelectionOnlyMode = false;
+        m_CurrentDrugModel->setSelectionOnlyMode(false);
+    }
 }
 
 void DrugsCentralWidget::createConnections()

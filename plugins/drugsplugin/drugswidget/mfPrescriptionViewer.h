@@ -53,9 +53,8 @@
 /**
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.2
- * \date 29 Nov 2009
- * \brief
+ * \version 0.4.0
+ * \date 06 Mar 2010
 */
 
 namespace DrugsDB {
@@ -78,7 +77,6 @@ public:
     void initialize();
     QListView *listview();
     void setModel(DrugsDB::DrugsModel *model);
-    void setModelColumn(const int col);
     void setListViewPadding(const int pad);
 
 Q_SIGNALS:

@@ -56,21 +56,33 @@ namespace Constants {
     const char * const  DRUGCONSTANTS_TR_CONTEXT = "mfDrugsConstants";
     const char * const  M_PLUGINS_DRUGS         =  "DrugsPlugins.menuDrugs";
     const char * const  M_PLUGINS_SEARCH        =  "DrugsPlugins.menuSearch";
+    const char * const  M_PLUGINS_MODES         =  "DrugsPlugins.menuModes";
+
     const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.groupDrugs";
     const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.groupSearch";
+    const char * const  G_PLUGINS_MODES         =  "DrugsPlugins.groupModes";
+
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
+
     const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
     const char* const   A_SEARCH_MOLECULES      = "a.DrugsPlug.SearchMol";
     const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
     const char* const   A_PRINT_PRESCRIPTION    = "a.DrugsPlug.PrintPrescr";
     const char* const   A_TOOGLE_TESTINGDRUGS   = "a.DrugsPlug.ToogleTestings";
     const char* const   A_DATABASE_INFORMATIONS = "a.DrugsPlug.DbInfos";
+    const char* const   A_PRESCRIBERMODE        = "a.DrugsPlug.PrescriberMode";
+    const char* const   A_SELECTONLYMODE        = "a.DrugsPlug.SelectOnlyMode";
+
+
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search method");
     const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");
     const char* const   SEARCHINN_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by INN");
     const char* const   SEARCHMOLECULES_TEXT    = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by molecules");
+    const char* const   MODEMENU_TEXT           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Edition modes");
+    const char* const   PRESCRIBERMODE_TEXT     = QT_TRANSLATE_NOOP("mfDrugsConstants", "Full prescriber");
+    const char* const   SELECTONLYMODE_TEXT     = QT_TRANSLATE_NOOP("mfDrugsConstants", "Select only");
     const char* const   PRINTPRESCRIPTION_TEXT  = QT_TRANSLATE_NOOP("mfDrugsConstants", "Print prescription");
     const char* const   TOOGLETESTINGDRUGS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toogle testing drugs");
 

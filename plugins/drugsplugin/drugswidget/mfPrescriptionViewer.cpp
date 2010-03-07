@@ -101,13 +101,7 @@ void PrescriptionViewer::setModel(DrugsDB::DrugsModel *model)
 {
     Q_ASSERT_X(model, "PrescriptionViewer::setModel", "Model must be correctly setted");
     listView->setModel(model);
-}
-
-/** \brief Defines the model's column to use. */
-void PrescriptionViewer::setModelColumn(const int col)
-{
-    Q_ASSERT_X(static_cast<DrugsDB::DrugsModel*>(listView->model()), "PrescriptionViewer::setModelColumn", "model is not a mfDrugsModel*");
-    listView->setModelColumn(col);
+    listView->setModelColumn(DrugsDB::Constants::Drug::FullPrescription);
 }
 
 void PrescriptionViewer::setListViewPadding(const int pad)
@@ -165,6 +159,7 @@ void PrescriptionViewer::createActionsAndToolbar()
         m_ToolBar->addAction(cmd->action());
         m_ToolBar->addSeparator();
     }
+
     m_ToolBar->setFocusPolicy(Qt::ClickFocus);
 }
 

@@ -131,6 +131,11 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                 }
             }
         }
+    } else if (role == Qt::ToolTipRole) {
+        QString tmp = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_NAME)).toString() + "\n";
+        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "\n";
+        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString();
+        return tmp;
     }
     return QSqlTableModel::data(item,role);
 }

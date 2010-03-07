@@ -54,6 +54,7 @@
 
 namespace DrugsWidget {
 class DrugsViewOptionsPage;
+class DrugsSelectorOptionsPage;
 class DrugsPrintOptionsPage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
@@ -80,6 +81,7 @@ public slots:
 
 private:
     DrugsWidget::DrugsViewOptionsPage *viewPage;
+    DrugsWidget::DrugsSelectorOptionsPage *selectorPage;
     DrugsWidget::DrugsPrintOptionsPage *printPage;
     DrugsWidget::DrugsUserOptionsPage *userPage;
     DrugsWidget::DrugsExtraOptionsPage *extraPage;

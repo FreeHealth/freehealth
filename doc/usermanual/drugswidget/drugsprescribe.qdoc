@@ -57,9 +57,9 @@ These standardized dosages are:
 \li for a whole INN's class (with the same strength - Clamoxyl 1g <-> AMOXICILLIN 1g).
 
 These standardized dosages permit:
-\ li to speed up the process of prescribing,
-\ li to automate tests (age, weight, height, creatinine clearance, limits ICD10 ...)
-\ li to create INN's prescriptions
+\li to speed up the process of prescribing,
+\li to automate tests (age, weight, height, creatinine clearance, limits ICD10 ...)
+\li to create INN's prescriptions
 
 It is also possible to add drugs in the order just for testing purposes. These drugs
 will not be notified when printing the prescription (this is useful to test treatment
@@ -232,11 +232,11 @@ Click on <b>Transform to INN prescription</b>, the INN wording appears below: am
 means that the dosage will be accessible to all drugs containing only as INN \e amlodipine
 at a dosage of 5 milligrams. \n
 Verify that the icon INN is now before the label of the dosagee in the top frame. \n
-Save without prescribing. \ N
+Save without prescribing. \n
 
-\ image html black_dci.png Icon INN
+\image html black_dci.png Icon INN
 
-\ image html prescription_ex1.png Dosage INN - example
+\image html prescription_ex1.png Dosage INN - example
 
 
 
@@ -280,7 +280,7 @@ Click the "INN" which is located beside the drug name and click OK. \n
 Check the name of the INN will be required (it replaces the name of specialty).
 
 
-\ mage html prescription_dci.png Transform a normal prescription to INN
+\image html prescription_dci.png Transform a normal prescription to INN
 
 
 

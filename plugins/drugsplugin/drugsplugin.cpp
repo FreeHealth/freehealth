@@ -64,6 +64,7 @@ static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Interna
 
 DrugsPlugin::DrugsPlugin() :
         viewPage(0),
+        selectorPage(0),
         printPage(0),
         userPage(0),
         extraPage(0),
@@ -84,6 +85,10 @@ DrugsPlugin::~DrugsPlugin()
     if (viewPage) {
         removeObject(viewPage);
         delete viewPage; viewPage=0;
+    }
+    if (selectorPage) {
+        removeObject(selectorPage);
+        delete selectorPage; selectorPage=0;
     }
     if (userPage) {
         removeObject(userPage);
@@ -116,6 +121,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
 
     viewPage = new DrugsViewOptionsPage(this);
+    selectorPage = new DrugsSelectorOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
     userPage = new DrugsUserOptionsPage(this);
     extraPage = new DrugsExtraOptionsPage(this);
@@ -124,12 +130,14 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     // check settings
     if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        selectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         printPage->writeDefaultSettings(Core::ICore::instance()->settings());
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
         databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
     } else {
         viewPage->checkSettingsValidity();
+        selectorPage->checkSettingsValidity();
         printPage->checkSettingsValidity();
         userPage->checkSettingsValidity();
         extraPage->checkSettingsValidity();
@@ -137,6 +145,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     }
 
     addObject(viewPage);
+    addObject(selectorPage);
     addObject(printPage);
     addObject(userPage);
     addObject(extraPage);
@@ -159,6 +168,7 @@ void DrugsPlugin::extensionsInitialized()
 
 void DrugsPlugin::remoteArgument(const QString& arg)
 {
+    Q_UNUSED(arg);
 //    qWarning() << "drugplugin" << arg;
     // An empty argument is sent to trigger activation
     // of the window via QtSingleApplication. It should be

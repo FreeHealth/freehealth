@@ -49,12 +49,13 @@
 #include "ui_drugsprintoptionspage.h"
 #include "ui_drugsuseroptionspage.h"
 #include "ui_drugsextraoptionspage.h"
+#include "ui_drugselectorwidget.h"
 
 /**
  * \file mfDrugsPreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.4.0
+ * \date 5 Mar 2010
 */
 
 namespace Core {
@@ -91,6 +92,25 @@ public Q_SLOTS:
 protected:
     virtual void changeEvent(QEvent *e);
 };
+
+class DrugsSelectorWidget : public QWidget, private Ui::DrugsSelectorWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DrugsSelectorWidget)
+
+public:
+    explicit DrugsSelectorWidget(QWidget *parent = 0);
+    void setDatasToUi();
+
+    static void writeDefaultSettings(Core::ISettings *s);
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+};
+
 
 class DrugsPrintWidget : public QWidget, private Ui::DrugsPrintWidget
 {
@@ -183,6 +203,34 @@ public:
 private:
     QPointer<Internal::DrugsViewWidget> m_Widget;
 };
+
+
+class DrugsSelectorOptionsPage : public Core::IOptionsPage
+{
+public:
+    DrugsSelectorOptionsPage(QObject *parent = 0);
+    ~DrugsSelectorOptionsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+        private:
+    QPointer<Internal::DrugsSelectorWidget> m_Widget;
+};
+
+
+
 
 class DrugsPrintOptionsPage : public Core::IOptionsPage
 {

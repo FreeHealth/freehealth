@@ -124,13 +124,6 @@ DrugsCentralWidget *DrugsWidgetManager::currentView() const
     return DrugsActionHandler::m_CurrentView;
 }
 
-void DrugsWidgetManager::enterSelectionOnlyMode()
-{
-    // Inform DrugsSelector
-    DrugsActionHandler::m_CurrentView->enterSelectionOnlyMode();
-//    aPrintPrescription->setEnabled(false);
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +147,9 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aChangeDuration(0),
         aToTemplate(0),
         aDatabaseInformations(0),
+        gModes(0),
+        aPrescriberMode(0),
+        aSelectOnlyMode(0),
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
@@ -169,6 +165,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
         menu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
         menu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
@@ -329,7 +326,34 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     }
     connect(aDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDatabaseInformations()));
 
+    // Mode menu
+    Core::ActionContainer *modemenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_MODES);
+    if (!modemenu) {
+        modemenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_MODES);
+        modemenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
+        modemenu->setTranslations(DrugsWidget::Constants::MODEMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
+        menu->addMenu(modemenu, DrugsWidget::Constants::G_PLUGINS_MODES);
+    }
+    Q_ASSERT(modemenu);
 
+    gModes = new QActionGroup(this);
+    a = aPrescriberMode = new QAction(this);
+    a->setCheckable(true);
+    a->setChecked(true);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_PRESCRIBERMODE, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::PRESCRIBERMODE_TEXT, DrugsWidget::Constants::PRESCRIBERMODE_TEXT, DRUGCONSTANTS_TR_CONTEXT);
+    modemenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_MODES);
+    gModes->addAction(a);
+
+    a = aSelectOnlyMode = new QAction(this);
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SELECTONLYMODE, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::SELECTONLYMODE_TEXT, DrugsWidget::Constants::SELECTONLYMODE_TEXT, DRUGCONSTANTS_TR_CONTEXT);
+    modemenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_MODES);
+    gModes->addAction(a);
+
+    connect(gModes,SIGNAL(triggered(QAction*)),this,SLOT(modeActionChanged(QAction*)));
 
     actionManager()->retranslateMenusAndActions();
 }
@@ -494,4 +518,14 @@ void DrugsActionHandler::showDatabaseInformations()
     if (m_CurrentView) {
         m_CurrentView->showDatabaseInformations();
     }
+}
+
+void DrugsActionHandler::modeActionChanged(QAction *a)
+{
+    if (!m_CurrentView)
+        return;
+    if (a==aPrescriberMode)
+        m_CurrentView->setMode(DrugsCentralWidget::Prescriber);
+    else
+        m_CurrentView->setMode(DrugsCentralWidget::SelectOnly);
 }

@@ -40,7 +40,7 @@ Les données suivantes peuvent être renseignées par la ligne de commande (\ref
 \~english
 Every patient is defined by a series of data available directly or indirectly. The only data
 accessible is the name of the patient (1). Other data may be informed by clicking
-button located next to the input area of the patient's name (2). \ n
+button located next to the input area of the patient's name (2). \n
 The following data may be informed by the command line (\ref ligne_commandes) and / or user:
 \li weight in kilograms
 \li date of birth (dd / mm / yyyy)
@@ -147,7 +147,7 @@ The toolbar icon in order, the following actions:
 \li off the drug
 \li Sort drugs (100% are put first, then sorting is done on the name)
 \li Separator
-\li See \ ref synthetiseur_iam
+\li See \ref synthetiseur_iam
 \li Separator
 \li Edit all periods of limitation in one click
 
@@ -163,18 +163,6 @@ The toolbar icon in order, the following actions:
 /**
 \~french \page prescriptions_io Sauvegarder, recharger, ajouter des prescriptions
 \~english \page prescriptions_io Save, load and add prescriptions
-
-\~french \section prescription_io_problemes_connus Problèmes connus
-\~english \section prescription_io_problemes_connus Known issues
-
-\~french
-Les version 0.0.8 à 0.1.4 de \freediams ne sauvegardaient pas correctement le schéma de
-répartition journalier. Il est impossible de les récupérer. Ce bogue est corrigé depuis la version 0.2.0 de \freediams.
-
-\~english
-\freediams versions untill v0.1.4 does not save correctly the daily scheme. It is impossible to recocer it.
-This bug is corrected since v0.2.0 of \freediams.
-
 
 \~french \section prescription_save Sauvegarder une prescription
 \~english \section prescription_save Save a prescription
@@ -234,12 +222,13 @@ sauvegardées dans ces fichiers. Les données concernant le patient sont brouill
 
 Exemple de prescription :
 \verbatim
-<?xml version="0.2.0" encoding="UTF-8"?>        indique la version utilisée pour créer la prescription
-<FullPrescription>
+<?xml version="1.0" encoding="UTF-8"?>            XML heading
+<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
+<FullPrescription version="0.4.0">                Début de la prescription avec la version d'encodage utilisée
   <Prescription>
-    <CIS>68166740</CIS>                         code CIS du médicament pour les prescriptions non DCI
+    <Drug_UID>68166740</Drug_UID>               code Drug_UID du médicament pour les prescriptions non DCI
     <INN></INN>                                 true ou false selon que ce médicament doit ou non être prescrit sous sa formulation DCI
-    <CIP></CIP>                                 code CIP (présentation)
+    <Pack_UID></Pack_UID>                       code Pack_UID (présentation)
     <IntakeFromTo>false</IntakeFromTo>          Prises utilisent de x à y
     <IntakeFrom>1.0</IntakeFrom>                Prises (de)
     <IntakeTo>1.0</IntakeTo>                    Prises (à)
@@ -294,12 +283,13 @@ stored in these files. The patient datas are scrambled.
 
 Sample prescription:
 \verbatim
-<?xml version = "0.2.0" encoding = "UTF-8"?>    indicates the version used to create prescription
-<FullPrescription>
+<?xml version = "1.0" encoding = "UTF-8"?>        XML heading
+<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
+<FullPrescription version="0.4.0">                Begining of the prescription, with the xml encoding version used
   <Prescription>
-    <CIS>68166740</CIS>                           CIS Code of drug prescriptions for non-IBD
+    <Drug_UID>68166740</Drug_UID>                 Drug_UID Code of drug prescriptions for non-IBD
     <INN></Inn>                                   true or false depending on whether the drug should or should not be prescribed in its INN's formulation
-    <CIP></CIP>                                   CIP code (packaging)
+    <Pack_UID></Pack_UID>                         Pack_UID code (packaging)
     <IntakeFromTo>False</IntakeFromTo>            intakes uses range x to y
     <IntakeFrom>1.0</IntakeFrom>                  intake
     <IntakeTo>1.0</IntakeTo>                      intake
@@ -638,7 +628,7 @@ la zone de saisie des recherches de médicaments à droite \ref zone_recherche_m
 Set here the few display settings:
 - The font used for displaying and drug prescription
 - The size of the history of selected drugs. This history is available in
-the entry area of drug research right \ ref zone_recherche_medics.
+the entry area of drug research right \ref zone_recherche_medics.
 - The alert level of interaction consists of three levels:
     - Maximum: all interactions found will be displayed
     - Moderate

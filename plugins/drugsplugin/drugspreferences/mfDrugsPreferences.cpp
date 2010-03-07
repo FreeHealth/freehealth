@@ -130,6 +130,62 @@ QWidget *DrugsViewOptionsPage::createPage(QWidget *parent)
     return m_Widget;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////  DrugsViewOptionsPage  //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+DrugsSelectorOptionsPage::DrugsSelectorOptionsPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0) { setObjectName("DrugsSelectorOptionsPage"); }
+
+DrugsSelectorOptionsPage::~DrugsSelectorOptionsPage()
+{
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
+}
+
+QString DrugsSelectorOptionsPage::id() const { return objectName(); }
+QString DrugsSelectorOptionsPage::name() const { return tr("Selector"); }
+QString DrugsSelectorOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+
+void DrugsSelectorOptionsPage::resetToDefaults()
+{
+    m_Widget->writeDefaultSettings(settings());
+    m_Widget->setDatasToUi();
+}
+
+void DrugsSelectorOptionsPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
+    }
+    m_Widget->saveToSettings(settings());
+}
+
+void DrugsSelectorOptionsPage::finish() { delete m_Widget; }
+
+void DrugsSelectorOptionsPage::checkSettingsValidity()
+{
+    QHash<QString, QVariant> defaultvalues;
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME,true);
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
+    defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
+    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+
+    foreach(const QString &k, defaultvalues.keys()) {
+        if (settings()->value(k) == QVariant())
+            settings()->setValue(k, defaultvalues.value(k));
+    }
+    settings()->sync();
+}
+
+QWidget *DrugsSelectorOptionsPage::createPage(QWidget *parent)
+{
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new DrugsSelectorWidget(parent);
+    return m_Widget;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////  DrugsPrintOptionsPage  //////////////////////////////////////////
@@ -334,8 +390,6 @@ void DrugsViewWidget::setDatasToUi()
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE, 12).toInt());
     historicSizeSpin->setValue(s->value(S_HISTORYSIZE).toInt());
     levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING).toInt());
-    useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
-    backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
 
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
@@ -371,10 +425,6 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
 
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
-
-    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
-    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
-
 }
 
 void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
@@ -392,8 +442,6 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(S_DRUGFONT , QFont().toString());
     s->setValue(S_PRESCRIPTIONFONT , QFont().toString());
 
-    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
-    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     s->sync();
 }
 
@@ -409,6 +457,68 @@ void DrugsViewWidget::changeEvent(QEvent *e)
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////  DrugsSelectorWidget  ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+DrugsSelectorWidget::DrugsSelectorWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    setupUi(this);
+    setDatasToUi();
+}
+
+void DrugsSelectorWidget::setDatasToUi()
+{
+    drugsBrandNameBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME).toBool());
+    routeBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
+    formBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
+
+    useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
+    backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
+}
+
+void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
+{
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
+
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME,drugsBrandNameBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE,routeBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM,formBox->isChecked());
+
+    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
+    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
+}
+
+void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
+{
+//    qWarning() << "---------> writedefaults";
+    Utils::Log::addMessage("DrugsSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsSelectorWidget"));
+
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME, true);
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
+
+    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
+    s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+
+    s->sync();
+}
+
+void DrugsSelectorWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////  DrugsPrintWidget  ////////////////////////////////////////////

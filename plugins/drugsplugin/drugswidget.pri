@@ -6,7 +6,6 @@ INCLUDEPATH *= $${PWD}
 HEADERS += $${PWD}/drugs_exporter.h \
     $${PWD}/constants.h \
     $${PWD}/drugswidgetmanager.h
-
 SOURCES += $${PWD}/drugswidgetmanager.cpp
 
 # Dosage Dialog
@@ -25,16 +24,15 @@ FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
 
 # DrugsWidget Preferences
 HEADERS += $${PWD}/drugspreferences/mfDrugsPreferences.h \
-           $${PWD}/drugspreferences/databaseselectorwidget.h
-
+    $${PWD}/drugspreferences/databaseselectorwidget.h
 SOURCES += $${PWD}/drugspreferences/mfDrugsPreferences.cpp \
-           $${PWD}/drugspreferences/databaseselectorwidget.cpp
-
+    $${PWD}/drugspreferences/databaseselectorwidget.cpp
 FORMS += $${PWD}/drugspreferences/drugsextraoptionspage.ui \
     $${PWD}/drugspreferences/drugsviewoptionspage.ui \
     $${PWD}/drugspreferences/drugsuseroptionspage.ui \
     $${PWD}/drugspreferences/drugsprintoptionspage.ui \
-    $${PWD}/drugspreferences/databaseselectorwidget.ui
+    $${PWD}/drugspreferences/databaseselectorwidget.ui \
+    $${PWD}/drugspreferences/drugselectorwidget.ui
 
 # DrugsWidgets
 HEADERS += $${PWD}/drugswidget/druginfo.h \

@@ -124,7 +124,7 @@ PrinterPreferencesWidget::PrinterPreferencesWidget(QWidget *parent) :
 void PrinterPreferencesWidget::setDatasToUi()
 {
     printerList->clear();
-    if (QPrinterInfo::availablePrinters().count()) {
+    if (!QPrinterInfo::availablePrinters().count()) {
         QListWidgetItem *item = new QListWidgetItem(printerList);
         QFont bold;
         bold.setBold(true);

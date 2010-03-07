@@ -106,6 +106,7 @@ private Q_SLOTS:
     void createTemplate();
     void printPreview();
     void showDatabaseInformations();
+    void modeActionChanged(QAction *a);
 
 private:
     bool canMoveUp();
@@ -131,6 +132,9 @@ protected:
     QAction *aChangeDuration;
     QAction *aToTemplate;
     QAction *aDatabaseInformations;
+    QActionGroup *gModes;
+    QAction *aPrescriberMode;
+    QAction *aSelectOnlyMode;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 };
@@ -151,8 +155,6 @@ public:
     DrugsWidget::DrugsCentralWidget  *currentView() const;
     DrugsDB::DrugsModel          *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
     DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
-
-    void enterSelectionOnlyMode();
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
