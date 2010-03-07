@@ -124,6 +124,12 @@ DrugsCentralWidget *DrugsWidgetManager::currentView() const
     return DrugsActionHandler::m_CurrentView;
 }
 
+void DrugsWidgetManager::enterSelectionOnlyMode()
+{
+    // Inform DrugsSelector
+    DrugsActionHandler::m_CurrentView->enterSelectionOnlyMode();
+//    aPrintPrescription->setEnabled(false);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
@@ -273,7 +279,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 //    cmd->setKeySequence();
     cmd->retranslate();
     if (tmenu) {
-        tmenu->addAction(cmd, Core::Constants::G_FILE_NEW);
+        tmenu->addAction(cmd, Core::Constants::G_TEMPLATES_NEW);
     }
     connect(a, SIGNAL(triggered()), this, SLOT(createTemplate()));
 

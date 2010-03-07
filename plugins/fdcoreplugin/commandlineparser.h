@@ -54,6 +54,7 @@ class CommandLine  : public Core::ICommandLine
 public:
     enum Param {
         CL_MedinTux = 0,
+        CL_SelectionOnly,
         CL_ExchangeFile,
         CL_PatientName,
         CL_PatientGender,
@@ -74,6 +75,7 @@ public:
     CommandLine() : ICommandLine()
     {
         ref.insert(CL_MedinTux, "--medintux");
+        ref.insert(CL_SelectionOnly, "--selection-only");
         ref.insert(CL_ExchangeFile, "--exchange");
         ref.insert(CL_PatientName, "--patientname");
         ref.insert(CL_PatientGender, "--gender");
@@ -97,24 +99,25 @@ public:
                 k = k.left(k.indexOf("="));
             switch (ref.key(k,-1))
             {
-                case CL_MedinTux : params.insert(CL_MedinTux, true); break;
-                case CL_ExchangeFile : params.insert(CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_PatientName : params.insert(CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_PatientGender : params.insert(CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_DateOfBirth : params.insert(CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_Weight : params.insert(CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_Height : params.insert(CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_ClCr : params.insert(CL_ClCr, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_Creatinin : params.insert(CL_Creatinin, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_Chrono : params.insert(CL_Chrono, true); break;
-                case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
-                case CL_ConfigFile : params.insert(CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_RunningUnderWine : params.insert(CL_RunningUnderWine, true); break;
-                    /** \todo icd10 and drugs allergies */
-//                case CL_DrugsAllergies : params.insert(CL_DrugsAllergies, true); break;
-//                case CL_ICD10Diseases : params.insert(CL_ICD10Diseases, true); break;
-                default : break;
-            }
+            case CL_MedinTux : params.insert(CL_MedinTux, true); break;
+            case CL_SelectionOnly : params.insert(CL_SelectionOnly, true); break;
+            case CL_ExchangeFile : params.insert(CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_PatientName : params.insert(CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_PatientGender : params.insert(CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_DateOfBirth : params.insert(CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_Weight : params.insert(CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_Height : params.insert(CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_ClCr : params.insert(CL_ClCr, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_Creatinin : params.insert(CL_Creatinin, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_Chrono : params.insert(CL_Chrono, true); break;
+            case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
+            case CL_ConfigFile : params.insert(CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CL_RunningUnderWine : params.insert(CL_RunningUnderWine, true); break;
+                /** \todo icd10 and drugs allergies */
+                //                case CL_DrugsAllergies : params.insert(CL_DrugsAllergies, true); break;
+                //                case CL_ICD10Diseases : params.insert(CL_ICD10Diseases, true); break;
+            default : break;
+        }
         }
     }
 

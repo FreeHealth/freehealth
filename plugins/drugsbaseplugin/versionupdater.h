@@ -48,8 +48,8 @@
 /**
  * \file versionupdater.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.2
- * \date 13 Dec 2009
+ * \version 0.4.0
+ * \date 06 Mar 2010
 */
 
 namespace DrugsDB {
@@ -87,7 +87,7 @@ public:
     virtual ~DrugsIOUpdateStep() {}
 
     virtual bool updateFromXml() const = 0;
-    virtual bool executeUpdate(const QString &xml) const = 0;
+    virtual bool executeXmlUpdate(QString &xml) const = 0;
 
     virtual bool updateFromModel() const = 0;
     virtual bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const = 0;
@@ -103,7 +103,8 @@ public:
 
     bool isDosageDatabaseUpToDate() const;
     bool updateDosageDatabase();
-    QString lastDosageDabaseDosage() const;
+    QString lastDosageDabaseVersion() const;
+    QString lastXmlIOVersion() const;
 
     bool isXmlIOUpToDate(const QString &xmlContent) const;
     QString xmlVersion(const QString &xmlContent) const;

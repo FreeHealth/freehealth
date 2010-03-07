@@ -9,6 +9,7 @@ version=0.3.1
     * Nouvelles fonctionnalités :
       * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender'
       * Fonctionnalités multi-bases thérapeutiques implémentées
+      * Nouveau mode paramètrable par ligne de commande : le mode "sélection seulement"
 
     * Modifications importantes :
 

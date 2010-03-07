@@ -274,8 +274,6 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     }
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, d->m_PathModel->stringList());
 
-    /** \todo manage drugsdatabases from the applicationResourcePath --> replace path with a specific TAG. */
-
     // 0. if selected DB is the default one --> change selected to RESOURCE_TAG
     QString tmp = d->m_SelectedDatabaseFileName;
     QString defaultDbFileName = set->databasePath() + QDir::separator() + QString(DrugsDB::Constants::DRUGS_DATABASE_NAME) + QDir::separator() + QString(DrugsDB::Constants::DRUGS_DATABASE_NAME) + ".db";

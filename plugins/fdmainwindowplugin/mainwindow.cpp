@@ -211,6 +211,7 @@ void MainWindow::extensionsInitialized()
     m_ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
+    // Manage patient datas
     m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
     refreshPatient();
@@ -218,6 +219,10 @@ void MainWindow::extensionsInitialized()
     messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
 //    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
+
+    // SelectionOnly ?
+    if (commandLine()->value(Core::CommandLine::CL_SelectionOnly).toBool())
+        enterSelectionOnlyMode();
 
     // If needed read exchange file
     const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
@@ -268,6 +273,18 @@ void MainWindow::extensionsInitialized()
     createDockWindows();
     finishSplash(this);
     show();
+}
+
+void MainWindow::enterSelectionOnlyMode()
+{
+    // Log mode
+    Utils::Log::addMessage(this, tr("Entering selection mode"));
+    // Unable some actions in menus
+//    aPrint->setEnabled(false);
+    aPrintPreview->setEnabled(false);
+    /** \todo Change the window title */
+    // Inform the widgets
+    DrugsWidget::DrugsWidgetManager::instance()->enterSelectionOnlyMode();
 }
 
 MainWindow::~MainWindow()

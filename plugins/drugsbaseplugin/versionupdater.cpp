@@ -349,7 +349,7 @@ public:
     QString toVersion() const {return "0.2.0";}
 
     bool updateFromXml() const {return false;}
-    bool executeUpdate(const QString &xml) const {Q_UNUSED(xml); return true;}
+    bool executeXmlUpdate(QString &xml) const {Q_UNUSED(xml); return true;}
 
     bool updateFromModel() const {return true;}
     bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
@@ -362,6 +362,49 @@ public:
                 model->setData(model->index(r, Constants::Prescription::MealTimeSchemeIndex),meal);
             }
         }
+        return true;
+    }
+};
+
+class IO_Update_From_020_To_040 : public DrugsDB::DrugsIOUpdateStep
+{
+public:
+    // Unfortunatly DailyScheme was not saved before 0.2.0 --> so no update is available
+    // MealTime scheme must be update since an empty choice has been added at index (0)
+    IO_Update_From_020_To_040() : DrugsDB::DrugsIOUpdateStep() {}
+    ~IO_Update_From_020_To_040() {}
+
+    QString fromVersion() const {return "0.2.0";}
+    QString toVersion() const {return "0.4.0";}
+
+    bool updateFromXml() const {return true;}
+    bool executeXmlUpdate(QString &xml) const
+    {
+        // Rename some tags
+        xml.replace("<CIS>","<Drug_UID>");
+        xml.replace("</CIS>", "</Drug_UID>");
+        xml.replace("<CIP>","<Pack_UID>");
+        xml.replace("</CIP>", "</Pack_UID>");
+        // Get the old version
+        if (!xml.startsWith("<?xml version=\""))
+            return false;
+        int begin = 15;
+        int end = xml.indexOf("\"", begin);
+        if (xml.mid(begin,end-begin) != "1.0") {
+            // Add the new version tag
+            xml.replace("<FullPrescription>", "<FullPrescription version=\"0.4.0\">");
+            // Remove the olf version number
+            xml.replace("<?xml version=\"0.2.0\"", "<?xml version=\"1.0\"");
+            xml.replace("<?xml version=\"0.0.8\"", "<?xml version=\"1.0\"");
+        }
+        return true;
+    }
+
+    bool updateFromModel() const {return false;}
+    bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
+    {
+        Q_UNUSED(model);
+        Q_UNUSED(rows);
         return true;
     }
 };
@@ -381,15 +424,21 @@ public:
     }
 
     static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0"; }
-    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0"; }
+    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0"; }
 
     QString xmlVersion(const QString &xml)
     {
-        if (!xml.startsWith("<?xml version=\""))
-            return QString();
-        int begin = 15;
-        int end = xml.indexOf("\"", begin);
-        return xml.mid(begin,end-begin);
+        QString v;
+        if (xml.startsWith("<?xml version=\"1.0\"")) {
+            int begin = xml.indexOf("<FullPrescription version=\"") + 27;
+            int end = xml.indexOf("\">", begin);
+            v = xml.mid(begin,end-begin).simplified();
+        } else {
+            int begin = 15;
+            int end = xml.indexOf("\"", begin);
+            v = xml.mid(begin,end-begin).simplified();
+        }
+        return v;
     }
 
     QMap<QString, DrugsIOUpdateStep *> ioSteps()
@@ -435,6 +484,7 @@ VersionUpdater::VersionUpdater() : d(0)
     d->m_Updaters.append(new ::Dosage_008_To_020);
     d->m_Updaters.append(new ::Dosage_030_To_040);
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
+    d->m_Updaters.append(new ::IO_Update_From_020_To_040);
 }
 
 VersionUpdater::~VersionUpdater()
@@ -501,9 +551,14 @@ bool VersionUpdater::updateDosageDatabase()
     return true;
 }
 
-QString VersionUpdater::lastDosageDabaseDosage() const
+QString VersionUpdater::lastDosageDabaseVersion() const
 {
     return d->dosageDatabaseVersions().last();
+}
+
+QString VersionUpdater::lastXmlIOVersion() const
+{
+    return d->xmlIoVersions().last();
 }
 
 QString VersionUpdater::xmlVersion(const QString &xmlContent) const
@@ -518,6 +573,7 @@ bool VersionUpdater::isXmlIOUpToDate(const QString &xmlContent) const
 
 QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 {
+    Utils::Log::addMessage("VersionUpdater", "Updating XML IO content version");
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
     QString version = d->xmlVersion(xmlContent);
     QString xml = xmlContent;
@@ -527,7 +583,7 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
             break;
         if (step->updateFromXml()) {
             if (step->fromVersion() == version) {
-                if (!step->executeUpdate(xml))
+                if (!step->executeXmlUpdate(xml))
                     Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
                 else
                     version = step->toVersion();
@@ -541,6 +597,7 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 
 bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::DrugsModel *model, const QList<int> &rowsToUpdate)
 {
+    Utils::Log::addMessage("VersionUpdater", "Updating IO model version from version " + fromVersion);
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
     QString version = fromVersion;
     while (version != d->xmlIoVersions().last()) {

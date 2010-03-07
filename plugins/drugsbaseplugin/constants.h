@@ -285,8 +285,8 @@ namespace Drug
     enum Drug
     {
         Id = 1000,
-        CIS,
-        CIPs,
+        UID,
+        Pack_UID,
         Denomination,
         Form,
         IsScoredTablet,
@@ -325,7 +325,7 @@ namespace Prescription
         Id = 1200,
         IsTextualOnly,    // Setted for textual drugs
         UsedDosage,
-        CIP,
+        Pack_UID,
         OnlyForTest,
         IntakesFrom,
         IntakesTo,

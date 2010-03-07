@@ -448,7 +448,7 @@ bool DrugsBase::createDatabase( const QString &connectionName , const QString &d
         << "CREATE TABLE IF NOT EXISTS `VERSION` ("
            "`ACTUAL`                varchar(10)    NULL"
            ");"
-        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseDosage())
+        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
         , DB)) {
         Utils::Log::addMessage(this, tr("Database %1 %2 correctly created").arg(connectionName, dbName));
         return true;

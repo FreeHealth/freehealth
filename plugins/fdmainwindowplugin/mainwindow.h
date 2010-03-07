@@ -80,6 +80,8 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+    void enterSelectionOnlyMode();
+
     void createDockWindows();
     void refreshPatient();
     void readSettings();

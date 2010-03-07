@@ -33,32 +33,28 @@ L'interface de \freediams est disponible en différents langages : Anglais, Fran
 
 
 \~english
-The objective of \freediams is to provide a free tool (open source), no cost,
-independent (no conflict of interest) and multi-platform support for health professionals.
-The database is multi-therapeutic use and cover for the following countries:
-France, Canada and United States of America.
-Interactions are calculated on the basis of the thesaurus
-interactions AFSSAPS. \n
-\freediams allows you to create prescriptions
-fully configurable with real time interaction alerts. You can
-print your prescriptions with your own headers, footers and tattooing. \n
-\freediams can be used with other software
-parameters are then transmitted by the command line. \n
+The objective of FreeDiams is to provide a free tool (open source), no cost, independent (no conflict of interest)
+and multi-platform support for health professionals. The database is multi-therapeutic use and cover for the
+following countries: France, Canada and United States of America. Interactions are calculated on the basis
+of the thesaurus interactions AFSSAPS. FreeDiams allows you to create prescriptions fully configurable with
+real time interaction alerts. You can print your prescriptions with your own headers, footers and watermarks.
+FreeDiams can be used with other software parameters are then transmitted by the command line.\n
 
 \freediams is available for:
 \li Linux (compiled under Ubuntu, Debian package Debian-Med)
 \li Mac OS (Universal, from OS 10.5)
 \li FreeBSD (need recompilation of the sources)
 \li Windows
-\li user "nomadic" working on multiple operating systems simultaneously have the
-ability to install on a USB key all versions of the software. The data are fully compatible
-from one system to another.
+\li "Nomadic" user mode, in which all OS versions of the software, with single saved preferences,
+can be run from a single USB key. Saved prescription data are also fully compatible between operating
+systems. Version-specific distributions for Linux will, on installation, take care of dependencies
+automatically. The FreeDiams user interface can be toggled between: English, French, German, Spanish.
 \li fact whatever your platform, it is possible to work with \freediams without any requirements.
 For version-specific distributions Linux, dependencies are automatically installed with the package.
 
 The interface of \freediams is available in different languages: English, French, German, spanish.
 
-\image html i18n.png Menu langage
+\image html i18n.png Menu language
 
 \~french \section TOC Contenu du manuel
 \~english \section TOC Content of the user manual
@@ -93,10 +89,9 @@ développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 \li Version de la base de données des interactions : <b>30 Juin 2009</b>.
 
 \~english
-\freediams is still at an embryonic stage of development.
-You can find flaws or errors. Thank you for the report to
-developers on public mailing list: freemedforms@googlegroups.com.
-\li \ref versionning
+\freediams is still at an early stage. You can find flaws or errors. Thank you for
+any reports to developers on the public mailing list: freemedforms@googlegroups.com.
+\li Read also : \ref versionning
 \li The current documented version is <b> version 0.4.0 (April 2010) </b>.
 \li version of the interactions database: <b>June 30, 2009 </b>.
 
@@ -176,8 +171,9 @@ When an update is available, the menu <b>Update Available</b> appears.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////  INSTALLATION CLE USB  ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \page installation_cle_usb Installation sur clé USB multi-plateforme
-
+/**
+\~french \page installation_cle_usb Installation sur clé USB multi-plateforme
+\~english \page installation_cle_usb USB key, multi-platform installation
 En cours de rédaction.
 
 \ref index

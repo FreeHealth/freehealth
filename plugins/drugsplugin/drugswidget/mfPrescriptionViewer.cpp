@@ -225,12 +225,12 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 /** \brief Opens the mfDosageDialog for the selected drug. */
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
-    int CIS = drugModel()->index(item.row(), DrugsDB::Constants::Drug::CIS).data().toInt();
+    int UID = drugModel()->index(item.row(), DrugsDB::Constants::Drug::UID).data().toInt();
     bool isTextual = drugModel()->index(item.row(), DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
     int row = item.row();
-    if (CIS!=-1) {
+    if (UID!=-1) {
         Internal::DosageDialog dlg(this);
-        dlg.changeRow(CIS, row);
+        dlg.changeRow(UID, row);
         dlg.exec();
     } else if (isTextual) {
         TextualPrescriptionDialog dlg(this);

@@ -807,18 +807,22 @@ QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, 
     QDomElement main = doc.createElement(mainTag);
     doc.appendChild(main);
     if (valueToBase64) {
-        foreach( const QString &k, datas.keys() ) {
+        foreach(const QString &k, datas.keys()) {
             QDomElement data  = doc.createElement(k);
-            QDomText dataText = doc.createTextNode( datas.value(k).toAscii().toBase64() );
             main.appendChild(data);
-            data.appendChild(dataText);
+            if (!datas.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(datas.value(k).toAscii().toBase64());
+                data.appendChild(dataText);
+            }
         }
     } else {
-        foreach( const QString &k, datas.keys() ) {
+        foreach(const QString &k, datas.keys()) {
             QDomElement data  = doc.createElement(k);
-            QDomText dataText = doc.createTextNode(datas.value(k));
             main.appendChild(data);
-            data.appendChild(dataText);
+            if (!datas.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(datas.value(k));
+                data.appendChild(dataText);
+            }
         }
     }
     return doc.toString(indent);

@@ -56,8 +56,8 @@
 /**
  * \file drugswidgetmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 06 Mar 2010
  * \internal
 */
 
@@ -151,6 +151,8 @@ public:
     DrugsWidget::DrugsCentralWidget  *currentView() const;
     DrugsDB::DrugsModel          *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
     DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+
+    void enterSelectionOnlyMode();
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);

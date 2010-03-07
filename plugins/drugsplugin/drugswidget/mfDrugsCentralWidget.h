@@ -82,6 +82,7 @@ class DRUGS_EXPORT DrugsCentralWidget : public QWidget
 public:
     DrugsCentralWidget(QWidget *parent = 0);
     bool initialize();
+    void enterSelectionOnlyMode();
 
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;
@@ -111,6 +112,7 @@ private:
     Internal::Ui::DrugsCentralWidget *m_ui;
     DrugsDB::DrugsModel   *m_CurrentDrugModel;
     Internal::DrugsContext *m_Context;
+    bool m_SelectionOnlyMode;
 };
 
 }  // End DrugsWidget

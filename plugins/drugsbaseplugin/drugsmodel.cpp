@@ -106,7 +106,9 @@ namespace Internal {
 class DrugsModelPrivate
 {
 public:
-    DrugsModelPrivate() : m_LastDrugRequiered(0), m_ShowTestingDrugs(true)
+    DrugsModelPrivate() :
+            m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
+            m_SelectionOnlyMode(false)
     {
     }
 
@@ -172,8 +174,8 @@ public:
         switch (column)
         {
              case Drug::Denomination : return drug->denomination();
-             case Drug::CIS : return drug->UID();
-             case Drug::CIPs : return drug->CIPs();
+             case Drug::UID : return drug->UID();
+             case Drug::Pack_UID : return drug->CIPs();
              case Drug::Form :  return drug->form();
              case Drug::AvailableForms :
                  {
@@ -219,7 +221,7 @@ public:
              case Drug::LinkToSCP :          return drug->linkToSCP();
              case Drug::FullPrescription :
                  {
-                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool()) {
+                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool() || m_SelectionOnlyMode) {
                          if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
                              return drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
                          else return drug->denomination();
@@ -302,7 +304,7 @@ public:
     mutable QHash<int, QPointer<DosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
     DrugsData *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
     InteractionsManager *m_InteractionsManager;
-    bool m_ShowTestingDrugs;
+    bool m_ShowTestingDrugs, m_SelectionOnlyMode;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -702,6 +704,11 @@ bool DrugsModel::testingDrugsAreVisible() const
     return d->m_ShowTestingDrugs;
 }
 
+void DrugsModel::setSelectionOnlyMode(bool b)
+{
+    d->m_SelectionOnlyMode = b;
+}
+
 /** \brief Returns the dosage model for the selected drug */
 Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 {
@@ -720,7 +727,7 @@ Internal::DosageModel *DrugsModel::dosageModel(const QModelIndex &drugIndex)
 {
     if (! drugIndex.isValid())
         return 0;
-    if (drugIndex.column() != Constants::Drug::CIS)
+    if (drugIndex.column() != Constants::Drug::UID)
         return 0;
     return dosageModel(drugIndex.data().toInt());
 }
@@ -831,11 +838,16 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     } else {
         tokens_value["DRUG"] =  drug->denomination();
     }
-    tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
-    if (drug->prescriptionValue(Constants::Prescription::IntakesUsesFromTo).toBool())
-        tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
 
-    tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
+    if (drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble()) {
+        tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
+        if (drug->prescriptionValue(Constants::Prescription::IntakesUsesFromTo).toBool())
+            tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
+
+        tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
+    } else {
+        tokens_value["Q_FROM"] = tokens_value["Q_TO"] = tokens_value["Q_SCHEME"] = "";
+    }
 
     // Manage Daily Scheme See DailySchemeModel::setSerializedContent
     DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
@@ -849,12 +861,18 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
         tokens_value["DAILY_SCHEME"] = tokens_value.value("REPEATED_DAILY_SCHEME");
     }
 
-    tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
-    tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
-    if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
-        tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
+    // Duration
+    if (drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble()) {
+        tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
+        tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
+        if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
+            tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
 
-    tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
+        tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
+    } else {
+        tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
+    }
+
     tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
     if (tmp2 == "1")

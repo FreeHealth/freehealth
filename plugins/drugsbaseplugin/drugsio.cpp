@@ -52,6 +52,7 @@
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/dailyschememodel.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
@@ -75,19 +76,21 @@
 #include <QDir>
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+
 
 namespace DrugsIOConstants {
-    /** \todo update to version 0.4.0 --> XML_PRESCRIPTION_DRUGSBASENAME */
-    const char *const XML_VERSION                         = "<?xml version=\"0.2.0\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_HEADER                          = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_DRUGS_DATABASE_NAME             = "DrugsDatabaseName";
+    const char *const XML_VERSION                         = "version";
     const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
     const char *const XML_PRESCRIPTION_ISTEXTUAL          = "IsTextual";
-    const char *const XML_PRESCRIPTION_DRUGSBASENAME      = "DrugsBaseName";
     const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME    = "TextualDrugName";
-    const char *const XML_PRESCRIPTION_CIS                = "CIS";
+    const char *const XML_PRESCRIPTION_CIS                = "Drug_UID";
     const char *const XML_PRESCRIPTION_TESTONLY           = "OnlyForTest";
     const char *const XML_PRESCRIPTION_ID                 = "Id";
     const char *const XML_PRESCRIPTION_USEDDOSAGE         = "RefDosage";
-    const char *const XML_PRESCRIPTION_CIP                = "CIP";
+    const char *const XML_PRESCRIPTION_CIP                = "Pack_UID";
     const char *const XML_PRESCRIPTION_INTAKEFROM         = "IntakeFrom";
     const char *const XML_PRESCRIPTION_INTAKETO           = "IntakeTo";
     const char *const XML_PRESCRIPTION_INTAKESCHEME       = "IntakeScheme";
@@ -130,7 +133,7 @@ public:
         m_PrescriptionXmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
         m_PrescriptionXmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
         m_PrescriptionXmlTags.insert(Prescription::IsTextualOnly , XML_PRESCRIPTION_ISTEXTUAL);
-        m_PrescriptionXmlTags.insert(Prescription::CIP , XML_PRESCRIPTION_CIP);
+        m_PrescriptionXmlTags.insert(Prescription::Pack_UID , XML_PRESCRIPTION_CIP);
         m_PrescriptionXmlTags.insert(Prescription::OnlyForTest, XML_PRESCRIPTION_TESTONLY);
         m_PrescriptionXmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
         m_PrescriptionXmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
@@ -261,10 +264,48 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 {
     Q_ASSERT(m);
     QString xml = xmlContent;
+
+    // check prescription encoding version
+    bool needUpdate = (!DrugsDB::VersionUpdater::instance()->isXmlIOUpToDate(xml));
+    QString version;
+    if (needUpdate) {
+        version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
+        Utils::Log::addMessage("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
+        xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xml);
+    }
+
+    // Check if the drugs database correspond to the actual one
+    QString xmlDbName = DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT;
+    QString start = QString("<%1>").arg(XML_DRUGS_DATABASE_NAME);
+    QString finish;
+    if (xml.contains(start)) {
+        int begin = xml.indexOf(start) + start.length();
+        finish = QString("</%1").arg(XML_DRUGS_DATABASE_NAME);
+        int end = xml.indexOf(finish, begin);
+        if (begin==-1 || end==-1) {
+            Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_DRUGS_DATABASE_NAME));
+            return false;
+        }
+        xmlDbName = xml.mid( begin, end - begin);
+    }
+    if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
+        Utils::Log::addError("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
+                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
+        Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
+                                 tr("You are trying to load prescription that uses a different drugs database than the "
+                                    "actual one. You can not read this prescription unless you change the current "
+                                    "database in the Preferences.\n"
+                                    "Actual: %1\n"
+                                    "Prescription: %2.")
+                                 .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
+        return false;
+    }
+
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
-    QString start = QString("<%1>").arg(XML_FULLPRESCRIPTION_TAG);
-    QString finish = QString("</%1>").arg(XML_FULLPRESCRIPTION_TAG);
+    start = QString("<%1").arg(XML_FULLPRESCRIPTION_TAG);
+    finish = QString("</%1>").arg(XML_FULLPRESCRIPTION_TAG);
     int begin = xml.indexOf(start) + start.length();
+    begin = xml.indexOf("\">", begin) + 2;
     int end = xml.indexOf(finish, begin);
     if (begin==-1 || end==-1) {
         Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
@@ -281,23 +322,13 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     if (loader==ReplacePrescription)
         m->clearDrugsList();
 
-    // check prescription encoding version
-    bool needUpdate = (!DrugsDB::VersionUpdater::instance()->isXmlIOUpToDate(xml));
-    QString version;
-    if (needUpdate) {
-        version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
-        Utils::Log::addMessage("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
-//        qWarning() << version;
-        xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xml);
-    }
-
     // build model with serialized prescription
     QHash<QString, QString> hash;
     QList<int> rowsToUpdate;
     int row;
     foreach(const QString &s, drugs) {
         // Some verifications
-        if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG), XML_PRESCRIPTION_MAINTAG,hash,false)) { //tkSerializer::threeCharKeyHashToHash(s);
+        if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG), XML_PRESCRIPTION_MAINTAG,hash,false)) {
             Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"));
             continue;
         }
@@ -330,7 +361,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     Q_EMIT m->numberOfRowsChanged();
 
     // small debug information
-    Utils::Log::addMessage("DrugsIO",tr("Xml prescription correctly read."));
+    Utils::Log::addMessage("DrugsIO", tr("Xml prescription correctly read."));
     return true;
 }
 
@@ -539,7 +570,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     keysToSave
         << Prescription::IsTextualOnly
         << Prescription::UsedDosage
-        << Prescription::CIP
+        << Prescription::Pack_UID
         << Prescription::OnlyForTest
         << Prescription::IntakesFrom
         << Prescription::IntakesTo
@@ -565,7 +596,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     QHash<QString, QString> forXml;
     int i;
     for(i=0; i<m->rowCount() ; ++i) {
-        forXml.insert(XML_PRESCRIPTION_CIS, m->index(i, Drug::CIS).data().toString());
+        forXml.insert(XML_PRESCRIPTION_CIS, m->index(i, Drug::UID).data().toString());
         if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
         } else {
@@ -573,7 +604,6 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
                 forXml.insert( instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString() );
             }
         }
-        /** \todo Manage Textual drugs name Drug::Denomination */
         if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
             forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
                           m->index(i, Drug::Denomination).data().toString());
@@ -581,7 +611,15 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
         xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false);
         forXml.clear();
     }
-    xmldPrescription.prepend(QString("%1<%2>\n").arg(XML_VERSION, XML_FULLPRESCRIPTION_TAG));
+    // Add XmlVersion XML_HEADER
+    xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
+                             .arg(XML_FULLPRESCRIPTION_TAG)
+                             .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
+    // Add drugsBase identifiant
+    QString dbName = drugsBase()->actualDatabaseInformations()->identifiant;
+    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
+    // Add the version and the FullPrescription tags
+    xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
     xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
     return xmldPrescription;
 }
@@ -600,8 +638,6 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
         QString tmp = Utils::createXml(XML_EXTRADATAS_TAG,extraDatas,4,false);
         xmldPrescription.append(tmp);
     }
-    // add xml doc version to the beginning of the doc
-    xmldPrescription.prepend(XML_VERSION);
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
@@ -625,8 +661,6 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
         xmldPrescription.append(extraXmlDatas);
         xmldPrescription.append(QString("\n</%1>\n").arg(XML_EXTRADATAS_TAG));
     }
-    // add xml doc version to the beginning of the doc
-    xmldPrescription.prepend(XML_VERSION);
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",

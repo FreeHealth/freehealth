@@ -83,7 +83,8 @@ static inline Core::ContextManager *contextManager() {return Core::ICore::instan
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
-    QWidget(parent), m_CurrentDrugModel(0)
+    QWidget(parent), m_CurrentDrugModel(0),
+    m_SelectionOnlyMode(false)
 {
     // create instance of DrugsManager
     DrugsWidgetManager::instance();
@@ -104,7 +105,7 @@ bool DrugsCentralWidget::initialize()
     m_CurrentDrugModel = new DrugsDB::DrugsModel(this);
     m_ui->m_PrescriptionView->initialize();
     m_ui->m_PrescriptionView->setModel(m_CurrentDrugModel);
-    m_ui->m_PrescriptionView->setModelColumn( DrugsDB::Constants::Drug::FullPrescription );
+    m_ui->m_PrescriptionView->setModelColumn(DrugsDB::Constants::Drug::FullPrescription);
 
     m_ui->m_DrugSelector->initialize();
 
@@ -140,6 +141,12 @@ DrugsDB::DrugsModel *DrugsCentralWidget::currentDrugsModel() const
 void DrugsCentralWidget::setCurrentSearchMethod(int method)
 {
     m_ui->m_DrugSelector->setSearchMethod(method);
+}
+
+void DrugsCentralWidget::enterSelectionOnlyMode()
+{
+    m_SelectionOnlyMode = true;
+    m_CurrentDrugModel->setSelectionOnlyMode(true);
 }
 
 void DrugsCentralWidget::createConnections()
@@ -182,11 +189,13 @@ void DrugsCentralWidget::selector_drugSelected(const int uid)
     }
 //    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
     m_CurrentDrugModel->addDrug(uid);
-    Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));
-    if (dlg.exec()==QDialog::Rejected) {
-        m_CurrentDrugModel->removeLastInsertedDrug();
+    if (!m_SelectionOnlyMode) {
+        Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));
+        if (dlg.exec()==QDialog::Rejected) {
+            m_CurrentDrugModel->removeLastInsertedDrug();
+        }
+        m_ui->m_PrescriptionView->listview()->update();
     }
-    m_ui->m_PrescriptionView->listview()->update();
 }
 
 /** \brief Change the font of the viewing widget */

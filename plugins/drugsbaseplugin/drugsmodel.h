@@ -118,9 +118,10 @@ public:
     bool moveUp( const QModelIndex &item );
     bool moveDown( const QModelIndex &item );
 
-    // FILTERS
+    // FILTERS AND MODES
     void showTestingDrugs(bool state);
     bool testingDrugsAreVisible() const;
+    void setSelectionOnlyMode(bool b);
 
     // DRAG AND DROP
     Qt::DropActions supportedDropActions() const;

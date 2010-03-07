@@ -219,7 +219,7 @@ bool Patient::fromXml(const QString &xml)
 {
     QHash<QString,QString> datas;
     if (!Utils::readXml(xml, MAIN_PATIENT_TAG, datas, true)) {
-        Utils::Log::addError("diPatient", "Error while reading XML patient's datas (Patient::fromXml())");
+        Utils::Log::addError("Patient", "Error while reading XML patient's datas (Patient::fromXml())");
         return false;
     }
     foreach(const QString &k, datas.keys()) {
@@ -228,7 +228,7 @@ bool Patient::fromXml(const QString &xml)
             d->m_Values.insert(id, datas.value(k));
         }
     }
-    qWarning() << d->m_Values;
+//    qWarning() << d->m_Values;
     return true;
 }
 
