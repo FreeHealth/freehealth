@@ -276,7 +276,7 @@ void ListViewActionHandler::removeItem()
 namespace Views {
 namespace Internal {
 
-ListViewPrivate::ListViewPrivate( QWidget * parent, ListView::AvailableActions actions ) :
+ListViewPrivate::ListViewPrivate(QWidget * parent, ListView::AvailableActions actions) :
     m_Parent(parent),
     m_ListView(0),
     m_Actions(actions),
@@ -368,7 +368,7 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
 
 
 /** \brief Defines the objectName */
-void ListView::setObjectName( const QString &name )
+void ListView::setObjectName(const QString &name)
 {
     d->m_ListView->setObjectName(name+"ListView");
     QWidget::setObjectName(name);
@@ -386,14 +386,14 @@ QAbstractItemModel * ListView::model() const
     return d->m_ListView->model();
 }
 
-void ListView::setModel( QAbstractItemModel * model )
+void ListView::setModel(QAbstractItemModel * model)
 {
-    d->m_ListView->setModel( model );
+    d->m_ListView->setModel(model);
 }
 
-void ListView::setModelColumn( int column )
+void ListView::setModelColumn(int column)
 {
-    d->m_ListView->setModelColumn( column );
+    d->m_ListView->setModelColumn(column);
 }
 
 int ListView::modelColumn() const
@@ -401,17 +401,17 @@ int ListView::modelColumn() const
     return d->m_ListView->modelColumn();
 }
 
-void ListView::setCurrentIndex( const QModelIndex & item )
+void ListView::setCurrentIndex(const QModelIndex & item)
 {
-    d->m_ListView->setCurrentIndex( item );
+    d->m_ListView->setCurrentIndex(item);
 }
 
-void ListView::setEditTriggers( QAbstractItemView::EditTriggers triggers )
+void ListView::setEditTriggers(QAbstractItemView::EditTriggers triggers)
 {
     d->m_ListView->setEditTriggers(triggers);
 }
 
-void ListView::setActions( AvailableActions actions )
+void ListView::setActions(AvailableActions actions)
 {
     d->m_Actions = actions;
     d->calculateContext();
@@ -427,7 +427,7 @@ void ListView::showButtons()
     d->m_ToolBar->show();
 }
 
-void ListView::useContextMenu( bool state )
+void ListView::useContextMenu(bool state)
 {
     if (state)
         d->m_ListView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -444,39 +444,41 @@ QMenu * ListView::getContextMenu()
 
 void ListView::addItem()
 {
-    if ( ! d->m_ListView->model() )
+    if (! d->m_ListView->model())
         return;
     
     // insert a row into model
     int row = 0;
-    if ( d->m_ListView->currentIndex().isValid() )
+    if (d->m_ListView->currentIndex().isValid())
         row = d->m_ListView->currentIndex().row() + 1;
     else {
         row = d->m_ListView->model()->rowCount();
         if (row<0)
             row = 0;
     }
-    if ( !d->m_ListView->model()->insertRows( row, 1 ) )
-        Utils::Log::addError( this, QString("ListView can not add a row to the model %1").arg(model()->objectName()) );
+    if (!d->m_ListView->model()->insertRows(row, 1))
+        Utils::Log::addError(this, QString("ListView can not add a row to the model %1").arg(model()->objectName()));
 
     // select inserted row and edit it
-    if ( d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers ) {
-        QModelIndex index = d->m_ListView->model()->index( row, 0 ) ;
-        d->m_ListView->edit( index );
+    if (d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers) {
+        QModelIndex index = d->m_ListView->model()->index(row, 0) ;
+        d->m_ListView->edit(index);
     }
 }
 
 void ListView::removeItem()
 {
-    if (!d->m_ListView->model() )
+    if (!d->m_ListView->model())
         return;
-
-    if ( d->m_ListView->currentIndex().isValid() ) {
-        d->m_ListView->closePersistentEditor( d->m_ListView->currentIndex() );
-        if ( ! d->m_ListView->model()->removeRows( d->m_ListView->currentIndex().row(), 1 ) )
-            Utils::Log::addError( this, QString("ListView can not remove row %1 to the model %2")
-                             .arg( d->m_ListView->currentIndex().row() )
-                             .arg( model()->objectName() ) );
+    QModelIndex idx = d->m_ListView->currentIndex();
+    if (idx.isValid()) {
+        d->m_ListView->closePersistentEditor(idx);
+        int row = idx.row();
+        qWarning() << idx.data() << idx.row();
+        if (!d->m_ListView->model()->removeRows(row, 1))
+            Utils::Log::addError(this, QString("ListView can not remove row %1 to the model %2")
+                             .arg(row)
+                             .arg(model()->objectName()));
     }
 }
 
@@ -504,13 +506,13 @@ void ListView::moveDown()
     // TODO : else swap the two rows.
 
     if (moved)
-        d->m_ListView->setCurrentIndex( d->m_ListView->model()->index(idx.row()+1,0) );
+        d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()+1,0));
 }
 
 void ListView::moveUp()
 {
     QModelIndex idx = d->m_ListView->currentIndex();
-//    d->m_ListView->closePersistentEditor( idx );
+//    d->m_ListView->closePersistentEditor(idx);
     bool moved = false;
 
     StringListModel *m = qobject_cast<StringListModel*>(model());
@@ -529,13 +531,13 @@ void ListView::moveUp()
     // TODO : else swap the two rows.
 
     if (moved)
-        d->m_ListView->setCurrentIndex( d->m_ListView->model()->index(idx.row()-1,0) );
+        d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()-1,0));
 }
 
 void ListView::on_edit_triggered()
 {}
 
-void ListView::contextMenu( const QPoint & p )
+void ListView::contextMenu(const QPoint & p)
 {
     QMenu *pop = getContextMenu();
     pop->popup(this->mapToGlobal(p));

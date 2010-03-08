@@ -325,6 +325,10 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(m_UID != -1, "DosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
+
+    if (row < 0)
+        return false;
+
     setEditStrategy(QSqlTableModel::OnRowChange);
     bool toReturn = false;
     if (QSqlTableModel::removeRows(row, count, parent)) {

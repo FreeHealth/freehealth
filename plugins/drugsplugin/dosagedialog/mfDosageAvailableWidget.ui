@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QListView" name="listView">
+    <widget class="Views::ListView" name="listView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -38,6 +38,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Views::ListView</class>
+   <extends>QListView</extends>
+   <header location="global">listviewplugin/listview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -70,6 +70,7 @@ class DrugSelector : public QWidget, private Ui::DrugSelector
 public:
     explicit DrugSelector(QWidget *parent = 0);
     void initialize();
+    void updateDrugsViewColumns();
 
     void setFont(const QFont &font);
     void setFocus(Qt::FocusReason r) { searchLine->setFocus(r); }

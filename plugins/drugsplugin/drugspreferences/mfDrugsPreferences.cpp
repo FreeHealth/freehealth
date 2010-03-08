@@ -42,6 +42,7 @@
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
+#include <drugsplugin/drugswidget/mfDrugSelector.h>
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -491,6 +492,9 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
+
+    s->sync();
+    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }
 
 void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
@@ -506,6 +510,8 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
 
     s->sync();
+
+//    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }
 
 void DrugsSelectorWidget::changeEvent(QEvent *e)

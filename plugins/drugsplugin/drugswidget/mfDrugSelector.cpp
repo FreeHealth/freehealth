@@ -165,17 +165,24 @@ void DrugSelector::createDrugModelView()
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_AUTHORIZATION , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_TYPE_MP , 1);
     m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ATC , 1);
-    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool())
-        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ROUTE , 1);
-    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool())
-        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_FORM , 1);
+//    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool())
+//        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_ROUTE , 1);
+//    if (!settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool())
+//        m_DrugsModel->removeColumns(DrugsDB::Constants::DRUGS_FORM , 1);
     // create the view
     drugsView->setModel(m_DrugsModel);
     //      drugsView->sortByColumn(1 , Qt::AscendingOrder);  // NOT SUPPORTED BY WIN32 CROSS-COMPILATION !!!!
     drugsView->setColumnHidden(0 , true);
+    updateDrugsViewColumns();
     drugsView->verticalHeader()->hide();
     drugsView->horizontalHeader()->hide();
     drugsView->resizeColumnsToContents();
+}
+
+void DrugSelector::updateDrugsViewColumns()
+{
+    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_ROUTE, !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
+    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_FORM , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
 }
 
 void DrugSelector::createINNModelView()
