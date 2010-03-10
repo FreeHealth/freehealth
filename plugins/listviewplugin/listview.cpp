@@ -79,6 +79,8 @@ using namespace Views;
 using namespace Views::Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 namespace ListViewConstants
 {
@@ -99,7 +101,7 @@ ListViewManager *ListViewManager::instance()
 
 ListViewManager::ListViewManager(QObject *parent) : ListViewActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
+    connect(contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
 }
 
@@ -276,41 +278,57 @@ void ListViewActionHandler::removeItem()
 namespace Views {
 namespace Internal {
 
-ListViewPrivate::ListViewPrivate(QWidget * parent, ListView::AvailableActions actions) :
-    m_Parent(parent),
-    m_ListView(0),
-    m_Actions(actions),
-    m_Context(0)
+class ListViewPrivate
 {
-}
-
-void ListViewPrivate::calculateContext()
-{
-    m_Context->clearContext();
-    if (m_Actions & ListView::MoveUpDown)
-        m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(ListViewConstants::C_BASIC_MOVE));
-
-    if (m_Actions & ListView::AddRemove)
-        m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(ListViewConstants::C_BASIC_ADDREMOVE));
-}
-
-void ListViewPrivate::populateToolbar()
-{
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    if (m_Actions & ListView::AddRemove) {
-        Core::Command *cmd = am->command(Core::Constants::A_LIST_ADD);
-        m_ToolBar->addAction(cmd->action());
-        cmd = am->command(Core::Constants::A_LIST_REMOVE);
-        m_ToolBar->addAction(cmd->action());
+public:
+    ListViewPrivate(QWidget * parent, ListView::AvailableActions actions) :
+            m_Parent(parent),
+            m_ListView(0),
+            m_Actions(actions),
+            m_Context(0)
+    {
     }
 
-    if (m_Actions & ListView::MoveUpDown) {
-        Core::Command *cmd = am->command(Core::Constants::A_LIST_MOVEUP);
-        m_ToolBar->addAction(cmd->action());
-        cmd = am->command(Core::Constants::A_LIST_MOVEDOWN);
-        m_ToolBar->addAction(cmd->action());
+    ~ListViewPrivate()
+    {
     }
-}
+
+    void calculateContext()
+    {
+        m_Context->clearContext();
+        if (m_Actions & ListView::MoveUpDown)
+            m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(ListViewConstants::C_BASIC_MOVE));
+
+        if (m_Actions & ListView::AddRemove)
+            m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(ListViewConstants::C_BASIC_ADDREMOVE));
+    }
+
+    void populateToolbar()
+    {
+        Core::ActionManager *am = Core::ICore::instance()->actionManager();
+        if (m_Actions & ListView::AddRemove) {
+            Core::Command *cmd = am->command(Core::Constants::A_LIST_ADD);
+            m_ToolBar->addAction(cmd->action());
+            cmd = am->command(Core::Constants::A_LIST_REMOVE);
+            m_ToolBar->addAction(cmd->action());
+        }
+
+        if (m_Actions & ListView::MoveUpDown) {
+            Core::Command *cmd = am->command(Core::Constants::A_LIST_MOVEUP);
+            m_ToolBar->addAction(cmd->action());
+            cmd = am->command(Core::Constants::A_LIST_MOVEDOWN);
+            m_ToolBar->addAction(cmd->action());
+        }
+    }
+
+public:
+    QWidget *m_Parent;
+    QListView *m_ListView;
+    ListView::AvailableActions m_Actions;
+    ListViewContext *m_Context;
+    QToolBar *m_ToolBar;
+    QString m_ContextName;
+};
 
 }  // End Internal
 }  // End Views
@@ -330,7 +348,7 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
     ListViewManager::instance();
     d->m_Context = new ListViewContext(this);
     d->calculateContext();
-    Core::ICore::instance()->contextManager()->addContextObject(d->m_Context);
+    contextManager()->addContextObject(d->m_Context);
 
     // Create widget
     QGridLayout *layout = new QGridLayout(this);
@@ -344,28 +362,16 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
     layout->addWidget(d->m_ListView, 0, 0 , 1, 2);
     layout->addWidget(d->m_ToolBar, 1, 0);
 
-
     connect(d->m_ListView, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(contextMenu(const QPoint &)));
 
     d->populateToolbar();
 }
 
-//void ListView::focusInEvent(QFocusEvent *event)
-//{
-//    qWarning() << objectName() << "focus in";
-//    Q_UNUSED(event);
-//    QWidget::focusInEvent(event);
-//    d->m_ListView->setFocus();
-//}
-//
-//void ListView::focusOutEvent(QFocusEvent *event)
-//{
-//    qWarning() << objectName() << "focus out";
-//    Q_UNUSED(event);
-//    QWidget::focusOutEvent(event);
-//}
-
+ListView::~ListView()
+{
+    contextManager()->removeContextObject(d->m_Context);
+}
 
 /** \brief Defines the objectName */
 void ListView::setObjectName(const QString &name)

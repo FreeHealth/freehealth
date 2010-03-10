@@ -64,24 +64,6 @@ namespace Internal {
 class ListViewContext;
 
 
-class ListViewPrivate
-{
-public:
-    ListViewPrivate( QWidget *parent, ListView::AvailableActions actions );
-
-    void populateToolbar();
-    void calculateContext();
-
-public:
-    QWidget *m_Parent;
-    QListView *m_ListView;
-    ListView::AvailableActions m_Actions;
-    ListViewContext *m_Context;
-    QToolBar *m_ToolBar;
-    QString m_ContextName;
-};
-
-
 class ListViewContext : public Core::IContext
 {
 public:

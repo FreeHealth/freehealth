@@ -160,11 +160,14 @@ void ContextManagerPrivate::updateContext()
 
 void ContextManagerPrivate::updateContextObject(IContext *context)
 {
+    if (!context)
+        return;
+
     if (context == m_activeContext)
         return;
+
     IContext *oldContext = m_activeContext;
     m_activeContext = context;
-
 
     if (WarnContextUpdates) {
         if (context) {
