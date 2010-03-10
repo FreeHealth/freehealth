@@ -64,7 +64,7 @@ class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlTableModel
     Q_OBJECT
 public:
     GlobalDrugsModel(QObject * parent = 0);
-//    static GlobalDrugsModel *instance(QObject * parent = 0);
+    static void updateAvailableDosages();
 
     bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
@@ -74,7 +74,6 @@ public Q_SLOTS:
     void updateCachedAvailableDosage();
 
 private:
-//    static GlobalDrugsModel *m_Instance;
     Internal::GlobalDrugsModelPrivate *d;
 };
 

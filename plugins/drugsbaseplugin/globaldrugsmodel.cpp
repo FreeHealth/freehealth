@@ -93,13 +93,10 @@ QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
 
 using namespace DrugsDB;
 
-//DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::m_Instance = 0;
-//DrugsDB::GlobalDrugsModel *DrugsDB::GlobalDrugsModel::instance(QObject *parent)
-//{
-//    if (!m_Instance)
-//        m_Instance = new DrugsDB::GlobalDrugsModel(parent);
-//    return m_Instance;
-//}
+void GlobalDrugsModel::updateAvailableDosages()
+{
+    Internal::GlobalDrugsModelPrivate::updateCachedAvailableDosage();
+}
 
 GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
         QSqlTableModel(parent, QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME)),

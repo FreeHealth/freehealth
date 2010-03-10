@@ -206,8 +206,7 @@ void DosageCreatorDialog::done(int r)
     if ( r == QDialog::Rejected ) {
         d->m_DosageModel->revertRow(row);
     }  else {
-        /** \todo globaldrusmodel */
-//        DrugsDB::GlobalDrugsModel::instance()->updateCachedAvailableDosage();
+        DrugsDB::GlobalDrugsModel::updateAvailableDosages();
         dosageViewer->done(r);
         /** \todo check validity of the dosage before submition */
     }
