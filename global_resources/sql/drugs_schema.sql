@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `DRUGS` (
   `ATC` varchar(7),
   `TYPE_MP` varchar(1),
   `AUTHORIZATION` varchar(1),
-  `MARKETED` bool NOT NULL DEFAULT true,
+  `MARKETED` bool NOT NULL DEFAULT 1,
   `LINK_SPC` varchar(250)
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `PACKAGING` (
   `PACKAGE_UID` int(20) NOT NULL,
   `LABEL` varchar(500) NOT NULL,
   `STATUS` varchar(1),
-  `MARKETING` varchar(1) NOT NULL,
+  `MARKETING` int(1) NOT NULL DEFAULT 1,
   `DATE` varchar(25),
   `OPTIONAL_CODE` int(20)
 );
