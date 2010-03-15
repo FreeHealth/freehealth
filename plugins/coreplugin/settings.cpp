@@ -542,10 +542,10 @@ void SettingsPrivate::restoreState(QMainWindow * window, const QString & prefix)
         QWidget *w = 0;
         foreach(const QString &s, k) {
             w = window->findChild<QDockWidget*>(s.mid(s.indexOf("Dock/")+5));
-            qWarning() << w << s.mid(s.indexOf("Dock/")+5);
             if (w) {
                 w->restoreGeometry(value(prefix + "/Dock/" + w->objectName()).toByteArray());
             }
+            w = 0;
         }
     }
 }

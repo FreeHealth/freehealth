@@ -84,7 +84,7 @@ public Q_SLOTS:
     void done(int r);
     void commitToModel();
     void changeCurrentRow(const int dosageRow);
-    void changeCurrentRow(const QModelIndex &item);
+    void changeCurrentRow(const QModelIndex &current, const QModelIndex &previous); 
 
 private:
     void resizeEvent(QResizeEvent * event);

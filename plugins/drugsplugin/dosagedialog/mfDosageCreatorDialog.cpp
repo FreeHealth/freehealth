@@ -184,7 +184,10 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     }
 
     // Create connections
-    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),dosageViewer,SLOT(changeCurrentRow(QModelIndex)));
+//    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),
+//            dosageViewer, SLOT(changeCurrentRow(QModelIndex)));
+    connect(availableDosagesListView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            dosageViewer, SLOT(changeCurrentRow(QModelIndex, QModelIndex)));
     QModelIndex idx = dosageModel->index(0,Dosages::Constants::Label);
     availableDosagesListView->setCurrentIndex(idx);
 }

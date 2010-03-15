@@ -455,9 +455,9 @@ void ListView::addItem()
     
     // insert a row into model
     int row = 0;
-    if (d->m_ListView->currentIndex().isValid())
+    if (d->m_ListView->currentIndex().isValid()) {
         row = d->m_ListView->currentIndex().row() + 1;
-    else {
+    } else {
         row = d->m_ListView->model()->rowCount();
         if (row<0)
             row = 0;
@@ -466,8 +466,9 @@ void ListView::addItem()
         Utils::Log::addError(this, QString("ListView can not add a row to the model %1").arg(model()->objectName()));
 
     // select inserted row and edit it
+    QModelIndex index = d->m_ListView->model()->index(row, d->m_ListView->modelColumn());
+    d->m_ListView->setCurrentIndex(index);
     if (d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers) {
-        QModelIndex index = d->m_ListView->model()->index(row, 0) ;
         d->m_ListView->edit(index);
     }
 }
