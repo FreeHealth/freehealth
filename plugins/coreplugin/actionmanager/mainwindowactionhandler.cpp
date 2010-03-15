@@ -681,8 +681,8 @@ void MainWindowActionHandler::createTemplatesActions(int actions)
     if (actions & Core::MainWindowActions::A_Templates_ToogleViewer) {
         a = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONTEMPLATES));
-        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_TOOGLEVIEW, ctx);
-        cmd->setTranslations(Trans::Constants::TEMPLATES_TOOGLEVIEW_TEXT);
+        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_TOGGLEVIEW, ctx);
+        cmd->setTranslations(Trans::Constants::TEMPLATES_TOGGLEVIEW_TEXT);
         menu->addAction(cmd, Constants::G_TEMPLATES_EXTRAS);
     }
 }

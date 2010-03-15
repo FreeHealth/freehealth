@@ -753,116 +753,121 @@ DrugsData *DrugsBase::getDrugByCIP(const QVariant & CIP_id)
 /** \brief Retrieve and return the drug designed by the UID code \e drug_UID. */
 DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
 {
-     QTime t;
-     t.start();
+    if (!d->m_ActualDBInfos) {
+        DrugsData * toReturn = new DrugsData;
+        toReturn->setValue(Table_DRUGS, DRUGS_NAME, QString("No drugs database loaded."));
+        return toReturn;
+    }
+    QTime t;
+    t.start();
 
-     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
-     if ((!DB.open()) && (!DB.isOpen())) {
-         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+    QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
+    if ((!DB.open()) && (!DB.isOpen())) {
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                              .arg(Constants::DRUGS_DATABASE_NAME).arg(DB.lastError().text()));
-          return 0;
-      }
+        return 0;
+    }
 
-     // construct the where clause
-     QHash<int, QString> where;
-     int newUID = drug_UID.toInt();
-     if (newUID == -1) {
-         QString req = select(Table_DRUGS, DRUGS_UID, where);
-         req = req.remove("WHERE ") + " LIMIT 1";
-         QSqlQuery q(req,DB);
-         if (q.isActive()) {
-             if (q.next()) {
-                 newUID = q.value(0).toInt();
-             }
-         } else {
-             Utils::Log::addError(this, "Can find a valid DRUGS_UID in getDrugByUID where uid==-1");
-             Utils::Log::addQueryError("DrugsBase", q);
-             return 0;
-         }
-     }
-     where.insert(DRUGS_UID, QString("=%1").arg(newUID));
+    // construct the where clause
+    QHash<int, QString> where;
+    int newUID = drug_UID.toInt();
+    if (newUID == -1) {
+        QString req = select(Table_DRUGS, DRUGS_UID, where);
+        req = req.remove("WHERE ") + " LIMIT 1";
+        QSqlQuery q(req,DB);
+        if (q.isActive()) {
+            if (q.next()) {
+                newUID = q.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addError(this, "Can find a valid DRUGS_UID in getDrugByUID where uid==-1");
+            Utils::Log::addQueryError("DrugsBase", q);
+            return 0;
+        }
+    }
+    where.insert(DRUGS_UID, QString("=%1").arg(newUID));
 
-     // get DRUGS table
-     QString req = select(Table_DRUGS, where);
-     DrugsData * toReturn = 0;
-     {
-          QSqlQuery q(req , DB);
-          if (q.isActive()) {
-               if (q.next()) {
-                    if (q.record().count() != DRUGS_MaxParam)
-                         Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
-                                   "ERROR : will retreiving %1. Wrong number of fields")
-                                          .arg("DRUGS table"));
-                    int i = 0;
-                    toReturn = new DrugsData();
-                    for (i = 0; i < DRUGS_MaxParam; ++i)
-                         toReturn->setValue(Table_DRUGS, i, q.value(i));
-               }
-               // manage drugs denomination according to the database informations
-               if (d->m_ActualDBInfos) {
-                   QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
-                   if (!tmp.isEmpty()) {
-                       tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
-                       tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
-                       tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
-                       tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
-                       toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
-                   }
-               }
-           } else {
-               Utils::Log::addQueryError(this, q);
-           }
-      }
+    // get DRUGS table
+    QString req = select(Table_DRUGS, where);
+    DrugsData * toReturn = 0;
+    {
+        QSqlQuery q(req , DB);
+        if (q.isActive()) {
+            if (q.next()) {
+                if (q.record().count() != DRUGS_MaxParam)
+                    Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
+                                                                                  "ERROR : will retreiving %1. Wrong number of fields")
+                                         .arg("DRUGS table"));
+                int i = 0;
+                toReturn = new DrugsData();
+                for (i = 0; i < DRUGS_MaxParam; ++i)
+                    toReturn->setValue(Table_DRUGS, i, q.value(i));
+            }
+            // manage drugs denomination according to the database informations
+            if (d->m_ActualDBInfos) {
+                QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
+                if (!tmp.isEmpty()) {
+                    tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
+                    tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
+                    tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
+                    tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
+                    toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
+                }
+            }
+        } else {
+            Utils::Log::addQueryError(this, q);
+        }
+    }
 
-     // get COMPO table
-     where.clear();
-     where.insert(COMPO_UID, QString("=%1").arg(newUID));
-     QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
-     req = select(Table_COMPO, where) + sort;
-     QSet<int> codeMols;
-     {
-         DrugComposition *compo = 0;
-         DrugComposition *precedent = 0;
-          QSqlQuery q(req , DB);
-          if (q.isActive()) {
-              QList<DrugComposition*> list;
-               while (q.next()) {
-                    if (q.record().count() != COMPO_MaxParam)
-                         Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
-                                   "ERROR : will retreiving %1. Wrong number of fields")
-                                          .arg("COMPOSITION table"));
-                    compo = new DrugComposition();
-                    int i = 0;
-                    for (i = 0; i < COMPO_MaxParam; ++i)
-                         compo->setValue(i, q.value(i));
-                    compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->m_CodeMolecule));
-                    compo->setValue(COMPO_IAM_CLASS_DENOMINATION, getIamClassDenomination(compo->m_CodeMolecule));
-                    compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_MOL_CODE).toInt()));
-                    list << compo;
-                    codeMols << q.value(COMPO_MOL_CODE).toInt();
-                    if (precedent) {
-                        if (q.value(COMPO_LK_NATURE) == precedent->linkId()) {
-                            compo->setLinkedSubstance(list.at(list.count()-2));
-                        }
+    // get COMPO table
+    where.clear();
+    where.insert(COMPO_UID, QString("=%1").arg(newUID));
+    QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
+    req = select(Table_COMPO, where) + sort;
+    QSet<int> codeMols;
+    {
+        DrugComposition *compo = 0;
+        DrugComposition *precedent = 0;
+        QSqlQuery q(req , DB);
+        if (q.isActive()) {
+            QList<DrugComposition*> list;
+            while (q.next()) {
+                if (q.record().count() != COMPO_MaxParam)
+                    Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
+                                                                                  "ERROR : will retreiving %1. Wrong number of fields")
+                                         .arg("COMPOSITION table"));
+                compo = new DrugComposition();
+                int i = 0;
+                for (i = 0; i < COMPO_MaxParam; ++i)
+                    compo->setValue(i, q.value(i));
+                compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->m_CodeMolecule));
+                compo->setValue(COMPO_IAM_CLASS_DENOMINATION, getIamClassDenomination(compo->m_CodeMolecule));
+                compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_MOL_CODE).toInt()));
+                list << compo;
+                codeMols << q.value(COMPO_MOL_CODE).toInt();
+                if (precedent) {
+                    if (q.value(COMPO_LK_NATURE) == precedent->linkId()) {
+                        compo->setLinkedSubstance(list.at(list.count()-2));
                     }
-                    precedent = compo;
-               }
-               foreach(DrugComposition *c, list)
-                   toReturn->addComposition(c);
-           } else {
-               Utils::Log::addQueryError(this, q);
-           }
-      }
-     foreach(const int i, codeMols) {
-         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
-     }
+                }
+                precedent = compo;
+            }
+            foreach(DrugComposition *c, list)
+                toReturn->addComposition(c);
+        } else {
+            Utils::Log::addQueryError(this, q);
+        }
+    }
+    foreach(const int i, codeMols) {
+        toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
+    }
 
-//     if (toReturn)
-//         toReturn->warn();
+    //     if (toReturn)
+    //         toReturn->warn();
 
-     if (d->m_LogChrono)
-         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");
+    if (d->m_LogChrono)
+        Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");
 
-     return toReturn;
+    return toReturn;
 }
 

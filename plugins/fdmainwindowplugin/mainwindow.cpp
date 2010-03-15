@@ -181,8 +181,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     actionManager()->retranslateMenusAndActions();
 
-    readSettings();
-
     return true;
 }
 
@@ -280,6 +278,7 @@ void MainWindow::extensionsInitialized()
 
     createDockWindows();
     finishSplash(this);
+    readSettings();
     show();
 }
 
@@ -414,7 +413,7 @@ void MainWindow::readSettings()
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
-    settings()->saveState( this, DrugsWidget::Constants::S_STATEPREFIX );
+    settings()->saveState(this, DrugsWidget::Constants::S_STATEPREFIX);
     fileManager()->saveRecentFiles();
     settings()->sync();
 }

@@ -101,7 +101,7 @@ private Q_SLOTS:
     void listViewItemChanged();
     void searchActionChanged(QAction *a);
     void printPrescription();
-    void toogleTestingDrugs();
+    void toggleTestingDrugs();
     void changeDuration();
     void createTemplate();
     void printPreview();
@@ -128,7 +128,7 @@ protected:
     QAction *aSearchInn;
     QAction *aPrintPrescription;
     QAction *aPrintPreview;
-    QAction *aToogleTestingDrugs;
+    QAction *aToggleTestingDrugs;
     QAction *aChangeDuration;
     QAction *aToTemplate;
     QAction *aDatabaseInformations;

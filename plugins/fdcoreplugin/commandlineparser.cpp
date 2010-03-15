@@ -176,8 +176,8 @@ public:
         if (!loadElement(root))
             return false;
 
-        foreach(int k, value.keys())
-            qWarning() << params.value(k) << value.value(k);
+//        foreach(int k, value.keys())
+//            qWarning() << params.value(k) << value.value(k);
 
         return true;
     }

@@ -143,7 +143,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aSearchInn(0),
         aPrintPrescription(0),
         aPrintPreview(0),
-        aToogleTestingDrugs(0),
+        aToggleTestingDrugs(0),
         aChangeDuration(0),
         aToTemplate(0),
         aDatabaseInformations(0),
@@ -220,14 +220,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(viewInteractions()));
 
-    a = aToogleTestingDrugs = new QAction(this);
-    a->setIcon(th->icon(DrugsWidget::Constants::I_TOOGLETESTINGDRUGS));
+    a = aToggleTestingDrugs = new QAction(this);
+    a->setIcon(th->icon(DrugsWidget::Constants::I_TOGGLETESTINGDRUGS));
     a->setCheckable(true);
     a->setChecked(true);
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_TOOGLE_TESTINGDRUGS, ctx);
-    cmd->setTranslations(DrugsWidget::Constants::TOOGLETESTINGDRUGS_TEXT);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS, ctx);
+    cmd->setTranslations(DrugsWidget::Constants::TOGGLETESTINGDRUGS_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-    connect(a, SIGNAL(triggered()), this, SLOT(toogleTestingDrugs()));
+    connect(a, SIGNAL(triggered()), this, SLOT(toggleTestingDrugs()));
 
     // Search method menu
     Core::ActionContainer *searchmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
@@ -488,10 +488,10 @@ void DrugsActionHandler::printPrescription()
         m_CurrentView->printPrescription();
 }
 
-void DrugsActionHandler::toogleTestingDrugs()
+void DrugsActionHandler::toggleTestingDrugs()
 {
     if (m_CurrentView)
-       m_CurrentView->currentDrugsModel()->showTestingDrugs(aToogleTestingDrugs->isChecked());
+       m_CurrentView->currentDrugsModel()->showTestingDrugs(aToggleTestingDrugs->isChecked());
 }
 
 void DrugsActionHandler::changeDuration()

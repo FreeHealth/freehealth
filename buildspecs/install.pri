@@ -121,7 +121,7 @@ INSTALLS += forms
 # Install databases
 !isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
 drugsdb.path = $${INSTALL_DATABASES_PATH}/drugs
-drugsdb.files = $${SOURCES_DATABASES}/drugs/drugs.db
+drugsdb.files = $${SOURCES_DATABASES}/drugs/drugs*.db
 INSTALLS += drugsdb
 usersdb.path = $${INSTALL_DATABASES_PATH}/users
 usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt

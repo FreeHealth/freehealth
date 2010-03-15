@@ -93,8 +93,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_MedinTux(0),
         m_UID(new UniqueIDManager),
+        m_MedinTux(0),
         m_Patient(new Patient)
 {
     m_Settings = new SettingsPrivate(this);

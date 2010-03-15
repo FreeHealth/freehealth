@@ -184,7 +184,7 @@ namespace Time {
 
         const char * const  TEMPLATES             = QT_TRANSLATE_NOOP("tkConstants", "Templates");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  CREATETEMPLATE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Create a new template");    /*!< \brief Default action text  \ingroup constants_actionmanager */
-        const char * const  TEMPLATES_TOOGLEVIEW_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Toogle template view");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TEMPLATES_TOGGLEVIEW_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Toggle template view");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ADDCATEGORY_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Add a category");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  ADD_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "Add");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  REMOVE_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Remove");    /*!< \brief Default action text  \ingroup constants_actionmanager */
@@ -233,7 +233,7 @@ namespace Time {
         const char * const  PRINT_PREVIEW_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Print Preview");
         const char * const  TRANSLATORS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
-        const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toogle full screen");
+        const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toggle full screen");
         const char * const  ZOOMIN_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Zoom in");
         const char * const  ZOOMOUT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Zoom out");
 
@@ -451,7 +451,7 @@ namespace Time {
         /*: Add table Editor shortcut key : Mac specific */
         const char* const K_EDITOR_ADDTABLE_MAC     = QT_TRANSLATE_NOOP("tkConstants", "");
 
-const char * const EDITOR_TOGGLETOOLBAR_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Toogle toolbar");
+const char * const EDITOR_TOGGLETOOLBAR_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Toggle toolbar");
 const char * const EDITOR_FILEOPEN_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Open in editor");
 const char * const EDITOR_FILESAVE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Save editor");
 const char * const EDITORMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Rich Text Editor");

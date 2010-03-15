@@ -68,8 +68,10 @@ namespace Internal {
 class GlobalDrugsModelPrivate
 {
 public:
-    GlobalDrugsModelPrivate()
-    {}
+    GlobalDrugsModelPrivate(GlobalDrugsModel *parent) : q(parent)
+    {
+        Q_ASSERT(q);
+    }
 
     static void updateCachedAvailableDosage()
     {
@@ -82,8 +84,29 @@ public:
         return m_CachedAvailableDosageForUID.contains(uid);
     }
 
+    QString getConstructedDrugName(const int row)
+    {
+        if (drugsBase()->actualDatabaseInformations()) {
+            QString tmp = drugsBase()->actualDatabaseInformations()->drugsNameConstructor;
+            if (!tmp.isEmpty()) {
+                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME),
+                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString());
+                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_FORM),
+                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_FORM)).toString());
+                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
+                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_ROUTE)).toString());
+                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH),
+                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_STRENGTH)).toString());
+                return tmp;
+            }
+        }
+        return q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString();
+    }
+
+
 private:
     static QList<int> m_CachedAvailableDosageForUID;
+    GlobalDrugsModel *q;
 };
 
 /** \todo clear static cachedCISDosage when no entity of this object left */
@@ -103,7 +126,7 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
         QSqlTableModel(parent, QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME)),
         d(0)
 {
-    d = new Internal::GlobalDrugsModelPrivate();
+    d = new Internal::GlobalDrugsModelPrivate(this);
     d->updateCachedAvailableDosage();
     setTable(drugsBase()->table(Constants::Table_DRUGS));
     setEditStrategy( QSqlTableModel::OnManualSubmit );
@@ -120,23 +143,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
     if (role == Qt::DisplayRole) {
         if (item.column() == DrugsDB::Constants::DRUGS_NAME) {
-            if (drugsBase()->actualDatabaseInformations()) {
-                // Construct drug name according to the database standard
-                QString tmp = drugsBase()->actualDatabaseInformations()->drugsNameConstructor;
-                if (!tmp.isEmpty()) {
-                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME),
-                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_NAME)).toString());
-                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_FORM),
-                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_FORM)).toString());
-                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
-                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_ROUTE)).toString());
-                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH),
-                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_STRENGTH)).toString());
-                    return tmp;
-                } else {
-                    return QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_NAME));
-                }
-            }
+            return d->getConstructedDrugName(item.row());
         }
     } else if (role == Qt::BackgroundRole) {
         if (item.column() == Constants::DRUGS_NAME) {
@@ -150,9 +157,14 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             }
         }
     } else if (role == Qt::ToolTipRole) {
-        QString tmp = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_NAME)).toString() + "\n";
+        QString tmp = d->getConstructedDrugName(item.row()) + "\n";
         tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "\n";
-        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString();
+        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "\n";
+        QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
+        if (atc.isEmpty())
+            tmp += "    No ATC found";
+        else
+            tmp += "    " + atc;
         return tmp;
     }
     return QSqlTableModel::data(item,role);

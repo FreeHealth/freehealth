@@ -150,7 +150,7 @@ void PrescriptionViewer::createActionsAndToolbar()
 
     actionsToAdd.clear();
     actionsToAdd
-            << DrugsWidget::Constants::A_TOOGLE_TESTINGDRUGS
+            << DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS
             << Core::Constants::A_VIEW_INTERACTIONS
             << Core::Constants::A_CHANGE_DURATION;
 
