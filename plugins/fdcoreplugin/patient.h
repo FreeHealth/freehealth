@@ -60,16 +60,22 @@ class CORE_EXPORT Patient
 {
 public:
     enum Reference {
-        FullName = 0,
-        Sex,
+        UID = 0,
+        Name,
+        Surname,
+        Gender,
         DateOfBirth,
         Age,
         YearsOld,
         Weight,
+        WeightUnit,
         Height,
+        HeightUnit,
         IMC,
+        Creatinine,
+        CreatinineUnit,
         CreatinClearance,
-        Creatinin,
+        CreatinClearanceUnit,
         DrugsAllergies,     //  see tkSerializer --> string<->stringlist
         ICD10Deceases,      //  see tkSerializer --> string<->stringlist
     };

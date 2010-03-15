@@ -238,7 +238,7 @@ namespace Constants {
 
     /** \brief Represents the fields index of drugs database table CIS */
     enum DRUGSfields
-    { DRUGS_UID = 0, DRUGS_NAME, DRUGS_FORM, DRUGS_ROUTE, DRUGS_ATC, DRUGS_TYPE_MP,
+    { DRUGS_UID = 0, DRUGS_NAME, DRUGS_FORM, DRUGS_ROUTE, DRUGS_ATC, DRUGS_STRENGTH, DRUGS_TYPE_MP,
       DRUGS_AUTHORIZATION, DRUGS_MARKET, DRUGS_LINK_SPC,
       DRUGS_MaxParam
     };
@@ -260,7 +260,7 @@ namespace Constants {
     enum INFOfields
     { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK,
       INFO_AUTHOR, INFO_LICENSE, INFO_LICENSE_TERMS, INFO_DATE, INFO_DRUG_UID_NAME, INFO_PACK_MAIN_CODE_NAME,
-      INFO_ATC, INFO_INTERACTIONS, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY,
+      INFO_ATC, INFO_INTERACTIONS, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY, INFO_DRUGS_NAME_CONSTRUCTOR,
       INFO_MaxParam
     };
 
@@ -293,14 +293,18 @@ namespace Drug
         Pack_UID,
         Denomination,
         Form,
+        Route,
+        GlobalStrength,
         IsScoredTablet,
         Molecules,
         CodeMoleculesList,
         AllInnsKnown,
         Inns,                    // names
+        InnsATCcodes,
         InnClasses,              // names
         MainInnCode,             // -1 if no INN known or more than one INN
         MainInnName,             // -1 if no INN known or more than one INN
+        ATC,
         MainInnDosage,
         Administration,
         Interacts,

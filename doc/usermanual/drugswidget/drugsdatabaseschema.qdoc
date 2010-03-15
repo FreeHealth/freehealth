@@ -74,6 +74,9 @@ Schéma :
 - FORM : forme du médicament (gélule, comprimé, gél...)
 - ROUTE : voie d'administration
 - ATC : code ATC du médicament
+- GLOBAL_STRENGTH : contient le dosage global du médicament. N'est utilisé que pour construire
+le nom du médicament pour certaines bases de données. Voir aussi INFORMATIONS.DRUGS_NAME_CONSTRUCTOR.
+    - Ex : 2.5mg;6.5mg
 - TYPE_MP (optionnel) : type d'AMM , schedule in CA
 - AUTHORIZATION (optionnal) : type d'autorisation d'AMM
 - MARKETED : commercialisé : Booléen :: Oui = 1 ; Non = 0
@@ -86,6 +89,9 @@ Schema :
 - FORM : Form of the drug (e.g. tablet, capsule, powder, solution, cream, soap bar)
 - ROUTE : route of administration (e.g. oral, intravenous, ophthalmic, rectal, topical)
 - ATC : drug's Anatomical Therapeutic Chemical classification system code
+- GLOBAL_STRENGTH : contains the globale strenght of the drug. Only used for the drugs name construction.
+See also: INFORMATIONS.DRUGS_NAME_CONSTRUCTOR.
+    - Ex : 2.5mg;6.5mg
 - TYPE_MP (optional) : marketing permission (AMM in French, Schedule in CA)
 - AUTHORIZATION (optional) : type of authorisation
 - MARKETED : Boolean :: Yes = 1 ; No = 0
@@ -204,6 +210,16 @@ xx=All other languages
     - language is a lowercase, two-letter, ISO 639 language code,
     - territory is an uppercase, two-letter, ISO 3166 country code,
     - and codeset and modifier are ignored.
+- DRUGS_NAME_CONSTRUCTOR : string to use for the drug name construction. Some tokens will be replaced
+by their values. You can use these tokens :
+    - NULL value is replaced by "NAME" only
+    - "NAME" : for the name of the drug ( == DRUGS.NAME)
+    - "FORM" : for the name of the drug ( == DRUGS.FORM)
+    - "ROUTE" : for the name of the drug ( == DRUGS.ROUTE)
+    - "GLOBAL_STRENGTH" : for the name of the drug ( == DRUGS.GLOBAL_STRENGTH)
+    - Eg : NAME, FORM (GLOBAL_STRENGTH) == AMOXICILLINE, TABLETS (1g)
+    - Eg : NAME, FORM, ROUTE -- GLOBAL_STRENGTH == AMOXICILLINE, TABLETS, ORAL -- 1g
+
 
 
 \~french \section interactionsdb Base de données des interactions

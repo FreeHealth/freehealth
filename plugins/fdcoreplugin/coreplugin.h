@@ -42,6 +42,13 @@
 
 #include <extensionsystem/iplugin.h>
 
+/**
+ * \file coreplugin.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 12 Mar 2010
+*/
+
 namespace Core {
 namespace Internal {
     class CoreImpl;

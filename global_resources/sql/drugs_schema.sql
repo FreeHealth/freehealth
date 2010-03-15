@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `DRUGS` (
   `FORM` varchar(500),
   `ROUTE` varchar(100),
   `ATC` varchar(7),
+  `GLOBAL_STRENGTH` varchar(40),
   `TYPE_MP` varchar(1),
   `AUTHORIZATION` varchar(1),
   `MARKETED` bool NOT NULL DEFAULT 1,
@@ -47,5 +48,6 @@ CREATE TABLE IF NOT EXISTS `INFORMATIONS` (
   `ATC` bool NOT NULL,
   `INTERACTIONS`  bool NOT NULL DEFAULT FALSE,
   `AUTHOR_COMMENTS` varchar(10000),
-  `LANGUAGE_COUNTRY` varchar(5)
+  `LANGUAGE_COUNTRY` varchar(5),
+  `DRUGS_NAME_CONSTRUCTOR` varchar(200)
 );

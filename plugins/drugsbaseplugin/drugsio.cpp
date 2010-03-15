@@ -77,43 +77,52 @@
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 
 
 namespace DrugsIOConstants {
-    const char *const XML_HEADER                          = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    const char *const XML_DRUGS_DATABASE_NAME             = "DrugsDatabaseName";
-    const char *const XML_VERSION                         = "version";
-    const char *const XML_PRESCRIPTION_MAINTAG            = "Prescription";
-    const char *const XML_PRESCRIPTION_ISTEXTUAL          = "IsTextual";
-    const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME    = "TextualDrugName";
-    const char *const XML_PRESCRIPTION_CIS                = "Drug_UID";
-    const char *const XML_PRESCRIPTION_TESTONLY           = "OnlyForTest";
-    const char *const XML_PRESCRIPTION_ID                 = "Id";
-    const char *const XML_PRESCRIPTION_USEDDOSAGE         = "RefDosage";
-    const char *const XML_PRESCRIPTION_CIP                = "Pack_UID";
-    const char *const XML_PRESCRIPTION_INTAKEFROM         = "IntakeFrom";
-    const char *const XML_PRESCRIPTION_INTAKETO           = "IntakeTo";
-    const char *const XML_PRESCRIPTION_INTAKESCHEME       = "IntakeScheme";
-    const char *const XML_PRESCRIPTION_INTAKEFROMTO       = "IntakeFromTo";
-    const char *const XML_PRESCRIPTION_INTAKEINTERVALTIME = "IntakeIntervalTime";
-    const char *const XML_PRESCRIPTION_INTAKEINTERVALSCHEME = "IntakeIntervalScheme";
-    const char *const XML_PRESCRIPTION_INTAKEFULLSTRING   = "IntakeFullString";
-    const char *const XML_PRESCRIPTION_DURATIONFROM       = "DurationFrom";
-    const char *const XML_PRESCRIPTION_DURATIONTO         = "DurationTo";
-    const char *const XML_PRESCRIPTION_DURATIONSCHEME     = "DurationScheme";
-    const char *const XML_PRESCRIPTION_DURATIONFROMTO     = "DurationFromTo";
-    const char *const XML_PRESCRIPTION_PERIOD             = "Period";
-    const char *const XML_PRESCRIPTION_PERIODSCHEME       = "PeriodScheme";
-    const char *const XML_PRESCRIPTION_DAILYSCHEME        = "Daily";
-    const char *const XML_PRESCRIPTION_MEALSCHEME         = "MealTime";
-    const char *const XML_PRESCRIPTION_NOTE               = "Note";
-    const char *const XML_PRESCRIPTION_ISINN              = "INN";
-    const char *const XML_PRESCRIPTION_SPECIFYFORM        = "SpecifyForm";
-    const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION = "SpecifyPresentation";
-    const char *const XML_PRESCRIPTION_ISALD              = "IsAld";
-    const char *const XML_PRESCRIPTION_TOHTML             = "Html";
-    const char *const XML_EXTRADATAS_TAG                  = "ExtraDatas";
-    const char *const XML_FULLPRESCRIPTION_TAG            = "FullPrescription";
+    const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_DRUGS_DATABASE_NAME              = "DrugsDatabaseName";
+    const char *const XML_VERSION                          = "version";
+    const char *const XML_PRESCRIPTION_MAINTAG             = "Prescription";
+    const char *const XML_PRESCRIPTION_ISTEXTUAL           = "IsTextual";
+    const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME     = "TextualDrugName";
+    const char *const XML_PRESCRIPTION_CIS                 = "Drug_UID";
+    const char *const XML_PRESCRIPTION_TESTONLY            = "OnlyForTest";
+    const char *const XML_PRESCRIPTION_ID                  = "Id";
+    const char *const XML_PRESCRIPTION_USEDDOSAGE          = "RefDosage";
+    const char *const XML_PRESCRIPTION_CIP                 = "Pack_UID";
+    const char *const XML_PRESCRIPTION_INTAKEFROM          = "IntakeFrom";
+    const char *const XML_PRESCRIPTION_INTAKETO            = "IntakeTo";
+    const char *const XML_PRESCRIPTION_INTAKESCHEME        = "IntakeScheme";
+    const char *const XML_PRESCRIPTION_INTAKEFROMTO        = "IntakeFromTo";
+    const char *const XML_PRESCRIPTION_INTAKEINTERVALTIME  = "IntakeIntervalTime";
+    const char *const XML_PRESCRIPTION_INTAKEINTERVALSCHEME= "IntakeIntervalScheme";
+    const char *const XML_PRESCRIPTION_INTAKEFULLSTRING    = "IntakeFullString";
+    const char *const XML_PRESCRIPTION_DURATIONFROM        = "DurationFrom";
+    const char *const XML_PRESCRIPTION_DURATIONTO          = "DurationTo";
+    const char *const XML_PRESCRIPTION_DURATIONSCHEME      = "DurationScheme";
+    const char *const XML_PRESCRIPTION_DURATIONFROMTO      = "DurationFromTo";
+    const char *const XML_PRESCRIPTION_PERIOD              = "Period";
+    const char *const XML_PRESCRIPTION_PERIODSCHEME        = "PeriodScheme";
+    const char *const XML_PRESCRIPTION_DAILYSCHEME         = "Daily";
+    const char *const XML_PRESCRIPTION_MEALSCHEME          = "MealTime";
+    const char *const XML_PRESCRIPTION_NOTE                = "Note";
+    const char *const XML_PRESCRIPTION_ISINN               = "INN";
+    const char *const XML_PRESCRIPTION_SPECIFYFORM         = "SpecifyForm";
+    const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION= "SpecifyPresentation";
+    const char *const XML_PRESCRIPTION_ISALD               = "IsAld";
+    const char *const XML_PRESCRIPTION_TOHTML              = "Html";
+    const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
+    const char *const XML_FULLPRESCRIPTION_TAG             = "FullPrescription";
+
+    const char *const XML_DRUG_DENOMINATION            = "DrugName";
+    const char *const XML_DRUG_INNS                    = "DrugINN";
+    const char *const XML_DRUG_INNS_ATC                = "DrugINN_ATC";
+    const char *const XML_DRUG_ATC                     = "DrugATC";
+    const char *const XML_DRUG_FORM                    = "DrugForm";
+    const char *const XML_DRUG_ROUTE                   = "DrugRoute";
+    const char *const XML_DRUG_STRENGTH                = "DrugStrength";
 }
 
 using namespace DrugsIOConstants;
@@ -156,6 +165,13 @@ public:
         m_PrescriptionXmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
         m_PrescriptionXmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
         m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
+        m_PrescriptionXmlTags.insert(Drug::Denomination, XML_DRUG_DENOMINATION);
+        m_PrescriptionXmlTags.insert(Drug::Inns, XML_DRUG_INNS);
+        m_PrescriptionXmlTags.insert(Drug::InnsATCcodes, XML_DRUG_INNS_ATC);
+        m_PrescriptionXmlTags.insert(Drug::ATC, XML_DRUG_ATC);
+        m_PrescriptionXmlTags.insert(Drug::Form, XML_DRUG_FORM);
+        m_PrescriptionXmlTags.insert(Drug::Route, XML_DRUG_ROUTE);
+        m_PrescriptionXmlTags.insert(Drug::GlobalStrength, XML_DRUG_STRENGTH);
     }
 
     ~DrugsIOPrivate()
@@ -567,32 +583,45 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     }
     QString xmldPrescription;
     QList<int> keysToSave;
-    keysToSave
-        << Prescription::IsTextualOnly
-        << Prescription::UsedDosage
-        << Prescription::Pack_UID
-        << Prescription::OnlyForTest
-        << Prescription::IntakesFrom
-        << Prescription::IntakesTo
-        << Prescription::IntakesScheme
-        << Prescription::IntakesUsesFromTo
-        << Prescription::IntakesFullString
-        << Prescription::DurationFrom
-        << Prescription::DurationTo
-        << Prescription::DurationScheme
-        << Prescription::DurationUsesFromTo
-        << Prescription::Period
-        << Prescription::PeriodScheme
-        << Prescription::DailyScheme
-        << Prescription::MealTimeSchemeIndex
-        << Prescription::IntakesIntervalOfTime
-        << Prescription::IntakesIntervalScheme
-        << Prescription::Note
-        << Prescription::IsINNPrescription
-        << Prescription::SpecifyForm
-        << Prescription::SpecifyPresentation
-        << Prescription::IsALD
-        ;
+    if (m->isSelectionOnlyMode()) {
+        keysToSave
+                << Drug::Denomination
+                << Drug::Inns
+                << Drug::ATC
+                << Drug::InnsATCcodes
+                << Drug::Form
+                << Drug::Route
+                << Drug::GlobalStrength
+                << Prescription::Pack_UID
+                ;
+    } else {
+        keysToSave
+                << Prescription::IsTextualOnly
+                << Prescription::UsedDosage
+                << Prescription::Pack_UID
+                << Prescription::OnlyForTest
+                << Prescription::IntakesFrom
+                << Prescription::IntakesTo
+                << Prescription::IntakesScheme
+                << Prescription::IntakesUsesFromTo
+                << Prescription::IntakesFullString
+                << Prescription::DurationFrom
+                << Prescription::DurationTo
+                << Prescription::DurationScheme
+                << Prescription::DurationUsesFromTo
+                << Prescription::Period
+                << Prescription::PeriodScheme
+                << Prescription::DailyScheme
+                << Prescription::MealTimeSchemeIndex
+                << Prescription::IntakesIntervalOfTime
+                << Prescription::IntakesIntervalScheme
+                << Prescription::Note
+                << Prescription::IsINNPrescription
+                << Prescription::SpecifyForm
+                << Prescription::SpecifyPresentation
+                << Prescription::IsALD
+                ;
+    }
     QHash<QString, QString> forXml;
     int i;
     for(i=0; i<m->rowCount() ; ++i) {
@@ -601,7 +630,10 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
         } else {
             foreach(int k, keysToSave) {
-                forXml.insert( instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString() );
+                if (m->index(i, k).data().type() == QVariant::StringList)
+                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
+                else
+                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
             }
         }
         if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
@@ -706,7 +738,8 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 #ifdef FREEDIAMS
     Core::Patient *patient = Core::ICore::instance()->patient();
     footer = prepareFooter(model);
-    p.printer()->setDocName("FreeDiams - " + patient->value(Core::Patient::FullName).toString().leftJustified(50,'_'));
+    QString tmp = patient->value(Core::Patient::Name).toString() + "_" + patient->value(Core::Patient::Surname).toString();
+    p.printer()->setDocName("FreeDiams - " + tmp.leftJustified(50,'_'));
     p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
                        Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
                        Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
@@ -735,7 +768,8 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
 #ifdef FREEDIAMS
     Core::Patient *patient = Core::ICore::instance()->patient();
     footer = prepareFooter(model);
-    p.printer()->setDocName("FreeDiams - " + patient->value(Core::Patient::FullName).toString().leftJustified(50,'_'));
+    QString tmp = patient->value(Core::Patient::Name).toString() + "_" + patient->value(Core::Patient::Surname).toString();
+    p.printer()->setDocName("FreeDiams - " + tmp.leftJustified(50,'_'));
     p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
                        Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
                        Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));

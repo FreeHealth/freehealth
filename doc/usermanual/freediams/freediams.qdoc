@@ -188,18 +188,19 @@ En cours de rédaction.
 
 \~french
 \freediams est pensé comme un "module" externe. Ce "module" peut étre utilisé par un grand nombre
-de logiciel propriétaires ou non. A l'heure actuel, seul MedinTux et GNUMed sont configurables
+de logiciel propriétaires ou non. A l'heure actuel, MedinTux et GNUMed sont configurables
 pour utiliser ce logiciel comme prescripteur.\n
 
-Pour interfacer un logiciel avec \freediams, il suffit de renseigner les paramètres de la ligne de commande.
+Pour interfacer un logiciel avec \freediams, il suffit de renseigner les paramètres
+de la ligne de commande et d'utiliser les fichiers d'échange.
 
 \~english
 \freediams is thought as an external "module". This "module" can be used by many
-software. At present, only MedinTux and GNUMed are configurable to use this software
+software. At present, MedinTux and GNUMed are configurable to use this software
 as a prescriber. \n
 
 In order to interface software with \freediams, just learn the command line
-params.
+params and use exchange files.
 
 \~french \section params_ligne_commandes Paramètres de la ligne de commande
 \~english \section params_ligne_commandes Params of the command line
@@ -207,53 +208,186 @@ params.
 \~french
 Les paramètres suivants sont disponibles :
 \li \e --version , -version , -v : affiche la version actuelle de FreeDiams.
+\li \e --selection-only : Démarre \freediams en mode de sélection seulement.
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
+\li \e --exchange-in="/path/to/xml/exchange-in.xml" : définit le fichier d'échange entrant.
 \li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications. Le fichier doit exister.
 \li \e --patientname="xx xx xx" : définit le nom du patient.
+\li \e --patientsurname="xx xx" : définti le prénom du patient.
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
 \li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
 \li \e --weight="dd" : définit le poids du patient (en kg)
 \li \e --height="ddd" : définit la taille du patient (en cm)
 \li \e --crcl="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
-\li \e --creatinin="dd" : définit la créatininémie du patient (en mg/l)
+\li \e --creatinine="dd" : définit la créatininémie du patient (en mg/l)
 \li \e --chrono : Chronomètres diverses fonctions du testeur d'interactions (proposé à des fins de déboggage)
 \li \e --transmit-dosage = non documenté.
 
 \~english
 The following settings are available:
 \li \e --version,-version,-v: Displays the current version of FreeDiams.
+\li \e --selection-only : Starts \freediams in Selection Only Mode
 \li \e --medintux: defines a specific user MedinTux.
+\li \e --exchange-in="/path/to/xml/exchange-in.xml" : defines the "in" exchange file.
 \li \e --exchange="xxx" : "xxx" identifies the exchange file between the two applications. File must exist.
 \li \e --patientname="xx xx xx" defines the name of the patient.
+\li \e --patientsurname="xx xx" define the surname of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
 \li \e --dateofbirth="dd/MM/yyyy" defines the data of birth of patient (date must be transmitted in the form dd/mm/yyyy)
 \li \e --weight="dd" defines the patient's weight (kg)
 \li \e --height="ddd": sets the size of the patient (cm)
 \li \e --crcl="dd.d" defines the clearance of creatinine of the patient (ml/min)
-\li \e --creatinin = "dd" defines the patient's serum creatinine (mg/l)
+\li \e --creatinine = "dd" defines the patient's serum creatinine (mg/l)
 \li \e --chrono: log chronos on various functions of the tester interactions (proposed for debugging)
 \li \e --transmit-dosage = undocumented.
 
+\~
+Not yet fully used in \freediams :
+\li \e --emr-name : name of the EMR (will be returned without any modification in the "out" exchange file)
+\li \e --emr-uid : EMR session UID (will be returned without any modification in the "out" exchange file)
+\li \e --drugsdb-uid : Drugs database Unique identifier to use at startup
+\li \e --patientuid : Patient UID (will be returned without any modification in the "out" exchange file)
+\li \e --weight-unit
+\li \e --height-unit
+\li \e --crcl-unit
+\li \e --creatinine-unit
+\li \e --blockpatientdatas
+\li \e --drugs-uid-allergies
+\li \e --atc-allergies
+\li \e --inn-allergies
 
-\~french \section exchange Le fichier d'échange
-\~english \section exchange The exchange file
+Examples :
+- Linux/*BSD :
+\code
+    - freediams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+\endcode
+- Win :
+\code
+    - freediams.exe --exhange-in="c:\Files\exchang-in.xml" --exchange="c:\Files\exchange.exc"
+\endcode
+- Mac (don't forget the bundle) :
+\code
+    - FreeDiams.app/Contents/MacOs/FreeDiams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+\endcode
+
+\~french \section exchange-in Le fichier d'échange entrant
+\~english \section exchange-in The "in" exchange file
 
 \~french
-Lorsqu'un fichier d'échange est notifié au démarrage du testeur d'interactions, celui-ci essaie de lire
-le contenu du fichier et d'y récupérer les données de la prescription.\n
-A la fermeture de l'application, la prescription est sauvegardée dans le d'échange sous format XML. Voir \ref format_fichier_di.\n
-
-Lorsque le paramètre \e --medintux est notifié dans la ligne de commande, le format du fichier d'échange est spécifique
-à MedinTux.\n
+Tous les fichiers sont encodés en UTF-8.\n
+Au lieu d'utiliser la ligne de commande pour renseigner les différents paramètres
+à utiliser dans FreeDiams, les EMR peuvent utiliser un fichier d'échange encodé en XML.\n
+Lorsqu'un fichier d'échange entrant est spécifié les données qu'ils incluent
+remplaceront les données passés en ligne de commande. Une utilisation mixte est toujours
+possible : une partie des données sont transmises par la ligne de commande, l'autre par
+le fichier d'échange entrant.\n
+La structure de ce fichier doit répondre aux exigences ci-dessous.
 
 \~english
-When a swap file is notified to start the tester interaction, it tries to read
+All files are UTF-8 encoded.\n
+Instead of using the command line to learn the various parameters used in FreeDiams,
+the EMRs can use an XML encoded exchange file. \n
+When you specify a in exchange file, the command line params are replaced with the XML values.
+You can use both (command line and xml in file) to define params to pass to \freediams. \n
+The structure of this file must meet the following requirements.
+
+\~french \subsection exchange-in-xml structuration XML du fichier d'échange entrant
+\~english \subsection exchange-in-xml XML structuration of the "in" exchange file
+
+\~
+\verbatim
+<FreeDiams_In version="0.4.0">
+  <ConfigFile value="/path/to/the/requiered/configFile.ini"/>
+  <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
+  <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
+  <Patient>
+    <Identity name="Name Of Patient" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
+    <Creatinine value="12" unit="mg/l or mmol/l"/>
+    <Weight value="70" unit="kg or pd" />
+    <Height value="170" unit="cm or "/>
+    <InnAllergies value="inn1;inn2;inn3"/>
+    <ATCAllergies value="ATC1;ATC2;ATC3"/>
+    <DrugsUidAllergies value="7655668;876769;656789"/>
+    <ICD10 value="J11.0;A22;Z23"/>
+  </Patient>
+  <Ui editmode="select-only or prescriber" blockPatientDatas="0/1"/>
+</FreeDiams_In>
+\endverbatim
+
+- ConfigFile : tells \freediams to use the specified config file. If this file does not exist, \freediams
+will use the default one.
+- DrugsDatabase : specify the Drugs Database to use. The \e uid is the \freediams unique identifier.
+- EMR : these params will be returned in the out exchange file, so that EMR can test and check the files.
+- UI : \freediams can be used in different editing mode, you can define it here. Use he \e blockPatientDatas
+when user should not be able to change patient's datas.
+- Patient's datas : please note the date format (yyyy/MM/dd) and the list model : item1;item2;item3.
+
+\~french \subsection exchange-in-xml-defaults Valeurs par défaut
+\~english \subsection exchange-in-xml-defaults Defaults
+
+\n
+- Ui : prescriber
+- blockPatientData = 0
+- ConfigFile : will use the default one. Use this param for the USBKey working
+or for debugging purpose.
+The InFile represents a content to be parsed by FreeDiams (a prescription or a list of drugs).
+Use this when reediting datas.
+
+\~french \section exchange Le fichier d'échange sortant
+\~english \section exchange The "out" exchange file
+
+\~french
+Lorsqu'un fichier d'échange est notifié, \freediams essaie de lire
+le contenu de ce fichier et d'y récupérer les données de la prescription.\n
+A la fermeture de l'application, la prescription est sauvegardée dans le d'échange sous format XML.
+Voir \ref format_fichier_di.\n
+Lorsque le paramètre \e --medintux est notifié dans la ligne de commande, le format du fichier
+d'échange est spécifique à MedinTux.\n
+Le contenu du fichier d'échange de sortie est un mélange d'HTML et de XML.
+
+\~english
+When a swap file is notified, \freediams tries to read
 the file contents and to retrieve data from the prescription.\n
 At the close of the application, the prescription is stored in the exchange format XML.
 See \ref format_fichier_di. \n
-
 When the \e --medintux is notified in the command line, the format of the paging file is specific
 to MedinTux. \n
+The contents of the 'out' exchange file is a mix between HTML and XML.
+
+\~french \subsection exchange_out_struct Format de fichier
+\~english \subsection exchange_out_struct File format
+
+\~french
+Jusqu'à la version v0.4.0, le fichier est structuré de la sorte.
+\~english
+Till v0.4.0, the out exchange file is structured like this.
+\~
+\verbatim
+<html>
+  ...
+<body>
+<a href="FreeDiamsEncodedPrescription:base64FreeDiamsXmlencoded">
+... (full HTML prescription)
+</a>
+</body>
+</html>
+\endverbatim
+
+\~french
+Pour les versions à partir de la 0.4.0 :
+\~english
+For versions upper or egal to 0.4.0 :
+\~
+\verbatim
+<html>
+   ...
+  <meta name="FreeDiams" content="FreeDiamsEncodedPrescription:base64FreeDiamsXmlencoded"/>
+<body>
+... (full HTML prescription)
+</body>
+</html>
+\endverbatim
+
 
 \~french \section param_command_line_specifiques Paramètres de la ligne de commandes spécifiques à certaines actions
 \~english \section param_command_line_specifiques Command line specific params
@@ -268,7 +402,7 @@ comité scientifique chargé de les valider.
 Some actions require the activation parameters of the command line. \n
 To assist in debugging the application when it seems slow: \e --chrono help to find the slowdown. \n
 The editors of standard dosages, can transmit their dosages to
-scientific committee to confirm with the \e --transmit-determination param.
+scientific committee to confirm with the \e --transmit-dosage param.
 
 \~
 \ref index

@@ -93,14 +93,18 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_MedinTux(0)
+        m_MedinTux(0),
+        m_UID(new UniqueIDManager),
+        m_Patient(new Patient)
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+
     m_CommandLine = new CommandLine();
+    m_CommandLine->feedPatientDatas(m_Patient);
 
     QTime chrono;
     chrono.start();
@@ -130,8 +134,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
-    m_Patient = new Patient();
-    m_UID = new UniqueIDManager();
 
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
 
@@ -147,17 +149,6 @@ CoreImpl::CoreImpl(QObject *parent) :
         QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
     }
 #endif
-
-    // Feed patient datas
-    m_Patient->setValue(Patient::DateOfBirth, m_CommandLine->value(CommandLine::CL_DateOfBirth));
-    m_Patient->setValue(Patient::CreatinClearance, m_CommandLine->value(CommandLine::CL_ClCr));
-    m_Patient->setValue(Patient::Height, m_CommandLine->value(CommandLine::CL_Height));
-    m_Patient->setValue(Patient::Weight, m_CommandLine->value(CommandLine::CL_Weight));
-    m_Patient->setValue(Patient::Creatinin, m_CommandLine->value(CommandLine::CL_Creatinin));
-    m_Patient->setValue(Patient::FullName, m_CommandLine->value(CommandLine::CL_PatientName));
-    m_Patient->setValue(Patient::Sex, m_CommandLine->value(CommandLine::CL_PatientGender));
-//    m_Patient->setValue(Patient::DrugsAllergies, m_CommandLine->value(CommandLine::));
-//    m_Patient->setValue(Patient::ICD10Deceases, m_CommandLine->value(CommandLine::CL_DateOfBirth));
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
         Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));

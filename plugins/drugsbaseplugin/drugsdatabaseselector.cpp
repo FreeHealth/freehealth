@@ -179,6 +179,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
         new QTreeWidgetItem(validItem, QStringList() << "IAM validity" << tkTr(Trans::Constants::AVAILABLE));
     else
         new QTreeWidgetItem(validItem, QStringList() << "IAM validity" <<tkTr(Trans::Constants::UNAVAILABLE));
+    new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR" << drugsNameConstructor);
 
     tree->expandAll();
     tree->resizeColumnToContents(0);

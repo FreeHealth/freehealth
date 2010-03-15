@@ -66,7 +66,7 @@ public:
     void toTreeWidget(QTreeWidget *tree) const;
 
     QString name, identifiant, fileName, version, compatVersion, lang_country, connectionName;
-    QString provider, author, license, drugsUidName, packUidName;
+    QString provider, author, license, drugsUidName, packUidName, drugsNameConstructor;
     QString weblink, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;
     QDate date;

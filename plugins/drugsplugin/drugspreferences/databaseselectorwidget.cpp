@@ -193,6 +193,8 @@ void DatabaseSelectorWidget::setDatasToUi()
     int row = 0;
     foreach(DrugsDB::DatabaseInfos *info, d->m_Infos) {
         ui->databaseList->addItem(info->translatedName());
+        if (!actual)
+            continue;
         if (info->fileName == actual->fileName) {
             ui->databaseList->setCurrentRow(row, QItemSelectionModel::Select);
         }
@@ -258,7 +260,7 @@ void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
     if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != QString(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)) {
         Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database than the currently-opened on. "
+                                 tr("You have selected a different drugs database than the currently-opened one. "
                                     "You need to restart the application."),
                                  "", tr("Drugs database selection"));
     }
@@ -288,7 +290,7 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     // 2. check if user changes the database
     if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != tmp) {
         Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database than the currently-opened on. "
+                                 tr("You have selected a different drugs database than the currently-opened one. "
                                     "You need to restart the application."),
                                  "", tr("Drugs database selection"));
     }

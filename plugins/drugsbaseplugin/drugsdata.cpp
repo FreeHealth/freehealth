@@ -336,21 +336,13 @@ QStringList DrugsData::listOfInn() const
     // return the list of distinct know INN of this drug
     QStringList toReturn;
     QString tmp = "";
-    foreach( DrugComposition *compo, d->m_Compositions) {
-        if ( tmp != compo->innName() ) {
+    foreach(DrugComposition *compo, d->m_Compositions) {
+        if (tmp != compo->innName()) {
             toReturn << compo->innName();
             tmp = compo->innName();
         }
     }
-//    if (d->m_COMPOValues.values( COMPO_IAM_DENOMINATION ).count() == 0)
-//        return toReturn;
-//    QString tmp = "";
-//    foreach( const QVariant &q, d->m_COMPOValues.values( COMPO_IAM_DENOMINATION ) ) {
-//        if ( tmp != q.toString() ) {
-//            toReturn << q.toString();
-//            tmp = q.toString();
-//        }
-//    }
+//    qWarning() << toReturn;
     return toReturn;
 }
 
@@ -429,6 +421,7 @@ QStringList DrugsData::dosageOfMolecules() const
 */
 bool DrugsData::isScoredTablet() const
 {
+    /** \todo manage all databases */
     return denomination().contains( QRegExp( "s.cable", Qt::CaseInsensitive ) );
 }
 

@@ -12,7 +12,6 @@ CONFIG *= dll \
     network
 QT *= sql \
     network
-
 HEADERS += global_exporter.h \
     global.h \
     database.h \
@@ -28,7 +27,6 @@ HEADERS += global_exporter.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
     widgets/spinboxdelegate.h
-
 SOURCES += global.cpp \
     database.cpp \
     log.cpp \
@@ -44,5 +42,5 @@ SOURCES += global.cpp \
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
-                $${SOURCES_TRANSLATIONS}/utils_de.ts \
-                $${SOURCES_TRANSLATIONS}/utils_es.ts
+    $${SOURCES_TRANSLATIONS}/utils_de.ts \
+    $${SOURCES_TRANSLATIONS}/utils_es.ts

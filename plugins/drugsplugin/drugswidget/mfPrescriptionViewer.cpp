@@ -69,8 +69,8 @@ using namespace DrugsWidget;
 using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 /** \brief Constructor. You must call initialize() after instanciation */

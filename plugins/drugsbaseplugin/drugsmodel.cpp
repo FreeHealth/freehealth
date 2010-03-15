@@ -173,127 +173,131 @@ public:
         using namespace ::DrugsDB::Constants;
         switch (column)
         {
-             case Drug::Denomination : return drug->denomination();
-             case Drug::UID : return drug->UID();
-             case Drug::Pack_UID : return drug->CIPs();
-             case Drug::Form :  return drug->form();
-             case Drug::AvailableForms :
-                 {
-                     QStringList toReturn;
-                     toReturn << tkTr(Trans::Constants::INTAKES);
-                     toReturn << drug->form();
-                     if (drug->numberOfInn() == 1) {
-                         toReturn << QApplication::translate("DrugsModel", "x %1 of %2")
-                                 .arg(drug->dosageOfMolecules().at(0) , drug->listOfInn().at(0));
-                     }
-                     if (!settings()->value(Constants::S_USERRECORDEDFORMS).isNull()) {
-                         foreach(const QString &s, settings()->value(Constants::S_USERRECORDEDFORMS).toStringList())
-                             if (!s.isEmpty())
-                                 toReturn << s;
-                     }
-                     toReturn << DosageModel::predeterminedForms();
-                     return toReturn;
-                     break;
-                 }
-             case Drug::AvailableDosages :
-                 {
-                     QStringList list;
-                     list << QApplication::translate("DrugsModel","Available Dosages");
-                     // TODO
-                     return list.join("<br />");
-                     break;
-                 }
-             case Drug::IsScoredTablet :     return drug->isScoredTablet();
-             case Drug::Molecules :          return drug->listOfMolecules();
-             case Drug::AllInnsKnown :       return drugsBase()->drugsINNIsKnown(drug);
-             case Drug::Inns :               return drug->listOfInn();
-             case Drug::MainInnCode :        return drug->mainInnCode();
-             case Drug::MainInnDosage :      return drug->mainInnDosage();
-             case Drug::MainInnName :        return drug->mainInnName();
-             case Drug::InnClasses :         return drug->listOfInnClasses();
-             case Drug::Administration :     return QVariant();
-             case Drug::Interacts :          return m_InteractionsManager->drugHaveInteraction(drug);
-             case Drug::MaximumLevelOfInteraction : return int(m_InteractionsManager->getMaximumTypeOfIAM(drug));
-             case Drug::CompositionString :  return drug->toHtml();
-             case Drug::InnCompositionString :  return drug->innComposition();
-             case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
-             case Drug::HasPrescription :    return drug->hasPrescription();
-             case Drug::LinkToSCP :          return drug->linkToSCP();
-             case Drug::FullPrescription :
-                 {
-                     if (drug->prescriptionValue(Prescription::OnlyForTest).toBool() || m_SelectionOnlyMode) {
-                         if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
-                             return drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
-                         else return drug->denomination();
-                     }
-                     return ::DrugsDB::DrugsModel::getFullPrescription(drug,false);
-                 }
+        case Drug::Denomination :       return drug->denomination();
+        case Drug::UID :                return drug->UID();
+        case Drug::Pack_UID :           return drug->CIPs();
+        case Drug::Form :               return drug->form();
+        case Drug::Route :              return drug->route();
+        case Drug::ATC :                return drug->ATC();
+        case Drug::IsScoredTablet :     return drug->isScoredTablet();
+        case Drug::GlobalStrength :     return drug->strength();
+        case Drug::Molecules :          return drug->listOfMolecules();
+        case Drug::AllInnsKnown :       return drugsBase()->drugsINNIsKnown(drug);
+        case Drug::Inns :               return drug->listOfInn();
+        case Drug::InnsATCcodes :  /** \todo code here */            return QVariant();
+        case Drug::MainInnCode :        return drug->mainInnCode();
+        case Drug::MainInnDosage :      return drug->mainInnDosage();
+        case Drug::MainInnName :        return drug->mainInnName();
+        case Drug::InnClasses :         return drug->listOfInnClasses();
+        case Drug::Administration :     return QVariant();
+        case Drug::Interacts :          return m_InteractionsManager->drugHaveInteraction(drug);
+        case Drug::MaximumLevelOfInteraction : return int(m_InteractionsManager->getMaximumTypeOfIAM(drug));
+        case Drug::CompositionString :  return drug->toHtml();
+        case Drug::InnCompositionString :  return drug->innComposition();
+        case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
+        case Drug::HasPrescription :    return drug->hasPrescription();
+        case Drug::LinkToSCP :          return drug->linkToSCP();
+        case Drug::AvailableForms :
+            {
+                QStringList toReturn;
+                toReturn << tkTr(Trans::Constants::INTAKES);
+                toReturn << drug->form();
+                if (drug->numberOfInn() == 1) {
+                    toReturn << QApplication::translate("DrugsModel", "x %1 of %2")
+                            .arg(drug->dosageOfMolecules().at(0) , drug->listOfInn().at(0));
+                }
+                if (!settings()->value(Constants::S_USERRECORDEDFORMS).isNull()) {
+                    foreach(const QString &s, settings()->value(Constants::S_USERRECORDEDFORMS).toStringList())
+                        if (!s.isEmpty())
+                            toReturn << s;
+                }
+                toReturn << DosageModel::predeterminedForms();
+                return toReturn;
+                break;
+            }
+        case Drug::AvailableDosages :
+            {
+                QStringList list;
+                list << QApplication::translate("DrugsModel","Available Dosages");
+                // TODO
+                return list.join("<br />");
+                break;
+            }
+        case Drug::FullPrescription :
+            {
+                if (drug->prescriptionValue(Prescription::OnlyForTest).toBool() || m_SelectionOnlyMode) {
+                    if (drug->prescriptionValue(Prescription::IsINNPrescription).toBool())
+                        return drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
+                    else return drug->denomination();
+                }
+                return ::DrugsDB::DrugsModel::getFullPrescription(drug,false);
+            }
 
-             case Prescription::UsedDosage :            return drug->prescriptionValue(Prescription::UsedDosage);
-             case Prescription::IsTextualOnly :         return drug->prescriptionValue(Prescription::IsTextualOnly);
-             case Prescription::OnlyForTest :           return drug->prescriptionValue(Prescription::OnlyForTest);
-             case Prescription::IntakesFrom :           return drug->prescriptionValue(Prescription::IntakesFrom);
-             case Prescription::IntakesTo :             return drug->prescriptionValue(Prescription::IntakesTo);
-             case Prescription::IntakesScheme :         return drug->prescriptionValue(Prescription::IntakesScheme);
-             case Prescription::IntakesUsesFromTo :     return drug->prescriptionValue(Prescription::IntakesUsesFromTo);
-             case Prescription::IntakesIntervalOfTime : return drug->prescriptionValue(Prescription::IntakesIntervalOfTime);
-             case Prescription::IntakesIntervalScheme : return drug->prescriptionValue(Prescription::IntakesIntervalScheme);
-             case Prescription::DurationFrom :          return drug->prescriptionValue(Prescription::DurationFrom);
-             case Prescription::DurationTo :            return drug->prescriptionValue(Prescription::DurationTo);
-             case Prescription::DurationScheme :        return drug->prescriptionValue(Prescription::DurationScheme);
-             case Prescription::DurationUsesFromTo :    return drug->prescriptionValue(Prescription::DurationUsesFromTo);
-             case Prescription::MealTimeSchemeIndex :   return drug->prescriptionValue(Prescription::MealTimeSchemeIndex);
-             case Prescription::Period :                return drug->prescriptionValue(Prescription::Period);
-             case Prescription::PeriodScheme :          return drug->prescriptionValue(Prescription::PeriodScheme);
-             case Prescription::DailyScheme :           return drug->prescriptionValue(Prescription::DailyScheme);
-             case Prescription::Note :                  return drug->prescriptionValue(Prescription::Note);
-             case Prescription::IsINNPrescription :     return drug->prescriptionValue(Prescription::IsINNPrescription);
-             case Prescription::SpecifyForm :           return drug->prescriptionValue(Prescription::SpecifyForm);
-             case Prescription::SpecifyPresentation :   return drug->prescriptionValue(Prescription::SpecifyPresentation);
-             case Prescription::IsALD :                 return drug->prescriptionValue(Prescription::IsALD);
-             case Prescription::ToHtml :
-                 return ::DrugsDB::DrugsModel::getFullPrescription(drug,true);
+        case Prescription::UsedDosage :            return drug->prescriptionValue(Prescription::UsedDosage);
+        case Prescription::IsTextualOnly :         return drug->prescriptionValue(Prescription::IsTextualOnly);
+        case Prescription::OnlyForTest :           return drug->prescriptionValue(Prescription::OnlyForTest);
+        case Prescription::IntakesFrom :           return drug->prescriptionValue(Prescription::IntakesFrom);
+        case Prescription::IntakesTo :             return drug->prescriptionValue(Prescription::IntakesTo);
+        case Prescription::IntakesScheme :         return drug->prescriptionValue(Prescription::IntakesScheme);
+        case Prescription::IntakesUsesFromTo :     return drug->prescriptionValue(Prescription::IntakesUsesFromTo);
+        case Prescription::IntakesIntervalOfTime : return drug->prescriptionValue(Prescription::IntakesIntervalOfTime);
+        case Prescription::IntakesIntervalScheme : return drug->prescriptionValue(Prescription::IntakesIntervalScheme);
+        case Prescription::DurationFrom :          return drug->prescriptionValue(Prescription::DurationFrom);
+        case Prescription::DurationTo :            return drug->prescriptionValue(Prescription::DurationTo);
+        case Prescription::DurationScheme :        return drug->prescriptionValue(Prescription::DurationScheme);
+        case Prescription::DurationUsesFromTo :    return drug->prescriptionValue(Prescription::DurationUsesFromTo);
+        case Prescription::MealTimeSchemeIndex :   return drug->prescriptionValue(Prescription::MealTimeSchemeIndex);
+        case Prescription::Period :                return drug->prescriptionValue(Prescription::Period);
+        case Prescription::PeriodScheme :          return drug->prescriptionValue(Prescription::PeriodScheme);
+        case Prescription::DailyScheme :           return drug->prescriptionValue(Prescription::DailyScheme);
+        case Prescription::Note :                  return drug->prescriptionValue(Prescription::Note);
+        case Prescription::IsINNPrescription :     return drug->prescriptionValue(Prescription::IsINNPrescription);
+        case Prescription::SpecifyForm :           return drug->prescriptionValue(Prescription::SpecifyForm);
+        case Prescription::SpecifyPresentation :   return drug->prescriptionValue(Prescription::SpecifyPresentation);
+        case Prescription::IsALD :                 return drug->prescriptionValue(Prescription::IsALD);
+        case Prescription::ToHtml :
+            return ::DrugsDB::DrugsModel::getFullPrescription(drug,true);
 
-             case Interaction::Id :     return QVariant();
-             case Interaction::Icon :   return m_InteractionsManager->iamIcon(drug, m_levelOfWarning);
-             case Interaction::Pixmap : return m_InteractionsManager->iamIcon(drug, m_levelOfWarning).pixmap(16,16);
-             case Interaction::ToolTip :
-                 {
-                     QString display;
-                     if (m_InteractionsManager->drugHaveInteraction(drug)) {
-                         const QList<DrugsInteraction *> &list = m_InteractionsManager->getInteractions(drug);
-                         display.append(m_InteractionsManager->listToHtml(list, false));
-                     } else if (drugsBase()->drugsINNIsKnown(drug)) {
-                         display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInnClasses().join("<br />");
-                     } else {
-                         display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
-                     }
-                     return display;
-                     break;
-                 }
-             case Interaction::FullSynthesis :
-                 {
-                     QString display;
-                     const QList<DrugsInteraction *> & list = m_InteractionsManager->getAllInteractionsFound();
-                     int i = 0;
-                     display.append("<p>");
-                     foreach(DrugsData *drg, m_DrugsList) {
-                         ++i;
-                         display.append(QString("%1&nbsp;.&nbsp;%2<br />")
-                                         .arg(i)
-                                         .arg(drg->denomination()));
-                     }
-                     display.append("</p><p>");
-                     if (list.count() > 0) {
-                         display.append(m_InteractionsManager->synthesisToHtml(list, true));
-                     } else
-                         display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
-                     display.append("</p>");
-                     return display;
-                     break;
-                 }
-             case Interaction::MaxParam : return QVariant();
-             }
+        case Interaction::Id :     return QVariant();
+        case Interaction::Icon :   return m_InteractionsManager->iamIcon(drug, m_levelOfWarning);
+        case Interaction::Pixmap : return m_InteractionsManager->iamIcon(drug, m_levelOfWarning).pixmap(16,16);
+        case Interaction::ToolTip :
+            {
+                QString display;
+                if (m_InteractionsManager->drugHaveInteraction(drug)) {
+                    const QList<DrugsInteraction *> &list = m_InteractionsManager->getInteractions(drug);
+                    display.append(m_InteractionsManager->listToHtml(list, false));
+                } else if (drugsBase()->drugsINNIsKnown(drug)) {
+                    display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInnClasses().join("<br />");
+                } else {
+                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
+                }
+                return display;
+                break;
+            }
+        case Interaction::FullSynthesis :
+            {
+                QString display;
+                const QList<DrugsInteraction *> & list = m_InteractionsManager->getAllInteractionsFound();
+                int i = 0;
+                display.append("<p>");
+                foreach(DrugsData *drg, m_DrugsList) {
+                    ++i;
+                    display.append(QString("%1&nbsp;.&nbsp;%2<br />")
+                                   .arg(i)
+                                   .arg(drg->denomination()));
+                }
+                display.append("</p><p>");
+                if (list.count() > 0) {
+                    display.append(m_InteractionsManager->synthesisToHtml(list, true));
+                } else
+                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
+                display.append("</p>");
+                return display;
+                break;
+            }
+        case Interaction::MaxParam : return QVariant();
+        }
         return QVariant();
     }
 
@@ -708,6 +712,11 @@ void DrugsModel::setSelectionOnlyMode(bool b)
 {
     d->m_SelectionOnlyMode = b;
     reset();
+}
+
+bool DrugsModel::isSelectionOnlyMode() const
+{
+    return d->m_SelectionOnlyMode;
 }
 
 /** \brief Returns the dosage model for the selected drug */

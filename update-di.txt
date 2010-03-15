@@ -8,11 +8,14 @@ version=0.3.1
 
     * Nouvelles fonctionnalités :
       * Nouveau mode d'édition = mode prescripteur et mode sélection seulement
-      * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender'
+      * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender', '--exchange-in'...
+      * Possibilité de passer les arguments à FreeDiams par un fichier d'échange entrant (exchange-in)
       * Nouveau mode paramètrable par ligne de commande : le mode "sélection seulement"
       * Fonctionnalités multi-bases thérapeutiques implémentées
 
     * Modifications importantes :
+      * Les étiquettes pour le patient sont modifiées pour le nom et le prénom
+
 
     * Correction de bogues / Améliorations techniques :
 }

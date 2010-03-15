@@ -43,6 +43,14 @@
 
 #include <coreplugin/icore.h>
 
+/**
+ * \file coreimpl.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 12 Mar 2010
+*/
+
+
 namespace MedinTux {
 class Configuration;
 }

@@ -280,10 +280,11 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(m_Parent);
-        m_Parent->labelOfDosageLabel->setToolTip(drugModel()->drugData( m_CIS, DrugsDB::Constants::Drug::AvailableDosages).toString() );
-//        QString toolTip = drugM->drugData( m_CIS, Interaction::ToolTip ).toString();
-//        toolTip = drugM->drugData( m_CIS, Drug::CompositionString ).toString();
-//        dosageForAllInnCheck.setEnabled(m->drugData(CIS, Drug::AllInnsKnown ).toBool());
+        m_Parent->labelOfDosageLabel->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::AvailableDosages).toString());
+        m_Parent->drugNameLabel->setText(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::Denomination).toString());
+        m_Parent->drugNameLabel->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::CompositionString).toString());
+        m_Parent->interactionLabel->setPixmap(drugModel()->drugData(m_CIS, DrugsDB::Constants::Interaction::Icon).value<QIcon>().pixmap(16,16));
+        m_Parent->interactionLabel->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Interaction::ToolTip ).toString());
     }
 
     /**
@@ -416,7 +417,7 @@ DosageViewer::DosageViewer( QWidget *parent )
     // Ui initialization
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
-    userformsButton->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT) );
+    userformsButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT));
     // remove last page of tabWidget (TODO page)
     tabWidget->removeTab(tabWidget->count()-1);
 

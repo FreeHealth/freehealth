@@ -216,7 +216,11 @@ public:
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
      QString           denomination() const;
+     QString           ATC() const                { return value( Table_DRUGS, DRUGS_ATC ).toString(); }
      QString           form() const               { return value( Table_DRUGS, DRUGS_FORM ).toString(); }
+     QString           route() const              { return value( Table_DRUGS, DRUGS_ROUTE ).toString(); }
+     QString           strength() const              { return value( Table_DRUGS, DRUGS_STRENGTH ).toString(); }
+
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
      QStringList       listOfMolecules() const;

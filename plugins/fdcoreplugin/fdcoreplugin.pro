@@ -1,5 +1,5 @@
-TEMPLATE        = lib
-TARGET          = Core
+TEMPLATE = lib
+TARGET = Core
 PACKAGE_VERSION = 0.0.2
 
 # include shared files for the coreplugin.
@@ -10,24 +10,19 @@ include(../coreplugin/common_core.pri)
 include(fdcoreplugin_dependencies.pri)
 
 # specific derivative files
-HEADERS += \
-    coreplugin.h \
-    coreimpl.h \
-#    mainwindow.h \
+HEADERS += coreplugin.h \
+    coreimpl.h \ # mainwindow.h \
     appaboutpage.h \
     commandlineparser.h \
     patient.h
-
-SOURCES += \
-    coreplugin.cpp \
-    coreimpl.cpp \
-#    mainwindow.cpp \
+SOURCES += coreplugin.cpp \
+    coreimpl.cpp \ # mainwindow.cpp \
     appaboutpage.cpp \
-    patient.cpp
+    patient.cpp \
+    commandlineparser.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdcoreplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/fdcoreplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/fdcoreplugin_es.ts
-
+    $${SOURCES_TRANSLATIONS}/fdcoreplugin_de.ts \
+    $${SOURCES_TRANSLATIONS}/fdcoreplugin_es.ts
 OTHER_FILES += $${PWD}/Core.pluginspec

@@ -263,14 +263,20 @@ Exemple de prescription :
 </FullPrescription>
 <ExtraDatas>
   <PatientDatas>
-    <Sex>data</Sex>                             Encodé
-    <CreatinClearance>data</CreatinClearance>   Encodé
-    <Size>data</Size>                           Encodé
-    <Creatinin>data</Creatinin>                 Encodé
-    <Weight>data</Weight>                       Encodé
-    <Name>data</Name>                           Encodé
-    <DrugsAllergies>data</DrugsAllergies>       Encodé
+    <UID>data</UID>
+    <Name>data</Name>
+    <Surname>data</Surname>
+    <Gender>data</Gender>
+    <Weight>data</Weight>
+    <WeightUnit>data</WeightUnit>
+    <Height>data</Height>
+    <HeightUnit>data</HeightUnit>
+    <CreatinClearance>data</CreatinClearance>
+    <Creatinine>data</Creatinine>
+    <CreatinineUnit>data</CreatinineUnit>
+    <DrugsAllergies>data</DrugsAllergies>
   </PatientDatas>
+  <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
 </ExtraDatas>
 \endverbatim
 
@@ -324,15 +330,21 @@ Sample prescription:
 </FullPrescription>
 <ExtraDatas>
   <PatientDatas>
-    <Sex> Data </Sex> Encoded
-    <CreatinClearance> Data </CreatinClearance> Encoded
-    <Size> Data </Size> Encoded
-    <Creatinin> Data </creatinine> Encoded
-    <Weight> Data </Weight> Encoded
-    <Name> Data </Name> Encoded
-    <DrugsAllergies> Data </DrugsAllergies> Encoded
+    <UID>data</UID>
+    <Name>data</Name>
+    <Surname>data</Surname>
+    <Gender>data</Gender>
+    <Weight>data</Weight>
+    <WeightUnit>data</WeightUnit>
+    <Height>data</Height>
+    <HeightUnit>data</HeightUnit>
+    <CreatinClearance>data</CreatinClearance>
+    <Creatinine>data</Creatinine>
+    <CreatinineUnit>data</CreatinineUnit>
+    <DrugsAllergies>data</DrugsAllergies>
   </PatientDatas>
-</ExtraData>
+  <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
+</ExtraDatas>
 \endverbatim
 
 For all information on technical data encoding thank you for you

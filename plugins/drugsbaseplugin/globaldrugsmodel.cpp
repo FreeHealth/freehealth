@@ -42,6 +42,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -117,7 +118,27 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
     if (!item.isValid())
         return QVariant();
 
-    if (role == Qt::BackgroundRole) {
+    if (role == Qt::DisplayRole) {
+        if (item.column() == DrugsDB::Constants::DRUGS_NAME) {
+            if (drugsBase()->actualDatabaseInformations()) {
+                // Construct drug name according to the database standard
+                QString tmp = drugsBase()->actualDatabaseInformations()->drugsNameConstructor;
+                if (!tmp.isEmpty()) {
+                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME),
+                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_NAME)).toString());
+                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_FORM),
+                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_FORM)).toString());
+                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
+                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_ROUTE)).toString());
+                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH),
+                                QSqlTableModel::data(index(item.row(), Constants::DRUGS_STRENGTH)).toString());
+                    return tmp;
+                } else {
+                    return QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_NAME));
+                }
+            }
+        }
+    } else if (role == Qt::BackgroundRole) {
         if (item.column() == Constants::DRUGS_NAME) {
             if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
                 QModelIndex cis = index(item.row(), Constants::DRUGS_UID);

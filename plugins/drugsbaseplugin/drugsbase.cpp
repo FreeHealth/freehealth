@@ -172,6 +172,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_DRUGS, DRUGS_FORM,           "FORM");
     addField(Table_DRUGS, DRUGS_ROUTE,          "ROUTE");
     addField(Table_DRUGS, DRUGS_ATC,            "ATC");
+    addField(Table_DRUGS, DRUGS_STRENGTH,       "GLOBAL_STRENGTH");
     addField(Table_DRUGS, DRUGS_TYPE_MP,        "TYPE_MP");
     addField(Table_DRUGS, DRUGS_AUTHORIZATION,  "AUTHORIZATION");
     addField(Table_DRUGS, DRUGS_MARKET,         "MARKETED");
@@ -210,7 +211,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_INTERACTIONS,      "INTERACTIONS");
     addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
     addField(Table_INFORMATION, INFO_LANGUAGE_COUNTRY,  "LANGUAGE_COUNTRY");
-
+    addField(Table_INFORMATION, INFO_DRUGS_NAME_CONSTRUCTOR, "DRUGS_NAME_CONSTRUCTOR");
 }
 
 /** \brief Destructor. */
@@ -336,6 +337,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
             info->iamCompatible = q.value(Constants::INFO_INTERACTIONS).toBool();
             info->authorComments = q.value(Constants::INFO_AUTHOR_COMMENTS).toString();
             info->lang_country = q.value(Constants::INFO_LANGUAGE_COUNTRY).toString();
+            info->drugsNameConstructor = q.value(Constants::INFO_DRUGS_NAME_CONSTRUCTOR).toString();
             info->connectionName = db.connectionName();
             if (db.driverName() == "QSQLITE") {
                 info->fileName = db.databaseName();
@@ -558,6 +560,10 @@ struct minimalCompo {
 QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 {
     QList<int> toReturn;
+
+    if (!actualDatabaseInformations())
+        return toReturn;
+
     QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
     if ((DosageDB.isOpen()) && (!DosageDB.open())) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
@@ -791,6 +797,17 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                     toReturn = new DrugsData();
                     for (i = 0; i < DRUGS_MaxParam; ++i)
                          toReturn->setValue(Table_DRUGS, i, q.value(i));
+               }
+               // manage drugs denomination according to the database informations
+               if (d->m_ActualDBInfos) {
+                   QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
+                   if (!tmp.isEmpty()) {
+                       tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
+                       tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
+                       tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
+                       tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
+                       toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
+                   }
                }
            } else {
                Utils::Log::addQueryError(this, q);

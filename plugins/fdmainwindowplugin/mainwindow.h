@@ -109,6 +109,7 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 
     // slots for patient's datas
     void on_patientName_textChanged(const QString &text);
+    void on_patientSurname_textChanged(const QString &text);
     void on_patientWeight_valueChanged(const QString &text);
     void on_patientSize_valueChanged(const QString &text);
     void on_sexCombo_currentIndexChanged(const QString &text);

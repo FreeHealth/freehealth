@@ -70,16 +70,23 @@ class PatientPrivate
 public:
     PatientPrivate()
     {
-        m_XmlTags.insert(Patient::FullName , "Name" );
-        m_XmlTags.insert(Patient::Sex , "Sex" );
-        m_XmlTags.insert(Patient::DateOfBirth , "DateOfbirth");
-        m_XmlTags.insert(Patient::Weight , "Weight");
-        m_XmlTags.insert(Patient::Height , "Height" );
+        m_XmlTags.insert(Patient::UID ,        "UID");
+        m_XmlTags.insert(Patient::Name ,       "Name" );
+        m_XmlTags.insert(Patient::Surname ,    "Surname" );
+        m_XmlTags.insert(Patient::Gender ,     "Gender" );
+        m_XmlTags.insert(Patient::DateOfBirth ,"DateOfbirth");
+        m_XmlTags.insert(Patient::Weight ,     "Weight");
+        m_XmlTags.insert(Patient::WeightUnit , "WeightUnit");
+        m_XmlTags.insert(Patient::Height ,     "Height" );
+        m_XmlTags.insert(Patient::HeightUnit , "HeightUnit" );
+        m_XmlTags.insert(Patient::Creatinine,  "Creatinine" );
+        m_XmlTags.insert(Patient::CreatinineUnit,  "CreatinineUnit" );
+        m_XmlTags.insert(Patient::IMC ,        "IMC");
         m_XmlTags.insert(Patient::CreatinClearance , "CreatinClearance" );
-        m_XmlTags.insert(Patient::ICD10Deceases , "ICD10Deceases");
-        m_XmlTags.insert(Patient::DrugsAllergies , "DrugsAllergies" );
-        m_XmlTags.insert(Patient::Creatinin , "Creatinin");
-        m_XmlTags.insert(Patient::IMC , "IMC");
+        m_XmlTags.insert(Patient::ICD10Deceases ,    "ICD10Deceases");
+        m_XmlTags.insert(Patient::DrugsAllergies ,   "DrugsAllergies" );
+//        m_XmlTags.insert(Patient::ATCAllergies ,   "ATCAllergies" );
+//        m_XmlTags.insert(Patient::INNAllergies ,   "INNAllergies" );
     }
 
     QString getXmlTag(const int key) const
@@ -103,9 +110,8 @@ public:
 
 
 /** Constructor */
-Patient::Patient() : d(0)
+Patient::Patient() : d(new PatientPrivate)
 {
-    d = new PatientPrivate();
     Q_ASSERT(d);
 }
 
@@ -155,19 +161,17 @@ QVariant Patient::value(Reference ref) const
         }
         case CreatinClearance :
         {
-            // Try to calculate Clearance
+            if (has(ref) && (!d->m_Values.value(ref).isNull()))
+                return d->m_Values.value(ref);
+            // If we can not retreive it from command line --> calculate it
             if (value(YearsOld).toInt()>0) {
-                if (has(Creatinin) && has(Sex) && has(Weight)) {
-                    bool isMale = d->m_Values.value(Sex).toString().startsWith("M");
+                if (has(Creatinine) && has(Gender) && has(Weight)) {
+                    bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
                     return MedicalUtils::clearanceCreatinin(value(YearsOld).toInt(),
                                                             d->m_Values.value(Weight).toDouble(),
-                                                            d->m_Values.value(Creatinin).toDouble(),
+                                                            d->m_Values.value(Creatinine).toDouble(),
                                                             isMale);
                 }
-            } else {
-                // If we can not calculate it, then try to return the command line clearance
-                if (has(ref) && (!d->m_Values.value(ref).isNull()))
-                    return d->m_Values.value(ref);
             }
             break;
         }
@@ -246,7 +250,8 @@ bool Patient::fromXml(const QString &xml)
 */
 void Patient::replaceTokens(QString &stringWillBeModified)
 {
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(Patient::FullName).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(Patient::Name).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSURNAME, value(Patient::Surname).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD, value(Patient::YearsOld).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(Patient::Weight).toString() );

@@ -148,8 +148,8 @@ private:
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
  \todo use a QPersistentModelIndex instead of drugRow, dosageRow
 */
-DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel )
-    : QDialog( parent ),
+DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel)
+    : QDialog(parent),
     d(0)
 {
     using namespace DrugsDB::Constants;
@@ -161,15 +161,16 @@ DosageCreatorDialog::DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::Do
     // Ui initialization
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
     // Drug informations
     int CIS = dosageModel->drugUID();
     drugNameLabel->setText( drugModel()->drugData(CIS, Drug::Denomination).toString() );
     QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
-    interactionIconLabel->setPixmap( drugModel()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16) );
-    interactionIconLabel->setToolTip( toolTip );
+    interactionIconLabel->setPixmap(drugModel()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16));
+    interactionIconLabel->setToolTip(toolTip);
     toolTip = drugModel()->drugData(CIS, Drug::CompositionString ).toString();
-    drugNameLabel->setToolTip( toolTip );
+    drugNameLabel->setToolTip(toolTip);
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
     availableDosagesListView->setModel(dosageModel);

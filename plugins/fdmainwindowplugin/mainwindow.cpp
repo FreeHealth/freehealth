@@ -296,30 +296,25 @@ MainWindow::~MainWindow()
 */
 void MainWindow::refreshPatient()
 {
-    m_ui->patientName->setText( patient()->value(Core::Patient::FullName).toString() );
-    m_ui->patientName->setToolTip( QString("Nom : %1<br />Date de naissance : %2<br />Poids : %3<br />"
-                                     "Taille : %4<br />Clearance : %5")
-                             .arg( patient()->value(Core::Patient::FullName).toString(),
+    m_ui->patientName->setText(patient()->value(Core::Patient::Name).toString());
+    m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
+                                     "Taille : %5<br />Clearance : %6")
+                             .arg( patient()->value(Core::Patient::Name).toString(),
+                                   patient()->value(Core::Patient::Surname).toString(),
                                    patient()->value(Core::Patient::DateOfBirth).toString(),
                                    patient()->value(Core::Patient::Weight).toString() )
                              .arg( patient()->value(Core::Patient::Height).toString(),
                                    patient()->value(Core::Patient::CreatinClearance).toString() ));
-    QString sex = patient()->value(Core::Patient::Sex).toString();
-//    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Sex).toString()));
-    if (sex == "M")
-        m_ui->sexCombo->setCurrentIndex(1);
-    else if (sex == "F")
-        m_ui->sexCombo->setCurrentIndex(2);
-    else if (sex == "H")
-        m_ui->sexCombo->setCurrentIndex(3);
-    else
-        m_ui->sexCombo->setCurrentIndex(0);
-
+    m_ui->patientSurname->setText(patient()->value(Core::Patient::Surname).toString());
     m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
+    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Gender).toString(), Qt::MatchFixedString));
+    m_ui->creatinineUnit->setCurrentIndex(m_ui->creatinineUnit->findText(patient()->value(Core::Patient::CreatinineUnit).toString(), Qt::MatchFixedString));
+    m_ui->crClUnit->setCurrentIndex(m_ui->crClUnit->findText(patient()->value(Core::Patient::CreatinClearanceUnit).toString(), Qt::MatchFixedString));
     m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
     m_ui->patientSize->setValue(patient()->value(Core::Patient::Height).toInt());
     m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
-    m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinin).toDouble());
+    m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinine).toDouble());
+    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
     m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAllergies).toString());
 }
 
@@ -367,10 +362,10 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        QVariant sex = patient()->value(Core::Patient::Sex);
+        QVariant sex = patient()->value(Core::Patient::Gender);
 	m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
-        patient()->setValue(Core::Patient::Sex, sex);
+        patient()->setValue(Core::Patient::Gender, sex);
         refreshPatient();
     }
 }
@@ -506,6 +501,14 @@ bool MainWindow::saveFile()
 bool MainWindow::savePrescription(const QString &fileName)
 {
     QString xmlExtra = patient()->toXml();
+    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+            xmlExtra.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
+        }
+        xmlExtra.append("/>");
+    }
+    qWarning() << xmlExtra;
     return DrugsDB::DrugsIO::savePrescription(drugModel(), xmlExtra, fileName);
 }
 
@@ -566,13 +569,19 @@ void MainWindow::createDockWindows()
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientName_textChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::FullName, text);
+    patient()->setValue(Core::Patient::Name, text);
+}
+
+/** \brief Always keep uptodate patient's datas */
+void MainWindow::on_patientSurname_textChanged(const QString &text)
+{
+    patient()->setValue(Core::Patient::Surname, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_sexCombo_currentIndexChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::Sex, text);
+    patient()->setValue(Core::Patient::Gender, text);
     refreshPatient();
 }
 
@@ -600,7 +609,7 @@ void MainWindow::on_patientClCr_valueChanged(const QString & text)
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
 {
-    patient()->setValue(Core::Patient::Creatinin, text);
+    patient()->setValue(Core::Patient::Creatinine, text);
     refreshPatient();
 }
 

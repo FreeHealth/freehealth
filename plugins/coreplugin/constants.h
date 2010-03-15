@@ -394,6 +394,7 @@ const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
 const char * const  TOKEN_PATIENTAGE   ="AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTYEARSOLD ="YEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTSURNAME  ="PATIENTSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_HEIGHT       ="HEIGHT";          /*!< /brief Tokens for Patient::replaceTokens() */

@@ -12,23 +12,31 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <property name="margin">
-     <number>10</number>
-    </property>
-    <property name="spacing">
-     <number>10</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Patient Name</string>
-      </property>
-     </widget>
+    <item row="0" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Patient Name</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="patientName"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Surname</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="patientSurname"/>
+      </item>
+     </layout>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="patientName"/>
-    </item>
-    <item row="1" column="0" colspan="4">
+    <item row="1" column="0" colspan="3">
      <widget class="QGroupBox" name="patientInformations">
       <property name="title">
        <string>Patient informations</string>
@@ -65,7 +73,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Weight (kg)</string>
+            <string>Weight</string>
            </property>
           </widget>
          </item>
@@ -83,9 +91,23 @@
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="weightUnit">
+           <item>
+            <property name="text">
+             <string>Kg</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>lbs</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Size (cm)</string>
+            <string>Size</string>
            </property>
           </widget>
          </item>
@@ -100,6 +122,25 @@
            <property name="value">
             <number>0</number>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="sizeUnit">
+           <item>
+            <property name="text">
+             <string>cm</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>m</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>inches</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
@@ -140,7 +181,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Creatinin clearance (ml/min)</string>
+            <string>Creatinin clearance</string>
            </property>
           </widget>
          </item>
@@ -150,7 +191,7 @@
             <number>0</number>
            </property>
            <property name="maximum">
-            <number>170</number>
+            <number>200</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -158,9 +199,23 @@
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="crClUnit">
+           <item>
+            <property name="text">
+             <string>mL/min</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>mL/sec</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Creatinin (mg/l)</string>
+            <string>Creatinine</string>
            </property>
           </widget>
          </item>
@@ -175,6 +230,30 @@
            <property name="value">
             <double>0.000000000000000</double>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="creatinineUnit">
+           <item>
+            <property name="text">
+             <string>mg/L</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>mg/dL</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>mmol/L</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>µmol/L</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -194,16 +273,6 @@
         </layout>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="4">
-     <widget class="DrugsWidget::DrugsCentralWidget" name="m_CentralWidget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
      </widget>
     </item>
     <item row="0" column="2">
@@ -231,6 +300,16 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="3">
+     <widget class="DrugsWidget::DrugsCentralWidget" name="m_CentralWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
      </widget>
     </item>

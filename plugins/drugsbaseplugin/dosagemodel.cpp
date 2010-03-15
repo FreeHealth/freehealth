@@ -192,9 +192,11 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
                   .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
                   .arg(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT));
     } else {
-        setFilter(QString("%1 = \"%2\"")
-                  .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
-                  .arg(drugsBase()->actualDatabaseInformations()->identifiant));
+        if (drugsBase()->actualDatabaseInformations()) {
+            setFilter(QString("%1 = \"%2\"")
+                      .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
+                      .arg(drugsBase()->actualDatabaseInformations()->identifiant));
+        }
     }
 }
 
@@ -291,7 +293,8 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             toReturn = false;
         } else {
             setData(index(createdRow, Dosages::Constants::Uuid) , QUuid::createUuid().toString());
-            setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant) , drugsBase()->actualDatabaseInformations()->identifiant);
+            if (drugsBase()->actualDatabaseInformations())
+                setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant) , drugsBase()->actualDatabaseInformations()->identifiant);
             setData(index(createdRow, Dosages::Constants::CIS_LK) , m_UID);
             setData(index(createdRow, Dosages::Constants::IntakesTo) , 1);
             setData(index(createdRow, Dosages::Constants::IntakesFrom) , 1);

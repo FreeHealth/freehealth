@@ -122,6 +122,7 @@ public:
     void showTestingDrugs(bool state);
     bool testingDrugsAreVisible() const;
     void setSelectionOnlyMode(bool b);
+    bool isSelectionOnlyMode() const;
 
     // DRAG AND DROP
     Qt::DropActions supportedDropActions() const;
