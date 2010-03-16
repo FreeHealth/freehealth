@@ -76,7 +76,10 @@ public:
         CreatinineUnit,
         CreatinClearance,
         CreatinClearanceUnit,
-        DrugsAllergies,     //  see tkSerializer --> string<->stringlist
+        DrugsUidAllergies,     //  see tkSerializer --> string<->stringlist
+        DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
+        DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
+        DrugsInnAtcAllergies,     //  see tkSerializer --> string<->stringlist
         ICD10Deceases,      //  see tkSerializer --> string<->stringlist
     };
 

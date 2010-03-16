@@ -49,6 +49,10 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
 
+#ifdef FREEDIAMS
+#  include <fdcoreplugin/patient.h>
+#endif
+
 #include <QList>
 #include <QColor>
 
@@ -57,6 +61,10 @@
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+
+#ifdef FREEDIAMS
+static inline Core::Patient *patient() {return Core::ICore::instance()->patient();}
+#endif
 
 /**
   \todo no singleton otherwise search filter is applied to all views.
@@ -104,6 +112,10 @@ public:
     }
 
 
+public:
+    QStringList atcAllergies, uidAllergies;
+    bool testAtc, testUid;
+
 private:
     static QList<int> m_CachedAvailableDosageForUID;
     GlobalDrugsModel *q;
@@ -134,6 +146,14 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     where.insert(Constants::DRUGS_MARKET, "=1");
     setFilter(drugsBase()->getWhereClause(Constants::Table_DRUGS, where));
     select();
+#ifdef FREEDIAMS
+    d->uidAllergies = patient()->value(Core::Patient::DrugsUidAllergies).toStringList();
+    d->atcAllergies = patient()->value(Core::Patient::DrugsAtcAllergies).toStringList();
+    d->uidAllergies.removeAll("");
+    d->atcAllergies.removeAll("");
+    d->testAtc = !d->atcAllergies.isEmpty();
+    d->testUid = !d->uidAllergies.isEmpty();
+#endif
 }
 
 QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
@@ -147,6 +167,26 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
     } else if (role == Qt::BackgroundRole) {
         if (item.column() == Constants::DRUGS_NAME) {
+#ifdef FREEDIAMS
+            // test atc's patient allergies
+            /** \todo use a cache */
+            if (d->testAtc) {
+                QString atc = index(item.row(), Constants::DRUGS_ATC).data().toString();
+                if (d->atcAllergies.contains(atc)) {
+                    QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+                    c.setAlpha(190);
+                    return c;
+                }
+            }
+            if (d->testUid) {
+                QString uid = index(item.row(), Constants::DRUGS_UID).data().toString();
+                if (d->uidAllergies.contains(uid)) {
+                    QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+                    c.setAlpha(190);
+                    return c;
+                }
+            }
+#endif
             if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
                 QModelIndex cis = index(item.row(), Constants::DRUGS_UID);
                 if (d->UIDHasRecordedDosage(cis.data().toInt())) {
@@ -156,6 +196,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                 }
             }
         }
+
     } else if (role == Qt::ToolTipRole) {
         QString tmp = d->getConstructedDrugName(item.row()) + "\n";
         tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "\n";

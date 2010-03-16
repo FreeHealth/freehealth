@@ -102,6 +102,20 @@ DrugsDatabaseSelector *DrugsDatabaseSelector::instance()
     return m_Instance;
 }
 
+void DatabaseInfos::setDrugsNameConstructor(const QString &s)
+{
+    drugsNameConstructor = s;
+    QRegExp rx("\\b(NAME|FORM|ROUTE|GLOBAL_STRENGTH)\\b");
+    QStringList list;
+    int pos = 0;
+    while ((pos = rx.indexIn(s, pos)) != -1) {
+        list << "`DRUGS`.`" + rx.cap(1) +"`";
+        pos += rx.matchedLength();
+    }
+    drugsNameConstructorSearchFilter = list.join(" || ");
+}
+
+
 void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 {
     QFont bold;
@@ -180,6 +194,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     else
         new QTreeWidgetItem(validItem, QStringList() << "IAM validity" <<tkTr(Trans::Constants::UNAVAILABLE));
     new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR" << drugsNameConstructor);
+    new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR (filter)" << drugsNameConstructorSearchFilter);
 
     tree->expandAll();
     tree->resizeColumnToContents(0);

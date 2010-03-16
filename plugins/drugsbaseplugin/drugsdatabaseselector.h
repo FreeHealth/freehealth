@@ -63,10 +63,11 @@ public:
     void warn();
     QString translatedName() const;
     QHash<QString, QString> names() const;
+    void setDrugsNameConstructor(const QString &s);
     void toTreeWidget(QTreeWidget *tree) const;
 
     QString name, identifiant, fileName, version, compatVersion, lang_country, connectionName;
-    QString provider, author, license, drugsUidName, packUidName, drugsNameConstructor;
+    QString provider, author, license, drugsUidName, packUidName, drugsNameConstructor,  drugsNameConstructorSearchFilter;
     QString weblink, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;
     QDate date;

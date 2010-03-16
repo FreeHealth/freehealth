@@ -272,6 +272,13 @@ public:
         patient->setValue(Patient::Name,           value.value(CommandLine::CL_PatientName));
         patient->setValue(Patient::Surname,        value.value(CommandLine::CL_PatientSurname));
         patient->setValue(Patient::Gender,         value.value(CommandLine::CL_PatientGender));
+        QStringList tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
+        patient->setValue(Patient::DrugsAtcAllergies, tmp);
+        tmp = value.value(CommandLine::CL_InnAllergies).toString().split(";");
+        patient->setValue(Patient::DrugsInnAllergies, tmp);
+        tmp = value.value(CommandLine::CL_DrugsAllergies).toString().split(";");
+        patient->setValue(Patient::DrugsUidAllergies, tmp);
+        //        patient->setValue(Patient::DrugsInnAtcAllergies, value.value(CommandLine::CL_InnAtcAllergies));
         if (value.value(CommandLine::CL_CrCl).isValid()) {
             patient->setValue(Patient::CreatinClearance,     value.value(CommandLine::CL_CrCl));
             patient->setValue(Patient::CreatinClearanceUnit, value.value(CommandLine::CL_CrCl_Unit));

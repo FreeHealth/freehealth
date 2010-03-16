@@ -314,7 +314,8 @@ void MainWindow::refreshPatient()
     m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
     m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinine).toDouble());
     m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
-    m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAllergies).toString());
+    /** \todo manage allergies */
+    m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAtcAllergies).toString());
 }
 
 /**
@@ -615,6 +616,7 @@ void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_listOfAllergies_textChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::DrugsAllergies, text);
+    /** \todo manage allergies */
+    patient()->setValue(Core::Patient::DrugsAtcAllergies, text);
     refreshPatient();
 }

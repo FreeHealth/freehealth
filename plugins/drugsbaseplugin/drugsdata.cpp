@@ -496,19 +496,21 @@ QString DrugsData::toHtml() const
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
-                    "       <br>CIS = %2\n"
+                    "       <br>UID = %2\n"
+                    "       <br>ATC = %3\n"
                     "   </td>\n"
                     " </tr>\n"
                     " <tr>\n"
-                    "   <td>%3</td>\n"
                     "   <td>%4</td>\n"
+                    "   <td>%5</td>\n"
                     " </tr>\n"
                     " <tr>\n"
-                    "   <td colspan=2 rowspan=1>%5</td>\n"
+                    "   <td colspan=2 rowspan=1>%6</td>\n"
                     " </tr>\n"
                     "</table>\n\n" )
             .arg( denomination() )
             .arg( value(Table_DRUGS, DRUGS_UID).toString() )
+            .arg( value(Table_DRUGS, DRUGS_ATC).toString() )
             .arg( mols.join( "<br>" ) )
             .arg( textIams )
             .arg( textClass );

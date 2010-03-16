@@ -84,7 +84,10 @@ public:
         m_XmlTags.insert(Patient::IMC ,        "IMC");
         m_XmlTags.insert(Patient::CreatinClearance , "CreatinClearance" );
         m_XmlTags.insert(Patient::ICD10Deceases ,    "ICD10Deceases");
-        m_XmlTags.insert(Patient::DrugsAllergies ,   "DrugsAllergies" );
+        m_XmlTags.insert(Patient::DrugsAtcAllergies ,   "DrugsAtcAllergies" );
+        m_XmlTags.insert(Patient::DrugsUidAllergies ,   "DrugsUidAllergies" );
+        m_XmlTags.insert(Patient::DrugsInnAllergies ,   "DrugsInnAllergies" );
+        m_XmlTags.insert(Patient::DrugsInnAtcAllergies ,   "DrugsInnAtcAllergies" );
 //        m_XmlTags.insert(Patient::ATCAllergies ,   "ATCAllergies" );
 //        m_XmlTags.insert(Patient::INNAllergies ,   "INNAllergies" );
     }

@@ -47,6 +47,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -260,9 +261,16 @@ void DrugSelector::setSearchMethod(int method)
         InnView->hide();
         m_SearchMethod = method;
         QHashWhere where;
-        where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
-        where.insert(DrugsDB::Constants::DRUGS_NAME , "LIKE '__replaceit__%'");
-        m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
+        if (drugsBase()->actualDatabaseInformations()) {
+            where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
+            m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
+            m_filterModel.prepend(drugsBase()->actualDatabaseInformations()->drugsNameConstructorSearchFilter +
+                                  " LIKE '__replaceit__%' AND ");
+        } else {
+            where.insert(DrugsDB::Constants::DRUGS_MARKET, "=1");
+            where.insert(DrugsDB::Constants::DRUGS_NAME , "LIKE '__replaceit__%'");
+            m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
+        }
     }
     else if (method == Constants::SearchMolecules) {
         Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHMOLECULES_TEXT));
