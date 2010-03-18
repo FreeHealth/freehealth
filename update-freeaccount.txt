@@ -1,0 +1,20 @@
+version=0.1.0
+{
+    * Mars 2010
+    * Première mise en ligne de l'application
+
+    * Nouvelles fonctionnalités :
+      * Première mise en compatibilité avec la suite FreeMedForms
+      * UpdateChecker disponible
+
+    * Modifications importantes :
+      * Création de l'application avec comme nouveaux plugins :
+        - faccountcoreplugin --> Core spécifique à FreeAccount
+        - faccountmainwindowplugin --> MainWindow spécifique à FreeAccount
+      * Connection avec les plugins :
+        - printerplugin
+        - listviewplugin
+        - texteditorplugin
+
+    * Disponible pour Linux, Mac Os X intel, Windows
+}
