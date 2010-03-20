@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -291,6 +291,11 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 
 SettingsPrivate::~SettingsPrivate()
 {}
+
+QSettings *SettingsPrivate::getQSettings()
+{
+    return this;
+}
 
 /**
   \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -70,6 +70,8 @@ class CORE_EXPORT SettingsPrivate : public ISettings, public QSettings
 public:
     SettingsPrivate(QObject *parent = 0, const QString &appName = QString::null, const QString &fileName = QString::null );
     ~SettingsPrivate();
+
+    QSettings *getQSettings();
 
     // QSettings wrappers
     inline void beginGroup ( const QString & prefix ) { QSettings::beginGroup(prefix); }

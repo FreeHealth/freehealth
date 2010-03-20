@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -49,13 +49,14 @@ QT_BEGIN_NAMESPACE
 class QStringList;
 class QTreeWidget;
 class QMainWindow;
+class QSettings;
 QT_END_NAMESPACE
 
 /**
  * \file settings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.13
- * \date 10 Sept 2009
+ * \version 0.4.0
+ * \date 18 Mar 2010
 */
 
 namespace Core {
@@ -90,6 +91,8 @@ public:
     };
 
     virtual ~ISettings() {}
+
+    virtual QSettings *getQSettings() = 0;
 
     // QSettings wrappers
     virtual void beginGroup ( const QString & prefix ) = 0;
