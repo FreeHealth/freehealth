@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -313,7 +313,6 @@ const char * const  ICONHOME =         "gohome.png";
 const char * const  ICONLOCK =         "lock.png";
 const char * const  ICONUNLOCK =       "unlock.png";
 
-
 // menu View
 const char * const  ICONEYES =         "eyes.png";
 const char * const  ICONVIEWSIDE =     "view_sidetree.png";
@@ -356,6 +355,9 @@ const char * const  ICONCRASHRECOVER = "crashrecoverer.png";
 const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
 const char * const  ICONPENCIL    =  "pencil.png";
+
+// dialog icons
+const char * const  ICONWARNING    =  "warning.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
@@ -404,23 +406,13 @@ const char * const  TOKEN_NUMBEROFDRUGS = "NBDRUGS";
 
 
 // Settings keys
-const char * const  S_RECENTFILES_GROUP ="RecentFiles";
-const char * const  S_RECENTFILES_KEY ="File";
-const char * const  S_SAVEINTERVAL ="Core/SaveInterval";
-const char * const  S_OPENLAST ="Core/OpenLastOpenedFile";
+const char * const  S_RECENTFILES_GROUP = "RecentFiles";
+const char * const  S_RECENTFILES_KEY = "File";
+const char * const  S_SAVEINTERVAL = "Core/SaveInterval";
+const char * const  S_OPENLAST = "Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
 const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
-const char * const  S_CHECKUPDATE  = "CheckUpdate";
-const char * const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
-
-enum {  // Don't change the ordre of this enum
-    S_CheckUpdate_AtStartup = 0,
-    S_CheckUpdate_EachWeeks,
-    S_CheckUpdate_EachMonth,
-    S_CheckUpdate_EachQuarters,
-    S_CheckUpdate_Never
-};
 
 
 // Some path tags

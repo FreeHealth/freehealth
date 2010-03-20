@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -50,7 +50,7 @@
  * \file globaldrugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 23 Fev 2010
+ * \date 16 Mar 2010
 */
 
 namespace DrugsDB {
@@ -64,6 +64,8 @@ class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlTableModel
     Q_OBJECT
 public:
     GlobalDrugsModel(QObject * parent = 0);
+    ~GlobalDrugsModel();
+
     static void updateAvailableDosages();
 
     bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }

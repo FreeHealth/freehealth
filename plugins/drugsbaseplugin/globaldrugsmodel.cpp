@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -55,6 +55,8 @@
 
 #include <QList>
 #include <QColor>
+#include <QDir>
+#include <QCache>
 
 #include <QDebug>
 
@@ -79,6 +81,16 @@ public:
     GlobalDrugsModelPrivate(GlobalDrugsModel *parent) : q(parent)
     {
         Q_ASSERT(q);
+        ++numberOfInstances;
+    }
+
+    ~GlobalDrugsModelPrivate()
+    {
+        --numberOfInstances;
+        if (numberOfInstances==0) {
+            m_CachedAvailableDosageForUID.clear();
+            drugAllergyCache.clear();
+        }
     }
 
     static void updateCachedAvailableDosage()
@@ -111,18 +123,49 @@ public:
         return q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString();
     }
 
+    bool hasAllergie(const QModelIndex &item)
+    {
+        int uid = q->index(item.row(), Constants::DRUGS_UID).data().toInt();
+        if (drugAllergyCache.contains(uid)) {
+            return drugAllergyCache.value(uid);
+        }
+        if (testAtc) {
+            QString atc = q->index(item.row(), Constants::DRUGS_ATC).data().toString();
+            if (atcAllergies.contains(atc)) {
+                drugAllergyCache.insert(uid, true);
+                return true;
+            }
+        }
+        if (testUid) {
+            if (uidAllergies.contains(QString::number(uid))) {
+                drugAllergyCache.insert(uid, true);
+                return true;
+            }
+        }
+        drugAllergyCache.insert(uid, false);
+
+        if (drugAllergyCache.size() > 5000) {
+            drugAllergyCache.remove(drugAllergyCache.begin().key());
+        }
+
+        return false;
+    }
+
 
 public:
     QStringList atcAllergies, uidAllergies;
     bool testAtc, testUid;
 
 private:
+    static QHash<int, bool> drugAllergyCache;
     static QList<int> m_CachedAvailableDosageForUID;
+    static int numberOfInstances;
     GlobalDrugsModel *q;
 };
 
-/** \todo clear static cachedCISDosage when no entity of this object left */
 QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
+QHash<int, bool> GlobalDrugsModelPrivate::drugAllergyCache;
+int GlobalDrugsModelPrivate::numberOfInstances;
 
 }  // End Internal
 }  // End DrugsDB
@@ -149,11 +192,19 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
 #ifdef FREEDIAMS
     d->uidAllergies = patient()->value(Core::Patient::DrugsUidAllergies).toStringList();
     d->atcAllergies = patient()->value(Core::Patient::DrugsAtcAllergies).toStringList();
+#endif
     d->uidAllergies.removeAll("");
     d->atcAllergies.removeAll("");
     d->testAtc = !d->atcAllergies.isEmpty();
     d->testUid = !d->uidAllergies.isEmpty();
-#endif
+}
+
+GlobalDrugsModel::~GlobalDrugsModel()
+{
+    if (d) {
+        delete d;
+        d=0;
+    }
 }
 
 QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
@@ -167,26 +218,12 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
     } else if (role == Qt::BackgroundRole) {
         if (item.column() == Constants::DRUGS_NAME) {
-#ifdef FREEDIAMS
             // test atc's patient allergies
-            /** \todo use a cache */
-            if (d->testAtc) {
-                QString atc = index(item.row(), Constants::DRUGS_ATC).data().toString();
-                if (d->atcAllergies.contains(atc)) {
-                    QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-                    c.setAlpha(190);
-                    return c;
-                }
+            if (d->hasAllergie(item)) {
+                QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+                c.setAlpha(190);
+                return c;
             }
-            if (d->testUid) {
-                QString uid = index(item.row(), Constants::DRUGS_UID).data().toString();
-                if (d->uidAllergies.contains(uid)) {
-                    QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-                    c.setAlpha(190);
-                    return c;
-                }
-            }
-#endif
             if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
                 QModelIndex cis = index(item.row(), Constants::DRUGS_UID);
                 if (d->UIDHasRecordedDosage(cis.data().toInt())) {
@@ -198,15 +235,23 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
 
     } else if (role == Qt::ToolTipRole) {
-        QString tmp = d->getConstructedDrugName(item.row()) + "\n";
-        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "\n";
-        tmp += "    " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "\n";
-        QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
+        QString tmp = "<html><body>";
+        if (d->hasAllergie(item)) {
+            tmp += QString("<span style=\"align:center;vertical-align:middle\"><img src=\"%1\"><span style=\"color:red;font-weight:600\">WARNING : known allergy.</span><img src=\"%1\"></span><br />")
+                   .arg(settings()->path(Core::ISettings::MediumPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING));
+        }
+        tmp += d->getConstructedDrugName(item.row()) + "<br />";
+        tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "<br />";
+        tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "<br />";
+        QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString() + "</body></html>";
         if (atc.isEmpty())
-            tmp += "    No ATC found";
+            tmp += "&nbsp;&nbsp;&nbsp;&nbsp;No ATC found";
         else
-            tmp += "    " + atc;
+            tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + atc;
         return tmp;
+    } else if (role == Qt::DecorationRole) {
+        if (d->hasAllergie(item))
+            return theme()->icon(Core::Constants::ICONWARNING);
     }
     return QSqlTableModel::data(item,role);
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -71,6 +71,7 @@
 
 #include <QMessageBox>
 #include <QModelIndex>
+#include <QToolBar>
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
@@ -162,14 +163,26 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     setupUi(this);
     setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
+//    buttonBox->addButton(tr("Save and prescribe"), QDialogButtonBox::YesRole);
+//    buttonBox->addButton(tr("Save Protocol"), QDialogButtonBox::YesRole);
+//    buttonBox->addButton(tr("Prescribe only"), QDialogButtonBox::ActionRole);
+//    buttonBox->addButton(tr("Test only"), QDialogButtonBox::ActionRole);
+
+    // create toolbar
+//    QToolBar *t = new QToolBar(this);
+    // Save and Prescribe
+    // Save protocol
+    // Prescribe only
+    // For test only
+
 
     // Drug informations
-    int CIS = dosageModel->drugUID();
-    drugNameLabel->setText( drugModel()->drugData(CIS, Drug::Denomination).toString() );
-    QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
-    interactionIconLabel->setPixmap(drugModel()->drugData(CIS, Interaction::Icon).value<QIcon>().pixmap(16,16));
+    int UID = dosageModel->drugUID();
+    drugNameLabel->setText( drugModel()->drugData(UID, Drug::Denomination).toString() );
+    QString toolTip = drugModel()->drugData(UID, Interaction::ToolTip ).toString();
+    interactionIconLabel->setPixmap(drugModel()->drugData(UID, Interaction::Icon).value<QIcon>().pixmap(16,16));
     interactionIconLabel->setToolTip(toolTip);
-    toolTip = drugModel()->drugData(CIS, Drug::CompositionString ).toString();
+    toolTip = drugModel()->drugData(UID, Drug::CompositionString ).toString();
     drugNameLabel->setToolTip(toolTip);
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
