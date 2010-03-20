@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -50,7 +50,7 @@ using namespace Core::Internal;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeMedForms</b><br />"
-        "Copyright (C) 2008-2009 by Eric MAEKER, MD</p>"
+        "(C) 2008-2010 by Eric MAEKER, MD</p>"
         "<p align=left>This application is an early alpha release. This means that a lot of "
         "features are not yet implemented or may not work and that you may experiment bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"

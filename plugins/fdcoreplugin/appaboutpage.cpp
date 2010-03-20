@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -59,7 +59,7 @@ using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeDiams</b><br />"
-        "Copyright (C) 2008-2009 by Eric MAEKER, MD</p>"
+        "(C) 2008-2010 by Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
         "Please refer to web site for more informations.<br />"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -77,7 +77,7 @@
 
 #include "ui_mainwindow.h"
 
-// include Qt headers
+#include <QSettings>
 #include <QTextEdit>
 #include <QTextStream>
 #include <QCloseEvent>
@@ -260,12 +260,7 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
-    int chk = settings()->value(Core::Constants::S_CHECKUPDATE,Core::Constants::S_CheckUpdate_AtStartup).toInt();
-    QDate last = settings()->value(Core::Constants::S_LAST_CHECKUPDATE,QDate::currentDate()).toDate();
-    if ((chk == Core::Constants::S_CheckUpdate_AtStartup)
-       || ((chk == Core::Constants::S_CheckUpdate_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
-       || ((chk == Core::Constants::S_CheckUpdate_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
-       || ((chk == Core::Constants::S_CheckUpdate_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
+    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
@@ -273,7 +268,7 @@ void MainWindow::extensionsInitialized()
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
         updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
-        settings()->setValue(Core::Constants::S_LAST_CHECKUPDATE,QDate::currentDate());
+        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
     createDockWindows();

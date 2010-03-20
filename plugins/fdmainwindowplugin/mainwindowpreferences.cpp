@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -41,6 +41,8 @@
 #include "mainwindowpreferences.h"
 
 #include <utils/log.h>
+#include <utils/updatechecker.h>
+
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -89,7 +91,7 @@ void MainWindowPreferencesPage::finish() { delete m_Widget; }
 void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -117,7 +119,7 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
 
 void MainWindowPreferencesWidget::setDatasToUi()
 {
-    updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
+    updateCheckingCombo->setCurrentIndex(settings()->value(Utils::Constants::S_CHECKUPDATE).toInt());
 }
 
 void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -129,14 +131,14 @@ void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
         s = sets;
 
     // manage font size
-    s->setValue(Core::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
+    s->setValue(Utils::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
 }
 
 void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
-    s->setValue(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
     s->sync();
 }
 
