@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedForms Project                                                  *
- *   Copyright (C) 2008-2009 by Eric MAEKER, MD                            *
+ *   (C) 2008-2010 by Eric MAEKER, MD                            *
  *   eric.maeker@free.fr                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
