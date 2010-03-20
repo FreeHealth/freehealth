@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -57,7 +57,6 @@
 #include "updatechecker.h"
 #include "updatechecker_p.h"
 #include <utils/log.h>
-//#include <tkSettings.h>
 
 #include <translationutils/constanttranslations.h>
 
@@ -69,6 +68,8 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QFrame>
+#include <QDate>
+
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -77,6 +78,7 @@ using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 namespace Internal {
+
 /**
   \brief Privat part of UpdateChecker
   \internal
@@ -193,6 +195,19 @@ UpdateChecker::~UpdateChecker()
         delete d;
         d=0;
     }
+}
+
+bool UpdateChecker::needsUpdateChecking(QSettings *settings) const
+{
+    int chk = settings->value(Constants::S_CHECKUPDATE, Check_AtStartup).toInt();
+    QDate last = settings->value(Constants::S_LAST_CHECKUPDATE, QDate::currentDate()).toDate();
+    if ((chk == Check_AtStartup)
+        || ((chk == Check_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
+        || ((chk == Check_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
+        || ((chk == Check_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
+        return true;
+    }
+    return false;
 }
 
 bool UpdateChecker::isChecking() const

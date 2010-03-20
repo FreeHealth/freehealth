@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -46,20 +46,27 @@
 #include <QUrl>
 #include <QString>
 #include <QProgressBar>
+QT_BEGIN_NAMESPACE
 class QWidget;
+class QSettings;
+QT_END_NAMESPACE
 
 namespace Utils {
 namespace Constants {
     const char* const  FREEMEDFORMS_UPDATE_URL  = "http://www.ericmaeker.fr/FreeMedForms/update-fmf.txt";
     const char* const  FREEDIAMS_UPDATE_URL     = "http://www.ericmaeker.fr/FreeMedForms/update-di.txt";
+    const char* const  FREEACCOUNT_UPDATE_URL   = "http://www.ericmaeker.fr/FreeMedForms/update-freeaccount.txt";
+
+    const char* const  S_CHECKUPDATE       = "CheckUpdate";
+    const char* const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
 }
 }
 
 /**
  * \file updatechecker.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 30 Sept 2009
+ * \version 0.4.0
+ * \date 18 Mar 2010
 */
 
 namespace Utils {
@@ -73,8 +80,18 @@ class UTILS_EXPORT UpdateChecker : public QObject
     friend class Internal::UpdateCheckerPrivate;
 
 public:
+    enum {  // Don't change the ordre of this enum
+        Check_AtStartup = 0,
+        Check_EachWeeks,
+        Check_EachMonth,
+        Check_EachQuarters,
+        Check_Never
+    };
+
      UpdateChecker(QObject *parent = 0);
     ~UpdateChecker();
+
+    bool needsUpdateChecking(QSettings *settings) const;
 
     bool isChecking() const;
     void check(const QString &url);

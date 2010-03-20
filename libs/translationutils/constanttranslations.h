@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   Copyright (C) 2008-2009 by Eric MAEKER                                *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -261,6 +261,10 @@ namespace Time {
         const char* const PRECAUTION_FOR_USE  = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
         const char* const INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Information");
 
+        // Account
+        const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");
+
+
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
         const char* const SECONDS    = QT_TRANSLATE_NOOP("tkConstants", "second(s)");
@@ -320,6 +324,7 @@ namespace Time {
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
         const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as user %1.");
         const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConstants", "No user connected.");
+        const char* const USER                              = QT_TRANSLATE_NOOP("tkConstants", "User");
 
         // Files and Paths
         const char* const PATH_1_DOESNOT_EXISTS              = QT_TRANSLATE_NOOP("tkConstants", "Path %1 does not exist");
