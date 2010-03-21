@@ -37,6 +37,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
 
 #include "quazip.h"
 #include "quazipnewinfo.h"
+#include "exporter.h"
 
 /// A file inside ZIP archive.
 /** \class QuaZipFile quazipfile.h <quazip/quazipfile.h>
@@ -68,7 +69,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  * this class.
  *
  **/
-class QuaZipFile: public QIODevice {
+class ZIP_EXPORT QuaZipFile: public QIODevice {
   Q_OBJECT
   private:
     QuaZip *zip;

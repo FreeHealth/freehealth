@@ -32,6 +32,7 @@ your code based on QuaZIP, since it would be also based on Qt in this
 case. If you are Qt commercial license owner, then you are free to use
 QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  **/
+#include "exporter.h"
 
 #include <QByteArray>
 #include <QDateTime>
@@ -39,7 +40,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
 /// Information about a file inside archive.
 /** Call QuaZip::getCurrentFileInfo() or QuaZipFile::getFileInfo() to
  * fill this structure. */
-struct QuaZipFileInfo {
+struct ZIP_EXPORT QuaZipFileInfo {
   /// File name.
   QString name;
   /// Version created by.

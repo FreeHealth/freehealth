@@ -40,6 +40,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
 #include "unzip.h"
 
 #include "quazipfileinfo.h"
+#include "exporter.h"
 
 // just in case it will be defined in the later versions of the ZIP/UNZIP
 #ifndef UNZ_OPENERROR
@@ -85,7 +86,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  * detection using locale information. Does anyone know a good way to do
  * it?
  **/
-class QuaZip {
+class ZIP_EXPORT QuaZip {
   public:
     /// Useful constants.
     enum Constants {

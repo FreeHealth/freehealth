@@ -1,22 +1,31 @@
-TEMPLATE = lib
-TARGET = quazip
+TEMPLATE  = lib
+TARGET    = quazip
 
-isEmpty(BUILDING_PROTECTED):include( ../../../config.pri )
+DEFINES += QUAZIP_LIBRARY
+
+#isEmpty(BUILDING_PROTECTED):include( ../../../config.pri )
+include( ../../../config.pri )
 
 DESTDIR = ../
 
-CONFIG *= staticlib
+CONFIG *= dll
+#CONFIG *= staticlib
 # CONFIG *= qt warn_on staticlib
 # QT -= gui
 
-unix { LIBS += -z  }
+# include config file
+include( ../../../libs/libsworkbench.pri )
+
+#CONFIG *= dll
+
+unix { LIBS *= -lz  }
 else {
     message( Win32 compilation of Quazip )
     PRE_TARGETDEPS += ../zlib-1.2.3
-    LIBS += -L../zlib-1.2.3 -lz
+    LIBS *= -L../zlib-1.2.3 -lz
 }
 
-DEPENDPATH += .
+#DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
@@ -27,7 +36,8 @@ HEADERS += crypt.h \
            quazipfileinfo.h \
            quazipnewinfo.h \
            unzip.h \
-           zip.h
+           zip.h \
+           exporter.h
 
 SOURCES += ioapi.c \
            quazip.cpp \

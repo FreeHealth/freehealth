@@ -1,17 +1,20 @@
 # toolkit library project file
 TEMPLATE = lib
 TARGET = Utils
-PACKAGE_VERSION = 0.1.0
+PACKAGE_VERSION = 0.4.0
 DEFINES *= UTILS_LIBRARY
 
 # include config file
 include(../libsworkbench.pri)
 include(../utils_dependencies.pri)
+
 CONFIG *= dll \
     sql \
     network
+
 QT *= sql \
     network
+
 HEADERS += global_exporter.h \
     global.h \
     database.h \

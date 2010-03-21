@@ -33,6 +33,8 @@ case. If you are Qt commercial license owner, then you are free to use
 QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  **/
 
+#include "exporter.h"
+
 #include <QDateTime>
 #include <QString>
 
@@ -42,7 +44,7 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  * passing this structure to
  * QuaZipFile::open(OpenMode,const QuaZipNewInfo&,int,int,bool).
  **/
-struct QuaZipNewInfo {
+struct ZIP_EXPORT QuaZipNewInfo {
   /// File name.
   /** This field holds file name inside archive, including path relative
    * to archive root.

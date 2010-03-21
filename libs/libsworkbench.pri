@@ -2,7 +2,7 @@
 include(../config.pri)
 
 win32 {
-    DLLDESTDIR = $${BUID_BINARY_PATH}
+    DLLDESTDIR = $${BUILD_BINARY_PATH}
 }
 
 include(rpath.pri)

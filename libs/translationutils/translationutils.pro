@@ -1,7 +1,7 @@
 # toolkit library project file
 TEMPLATE        = lib
 TARGET          = TranslationUtils
-PACKAGE_VERSION = 0.0.1
+PACKAGE_VERSION = 0.4.0
 
 DEFINES *= TRANSLATIONUTILS_LIBRARY
 

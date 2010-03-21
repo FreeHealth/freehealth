@@ -47,7 +47,7 @@ exists( $${SOURCES_PROTECTED_PATH} ){
 }
 
 # define some paths related to application sources
-BUID_BINARY_PATH          = $${SOURCES_ROOT_PATH}/bin
+BUILD_BINARY_PATH          = $${SOURCES_ROOT_PATH}/bin
 BUILD_LIB_PATH            = $${SOURCES_ROOT_PATH}/bin/plugins
 BUILD_PLUGIN_PATH         = $${BUILD_LIB_PATH}
 

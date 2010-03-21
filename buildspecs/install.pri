@@ -47,7 +47,7 @@ INSTALL_QT_INSIDE_BUNDLE = true
 
 # message the configuration
 message( Binary : )
-message(    * From : $${BUID_BINARY_PATH} )
+message(    * From : $${BUILD_BINARY_PATH} )
 message(    * To : $${INSTALL_BINARY_PATH} )
 message( Application libraries : )
 message(    * From : $${BUILD_LIB_PATH})
@@ -73,9 +73,9 @@ message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
 
 # Install target
-!isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUID_BINARY_PATH){
+!isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
 target.path = $${INSTALL_BINARY_PATH}
-#installtarget.files = $${BUID_BINARY_PATH}/$${BINARY_TARGET}
+#installtarget.files = $${BUILD_BINARY_PATH}/$${BINARY_TARGET}
 INSTALLS += target
 }
 
