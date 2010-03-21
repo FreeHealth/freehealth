@@ -22,15 +22,6 @@
    </property>
    <item row="0" column="0">
     <widget class="Views::ListView" name="listView">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="verticalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-     <property name="horizontalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
      <property name="uniformItemSizes">
       <bool>true</bool>
      </property>

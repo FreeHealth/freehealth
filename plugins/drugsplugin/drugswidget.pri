@@ -11,16 +11,18 @@ SOURCES += $${PWD}/drugswidgetmanager.cpp
 # Dosage Dialog
 HEADERS += $${PWD}/dosagedialog/mfDosageDialog.h \
     $${PWD}/dosagedialog/mfDosageCreatorDialog.h \
-    $${PWD}/dosagedialog/mfDosageViewer.h \
-    $${PWD}/dosagedialog/mfDosageAvailableWidget.h
+    $${PWD}/dosagedialog/mfDosageViewer.h
+#    $${PWD}/dosagedialog/mfDosageAvailableWidget.h
+
 SOURCES += $${PWD}/dosagedialog/mfDosageDialog.cpp \
     $${PWD}/dosagedialog/mfDosageCreatorDialog.cpp \
-    $${PWD}/dosagedialog/mfDosageViewer.cpp \
-    $${PWD}/dosagedialog/mfDosageAvailableWidget.cpp
+    $${PWD}/dosagedialog/mfDosageViewer.cpp
+#    $${PWD}/dosagedialog/mfDosageAvailableWidget.cpp
+
 FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
     $${PWD}/dosagedialog/mfDosageCreatorDialog.ui \
-    $${PWD}/dosagedialog/mfDosageViewer.ui \
-    $${PWD}/dosagedialog/mfDosageAvailableWidget.ui
+    $${PWD}/dosagedialog/mfDosageViewer.ui
+#    $${PWD}/dosagedialog/mfDosageAvailableWidget.ui
 
 # DrugsWidget Preferences
 HEADERS += $${PWD}/drugspreferences/mfDrugsPreferences.h \

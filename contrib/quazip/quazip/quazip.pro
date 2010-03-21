@@ -4,9 +4,9 @@ TARGET    = quazip
 DEFINES += QUAZIP_LIBRARY
 
 #isEmpty(BUILDING_PROTECTED):include( ../../../config.pri )
-include( ../../../config.pri )
+#include( ../../../config.pri )
 
-DESTDIR = ../
+#DESTDIR = ../
 
 CONFIG *= dll
 #CONFIG *= staticlib
