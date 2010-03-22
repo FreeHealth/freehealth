@@ -421,6 +421,7 @@ namespace Time {
         // Countries
         const char* const COUNTRY_FRANCE      = QT_TRANSLATE_NOOP( "tkConstants", "France" );
         const char* const COUNTRY_GERMANY     = QT_TRANSLATE_NOOP( "tkConstants", "Germany" );
+        const char* const COUNTRY_CANADA      = QT_TRANSLATE_NOOP( "tkConstants", "Canada" );
 
         // Patient related
         const char* const PATIENT_NAME = QT_TRANSLATE_NOOP("tkConstants", "Patient Name");

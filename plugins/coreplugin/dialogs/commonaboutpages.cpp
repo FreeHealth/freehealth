@@ -197,6 +197,13 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER)
                 )
 
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER),
+                 "Jim Busser, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_CANADA),
+                 "jbusser@interchange.ubc.ca",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER)
+                )
+
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
@@ -225,6 +232,20 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER)
                 )
 
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
+                 "Vincent Perez, MD",
+                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+                 "vinperez@gmail.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
+                 "Karsten Hilbert, MD (GNUmed)",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_GERMANY),
+                 "Karsten.Hilbert@gmx.net",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
+                )
+
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
@@ -248,7 +269,7 @@ static const QList<Team> m_Team = QList<Team>()
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER),
                  "Debian Med Team",
-                 "",
+                 "jbusser@interchange.ubc.ca",
                  "debian-med@lists.debian.org",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("Debian")
                 )
@@ -260,7 +281,14 @@ static const QList<Team> m_Team = QList<Team>()
 		 "German translation"
 		)
 
-	<< Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
+                 "Jim Busser, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_CANADA),
+                 "",
+                 "English"
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
 		 "Eric Maeker, MD",
 		 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
 		 "eric.maeker@free.fr",

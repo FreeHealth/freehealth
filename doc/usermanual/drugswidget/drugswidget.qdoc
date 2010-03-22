@@ -812,62 +812,6 @@ You can visit also visit:
 \ref index
 */
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////  AUTEURS ET CONTRIBUTEURS  ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
-\~french \page auteurs Auteurs et contributeurs
-\~english  \page auteurs Authors and contributors
-
-\~french - <b>Créateur et principal développeur :</b>
-\~english - <b>Creator and main developper:</b>
-\~
-    - Éric Maeker, MD <eric.maeker@free.fr>.
-
-\~french - <b>Contributeurs :</b>
-\~english - <b>Contributors :</b>
-\~
-    - Guillaume Denry : codeur, déboggueur, conseiller informatique
-    - Sébastien Belin, MD : junior codeur, conseiller médical
-    - Laurent Masson, MD : conseiller médical
-    - Jim Busser : conseiller médical
-
-\~french - <b>Aides et conseillers :</b>
-\~english - <b>Helpers and advisors:</b>
-\~
-    -  Filipe Azevedo : aide au déboggueur, conseiller informatique.
-    -  David Geldreich : conseiller informatique,
-    -  Jourdan Romain : aide au codage du moteur d'impression
-
-\~french - <b>Testeurs :</b>
-\~english - <b>Testers :</b>
-\~
-    - Plusieurs testeurs anonymes pour la plupart.
-
-\~french - <b>Packageurs :</b>
-\~english - <b>Packagers :</b>
-\~
-    - Eric Maeker, MD : Debian, Ubuntu, MacOs, FreeBSD (en cours), Windows
-    - Sascha Manns : OpenSuse
-    - Debian Med Team : Debian
-
-\~french - <b>Traducteur :</b>
-\~english - <b>Translators :</b>\~
-    - Éric Maeker, MD (english, french)
-    - Sascha Manns (deutsch)
-
-\~french - <b>Maître toile : </b>
-\~english - <b>WebMaster : </b>
-\~
-    - Vincent Perez, MD
-
-- <b>Mailing liste publique :</b>
-    -  freemedforms@googlegroups.com
-
-\ref index
-
-*/
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**

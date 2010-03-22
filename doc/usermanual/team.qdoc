@@ -1,0 +1,60 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  AUTEURS ET CONTRIBUTEURS  ///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+\~french \page auteurs Auteurs et contributeurs
+\~english  \page auteurs Authors and contributors
+
+\~french - <b>Créateur et principal développeur :</b>
+\~english - <b>Creator and main developper:</b>
+\~    - Éric Maeker, MD <eric.maeker@free.fr>.
+
+\~french - <b>Contributeurs :</b>
+\~english - <b>Contributors :</b>
+\~    - Guillaume Denry : codeur, déboggueur, conseiller informatique
+    - Pierre-Marie Desombre, MD (FreeAccount) : codeur
+
+\~french - <b>Aides et conseillers :</b>
+\~english - <b>Helpers and advisors:</b>
+\~    - Filipe Azevedo : aide au déboggueur, conseiller informatique.
+    - David Geldreich : conseiller informatique,
+    - Jourdan Romain : aide au codage du moteur d'impression
+    - Laurent Masson, MD : conseiller médical
+    - Sébastien Belin, MD : conseiller médical
+    - Jim Busser, MD : medical advisor
+    - Karsten Hilbert, MD (GNUmed) : medical advisor
+    - Pierre-Marie Desombre, MD (FreeAccount) : medical advisor, tester
+    - Vincent Perez, MD : medical advisor
+
+\~french - <b>Gestionnaires des bases de données thérapeutiques :</b>
+\~english - <b>Drugs database managers:</b>
+\~    -  Éric Maeker, MD : french database, FDA database
+    - Jim Busser, MD : canadian database, FDA database
+
+\~french - <b>Testeurs :</b>
+\~english - <b>Testers :</b>
+\~    - Plusieurs testeurs anonymes pour la plupart.
+
+\~french - <b>Packageurs :</b>
+\~english - <b>Packagers :</b>
+\~    - Eric Maeker, MD : Debian, Ubuntu, MacOs, FreeBSD (en cours), Windows
+    - Sascha Manns : OpenSuse
+    - Debian Med Team : Debian
+
+\~french - <b>Traducteur :</b>
+\~english - <b>Translators :</b>
+\~    - Éric Maeker, MD (english, french)
+    - Sascha Manns (deutsch)
+    - Jim Busser (english)
+
+\~french - <b>Maître toile : </b>
+\~english - <b>WebMaster : </b>
+\~    - Vincent Perez, MD
+
+- <b>Mailing list :</b>
+    -  freemedforms@googlegroups.com
+
+\ref index
+
+*/
+
