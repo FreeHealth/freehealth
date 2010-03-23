@@ -236,7 +236,9 @@ void MainWindow::extensionsInitialized()
         messageSplash(tr("Reading exchange file..."));
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
             Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
-            QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
+            QString tmp;
+            if (QFile(exfile).exists())
+                tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
             Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
             if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
@@ -257,8 +259,6 @@ void MainWindow::extensionsInitialized()
         }
     }
 
-    raise();
-
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
@@ -275,6 +275,7 @@ void MainWindow::extensionsInitialized()
     finishSplash(this);
     readSettings();
     show();
+    raise();
 }
 
 MainWindow::~MainWindow()
@@ -333,16 +334,18 @@ void MainWindow::closeEvent( QCloseEvent *event )
 
     // Save exchange file
     QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
-    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
-        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
-    } else if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
+//    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
+//        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
+//    } else
+//    if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
+    if (!exfile.isEmpty()) {
         Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
         Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
         // if is a medintux plugins --> save prescription to exchange file
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
-            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
+            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
             tmp.replace("font-weight:bold;", "font-weight:600;");
-            Utils::saveStringToFile(Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser);
+            Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::DontWarnUser);
         } else {
             savePrescription(exfile);
         }

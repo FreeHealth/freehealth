@@ -734,7 +734,7 @@ bool MainWindowActionHandler::checkUpdate()
 }
 
 /**
-  \brief Slot to connect with the Utils::UpdateChecke::updateFound() signal.
+  \brief Slot to connect with the Utils::UpdateChecker::updateFound() signal.
   Add a menu to the menu bar and connect the only action to the update dialog. If the sender is
   known as a Utls::UpdateChecker, the action is automatically connected to the view update dialog from it.
 */
