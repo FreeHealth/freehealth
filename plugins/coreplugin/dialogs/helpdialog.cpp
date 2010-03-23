@@ -194,6 +194,7 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_GroupLeader);
     d = new HelpDialogPrivate(this);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     Q_ASSERT(d);
     d->retranslate();
     d->createConnections();

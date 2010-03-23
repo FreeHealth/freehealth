@@ -73,6 +73,7 @@ PluginDialog::PluginDialog(QWidget *parent)
     vl->addLayout(hl);
 
     setWindowTitle(tr("Installed Plugins"));
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
     connect(m_view, SIGNAL(currentPluginChanged(ExtensionSystem::PluginSpec*)),
             this, SLOT(updateButtons()));

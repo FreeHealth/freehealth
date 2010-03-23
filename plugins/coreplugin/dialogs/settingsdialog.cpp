@@ -65,6 +65,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
     : QDialog(parent), m_applied(false)
 {
     m_ui = new Ui::SettingsDialog();
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     m_ui->setupUi(this);
     QString initialCategory = categoryId;
     QString initialPage = pageId;
