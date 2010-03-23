@@ -325,6 +325,9 @@ namespace Time {
         const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as user %1.");
         const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConstants", "No user connected.");
         const char* const USER                              = QT_TRANSLATE_NOOP("tkConstants", "User");
+        const char* const USER_DATAS                        = QT_TRANSLATE_NOOP("tkConstants", "User datas");
+
+        const char* const SAVE_AND_RESTORE                  = QT_TRANSLATE_NOOP("tkConstants", "Save and restore");
 
         // Files and Paths
         const char* const PATH_1_DOESNOT_EXISTS              = QT_TRANSLATE_NOOP("tkConstants", "Path %1 does not exist");
@@ -414,6 +417,9 @@ namespace Time {
         const char* const WATERMARK = QT_TRANSLATE_NOOP("tkConstants", "Watermark");
         const char* const PRINTING = QT_TRANSLATE_NOOP("tkConstants", "Printing");
 
+
+        // File filters
+        const char * const FILE_FILTER_ZIP = QT_TRANSLATE_NOOP("tkConstants", "Zip archive (*zip)");
 
         // Plugins related
         const char* const PLUGINS_CATEGORY = QT_TRANSLATE_NOOP("tkConstants", "Plugins");

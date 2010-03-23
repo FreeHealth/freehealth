@@ -8,7 +8,8 @@ SUBDIRS = \
     drugs \
     drugsbase \
     templates \
-    listview
+    listview \
+    saverestore
 
 
 core.subdir = ../../plugins/fdcoreplugin
@@ -44,3 +45,6 @@ drugs.depends += templates
 templates.subdir = ../../plugins/templatesplugin
 templates.depends += core
 #templates.depends += mainwindow
+
+saverestore.subdir = ../../plugins/saverestoreplugin
+saverestore.depends = core
