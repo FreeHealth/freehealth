@@ -30,13 +30,14 @@
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="155"/>
         <source>Prescription is not empty. Clear it ?</source>
-        <translation type="unfinished"></translation>
+        <translation>La prescription n&apos;est pas vide. Voulez-vous l&apos;effacer ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="156"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez sélectionné un autre mode d&apos;édition que le mode actuel. Changer de mode d&apos;édition va causer la perte de la prescription.
+Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="206"/>
@@ -60,7 +61,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="84"/>
         <source>Database selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionneur de base de données</translation>
     </message>
 </context>
 <context>
@@ -84,7 +85,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="147"/>
         <source>Selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionneur</translation>
     </message>
 </context>
 <context>
@@ -126,65 +127,65 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Forme</translation>
+        <translation>Forme</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="32"/>
         <source>Drugs database selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionneur de base de données thérapeutiques</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="60"/>
         <source>Databases search path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de recherche des bases</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="120"/>
         <source>Add a search path</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un répertoire de recherche</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="145"/>
         <source>Remove the selected search path</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlever un répertoire de recherche</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="166"/>
         <source>Hide/Show the databases search path</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher/cacher les répertoires de recherche des bases</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="179"/>
         <source>Available databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Bases de données disponibles</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="208"/>
         <source>Database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de la base de données</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="226"/>
         <source>Select directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="262"/>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="292"/>
         <source>Application must be restarted to take changes into account.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;application doit êetre redémarrée pour que les changements prennent effet.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="263"/>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="293"/>
         <source>You have selected a different drugs database than the currently-opened one. You need to restart the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez sélectionné une base de données thérapeutiques différent que celle en cours d&apos;utilisation. Vous devez redémarrer l&apos;application.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="265"/>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="295"/>
         <source>Drugs database selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionneur de base de données</translation>
     </message>
 </context>
 <context>
@@ -197,7 +198,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="93"/>
         <source>Available personal protocols</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocoles disponibles</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="125"/>
@@ -222,7 +223,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="178"/>
         <source>The dosage will be saved in your personal dosage database, but not included in this prescription.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le dosage va être sauvegardé dans votre base de données personnelle, mais pas inclus dans la prescription.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="191"/>
@@ -344,17 +345,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="25"/>
         <source>Protocol name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du protocole</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="35"/>
         <source>View the summary of product characteristics</source>
-        <translation type="unfinished"></translation>
+        <translation>Voir le résumé des caractériques du produit</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="38"/>
         <source>View SPC</source>
-        <translation type="unfinished"></translation>
+        <translation>Voir RCP</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="128"/>
@@ -986,47 +987,47 @@ Voulez-vous les envoyer ?</translation>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="14"/>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="43"/>
         <source>Form</source>
-        <translation type="unfinished">Forme</translation>
+        <translation>Forme</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="20"/>
         <source>Available informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations disponibles</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="29"/>
         <source>Drug commercial name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom commercial du médicament</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="36"/>
         <source>Route</source>
-        <translation type="unfinished"></translation>
+        <translation>Voie d&apos;administration</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="50"/>
         <source>Strength</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosage</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="60"/>
         <source>Available personal protocols</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocoles personnels disponibles</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="85"/>
         <source>Background color for drugs with available protocols</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur de fond pour les médicaments possédant des protocoles</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="108"/>
         <source>Allergies</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="114"/>
         <source>Drugs allergies background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur de fond des médicaments avec allergie</translation>
     </message>
 </context>
 <context>
@@ -1227,17 +1228,17 @@ Voulez-vous les envoyer ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="83"/>
         <source>Edition modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="84"/>
         <source>Full prescriber</source>
-        <translation type="unfinished"></translation>
+        <translation>Prescripteur</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
         <source>Select only</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection seulement</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="86"/>
@@ -1247,7 +1248,7 @@ Voulez-vous les envoyer ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="87"/>
         <source>Toggle testing drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher/cacher les médicaments tests</translation>
     </message>
 </context>
 </TS>

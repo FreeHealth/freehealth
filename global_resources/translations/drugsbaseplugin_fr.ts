@@ -7,7 +7,8 @@
         <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="57"/>
         <source>Your dosage database needs to be updated from version 0.2.0 to version 0.4.0.
 This will be automatically done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Votre base de données de protocoles nécessite une mise à jour depuis la version 0.2.0 vers la version 0.4.0.
+Ceci va êetre réalisé automatiquement.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="161"/>
@@ -54,14 +55,16 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="310"/>
         <source>Prescription specifies a different drugs database than the actual one.</source>
-        <translation type="unfinished"></translation>
+        <translation>La prescription spécifie une base de données thérapeutique différente que celle en cours.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="311"/>
         <source>You are trying to load prescription that uses a different drugs database than the actual one. You can not read this prescription unless you change the current database in the Preferences.
 Actual: %1
 Prescription: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous essayez de charger une prescription qui utilise une base de données thérapeutique différente que celle en cours d&apos;utilisation. Vous ne pouvez pas charger cette prescription à moins de ne changer de base de données thérapeutique dans les Préférences de l&apos;application.
+Actuelle : %1
+Prescription : %2.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="348"/>

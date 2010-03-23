@@ -948,27 +948,27 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="187"/>
         <source>Toggle template view</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher/cacher la vue des modèles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="236"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortir/revenir au mode plein écran</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="245"/>
         <source>Drugs database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de la base de données thérapeutiques</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="265"/>
         <source>Accountancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Comptabilité</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="294"/>
         <source>no meal relation</source>
-        <translation type="unfinished"></translation>
+        <translation>pas de relation avec le repas</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="319"/>
@@ -978,37 +978,37 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="327"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="328"/>
         <source>User datas</source>
-        <translation type="unfinished"></translation>
+        <translation>Données de l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="330"/>
         <source>Save and restore</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder et restorer</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="349"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Auteur</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="350"/>
         <source>Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="353"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponible</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="354"/>
         <source>Unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Indisponible</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="372"/>
@@ -1190,7 +1190,7 @@ Localisation : %2</translation>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="422"/>
         <source>Zip archive (*zip)</source>
-        <translation type="unfinished"></translation>
+        <translation>Archive Zip (*.zip)</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="428"/>
@@ -1205,7 +1205,7 @@ Localisation : %2</translation>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="430"/>
         <source>Canada</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="433"/>
@@ -1257,7 +1257,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="466"/>
         <source>Toggle toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher/cacher la barre d&apos;outil</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="467"/>

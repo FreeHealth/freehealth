@@ -25,4 +25,9 @@ SOURCES += \
 #    mainwindow.cpp \
     appaboutpage.cpp
 
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfcoreplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/fmfcoreplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/fmfcoreplugin_es.ts
+
+
 OTHER_FILES = Core.pluginspec

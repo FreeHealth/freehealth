@@ -4,36 +4,23 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.cpp" line="60"/>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeDiams&lt;/b&gt;&lt;br /&gt;(C) 2008-2010 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This application is a stable release but can still contains some bugs.&lt;br /&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more informations.&lt;br /&gt;&lt;a href=&quot;%1&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
+        <location filename="../../plugins/fmfcoreplugin/appaboutpage.cpp" line="51"/>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-2010 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This application is an early alpha release. This means that a lot of features are not yet implemented or may not work and that you may experiment bugs.&lt;br /&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more informations.&lt;br /&gt;&lt;a href=&quot;%1&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <location filename="../../plugins/fdcoreplugin/commandlineparser.cpp" line="158"/>
-        <source>In File %1 is empty.</source>
-        <translation>Le fichier d&apos;entrée %1 est vide.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fdcoreplugin/commandlineparser.cpp" line="173"/>
-        <source>Wrong root tag %1 %2.</source>
-        <translation>Mauvais marqueur principal %1 %2.</translation>
     </message>
 </context>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="166"/>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="168"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="158"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="160"/>
         <source>Core intialization finished...</source>
-        <translation>Intialisation du Core terminée...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/coreimpl.cpp" line="264"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="243"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
-        <translation>Nouvelle version de FreeDiams détectée, vous devez renouveler l&apos;agrément de licence.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -41,7 +28,7 @@
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="376"/>
         <source>Form : </source>
-        <translation>Forme : </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -49,7 +36,7 @@
     <message>
         <location filename="../../plugins/coreplugin/iformitem.cpp" line="503"/>
         <source>Forms : </source>
-        <translation>Formes : </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -57,25 +44,25 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/aboutdialog.ui" line="32"/>
         <source>Application name</source>
-        <translation>Nom de l&apos;application</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Core::Internal::AppAboutPage</name>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="56"/>
+        <location filename="../../plugins/fmfcoreplugin/appaboutpage.h" line="56"/>
         <source>1. General</source>
-        <translation>1. Général</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="57"/>
+        <location filename="../../plugins/fmfcoreplugin/appaboutpage.h" line="57"/>
         <source>Application</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -83,20 +70,7 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="107"/>
         <source>Actual Qt version : %1</source>
-        <translation>Version actuelle de Qt : %1</translation>
-    </message>
-</context>
-<context>
-    <name>Core::Internal::CommandLineAboutPage</name>
-    <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="70"/>
-        <source>5. Command line</source>
-        <translation>5. Ligne de commande</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fdcoreplugin/appaboutpage.h" line="71"/>
-        <source>Application</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -104,37 +78,37 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="34"/>
         <source>Show debugging informations</source>
-        <translation>Montrer les informations de déboggage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="118"/>
         <source>Send to dev team</source>
-        <translation>Envoyer à l&apos;équipe de développement</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="125"/>
         <source>Save log</source>
-        <translation>Enregistrer le journal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="151"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="164"/>
         <source>Ok</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="175"/>
         <source>Sending debugging informations to dev team</source>
-        <translation>Envoi des informations de déboggage à l&apos;équipe de développement</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="176"/>
@@ -146,7 +120,7 @@ Please wait...</source>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="197"/>
         <source>Debugging informations correctly sent.</source>
-        <translation>Les informations de déboggage ont correctement été envoyées.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="200"/>
@@ -161,12 +135,12 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="14"/>
         <source>Options</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/settingsdialog.ui" line="34"/>
         <source>0</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -466,32 +440,32 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="59"/>
         <source>Details</source>
-        <translation>Détails</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="60"/>
         <source>Error Details</source>
-        <translation>Détails des erreurs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="61"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="75"/>
         <source>Installed Plugins</source>
-        <translation>Plugins installés</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="114"/>
         <source>Plugin Details of %1</source>
-        <translation>Détails du plugin %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/plugindialog.cpp" line="134"/>
         <source>Plugin Errors of %1</source>
-        <translation>Détail des erreurs du plugin %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

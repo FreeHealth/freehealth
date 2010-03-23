@@ -45,7 +45,8 @@ FORMS += widgets/userviewer.ui \
     widgets/userpassworddialog.ui
 
 # translators
-TRANSLATIONS += $${FMF_GLOBAL_RESOURCES}/translations/usermanagerplugin_fr.ts \
-    $${FMF_GLOBAL_RESOURCES}/translations/usermanagerplugin_de.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/usermanagerplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/usermanagerplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/usermanagerplugin_es.ts
 
 OTHER_FILES = UserManager.pluginspec

@@ -8,12 +8,12 @@
         <location filename="../../libs/utils/database.cpp" line="170"/>
         <location filename="../../libs/utils/database.cpp" line="174"/>
         <source>ERROR : %1 driver is not available</source>
-        <translation type="unfinished"></translation>
+        <translation>ERREUR : le pilote %1 n&apos;est pas disponible</translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="181"/>
         <source>WARNING : %1 database already in use</source>
-        <translation type="unfinished"></translation>
+        <translation>ATTENTION : la base de données %1 est déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="193"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="301"/>
         <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Une mise à jour est disponible. Veuillez vous rendre sur le site internet &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
 </context>
 </TS>

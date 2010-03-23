@@ -19,58 +19,58 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="20"/>
         <source>Patient Firstname</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du patient</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="30"/>
         <source>Surname</source>
-        <translation type="unfinished"></translation>
+        <translation>Prénom</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="42"/>
         <source>Patient information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations concernant le patient</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="69"/>
         <source>yyyy/MM/dd</source>
         <comment>Format de date</comment>
-        <translation type="unfinished"></translation>
+        <translation>dd/MM/yyyy</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="76"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="97"/>
         <source>Kg</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="102"/>
         <source>lbs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="110"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="131"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="136"/>
         <source>m</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="141"/>
         <source>inches</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="149"/>
@@ -90,47 +90,47 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="172"/>
         <source>H</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="184"/>
         <source>Creatinine clearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Clearance de la créatinine</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="205"/>
         <source>mL/min</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="210"/>
         <source>mL/sec</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="218"/>
         <source>Creatinine</source>
-        <translation type="unfinished"></translation>
+        <translation>Créatinine</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="239"/>
         <source>mg/L</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="244"/>
         <source>mg/dL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="249"/>
         <source>mmol/L</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message utf8="true">
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="254"/>
         <source>µmol/L</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.ui" line="266"/>
@@ -205,7 +205,7 @@
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="224"/>
         <source>Entering selection mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée dans le mode de sélection seulement</translation>
     </message>
     <message>
         <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="236"/>

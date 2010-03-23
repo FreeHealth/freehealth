@@ -20,7 +20,8 @@ FORMS = \
 #    mainwindow.ui \
     mainwindowpreferenceswidget.ui
 
-TRANSLATIONS += $${SOURCES_GLOBAL_RESOURCES}/translations/fmfmainwindowplugin_fr.ts \
-    $${SOURCES_GLOBAL_RESOURCES}/translations/fmfmainwindowplugin_de.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_es.ts
 
 OTHER_FILES = MainWindow.pluginspec
