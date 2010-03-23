@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="124"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
         <source>Save templates .</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="126"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
@@ -176,7 +176,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1155"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1156"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>

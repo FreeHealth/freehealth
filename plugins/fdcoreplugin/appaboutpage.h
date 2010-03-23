@@ -47,6 +47,7 @@ namespace Internal {
 
 class AppAboutPage : public IAboutPage
 {
+    Q_OBJECT
 public:
     AppAboutPage(QObject *parent);
     ~AppAboutPage();
@@ -60,6 +61,7 @@ public:
 
 class CommandLineAboutPage : public IAboutPage
 {
+    Q_OBJECT
 public:
     CommandLineAboutPage(QObject *parent) : IAboutPage(parent) {}
     ~CommandLineAboutPage() {}

@@ -68,12 +68,21 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="148"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="134"/>
+        <source>WARNING !
+No configurated printer found on your system.
+Printing and print preview should not work at all.
+Please configure a printer.
+Refer to your operating system documentation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="162"/>
         <source>Always use system&apos;s default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="152"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="166"/>
         <source>Always ask user for the printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -167,6 +176,25 @@
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="98"/>
         <source>Duplicatas only</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Print::PrinterPlugin</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="93"/>
+        <source>No printer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="94"/>
+        <source>No printer is configured in your system. The print preview and printing will not work.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="95"/>
+        <source>You must configure at least on printer. Please refer to your system documentation. 
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

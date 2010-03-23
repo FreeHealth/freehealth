@@ -49,6 +49,7 @@ namespace Internal {
 
 class BuildAboutPage : public IAboutPage
 {
+    Q_OBJECT
 public:
     BuildAboutPage(QObject *parent);
     ~BuildAboutPage();
@@ -62,6 +63,7 @@ public:
 
 class LicenseAboutPage : public IAboutPage
 {
+    Q_OBJECT
 public:
     LicenseAboutPage(QObject *parent);
     ~LicenseAboutPage();

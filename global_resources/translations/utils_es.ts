@@ -70,39 +70,39 @@
     <name>Log</name>
     <message>
         <location filename="../../libs/utils/log.cpp" line="127"/>
-        <location filename="../../libs/utils/log.cpp" line="136"/>
+        <location filename="../../libs/utils/log.cpp" line="139"/>
         <source>SQL Error : Driver : %1, Database : %2, Query : %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="129"/>
-        <location filename="../../libs/utils/log.cpp" line="138"/>
+        <location filename="../../libs/utils/log.cpp" line="141"/>
         <source>%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="146"/>
+        <location filename="../../libs/utils/log.cpp" line="152"/>
         <source>%1 ms : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="221"/>
+        <location filename="../../libs/utils/log.cpp" line="227"/>
         <source>Unable to save %1 : Error %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="236"/>
+        <location filename="../../libs/utils/log.cpp" line="242"/>
         <source>Debugging informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="241"/>
+        <location filename="../../libs/utils/log.cpp" line="247"/>
         <source>********** ERRORS *********
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="260"/>
+        <location filename="../../libs/utils/log.cpp" line="266"/>
         <source>********** MESSAGES *********
 </source>
         <translation type="unfinished"></translation>
@@ -220,7 +220,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="967"/>
+        <location filename="../../libs/utils/global.cpp" line="984"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -228,12 +228,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="127"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="129"/>
         <source>Error %1 while retreiving update file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="151"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="153"/>
         <source>* Updates of version : %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -241,7 +241,7 @@
 <context>
     <name>Utils::UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="286"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="301"/>
         <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>

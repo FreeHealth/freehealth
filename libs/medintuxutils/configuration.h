@@ -51,6 +51,7 @@ class ConfigurationPrivate;
 */
 class MEDINTUX_EXPORT Configuration : public QObject
 {
+    Q_OBJECT
 public:
     enum GlossaryFor {
         ObservationGlossary,

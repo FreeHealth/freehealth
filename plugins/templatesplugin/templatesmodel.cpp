@@ -110,6 +110,7 @@ namespace Internal {
 
 class TemplatesCoreListener : public Core::ICoreListener
 {
+    Q_OBJECT
 public:
     TemplatesCoreListener(Templates::TemplatesModel *parent) : Core::ICoreListener(parent)
     {

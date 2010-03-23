@@ -203,6 +203,7 @@ private:
 
 class CORE_EXPORT FormMainDebugPage : public IDebugPage
 {
+    Q_OBJECT
 public:
     FormMainDebugPage(FormMain *form, QObject *parent);
     ~FormMainDebugPage();

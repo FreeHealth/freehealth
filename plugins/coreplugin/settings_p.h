@@ -40,11 +40,9 @@
 #ifndef CORESETTINGSPRIVATE_H
 #define CORESETTINGSPRIVATE_H
 
-// include toolkit headers
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/isettings.h>
 
-// include Qt headers
 #include <QSettings>
 #include <QStringList>
 #include <QDir>
@@ -58,8 +56,8 @@ QT_END_NAMESPACE
 /**
  * \file settings_p.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.12
- * \date 10 Aug 2009
+ * \version 0.4.0
+ * \date 23 Mar 2010
 */
 
 namespace Core {

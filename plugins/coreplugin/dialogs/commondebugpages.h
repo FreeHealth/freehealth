@@ -54,6 +54,7 @@ namespace Internal {
 
 class LogMessageDebugPage : public IDebugPage
 {
+    Q_OBJECT
 public:
     LogMessageDebugPage(QObject *parent);
     ~LogMessageDebugPage();
@@ -68,6 +69,7 @@ public:
 
 class LogErrorDebugPage : public IDebugPage
 {
+    Q_OBJECT
 public:
     LogErrorDebugPage(QObject *parent);
     ~LogErrorDebugPage();
@@ -82,6 +84,7 @@ public:
 
 class SettingDebugPage : public IDebugPage
 {
+    Q_OBJECT
 public:
     SettingDebugPage(QObject *parent);
     ~SettingDebugPage();

@@ -182,6 +182,7 @@ protected:
 
 class DrugsViewOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsViewOptionsPage(QObject *parent = 0);
     ~DrugsViewOptionsPage();
@@ -207,6 +208,7 @@ private:
 
 class DrugsSelectorOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsSelectorOptionsPage(QObject *parent = 0);
     ~DrugsSelectorOptionsPage();
@@ -234,6 +236,7 @@ public:
 
 class DrugsPrintOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsPrintOptionsPage(QObject *parent = 0);
     ~DrugsPrintOptionsPage();
@@ -258,6 +261,7 @@ private:
 
 class DrugsUserOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsUserOptionsPage(QObject *parent = 0);
     ~DrugsUserOptionsPage();
@@ -281,6 +285,7 @@ private:
 
 class DrugsExtraOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsExtraOptionsPage(QObject *parent = 0);
     ~DrugsExtraOptionsPage();

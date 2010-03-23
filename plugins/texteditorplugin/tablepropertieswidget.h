@@ -55,6 +55,7 @@ class TablePropertiesDialog;
 
 class TablePropertiesWidget : public QWidget
 {
+    Q_OBJECT
 public:
     TablePropertiesWidget(QWidget *parent = 0);
     ~TablePropertiesWidget();

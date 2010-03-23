@@ -16,6 +16,7 @@ namespace Ui {
 
 class BaseFormSettingsWidget : public QWidget
 {
+    Q_OBJECT
 public:
     BaseFormSettingsWidget(QWidget *parent = 0);
     ~BaseFormSettingsWidget();
@@ -29,6 +30,7 @@ private:
 
 class BaseFormWidgetsOptionsPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     BaseFormWidgetsOptionsPage(QObject *parent = 0);
     ~BaseFormWidgetsOptionsPage();

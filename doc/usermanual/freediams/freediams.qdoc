@@ -259,15 +259,15 @@ Not yet fully used in \freediams :
 Examples :
 - Linux/*BSD :
 \code
-    - freediams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+freediams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
 \endcode
 - Win :
 \code
-    - freediams.exe --exhange-in="c:\Files\exchang-in.xml" --exchange="c:\Files\exchange.exc"
+freediams.exe --exhange-in="c:\Files\exchang-in.xml" --exchange="c:\Files\exchange.exc"
 \endcode
 - Mac (don't forget the bundle) :
 \code
-    - FreeDiams.app/Contents/MacOs/FreeDiams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+FreeDiams.app/Contents/MacOs/FreeDiams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
 \endcode
 
 \~french \section exchange-in Le fichier d'échange entrant

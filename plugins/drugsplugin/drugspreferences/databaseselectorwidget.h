@@ -103,6 +103,7 @@ private:
 
 class DrugsDatabaseSelectorPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     DrugsDatabaseSelectorPage(QObject *parent = 0);
     ~DrugsDatabaseSelectorPage();
