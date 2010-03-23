@@ -573,6 +573,7 @@ INPUT                  = ../doc/usermanual/freediams \
                          ../doc/usermanual/richtexteditor \
                          ../doc/usermanual/tokensmanager \
                          ../doc/usermanual/templates \
+                         ../doc/usermanual/saverestore \
                          ../doc/usermanual/versionning.qdoc \
                          ../doc/usermanual/team.qdoc
 

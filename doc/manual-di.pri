@@ -63,6 +63,7 @@ OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/templates/templates.qdoc \
+               $${PWD}/usermanual/saverestore/saverestore.qdoc \
                $${PWD}/usermanual/freediams/Doxyfile_en \
                $${PWD}/usermanual/freediams/Doxyfile_fr \
                $${PWD}/usermanual/freediams/doxygen.css \

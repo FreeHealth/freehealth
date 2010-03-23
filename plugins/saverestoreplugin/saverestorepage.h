@@ -111,7 +111,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return QString();}
+    QString helpPage() {return "saverestore.html";}
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::SaveRestoreWidget::writeDefaultSettings(s);}
 
