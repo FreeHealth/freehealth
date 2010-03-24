@@ -82,6 +82,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/dialogs/settingsdialog.h>
 
 // include Qt headers
 #include <QCoreApplication>
@@ -104,7 +105,7 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
+static inline QString defaultDatabaseFileName() {return settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + "-fr_FR.db";}
 
 namespace DrugsDB {
 namespace Internal {
@@ -162,9 +163,9 @@ DrugsBase::DrugsBase(QObject *parent)
     setObjectName("DrugsBase");
 
     // DRUGS DATABASE
-    addTable(Table_DRUGS, "DRUGS");
-    addTable(Table_COMPO, "COMPOSITION");
-    addTable(Table_PACKAGING, "PACKAGING");
+    addTable(Table_DRUGS,       "DRUGS");
+    addTable(Table_COMPO,       "COMPOSITION");
+    addTable(Table_PACKAGING,   "PACKAGING");
     addTable(Table_INFORMATION, "INFORMATIONS");
 
     addField(Table_DRUGS, DRUGS_UID ,           "UID");
@@ -246,17 +247,21 @@ bool DrugsBase::init()
          dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
      }
 
-     if ((dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT) || (dbFileName.isEmpty())) {
+     // define is default drugs database (fr_FR)
+     // if settings drugs database is wrong --> use the default database
+     if (dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)
          m_IsDefaultDB = true;
-         if (Utils::isRunningOnMac())
-             dbFileName = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + ".db";
-         else
-             dbFileName = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + ".db";
+     else if ((dbFileName.isEmpty())
+              || (!QFile(dbFileName).exists())) {
+         Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
+         m_IsDefaultDB = true;
+         dbFileName = defaultDatabaseFileName();
      } else {
          m_IsDefaultDB = false;
      }
-     QString pathToDb = QFileInfo(dbFileName).absolutePath();
 
+     // log the path of the database
+     QString pathToDb = QFileInfo(dbFileName).absolutePath();
      Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
      // Connect Drugs Database
@@ -265,6 +270,7 @@ bool DrugsBase::init()
          d->m_ActualDBInfos = getDatabaseInformations(DRUGS_DATABASE_NAME);
      } else {
          /** \todo try to connect default database */
+         Utils::Log::addError(this, "No drugs database found.");
          return false;
      }
 

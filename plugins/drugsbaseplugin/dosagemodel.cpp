@@ -71,12 +71,12 @@
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 
 /** \todo reimplement user management */
 
-// including Qt headers
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QApplication>
@@ -96,6 +96,7 @@ using namespace Trans::ConstantTranslations;
 using namespace mfDosageModelConstants;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- Static Datas --------------------------------------------
@@ -275,7 +276,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
 /** \brief Create new dosages. Defaults values of the dosages are stted here. */
 bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::insertRows", "before inserting row, you must specify the CIS of the related drug");
+    Q_ASSERT_X(m_UID != -1, "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
     QString userUuid;
 #ifdef FREEDIAMS
     userUuid = DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID;
@@ -299,7 +300,14 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             setData(index(createdRow, Dosages::Constants::IntakesTo) , 1);
             setData(index(createdRow, Dosages::Constants::IntakesFrom) , 1);
             setData(index(createdRow, Dosages::Constants::IntakesUsesFromTo) , false);
-            setData(index(createdRow, Dosages::Constants::IntakesScheme) , tkTr(Trans::Constants::INTAKES, 1));
+            QString s = settings()->value(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA).toString();
+            if (s.isEmpty()) {
+                setData(index(createdRow, Dosages::Constants::IntakesScheme) , m_DrugsModel->drugData(m_UID, Drug::AvailableForms).toStringList().at(0));
+            } else if (s=="||") {
+                setData(index(createdRow, Dosages::Constants::IntakesScheme) , tkTr(Trans::Constants::INTAKES, 1));
+            } else {
+                setData(index(createdRow, Dosages::Constants::IntakesScheme) , s);
+            }
             setData(index(createdRow, Dosages::Constants::Period), 1);
             setData(index(createdRow, Dosages::Constants::PeriodScheme) , tkTr(Trans::Constants::DAYS));
             setData(index(createdRow, Dosages::Constants::DurationTo) , 1);

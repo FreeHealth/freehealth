@@ -2,6 +2,68 @@
 \~french \page saverestore Sauvegarder et restorer les paramètres et données des utilisateurs
 \~english  \page saverestore Saving and restoring settings and datas of users
 
+\~french
+Les applicatifs de FreeMedForms peuvent à tout moment sauvegarder et restaurer les paramètres et données
+des utilisateurs.
+
+Pour ce faire, une page spécifique est disponible dans les Préférences de l'application à la rubrique :
+<b>Sauvegarder et restaurer</b>.
+
+\~english
+The application of FreeMedForms may at any time save and restore settings and data users.
+
+To do this, a specfic page is available in the Preferences under the heading:
+<b>Save and restore NEWS </b>.
+
+
+\~french \section saverestore_datas Données accessibles
+\~english \section saverestore_datas Accessible datas
+
+\~french
+Les données suivantes seront intégrées au processus :
+- les paramètres de l'application
+- toutes les bases de données personnelles en cours d'utilisation
+
+\~english
+The following datas will be integrated to the process:
+- application preferences
+- every personnal database in use
+
+
+\~french \section saverestore_save Sauvegarder
+\~english \section saverestore_save Save
+
+\~french
+Pour sauvegarder :
+- cliquez sur le bouton ad-hoc
+- sélectionnez le répertoire et le nom du fichier de sauvegarde
+
+Un message vous confirmera la bonne sauvegarde de vos données personnelles.
+
+\~english
+To save:
+- Click on the 'save' button
+- Select the directory and file name of backup
+
+A message will confirm the good backup of your data.
+
+\~french \section saverestore_rest Restaurer
+\~english \section saverestore_rest Restore
+
+\~french
+Pour restaurer :
+- cliquez le bouton ad-hoc
+- sélectionnez le fichier de sauvegarde
+- à la fin du processus un message d'information confirmera la restauration des données
+- l'application se terminera vous demandant de la redémarrer pour achever le processus de restauration.
+
+\~english
+To restore:
+- Click the 'restore' button
+- Select the backup file
+- At the end of the process an informational message confirming the restoration of data
+- The application will end asking you to restart the application to complete the restoration process.
+
 
 \ref index
 

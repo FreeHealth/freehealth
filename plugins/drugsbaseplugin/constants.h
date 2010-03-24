@@ -109,6 +109,8 @@ namespace Constants {
     const char * const S_DATABASE_PATHS                 ="DrugsWidget/DatabaseSearchPaths";
     const char * const S_SELECTED_DATABASE_FILENAME     ="DrugsWidget/SelectedDatabaseFileName";
 
+    const char * const S_PROTOCOL_DEFAULT_SCHEMA        ="Protocols/DefaultSchema";
+
     // ICONS
     const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_SEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */

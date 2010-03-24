@@ -43,6 +43,7 @@
 #include "constants.h"
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
+#include "drugspreferences/protocolpreferencespage.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -68,7 +69,8 @@ DrugsPlugin::DrugsPlugin() :
         printPage(0),
         userPage(0),
         extraPage(0),
-        databaseSelectorPage(0)
+        databaseSelectorPage(0),
+        protocolPage(0)
 
 {
     setObjectName("DrugsPlugin");
@@ -106,6 +108,10 @@ DrugsPlugin::~DrugsPlugin()
         removeObject(databaseSelectorPage);
         delete databaseSelectorPage; databaseSelectorPage=0;
     }
+    if (protocolPage) {
+        removeObject(protocolPage);
+        delete protocolPage; protocolPage=0;
+    }
 }
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -126,6 +132,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     userPage = new DrugsUserOptionsPage(this);
     extraPage = new DrugsExtraOptionsPage(this);
     databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
+    protocolPage = new ProtocolPreferencesPage(this);
 
     // check settings
     if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
@@ -135,6 +142,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
         databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        protocolPage->writeDefaultSettings(Core::ICore::instance()->settings());
     } else {
         viewPage->checkSettingsValidity();
         selectorPage->checkSettingsValidity();
@@ -142,6 +150,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
         userPage->checkSettingsValidity();
         extraPage->checkSettingsValidity();
         databaseSelectorPage->checkSettingsValidity();
+        protocolPage->checkSettingsValidity();
     }
 
     addObject(viewPage);
@@ -150,6 +159,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addObject(userPage);
     addObject(extraPage);
     addObject(databaseSelectorPage);
+    addObject(protocolPage);
 
     // Initialize drugs database after the settings where checked
     drugsBase();

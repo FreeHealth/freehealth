@@ -445,7 +445,6 @@ bool MainWindow::newFile()
 */
 bool MainWindow::applicationPreferences()
 {
-    /** \todo here */
     Core::SettingsDialog dlg(this);
     dlg.exec();
     return true;

@@ -26,15 +26,21 @@ FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
 
 # DrugsWidget Preferences
 HEADERS += $${PWD}/drugspreferences/mfDrugsPreferences.h \
-    $${PWD}/drugspreferences/databaseselectorwidget.h
+    $${PWD}/drugspreferences/databaseselectorwidget.h \
+    $${PWD}/drugspreferences/protocolpreferencespage.h
+
 SOURCES += $${PWD}/drugspreferences/mfDrugsPreferences.cpp \
-    $${PWD}/drugspreferences/databaseselectorwidget.cpp
+    $${PWD}/drugspreferences/databaseselectorwidget.cpp \
+    $${PWD}/drugspreferences/protocolpreferencespage.cpp
+
 FORMS += $${PWD}/drugspreferences/drugsextraoptionspage.ui \
     $${PWD}/drugspreferences/drugsviewoptionspage.ui \
     $${PWD}/drugspreferences/drugsuseroptionspage.ui \
     $${PWD}/drugspreferences/drugsprintoptionspage.ui \
     $${PWD}/drugspreferences/databaseselectorwidget.ui \
-    $${PWD}/drugspreferences/drugselectorwidget.ui
+    $${PWD}/drugspreferences/drugselectorwidget.ui \
+    $${PWD}/drugspreferences/protocolpreferencespage.ui
+
 
 # DrugsWidgets
 HEADERS += $${PWD}/drugswidget/druginfo.h \

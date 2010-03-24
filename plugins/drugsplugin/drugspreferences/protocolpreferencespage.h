@@ -38,59 +38,86 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGSWIDGETPLUGIN_H
-#define DRUGSWIDGETPLUGIN_H
+#ifndef PROTOCOLPREFERENCESPAGE_H
+#define PROTOCOLPREFERENCESPAGE_H
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/ioptionspage.h>
+
+#include <QPointer>
+#include <QWidget>
+#include <QStringListModel>
 
 /**
- * \file drugswidgetmanager.h
+ * \file protocolpreferencespage.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
- * \internal
+ * \version 0.4.0
+ * \date 25 Mar 2010
 */
 
 
-namespace DrugsWidget {
-class DrugsViewOptionsPage;
-class DrugsSelectorOptionsPage;
-class DrugsPrintOptionsPage;
-class DrugsUserOptionsPage;
-class DrugsExtraOptionsPage;
-class DrugsDatabaseSelectorPage;
-class ProtocolPreferencesPage;
+namespace DrugsDB {
+class DatabaseInfos;
 }
 
+namespace Core {
+class ISettings;
+}
 
 namespace DrugsWidget {
 namespace Internal {
-
-class DrugsPlugin : public ExtensionSystem::IPlugin
+namespace Ui {
+class ProtocolPreferencesWidget;
+}
+class ProtocolPreferencesWidget : public QWidget
 {
     Q_OBJECT
-
 public:
-    DrugsPlugin();
-    ~DrugsPlugin();
+    ProtocolPreferencesWidget(QWidget *parent = 0);
+    ~ProtocolPreferencesWidget();
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
+    void setDatasToUi();
+    static void writeDefaultSettings(Core::ISettings *s = 0);
 
-public slots:
-    void remoteArgument(const QString&);
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    DrugsWidget::DrugsViewOptionsPage *viewPage;
-    DrugsWidget::DrugsSelectorOptionsPage *selectorPage;
-    DrugsWidget::DrugsPrintOptionsPage *printPage;
-    DrugsWidget::DrugsUserOptionsPage *userPage;
-    DrugsWidget::DrugsExtraOptionsPage *extraPage;
-    DrugsWidget::DrugsDatabaseSelectorPage *databaseSelectorPage;
-    DrugsWidget::ProtocolPreferencesPage *protocolPage;
+    Ui::ProtocolPreferencesWidget *ui;
 };
 
-} // namespace Internal
-} // namespace DrugsWidget
+}  // End namespace Internal
 
-#endif // DRUGSWIDGETPLUGIN_H
+
+class ProtocolPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    ProtocolPreferencesPage(QObject *parent = 0);
+    ~ProtocolPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::ProtocolPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+
+private:
+    QPointer<Internal::ProtocolPreferencesWidget> m_Widget;
+};
+
+}  // End namespace DrugsWidget
+
+
+#endif // PROTOCOLPREFERENCESPAGE_H

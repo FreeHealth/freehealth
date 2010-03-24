@@ -200,8 +200,8 @@ public:
         case Drug::AvailableForms :
             {
                 QStringList toReturn;
-                toReturn << tkTr(Trans::Constants::INTAKES);
                 toReturn << drug->form();
+                toReturn << tkTr(Trans::Constants::INTAKES);
                 if (drug->numberOfInn() == 1) {
                     toReturn << QApplication::translate("DrugsModel", "x %1 of %2")
                             .arg(drug->dosageOfMolecules().at(0) , drug->listOfInn().at(0));
