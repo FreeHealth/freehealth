@@ -144,6 +144,8 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
     sizes << 150 << 300;
     m_ui->splitter->setSizes(sizes);
 
+    m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
+
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->pageTree), 0);
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->layoutWidget), 1);
 

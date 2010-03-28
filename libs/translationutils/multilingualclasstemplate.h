@@ -41,7 +41,7 @@
 #ifndef MULTILINGUALCLASSTEMPLATE_H
 #define MULTILINGUALCLASSTEMPLATE_H
 
-#include <translationutils/translationutils_exporter.h>
+//#include <translationutils/translationutils_exporter.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QString>
@@ -75,7 +75,7 @@ else
   \endcode
 */
 template <typename T>
-class TRUTILS_EXPORT MultiLingualClass
+class MultiLingualClass
 {
 public:
     MultiLingualClass() { }

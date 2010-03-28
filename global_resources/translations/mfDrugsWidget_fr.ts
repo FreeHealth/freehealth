@@ -676,18 +676,18 @@ p, li { white-space: pre-wrap; }
         <translation>Alterner avec</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="421"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="420"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="587"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="586"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="625"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="624"/>
         <source>Linking to : </source>
         <translation>Lier avec : </translation>
     </message>
@@ -1162,6 +1162,52 @@ Voulez-vous les envoyer ?</translation>
         <location filename="../../plugins/drugsplugin/drugswidget/mfPrescriptionViewer.ui" line="14"/>
         <source>Form</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>DrugsWidget::Internal::ProtocolPreferencesWidget</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished">Forme</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="32"/>
+        <source>Protocols preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="49"/>
+        <source>Default intake schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="55"/>
+        <source>When creating a new protocol, use the following default intake schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="62"/>
+        <source>drugs form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="69"/>
+        <source>the word: Intake(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="76"/>
+        <source>other word:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DrugsWidget::ProtocolPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="72"/>
+        <source>Protocols</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

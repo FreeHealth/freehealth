@@ -25,11 +25,14 @@ QT *= sql \
 
 DEFINES *= FREEDIAMS
 
-macx:ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freediams.icns
-win32:RC_FILE=$${SOURCES_GLOBAL_RESOURCES}/textfiles/freediams_win32_icon.rc
+macx {
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freediams.icns
+  !CONFIG(debug, release|debug):QMAKE_INFO_PLIST=Info.plist
+}
+win32:RC_FILE=freediams_win32_icon.rc
 
 # sources
 SOURCES += \
     main.cpp \
 
-
+OTHER_FILES += freediams_win32_icon.rc

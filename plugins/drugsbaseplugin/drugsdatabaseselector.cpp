@@ -303,7 +303,7 @@ void DrugsDatabaseSelector::getAllDatabaseInformations(const QStringList &paths)
             DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->getDatabaseInformations(fi.fileName());
             if (info) {
 //                info->fileName = fi.absoluteFilePath();
-                info->warn();
+//                info->warn();
                 d->m_FileName_Infos.insert(fi.fileName(), info);
             }
         }

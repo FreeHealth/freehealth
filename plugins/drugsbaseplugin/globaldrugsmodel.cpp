@@ -241,6 +241,19 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                    .arg(settings()->path(Core::ISettings::MediumPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING));
         }
         tmp += d->getConstructedDrugName(item.row()) + "<br />";
+        // get composition
+        if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {
+            QSqlTableModel compo(0, database());
+            compo.setTable(drugsBase()->table(Constants::Table_COMPO));
+            QHash<int, QString> where;
+            where.insert(Constants::COMPO_UID, "=" + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toString());
+            compo.setFilter(drugsBase()->getWhereClause(Constants::Table_COMPO, where));
+            compo.select();
+            for(int i=0; i< compo.rowCount(); ++i) {
+                tmp += "&nbsp;&nbsp;" + compo.data(compo.index(i, Constants::COMPO_MOL_NAME)).toString() + "<br />";
+            }
+        }
+        // get form / route
         tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "<br />";
         tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "<br />";
         QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString() + "</body></html>";
@@ -248,6 +261,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             tmp += "&nbsp;&nbsp;&nbsp;&nbsp;No ATC found";
         else
             tmp += "&nbsp;&nbsp;&nbsp;&nbsp;" + atc;
+
         return tmp;
     } else if (role == Qt::DecorationRole) {
         if (d->hasAllergie(item))

@@ -228,27 +228,27 @@
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="537"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : fusionner ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Il existe déjà une prescription dans l&apos;éditeur, voulez-vous la remplacer ou ajouter la nouvelle prescription ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
         <source>Open a prescription</source>
         <translation>Ouvrerture d&apos;une prescription</translation>
     </message>

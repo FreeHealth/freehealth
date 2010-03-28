@@ -190,6 +190,7 @@ namespace SettingsPrivateConstants {
     static const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     static const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     static const char* const USERMANUAL_PATH      = "/doc/%1";
+    static const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1-doc/html";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
 #ifdef DEBUG
@@ -350,7 +351,15 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 if (appname.contains("_d"))
                     appname = appname.left(appname.indexOf("_d"));
             }
+#ifdef LINUX_INTEGRATED
+            if (QDir(LINUX_USERMANUAL_PATH).exists()) {
+                m_Enum_Path.insert(DocumentationPath, QString(LINUX_USERMANUAL_PATH).arg(appname));
+            } else {
+                m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
+            }
+#else
             m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
+#endif
             break;
         }
         case ApplicationPath :

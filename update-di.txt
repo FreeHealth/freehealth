@@ -10,14 +10,22 @@ version=0.3.1
       * Nouveau mode d'édition = mode prescripteur et mode sélection seulement
       * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender', '--exchange-in'...
       * Possibilité de passer les arguments à FreeDiams par un fichier d'échange entrant (exchange-in)
-      * Nouveau mode paramètrable par ligne de commande : le mode "sélection seulement"
       * Fonctionnalités multi-bases thérapeutiques implémentées
+      * Nouveau plugin : Sauvegarde et Restauration des données utilisateur
+      * Nouveaux paramètres d'application
+        - Pour les dosages
+        - Pour le sélectionneur de médicaments
+        - Pour le sélectionneur de base de données thérapeutiques
 
     * Modifications importantes :
       * Les étiquettes pour le patient sont modifiées pour le nom et le prénom
+      * Documentation enrichie et traduite en anglais
 
 
     * Correction de bogues / Améliorations techniques :
+      * Passage à Qt 4.6.2 pour MacOs et Windows
+      * Nécessite XP SP2 au minimum pour fonctionner sous Windows
+      * Quelques corrections de bogues
 }
 
 version=0.3.0

@@ -4,6 +4,7 @@
 
 TEMPLATE = lib
 CONFIG *= staticlib
+TARGET = z
 # CONFIG += qt warn_on staticlib
 # QT -= gui
 DEPENDPATH += .
@@ -42,11 +43,3 @@ SOURCES += adler32.c  \
 OBJECTS_DIR=.obj
 MOC_DIR=.moc
 
-
-unix {
-  TARGET= ../z
-}
-
-win32 {
-    TARGET = ../z
-}

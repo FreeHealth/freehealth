@@ -18,14 +18,15 @@ include( ../../../libs/libsworkbench.pri )
 
 #CONFIG *= dll
 
-unix { LIBS *= -lz  }
-else {
+unix {
+    LIBS *= -lz
+} else {
     message( Win32 compilation of Quazip )
     PRE_TARGETDEPS += ../zlib-1.2.3
     LIBS *= -L../zlib-1.2.3 -lz
 }
 
-#DEPENDPATH += .
+DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input

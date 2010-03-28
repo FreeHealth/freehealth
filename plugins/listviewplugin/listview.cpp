@@ -212,8 +212,8 @@ ListViewActionHandler::ListViewActionHandler(QObject *parent) :
 
 void ListViewActionHandler::setCurrentView(ListView *view)
 {
-    if (view)
-        qWarning() << "current view " << view;
+//    if (view)
+//        qWarning() << "current view " << view;
     // disconnect old view
     if (m_CurrentView) {
         disconnect(m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),

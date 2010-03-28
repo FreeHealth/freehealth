@@ -41,6 +41,7 @@
 #ifndef INTERACTIONSBASE_H
 #define INTERACTIONSBASE_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <utils/database.h>
 
 #include <QList>
@@ -61,7 +62,7 @@ class InteractionsBasePrivate;
 class DrugsInteraction;
 class DrugsData;
 
-class InteractionsBase
+class DRUGSBASE_EXPORT InteractionsBase
 {
     friend class InteractionsBasePrivate;
 public:

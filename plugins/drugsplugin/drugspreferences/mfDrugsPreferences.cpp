@@ -169,6 +169,7 @@ void DrugsSelectorOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME,true);
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, false);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     defaultvalues.insert(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
@@ -478,6 +479,7 @@ void DrugsSelectorWidget::setDatasToUi()
     drugsBrandNameBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME).toBool());
     routeBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
     formBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
+    compoBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES).toBool());
 
     useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
     backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
@@ -492,11 +494,12 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME,drugsBrandNameBox->isChecked());
-    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE,routeBox->isChecked());
-    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM,formBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME, drugsBrandNameBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, routeBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM, formBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, compoBox->isChecked());
 
-    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,useBackgroundForDosages->isChecked());
+    s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES, useBackgroundForDosages->isChecked());
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, backgroundAllergiesButton->color());
 
@@ -512,6 +515,7 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME, true);
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, false);
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);

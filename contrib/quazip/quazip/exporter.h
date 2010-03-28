@@ -3,11 +3,11 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined(EXTENSIONSYSTEM_LIBRARY)
+#if defined(QUAZIP_LIBRARY)
 #  define ZIP_EXPORT Q_DECL_EXPORT
 #else
 #  define ZIP_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif  H_QUAZIP_EXPORTER
+#endif // End H_QUAZIP_EXPORTER
 
