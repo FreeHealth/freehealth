@@ -41,7 +41,6 @@
 #ifndef MULTILINGUALCLASSTEMPLATE_H
 #define MULTILINGUALCLASSTEMPLATE_H
 
-//#include <translationutils/translationutils_exporter.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QString>
