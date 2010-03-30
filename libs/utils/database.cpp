@@ -86,6 +86,8 @@
 #include <QMultiHash>
 #include <QMap>
 
+enum {WarnSqlCommands=false};
+
 using namespace Utils;
 using namespace Utils::Internal;
 
@@ -393,6 +395,8 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
     where.chop(5);
     if (conditions.count() > 1)
         where = QString("(%1)").arg(where);
+    if (WarnSqlCommands)
+        qWarning() << where;
     return where;
 }
 
@@ -403,6 +407,8 @@ QString Database::select(const int & tableref, const int & fieldref, const QHash
             .arg(field(tableref, fieldref))
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -425,6 +431,8 @@ QString Database::select(const int & tableref, const QList<int> &fieldsref, cons
             .arg(tmp)
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -440,6 +448,8 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
     toReturn = QString("SELECT %1 FROM `%2`")
             .arg(tmp)
             .arg(table(tableref));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -458,6 +468,8 @@ QString Database::select(const int & tableref, const QHash<int, QString> & condi
             .arg(tmp)
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -475,6 +487,8 @@ QString Database::select(const int & tableref) const
     toReturn = QString("SELECT %1 FROM `%2`")
             .arg(tmp)
             .arg(table(tableref));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -496,6 +510,8 @@ QString Database::prepareInsertQuery(const int & tableref)const
             .arg(table(tableref))
             .arg(fields)
             .arg(numbers);
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -509,6 +525,8 @@ QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<i
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -526,6 +544,8 @@ QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> c
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
@@ -555,7 +575,7 @@ bool Database::executeSQL(const QString & req, const QSqlDatabase & DB)const
     return true;
 }
 
-bool Database::createTable(const int & tableref)const
+bool Database::createTable(const int & tableref) const
 {
     if (! d->m_Tables.contains(tableref))
         return false;
@@ -596,10 +616,12 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
     toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
     QList<int> list = m_Tables_Fields.values(tableref);
     qSort(list);
-    int table = tableref * 1000;
+
     foreach(int i, list) {
+
+        // Manage NULL value
         if (m_DefaultFieldValue.value(i) == "NULL") {
-            if (Database::TypeOfField(m_TypeOfField.value(i + table)) != Database::FieldIsUniquePrimaryKey) {
+            if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
                 toReturn.append(QString("%1 \t %2 DEFAULT NULL, \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
@@ -609,15 +631,28 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
                                 .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
             }
         } else {
-            switch (Database::TypeOfField(m_TypeOfField.value(i + table)))
+
+            // Manage DEFAULT value by type of field
+            switch (Database::TypeOfField(m_TypeOfField.value(i)))
             {
             case Database::FieldIsUUID :
             case Database::FieldIsLongText :
             case Database::FieldIsShortText :
             case Database::FieldIsLanguageText :
             case Database::FieldIsBlob :
-            case Database::FieldIsDate :
                 toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(m_DefaultFieldValue.value(i)));
+                break;
+            case Database::FieldIsDate :
+                if (m_DefaultFieldValue.value(i).startsWith("CUR"))
+                    toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(m_DefaultFieldValue.value(i)));
+                else
+                    toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
@@ -643,6 +678,10 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
     }
     toReturn.chop(3);
     toReturn.append("\n); \n\n");
+
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+
     return toReturn;
 }
 
@@ -695,6 +734,8 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
     toReturn = QString("DELETE FROM `%1` \n WHERE %2")
                .arg(table(tableref))
                .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
     return toReturn;
 }
 
