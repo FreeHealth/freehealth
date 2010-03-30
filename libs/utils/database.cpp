@@ -598,36 +598,48 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
     qSort(list);
     int table = tableref * 1000;
     foreach(int i, list) {
-        switch (Database::TypeOfField(m_TypeOfField.value(i + table)))
-        {
-        case Database::FieldIsUUID :
-        case Database::FieldIsLongText :
-        case Database::FieldIsShortText :
-        case Database::FieldIsLanguageText :
-        case Database::FieldIsBlob :
-        case Database::FieldIsDate :
-            toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
-                            .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                            .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
-                            .arg(m_DefaultFieldValue.value(i)));
-            break;
-        case Database::FieldIsBoolean :
-        case Database::FieldIsInteger :
-        case Database::FieldIsLongInteger :
-        case Database::FieldIsReal :
-            toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
-                            .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                            .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
-                            .arg(m_DefaultFieldValue.value(i)));
-            break;
-        default :
+        if (m_DefaultFieldValue.value(i) == "NULL") {
+            if (Database::TypeOfField(m_TypeOfField.value(i + table)) != Database::FieldIsUniquePrimaryKey) {
+                toReturn.append(QString("%1 \t %2 DEFAULT NULL, \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
+            } else {
+                toReturn.append(QString("%1 \t %2, \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
+            }
+        } else {
+            switch (Database::TypeOfField(m_TypeOfField.value(i + table)))
+            {
+            case Database::FieldIsUUID :
+            case Database::FieldIsLongText :
+            case Database::FieldIsShortText :
+            case Database::FieldIsLanguageText :
+            case Database::FieldIsBlob :
+            case Database::FieldIsDate :
                 toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
-        break;
+                break;
+            case Database::FieldIsBoolean :
+            case Database::FieldIsInteger :
+            case Database::FieldIsLongInteger :
+            case Database::FieldIsReal :
+                toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(m_DefaultFieldValue.value(i)));
+                break;
+            default :
+                    toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                                    .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                    .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                    .arg(m_DefaultFieldValue.value(i)));
+            break;
 
-    }
+        }
+        }
     }
     toReturn.chop(3);
     toReturn.append("\n); \n\n");
