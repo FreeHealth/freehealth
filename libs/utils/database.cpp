@@ -189,7 +189,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         if ((! QFile(pathOrHostName + QDir::separator() + dbName).exists())||
              (QFileInfo(pathOrHostName + QDir::separator() + dbName).size() == 0)) {
             if (createOption == CreateDatabase){
-                if (! createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
+                if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
                     Log::addError("Database", QCoreApplication::translate("Database",
                                                                     "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                     return false;
@@ -582,8 +582,10 @@ bool Database::createTables() const
     QList<int> list = d->m_Tables.keys();
     qSort(list);
     foreach(const int & i, list)
-        if(! createTable(i))
+        if(!createTable(i)) {
             toReturn = false;
+            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+        }
     return toReturn;
 }
 
@@ -594,11 +596,39 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
     toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
     QList<int> list = m_Tables_Fields.values(tableref);
     qSort(list);
-    foreach(int i, list)
-        toReturn.append(QString("%1 \t %2 %3, \n")
-                         .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                         .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
-                         .arg(m_DefaultFieldValue.value(i)));
+    int table = tableref * 1000;
+    foreach(int i, list) {
+        switch (Database::TypeOfField(m_TypeOfField.value(i + table)))
+        {
+        case Database::FieldIsUUID :
+        case Database::FieldIsLongText :
+        case Database::FieldIsShortText :
+        case Database::FieldIsLanguageText :
+        case Database::FieldIsBlob :
+        case Database::FieldIsDate :
+            toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                            .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                            .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                            .arg(m_DefaultFieldValue.value(i)));
+            break;
+        case Database::FieldIsBoolean :
+        case Database::FieldIsInteger :
+        case Database::FieldIsLongInteger :
+        case Database::FieldIsReal :
+            toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                            .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                            .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                            .arg(m_DefaultFieldValue.value(i)));
+            break;
+        default :
+                toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(m_DefaultFieldValue.value(i)));
+        break;
+
+    }
+    }
     toReturn.chop(3);
     toReturn.append("\n); \n\n");
     return toReturn;
