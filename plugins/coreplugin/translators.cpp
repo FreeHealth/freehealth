@@ -66,6 +66,8 @@
 
 using namespace Core;
 
+enum { WarnTranslatorsErrors = false };
+
 QString Translators::m_PathToTranslations = "";
 Translators * Translators::m_Instance = 0;
 
@@ -144,10 +146,12 @@ void Translators::changeLanguage( const QString & lang )
             else
                 path = m_PathToTranslations;
 
-            if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) )
-                Utils::Log::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
-            else
+            if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) ) {
+                if (WarnTranslatorsErrors)
+                    Utils::Log::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
+            } else {
                 Utils::Log::addMessage( this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
+            }
         }
 //    }
     emit languageChanged();
