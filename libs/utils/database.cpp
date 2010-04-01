@@ -549,13 +549,13 @@ QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> c
     return toReturn;
 }
 
-bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)const
+bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB) const
 {
     foreach(const QString & r, list)
     {
         if (r.isEmpty())continue;
         QSqlQuery q(r, DB);
-        if (! q.isActive()) {
+        if (!q.isActive()) {
             Log::addQueryError("Database", q);
             return false;
         }
@@ -563,16 +563,13 @@ bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)cons
     return true;
 }
 
-bool Database::executeSQL(const QString & req, const QSqlDatabase & DB)const
+bool Database::executeSQL(const QString &req, const QSqlDatabase & DB) const
 {
     if (req.isEmpty())
         return false;
-    QSqlQuery q(req, DB);
-    if (! q.isActive()) {
-        Log::addQueryError("Database", q);
-        return false;
-    }
-    return true;
+    /** \todo manage ; inside "" or '' */
+    QStringList list = req.split(";\n", QString::SkipEmptyParts);
+    return executeSQL(list, DB);
 }
 
 bool Database::createTable(const int & tableref) const
