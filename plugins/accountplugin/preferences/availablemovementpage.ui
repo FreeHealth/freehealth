@@ -29,7 +29,7 @@
       </font>
      </property>
      <property name="text">
-      <string>User's bank details</string>
+      <string>Available personnal movements</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

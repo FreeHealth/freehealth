@@ -73,7 +73,7 @@ AvailableMovementPage::~AvailableMovementPage()
 }
 
 QString AvailableMovementPage::id() const { return objectName(); }
-QString AvailableMovementPage::name() const { return tkTr(Trans::Constants::USER); }
+QString AvailableMovementPage::name() const { return tkTr(Trans::Constants::AVAILABLE_MOVEMENTS); }
 QString AvailableMovementPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 
 void AvailableMovementPage::resetToDefaults()

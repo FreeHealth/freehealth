@@ -74,7 +74,7 @@ BankDetailsPage::~BankDetailsPage()
 }
 
 QString BankDetailsPage::id() const { return objectName(); }
-QString BankDetailsPage::name() const { return tkTr(Trans::Constants::USER); }
+QString BankDetailsPage::name() const { return tkTr(Trans::Constants::BANK_DETAILS); }
 QString BankDetailsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 
 void BankDetailsPage::resetToDefaults()

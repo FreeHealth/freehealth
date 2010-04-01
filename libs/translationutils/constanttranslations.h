@@ -263,6 +263,8 @@ namespace Time {
 
         // Account
         const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");
+        const char* const BANK_DETAILS = QT_TRANSLATE_NOOP("tkConstants", "Bank details");
+        const char* const AVAILABLE_MOVEMENTS = QT_TRANSLATE_NOOP("tkConstants", "Available movements");
 
 
         // Time and periods
