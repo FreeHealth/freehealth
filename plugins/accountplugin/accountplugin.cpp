@@ -35,6 +35,7 @@
 #include "accountplugin.h"
 #include "preferences/accountpreferences.h"
 #include "preferences/bankdetailspage.h"
+#include "preferences/availablemovementpage.h"
 
 #include <utils/log.h>
 
@@ -76,6 +77,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new AccountUserOptionsPage(this));
     addAutoReleasedObject(new BankDetailsPage(this));
+    addAutoReleasedObject(new AvailableMovementPage(this));
 }
 
 

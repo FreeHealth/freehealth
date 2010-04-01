@@ -6,4 +6,7 @@ INSERT INTO bank_details VALUES(2,'AccountancyDefaultUser','BD LABEL2','BD OWNER
 INSERT INTO medical_procedure VALUES(1,'AccountancyDefaultUser1','AccountancyDefaultUser','MP1','ABSTRACT MP 1','TYPE MP1',1.1,0.0,'2010/04/01');
 INSERT INTO medical_procedure VALUES(2,'AccountancyDefaultUser2','AccountancyDefaultUser','MP2','ABSTRACT MP2','TYPE MP2',2.2,1.0,'2010/04/02');
 
+INSERT INTO available_movement VALUES(1, -1, 'Type1', 'AvailableMovement1', 'Comment_AvailableMovement1');
+INSERT INTO available_movement VALUES(2, -1, 'Type2', 'AvailableMovement2', 'Comment_AvailableMovement2');
+
 COMMIT;

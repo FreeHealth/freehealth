@@ -271,8 +271,9 @@ const char* const  A_CHANGE_DURATION    = "actionChangeDuration";
 
 
 
-const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
 const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
+const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
+const char * const  FREEACCOUNT_SPLASHSCREEN = "freeaccount.png";
 const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
 
 // application icons
