@@ -34,8 +34,6 @@ SOURCES += \
     $${PWD}/translators.cpp \
     $${PWD}/settings.cpp \
     $${PWD}/imainwindow.cpp \
-#    $${PWD}/mfObject.cpp \
-#    $${PWD}/mfObjectFundamental.cpp \
     $${PWD}/iformitem.cpp \
     $${PWD}/formmanager.cpp \
     $${PWD}/filemanager.cpp \
