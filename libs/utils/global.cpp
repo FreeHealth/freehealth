@@ -347,7 +347,7 @@ QString isFileExists(const QString &absPath)
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Creates an informative messagebox. **/
-void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
+void informativeMessageBox( const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
@@ -368,8 +368,9 @@ void informativeMessageBox( const QString &text, const QString&infoText, const Q
 }
 
 /** \brief Creates a warning messagebox. **/
-void warningMessageBox( const QString &text, const QString&infoText, const QString&detail, const QString &title)
+void warningMessageBox( const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
+    Utils::Log::addMessage("Warning Dialog", infoText);
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb( parent );
     mb.setWindowModality(Qt::WindowModal);
