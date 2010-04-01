@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.4.0
+Type=Application
+Categories=Office;MedicalSoftware
+Name=FreeAccount
+Comment[en]=Medical billing and accountancy
+Comment[fr]=Comptabilité médicale
+TryExec=freeaccount
+Exec=freeaccount
+Icon=freeaccount
