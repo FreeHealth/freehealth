@@ -3,6 +3,10 @@ mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
 else:win32:INSTALL_BASENAME_PATH   = win
 
+# binary wrapper (bw) installer --> leave empty == no bw installation, otherwise specify the filename
+# the bw should be located in SOURCES_RESOURCES_TEXTFILES
+INSTALL_BINARY_WRAPPER_NAME =
+
 # Qt libs and plugs
 INSTALL_QT_LIBS_PATH      = $${INSTALL_BINARY_PATH}/libs
 INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
@@ -79,10 +83,19 @@ target.path = $${INSTALL_BINARY_PATH}
 INSTALLS += target
 }
 
+# manage binary wrapper
+!isEmpty(INSTALL_BINARY_WRAPPER_NAME){
+bw.path = $${INSTALL_BINARY_PATH}
+bw.files = $${SOURCES_RESOURCES_TEXTFILES}/$${INSTALL_BINARY_WRAPPER_NAME}
+INSTALLS += bw
+}
+
 # Install libs
 !isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
-applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
+mac:applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
+else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}.1
+else:win32:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}
 applibs.CONFIG += no_check_exist
 INSTALLS += applibs
 }

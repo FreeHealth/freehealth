@@ -6,7 +6,7 @@ CONFIG( debug, debug|release ) {
 
  CONFIG(crosscompil) {
     QTLIBS_INSTALL_PATH = $${TARGET_INSTALL_PATH}
-    QTLIBS_PATH = /home/eric/.wine/drive_c/Qt/2009.02/qt/bin
+    QTLIBS_PATH = /home/eric/.wine/drive_c/Qt/2010.02/qt/bin
     QTPLUGINS_PATH = $${QTLIBS_PATH}/../plugins
     qtlibs.path  = $${QTLIBS_INSTALL_PATH}
     qtlibs.files = $${QTLIBS_PATH}/*mingw* \
@@ -21,26 +21,18 @@ CONFIG( debug, debug|release ) {
     INSTALLS += qtlibs
     message( Cross-compilation : Qt Libs will be installed from $${QTLIBS_PATH} to $${QTLIBS_INSTALL_PATH})
 
- }else{
-
-    INSTALL_ROOT_PATH      = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
+ } else {
+    # define root path and install path
+    isEmpty(INSTALL_ROOT_PATH):INSTALL_ROOT_PATH = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
     INSTALL_BINARY_PATH    = $${INSTALL_ROOT_PATH}
 
-    INSTALL_QT_LIBS_PATH = $${INSTALL_BINARY_PATH}
-    INSTALL_QT_PLUGINS_PATH = $${INSTALL_BINARY_PATH}/plugins/qt
+    # install Qt libs and plugs
+    INSTALL_QT_INSIDE_BUNDLE = 1
+    INSTALL_QT_LIBS_PATH     = $${INSTALL_BINARY_PATH}
+    INSTALL_QT_PLUGINS_PATH  = $${INSTALL_BINARY_PATH}/plugins/qt
 
-    qtlibs.path  = $${INSTALL_QT_LIBS_PATH}
-    qtlibs.files = $$[QT_INSTALL_LIBS]/*QtCore* \
-                   $$[QT_INSTALL_LIBS]/*QtGui* \
-                   $$[QT_INSTALL_LIBS]/*QtSql* \
-                   $$[QT_INSTALL_LIBS]/*QtScript* \
-                   $$[QT_INSTALL_LIBS]/*Qt3Support* \
-                   $$[QT_INSTALL_LIBS]/*QtXml* \
-                   $$[QT_INSTALL_LIBS]/*QtSvg* \
-                   $$[QT_INSTALL_LIBS]/*QtNetwork*
-    INSTALLS += qtlibs
-    message( Win32 : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
-    message( Win32 : Qt Plugins will be installed from $$[QT_INSTALL_PLUGINS] to $${INSTALL_QT_PLUGINS_PATH})
+    message( Win32 Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH})
+    message( Win32 Bundle : Binary Wrapper will be : $${INSTALL_BINARY_WRAPPER_NAME})
  }
 
 }  #end if release mode

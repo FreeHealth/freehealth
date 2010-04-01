@@ -20,6 +20,7 @@ else {
    INSTALL_QT_INSIDE_BUNDLE  =
    INSTALL_QT_LIBS_PATH      =
    INSTALL_QT_PLUGINS_PATH   =
+   INSTALL_BINARY_WRAPPER_NAME =
 
    # create a link in /usr/bin to the application
    !isEmpty(LINK_ROOT_PATH){
@@ -28,7 +29,22 @@ else {
      PRE_TARGETDEPS += createlink
    }
  }else{
-   # install binary wrapper with rpath redefinition
+    # define root path and install path
+    isEmpty(INSTALL_ROOT_PATH):INSTALL_ROOT_PATH = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
+    INSTALL_BINARY_PATH    = $${INSTALL_ROOT_PATH}
+    INSTALL_LIBS_PATH      = $${INSTALL_BINARY_PATH}/plugins
+    INSTALL_PLUGINS_PATH   = $${INSTALL_LIBS_PATH}
+
+    # install binary wrapper with rpath redefinition
+    INSTALL_BINARY_WRAPPER_NAME = $${TARGET}-linux
+
+    # install Qt libs and plugs
+    INSTALL_QT_INSIDE_BUNDLE = 1
+    INSTALL_QT_LIBS_PATH     = $${INSTALL_BINARY_PATH}/plugins
+    INSTALL_QT_PLUGINS_PATH  = $${INSTALL_BINARY_PATH}/plugins/qt
+
+    message( Linux Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
+    message( Linux Bundle : Binary Wrapper will be : $${INSTALL_BINARY_WRAPPER_NAME})
  }
 
    LIB_EXTENSION = so*
