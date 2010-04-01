@@ -14,7 +14,11 @@ HEADERS = accountbaseplugin.h \
     availablemovementmodel.h \
     workingplacesmodel.h \
     insurancemodel.h \
-    accountmodel.h
+    accountmodel.h \
+    assetmodel.h \
+    depositmodel.h \
+    movementmodel.h \
+    medicalproceduremodel.h
 
 SOURCES = accountbaseplugin.cpp \
     accountbase.cpp \
@@ -22,7 +26,11 @@ SOURCES = accountbaseplugin.cpp \
     availablemovementmodel.cpp \
     workingplacesmodel.cpp \
     insurancemodel.cpp \
-    accountmodel.cpp
+    accountmodel.cpp \
+    assetmodel.cpp \
+    depositmodel.cpp \
+    movementmodel.cpp \
+    medicalproceduremodel.cpp
 
 OTHER_FILES = AccountBase.pluginspec
 
