@@ -33,9 +33,11 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "accountplugin.h"
+
 #include "preferences/accountpreferences.h"
 #include "preferences/bankdetailspage.h"
 #include "preferences/availablemovementpage.h"
+#include "preferences/medicalprocedurepage.h"
 
 #include <utils/log.h>
 
@@ -78,6 +80,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new AccountUserOptionsPage(this));
     addAutoReleasedObject(new BankDetailsPage(this));
     addAutoReleasedObject(new AvailableMovementPage(this));
+    addAutoReleasedObject(new MedicalProcedurePage(this));
 }
 
 

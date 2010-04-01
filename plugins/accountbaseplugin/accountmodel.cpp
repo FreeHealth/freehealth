@@ -51,7 +51,7 @@ public:
     AccountModelPrivate(AccountModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
-        m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_BankDetails));
+        m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Account));
 //        m_SqlTable->setFilter(USER_UID);
     }
     ~AccountModelPrivate () {}
@@ -100,7 +100,7 @@ void AccountModel::setUserUuid(const QString &uuid)
 {
     QHash<int, QString> where;
     where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
-    d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_BankDetails, where));
+    d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_Account, where));
 }
 
 QVariant AccountModel::data(const QModelIndex &index, int role) const

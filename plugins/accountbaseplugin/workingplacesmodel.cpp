@@ -39,7 +39,7 @@ private:
 WorkingPlacesModel::WorkingPlacesModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::WorkingPlacesModelPrivate(this))
 {
-    d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_AvailableMovement));
+    d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_Sites));
     //    d->m_SqlTable->setEditStrategy();
     //    d->m_SqlTable->setFilter( user );
     d->m_SqlTable->select();
