@@ -82,7 +82,7 @@ INSTALLS += target
 # Install libs
 !isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
-applibs.files = $${BUILD_LIB_PATH}/*.$${LIB_EXTENSION}
+applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
 applibs.CONFIG += no_check_exist
 INSTALLS += applibs
 }
@@ -107,7 +107,8 @@ i18n.path = $${INSTALL_TRANSLATIONS_PATH}
 i18n.files = $${SOURCES_TRANSLATIONS}/*.qm
 qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
 qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
-              $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm
+               $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \
+               $$[QT_INSTALL_TRANSLATIONS]/translations/*es.qm
 INSTALLS +=  qti18n i18n
 }
 
