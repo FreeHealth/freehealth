@@ -65,7 +65,7 @@ class UTILS_EXPORT Database
 {
 public:
 
-    /** */
+    /** \brief Describe the desired type of database access (read only, read and write...). */
     enum TypeOfAccess
     {
         ReadOnly = 0,

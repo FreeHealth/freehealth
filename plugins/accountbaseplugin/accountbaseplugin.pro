@@ -11,12 +11,18 @@ HEADERS = accountbaseplugin.h \
     accountbase.h \
     constants.h \
     bankaccountmodel.h \
-    availablemovementmodel.h
+    availablemovementmodel.h \
+    workingplacesmodel.h \
+    insurancemodel.h \
+    accountmodel.h
 
 SOURCES = accountbaseplugin.cpp \
     accountbase.cpp \
     bankaccountmodel.cpp \
-    availablemovementmodel.cpp
+    availablemovementmodel.cpp \
+    workingplacesmodel.cpp \
+    insurancemodel.cpp \
+    accountmodel.cpp
 
 OTHER_FILES = AccountBase.pluginspec
 
