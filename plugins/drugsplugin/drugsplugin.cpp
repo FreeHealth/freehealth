@@ -176,18 +176,4 @@ void DrugsPlugin::extensionsInitialized()
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 }
 
-void DrugsPlugin::remoteArgument(const QString& arg)
-{
-    Q_UNUSED(arg);
-//    qWarning() << "drugplugin" << arg;
-    // An empty argument is sent to trigger activation
-    // of the window via QtSingleApplication. It should be
-    // the last of a sequence.
-//    if (arg.isEmpty()) {
-//        m_mainWindow->activateWindow();
-//    } else {
-//        m_mainWindow->openFiles(QStringList(arg));
-//    }
-}
-
 Q_EXPORT_PLUGIN(DrugsPlugin)

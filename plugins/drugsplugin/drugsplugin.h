@@ -77,9 +77,6 @@ public:
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
 
-public slots:
-    void remoteArgument(const QString&);
-
 private:
     DrugsWidget::DrugsViewOptionsPage *viewPage;
     DrugsWidget::DrugsSelectorOptionsPage *selectorPage;
