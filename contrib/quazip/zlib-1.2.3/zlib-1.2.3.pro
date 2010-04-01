@@ -4,7 +4,7 @@
 
 TEMPLATE = lib
 CONFIG *= staticlib
-TARGET = z
+TARGET = ../z  #under win32 leaving 'release' dir
 # CONFIG += qt warn_on staticlib
 # QT -= gui
 DEPENDPATH += .
