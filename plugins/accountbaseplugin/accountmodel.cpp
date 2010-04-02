@@ -50,6 +50,7 @@ class AccountModelPrivate
 public:
     AccountModelPrivate(AccountModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
     {
+        qWarning() << QSqlDatabase::connectionNames();
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Account));
 //        m_SqlTable->setFilter(USER_UID);

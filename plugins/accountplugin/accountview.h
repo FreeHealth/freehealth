@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,52 +32,41 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "accountbaseplugin.h"
-#include "accountbase.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef ACCOUNTVIEW_H
+#define ACCOUNTVIEW_H
 
-#include <utils/log.h>
+#include <QObject>
+#include <QWidget>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+/**
+ * \file accountview.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.1.0
+ * \date 03 Apr 2010
+*/
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace AccountDB;
-
-AccountBasePlugin::AccountBasePlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating AccountBasePlugin";
+namespace Account {
+namespace Internal {
+class AccountViewPrivate;
 }
 
-AccountBasePlugin::~AccountBasePlugin()
+class AccountView : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    AccountView(QWidget *parent);
+    ~AccountView();
 
-bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "AccountBasePlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    // Initialize Account Database
-    AccountBase::instance();
-
-    return true;
-}
-
-void AccountBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "AccountBasePlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-}
+private:
+    Internal::AccountViewPrivate *d;
+};
 
 
-Q_EXPORT_PLUGIN(AccountBasePlugin)
+}  // End namespace Account
+
+#endif    // End ACCOUNT_PLUGIN_H

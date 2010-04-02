@@ -10,19 +10,22 @@ HEADERS = accountplugin.h \
     accountwidgetmanager.h \
     preferences/bankdetailspage.h \
     preferences/availablemovementpage.h \
-    preferences/medicalprocedurepage.h
+    preferences/medicalprocedurepage.h \
+    accountview.h
 
 SOURCES = accountplugin.cpp \
     preferences/accountpreferences.cpp \
     accountwidgetmanager.cpp \
     preferences/bankdetailspage.cpp \
     preferences/availablemovementpage.cpp \
-    preferences/medicalprocedurepage.cpp
+    preferences/medicalprocedurepage.cpp \
+    accountview.cpp
 
 FORMS += preferences/accountuseroptionspage.ui \
     preferences/bankdetailspage.ui \
     preferences/availablemovementpage.ui \
-    preferences/medicalprocedurepage.ui
+    preferences/medicalprocedurepage.ui \
+    accountview.ui
 
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountplugin_fr.ts \

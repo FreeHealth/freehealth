@@ -32,52 +32,64 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "accountbaseplugin.h"
-#include "accountbase.h"
+#include "accountview.h"
 
 #include <utils/log.h>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <accountbaseplugin/accountmodel.h>
+#include <accountbaseplugin/constants.h>
+
+#include <QTableView>
 #include <QDebug>
 
-using namespace AccountDB;
+#include "ui_accountview.h"
 
-AccountBasePlugin::AccountBasePlugin()
+using namespace Account;
+
+namespace Account {
+namespace Internal {
+class AccountViewPrivate
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating AccountBasePlugin";
+public:
+    AccountViewPrivate(AccountView *parent) : q(parent)
+    {
+        m_ui = new Ui::AccountView;
+    }
+    ~AccountViewPrivate()
+    {
+        if (m_ui) {
+            delete m_ui;
+            m_ui = 0;
+        }
+    }
+
+public:
+    Ui::AccountView * m_ui;
+
+private:
+    AccountView *q;
+};
 }
-
-AccountBasePlugin::~AccountBasePlugin()
-{
-}
-
-bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "AccountBasePlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    // Initialize Account Database
-    AccountBase::instance();
-
-    return true;
-}
-
-void AccountBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "AccountBasePlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 
-Q_EXPORT_PLUGIN(AccountBasePlugin)
+AccountView::AccountView(QWidget *parent) :
+        QWidget(parent), d(new Internal::AccountViewPrivate(this))
+{
+    setObjectName("AccountView");
+    d->m_ui->setupUi(this);
+
+    AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
+    d->m_ui->tableView->setModel(model);
+}
+
+AccountView::~AccountView()
+{
+    if (d) {
+        delete d;
+        d=0;
+    }
+}
+

@@ -1,7 +1,7 @@
-include(listviewplugin_dependencies.pri)
+include(accountviewplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lAccount_debug
+    win32:LIBS   *= -lAccount_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lAccount
 }
