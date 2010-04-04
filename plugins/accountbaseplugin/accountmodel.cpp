@@ -36,11 +36,21 @@
 #include "accountbase.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
+
 #include <utils/log.h>
 
 #include <QSqlTableModel>
 
 using namespace AccountDB;
+
+enum {WarnFilter=false};
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
+
 
 namespace AccountDB {
 namespace Internal {
@@ -48,18 +58,42 @@ namespace Internal {
 class AccountModelPrivate
 {
 public:
-    AccountModelPrivate(AccountModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
+    AccountModelPrivate(AccountModel *parent) :
+            m_SqlTable(0), m_IsDirty(false),
+            m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
+            m_UserUid(Constants::DEFAULT_ACCOUNTANCY_USER),
+            q(parent)
     {
         qWarning() << QSqlDatabase::connectionNames();
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
-        m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Account));
-//        m_SqlTable->setFilter(USER_UID);
+        m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
+        refreshFilter();
     }
     ~AccountModelPrivate () {}
+
+    void refreshFilter()
+    {
+        if (!m_SqlTable)
+            return;
+        QHash<int, QString> where;
+        if (m_EndDate==m_StartDate) {
+            where.insert(AccountDB::Constants::ACCOUNT_DATE, QString("='%1'").arg(m_EndDate.toString(Qt::ISODate)));
+        } else {
+            where.insertMulti(AccountDB::Constants::ACCOUNT_DATE, QString(">='%1'").arg(m_StartDate.toString(Qt::ISODate)));
+            where.insertMulti(AccountDB::Constants::ACCOUNT_DATE, QString("<='%1'").arg( m_EndDate.toString(Qt::ISODate)));
+        }
+        where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
+        m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Account, where));
+        if (WarnFilter)
+            qWarning() << m_SqlTable->filter();
+        q->reset();
+    }
 
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
+    QDate m_StartDate, m_EndDate;
+    QString m_UserUid;
 
 private:
     AccountModel *q;
@@ -99,14 +133,24 @@ int AccountModel::columnCount(const QModelIndex &parent) const
 
 void AccountModel::setUserUuid(const QString &uuid)
 {
-    QHash<int, QString> where;
-    where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
-    d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_Account, where));
+    d->m_UserUid = uuid;
+    d->refreshFilter();
 }
 
 QVariant AccountModel::data(const QModelIndex &index, int role) const
 {
-    return d->m_SqlTable->data(index, role);
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    if (role==Qt::DisplayRole) {
+        if (index.column()==Constants::ACCOUNT_DATE) {
+            QDate date = d->m_SqlTable->data(index, role).toDate();
+            return date.toString(settings()->value(Core::Constants::S_DATEFORMAT, QLocale().dateFormat(QLocale::LongFormat)).toString());
+        }
+        return d->m_SqlTable->data(index, role);
+    }
+    return QVariant();
 }
 
 bool AccountModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -155,4 +199,29 @@ void AccountModel::revert()
 bool AccountModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+void AccountModel::setStartDate(const QDate &date)
+{
+    d->m_StartDate = date;
+    d->refreshFilter();
+}
+
+void AccountModel::setEndDate(const QDate &date)
+{
+    d->m_EndDate = date;
+    d->refreshFilter();
+}
+
+double AccountModel::sum(const int &fieldRef)
+{
+    // construct query == SELECT total(FIELD) FROM TABLE WHERE...
+    QSqlQuery query(accountBase()->total(Constants::Table_Account, fieldRef) + " WHERE " + d->m_SqlTable->filter(), d->m_SqlTable->database());
+    if (query.isActive()) {
+        if (query.next())
+            return query.value(0).toDouble();
+    } else {
+        Utils::Log::addQueryError(this, query);
+    }
+    return 0.0;
 }

@@ -42,6 +42,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QDate>
 
 /**
  * \file accountview.h
@@ -61,6 +62,14 @@ class AccountView : public QWidget
 public:
     AccountView(QWidget *parent);
     ~AccountView();
+
+private:
+    void filterChanged();
+
+private Q_SLOTS:
+    void on_startDate_dateChanged(const QDate &date);
+    void on_endDate_dateChanged(const QDate &date);
+    void on_periodCombo_currentIndexChanged(int index);
 
 private:
     Internal::AccountViewPrivate *d;

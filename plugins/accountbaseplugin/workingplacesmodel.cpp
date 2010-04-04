@@ -17,7 +17,7 @@ namespace Internal {
 class WorkingPlacesModelPrivate
 {
 public:
-    WorkingPlacesModelPrivate(WorkingPlacesModel *parent) : q(parent), m_SqlTable(0)
+    WorkingPlacesModelPrivate(WorkingPlacesModel *parent) : m_SqlTable(0), q(parent)
     {
         m_SqlTable = new QSqlTableModel(q);
     }

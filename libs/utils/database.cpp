@@ -368,9 +368,7 @@ QStringList Database::fields(const int & tableref)const
 
 QString Database::table(const int & tableref)const
 {
-    if (! d->m_Tables.contains(tableref))
-        return QString::null;
-    return d->m_Tables.value(tableref);
+    return d->m_Tables.value(tableref, QString());
 }
 
 QStringList Database::tables() const
@@ -383,7 +381,7 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
 {
     // here we create a where condition
     QString where = "";
-    QHashIterator< int, QString> i(conditions);
+    QHashIterator<int, QString> i(conditions);
     while (i.hasNext()) {
         i.next();
         if (!d->m_Fields.keys().contains(i.key() + (tableref * 1000)))
@@ -606,6 +604,30 @@ bool Database::createTables() const
     return toReturn;
 }
 
+QString Database::total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
+{
+    QString toReturn;
+    if (where.count()) {
+        toReturn = QString("SELECT total(`%1`) FROM `%2` WHERE %3")
+                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Tables.value(tableRef))
+                   .arg(getWhereClause(tableRef, where));
+    } else  {
+        toReturn = QString("SELECT total(`%1`) FROM `%2`")
+                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Tables.value(tableRef));
+    }
+    return toReturn;
+}
+
+QString Database::total(const int tableRef, const int fieldRef) const
+{
+    QString toReturn;
+    toReturn = QString("SELECT total(`%1`) FROM `%2`")
+               .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+               .arg(d->m_Tables.value(tableRef));
+    return toReturn;
+}
 
 QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver)
 {

@@ -409,6 +409,7 @@ const char * const  S_OPENLAST = "Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
 const char * const  S_LASTLOGIN  = "Login/userLogin";
 const char * const  S_LASTPASSWORD  = "Login/userPassword";
+const char * const  S_DATEFORMAT  = "Dates/Format";
 
 
 // Some path tags

@@ -17,7 +17,7 @@ namespace Internal {
 class AvailableMovementModelPrivate
 {
 public:
-    AvailableMovementModelPrivate(AvailableMovementModel *parent) : q(parent), m_SqlTable(0)
+    AvailableMovementModelPrivate(AvailableMovementModel *parent) : m_SqlTable(0), q(parent)
     {
         m_SqlTable = new QSqlTableModel(q);
     }

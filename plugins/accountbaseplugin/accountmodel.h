@@ -45,6 +45,8 @@ class AccountModelPrivate;
 class AccountModel : public QAbstractTableModel
 {
     Q_OBJECT
+    friend class Internal::AccountModelPrivate;
+
 public:
     AccountModel(QObject *parent);
     ~AccountModel();
@@ -66,8 +68,15 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
-    void setUserUuid(const QString &uuid);
     bool isDirty() const;
+
+    // Filter fucntions
+    void setUserUuid(const QString &uuid);
+    void setStartDate(const QDate &date);
+    void setEndDate(const QDate &date);
+
+    // Sums
+    double sum(const int &fieldRef);
 
 public Q_SLOTS:
     bool submit();

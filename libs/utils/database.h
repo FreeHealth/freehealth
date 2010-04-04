@@ -168,6 +168,9 @@ public:
     virtual bool createTable( const int & tableref ) const;
     virtual bool createTables() const;
 
+    virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
+    virtual QString total(const int tableRef, const int fieldRef) const;
+
     virtual bool executeSQL( const QStringList & list, const QSqlDatabase & DB ) const;
     virtual bool executeSQL( const QString & req, const QSqlDatabase & DB ) const;
 
