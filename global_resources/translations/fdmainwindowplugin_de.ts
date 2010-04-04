@@ -198,57 +198,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="217"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="219"/>
         <source>Initializing drugs database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="224"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="226"/>
         <source>Entering selection mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="236"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="238"/>
         <source>Reading exchange file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="238"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="240"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="430"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="432"/>
         <source>Save actual prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="431"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="433"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="537"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
         <source>Replace prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
         <source>Add to prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="542"/>
         <source>Open a prescription</source>
         <translation type="unfinished"></translation>
     </message>

@@ -20,8 +20,8 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="804"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="842"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="803"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="841"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -214,7 +214,7 @@ Do you want to add them to the file ?</source>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="435"/>
-        <source>The dosage must be labelled.</source>
+        <source>The protocol must be labelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -236,38 +236,23 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="237"/>
-        <source>FATAL ERROR : SQLite driver is not available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="238"/>
-        <source>Fatal Error. Application will not work properly</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="239"/>
-        <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="265"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="264"/>
         <source>Searching databases into dir %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="461"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="460"/>
         <source>Database %1 %2 correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="464"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="463"/>
         <source>ERROR : database can not be created %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="547"/>
-        <source>Unable to update transmission date dosage</source>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="546"/>
+        <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

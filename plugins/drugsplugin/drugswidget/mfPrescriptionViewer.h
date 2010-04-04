@@ -54,7 +54,7 @@
  * \file mfPrescriptionViewer.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 06 Mar 2010
+ * \date 03 Apr 2010
 */
 
 namespace DrugsDB {

@@ -432,7 +432,7 @@ QStringList DosageModel::isDosageValid(const int row)
     QStringList errors;
     // Label
     if (index(row, Dosages::Constants::Label).data().toString().isEmpty())
-        errors << tr("The dosage must be labelled.");
+        errors << tr("The protocol must be labelled.");
     // Intakes
     if (index(row, Dosages::Constants::IntakesScheme).data().toString().isEmpty())
         errors << tr("The intakes' scheme must be defined.");

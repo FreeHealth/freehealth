@@ -23,8 +23,8 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="804"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="842"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="803"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="841"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
@@ -216,64 +216,49 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="293"/>
         <source>Model Error : unable to insert a row</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur du modèle : Impossible d&apos;insérer une ligne</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="435"/>
-        <source>The dosage must be labelled.</source>
-        <translation type="unfinished"></translation>
+        <source>The protocol must be labelled.</source>
+        <translation>Le protocole doit être libellé.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="438"/>
         <source>The intakes&apos; scheme must be defined.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le schéma de prise doit être défini.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="440"/>
         <source>The period&apos;s scheme must be defined.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le schéma de période doit être défini.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="443"/>
         <source>The duration&apos;s scheme must be defined.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le schema de durée doit être défini.</translation>
     </message>
 </context>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="237"/>
-        <source>FATAL ERROR : SQLite driver is not available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="238"/>
-        <source>Fatal Error. Application will not work properly</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="239"/>
-        <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="265"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="264"/>
         <source>Searching databases into dir %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="461"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="460"/>
         <source>Database %1 %2 correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="464"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="463"/>
         <source>ERROR : database can not be created %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="547"/>
-        <source>Unable to update transmission date dosage</source>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="546"/>
+        <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -339,7 +324,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="92"/>
         <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;[Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][ durant [D_FROM]][ à [D_TO]][ [D_SCHEME]][&lt;br /&gt;Répartition journalière : [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;[NOTE]]&lt;/span&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="93"/>
@@ -347,7 +332,10 @@ Voulez-vous les ajouter au fichier ?</translation>
 [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][
 Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][
 [NOTE] ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[[DRUG]][
+[Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][ durant [D_FROM]][ à [D_TO]][ [D_SCHEME]][
+Répartition journalière: [DISTRIBUTED_DAILY_SCHEME]][
+[NOTE] ]</translation>
     </message>
 </context>
 </TS>

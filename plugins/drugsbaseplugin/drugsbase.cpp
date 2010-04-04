@@ -543,7 +543,7 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
         reqs << req;
     }
     if (!executeSQL(reqs,DB)) {
-        Utils::Log::addError(this, tr("Unable to update transmission date dosage"));
+        Utils::Log::addError(this, tr("Unable to update the protocol's transmission date."));
         return false;
     }
     return true;

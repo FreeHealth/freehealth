@@ -198,57 +198,57 @@
         <translation>Transmition des posologies...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="217"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="219"/>
         <source>Initializing drugs database</source>
         <translation>Initialisation de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="224"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="226"/>
         <source>Entering selection mode</source>
         <translation>Entrée dans le mode de sélection seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="236"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="238"/>
         <source>Reading exchange file...</source>
         <translation>Ouverture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="238"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="240"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation>Ouverture du fichier d&apos;échange de MedinTux.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="430"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="432"/>
         <source>Save actual prescription ?</source>
         <translation>Sauvegarder la prescription actuelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="431"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="433"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="537"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : fusionner ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Il existe déjà une prescription dans l&apos;éditeur, voulez-vous la remplacer ou ajouter la nouvelle prescription ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="542"/>
         <source>Open a prescription</source>
         <translation>Ouvrerture d&apos;une prescription</translation>
     </message>

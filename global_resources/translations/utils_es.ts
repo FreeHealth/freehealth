@@ -4,57 +4,62 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="166"/>
-        <location filename="../../libs/utils/database.cpp" line="170"/>
-        <location filename="../../libs/utils/database.cpp" line="174"/>
+        <location filename="../../libs/utils/database.cpp" line="168"/>
+        <location filename="../../libs/utils/database.cpp" line="172"/>
+        <location filename="../../libs/utils/database.cpp" line="176"/>
         <source>ERROR : %1 driver is not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="181"/>
+        <location filename="../../libs/utils/database.cpp" line="183"/>
         <source>WARNING : %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="193"/>
-        <location filename="../../libs/utils/database.cpp" line="198"/>
+        <location filename="../../libs/utils/database.cpp" line="195"/>
+        <location filename="../../libs/utils/database.cpp" line="200"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="207"/>
+        <location filename="../../libs/utils/database.cpp" line="209"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="216"/>
+        <location filename="../../libs/utils/database.cpp" line="218"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="247"/>
+        <location filename="../../libs/utils/database.cpp" line="249"/>
         <source>INFO : database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="252"/>
+        <location filename="../../libs/utils/database.cpp" line="254"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="258"/>
+        <location filename="../../libs/utils/database.cpp" line="260"/>
         <source>INFO : database %1 installed. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="319"/>
+        <location filename="../../libs/utils/database.cpp" line="321"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="329"/>
+        <location filename="../../libs/utils/database.cpp" line="331"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="604"/>
+        <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -179,48 +184,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="440"/>
+        <location filename="../../libs/utils/global.cpp" line="441"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="499"/>
+        <location filename="../../libs/utils/global.cpp" line="500"/>
         <source>This function is not available in this version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="500"/>
+        <location filename="../../libs/utils/global.cpp" line="501"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="541"/>
         <location filename="../../libs/utils/global.cpp" line="542"/>
+        <location filename="../../libs/utils/global.cpp" line="543"/>
         <source>License agreement acceptation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="553"/>
+        <location filename="../../libs/utils/global.cpp" line="554"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="561"/>
+        <location filename="../../libs/utils/global.cpp" line="562"/>
         <source>Do you agree these terms ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="615"/>
+        <location filename="../../libs/utils/global.cpp" line="616"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="620"/>
+        <location filename="../../libs/utils/global.cpp" line="621"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="984"/>
+        <location filename="../../libs/utils/global.cpp" line="985"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>

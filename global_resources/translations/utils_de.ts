@@ -4,59 +4,64 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="166"/>
-        <location filename="../../libs/utils/database.cpp" line="170"/>
-        <location filename="../../libs/utils/database.cpp" line="174"/>
+        <location filename="../../libs/utils/database.cpp" line="168"/>
+        <location filename="../../libs/utils/database.cpp" line="172"/>
+        <location filename="../../libs/utils/database.cpp" line="176"/>
         <source>ERROR : %1 driver is not available</source>
         <translation>%1 Treiber ist nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="181"/>
+        <location filename="../../libs/utils/database.cpp" line="183"/>
         <source>WARNING : %1 database already in use</source>
         <translation>%1 Datenbank bereits in benutzung</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="193"/>
-        <location filename="../../libs/utils/database.cpp" line="198"/>
+        <location filename="../../libs/utils/database.cpp" line="195"/>
+        <location filename="../../libs/utils/database.cpp" line="200"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation>Error: %1 Datenbank existiert nicht und kann nicht angelegt werden: Pfad=%2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="207"/>
+        <location filename="../../libs/utils/database.cpp" line="209"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation>Datenbank %1 ist nicht lesbar Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="216"/>
+        <location filename="../../libs/utils/database.cpp" line="218"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation>Datenbank %1 ist nicht schreibbar Pfad: %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="247"/>
+        <location filename="../../libs/utils/database.cpp" line="249"/>
         <source>INFO : database %1 connection = %2</source>
         <translation>Datenbank %1 verbindung= %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="252"/>
+        <location filename="../../libs/utils/database.cpp" line="254"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>Kann datenbank %1 : %2 
  %3 nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="258"/>
+        <location filename="../../libs/utils/database.cpp" line="260"/>
         <source>INFO : database %1 installed. Path : %2</source>
         <translation>Datenbank %1 installiert in Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="319"/>
+        <location filename="../../libs/utils/database.cpp" line="321"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation>Datenbank Scheme Error: falsche Feldnummern für die Tabelle %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="329"/>
+        <location filename="../../libs/utils/database.cpp" line="331"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3</source>
         <translation>Feldnummer %1 differs: %2 anstelle von %3</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="604"/>
+        <source>Can not create table %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -180,48 +185,48 @@
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="440"/>
+        <location filename="../../libs/utils/global.cpp" line="441"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="499"/>
+        <location filename="../../libs/utils/global.cpp" line="500"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="500"/>
+        <location filename="../../libs/utils/global.cpp" line="501"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation>Du kannst den Entwicklern eine Email senden und Ihnen deine Schwierigkeiten erklären: freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="541"/>
         <location filename="../../libs/utils/global.cpp" line="542"/>
+        <location filename="../../libs/utils/global.cpp" line="543"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="553"/>
+        <location filename="../../libs/utils/global.cpp" line="554"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="561"/>
+        <location filename="../../libs/utils/global.cpp" line="562"/>
         <source>Do you agree these terms ?</source>
         <translation>Nehmen Sie diese Lizenz an?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="615"/>
+        <location filename="../../libs/utils/global.cpp" line="616"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="620"/>
+        <location filename="../../libs/utils/global.cpp" line="621"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="984"/>
+        <location filename="../../libs/utils/global.cpp" line="985"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>
