@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>500</width>
     <height>417</height>
    </rect>
   </property>
@@ -56,7 +56,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="1" column="0" colspan="2">
        <widget class="QRadioButton" name="drugFormRadio">
         <property name="text">
          <string>drugs form</string>

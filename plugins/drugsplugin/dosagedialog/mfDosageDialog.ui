@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
+    <width>518</width>
     <height>320</height>
    </rect>
   </property>
@@ -59,8 +59,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="innButton">
+       <property name="toolTip">
+        <string>Prescribe in INN mode</string>
+       </property>
        <property name="text">
-        <string>Inn</string>
+        <string>INN</string>
        </property>
        <property name="checkable">
         <bool>true</bool>

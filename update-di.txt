@@ -16,6 +16,9 @@ version=0.3.1
         - Pour les dosages
         - Pour le sélectionneur de médicaments
         - Pour le sélectionneur de base de données thérapeutiques
+      * Ajout d'un menu contextuel dans la zone de prescription permettant
+        - d'accéder rapidement aux préférences
+        - de modifier la durée de prescription du médicament sélectionné seulement
 
     * Modifications importantes :
       * Les étiquettes pour le patient sont modifiées pour le nom et le prénom

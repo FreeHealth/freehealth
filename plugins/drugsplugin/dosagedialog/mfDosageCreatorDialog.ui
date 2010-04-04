@@ -144,6 +144,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="testOnlyButton">
+       <property name="toolTip">
+        <string>The drug will be added in your prescription only for interactions testing.</string>
+       </property>
        <property name="text">
         <string>For test only</string>
        </property>
@@ -155,10 +158,11 @@
      <item>
       <widget class="QPushButton" name="prescribeButton">
        <property name="toolTip">
-        <string>The dosage will be used for your actual prescription,&lt;br /&gt; but will not be saved in your dosage database.</string>
+        <string>The current protocol will be used for your actual prescription,
+ but will not be saved in your personnal database.</string>
        </property>
        <property name="text">
-        <string>Only prescribe</string>
+        <string>Prescribe only</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -175,7 +179,7 @@
      <item>
       <widget class="QPushButton" name="saveButton">
        <property name="toolTip">
-        <string>The dosage will be saved in your personal dosage database, but not included in this prescription.</string>
+        <string>The current protocol will be saved in your personal database, but not included in this prescription.</string>
        </property>
        <property name="text">
         <string>Save changes</string>
@@ -188,7 +192,8 @@
      <item>
       <widget class="QPushButton" name="saveAndPrescribeButton">
        <property name="toolTip">
-        <string>The dosage will be used for your actual prescription,&lt;br /&gt; and it will be saved in your dosage The dosage will be saved in your personal dosage database, and used in this prescription.</string>
+        <string>The current protocol will be used for your actual prescription,
+ and it will be saved in your dosage The dosage will be saved in your personal database, and used in this prescription.</string>
        </property>
        <property name="text">
         <string>Save and prescribe</string>

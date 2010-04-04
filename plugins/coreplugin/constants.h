@@ -265,11 +265,6 @@ const char * const  A_CONFIGURE_MEDINTUX = "actionConfMedintux";  /*!< \brief De
 const char * const  A_CHECKUPDATE      = "actionCheckUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
-// Drugs specific actions' name
-const char* const  A_VIEW_INTERACTIONS  = "actionViewInteractions";
-const char* const  A_CHANGE_DURATION    = "actionChangeDuration";
-
-
 
 const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
 const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";

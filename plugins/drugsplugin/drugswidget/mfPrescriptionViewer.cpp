@@ -57,6 +57,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/dialogs/settingsdialog.h>
 
 #include <fdmainwindowplugin/mainwindow.h>
 
@@ -92,6 +93,7 @@ void PrescriptionViewer::initialize()
     listView->setAcceptDrops(true);
     listView->setDragDropMode(QAbstractItemView::DropOnly);
     listView->setDropIndicatorShown(true);
+    listView->setContextMenuPolicy(Qt::CustomContextMenu);
 //    this->setAcceptDrops(true);
 //    listView->setMovement(QListView::Snap);
 }
@@ -151,8 +153,8 @@ void PrescriptionViewer::createActionsAndToolbar()
     actionsToAdd.clear();
     actionsToAdd
             << DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS
-            << Core::Constants::A_VIEW_INTERACTIONS
-            << Core::Constants::A_CHANGE_DURATION;
+            << DrugsWidget::Constants::A_VIEW_INTERACTIONS
+            << DrugsWidget::Constants::A_CHANGE_DURATION;
 
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);
@@ -161,6 +163,29 @@ void PrescriptionViewer::createActionsAndToolbar()
     }
 
     m_ToolBar->setFocusPolicy(Qt::ClickFocus);
+}
+
+/** \brief create the context menu on the precription listView */
+void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
+{
+    if (!drugModel()->rowCount())
+        return;
+
+    QMenu *pop = new QMenu(this);
+    QStringList actionsToAdd;
+    actionsToAdd
+            << DrugsWidget::Constants::A_OPENDOSAGEDIALOG
+            << DrugsWidget::Constants::A_OPENDOSAGEPREFERENCES
+            << DrugsWidget::Constants::A_CHANGE_DURATION;
+
+    Core::Command *cmd = 0;
+    foreach(const QString &s, actionsToAdd) {
+        cmd = actionManager()->command(s);
+        pop->addAction(cmd->action());
+    }
+    pop->exec(QCursor::pos());
+    delete pop;
+    pop = 0;
 }
 
 /** \brief Clears the prescription */
@@ -220,9 +245,18 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 /** \brief Opens the mfDosageDialog for the selected drug. */
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
-    int UID = drugModel()->index(item.row(), DrugsDB::Constants::Drug::UID).data().toInt();
-    bool isTextual = drugModel()->index(item.row(), DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
-    int row = item.row();
+    int row;
+    if (!item.isValid()) {
+        row = listView->currentIndex().row();
+    } else {
+        row = item.row();
+    }
+
+    if (row < 0)
+        return;
+
+    int UID = drugModel()->index(row, DrugsDB::Constants::Drug::UID).data().toInt();
+    bool isTextual = drugModel()->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
     if (UID!=-1) {
         Internal::DosageDialog dlg(this);
         dlg.changeRow(UID, row);
@@ -254,6 +288,20 @@ void PrescriptionViewer::viewInteractions()
 /** \brief Presents a QMenu to the user, and change duration of all drugs in the prescription */
 void PrescriptionViewer::changeDuration()
 {
+    QPoint pos;
+    QString senderTag;
+    // get sender --> if null --> drugsmanager drugsactionhandler
+    if (sender()) {
+        senderTag = "%ù";
+        pos = QCursor::pos();
+    } else {
+        // get the position of the caller
+        QAction *a = actionManager()->command(DrugsWidget::Constants::A_CHANGE_DURATION)->action();
+        pos = mapToGlobal(m_ToolBar->actionGeometry(a).center());
+        senderTag.clear();
+    }
+
+    // create the pop menu
     QMenu *root = new QMenu(this);
     QStringList subs = QStringList()
                        << Trans::Constants::DAYS
@@ -268,13 +316,13 @@ void PrescriptionViewer::changeDuration()
         int j = quantity[i];
         for(int z=0; z<j;++z) {
             QAction *a = submenu->addAction(QString::number(z+1));
-            a->setObjectName(tkTr(s.toAscii())+":"+QString::number(z+1));
+            a->setObjectName(tkTr(s.toAscii())+":"+QString::number(z+1)+senderTag);
             connect(a,SIGNAL(triggered()), this, SLOT(changeDurationTo()));
         }
         ++i;
     }
-    QAction *a = actionManager()->command(Core::Constants::A_CHANGE_DURATION)->action();
-    root->popup(mapToGlobal(m_ToolBar->actionGeometry(a).center()));
+
+    root->popup(pos);
 }
 
 /** \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
@@ -283,10 +331,22 @@ void PrescriptionViewer::changeDurationTo()
     QAction *a = qobject_cast<QAction*>(sender());
     if (!a)
         return;
-    QString scheme = a->objectName().left(a->objectName().indexOf(":"));
-    int duration = a->objectName().mid(a->objectName().indexOf(":")+1).toInt();
-    int nb = drugModel()->rowCount();
-    for(int i=0;i<nb;++i) {
+
+    QString name = a->objectName().remove("%ù");
+    QString scheme = name.left(name.indexOf(":"));
+    int duration = name.mid(name.indexOf(":")+1).toInt();
+
+    int i = 0;
+    int nb = 0;
+    if (a->objectName().contains("%ù")) {
+        i = listView->currentIndex().row();
+        nb = i + 1;
+    } else {
+        i = 0;
+        nb = drugModel()->rowCount();
+    }
+
+    for(i ; i<nb ; ++i) {
         QModelIndex idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationScheme);
         drugModel()->setData(idx, scheme);
         idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationFrom);
@@ -294,6 +354,13 @@ void PrescriptionViewer::changeDurationTo()
         idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationUsesFromTo);
         drugModel()->setData(idx, false);
     }
+}
+
+/** \brief Opens the protocols preferences page */
+void PrescriptionViewer::openProtocolPreferencesDialog()
+{
+    Core::SettingsDialog dlg(this, tkTr(Trans::Constants::DRUGS), "DrugsPrintOptionsPage");
+    dlg.exec();
 }
 
 /** \brief Returns the listView in use for the prescription. */

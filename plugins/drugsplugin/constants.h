@@ -65,6 +65,8 @@ namespace Constants {
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
 
+    const char* const   A_VIEW_INTERACTIONS     = "a.DrugsPlug.ViewInteractions";
+    const char* const   A_CHANGE_DURATION       = "a.DrugsPlug.ChangeDuration";
     const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
     const char* const   A_SEARCH_MOLECULES      = "a.DrugsPlug.SearchMol";
     const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
@@ -73,6 +75,8 @@ namespace Constants {
     const char* const   A_DATABASE_INFORMATIONS = "a.DrugsPlug.DbInfos";
     const char* const   A_PRESCRIBERMODE        = "a.DrugsPlug.PrescriberMode";
     const char* const   A_SELECTONLYMODE        = "a.DrugsPlug.SelectOnlyMode";
+    const char* const   A_OPENDOSAGEDIALOG      = "a.DrugsPlug.OpenDosage";
+    const char* const   A_OPENDOSAGEPREFERENCES = "a.DrugsPlug.OpenDosagePreferences";
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
@@ -85,6 +89,8 @@ namespace Constants {
     const char* const   SELECTONLYMODE_TEXT     = QT_TRANSLATE_NOOP("mfDrugsConstants", "Select only");
     const char* const   PRINTPRESCRIPTION_TEXT  = QT_TRANSLATE_NOOP("mfDrugsConstants", "Print prescription");
     const char* const   TOGGLETESTINGDRUGS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toggle testing drugs");
+    const char* const   OPENDOSAGEDIALOG_TEXT      = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open protocol dialog");
+    const char* const   OPENDOSAGEPREFERENCES_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open posologic sentence preferences");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
 

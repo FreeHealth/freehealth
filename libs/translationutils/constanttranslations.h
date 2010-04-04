@@ -244,7 +244,8 @@ namespace Time {
         const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
         const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
         const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
-        const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "drugs");
+        const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
+        const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
         const char* const INN                           = QT_TRANSLATE_NOOP("tkConstants", "INN");
         const char* const INTAKES                       = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
         const char* const VIEWINTERACTIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
@@ -266,6 +267,9 @@ namespace Time {
         const char* const BANK_DETAILS = QT_TRANSLATE_NOOP("tkConstants", "Bank details");
         const char* const AVAILABLE_MOVEMENTS = QT_TRANSLATE_NOOP("tkConstants", "Available movements");
 
+        // Database related
+        const char *const SQLITE_DRIVER_NOT_AVAILABLE = QT_TRANSLATE_NOOP("tkConstants", "SQLite driver is not available.");
+        const char *const SQLITE_DRIVER_NOT_AVAILABLE_DETAIL = QT_TRANSLATE_NOOP("tkConstants", "The SQLite database driver is not installed or can not be found. Please report this error to the developper.");
 
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
@@ -376,6 +380,7 @@ namespace Time {
         const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
         const char* const YES                                = QT_TRANSLATE_NOOP("tkConstants", "Yes");
         const char* const NO                                 = QT_TRANSLATE_NOOP("tkConstants", "No");
+        const char* const APPLICATION_FAILURE                = QT_TRANSLATE_NOOP("tkConstants", "Fatal error : Application failure. Please restart application.");
 
         const char* const TRYING_TO_CREATE_1_PLACE_2         = QT_TRANSLATE_NOOP("tkConstants", "Trying to create %1 \nPlace : %2");
         const char* const UNABLE_TO_OPEN_DATABASE_1_ERROR_2  = QT_TRANSLATE_NOOP("tkConstants", "Unable to open database %1 : Error : %2");

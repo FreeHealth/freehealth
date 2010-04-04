@@ -87,9 +87,9 @@ DrugsWidgetManager::DrugsWidgetManager(QObject *parent) : DrugsActionHandler(par
 
 void DrugsWidgetManager::updateContext(Core::IContext *object)
 {
-//    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
-//    if (object)
-//        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();
+    //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
+    //    if (object)
+    //        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();
 
     DrugsCentralWidget *view = 0;
     do {
@@ -97,7 +97,7 @@ void DrugsWidgetManager::updateContext(Core::IContext *object)
             if (!m_CurrentView)
                 return;
 
-//            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
+            //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
         view = qobject_cast<DrugsCentralWidget *>(object->widget());
@@ -105,7 +105,7 @@ void DrugsWidgetManager::updateContext(Core::IContext *object)
             if (!m_CurrentView)
                 return;
 
-//            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
+            //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
 
@@ -150,6 +150,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         gModes(0),
         aPrescriberMode(0),
         aSelectOnlyMode(0),
+        aOpenDosageDialog(0),
+        aOpenPrescriptionSentencePreferences(0),
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
@@ -215,7 +217,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aViewInteractions = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONEYES));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_VIEW_INTERACTIONS, ctx);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_VIEW_INTERACTIONS, ctx);
     cmd->setTranslations(Trans::Constants::VIEWINTERACTIONS_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(viewInteractions()));
@@ -273,7 +275,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONTEMPLATES));
     cmd = actionManager()->registerAction(a, Core::Constants::A_TEMPLATE_CREATE, ctx);
     cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT, Trans::Constants::CREATETEMPLATE_TEXT);
-//    cmd->setKeySequence();
+    //    cmd->setKeySequence();
     cmd->retranslate();
     if (tmenu) {
         tmenu->addAction(cmd, Core::Constants::G_TEMPLATES_NEW);
@@ -283,7 +285,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     a = aPrintPrescription = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
-//    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_PRINT_PRESCRIPTION, ctx);
     cmd->setTranslations(DrugsWidget::Constants::PRINTPRESCRIPTION_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
 #ifdef FREEDIAMS
@@ -299,7 +301,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aPrintPreview = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
-//    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
     cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
     cmd->retranslate();
@@ -311,7 +313,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a = aChangeDuration = new QAction(this);
     a->setObjectName("aChangeDuration");
     a->setIcon(th->icon(Core::Constants::ICONDATE));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_CHANGE_DURATION, ctx);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_CHANGE_DURATION, ctx);
     cmd->setTranslations(Trans::Constants::DURATION);
     connect(aChangeDuration,SIGNAL(triggered()),this,SLOT(changeDuration()));
 
@@ -352,8 +354,21 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(DrugsWidget::Constants::SELECTONLYMODE_TEXT, DrugsWidget::Constants::SELECTONLYMODE_TEXT, DRUGCONSTANTS_TR_CONTEXT);
     modemenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_MODES);
     gModes->addAction(a);
+    connect(gModes,SIGNAL(triggered()),this,SLOT(modeActionChanged(QAction*)));
 
-    connect(gModes,SIGNAL(triggered(QAction*)),this,SLOT(modeActionChanged(QAction*)));
+    a = aOpenDosageDialog = new QAction(this);
+    a->setObjectName("aOpenDosageDialog");
+    //    a->setIcon(th->icon(Core::Constants::ICONDATE));
+    cmd = actionManager()->registerAction(a, Constants::A_OPENDOSAGEDIALOG, ctx);
+    cmd->setTranslations(Constants::OPENDOSAGEDIALOG_TEXT, Constants::OPENDOSAGEDIALOG_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    connect(aOpenDosageDialog,SIGNAL(triggered()),this,SLOT(openDosageDialog()));
+
+    a = aOpenPrescriptionSentencePreferences = new QAction(this);
+    a->setObjectName("aOpenPrescriptionSentencePreferences");
+    //    a->setIcon(th->icon(Core::Constants::ICONDATE));
+    cmd = actionManager()->registerAction(a, Constants::A_OPENDOSAGEPREFERENCES, ctx);
+    cmd->setTranslations(Constants::OPENDOSAGEPREFERENCES_TEXT, Constants::OPENDOSAGEPREFERENCES_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    connect(aOpenPrescriptionSentencePreferences,SIGNAL(triggered()),this,SLOT(openProtocolPreferencesDialog()));
 
     actionManager()->retranslateMenusAndActions();
 }
@@ -377,7 +392,7 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
         Utils::Log::addError(this, "setCurrentView : no view");
         return;
     }
-//    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
+    //    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
 
     // disconnect old view
     if (m_CurrentView) {
@@ -448,38 +463,50 @@ bool DrugsActionHandler::canMoveDown()
 
 void DrugsActionHandler::moveUp()
 {
-    if (m_CurrentView)
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->moveUp();
+    }
 }
 
 void DrugsActionHandler::moveDown()
 {
-    if (m_CurrentView)
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->moveDown();
+    }
 }
 
 void DrugsActionHandler::sortDrugs()
 {
-    if (m_CurrentView)
-       m_CurrentView->currentDrugsModel()->sort(0);
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->currentDrugsModel());
+        m_CurrentView->currentDrugsModel()->sort(0);
+    }
 }
 
 void DrugsActionHandler::removeItem()
 {
-    if (m_CurrentView)
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->removeTriggered();
+    }
 }
 
 void DrugsActionHandler::clear()
 {
-    if (m_CurrentView)
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->clearTriggered();
+    }
 }
 
 void DrugsActionHandler::viewInteractions()
 {
-    if (m_CurrentView)
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->viewInteractions();
+    }
 }
 
 void DrugsActionHandler::printPrescription()
@@ -490,20 +517,24 @@ void DrugsActionHandler::printPrescription()
 
 void DrugsActionHandler::toggleTestingDrugs()
 {
-    if (m_CurrentView)
-       m_CurrentView->currentDrugsModel()->showTestingDrugs(aToggleTestingDrugs->isChecked());
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->currentDrugsModel());
+        m_CurrentView->currentDrugsModel()->showTestingDrugs(aToggleTestingDrugs->isChecked());
+    }
 }
 
 void DrugsActionHandler::changeDuration()
 {
-    if (m_CurrentView)
-       m_CurrentView->prescriptionView()->changeDuration();
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
+        m_CurrentView->prescriptionView()->changeDuration();
+    }
 }
 
 void DrugsActionHandler::createTemplate()
 {
     if (m_CurrentView)
-       m_CurrentView->createTemplate();
+        m_CurrentView->createTemplate();
 }
 
 void DrugsActionHandler::printPreview()
@@ -528,4 +559,20 @@ void DrugsActionHandler::modeActionChanged(QAction *a)
         m_CurrentView->setMode(DrugsCentralWidget::Prescriber);
     else
         m_CurrentView->setMode(DrugsCentralWidget::SelectOnly);
+}
+
+void DrugsActionHandler::openDosageDialog()
+{
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
+        m_CurrentView->prescriptionView()->showDosageDialog();
+    }
+}
+
+void DrugsActionHandler::openProtocolPreferencesDialog()
+{
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
+        m_CurrentView->prescriptionView()->openProtocolPreferencesDialog();
+    }
 }

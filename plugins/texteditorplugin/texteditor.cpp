@@ -305,7 +305,7 @@ QMenu* TextEditor::getContextMenu()
 void TextEditor::contextMenu( const QPoint &pos )
 {
     QMenu * p = getContextMenu();
-    p->exec(this->mapToGlobal(pos));
+    p->exec(mapToGlobal(pos));
 }
 
 void TextEditor::toogleToolbar(bool state)

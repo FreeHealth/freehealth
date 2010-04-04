@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="toolTip">
+   <string>Show the summary of product characteristics</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="margin">
     <number>0</number>
@@ -83,6 +86,9 @@
    </item>
    <item row="3" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -929,6 +935,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabLinks">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <attribute name="title">
        <string>Links</string>
       </attribute>
@@ -980,6 +989,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabMonitoring">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <attribute name="title">
        <string>Monitoring</string>
       </attribute>
@@ -1047,6 +1059,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabTodos">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <attribute name="title">
        <string>Todos</string>
       </attribute>

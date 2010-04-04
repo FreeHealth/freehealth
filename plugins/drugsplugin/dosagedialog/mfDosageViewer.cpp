@@ -240,12 +240,12 @@ public:
             // Interval
             q->minIntervalIntakesSpin->setValue(drugModel()->drugData(m_CIS, Prescription::IntakesIntervalOfTime).toDouble());
 
-            bool intakeRange = m_DosageModel->index(row, Prescription::IntakesUsesFromTo).data().toBool();
+            bool intakeRange = drugModel()->index(row, Prescription::IntakesUsesFromTo).data().toBool();
             q->fromToIntakesCheck->setChecked(intakeRange);
             q->intakesToLabel->setVisible(intakeRange);
             q->intakesToSpin->setVisible(intakeRange);
 
-            bool durationRange = m_DosageModel->index(row, Prescription::DurationUsesFromTo).data().toBool();
+            bool durationRange = drugModel()->index(row, Prescription::DurationUsesFromTo).data().toBool();
             q->fromToDurationCheck->setChecked(durationRange);
             q->durationToLabel->setVisible(durationRange);
             q->durationToSpin->setVisible(durationRange);

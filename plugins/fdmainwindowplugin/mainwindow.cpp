@@ -198,11 +198,13 @@ void MainWindow::extensionsInitialized()
     }
 
     // Disable some actions when starting as medintux plugin
+    /** \todo this must disappear */
     if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
         this->aNew->setEnabled(false);
         this->aSave->setEnabled(false);
         this->aMedinTux->setEnabled(false);
     }
+    /** end */
 
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();

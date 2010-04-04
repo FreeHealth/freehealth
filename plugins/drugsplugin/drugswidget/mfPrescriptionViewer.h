@@ -72,6 +72,7 @@ class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::Pr
 {
     Q_OBJECT
     Q_DISABLE_COPY(PrescriptionViewer)
+
 public:
     explicit PrescriptionViewer(QWidget *parent = 0);
     void initialize();
@@ -96,10 +97,14 @@ public Q_SLOTS:
     void moveDown();
     void sortDrugs();
     void showDrugInfo(const QModelIndex &item);
-    void showDosageDialog(const QModelIndex &item);
+    void showDosageDialog(const QModelIndex &item = QModelIndex());
     void viewInteractions();
     void changeDuration();
     void changeDurationTo();
+    void openProtocolPreferencesDialog();
+
+private Q_SLOTS:
+    void on_listView_customContextMenuRequested(const QPoint &pos);
 
 private:
     QToolBar *m_ToolBar;               // drugslist widget's toolbar

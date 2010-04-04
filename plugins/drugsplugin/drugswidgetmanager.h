@@ -107,6 +107,8 @@ private Q_SLOTS:
     void printPreview();
     void showDatabaseInformations();
     void modeActionChanged(QAction *a);
+    void openDosageDialog();
+    void openProtocolPreferencesDialog();
 
 private:
     bool canMoveUp();
@@ -135,6 +137,8 @@ protected:
     QActionGroup *gModes;
     QAction *aPrescriberMode;
     QAction *aSelectOnlyMode;
+    QAction *aOpenDosageDialog;
+    QAction *aOpenPrescriptionSentencePreferences;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 };
