@@ -1,0 +1,5 @@
+Première ligne|interpret1|1
+Deuxième ligne|interpret2|2
+Troisième ligne|interpret3|3
+Quatrième ligne|interpret4|4
+

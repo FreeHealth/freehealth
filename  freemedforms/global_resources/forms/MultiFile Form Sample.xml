@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<MedForm>
+   <name>multiform</name>
+   <type>form</type>
+   <label>Exemple de formulaire "multifichier".</label>
+   <version>0.2</version>
+   <cdate>2009-01-20</cdate>
+   <categorie>samples</categorie>
+   <file>./BaseWidgets Sample.xml</file>
+   <file>./Gir Sample.xml</file>
+</MedForm>

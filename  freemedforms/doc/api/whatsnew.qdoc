@@ -1,0 +1,179 @@
+/*!
+    \page whatsnew What's New
+
+    \section freemedforms_news FreeMedForms News
+
+    \subsection fmf_v008 version 0.0.8
+  - August 2009
+  - --- English
+  - New features:
+     - Preparation of a multi-user use
+     - A user management is available
+     - Plugins prescription greatly improved
+     - New print manager with managing headers, footers and watermark (not yet fully implemented)
+     - Theming the GUI
+     - Preparation of the patient data backup
+
+  - Technical improvements
+     - Switch to Qt 4.5.2 MacOs, Win32
+     - Better management of databases
+     - Better management of user settings
+     - Additional libraries goes dynamic
+     - Many speed improvements
+     - New 'ActionManager' and 'ContextManager'
+
+  - --- French
+  - Nouvelles fonctionnalités :
+    - Préparation d'une utilisation multi-utilisateur
+    - Un gestionnaire des utilisateurs est disponible
+    - Plugins prescription très largement amélioré
+    - Nouveau gestionnaire d'impression avec gestion des entêtes, pieds de page et tatouage d'impression (non encore entièrement implémenté)
+    - Thématisation de l'interface graphique
+    - Préparation de la sauvegarde des données patient
+
+  - Améliorations techniques
+    - Passage à Qt 4.5.2 sous MacOs, Win32
+    - Meilleure gestion des bases de données
+    - Meilleure gestion des paramètres utilisateurs
+    - Librairies additionnelles dynamiques
+    - Beaucoup d'amélioration dans la rapidité d'exécution
+    - Nouveau 'ActionManager' et 'ContextManager'
+
+
+     \subsection fmf_v006 version 0.0.6
+  - Jan 2009
+  - Very first implementation of data saving/restoring (not fully functionnal)
+  - New drugs selector plugin with drugs interactions tester
+  - Drugs interactions stand alone application and FreeMedForms drugs widget
+      - first version for testers
+      - datas from AFSSAPS Dec 2008
+  - first MacOs release (Universal Binary)
+  - New 'special combo' widget : combo is filled with datas stored into a database or a file (not fully functionnal)
+  - Command line parser for applications parameters and resources
+  - Very first user identification (not functionnal)
+  - Debugging informations via menu Help / Debugging informations
+  - Ability to easily send informations to developers
+
+     \subsection fmf_v005 version 0.0.5
+  - Nov 2008
+  - Form's widgets are now plugins of application
+  - mfRichTextWidget's plugin provides new types : richtext, fullrichtext with many available options
+  - New options : BoldLabel, Vertical, Horizontal, LabelOnTop, CompactView, NumericOnly, mask=XXXXX, Hide
+  - New form navigation toolbar
+  - Improvments on windows binaries
+  - Massive code and project reorganisation
+
+     \subsection fmf_v004 version 0.0.4
+  - Nov 2008
+  - Data saving is NOT implemented yet +++
+  - Added button, spin, scriptonload, script, bibliography, license, authors
+  - Script extensions (cf doc)
+  - Multi-language ability for forms
+  - PDF print of forms
+  - Crash recovery of datas prepared (will be functionnal when data saving will be implemented)
+  - Rudimentary "About this form" dialog
+
+     \subsection fmf_v003 version 0.0.3
+  - Oct 2008
+  - Adding Date type to form's possibilities
+  - Some corrections (thanks to Guillaume Denry)
+  - Adding new script functions (sumOfChildren, sumOfCheckedLabels, sumOfInterpretValues, allChildInterpreted)
+  - Adding new script properties for the objects (interpreted, completed,
+  - Adding optional/required property for form's object (XML tag = <name completion="optional">...). Set by default to required.
+  - Adding dynamic adding of form into an opened form (popupmenu on treeview)
+  - Seg fault removed when clicking "New" action in file menu
+
+     \subsection fmf_v002 version 0.0.2
+  - Oct 2008
+  - First implementation of the script engine
+  - Adding understanded tags to XML forms
+
+     \subsection fmf_v001 version 0.0.1
+  - Oct 2008
+  - First release
+
+
+
+
+    \section freediams_news Freediams News
+
+     \subsection fd_v008 version 0.0.8
+  - Juillet 2009
+  - Version de la base de données thérapeutique :
+    - Médicaments :  AFSSAPS - 26/06/2009
+    - Interactions : AFSSAPS - 29/06/2009
+
+  - Nouvelles fonctionnalités :
+    - Prescription en DCI lorsque la DCI est connue (attention nécessite une vérification)
+    - Possibilité de créer des posologies référencielles pour un médicament donné comme pour toute une classe de DCI ayant un dosage donné (eg : amoxicilline 1g)
+    - Possibilité d'ajouter une prescription à une prescription en cours d'édition
+    - Manuel de l'utilisateur disponible (menu À propos/Aide)
+    - Nouveaux paramètres de ligne de commande (poids, taille, clearance de la créatinine, créatinine)
+    - Nouveaux repères pour les informations patients (WEIGHT, SIZE, DATEOFBIRTH, CLCR, CREATININ)
+    - Possibilité de sauvegarder son entête et pied de page dans des fichiers HTML séparés
+    - Possibilté de visualiser/imprimer la synthèse des interactions d'une ordonnance
+
+  - Modifications importantes :
+    - Nouveau système de sauvegarde en XML (non compatible avec la sauvegarde des versions antérieures de DI)
+    - L'acceptation de la licence est maintenant obligatoire pour utiliser ce logiciel
+    - Amélioration des remplacements des repères : [texte à mettre avant si repere existe [REPERE] texte après]
+    - Amélioration du dialogue des préférences (évite les surcharges CPU à l'ouverture)
+    - Amélioration de la sauvegarde des fichiers HTML (meilleure gestion de l'encodage)
+    - Possibilité d'ajouter sans effort ses propres formes
+    - Gestion de la sécabilité des médicaments
+    - Lors de l'envoie des informations de déboggage, vous pouvez y associer un message.
+    - Nouveaux intitutés de forme de prescription (bouffées, applications, bain de bouche...)
+    - Préparation de la gestion de la physiologie du patient (poids, taille, clairance de la créatinine, allergies)
+    - L'impression peut maintenant être annulée, et les pages à imprimer définies (de la page x à la page y).
+
+  - Modifications techniques :
+    - Passage à la version 4.5.2 des librairies de Qt (pour MacOs)
+    - Amélioration du moteur de recherche d'interactions médicamenteuses (~ trois fois plus rapide)
+    - Forte amélioration de l'accès à la base de données des médicaments
+    - Meilleure intégration à MedinTux, recherche automatique du répertoire d'installation pour tout OS
+    - Transformation des librairies 'toolkit' en librairies dynamiques
+    - Nombreuses corrections de bogues (en particulier pour la sauvegarde des prescriptions)
+
+     \subsection fd_v006 version 0.0.6
+  - Juin 2009
+  - Mise à jour de la base de données thérapeutique à celle du mois de Mars 2009 (site AFSSAPS)
+  - Mise à jour des interactions connues AFSSAPS Décembre 2008
+  - Sauvegarde des prescriptions avec les posologies
+  - Recherche automatique des mises à jour pour les ordinateurs connectés à internet
+  - Interfaçage avec MedinTux en un clique (cf menus)
+  - Possibilité de réaliser des prescriptions intégrales
+  - Impression des prescriptions sans limitation, avec duplicatas et sans effort
+  - Menu Préférences --> beaucoup de fonctionnalités nouvelles
+  - Information sur la license de diffusion du logiciel
+  - Amélioration des traductions françaises
+  - Correction des interactions au sein de la même classe. Valable pour les classes : "anti-inflammatoires non stéroïdiens" ; "sympathomimétiques indirects" ; "aminosides" ; "analgésiques morphiniques agonistes" ; "diurétiques épargneurs de potassium (seuls ou associés)" ; "antiarythmiques" ; "bradycardisants" ; "hyperkaliémiants" ; "hypnotiques" ; "hypokaliémiants" ; "médicaments hyponatrémiants" ; "médicaments abaissant le seuil épileptogène" ; "médicaments atropiniques" ; "médicaments néphrotoxiques" ; "médicaments sédatifs". Ces interactions sont identifiées dans le thésaurus de l'AFSSAPS par "autres xxxx".
+  - Limitation du nombre d'IAM retrouvées ( 1<>2 et 2<>1 --> garde seulement 1<>2 )
+  - Amélioration du moteur de recherche d'interactions
+  - Dialogue d'aide au déboggage de l'application avec envoie simplifié des erreurs aux développeurs de la suite.
+  - Meilleure gestion des paramètres utilisateurs
+  - Correction de bogues
+  - Distribution pour MacOsX 'Universal'
+
+     \subsection fd_v004 version 0.0.4
+  - 13 Janvier 2009
+  - Recherche des médicaments par nom commercial, nom de molécules ou par DCI
+  - Plus d'icônes pour mieux comprendre les interactions et non interactions
+  - Historique des médicaments sélectionnés
+  - Niveau d'alerte paramétrable
+  - Alerte si plus d'une même DCI est présente dans la prescription
+  - Fenêtre de préférences
+  - Sauvegarde et impression de la prescription avec état d'interaction pour chaque médicaments
+  - Interface pour les testeurs fonctionnelle
+  - Base de données non garantie, basée sur les données de l'AFSSAPS : - Décembre 2008
+
+     \subsection fd_v002 version 0.0.2
+  - Déc 2008
+  - Première mise en ligne de l'application
+  - Possibilité de créer une ordonnance et d'en vérifier les interactions
+  - Possibilité de sauvegarder en HTML l'ordonnance avec son analyse
+  - Base de données des interactions n'est pas exhaustive, basée sur les données de l'AFSSAPS Juillet 2008
+  - Disponible pour Linux, Mac Os X intel, Windows
+
+    \section svnnews News from the SVN (instable version)
+
+*/

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/" >
+        <file alias="document.html">resources/document.html</file>
+        <file alias="footer.html">resources/footer.html</file>
+        <file alias="footer_2.html">resources/footer_2.html</file>
+        <file alias="header.html">resources/header.html</file>
+        <file alias="header_2.html">resources/header_2.html</file>
+        <file alias="pixmapWatermark.png">resources/pixmapWatermark.png</file>
+        <file alias="watermark.html">resources/watermark.html</file>
+    </qresource>
+</RCC>

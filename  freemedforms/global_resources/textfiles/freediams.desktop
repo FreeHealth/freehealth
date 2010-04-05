@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.4.0
+Type=Application
+Categories=Office;MedicalSoftware
+Name=FreeDiams
+Comment[en]=Pharmaceutical Drugs Prescriptor
+Comment[fr]=Prescripteur
+TryExec=freediams
+Exec=freediams
+Icon=freediams

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>formSample</name>
+	<label>Text's example</label>
+	<type>form</type>
+	<version>0.1</version>
+	<cdate>2008-10-16</cdate>
+	<categorie>samples</categorie>
+	<script>
+		{
+		var object = thisForm.sampleShort;
+		var str = "";
+		str =  object.name + " has value " + object.value + "\n";
+		str += "Setting value to \"Bla bla bla\" \n";
+		
+		object.value = "Bla bla bla";
+		
+		if ( object.value == "Bla bla bla" )
+		str += "All is good !!! See the form now !";
+		else str += "Something is wrong " + object.value;
+		
+		str += "------------------------\n\n";
+		
+		object = thisForm.sampleLong;
+		str +=  object.name + " has value " + object.value + "\n";
+		str += "Setting value to \"Bla bla bla\" \n";
+		
+		object.value = "Bla bla bla";
+		
+		if ( object.value == "Bla bla bla" )
+		str += "All is good !!! See the form now !";
+		else str += "Something is wrong " + object.value;
+		
+		
+		return str;
+		}
+	</script>
+	
+	<MedForm>
+		<name>sampleShort</name>
+		<label>This is a simple scripted shortText sample</label>
+		<type>shorttext</type>
+	</MedForm>
+	<MedForm>
+		<name>sampleLong</name>
+		<label>This is a simple scripted longText sample</label>
+		<type>longtext</type>
+	</MedForm>
+</MedForm>

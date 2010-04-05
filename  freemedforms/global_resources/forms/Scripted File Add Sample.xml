@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+	<name>formSample</name>
+	<label>ComboBox' example</label>
+	<type>form</type>
+	<version>0.1</version>
+	<cdate>2008-10-16</cdate>
+	<categorie>samples</categorie>
+	<script>
+	{
+	  var object = _formSample;
+	  object.addFile("./Combo Sample.xml");
+	}
+	</script>
+	
+	<MedForm>
+		<name>sampleCombo</name>
+		<label>This a ComboBox</label>
+		<type>combo</type>
+			<possiblevalues id="0">The first value</possiblevalues>
+			<possiblevalues id="1">The second value</possiblevalues>
+			<possiblevalues id="2">The third value</possiblevalues>
+			<interpretvalues id="0">The first interpreted value</interpretvalues>
+			<interpretvalues id="1">The second interpreted value</interpretvalues>
+			<interpretvalues id="2">The third interpreted value</interpretvalues>
+			<numericalvalues id="0">1</numericalvalues>
+			<numericalvalues id="1">2</numericalvalues>
+			<numericalvalues id="1">4</numericalvalues>
+	</MedForm>
+</MedForm>

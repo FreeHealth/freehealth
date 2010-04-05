@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForm>
+<MedForm>
+   <name>mmsForm</name>
+   <type>form</type>
+   <label lang="de" >Mini-Mental Score</label>
+   <label lang="en" >Mini-Mental Score</label>
+   <label lang="fr" >Mini-Mental Score</label>
+   <version>0.04</version>
+   <cdate>2008-10-26</cdate>
+   <authors>Maeker Eric, MD</authors>
+   <categorie>examples</categorie>
+   <onloadscript lang="fr">{   
+	   function calculateScore() {
+	   var score = _mmsForm.sumOfChildren();
+	   _mmsForm.score.value = score;
+	   }
+	   
+	   function optionComboExecute() {
+	   var val = 0;
+	   if ( _mmsForm.optionCombo.id == 0) return;
+	   _mmsForm.valueChanged.disconnect( calculateScore );
+	   val = _mmsForm.optionCombo.id - 1;
+	   _mmsForm.orientation.setChildrenId( val );
+	   _mmsForm.registration.setChildrenId( val );
+	   _mmsForm.attention.setChildrenId( val );
+	   _mmsForm.recall.setChildrenId( val );
+	   _mmsForm.language.setChildrenId( val );
+	   calculateScore();
+	   _mmsForm.valueChanged.connect( calculateScore );
+	   }
+	   
+	   _mmsForm.valueChanged.connect( calculateScore );
+	   _mmsForm.optionCombo.valueChanged.connect( optionComboExecute );
+	   }
+   </onloadscript>
+   <MedForm>
+	<name>optionCombo</name>
+	<type>combo</type>
+	<label lang="fr">Options du formulaire</label>
+	<label lang="en">Option of the form</label>
+	<label lang="de">Option of the form</label>
+	<possiblevalues id="0" lang="de" >Select an option</possiblevalues>
+	<possiblevalues id="1" lang="de" >Define all as exact</possiblevalues>
+	<possiblevalues id="2" lang="de" >Define all as error</possiblevalues>
+	<possiblevalues id="0" lang="en" >Select an option</possiblevalues>
+	<possiblevalues id="1" lang="en" >Define all as exact</possiblevalues>
+	<possiblevalues id="2" lang="en" >Define all as error</possiblevalues>
+	<possiblevalues id="0" lang="fr" >Selectionner une option</possiblevalues>
+	<possiblevalues id="1" lang="fr" >Tout définir comme correcte</possiblevalues>
+	<possiblevalues id="2" lang="fr" >Tout définir comme erreur</possiblevalues>
+   </MedForm>
+	   
+   <MedForm>
+      <name>orientation</name>
+      <type>group</type>
+      <label lang="fr">Orientation</label>
+      <label lang="en">Orientation</label>
+      <label lang="de">Orientierung</label>
+      <option>col=1</option>
+      <MedForm>
+	      <name>helpOrientation</name>
+	      <type>helptext</type>
+	      <label lang="fr">Je vais vous poser quelques questions pour apprécier comment fonctionne votre mémoire. Les unes sont très simples, les autres un peu moins. Vous devez répondre du mieux que vous pouvez.&lt;br /&gt;Quelle est la date complète d'aujourd'hui ? &lt;br /&gt;Si la réponse est incorrecte ou incomplète, posées les questions restées sans réponse, dans l’ordre suivant :</label>
+	      <label lang="de">Welchen Tag haben wir heute?</label>
+	      <label lang="en">Approach the patient with respect and encouragement. &lt;br /&gt;Ask : Do you have trouble with your memory? Note the response.&lt;br /&gt;May I ask you some questions about your memory? Note response.</label>
+      </MedForm>
+      <MedForm>
+	      <name>year</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Jahr</label>
+	      <label lang="en" >What is the year?</label>
+	      <label lang="fr" >En quelle année sommes-nous ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>season</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Welche Jahreszeit haben wir nun ?</label>
+	      <label lang="en" >what is the season?</label>
+	      <label lang="fr" >En quel saison ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>month</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Monat</label>
+	      <label lang="en" >What is the month?</label>
+	      <label lang="fr" >En quel mois ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>dayofmonth</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Datum</label>
+	      <label lang="en" >what is the date?</label>
+	      <label lang="fr" >Quel jour du mois ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>weekday</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Welcher Wochentag ist heute?</label>
+	      <label lang="en" >What is the day of the week?</label>
+	      <label lang="fr" >Quel jour de la semaine ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>state</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >In welchem Krankenhaus sind Sie hier?</label>
+	      <label lang="en" >Where are we now? What is the state?</label>
+	      <label lang="fr" >Quel est le nom de l'hôpital (de l'établissement, du cabinet) où nous sommes ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>city</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >In welcher Stadt ist dieses Krankenhaus?</label>
+	      <label lang="en" >What is the city?</label>
+	      <label lang="fr" >Dans quel ville se trouve-t-il ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>partcity</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >Bundesland</label>
+	      <label lang="en" >What is the part of the city?</label>
+	      <label lang="fr" >Quel est le nom du département dans lequel est située cette ville ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>building</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >In welchem Land befinden wir uns hier?</label>
+	      <label lang="en" >What is the building?</label>
+	      <label lang="fr" >Dans quelle province ou région est situé le département ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+      <MedForm>
+	      <name>floor</name>
+	      <option>horizontal</option>
+	      <type>radio</type>
+	      <label lang="de" >In welchem Stockwerk befinden wir uns?</label>
+	      <label lang="en" >What is the floor of the building?</label>
+	      <label lang="fr" >A quel étage sommes-nous ?</label>
+	      <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+	      <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+	      <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+	      <possiblevalues id="1" lang="en" >Error</possiblevalues>
+	      <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+	      <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+	      <numericalvalues id="0">1</numericalvalues>
+	      <numericalvalues id="1">0</numericalvalues>
+      </MedForm>
+   </MedForm>
+   
+   
+   <MedForm>
+	   <name>registration</name>
+	   <type>group</type>
+	   <label lang="fr">Apprentissage</label>
+	   <label lang="en">Registration of three words</label>
+	   <label lang="de">Kurzzeitgedächtnis</label>
+	   <option>col=1</option>
+	   <MedForm>
+		   <name>helpRegist</name>
+		   <type>helptext</type>
+		   <label lang="fr">Je vais vous dire trois mots ; je vous voudrais que vous me les répétiez et que vous essayiez de les retenir car je vous les redemanderai tout à l’heure.</label>
+		   <label lang="de">Der Untersucher nennt folgende drei Gegenstände und fordert den Patienten auf, die Begriffe zu wiederholen (1 Punkt für jede richtige Antwort). Der Untersucher wiederholt die Wörter solange, bis der Patient alle drei gelernt hat (höchstens 6 Wiederholungen).</label>
+
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Auto</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Cigare ou Citron ou Fauteuil</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <option>horizontal</option>
+		   <type>radio</type>
+		   <label lang="de" >Blume</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Fleur ou Clé ou Tulipe</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <option>horizontal</option>
+		   <type>radio</type>
+		   <label lang="de" >Kerze</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Porte ou Ballon ou Canard</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+   </MedForm>
+   
+
+   
+   <MedForm>
+	   <name>attention</name>
+	   <type>group</type>
+	   <label lang="fr">Attention et calcul</label>
+	   <label lang="en"></label>
+	   <label lang="de">Aufmerksamkeit und Rechenfähigkeit</label>
+	   <option>col=1</option>
+	   <MedForm>
+		   <name>helpRegist</name>
+		   <type>helptext</type>
+		   <label lang="fr">Voulez-vous compter à partir de 100 en retirant 7 à chaque fois ?</label>
+		   <label lang="de">Von 100 an sind jeweils 7 abzuziehen. Falls ein Rechenfehler gemacht wird du die darauf folgenden Ergebnisse „verschoben“ sind, so wird nur ein Fehler gegeben.</label>
+		   
+	   </MedForm>
+	   <MedForm>
+		   <name>93</name>
+		   <option>horizontal</option>
+		   <type>radio</type>
+		   <label lang="de" >93</label>
+		   <label lang="en" >93</label>
+		   <label lang="fr" >93</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>86</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label>86</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>79</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label>79</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>72</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label>72</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>65</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label>65</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name></name>
+		   <type>helptext</type>
+		   <label lang = "fr" >Pour tous les sujets, même pour ceux qui ont obtenu le maximum de points, demander : Voulez-vous épeler le mot MONDE à l’envers ?</label>
+		   <label lang = "de" >ODER. Falls der Patient die Aufgabe nicht durchführen kann oder will, „Radio“ rückwärts buchstabieren lassen: O-I-D-A-R</label>
+		   <label lang = "en" ></label>
+           </MedForm>
+   </MedForm>
+
+
+
+   
+   <MedForm>
+	   <name>recall</name>
+	   <type>group</type>
+	   <label lang="fr">Rappel</label>
+	   <label lang="en">Recall of three words</label>
+	   <label lang="de">Gedächtnis</label>
+	   <option>col=1</option>
+	   <MedForm>
+		   <name>helpRegist</name>
+		   <type>helptext</type>
+		   <label lang="fr">Pouvez-vous me dire quels étaient les 3 mots que je vous ai demandés de répéter et de retenir tout à l’heure ?</label>
+		   <label lang="de">Bitten Sie den Patienten, die drei Worte, die Sie ihm zuvor nannten (II), noch einmal zu wiederholen.</label>
+		   
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Auto</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Cigare ou Citron ou Fauteuil</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Blume</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Fleur ou Clé ou Tulipe</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>year</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Kerze</label>
+		   <label lang="en" >What is the year?</label>
+		   <label lang="fr" >Porte ou Ballon ou Canard</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+   </MedForm>
+   
+   
+   
+   <MedForm>
+	   <name>language</name>
+	   <type>group</type>
+	   <label lang="fr">Langage</label>
+	   <label lang="en">Language</label>
+	   <label lang="de">Sprache</label>
+	   <option>col=1</option>
+	   <MedForm>
+		   <name>helpRegist</name>
+		   <type>helptext</type>
+		   <label lang="fr"></label>
+		   <label lang="de">Der Untersucher zeigt zwei Gegenstände und fordert den Patienten auf, sie zu benennen.</label>
+		   
+	   </MedForm>
+	   <MedForm>
+		   <name>pen</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Bleistift</label>
+		   <label lang="en" >Pencil</label>
+		   <label lang="fr" >Crayon</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>watch</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Armbanduhr</label>
+		   <label lang="en" >Watch</label>
+		   <label lang="fr" >Montre</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>repeat</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Der Untersucher fordert den Patienten auf, 3. „Sie leiht ihm kein Geld mehr“ nachzusprechen.</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Ecoutez bien et répétez après moi : « PAS DE MAIS, DE SI, NI DE ET »</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>helpIntruction</name>
+		   <type>helptext</type>
+		   <label lang="fr" >Poser une feuille de papier sur le bureau, la montrer au sujet en lui disant : « Ecoutez bien et faites ce que je vais vous dire :</label>
+		   <label lang="de" >Der Untersucher lässt den Patienten folgendes Kommando befolgen.</label>
+		   
+	   </MedForm>
+	   <MedForm>
+		   <name>comprehension1</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >„Nehmen Sie dieses Blatt in die rechte Hand“</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Prenez cette feuille de papier avec votre main droite,</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>comprehension2</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >„Falten Sie es in der Mitte“</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Pliez-la en deux,</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>comprehension3</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >„Legen Sie es auf den Boden“</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Et jetez-la par terre.</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+
+	   
+	   <MedForm>
+		   <name>reading</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Der Untersucher bittet den Patienten, 7. Die Anweisung auf der Rückseite zu befolgen</label>
+		   <label lang="en" >Please read this and do what it says.</label>
+		   <label lang="fr" >Tendre au sujet une feuille de papier sur laquelle est écrit en gros caractère : « FERMEZ LES YEUX » et dire au sujet : « Faites ce qui est écrit ».</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+
+	   <MedForm>
+		   <name>writing</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Der Untersucher dreht das Blatt um und fordert den einen vollständigen Satz zu Patienten auf,schreiben (Rückseite).</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Tendre au sujet une feuille de papier et un stylo, en disant : « Voulez-vous m’écrire une phrase, ce que vous voulez, mais une phrase entière. »</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+	   <MedForm>
+		   <name>drawing</name>
+		   <type>radio</type>
+		   <option>horizontal</option>
+		   <label lang="de" >Der Untersucher lässt den Patienten die auf der Rückseite vorgegebene Figur malen (1 Punkt, wenn alle Seiten und Winkel stimmen und die sich überschneidenden Linien ein Viereck bilden).</label>
+		   <label lang="en" ></label>
+		   <label lang="fr" >Tendre au sujet une feuille de papier et lui demander : « Voulez-vous recopier ce dessin ? »</label>
+		   <possiblevalues id="0" lang="de" >Genaue</possiblevalues>
+		   <possiblevalues id="1" lang="de" >Fehler</possiblevalues>
+		   <possiblevalues id="0" lang="en" >Exact</possiblevalues>
+		   <possiblevalues id="1" lang="en" >Error</possiblevalues>
+		   <possiblevalues id="0" lang="fr" >Correct</possiblevalues>
+		   <possiblevalues id="1" lang="fr" >Erreur</possiblevalues>
+		   <numericalvalues id="0">1</numericalvalues>
+		   <numericalvalues id="1">0</numericalvalues>
+	   </MedForm>
+   </MedForm>
+	   
+   <MedForm>
+	   <name>score</name>
+	   <type>shorttext</type>
+	   <label>Score = </label>
+   </MedForm>
+   
+   
+</MedForm>
+   

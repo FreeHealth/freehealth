@@ -1,0 +1,37 @@
+/**
+ * \class mfPrinter
+ * \~english <b>This class is used for the form printing. This class MUST BE INSTANCIATE WITH THE MFOBJECT TO PRINT. Its roles are :
+                - prepare the form for the printer (tranform it to very light HTML) ; the presentation is quite the same as the screen presentation.
+                - print blank forms
+                - print forms and selected values (non yet implemented)
+            </b>
+ *
+ * \~french <b>Cette classe est utilisée pour l'impression des formulaires. Cette classe DOIT ÊTRE INSTANCIÉE AVEC LE MFOBJECT À IMPRIMER. Ses rôles sont :
+                - préparer les formulaires pour l'impression (transformation en HTML primaire) ; la présentation papier est quasiment identique à la présentation à l'écran.
+                - imprimer des formulaires vierges
+                - imprimer les formulaires saisis (pas encore implémenté)
+            </b>
+ *
+*/
+
+
+/**
+ * \fn bool mfPrinter::print()
+ * \~english Starts the printing of the form (show print dialog, and print).
+ * \~french Démarre l'impression du formulaire (affiche le dialogue d'impression et imprime).
+*/
+
+
+/**
+ * \fn QString mfPrinter::toPrintableHtml()
+ * \~english Prepare the HTML Form of mfObject that is set as parent of this class. Massively uses resources files.
+ * \~french Prépare le formulaire HTML du mfObject qui est définit comme parent de cette classe. Utilise massivement les fichiers resources.
+*/
+
+
+/**
+ * \fn QString mfPrinter::retrieveFile( const QString & fileName ) const
+ * \~english Return the content of an existing file (file is tested with a Q_ASSERT_X).
+ * \~french Retourne le contenu d'un fichier existant (le fichier est testé avec un Q_ASSERT_X).
+*/
+

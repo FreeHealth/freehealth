@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForm>
+<MedForm>
+   <name>formsample</name>
+   <type>form</type>
+   <label lang="de" >Arbeiten mit Form von Übersetzungen</label>
+   <label lang="en" >Working with form's translations</label>
+   <label lang="fr" >Travailler avec les traductions de formulaires</label>
+   <version>0.06</version>
+   <cdate>2008-10-29</cdate>
+   <categorie>examples</categorie>
+   <authors id="0">Eric Maeker, MD</authors>
+   <bibliography lang="en" id="0">No scientific bibliography</bibliography>
+   <bibliography lang="fr" id="0">Aucune bibliographie scientifique</bibliography>
+   <bibliography lang="de" id="0">Keine Literatur</bibliography>
+   <bibliography lang="en" id="1">http://www.ericmaeker.fr/FreeMedForms</bibliography>
+   <bibliography lang="fr" id="1">http://www.ericmaeker.fr/FreeMedForms</bibliography>
+   <bibliography lang="de" id="1">http://www.ericmaeker.fr/FreeMedForms</bibliography>
+   <license lang="en">This form is distributed in BSD-revised license</license>
+   <license lang="fr">Ce formulaire est distribué sous licence BSD dans sa version révisée.</license>
+   <license lang="de">Diese Form wird in BSD-Lizenz überarbeitet</license>
+   <script lang="fr" >{   
+
+	}</script>
+   <MedForm>
+	<name>button</name>
+	<type>button</type>
+	<script>{ var object = thisForm.patientname; object.value = "You click on the button !"; }</script>
+	<label lang="de" >Klicken Sie auf mir</label>
+	<label lang="en" >Click me</label>
+	<label lang="fr" >Cliquez moi</label>
+   </MedForm>
+   <MedForm>
+	   <name>patientname</name>
+	   <type>shorttext</type>
+	   <label lang="de" >Name</label>
+	   <label lang="en" >Name</label>
+	   <label lang="fr" >Nom</label>
+   </MedForm>
+   <MedForm>
+	   <name>patientage</name>
+	   <type>spin</type>
+	   <label lang="de" >Age</label>
+	   <label lang="en" >Age</label>
+	   <label lang="fr" >Age</label>
+   </MedForm>
+   
+   <MedForm>
+      <name>history</name>
+      <type>longtext</type>
+      <label lang="de" >Medizinische Geschichte</label>
+      <label lang="en" >Medical history</label>
+      <label lang="fr" >Histoire médicale</label>
+   </MedForm>
+   <MedForm>
+      <name>date</name>
+      <type>date</type>
+      <label lang="de" >Wählen Sie ein Datum</label>
+      <label lang="en" >Select a date</label>
+      <label lang="fr" >Sélectionnez une date</label>
+      <option id="0" >now</option>
+      <option id="1" >format=dd MMMM yyyy</option>
+   </MedForm>
+   <MedForm>
+      <name>combosample</name>
+      <type>combo</type>
+      <label lang="de" >Wählen Sie ein Element innerhalb der Combo</label>
+      <label lang="en" >Select an item inside the combo</label>
+      <label lang="fr" >Sélectionnez un item dans le combo</label>
+      <possiblevalues id="0" lang="de" >Erstes Element</possiblevalues>
+      <possiblevalues id="1" lang="de" >Zweites Element</possiblevalues>
+      <possiblevalues id="2" lang="de" >Drittes Element</possiblevalues>
+      <possiblevalues id="0" lang="en" >First item</possiblevalues>
+      <possiblevalues id="1" lang="en" >Second item</possiblevalues>
+      <possiblevalues id="2" lang="en" >Third item</possiblevalues>
+      <possiblevalues id="0" lang="fr" >Premier item</possiblevalues>
+      <possiblevalues id="1" lang="fr" >Deuxième item</possiblevalues>
+      <possiblevalues id="2" lang="fr" >Troisième item</possiblevalues>
+   </MedForm>
+   <MedForm>
+      <name>listsample</name>
+      <type>uniquelist</type>
+      <label lang="de" >Wählen Sie ein Element der Liste</label>
+      <label lang="en" >Select an item of the list</label>
+      <label lang="fr" >Sélectionnez un item de la liste</label>
+      <possiblevalues id="0" lang="de" >Erstes Element</possiblevalues>
+      <possiblevalues id="1" lang="de" >Zweites Element</possiblevalues>
+      <possiblevalues id="2" lang="de" >Drittes Element</possiblevalues>
+      <possiblevalues id="0" lang="en" >First item</possiblevalues>
+      <possiblevalues id="1" lang="en" >Second item</possiblevalues>
+      <possiblevalues id="2" lang="en" >Third item</possiblevalues>
+      <possiblevalues id="0" lang="fr" >Premier item</possiblevalues>
+      <possiblevalues id="1" lang="fr" >Deuxième item</possiblevalues>
+      <possiblevalues id="2" lang="fr" >Troisième item</possiblevalues>
+   </MedForm>
+   <MedForm>
+	   <name>multilistsample</name>
+	   <type>multilist</type>
+	   <label lang="de" >Wählt Elemente der Liste</label>
+	   <label lang="en" >Select items of the list</label>
+	   <label lang="fr" >Sélectionnez les items de la liste</label>
+	   <possiblevalues id="0" lang="de" >Erstes Element</possiblevalues>
+	   <possiblevalues id="1" lang="de" >Zweites Element</possiblevalues>
+	   <possiblevalues id="2" lang="de" >Drittes Element</possiblevalues>
+	   <possiblevalues id="0" lang="en" >First item</possiblevalues>
+	   <possiblevalues id="1" lang="en" >Second item</possiblevalues>
+	   <possiblevalues id="2" lang="en" >Third item</possiblevalues>
+	   <possiblevalues id="0" lang="fr" >Premier item</possiblevalues>
+	   <possiblevalues id="1" lang="fr" >Deuxième item</possiblevalues>
+	   <possiblevalues id="2" lang="fr" >Troisième item</possiblevalues>
+   </MedForm>
+   <MedForm>
+      <name>radiosample</name>
+      <type>radio</type>
+      <label lang="de" >Wählen Sie ein Radio Element</label>
+      <label lang="en" >Select a radio item</label>
+      <label lang="fr" >Sélectionnez un item radio</label>
+      <possiblevalues id="0" lang="de" >Erstes Element</possiblevalues>
+      <possiblevalues id="1" lang="de" >Zweites Element</possiblevalues>
+      <possiblevalues id="2" lang="de" >Drittes Element</possiblevalues>
+      <possiblevalues id="0" lang="en" >First item</possiblevalues>
+      <possiblevalues id="1" lang="en" >Second item</possiblevalues>
+      <possiblevalues id="2" lang="en" >Third item</possiblevalues>
+      <possiblevalues id="0" lang="fr" >Premier item</possiblevalues>
+      <possiblevalues id="1" lang="fr" >Deuxième item</possiblevalues>
+      <possiblevalues id="2" lang="fr" >Troisième item</possiblevalues>
+   </MedForm>
+   <MedForm>
+      <name>groupsample</name>
+      <type>group</type>
+      <label lang="de" >Wählen Sie ein Element</label>
+      <label lang="en" >Select an item</label>
+      <label lang="fr" >Sélectionnez un item</label>
+      <option id="0" >col=3</option>
+      <option id="1" >checkable</option>
+      <MedForm>
+         <name>checksample1</name>
+         <type>check</type>
+         <label lang="de" >Erstes Element</label>
+         <label lang="en" >First item</label>
+         <label lang="fr" >Premier item</label>
+         <possiblevalues id="0" >unchecked</possiblevalues>
+         <possiblevalues id="1" >checked</possiblevalues>
+      </MedForm>
+      <MedForm>
+         <name>checksample2</name>
+         <type>check</type>
+         <label lang="de" >Zweites Element</label>
+         <label lang="en" >Second item</label>
+         <label lang="fr" >Deuxième item</label>
+         <possiblevalues id="0" >unchecked</possiblevalues>
+         <possiblevalues id="1" >checked</possiblevalues>
+      </MedForm>
+      <MedForm>
+         <name>checksample3</name>
+         <type>check</type>
+         <label lang="de" >Drittes Element</label>
+         <label lang="en" >Third item</label>
+         <label lang="fr" >Troisième item</label>
+         <possiblevalues id="0" >unchecked</possiblevalues>
+         <possiblevalues id="1" >checked</possiblevalues>
+      </MedForm>
+   </MedForm>
+</MedForm>

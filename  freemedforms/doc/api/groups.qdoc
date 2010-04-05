@@ -1,0 +1,148 @@
+// all groups are :
+
+// For toolkits
+// toolkit widget_toolkit object_toolkit database_toolkit
+// usertoolkit widget_usertoolkit  object_usertoolkit database_usertoolkit
+// medintuxtoolkit
+
+// For FreeMedForms
+// freemedforms fmf_plugins fmf_plugins_formswidget fmf_plugins_interfaces
+
+// For freediams
+// freediams
+
+
+// FREMEDFORMS GROUPS
+/**
+ \defgroup freemedforms FreeMedForms
+ */
+
+/**
+ \defgroup fmf_plugins FreeMedForms Plugins
+ \ingroup freemedforms
+ */
+
+/**
+ \defgroup fmf_plugins_formswidget FreeMedForms Plugins : Forms Widgets
+ \ingroup fmf_plugins
+*/
+
+/**
+ \defgroup fmf_plugins_interfaces FreeMedForms Plugins' Interfaces
+ \ingroup freemedforms fm_plugins
+*/
+
+/**
+  \defgroup derivatives FreeMedForms Derivative and Standalone applications
+  \ingroup freemedforms
+ */
+
+
+
+// FREEDIAMS GROUPS
+/**
+   \defgroup freediams FreeDiams
+   \ingroup derivatives
+*/
+
+
+  // TOOLKITS GROUPS
+/**
+  \defgroup  toolkit ToolKit
+
+  \section toolkit_intro Introduction
+
+  This library propose many \link object_toolkit object\endlink, \link widget_toolkit widgets\endlink and
+  \link database_toolkit database abstraction mecanism\endlink that are used in FreeMedForms,
+  DrugsInteractions and all the plugins.
+
+  You will find in theis library :
+   \li \link tkGlobal Some generic functions informations about the build process and the running os, wrappers for message boxes, html encoders, xml parsers... \endlink
+   \li \link tkSettings A settings manager \endlink
+   \li \link tkActionManager An action manager, menu builder with automatic translations. \endlink
+   \li \link tkTranslators A translators manager for whole application and plugins\endlink
+   \li \link tkSendMessage A message sender over the web (need a php script to be installed on a distant server). \endlink
+   \li \link tkDatabase A database manager with dynamic scheme definition, query preparer and other usefull tools. \endlink
+   \li \link tkLog A logger for whole application, and plugins. Log messages and errors\endlink \sa tkDebugDialog
+   \li \link tkPrinter A printer manager. Ability to print documents with headers , footers and watermark addition.\endlink \sa tkTextDocumentExtra
+   \li \link tkRichTextEditor A rich text editor with multiple possibilities. \endlink
+   \li \link tkScrollingWidget A widget that scrolls text. \endlink
+   \li \link tkSerializer A usefull serializer for QStringList, QHash... \endlink
+   \li \link tkTheme A theme manager. \endlink
+   \li \link tkUpdateChecker An update checker. \endlink
+   \li \link tkDebugDialog A usefull debug dialog that works with the logger, message sender and settings manager. \endlink
+   \li \link QButtonLineEdit A QLineEdit with two toolbuttons (one on the left, the other on the right) \endlink
+*/
+
+/**
+   \defgroup widget_toolkit ToolKit : Widgets
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup object_toolkit ToolKit : Objects
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup database_toolkit ToolKit : Database Management
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup constants_toolkit ToolKit : Constants
+   \ingroup toolkit
+*/
+
+/**
+   \defgroup constants_serializer ToolKit : Constants For the Serializer
+   \ingroup constants_toolkit
+*/
+/**
+   \defgroup constants_actionmanager ToolKit : Constants For the Action Manager
+   \ingroup constants_toolkit
+*/
+/**
+   \defgroup constants_theme ToolKit : Constants For Theme Engine
+   \ingroup constants_toolkit
+*/
+
+
+// USER TOOLKIT GROUPS
+
+/**
+   \defgroup usertoolkit User ToolKit
+*/
+
+/**
+   \defgroup widget_usertoolkit User ToolKit : Widgets
+   \ingroup usertoolkit
+*/
+
+/**
+   \defgroup object_usertoolkit User ToolKit : Objects
+   \ingroup usertoolkit
+*/
+
+/**
+   \defgroup database_usertoolkit User ToolKit : Database Management
+   \ingroup usertoolkit
+*/
+
+/**
+  \defgroup usermanager Unser Manager Standalone
+  \ingroup derivatives
+ */
+
+// MEDINTUX TOOLKIT
+
+/**
+   \defgroup medintuxtoolkit MedinTux ToolKit
+*/
+
+
+// FMF PLUGINS SPECIFIC
+/**
+   \defgroup drugswidget Drug Widget Plugins - see also freediams
+   \ingroup fmf_plugins_formswidget fmf_plugins
+*/

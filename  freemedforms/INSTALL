@@ -1,0 +1,38 @@
+                  Welcome to FreeMeForms
+           Copyright (C) 2008-2009 by Eric MAEKER
+                   eric.maeker@free.fr
+                  All rights reserved.
+
+
+
+I. What is FreeMedForms ?
+
+FreeMedForms aims to be a open Electronic Medical Record Manager.
+FreeMedForms is also a lot of derivatives sub-project, which are
+just standalone compilation of FreeMedForms plugins.
+
+This project is a free and open source project. A community grows up
+around it. FreeMedForms and derivatives is released under the terms
+of the new BSD License. Some parts of the code are LGPL v2.1.
+
+FreeMedForms and Derivatives are coded in C++/Qt4.4.3 at least.
+FreeMedForms and Derivatives are available for :
+- MacOs X universal
+- Linux : Ubuntu, Debian, OpenSuse, standalone binary
+- FreeBSD : need compilation of SVN trunk (please contact author)
+- Windows
+
+
+
+II. Build specification
+
+Build instructions are described here (doxygen generated) :
+http://ericmaeker.fr/FreeMedForms/doc/index.html
+(follow the link -> Build Instructions in this page)
+
+
+
+III. Install procedure
+
+Install procedure is described in the build instructions.
+

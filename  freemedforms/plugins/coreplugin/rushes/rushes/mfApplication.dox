@@ -1,0 +1,27 @@
+/**
+ * \class mfApplication
+ * \~english <b>This class is a wrapper of QApplication class. Its goals are to :
+                - Manage the OS and define some path 
+                - Manage QTranslator of the application, and store the actual language
+                - Store the script engine (m_Scriptor = mfScriptor)
+                - Create and own the temporary file pointer
+                - Load application plugins
+                - Manage the configuration on load (not implemented)
+                - Interpret command line arguments (not implemented)</b>
+ *
+ * \~french <b>Cette classe est une surcouche de la classe QApplication. Ses objectifs sont :
+               - Gérer l'OS en cours et quelques répertoires
+               - Gérer les QTranslator de l'application et stocker le language en cours
+               - Conserve le moteur de script (m_Scriptor = mf Scriptor)
+               - Créer et gérer le pointeur du fichier temporaire
+               - Charge les plugins de l'application
+               - Gérer la configuration au chargement (non implémenté)
+               - Interpréter les arguments de la ligne de commande (non implémenté)</b>
+ *
+*/
+
+/**
+ * \fn 
+ * \~english 
+ * \~french 
+*/

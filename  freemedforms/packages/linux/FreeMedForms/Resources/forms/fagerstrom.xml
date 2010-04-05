@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedForm>
+   <name>fagerstrom</name>
+   <label>Test de Fagerstrom</label>
+   <type>form</type>
+   <version></version>
+   <cdate>13/10/2008</cdate>
+   <categorie></categorie>
+   <possiblevalues></possiblevalues>
+	<MedForm>
+      		<name>cig_reveil</name>
+      		<label>&lt;font color="#CC0066"&gt;Combien de temps après vous être réveillé,&lt;br&gt; fumez-vous votre première cigarette ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">moins de 5 minutes</possiblevalues>
+		<possiblevalues id="1">entre 6 et 30 minutes</possiblevalues>
+		<possiblevalues id="2">entre 31 et 60 minutes</possiblevalues>
+		<possiblevalues id="3">après 60 minutes</possiblevalues>
+	</MedForm>
+	<MedForm>
+      		<name>fum_interdit</name>
+      		<label>&lt;font color="#CC3366"&gt;Trouvez-vous difficile de ne pas fumer dans les endroits interdits&lt;br&gt; (ex: cinémas, bibliothèques...) ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">non</possiblevalues>
+     		<possiblevalues id="1">oui</possiblevalues>
+	</MedForm>
+	<MedForm>
+      		<name>cig_indispensable</name>
+      		<label>&lt;font color="#CC6666"&gt;Quelle cigarette trouvez-vous la plus indispensable ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">la première</possiblevalues>
+     		<possiblevalues id="1">une autre</possiblevalues>
+	</MedForm>
+	<MedForm>
+      		<name>cig_par_jour</name>
+      		<label>&lt;font color="#CC9966"&gt;Combien de cigarettes fumez-vous par jour en moyenne ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">10 ou moins</possiblevalues>
+      		<possiblevalues id="1">entre 11 et 20</possiblevalues>
+      		<possiblevalues id="2">entre 21 et 30</possiblevalues>
+      		<possiblevalues id="3">31 ou plus</possiblevalues>
+	</MedForm>
+	<MedForm>
+      		<name>premiere_heure</name>
+      		<label>&lt;font color="#FF6666"&gt;Fumez-vous de façon plus rapprochée dans la première heure &lt;br&gt;après le réveil que pendant le reste de la journée ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">non</possiblevalues>
+     		<possiblevalues id="1">oui</possiblevalues>
+	</MedForm>
+	<MedForm>
+      		<name>maladie</name>
+      		<label>&lt;font color="#FF0066"&gt;Fumez-vous même si une maladie vous oblige à rester au lit ?&lt;/font&gt;</label>
+      		<type>radio</type>
+      		<categorie></categorie>
+      		<possiblevalues id="0">non</possiblevalues>
+     		<possiblevalues id="1">oui</possiblevalues>
+	</MedForm>
+</MedForm>
