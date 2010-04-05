@@ -1,6 +1,0 @@
-include( ../coreplugin/coreplugin.pri )
-include( ../printerplugin/printerplugin.pri )
-include( ../texteditorplugin/texteditorplugin.pri )
-include( ../listviewplugin/listviewplugin.pri )
-include( $${SOURCES_LIBS_PATH}/utils.pri)
-include( $${SOURCES_LIBS_PATH}/translationutils.pri)

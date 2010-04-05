@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/" >
-        <file alias="link-class-substances.csv" >./resources/link-class-substances.csv</file>
-        <file alias="inns_molecules_link.csv" >./resources/inns_molecules_link.csv</file>
-    </qresource>
-</RCC>

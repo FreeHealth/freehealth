@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=0.1.0
-Type=Application
-Name=FreMedForms
-Comment=Open source EMR
-TryExec=FreeMedForms
-Exec=FreeMedForms
-Icon=FreeMedForms
