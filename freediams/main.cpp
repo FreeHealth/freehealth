@@ -137,7 +137,6 @@ int main( int argc, char *argv[] )
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
     app.setApplicationName( QString("%1").arg(BINARY_NAME));
-
     app.setOrganizationName(BINARY_NAME);
     app.setApplicationVersion(PACKAGE_VERSION);
 

@@ -34,7 +34,7 @@
  ***************************************************************************/
 #include "baseformwidgets.h"
 
-#include <coreplugin/iformitem.h>
+#include <formmanagerplugin/iformitem.h>
 #include <utils/global.h>
 
 #include <QStringList>
@@ -92,7 +92,7 @@ namespace {
 
 }
 
-inline static int getNumberOfColumns(Core::FormItem *item, int defaultValue = 1)
+inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
     if (!item->extraDatas().value(::EXTRAS_KEY_COLUMN).isEmpty())
         return item->extraDatas().value(::EXTRAS_KEY_COLUMN).toInt();
@@ -100,7 +100,7 @@ inline static int getNumberOfColumns(Core::FormItem *item, int defaultValue = 1)
         return defaultValue;
 }
 
-inline static int isCompactView(Core::FormItem *item, bool defaultValue = false)
+inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_COMPACT_VIEW))
         return true;
@@ -108,7 +108,7 @@ inline static int isCompactView(Core::FormItem *item, bool defaultValue = false)
         return defaultValue;
 }
 
-inline static int isGroupCheckable(Core::FormItem *item, bool defaultValue = false)
+inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_GROUP_CHECKABLE))
         return true;
@@ -116,7 +116,7 @@ inline static int isGroupCheckable(Core::FormItem *item, bool defaultValue = fal
         return defaultValue;
 }
 
-inline static int isGroupChecked(Core::FormItem *item, bool defaultValue = false)
+inline static int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_GROUP_CHECKED))
         return true;
@@ -124,7 +124,7 @@ inline static int isGroupChecked(Core::FormItem *item, bool defaultValue = false
         return defaultValue;
 }
 
-inline static int isRadioHorizontalAlign(Core::FormItem *item, bool defaultValue = true)
+inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
 {
     if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_ALIGN_HORIZONTAL))
         return true;
@@ -132,7 +132,7 @@ inline static int isRadioHorizontalAlign(Core::FormItem *item, bool defaultValue
         return defaultValue;
 }
 
-inline static QString getDateFormat(Core::FormItem *item, const QString & defaultValue = "dd MM yyyy")
+inline static QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
 {
     if (!item->extraDatas().value(::DATE_EXTRAS_KEY).isEmpty()) {
         return item->extraDatas().value(::DATE_EXTRAS_KEY);
@@ -175,7 +175,7 @@ bool BaseWidgetsFactory::isContainer( const int idInStringList ) const
             ( idInStringList == ::Type_Group );
 }
 
-Core::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent)
+Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent)
 {
     int id = ::widgetsName.indexOf(name);
     if (id == -1)
@@ -207,12 +207,12 @@ Core::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Core::F
 //--------------------------------------------------------------------------------------------------------
 /** \class BaseForm
    \brief Creates a form
-   Understand some Core::FormItem::extraDatas() (that is a QHash<QString, QString>) :
+   Understand some Form::FormItem::extraDatas() (that is a QHash<QString, QString>) :
    - "col=" ; "numberOfColumns"
 */
 
-BaseForm::BaseForm(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_ContainerLayout( 0 )
+BaseForm::BaseForm(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_ContainerLayout( 0 )
 {
     QVBoxLayout *mainLayout = new QVBoxLayout( this );
     QWidget *mainWidget = new QWidget;
@@ -279,8 +279,8 @@ void BaseForm::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseGroup implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseGroup::BaseGroup(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Group(0), m_ContainerLayout(0)
+BaseGroup::BaseGroup(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Group(0), m_ContainerLayout(0)
 {
     QVBoxLayout * vblayout = new QVBoxLayout( this );
     m_Group = new QGroupBox( this );
@@ -359,8 +359,8 @@ void BaseGroup::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- BaseCheck ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseCheck::BaseCheck(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Check( 0 )
+BaseCheck::BaseCheck(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Check( 0 )
 {
     QHBoxLayout * hb = new QHBoxLayout( this );
     // Add Buttons
@@ -383,8 +383,8 @@ void BaseCheck::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- BaseRadio ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseRadio::BaseRadio(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent)
+BaseRadio::BaseRadio(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent)
 {
     // Prepare Widget Layout and label
     //     QBoxLayout * hb = getBoxLayout( Label_OnLeft, mfo(m_LinkedObject)->label(), this );
@@ -416,7 +416,7 @@ BaseRadio::BaseRadio(Core::FormItem *linkedObject, QWidget *parent)
     radioLayout->setContentsMargins( 1, 0, 1, 0 );
     QRadioButton * rb = 0;
     int i = 0;
-    foreach ( QString v, m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible) ) {
+    foreach ( QString v, m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible) ) {
         rb = new QRadioButton(this);
         rb->setObjectName("Radio");
         rb->setText(v);
@@ -467,7 +467,7 @@ void BaseRadio::retranslate()
     m_Label->setText(m_LinkedObject->spec()->label());
 
     if ( m_RadioList.size() ) {
-        const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
+        const QStringList &list = m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if ( list.count() != m_RadioList.count() ) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
@@ -489,8 +489,8 @@ void BaseRadio::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- BaseSimpleText -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseSimpleText::BaseSimpleText(Core::FormItem *linkedObject, QWidget *parent, bool shortText)
-        : Core::IFormWidget(linkedObject,parent), m_Line(0), m_Text(0)
+BaseSimpleText::BaseSimpleText(Form::FormItem *linkedObject, QWidget *parent, bool shortText)
+        : Form::IFormWidget(linkedObject,parent), m_Line(0), m_Text(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this);
@@ -587,8 +587,8 @@ void BaseSimpleText::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseHelpText -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseHelpText::BaseHelpText(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent)
+BaseHelpText::BaseHelpText(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent)
 {
     QHBoxLayout * hb = new QHBoxLayout( this );
     // Add QLabel
@@ -611,8 +611,8 @@ void BaseHelpText::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseLists --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseList::BaseList(Core::FormItem *linkedObject, QWidget *parent, bool uniqueList)
-        : Core::IFormWidget(linkedObject,parent), m_List( 0 )
+BaseList::BaseList(Form::FormItem *linkedObject, QWidget *parent, bool uniqueList)
+        : Form::IFormWidget(linkedObject,parent), m_List( 0 )
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this);
@@ -622,7 +622,7 @@ BaseList::BaseList(Core::FormItem *linkedObject, QWidget *parent, bool uniqueLis
     m_List = new QListWidget(this);
     m_List->setObjectName("List_" + QString::number(m_LinkedObject->uuid()));
     m_List->setUniformItemSizes(true);
-    m_List->addItems( m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible) );
+    m_List->addItems( m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible) );
     m_List->setSortingEnabled(false);
     m_List->setAlternatingRowColors(true);
     m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
@@ -679,7 +679,7 @@ void BaseList::retranslate()
 {
     m_Label->setText(m_LinkedObject->spec()->label());
     if (m_List) {
-        const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
+        const QStringList &list = m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if (list.count() != m_List->count()) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
@@ -698,8 +698,8 @@ void BaseList::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseCombo --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseCombo::BaseCombo(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Combo( 0 )
+BaseCombo::BaseCombo(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Combo( 0 )
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this);
@@ -715,7 +715,7 @@ BaseCombo::BaseCombo(Core::FormItem *linkedObject, QWidget *parent)
     // Add List and manage size
     m_Combo = new QComboBox(this);
     m_Combo->setObjectName("Combo_" + QString::number(m_LinkedObject->uuid()));
-    m_Combo->addItems(m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible));
+    m_Combo->addItems(m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible));
     hb->addWidget(m_Combo);
     //     if ( mfo(m_LinkedObject)->options() & mfObjectFundamental::SizePreferred )
     //          m_Combo->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
@@ -762,7 +762,7 @@ void BaseCombo::retranslate()
 {
     m_Label->setText(m_LinkedObject->spec()->label());
     if (m_Combo) {
-        const QStringList &list = m_LinkedObject->valueReferences()->values(Core::FormItemValues::Value_Possible);
+        const QStringList &list = m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if (list.count() != m_Combo->count()) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
@@ -783,8 +783,8 @@ void BaseCombo::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseDate::BaseDate(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Date( 0 )
+BaseDate::BaseDate(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Date( 0 )
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this);
@@ -861,8 +861,8 @@ void BaseDate::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseSpin::BaseSpin(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Spin( 0 )
+BaseSpin::BaseSpin(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Spin( 0 )
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_LinkedObject->spec()->label(), this);
@@ -925,8 +925,8 @@ void BaseSpin::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseButton ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseButton::BaseButton(Core::FormItem *linkedObject, QWidget *parent)
-        : Core::IFormWidget(linkedObject,parent), m_Button( 0 )
+BaseButton::BaseButton(Form::FormItem *linkedObject, QWidget *parent)
+        : Form::IFormWidget(linkedObject,parent), m_Button( 0 )
 {
     QHBoxLayout * hb = new QHBoxLayout(this);
     hb->addStretch();

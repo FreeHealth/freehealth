@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,45 +32,43 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "xmlioplugin.h"
-#include "xmlformio.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef IFORM_MANAGER_H
+#define IFORM_MANAGER_H
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/core_exporter.h>
 
-#include <utils/log.h>
+#include <QtCore/QObject>
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
+/**
+ * \file iformmanager.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 05 Avr 2010
+*/
 
-using namespace XmlForms;
 
-XmlFormIOPlugin::XmlFormIOPlugin()
+namespace Core {
+class UniqueIDManager;
+
+class CORE_EXPORT IFormManager : public QObject
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating XmlIOPlugin";
-}
+    Q_OBJECT
 
-XmlFormIOPlugin::~XmlFormIOPlugin()
-{
-}
+public:
+    IFormManager(QObject *parent) : QObject(parent) {}
+    virtual ~IFormManager() {}
 
-bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "XmlIOPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    return true;
-}
+    virtual UniqueIDManager *uniqueIDManager() const = 0;
+    virtual bool intialize() = 0;
+    virtual void extensionsInitialized() = 0;
 
-void XmlFormIOPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "XmlIOPlugin::extensionsInitialized";
+};
 
-    addAutoReleasedObject(new XmlFormIO("",this));
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-}
+} // namespace Core
 
-
-Q_EXPORT_PLUGIN(XmlFormIOPlugin)
+#endif // IFORM_MANAGER_H

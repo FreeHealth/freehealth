@@ -52,7 +52,7 @@ MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0), prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating MainWinPlugin";
+        qWarning() << "creating FREEMEDFORMS::MainWinPlugin";
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -68,7 +68,8 @@ MainWinPlugin::~MainWinPlugin()
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::initialize";
+        qWarning() << "FREEMEDFORMS::MainWinPlugin::initialize";
+
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     m_MainWindow = new MainWindow();
@@ -80,7 +81,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 void MainWinPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "MainWinPlugin::extensionsInitialized";
+        qWarning() << "FREEMEDFORMS::MainWinPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 

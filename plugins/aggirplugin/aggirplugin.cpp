@@ -37,6 +37,8 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
+#include <utils/log.h>
+
 #include <QtCore/QtPlugin>
 
 #include <QDebug>
@@ -46,7 +48,8 @@ using namespace Gir::Internal;
 
 GirPlugin::GirPlugin() : m_Factory(0)
 {
-    qWarning() << "creating GirPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating GirPlugin";
 }
 
 GirPlugin::~GirPlugin()
@@ -60,7 +63,9 @@ GirPlugin::~GirPlugin()
 
 bool GirPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "GirPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "GirPlugin::initialize";
+
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     m_Factory = new GirWidgetFactory(this);
@@ -70,7 +75,10 @@ bool GirPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void GirPlugin::extensionsInitialized()
 {
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "GirPlugin::extensionsInitialized";
+
+        addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 

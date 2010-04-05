@@ -44,11 +44,12 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/iformio.h>
-#include <coreplugin/iformitem.h>
-#include <coreplugin/iformwidgetfactory.h>
-#include <coreplugin/formmanager.h>
 #include <coreplugin/filemanager.h>
+
+#include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/formmanager.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -92,7 +93,8 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 inline static ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-inline static Core::FormManager *formManager() { return Core::ICore::instance()->formManager(); }
+
+inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
@@ -181,18 +183,15 @@ void MainWindow::extensionsInitialized()
     raise();
 
     // Start the update checker
-    int chk = settings()->value(Core::Constants::S_CHECKUPDATE,Core::Constants::S_CheckUpdate_AtStartup).toInt();
-    QDate last = settings()->value(Core::Constants::S_LAST_CHECKUPDATE,QDate::currentDate()).toDate();
-    if ((chk == Core::Constants::S_CheckUpdate_AtStartup)
-       || ((chk == Core::Constants::S_CheckUpdate_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
-       || ((chk == Core::Constants::S_CheckUpdate_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
-       || ((chk == Core::Constants::S_CheckUpdate_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
+    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
+        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
         updateChecker()->check(Utils::Constants::FREEMEDFORMS_UPDATE_URL);
+        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
     // Open Last Opened Forms is necessary
@@ -248,10 +247,10 @@ void MainWindow::openLastOpenedForm()
 bool MainWindow::openFile()
 {
     // Get all IFormIO from pluginsmanager
-    QList<Core::IFormIO *> list = pluginManager()->getObjects<Core::IFormIO>();
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
     // Ask list for the file filters
     QStringList filters;
-    foreach(const Core::IFormIO *io, list) {
+    foreach(const Form::IFormIO *io, list) {
         filters << io->fileFilters();
     }
     // Ask user for a file
@@ -265,18 +264,18 @@ bool MainWindow::openFile()
     return loadFile(file, list);
 }
 
-bool MainWindow::loadFile(const QString &filename, const QList<Core::IFormIO *> &iolist)
+bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
     if (filename.isEmpty())
         return false;
-    Core::IFormIO *reader = 0;
-    QList<Core::IFormIO *> list;
+    Form::IFormIO *reader = 0;
+    QList<Form::IFormIO *> list;
     if (iolist.isEmpty())
-         list = pluginManager()->getObjects<Core::IFormIO>();
+         list = pluginManager()->getObjects<Form::IFormIO>();
     else
         list = iolist;
 
-    foreach(Core::IFormIO *io, list) {
+    foreach(Form::IFormIO *io, list) {
         if (io->setFileName(filename) && io->canReadFile()) {
             if (io->loadForm())
                 reader = io;

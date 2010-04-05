@@ -25,7 +25,7 @@ public:
     virtual bool isInitialized() const = 0;
 
     virtual QStringList providedItemDatas() const = 0;
-    virtual Core::IFormItemData *createItemData(Core::FormItem *parent) = 0;
+    virtual Form::IFormItemData *createItemData(Form::FormItem *parent) = 0;
 };
 
 
@@ -38,7 +38,7 @@ public:
     virtual ~IFormItemData() {}
     inline static int columnCount() { return 4; } // to be improved+++
 
-    virtual Core::FormItem *parentItem() const = 0;
+    virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;
 
     virtual void setData(const QVariant &data) = 0;
@@ -54,7 +54,7 @@ public:
     virtual QVariant scriptData() const = 0;
 
 protected:
-    explicit IFormItemData(Core::FormItem *parent) : QObject(parent) {}
+    explicit IFormItemData(Form::FormItem *parent) : QObject(parent) {}
 };
 } // namespace Form
 

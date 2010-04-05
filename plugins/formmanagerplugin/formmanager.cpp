@@ -78,11 +78,23 @@ private:
 } // End Internal
 } // End Form
 
+
+FormManager *FormManager::m_Instance = 0;
+
+FormManager *FormManager::instance()
+{
+    if (!m_Instance) {
+        m_Instance = new FormManager(qApp);
+    }
+    return m_Instance;
+}
+
+
 FormManager::FormManager(QObject *parent)
         : QObject(parent), d(new Form::Internal::FormManagerPrivate)
 {
     setObjectName("Form::FormManager");
-    d->m_UuidManager = new UniqueIDManager();
+    d->m_UuidManager = new Core::UniqueIDManager();
 }
 
 FormManager::~FormManager()
@@ -93,7 +105,7 @@ FormManager::~FormManager()
     }
 }
 
-UniqueIDManager *FormManager::uuidManager() const
+Core::UniqueIDManager *FormManager::uuidManager() const
 {
     return d->m_UuidManager;
 }

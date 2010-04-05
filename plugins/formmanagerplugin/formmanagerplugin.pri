@@ -1,7 +1,7 @@
-include(listviewplugin_dependencies.pri)
+include(formmanagerplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lFormManager_debug
+    win32:LIBS   *= -lFormManager_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lFormManager
 }

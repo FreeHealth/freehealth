@@ -68,7 +68,7 @@ class Translators;
 class ITheme;
 class ISettings;
 class IMainWindow;
-class FormManager;
+//class IFormManager;
 class CommandLine;
 class Patient;
 class FileManager;
@@ -114,7 +114,7 @@ public:
     // Use this with precaution (only used by FreeDiams)
     virtual Patient *patient() const {return 0;}
 
-    virtual FormManager *formManager() const = 0;
+//    virtual IFormManager *formManager() const = 0;
 
     virtual FileManager *fileManager() const = 0;
 

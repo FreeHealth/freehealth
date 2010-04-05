@@ -7,3 +7,6 @@ include( ../listviewplugin/listviewplugin.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri)
 include( $${SOURCES_LIBS_PATH}/translationutils.pri)
 include( $${SOURCES_LIBS_PATH}/medicalutils.pri)
+
+# FreeMedForms only inclusion
+isEmpty(FREEDIAMS):include( ../formmanagerplugin/formmanagerplugin.pri )

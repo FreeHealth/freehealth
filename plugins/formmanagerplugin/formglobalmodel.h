@@ -1,8 +1,7 @@
 #ifndef FORMGLOBALMODEL_H
 #define FORMGLOBALMODEL_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/iformitemdatafactory.h>
+#include <formmanagerplugin/iformitemdatafactory.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -10,19 +9,19 @@
 #include <QtCore/QVariant>
 #include <QtCore/QAbstractItemModel>
 
-namespace Core {
+namespace Form {
 class FakeDataFactory;
 
-class FakeData : public Core::IFormItemData
+class FakeData : public Form::IFormItemData
 {
-    friend class Core::FakeDataFactory;
+    friend class Form::FakeDataFactory;
 public:
     virtual ~FakeData() {}
 
-    virtual Core::FormItem *parentItem() const
+    virtual Form::FormItem *parentItem() const
     {
-        Q_ASSERT(qobject_cast<Core::FormItem*>(parent()));
-        return qobject_cast<Core::FormItem*>(parent());
+        Q_ASSERT(qobject_cast<Form::FormItem*>(parent()));
+        return qobject_cast<Form::FormItem*>(parent());
     }
 
     virtual bool isModified() const {return false;}
@@ -40,13 +39,13 @@ public:
     virtual QVariant scriptData() const { return QVariant(); }
 
 protected:
-    explicit FakeData(Core::FormItem *parent) : IFormItemData(parent) {}
+    explicit FakeData(Form::FormItem *parent) : IFormItemData(parent) {}
 
 private:
     QVariant m_data;
 };
 
-class FakeDataFactory : public Core::IFormItemDataFactory
+class FakeDataFactory : public Form::IFormItemDataFactory
 {
     Q_OBJECT
 public:
@@ -58,10 +57,10 @@ public:
     virtual bool isInitialized() const { return true; }
 
     virtual QStringList providedItemDatas() const { return QStringList() << "fake"; }
-    virtual Core::FakeData *createItemData(Core::FormItem *parent) { return new FakeData(parent); }
+    virtual Form::FakeData *createItemData(Form::FormItem *parent) { return new FakeData(parent); }
 };
 
-class CORE_EXPORT FormGlobalModel : public QAbstractItemModel
+class FormGlobalModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
@@ -97,7 +96,7 @@ public:
 //    virtual FormIdentifiantModel *createIdentifiantModel();
 private:
     FakeDataFactory *plugs;
-    Core::FormItem *root;
+    Form::FormItem *root;
 };
 
 //class CORE_EXPORT FormIdentifiantModel : public QAbstractItemModel
@@ -156,6 +155,6 @@ private:
 //
 //};
 
-} // namespace Core
+} // namespace Form
 
 #endif // FORMGLOBALMODEL_H

@@ -102,10 +102,10 @@ UserBase *UserBase::instance()
 }
 
 /**
-  \brief Constructor, inform tkDatabase of the database scheme.
+  \brief Constructor, inform Utils::Database of the database scheme.
 */
 UserBase::UserBase(QObject *parent)
-	: Utils::Database(parent)
+        : QObject(parent), Utils::Database()
 {
     setObjectName("UserBase");
     m_initialized = false;
@@ -150,7 +150,7 @@ UserBase::UserBase(QObject *parent)
 
 /**
   \brief Initialize users base using the \e settings values.
-  \sa tkSettings, tkSettings::ReadWriteDatabasesPath
+  \sa Core::ISettings, Core::ISettings::ReadWriteDatabasesPath
 */
 bool UserBase::initialize(Core::ISettings *settings)
 {

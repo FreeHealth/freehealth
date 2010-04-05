@@ -50,7 +50,6 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/formmanager.h>
 #include <coreplugin/filemanager.h>
 
 #include <fdcoreplugin/commandlineparser.h>
@@ -154,7 +153,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 
-    m_FormManager = new FormManager(this);
+//    m_FormManager = new FormManager(this);
 
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
@@ -229,7 +228,7 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
 }
 
-FormManager *CoreImpl::formManager() const { return m_FormManager; }
+//FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
 CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }

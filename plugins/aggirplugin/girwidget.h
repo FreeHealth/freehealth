@@ -1,7 +1,7 @@
 #ifndef GIRWIDGET_H
 #define GIRWIDGET_H
 
-#include <coreplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 #include <QtGui/QWidget>
 #include <QVariant>
 
@@ -9,10 +9,18 @@ QT_BEGIN_NAMESPACE
 class QAbstractButton;
 QT_END_NAMESPACE
 
+/**
+ * \file girwidget.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 05 Apr 2010
+*/
+
+
 namespace Gir {
 namespace Internal {
 
-class GirWidgetFactory : public Core::IFormWidgetFactory
+class GirWidgetFactory : public Form::IFormWidgetFactory
 {
     Q_OBJECT
 public:
@@ -25,7 +33,7 @@ public:
 
     bool isContainer(const int idInStringList) const {Q_UNUSED(idInStringList); return false;}
     QStringList providedWidgets() const {return QStringList() << "aggir" << "gir";}
-    Core::IFormWidget *createWidget(const QString &name, Core::FormItem *object, QWidget *parent = 0);
+    Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
 };
 
 
@@ -55,11 +63,11 @@ private:
 };
 
 
-class GirWidget : public Core::IFormWidget
+class GirWidget : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    GirWidget(Core::FormItem *linkedObject, QWidget *parent = 0);
+    GirWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~GirWidget();
 
     bool isContainer() const {return false;}

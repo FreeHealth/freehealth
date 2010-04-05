@@ -51,20 +51,20 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-#include <coreplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 
 
 /**
  * \file drugswidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
 namespace DrugsWidget {
 namespace Internal {
 
-class DrugsWidgetsFactory : public Core::IFormWidgetFactory
+class DrugsWidgetsFactory : public Form::IFormWidgetFactory
 {
     Q_OBJECT
 public:
@@ -78,18 +78,18 @@ public:
     QStringList providedWidgets() const;
     bool isInitialized() const { /** \todo here */ return true; }
 
-    Core::IFormWidget *createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent = 0);
+    Form::IFormWidget *createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent = 0);
 };
 
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class DrugsPrescriptorWidget : public Core::IFormWidget
+class DrugsPrescriptorWidget : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    DrugsPrescriptorWidget(Core::FormItem *linkedObject, QWidget *parent);
+    DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWidget *parent);
     ~DrugsPrescriptorWidget();
 
 private:

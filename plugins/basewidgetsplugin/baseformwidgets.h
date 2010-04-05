@@ -46,13 +46,13 @@
 #include <QWidget>
 #include <QVariant>
 
-#include <coreplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 
 /**
- * \file BaseFormWidgets.h
+ * \file baseformwidgets.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.3
- * \date 11 Aug 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
 QT_BEGIN_NAMESPACE
@@ -71,7 +71,7 @@ QT_END_NAMESPACE
 
 namespace BaseWidgets {
 
-class BaseWidgetsFactory : public Core::IFormWidgetFactory
+class BaseWidgetsFactory : public Form::IFormWidgetFactory
 {
     Q_OBJECT
 public:
@@ -84,21 +84,21 @@ public:
 
     bool isContainer(const int idInStringList) const;
     QStringList providedWidgets() const;
-    Core::IFormWidget *createWidget(const QString &name, Core::FormItem *object, QWidget *parent = 0);
+    Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
 };
 
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseForm implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseForm : public Core::IFormWidget
+class BaseForm : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    BaseForm(Core::FormItem *linkedObject, QWidget *parent = 0);
+    BaseForm(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseForm();
 
-    void addWidgetToContainer( Core::IFormWidget *widget );
+    void addWidgetToContainer( Form::IFormWidget *widget );
     bool isContainer() const {return true;}
 
     void setValue(const QVariant &) {}
@@ -116,14 +116,14 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseGroup implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseGroup : public Core::IFormWidget
+class BaseGroup : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    BaseGroup(Core::FormItem *linkedObject, QWidget *parent = 0);
+    BaseGroup(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseGroup();
 
-    void addWidgetToContainer( Core::IFormWidget *widget );
+    void addWidgetToContainer( Form::IFormWidget *widget );
     bool isContainer() const {return true;}
 
     void setValue(const QVariant &) {}
@@ -143,11 +143,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseCheck implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseCheck : public Core::IFormWidget
+class BaseCheck : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    BaseCheck(Core::FormItem *linkedObject, QWidget *parent = 0);
+    BaseCheck(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseCheck();
 
     void setValue(const QVariant &) {}
@@ -167,11 +167,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseRadio implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseRadio : public Core::IFormWidget
+class BaseRadio : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    BaseRadio(Core::FormItem *linkedObject, QWidget *parent = 0);
+    BaseRadio(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseRadio();
 
     void setValue(const QVariant &) {}
@@ -191,11 +191,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------- BaseSimpleText implementation ------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseSimpleText : public Core::IFormWidget
+class BaseSimpleText : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseSimpleText(Core::FormItem *linkedObject, QWidget *parent = 0, bool shortText = true);
+     BaseSimpleText(Form::FormItem *linkedObject, QWidget *parent = 0, bool shortText = true);
      ~BaseSimpleText();
 
 public Q_SLOTS:
@@ -214,11 +214,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ BaseHelpText implementation -------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseHelpText : public Core::IFormWidget
+class BaseHelpText : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseHelpText(Core::FormItem *linkedObject, QWidget *parent = 0);
+     BaseHelpText(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseHelpText();
 
 public Q_SLOTS:
@@ -228,11 +228,11 @@ public Q_SLOTS:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseList implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseList : public Core::IFormWidget
+class BaseList : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseList(Core::FormItem *linkedObject, QWidget *parent = 0, bool uniqueList = true);
+     BaseList(Form::FormItem *linkedObject, QWidget *parent = 0, bool uniqueList = true);
      ~BaseList();
 
 public Q_SLOTS:
@@ -248,11 +248,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseCombo implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseCombo : public Core::IFormWidget
+class BaseCombo : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseCombo(Core::FormItem *linkedObject, QWidget *parent = 0);
+     BaseCombo(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseCombo();
 
 public Q_SLOTS:
@@ -269,11 +269,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseDate implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseDate : public Core::IFormWidget
+class BaseDate : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseDate(Core::FormItem *linkedObject, QWidget *parent = 0);
+     BaseDate(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseDate();
 
 public Q_SLOTS:
@@ -291,11 +291,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseSpin implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseSpin : public Core::IFormWidget
+class BaseSpin : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseSpin(Core::FormItem *linkedObject, QWidget *parent = 0);
+     BaseSpin(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseSpin();
 
 public Q_SLOTS:
@@ -311,11 +311,11 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ BaseButton implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class BaseButton : public Core::IFormWidget
+class BaseButton : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseButton(Core::FormItem *linkedObject, QWidget *parent = 0);
+     BaseButton(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseButton();
 
 public Q_SLOTS:

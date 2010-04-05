@@ -41,6 +41,7 @@
 #include "mainwindowpreferences.h"
 
 #include <utils/log.h>
+#include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -85,7 +86,7 @@ void MainWindowPreferencesPage::finish() { delete m_Widget; }
 void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -108,7 +109,7 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
 {
     setupUi(this);
     // feed with actual values
-    updateCheckingCombo->setCurrentIndex(settings()->value(Core::Constants::S_CHECKUPDATE).toInt());
+    updateCheckingCombo->setCurrentIndex(settings()->value(Utils::Constants::S_CHECKUPDATE).toInt());
 }
 
 void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -120,14 +121,14 @@ void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
         s = sets;
 
     // manage font size
-    s->setValue(Core::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
+    s->setValue(Utils::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
 }
 
 void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
-    s->setValue(Core::Constants::S_CHECKUPDATE, Core::Constants::S_CheckUpdate_AtStartup);
+    s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
     s->sync();
 }
 

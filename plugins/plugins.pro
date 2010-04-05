@@ -24,6 +24,7 @@ mainwin.depends += core
 mainwin.depends += texteditor
 mainwin.depends += printer
 mainwin.depends += usermanager
+mainwin.depends += formmanager
 
 printer.subdir   = printerplugin
 printer.depends += core
@@ -31,9 +32,11 @@ printer.depends += texteditor
 
 xmlio.subdir   = xmlioplugin
 xmlio.depends += core
+xmlio.depends += formmanager
 
 basewidgets.subdir   = basewidgetsplugin
 basewidgets.depends += core
+basewidgets.depends += formmanager
 
 listview.subdir   = listviewplugin
 listview.depends += core
@@ -43,12 +46,14 @@ texteditor.depends += core
 
 aggir.subdir   = aggirplugin
 aggir.depends += core
+aggir.depends += formmanager
 
 drugs.subdir   = drugsplugin
 drugs.depends += core
 drugs.depends += drugsbase
 drugs.depends += texteditor
 drugs.depends += templates
+drugs.depends += formmanager
 
 drugsbase.subdir = drugsbaseplugin
 drugsbase.depends += core

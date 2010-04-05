@@ -74,7 +74,7 @@ namespace {
     static QHash<QString, int> m_SpecsTypes;
 }
 
-inline static Form::FormManager *formManager() {return Core::ICore::instance()->formManager();}
+inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)

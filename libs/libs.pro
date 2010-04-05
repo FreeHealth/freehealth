@@ -3,10 +3,8 @@ TEMPLATE = subdirs
 CONFIG *= ordered
 
 SUBDIRS +=  \
-#        toolkit \
-#           usertoolkit \
-translationutils \
-medicalutils \
-aggregation \
-extensionsystem \
-utils
+    translationutils \
+    medicalutils \
+    aggregation \
+    extensionsystem \
+    utils

@@ -51,7 +51,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
-#include <coreplugin/iformitem.h>
+
+#include <formmanagerplugin/iformitem.h>
 
 #include <QStringList>
 #include <QSqlRecord>
@@ -82,7 +83,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 //------------------------------------ mfDrugsWidget plugin interface ------------------------------------
 //--------------------------------------------------------------------------------------------------------
 DrugsWidgetsFactory::DrugsWidgetsFactory(QObject *parent) :
-        IFormWidgetFactory(parent)
+        Form::IFormWidgetFactory(parent)
 {
 }
 
@@ -113,7 +114,7 @@ bool DrugsWidgetsFactory::isContainer(const int) const
     return false;
 }
 
-Core::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent)
+Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent)
 {
     return new DrugsPrescriptorWidget(linkedObject, parent);
 }
@@ -121,9 +122,9 @@ Core::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Core::
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------- DrugsPrescriptorWidget implementation --------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsPrescriptorWidget::DrugsPrescriptorWidget(Core::FormItem *linkedObject, QWidget *parent)
-          : IFormWidget(linkedObject,parent),
-          m_PrescriptionModel(0)
+DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWidget *parent) :
+        Form::IFormWidget(linkedObject,parent),
+        m_PrescriptionModel(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this );

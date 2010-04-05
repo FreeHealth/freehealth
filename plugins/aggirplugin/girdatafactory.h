@@ -1,7 +1,7 @@
 #ifndef GIRDATAFACTORY_H
 #define GIRDATAFACTORY_H
 
-#include <coreplugin/iformitemdatafactory.h>
+#include <formmanagerplugin/iformitemdatafactory.h>
 
 #include <medicalutils/aggir/girscore.h>
 
@@ -14,7 +14,7 @@ QT_END_NAMESPACE
 
 namespace Gir {
 
-class GirDataFactory : public Core::IFormItemDataFactory
+class GirDataFactory : public Form::IFormItemDataFactory
 {
     Q_OBJECT
 public:
@@ -26,24 +26,24 @@ public:
     bool isInitialized() const {return true;}
 
     QStringList providedItemDatas() const { return QStringList() << "gir" << "aggir"; }
-    Core::IFormItemData *createItemData(Core::FormItem *parent);
+    Form::IFormItemData *createItemData(Form::FormItem *parent);
 };
 
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- GirWidget implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class CORE_EXPORT GirItemData : public Core::IFormItemData
+class CORE_EXPORT GirItemData : public Form::IFormItemData
 {
     Q_OBJECT
     friend class GirDataFactory;
 
 public:
     virtual ~GirItemData() {}
-    virtual Core::FormItem *parentItem() const
+    virtual Form::FormItem *parentItem() const
     {
-        Q_ASSERT(qobject_cast<Core::FormItem*>(parent()));
-        return qobject_cast<Core::FormItem*>(parent());
+        Q_ASSERT(qobject_cast<Form::FormItem*>(parent()));
+        return qobject_cast<Form::FormItem*>(parent());
     }
 
     bool isModified() const;
@@ -61,7 +61,7 @@ public:
     virtual QVariant scriptData() const;
 
 protected:
-    explicit GirItemData(Core::FormItem *parent) : Core::IFormItemData(parent) {}
+    explicit GirItemData(Form::FormItem *parent) : Form::IFormItemData(parent) {}
 
 private:
     bool m_IsModified;

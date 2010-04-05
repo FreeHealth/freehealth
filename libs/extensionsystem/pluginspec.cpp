@@ -799,6 +799,7 @@ bool PluginSpecPrivate::loadLibrary()
         loader.unload();
         return false;
     }
+//    qWarning() << "LOADED PLUGIN :: " << libName;
     state = PluginSpec::Loaded;
     plugin = pluginObject;
     plugin->d->pluginSpec = q;

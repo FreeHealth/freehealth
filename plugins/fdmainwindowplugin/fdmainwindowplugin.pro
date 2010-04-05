@@ -3,6 +3,7 @@ TARGET = MainWindow
 PACKAGE_VERSION = 0.0.2
 
 DEFINES += FD_MAINWIN_LIBRARY
+FREEDIAMS = 1
 
 include(../fmf_plugins.pri)
 include( fdmainwindowplugin_dependencies.pri )

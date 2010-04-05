@@ -148,7 +148,6 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
     m_UID = new UniqueIDManager();
-    m_FormManager = new FormManager(this);
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
 
@@ -221,7 +220,7 @@ UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const{ return m_Settings; }
-FormManager *CoreImpl::formManager() const { return m_FormManager; }
+//FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }

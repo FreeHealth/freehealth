@@ -44,7 +44,6 @@
 #include <fmfmainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
 
-// include Qt headers
 #include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
@@ -56,11 +55,11 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.1
- * \date 23 Oct 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
-namespace Core {
+namespace Form {
 class IFormIO;
 }
 
@@ -93,7 +92,7 @@ public:
 public Q_SLOTS: // Interface of MainWidowActionHandler
 //    bool newFile();
     bool openFile();
-    bool loadFile(const QString &filename, const QList<Core::IFormIO *> &iolist = QList<Core::IFormIO *>());
+    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
 //    bool saveFile();
 //    bool saveAsFile();
 //    bool print();

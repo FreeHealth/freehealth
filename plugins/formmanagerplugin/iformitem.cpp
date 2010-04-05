@@ -57,15 +57,17 @@
 #include <QMap>
 #include <QDebug>
 
-using namespace Core;
-using namespace Core::Internal;
+using namespace Form;
+using namespace Form::Internal;
+
+inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  FormItemIdentifiants  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FormItemIdentifiants::setUuid(const QString &uuid)
 {
-    id = Core::ICore::instance()->formManager()->uuidManager()->uniqueIdentifier(uuid);
+    id = formManager()->uuidManager()->uniqueIdentifier(uuid);
     m_Uuid=uuid;
 }
 
@@ -93,7 +95,7 @@ public:
     QHash<int, int> m_States;
 };
 
-namespace Core {
+namespace Form {
 namespace Internal {
 class FormItemScriptsPrivate : public Trans::MultiLingualClass<ScriptsBook>
 {
@@ -105,7 +107,7 @@ public:
 };
 
 } // End Internal
-} // End Core
+} // End Form
 
 FormItemScripts::FormItemScripts(
         const QString &lang,
@@ -172,7 +174,7 @@ void FormItemScripts::warn() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////  FormItemValueReferences  ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace Core {
+namespace Form {
 namespace Internal {
 
 class ValuesBook {
@@ -214,10 +216,10 @@ public:
     bool m_Optionnal;
 };
 }  // End Internal
-}  // End Core
+}  // End Form
 
 FormItemValues::FormItemValues(QObject *parent) :
-        QObject(parent), d(new Core::Internal::FormItemValuesPrivate)
+        QObject(parent), d(new Form::Internal::FormItemValuesPrivate)
 {
 }
 
@@ -317,7 +319,7 @@ void FormItem::addExtraData(const QString &id, const QString &data)
 
 FormItem *FormItem::createChildItem(const QString &uuid)
 {
-    Core::FormItem *i = new Core::FormItem(this);
+    Form::FormItem *i = new Form::FormItem(this);
     if (!uuid.isEmpty())
         i->setUuid(uuid);
     return i;
@@ -405,22 +407,22 @@ class SpecsBook {
 public:
     void toTreeWidgetItem(QTreeWidgetItem *i)
     {
-        new QTreeWidgetItem(i, QStringList() << "Authors" << m_Specs.value(Core::FormItemSpec::Spec_Author).toString() );
-        new QTreeWidgetItem(i, QStringList() << "License" << m_Specs.value(Core::FormItemSpec::Spec_License).toString() );
-        new QTreeWidgetItem(i, QStringList() << "version" << m_Specs.value(Core::FormItemSpec::Spec_Version).toString() );
-        new QTreeWidgetItem(i, QStringList() << "biblio" << m_Specs.value(Core::FormItemSpec::Spec_Bibliography).toString() );
-        new QTreeWidgetItem(i, QStringList() << "Description" << m_Specs.value(Core::FormItemSpec::Spec_Description).toString() );
-        new QTreeWidgetItem(i, QStringList() << "category" << m_Specs.value(Core::FormItemSpec::Spec_Category).toString() );
-        new QTreeWidgetItem(i, QStringList() << "creationDate" << m_Specs.value(Core::FormItemSpec::Spec_CreationDate).toString() );
-        new QTreeWidgetItem(i, QStringList() << "LastModification" << m_Specs.value(Core::FormItemSpec::Spec_LastModified).toString() );
-        new QTreeWidgetItem(i, QStringList() << "Plugin Name" << m_Specs.value(Core::FormItemSpec::Spec_Plugin).toString() );
-        new QTreeWidgetItem(i, QStringList() << "IconFileName" << m_Specs.value(Core::FormItemSpec::Spec_IconFileName).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Authors" << m_Specs.value(Form::FormItemSpec::Spec_Author).toString() );
+        new QTreeWidgetItem(i, QStringList() << "License" << m_Specs.value(Form::FormItemSpec::Spec_License).toString() );
+        new QTreeWidgetItem(i, QStringList() << "version" << m_Specs.value(Form::FormItemSpec::Spec_Version).toString() );
+        new QTreeWidgetItem(i, QStringList() << "biblio" << m_Specs.value(Form::FormItemSpec::Spec_Bibliography).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Description" << m_Specs.value(Form::FormItemSpec::Spec_Description).toString() );
+        new QTreeWidgetItem(i, QStringList() << "category" << m_Specs.value(Form::FormItemSpec::Spec_Category).toString() );
+        new QTreeWidgetItem(i, QStringList() << "creationDate" << m_Specs.value(Form::FormItemSpec::Spec_CreationDate).toString() );
+        new QTreeWidgetItem(i, QStringList() << "LastModification" << m_Specs.value(Form::FormItemSpec::Spec_LastModified).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Plugin Name" << m_Specs.value(Form::FormItemSpec::Spec_Plugin).toString() );
+        new QTreeWidgetItem(i, QStringList() << "IconFileName" << m_Specs.value(Form::FormItemSpec::Spec_IconFileName).toString() );
     }
 
     QHash<int, QVariant> m_Specs;
 };
 
-namespace Core {
+namespace Form {
 namespace Internal {
 class FormItemSpecPrivate : public Trans::MultiLingualClass<SpecsBook>
 {
@@ -432,10 +434,10 @@ public:
 };
 
 } // End Internal
-} // End Core
+} // End Form
 
 FormItemSpec::FormItemSpec() :
-        d(new Core::Internal::FormItemSpecPrivate)
+        d(new Form::Internal::FormItemSpecPrivate)
 {
 }
 

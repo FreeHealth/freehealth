@@ -10,58 +10,58 @@
 #include "iformitemdatafactory.h"
 
 namespace {
-static QHash<QString, Core::IFormItemDataFactory *> m_PlugsFactories;
+static QHash<QString, Form::IFormItemDataFactory *> m_PlugsFactories;
 }
 
-using namespace Core;
+using namespace Form;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline static Core::FormManager *fm() {return Core::ICore::instance()->formManager();}
+inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pm() {return ExtensionSystem::PluginManager::instance();}
 inline static void refreshPlugsFactories()
 {
     ::m_PlugsFactories.clear();
-    foreach(Core::IFormItemDataFactory *fact, pm()->getObjects<Core::IFormItemDataFactory>()) {
+    foreach(Form::IFormItemDataFactory *fact, pm()->getObjects<Form::IFormItemDataFactory>()) {
         foreach(const QString &name, fact->providedItemDatas()) {
             ::m_PlugsFactories.insert(name,fact);
         }
     }
 }
 
-inline static Core::IFormItemData *getItemData(const QModelIndex &idx)
+inline static Form::IFormItemData *getItemData(const QModelIndex &idx)
 {
     if (!idx.isValid())
         return 0;
-    Q_ASSERT(static_cast<Core::IFormItemData*>(idx.internalPointer()));
-    return static_cast<Core::IFormItemData*>(idx.internalPointer());
+    Q_ASSERT(static_cast<Form::IFormItemData*>(idx.internalPointer()));
+    return static_cast<Form::IFormItemData*>(idx.internalPointer());
 }
 
-inline static Core::FormItem *getItem(const QModelIndex &idx)
+inline static Form::FormItem *getItem(const QModelIndex &idx)
 {
-    Core::IFormItemData *dt = getItemData(idx);
+    Form::IFormItemData *dt = getItemData(idx);
 //    qWarning() << "getItem" << idx.data() << dt->parentItem()->uuid();
     if (dt)
         return dt->parentItem();
     return 0;
 }
 
-inline static QList<Core::IFormItemData *> itemDatas(Core::FormItem *item)
+inline static QList<Form::IFormItemData *> itemDatas(Form::FormItem *item)
 {
-    QList<Core::IFormItemData *> list;
+    QList<Form::IFormItemData *> list;
     if (!item)
         return list;
-    Core::IFormItemData *cast = 0;
+    Form::IFormItemData *cast = 0;
     foreach(QObject *o, item->children()) {
-        cast = qobject_cast<Core::IFormItemData *>(o);
+        cast = qobject_cast<Form::IFormItemData *>(o);
         if (cast)
             list << cast;
     }
     return list;
 }
 
-inline static int itemDatasCount(Core::FormItem *item)
+inline static int itemDatasCount(Form::FormItem *item)
 {
     return itemDatas(item).count();
 }
@@ -79,17 +79,17 @@ FormGlobalModel::FormGlobalModel(QObject *parent) :
     refreshPlugsFactories();
 
     // creates an artificial model
-    root = new Core::FormItem(this);
+    root = new Form::FormItem(this);
     root->setUuid("0");
     root->setObjectName("RootItem");
 //    root->createChildItem("1");
 //    root->createChildItem("2");
-    Core::FormItem *sec = root->createChildItem("3");
+    Form::FormItem *sec = root->createChildItem("3");
     sec->setObjectName("SecItem");
 //    sec->createChildItem("3.1");
 //    sec->createChildItem("3.2");
 //    sec->createChildItem("3.3");
-    Core::FormItem *third = root->createChildItem("4");
+    Form::FormItem *third = root->createChildItem("4");
     third->setObjectName("ThirdItem");
     plugs = new FakeDataFactory(this);
     plugs->createItemData(root)->setData("root1");
@@ -106,14 +106,15 @@ FormGlobalModel::FormGlobalModel(QObject *parent) :
 }
 
 FormGlobalModel::~FormGlobalModel()
-{}
+{
+}
 
 QModelIndex FormGlobalModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    Core::FormItem *parentItem = 0;
+    Form::FormItem *parentItem = 0;
     if (!parent.isValid()) {
         parentItem = root;
     }
@@ -121,7 +122,7 @@ QModelIndex FormGlobalModel::index(int row, int column, const QModelIndex &paren
         parentItem = getItem(parent);
     }
 
-    Core::IFormItemData *dt = itemDatas(parentItem).at(row);
+    Form::IFormItemData *dt = itemDatas(parentItem).at(row);
     QModelIndex i;
     if (dt)
         i = createIndex(row, column, dt);
@@ -134,12 +135,12 @@ QModelIndex FormGlobalModel::index(int row, int column, const QModelIndex &paren
 
 int FormGlobalModel::columnCount(const QModelIndex &parent) const
 {
-    return Core::IFormItemData::columnCount();
+    return Form::IFormItemData::columnCount();
 }
 
 int FormGlobalModel::rowCount(const QModelIndex &parent) const
 {
-    Core::FormItem *parentItem = 0;
+    Form::FormItem *parentItem = 0;
     if (parent.column() > 0)
         return 0;
 
@@ -179,12 +180,12 @@ QModelIndex FormGlobalModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Core::FormItem *item = getItem(index);
+    Form::FormItem *item = getItem(index);
     qWarning() << "Item = " << item->objectName() << getItemData(index)->data();
     if (item == root)
         return QModelIndex();
 
-    Core::FormItem *parentItem = static_cast<Core::FormItem*>(item->parent());
+    Form::FormItem *parentItem = static_cast<Form::FormItem*>(item->parent());
     if (parentItem) qWarning() << "Parent = " << parentItem->objectName();
     if (parentItem == root)
         return QModelIndex();

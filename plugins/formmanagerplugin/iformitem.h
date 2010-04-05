@@ -94,7 +94,7 @@ class FormMainDebugPage;
 - 1 QWidget historique
 - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
 */
-class FORM_EXPORT FormItem : public Core::FormItemIdentifiants
+class FORM_EXPORT FormItem : public Form::FormItemIdentifiants
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -120,16 +120,16 @@ public:
         }
     }
 
-    Core::FormItemSpec *spec() const {return m_Spec;}
-    Core::FormItemScripts *scripts() const {return m_Scripts;}
-    Core::FormItemValues *valueReferences() const {return m_Values;}
+    Form::FormItemSpec *spec() const {return m_Spec;}
+    Form::FormItemScripts *scripts() const {return m_Scripts;}
+    Form::FormItemValues *valueReferences() const {return m_Values;}
 
     // Access to database values. Pointer will not be deleted
-    void setItemDatas(Core::IFormItemData *data) {m_ItemDatas = data;}
-    Core::IFormItemData *itemDatas() {return m_ItemDatas;}
+    void setItemDatas(Form::IFormItemData *data) {m_ItemDatas = data;}
+    Form::IFormItemData *itemDatas() {return m_ItemDatas;}
 
     // Access to the user's widget
-    virtual void setFormWidget(Core::IFormWidget *w) {m_FormWidget=w;}
+    virtual void setFormWidget(Form::IFormWidget *w) {m_FormWidget=w;}
     virtual IFormWidget *formWidget() {return m_FormWidget;}
 
     // Access to the FormItem tree
@@ -146,18 +146,18 @@ public Q_SLOTS:
     virtual void languageChanged();
 
 private:
-    Core::FormItemSpec *m_Spec;
-    Core::FormItemScripts *m_Scripts;
-    Core::FormItemValues *m_Values;
-    Core::IFormWidget *m_FormWidget;
-    Core::IFormItemData *m_ItemDatas;
+    Form::FormItemSpec *m_Spec;
+    Form::FormItemScripts *m_Scripts;
+    Form::FormItemValues *m_Values;
+    Form::IFormWidget *m_FormWidget;
+    Form::IFormItemData *m_ItemDatas;
     QHash<QString, QString> m_ExtraDatas;
 };
-inline QList<Core::FormItem*> Core::FormItem::formItemChildren() const
+inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
 {
-     QList<Core::FormItem*> list;
+     QList<Form::FormItem*> list;
      foreach(QObject *o, children()) {
-          Core::FormItem *i = qobject_cast<Core::FormItem*>(o);
+          Form::FormItem *i = qobject_cast<Form::FormItem*>(o);
           if (i) {
               list.append(i);
           }
@@ -202,7 +202,7 @@ private:
     FormMainDebugPage *m_DebugPage;
 };
 
-class FORM_EXPORT FormMainDebugPage : public IDebugPage
+class FORM_EXPORT FormMainDebugPage : public Core::IDebugPage
 {
     Q_OBJECT
 public:

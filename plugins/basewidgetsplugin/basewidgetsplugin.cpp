@@ -38,6 +38,8 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
+#include <utils/log.h>
+
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
@@ -47,7 +49,8 @@ BaseWidgetsPlugin::BaseWidgetsPlugin() :
         m_Factory(0),
         m_OptionsPage(0)
 {
-    qWarning() << "creating BaseWidgetsPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating BaseWidgetsPlugin";
 }
 
 BaseWidgetsPlugin::~BaseWidgetsPlugin()
@@ -66,7 +69,9 @@ BaseWidgetsPlugin::~BaseWidgetsPlugin()
 
 bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    qWarning() << "BaseWidgetsPlugin::initialize";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "BaseWidgetsPlugin::initialize";
+
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     m_Factory = new BaseWidgetsFactory(this);
@@ -77,6 +82,9 @@ bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorS
 
 void BaseWidgetsPlugin::extensionsInitialized()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "BaseWidgetsPlugin::extensionsInitialized";
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addObject(m_Factory);
 //    addObject(m_OptionsPage);

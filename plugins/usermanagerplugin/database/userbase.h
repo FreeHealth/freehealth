@@ -53,8 +53,8 @@
 /**
  * \file userbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.10
- * \date 15 Nov 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
 namespace UserPlugin {
@@ -63,11 +63,10 @@ class UserModel;
 namespace Internal {
 class UserData;
 
-class USER_EXPORT UserBase : public Utils::Database
+class USER_EXPORT UserBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
     friend void initLib();
-//    friend void tkUser::warn() const;
     friend class UserPlugin::UserModel;
     friend class UserModelPrivate;
     friend class UserData;

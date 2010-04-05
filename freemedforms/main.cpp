@@ -45,9 +45,38 @@
 
 #include <utils/log.h>
 
+#include <iostream>
+
+enum {WarnAllPluginSpecs=true};
+
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 static const char* USERPLUGINSNAME = "UserManager";
+
+static const QString VERSION_MESSAGE =
+        QString("FreeDiams %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        .arg(PACKAGE_VERSION)
+#ifdef LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug (Linux Integrated)")
+#  else
+        .arg("Release (Linux Integrated)")
+#  endif
+#else  // NOT LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug")
+#  else
+        .arg("Release")
+#  endif
+#endif
+        .arg(__DATE__, __TIME__)
+#ifdef FULLAPPLICATION_BUILD
+        .arg("Full application")
+#else
+        .arg("SVN application")
+#endif
+        .arg(QT_VERSION_STR)
+        .arg(qVersion());
 
 
 static inline QString getPluginPaths()
@@ -107,14 +136,29 @@ int main( int argc, char *argv[] )
      app.setOrganizationName(BINARY_NAME);
      app.setApplicationVersion(PACKAGE_VERSION);
 
+     if (qApp->arguments().contains("--version") ||
+         qApp->arguments().contains("-version") ||
+         qApp->arguments().contains("-v")) {
+         std::cout << qPrintable(VERSION_MESSAGE);
+         return 0;
+     }
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
+    // Add some debugging informations
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
+#ifdef DEBUG
+    Utils::Log::addMessage("Main", "Running debug version");
+#else
+    Utils::Log::addMessage("Main", "Running release version");
+#endif
+#ifdef LINUX_INTEGRATED
+    Utils::Log::addMessage("Main", "Linux Integrated");
+#endif
 
     defineLibraryPaths();
 
@@ -141,6 +185,13 @@ int main( int argc, char *argv[] )
 
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
+
+    if (WarnAllPluginSpecs) {
+        foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+            qWarning() << "PluginSpecs :::"<< spec->filePath() << spec->name() << spec->version();
+        }
+    }
+
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
@@ -203,6 +254,12 @@ int main( int argc, char *argv[] )
 //    }
 
     pluginManager.loadPlugins();
+    if (WarnAllPluginSpecs) {
+        foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+            qWarning() << "PluginSpecs :::"<< spec->name() << "hasError:" << spec->hasError() << spec->errorString();
+        }
+    }
+
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
         return 1;

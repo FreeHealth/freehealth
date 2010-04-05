@@ -41,14 +41,14 @@
 #ifndef FORMMANAGER_H
 #define FORMMANAGER_H
 
-#include <coreplugin/core_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
 
 /**
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 21 Aug 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
 QT_BEGIN_NAMESPACE
@@ -60,23 +60,26 @@ QT_END_NAMESPACE
 
 namespace Core {
 class UniqueIDManager;
-class FormMain;
-class FormItem;
 }
 
-namespace Core {
+namespace Form {
+class FormMain;
+class FormItem;
+
 namespace Internal {
 class FormManagerPrivate;
 }
 
-class CORE_EXPORT FormManager : public QObject
+class FORM_EXPORT FormManager : public QObject
 {
      Q_OBJECT
-public:
      FormManager(QObject *parent = 0);
+
+public:
+     static FormManager *instance();
      ~FormManager();
 
-     UniqueIDManager *uuidManager() const;
+     Core::UniqueIDManager *uuidManager() const;
      FormMain *createForm(const QString &uuid, FormMain *parent = 0);
 
      QList<FormMain*> forms() const;
@@ -115,9 +118,9 @@ public Q_SLOTS:
 
  private:
      Internal::FormManagerPrivate *d;
-
+     static FormManager *m_Instance;
 };
 
-} // End Core
+} // End Form
 
 #endif  // FORMMANAGER_H

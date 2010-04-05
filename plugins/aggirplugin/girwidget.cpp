@@ -1,7 +1,7 @@
 #include "girwidget.h"
 #include "ui_girwidget.h"
 
-#include <coreplugin/iformitem.h>
+#include <formmanagerplugin/iformitem.h>
 #include <medicalutils/aggir/girscore.h>
 
 #include <QDebug>
@@ -14,7 +14,7 @@ GirWidgetFactory::GirWidgetFactory(QObject *parent) :
 {
 }
 
-Core::IFormWidget *GirWidgetFactory::createWidget(const QString &name, Core::FormItem *object, QWidget *parent)
+Form::IFormWidget *GirWidgetFactory::createWidget(const QString &name, Form::FormItem *object, QWidget *parent)
 {
     if ((name.compare("aggir",Qt::CaseInsensitive)==0) ||
         (name.compare("gir",Qt::CaseInsensitive)==0)) {
@@ -108,8 +108,8 @@ void GirUi::updateGirString(QAbstractButton *radio)
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- GirWidget -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-GirWidget::GirWidget(Core::FormItem *linkedObject, QWidget *parent) :
-    Core::IFormWidget(linkedObject,parent)
+GirWidget::GirWidget(Form::FormItem *linkedObject, QWidget *parent) :
+    Form::IFormWidget(linkedObject,parent)
 {
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this);
     m_Label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);

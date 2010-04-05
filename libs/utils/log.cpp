@@ -79,7 +79,7 @@ QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 
-bool Log::warnPluginsCreation() { return false; }
+bool Log::warnPluginsCreation() { return true; }
 
 
     void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)

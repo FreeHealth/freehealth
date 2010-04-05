@@ -56,12 +56,6 @@ class Configuration;
 }
 
 namespace Core {
-//    class MainWindow;
-//    class ActionManager;
-//    class ISettings;
-//    class IMainWindow;
-//    class CommandLine;
-//    class Patient;
 
 namespace Internal {
     class ThemePrivate;
@@ -102,7 +96,7 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *);
 
-    FormManager *formManager() const;
+//    FormManager *formManager() const;
     FileManager *fileManager() const;
 
     // initialization
@@ -127,7 +121,7 @@ private:
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
-    FormManager *m_FormManager;
+//    FormManager *m_FormManager;
     CommandLine *m_CommandLine;
     mutable MedinTux::Configuration *m_MedinTux;
     Patient *m_Patient;

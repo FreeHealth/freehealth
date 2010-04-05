@@ -39,11 +39,14 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "drugsplugin.h"
-#include "drugswidgetfactory.h"
 #include "constants.h"
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
+
+#ifdef FREEMEDFORMS
+#    include "drugswidgetfactory.h"
+#endif
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -124,7 +127,10 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Utils::Log::addMessage(this,"Running as FreeDiams");
 #endif
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
+
+#ifdef FREEMEDFORMS
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
+#endif
 
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);

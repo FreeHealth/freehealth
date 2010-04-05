@@ -1,6 +1,6 @@
 #include "girdatafactory.h"
 
-#include <coreplugin/iformitem.h>
+#include <formmanagerplugin/iformitem.h>
 #include <medicalutils/aggir/girscore.h>
 
 #include <QDebug>
@@ -11,11 +11,11 @@ using namespace Gir;
 //---------------------------------------------- Factory -------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 GirDataFactory::GirDataFactory(QObject *parent) :
-        Core::IFormItemDataFactory(parent)
+        Form::IFormItemDataFactory(parent)
 {
 }
 
-Core::IFormItemData *GirDataFactory::createItemData(Core::FormItem *parent)
+Form::IFormItemData *GirDataFactory::createItemData(Form::FormItem *parent)
 {
 //    if ((name.compare("aggir",Qt::CaseInsensitive)==0) ||
 //        (name.compare("gir",Qt::CaseInsensitive)==0)) {

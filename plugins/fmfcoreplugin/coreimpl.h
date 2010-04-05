@@ -88,7 +88,8 @@ public:
 
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *window);
-    FormManager *formManager() const;
+
+//    FormManager *formManager() const;
 
     CommandLine *commandLine() const;
     Utils::UpdateChecker *updateChecker() const;
@@ -107,7 +108,7 @@ private:
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
-    FormManager *m_FormManager;
+//    FormManager *m_FormManager;
     Utils::UpdateChecker *m_UpdateChecker;
     FileManager *m_FileManager;
     CommandLine *m_CommandLine;
