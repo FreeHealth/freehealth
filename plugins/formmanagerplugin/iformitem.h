@@ -40,12 +40,13 @@
 #ifndef IFORMITEM_H
 #define IFORMITEM_H
 
-#include <coreplugin/core_exporter.h>
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/constants.h>
-#include <coreplugin/iformitemspec.h>
-#include <coreplugin/iformitemscripts.h>
-#include <coreplugin/iformitemvalues.h>
+
+#include <formmanagerplugin/formmanager_exporter.h>
+#include <formmanagerplugin/iformitemspec.h>
+#include <formmanagerplugin/iformitemscripts.h>
+#include <formmanagerplugin/iformitemvalues.h>
 
 #include <QObject>
 #include <QString>
@@ -67,11 +68,11 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 27 Aug 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
-namespace Core {
+namespace Form {
 class IFormWidget;
 class IFormItemData;
 class FormItemIdentifiants;
@@ -93,7 +94,7 @@ class FormMainDebugPage;
 - 1 QWidget historique
 - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
 */
-class CORE_EXPORT FormItem : public Core::FormItemIdentifiants
+class FORM_EXPORT FormItem : public Core::FormItemIdentifiants
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -165,7 +166,7 @@ inline QList<Core::FormItem*> Core::FormItem::formItemChildren() const
 }
 
 
-class CORE_EXPORT FormPage : public FormItem
+class FORM_EXPORT FormPage : public FormItem
 {
     Q_OBJECT
 public:
@@ -180,7 +181,7 @@ public:
 private:
 };
 
-class CORE_EXPORT FormMain : public FormItem
+class FORM_EXPORT FormMain : public FormItem
 {
     Q_OBJECT
 public:
@@ -201,7 +202,7 @@ private:
     FormMainDebugPage *m_DebugPage;
 };
 
-class CORE_EXPORT FormMainDebugPage : public IDebugPage
+class FORM_EXPORT FormMainDebugPage : public IDebugPage
 {
     Q_OBJECT
 public:
@@ -222,6 +223,6 @@ private:
     FormMain *m_Form;
 };
 
-} // end Core
+} // end Form
 
 #endif // IFORMITEM_H

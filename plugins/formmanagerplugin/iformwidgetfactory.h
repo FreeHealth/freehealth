@@ -1,7 +1,7 @@
 #ifndef IFORMWIDGETFACTORY_H
 #define IFORMWIDGETFACTORY_H
 
-#include <coreplugin/core_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -11,13 +11,13 @@
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 
-namespace Core {
+namespace Form {
 
 class IFormWidget;
 class FormItem;
 
 // This part is very closed to QDesignerCustomWidgetInterface so the translation should be easier
-class CORE_EXPORT IFormWidgetFactory : public QObject
+class FORM_EXPORT IFormWidgetFactory : public QObject
 {
     Q_OBJECT
 public:
@@ -30,11 +30,11 @@ public:
     virtual bool isContainer( const int idInStringList ) const = 0;
     inline bool isContainer(const QString &name) {return isContainer(providedWidgets().indexOf(name)); }
     virtual bool isInitialized() const = 0;
-    virtual IFormWidget *createWidget(const QString &name, Core::FormItem *linkedObject, QWidget *parent = 0) = 0;
+    virtual IFormWidget *createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent = 0) = 0;
 };
 
 
-class CORE_EXPORT IFormWidget : public QWidget
+class FORM_EXPORT IFormWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -54,7 +54,7 @@ public:
         Label_OnTopCentered
     };
 
-    IFormWidget(Core::FormItem *linkedObject, QWidget *parent = 0);
+    IFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     virtual ~IFormWidget() {}
 
     virtual void addWidgetToContainer(IFormWidget *) {}
@@ -65,18 +65,18 @@ public:
 
     virtual void changeEvent(QEvent *event);
 
-    virtual void setLinkedObject(Core::FormItem *link) { m_LinkedObject = link; }
-    virtual Core::FormItem *linkedObject() { return m_LinkedObject; }
+    virtual void setLinkedObject(Form::FormItem *link) { m_LinkedObject = link; }
+    virtual Form::FormItem *linkedObject() { return m_LinkedObject; }
 
 public Q_SLOTS:
     virtual void retranslate() {}
 
 public:
     QLabel *m_Label;
-    Core::FormItem *m_LinkedObject;
+    Form::FormItem *m_LinkedObject;
     QString m_OldTrans;
 };
 
-} // namespace Core
+} // namespace Form
 
 #endif // IFORMWIDGETFACTORY_H

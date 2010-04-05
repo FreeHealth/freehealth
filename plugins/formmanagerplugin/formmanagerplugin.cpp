@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,68 +32,47 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef CORE_FILEMANAGER_H
-#define CORE_FILEMANAGER_H
+#include "formmanagerplugin.h"
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/idebugpage.h>
-#include <coreplugin/constants.h>
+#include <utils/log.h>
 
-#include <QObject>
-#include <QString>
-#include <QDateTime>
-#include <QWidget>
-#include <QVariant>
-#include <QPointer>
-#include <QHash>
+#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
-
+#include <QtCore/QtPlugin>
 #include <QDebug>
 
-QT_BEGIN_NAMESPACE
-class QTreeWidget;
-class QTreeWidgetItem;
-QT_END_NAMESPACE
+using namespace Form;
 
-
-/**
- * \file filemanager.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 13 Sept 2009
-*/
-
-namespace Core {
-
-class CORE_EXPORT FileManager : public QObject
+FormManagerPlugin::FormManagerPlugin()
 {
-    Q_OBJECT
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating FormManagerPlugin";
+}
 
-public:
-    FileManager(QObject *parent=0) : QObject(parent) {setObjectName("FileManager");}
-    virtual ~FileManager() {}
+FormManagerPlugin::~FormManagerPlugin()
+{
+}
 
-    // recent files
-    void getRecentFilesFromSettings();
-    void addToRecentFiles(const QString &fileName);
-    QStringList recentFiles() const;
-    void saveRecentFiles() const;
+bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "FormManagerPlugin::initialize";
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
+    return true;
+}
 
-    // current file
-    void setCurrentFile(const QString &filePath);
-    QString currentFile() const;
+void FormManagerPlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "FormManagerPlugin::extensionsInitialized";
 
-private:
-    QStringList m_recentFiles;
-    static const int m_maxRecentFiles = 10;
-    QString m_currentFile;
-};
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+}
 
-}  // end Core
 
-#endif  // CORE_FILEMANAGER_H
+Q_EXPORT_PLUGIN(FormManagerPlugin)

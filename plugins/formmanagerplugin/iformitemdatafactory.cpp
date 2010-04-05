@@ -5,6 +5,6 @@
  This class is an interface for items datas' factory.
 */
 
-using namespace Core;
+using namespace Form;
 
 

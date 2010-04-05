@@ -40,13 +40,13 @@
 #include <utils/global.h>
 
 #include <coreplugin/icore.h>
-#include <coreplugin/formmanager.h>
-#include <coreplugin/iformitem.h>
-#include <coreplugin/iformwidgetfactory.h>
+
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <translationutils/constanttranslations.h>
 
-// including Qt headers
 #include <QApplication>
 #include <QDir>
 #include <QMessageBox>
@@ -68,13 +68,13 @@ using namespace XmlForms;
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace {
-    static QHash<QString, Core::IFormWidgetFactory *> m_PlugsFactories;
+    static QHash<QString, Form::IFormWidgetFactory *> m_PlugsFactories;
     static QHash<QString, int> m_ScriptsTypes;
     static QHash<QString, int> m_ValuesTypes;
     static QHash<QString, int> m_SpecsTypes;
 }
 
-inline static Core::FormManager *formManager() {return Core::ICore::instance()->formManager();}
+inline static Form::FormManager *formManager() {return Core::ICore::instance()->formManager();}
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
@@ -93,21 +93,21 @@ inline static void warnXmlReadError(const QString &file, const QString &msg, con
 inline static void refreshPlugsFactories()
 {
     ::m_PlugsFactories.clear();
-    foreach(Core::IFormWidgetFactory *fact, pluginManager()->getObjects<Core::IFormWidgetFactory>()) {
+    foreach(Form::IFormWidgetFactory *fact, pluginManager()->getObjects<Form::IFormWidgetFactory>()) {
         foreach(const QString &widgetname, fact->providedWidgets()) {
             ::m_PlugsFactories.insert(widgetname,fact);
         }
     }
 }
 
-inline static Core::FormMain *createNewForm(const QDomElement &element, Core::FormItem *item = 0)
+inline static Form::FormMain *createNewForm(const QDomElement &element, Form::FormItem *item = 0)
 {
     QString name = element.firstChildElement(Constants::TAG_NAME).text();
-    Core::FormMain *parent = formManager()->getParent<Core::FormMain>(item);
+    Form::FormMain *parent = formManager()->getParent<Form::FormMain>(item);
     return formManager()->createForm(name, parent);
 }
 
-inline static bool populateValues(Core::FormItem *item, const QDomElement &root)
+inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
 //    qWarning() << "Values" << root.tagName() << element.tagName();
@@ -128,13 +128,13 @@ inline static bool populateValues(Core::FormItem *item, const QDomElement &root)
     return true;
 }
 
-inline static bool populateScripts(Core::FormItem *item, const QDomElement &root)
+inline static bool populateScripts(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE).left(2);
     while (!element.isNull()) {
         QString script = element.text();
-        int type = ::m_ScriptsTypes.value(element.tagName(),Core::FormItemScripts::Script_OnDemand);
+        int type = ::m_ScriptsTypes.value(element.tagName(),Form::FormItemScripts::Script_OnDemand);
         item->scripts()->setScript(type,script,lang);
         element = element.nextSiblingElement();
     }
@@ -149,27 +149,27 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
 {
     setObjectName("XmlFormIO");
     ::m_ScriptsTypes.clear();
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Core::FormItemScripts::Script_OnLoad);
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_POSTLOAD, Core::FormItemScripts::Script_PostLoad);
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEMAND, Core::FormItemScripts::Script_OnDemand);
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUECHANGED, Core::FormItemScripts::Script_OnValueChanged);
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Core::FormItemScripts::Script_OnValueRequiered);
-    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Core::FormItemScripts::Script_OnDependentValueChanged);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Form::FormItemScripts::Script_OnLoad);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_POSTLOAD, Form::FormItemScripts::Script_PostLoad);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEMAND, Form::FormItemScripts::Script_OnDemand);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUECHANGED, Form::FormItemScripts::Script_OnValueChanged);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Form::FormItemScripts::Script_OnValueRequiered);
+    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Form::FormItemScripts::Script_OnDependentValueChanged);
     ::m_ValuesTypes.clear();
-    ::m_ValuesTypes.insert(Constants::TAG_VALUE_NUMERICAL, Core::FormItemValues::Value_Numerical);
-    ::m_ValuesTypes.insert(Constants::TAG_VALUE_SCRIPT, Core::FormItemValues::Value_Script);
-    ::m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Core::FormItemValues::Value_Possible);
-    ::m_ValuesTypes.insert(Constants::TAG_VALUE_DEPENDENCIES, Core::FormItemValues::Value_Dependency);
+    ::m_ValuesTypes.insert(Constants::TAG_VALUE_NUMERICAL, Form::FormItemValues::Value_Numerical);
+    ::m_ValuesTypes.insert(Constants::TAG_VALUE_SCRIPT, Form::FormItemValues::Value_Script);
+    ::m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Form::FormItemValues::Value_Possible);
+    ::m_ValuesTypes.insert(Constants::TAG_VALUE_DEPENDENCIES, Form::FormItemValues::Value_Dependency);
     ::m_SpecsTypes.clear();
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_PLUGINNAME, Core::FormItemSpec::Spec_Plugin);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_AUTHORS, Core::FormItemSpec::Spec_Author);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CATEGORY, Core::FormItemSpec::Spec_Category);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LICENSE, Core::FormItemSpec::Spec_License);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CREATIONDATE, Core::FormItemSpec::Spec_CreationDate);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_BIBLIOGRAPHY, Core::FormItemSpec::Spec_Bibliography);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_DESCRIPTION, Core::FormItemSpec::Spec_Description);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Core::FormItemSpec::Spec_Label);
-    ::m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Core::FormItemSpec::Spec_Version);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_PLUGINNAME, Form::FormItemSpec::Spec_Plugin);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_AUTHORS, Form::FormItemSpec::Spec_Author);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CATEGORY, Form::FormItemSpec::Spec_Category);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LICENSE, Form::FormItemSpec::Spec_License);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CREATIONDATE, Form::FormItemSpec::Spec_CreationDate);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_BIBLIOGRAPHY, Form::FormItemSpec::Spec_Bibliography);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_DESCRIPTION, Form::FormItemSpec::Spec_Description);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Form::FormItemSpec::Spec_Label);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
 }
 
 XmlFormIO::~XmlFormIO()
@@ -222,7 +222,7 @@ bool XmlFormIO::loadForm()
     return loadForm(m_AbsFileName,0);
 }
 
-bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
+bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 {
     // Read contents if necessary
     QString contents;
@@ -275,7 +275,7 @@ bool XmlFormIO::loadForm(const QString &file, Core::FormMain *rootForm)
     return true;
 }
 
-bool XmlFormIO::loadElement(Core::FormItem *item, QDomElement &rootElement)
+bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
 {
     QDomElement element = rootElement.firstChildElement();
     while (!element.isNull()) {
@@ -335,7 +335,7 @@ bool XmlFormIO::loadElement(Core::FormItem *item, QDomElement &rootElement)
     return true;
 }
 
-bool XmlFormIO::createElement(Core::FormItem *item, QDomElement &element)
+bool XmlFormIO::createElement(Form::FormItem *item, QDomElement &element)
 {
     qWarning() << "XmlFormIO create element" << element.text();
     // new item
@@ -377,7 +377,7 @@ bool XmlFormIO::createElement(Core::FormItem *item, QDomElement &element)
     return false;
 }
 
-bool XmlFormIO::createItemWidget(Core::FormItem *item, QWidget *parent)
+bool XmlFormIO::createItemWidget(Form::FormItem *item, QWidget *parent)
 {
     // does plugin was inform in the xml file ?
     if (item->spec()->pluginName().isEmpty()) {
@@ -394,19 +394,19 @@ bool XmlFormIO::createItemWidget(Core::FormItem *item, QWidget *parent)
     }
 
     // get the widget
-    Core::IFormWidgetFactory *factory = m_PlugsFactories.value(askedWidget);
-    Core::IFormWidget *w = 0;
+    Form::IFormWidgetFactory *factory = m_PlugsFactories.value(askedWidget);
+    Form::IFormWidget *w = 0;
     w = factory->createWidget(askedWidget,item);
     if (w->isContainer()) {
-        foreach(Core::FormItem *child, item->formItemChildren()) {
-//            Core::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
+        foreach(Form::FormItem *child, item->formItemChildren()) {
+//            Form::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
 //            w->addWidgetToContainer(wchild);
 //            child->setFormWidget(wchild);
             createItemWidget(child,w);
         }
     }
     item->setFormWidget(w);
-    Core::IFormWidget *p = qobject_cast<Core::IFormWidget*>(parent);
+    Form::IFormWidget *p = qobject_cast<Form::IFormWidget*>(parent);
     if (p)
         p->addWidgetToContainer(w);
 
@@ -425,7 +425,7 @@ bool XmlFormIO::createItemWidget(Core::FormItem *item, QWidget *parent)
     return true;
 }
 
-bool XmlFormIO::createFormWidget(Core::FormMain *form)
+bool XmlFormIO::createFormWidget(Form::FormMain *form)
 {
     // Create a new Widget with a vbox and put the label
     QWidget *w = new QWidget();
@@ -454,7 +454,7 @@ bool XmlFormIO::createFormWidget(Core::FormMain *form)
 bool XmlFormIO::createWidgets()
 {
     // foreach Forms in FormManager
-    foreach(Core::FormMain *form, formManager()->forms()) {
+    foreach(Form::FormMain *form, formManager()->forms()) {
         // create the form
         createFormWidget(form);
     }

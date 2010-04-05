@@ -12,7 +12,8 @@ SUBDIRS = \
     drugs \
     drugsbase \
     usermanager \
-    templates
+    templates \
+    formmanager
 #    patientbase \
 #    alerts \
 
@@ -68,3 +69,6 @@ alerts.depends += core
 
 templates.subdir = templatesplugin
 templates.depends += core
+
+formmanager.subdir = formmanagerplugin
+formmanager.depends += core

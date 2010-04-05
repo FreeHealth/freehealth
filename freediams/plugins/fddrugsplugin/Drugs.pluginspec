@@ -7,7 +7,6 @@
     <dependencyList>
         <dependency name="Core" version="0.0.9"/>
         <dependency name="DrugsBase" version="0.0.9"/>
-        <dependency name="ListView" version="0.0.9"/>
         <dependency name="Templates" version="0.0.9"/>
         <dependency name="TextEditor" version="0.0.9"/>
     </dependencyList>

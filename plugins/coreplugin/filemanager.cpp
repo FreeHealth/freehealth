@@ -47,7 +47,6 @@
 #include <QDebug>
 
 using namespace Core;
-using namespace Core::Internal;
 
 /*!
     Adds the \a fileName to the list of recent files.

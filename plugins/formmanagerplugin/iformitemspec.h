@@ -40,7 +40,8 @@
 #ifndef IFORMITEMSPEC_H
 #define IFORMITEMSPEC_H
 
-#include <coreplugin/core_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h>
+
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/constants.h>
 
@@ -66,11 +67,11 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 27 Aug 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
-namespace Core {
+namespace Form {
 class IFormWidget;
 
 class FormItemIdentifiants : public QObject
@@ -93,7 +94,7 @@ namespace Internal{
 class FormItemSpecPrivate;
 }
 
-class CORE_EXPORT FormItemSpec
+class FORM_EXPORT FormItemSpec
 {
 public:
     enum {
@@ -129,10 +130,10 @@ public:
     void toTreeWidget(QTreeWidgetItem *tree) const;
 
 private:
-    Core::Internal::FormItemSpecPrivate *d;
+    Form::Internal::FormItemSpecPrivate *d;
 };
 
 
-} // end Core
+} // end Form
 
 #endif // IFORMITEMSPEC_H

@@ -11,10 +11,10 @@
 #include <QEvent>
 #include <QBoxLayout>
 
-using namespace Core;
+using namespace Form;
 
 
-IFormWidget::IFormWidget(Core::FormItem *linkedObject, QWidget *parent )
+IFormWidget::IFormWidget(Form::FormItem *linkedObject, QWidget *parent )
         : QWidget(parent), m_LinkedObject(linkedObject)
 {
 }

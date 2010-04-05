@@ -48,8 +48,9 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/formmanager.h>
 #include <coreplugin/filemanager.h>
+
+//#include <coreplugin/formmanager.h>
 
 #include <fmfcoreplugin/commandlineparser.h>
 

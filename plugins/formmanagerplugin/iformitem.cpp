@@ -42,7 +42,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/formmanager.h>
+
+#include <formmanagerplugin/formmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>

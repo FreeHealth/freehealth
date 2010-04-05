@@ -32,89 +32,15 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef IFORMITEMSCRIPTS_H
-#define IFORMITEMSCRIPTS_H
+#ifndef FORMMANAGER_EXPORTER_H
+#define FORMMANAGER_EXPORTER_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/constants.h>
-#include <translationutils/constanttranslations.h>
+#include <qglobal.h>
 
-#include <QObject>
-#include <QString>
-#include <QDateTime>
-#include <QWidget>
-#include <QVariant>
-#include <QPointer>
-#include <QHash>
+#if defined(FORMMANAGER_LIBRARY)
+#define FORM_EXPORT Q_DECL_EXPORT
+#else
+#define FORM_EXPORT Q_DECL_IMPORT
+#endif
 
-
-#include <QDebug>
-
-QT_BEGIN_NAMESPACE
-class QTreeWidget;
-class QTreeWidgetItem;
-QT_END_NAMESPACE
-
-
-/**
- * \file iformitem.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 27 Aug 2009
-*/
-
-namespace Core {
-
-namespace Internal{
-class FormItemScriptsPrivate;
-}
-
-class CORE_EXPORT FormItemScripts
-{
-public:
-    enum {
-        Script_OnLoad = 0,
-        Script_PostLoad,
-        Script_OnDemand,
-        Script_OnValueChanged,
-        Script_OnValueRequiered,
-        Script_OnDependentValueChanged
-    };
-
-
-    FormItemScripts(const QString &lang = Trans::Constants::ALL_LANGUAGE,
-                    const QString &onLoad = QString::null,
-                    const QString &postLoad = QString::null,
-                    const QString &onDemand = QString::null,
-                    const QString &onValChanged = QString::null,
-                    const QString &onValRequiered = QString::null,
-                    const QString &onDependentValuesChanged = QString::null
-                    );
-    ~FormItemScripts();
-
-    void setScript(const int type, const QString &script, const QString &lang = Trans::Constants::ALL_LANGUAGE);
-    QString script(const int type, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
-
-    void warn() const;
-
-    QString onLoadScript() const {return script(Script_OnLoad);}
-    QString postLoadScript() const {return script(Script_PostLoad);}
-    QString onDemandScript() const {return script(Script_OnDemand);}
-    QString onValueChangedScript() const {return script(Script_OnValueChanged);}
-    QString onValueRequieredScript() const {return script(Script_OnValueRequiered);}
-    QString onDependentValueChangedScript() const {return script(Script_OnDependentValueChanged);}
-
-    void toTreeWidget(QTreeWidgetItem *tree);
-private:
-    Internal::FormItemScriptsPrivate *d;
-};
-
-
-} // end Core
-
-#endif // IFORMITEMSCRIPTS_H
+#endif

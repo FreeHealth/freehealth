@@ -37,12 +37,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef CORE_FILEMANAGER_H
-#define CORE_FILEMANAGER_H
+#ifndef IFORMITEMVALUES_H
+#define IFORMITEMVALUES_H
 
-#include <coreplugin/core_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h>
+
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QObject>
 #include <QString>
@@ -62,38 +64,58 @@ QT_END_NAMESPACE
 
 
 /**
- * \file filemanager.h
+ * \file iformitemvalues.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 13 Sept 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
-namespace Core {
+namespace Form {
 
-class CORE_EXPORT FileManager : public QObject
+namespace Internal {
+class FormItemValuesPrivate;
+}
+
+class FORM_EXPORT FormItemValues : public QObject
 {
     Q_OBJECT
-
 public:
-    FileManager(QObject *parent=0) : QObject(parent) {setObjectName("FileManager");}
-    virtual ~FileManager() {}
+    enum {
+        Value_Possible = 0,
+        Value_Script,
+        Value_Numerical,
+        Value_Default,
+        Value_Dependency
+    };
+    FormItemValues(QObject *parent);
+    ~FormItemValues();
 
-    // recent files
-    void getRecentFilesFromSettings();
-    void addToRecentFiles(const QString &fileName);
-    QStringList recentFiles() const;
-    void saveRecentFiles() const;
+    void setValue(int type, const int id, const QVariant &val, const QString &language = Trans::Constants::ALL_LANGUAGE);
+    void setDefaultValue(const QVariant &val, const QString &lang = Trans::Constants::ALL_LANGUAGE);
 
-    // current file
-    void setCurrentFile(const QString &filePath);
-    QString currentFile() const;
+    // this value represents the one the user's define : text of the LineEdit, value of the spinBox...
+//    void setSelectedValue(const QVariant &val);
+//    QVariant selectedValue() const;
+
+    bool isOptionnal() const;
+    void setOptionnal(bool state);
+
+    QStringList values(const int typeOfValues) const;
+
+    // unique or historic-values possibilities
+    // actual selected value(s)
+
+    // filename
+    void setFileName(const QString &fileName) {m_FileName=fileName;}
+    QString fileName() const {return m_FileName;}
+
+    void toTreeWidget(QTreeWidgetItem *tree) const;
 
 private:
-    QStringList m_recentFiles;
-    static const int m_maxRecentFiles = 10;
-    QString m_currentFile;
+    Internal::FormItemValuesPrivate *d;
+    QString m_FileName;
 };
 
-}  // end Core
+} // end Form
 
-#endif  // CORE_FILEMANAGER_H
+#endif // IFORMITEMVALUES_H

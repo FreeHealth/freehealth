@@ -73,6 +73,7 @@ The interface of \freediams is available in different languages: English, French
 \li \ref medintux
 \li \ref ligne_commandes
 \li \ref installation_cle_usb
+\li \ref multiple_drugs_databases
 \li \ref drugsdatabaseschema
 \li \ref participer
 

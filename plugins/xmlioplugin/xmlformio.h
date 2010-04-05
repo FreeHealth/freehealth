@@ -41,7 +41,7 @@
 #ifndef XMLFORMIO_H
 #define XMLFORMIO_H
 
-#include <coreplugin/iformio.h>
+#include <formmanagerplugin/iformio.h>
 
 #include <QDomNode>
 #include <QObject>
@@ -50,7 +50,7 @@
     class mfObject;
 //}
 
-namespace Core {
+namespace Form {
 class FormItem;
 class FormMain;
 class IFormWidgetFactory;
@@ -64,7 +64,7 @@ namespace XmlForms {
 //class XmlIOPrivate;
 //} // End Internal
 
-class XmlFormIO : public Core::IFormIO
+class XmlFormIO : public Form::IFormIO
 {
      Q_OBJECT
 public:
@@ -83,11 +83,11 @@ public:
     static QString lastestXmlVersion();
 
 private:
-    bool loadForm(const QString &file, Core::FormMain *rootForm);
-    bool loadElement(Core::FormItem *item, QDomElement &rootElement);
-    bool createElement(Core::FormItem *item, QDomElement &element);
-    bool createItemWidget(Core::FormItem *item, QWidget *parent = 0);
-    bool createFormWidget(Core::FormMain *form);
+    bool loadForm(const QString &file, Form::FormMain *rootForm);
+    bool loadElement(Form::FormItem *item, QDomElement &rootElement);
+    bool createElement(Form::FormItem *item, QDomElement &element);
+    bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
+    bool createFormWidget(Form::FormMain *form);
     bool createWidgets();
 
 private:

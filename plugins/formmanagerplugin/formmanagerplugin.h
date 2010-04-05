@@ -35,43 +35,37 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFORMIO_H
-#define IFORMIO_H
+#ifndef FORM_MANAGER_TPLUGIN_H
+#define FORM_MANAGER_TPLUGIN_H
 
-#include <coreplugin/core_exporter.h>
+#include <extensionsystem/iplugin.h>
 
-#include <QObject>
-#include <QStringList>
+#include <QtCore/QObject>
 
 /**
- * \file iformio.h
+ * \file formmanagerplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 09 Aug 2009
+ * \version 0.4.0
+ * \date 05 Apr 2010
 */
 
-namespace Core {
+namespace Form {
 
-class CORE_EXPORT IFormIO : public QObject
+class FormManagerPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
 public:
-    IFormIO(const QString &absFileName, QObject *parent=0) : QObject(parent) { Q_UNUSED(absFileName); }
-    virtual ~IFormIO() {}
+    FormManagerPlugin();
+    ~FormManagerPlugin();
 
-    virtual bool setFileName(const QString &absFileName) = 0;
-
-    virtual QStringList fileFilters() const = 0;
-
-    virtual QString managedFileExtension() const = 0;
-    virtual bool canReadFile() const = 0;
-
-    virtual bool loadForm() = 0;
-    virtual bool saveForm(QObject *treeRoot) = 0;
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
 };
 
-} // end Core
 
-#endif // IFORMIO_H
+}
+
+#endif  // End FORM_MANAGER_TPLUGIN_H

@@ -1,19 +1,19 @@
 #ifndef IFORMITEMDATAFACTORY_H
 #define IFORMITEMDATAFACTORY_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/iformitem.h>
+#include <formmanagerplugin/formmanager_exporter.h>
+#include <formmanagerplugin/iformitem.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-namespace Core {
+namespace Form {
 class IFormItemData;
 class FormItem;
 
-class CORE_EXPORT IFormItemDataFactory : public QObject
+class FORM_EXPORT IFormItemDataFactory : public QObject
 {
     Q_OBJECT
 public:
@@ -29,7 +29,7 @@ public:
 };
 
 
-class CORE_EXPORT IFormItemData : public QObject
+class FORM_EXPORT IFormItemData : public QObject
 {
     Q_OBJECT
     friend class IFormItemDataFactory;
@@ -56,8 +56,8 @@ public:
 protected:
     explicit IFormItemData(Core::FormItem *parent) : QObject(parent) {}
 };
-} // namespace Core
+} // namespace Form
 
-Q_DECLARE_METATYPE(Core::IFormItemData*);
+Q_DECLARE_METATYPE(Form::IFormItemData*);
 
 #endif // IFORMITEMDATAFACTORY_H

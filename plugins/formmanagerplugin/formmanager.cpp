@@ -35,7 +35,8 @@
 #include "formmanager.h"
 #include "iformitem.h"
 
-#include <coreplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+
 #include <coreplugin/uniqueidmanager.h>
 
 #include <utils/global.h>
@@ -50,10 +51,10 @@
 #include <QPointer>
 #include <QMap>
 
-using namespace Core;
-using namespace Core::Internal;
+using namespace Form;
+using namespace Form::Internal;
 
-namespace Core {
+namespace Form {
 namespace Internal {
 class FormManagerPrivate
 {
@@ -70,17 +71,17 @@ public:
     QPointer<QStackedLayout> m_Stack;
     QPointer<QTreeWidget> m_Tree;
     Core::UniqueIDManager *m_UuidManager;
-    QMap<int, Core::FormMain *> m_MappedForms;
+    QMap<int, Form::FormMain *> m_MappedForms;
 
 private:
 };
 } // End Internal
-} // End Core
+} // End Form
 
 FormManager::FormManager(QObject *parent)
-        : QObject(parent), d(new Core::Internal::FormManagerPrivate)
+        : QObject(parent), d(new Form::Internal::FormManagerPrivate)
 {
-    setObjectName("Core::FormManager");
+    setObjectName("Form::FormManager");
     d->m_UuidManager = new UniqueIDManager();
 }
 

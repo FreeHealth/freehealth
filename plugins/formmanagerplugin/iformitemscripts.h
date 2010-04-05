@@ -37,12 +37,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef CORE_FILEMANAGER_H
-#define CORE_FILEMANAGER_H
+#ifndef IFORMITEMSCRIPTS_H
+#define IFORMITEMSCRIPTS_H
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/idebugpage.h>
+#include <formmanagerplugin/formmanager_exporter.h>
+
 #include <coreplugin/constants.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QObject>
 #include <QString>
@@ -62,38 +63,59 @@ QT_END_NAMESPACE
 
 
 /**
- * \file filemanager.h
+ * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 13 Sept 2009
+ * \version 0.0.8
+ * \date 27 Aug 2009
 */
 
-namespace Core {
+namespace Form {
 
-class CORE_EXPORT FileManager : public QObject
+namespace Internal{
+class FormItemScriptsPrivate;
+}
+
+class FORM_EXPORT FormItemScripts
 {
-    Q_OBJECT
-
 public:
-    FileManager(QObject *parent=0) : QObject(parent) {setObjectName("FileManager");}
-    virtual ~FileManager() {}
+    enum {
+        Script_OnLoad = 0,
+        Script_PostLoad,
+        Script_OnDemand,
+        Script_OnValueChanged,
+        Script_OnValueRequiered,
+        Script_OnDependentValueChanged
+    };
 
-    // recent files
-    void getRecentFilesFromSettings();
-    void addToRecentFiles(const QString &fileName);
-    QStringList recentFiles() const;
-    void saveRecentFiles() const;
 
-    // current file
-    void setCurrentFile(const QString &filePath);
-    QString currentFile() const;
+    FormItemScripts(const QString &lang = Trans::Constants::ALL_LANGUAGE,
+                    const QString &onLoad = QString::null,
+                    const QString &postLoad = QString::null,
+                    const QString &onDemand = QString::null,
+                    const QString &onValChanged = QString::null,
+                    const QString &onValRequiered = QString::null,
+                    const QString &onDependentValuesChanged = QString::null
+                    );
+    ~FormItemScripts();
 
+    void setScript(const int type, const QString &script, const QString &lang = Trans::Constants::ALL_LANGUAGE);
+    QString script(const int type, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+
+    void warn() const;
+
+    QString onLoadScript() const {return script(Script_OnLoad);}
+    QString postLoadScript() const {return script(Script_PostLoad);}
+    QString onDemandScript() const {return script(Script_OnDemand);}
+    QString onValueChangedScript() const {return script(Script_OnValueChanged);}
+    QString onValueRequieredScript() const {return script(Script_OnValueRequiered);}
+    QString onDependentValueChangedScript() const {return script(Script_OnDependentValueChanged);}
+
+    void toTreeWidget(QTreeWidgetItem *tree);
 private:
-    QStringList m_recentFiles;
-    static const int m_maxRecentFiles = 10;
-    QString m_currentFile;
+    Internal::FormItemScriptsPrivate *d;
 };
 
-}  // end Core
 
-#endif  // CORE_FILEMANAGER_H
+} // end Form
+
+#endif // IFORMITEMSCRIPTS_H
