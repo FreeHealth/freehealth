@@ -116,6 +116,8 @@ public:
     Database();
     virtual ~Database();
 
+    static void logAvailableDrivers();
+
     // connection
     virtual bool createConnection( const QString & connectionName, const QString & dbName,
                                    const QString & pathOrHostName,

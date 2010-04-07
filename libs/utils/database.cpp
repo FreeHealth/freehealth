@@ -114,6 +114,18 @@ public:
 }
 }
 
+void Database::logAvailableDrivers()
+{
+    QString tmp;
+    foreach(const QString &drv, QSqlDatabase::drivers()) {
+        if (QSqlDatabase::isDriverAvailable(drv)) {
+            tmp += drv + " ; ";
+        }
+    }
+    tmp.chop(3);
+    Utils::Log::addMessage("Database", QString("Available drivers : %1").arg(tmp));
+}
+
 
 Database::Database()
         : d(0)

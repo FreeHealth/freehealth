@@ -44,6 +44,7 @@
 #include <extensionsystem/iplugin.h>
 
 #include <utils/log.h>
+#include <utils/database.h>
 
 #include <iostream>
 
@@ -155,6 +156,8 @@ int main( int argc, char *argv[] )
     // Add some debugging informations
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
+    Utils::Database::logAvailableDrivers();
+
 #ifdef DEBUG
     Utils::Log::addMessage("Main", "Running debug version");
 #else
