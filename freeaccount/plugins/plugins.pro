@@ -14,6 +14,7 @@ core.subdir = ../../plugins/faccountcoreplugin
 mainwindow.subdir   = ../../plugins/faccountmainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += printer
+mainwindow.depends += account
 
 accountbase.subdir   = ../../plugins/accountbaseplugin
 accountbase.depends += core
