@@ -23,6 +23,8 @@ account.subdir   = ../../plugins/accountplugin
 account.depends += core
 account.depends += texteditor
 account.depends += printer
+account.depends += accountbase
+#account.depends += listview
 
 printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
