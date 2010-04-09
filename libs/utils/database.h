@@ -47,6 +47,7 @@
 #include <QSqlDatabase>
 #include <QVariant>
 #include <QObject>
+#include <QHash>
 
 /**
  * \file database.h
@@ -113,6 +114,32 @@ public:
         FieldIsReal
     };
 
+    /** \brief Describe the grants on database/server (mainly used for MySQL connections). */
+    enum Grant {
+        Grant_Select           = 0x00001,
+        Grant_Update           = 0x00002,
+        Grant_Insert           = 0x00004,
+        Grant_Delete           = 0x00008,
+        Grant_Create           = 0x00010,
+        Grant_Drop             = 0x00020,
+        Grant_Index            = 0x00040,
+        Grant_Alter            = 0x00080,
+        Grant_CreateTmpTables  = 0x00100,
+        Grant_LockTables       = 0x00200,
+        Grant_Execute          = 0x00400,
+        Grant_CreateView       = 0x00800,
+        Grant_ShowView         = 0x01000,
+        Grant_CreateRoutine    = 0x02000,
+        Grant_AlterRoutine     = 0x04000,
+        Grant_CreateUser       = 0x08000,
+        Grant_Options          = 0x10000,
+        Grant_Process          = 0x20000,
+        Grant_Trigger          = 0x40000,
+        Grant_ShowDatabases    = 0x80000,
+        Grant_All              = 0xFFFFF
+    };
+    Q_DECLARE_FLAGS(Grants, Grant);
+
     Database();
     virtual ~Database();
 
@@ -139,6 +166,8 @@ public:
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
 
+    Grants grants(const QString &connectionName) const;
+
 
     // manage database scheme (use enums for the int references)
     virtual int addTable( const int & ref, const QString & name );
@@ -158,12 +187,14 @@ public:
     virtual QString select( const int & tableref, const QList<int> &fieldsref ) const;
     virtual QString select( const int & tableref, const QHash<int, QString> & conditions ) const;
     virtual QString select( const int & tableref ) const;
-    virtual QString selectDistinct( const int & tableref, const int & fieldref, const QHash<int, QString> & conditions ) const;
+    virtual QString selectDistinct( const int & tableref, const int & fieldref, const QHash<int, QString> &conditions ) const;
 
     virtual QString prepareInsertQuery( const int & tableref ) const;
 
-    virtual QString prepareUpdateQuery( const int & tableref, int fieldref, QHash<int, QString> conditions );
-    virtual QString prepareUpdateQuery( const int & tableref, QHash<int, QString> conditions );
+    virtual QString prepareUpdateQuery( const int & tableref, int fieldref, const QHash<int, QString> &conditions);
+    virtual QString prepareUpdateQuery( const int & tableref, int fieldref );
+    virtual QString prepareUpdateQuery( const int & tableref, const QHash<int, QString> &conditions );
+    virtual QString prepareUpdateQuery( const int & tableref );
 
     virtual QString prepareDeleteQuery( const int tableref, const QHash<int,QString> & conditions );
 
@@ -180,10 +211,14 @@ public:
 
 protected:
     virtual void setConnectionName( const QString & c );
+    virtual void setDriver(const AvailableDrivers &d);
 
 private:
     Internal::DatabasePrivate *d;
 };
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Utils::Database::Grants);
+
 #endif // UTILS_DATABASE_H

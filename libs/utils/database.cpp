@@ -78,6 +78,8 @@
 #include "database.h"
 #include "log.h"
 
+#include <translationutils/constanttranslations.h>
+
 #include <QDir>
 #include <QSqlRecord>
 #include <QSqlField>
@@ -90,6 +92,7 @@ enum {WarnSqlCommands=false};
 
 using namespace Utils;
 using namespace Utils::Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 namespace Internal {
@@ -98,8 +101,52 @@ class DatabasePrivate
 public:
     DatabasePrivate();
     ~DatabasePrivate() {}
-    QString getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver);
-    QString getTypeOfField(const int & fieldref, const Database::AvailableDrivers)const;
+    QString getSQLCreateTable(const int & tableref);
+    QString getTypeOfField(const int & fieldref) const;
+
+    void getGrants(const QString &connection, const QStringList &grants)
+    {
+        QHash<QString, int> ref;
+        ref.insert("ALL PRIVILEGES", Database::Grant_All);
+        ref.insert("ALTER", Database::Grant_Alter);
+        ref.insert("ALTER ROUTINE", Database::Grant_AlterRoutine);
+        ref.insert("CREATE", Database::Grant_Create);
+        ref.insert("CREATE ROUTINE", Database::Grant_CreateRoutine);
+        ref.insert("CREATE TEMPORARY TABLES", Database::Grant_CreateTmpTables);
+        ref.insert("CREATE USER", Database::Grant_CreateUser);
+        ref.insert("CREATE VIEW", Database::Grant_CreateView);
+        ref.insert("DELETE", Database::Grant_Delete);
+        ref.insert("DROP", Database::Grant_Drop);
+        ref.insert("EXECUTE", Database::Grant_Execute);
+        ref.insert("GRANT OPTION", Database::Grant_Options);
+        ref.insert("INDEX", Database::Grant_Index);
+        ref.insert("INSERT", Database::Grant_Insert);
+        ref.insert("LOCK TABLES", Database::Grant_LockTables);
+        ref.insert("PROCESS", Database::Grant_Process);
+        ref.insert("SELECT", Database::Grant_Select);
+        ref.insert("SHOW DATABASES", Database::Grant_ShowDatabases);
+        ref.insert("SHOW VIEW", Database::Grant_ShowView);
+        ref.insert("TRIGGER", Database::Grant_Trigger);
+        ref.insert("UPDATE", Database::Grant_Update);
+//        ref.insert("EVENT", Database::Grant_Event);
+//        ref.insert("FILE", Database::Grant_File);
+//        ref.insert("REFERENCES", Database::Grant_References);
+//        ref.insert("RELOAD", Database::Grant_Reload);
+//        ref.insert("USAGE", Database::Grant_Usage);
+
+        // check grants from stringlist
+        Database::Grants g = 0;
+        foreach(const QString &s, grants) {
+            foreach(const QString &k, ref.keys()) {
+                if (s.contains(k + ",") || s.contains(k+" ON")) {
+                    g |= Database::Grants(ref.value(k));
+                    break;
+                }
+            }
+        }
+        m_Grants.insert(connection, g);
+//        qWarning() << g;
+    }
 
 public:
     QHash<int, QString>        m_Tables;         // tables are not sorted
@@ -107,9 +154,11 @@ public:
     QMap<int, QString>         m_Fields;         // fields should be sorted from first to last one using ref
     QHash<int, int>            m_TypeOfField;
     QHash<int, QString>        m_DefaultFieldValue;
-    int                        m_LastCorrectLogin;
     bool                       m_initialized;
+    int                        m_LastCorrectLogin;
     QString                    m_ConnectionName;
+    QHash<QString, Database::Grants> m_Grants;
+    Database::AvailableDrivers m_Driver;
 };
 }
 }
@@ -138,10 +187,11 @@ Database::~Database()
     if (d) delete d; d=0;
 }
 
-DatabasePrivate::DatabasePrivate()
+DatabasePrivate::DatabasePrivate() :
+        m_initialized(false),
+        m_LastCorrectLogin(-1),
+        m_Driver(Database::SQLite)
 {
-    m_initialized      = false;
-    m_LastCorrectLogin = -1;
     m_ConnectionName = "";
 }
 
@@ -155,7 +205,14 @@ QSqlDatabase Database::database() const
 { return QSqlDatabase::database(d->m_ConnectionName); }
 
 /**
-  \brief Create the connection to the database. If database does not exists createDatabase() is called.
+  \brief Create the connection to the database.
+  If database does not exists, according to the \e createOption, createDatabase() is called.
+  An error is returned if :
+  - Driver is not available
+  - Can not connect to server (wrong host/log/pass)
+  - Can not create database is it doesn't exists and user asked to create it
+  - Can not read database if asked to be readable
+  - Can not write in database if asked to be writable
   \param connectionName = name of the connect
   \param dbName = name of the database
   \param pathOrHostName = path to the SQLite file or name of the host name to connect to.
@@ -170,86 +227,222 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                                    TypeOfAccess access, AvailableDrivers driver,
                                    const QString & login, const QString & password,
                                    CreationOption createOption
-                                  )
+                                   )
 {
     bool toReturn = true;
     d->m_ConnectionName = "";
 
     // does driver is available
-    if ((driver == SQLite) && (! QSqlDatabase::isDriverAvailable("QSQLITE"))) {
-        Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available").arg("SQLite"));
-        return false;
-    } else if ((driver == MySQL) && (! QSqlDatabase::isDriverAvailable("QMYSQL"))) {
-        Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available").arg("MySQL"));
-        return false;
-    } else if ((driver == PostSQL) && (! QSqlDatabase::isDriverAvailable("QPSQL"))) {
-        Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 driver is not available").arg("PostGreSQL"));
-        return false;
+    switch (driver) {
+    case SQLite :
+        {
+            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                                   .arg(dbName)
+                                   .arg("SQlite"));
+            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+                Log::addError("Database", QCoreApplication::translate("Database",
+                                                                      "ERROR : %1 driver is not available")
+                              .arg("SQLite"));
+                return false;
+            }
+            break;
+        }
+    case MySQL:
+        {
+            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                                   .arg(dbName)
+                                   .arg("MySQL"));
+            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+                Log::addError("Database", QCoreApplication::translate("Database",
+                                                                      "ERROR : %1 driver is not available")
+                              .arg("MySQL"));
+                return false;
+            }
+            break;
+        }
+    case PostSQL :
+        {
+            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                                   .arg(dbName)
+                                   .arg("PostGre SQL"));
+            if (!QSqlDatabase::isDriverAvailable("QPSQL")) {
+                Log::addError("Database", QCoreApplication::translate("Database",
+                                                                      "ERROR : %1 driver is not available")
+                              .arg("PostGreSQL"));
+                return false;
+            }
+        }
     }
 
     // does connection already exists ?
     if (QSqlDatabase::contains(connectionName)) {
         Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                      "WARNING : %1 database already in use").arg(connectionName));
+                                                                "WARNING : %1 database already in use")
+                        .arg(connectionName));
         d->m_ConnectionName = connectionName;
         return true;
     }
 
-    // test dbname file if user if asking SQLite driver
-    if (driver == SQLite) {
-        if ((! QFile(pathOrHostName + QDir::separator() + dbName).exists())||
-             (QFileInfo(pathOrHostName + QDir::separator() + dbName).size() == 0)) {
-            if (createOption == CreateDatabase){
-                if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
-                    Log::addError("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
-                    return false;
-                }
-            } else { // Warn Only
-                    Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                    "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
-                    return false;
+    QSqlDatabase DB;
+    QString fileName = pathOrHostName + QDir::separator() + dbName;
+
+    // check server connection
+    switch (driver) {
+    case SQLite: break;
+    case MySQL:
+        {
+            DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
+            DB.setHostName(pathOrHostName);
+            DB.setUserName(login);
+            DB.setPassword(password);
+            bool ok = DB.open();
+            if (!ok) {
+                Utils::Log::addError("Database", QString("Unable to connect to the server %1 - %2")
+                                     .arg(pathOrHostName).arg(DB.lastError().text()));
+                return false;
             }
+            Utils::Log::addMessage("Database", QString("Connected to host %1").arg(pathOrHostName));
+            break;
+        }
+    case PostSQL:
+        {
+            /** \todo Check PostSQL connection */
+            break;
+        }
+    }
+
+    // create database is not exists and user ask for database creation
+    switch (driver) {
+    case SQLite:
+        {
+            if ((!QFile(fileName).exists()) ||
+                 (QFileInfo(fileName).size() == 0)) {
+                if (createOption == CreateDatabase) {
+                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
+                        Log::addError("Database", QCoreApplication::translate("Database",
+                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                        return false;
+                    }
+                } else { // Warn Only
+                        Log::addMessage("Database", QCoreApplication::translate("Database",
+                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                        return false;
+                }
+            }
+            break;
+        }
+    case MySQL:
+        {
+            // can get connection to server ?
+            DB.setDatabaseName(dbName);
+            bool ok = DB.open();
+            if (!ok) {
+                Utils::Log::addError("Database", QString("Unable to connect to the database %1 - %2")
+                                     .arg(dbName).arg(DB.lastError().text()));
+                if (createOption == CreateDatabase) {
+                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
+                        Log::addError("Database", QCoreApplication::translate("Database",
+                                      "ERROR : %1 database does not exist and can not be created. Path = %2")
+                                      .arg(dbName, pathOrHostName));
+                        return false;
+                    }
+                } else { // Warn Only
+                        Log::addMessage("Database", QCoreApplication::translate("Database",
+                                        "ERROR : %1 database does not exist and can not be created. Path = %2")
+                                        .arg(dbName, pathOrHostName));
+                        return false;
+                }
+            }
+            Utils::Log::addMessage("Database", QString("Connected to database %1").arg(dbName));
+            break;
+        }
+    case PostSQL:
+        {
+            /** \todo Test database existence */
+            break;
         }
     }
 
     // test read access to database
-    if (!QFileInfo(pathOrHostName + QDir::separator() + dbName).isReadable()) {
-        Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
-                         .arg(dbName, pathOrHostName));
-        toReturn = false;
+    switch (driver) {
+    case SQLite:
+        {
+            if (!QFileInfo(fileName).isReadable()) {
+                Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
+                              .arg(dbName, pathOrHostName));
+                toReturn = false;
+            }
+            break;
+        }
+    case MySQL:
+        {
+            if (!DB.open()) {
+                Log::addError("Database", QCoreApplication::translate("Database",
+                              "ERROR : Database %1 is not readable. Path : %2")
+                              .arg(dbName, pathOrHostName));
+                return false;
+            }
+            QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
+            if (!query.isActive()) {
+                Log::addError("Database", QCoreApplication::translate("Database",
+                              "ERROR : Database %1 is not readable. Path : %2")
+                              .arg(dbName, pathOrHostName));
+                Log::addQueryError("Database", query);
+                return false;
+            } else {
+                QStringList grants;
+                while (query.next()) {
+                    grants << query.value(0).toString();
+                }
+                d->getGrants(connectionName, grants);
+                qWarning() << grants;
+            }
+            break;
+        }
+    case PostSQL:
+        {
+            /** \todo Test database connection PostSQL */
+            break;
+        }
     }
 
     // test write access
-    // TODO manage MySQL
-    if (driver == SQLite) {
-        if ((access == ReadWrite) && (!QFileInfo(pathOrHostName + QDir::separator() + dbName).isWritable())) {
-            Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not writable. Path : %2.")
-                             .arg(dbName, pathOrHostName));
-            toReturn = false;
+    if (access == ReadWrite) {
+        switch (driver) {
+        case SQLite:
+            {
+                if (!QFileInfo(fileName).isWritable()) {
+                    Log::addError("Database", QCoreApplication::translate("Database",
+                                  "ERROR : Database %1 is not writable. Path : %2.")
+                                  .arg(dbName, pathOrHostName));
+                    toReturn = false;
+                }
+                break;
+            }
+        case MySQL:
+            {
+                /** \todo test write access to MySQL database */
+                break;
+            }
+        case PostSQL:
+            {
+                /** \todo test write access to PostGreSQL database */
+                break;
+            }
         }
     }
 
     // create connection
-    QSqlDatabase DB;
     switch (driver)
     {
         case SQLite :
         {
              DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
-             DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
+             DB.setDatabaseName(QDir::cleanPath(fileName));
              break;
          }
         case MySQL :
         {
-             DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
-             DB.setDatabaseName(dbName);
-             DB.setHostName(pathOrHostName);
-             DB.setUserName(login);
-             DB.setPassword(password);
              break;
          }
         case PostSQL :
@@ -284,9 +477,18 @@ QString Database::connectionName() const
     return d->m_ConnectionName;
 }
 
+/** \brief returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
+Database::Grants Database::grants(const QString &connectionName) const
+{
+    return d->m_Grants.value(connectionName, 0);
+}
+
 /** \brief Set connectionName to \e c */
 void Database::setConnectionName(const QString & c)
 { d->m_ConnectionName = c; }
+
+void Database::setDriver(const Database::AvailableDrivers &drv)
+{ d->m_Driver = drv; }
 
 /** \brief Add a table \e name to the database scheme with the index \e ref */
 int Database::addTable(const int & ref, const QString & name)
@@ -314,7 +516,6 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
 /** \brief Verify that the dynamically scheme passed is corresponding to the real database scheme. */
 bool Database::checkDatabaseScheme()
 {
-    /** \todo need to be tested */
     if (d->m_ConnectionName.isEmpty())
         return false;
     if (d->m_Tables.keys().count() == 0)
@@ -502,7 +703,7 @@ QString Database::select(const int & tableref) const
     return toReturn;
 }
 
-QString Database::prepareInsertQuery(const int & tableref)const
+QString Database::prepareInsertQuery(const int & tableref) const
 {
     QString toReturn;
     QString fields;
@@ -525,7 +726,7 @@ QString Database::prepareInsertQuery(const int & tableref)const
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<int, QString> conditions)
+QString Database::prepareUpdateQuery(const int & tableref, int fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4")
@@ -540,17 +741,49 @@ QString Database::prepareUpdateQuery(const int & tableref, int fieldref, QHash<i
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, QHash<int, QString> conditions)
+QString Database::prepareUpdateQuery(const int & tableref, int fieldref)
+{
+    QString toReturn;
+    toReturn = QString("UPDATE `%1` SET `%2` = ?")
+               .arg(table(tableref))
+               .arg(field(tableref, fieldref));
+    // UPDATE tbl_name [, tbl_name ...]
+    // SET col_name1=expr1 [, col_name2=expr2 ...]
+    // WHERE where_definition
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+QString Database::prepareUpdateQuery(const int & tableref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
     QString tmp;
-    foreach(const QString & f, fields(tableref))
+    foreach(const QString &f, fields(tableref))
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
-    toReturn = QString("UPDATE `%1` \nSET %2 \nWHERE %4")
+    toReturn = QString("UPDATE `%1` SET \n%2 \nWHERE %4")
                .arg(table(tableref))
                .arg(tmp)
                .arg(getWhereClause(tableref, conditions));
+    // UPDATE tbl_name [, tbl_name ...]
+    // SET col_name1=expr1 [, col_name2=expr2 ...]
+    // WHERE where_definition
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+QString Database::prepareUpdateQuery(const int & tableref)
+{
+    QString toReturn;
+    QString tmp;
+    foreach(const QString &f, fields(tableref))
+        tmp += QString ("`%1`=? , ").arg(f);
+    tmp.chop(2);
+    toReturn = QString("UPDATE `%1` SET \n%2 ")
+               .arg(table(tableref))
+               .arg(tmp);
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -598,7 +831,7 @@ bool Database::createTable(const int & tableref) const
 
     // create query
     QString req;
-    req = d->getSQLCreateTable(tableref, SQLite);
+    req = d->getSQLCreateTable(tableref);
 
     return executeSQL(QStringList() << req, DB);
 }
@@ -641,7 +874,7 @@ QString Database::total(const int tableRef, const int fieldRef) const
     return toReturn;
 }
 
-QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database::AvailableDrivers driver)
+QString DatabasePrivate::getSQLCreateTable(const int & tableref)
 {
     QString toReturn;
     toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
@@ -655,11 +888,11 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
             if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
                 toReturn.append(QString("%1 \t %2 DEFAULT NULL, \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             } else {
                 toReturn.append(QString("%1 \t %2, \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver)));// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             }
         } else {
 
@@ -673,19 +906,19 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
             case Database::FieldIsBlob :
                 toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             case Database::FieldIsDate :
                 if (m_DefaultFieldValue.value(i).startsWith("CUR"))
                     toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 else
                     toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             case Database::FieldIsBoolean :
@@ -694,13 +927,13 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
             case Database::FieldIsReal :
                 toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             default :
                     toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
                                     .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                    .arg(getTypeOfField(i, driver))// .leftJustified(20, ' '))
+                                    .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                     .arg(m_DefaultFieldValue.value(i)));
             break;
 
@@ -716,7 +949,7 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref, const Database:
     return toReturn;
 }
 
-QString DatabasePrivate::getTypeOfField(const int & fieldref, const Database::AvailableDrivers)const
+QString DatabasePrivate::getTypeOfField(const int & fieldref) const
 {
     QString toReturn;
     switch (Database::TypeOfField(m_TypeOfField.value(fieldref)))
@@ -746,7 +979,11 @@ QString DatabasePrivate::getTypeOfField(const int & fieldref, const Database::Av
             toReturn = "integer";
             break;
         case Database::FieldIsUniquePrimaryKey :
-            toReturn = "integer not null primary key";
+            if (m_Driver==Database::SQLite) {
+                toReturn = "integer not null primary key";
+            } else if (m_Driver==Database::MySQL) {
+                toReturn = "integer unsigned not null primary key auto_increment";
+            }
             break;
         case Database::FieldIsLongInteger :
             toReturn = "int(11)";
@@ -787,7 +1024,7 @@ void Database::warn() const
         foreach(int f, list)
             Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4")
                                .arg(f)
-                               .arg(d->m_Fields[f], d->getTypeOfField(f, SQLite), d->m_DefaultFieldValue[i]));
+                               .arg(d->m_Fields[f], d->getTypeOfField(f), d->m_DefaultFieldValue[i]));
 
     }
 }
