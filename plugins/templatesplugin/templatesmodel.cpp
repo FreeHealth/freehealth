@@ -46,6 +46,7 @@
 */
 
 #include "templatesmodel.h"
+#include "templatebase.h"
 #include "itemplates.h"
 #include "constants.h"
 
@@ -72,11 +73,13 @@
 #include <QDebug>
 
 /**
-  \todo Remove the static datas. instead use a new member getDatas() to be called after setCategoryOnly(bool)
-  \todo Don't get the contents of templates to memory
-  \todo Detect corrupted templates database --> ask user what to do
+  \todo Add a UUID to templates and categories
   \todo Add user filter, MimeType filter
+  \todo Don't get the contents of templates to memory
+  \todo Remove the static datas. instead use a new member getDatas() to be called after setCategoryOnly(bool)
+  \todo Detect corrupted templates database --> ask user what to do
   \todo Add a coreListener --> save templates database before closing application
+  \todo Manage transmission date
 */
 
 
@@ -100,13 +103,10 @@ enum {
 #endif
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Templates::TemplateBase *templateBase() {return Templates::TemplateBase::instance();}
 
 namespace Templates {
 namespace Internal {
-
-    static const char *const DATABASE_NAME = "templates";
-    static const char *const DATABASE_FILENAME = "templates.db";
-    static const char *const DATABASE_ACTUAL_VERSION = "0.3.0";
 
 class TemplatesCoreListener : public Core::ICoreListener
 {
@@ -290,25 +290,25 @@ public:
     {
         q->setObjectName("TemplatesModel");
         if (!m_ModelDatasRetreived) {
-            QSqlDatabase DB;
-            DB = QSqlDatabase::addDatabase("QSQLITE" , Internal::DATABASE_NAME);
-            if (!databasePath().exists()) {
-                if (!QDir().mkpath(databasePath().absolutePath())) {
-                    tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(databasePath().absolutePath());
-                }
-            }
-            DB.setDatabaseName(QDir::cleanPath(databasePath().absolutePath() + QDir::separator() + Internal::DATABASE_FILENAME));
-            if (!DB.open()) {
-                Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                     .arg(Internal::DATABASE_NAME)
-                                     .arg(DB.lastError().text()));
-            }
-            // Test if database already created or need to be created
-            if (DB.tables(QSql::Tables).count() == 0) {
-                createDatabase();
-            } else if (DB.tables(QSql::Tables).count() != 3) {
-                /** \todo Corrupted templates database --> ask user what to do */
-            }
+//            QSqlDatabase DB;
+//            DB = QSqlDatabase::addDatabase("QSQLITE" , Constants::DB_TEMPLATES_NAME);
+//            if (!databasePath().exists()) {
+//                if (!QDir().mkpath(databasePath().absolutePath())) {
+//                    tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(databasePath().absolutePath());
+//                }
+//            }
+//            DB.setDatabaseName(QDir::cleanPath(databasePath().absolutePath() + QDir::separator() + Constants::DB_TEMPLATES_FILENAME));
+//            if (!DB.open()) {
+//                Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+//                                     .arg(Constants::DB_TEMPLATES_NAME)
+//                                     .arg(DB.lastError().text()));
+//            }
+//            // Test if database already created or need to be created
+//            if (DB.tables(QSql::Tables).count() == 0) {
+//                createDatabase();
+//            } else if (DB.tables(QSql::Tables).count() != 3) {
+//                /** \todo Corrupted templates database --> ask user what to do */
+//            }
             QHash<int, QVariant> datas;
             datas.insert(Constants::Data_Label, "ROOT");
             datas.insert(Constants::Data_ParentId, -1);
@@ -395,73 +395,73 @@ public:
             }
     }
 
-    QDir databasePath() const
-    {
-        return QDir(settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + DATABASE_NAME);
-    }
+//    QDir databasePath() const
+//    {
+//        return QDir(settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + Constants::DB_TEMPLATES_NAME);
+//    }
 
-    bool createDatabase() const
-    {
-        Utils::Log::addMessage(q, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                               .arg(DATABASE_NAME).arg(databasePath().absolutePath()));
-        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DATABASE_NAME)
-                                 .arg(DB.lastError().text()));
-            return false;
-        }
-        QStringList req;
-        req <<  "CREATE TABLE IF NOT EXISTS `TEMPLATES` ("
-                "`TEMPLATE_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
-                "`TEMPLATE_UUID`            varchar(40)    NULL,"
-                "`USER_UUID`                int(11)        NULL,"
-                "`ID_CATEGORY`              int(11)        DEFAULT -1,"
-                "`LABEL`                    varchar(300)   NULL,"
-                "`SUMMARY`                  varchar(500)   NULL,"
-                "`CONTENT`                  blob           NULL,"
-                "`CONTENT_MIMETYPES`        varchar(300)   NULL,"
-                "`DATE_CREATION`            date           NULL,"
-                "`DATE_MODIFICATION`        date           NULL,"
-                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
-                "`TRANSMISSION_DATE`        date           NULL"
-                ");";
-        req <<  "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
-                "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
-                "`CATEGORY_UUID`            varchar(40)    NULL,"
-                "`USER_UUID`                int(11)        NULL,"
-                "`PARENT_CATEGORY`          int(11)        DEFAULT -1,"
-                "`LABEL`                    varchar(300)   NULL,"
-                "`SUMMARY`                  varchar(500)   NULL,"
-                "`MIMETYPES`                varchar(300)   NULL,"
-                "`DATE_CREATION`            date           NULL,"
-                "`DATE_MODIFICATION`        date           NULL,"
-                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
-                "`TRANSMISSION_DATE`        date           NULL"
-                ");";
-        req <<  "CREATE TABLE IF NOT EXISTS `VERSION` ("
-                "`ACTUAL`                  varchar(10)"
-                ");";
-        req <<  QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(DATABASE_ACTUAL_VERSION);
-        req <<  "CREATE TRIGGER delete_all_category_children AFTER "
-                "DELETE ON `CATEGORIES` "
-                "FOR EACH ROW "
-                "  BEGIN"
-                "    DELETE FROM `CATEGORIES` WHERE `CATEGORIES`.`PARENT_CATEGORY`=old.`CATEGORY_ID`;"
-                "    DELETE FROM `TEMPLATES` WHERE `TEMPLATES`.`ID_CATEGORY`=old.`CATEGORY_ID`;"
-                "  END;";
-        bool toReturn = true;
-        foreach(const QString &r, req) {
-            QSqlQuery query(r,DB);
-            if (query.isActive()) {
-                query.next();
-            } else {
-                Utils::Log::addQueryError(q,query);
-                toReturn = false;
-            }
-        }
-        return toReturn;
-    }
+//    bool createDatabase() const
+//    {
+//        Utils::Log::addMessage(q, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+//                               .arg(Constants::DB_TEMPLATES_NAME).arg(databasePath().absolutePath()));
+//        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
+//        if (!DB.open()) {
+//            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+//                                 .arg(Constants::DB_TEMPLATES_NAME)
+//                                 .arg(DB.lastError().text()));
+//            return false;
+//        }
+//        QStringList req;
+//        req <<  "CREATE TABLE IF NOT EXISTS `TEMPLATES` ("
+//                "`TEMPLATE_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
+//                "`TEMPLATE_UUID`            varchar(40)    NULL,"
+//                "`USER_UUID`                int(11)        NULL,"
+//                "`ID_CATEGORY`              int(11)        DEFAULT -1,"
+//                "`LABEL`                    varchar(300)   NULL,"
+//                "`SUMMARY`                  varchar(500)   NULL,"
+//                "`CONTENT`                  blob           NULL,"
+//                "`CONTENT_MIMETYPES`        varchar(300)   NULL,"
+//                "`DATE_CREATION`            date           NULL,"
+//                "`DATE_MODIFICATION`        date           NULL,"
+//                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
+//                "`TRANSMISSION_DATE`        date           NULL"
+//                ");";
+//        req <<  "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
+//                "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
+//                "`CATEGORY_UUID`            varchar(40)    NULL,"
+//                "`USER_UUID`                int(11)        NULL,"
+//                "`PARENT_CATEGORY`          int(11)        DEFAULT -1,"
+//                "`LABEL`                    varchar(300)   NULL,"
+//                "`SUMMARY`                  varchar(500)   NULL,"
+//                "`MIMETYPES`                varchar(300)   NULL,"
+//                "`DATE_CREATION`            date           NULL,"
+//                "`DATE_MODIFICATION`        date           NULL,"
+//                "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
+//                "`TRANSMISSION_DATE`        date           NULL"
+//                ");";
+//        req <<  "CREATE TABLE IF NOT EXISTS `VERSION` ("
+//                "`ACTUAL`                  varchar(10)"
+//                ");";
+//        req <<  QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(Constants::DB_ACTUAL_VERSION);
+//        req <<  "CREATE TRIGGER delete_all_category_children AFTER "
+//                "DELETE ON `CATEGORIES` "
+//                "FOR EACH ROW "
+//                "  BEGIN"
+//                "    DELETE FROM `CATEGORIES` WHERE `CATEGORIES`.`PARENT_CATEGORY`=old.`CATEGORY_ID`;"
+//                "    DELETE FROM `TEMPLATES` WHERE `TEMPLATES`.`ID_CATEGORY`=old.`CATEGORY_ID`;"
+//                "  END;";
+//        bool toReturn = true;
+//        foreach(const QString &r, req) {
+//            QSqlQuery query(r,DB);
+//            if (query.isActive()) {
+//                query.next();
+//            } else {
+//                Utils::Log::addQueryError(q,query);
+//                toReturn = false;
+//            }
+//        }
+//        return toReturn;
+//    }
 
     void setupModelData()
     {
@@ -469,31 +469,32 @@ public:
             return;
 
         Utils::Log::addMessage(q, "Getting Templates Categories");
-        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DATABASE_NAME)
+                                 .arg(Constants::DB_TEMPLATES_NAME)
                                  .arg(DB.lastError().text()));
             return;
         }
 
         // get categories
         m_IdToCategory.clear();
-        QString req = "SELECT `CATEGORY_ID`, `CATEGORY_UUID`, `USER_UUID`, "
-                      "`PARENT_CATEGORY`, `LABEL`, `SUMMARY`,`DATE_CREATION`, `DATE_MODIFICATION` "
-                      "FROM `CATEGORIES`";
-        QSqlQuery query(req,DB);
+//        QString req = "SELECT `CATEGORY_ID`, `CATEGORY_UUID`, `USER_UUID`, "
+//                      "`PARENT_CATEGORY`, `LABEL`, `SUMMARY`,`DATE_CREATION`, `DATE_MODIFICATION` "
+//                      "FROM `CATEGORIES`";
+        /** \todo Filter user's templates */
+        QSqlQuery query(templateBase()->select(Templates::Constants::Table_Categories), DB);
         if (query.isActive()) {
             QHash<int, QVariant> datas;
             while (query.next()) {
-                datas.insert(Constants::Data_Id, query.value(0));
-                datas.insert(Constants::Data_Uuid, query.value(1));
-                datas.insert(Constants::Data_UserUuid, query.value(2));
-                datas.insert(Constants::Data_ParentId, query.value(3));
-                datas.insert(Constants::Data_Label, query.value(4));
-                datas.insert(Constants::Data_Summary, query.value(5));
-                datas.insert(Constants::Data_CreationDate, query.value(6));
-                datas.insert(Constants::Data_ModifDate, query.value(7));
+                datas.insert(Constants::Data_Id, query.value(Constants::CATEGORIES_ID));
+                datas.insert(Constants::Data_Uuid, query.value(Constants::CATEGORIES_UUID));
+                datas.insert(Constants::Data_UserUuid, query.value(Constants::CATEGORIES_USER_UID));
+                datas.insert(Constants::Data_ParentId, query.value(Constants::CATEGORIES_PARENT_ID));
+                datas.insert(Constants::Data_Label, query.value(Constants::CATEGORIES_LABEL));
+                datas.insert(Constants::Data_Summary, query.value(Constants::CATEGORIES_SUMMARY));
+                datas.insert(Constants::Data_CreationDate, query.value(Constants::CATEGORIES_DATECREATION));
+                datas.insert(Constants::Data_ModifDate, query.value(Constants::CATEGORIES_DATEMODIF));
                 m_IdToCategory.insert(datas.value(Constants::Data_Id).toInt(), new TreeItem(datas,0));
                 datas.clear();
             }
@@ -512,24 +513,25 @@ public:
         // get templates
         Utils::Log::addMessage(q, "Getting Templates");
         QList<TreeItem *> templates;
-        req = "SELECT `TEMPLATE_ID`, `TEMPLATE_UUID`, `USER_UUID`, `ID_CATEGORY`, `LABEL`, "
-                      "`SUMMARY`, `CONTENT`, `CONTENT_MIMETYPES`, `DATE_CREATION`, `DATE_MODIFICATION`, "
-                      "`THEMED_ICON_FILENAME`  FROM `TEMPLATES`";
-        query.exec(req);
+//        req = "SELECT `TEMPLATE_ID`, `TEMPLATE_UUID`, `USER_UUID`, `ID_CATEGORY`, `LABEL`, "
+//                      "`SUMMARY`, `CONTENT`, `CONTENT_MIMETYPES`, `DATE_CREATION`, `DATE_MODIFICATION`, "
+//                      "`THEMED_ICON_FILENAME`  FROM `TEMPLATES`";
+        /** \todo filter user's uuid */
+        query.exec(templateBase()->select(Templates::Constants::Table_Templates));
         if (query.isActive()) {
             QHash<int, QVariant> datas;
             while (query.next()) {
-                datas.insert(Constants::Data_Id, query.value(0));
-                datas.insert(Constants::Data_Uuid, query.value(1));
-                datas.insert(Constants::Data_UserUuid, query.value(2));
-                datas.insert(Constants::Data_ParentId, query.value(3));
-                datas.insert(Constants::Data_Label, query.value(4));
-                datas.insert(Constants::Data_Summary, query.value(5));
-                datas.insert(Constants::Data_Content, query.value(6));
-                datas.insert(Constants::Data_ContentMimeTypes, query.value(7));
-                datas.insert(Constants::Data_CreationDate, query.value(8));
-                datas.insert(Constants::Data_ModifDate, query.value(9));
-                datas.insert(Constants::Data_ThemedIcon, query.value(10));
+                datas.insert(Constants::Data_Id, query.value(Constants::TEMPLATE_ID));
+                datas.insert(Constants::Data_Uuid, query.value(Constants::TEMPLATE_UUID));
+                datas.insert(Constants::Data_UserUuid, query.value(Constants::TEMPLATE_USER_UID));
+                datas.insert(Constants::Data_ParentId, query.value(Constants::TEMPLATE_ID_CATEGORY));
+                datas.insert(Constants::Data_Label, query.value(Constants::TEMPLATE_LABEL));
+                datas.insert(Constants::Data_Summary, query.value(Constants::TEMPLATE_SUMMARY));
+                datas.insert(Constants::Data_Content, query.value(Constants::TEMPLATE_CONTENT));
+                datas.insert(Constants::Data_ContentMimeTypes, query.value(Constants::TEMPLATE_CONTENTMIMETYPES));
+                datas.insert(Constants::Data_CreationDate, query.value(Constants::TEMPLATE_DATECREATION));
+                datas.insert(Constants::Data_ModifDate, query.value(Constants::TEMPLATE_DATEMODIF));
+                datas.insert(Constants::Data_ThemedIcon, query.value(Constants::TEMPLATE_THEMEDICON));
                 TreeItem *it = new TreeItem(datas,0);
                 it->setHasTemplate(true);
                 templates.insert(datas.value(Constants::Data_Id).toInt(), it);
@@ -555,13 +557,15 @@ public:
     {
         if (WarnDatabaseSaving)
             qWarning() << "saveModelDatas :" << start.data().toString();
-        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DATABASE_NAME)
+                                 .arg(Constants::DB_TEMPLATES_NAME)
                                  .arg(DB.lastError().text()));
             return;
         }
+
         QModelIndex idx = start;
         for(int i = 0; i< q->rowCount(start); ++i) {
             idx = q->index(i, 0, start);
@@ -574,31 +578,32 @@ public:
             QString req;
             if (t->isNewlyCreated()) {
                 if (t->isTemplate()) {
-                    query.prepare("INSERT INTO `TEMPLATES` ("
-                                  "`TEMPLATE_UUID`,"
-                                  "`USER_UUID`,"
-                                  "`ID_CATEGORY`,"
-                                  "`LABEL`,"
-                                  "`SUMMARY`,"
-                                  "`CONTENT`,"
-                                  "`CONTENT_MIMETYPES`,"
-                                  "`DATE_CREATION`,"
-                                  "`DATE_MODIFICATION`,"
-                                  "`THEMED_ICON_FILENAME`,"
-                                  "`TRANSMISSION_DATE`"
-                                  ") "
-                                  "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
-                    query.bindValue(0, t->uuid());
-                    query.bindValue(1, t->ownerUuid());
-                    query.bindValue(2, t->parentId());
-                    query.bindValue(3, t->label());
-                    query.bindValue(4, t->summary());
-                    query.bindValue(5, t->content());
-                    query.bindValue(6, t->contentMimeTypes().join(";"));
-                    query.bindValue(7, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
-                    query.bindValue(8, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
-                    query.bindValue(9, t->data(Constants::Data_ThemedIcon).toString());
-                    query.bindValue(10, QVariant());
+//                    query.prepare("INSERT INTO `TEMPLATES` ("
+//                                  "`TEMPLATE_UUID`,"
+//                                  "`USER_UUID`,"
+//                                  "`ID_CATEGORY`,"
+//                                  "`LABEL`,"
+//                                  "`SUMMARY`,"
+//                                  "`CONTENT`,"
+//                                  "`CONTENT_MIMETYPES`,"
+//                                  "`DATE_CREATION`,"
+//                                  "`DATE_MODIFICATION`,"
+//                                  "`THEMED_ICON_FILENAME`,"
+//                                  "`TRANSMISSION_DATE`"
+//                                  ") "
+//                                  "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+                    query.prepare(templateBase()->prepareInsertQuery(Templates::Constants::Table_Templates));
+                    query.bindValue(Constants::TEMPLATE_UUID, t->uuid());
+                    query.bindValue(Constants::TEMPLATE_USER_UID, t->ownerUuid());
+                    query.bindValue(Constants::TEMPLATE_ID_CATEGORY, t->parentId());
+                    query.bindValue(Constants::TEMPLATE_LABEL, t->label());
+                    query.bindValue(Constants::TEMPLATE_SUMMARY, t->summary());
+                    query.bindValue(Constants::TEMPLATE_CONTENT, t->content());
+                    query.bindValue(Constants::TEMPLATE_CONTENTMIMETYPES, t->contentMimeTypes().join(";"));
+                    query.bindValue(Constants::TEMPLATE_DATECREATION, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::TEMPLATE_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::TEMPLATE_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
                     query.exec();
                     if (!query.isActive()) {
                         Utils::Log::addQueryError(q, query);
@@ -610,27 +615,28 @@ public:
                     // retreive its id
                     t->setId(query.lastInsertId().toInt());
                 } else {
-                    query.prepare("INSERT INTO `CATEGORIES` ("
-                                  "`CATEGORY_UUID`,"
-                                  "`USER_UUID`,"
-                                  "`PARENT_CATEGORY`,"
-                                  "`LABEL`,"
-                                  "`SUMMARY`,"
-                                  "`DATE_CREATION`,"
-                                  "`DATE_MODIFICATION`,"
-                                  "`THEMED_ICON_FILENAME`,"
-                                  "`TRANSMISSION_DATE`"
-                                  ") "
-                                  "VALUES (?,?,?,?,?,?,?,?,?);");
-                    query.bindValue(0, t->uuid());
-                    query.bindValue(1, t->ownerUuid());
-                    query.bindValue(2, t->parentId());
-                    query.bindValue(3, t->label());
-                    query.bindValue(4, t->summary());
-                    query.bindValue(5, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
-                    query.bindValue(6, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
-                    query.bindValue(7, t->data(Constants::Data_ThemedIcon).toString());
-                    query.bindValue(8, QVariant());
+//                    query.prepare("INSERT INTO `CATEGORIES` ("
+//                                  "`CATEGORY_UUID`,"
+//                                  "`USER_UUID`,"
+//                                  "`PARENT_CATEGORY`,"
+//                                  "`LABEL`,"
+//                                  "`SUMMARY`,"
+//                                  "`DATE_CREATION`,"
+//                                  "`DATE_MODIFICATION`,"
+//                                  "`THEMED_ICON_FILENAME`,"
+//                                  "`TRANSMISSION_DATE`"
+//                                  ") "
+//                                  "VALUES (?,?,?,?,?,?,?,?,?);");
+                    query.prepare(templateBase()->prepareInsertQuery(Templates::Constants::Table_Categories));
+                    query.bindValue(Constants::CATEGORIES_UUID, t->uuid());
+                    query.bindValue(Constants::CATEGORIES_USER_UID, t->ownerUuid());
+                    query.bindValue(Constants::CATEGORIES_PARENT_ID, t->parentId());
+                    query.bindValue(Constants::CATEGORIES_LABEL, t->label());
+                    query.bindValue(Constants::CATEGORIES_SUMMARY, t->summary());
+                    query.bindValue(Constants::CATEGORIES_DATECREATION, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::CATEGORIES_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::CATEGORIES_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(Constants::CATEGORIES_TRANSMISSIONDATE, QVariant());
                     // save category
                     query.exec();
                     if (!query.isActive()) {
@@ -650,86 +656,114 @@ public:
                 }
             } else if (t->isModified()) {
                 if (t->isTemplate()) {
-                    req = QString("UPDATE `TEMPLATES` SET "
-                          "`TEMPLATE_UUID`= '%1' ,"
-                          "`USER_UUID`= '%2',"
-                          "`ID_CATEGORY`= %3 ,"
-                          "`LABEL`= '%4' ,"
-                          "`CONTENT_MIMETYPES`= '%5',"
-                          "`DATE_CREATION`= '%6',"
-                          "`DATE_MODIFICATION`= '%7',"
-                          "`THEMED_ICON_FILENAME`= '%8',"
-                          "`TRANSMISSION_DATE`= '%9' "
-                          "WHERE (`TEMPLATE_ID`= %10 )")
-                            .arg(t->uuid())
-                            .arg(t->ownerUuid())
-                            .arg(t->parentId())
-                            .arg(t->label())
-                            .arg(t->contentMimeTypes().join(";"))
-                            .arg(t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate))
-                            .arg(t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate))
-                            .arg(t->data(Constants::Data_ThemedIcon).toString())
-                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString(Qt::ISODate))
-                            .arg(t->id());
-                    query.exec(req);
+//                    req = QString("UPDATE `TEMPLATES` SET "
+//                          "`TEMPLATE_UUID`= '%1' ,"
+//                          "`USER_UUID`= '%2',"
+//                          "`ID_CATEGORY`= %3 ,"
+//                          "`LABEL`= '%4' ,"
+//                          "`CONTENT_MIMETYPES`= '%5',"
+//                          "`DATE_CREATION`= '%6',"
+//                          "`DATE_MODIFICATION`= '%7',"
+//                          "`THEMED_ICON_FILENAME`= '%8',"
+//                          "`TRANSMISSION_DATE`= '%9' "
+//                          "WHERE (`TEMPLATE_ID`= %10 )")
+//                            .arg(t->uuid())
+//                            .arg(t->ownerUuid())
+//                            .arg(t->parentId())
+//                            .arg(t->label())
+//                            .arg(t->contentMimeTypes().join(";"))
+//                            .arg(t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->data(Constants::Data_ThemedIcon).toString())
+//                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->id());
+                    QHash<int, QString> where;
+                    where.insert(Constants::TEMPLATE_ID, QString("=%1").arg(t->id()));
+                    query.prepare(templateBase()->prepareUpdateQuery(Templates::Constants::Table_Templates, where));
+                    query.bindValue(Constants::TEMPLATE_ID, t->id());
+                    query.bindValue(Constants::TEMPLATE_UUID, t->uuid());
+                    query.bindValue(Constants::TEMPLATE_USER_UID, t->ownerUuid());
+                    query.bindValue(Constants::TEMPLATE_ID_CATEGORY, t->parentId());
+                    query.bindValue(Constants::TEMPLATE_LABEL, t->label());
+                    query.bindValue(Constants::TEMPLATE_SUMMARY, t->summary());
+                    query.bindValue(Constants::TEMPLATE_CONTENT, t->content());
+                    query.bindValue(Constants::TEMPLATE_CONTENTMIMETYPES, t->contentMimeTypes().join(";"));
+                    query.bindValue(Constants::TEMPLATE_DATECREATION, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::TEMPLATE_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::TEMPLATE_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
+                    query.exec();
                     if (!query.isActive()) {
                         Utils::Log::addQueryError(q, query);
                     }
                     req.clear();
                     query.finish();
-                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
-                        query.prepare(QString("UPDATE `TEMPLATES` SET `SUMMARY` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
-                        query.bindValue(0, t->summary());
-                        query.exec();
-                        if (!query.isActive()) {
-                            Utils::Log::addQueryError(q, query);
-                        }
-                        query.finish();
-                    }
-                    if (t->dirtyRows().contains(Constants::Data_Content)) {
-                        query.prepare(QString("UPDATE `TEMPLATES` SET `CONTENT` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
-                        query.bindValue(0, t->content());
-                        query.exec();
-                        if (!query.isActive()) {
-                            Utils::Log::addQueryError(q, query);
-                        }
-                    }
+//                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
+//                        query.prepare(QString("UPDATE `TEMPLATES` SET `SUMMARY` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+//                        query.bindValue(0, t->summary());
+//                        query.exec();
+//                        if (!query.isActive()) {
+//                            Utils::Log::addQueryError(q, query);
+//                        }
+//                        query.finish();
+//                    }
+//                    if (t->dirtyRows().contains(Constants::Data_Content)) {
+//                        query.prepare(QString("UPDATE `TEMPLATES` SET `CONTENT` = ? WHERE `TEMPLATE_ID`=%1").arg(t->id()));
+//                        query.bindValue(0, t->content());
+//                        query.exec();
+//                        if (!query.isActive()) {
+//                            Utils::Log::addQueryError(q, query);
+//                        }
+//                    }
                     t->setModified(false);
                     allInstancesEmitDataChangedFrom(idx);
                 } else {
-                    req = QString("UPDATE `CATEGORIES` SET "
-                          "`CATEGORY_UUID`= '%1' ,"
-                          "`USER_UUID`= '%2',"
-                          "`PARENT_CATEGORY`= %3 ,"
-                          "`LABEL`= '%4' ,"
-                          "`DATE_CREATION`= '%5',"
-                          "`DATE_MODIFICATION`= '%6',"
-                          "`THEMED_ICON_FILENAME`= '%7',"
-                          "`TRANSMISSION_DATE`= '%8' "
-                          "WHERE (`CATEGORY_ID`= %9 )")
-                            .arg(t->uuid())
-                            .arg(t->ownerUuid())
-                            .arg(t->parentId())
-                            .arg(t->label())
-                            .arg(t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate))
-                            .arg(t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate))
-                            .arg(t->data(Constants::Data_ThemedIcon).toString())
-                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString(Qt::ISODate))
-                            .arg(t->id());
-                    query.exec(req);
+//                    req = QString("UPDATE `CATEGORIES` SET "
+//                          "`CATEGORY_UUID`= '%1' ,"
+//                          "`USER_UUID`= '%2',"
+//                          "`PARENT_CATEGORY`= %3 ,"
+//                          "`LABEL`= '%4' ,"
+//                          "`DATE_CREATION`= '%5',"
+//                          "`DATE_MODIFICATION`= '%6',"
+//                          "`THEMED_ICON_FILENAME`= '%7',"
+//                          "`TRANSMISSION_DATE`= '%8' "
+//                          "WHERE (`CATEGORY_ID`= %9 )")
+//                            .arg(t->uuid())
+//                            .arg(t->ownerUuid())
+//                            .arg(t->parentId())
+//                            .arg(t->label())
+//                            .arg(t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->data(Constants::Data_ThemedIcon).toString())
+//                            .arg(t->data(Constants::Data_TransmissionDate).toDate().toString(Qt::ISODate))
+//                            .arg(t->id());
+                    QHash<int, QString> where;
+                    where.insert(Constants::TEMPLATE_ID, QString("=%1").arg(t->id()));
+                    query.prepare(templateBase()->prepareUpdateQuery(Templates::Constants::Table_Categories, where));
+                    query.bindValue(Constants::CATEGORIES_ID, t->id());
+                    query.bindValue(Constants::CATEGORIES_UUID, t->uuid());
+                    query.bindValue(Constants::CATEGORIES_USER_UID, t->ownerUuid());
+                    query.bindValue(Constants::CATEGORIES_PARENT_ID, t->parentId());
+                    query.bindValue(Constants::CATEGORIES_LABEL, t->label());
+                    query.bindValue(Constants::CATEGORIES_SUMMARY, t->summary());
+                    query.bindValue(Constants::CATEGORIES_DATECREATION, t->data(Constants::Data_CreationDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::CATEGORIES_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
+                    query.bindValue(Constants::CATEGORIES_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
+                    query.bindValue(Constants::CATEGORIES_TRANSMISSIONDATE, QVariant());
+                    query.exec();
                     if (!query.isActive()) {
                         Utils::Log::addQueryError(q, query);
                     }
                     req.clear();
                     query.finish();
-                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
-                        query.prepare(QString("UPDATE `CATEGORIES` SET `SUMMARY` = ? WHERE `CATEGORY_ID`=%1").arg(t->id()));
-                        query.bindValue(0, t->summary());
-                        query.exec();
-                        if (!query.isActive()) {
-                            Utils::Log::addQueryError(q, query);
-                        }
-                    }
+//                    if (t->dirtyRows().contains(Constants::Data_Summary)) {
+//                        query.prepare(QString("UPDATE `CATEGORIES` SET `SUMMARY` = ? WHERE `CATEGORY_ID`=%1").arg(t->id()));
+//                        query.bindValue(0, t->summary());
+//                        query.exec();
+//                        if (!query.isActive()) {
+//                            Utils::Log::addQueryError(q, query);
+//                        }
+//                    }
                     t->setModified(false);
                     allInstancesEmitDataChangedFrom(idx);
                 }
@@ -745,14 +779,17 @@ public:
     {
         QVector<int> toReturn;
         QString req;
-        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DATABASE_NAME)
+                                 .arg(Constants::DB_TEMPLATES_NAME)
                                  .arg(DB.lastError().text()));
             return toReturn;
         }
-        req = QString("SELECT `CATEGORY_ID` FROM `CATEGORIES`  WHERE `PARENT_CATEGORY`=%1").arg(idCategory);
+//        QString("SELECT `CATEGORY_ID` FROM `CATEGORIES`  WHERE `PARENT_CATEGORY`=%1").arg(idCategory);
+        QHash<int, QString> where;
+        where.insert(Constants::CATEGORIES_PARENT_ID, QString("=%1").arg(idCategory));
+        req = templateBase()->select(Constants::Table_Categories, Constants::CATEGORIES_ID, where);
         QSqlQuery query(req, DB);
         if (!query.isActive()) {
             Utils::Log::addQueryError(q, query);
@@ -771,10 +808,10 @@ public:
         if (m_CategoriesToDelete.isEmpty() && m_TemplatesToDelete.isEmpty())
             return;
 //        qWarning() << "deleteRows" << m_CategoriesToDelete << m_TemplatesToDelete;
-        QSqlDatabase DB = QSqlDatabase::database(DATABASE_NAME);
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DATABASE_NAME)
+                                 .arg(Constants::DB_TEMPLATES_NAME)
                                  .arg(DB.lastError().text()));
             return;
         }
@@ -794,7 +831,11 @@ public:
             req.chop(3);
             
             // The Trigger cleans all children of each categories
-            req = "DELETE FROM `CATEGORIES` WHERE `CATEGORY_ID` IN ( " + req + " )";
+//            req = "DELETE FROM `CATEGORIES` WHERE `CATEGORY_ID` IN ( " + req + " )";
+            QHash<int, QString> where;
+            where.insert(Constants::CATEGORIES_ID, QString(" IN (%1)").arg(req));
+            req = templateBase()->prepareDeleteQuery(Constants::Table_Categories, where);
+
             QSqlQuery query(req, DB);
             if (!query.isActive())
                 Utils::Log::addQueryError(q, query);
@@ -808,7 +849,10 @@ public:
         }
         req.chop(3);
         if (!req.isEmpty()) {
-            req = "DELETE FROM `TEMPLATES` WHERE `TEMPLATE_ID` IN ( " + req + " )";
+//            req = "DELETE FROM `TEMPLATES` WHERE `TEMPLATE_ID` IN ( " + req + " )";
+            QHash<int, QString> where;
+            where.insert(Constants::TEMPLATE_ID, QString(" IN (%1)").arg(req));
+            req = templateBase()->prepareDeleteQuery(Constants::Table_Templates, where);
             QSqlQuery query(req, DB);
             if (!query.isActive())
                 Utils::Log::addQueryError(q, query);

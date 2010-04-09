@@ -7,50 +7,123 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="label_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Update checking</string>
+      <string>General preferences</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="updateCheckingCombo">
-     <item>
-      <property name="text">
-       <string>At startup</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Each weeks</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Each months</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Each quarters</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Never (on user's demand)</string>
-      </property>
-     </item>
+   <item row="1" column="0" rowspan="2" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="4" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>External databases</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Host name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="host"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Login</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Utils::LineEditEchoSwitcher" name="log" native="true"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="Utils::LineEditEchoSwitcher" name="pass" native="true"/>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QCheckBox" name="useExternalDB">
+        <property name="text">
+         <string>Use external server for my personnal databases</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLineEdit" name="userUuid">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Your user uuid</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QPushButton" name="testButton">
+        <property name="text">
+         <string>Test connection</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1" colspan="2">
+       <widget class="QLabel" name="testConnectionLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -63,8 +136,70 @@
      </property>
     </spacer>
    </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Update engine</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Update checking</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="updateCheckingCombo">
+        <item>
+         <property name="text">
+          <string>At startup</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Each weeks</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Each months</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Each quarters</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Never (on user's demand)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::LineEditEchoSwitcher</class>
+   <extends>QWidget</extends>
+   <header location="global">utils/widgets/lineeditechoswitcher.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>updateCheckingCombo</tabstop>
+  <tabstop>useExternalDB</tabstop>
+  <tabstop>host</tabstop>
+  <tabstop>log</tabstop>
+  <tabstop>pass</tabstop>
+  <tabstop>userUuid</tabstop>
+  <tabstop>testButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -222,8 +222,11 @@ DrugsBase::~DrugsBase()
     d=0;
 }
 
-DrugsBasePrivate::DrugsBasePrivate(DrugsBase * base)
-        : m_DrugsBase(base), m_ActualDBInfos(0), m_LogChrono(false) {}
+DrugsBasePrivate::DrugsBasePrivate(DrugsBase * base) :
+        m_DrugsBase(base),
+        m_ActualDBInfos(0),
+        m_LogChrono(false)
+{}
 
 /** \brief Initializer for the database. Return the error state. */
 bool DrugsBase::init()
@@ -233,56 +236,67 @@ bool DrugsBase::init()
         return true;
 
     // test driver
-     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-         Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
-         Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                  tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
-                                  "", qApp->applicationName());
-          return false;
-      }
+    if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+        Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
+        Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                 tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
+                                 "", qApp->applicationName());
+        return false;
+    }
 
-     QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
-     if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
-         dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
-     }
+    QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
+    if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
+        dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+    }
 
-     // define is default drugs database (fr_FR)
-     // if settings drugs database is wrong --> use the default database
-     if (dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)
-         m_IsDefaultDB = true;
-     else if ((dbFileName.isEmpty())
-              || (!QFile(dbFileName).exists())) {
-         Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
-         m_IsDefaultDB = true;
-         dbFileName = defaultDatabaseFileName();
-     } else {
-         m_IsDefaultDB = false;
-     }
+    // define is default drugs database (fr_FR)
+    // if settings drugs database is wrong --> use the default database
+    if (dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)
+        m_IsDefaultDB = true;
+    else if ((dbFileName.isEmpty())
+        || (!QFile(dbFileName).exists())) {
+        Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
+        m_IsDefaultDB = true;
+        dbFileName = defaultDatabaseFileName();
+    } else {
+        m_IsDefaultDB = false;
+    }
 
-     // log the path of the database
-     QString pathToDb = QFileInfo(dbFileName).absolutePath();
-     Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
+    // log the path of the database
+    QString pathToDb = QFileInfo(dbFileName).absolutePath();
+    Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
-     // Connect Drugs Database
-     if (createConnection(DRUGS_DATABASE_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
-                          Utils::Database::ReadOnly, Utils::Database::SQLite)) {
-         d->m_ActualDBInfos = getDatabaseInformations(DRUGS_DATABASE_NAME);
-     } else {
-         /** \todo try to connect default database */
-         Utils::Log::addError(this, "No drugs database found.");
-         return false;
-     }
+    // Connect Drugs Database
+    if (createConnection(DRUGS_DATABASE_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
+                         Utils::Database::ReadOnly, Utils::Database::SQLite)) {
+        d->m_ActualDBInfos = getDatabaseInformations(DRUGS_DATABASE_NAME);
+    } else {
+        Utils::Log::addError(this, "No drugs database found.");
+        return false;
+    }
 
-     // Connect and check Dosage Database
-     createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME, Dosages::Constants::DOSAGES_DATABASE_FILENAME,
-                      Core::ICore::instance()->settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
-                      Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
-     checkDosageDatabaseVersion();
+    // Connect and check Dosage Database
+    // Check settings --> SQLite or MySQL ?
+    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, true).toBool()) {
+        createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME,
+                         Dosages::Constants::DOSAGES_DATABASE_NAME,
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+                         Utils::Database::ReadWrite,
+                         Utils::Database::MySQL,
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                         Utils::Database::CreateDatabase);
+    } else {
+        createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME, Dosages::Constants::DOSAGES_DATABASE_FILENAME,
+                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
+                         Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+    }
+    checkDosageDatabaseVersion();
 
-     // Initialize
-     InteractionsBase::init();
-     m_initialized = true;
-     return true;
+    // Initialize
+    InteractionsBase::init();
+    m_initialized = true;
+    return true;
 }
 
 /**
@@ -415,19 +429,16 @@ QString DrugsBase::dosageCreateTableSqlQuery()
 }
 
 /**
-  \brief
-  \todo documentation
+  \brief Create the protocols database if it does not exists.
 */
-bool DrugsBase::createDatabase( const QString &connectionName , const QString &dbName,
-                                   const QString &pathOrHostName,
-                                   TypeOfAccess /*access*/, AvailableDrivers driver,
-                                   const QString & /*login*/, const QString & /*pass*/,
-                                   CreationOption /*createOption*/
-                                  )
+bool DrugsBase::createDatabase(const QString &connectionName , const QString &dbName,
+                               const QString &pathOrHostName,
+                               TypeOfAccess /*access*/, AvailableDrivers driver,
+                               const QString & login, const QString & pass,
+                               CreationOption /*createOption*/
+                              )
 {
-    // TODO ask user if he wants :
-    // 1. an empty dosage base
-    // 2. to retreive dosages from internet FMF website
+    /** \todo  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website */
     if (connectionName != Dosages::Constants::DOSAGES_DATABASE_NAME)
         return false;
     Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
@@ -441,27 +452,56 @@ bool DrugsBase::createDatabase( const QString &connectionName , const QString &d
                 tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         DB.open();
+        setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
-        /** \todo how to create a new mysql database ??? */
+        DB = QSqlDatabase::database(connectionName);
+        if (!DB.open()) {
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
+            d.setHostName(pathOrHostName);
+            /** \todo retreive log/pass */
+            d.setUserName(login);
+            d.setPassword(pass);
+            if (!d.open()) {
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                return false;
+            }
+            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
+            if (!q.isActive()) {
+                Utils::Log::addQueryError("Database", q);
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                return false;
+            }
+            DB.setDatabaseName(dbName);
+            if (!DB.open()) {
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                return false;
+            }
+            DB.setDatabaseName(dbName);
+        }
+        if (QSqlDatabase::connectionNames().contains("CREATOR"))
+            QSqlDatabase::removeDatabase("CREATOR");
+        DB.open();
+        setDriver(Utils::Database::MySQL);
     }
 
     // create db structure
     // before we need to inform Utils::Database of the connectionName to use
     setConnectionName(connectionName);
+
     // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     if (executeSQL(QStringList()
-        << dosageCreateTableSqlQuery()
+        << dosageCreateTableSqlQuery().replace("AUTOINCREMENT", "AUTO_INCREMENT")
         << "CREATE TABLE IF NOT EXISTS `VERSION` ("
            "`ACTUAL`                varchar(10)    NULL"
            ");"
         << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
         , DB)) {
-        Utils::Log::addMessage(this, tr("Database %1 %2 correctly created").arg(connectionName, dbName));
+        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
         return true;
     } else {
-        Utils::Log::addError(this, tr("ERROR : database can not be created %1 %2 %3")
-                         .arg(connectionName, dbName, DB.lastError().text()));
+        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                         .arg(dbName, DB.lastError().text()));
     }
     return false;
 }

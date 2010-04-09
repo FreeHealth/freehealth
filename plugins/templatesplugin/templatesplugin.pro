@@ -9,6 +9,7 @@ HEADERS = templatesplugin.h \
     templates_exporter.h \
     itemplates.h \
     itemplateprinter.h \
+    templatebase.h \
     templatesmodel.h \
     constants.h \
     templatesview.h \
@@ -17,6 +18,7 @@ HEADERS = templatesplugin.h \
     templatespreferencespages.h \
     templatescreationdialog.h
 SOURCES = templatesplugin.cpp \
+    templatebase.cpp \
     templatesmodel.cpp \
     templatesview.cpp \
     templateseditdialog.cpp \

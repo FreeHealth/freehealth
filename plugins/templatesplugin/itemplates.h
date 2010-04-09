@@ -57,7 +57,7 @@ QT_END_NAMESPACE
  * \file itemplates.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.2.3
- * \date 10 Jan 2009
+ * \date 10 Jan 2010
 */
 
 namespace Templates {

@@ -52,8 +52,10 @@
 
 namespace Templates {
 namespace Constants {
-    const char * const TEMPLATES_DATABASE_NAME     = "templates";
-    const char * const TEMPLATES_DATABASE_FILENAME = "templates.db";
+    const char * const DB_TEMPLATES_NAME      = "templates";
+    const char * const DB_TEMPLATES_FILENAME  = "templates.db";
+    const char * const DB_ACTUAL_VERSION      = "0.3.0";
+
 
     const char * const  S_BACKGROUND_CATEGORIES    = "Templates/Background/Categories";
     const char * const  S_BACKGROUND_TEMPLATES     = "Templates/Background/Templates";
@@ -77,26 +79,45 @@ namespace Constants {
     const char * const XML_TEMPLATE_MIME_ATTRIB    = "mime";
     const char * const XML_TEMPLATE_CHILD_TAG      = "Child";
 
+    enum Tables {
+        Table_Templates = 0,
+        Table_Categories,
+        Table_Version
+    };
 
     enum TemplatesFields {
-        TF_Id = 0,
-        TF_OwnerUuid,
-        TF_GroupUuid,
-        TF_Type,
-        TF_CategoryId,
-        TF_Label,
-        TF_Summary,
-        TF_Contents
+        TEMPLATE_ID = 0,
+        TEMPLATE_UUID,
+        TEMPLATE_USER_UID,
+        TEMPLATE_ID_CATEGORY,
+        TEMPLATE_LABEL,
+        TEMPLATE_SUMMARY,
+        TEMPLATE_CONTENT,
+        TEMPLATE_CONTENTMIMETYPES,
+        TEMPLATE_DATECREATION,
+        TEMPLATE_DATEMODIF,
+        TEMPLATE_THEMEDICON,
+        TEMPLATE_TRANSMISSIONDATE,
+        TEMPLATE_MaxParam
     };
 
     enum CategoryFields {
-        CF_Id = 0,
-        CF_OwnerUuid,
-        CF_GroupUuid,
-        CF_Type,
-        CF_ParentId,
-        CF_Label,
-        CF_Summary
+        CATEGORIES_ID = 0,
+        CATEGORIES_UUID,
+        CATEGORIES_USER_UID,
+        CATEGORIES_PARENT_ID,
+        CATEGORIES_LABEL,
+        CATEGORIES_SUMMARY,
+        CATEGORIES_MIMETYPES,
+        CATEGORIES_DATECREATION,
+        CATEGORIES_DATEMODIF,
+        CATEGORIES_THEMEDICON,
+        CATEGORIES_TRANSMISSIONDATE,
+        CATEGROIES_MaxParam
+    };
+
+    enum VersionFields {
+        VERSION_ACTUAL = 0
     };
 
     enum ModelDataRepresentation {

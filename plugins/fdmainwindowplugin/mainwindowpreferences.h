@@ -76,6 +76,9 @@ public:
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
 
+private Q_SLOTS:
+    void on_testButton_clicked();
+
 protected:
     virtual void changeEvent(QEvent *e);
 };

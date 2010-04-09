@@ -301,6 +301,9 @@ const char * const  ICONSORT =         "sort.png";
 const char * const  ICONSELECTALL =    "edit-select-all.png";
 const char * const  ICONDESELECT =     "";
 const char * const  ICONFIND =         "find.png";
+const char * const  ICONOK =           "ok.png";
+const char * const  ICONERROR =        "warning.png";
+const char * const  ICONWARNING =      "warning.png";
 
 // menu Navigation
 const char * const  ICONNEXT =         "next.png";
@@ -352,12 +355,8 @@ const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
 const char * const  ICONPENCIL    =  "pencil.png";
 
-// dialog icons
-const char * const  ICONWARNING    =  "warning.png";
-
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
-
 
 // menu Users --> MediumSize
 const char * const  ICONUSER          = "user.png";
@@ -403,13 +402,19 @@ const char * const  TOKEN_NUMBEROFDRUGS = "NBDRUGS";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";
-const char * const  S_RECENTFILES_KEY = "File";
-const char * const  S_SAVEINTERVAL = "Core/SaveInterval";
-const char * const  S_OPENLAST = "Core/OpenLastOpenedFile";
-const char * const  S_SHOWHELPTEXT ="Core/ShowFormHelpText";
-const char * const  S_LASTLOGIN  = "Login/userLogin";
-const char * const  S_LASTPASSWORD  = "Login/userPassword";
-const char * const  S_DATEFORMAT  = "Dates/Format";
+const char * const  S_RECENTFILES_KEY   = "File";
+const char * const  S_SAVEINTERVAL      = "Core/SaveInterval";
+const char * const  S_OPENLAST          = "Core/OpenLastOpenedFile";
+const char * const  S_SHOWHELPTEXT      = "Core/ShowFormHelpText";
+const char * const  S_LASTLOGIN         = "Login/userLogin";
+const char * const  S_LASTPASSWORD      = "Login/userPassword";
+const char * const  S_DATEFORMAT        = "Dates/Format";
+
+const char * const  S_USE_EXTERNAL_DATABASE  = "ExternalDatabase/UseIt";
+const char * const  S_EXTERNAL_DATABASE_LOG  = "ExternalDatabase/Log";
+const char * const  S_EXTERNAL_DATABASE_PASS = "ExternalDatabase/Pass";
+const char * const  S_EXTERNAL_DATABASE_HOST = "ExternalDatabase/Host";
+const char * const  S_EXTERNAL_DATABASE_PORT = "ExternalDatabase/Port";
 
 
 // Some path tags

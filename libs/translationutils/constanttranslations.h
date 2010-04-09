@@ -385,7 +385,8 @@ namespace Time {
         const char* const TRYING_TO_CREATE_1_PLACE_2         = QT_TRANSLATE_NOOP("tkConstants", "Trying to create %1 \nPlace : %2");
         const char* const UNABLE_TO_OPEN_DATABASE_1_ERROR_2  = QT_TRANSLATE_NOOP("tkConstants", "Unable to open database %1 : Error : %2");
         const char* const UNABLE_TO_SAVE_DATA_IN_DATABASE_1  = QT_TRANSLATE_NOOP("tkConstants", "Unable to save data in database %1.");
-
+        const char* const DATABASE_1_CORRECTLY_CREATED       = QT_TRANSLATE_NOOP("tkConstants", "Database %1 correctly created");
+        const char* const DATABASE_1_CANNOT_BE_CREATED_ERROR_2 = QT_TRANSLATE_NOOP("tkConstants", "Database %1 can not be created. Error: %2.");
 
         // Sender and Updater
         const char* const START_MESSAGE_SENDING              = QT_TRANSLATE_NOOP("tkConstants", "Starting to send message.");

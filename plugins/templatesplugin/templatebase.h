@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,62 +32,63 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "templatesplugin.h"
-#include "templatesmodel.h"
-#include "templatebase.h"
-#include "templatesview.h"
-#include "templatesview_p.h"
-#include "templatespreferencespages.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef TEMPLATES_BASE_H
+#define TEMPLATES_BASE_H
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <utils/database.h>
 
-#include <utils/log.h>
+/**
+ * \file templatebase.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 08 Apr 2010
+*/
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
 
-using namespace Templates;
+namespace Templates {
+namespace Internal {
+class TemplateBasePrivate;
+} // End namespace Internal
 
-TemplatesPlugin::TemplatesPlugin()
+class TemplateBase : public QObject, public Utils::Database
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating TemplatesPlugin";
-}
+    Q_OBJECT
 
-TemplatesPlugin::~TemplatesPlugin()
-{
-}
+    TemplateBase(QObject *parent = 0);
 
-bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TemplatesPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    // Initialize template database
-    Templates::TemplateBase::instance();
-
-    return true;
-}
-
-void TemplatesPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TemplatesPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
-
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
-
-    // Initialize TemplatesViewManager
-    Templates::Internal::TemplatesViewManager::instance(this);
-}
+public:
+    static TemplateBase *instance();
+    ~TemplateBase();
 
 
-Q_EXPORT_PLUGIN(TemplatesPlugin)
+    // Initializer / Checkers
+    static bool isInitialized() { return m_initialized; }
+    void logChronos(bool state);
+
+private:
+    bool init();
+    bool createDatabase(const QString & connectionName , const QString & dbName,
+                        const QString & pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString & /*login*/, const QString & /*pass*/,
+                        CreationOption /*createOption*/
+                       );
+
+private:
+    // intialization state
+    static TemplateBase *m_Instance;
+    static bool m_initialized;
+    Internal::TemplateBasePrivate *d;
+};
+
+
+}  // End namespace Templates
+
+
+#endif // TEMPLATES_BASE_H
