@@ -89,6 +89,8 @@ LineEditEchoSwitcher::LineEditEchoSwitcher(QWidget *parent) :
     setObjectName("LineEditEchoSwitcher");
     d = new LineEditEchoSwitcherPrivate(this);
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setMargin(0);
     layout->addWidget(d->lineEdit);
     layout->addWidget(d->toogler);
     connect( d->toogler, SIGNAL(clicked()), this, SLOT(toogleEchoMode()));
