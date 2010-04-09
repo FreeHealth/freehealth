@@ -11,7 +11,7 @@ include(faccountmainwindowplugin_dependencies.pri)
 HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
-    medintux.h \
+#    medintux.h \
     mainwindowpreferences.h
 
 SOURCES = mainwindowplugin.cpp \
