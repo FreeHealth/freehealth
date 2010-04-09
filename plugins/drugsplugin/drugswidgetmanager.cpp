@@ -354,7 +354,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(DrugsWidget::Constants::SELECTONLYMODE_TEXT, DrugsWidget::Constants::SELECTONLYMODE_TEXT, DRUGCONSTANTS_TR_CONTEXT);
     modemenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_MODES);
     gModes->addAction(a);
-    connect(gModes,SIGNAL(triggered()),this,SLOT(modeActionChanged(QAction*)));
+    connect(gModes,SIGNAL(triggered(QAction*)),this,SLOT(modeActionChanged(QAction*)));
 
     a = aOpenDosageDialog = new QAction(this);
     a->setObjectName("aOpenDosageDialog");

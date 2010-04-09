@@ -82,9 +82,6 @@ namespace Core {
 namespace Internal {
 
 
-/** \todo Manage multilingual documentation by changing search path ? */
-
-
 class HelpDialogPrivate
 {
 public:

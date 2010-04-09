@@ -514,7 +514,7 @@ QString DosageModel::toXml(const int row)
 }
 
 /**
-  \brief Adds a XML file to the model. A verification of the drugs' CIS is done.
+  \brief Adds a XML file to the model. A verification of the drugs' UID is done.
   \todo write this
 */
 bool DosageModel::addFromXml(const QString &xml)

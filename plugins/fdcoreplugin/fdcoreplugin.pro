@@ -15,6 +15,7 @@ HEADERS += coreplugin.h \
     appaboutpage.h \
     commandlineparser.h \
     patient.h
+
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \ # mainwindow.cpp \
     appaboutpage.cpp \
