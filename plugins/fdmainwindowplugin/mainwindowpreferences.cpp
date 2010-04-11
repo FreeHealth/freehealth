@@ -97,6 +97,7 @@ void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    defaultvalues.insert(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -123,7 +124,7 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
     log->setIcon(theme()->icon(Core::Constants::ICONEYES));
     pass->setIcon(theme()->icon(Core::Constants::ICONEYES));
     pass->toogleEchoMode();
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool())
+    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
         on_testButton_clicked();
 }
 

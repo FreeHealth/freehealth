@@ -237,7 +237,7 @@ bool TemplateBase::init()
         return true;
 
     // Check settings --> SQLite or MySQL ?
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, true).toBool()) {
+    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
         createConnection(Templates::Constants::DB_TEMPLATES_NAME,
                          Templates::Constants::DB_TEMPLATES_NAME,
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
@@ -258,8 +258,8 @@ bool TemplateBase::init()
     }
     d->checkDatabaseVersion();
 
-     m_initialized = true;
-     return true;
+    m_initialized = true;
+    return true;
 }
 
 void TemplateBase::logChronos(bool state)
@@ -348,4 +348,9 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
 
 void TemplateBase::onCoreDatabaseServerChanged()
 {
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
+        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
+    }
+    init();
 }

@@ -239,7 +239,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         {
             Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
-                                   .arg("SQlite"));
+                                   .arg("SQLite"));
             if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                                                                       "ERROR : %1 driver is not available")

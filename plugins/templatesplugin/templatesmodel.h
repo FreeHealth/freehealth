@@ -109,6 +109,9 @@ public:
 public Q_SLOTS:
     bool submit();
 
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
 private:
     Internal::TemplatesModelPrivate *d;
 };

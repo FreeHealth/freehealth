@@ -302,7 +302,7 @@ bool DrugsBase::init()
 
     // create drugs database connection
     if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
-        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, true).toBool()) {
+        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
             createConnection(Dosages::Constants::DB_DOSAGES_NAME,
                              Dosages::Constants::DB_DOSAGES_NAME,
                              QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
