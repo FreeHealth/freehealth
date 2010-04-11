@@ -47,7 +47,7 @@
 #include <QString>
 #include <QDataWidgetMapper>
 
-#include "ui_MedicalProcedurepage.h"
+#include "ui_medicalprocedurepage.h"
 
 /**
  * \file medicalprocedurepage.h

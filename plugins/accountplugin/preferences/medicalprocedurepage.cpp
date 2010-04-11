@@ -41,7 +41,7 @@
 #include "medicalprocedurepage.h"
 #include <accountplugin/constants.h>
 
-#include <accountbaseplugin/MedicalProceduremodel.h>
+#include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/constants.h>
 
 #include <utils/log.h>
