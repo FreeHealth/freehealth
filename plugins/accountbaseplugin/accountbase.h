@@ -71,6 +71,7 @@ private:
                         const QString & pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
                         const QString & /*login*/, const QString & /*pass*/,
+                        const int port,
                         CreationOption /*createOption*/
                        );
 

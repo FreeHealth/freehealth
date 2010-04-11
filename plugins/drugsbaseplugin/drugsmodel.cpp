@@ -329,6 +329,7 @@ DrugsModel::DrugsModel(QObject * parent)
     d->m_DosageModelList.clear();
     d->m_InteractionsManager = new InteractionsManager(this);
     Utils::Log::addMessage(this, "Instance created");
+    connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
 }
 
 /** \brief Destructor */
@@ -336,6 +337,12 @@ DrugsModel::~DrugsModel()
 {
     if (d) delete d;
     d=0;
+}
+
+void DrugsModel::dosageDatabaseChanged()
+{
+    qDeleteAll(d->m_DosageModelList);
+    d->m_DosageModelList.clear();
 }
 
 /** \brief count the number of selected drugs */
@@ -722,14 +729,17 @@ bool DrugsModel::isSelectionOnlyMode() const
 /** \brief Returns the dosage model for the selected drug */
 Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 {
-    if (! d->m_DosageModelList.keys().contains(uid)) {
-        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
-        d->m_DosageModelList[uid]->setDrugUID(uid);
-    } else if (! d->m_DosageModelList.value(uid)) {
-        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
-        d->m_DosageModelList[uid]->setDrugUID(uid);
-    }
-    return d->m_DosageModelList.value(uid);
+//    if (! d->m_DosageModelList.keys().contains(uid)) {
+//        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
+//        d->m_DosageModelList[uid]->setDrugUID(uid);
+//    } else if (! d->m_DosageModelList.value(uid)) {
+//        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
+//        d->m_DosageModelList[uid]->setDrugUID(uid);
+//    }
+//    return d->m_DosageModelList.value(uid);
+    Internal::DosageModel *m = new Internal::DosageModel(this);
+    m->setDrugUID(uid);
+    return m;
 }
 
 /** \brief Returns the dosage model for the selected drug */

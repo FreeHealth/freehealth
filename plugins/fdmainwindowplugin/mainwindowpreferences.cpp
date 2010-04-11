@@ -40,15 +40,16 @@
  ***************************************************************************/
 #include "mainwindowpreferences.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/theme.h>
+#include <coreplugin/constants.h>
+
 #include <utils/log.h>
 #include <utils/updatechecker.h>
 
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/theme.h>
-#include <coreplugin/constants.h>
 
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -133,8 +134,19 @@ void MainWindowPreferencesWidget::setDatasToUi()
     host->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toByteArray()));
     log->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG).toByteArray()));
     pass->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS).toByteArray()));
-    /** \todo add port */
-//    port->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray()));
+    port->setValue(QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray())).toInt());
+}
+
+static void saveExternalDatabase(Core::ISettings *s, bool use, const QString &host, const QString &log, const QString &pass, const int port)
+{
+    if (s->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool() != use) {
+        s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, use);
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(host.toAscii().toBase64()));
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(port).toAscii().toBase64());
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(log.toAscii().toBase64()));
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(pass.toAscii().toBase64()));
+        Core::ICore::instance()->databaseServerLoginChanged();
+    }
 }
 
 void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -146,13 +158,7 @@ void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
         s = sets;
 
     s->setValue(Utils::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
-    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, useExternalDB->isChecked());
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(host->text().toAscii().toBase64()));
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(log->text().toAscii().toBase64()));
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(pass->text().toAscii().toBase64()));
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, updateCheckingCombo->currentIndex());
-
-    /** \todo refresh connections */
+    saveExternalDatabase(s, useExternalDB->isChecked(), host->text(), log->text(), pass->text(), port->value());
 }
 
 void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -170,6 +176,7 @@ void MainWindowPreferencesWidget::on_testButton_clicked()
     {
         QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "FREEDIAMS_MAINWIN_CONNECTION_TESTER");
         test.setHostName(host->text());
+        test.setPort(port->value());
         test.setUserName(log->text());
         test.setPassword(pass->text());
         if (!test.open()) {

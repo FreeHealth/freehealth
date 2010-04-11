@@ -150,6 +150,7 @@ public:
                                    const QString & pathOrHostName,
                                    TypeOfAccess access = ReadWrite, AvailableDrivers driver = SQLite,
                                    const QString & login = QString::null, const QString & pass = QString::null,
+                                   const int port = 0,
                                    CreationOption createOption = WarnOnly );
 
     /**
@@ -160,6 +161,7 @@ public:
                                   const QString & /*pathOrHostName*/,
                                   TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
                                   const QString & /*login*/, const QString & /*pass*/,
+                                  const int /*port*/,
                                   CreationOption /*createOption*/
                                   ) { return false; }
 

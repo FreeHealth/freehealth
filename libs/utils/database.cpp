@@ -225,7 +225,8 @@ QSqlDatabase Database::database() const
 bool Database::createConnection(const QString & connectionName, const QString & dbName,
                                    const QString & pathOrHostName,
                                    TypeOfAccess access, AvailableDrivers driver,
-                                   const QString & login, const QString & password,
+                                   const QString &login, const QString &password,
+                                   const int port,
                                    CreationOption createOption
                                    )
 {
@@ -295,6 +296,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             DB.setHostName(pathOrHostName);
             DB.setUserName(login);
             DB.setPassword(password);
+            DB.setPort(port);
             bool ok = DB.open();
             if (!ok) {
                 Utils::Log::addError("Database", QString("Unable to connect to the server %1 - %2")
@@ -318,7 +320,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             if ((!QFile(fileName).exists()) ||
                  (QFileInfo(fileName).size() == 0)) {
                 if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
+                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
                                                                         "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                         return false;
@@ -340,7 +342,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 Utils::Log::addError("Database", QString("Unable to connect to the database %1 - %2")
                                      .arg(dbName).arg(DB.lastError().text()));
                 if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, createOption)) {
+                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
                                       "ERROR : %1 database does not exist and can not be created. Path = %2")
                                       .arg(dbName, pathOrHostName));
@@ -395,7 +397,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                     grants << query.value(0).toString();
                 }
                 d->getGrants(connectionName, grants);
-                qWarning() << grants;
+//                qWarning() << grants;
             }
             break;
         }

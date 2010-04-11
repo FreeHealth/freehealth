@@ -218,6 +218,8 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
     addField(Table_INFORMATION, INFO_LANGUAGE_COUNTRY,  "LANGUAGE_COUNTRY");
     addField(Table_INFORMATION, INFO_DRUGS_NAME_CONSTRUCTOR, "DRUGS_NAME_CONSTRUCTOR");
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 /** \brief Destructor. */
@@ -308,12 +310,15 @@ bool DrugsBase::init()
                              Utils::Database::MySQL,
                              QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
                              QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
                              Utils::Database::CreateDatabase);
         } else {
             createConnection(Dosages::Constants::DB_DOSAGES_NAME,
                              Dosages::Constants::DB_DOSAGES_FILENAME,
                              settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DB_DRUGS_NAME),
-                             Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+                             Utils::Database::ReadWrite, Utils::Database::SQLite,
+                             "log", "pas", 0,
+                             Utils::Database::CreateDatabase);
         }
         checkDosageDatabaseVersion();
     }
@@ -439,10 +444,10 @@ QString DrugsBase::dosageCreateTableSqlQuery()
            "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
            "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
            "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
-           "`INN_LK`                int(11)        NULL,"
+           "`INN_LK`                int(11)        DEFAULT -1,"
            "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-           "`CIS_LK`                int(11)        NULL,"
-           "`CIP_LK`                int(11)        NULL,"
+           "`CIS_LK`                int(11)        DEFAULT -1,"
+           "`CIP_LK`                int(11)        DEFAULT -1,"
            "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
            "`INTAKEFROM`            double         NULL,"    // put NOT NULL
@@ -499,6 +504,7 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
                                const QString &pathOrHostName,
                                TypeOfAccess /*access*/, AvailableDrivers driver,
                                const QString & login, const QString & pass,
+                               const int port,
                                CreationOption /*createOption*/
                               )
 {
@@ -528,6 +534,7 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
             /** \todo retreive log/pass */
             d.setUserName(login);
             d.setPassword(pass);
+            d.setPort(port);
             if (!d.open()) {
                 Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
                 return false;
@@ -570,6 +577,11 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
                          .arg(dbName, DB.lastError().text()));
     }
     return false;
+}
+
+void DrugsBase::onCoreDatabaseServerChanged()
+{
+    refreshDosageBase();
 }
 
 /**

@@ -90,7 +90,7 @@ class DosageCreatorDialogPrivate
 {
 public:
     DosageCreatorDialogPrivate(DosageCreatorDialog *parent) :
-            m_DosageModel(0), m_Parent(parent) {}
+            m_DosageModel(0), m_SaveProtocolToBase(false), m_Parent(parent) {}
 
     /** \brief Check the validity o the dosage. Warn if dosage is not valid */
     bool checkDosageValidity(const int row)
@@ -123,7 +123,7 @@ public:
             m_DosageModel->database().rollback();
             QMessageBox::warning(m_Parent, QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"),
                                  tkTr(Trans::Constants::ERROR_1_FROM_DATABASE_2)
-                                 .arg(m_DosageModel->database().lastError().text())
+                                 .arg(m_DosageModel->lastError().text() + m_DosageModel->query().executedQuery())
                                  .arg(m_DosageModel->database().connectionName()));
         }
     }
@@ -138,6 +138,8 @@ public:
 public:
     DrugsDB::Internal::DosageModel *m_DosageModel;
     QString      m_ActualDosageUuid;
+    bool         m_SaveProtocolToBase;
+
 private:
     DosageCreatorDialog *m_Parent;
 };
@@ -220,7 +222,7 @@ void DosageCreatorDialog::done(int r)
 {
     int row = availableDosagesListView->listView()->currentIndex().row();
 
-    if ( r == QDialog::Rejected ) {
+    if (!d->m_SaveProtocolToBase) {
         d->m_DosageModel->revertRow(row);
     }  else {
         DrugsDB::GlobalDrugsModel::updateAvailableDosages();
@@ -237,6 +239,8 @@ void DosageCreatorDialog::on_saveButton_clicked()
     saveButton->setFocus();
     dosageViewer->commitToModel();
     d->saveToModel();
+    dosageViewer->done(QDialog::Accepted);
+    d->m_SaveProtocolToBase = true;
     done(QDialog::Rejected);
 }
 
@@ -260,6 +264,7 @@ void DosageCreatorDialog::on_saveAndPrescribeButton_clicked()
     d->toPrescription();
     d->saveToModel();
     dosageViewer->done(QDialog::Accepted);
+    d->m_SaveProtocolToBase = true;
     done(QDialog::Accepted);
 }
 

@@ -198,6 +198,8 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     d->atcAllergies.removeAll("");
     d->testAtc = !d->atcAllergies.isEmpty();
     d->testUid = !d->uidAllergies.isEmpty();
+
+    connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
 }
 
 GlobalDrugsModel::~GlobalDrugsModel()

@@ -151,6 +151,7 @@ private:
     static QString       m_ActualLangage;
     int m_UID;
     QSet<int> m_DirtyRows;
+    QSet<int> m_DirtyInnLkRows;
 };
 
 }  // End Internal

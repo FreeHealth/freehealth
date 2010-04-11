@@ -135,6 +135,7 @@ public:
 
     void coreIsAboutToClose() { Q_EMIT coreAboutToClose(); }
     void requestSaveSettings() { Q_EMIT saveSettingsRequested(); }
+    void databaseServerLoginChanged() { Q_EMIT databaseServerChanged(); }
 
 Q_SIGNALS:
     void coreAboutToOpen();
@@ -142,6 +143,8 @@ Q_SIGNALS:
     void saveSettingsRequested();
     void optionsDialogRequested();
     void coreAboutToClose();
+
+    void databaseServerChanged();
 };
 
 } // namespace Core

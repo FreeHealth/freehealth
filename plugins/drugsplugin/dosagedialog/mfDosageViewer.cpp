@@ -104,9 +104,9 @@ public:
     {
         if (m_DosageModel) {
             m_DosageModel->setData(m_DosageModel->index(m_Mapper->currentIndex(), index), qtCheckState==Qt::Checked);
-            qWarning() << "dosage" << Dosages::Constants::IntakesUsesFromTo << m_Mapper->currentIndex() <<  m_DosageModel->data(m_DosageModel->index(m_Mapper->currentIndex(), index));
+//            qWarning() << "dosage" << Dosages::Constants::IntakesUsesFromTo << m_Mapper->currentIndex() <<  m_DosageModel->data(m_DosageModel->index(m_Mapper->currentIndex(), index));
         } else {
-            qWarning() << "drug";
+//            qWarning() << "drug";
             drugModel()->setDrugData(m_CIS, index, qtCheckState==Qt::Checked);
         }
     }
@@ -219,7 +219,8 @@ public:
             daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
 //            q->dailySchemeView->resizeColumnsToContents();
 
-            bool innPrescr = m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toBool();
+            int  inn = m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toInt();
+            bool innPrescr = (inn > 0);
             q->dosageForAllInnCheck->setChecked(innPrescr);
             q->innCompositionLabel->setVisible(innPrescr);
 
@@ -290,7 +291,7 @@ public:
 
     /**
       \brief Reset the Ui to the defaults.
-      \li Clears all combo, refill them and set their currentIndex to the default mfDosageModel::periodDefault()
+      \li Clears all combo, refill them and set their currentIndex to the default DosageModel::periodDefault()
       \li Manage scored tablet
     */
     void resetUiToDefaults()
@@ -607,18 +608,19 @@ void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
         // INN Prescription ?
         int row = d->m_Mapper->currentIndex();
             if ((dosageForAllInnCheck->isEnabled()) && (state==Qt::Checked)) {
+//                qWarning() << "INN" << drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnCode);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIS_LK), d->m_CIS);
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), QVariant());
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK),
                                            drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnCode));
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage),
                                            drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnDosage));
             } else {
+//                qWarning() << "not INN";
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIS_LK), d->m_CIS);
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), QVariant());
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK), QVariant());
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage),
-                                           drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnCode));
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK), -1);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage), "");
             }
         innCompositionLabel->show();
         innCompositionLabel->setText(tr("Linking to : ")

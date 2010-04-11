@@ -150,6 +150,9 @@ protected:
     QModelIndex createIndex( int row, int column, quint32 id ) const;
     virtual void checkInteractions() const;
 
+private Q_SLOTS:
+    void dosageDatabaseChanged();
+
 private:
     Internal::DrugsModelPrivate *d;
     static DrugsModel *m_ActiveModel;

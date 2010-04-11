@@ -218,6 +218,8 @@ TemplateBase::TemplateBase(QObject *parent)
 //            "`ACTUAL`                  varchar(10)"
 //            ");";
 
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+
     init();
 }
 
@@ -243,6 +245,7 @@ bool TemplateBase::init()
                          Utils::Database::MySQL,
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
                          Utils::Database::CreateDatabase);
     } else {
         createConnection(Templates::Constants::DB_TEMPLATES_NAME,
@@ -250,7 +253,7 @@ bool TemplateBase::init()
                          settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Templates::Constants::DB_TEMPLATES_NAME),
                          Utils::Database::ReadWrite,
                          Utils::Database::SQLite,
-                         "log", "pas",
+                         "log", "pas", 0,
                          Utils::Database::CreateDatabase);
     }
     d->checkDatabaseVersion();
@@ -266,6 +269,7 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
                     const QString & login, const QString & pass,
+                    const int port,
                     CreationOption /*createOption*/
                    )
 {
@@ -293,7 +297,7 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
             d.setHostName(pathOrHostName);
             d.setUserName(login);
             d.setPassword(pass);
-            /** \todo add mysql port */
+            d.setPort(port);
             if (!d.open()) {
                 Utils::warningMessageBox(tr("Unable to connect the Templates host."),tr("Please contact dev team."));
                 return false;
@@ -342,3 +346,6 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
     return true;
 }
 
+void TemplateBase::onCoreDatabaseServerChanged()
+{
+}

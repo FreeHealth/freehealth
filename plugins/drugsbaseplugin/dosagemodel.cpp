@@ -86,6 +86,11 @@
 #include <QColor>
 #include <QLocale>
 
+/**
+  \todo remove QCache of DasogeModels
+*/
+
+
 namespace mfDosageModelConstants {
     const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
@@ -207,11 +212,14 @@ bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int
     Q_ASSERT_X(m_UID != -1, "DosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
     if (! index.isValid())
         return false;
-    if (role == Qt::EditRole) {
+    if (role == Qt::EditRole) {        
+
+        QVariant q = data(index);
+
         // verify the value is different as model
-        QVariant q = data(index,Qt::DisplayRole);
-        if (q==value)
-            return false;
+        if (q==value) {
+            return true;
+        }
 
         // set only once modification date (infinite loop prevention)
         if (index.column()!=Dosages::Constants::ModificationDate)
@@ -222,8 +230,16 @@ bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int
             m_DirtyRows << index.row();
         }
 
-        if (!QSqlTableModel::setData(index, value, role))
+//        if  ((index.column() == Dosages::Constants::INN_LK) || (index.column() == Dosages::Constants::InnLinkedDosage)){
+//            qWarning() << index.column() << value << m_DirtyRows;
+//            warn();
+//        }
+
+        if (!QSqlTableModel::setData(index, value, role)) {
+            Utils::Log::addError(this, "Can not set data to QSqlTableModel");
+            Utils::Log::addQueryError(this, query());
             return false;
+        }
 
         QModelIndex label = this->index(index.row(), Dosages::Constants::Label);
         emit dataChanged(label, label);
@@ -264,8 +280,10 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
         }
     case Qt::DecorationRole :
         {
-            //            qWarning() << QSqlTableModel::index(item.row(), Dosage::INN_LK).data().toString();
-            if (!QSqlTableModel::index(item.row(), Dosages::Constants::INN_LK).data().toString().isEmpty())
+            int t = QSqlTableModel::index(item.row(), Dosages::Constants::INN_LK).data().toInt();
+//            qWarning() << t;
+//            if (!t.isEmpty() && (t != "-1"))
+            if (t > 0)
                 return theme()->icon(DrugsDB::Constants::I_SEARCHINN);
             return theme()->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL);
         }
@@ -297,6 +315,8 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             if (drugsBase()->actualDatabaseInformations())
                 setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant) , drugsBase()->actualDatabaseInformations()->identifiant);
             setData(index(createdRow, Dosages::Constants::CIS_LK) , m_UID);
+            setData(index(createdRow, Dosages::Constants::INN_LK) , -1);
+            setData(index(createdRow, Dosages::Constants::InnLinkedDosage) , "");
             setData(index(createdRow, Dosages::Constants::IntakesTo) , 1);
             setData(index(createdRow, Dosages::Constants::IntakesFrom) , 1);
             setData(index(createdRow, Dosages::Constants::IntakesUsesFromTo) , false);
@@ -367,13 +387,20 @@ void DosageModel::revertRow(int row)
 bool DosageModel::submitAll()
 {
     Q_ASSERT_X(m_UID != -1, "DosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
-    //    warn();
+//    warn();
+//    qWarning() << m_DirtyInnLkRows << m_DirtyRows;
+//    foreach(const int i, m_DirtyInnLkRows) {
+//        this->revertRow(i);
+//    }
+
     QSet<int> safe = m_DirtyRows;
     m_DirtyRows.clear();
     if (QSqlTableModel::submitAll()) {
         return true;
-    } else
+    } else {
         m_DirtyRows = safe;
+        Utils::Log::addQueryError(this, QSqlTableModel::query());
+    }
     //    reset();
     return false;
 }
@@ -387,10 +414,11 @@ bool DosageModel::setDrugUID(const int uid)
         return true;
     m_UID = uid;
     QString filter = QString("%1=%2").arg(record().fieldName(Dosages::Constants::CIS_LK)).arg(m_UID);
+
     int inn = -1;
     if (m_DrugsModel)
         inn = m_DrugsModel->drugData(uid, Constants::Drug::MainInnCode).toInt();
-    //    int inn = DRUGMODEL->drugData(_CIS,Drug::MainInnCode).toInt();
+
     if (inn!=-1) {
         // add INN_LK
         QString innFilter = QString::number(inn);
@@ -402,7 +430,7 @@ bool DosageModel::setDrugUID(const int uid)
                     .arg(m_DrugsModel->drugData(uid, Constants::Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }        
-    //    qWarning() << "filter" << filter;
+//    qWarning() << "filter" << filter;
     setFilter(filter);
     select();
     return true;

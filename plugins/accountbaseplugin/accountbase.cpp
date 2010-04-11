@@ -522,6 +522,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
                     const QString & /*login*/, const QString & /*pass*/,
+                    const int port,
                     CreationOption /*createOption*/
                    )
 {
@@ -540,7 +541,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
         DB.open();
     }
     else if (driver == MySQL) {
-        /** \todo how to create a new mysql database ??? */
+        /** \todo param MySQL database */
     }
 
     // create db structure
