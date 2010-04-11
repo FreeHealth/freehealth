@@ -149,6 +149,7 @@ namespace Time {
         const char * const  M_LANGUAGES_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Languages");          /*!< \brief Default text for menu Languages  \ingroup constants_actionmanager */
         const char * const  M_INTERPRETOR_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Interpretor");        /*!< \brief Default text for menu Interpretor  \ingroup constants_actionmanager */
         const char * const  M_ABOUT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "About");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
+        const char * const  ABOUTDATABASES_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "About databases");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
         const char * const  M_UPDATE_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Update available");   /*!< \brief Default text for menu Update  \ingroup constants_actionmanager */
 
         // Actions translations
@@ -243,6 +244,8 @@ namespace Time {
         // Drugs
         const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
         const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
+        const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database informations");
+        const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database informations");
         const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
         const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
         const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");

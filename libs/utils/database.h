@@ -49,6 +49,10 @@
 #include <QObject>
 #include <QHash>
 
+QT_BEGIN_NAMESPACE
+class QTreeWidget;
+QT_END_NAMESPACE
+
 /**
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
@@ -210,9 +214,11 @@ public:
     virtual bool executeSQL( const QString & req, const QSqlDatabase & DB ) const;
 
     virtual void warn() const;
+    virtual void toTreeWidget(QTreeWidget *tree);
+
+    virtual void setConnectionName( const QString & c );
 
 protected:
-    virtual void setConnectionName( const QString & c );
     virtual void setDriver(const AvailableDrivers &d);
 
 private:

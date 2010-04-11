@@ -70,6 +70,7 @@ const char * const  M_TOOLBARS           = "menuToolbars";      /*!< \brief Defa
 const char * const  M_LANGUAGES          = "menuLanguages";     /*!< \brief Default menu Languages object name  \ingroup constants_actionmanager */
 const char * const  M_INTERPRETOR        = "menuInterpretor";   /*!< \brief Default menu Interpertor object name  \ingroup constants_actionmanager */
 const char * const  M_HELP               = "menuHelp";          /*!< \brief Default menu About object name  \ingroup constants_actionmanager */
+const char * const  M_HELP_DATABASES     = "menuHelp.DB";       /*!< \brief Default menu About object name  \ingroup constants_actionmanager */
 const char * const  M_UPDATE             = "menuUpdate";        /*!< \brief Default menu Update object name  \ingroup constants_actionmanager */
 
 // Groups' name
@@ -149,6 +150,7 @@ const char * const G_TOOLS_GENERAL       = "grTools.General";        /*!< \brief
 const char * const G_HELP                = "grHelp";            /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_HELP           = "grHelp.Help";       /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_ABOUT          = "grHelp.About";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_HELP_DATABASES      = "grHelp.About.DB";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_OTHER          = "grHelp.Other";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_HELP_DEBUG          = "grHelp.Debug";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 

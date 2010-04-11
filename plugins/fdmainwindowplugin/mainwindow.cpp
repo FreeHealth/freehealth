@@ -44,10 +44,6 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
-//#include <coreplugin/iformio.h>
-//#include <coreplugin/iformitem.h>
-//#include <coreplugin/iformwidgetfactory.h>
-//#include <coreplugin/formmanager.h>
 #include <coreplugin/filemanager.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>

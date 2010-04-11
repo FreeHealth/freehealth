@@ -258,17 +258,53 @@ bool DrugsCentralWidget::createTemplate()
     return true;
 }
 
-void DrugsCentralWidget::showDatabaseInformations()
+void DrugsCentralWidget::showDrugsDatabaseInformations()
 {
     const DrugsDB::DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->actualDatabaseInformations();
     if (!info)
         return;
     QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);
+    QTreeWidget tree2(&dlg);
+    tree2.setColumnCount(2);
+    tree2.header()->hide();
+    info->toTreeWidget(&tree2);
+
     QTreeWidget tree(&dlg);
     tree.setColumnCount(2);
     tree.header()->hide();
-    info->toTreeWidget(&tree);
+    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
+    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
+
+    lay.addWidget(&tree);
+    lay.addWidget(&tree2);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
+}
+
+void DrugsCentralWidget::showDosagesDatabaseInformations()
+{
+    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
+    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
+}
+
+void DrugsCentralWidget::showInteractionsDatabaseInformations()
+{
+    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(DrugsDB::Constants::DB_IAM_NAME);
+    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);
     dlg.exec();

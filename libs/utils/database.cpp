@@ -87,6 +87,8 @@
 #include <QHash>
 #include <QMultiHash>
 #include <QMap>
+#include <QTreeWidgetItem>
+#include <QTreeWidget>
 
 enum {WarnSqlCommands=false};
 
@@ -1029,4 +1031,90 @@ void Database::warn() const
                                .arg(d->m_Fields[f], d->getTypeOfField(f), d->m_DefaultFieldValue[i]));
 
     }
+}
+
+/** \brief Used for debugging and informations purpose. */
+void Database::toTreeWidget(QTreeWidget *tree)
+{
+    QFont bold;
+    bold.setBold(true);
+    tree->clear();
+
+    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+
+    // General informations
+    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "General informations");
+    db->setFont(0, bold);
+    new QTreeWidgetItem(db, QStringList() << "Connection Name" << d->m_ConnectionName);
+    new QTreeWidgetItem(db, QStringList() << "Database Name" << DB.databaseName());
+    if (DB.isOpenError()) {
+        QTreeWidgetItem *e = new QTreeWidgetItem(db, QStringList() << "Error" << DB.lastError().text());
+        e->setFont(0, bold);
+    } else {
+        new QTreeWidgetItem(db, QStringList() << "Connected" << "Without error");
+    }
+
+    // Driver / Connection // ConnectionError
+    QTreeWidgetItem *drv = new QTreeWidgetItem(tree, QStringList() << "Driver informations");
+    drv->setFont(0, bold);
+    new QTreeWidgetItem(drv, QStringList() << "Qt Driver" << DB.driverName());
+    if (DB.driverName()=="QSQLITE") {
+        new QTreeWidgetItem(drv, QStringList() << "Driver" << "SQLite");
+        QString path = QFileInfo(DB.databaseName()).absolutePath();
+        path = QDir(qApp->applicationDirPath()).relativeFilePath(path);
+        new QTreeWidgetItem(drv, QStringList() << "Path" << path);
+        new QTreeWidgetItem(drv, QStringList() << "FileName" << QFileInfo(DB.databaseName()).baseName());
+    }
+    else if (DB.driverName()=="QMYSQL") {
+        new QTreeWidgetItem(drv, QStringList() << "Driver" << "MySQL");
+        new QTreeWidgetItem(drv, QStringList() << "Host" << DB.hostName());
+        new QTreeWidgetItem(drv, QStringList() << "Port" << QString::number(DB.port()));
+        new QTreeWidgetItem(drv, QStringList() << "Login" << "****");
+        new QTreeWidgetItem(drv, QStringList() << "Password" << "****");
+    }
+    else if (DB.driverName()=="QPSQL") {
+        new QTreeWidgetItem(drv, QStringList() << "Driver" << "PostGreSQL");
+        new QTreeWidgetItem(drv, QStringList() << "Host" << DB.hostName());
+        new QTreeWidgetItem(drv, QStringList() << "Port" << QString::number(DB.port()));
+        new QTreeWidgetItem(drv, QStringList() << "Login" << "****");
+        new QTreeWidgetItem(drv, QStringList() << "Password" << "****");
+    }
+
+    // Grants
+    QTreeWidgetItem *grants = new QTreeWidgetItem(tree, QStringList() << "Grants");
+    grants->setFont(0, bold);
+    Database::Grants g = d->m_Grants.value(d->m_ConnectionName);
+    if (g & Database::Grant_All) {
+        new QTreeWidgetItem(grants, QStringList() << "ALL PRIVILEGES");
+    } else {
+        QHash<QString, int> ref;
+        ref.insert("ALL PRIVILEGES", Database::Grant_All);
+        ref.insert("ALTER", Database::Grant_Alter);
+        ref.insert("ALTER ROUTINE", Database::Grant_AlterRoutine);
+        ref.insert("CREATE", Database::Grant_Create);
+        ref.insert("CREATE ROUTINE", Database::Grant_CreateRoutine);
+        ref.insert("CREATE TEMPORARY TABLES", Database::Grant_CreateTmpTables);
+        ref.insert("CREATE USER", Database::Grant_CreateUser);
+        ref.insert("CREATE VIEW", Database::Grant_CreateView);
+        ref.insert("DELETE", Database::Grant_Delete);
+        ref.insert("DROP", Database::Grant_Drop);
+        ref.insert("EXECUTE", Database::Grant_Execute);
+        ref.insert("GRANT OPTION", Database::Grant_Options);
+        ref.insert("INDEX", Database::Grant_Index);
+        ref.insert("INSERT", Database::Grant_Insert);
+        ref.insert("LOCK TABLES", Database::Grant_LockTables);
+        ref.insert("PROCESS", Database::Grant_Process);
+        ref.insert("SELECT", Database::Grant_Select);
+        ref.insert("SHOW DATABASES", Database::Grant_ShowDatabases);
+        ref.insert("SHOW VIEW", Database::Grant_ShowView);
+        ref.insert("TRIGGER", Database::Grant_Trigger);
+        ref.insert("UPDATE", Database::Grant_Update);
+        foreach(const int grant, ref.values()) {
+            if (g & grant)
+                new QTreeWidgetItem(grants, QStringList() << ref.key(grant));
+        }
+    }
+    tree->expandAll();
+    tree->resizeColumnToContents(0);
+    tree->resizeColumnToContents(1);
 }

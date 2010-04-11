@@ -253,9 +253,14 @@ void MainWindowActionHandler::createHelpMenu()
     m->setTranslations(Trans::Constants::M_ABOUT_TEXT);
     m->appendGroup(Constants::G_HELP_HELP);
     m->appendGroup(Constants::G_HELP_ABOUT);
+    m->appendGroup(Constants::G_HELP_DATABASES);
     m->appendGroup(Constants::G_HELP_OTHER);
     m->appendGroup(Constants::G_UPDATE);
     m->appendGroup(Constants::G_HELP_DEBUG);
+
+    ActionContainer *mdb = actionManager()->createMenu(Constants::M_HELP_DATABASES);
+    m->addMenu(mdb, Constants::G_HELP_DATABASES);
+    mdb->setTranslations(Trans::Constants::ABOUTDATABASES_TEXT);
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/

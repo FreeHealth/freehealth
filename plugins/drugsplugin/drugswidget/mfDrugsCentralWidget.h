@@ -100,7 +100,10 @@ public:
     bool printPrescription();
     void printPreview();
     bool createTemplate();
-    void showDatabaseInformations();
+
+    void showDrugsDatabaseInformations();
+    void showDosagesDatabaseInformations();
+    void showInteractionsDatabaseInformations();
 
 protected:
     void createConnections();
