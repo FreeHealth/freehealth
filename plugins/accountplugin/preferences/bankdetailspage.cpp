@@ -204,13 +204,15 @@ void BankDetailsWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        retranslateUi(this);
-        int s = defaultCombo->currentIndex();
-        defaultCombo->clear();
-        defaultCombo->addItem(tkTr(Trans::Constants::NO));
-        defaultCombo->addItem(tkTr(Trans::Constants::YES));
-        defaultCombo->setCurrentIndex(s);
-        break;
+        {
+            retranslateUi(this);
+            int s = defaultCombo->currentIndex();
+            defaultCombo->clear();
+            defaultCombo->addItem(tkTr(Trans::Constants::NO));
+            defaultCombo->addItem(tkTr(Trans::Constants::YES));
+            defaultCombo->setCurrentIndex(s);
+            break;
+        }
     default:
         break;
     }
