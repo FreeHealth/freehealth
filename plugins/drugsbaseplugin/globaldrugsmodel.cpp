@@ -57,6 +57,7 @@
 #include <QColor>
 #include <QDir>
 #include <QCache>
+#include <QSqlError>
 
 #include <QDebug>
 
@@ -178,7 +179,7 @@ void GlobalDrugsModel::updateAvailableDosages()
 }
 
 GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
-        QSqlTableModel(parent, QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME)),
+        QSqlTableModel(parent, QSqlDatabase::database(Constants::DB_DRUGS_NAME)),
         d(0)
 {
     d = new Internal::GlobalDrugsModelPrivate(this);

@@ -104,6 +104,8 @@ private Q_SLOTS:
     // history slots
     void historyAct_triggered( QAction * action );
 
+    void onDrugsBaseChanged();
+
 private:
     // models
     QSqlTableModel *m_DrugsModel;

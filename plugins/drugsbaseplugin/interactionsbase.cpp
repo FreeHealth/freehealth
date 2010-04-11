@@ -148,7 +148,7 @@ public:
 
          /** \todo release these resources files to limit memory usage */
 
-         QSqlDatabase DB = QSqlDatabase::database(IAM_DATABASE_NAME);
+         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_IAM_NAME);
          if (!DB.isOpen())
               DB.open();
 
@@ -276,11 +276,11 @@ bool InteractionsBase::init()
     QString pathToDb = "";
 
     if (Utils::isRunningOnMac())
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME);
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
     else
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME);
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
 
-    di->m_DB->createConnection(IAM_DATABASE_NAME, IAM_DATABASE_FILENAME, pathToDb,
+    di->m_DB->createConnection(DB_IAM_NAME, DB_IAM_FILENAME, pathToDb,
                                Utils::Database::ReadOnly, Utils::Database::SQLite);
 
     // retreive iams into m_Iams for speed improvements
@@ -481,7 +481,7 @@ QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
      if ( m_IamFound.isEmpty() )
           return toReturn;
 
-     QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
+     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
      if (!DB.isOpen())
           DB.open();
 

@@ -105,7 +105,7 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString defaultDatabaseFileName() {return settings()->databasePath() + QDir::separator() + QString(DRUGS_DATABASE_NAME) + QDir::separator() + QString(DRUGS_DATABASE_NAME) + "-fr_FR.db";}
+static inline QString defaultDatabaseFileName() {return settings()->databasePath() + QDir::separator() + QString(DB_DRUGS_NAME) + QDir::separator() + QString(DB_DRUGS_NAME) + "-fr_FR.db";}
 
 namespace DrugsDB {
 namespace Internal {
@@ -116,18 +116,23 @@ namespace Internal {
 class DrugsBasePrivate
 {
 public:
-    DrugsBasePrivate(DrugsBase *base);
+    DrugsBasePrivate(DrugsBase * base) :
+            m_DrugsBase(base),
+            m_ActualDBInfos(0),
+            m_LogChrono(false),
+            m_RefreshDrugsBase(false),
+            m_RefreshDosageBase(false)
+    {}
+
     ~DrugsBasePrivate()
     {
     }
-    // connections creator
-    bool createConnections(const QString & path, const QString & db, const QString & dbName, bool readwrite);
 
 
 public:
     DrugsBase *m_DrugsBase;
     DatabaseInfos *m_ActualDBInfos;
-    bool m_LogChrono;
+    bool m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -222,11 +227,6 @@ DrugsBase::~DrugsBase()
     d=0;
 }
 
-DrugsBasePrivate::DrugsBasePrivate(DrugsBase * base) :
-        m_DrugsBase(base),
-        m_ActualDBInfos(0),
-        m_LogChrono(false)
-{}
 
 /** \brief Initializer for the database. Return the error state. */
 bool DrugsBase::init()
@@ -235,63 +235,88 @@ bool DrugsBase::init()
     if (m_initialized)
         return true;
 
-    // test driver
-    if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
-        Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                 tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
-                                 "", qApp->applicationName());
-        return false;
+    // remove drugs database connection if exists
+    if (d->m_RefreshDrugsBase) {
+        if (QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
+            QSqlDatabase::database(Constants::DB_DRUGS_NAME).close();
+            QSqlDatabase::removeDatabase(Constants::DB_DRUGS_NAME);
+        }
+        d->m_RefreshDrugsBase = false;
     }
 
-    QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
-    if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
-        dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+    // create drugs database connection
+    if (!QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
+        // test driver
+        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
+                                     "", qApp->applicationName());
+            return false;
+        }
+
+        QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
+        if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
+            dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+        }
+
+        // define is default drugs database (fr_FR)
+        // if settings drugs database is wrong --> use the default database
+        if (dbFileName == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT)
+            m_IsDefaultDB = true;
+        else if ((dbFileName.isEmpty())
+            || (!QFile(dbFileName).exists())) {
+            Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
+            m_IsDefaultDB = true;
+            dbFileName = defaultDatabaseFileName();
+        } else {
+            m_IsDefaultDB = false;
+        }
+
+        // log the path of the database
+        QString pathToDb = QFileInfo(dbFileName).absolutePath();
+        Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
+
+        // Connect Drugs Database
+        if (createConnection(DB_DRUGS_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
+                             Utils::Database::ReadOnly, Utils::Database::SQLite)) {
+            d->m_ActualDBInfos = getDatabaseInformations(DB_DRUGS_NAME);
+        } else {
+            Utils::Log::addError(this, "No drugs database found.");
+            return false;
+        }
     }
 
-    // define is default drugs database (fr_FR)
-    // if settings drugs database is wrong --> use the default database
-    if (dbFileName == DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)
-        m_IsDefaultDB = true;
-    else if ((dbFileName.isEmpty())
-        || (!QFile(dbFileName).exists())) {
-        Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
-        m_IsDefaultDB = true;
-        dbFileName = defaultDatabaseFileName();
-    } else {
-        m_IsDefaultDB = false;
-    }
-
-    // log the path of the database
-    QString pathToDb = QFileInfo(dbFileName).absolutePath();
-    Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
-
-    // Connect Drugs Database
-    if (createConnection(DRUGS_DATABASE_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
-                         Utils::Database::ReadOnly, Utils::Database::SQLite)) {
-        d->m_ActualDBInfos = getDatabaseInformations(DRUGS_DATABASE_NAME);
-    } else {
-        Utils::Log::addError(this, "No drugs database found.");
-        return false;
-    }
 
     // Connect and check Dosage Database
     // Check settings --> SQLite or MySQL ?
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, true).toBool()) {
-        createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME,
-                         Dosages::Constants::DOSAGES_DATABASE_NAME,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-                         Utils::Database::ReadWrite,
-                         Utils::Database::MySQL,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-                         Utils::Database::CreateDatabase);
-    } else {
-        createConnection(Dosages::Constants::DOSAGES_DATABASE_NAME, Dosages::Constants::DOSAGES_DATABASE_FILENAME,
-                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DRUGS_DATABASE_NAME),
-                         Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+    // remove drugs database connection if exists
+    if (d->m_RefreshDosageBase) {
+        if (QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
+            QSqlDatabase::removeDatabase(Dosages::Constants::DB_DOSAGES_NAME);
+        }
+        d->m_RefreshDosageBase = false;
     }
-    checkDosageDatabaseVersion();
+
+    // create drugs database connection
+    if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
+        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, true).toBool()) {
+            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
+                             Dosages::Constants::DB_DOSAGES_NAME,
+                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+                             Utils::Database::ReadWrite,
+                             Utils::Database::MySQL,
+                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                             Utils::Database::CreateDatabase);
+        } else {
+            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
+                             Dosages::Constants::DB_DOSAGES_FILENAME,
+                             settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(DB_DRUGS_NAME),
+                             Utils::Database::ReadWrite, Utils::Database::SQLite, "log", "pas", Utils::Database::CreateDatabase);
+        }
+        checkDosageDatabaseVersion();
+    }
 
     // Initialize
     InteractionsBase::init();
@@ -317,6 +342,45 @@ const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
 bool DrugsBase::isDatabaseTheDefaultOne() const
 {
     return m_IsDefaultDB;
+}
+
+bool DrugsBase::refreshAllDatabases()
+{
+    m_initialized = false;
+    d->m_RefreshDrugsBase = true;
+    d->m_RefreshDosageBase = true;
+    Q_EMIT drugsBaseIsAboutToChange();
+    Q_EMIT dosageBaseIsAboutToChange();
+    bool r = init();
+    if (r) {
+        Q_EMIT drugsBaseHasChanged();
+        Q_EMIT dosageBaseHasChanged();
+    }
+    return r;
+}
+
+bool DrugsBase::refreshDrugsBase()
+{
+    m_initialized = false;
+    d->m_RefreshDrugsBase = true;
+    Q_EMIT drugsBaseIsAboutToChange();
+    bool r = init();
+    if (r)
+        Q_EMIT drugsBaseHasChanged();
+    else
+        Utils::Log::addError(this, "kjkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk");
+    return r;
+}
+
+bool DrugsBase::refreshDosageBase()
+{
+    m_initialized = false;
+    d->m_RefreshDosageBase = true;
+    Q_EMIT dosageBaseIsAboutToChange();
+    bool r = init();
+    if (r)
+        Q_EMIT dosageBaseHasChanged();
+    return r;
 }
 
 DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
@@ -439,11 +503,13 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
                               )
 {
     /** \todo  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website */
-    if (connectionName != Dosages::Constants::DOSAGES_DATABASE_NAME)
+    if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
         return false;
+
     Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
                            .arg(dbName).arg(pathOrHostName));
-        // create an empty database and connect
+
+    // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
         DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
@@ -521,10 +587,10 @@ void DrugsBase::checkDosageDatabaseVersion()
 QHash<QString, QString> DrugsBase::getDosageToTransmit()
 {
     QHash<QString, QString> toReturn;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!DB.open()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
+                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
         return toReturn;
     }
     QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
@@ -538,7 +604,7 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
                     // create a XML of the dosage
                     toXml.insert(query.record().field(i).name(), query.value(i).toString());
                 }
-                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DOSAGES_TABLE_NAME,toXml,4,false));
+                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
             }
         } else
             Utils::Log::addQueryError(this, query);
@@ -555,7 +621,7 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
                     // create a XML of the dosage
                     toXml.insert(query.record().field(i).name(), query.value(i).toString());
                 }
-                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DOSAGES_TABLE_NAME,toXml,4,false));
+                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
             }
         } else {
             Utils::Log::addQueryError(this, query);
@@ -569,10 +635,10 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
 {
     if (dosageUuids.count()==0)
         return true;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!DB.open()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
+                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
         return false;
     }
     QStringList reqs;
@@ -609,16 +675,16 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
     if (!actualDatabaseInformations())
         return toReturn;
 
-    QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if ((DosageDB.isOpen()) && (!DosageDB.open())) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DosageDB.lastError().text()));
+                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DosageDB.lastError().text()));
         return toReturn;
     }
     QString req;
     if (m_IsDefaultDB) {
         req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-              .arg(Constants::DEFAULT_DATABASE_IDENTIFIANT);
+              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
     } else {
         req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
               .arg(actualDatabaseInformations()->identifiant);
@@ -641,10 +707,10 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
     QHash<int, QString> where;
     QString tmp;
     QList<int> code_subst;
-    QSqlDatabase DrugsDB = QSqlDatabase::database(Constants::DRUGS_DATABASE_NAME);
+    QSqlDatabase DrugsDB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if ((DrugsDB.isOpen()) && (!DrugsDB.open())) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Constants::DRUGS_DATABASE_NAME).arg(DrugsDB.lastError().text()));
+                             .arg(Constants::DB_DRUGS_NAME).arg(DrugsDB.lastError().text()));
         return toReturn;
     }
 
@@ -720,16 +786,16 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
 {
     QMultiHash<int,QString> toReturn;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!DB.open()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DOSAGES_DATABASE_NAME).arg(DB.lastError().text()));
+                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
         return toReturn;
     }
     QString req;
     if (m_IsDefaultDB) {
         req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-              .arg(Constants::DEFAULT_DATABASE_IDENTIFIANT);
+              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
     } else {
         req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
               .arg(actualDatabaseInformations()->identifiant);
@@ -769,7 +835,7 @@ bool DrugsBase::drugsINNIsKnown(const DrugsData *drug)
 /** \brief Returns the unique code CIS for the CIP code \e CIP. */
 int DrugsBase::getUIDFromCIP(int CIP)
 {
-    QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if (!DB.isOpen())
         DB.open();
     // prepare where clause
@@ -806,10 +872,10 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     QTime t;
     t.start();
 
-    QSqlDatabase DB = QSqlDatabase::database(DRUGS_DATABASE_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if ((!DB.open()) && (!DB.isOpen())) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Constants::DRUGS_DATABASE_NAME).arg(DB.lastError().text()));
+                             .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
         return 0;
     }
 

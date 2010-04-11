@@ -121,6 +121,8 @@ void DrugSelector::initialize()
     drugsView->setFocus();
 
     retranslateUi("");
+
+    connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
 }
 
 void DrugSelector::setFont(const QFont &font)
@@ -154,12 +156,20 @@ void DrugSelector::createToolButtons()
     searchLine->setRightButton(m_DrugsHistoricButton);
 }
 
+void DrugSelector::onDrugsBaseChanged()
+{
+    delete m_DrugsModel;
+    m_DrugsModel = 0;
+    createDrugModelView();
+}
+
 void DrugSelector::createDrugModelView()
 {
     using namespace DrugsDB::Constants;
     // insert SQL drugs model and table view
-    if (!m_DrugsModel)
+    if (!m_DrugsModel) {
         m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
+    }
     // create the view
     drugsView->setModel(m_DrugsModel);
     //      drugsView->sortByColumn(1 , Qt::AscendingOrder);  // NOT SUPPORTED BY WIN32 CROSS-COMPILATION !!!!
@@ -186,7 +196,7 @@ void DrugSelector::createINNModelView()
 {
     using namespace DrugsDB::Constants;
     // create model and tableview for Iam Class / INNs
-    m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(IAM_DATABASE_NAME));
+    m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(DrugsDB::Constants::DB_IAM_NAME));
     m_InnModel->setTable(drugsBase()->iamTable(Table_IAM_DENOMINATION));
     m_InnModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     QHashWhere where;

@@ -291,7 +291,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     }
 
     // Check if the drugs database correspond to the actual one
-    QString xmlDbName = DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT;
+    QString xmlDbName = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
     QString start = QString("<%1>").arg(XML_DRUGS_DATABASE_NAME);
     QString finish;
     if (xml.contains(start)) {

@@ -69,7 +69,7 @@ namespace {
         bool updateDatabaseScheme() const
         {
             // these versions only use SQLite
-            QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+            QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
             if (!db.open()) {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace {
                                "`MODIFICATIONDATE`,"
                                "`TRANSMITTED`,"
                                "`ORDER`");
-            req << QString("UPDATE `DOSAGE` SET `DRUGS_DATABASE_IDENTIFIANT`=\"%1\";").arg(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT);
+            req << QString("UPDATE `DOSAGE` SET `DRUGS_DATABASE_IDENTIFIANT`=\"%1\";").arg(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
             req << "DROP TABLE `OLD_DOSAGE`;";
             req << "﻿DELETE FROM `VERSION`;";
             req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.4.0');";
@@ -205,7 +205,7 @@ public:
     bool updateDatabaseScheme() const
     {
         // these versions only use SQLite
-        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
         if (!db.open()) {
             return false;
         }
@@ -276,7 +276,7 @@ public:
     bool saveUpdatedValuesToDatabase() const
     {
         // these versions only use SQLite
-        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
         if (!db.open()) {
             return false;
         }
@@ -500,10 +500,10 @@ bool VersionUpdater::isDosageDatabaseUpToDate() const
     if (!d->m_DosageDatabaseVersion.isEmpty())
         return (d->m_DosageDatabaseVersion==d->dosageDatabaseVersions().last());
 
-    QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME);
+    QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!db.open()) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()),"","","");
-        Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DOSAGES_DATABASE_NAME, db.lastError().text()));
+        Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME, db.lastError().text()),"","","");
+        Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME, db.lastError().text()));
         return true;
     }
     QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` LIMIT 1;";
@@ -528,20 +528,20 @@ bool VersionUpdater::updateDosageDatabase()
         DosageDatabaseUpdateStep *step = from.value(version, 0);
         if (!step)
             break;
-        step->setConnectionName(Dosages::Constants::DOSAGES_DATABASE_NAME);
+        step->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
         if (!step->retreiveValuesToUpdate()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         if (!step->updateDatabaseScheme()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         if (!step->saveUpdatedValuesToDatabase()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DOSAGES_DATABASE_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
             return false;
         }
         version = step->toVersion();

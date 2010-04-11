@@ -44,6 +44,7 @@
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -67,6 +68,8 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::DrugsDatabaseSelector *selector() {return DrugsDB::DrugsDatabaseSelector::instance();}
 
+
+/** \todo How to manage drugs base changing into FreeMedForms ? */
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////  DrugsDatabaseSelectorPage  /////////////////////////////////////////
@@ -101,7 +104,7 @@ void DrugsDatabaseSelectorPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
-    defaultvalues.insert(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, QString(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT));
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, QString(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT));
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k).isNull())
@@ -250,6 +253,25 @@ void DatabaseSelectorWidget::tooglePaths()
     ui->pathView->setVisible(!ui->pathView->isVisible());
 }
 
+static void changeDrugsDatabase(Core::ISettings *set, const QString &fileName)
+{
+    if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != fileName) {
+        if (DrugsDB::DrugsModel::activeModel()->rowCount()) {
+            bool yes = Utils::yesNoMessageBox(
+                    QCoreApplication::translate("DatabaseSelectorWidget", "Reset actual prescription"),
+                QCoreApplication::translate("DatabaseSelectorWidget", "You have selected a different drugs database than the currently-opened one. "
+                   "Your actual prescription will be resetted. Do you want to continue ?"),
+                "", QCoreApplication::translate("DatabaseSelectorWidget", "Drugs database selection"));
+            if (!yes) {
+                return;
+            }
+            DrugsDB::DrugsModel::activeModel()->clearDrugsList();
+        }
+        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, fileName);
+        DrugsDB::Internal::DrugsBase::instance()->refreshDrugsBase();
+    }
+}
+
 void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Core::ISettings *set = s;
@@ -258,13 +280,7 @@ void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     }
     Utils::Log::addMessage("DatabaseSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DatabaseSelectorWidget"));
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
-    if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != QString(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT)) {
-        Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database than the currently-opened one. "
-                                    "You need to restart the application."),
-                                 "", tr("Drugs database selection"));
-    }
-    set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, QString(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT));
+    changeDrugsDatabase(set, DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
     set->sync();
 }
 
@@ -278,9 +294,9 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
 
     // 0. if selected DB is the default one --> change selected to RESOURCE_TAG
     QString tmp = d->m_SelectedDatabaseFileName;
-    QString defaultDbFileName = set->databasePath() + QDir::separator() + QString(DrugsDB::Constants::DRUGS_DATABASE_NAME) + QDir::separator() + QString(DrugsDB::Constants::DRUGS_DATABASE_NAME) + ".db";
+    QString defaultDbFileName = set->databasePath() + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + ".db";
     if (tmp == defaultDbFileName)
-        tmp = DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT;
+        tmp = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
 
     // 1. manage application resource path
     if (tmp.startsWith(settings()->path(Core::ISettings::ReadOnlyDatabasesPath))) {
@@ -288,14 +304,7 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     }
 
     // 2. check if user changes the database
-    if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != tmp) {
-        Utils::warningMessageBox(tr("Application must be restarted to take changes into account."),
-                                 tr("You have selected a different drugs database than the currently-opened one. "
-                                    "You need to restart the application."),
-                                 "", tr("Drugs database selection"));
-    }
-    // 3. save the value
-    set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, tmp);
+    changeDrugsDatabase(set, tmp);
 }
 
 void DatabaseSelectorWidget::changeEvent(QEvent *e)

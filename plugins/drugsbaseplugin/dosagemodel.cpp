@@ -51,7 +51,7 @@
   \li INN based could be the same and can be applied to AMOXICILLINE PHARMACEUTICAL_LABO 1g.
 
   A \b "prescription" is the when and how you prescribe a selected drug.\n
-  database(DOSAGES_DATABASE_NAME) should be defined BEFORE instance()
+  database(DB_DOSAGES_NAME) should be defined BEFORE instance()
 
   \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
 
@@ -181,17 +181,17 @@ QStringList DosageModel::predeterminedForms()
 //--------------------------------------------------------------------------------------------------------
 /** \brief Constructor */
 DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
-        : QSqlTableModel(parent, QSqlDatabase::database(Dosages::Constants::DOSAGES_DATABASE_NAME)),
+    : QSqlTableModel(parent, QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME)),
         m_DrugsModel(parent)
 {
     setObjectName("DosageModel");
-    QSqlTableModel::setTable(Dosages::Constants::DOSAGES_TABLE_NAME);
+    QSqlTableModel::setTable(Dosages::Constants::DB_DOSAGES_TABLE_NAME);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     m_UID = -1;
     if (drugsBase()->isDatabaseTheDefaultOne()) {
         setFilter(QString("%1 = \"%2\"")
                   .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
-                  .arg(DrugsDB::Constants::DEFAULT_DATABASE_IDENTIFIANT));
+                  .arg(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT));
     } else {
         if (drugsBase()->actualDatabaseInformations()) {
             setFilter(QString("%1 = \"%2\"")

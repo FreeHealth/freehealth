@@ -223,11 +223,11 @@ namespace Constants {
 
 
     // DATABASE
-    const char * const DRUGS_DATABASE_NAME     = "drugs";            /*!< \brief Drugs database connection name. */
-    const char * const IAM_DATABASE_NAME       = "iam";            /*!< \brief Drugs database connection name. */
-    const char * const DRUGS_DATABASE_FILENAME = "drugs.db";         /*!< \brief Drug database file name (for SQLite). */
-    const char * const IAM_DATABASE_FILENAME   = "iam.db";         /*!< \brief Drug database file name (for SQLite). */
-    const char * const DEFAULT_DATABASE_IDENTIFIANT  = "FR_AFSSAPS";
+    const char * const DB_DRUGS_NAME     = "drugs";            /*!< \brief Drugs database connection name. */
+    const char * const DB_IAM_NAME       = "iam";            /*!< \brief Drugs database connection name. */
+    const char * const DB_DRUGS_FILENAME = "drugs.db";         /*!< \brief Drug database file name (for SQLite). */
+    const char * const DB_IAM_FILENAME   = "iam.db";         /*!< \brief Drug database file name (for SQLite). */
+    const char * const DB_DEFAULT_IDENTIFIANT  = "FR_AFSSAPS";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------ Enums for Database Management -------------------------------------
@@ -409,9 +409,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Interaction::TypesOfIAM )
 */
 namespace Dosages {
 namespace Constants {
-    const char * const DOSAGES_DATABASE_NAME = "dosages";          /*!< \brief Dosage database connection name. */
-    const char * const DOSAGES_DATABASE_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
-    const char * const DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
+    const char * const DB_DOSAGES_NAME = "dosages";          /*!< \brief Dosage database connection name. */
+    const char * const DB_DOSAGES_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
+    const char * const DB_DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
 
 /**
  \brief Used by mfDosageModel for column representation.

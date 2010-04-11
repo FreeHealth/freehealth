@@ -92,6 +92,10 @@ public:
     DatabaseInfos *getDatabaseInformations(const QString &connectionName);
     bool isDatabaseTheDefaultOne() const;
 
+    bool refreshAllDatabases();
+    bool refreshDrugsBase();
+    bool refreshDosageBase();
+
     // Manage drugs
     DrugsData *getDrugByCIP(const QVariant & CIP_id);
     DrugsData *getDrugByUID(const QVariant &UID);
@@ -111,6 +115,13 @@ public:
 
     // managins drugs
     bool drugsINNIsKnown(const DrugsData *drug);
+
+Q_SIGNALS:
+    void drugsBaseIsAboutToChange();
+    void drugsBaseHasChanged();
+    void dosageBaseIsAboutToChange();
+    void dosageBaseHasChanged();
+
 
 private:
     bool createDatabase(const QString & connectionName , const QString & dbName,
