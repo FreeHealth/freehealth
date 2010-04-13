@@ -110,6 +110,7 @@ protected Q_SLOTS:
     void editCurrentItem();
     void saveModel();
     void lock(bool state = true);
+    void databaseInformations();
     bool printTemplate();
 
 protected:

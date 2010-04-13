@@ -260,6 +260,7 @@ void MainWindowActionHandler::createHelpMenu()
 
     ActionContainer *mdb = actionManager()->createMenu(Constants::M_HELP_DATABASES);
     m->addMenu(mdb, Constants::G_HELP_DATABASES);
+    mdb->appendGroup(Constants::G_HELP_DATABASES);
     mdb->setTranslations(Trans::Constants::ABOUTDATABASES_TEXT);
 }
 

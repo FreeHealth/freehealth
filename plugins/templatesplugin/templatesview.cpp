@@ -42,6 +42,7 @@
 #include "templatesview_p.h"
 #include "ui_templatesview.h"
 #include "templatesmodel.h"
+#include "templatebase.h"
 #include "itemplates.h"
 #include "itemplateprinter.h"
 #include "constants.h"
@@ -66,6 +67,7 @@
 #include <QWidget>
 #include <QToolBar>
 #include <QSpacerItem>
+#include <QTreeWidget>
 
 #include <QDebug>
 
@@ -168,6 +170,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         aPrint(0),
         aSave(0),
         aLocker(0),
+        aDatabaseInfos(0),
         m_CurrentView(0),
         m_IsLocked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool())
 {
@@ -226,6 +229,18 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                            Core::Constants::A_TEMPLATE_LOCK, Core::Constants::G_EDIT_TEMPLATES,
                            Trans::Constants::UNLOCKED_TEXT, lockContext, this);
     connect(aLocker, SIGNAL(triggered()), this, SLOT(lock()));
+
+    // Database informations
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    if (hmenu) {
+        aDatabaseInfos = registerAction("TemplatesView.aDbInfos", hmenu, Core::Constants::ICONABOUT,
+                                        Core::Constants::A_TEMPLATE_DATABASEINFORMATIONS,
+                                        Core::Constants::G_HELP_DATABASES,
+                                        Trans::Constants::TEMPLATES_DATABASE_INFORMATIONS_TEXT,
+                                        QList<int>() << Core::Constants::C_GLOBAL_ID, this);
+        connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformations()));
+    }
+
     updateActions();
 }
 
@@ -309,6 +324,13 @@ void TemplatesViewActionHandler::lock()
         m_IsLocked = !m_IsLocked;
         m_CurrentView->lock(m_IsLocked);
         updateActions();
+    }
+}
+
+void TemplatesViewActionHandler::databaseInformations()
+{
+    if (m_CurrentView) {
+        m_CurrentView->databaseInformations();
     }
 }
 
@@ -538,6 +560,20 @@ void TemplatesView::lock(bool toLock)
 bool TemplatesView::isLocked() const
 {
     return (!d->m_ui->categoryTreeView->acceptDrops());
+}
+
+void TemplatesView::databaseInformations()
+{
+    qWarning() << "getretret";
+    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    Templates::TemplateBase::instance()->toTreeWidget(&tree);
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }
 
 void TemplatesView::addCategory()

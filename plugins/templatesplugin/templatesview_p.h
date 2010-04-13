@@ -93,6 +93,7 @@ private Q_SLOTS:
     void saveModel();
     void print();
     void lock();
+    void databaseInformations();
     void templatesViewItemChanged();
 
 private:
@@ -107,6 +108,7 @@ protected:
     QAction *aPrint;
     QAction *aSave;
     QAction *aLocker;
+    QAction *aDatabaseInfos;
     QPointer<Templates::TemplatesView> m_CurrentView;
     bool m_IsLocked;
 };

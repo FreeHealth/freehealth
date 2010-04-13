@@ -212,6 +212,7 @@ const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brie
 const char * const  A_TEMPLATE_EDIT       = "actionTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_EDIT       = "actionCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_LOCK       = "actionTemplateLock";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_DATABASEINFORMATIONS       = "actionTemplateDBInfos";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
 const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */

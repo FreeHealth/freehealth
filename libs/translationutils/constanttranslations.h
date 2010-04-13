@@ -193,6 +193,7 @@ namespace Time {
         const char * const  UNLOCK_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Unlock");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  LOCKED_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Locked");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  UNLOCKED_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Unlocked");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  TEMPLATES_DATABASE_INFORMATIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database informations");    /*!< \brief Default action text  \ingroup constants_actionmanager */
 
         const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Bold");           /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Italic");         /*!< \brief Default action text  \ingroup constants_actionmanager */
