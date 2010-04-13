@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="126"/>
         <source>Save templates .</source>
         <translation>Sauvegarder les modèles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="126"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="127"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation>Certaines données ne sont pas encore sauvegardées dans la base de données. Voulez-vous les sauvegarder ?
@@ -175,9 +175,34 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
     </message>
 </context>
 <context>
+    <name>Templates::TemplateBase</name>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="357"/>
+        <source>Unable to connect the Templates host.</source>
+        <translation>Impossible de se connecter à l&apos;hôte.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="357"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <source>Please contact dev team.</source>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
+        <source>Unable to create the Templates database.</source>
+        <translation>Impossible de créer la base de données Modèles.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <source>Unable to connect the Templates database.</source>
+        <translation>Impossible de se connecter à la base de données Modèles.</translation>
+    </message>
+</context>
+<context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1156"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1028"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
@@ -185,17 +210,17 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="586"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="622"/>
         <source>About to delete %1.</source>
         <translation>Sur le point de supprimer %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="587"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="623"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation>Voulez-vous réellement supprimer %1 de votre liste de modèles ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="588"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="624"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation>Cette action est définitive. Toutes les informations de ces modèles seront perdues. Toutes les sous-catégories, s&apos;il en existe, seront effacées aussi.</translation>
     </message>

@@ -4,8 +4,8 @@
 <context>
     <name>MainWin::Internal::MainWindowPreferencesPage</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="67"/>
         <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="68"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="69"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
@@ -51,12 +51,12 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="108"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="110"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="259"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="258"/>
         <source>Choose a file</source>
         <translation type="unfinished"></translation>
     </message>

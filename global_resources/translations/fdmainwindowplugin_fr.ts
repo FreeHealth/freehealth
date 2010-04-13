@@ -141,8 +141,8 @@
 <context>
     <name>MainWin::Internal::MainWindowPreferencesPage</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="72"/>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="73"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="77"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="78"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
@@ -155,100 +155,175 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="20"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="32"/>
+        <source>General preferences</source>
+        <translation>Préférences générales</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="49"/>
+        <source>External databases</source>
+        <translation>Base de données externe</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="61"/>
+        <source>Use external server for my personnal databases</source>
+        <translation>Utiliser une base de données externe pour les bases personnelles</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="68"/>
+        <source>Host name</source>
+        <translation>Nom de l&apos;hôte</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="78"/>
+        <source>Login</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="88"/>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="105"/>
+        <source>Test connection</source>
+        <translation>Tester la connexion</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="119"/>
+        <source>Your user uuid</source>
+        <translation>Votre uuid d&apos;utilisateur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="126"/>
+        <source>Port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="144"/>
+        <source>MySQL</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="152"/>
+        <source>Server type</source>
+        <translation>Type de serveur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="162"/>
+        <source>Update engine</source>
+        <translation>Moteur de mise à jour</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="168"/>
         <source>Update checking</source>
         <translation>Vérification des mises à jour</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="176"/>
         <source>At startup</source>
         <translation>À chaque démarrage</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="181"/>
         <source>Each weeks</source>
         <translation>Toutes les semaines</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="186"/>
         <source>Each months</source>
         <translation>Tous les mois</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="191"/>
         <source>Each quarters</source>
         <translation>Tous les trimestres</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferenceswidget.ui" line="196"/>
         <source>Never (on user&apos;s demand)</source>
         <translation>Jamais automatiquement</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="176"/>
+        <source>Test in progress...</source>
+        <translation>Test en cours...</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="185"/>
+        <source>Connection error: %1</source>
+        <translation>Erreur de connection : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindowpreferences.cpp" line="189"/>
+        <source>Connected</source>
+        <translation>Connecté</translation>
     </message>
 </context>
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="134"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="130"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="193"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="189"/>
         <source>Transmitting posologies...</source>
         <translation>Transmition des posologies...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="219"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="215"/>
         <source>Initializing drugs database</source>
         <translation>Initialisation de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="226"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="222"/>
         <source>Entering selection mode</source>
         <translation>Entrée dans le mode de sélection seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="238"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="234"/>
         <source>Reading exchange file...</source>
         <translation>Ouverture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="240"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="236"/>
         <source>Reading a MedinTux exchange file.</source>
         <translation>Ouverture du fichier d&apos;échange de MedinTux.</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="432"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="429"/>
         <source>Save actual prescription ?</source>
         <translation>Sauvegarder la prescription actuelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="433"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="430"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="536"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation>Ouverture d&apos;une prescription : fusionner ou remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="540"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="537"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation>Il existe déjà une prescription dans l&apos;éditeur, voulez-vous la remplacer ou ajouter la nouvelle prescription ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="541"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="538"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="542"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="539"/>
         <source>Open a prescription</source>
         <translation>Ouvrerture d&apos;une prescription</translation>
     </message>
@@ -256,7 +331,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="117"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="113"/>
         <source>Preparing dosage transmission</source>
         <translation>Préparation de la transmission des posologies</translation>
     </message>

@@ -4,61 +4,65 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="168"/>
-        <location filename="../../libs/utils/database.cpp" line="172"/>
-        <location filename="../../libs/utils/database.cpp" line="176"/>
+        <location filename="../../libs/utils/database.cpp" line="246"/>
+        <location filename="../../libs/utils/database.cpp" line="259"/>
+        <location filename="../../libs/utils/database.cpp" line="272"/>
         <source>ERROR : %1 driver is not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="183"/>
+        <location filename="../../libs/utils/database.cpp" line="282"/>
         <source>WARNING : %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="195"/>
-        <location filename="../../libs/utils/database.cpp" line="200"/>
+        <location filename="../../libs/utils/database.cpp" line="326"/>
+        <location filename="../../libs/utils/database.cpp" line="331"/>
+        <location filename="../../libs/utils/database.cpp" line="348"/>
+        <location filename="../../libs/utils/database.cpp" line="354"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="209"/>
+        <location filename="../../libs/utils/database.cpp" line="375"/>
+        <location filename="../../libs/utils/database.cpp" line="384"/>
+        <location filename="../../libs/utils/database.cpp" line="391"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="218"/>
+        <location filename="../../libs/utils/database.cpp" line="419"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="249"/>
+        <location filename="../../libs/utils/database.cpp" line="458"/>
         <source>INFO : database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="254"/>
+        <location filename="../../libs/utils/database.cpp" line="463"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="260"/>
+        <location filename="../../libs/utils/database.cpp" line="469"/>
         <source>INFO : database %1 installed. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="321"/>
+        <location filename="../../libs/utils/database.cpp" line="538"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="331"/>
+        <location filename="../../libs/utils/database.cpp" line="548"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="604"/>
+        <location filename="../../libs/utils/database.cpp" line="857"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>

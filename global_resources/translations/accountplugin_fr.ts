@@ -22,53 +22,84 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="26"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="20"/>
         <source>Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="38"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="26"/>
         <source>Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="51"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="33"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="47"/>
+        <source>dd/MM/yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="40"/>
         <source>End date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="85"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="55"/>
         <source>Show all accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="90"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="60"/>
         <source>Today&apos;s accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="95"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="65"/>
         <source>Yesterday&apos;s accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="100"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="70"/>
         <source>This week accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="105"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="75"/>
         <source>This month accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="110"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="80"/>
         <source>This year accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.ui" line="125"/>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="104"/>
         <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="110"/>
+        <source>Cash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="124"/>
+        <source>Cheque</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="138"/>
+        <source>Visa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="152"/>
+        <source>Du</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountview.ui" line="166"/>
+        <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -2,6 +2,24 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr">
 <context>
+    <name>DatabaseSelectorWidget</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="261"/>
+        <source>Reset actual prescription</source>
+        <translation>Effacer la prescription actuelle</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="262"/>
+        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be resetted. Do you want to continue ?</source>
+        <translation>Vous avez sélectionné une base de données thérapeutique différente de celle en cours d&apos;utilisation. Votre prescription actuelle va être effacée. Voulez-vous poursuivre ?</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="264"/>
+        <source>Drugs database selection</source>
+        <translation>Sélectionneur de base de données</translation>
+    </message>
+</context>
+<context>
     <name>DosageCreatorDialog</name>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="100"/>
@@ -59,7 +77,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsDatabaseSelectorPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="84"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="87"/>
         <source>Database selector</source>
         <translation>Sélectionneur de base de données</translation>
     </message>
@@ -165,27 +183,9 @@ Drug %1 is already in your prescription</source>
         <translation>Informations de la base de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="226"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="229"/>
         <source>Select directory</source>
         <translation>Sélectionnez le répertoire</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="262"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="292"/>
-        <source>Application must be restarted to take changes into account.</source>
-        <translation>L&apos;application doit êetre redémarrée pour que les changements prennent effet.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="263"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="293"/>
-        <source>You have selected a different drugs database than the currently-opened one. You need to restart the application.</source>
-        <translation>Vous avez sélectionné une base de données thérapeutiques différent que celle en cours d&apos;utilisation. Vous devez redémarrer l&apos;application.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="265"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="295"/>
-        <source>Drugs database selection</source>
-        <translation>Sélectionneur de base de données</translation>
     </message>
 </context>
 <context>
@@ -247,7 +247,7 @@ mais ne serait inclus dans la prescription.</translation>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="195"/>
         <source>The current protocol will be used for your actual prescription,
 and saved in your personal database.</source>
-        <translation type="unfinished">Le protocole courant va être utilisé dans votre prescription,
+        <translation>Le protocole courant va être utilisé dans votre prescription,
 et sauvegardé dans votre base de données personnelle.</translation>
     </message>
     <message>
@@ -266,7 +266,7 @@ et sauvegardé dans votre base de données personnelle.</translation>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="164"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="166"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
@@ -696,18 +696,18 @@ p, li { white-space: pre-wrap; }
         <translation>Alterner avec</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="420"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="421"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="586"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="587"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="624"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="626"/>
         <source>Linking to : </source>
         <translation>Lier avec : </translation>
     </message>
@@ -906,7 +906,7 @@ Voulez-vous les envoyer ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="149"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="151"/>
         <source>Selected drugs historic.</source>
         <translation>Historique des médicaments sélectionnés.</translation>
     </message>
@@ -1268,64 +1268,69 @@ Voulez-vous les envoyer ?</translation>
 <context>
     <name>mfDrugsConstants</name>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="82"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
         <source>Prescription</source>
         <translation>Prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="83"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="86"/>
         <source>Search method</source>
         <translation>Méthode de recherche</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="84"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="87"/>
         <source>Search by commercial name</source>
         <translation>Rechercher par nom commercial</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="88"/>
         <source>Search by INN</source>
         <translation>Rechercher par DCI</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="86"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="89"/>
         <source>Search by molecules</source>
         <translation>Rechercher par molécules</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="87"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="90"/>
         <source>Edition modes</source>
         <translation>Mode d&apos;édition</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="88"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
         <source>Full prescriber</source>
         <translation>Prescripteur</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="89"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="92"/>
         <source>Select only</source>
         <translation>Sélection seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="90"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="93"/>
         <source>Print prescription</source>
         <translation>Imprimer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="94"/>
         <source>Toggle testing drugs</source>
         <translation>Afficher/cacher les médicaments tests</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="92"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="95"/>
         <source>Open protocol dialog</source>
         <translation>Ouvrir le dialogue du protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="93"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="96"/>
         <source>Open posologic sentence preferences</source>
         <translation>Ouvrir les préférences de la phrase posologique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="97"/>
+        <source>Reset the prescription sentence to the default one</source>
+        <translation>Réinitialiser la phrase posologique</translation>
     </message>
 </context>
 </TS>
