@@ -90,12 +90,12 @@ bw.files = $${SOURCES_RESOURCES_TEXTFILES}/$${INSTALL_BINARY_WRAPPER_NAME}
 INSTALLS += bw
 }
 
-# Install libs
+# Install libs (on Win32 copy from BUILD_LIB_PATH/../ (remove plugins path) )
 !isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
 mac:applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
 else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}.1
-else:win32:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}
+else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${LIB_EXTENSION}
 applibs.CONFIG += no_check_exist
 INSTALLS += applibs
 }
@@ -177,12 +177,11 @@ INSTALLS+=docs
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){
-   message($${INSTALL_QT_INSIDE_BUNDLE})
-   QTLIBS_INSTALL_PATH=$${INSTALL_QT_LIBS_PATH}
-   QTLIBS_PATH = $$[QT_INSTALL_LIBS]
+   macx:error(For MacOS use scripts instead of the installer for the Qt libs)
    QTPLUGINS_PATH = $$[QT_INSTALL_PLUGINS]
-   qtlibs.path  = $${QTLIBS_INSTALL_PATH}
-   qtlibs.files = $$[QT_INSTALL_LIBS]/*QtCore.so.4 \
+   qt_libs.path  = $${INSTALL_QT_LIBS_PATH}
+   linux {
+   qt_libs.files = $$[QT_INSTALL_LIBS]/*QtCore.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtGui.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtSql.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtScript.so.4 \
@@ -190,10 +189,24 @@ INSTALLS+=docs
                   $$[QT_INSTALL_LIBS]/*QtXml.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtSvg.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
-   INSTALLS += qtlibs
-   message( Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH})
-   # Install Application Libraries
+   }
+   win32 {
+   qt_libs.files = $$[QT_INSTALL_BINS]/QtCore4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtGui4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtSql4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtScript4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtXml4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtSvg4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/QtNetwork4.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/mingw*.$${LIB_EXTENSION} \
+                  $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
+                 # $$[QT_INSTALL_LIBS]/Qt3Support.$${LIB_EXTENSION} \
+   }
 
+   INSTALLS+=qt_libs
+
+   linux:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
+   else:win32:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_BIN] to $${INSTALL_QT_LIBS_PATH})
    # Install Qt plugins (SQL plugins)
    qt_sqlplugins.path = $${INSTALL_QT_PLUGINS_PATH}
    qt_sqlplugins.files = $${QTPLUGINS_PATH}/sqldrivers
@@ -201,7 +214,7 @@ INSTALLS+=docs
    qt_imagesplugins.files = $${QTPLUGINS_PATH}/imageformats
    qt_accessibleplugins.path = $${INSTALL_QT_PLUGINS_PATH}
    qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
-   INSTALLS += qt_sqlplugins qt_imagesplugins qt_accessibleplugins
-   message( Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
+   INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
+   message(Bundle : Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
   }
 

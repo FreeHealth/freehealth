@@ -25,13 +25,15 @@ CONFIG( debug, debug|release ) {
     # define root path and install path
     isEmpty(INSTALL_ROOT_PATH):INSTALL_ROOT_PATH = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
     INSTALL_BINARY_PATH    = $${INSTALL_ROOT_PATH}
+    INSTALL_LIBS_PATH      = $${INSTALL_BINARY_PATH}
+    INSTALL_PLUGINS_PATH   = $${INSTALL_LIBS_PATH}/plugins
 
     # install Qt libs and plugs
-    INSTALL_QT_INSIDE_BUNDLE = 1
+    INSTALL_QT_INSIDE_BUNDLE = yes
     INSTALL_QT_LIBS_PATH     = $${INSTALL_BINARY_PATH}
     INSTALL_QT_PLUGINS_PATH  = $${INSTALL_BINARY_PATH}/plugins/qt
 
-    message( Win32 Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${QTLIBS_INSTALL_PATH})
+    message( Win32 Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
     message( Win32 Bundle : Binary Wrapper will be : $${INSTALL_BINARY_WRAPPER_NAME})
  }
 
