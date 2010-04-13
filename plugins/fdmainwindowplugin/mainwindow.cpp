@@ -332,17 +332,18 @@ void MainWindow::closeEvent( QCloseEvent *event )
 
     // Save exchange file
     QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
-//    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
-//        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
-//    } else
-//    if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
     if (!exfile.isEmpty()) {
-        Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
-        Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
-        // if is a medintux plugins --> save prescription to exchange file
+        Utils::Log::addMessage(this, QString("Exchange File : %1 - %2").arg(exfile).arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
-            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
-            tmp.replace("font-weight:bold;", "font-weight:600;");
+            QString tmp;
+            // Manage specific MedinTux output exchange file format
+            if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
+                commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {
+                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp.replace("font-weight:bold;", "font-weight:600;");
+            } else {
+                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
+            }
             Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::DontWarnUser);
         } else {
             savePrescription(exfile);

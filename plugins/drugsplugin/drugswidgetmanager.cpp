@@ -53,6 +53,7 @@
 
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -154,6 +155,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aSelectOnlyMode(0),
         aOpenDosageDialog(0),
         aOpenPrescriptionSentencePreferences(0),
+        aResetPrescriptionSentenceToDefault(0),
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
@@ -394,6 +396,15 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::OPENDOSAGEPREFERENCES_TEXT, Constants::OPENDOSAGEPREFERENCES_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
     connect(aOpenPrescriptionSentencePreferences,SIGNAL(triggered()),this,SLOT(openProtocolPreferencesDialog()));
 
+    a = aResetPrescriptionSentenceToDefault = new QAction(this);
+    a->setObjectName("aResetPrescriptionSentenceToDefault");
+    //    a->setIcon(th->icon(Core::Constants::ICONDATE));
+    cmd = actionManager()->registerAction(a, Constants::A_RESETPRESCRIPTIONSENTENCE_TODEFAULT, ctx);
+    cmd->setTranslations(Constants::RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT, Constants::RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    menu->addAction(cmd, G_PLUGINS_DRUGS);
+    connect(aResetPrescriptionSentenceToDefault,SIGNAL(triggered()),this,SLOT(resetPrescriptionSentenceToDefault()));
+
+
     actionManager()->retranslateMenusAndActions();
 }
 
@@ -614,4 +625,19 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
         Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->openProtocolPreferencesDialog();
     }
+}
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
+void DrugsActionHandler::resetPrescriptionSentenceToDefault()
+{
+    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
+                         QCoreApplication::translate(
+                                 Constants::DRUGCONSTANTS_TR_CONTEXT,
+                                 DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
+                         QCoreApplication::translate(
+                                 Constants::DRUGCONSTANTS_TR_CONTEXT,
+                                 DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+    DrugsDB::DrugsModel::activeModel()->resetModel();
 }

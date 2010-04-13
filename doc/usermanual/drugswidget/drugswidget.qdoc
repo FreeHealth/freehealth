@@ -223,61 +223,63 @@ sauvegardées dans ces fichiers. Les données concernant le patient sont brouill
 Exemple de prescription :
 \verbatim
 <?xml version="1.0" encoding="UTF-8"?>            XML heading
-<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
-<FullPrescription version="0.4.0">                Début de la prescription avec la version d'encodage utilisée
-  <Prescription>
-    <Drug_UID>68166740</Drug_UID>               code Drug_UID du médicament pour les prescriptions non DCI
-    <INN></INN>                                 true ou false selon que ce médicament doit ou non être prescrit sous sa formulation DCI
-    <Pack_UID></Pack_UID>                       code Pack_UID (présentation)
-    <IntakeFromTo>false</IntakeFromTo>          Prises utilisent de x à y
-    <IntakeFrom>1.0</IntakeFrom>                Prises (de)
-    <IntakeTo>1.0</IntakeTo>                    Prises (à)
-    <IntakeScheme>prise(s)</IntakeScheme>       Prises libellé
-    <Period>1</Period>                          Période (tous les jours, tous les deux jours...)
-    <PeriodScheme>jour(s)</PeriodScheme>        Période
-    <DurationFromTo>false</DurationFromTo>      Durée de la prescription utilise de x à y
-    <DurationFrom>1.0</DurationFrom>            Durée (de)
-    <DurationTo>1.0</DurationTo>                Durée (à)
-    <DurationScheme>mois</DurationScheme>       Durée libellé
-    <IntakeIntervalTime>0</IntakeIntervalTime>  Intervalle entre chaque prises
-    <IntakeIntervalScheme></IntakeIntervalScheme>   Intervalle entre chaque prises libellé
-    <MealTime></MealTime>                       Relation avec le repas (codé en entier, voir documentation du code)
-    <DailyScheme></DailyScheme>                 Répartition journalière des prises codée en XML
-    <SpecifyPresentation></SpecifyPresentation> Non utilisé
-    <SpecifyForm></SpecifyForm>                 Non utilisé
-    <Note></Note>                               Note du prescripteur (sans les caractères '<' '>' '&'
-                                                qui sont remplacés par leurs équivalents HTML)
-    <IsAld></IsAld>                             Prescription 100 % (true / false / vide==false)
-    <RefDosage>{22164613-c1eb-4736-99f5-9abecf4a9fb2}</RefDosage> Identifiant de la posologie standard utilisée pour réaliser la prescription
-  </Prescription>
-  <Prescription>                                Médicament 2 - Juste pour les tests
-    <CIS>61348441</CIS>
-    <OnlyForTest>true</OnlyForTest>             Juste pour les tests
-  </Prescription>
-  <Prescription>                                Médicament 3
-  [...]
-  </Prescription>
-  <Prescription>                                Médicament 4
-  [...]
-  </Prescription>
-</FullPrescription>
-<ExtraDatas>
-  <PatientDatas>
-    <UID>data</UID>
-    <Name>data</Name>
-    <Surname>data</Surname>
-    <Gender>data</Gender>
-    <Weight>data</Weight>
-    <WeightUnit>data</WeightUnit>
-    <Height>data</Height>
-    <HeightUnit>data</HeightUnit>
-    <CreatinClearance>data</CreatinClearance>
-    <Creatinine>data</Creatinine>
-    <CreatinineUnit>data</CreatinineUnit>
-    <DrugsAllergies>data</DrugsAllergies>
-  </PatientDatas>
-  <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
-</ExtraDatas>
+<FreeDiams>
+  <DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
+  <FullPrescription version="0.4.0">                Début de la prescription avec la version d'encodage utilisée
+    <Prescription>
+      <Drug_UID>68166740</Drug_UID>               code Drug_UID du médicament pour les prescriptions non DCI
+      <INN></INN>                                 true ou false selon que ce médicament doit ou non être prescrit sous sa formulation DCI
+      <Pack_UID></Pack_UID>                       code Pack_UID (présentation)
+      <IntakeFromTo>false</IntakeFromTo>          Prises utilisent de x à y
+      <IntakeFrom>1.0</IntakeFrom>                Prises (de)
+      <IntakeTo>1.0</IntakeTo>                    Prises (à)
+      <IntakeScheme>prise(s)</IntakeScheme>       Prises libellé
+      <Period>1</Period>                          Période (tous les jours, tous les deux jours...)
+      <PeriodScheme>jour(s)</PeriodScheme>        Période
+      <DurationFromTo>false</DurationFromTo>      Durée de la prescription utilise de x à y
+      <DurationFrom>1.0</DurationFrom>            Durée (de)
+      <DurationTo>1.0</DurationTo>                Durée (à)
+      <DurationScheme>mois</DurationScheme>       Durée libellé
+      <IntakeIntervalTime>0</IntakeIntervalTime>  Intervalle entre chaque prises
+      <IntakeIntervalScheme></IntakeIntervalScheme>   Intervalle entre chaque prises libellé
+      <MealTime></MealTime>                       Relation avec le repas (codé en entier, voir documentation du code)
+      <DailyScheme></DailyScheme>                 Répartition journalière des prises codée en XML
+      <SpecifyPresentation></SpecifyPresentation> Non utilisé
+      <SpecifyForm></SpecifyForm>                 Non utilisé
+      <Note></Note>                               Note du prescripteur (sans les caractères '<' '>' '&'
+                                                  qui sont remplacés par leurs équivalents HTML)
+     <IsAld></IsAld>                             Prescription 100 % (true / false / vide==false)
+     <RefDosage>{22164613-c1eb-4736-99f5-9abecf4a9fb2}</RefDosage> Identifiant de la posologie standard utilisée pour réaliser la prescription
+   </Prescription>
+   <Prescription>                                Médicament 2 - Juste pour les tests
+     <CIS>61348441</CIS>
+     <OnlyForTest>true</OnlyForTest>             Juste pour les tests
+   </Prescription>
+   <Prescription>                                Médicament 3
+   [...]
+   </Prescription>
+   <Prescription>                                Médicament 4
+   [...]
+   </Prescription>
+  </FullPrescription>
+  <ExtraDatas>
+    <PatientDatas>
+      <UID>data</UID>
+      <Name>data</Name>
+      <Surname>data</Surname>
+      <Gender>data</Gender>
+      <Weight>data</Weight>
+      <WeightUnit>data</WeightUnit>
+      <Height>data</Height>
+      <HeightUnit>data</HeightUnit>
+      <CreatinClearance>data</CreatinClearance>
+      <Creatinine>data</Creatinine>
+      <CreatinineUnit>data</CreatinineUnit>
+      <DrugsAllergies>data</DrugsAllergies>
+    </PatientDatas>
+    <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
+  </ExtraDatas>
+</FreeDiams>
 \endverbatim
 
 Pour toutes informations sur les techniques d'encodage des données merci de vous
@@ -290,61 +292,63 @@ stored in these files. The patient datas are scrambled.
 Sample prescription:
 \verbatim
 <?xml version = "1.0" encoding = "UTF-8"?>        XML heading
-<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
-<FullPrescription version="0.4.0">                Begining of the prescription, with the xml encoding version used
-  <Prescription>
-    <Drug_UID>68166740</Drug_UID>                 Drug_UID Code of drug prescriptions for non-IBD
-    <INN></Inn>                                   true or false depending on whether the drug should or should not be prescribed in its INN's formulation
-    <Pack_UID></Pack_UID>                         Pack_UID code (packaging)
-    <IntakeFromTo>False</IntakeFromTo>            intakes uses range x to y
-    <IntakeFrom>1.0</IntakeFrom>                  intake
-    <IntakeTo>1.0</IntakeTo>                      intake
-    <IntakeScheme>Intake(s)</IntakeScheme>        Intakes scheme
-    <Period>1</Period>                            Period (daily, every two days ...)
-    <PeriodScheme>Day(s)</PeriodScheme>           Period
-    <DurationFromTo>False</DurationFromTo>        Duration of prescription use of x to y
-    <DurationFrom>1.0</DurationFrom>              Duration
-    <DurationTo>1.0</DurationTo>                  Duration
-    <DurationScheme>Month</DurationScheme>        Duration
-    <IntakeIntervalTime>0</IntakeIntervalTime>    Interval between each intake
-    <IntakeIntervalScheme></IntakeIntervalScheme> interval between each intake
-    <MealTime></Mealtime>                         Relationship with the meal (coded, see code documentation)
-    <DailyScheme></DailyScheme>                   Breakdown daily XML encoded
-    <SpecifyPresentation></SpecifyPresentation>   Not used
-    <SpecifyForm></SpecifyForm>                   Not used
-    <Note></Note>                                 Note the prescriber (not the characters '<' '>' '&'
-                                                  are replaced by their equivalent HTML)
-    <IsAld></IsAld>                               Prescription with 100% reimbursement (true / false / empty == false)
-    <RefDosage>xxxxxx</RefDosage>                 identifier of the standard dose used to achieve the prescription
-  </Prescription>
-  <Prescription>                                  Drug 2 - Just for testing
-    <CIS> 61348441 </CIS>
-    <OnlyForTest> True </OnlyForTest>             Just for testing
-  </Prescription>
-  <Prescription>                                  Drug 3
-  [...]
-  </Prescription>
-  <Prescription>                                  Drug 4
-  [...]
-  </Prescription>
-</FullPrescription>
-<ExtraDatas>
-  <PatientDatas>
-    <UID>data</UID>
-    <Name>data</Name>
-    <Surname>data</Surname>
-    <Gender>data</Gender>
-    <Weight>data</Weight>
-    <WeightUnit>data</WeightUnit>
-    <Height>data</Height>
-    <HeightUnit>data</HeightUnit>
-    <CreatinClearance>data</CreatinClearance>
-    <Creatinine>data</Creatinine>
-    <CreatinineUnit>data</CreatinineUnit>
-    <DrugsAllergies>data</DrugsAllergies>
-  </PatientDatas>
-  <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
-</ExtraDatas>
+<FreeDiams>
+  <DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName> Unique \freediams Identifiant of the drugs database used to create this prescription
+  <FullPrescription version="0.4.0">                Begining of the prescription, with the xml encoding version used
+    <Prescription>
+      <Drug_UID>68166740</Drug_UID>                 Drug_UID Code of drug prescriptions for non-IBD
+      <INN></Inn>                                   true or false depending on whether the drug should or should not be prescribed in its INN's formulation
+      <Pack_UID></Pack_UID>                         Pack_UID code (packaging)
+      <IntakeFromTo>False</IntakeFromTo>            intakes uses range x to y
+      <IntakeFrom>1.0</IntakeFrom>                  intake
+      <IntakeTo>1.0</IntakeTo>                      intake
+      <IntakeScheme>Intake(s)</IntakeScheme>        Intakes scheme
+      <Period>1</Period>                            Period (daily, every two days ...)
+      <PeriodScheme>Day(s)</PeriodScheme>           Period
+      <DurationFromTo>False</DurationFromTo>        Duration of prescription use of x to y
+      <DurationFrom>1.0</DurationFrom>              Duration
+      <DurationTo>1.0</DurationTo>                  Duration
+      <DurationScheme>Month</DurationScheme>        Duration
+      <IntakeIntervalTime>0</IntakeIntervalTime>    Interval between each intake
+      <IntakeIntervalScheme></IntakeIntervalScheme> interval between each intake
+      <MealTime></Mealtime>                         Relationship with the meal (coded, see code documentation)
+      <DailyScheme></DailyScheme>                   Breakdown daily XML encoded
+      <SpecifyPresentation></SpecifyPresentation>   Not used
+      <SpecifyForm></SpecifyForm>                   Not used
+      <Note></Note>                                 Note the prescriber (not the characters '<' '>' '&'
+                                                    are replaced by their equivalent HTML)
+      <IsAld></IsAld>                               Prescription with 100% reimbursement (true / false / empty == false)
+      <RefDosage>xxxxxx</RefDosage>                 identifier of the standard dose used to achieve the prescription
+    </Prescription>
+    <Prescription>                                  Drug 2 - Just for testing
+      <CIS> 61348441 </CIS>
+      <OnlyForTest> True </OnlyForTest>             Just for testing
+    </Prescription>
+    <Prescription>                                  Drug 3
+    [...]
+    </Prescription>
+     <Prescription>                                  Drug 4
+    [...]
+    </Prescription>
+  </FullPrescription>
+  <ExtraDatas>
+    <PatientDatas>
+      <UID>data</UID>
+      <Name>data</Name>
+      <Surname>data</Surname>
+      <Gender>data</Gender>
+      <Weight>data</Weight>
+      <WeightUnit>data</WeightUnit>
+      <Height>data</Height>
+      <HeightUnit>data</HeightUnit>
+      <CreatinClearance>data</CreatinClearance>
+      <Creatinine>data</Creatinine>
+      <CreatinineUnit>data</CreatinineUnit>
+      <DrugsAllergies>data</DrugsAllergies>
+    </PatientDatas>
+    <EMR name="EMRName" uid="SessionUIDDefinedInFileOrCommandLine"/>
+  </ExtraDatas>
+ </FreeDiams>
 \endverbatim
 
 For all information on technical data encoding thank you for you

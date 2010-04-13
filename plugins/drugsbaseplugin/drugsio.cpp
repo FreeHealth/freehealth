@@ -82,6 +82,7 @@ static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::act
 
 namespace DrugsIOConstants {
     const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_ROOT_TAG                         = "FreeDiams";
     const char *const XML_DRUGS_DATABASE_NAME              = "DrugsDatabaseName";
     const char *const XML_VERSION                          = "version";
     const char *const XML_PRESCRIPTION_MAINTAG             = "Prescription";
@@ -643,16 +644,26 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
         xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml,4,false);
         forXml.clear();
     }
-    // Add XmlVersion XML_HEADER
+
+    // Add full prescription tag and version
     xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
                              .arg(XML_FULLPRESCRIPTION_TAG)
                              .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
+
+    // Close Full prescription
+    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+
     // Add drugsBase identifiant
     QString dbName = drugsBase()->actualDatabaseInformations()->identifiant;
     xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
+
+    // Add the main root node
+    xmldPrescription.prepend(QString("%1\n").arg(XML_ROOT_TAG));
+    xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
+
     // Add the version and the FullPrescription tags
     xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
-    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+
     return xmldPrescription;
 }
 

@@ -79,6 +79,7 @@ namespace Constants {
     const char* const   A_SELECTONLYMODE        = "a.DrugsPlug.SelectOnlyMode";
     const char* const   A_OPENDOSAGEDIALOG      = "a.DrugsPlug.OpenDosage";
     const char* const   A_OPENDOSAGEPREFERENCES = "a.DrugsPlug.OpenDosagePreferences";
+    const char* const   A_RESETPRESCRIPTIONSENTENCE_TODEFAULT = "a.DrugsPlug.ResetPrescriptionSentenceToDefault";
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
@@ -93,6 +94,7 @@ namespace Constants {
     const char* const   TOGGLETESTINGDRUGS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toggle testing drugs");
     const char* const   OPENDOSAGEDIALOG_TEXT      = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open protocol dialog");
     const char* const   OPENDOSAGEPREFERENCES_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open posologic sentence preferences");
+    const char* const   RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Reset the prescription sentence to the default one");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
 

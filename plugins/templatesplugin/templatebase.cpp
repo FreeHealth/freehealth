@@ -93,10 +93,64 @@ public:
         query.finish();
         bool updateVersionNumber = false;
         if (version=="0.3.0") {
-//            updateVersionNumber = true;
             // Update database schema to 0.4.0
-            qWarning() << "xxxxxxxxxxxxxxxxxxxx Need database update";
+            // MySQL server connection starts here, so no update needed for MySQL database
+
+            // For SQLite :
+            // --> USER_UID from int to varchar
+            // --> Adding GROUP_UID for templates and categories
+            Utils::Log::addMessage(q, "Updating templates database version (0.3.0 to 0.4.0)");
+
+            // 1. Rename old tables
+            QStringList reqs;
+            reqs
+                    << "ALTER TABLE `CATEGORIES` RENAME TO `OLD_CATEGORIES`;"
+                    << "ALTER TABLE `TEMPLATES` RENAME TO `OLD_TEMPLATES`;";
+
+            if (!q->executeSQL(reqs, q->database()))
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+
+            // 2. Recreate the db schema
+            if (!q->createTables())
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+
+            reqs.clear();
+            reqs << QString("INSERT INTO `CATEGORIES` (%1) SELECT %1 FROM `OLD_CATEGORIES`;")
+                          .arg("`CATEGORY_ID`,"
+                               "`CATEGORY_UUID`,"
+                               "`USER_UUID`,"
+                               "`PARENT_CATEGORY`,"
+                               "`LABEL`,"
+                               "`SUMMARY`,"
+                               "`MIMETYPES`,"
+                               "`DATE_CREATION`,"
+                               "`DATE_MODIFICATION`,"
+                               "`THEMED_ICON_FILENAME`,"
+                               "`TRANSMISSION_DATE`")
+                    << "DROP TABLE `OLD_CATEGORIES`;"
+                    << QString("INSERT INTO `TEMPLATES` (%1) SELECT %1 FROM `OLD_TEMPLATES`;")
+                          .arg("`TEMPLATE_ID`,"
+                               "`TEMPLATE_UUID`,"
+                               "`USER_UUID`,"
+                               "`ID_CATEGORY`,"
+                               "`LABEL`,"
+                               "`SUMMARY`,"
+                               "`CONTENT`,"
+                               "`CONTENT_MIMETYPES`,"
+                               "`DATE_CREATION`,"
+                               "`DATE_MODIFICATION`,"
+                               "`THEMED_ICON_FILENAME`,"
+                               "`TRANSMISSION_DATE`")
+                    << "DROP TABLE `OLD_TEMPLATES`;";
+
+
+            // Reinsert datas to new tables
+            if (!q->executeSQL(reqs, q->database()))
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+
+            // Refresh db version
             version = "0.4.0";
+            updateVersionNumber = true;
         }
 
         if (updateVersionNumber) {
@@ -108,7 +162,6 @@ public:
             }
             query.finish();
         }
-
     }
 
 public:
@@ -156,6 +209,7 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Templates, TEMPLATE_ID,               "TEMPLATE_ID",          FieldIsUniquePrimaryKey);
     addField(Table_Templates, TEMPLATE_UUID,             "TEMPLATE_UUID",        FieldIsUUID);
     addField(Table_Templates, TEMPLATE_USER_UID,         "USER_UUID",            FieldIsUUID);
+    addField(Table_Templates, TEMPLATE_GROUP_UID,        "GROUP_UUID",           FieldIsUUID);
     addField(Table_Templates, TEMPLATE_ID_CATEGORY,      "ID_CATEGORY",          FieldIsInteger);
     addField(Table_Templates, TEMPLATE_LABEL,            "LABEL",                FieldIsShortText);
     addField(Table_Templates, TEMPLATE_SUMMARY,          "SUMMARY",              FieldIsLongText);
@@ -172,7 +226,7 @@ TemplateBase::TemplateBase(QObject *parent)
 //            "CREATE TABLE IF NOT EXISTS `TEMPLATES` ("
 //            "`TEMPLATE_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
 //            "`TEMPLATE_UUID`            varchar(40)    NULL,"
-//            "`USER_UUID`                int(11)        NULL,"
+//            "`USER_UUID`                int(11)        NULL,"           //  NEEDS UPDATE FROM 0.3.0 TO 0.4.0
 //            "`ID_CATEGORY`              int(11)        DEFAULT -1,"
 //            "`LABEL`                    varchar(300)   NULL,"
 //            "`SUMMARY`                  varchar(500)   NULL,"
@@ -187,6 +241,7 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Categories,  CATEGORIES_ID,               "CATEGORY_ID",          FieldIsUniquePrimaryKey);
     addField(Table_Categories,  CATEGORIES_UUID,             "CATEGORY_UUID",        FieldIsUUID);
     addField(Table_Categories,  CATEGORIES_USER_UID,         "USER_UUID",            FieldIsUUID);
+    addField(Table_Categories,  CATEGORIES_GROUP_UID,        "GROUP_UUID",           FieldIsUUID);
     addField(Table_Categories,  CATEGORIES_PARENT_ID,        "PARENT_CATEGORY",      FieldIsInteger);
     addField(Table_Categories,  CATEGORIES_LABEL,            "LABEL",                FieldIsShortText);
     addField(Table_Categories,  CATEGORIES_SUMMARY,          "SUMMARY",              FieldIsLongText);
@@ -201,7 +256,7 @@ TemplateBase::TemplateBase(QObject *parent)
 //            "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
 //            "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
 //            "`CATEGORY_UUID`            varchar(40)    NULL,"
-//            "`USER_UUID`                int(11)        NULL,"
+//            "`USER_UUID`                int(11)        NULL,"          //  NEEDS UPDATE FROM 0.3.0 TO 0.4.0
 //            "`PARENT_CATEGORY`          int(11)        DEFAULT -1,"
 //            "`LABEL`                    varchar(300)   NULL,"
 //            "`SUMMARY`                  varchar(500)   NULL,"

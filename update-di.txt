@@ -25,6 +25,7 @@ version=0.3.9
     * Modifications importantes :
       * Les étiquettes pour le patient sont modifiées pour le nom et le prénom
       * Documentation enrichie et traduite en anglais
+      * Mise à jour de la base de données 'Modèles' pour gérer les groupes d'utilisateurs
 
     * Correction de bogues / Améliorations techniques :
       * Passage à Qt 4.6.2 pour MacOs et Windows

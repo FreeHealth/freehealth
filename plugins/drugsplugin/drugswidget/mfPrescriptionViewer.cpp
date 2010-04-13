@@ -176,6 +176,7 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
     actionsToAdd
             << DrugsWidget::Constants::A_OPENDOSAGEDIALOG
             << DrugsWidget::Constants::A_OPENDOSAGEPREFERENCES
+            << DrugsWidget::Constants::A_RESETPRESCRIPTIONSENTENCE_TODEFAULT
             << DrugsWidget::Constants::A_CHANGE_DURATION;
 
     Core::Command *cmd = 0;

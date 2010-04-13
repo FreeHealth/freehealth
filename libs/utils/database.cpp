@@ -798,14 +798,20 @@ QString Database::prepareUpdateQuery(const int & tableref)
 
 bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB) const
 {
-    foreach(const QString & r, list)
+    if (!DB.isOpen())
+        return false;
+
+    foreach(const QString &r, list)
     {
-        if (r.isEmpty())continue;
+        if (r.isEmpty())
+            continue;
+
         QSqlQuery q(r, DB);
         if (!q.isActive()) {
             Log::addQueryError("Database", q);
             return false;
         }
+        q.finish();
     }
     return true;
 }
