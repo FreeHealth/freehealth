@@ -224,9 +224,9 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
-                         qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+                         QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
-                         qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+                         QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 
@@ -242,9 +242,9 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
         t.toPlainText().simplified().isEmpty()) {
         Utils::Log::addMessage(this, "Restoring prescription sentence to its defaults");
         settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
-                             qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+                             qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
         settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
-                             qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+                             qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     }
     settings()->sync();
 }
@@ -633,9 +633,9 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
     s->setValue(S_CONFIGURED, true);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
-                qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+                qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
-                qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+                qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
     s->sync();

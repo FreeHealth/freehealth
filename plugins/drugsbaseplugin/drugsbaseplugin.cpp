@@ -72,6 +72,9 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
 //    DrugsDatabaseSelector::instance();
 //    DrugsDatabaseSelector::instance()->getAllDatabaseInformations();
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
+
     // initialize DrugsBase
     Internal::DrugsBase::instance();
 
@@ -80,9 +83,6 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
 
 void DrugsBasePlugin::extensionsInitialized()
 {
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
-
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

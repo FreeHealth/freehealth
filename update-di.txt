@@ -9,6 +9,7 @@ version=0.3.9
     * Nouvelles fonctionnalités :
       * Nouveau mode d'édition = mode prescripteur et mode sélection seulement
       * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender', '--exchange-in'...
+      * Nouveau format du fichier d'échange de sortie
       * Possibilité de passer les arguments à FreeDiams par un fichier d'échange entrant (exchange-in)
       * Fonctionnalités multi-bases thérapeutiques implémentées
       * Possibilité de changer à chaud la base de données thérapeutiques
@@ -26,6 +27,7 @@ version=0.3.9
       * Les étiquettes pour le patient sont modifiées pour le nom et le prénom
       * Documentation enrichie et traduite en anglais
       * Mise à jour de la base de données 'Modèles' pour gérer les groupes d'utilisateurs
+      * Ajout d'un tag XML englobant pour les prescription "<FreeDiams>"
 
     * Correction de bogues / Améliorations techniques :
       * Passage à Qt 4.6.2 pour MacOs et Windows

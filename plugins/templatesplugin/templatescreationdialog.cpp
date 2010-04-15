@@ -93,9 +93,9 @@ void TemplatesCreationDialog::done(int r)
         model->setData(model->index(row, Constants::Data_Content, parent), m_Content);
         model->setData(model->index(row, Constants::Data_ContentMimeTypes, parent), m_Mimes);
         model->setData(model->index(row, Constants::Data_IsNewlyCreated, parent), true);
-        qWarning() << ui->userLineEdit->text();
+//        qWarning() << ui->userLineEdit->text();
         model->setData(model->index(row, Constants::Data_UserUuid), ui->userLineEdit->text());
-        qWarning() << ui->userLineEdit->text();
+//        qWarning() << ui->userLineEdit->text();
         delete model;
     }
 

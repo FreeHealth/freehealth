@@ -123,6 +123,10 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Q_UNUSED(errorMessage);
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+
 #ifdef FREEDIAMS
     Utils::Log::addMessage(this,"Running as FreeDiams");
 #endif
@@ -177,9 +181,6 @@ void DrugsPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 }
 
 Q_EXPORT_PLUGIN(DrugsPlugin)

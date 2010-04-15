@@ -325,7 +325,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     a = aDrugsDatabaseInformations = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DRUGSDATABASE_INFORMATIONS, ctx);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DRUGSDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
     cmd->setTranslations(Trans::Constants::DRUGS_DATABASE_INFORMATIONS);
     cmd->retranslate();
     if (hmenu) {
@@ -335,7 +335,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aDosagesDatabaseInformations = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DOSAGESDATABASE_INFORMATIONS, ctx);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DOSAGESDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
     cmd->setTranslations(Trans::Constants::DOSAGES_DATABASE_INFORMATIONS);
     cmd->retranslate();
     if (hmenu) {
@@ -345,7 +345,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aIamDatabaseInformations = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_IAMDATABASE_INFORMATIONS, ctx);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_IAMDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
     cmd->setTranslations(Trans::Constants::INTERACTIONS_DATABASE_INFORMATIONS);
     cmd->retranslate();
     if (hmenu) {

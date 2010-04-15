@@ -329,9 +329,15 @@ void TemplatesViewActionHandler::lock()
 
 void TemplatesViewActionHandler::databaseInformations()
 {
-    if (m_CurrentView) {
-        m_CurrentView->databaseInformations();
-    }
+    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    Templates::TemplateBase::instance()->toTreeWidget(&tree);
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }
 
 
@@ -486,8 +492,8 @@ TemplatesView::TemplatesView(QWidget *parent, int viewContent, EditModes editMod
     if (viewContent == CategoriesOnly)
         d->m_Model->categoriesOnly();
     QFont font;
-    font.fromString(settings()->value(Constants::S_FONT).toString());
-    setFont(font);
+    font.fromString(settings()->value(Constants::S_FONT, QFont().toString()).toString());
+    d->m_ui->categoryTreeView->setFont(font);
 }
 
 TemplatesView::~TemplatesView()
@@ -562,20 +568,6 @@ bool TemplatesView::isLocked() const
     return (!d->m_ui->categoryTreeView->acceptDrops());
 }
 
-void TemplatesView::databaseInformations()
-{
-    qWarning() << "getretret";
-    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    Templates::TemplateBase::instance()->toTreeWidget(&tree);
-    lay.addWidget(&tree);
-    Utils::resizeAndCenter(&dlg);
-    dlg.exec();
-}
-
 void TemplatesView::addCategory()
 {
     /** \todo Manage USER and MIMETYPE */
@@ -598,7 +590,10 @@ void TemplatesView::addCategory()
 }
 
 void TemplatesView::removeItem()
-{    
+{
+    if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
+    return;
+
     QModelIndexList list1 = d->m_ui->categoryTreeView->selectionModel()->selectedIndexes();
     if (!list1.count())
         return;
@@ -634,9 +629,13 @@ void TemplatesView::removeItem()
 
 void TemplatesView::editCurrentItem()
 {
+    if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
+        return;
+
     QModelIndex idx = d->m_ui->categoryTreeView->selectionModel()->currentIndex();
     if (!idx.isValid())
         return;
+
     TemplatesEditDialog dlg(this);
     dlg.setModel(d->m_Model);
     dlg.setModelIndex(idx);
@@ -653,6 +652,7 @@ bool TemplatesView::printTemplate()
     // Get selected items
     if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
         return true;
+
     QList<const ITemplate *> selection;
     foreach(const QModelIndex &idx, d->m_ui->categoryTreeView->selectionModel()->selectedRows(0)) {
         const ITemplate *t = d->m_Model->getTemplate(idx);

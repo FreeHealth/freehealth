@@ -54,7 +54,7 @@ namespace Templates {
 namespace Constants {
     const char * const DB_TEMPLATES_NAME      = "templates";
     const char * const DB_TEMPLATES_FILENAME  = "templates.db";
-    const char * const DB_ACTUAL_VERSION      = "0.3.0";
+    const char * const DB_ACTUAL_VERSION      = "0.4.0";
 
 
     const char * const  S_BACKGROUND_CATEGORIES    = "Templates/Background/Categories";

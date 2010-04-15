@@ -414,16 +414,20 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         Utils::Log::addError("DrugsIO", tr("No file name passed to load prescription"));
         return false;
     }
-    if (!QFile(fileName).exists()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+    QFileInfo info(fileName);
+    if (info.isRelative())
+        info.setFile(qApp->applicationDirPath() + QDir::separator() + fileName);
+
+    if (!info.exists()) {
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(info.absoluteFilePath()));
         return false;
     }
-    if (!QFileInfo(fileName).isReadable()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
+    if (!info.isReadable()) {
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()));
         return false;
     }
     xmlExtraDatas.clear();
-    QString xml = Utils::readTextFile(fileName);
+    QString xml = Utils::readTextFile(info.absoluteFilePath());
 
     // retreive prescription
     prescriptionFromXml(m, xml,loader);
@@ -466,6 +470,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
     int i;
     switch (version)
     {
+    case NormalVersion:
     case MedinTuxVersion :
         {
             for(i=0; i < m->rowCount(); ++i) {
@@ -510,7 +515,6 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
                 tmp.clear();
             }
             break;
-
         }
     case DrugsOnlyVersion :
         {
@@ -557,9 +561,10 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
     toReturn.replace("{PRESCRIPTION}", tmp );
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
+//                         .arg(QString(prescriptionToXml(m))));
                      .arg(QString(prescriptionToXml(m).toAscii().toBase64())));
 
-//    Utils::saveStringToFile(toReturn,"/Users/eric/Desktop/essai.html");
+//    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);
@@ -658,7 +663,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
 
     // Add the main root node
-    xmldPrescription.prepend(QString("%1\n").arg(XML_ROOT_TAG));
+    xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
     xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
 
     // Add the version and the FullPrescription tags
@@ -678,7 +683,10 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
     QString xmldPrescription = prescriptionToXml(model);
     // add extraDatas
     if (!extraDatas.isEmpty()) {
-        QString tmp = Utils::createXml(XML_EXTRADATAS_TAG,extraDatas,4,false);
+        QString tmp = Utils::createXml(XML_EXTRADATAS_TAG, extraDatas, 4, false);
+        xmldPrescription.append(tmp);
+        tmp = QString("</%1>").arg(XML_ROOT_TAG);
+        xmldPrescription.remove(tmp);
         xmldPrescription.append(tmp);
     }
     if (toFileName.isEmpty())
@@ -703,6 +711,9 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
         xmldPrescription.append(QString("\n<%1>\n").arg(XML_EXTRADATAS_TAG));
         xmldPrescription.append(extraXmlDatas);
         xmldPrescription.append(QString("\n</%1>\n").arg(XML_EXTRADATAS_TAG));
+        QString tmp = QString("</%1>").arg(XML_ROOT_TAG);
+        xmldPrescription.remove(tmp);
+        xmldPrescription.append(tmp);
     }
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,

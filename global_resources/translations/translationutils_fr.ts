@@ -105,7 +105,7 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="152"/>
         <source>About databases</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos des bases de données</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="153"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="196"/>
         <source>Templates database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations base : Modèles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="198"/>
@@ -492,12 +492,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="248"/>
         <source>Protocols database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations base :Protocoles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="249"/>
         <source>Interactions database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations base :Interactions</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="250"/>
@@ -988,12 +988,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="251"/>
         <source>Drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Médicaments</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="252"/>
         <source>Protocols</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocoles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="270"/>
@@ -1003,12 +1003,12 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="275"/>
         <source>SQLite driver is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le pilote SQLite n&apos;est pas disponible</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="276"/>
         <source>The SQLite database driver is not installed or can not be found. Please report this error to the developper.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le pilote SQLite n&apos;est pas installé ou ne peut pas êetre trouvé. Veuillez reporter ce problème à l&apos;équipe de développement.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="304"/>
@@ -1073,17 +1073,17 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="385"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Oui</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="386"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Non</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="387"/>
         <source>Fatal error : Application failure. Please restart application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur fatale. Veuillez redémarrer l&apos;application.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="389"/>
@@ -1100,17 +1100,17 @@ Localisation : %2</translation>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="391"/>
         <source>Unable to save data in database %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de sauvegarder les données dans la base de données %1.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="392"/>
         <source>Database %1 correctly created</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données %1 créée correctement</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="393"/>
         <source>Database %1 can not be created. Error: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données %1 ne peut pas être créée. Erreur %2.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="396"/>

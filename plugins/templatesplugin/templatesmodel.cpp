@@ -291,6 +291,7 @@ public:
     {
         q->setObjectName("TemplatesModel");
         m_Handles.insert(this);
+        m_RootItem = m_Tree;
     }
 
     ~TemplatesModelPrivate()
@@ -381,6 +382,7 @@ public:
         datas.insert(Constants::Data_ParentId, -1);
         m_RootItem = new TreeItem(datas, 0);
         m_RootItem->setIsTemplate(false);
+        m_Tree = m_RootItem;
 
         // getting categories
         Utils::Log::addMessage(q, "Getting Templates Categories");
@@ -459,6 +461,7 @@ public:
             item->setModified(false);
         }
         sortItems();
+
         m_ModelDatasRetreived = true;
     }
 
@@ -779,9 +782,7 @@ TemplatesModel::~TemplatesModel()
 void TemplatesModel::onCoreDatabaseServerChanged()
 {
     d->m_ModelDatasRetreived = false;
-    qWarning() << d->m_RootItem;
     d->setupModelData();
-    qWarning() << d->m_RootItem;
     reset();
 }
 
@@ -800,6 +801,9 @@ QModelIndex TemplatesModel::index(int row, int column, const QModelIndex &parent
  {
      if (parent.isValid() && parent.column() != 0)
          return QModelIndex();
+
+//     if (!parent.isValid())
+//         return QModelIndex();
 
      Internal::TreeItem *parentItem = d->getItem(parent);
      Internal::TreeItem *childItem = 0;

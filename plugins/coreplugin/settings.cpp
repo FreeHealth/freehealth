@@ -172,6 +172,10 @@
 #include <QRegExp>
 
 
+/**
+  \todo Manage settings stored into external database using : ICore::databaseServerChanged()
+*/
+
 namespace SettingsPrivateConstants {
 
     static const char* const WEBSITE              = "http://www.ericmaeker.fr/FreeMedForms";
@@ -405,7 +409,7 @@ QString SettingsPrivate::path(const int type) const
     if (type == ISettings::DocumentationPath) {
         QString tmp = m_Enum_Path.value(type);
         QString translatedPath = tmp + QDir::separator() + QLocale().name().left(2) + "/html";
-        qWarning() << tmp << translatedPath;
+//        qWarning() << tmp << translatedPath;
         if (QDir(translatedPath).exists())
             return translatedPath;
         else

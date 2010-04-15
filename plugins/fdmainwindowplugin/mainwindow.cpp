@@ -229,11 +229,13 @@ void MainWindow::extensionsInitialized()
     }
 
     // If needed read exchange file
-    const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
+    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
     if (!exfile.isEmpty()) {
         messageSplash(tr("Reading exchange file..."));
-        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
-            Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
+        if (QFileInfo(exfile).isRelative())
+            exfile.prepend(qApp->applicationDirPath() + QDir::separator());
+//        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+//            Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
             QString tmp;
             if (QFile(exfile).exists())
                 tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
@@ -250,12 +252,13 @@ void MainWindow::extensionsInitialized()
                 QString encoded = tmp.mid( begin, end - begin );
                 DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             }
-        } else {
-            QString extras;
-            DrugsDB::DrugsIO::loadPrescription(drugModel(), exfile, extras);
-            patient()->fromXml(extras);
         }
-    }
+//    else {
+//            QString extras;
+//            DrugsDB::DrugsIO::loadPrescription(drugModel(), exfile, extras);
+//            patient()->fromXml(extras);
+//        }
+//    }
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
@@ -333,8 +336,10 @@ void MainWindow::closeEvent( QCloseEvent *event )
     // Save exchange file
     QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
     if (!exfile.isEmpty()) {
-        Utils::Log::addMessage(this, QString("Exchange File : %1 - %2").arg(exfile).arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+        Utils::Log::addMessage(this, QString("Exchange File : %1 - %2")
+                               .arg(exfile)
+                               .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+//        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
             QString tmp;
             // Manage specific MedinTux output exchange file format
             if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
@@ -342,12 +347,12 @@ void MainWindow::closeEvent( QCloseEvent *event )
                 tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
                 tmp.replace("font-weight:bold;", "font-weight:600;");
             } else {
-                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
+                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::NormalVersion);
             }
             Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::DontWarnUser);
-        } else {
-            savePrescription(exfile);
-        }
+//        } else {
+//            savePrescription(exfile);
+//        }
     }
 
     Core::ICore::instance()->coreIsAboutToClose();
@@ -504,7 +509,7 @@ bool MainWindow::savePrescription(const QString &fileName)
         }
         xmlExtra.append("/>");
     }
-    qWarning() << xmlExtra;
+//    qWarning() << xmlExtra;
     return DrugsDB::DrugsIO::savePrescription(drugModel(), xmlExtra, fileName);
 }
 

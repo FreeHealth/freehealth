@@ -255,6 +255,11 @@ void DatabaseSelectorWidget::tooglePaths()
 
 static void changeDrugsDatabase(Core::ISettings *set, const QString &fileName)
 {
+    if (!DrugsDB::DrugsModel::activeModel()) {
+        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, fileName);
+        return;
+    }
+
     if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != fileName) {
         if (DrugsDB::DrugsModel::activeModel()->rowCount()) {
             bool yes = Utils::yesNoMessageBox(

@@ -220,20 +220,18 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             return d->getConstructedDrugName(item.row());
         }
     } else if (role == Qt::BackgroundRole) {
-        if (item.column() == Constants::DRUGS_NAME) {
-            // test atc's patient allergies
-            if (d->hasAllergie(item)) {
-                QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-                c.setAlpha(190);
+        // test atc's patient allergies
+        if (d->hasAllergie(item)) {
+            QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+            c.setAlpha(190);
+            return c;
+        }
+        if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
+            QModelIndex uid = index(item.row(), Constants::DRUGS_UID);
+            if (d->UIDHasRecordedDosage(uid.data().toInt())) {
+                QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
+                c.setAlpha(125);
                 return c;
-            }
-            if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
-                QModelIndex cis = index(item.row(), Constants::DRUGS_UID);
-                if (d->UIDHasRecordedDosage(cis.data().toInt())) {
-                    QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
-                    c.setAlpha(125);
-                    return c;
-                }
             }
         }
 

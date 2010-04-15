@@ -481,7 +481,7 @@ void ListView::removeItem()
     if (idx.isValid()) {
         d->m_ListView->closePersistentEditor(idx);
         int row = idx.row();
-        qWarning() << idx.data() << idx.row();
+//        qWarning() << idx.data() << idx.row();
         if (!d->m_ListView->model()->removeRows(row, 1))
             Utils::Log::addError(this, QString("ListView can not remove row %1 to the model %2")
                              .arg(row)

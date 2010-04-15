@@ -264,9 +264,10 @@ bool DrugsBase::init()
 
         // define is default drugs database (fr_FR)
         // if settings drugs database is wrong --> use the default database
-        if (dbFileName == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT)
+        if (dbFileName == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT) {
             m_IsDefaultDB = true;
-        else if ((dbFileName.isEmpty())
+            dbFileName = defaultDatabaseFileName();
+        } else if ((dbFileName.isEmpty())
             || (!QFile(dbFileName).exists())) {
             Utils::Log::addMessage(this, "Using default drugs database because drugs database settings is not correct.");
             m_IsDefaultDB = true;
