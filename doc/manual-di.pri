@@ -60,6 +60,8 @@ OTHER_FILES += $${PWD}/usermanual/freediams/freediams.qdoc \
                $${PWD}/usermanual/drugswidget/drugsprescribe.qdoc \
                $${PWD}/usermanual/drugswidget/drugsdatabaseschema.qdoc \
                $${PWD}/usermanual/drugswidget/multipledrugsdatabase.qdoc \
+               $${PWD}/usermanual/drugswidget/drugsinteractions.qdoc \
+               $${PWD}/usermanual/drugswidget/drugspreferences.qdoc \
                $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/templates/templates.qdoc \

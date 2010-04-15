@@ -74,6 +74,7 @@ The interface of \freediams is available in different languages: English, French
 \li \ref ligne_commandes
 \li \ref installation_cle_usb
 \li \ref multiple_drugs_databases
+\li \ref using_external_server
 \li \ref drugsdatabaseschema
 \li \ref participer
 
@@ -104,12 +105,13 @@ any reports to developers on the public mailing list: freemedforms@googlegroups.
 \freediams est distribué sous licence BSD révisée. Vous pouvez lire les termes
 de la licence en suivant le menu <b>À propos</b>.
 
+\image html about.png Dialogue : à propos
+
 \~english
 \freediams is available under BSD revised license. You can read terms of the license
 from the <b>About</b> menu.
 
-\~
-\image html about.png Dialogue : à propos
+\image html about.png About dialog
 */
 
 
@@ -326,7 +328,6 @@ when user should not be able to change patient's datas.
 \~french \subsection exchange-in-xml-defaults Valeurs par défaut
 \~english \subsection exchange-in-xml-defaults Defaults
 
-\n
 - Ui : prescriber
 - blockPatientData = 0
 - ConfigFile : will use the default one. Use this param for the USBKey working
@@ -362,6 +363,7 @@ The contents of the 'out' exchange file is a mix between HTML and XML.
 Jusqu'à la version v0.4.0, le fichier est structuré de la sorte.
 \~english
 Till v0.4.0, the out exchange file is structured like this.
+
 \~
 \verbatim
 <html>
@@ -461,3 +463,55 @@ scientific committee to confirm with the \e --transmit-dosage param.
 
   \ref index
 */
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////  SERVER  //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+\~french \page using_external_server Utiliser \freediams avec un serveur de données externes
+\~english \page using_external_server Use \freediams with an exernal database server
+
+\~french 
+\freediams peut se connecter à un serveur distant pour la gestion des bases de données utilisateurs. \n 
+Cette fonctionnalité est disponible depuis la version 0.4.0 de \freediams.
+
+\~english 
+\freediams can connect to external server for the management of the user's personnal databases.\n
+This feature is available since version 0.4.0 of \freediams. 
+ 
+\~french \section external_server_settings Définir les paramètres du serveur
+\~english \section external_server_settings Setting server params
+ 
+\~french 
+Les serveurs suivants sont accessibles :
+- MySQL
+
+Le paramétrage s'effectue dans le dialogue <b>Préférences/Général</b>.\n
+Vous pouvez tester les paramètres de connection en cliquant sur le bouton "Tester la connection".\n
+Quand vous validez le dialogue, les bases de données seront automatiquement rafraîchies.
+
+Bases de données concernées :
+- les protocoles personnels
+- les modèles personnels
+
+\image html serverpreferences-fr.png
+
+\~english 
+Accessible servers are :
+- MySQL
+
+Settings are available in the dialog <b>Preferences/General</b>.\n
+You can test connection settings with the "Test connection" button.\n
+When you validate the dialog, the databases will refresh automatically.
+
+Concerned databases :
+- personnal protocols
+- personnal templates
+
+\image html serverpreferences-en.png
+
+\~french 
+\~english 
+ 
+ */
+

@@ -659,8 +659,10 @@ EXAMPLE_RECURSIVE      = YES
 # the \image command).
 
 IMAGE_PATH             = ../doc/usermanual/freediams \
+                         ../doc/usermanual/freediams/images \
+                         ../doc/usermanual/drugswidget/images \
                          ../doc/usermanual/drugswidget \
-                         ../doc/usermanual/templates \
+                         ../doc/usermanual/templates/images \
                          ../global_resources/pixmap/16x16 \
                          ../doc/usermanual/richtexteditor
 

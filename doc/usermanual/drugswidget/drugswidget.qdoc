@@ -442,7 +442,7 @@ These informations are actually only available in french.
 \~english  \section iams_calcul Calculating and presenting drugs interactions
 
 \~french
-Les interactions sont calculées en temps réel. Cela signifie qu'à chaque ajout d'un médicament
+Les interactions sont calculées  temps réel. Cela signifie qu'à chaque ajout d'un médicament
 dans la prescription (double clique dans la partie de recherche/sélection), les interactions sont
 automatiquement recalculées. Aucune action supplémentaire de votre part n'est requise.\n
 La recherche d'interactions fait appel à l'analyse des DCI et des classes thérapeutiques définies par l'AFSSAPS.

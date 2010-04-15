@@ -7,13 +7,13 @@
 
 \~french
 Prescrire avec \freediams est d'une simplicité déconcertante. Vous pouvez préparer des posologies standardisées
-sur lesquelles vous vous reposerez pour prescrire au quotidien et, lorsque cela s'avère nécessaire, vous pouvez
+sur lesquelles vous vous reposerez pour prescrire au quotidien. Lorsque cela s'avère nécessaire, vous pouvez
 prescrire en "mode textuel pure".
 
 
 \~english
 Prescribe with \freediams is amazingly simple. You can prepare standardized dosages
-on which you can retreat to prescribe a daily basis and, when necessary, you can
+on which you can retreat to prescribe a daily basis. When needed, you can
 prescribe "pure text mode".
 
 
@@ -76,14 +76,10 @@ volunteers. Write on our mailing list: freemedforms@googlegroups.com.
 \~french \subsection dosagecreator_presentation Présentation du créateur de posologie
 \~english \subsection dosagecreator_presentation Presentation of the dosage creator
 
-\~
+\~french
 \image html poso1.png Zones du créateur de posologies
-
-\image html poso2.png Particularités de la posologie
-
-\image html poso3.png Limitations
-
-\image html poso4.png note
+\~english
+\image html poso1.png Protocol creator areas
 
 \~french
 Le créateur de posologie se compose de cinq parties distinctes :
@@ -93,18 +89,30 @@ le nom du médicament (composition) ou sur l'icône d'interaction (liste les int
 - 2 : La liste de vos posologies pré-enregistrées. En double-cliquant sur l'une d'elle, le visualisateur se met à jour.
 - 3 : Le libellé de la posologie standard
 - 4 : La posologie proprement dite avec :
+
+\image html protocolsbasis-fr.png Schéma basique de prescription
+
     - Les indications de prises
     - Les indications de durée
+    - Le caractère "DCI" de la prescription
+    - Le caractère "100%" de la prescription
+
+\image html protocolsschemes-fr.png Schéma de délivrance
+
     - Les particularités : moment de la journée pour les prises, horaires (non fonctionnel), intervalle entre
 les prises, relation de la prise avec les repas.
+
+\image html protocolslimits-fr.png Limites de la prescription
+
     - Les limites de la prescription (non fonctionnel - en cours de développement) :
     - Limites de diagnostic (codage CIM10, eDRC)
     - Limites de terrain : poids, taille, surface corporelle, clairance de la créatinine...
     - Limites pour les femmes enceintes et allaitantes
     - Surveillance à programmer : biologie, clinique...
+
+\image html protocolsnote-fr.png Note
+
     - Une note en texte libre
-    - Le caractère "DCI" de la prescription
-    - Le caractère "100%" de la prescription
 - 5 : Commandes de sauvegarde et/ou de prescription. Vous pouvez par exemple uniquement prescrire sans
 sauvegarder la posologie en cours dans votre bibliothèque personnelle, sauvegarder seulement, ou faire les deux d'un clique.
 
@@ -119,18 +127,30 @@ drug name (composition) or the interaction icon (interaction list).
 - 2: A list of your pre-recorded dosages. By double-clicking on one of them, the viewer is updated.
 - 3: The label of the standard dosage
 - 4: The dosage itself with:
+
+\image html protocolsbasis-en.png Basics of the prescription
+
     - All statements made
     - Indications of length
+    - The character "INN" prescribing
+    - The character "100%" of prescription (for the fully reimbursed drugs)
+
+\image html protocolsschemes-en.png Scheme of delivrance
+
     - The particulars: time of day to catch, hours (not working), interval between
 intakes, relationship with food.
+
+\image html protocolslimits-en.png Limits of the prescription
+
     - The statute of limitations (not working - currently under development):
     - Limits of diagnosis (ICD10 coding, EDRC - currently under development))
     - Limits of land: weight, height, body surface area, creatinine clearance ...
     - Limits for pregnant and lactating
     - Monitoring program: biology, clinical ...
+	
+\image html protocolsnote-en.png Note
+
     - A free text note
-    - The character "INN" prescribing
-    - The character "100%" of prescription (for the fully reimbursed drugs)
 - 5: Commands for save and / or prescribe. For example you can only prescribe without
 save the current dosage to your personnal database, save only, or both of a clique.
 
@@ -147,7 +167,7 @@ Les indications de prises comprennent :
 - un nombre de prise maximal
 - la possibilité de prescrire un intervalle de prises (de x à y prises par jour)
 - le texte de la prise :
-    - par défaut : \e prise(s)
+    - par défaut : \e prise(s) (ce texte est paramétrable \ref params_protocols)
     - une liste d'intitulés standards est proposé
     - vous pouvez saisir n'importe quel texte, le texte alors saisi (s'il n'apparatient pas aux libellés standards
 sera alors disponible en cliquant sur l'icône \e personnel situé à côté (cf image).
@@ -162,7 +182,7 @@ All statements made include:
 - A maximal number of intakes
 - The possibility to prescribe a range of doses (from x to y divided doses)
 - The text of the intakes:
-    - Default: \e intake(s)
+    - Default: \e intake(s) (this can be setted \ref params_protocols)
     - A list of proposed standards is entitled
     - You can enter any text, the text before then (if not the wording n'apparatient standards
 will be available by clicking on the \e personnal icon located next to the combo (see picture).
