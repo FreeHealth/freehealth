@@ -177,7 +177,7 @@ INSTALLS+=docs
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){
-   macx:error(For MacOS use scripts instead of the installer for the Qt libs)
+   #macx:error(For MacOS use scripts instead of the installer for the Qt libs)
    QTPLUGINS_PATH = $$[QT_INSTALL_PLUGINS]
    qt_libs.path  = $${INSTALL_QT_LIBS_PATH}
    linux {
@@ -207,6 +207,7 @@ INSTALLS+=docs
 
    linux:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
    else:win32:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_BIN] to $${INSTALL_QT_LIBS_PATH})
+
    # Install Qt plugins (SQL plugins)
    qt_sqlplugins.path = $${INSTALL_QT_PLUGINS_PATH}
    qt_sqlplugins.files = $${QTPLUGINS_PATH}/sqldrivers
