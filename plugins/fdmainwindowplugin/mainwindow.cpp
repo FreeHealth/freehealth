@@ -403,7 +403,9 @@ void MainWindow::openRecentFile()
 
 void MainWindow::updateCheckerEnd()
 {
+    // this code avoid deletion of the resizer corner of the mainwindow
     delete statusBar();
+    statusBar()->hide();
 }
 
 /** \brief Reads main window's settings */
