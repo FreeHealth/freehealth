@@ -254,31 +254,39 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn 
     if (!parent) {
         wgt = qApp->activeWindow();
     }
-    QFileInfo info( toFile );
-    if ( info.exists() && info.isWritable() && warnUser == WarnUser ) {
-        if ( QMessageBox::warning( wgt, qApp->applicationName(),
+
+    // Manage relative paths
+    QString correctFileName = toFile;
+    QFileInfo info(toFile);
+    if (info.isRelative())
+        correctFileName = qApp->applicationDirPath() + QDir::separator() + toFile;
+    info.setFile(correctFileName);
+
+    // Save file (overwrite)
+    QFile file(info.absoluteFilePath());
+    if (info.exists() && (info.isWritable() && warnUser == WarnUser)) {
+        if (QMessageBox::warning( wgt, qApp->applicationName(),
                                    QCoreApplication::translate( "Utils" ,
-                                                                "File %1 already exists. Do you want de replace it ?" ).arg( toFile ),
+                                                                "File %1 already exists. Do you want de replace it ?" ).arg(info.fileName()),
                                    QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
-            QFile file( toFile );
-            if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-                Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+            if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
+                Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
                 return false;
             }
-            file.write( toSave.toAscii() );
-            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly saved" ).arg( toFile ) );
+            file.write(toSave.toAscii());
+            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
         } else {
-            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "Save file aborted by user (file already exists) : " ) + toFile );
+            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists) : ") + file.fileName());
             return false;
         }
     } else {
-        QFile file( toFile );
-        if ( ! file.open( QFile::WriteOnly | QIODevice::Text ) ) {
-            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg( toFile, file.errorString() ) );
+        // Create file
+        if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
+            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg(file.fileName(), file.errorString() ) );
             return false;
         }
-        file.write( toSave.toAscii() );
-        Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 correctly saved" ).arg( toFile ) );
+        file.write(toSave.toAscii());
+        Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
     }
     return true;
 }
@@ -295,7 +303,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
                                                     filters);
     if (fileName.isEmpty())
         return false;
-    return Utils::saveStringToFile(toSave,fileName,WarnUser,wgt);
+    return Utils::saveStringToFile(toSave, fileName, WarnUser, wgt);
 }
 
 /** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
@@ -306,16 +314,23 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
     QWidget *p = parent;
     if (!p)
         p = qApp->activeWindow();
-    QFileInfo info( toRead );
+
+    // Manage relative paths
+    QString correctFileName = toRead;
+    QFileInfo info(toRead);
+    if (info.isRelative())
+        correctFileName = qApp->applicationDirPath() + QDir::separator() + toRead;
+    info.setFile(correctFileName);
+
     if (((!info.exists()) || (!info.isReadable()) ) && (warnUser == WarnUser)) {
-        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable." ).arg(toRead),
+        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable." ).arg(correctFileName),
                                  "","", qApp->applicationName());
         return QString::null;
     } else {
-        QFile file( toRead );
+        QFile file(correctFileName);
         if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
             Utils::Log::addError("Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
-                             .arg(toRead, file.errorString()));
+                             .arg(correctFileName, file.errorString()));
             return QString::null;
         }
         QByteArray data = file.readAll();
