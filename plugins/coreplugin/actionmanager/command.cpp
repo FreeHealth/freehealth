@@ -482,6 +482,8 @@ void OverrideableAction::addOverrideAction(QAction *action, const QList<int> &co
 
 void OverrideableAction::actionChanged()
 {
+//    qWarning() << "Action changed" << m_action << m_currentAction;
+
     if (hasAttribute(CA_UpdateIcon)) {
         m_action->setIcon(m_currentAction->icon());
         m_action->setIconText(m_currentAction->iconText());

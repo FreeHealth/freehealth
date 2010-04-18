@@ -190,11 +190,6 @@ QVariant Patient::value(Reference ref) const
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
 void Patient::setValue(Reference ref, const QVariant &value)
 {
-    if (ref==DateOfBirth) {
-        QDate date = QDate::fromString(value.toString(),"dd/MM/yyyy");
-        d->m_Values.insert(ref, date);
-        return;
-    }
     d->m_Values.insert(ref, value);
 }
 

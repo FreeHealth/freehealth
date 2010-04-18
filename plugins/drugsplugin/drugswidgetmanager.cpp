@@ -49,6 +49,7 @@
 #include <drugsbaseplugin/drugsbasemanager.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/constants.h>
@@ -404,7 +405,6 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     menu->addAction(cmd, G_PLUGINS_DRUGS);
     connect(aResetPrescriptionSentenceToDefault,SIGNAL(triggered()),this,SLOT(resetPrescriptionSentenceToDefault()));
 
-
     actionManager()->retranslateMenusAndActions();
 }
 
@@ -600,15 +600,57 @@ void DrugsActionHandler::showInteractionsDatabaseInformations()
     }
 }
 
+void DrugsActionHandler::setEditMode(const Modes mode)
+{
+    // no change
+    if (mode==SelectOnly && m_SelectionOnlyMode)
+        return;
+    if (mode==Prescriber && !m_SelectionOnlyMode)
+        return;
+
+    // ask user
+    if (DrugsDB::DrugsModel::activeModel()->rowCount() > 0) {
+        bool yes;
+        yes = Utils::yesNoMessageBox(tr("Prescription is not empty. Clear it ?"),
+                                     tr("You select another editing mode than the actual one. "
+                                        "Changing of mode during edition may cause prescription lose.\n"
+                                        "Do you really want to change the editing mode ?"));
+        if (yes) {
+           DrugsDB::DrugsModel::activeModel()->clearDrugsList();
+       } else {
+           return;
+       }
+    }
+
+    // change the mode
+    if (mode == SelectOnly) {
+        m_SelectionOnlyMode = true;
+        DrugsDB::DrugsModel::activeModel()->setSelectionOnlyMode(true);
+        this->aSelectOnlyMode->setChecked(true);
+        this->aPrescriberMode->setChecked(false);
+    } else {
+        m_SelectionOnlyMode = false;
+        DrugsDB::DrugsModel::activeModel()->setSelectionOnlyMode(false);
+        this->aSelectOnlyMode->setChecked(false);
+        this->aPrescriberMode->setChecked(true);
+    }
+}
+
+DrugsActionHandler::Modes DrugsActionHandler::editMode() const
+{
+    if (m_SelectionOnlyMode)
+        return SelectOnly;
+    return Prescriber;
+}
 
 void DrugsActionHandler::modeActionChanged(QAction *a)
 {
     if (!m_CurrentView)
         return;
     if (a==aPrescriberMode)
-        m_CurrentView->setMode(DrugsCentralWidget::Prescriber);
+        setEditMode(Prescriber);
     else
-        m_CurrentView->setMode(DrugsCentralWidget::SelectOnly);
+        setEditMode(SelectOnly);
 }
 
 void DrugsActionHandler::openDosageDialog()

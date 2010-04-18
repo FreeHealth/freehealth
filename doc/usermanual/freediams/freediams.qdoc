@@ -215,6 +215,7 @@ Les paramètres suivants sont disponibles :
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
 \li \e --exchange-in="/path/to/xml/exchange-in.xml" : définit le fichier d'échange entrant.
 \li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications. Le fichier doit exister.
+\li \e --exchange-format="xml html html_xml" : format du fichier d'échange de sortie
 \li \e --patientname="xx xx xx" : définit le nom du patient.
 \li \e --patientsurname="xx xx" : définti le prénom du patient.
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
@@ -233,6 +234,7 @@ The following settings are available:
 \li \e --medintux: defines a specific user MedinTux.
 \li \e --exchange-in="/path/to/xml/exchange-in.xml" : defines the "in" exchange file.
 \li \e --exchange="xxx" : "xxx" identifies the exchange file between the two applications. File must exist.
+\li \e --exchange-format="xml html html_xml" : format of the exchange out file
 \li \e --patientname="xx xx xx" defines the name of the patient.
 \li \e --patientsurname="xx xx" define the surname of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
@@ -245,16 +247,16 @@ The following settings are available:
 \li \e --transmit-dosage = undocumented.
 
 \~
-Not yet fully used in \freediams :
+Not yet documented :
 \li \e --emr-name : name of the EMR (will be returned without any modification in the "out" exchange file)
 \li \e --emr-uid : EMR session UID (will be returned without any modification in the "out" exchange file)
 \li \e --drugsdb-uid : Drugs database Unique identifier to use at startup
 \li \e --patientuid : Patient UID (will be returned without any modification in the "out" exchange file)
-\li \e --weight-unit
-\li \e --height-unit
+\li \e --weight-unit : value can be : Kg/lbs
+\li \e --height-unit : value can be : cm/
 \li \e --crcl-unit
 \li \e --creatinine-unit
-\li \e --blockpatientdatas
+\li \e --blockpatientdatas : value can be : 0 or 1. User can/can't modify patients' datas
 \li \e --drugs-uid-allergies
 \li \e --atc-allergies
 \li \e --inn-allergies
@@ -301,12 +303,13 @@ The structure of this file must meet the following requirements.
 \verbatim
 <FreeDiams_In version="0.4.0">
   <ConfigFile value="/path/to/the/requiered/configFile.ini"/>
+  <OutFile value="/path/to/the/requiered/exchange_File.txt" format="xml html html_xml"/>
   <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
   <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <Patient>
     <Identity name="Name Of Patient" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
     <Creatinine value="12" unit="mg/l or mmol/l"/>
-    <Weight value="70" unit="kg or pd" />
+    <Weight value="70" unit="kg or lbs" />
     <Height value="170" unit="cm or "/>
     <InnAllergies value="inn1;inn2;inn3"/>
     <ATCAllergies value="ATC1;ATC2;ATC3"/>
@@ -319,6 +322,7 @@ The structure of this file must meet the following requirements.
 
 - ConfigFile : tells \freediams to use the specified config file. If this file does not exist, \freediams
 will use the default one.
+- OutFile :
 - DrugsDatabase : specify the Drugs Database to use. The \e uid is the \freediams unique identifier.
 - EMR : these params will be returned in the out exchange file, so that EMR can test and check the files.
 - UI : \freediams can be used in different editing mode, you can define it here. Use he \e blockPatientDatas

@@ -83,10 +83,18 @@ class DrugsActionHandler : public QObject
 {
     Q_OBJECT
 public:
+    enum Modes {
+        Prescriber = 0,
+        SelectOnly
+    };
+
     DrugsActionHandler(QObject *parent = 0);
     virtual ~DrugsActionHandler() {}
 
     void setCurrentView(DrugsCentralWidget *view);
+    void setEditMode(const Modes mode);
+    Modes editMode() const;
+
 
 public Q_SLOTS:
     void drugsModelChanged();
@@ -149,6 +157,8 @@ protected:
     QAction *aResetPrescriptionSentenceToDefault;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
+
+    bool m_SelectionOnlyMode;
 };
 
 }  // End Internal
@@ -165,8 +175,8 @@ public:
     ~DrugsWidgetManager() {}
 
     DrugsWidget::DrugsCentralWidget  *currentView() const;
-    DrugsDB::DrugsModel          *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
-    DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+    DrugsDB::DrugsModel              *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
+    DrugsDB::InteractionsManager     *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);

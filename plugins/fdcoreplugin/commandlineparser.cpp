@@ -24,7 +24,7 @@ namespace Constants {
     const char *const XML_HEADER                  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     const char *const XML_GENERAL_TAG             = "FreeDiams_In";
     const char *const XML_CONFIG_FILE             = "ConfigFile";
-    const char *const XML_INFILE                  = "InFile";
+    const char *const XML_OUT_FILE                = "OutFile";
     const char *const XML_DRUGS_DATABASE          = "DrugsDatabase";
     const char *const XML_EMR                     = "EMR";
     const char *const XML_PATIENT                 = "Patient";
@@ -50,6 +50,7 @@ namespace Constants {
     const char *const XML_ATTRIB_VERSION          = "version";
     const char *const XML_ATTRIB_GENDER           = "gender";
     const char *const XML_ATTRIB_DATEOFBIRTH      = "dob";
+    const char *const XML_ATTRIB_FORMAT           = "format";
 }
 
 inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
@@ -71,6 +72,7 @@ public:
         params.insert(CommandLine::CL_SelectionOnly,     "--selection-only");
         params.insert(CommandLine::CL_DrugsDatabaseUid,  "--drugsdb-uid");
         params.insert(CommandLine::CL_ExchangeFile,      "--exchange");
+        params.insert(CommandLine::CL_ExchangeFileFormat,"--exchange-format");
         params.insert(CommandLine::CL_ExchangeInFile,    "--exchange-in");
         params.insert(CommandLine::CL_PatientUid,        "--patientuid");
         params.insert(CommandLine::CL_PatientName,       "--patientname");
@@ -94,6 +96,9 @@ public:
         params.insert(CommandLine::CL_ConfigFile,        "--config");
         params.insert(CommandLine::CL_RunningUnderWine,  "--wine");
         params.insert(CommandLine::CL_BlockPatientDatas, "--blockpatientdatas");
+
+        // insert default values
+        value.insert(CommandLine::CL_ExchangeFileFormat, "html_xml");
     }
 
     void parseCommandLine()
@@ -107,29 +112,30 @@ public:
                 k = k.left(k.indexOf("="));
             switch (params.key(k,-1))
             {
-            case CommandLine::CL_MedinTux :        value.insert(CommandLine::CL_MedinTux, true); break;
-            case CommandLine::CL_EMR_Name :        value.insert(CommandLine::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_EMR_Uid :         value.insert(CommandLine::CL_EMR_Uid, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_SelectionOnly :   value.insert(CommandLine::CL_SelectionOnly, true); break;
-            case CommandLine::CL_ExchangeFile :    value.insert(CommandLine::CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_ExchangeInFile :  value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_PatientUid :      value.insert(CommandLine::CL_PatientUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_PatientName :     value.insert(CommandLine::CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_PatientGender :   value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_DateOfBirth :     value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight :          value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight_Unit :     value.insert(CommandLine::CL_Weight_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height :          value.insert(CommandLine::CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height_Unit :     value.insert(CommandLine::CL_Height_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_CrCl :            value.insert(CommandLine::CL_CrCl, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_CrCl_Unit :       value.insert(CommandLine::CL_CrCl_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Creatinine :      value.insert(CommandLine::CL_Creatinine, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Creatinine_Unit : value.insert(CommandLine::CL_Creatinine_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Chrono :          value.insert(CommandLine::CL_Chrono, true); break;
-            case CommandLine::CL_TransmitDosage :  value.insert(CommandLine::CL_TransmitDosage, true); break;
-            case CommandLine::CL_ConfigFile :      value.insert(CommandLine::CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_RunningUnderWine: value.insert(CommandLine::CL_RunningUnderWine, true); break;
-            case CommandLine::CL_BlockPatientDatas:value.insert(CommandLine::CL_BlockPatientDatas, true); break;
+            case CommandLine::CL_MedinTux :          value.insert(CommandLine::CL_MedinTux, true); break;
+            case CommandLine::CL_EMR_Name :          value.insert(CommandLine::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_EMR_Uid :           value.insert(CommandLine::CL_EMR_Uid, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_SelectionOnly :     value.insert(CommandLine::CL_SelectionOnly, true); break;
+            case CommandLine::CL_ExchangeFile :      value.insert(CommandLine::CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_ExchangeFileFormat: value.insert(CommandLine::CL_ExchangeFileFormat, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_ExchangeInFile :    value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_PatientUid :        value.insert(CommandLine::CL_PatientUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_PatientName :       value.insert(CommandLine::CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_PatientGender :     value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_DateOfBirth :       value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Weight :            value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Weight_Unit :       value.insert(CommandLine::CL_Weight_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Height :            value.insert(CommandLine::CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Height_Unit :       value.insert(CommandLine::CL_Height_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_CrCl :              value.insert(CommandLine::CL_CrCl, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_CrCl_Unit :         value.insert(CommandLine::CL_CrCl_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Creatinine :        value.insert(CommandLine::CL_Creatinine, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Creatinine_Unit :   value.insert(CommandLine::CL_Creatinine_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_Chrono :            value.insert(CommandLine::CL_Chrono, true); break;
+            case CommandLine::CL_TransmitDosage :    value.insert(CommandLine::CL_TransmitDosage, true); break;
+            case CommandLine::CL_ConfigFile :        value.insert(CommandLine::CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_RunningUnderWine:   value.insert(CommandLine::CL_RunningUnderWine, true); break;
+            case CommandLine::CL_BlockPatientDatas:  value.insert(CommandLine::CL_BlockPatientDatas, true); break;
                 /** \todo icd10 and drugs allergies */
                 //                case CL_DrugsAllergies : value.insert(CL_DrugsAllergies, true); break;
                 //                case CL_ICD10Diseases : value.insert(CL_ICD10Diseases, true); break;
@@ -186,7 +192,7 @@ public:
     {
 //        <FreeDiams_In version="0.4.0">
 //          <ConfigFile value="/path/to/the/requiered/configFile.ini"/>
-//          <InFile value="/path/to/the/fileToRead.exc"/>
+//          <OutFile value="/path/to/the/fileToRead.exc" format="xml html html_xml"/>
 //          <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
 //          <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
 //          <Patient>
@@ -197,16 +203,20 @@ public:
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_CONFIG_FILE) {
                 value.insert(CommandLine::CL_ConfigFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+            } else if (element.tagName() == Internal::Constants::XML_OUT_FILE) {
+                value.insert(CommandLine::CL_ExchangeFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+                value.insert(CommandLine::CL_ExchangeFileFormat, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
             } else if (element.tagName() == Internal::Constants::XML_DRUGS_DATABASE) {
                 value.insert(CommandLine::CL_DrugsDatabaseUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
             } else if (element.tagName() == Internal::Constants::XML_EMR) {
                 value.insert(CommandLine::CL_EMR_Name, element.attribute(Internal::Constants::XML_ATTRIB_NAME));
                 value.insert(CommandLine::CL_EMR_Uid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
             } else if (element.tagName() == Internal::Constants::XML_UI) {
-                if (element.attribute(Internal::Constants::XML_ATTRIB_UI_EDITMODE) == "select-only")
+                if (element.attribute(Internal::Constants::XML_ATTRIB_UI_EDITMODE).compare("select-only",Qt::CaseInsensitive)==0)
                     value.insert(CommandLine::CL_SelectionOnly, true);
                 else
                     value.insert(CommandLine::CL_SelectionOnly, false);
+                value.insert(CommandLine::CL_BlockPatientDatas, element.attribute(Internal::Constants::XML_ATTRIB_UI_BLOCKDATAS));
             } else if (element.tagName() == Internal::Constants::XML_PATIENT) {
                 readPatientDatas(element);
             }

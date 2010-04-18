@@ -63,6 +63,7 @@ public:
         CL_SelectionOnly,
         CL_DrugsDatabaseUid,
         CL_ExchangeFile,
+        CL_ExchangeFileFormat,
         CL_ExchangeInFile,
         CL_PatientName,
         CL_PatientSurname,

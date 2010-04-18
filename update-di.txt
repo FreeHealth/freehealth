@@ -9,6 +9,8 @@ version=0.3.9
     * Nouvelles fonctionnalités :
       * Nouveau mode d'édition = mode prescripteur et mode sélection seulement
       * Nouveaux paramètres pour ligne de commande : '--version', '-version' , '-v' , '--gender', '--exchange-in'...
+      * Possibilité de bloquer la modification des données patients
+      * Possibilité de sélectionner le format du fichier d'échange de sortie : XML, HTML ou HTML + XML
       * Nouveau format du fichier d'échange de sortie
       * Possibilité de passer les arguments à FreeDiams par un fichier d'échange entrant (exchange-in)
       * Fonctionnalités multi-bases thérapeutiques implémentées

@@ -50,8 +50,8 @@
 /**
  * \file mfDrugsCentralWidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 18 Apr 2010
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
    \ingroup freediams
 */
@@ -80,14 +80,8 @@ class DRUGS_EXPORT DrugsCentralWidget : public QWidget
     friend class DrugsWidget::Internal::DrugsActionHandler;
 
 public:
-    enum Modes {
-        Prescriber = 0,
-        SelectOnly
-    };
-
     DrugsCentralWidget(QWidget *parent = 0);
     bool initialize();
-    void setMode(Modes mode);
 
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;
@@ -120,7 +114,6 @@ private:
     Internal::Ui::DrugsCentralWidget *m_ui;
     DrugsDB::DrugsModel   *m_CurrentDrugModel;
     Internal::DrugsContext *m_Context;
-    bool m_SelectionOnlyMode;
 };
 
 }  // End DrugsWidget

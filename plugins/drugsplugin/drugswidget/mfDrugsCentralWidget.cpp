@@ -62,6 +62,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <templatesplugin/templatescreationdialog.h>
@@ -79,12 +80,12 @@ static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::act
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
-    QWidget(parent), m_CurrentDrugModel(0),
-    m_SelectionOnlyMode(false)
+    QWidget(parent), m_CurrentDrugModel(0)
 {
     // create instance of DrugsManager
     DrugsWidgetManager::instance();
@@ -142,36 +143,6 @@ void DrugsCentralWidget::setCurrentSearchMethod(int method)
     m_ui->m_DrugSelector->setSearchMethod(method);
 }
 
-void DrugsCentralWidget::setMode(Modes mode)
-{
-    // no change
-    if (mode==SelectOnly && m_SelectionOnlyMode)
-        return;
-    if (mode==Prescriber && !m_SelectionOnlyMode)
-        return;
-    // ask user
-    if (m_CurrentDrugModel->rowCount() > 0) {
-        bool yes;
-        yes = Utils::yesNoMessageBox(tr("Prescription is not empty. Clear it ?"),
-                                     tr("You select another editing mode than the actual one. "
-                                        "Changing of mode during edition may cause prescription lose.\n"
-                                        "Do you really want to change the editing mode ?"));
-        if (yes) {
-           m_CurrentDrugModel->clearDrugsList();
-       } else {
-           return;
-       }
-    }
-    // change the mode
-    if (mode == SelectOnly) {
-        m_SelectionOnlyMode = true;
-        m_CurrentDrugModel->setSelectionOnlyMode(true);
-    } else {
-        m_SelectionOnlyMode = false;
-        m_CurrentDrugModel->setSelectionOnlyMode(false);
-    }
-}
-
 void DrugsCentralWidget::createConnections()
 {
     connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( selector_drugSelected(const int) ) );
@@ -212,7 +183,7 @@ void DrugsCentralWidget::selector_drugSelected(const int uid)
     }
 //    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
     m_CurrentDrugModel->addDrug(uid);
-    if (!m_SelectionOnlyMode) {
+    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
         Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));
         if (dlg.exec()==QDialog::Rejected) {
             m_CurrentDrugModel->removeLastInsertedDrug();

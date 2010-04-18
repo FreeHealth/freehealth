@@ -56,12 +56,14 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.15
- * \date 10 Sept 2009
+ * \version 0.4.0
+ * \date 18 Apr 2010
 */
 
 namespace MainWin {
 namespace Internal {
+class MainWinPrivate;
+
 namespace Ui {
 class MainWindow;
 }  // End Ui
@@ -124,6 +126,7 @@ protected:
 public:
     Internal::Ui::MainWindow *m_ui;
     QDockWidget *m_TemplatesDock;
+    Internal::MainWinPrivate *d;
 };
 
 } // End Core
