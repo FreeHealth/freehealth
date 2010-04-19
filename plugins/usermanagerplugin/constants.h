@@ -83,7 +83,7 @@ namespace Constants {
     const char * const USER_DATAS_PRESCRIPTIONWATERMARK= "papers.prescription.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
 
 //    const char * const USER_ROLE_SUPERADMIN      = "role.superadmin";
-    // if you add or delete a role, you must change tkUserRightsWidget
+    // if you add or delete a role, you must change UserRightsWidget
     const char * const USER_ROLE_USERMANAGER     = "role.userManager";
     const char * const USER_ROLE_MEDICAL         = "role.medical";
     const char * const USER_ROLE_DOSAGES         = "role.dosage";

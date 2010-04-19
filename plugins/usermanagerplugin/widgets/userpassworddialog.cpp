@@ -58,6 +58,8 @@
 
 #include "ui_userpassworddialog.h"
 
+#include <QDebug>
+
 using namespace UserPlugin;
 
 UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent) :
@@ -95,6 +97,9 @@ void UserPasswordDialog::accept()
 {
     const QString &cryptedNewPass = UserPlugin::crypt(m_ui->newPass->lineEdit()->text());
     const QString &oldPass = UserPlugin::crypt(m_ui->oldPass->lineEdit()->text());
+
+    qWarning() << oldPass << m_ActualPass << cryptedNewPass;
+
     if ((oldPass == m_ActualPass) &&
         (m_ui->newPass->lineEdit()->text() == m_ui->newControl->lineEdit()->text())) {
         m_AllIsGood = true;

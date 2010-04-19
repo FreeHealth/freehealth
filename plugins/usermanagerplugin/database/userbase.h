@@ -81,6 +81,15 @@ protected:
 
     // initialize
     bool initialize(Core::ISettings *settings);
+    bool createDatabase(const QString & connectionName, const QString & dbName,
+                        const QString & pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString & login, const QString & pass,
+                        const int port,
+                        CreationOption createOption
+                       );
+    bool checkDatabaseVersion();
+
     bool isNewlyCreated() const;
 
     // retreivers
@@ -102,14 +111,6 @@ protected:
 
 
 private:
-    bool createDatabase(const QString &connectionName, const QString &dbName,
-                          const QString &pathOrHostName,
-                          TypeOfAccess access, AvailableDrivers driver,
-                          const QString &login, const QString &pass,
-                          CreationOption createOption
-                         );
-//    void setConnectionName(const QString &c);
-
     // privates retreivers
     UserData *getUser(const QHash<int, QString> &conditions) const;
 

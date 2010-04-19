@@ -62,6 +62,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
 #include <printerplugin/textdocumentextra.h>
 
 #include <utils/log.h>
@@ -82,9 +83,13 @@
 
 using namespace UserPlugin::Internal;
 using namespace UserPlugin::Constants;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 
 // Initializing static datas
-bool UserBase::m_initialized      = false;
+bool UserBase::m_initialized = false;
 QString  UserBase::m_LastUuid = "";
 QString  UserBase::m_LastLogin = "";
 QString  UserBase::m_LastPass = "";
@@ -152,24 +157,49 @@ UserBase::UserBase(QObject *parent)
   \brief Initialize users base using the \e settings values.
   \sa Core::ISettings, Core::ISettings::ReadWriteDatabasesPath
 */
-bool UserBase::initialize(Core::ISettings *settings)
+bool UserBase::initialize(Core::ISettings *s)
 {
-    Q_ASSERT_X(settings, "UserBase", "initialize : you must specify a tkSettings pointer");
-    if (! settings)
-        return false;
+    Core::ISettings *set = s;
+    if (!set)
+        set = settings();
 
     if (m_initialized)
         return true;
 
-    // retreive databases path (tkSettings manages OS specific paths and debug compilation)
-    QString pathToDb = settings->path(Core::ISettings::ReadWriteDatabasesPath);
-    pathToDb = QDir::cleanPath(pathToDb + "/users");
-    QDir().mkpath(pathToDb);
-
     // test connection (create DB if not exists)
-    if (! createConnection(USER_DB_CONNECTION, QString("%1.db").arg(USER_DB_CONNECTION),
-			     pathToDb, ReadWrite, SQLite, "log", "pass", CreateDatabase))
+    // Check settings --> SQLite or MySQL ?
+    if (set->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+        if (!createConnection(USER_DB_CONNECTION,
+                         USER_DB_CONNECTION,
+                         QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+                         Utils::Database::ReadWrite,
+                         Utils::Database::MySQL,
+                         QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
+                         Utils::Database::CreateDatabase))
+            return false;
+    } else {
+        // Connect SQLite database
+        QString pathToDb = set->path(Core::ISettings::ReadWriteDatabasesPath);
+        pathToDb = QDir::cleanPath(pathToDb + QDir::separator() + USER_DB_CONNECTION);
+        if (!QDir(pathToDb).exists()) {
+            Utils::Log::addMessage(this, tkTr(Trans::Constants::CREATE_DIR_1).arg(pathToDb));
+            QDir().mkpath(pathToDb);
+        }
+        if (!createConnection(USER_DB_CONNECTION,
+                         QString("%1.db").arg(USER_DB_CONNECTION),
+                         pathToDb,
+                         Utils::Database::ReadWrite,
+                         Utils::Database::SQLite,
+                         "log", "pas", 0,
+                         Utils::Database::CreateDatabase))
+            return false;
+    }
+
+    if (!checkDatabaseVersion())
         return false;
+
     m_initialized = true;
     return true;
 }
@@ -177,6 +207,12 @@ bool UserBase::initialize(Core::ISettings *settings)
 bool UserBase::isNewlyCreated() const
 {
     return m_IsNewlyCreated;
+}
+
+bool UserBase::checkDatabaseVersion()
+{
+    /** \todo Code : UserBase::checkDatabaseVersion() */
+    return true;
 }
 
 
@@ -407,16 +443,19 @@ QString UserBase::createNewUuid()
   \brief Create the default users database if it does not exists.
   Actually this function only supports SQLite database.
 */
-bool UserBase::createDatabase( const QString & connectionName, const QString & dbName,
-                                  const QString & pathOrHostName,
-                                  TypeOfAccess access, AvailableDrivers driver,
-                                  const QString & login, const QString & pass,
-                                  CreationOption createOption
-				 )
+bool UserBase::createDatabase(const QString & connectionName , const QString & dbName,
+                    const QString & pathOrHostName,
+                    TypeOfAccess access, AvailableDrivers driver,
+                    const QString & login, const QString & pass,
+                    const int port,
+                    CreationOption createOption
+                   )
 {
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     Q_UNUSED(access);
     Q_UNUSED(login);
     Q_UNUSED(pass);
+    Q_UNUSED(port);
     Q_UNUSED(createOption);
     Utils::Log::addMessage("UserBase", QCoreApplication::translate("UserBase", "Trying to create empty user database. \nLocation : %1 \nFileName: %2")
 		       .arg(pathOrHostName, dbName));
@@ -437,7 +476,7 @@ bool UserBase::createDatabase( const QString & connectionName, const QString & d
     createTables();
 
     // add general administrator
-    UserData* user = new UserData(DEFAULT_USER_UUID);
+    UserData* user = new UserData;
     user->setLogin(DEFAULT_USER_LOGIN);
     user->setCryptedPassword(DEFAULT_USER_PASSWORD);
     user->setValidity(true);

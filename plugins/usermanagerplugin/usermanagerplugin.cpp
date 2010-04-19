@@ -40,6 +40,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/translators.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
@@ -108,6 +109,9 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         qWarning() << "UserManagerPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
 
     // Ask for User login
     if (!identifyUser()) {

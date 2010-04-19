@@ -10,6 +10,7 @@ include( usermanagerplugin_dependencies.pri )
 HEADERS = usermanagerplugin.h \
     usermanager_exporter.h \
     iuserlistener.h
+
 SOURCES = usermanagerplugin.cpp
 
 # Compile
