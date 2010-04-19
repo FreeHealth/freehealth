@@ -373,8 +373,8 @@ bool DrugsBase::refreshDrugsBase()
     bool r = init();
     if (r)
         Q_EMIT drugsBaseHasChanged();
-    else
-        Utils::Log::addError(this, "kjkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk");
+//    else
+//        Utils::Log::addError(this, "kjkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk");
     return r;
 }
 
@@ -565,7 +565,7 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
 
     // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     if (executeSQL(QStringList()
-        << dosageCreateTableSqlQuery().replace("AUTOINCREMENT", "AUTO_INCREMENT")
+        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
         << "CREATE TABLE IF NOT EXISTS `VERSION` ("
            "`ACTUAL`                varchar(10)    NULL"
            ");"
