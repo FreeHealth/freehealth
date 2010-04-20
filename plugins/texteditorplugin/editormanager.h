@@ -35,11 +35,9 @@
 #ifndef EDITORMANAGER_H
 #define EDITORMANAGER_H
 
-// include toolkit headers
 #include <texteditorplugin/texteditor_exporter.h>
 #include <texteditorplugin/editoractionhandler.h>
 
-// include Qt headers
 #include <QObject>
 
 namespace Core {

@@ -32,73 +32,55 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "printerplugin.h"
-#include "printerpreferences.h"
+#include "texteditorplugin.h"
 
 #include <utils/log.h>
-#include <utils/global.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
+
 #include <QtCore/QtPlugin>
-#include <QPrinterInfo>
 
 #include <QDebug>
 
-using namespace Print;
+using namespace Editor;
 
-PrinterPlugin::PrinterPlugin() :
-        prefPage(0)
-{
-    setObjectName("PrinterPlugin");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PrinterPlugin";
-}
+/**
+  \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
+*/
 
-PrinterPlugin::~PrinterPlugin()
-{
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
-}
-
-bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
+TextEditorPlugin::TextEditorPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::initialize";
+        qWarning() << "creating TextEditorPlugin";
+}
+
+TextEditorPlugin::~TextEditorPlugin()
+{
+}
+
+bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add translator
-    Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
 
     return true;
 }
 
-void PrinterPlugin::extensionsInitialized()
+void TextEditorPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::extensionsInitialized";
+        qWarning() << "TextEditorPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add preferences pages
-    prefPage = new Print::Internal::PrinterPreferencesPage(this);
-    addObject(prefPage);
-
-    // Check system for existing printers
-//    if (QPrinterInfo::availablePrinters().count()) {
-    if (QPrinterInfo::availablePrinters().isEmpty()) {
-        Utils::Log::addError(this, "No printer installed in this system.");
-        Utils::warningMessageBox(tr("No printer"),
-                                 tr("No printer is configured in your system. The print preview and printing will not work."),
-                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
-                                 qApp->applicationName());
-    }
 }
 
 
-Q_EXPORT_PLUGIN(PrinterPlugin)
+Q_EXPORT_PLUGIN(TextEditorPlugin)

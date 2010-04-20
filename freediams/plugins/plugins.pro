@@ -25,14 +25,14 @@ mainwindow.depends += drugs
 mainwindow.depends += printer
 mainwindow.depends += templates
 
-printer.subdir   = ../../plugins/printerplugin
+printer.subdir   = fdprinterplugin
 printer.depends += core
 printer.depends += texteditor
 
 listview.subdir   = ../../plugins/listviewplugin
 listview.depends += core
 
-texteditor.subdir   = ../../plugins/texteditorplugin
+texteditor.subdir   = fdtexteditorplugin
 texteditor.depends += core
 
 drugs.subdir   = fddrugsplugin

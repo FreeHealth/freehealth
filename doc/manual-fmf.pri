@@ -42,11 +42,23 @@ isEmpty(HELPGENERATOR) {
 #}
 
 # create the HTML output of Doxygen
-IN_DOXYFILE = $${PWD}/usermanual/freemedforms/Doxyfile
-html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
-QMAKE_EXTRA_TARGETS += html_docs
+#IN_DOXYFILE = $${PWD}/usermanual/freemedforms/Doxyfile
+#html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
+#QMAKE_EXTRA_TARGETS += html_docs
 
 OTHER_FILES += $${PWD}/usermanual/freemedforms/freemedforms.qdoc \
                $${PWD}/usermanual/usermanager/usermanager.qdoc \
+               $${PWD}/usermanual/versionning.qdoc \
+               $${PWD}/usermanual/team.qdoc \
+               $${PWD}/usermanual/drugswidget/drugswidget.qdoc \
+               $${PWD}/usermanual/drugswidget/drugsprescribe.qdoc \
+               $${PWD}/usermanual/drugswidget/drugsdatabaseschema.qdoc \
+               $${PWD}/usermanual/drugswidget/multipledrugsdatabase.qdoc \
+               $${PWD}/usermanual/drugswidget/drugsinteractions.qdoc \
+               $${PWD}/usermanual/drugswidget/drugspreferences.qdoc \
+               $${PWD}/usermanual/richtexteditor/richtexteditor.qdoc \
+               $${PWD}/usermanual/tokensmanager/tokens.qdoc \
+               $${PWD}/usermanual/templates/templates.qdoc \
+               $${PWD}/usermanual/saverestore/saverestore.qdoc \
                $${PWD}/usermanual/freemedforms/Doxyfile \
                $${PWD}/usermanual/freemedforms/doxygen.css

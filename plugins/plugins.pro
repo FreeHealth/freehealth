@@ -4,17 +4,19 @@ SUBDIRS = \
     core \
     mainwin \
     printer \
-    xmlio \
-    basewidgets \
     listview \
     texteditor \
+    templates \
+    saverestore \
+    xmlio \
+    basewidgets \
     aggir \
     drugs \
     drugsbase \
     usermanager \
-    templates \
-    formmanager
-#    patientbase \
+    formmanager \
+    patientbase \
+#    identity \
 #    alerts \
 
 core.subdir = fmfcoreplugin
@@ -43,6 +45,10 @@ listview.depends += core
 
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
+texteditor.depends += formmanager
+
+saverestore.subdir   = saverestoreplugin
+saverestore.depends += core
 
 aggir.subdir   = aggirplugin
 aggir.depends += core
@@ -77,3 +83,6 @@ templates.depends += core
 
 formmanager.subdir = formmanagerplugin
 formmanager.depends += core
+
+#identity.subdir = identityplugin
+#identity.depends += core

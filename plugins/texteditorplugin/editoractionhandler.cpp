@@ -185,9 +185,11 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
             aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
         }
     } else {
+        qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << am->actionContainer(Core::Constants::MENUBAR) << am->actionContainer(Core::Constants::M_EDITOR);
         rootMenu = am->actionContainer(Core::Constants::MENUBAR);
         editMenu = am->actionContainer(Core::Constants::M_EDIT);
         fileMenu = am->actionContainer(Core::Constants::M_FILE);
+        qWarning() << rootMenu << editMenu << fileMenu;
         // register already existing menu actions
         aUndo  = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
         aRedo  = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
@@ -204,11 +206,8 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     connect(aPaste,SIGNAL(triggered()),this,SLOT(paste()));
 
     // Menu Edit --> text formats
-    //    tkActionContainer *medit = am->actionContainer(Core::Constants::M_EDIT);
     Core::ActionContainer *formatMenu = am->actionContainer(Core::Constants::M_FORMAT);
     if (!formatMenu) {
-        //        tkActionContainer *menubar = am->createMenuBar(Core::Constants::MENUBAR);
-        //        Q_ASSERT(menubar);
         rootMenu->appendGroup(Core::Constants::G_FORMAT);
         formatMenu = am->createMenu(Core::Constants::M_FORMAT);
         rootMenu->addMenu(formatMenu, Core::Constants::G_FORMAT);

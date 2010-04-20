@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,73 +32,40 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "printerplugin.h"
-#include "printerpreferences.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef TEXTEDITORTPLUGIN_H
+#define TEXTEDITORTPLUGIN_H
 
-#include <utils/log.h>
-#include <utils/global.h>
+#include <extensionsystem/iplugin.h>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <QtCore/QObject>
 
-#include <QtCore/QtPlugin>
-#include <QPrinterInfo>
+/**
+ * \file texteditorplugin.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.2.1
+ * \date 25 Oct 2009
+*/
 
-#include <QDebug>
+namespace Editor {
 
-using namespace Print;
-
-PrinterPlugin::PrinterPlugin() :
-        prefPage(0)
+class TextEditorPlugin : public ExtensionSystem::IPlugin
 {
-    setObjectName("PrinterPlugin");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PrinterPlugin";
-}
+    Q_OBJECT
+public:
+    TextEditorPlugin();
+    ~TextEditorPlugin();
 
-PrinterPlugin::~PrinterPlugin()
-{
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
-}
-
-bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    // Add translator
-    Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
-
-    return true;
-}
-
-void PrinterPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::extensionsInitialized";
-
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add preferences pages
-    prefPage = new Print::Internal::PrinterPreferencesPage(this);
-    addObject(prefPage);
-
-    // Check system for existing printers
-//    if (QPrinterInfo::availablePrinters().count()) {
-    if (QPrinterInfo::availablePrinters().isEmpty()) {
-        Utils::Log::addError(this, "No printer installed in this system.");
-        Utils::warningMessageBox(tr("No printer"),
-                                 tr("No printer is configured in your system. The print preview and printing will not work."),
-                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
-                                 qApp->applicationName());
-    }
-}
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
+};
 
 
-Q_EXPORT_PLUGIN(PrinterPlugin)
+}  // End Editor
+
+#endif // End TEXTEDITORTPLUGIN_H

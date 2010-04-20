@@ -33,6 +33,8 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "texteditorplugin.h"
+#include "texteditorfactory.h"
+#include "editormanager.h"
 
 #include <utils/log.h>
 
@@ -67,6 +69,10 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
         qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+
     return true;
 }
 
@@ -75,9 +81,9 @@ void TextEditorPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TextEditorPlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+    // Add some objects to the plugin manager
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    addAutoReleasedObject(new TextEditorFactory(this));
 }
 
 
