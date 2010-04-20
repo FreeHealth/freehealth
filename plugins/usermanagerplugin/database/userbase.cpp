@@ -150,6 +150,12 @@ UserBase::UserBase(QObject *parent)
     addField(Table_RIGHTS, RIGHTS_ROLE,      "RIGHTS_ROLE",     FieldIsShortText);
     addField(Table_RIGHTS, RIGHTS_RIGHTS,    "RIGHTS_RIGHTS",   FieldIsInteger);
 
+    addField(Table_GROUPS, GROUPS_ID,               "GROUP_ID",   FieldIsUniquePrimaryKey);
+    addField(Table_GROUPS, GROUPS_UID,              "GROUP_UID",  FieldIsUUID);
+    addField(Table_GROUPS, GROUPS_USER_UID,         "USER_UID",   FieldIsUUID);
+    addField(Table_GROUPS, GROUPS_PARENT_GROUP_UID, "PARENT_GROUP_UID", FieldIsUUID);
+
+
     initialize(Core::ICore::instance()->settings());
 }
 
@@ -473,7 +479,10 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     // create db structure
     // before we need to inform tkDatabase of the connectionName to use
     setConnectionName(connectionName);
-    createTables();
+    if (!createTables()) {
+        Utils::Log::addError("UserBase", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+        return false;
+    }
 
     // add general administrator
     UserData* user = new UserData;
@@ -488,26 +497,35 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     user->setRights(USER_ROLE_USERMANAGER, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
 
     QList<UserDynamicData*> list;
-    Print::TextDocumentExtra *extra = new Print::TextDocumentExtra();
-    extra->setHtml(DEFAULT_USER_HEADER);
+
+    // Create default header
+    Print::TextDocumentExtra *headerDoc = new Print::TextDocumentExtra();
+    headerDoc->setHtml(DEFAULT_USER_HEADER);
     UserDynamicData *header = new UserDynamicData();
     header->setName(USER_DATAS_GENERICHEADER);
-    header->setValue(extra->toXml());
+    header->setValue(headerDoc);
     header->setUserUuid(user->uuid());
     list << header;
+
+    // Create default footer
     UserDynamicData *footer = new UserDynamicData();
-    delete extra;
-    extra = new Print::TextDocumentExtra();
-    extra->setHtml(DEFAULT_USER_FOOTER);
+    Print::TextDocumentExtra *extraFooter = new Print::TextDocumentExtra();
+    extraFooter->setHtml(DEFAULT_USER_FOOTER);
     footer->setName(USER_DATAS_GENERICFOOTER);
-    footer->setValue(extra->toXml());
+    footer->setValue(extraFooter);
     footer->setUserUuid(user->uuid());
     list << footer;
+
     user->addDynamicDatasFromDatabase(list);
-    delete extra;
 
     saveUser(user);
-    delete user;
+    delete user; // list is deleted here
+    if (extraFooter)
+        delete extraFooter;
+    if (headerDoc)
+        delete headerDoc;
+
+
     // database is readable/writable
     Utils::Log::addMessage("UserBase", QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
 
@@ -595,11 +613,11 @@ bool UserBase::saveUser(UserData *user)
         }
         // update dynamic datas
 	if (user->hasModifiedDynamicDatasToStore()) {
-            const QList<UserDynamicData*> & datasToUpdate = user->modifiedDynamicDatas();
+            const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
 	    foreach(UserDynamicData *dyn, datasToUpdate) {
 		QSqlQuery q (DB);
-//                qWarning() << "SAVE UDD TO BASE" ;
-//                dyn->warn();
+                qWarning() << "SAVE UDD TO BASE" ;
+                dyn->warn();
 		if (dyn->id() == -1) {
                     // create the dynamic data
 		    q.prepare(prepareInsertQuery(Table_DATAS));

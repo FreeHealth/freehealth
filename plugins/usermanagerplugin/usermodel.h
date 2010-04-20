@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUSERMODEL_H
-#define TKUSERMODEL_H
+#ifndef USERMODEL_H
+#define USERMODEL_H
 
 class tkTextDocumentExtra;
 
@@ -138,4 +138,4 @@ private:
 }  // End UserPlugin
 
 
-#endif // TKUSERMODEL_H
+#endif // End USERMODEL_H

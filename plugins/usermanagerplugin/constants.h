@@ -137,7 +137,7 @@ namespace Constants {
     /** \brief Enumerates all the tables of the users' database */
     enum Tables
     {
-        Table_USERS=0, Table_DATAS, Table_RIGHTS,
+        Table_USERS=0, Table_DATAS, Table_RIGHTS, Table_GROUPS,
         Table_MaxParam
     };
 
@@ -171,6 +171,14 @@ namespace Constants {
         RIGHTS_MaxParam
     };
 
+    enum GROUPSfields
+    {
+        GROUPS_ID = 0,
+        GROUPS_UID,
+        GROUPS_USER_UID,
+        GROUPS_PARENT_GROUP_UID
+    };
+
 }  // End Constants
 
 /**
@@ -186,8 +194,8 @@ namespace User
         Id = 0,
         Uuid,           /*!< \brief Unique identifier the each users */
         Validity,       /*!< \brief Validity of this user */
-        Login,          /*!< \brief Crypted login \sa tkUserGlobal::loginForSQL() */
-        Password,       /*!< \brief Crypted password \sa tkUserGlobal::crypt() */
+        Login,          /*!< \brief Crypted login \sa UserGlobal::loginForSQL() */
+        Password,       /*!< \brief Crypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */
         Name,           /*!< \brief Name */
         SecondName,     /*!< \brief Second name */
@@ -195,7 +203,8 @@ namespace User
         Mail,           /*!< \brief Mail address */
         Language,       /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */
-        LanguageIndex,  /*!< \brief Language index from tkTranslator::availbleLanguages() */
+        LanguageIndex,  /*!< \brief Language index from Core::Translators::availableLanguages() */
+
         // ORDER CAN CHANGE
         GenderIndex, TitleIndex, Gender, Title,
         Adress, Zipcode, City, Country, Tel1, Tel2, Tel3, Fax, PractitionerId,
