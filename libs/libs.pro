@@ -7,4 +7,5 @@ SUBDIRS +=  \
     medicalutils \
     aggregation \
     extensionsystem \
-    utils
+    utils \
+    ../contrib/quazip/
