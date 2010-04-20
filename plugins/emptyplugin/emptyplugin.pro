@@ -12,3 +12,7 @@ HEADERS = emptyplugin.h empty_exporter.h
 SOURCES = emptyplugin.cpp
 
 OTHER_FILES = Empty.pluginspec
+
+TRANSLATIONS += $${SOURCES_TRANSLATIONS}/emptyplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS}/emptyplugin_de.ts \
+                $${SOURCES_TRANSLATIONS}/emptyplugin_es.ts

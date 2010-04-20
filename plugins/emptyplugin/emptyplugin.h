@@ -48,8 +48,8 @@
 /**
  * \file emptyplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.4.0
+ * \date 19 Apr 2010
 */
 
 namespace Empty {
@@ -66,6 +66,6 @@ public:
 };
 
 
-} // End EMPTYTPLUGIN_H
+}  // End namespace Empty
 
-#endif
+#endif  // End EMPTYTPLUGIN_H

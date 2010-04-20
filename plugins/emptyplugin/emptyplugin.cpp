@@ -61,6 +61,10 @@ bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
         qWarning() << "EmptyPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
+
     return true;
 }
 
@@ -69,8 +73,6 @@ void EmptyPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
