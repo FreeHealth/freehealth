@@ -172,6 +172,13 @@ void ActionContainerPrivate::appendGroup(const QString &group)
 {
     int gid = UniqueIDManager::instance()->uniqueIdentifier(group);
     m_groups << gid;
+
+    // Add separator
+    ActionManagerPrivate *am = ActionManagerPrivate::instance();
+    QAction *sep = new QAction(this);
+    sep->setSeparator(true);
+    Command *cmd = am->registerAction(sep, QLatin1String("Sep.")+group, QList<int>() << Constants::C_GLOBAL_ID);
+    addAction(cmd, group);
 }
 
 QAction *ActionContainerPrivate::insertLocation(const QString &group) const
