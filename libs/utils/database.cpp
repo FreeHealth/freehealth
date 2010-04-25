@@ -320,17 +320,17 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     case SQLite:
         {
             if ((!QFile(fileName).exists()) ||
-                 (QFileInfo(fileName).size() == 0)) {
+                (QFileInfo(fileName).size() == 0)) {
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                                                                              "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                         return false;
                     }
                 } else { // Warn Only
-                        Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
-                        return false;
+                    Log::addMessage("Database", QCoreApplication::translate("Database",
+                                                                            "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                    return false;
                 }
             }
             break;
@@ -441,7 +441,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     {
         case SQLite :
         {
-             DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
+             DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
              DB.setDatabaseName(QDir::cleanPath(fileName));
              break;
          }
@@ -632,6 +632,23 @@ QString Database::selectDistinct(const int & tableref, const int & fieldref, con
     return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
 }
 
+int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
+{
+    QString req = QString("SELECT count(%1) FROM %2").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
+    if (!filter.isEmpty())
+        req += " WHERE " + filter;
+    QSqlQuery q(req, database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0).toInt();
+        } else {
+            Utils::Log::addQueryError("Database", q);
+        }
+    } else {
+        Utils::Log::addQueryError("Database", q);
+    }
+    return -1;
+}
 
 QString Database::select(const int & tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions)const
 {
@@ -984,6 +1001,9 @@ QString DatabasePrivate::getTypeOfField(const int & fieldref) const
             break;
         case Database::FieldIsDate :
             toReturn = "date";
+            break;
+    case Database::FieldIsOneChar :
+            toReturn = "varchar(1)";
             break;
         case Database::FieldIsInteger :
             toReturn = "integer";
