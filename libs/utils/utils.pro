@@ -7,14 +7,11 @@ DEFINES *= UTILS_LIBRARY
 # include config file
 include(../libsworkbench.pri)
 include(../utils_dependencies.pri)
-
 CONFIG *= dll \
     sql \
     network
-
 QT *= sql \
     network
-
 HEADERS += global_exporter.h \
     global.h \
     database.h \
@@ -29,7 +26,8 @@ HEADERS += global_exporter.h \
     widgets/QButtonLineEdit.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
-    widgets/spinboxdelegate.h
+    widgets/spinboxdelegate.h \
+    randomizer.h
 SOURCES += global.cpp \
     database.cpp \
     log.cpp \
@@ -41,7 +39,8 @@ SOURCES += global.cpp \
     widgets/lineeditechoswitcher.cpp \
     widgets/QButtonLineEdit.cpp \
     widgets/colorbuttonchooser.cpp \
-    widgets/spinboxdelegate.cpp
+    widgets/spinboxdelegate.cpp \
+    randomizer.cpp
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
