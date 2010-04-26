@@ -62,6 +62,7 @@ CorePlugin::CorePlugin() : m_CoreImpl(0)
 
 CorePlugin::~CorePlugin()
 {
+    qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
 //    if (m_welcomeMode) {
 //        removeObject(m_welcomeMode);
 //        delete m_welcomeMode;
@@ -74,7 +75,8 @@ CorePlugin::~CorePlugin()
 //    // delete FileIconProvider singleton
 //    delete FileIconProvider::instance();
 //
-//    delete m_mainWindow;
+//    if (m_CoreImpl->mainWindow())
+//        delete m_CoreImpl->mainWindow();
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)

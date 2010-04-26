@@ -1,10 +1,18 @@
-#ifndef TKCONTEXTMANAGER_H
-#define TKCONTEXTMANAGER_H
+#ifndef CONTEXTMANAGER_H
+#define CONTEXTMANAGER_H
 
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/contextmanager/icontext.h>
 
 #include <QObject>
+
+/**
+ * \file contextmanager.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 25 Apr 2010
+ * \brief adaptation of QtCreator MainWindow -> context management
+*/
 
 namespace Core {
 

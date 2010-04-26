@@ -61,6 +61,7 @@ namespace Constants {
     const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.groupDrugs";
     const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.groupSearch";
     const char * const  G_PLUGINS_MODES         =  "DrugsPlugins.groupModes";
+    const char * const  G_PLUGINS_INTERACTIONS  =  "DrugsPlugins.groupInteractions";
 
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";

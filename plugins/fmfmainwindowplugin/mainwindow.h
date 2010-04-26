@@ -63,6 +63,10 @@ namespace Form {
 class IFormIO;
 }
 
+namespace Utils {
+class FancyTabWidget;
+}
+
 namespace MainWin {
 namespace Internal {
 //namespace Ui {
@@ -116,18 +120,16 @@ protected:
     void changeEvent(QEvent *event);
 
 public:
-    QToolBar *fileToolBar;
-    QToolBar *editToolBar;
-    QAction *aUserManager;
+    Utils::FancyTabWidget *m_modeStack;
+//    Core::PatientBar *m_PatientBar;
 
     bool              m_HelpTextShow;
     uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
     int               m_TimerId;
-    //     mfRecovererThread thread;
     bool              m_OpenLastOpenedForm;
     QByteArray        windowState;
-    //     QPointer<tkUserManager> m_UserManager;
-//    Internal::Ui::MainWindow *m_ui;
+
+    //     mfRecovererThread thread;
 };
 
 } // End Core

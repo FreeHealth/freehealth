@@ -59,7 +59,7 @@ public:
             QStringList z = s.split("\t");
             if (z.count() != 2)
                 continue;
-            zipCodes.insert(z.at(1).toInt(), z.at(0));
+            zipCodes.insert(z.at(1).toInt(), z.at(0).toUpper());
         }
     }
 
@@ -71,7 +71,7 @@ public:
         if (c.isEmpty())
             Utils::Log::addError("Randomizer", "Can not read french words.");
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            words.append(s);
+            words.append(s.toUpper());
         }
     }
 

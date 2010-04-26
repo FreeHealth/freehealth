@@ -53,6 +53,7 @@ const char * const  M_FILE               = "menuFile";          /*!< \brief Defa
 const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_TEMPLATES          = "menuTemplates";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char * const  M_EDIT               = "menuEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
+const char * const  M_PATIENTS           = "menuPatients";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char* const   M_EDITOR_EDIT        = "menu.editor.edition";
 const char* const   M_EDITOR_FILE        = "menu.editor.file";
 const char * const  M_EDIT_SELECT        = "menuEdit.Select";   /*!< \brief Default menu Edit/Select object name  \ingroup constants_actionmanager */
@@ -88,10 +89,10 @@ const char * const G_FILE_EXIT           = "grFile.Exit";     /*!< \brief Defaul
 
 // Templates' menu groups
 const char * const G_TEMPLATES           = "grTemplates";           /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_TEMPLATES_NEW       = "grTemplatesNew";           /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_TEMPLATES_MANAGER   = "grTemplatesManager";           /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_TEMPLATES_EXTRAS    = "grTemplatesExtras";           /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_TEMPLATES_OTHERS    = "grTemplatesOthers";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_NEW       = "grTemplates.New";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_MANAGER   = "grTemplates.Manager";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_EXTRAS    = "grTemplates.Extras";           /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_TEMPLATES_OTHERS    = "grTemplates.Others";           /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 
 // edit menu groups
@@ -106,6 +107,10 @@ const char * const G_EDIT_ADVANCED       = "grEdit.Advanced";  /*!< \brief Defau
 const char * const G_EDIT_FIND           = "grEdit.Find";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_EDITOR         = "grEdit.Editor";    /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_EDIT_OTHER          = "grEdit.Other";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+
+// patients menu groups
+const char * const G_PATIENTS            = "grPatients";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+
 
 // format menu groups
 const char * const G_FORMAT              = "grFormat";            /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -269,6 +274,13 @@ const char * const  A_CHECKUPDATE      = "actionCheckUpdate";      /*!< \brief D
 const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 
+//modes
+const char * const MODE_PATIENT_SEARCH   = "PatientSearch";
+const char * const MODE_PATIENT_FILE     = "PatientFile";
+const int          P_MODE_PATIENT_SEARCH = 100;
+const int          P_MODE_PATIENT_FILE   = 90;
+
+
 const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
 const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
 const char * const  FREEACCOUNT_SPLASHSCREEN = "freeaccount.png";
@@ -369,6 +381,13 @@ const char * const  ICONEDITUSER      = "edituser.png";
 const char * const  ICONCLEARUSER     = "editclear.png";
 const char * const  ICONDELETEUSER    = "deleteuser.png";
 const char * const  ICONNEWUSER       = "adduser.png";
+
+// patients icons --> MediumSize / BigSize
+const char * const  ICONPATIENTS      = "patientsearch.png";
+const char * const  ICONMALE          = "male.png";
+const char * const  ICONFEMALE        = "female.png";
+const char * const  ICONHERMAPHRODISM = "";
+const char * const  ICONPATIENTFILES  = "patientfiles.png";
 
 
 // Contexts

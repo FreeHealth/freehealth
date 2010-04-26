@@ -60,8 +60,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="205.61851"
-     inkscape:cy="258.70504"
+     inkscape:cx="319.90423"
+     inkscape:cy="487.27647"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -902,5 +902,25 @@
          y="50.527412"
          style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Monospace;-inkscape-font-specification:Monospace"
          id="tspan7443" /></text>
+    <rect
+       style="opacity:0.72000002;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.23699999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.54947917"
+       id="rect7447"
+       width="32"
+       height="32"
+       x="156.14285"
+       y="492.1506"
+       rx="1.7231278"
+       ry="9.7902908" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia;-inkscape-font-specification:Georgia Bold"
+       x="141.1907"
+       y="542.59735"
+       id="text7449"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan7451"
+         x="141.1907"
+         y="542.59735">Mails / Faxes</tspan></text>
   </g>
 </svg>

@@ -73,6 +73,7 @@ public:
     void connectFileActions();
 
     void createTemplatesMenu();
+    void createPatientMenu();
 
     void createEditMenu();
     void createEditActions();

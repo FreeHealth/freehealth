@@ -337,7 +337,7 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
 
 bool XmlFormIO::createElement(Form::FormItem *item, QDomElement &element)
 {
-    qWarning() << "XmlFormIO create element" << element.text();
+//    qWarning() << "XmlFormIO create element" << element.text();
     // new item
     if (element.tagName().compare(Constants::TAG_NEW_ITEM, Qt::CaseInsensitive)==0) {
         if (item) {

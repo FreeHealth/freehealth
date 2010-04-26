@@ -67,6 +67,9 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
+
     // Initialize template database
     Templates::TemplateBase::instance();
 
@@ -77,9 +80,6 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

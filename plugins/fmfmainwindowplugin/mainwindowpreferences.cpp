@@ -46,6 +46,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/theme.h>
 #include <coreplugin/constants.h>
 
 using namespace MainWin::Internal;
@@ -53,6 +54,8 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+
 
 MainWindowPreferencesPage::MainWindowPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
@@ -87,6 +90,8 @@ void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    defaultvalues.insert(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -108,8 +113,34 @@ MainWindowPreferencesWidget::MainWindowPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    // feed with actual values
+    setDatasToUi();
+    log->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    pass->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    pass->toogleEchoMode();
+    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
+        on_testButton_clicked();
+}
+
+void MainWindowPreferencesWidget::setDatasToUi()
+{
     updateCheckingCombo->setCurrentIndex(settings()->value(Utils::Constants::S_CHECKUPDATE).toInt());
+    useExternalDB->setChecked(settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool());
+    host->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toByteArray()));
+    log->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG).toByteArray()));
+    pass->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS).toByteArray()));
+    port->setValue(QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray())).toInt());
+}
+
+static void saveExternalDatabase(Core::ISettings *s, bool use, const QString &host, const QString &log, const QString &pass, const int port)
+{
+    if (s->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool() != use) {
+        s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, use);
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(host.toAscii().toBase64()));
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(port).toAscii().toBase64());
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(log.toAscii().toBase64()));
+        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(pass.toAscii().toBase64()));
+        Core::ICore::instance()->databaseServerLoginChanged();
+    }
 }
 
 void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -120,8 +151,8 @@ void MainWindowPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    // manage font size
     s->setValue(Utils::Constants::S_CHECKUPDATE, updateCheckingCombo->currentIndex());
+    saveExternalDatabase(s, useExternalDB->isChecked(), host->text(), log->text(), pass->text(), port->value());
 }
 
 void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -129,8 +160,31 @@ void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
     s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
     s->sync();
 }
+
+void MainWindowPreferencesWidget::on_testButton_clicked()
+{
+    testConnectionLabel->setText(tr("Test in progress..."));
+    {
+        QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "FREEDIAMS_MAINWIN_CONNECTION_TESTER");
+        test.setHostName(host->text());
+        test.setPort(port->value());
+        test.setUserName(log->text());
+        test.setPassword(pass->text());
+        if (!test.open()) {
+            testButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
+            testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
+            testConnectionLabel->setToolTip(test.lastError().text());
+        } else {
+            testButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+            testConnectionLabel->setText(tr("Connected"));
+        }
+    }
+    QSqlDatabase::removeDatabase("FREEDIAMS_MAINWIN_CONNECTION_TESTER");
+}
+
 
 void MainWindowPreferencesWidget::changeEvent(QEvent *e)
 {

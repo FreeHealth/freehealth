@@ -427,6 +427,10 @@ Command *ActionManagerPrivate::command(const QString &id) const
 ActionContainer *ActionManagerPrivate::actionContainer(const QString &id) const
 {
     const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
+//    foreach(const int i, m_idContainerMap.keys()) {
+//        qWarning() << UniqueIDManager::instance()->stringForUniqueIdentifier(i);
+//    }
+
     const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
     if (it == m_idContainerMap.constEnd()) {
         if (warnAboutFindFailures)

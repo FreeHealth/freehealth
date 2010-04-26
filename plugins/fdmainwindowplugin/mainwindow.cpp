@@ -258,7 +258,6 @@ void MainWindow::extensionsInitialized()
 
     messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
-//    Drugs::Internal::DrugsManager::instance()->setCurrentView(m_ui->m_CentralWidget);
 
     // SelectionOnly ?
     if (commandLine()->value(Core::CommandLine::CL_SelectionOnly).toBool()) {
@@ -267,7 +266,6 @@ void MainWindow::extensionsInitialized()
         // Unable some actions in menus
     //    aPrint->setEnabled(false);
     //    aPrintPreview->setEnabled(false);
-        /** \todo Check the good action in the menu */
         // Inform the widgets
         DrugsWidget::DrugsWidgetManager::instance()->setEditMode(DrugsWidget::DrugsWidgetManager::SelectOnly);
     }

@@ -57,8 +57,7 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (m_MainWindow)
-        delete m_MainWindow;
+    qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;
@@ -72,7 +71,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
+    m_MainWindow = new MainWindow;
     Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->initialize(arguments,errorString);
     return true;

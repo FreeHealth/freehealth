@@ -53,6 +53,8 @@
 */
 
 namespace Form {
+namespace Internal {
+class FormManagerMode;
 
 class FormManagerPlugin : public ExtensionSystem::IPlugin
 {
@@ -63,9 +65,11 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+private:
+    FormManagerMode *mode;
 };
 
-
+}
 }
 
 #endif  // End FORM_MANAGER_TPLUGIN_H

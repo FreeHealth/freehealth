@@ -358,7 +358,9 @@ FormPage *FormMain::createPage(const QString &uuid)
 
 FormMain::~FormMain()
 {
-    ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
+    /** \todo this is buggy */
+//    if (m_DebugPage)
+//        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
 
 inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)

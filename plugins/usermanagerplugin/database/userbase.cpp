@@ -457,7 +457,6 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
                     CreationOption createOption
                    )
 {
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     Q_UNUSED(access);
     Q_UNUSED(login);
     Q_UNUSED(pass);
@@ -616,8 +615,8 @@ bool UserBase::saveUser(UserData *user)
             const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
 	    foreach(UserDynamicData *dyn, datasToUpdate) {
 		QSqlQuery q (DB);
-                qWarning() << "SAVE UDD TO BASE" ;
-                dyn->warn();
+//                qWarning() << "SAVE UDD TO BASE" ;
+//                dyn->warn();
 		if (dyn->id() == -1) {
                     // create the dynamic data
 		    q.prepare(prepareInsertQuery(Table_DATAS));

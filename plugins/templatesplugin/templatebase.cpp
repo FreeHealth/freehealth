@@ -338,11 +338,16 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
     QSqlDatabase DB;
     if (driver == SQLite) {
         DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-        if (!QDir(pathOrHostName).exists())
-            if (!QDir().mkpath(pathOrHostName))
-                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
+        if (!QDir(pathOrHostName).exists()) {
+            if (!QDir().mkpath(pathOrHostName)) {
+                Utils::Log::addError(this, tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
+            } else {
+                Utils::Log::addMessage(this, tkTr(Trans::Constants::CREATE_DIR_1).arg(pathOrHostName));
+            }
+        }
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
-        DB.open();
+        if (!DB.open())
+            Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {

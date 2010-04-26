@@ -33,6 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "formmanagerplugin.h"
+#include "formmanagermode.h"
 
 #include <utils/log.h>
 
@@ -44,8 +45,11 @@
 #include <QDebug>
 
 using namespace Form;
+using namespace Internal;
 
-FormManagerPlugin::FormManagerPlugin()
+
+FormManagerPlugin::FormManagerPlugin() :
+        mode(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FormManagerPlugin";
@@ -53,6 +57,12 @@ FormManagerPlugin::FormManagerPlugin()
 
 FormManagerPlugin::~FormManagerPlugin()
 {
+    qWarning() << "FormManagerPlugin::~FormManagerPlugin()";
+    if (mode) {
+        removeObject(mode);
+        delete mode;
+        mode = 0;
+    }
 }
 
 bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -61,6 +71,10 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         qWarning() << "FormManagerPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+
     return true;
 }
 
@@ -69,9 +83,11 @@ void FormManagerPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Add mode
+    mode = new FormManagerMode(this);
+    addObject(mode);
 }
 
 

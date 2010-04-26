@@ -344,6 +344,7 @@ namespace Time {
         const char* const PATH_1_ISNOT_EMPTY                 = QT_TRANSLATE_NOOP("tkConstants", "Path %1 is not empty");
         const char* const PATH_1_CONTAINS_DIRS               = QT_TRANSLATE_NOOP("tkConstants", "Path %1 contains dirs");
         const char* const PATH_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "Path %1 can not be removed");
+        const char* const CREATE_DIR_1                       = QT_TRANSLATE_NOOP("tkConstants", "Creating dir %1");
         const char* const FILE_1_DOESNOT_EXISTS              = QT_TRANSLATE_NOOP("tkConstants", "File %1 does not exist");
         const char* const FILE_1_ISNOT_READABLE              = QT_TRANSLATE_NOOP("tkConstants", "File %1 is not readable");
         const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
@@ -445,6 +446,10 @@ namespace Time {
 
         // Patient related
         const char* const PATIENT_NAME = QT_TRANSLATE_NOOP("tkConstants", "Patient Name");
+        const char* const PATIENT      = QT_TRANSLATE_NOOP("tkConstants", "Patient");
+        const char* const PATIENTS     = QT_TRANSLATE_NOOP("tkConstants", "Patients");
+        const char* const PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Patient informations");
+        const char* const PATIENT_DATABASE  = QT_TRANSLATE_NOOP("tkConstants", "Patient database");
 
         // ShortCut keys
          /*: Text Align Left shortcut key */

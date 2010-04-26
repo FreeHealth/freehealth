@@ -38,6 +38,8 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
+#include <utils/widgets/fancyactionbar.h>
+#include <utils/widgets/fancytabwidget.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -45,6 +47,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
+#include <coreplugin/modemanager/modemanager.h>
 
 #include <formmanagerplugin/iformio.h>
 #include <formmanagerplugin/iformitem.h>
@@ -66,9 +69,6 @@
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
 
-//#include "ui_mainwindow.h"
-
-// include Qt headers
 #include <QTextEdit>
 #include <QTextStream>
 #include <QCloseEvent>
@@ -92,9 +92,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
-inline static ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
@@ -103,8 +103,9 @@ static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finish
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-MainWindow::MainWindow( QWidget * parent )
-          : Core::IMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) :
+        Core::IMainWindow(parent),
+        m_modeStack(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -118,10 +119,12 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_ASSERT(contextManager());
     // create menus
     createFileMenu();
+    createPatientMenu();
     createEditMenu();
     createFormatMenu();
     createPluginsMenu();
     createConfigurationMenu();
+    createTemplatesMenu();
     createHelpMenu();
 
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
@@ -147,11 +150,13 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |
+            Core::MainWindowActions::A_PluginsAbout |
             Core::MainWindowActions::A_AppHelp |
             Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_FormsAbout |
-            Core::MainWindowActions::A_PluginsAbout
+            Core::MainWindowActions::A_CheckUpdate //|
+//            Core::MainWindowActions::A_QtAbout
             );
+    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
 
     actions.createEditActions(true);
     createActions(actions);
@@ -162,7 +167,12 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+
     readSettings();
+
+    // Create Mode stack
+    m_modeStack = new Utils::FancyTabWidget;
+    modeManager()->init(m_modeStack);
 
     return true;
 }
@@ -174,9 +184,6 @@ void MainWindow::extensionsInitialized()
         return;
     }
 
-    // Creating MainWindow interface
-//    m_ui = new Internal::Ui::MainWindow();
-//    m_ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION) );
@@ -195,16 +202,21 @@ void MainWindow::extensionsInitialized()
     }
 
     // Open Last Opened Forms is necessary
-    if (fileManager()->recentFiles().count() > 0) {
+//    if (fileManager()->recentFiles().count() > 0) {
         connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(openLastOpenedForm()));
-    }
+//    }
 
     finishSplash(this);
+
+//    modeManager()->addWidget(new QWidget(this));
+    setCentralWidget(m_modeStack);
+
     show();
 }
 
 MainWindow::~MainWindow()
 {
+    qWarning() << "MainWindow::~MainWindow()";
 }
 
 /** \brief Close the main window and the application */
@@ -298,7 +310,10 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
 //        if (formManager()->forms().at(0)->formWidget())
 //            vb->addWidget(formManager()->forms().at(0)->formWidget());
 //    }
-    setCentralWidget(w);
+
+    /** \todo Add loaded form inside the FormManagerPlaceHolder */
+//    setCentralWidget(w);
+
 //    if (root) {
 //        // inform form manager or create ui
 //        formManager()->setFormObjects(root);
@@ -310,6 +325,10 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
 void MainWindow::aboutToShowRecentFiles()
 {
     Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_FILE_RECENTFILES);
+    if (!recentsMenu)
+        return;
+    if (!recentsMenu->menu())
+        return;
     recentsMenu->menu()->clear();
 
     bool hasRecentFiles = false;
@@ -371,20 +390,6 @@ void MainWindow::createStatusBar()
 {
     statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
 }
-
-//void MainWindow::createToolBars()
-//{
-//    tkActionManager *am = mfCore::actionManager();
-//    fileToolBar = addToolBar("");
-//    fileToolBar->setObjectName("fileToolBar"); // objectName() is used for state save/restoration
-//    fileToolBar->addAction(am->action(A_FILE_NEW));   //newAct);
-//    fileToolBar->addAction(am->action(A_FILE_OPEN));  //openAct);
-//    fileToolBar->addAction(am->action(A_FILE_SAVE));  //saveAct);
-//    fileToolBar->addAction(am->action(A_FILE_PRINT));  //printAct);
-//    fileToolBar->addAction(am->action(A_INTERPRETOR_GENERAL));  //interpretationAct);
-//    fileToolBar->addAction(am->action(A_HELPTEXT_TOGGLER));  //helpTextAct);
-//    fileToolBar->addAction(am->action(A_ABOUTFORM));  //aboutThisFormAct);
-//}
 
 /**
   \brief Open the preferences dialog

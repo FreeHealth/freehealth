@@ -136,8 +136,8 @@ void DrugSelector::createToolButtons()
 {
     m_SearchToolButton = new QToolButton(searchLine);   // parent object will be redefined
     m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
-    m_SearchToolButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONSEARCH));
-    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+    m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    Core::ActionManager *am = actionManager();
     Core::Command *cmd = am->command(Constants::A_SEARCH_COMMERCIAL);
     m_SearchToolButton->addAction(cmd->action());
     cmd->action()->trigger();
@@ -149,7 +149,7 @@ void DrugSelector::createToolButtons()
     m_DrugsHistoricButton = new QToolButton(searchLine);
     m_DrugsHistoricButton->setPopupMode(QToolButton::InstantPopup);
     m_DrugsHistoricButton->setToolTip(tr("Selected drugs historic."));
-    m_DrugsHistoricButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT));
+    m_DrugsHistoricButton->setIcon(theme()->icon(Core::Constants::ICONEDIT));
 
     // add buttons to search line
     searchLine->setLeftButton(m_SearchToolButton);

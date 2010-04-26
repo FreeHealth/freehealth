@@ -122,7 +122,8 @@ TemplatesViewManager *TemplatesViewManager::instance(QObject *parent)
 
 TemplatesViewManager::TemplatesViewManager(QObject *parent) : TemplatesViewActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
+    if (contextManager())
+        connect(contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
 }
 
@@ -174,6 +175,9 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
         m_CurrentView(0),
         m_IsLocked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool())
 {
+    if (!actionManager())
+        return;
+
     QList<int> editContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_EDIT);
     QList<int> lockContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK);
     QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
@@ -239,6 +243,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                                         Trans::Constants::TEMPLATES_DATABASE_INFORMATIONS_TEXT,
                                         QList<int>() << Core::Constants::C_GLOBAL_ID, this);
         connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformations()));
+        contextManager()->updateContext();
     }
 
     updateActions();

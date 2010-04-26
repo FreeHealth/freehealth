@@ -71,9 +71,11 @@ public:
     explicit MainWindowPreferencesWidget(QWidget *parent = 0);
 
     static void writeDefaultSettings(Core::ISettings *s);
+    void setDatasToUi();
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
+    void on_testButton_clicked();
 
 protected:
     virtual void changeEvent(QEvent *e);

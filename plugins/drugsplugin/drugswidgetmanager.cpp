@@ -66,6 +66,7 @@ using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -168,6 +169,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(DrugsWidget::Constants::C_DRUGS_PLUGINS);
+    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
@@ -175,6 +177,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
+        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
         menu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
     }
     Q_ASSERT(menu);
@@ -224,7 +227,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONEYES));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_VIEW_INTERACTIONS, ctx);
     cmd->setTranslations(Trans::Constants::VIEWINTERACTIONS_TEXT);
-    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
     connect(a, SIGNAL(triggered()), this, SLOT(viewInteractions()));
 
     a = aToggleTestingDrugs = new QAction(this);
@@ -233,7 +236,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setChecked(true);
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS, ctx);
     cmd->setTranslations(DrugsWidget::Constants::TOGGLETESTINGDRUGS_TEXT);
-    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
     connect(a, SIGNAL(triggered()), this, SLOT(toggleTestingDrugs()));
 
     // Search method menu
@@ -405,6 +408,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     menu->addAction(cmd, G_PLUGINS_DRUGS);
     connect(aResetPrescriptionSentenceToDefault,SIGNAL(triggered()),this,SLOT(resetPrescriptionSentenceToDefault()));
 
+    contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 }
 

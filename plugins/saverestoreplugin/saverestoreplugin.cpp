@@ -68,6 +68,10 @@ bool SaveRestorePlugin::initialize(const QStringList &arguments, QString *errorS
         qWarning() << "SaveRestorePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("saverestoreplugin");
+
     return true;
 }
 
@@ -76,8 +80,6 @@ void SaveRestorePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "SaveRestorePlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("saverestoreplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     page = new SaveRestorePage(this);
     addObject(page);

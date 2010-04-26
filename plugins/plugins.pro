@@ -74,6 +74,7 @@ usermanager.depends += listview
 
 patientbase.subdir = patientbaseplugin
 patientbase.depends += core
+patientbase.depends += usermanager
 
 alerts.subdir = alertsplugin
 alerts.depends += core

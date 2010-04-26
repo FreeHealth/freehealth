@@ -52,6 +52,7 @@ XmlFormIOPlugin::XmlFormIOPlugin()
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
 {
+    qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
 }
 
 bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)

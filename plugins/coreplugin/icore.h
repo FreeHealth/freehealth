@@ -43,16 +43,17 @@
 #include <coreplugin/core_exporter.h>
 
 #include <QtCore/QObject>
+#include <QString>
+
 class QSplashScreen;
 class QPixmap;
 class QWidget;
-class QString;
 
 /**
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.3.0
- * \date 28 Jan 2010
+ * \version 0.4.0
+ * \date 24 Apr 2010
 */
 
 
@@ -68,7 +69,7 @@ class Translators;
 class ITheme;
 class ISettings;
 class IMainWindow;
-//class IFormManager;
+class ModeManager;
 class CommandLine;
 class Patient;
 class FileManager;
@@ -97,26 +98,24 @@ public:
     virtual ActionManager *actionManager() const = 0;
     virtual ContextManager *contextManager() const = 0;
     virtual UniqueIDManager *uniqueIDManager() const = 0;
+    virtual FileManager *fileManager() const = 0;
 
     virtual ITheme *theme() const = 0;
     virtual Translators *translators() const = 0;
-
     virtual ISettings *settings() const = 0;
-
-    virtual IMainWindow *mainWindow() const = 0;
-
     virtual CommandLine *commandLine() const = 0;
-
     virtual Utils::UpdateChecker *updateChecker() const = 0;
 
     virtual void setMainWindow(IMainWindow *) = 0;
+    virtual IMainWindow *mainWindow() const = 0;
 
     // Use this with precaution (only used by FreeDiams)
     virtual Patient *patient() const {return 0;}
 
 //    virtual IFormManager *formManager() const = 0;
 
-    virtual FileManager *fileManager() const = 0;
+    virtual ModeManager *modeManager() const {return 0;}
+
 
 //    virtual MessageManager *messageManager() const = 0;
 //    virtual EditorManager *editorManager() const = 0;
@@ -124,7 +123,6 @@ public:
 //    virtual ScriptManager *scriptManager() const = 0;
 //    virtual VariableManager *variableManager() const = 0;
 //    virtual VCSManager *vcsManager() const = 0;
-//    virtual ModeManager *modeManager() const = 0;
 //    virtual MimeDatabase *mimeDatabase() const = 0;
 //
 //    virtual QSettings *settings() const = 0;
@@ -145,6 +143,7 @@ Q_SIGNALS:
     void coreAboutToClose();
 
     void databaseServerChanged();
+
 };
 
 } // namespace Core

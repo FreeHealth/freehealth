@@ -43,6 +43,9 @@
 
 #include <coreplugin/icore.h>
 
+#include <QPixmap>
+#include <QSplashScreen>
+
 namespace Utils {
 class UpdateChecker;
 }
@@ -90,6 +93,7 @@ public:
     void setMainWindow(IMainWindow *window);
 
 //    FormManager *formManager() const;
+    virtual ModeManager *modeManager() const;
 
     CommandLine *commandLine() const;
     Utils::UpdateChecker *updateChecker() const;
@@ -112,6 +116,7 @@ private:
     Utils::UpdateChecker *m_UpdateChecker;
     FileManager *m_FileManager;
     CommandLine *m_CommandLine;
+    ModeManager *m_ModeManager;
 };
 
 } // namespace Internal

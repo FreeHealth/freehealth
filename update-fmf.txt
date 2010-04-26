@@ -1,13 +1,16 @@
-version=0.0.9
+version=0.2.0
 {
-    * September 2009
+    * 2010
     * New features :
-      * New plugin : AGGIR for french only
+      * Patient database implemented
+      * New plugins : AGGIR for french only, AlertPlugin, FormManager
       * Special build for linux integration
       * Recent file manager implemented
+      * DrugsWidget --> Read FreeDiams changelog
 
     * Technical improvements
       * Complete rewrite of the plugin management
+      * UserManager is ready for group management
       * New architecture of the application
       * Some new libs
 }

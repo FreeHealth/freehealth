@@ -53,6 +53,11 @@
 #include <QFileDialog>
 #include <QProgressDialog>
 
+
+/**
+  \todo Manage MySQL databases.
+*/
+
 using namespace SaveRestore;
 using namespace SaveRestore::Internal;
 using namespace Trans::ConstantTranslations;
@@ -68,7 +73,7 @@ namespace SaveRestore {
 //////////////////////////////////////  DrugsUserPage  //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 SaveRestorePage::SaveRestorePage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("AccountUserOptionsPage"); }
+        IOptionsPage(parent), m_Widget(0) { setObjectName("SaveRestorePage"); }
 
 SaveRestorePage::~SaveRestorePage()
 {

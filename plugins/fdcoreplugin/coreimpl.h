@@ -96,6 +96,7 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *);
 
+    
 //    FormManager *formManager() const;
     FileManager *fileManager() const;
 

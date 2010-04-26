@@ -193,6 +193,18 @@ void MainWindowActionHandler::createEditMenu()
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+void MainWindowActionHandler::createPatientMenu()
+{
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    Q_ASSERT(menubar);
+    menubar->appendGroup(Constants::G_PATIENTS);
+
+    ActionContainer *menu = actionManager()->createMenu(Constants::M_PATIENTS);
+    menubar->addMenu(menu, Constants::G_PATIENTS);
+    menu->setTranslations(Trans::Constants::PATIENTS);
+}
+
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createFormatMenu()
 {
     ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
@@ -306,6 +318,7 @@ void MainWindowActionHandler::createFileActions(int actions)
 
     // Open Action
     if (actions & Core::MainWindowActions::A_FileOpen) {
+        // Create action
         a = aOpen = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONOPEN));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_OPEN, ctx);

@@ -101,6 +101,7 @@ UserManagerPlugin::UserManagerPlugin() :
 
 UserManagerPlugin::~UserManagerPlugin()
 {
+    qWarning() << "UserManagerPlugin::~UserManagerPlugin()";
 }
 
 bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorString)

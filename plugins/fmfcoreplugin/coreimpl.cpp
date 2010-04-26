@@ -49,17 +49,13 @@
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
-
-//#include <coreplugin/formmanager.h>
+#include <coreplugin/modemanager/modemanager.h>
 
 #include <fmfcoreplugin/commandlineparser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
-#include <translationutils/constanttranslations.h>
-
-
 #include <translationutils/constanttranslations.h>
 
 #include <QtCore/QDir>
@@ -89,7 +85,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_Splash(0),
         m_MainWindow(0),
         m_ActionManager(0),
-        m_ContextManager(0)
+        m_ContextManager(0),
+        m_ModeManager(0)
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
@@ -167,9 +164,14 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     Q_EMIT coreAboutToClose();
-//    delete m_MainWindow;
-    delete m_UID;
-    delete m_CommandLine;
+    if (m_UID)
+        delete m_UID;
+    if (m_CommandLine)
+        delete m_CommandLine;
+    if (m_ModeManager)
+        delete m_ModeManager;
+    if (m_MainWindow)
+        delete m_MainWindow;
 }
 
 void CoreImpl::createSplashScreen(const QPixmap &pix)
@@ -208,9 +210,11 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     Q_ASSERT(m_MainWindow==0);
     Q_ASSERT(m_ActionManager==0);
     Q_ASSERT(m_ContextManager==0);
+    Q_ASSERT(m_ModeManager==0);
     m_MainWindow = win;
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
+    m_ModeManager = new ModeManager(m_MainWindow);
 }
 
 QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
@@ -220,13 +224,16 @@ UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const{ return m_Settings; }
-//FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
+ModeManager *CoreImpl::modeManager() const {return m_ModeManager;}
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
+
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
         // show the license agreement dialog
