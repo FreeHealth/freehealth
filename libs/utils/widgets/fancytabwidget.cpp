@@ -358,15 +358,8 @@ void FancyTabWidget::insertTab(int index, QWidget *tab, const QIcon &icon, const
 
 void FancyTabWidget::removeTab(int index)
 {
-    qWarning() << "FancyTabWidget::removeTab" << index << m_modesStack;
-    for(int i = 0; i < m_modesStack->count(); ++i) {
-        qWarning() << i << m_modesStack->widget(i);
-    }
-    if (m_modesStack->widget(index))
-        m_modesStack->removeWidget(m_modesStack->widget(index));
-    qWarning() << "FancyTabWidget::removeTab" << index << m_modesStack->count();
+    m_modesStack->removeWidget(m_modesStack->widget(index));
     m_tabBar->removeTab(index);
-    qWarning() << "FancyTabWidget::removeTab" << index << m_modesStack->count();
 }
 
 void FancyTabWidget::setBackgroundBrush(const QBrush &brush)
