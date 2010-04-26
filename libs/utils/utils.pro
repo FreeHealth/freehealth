@@ -11,7 +11,8 @@ CONFIG *= dll \
     sql \
     network
 QT *= sql \
-    network
+    network \
+    svg
 HEADERS += global_exporter.h \
     global.h \
     database.h \
@@ -27,7 +28,12 @@ HEADERS += global_exporter.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
     widgets/spinboxdelegate.h \
-    randomizer.h
+    randomizer.h \
+    stylehelper.h \
+    widgets/styledbar.h \
+    widgets/fancyactionbar.h \
+    widgets/fancytabwidget.h
+
 SOURCES += global.cpp \
     database.cpp \
     log.cpp \
@@ -40,9 +46,17 @@ SOURCES += global.cpp \
     widgets/QButtonLineEdit.cpp \
     widgets/colorbuttonchooser.cpp \
     widgets/spinboxdelegate.cpp \
-    randomizer.cpp
+    randomizer.cpp \
+    stylehelper.cpp \
+    widgets/styledbar.cpp \
+    widgets/fancyactionbar.cpp \
+    widgets/fancytabwidget.cpp
+
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
     $${SOURCES_TRANSLATIONS}/utils_de.ts \
     $${SOURCES_TRANSLATIONS}/utils_es.ts
+
+# resources
+RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
