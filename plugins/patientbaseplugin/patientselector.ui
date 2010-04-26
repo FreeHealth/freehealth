@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PatientSelector</class>
+ <widget class="QWidget" name="PatientSelector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="5">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QTableView" name="tableView">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::DashLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+     <widget class="Patients::IdentityWidget" name="identity" native="true"/>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Utils::QButtonLineEdit" name="searchName"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Surname</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="Utils::QButtonLineEdit" name="searchSurname"/>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="numberOfPatients">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <zorder>splitter</zorder>
+  <zorder>label_2</zorder>
+  <zorder>searchName</zorder>
+  <zorder>label_3</zorder>
+  <zorder>searchSurname</zorder>
+  <zorder>numberOfPatients</zorder>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::QButtonLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/QButtonLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Patients::IdentityWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">patientbaseplugin/identitywidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
