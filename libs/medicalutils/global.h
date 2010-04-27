@@ -57,7 +57,7 @@ QT_END_NAMESPACE
 
 namespace MedicalUtils {
 
-MEDICALUTILS_EXPORT QString readableAge(const QDateTime &DOB);
+MEDICALUTILS_EXPORT QString readableAge(const QDate &DOB);
 MEDICALUTILS_EXPORT int ageYears(const QDate &DOB);
 
 MEDICALUTILS_EXPORT double clearanceCreatinin(const int ageYears, const int weightKg, const double creatMlMin, const bool isMale);

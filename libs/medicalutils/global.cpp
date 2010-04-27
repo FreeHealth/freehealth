@@ -55,9 +55,9 @@ using namespace Trans::ConstantTranslations;
 namespace MedicalUtils {
 
 /** \brief Returns a readable age calculated from the date to now */
-QString readableAge(const QDateTime &DOB)
+QString readableAge(const QDate &DOB)
 {
-    int daysTo = DOB.daysTo(QDateTime::currentDateTime());
+    int daysTo = DOB.daysTo(QDate::currentDate());
     double age = daysTo / 365.242199;
     QStringList readableAge;
     // years
