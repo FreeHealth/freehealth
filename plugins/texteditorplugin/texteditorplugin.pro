@@ -9,7 +9,7 @@ include(texteditorplugin_dependencies.pri)
 
 include(texteditor_sources.pri)
 
-HEADERS += texteditorplugin.h texteditorfactory.h
-SOURCES += texteditorplugin.cpp texteditorfactory.cpp
+HEADERS += texteditorplugin.h
+SOURCES += texteditorplugin.cpp
 
 OTHER_FILES += TextEditor.pluginspec

@@ -35,6 +35,7 @@
 #include "basewidgetsplugin.h"
 #include "baseformwidgets.h"
 #include "baseformwidgetsoptionspage.h"
+#include "texteditorfactory.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -87,6 +88,8 @@ void BaseWidgetsPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addObject(m_Factory);
+    addAutoReleasedObject(new TextEditorFactory(this));
+
 //    addObject(m_OptionsPage);
 }
 

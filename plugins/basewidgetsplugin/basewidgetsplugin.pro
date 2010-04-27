@@ -7,16 +7,18 @@ DEFINES += BASEFORMWIDGETS_LIBRARY
 include(../fmf_plugins.pri)
 include( basewidgetsplugin_dependencies.pri )
 
-HEADERS = \
+HEADERS += \
           basewidgetsplugin.h \
           baseformwidgets.h \
-baseformwidgetsoptionspage.h \
+          baseformwidgetsoptionspage.h \
+          texteditorfactory.h
 #          baseformwidgetsaboutpage.h
 #basewigets_exporter.h \
 
-SOURCES = basewidgetsplugin.cpp \
-          baseformwidgets.cpp \
-baseformwidgetsoptionspage.cpp \
+SOURCES += basewidgetsplugin.cpp \
+           baseformwidgets.cpp \
+           baseformwidgetsoptionspage.cpp \
+           texteditorfactory.cpp
 #          baseformwidgetsaboutpage.cpp
 
 FORMS += baseformwidgetsoptionspage.ui

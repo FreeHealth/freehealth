@@ -18,18 +18,33 @@ SUBDIRS = \
     drugsbase \
 #    alerts \
 
+# root plugin
 core.subdir = fmfcoreplugin
 
-mainwin.subdir = fmfmainwindowplugin
+# simple plugins
+listview.subdir   = listviewplugin
+listview.depends += core
+
+texteditor.subdir   = texteditorplugin
+texteditor.depends += core
+
+saverestore.subdir   = saverestoreplugin
+saverestore.depends += core
+
+templates.subdir   = templatesplugin
+templates.depends += core
+
+printer.subdir   = printerplugin
+printer.depends += core
+printer.depends += texteditor
+
+# complex plugins
+mainwin.subdir   = fmfmainwindowplugin
 mainwin.depends += core
 mainwin.depends += texteditor
 mainwin.depends += printer
 mainwin.depends += usermanager
 mainwin.depends += formmanager
-
-printer.subdir   = printerplugin
-printer.depends += core
-printer.depends += texteditor
 
 xmlio.subdir   = xmlioplugin
 xmlio.depends += core
@@ -37,17 +52,8 @@ xmlio.depends += formmanager
 
 basewidgets.subdir   = basewidgetsplugin
 basewidgets.depends += core
+basewidgets.depends += texteditor
 basewidgets.depends += formmanager
-
-listview.subdir   = listviewplugin
-listview.depends += core
-
-texteditor.subdir   = texteditorplugin
-texteditor.depends += core
-texteditor.depends += formmanager
-
-saverestore.subdir   = saverestoreplugin
-saverestore.depends += core
 
 aggir.subdir   = aggirplugin
 aggir.depends += core
@@ -60,7 +66,7 @@ drugs.depends += texteditor
 drugs.depends += templates
 drugs.depends += formmanager
 
-drugsbase.subdir = drugsbaseplugin
+drugsbase.subdir   = drugsbaseplugin
 drugsbase.depends += core
 drugsbase.depends += templates
 drugsbase.depends += printer
@@ -71,17 +77,13 @@ usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
 
-patientbase.subdir = patientbaseplugin
+patientbase.subdir   = patientbaseplugin
 patientbase.depends += core
 patientbase.depends += usermanager
 
-alerts.subdir = alertsplugin
-alerts.depends += core
+#alerts.subdir = alertsplugin
+#alerts.depends += core
 
-templates.subdir = templatesplugin
-templates.depends += core
-
-formmanager.subdir = formmanagerplugin
+formmanager.subdir   = formmanagerplugin
 formmanager.depends += core
-formmanager.depends += patientbase
 

@@ -33,7 +33,6 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "texteditorplugin.h"
-#include "texteditorfactory.h"
 #include "editormanager.h"
 
 #include <utils/log.h>
@@ -83,7 +82,6 @@ void TextEditorPlugin::extensionsInitialized()
 
     // Add some objects to the plugin manager
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new TextEditorFactory(this));
 }
 
 
