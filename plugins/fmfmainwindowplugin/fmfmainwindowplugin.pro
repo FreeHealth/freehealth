@@ -7,16 +7,16 @@ include( fmfmainwindowplugin_dependencies.pri )
 HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
-    mainwindowpreferences.h \
-    rightsidebar.h
+    mainwindowpreferences.h
+
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
-    mainwindowpreferences.cpp \
-    rightsidebar.cpp
+    mainwindowpreferences.cpp
 
-# mainwindow.ui \
 FORMS = mainwindowpreferenceswidget.ui
+
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_es.ts
+
 OTHER_FILES = MainWindow.pluginspec

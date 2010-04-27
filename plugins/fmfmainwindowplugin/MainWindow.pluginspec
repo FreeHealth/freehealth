@@ -10,5 +10,6 @@
         <dependency name="Printer" version="0.0.9"/>
         <dependency name="FormManager" version="0.0.9"/>
         <dependency name="UserManager" version="0.0.9"/>
+        <dependency name="PatientBase" version="0.0.9"/>
     </dependencyList>
 </plugin>

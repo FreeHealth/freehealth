@@ -82,6 +82,7 @@ class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void init();
 
     // IMainWindow Interface
     bool initialize(const QStringList &arguments, QString *errorString);

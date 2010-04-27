@@ -113,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_QuitOnClose);
 }
 
-bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
+void MainWindow::init()
 {
     Q_ASSERT(actionManager());
     Q_ASSERT(contextManager());
@@ -173,7 +173,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // Create Mode stack
     m_modeStack = new Utils::FancyTabWidget;
     modeManager()->init(m_modeStack);
+}
 
+bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
+{
     return true;
 }
 
@@ -208,7 +211,6 @@ void MainWindow::extensionsInitialized()
 
     finishSplash(this);
 
-//    modeManager()->addWidget(new QWidget(this));
     setCentralWidget(m_modeStack);
 
     show();
@@ -273,39 +275,47 @@ bool MainWindow::openFile()
     // If one file is selected ask canReadForm()
     if (file.isEmpty())
         return false;
-    return loadFile(file, list);
+    if (formManager()->loadFile(file, list)) {
+        fileManager()->setCurrentFile(file);
+        fileManager()->addToRecentFiles(file);
+    } else {
+        return false;
+    }
+    return true;
 }
 
 bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
-    if (filename.isEmpty())
-        return false;
-    Form::IFormIO *reader = 0;
-    QList<Form::IFormIO *> list;
-    if (iolist.isEmpty())
-         list = pluginManager()->getObjects<Form::IFormIO>();
-    else
-        list = iolist;
+//    if (filename.isEmpty())
+//        return false;
+//    Form::IFormIO *reader = 0;
+//    QList<Form::IFormIO *> list;
+//    if (iolist.isEmpty())
+//         list = pluginManager()->getObjects<Form::IFormIO>();
+//    else
+//        list = iolist;
+//
+//    foreach(Form::IFormIO *io, list) {
+//        if (io->setFileName(filename) && io->canReadFile()) {
+//            if (io->loadForm())
+//                reader = io;
+//        }
+//    }
+//    if (!reader)
+//        return false;
+//    fileManager()->setCurrentFile(filename);
+//    fileManager()->addToRecentFiles(filename);
+//
+//    QWidget *w = new QWidget(this);
+//    QHBoxLayout *vb = new QHBoxLayout(w);
+//    w->setLayout(vb);
+//    QTreeWidget *t = formManager()->formsTreeWidget(w);
+//    QWidget *w2 = new QWidget(this);
+//    QStackedLayout *slayout = formManager()->formsStackedLayout(w2);
+//    vb->addWidget(t);
+//    vb->addWidget(w2);
 
-    foreach(Form::IFormIO *io, list) {
-        if (io->setFileName(filename) && io->canReadFile()) {
-            if (io->loadForm())
-                reader = io;
-        }
-    }
-    if (!reader)
-        return false;
-    fileManager()->setCurrentFile(filename);
-    fileManager()->addToRecentFiles(filename);
 
-    QWidget *w = new QWidget(this);
-    QHBoxLayout *vb = new QHBoxLayout(w);
-    w->setLayout(vb);
-    QTreeWidget *t = formManager()->formsTreeWidget(w);
-    QWidget *w2 = new QWidget(this);
-    QStackedLayout *slayout = formManager()->formsStackedLayout(w2);
-    vb->addWidget(t);
-    vb->addWidget(w2);
 //    if (formManager()->forms().count()>0) {
 //        if (formManager()->forms().at(0)->formWidget())
 //            vb->addWidget(formManager()->forms().at(0)->formWidget());
