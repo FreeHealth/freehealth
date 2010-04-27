@@ -28,6 +28,7 @@ public:
         Surname,
         Gender,
         DateOfBirth,
+        Age,
         MaritalStatus,
         DateOfDeath,
         Street,

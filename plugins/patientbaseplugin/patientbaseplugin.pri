@@ -1,7 +1,7 @@
-include(listviewplugin_dependencies.pri)
+include(patientbaseplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lPatientBase_debug
+    win32:LIBS   *= -lPatientBase_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lPatientBase
 }

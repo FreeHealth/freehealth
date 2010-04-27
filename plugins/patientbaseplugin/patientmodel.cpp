@@ -50,6 +50,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 
+#include <medicalutils/global.h>
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
@@ -281,6 +282,11 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 const QString &city = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADRESS_CITY)).toString();
                 const QString &zip = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_ZIPCODE)).toString();
                 return QString("%1 %2 %3").arg(street, city, zip);
+            }
+        case Age:
+            {
+                const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
+                return MedicalUtils::readableAge(dob);
             }
         }
         return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
