@@ -4,7 +4,7 @@
 
 #include <formmanagerplugin/iformitem.h>
 
-using namespace Editor;
+using namespace BaseWidgets;
 
 TextEditorFactory::TextEditorFactory(QObject *parent) :
         IFormWidgetFactory(parent)
@@ -52,18 +52,18 @@ TextEditorForm::TextEditorForm(Form::FormItem *linkedObject, QWidget *parent) :
     hb->setMargin(0);
     hb->setSpacing(0);
     const QString &options = linkedObject->extraDatas().value("options");
-    TextEditor::Types t = TextEditor::Simple;
+    Editor::TextEditor::Types t = Editor::TextEditor::Simple;
     if (options.compare("FullEditor", Qt::CaseInsensitive) == 0) {
-        t = TextEditor::Full;
+        t = Editor::TextEditor::Full;
     } else {
         if (options.compare("WithTable", Qt::CaseInsensitive) == 0) {
-            t |= TextEditor::WithTables;
+            t |= Editor::TextEditor::WithTables;
         }
         if (options.compare("WithIO", Qt::CaseInsensitive) == 0) {
-            t |= TextEditor::WithIO;
+            t |= Editor::TextEditor::WithIO;
         }
     }
-    m_Text = new TextEditor(this, t);
+    m_Text = new Editor::TextEditor(this, t);
     m_Text->setObjectName("TextEditor_" + QString::number(m_LinkedObject->uuid()));
     hb->addWidget(m_Text);
     retranslate();

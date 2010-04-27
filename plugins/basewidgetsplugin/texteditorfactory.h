@@ -1,16 +1,15 @@
 #ifndef TEXTEDITORFACTORY_H
 #define TEXTEDITORFACTORY_H
 
-#include <texteditorplugin/texteditor_exporter.h>
 #include <texteditorplugin/texteditor.h>
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <QStringList>
 
-namespace Editor {
+namespace BaseWidgets {
 
-class EDITOR_EXPORT TextEditorFactory : public Form::IFormWidgetFactory
+class TextEditorFactory : public Form::IFormWidgetFactory
 {
     Q_OBJECT
 public:
@@ -26,7 +25,7 @@ public:
     Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
 };
 
-class EDITOR_EXPORT TextEditorForm : public Form::IFormWidget
+class TextEditorForm : public Form::IFormWidget
 {
     Q_OBJECT
 public:
@@ -43,9 +42,9 @@ public Q_SLOTS:
     void retranslate();
 
 private:
-    TextEditor *m_Text;
+    Editor::TextEditor *m_Text;
 };
 
-}  // End namespace Editor
+}  // End namespace BaseWidgets
 
 #endif // TEXTEDITORFACTORY_H
