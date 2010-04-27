@@ -15,14 +15,16 @@ HEADERS = formmanagerplugin.h \
     iformwidgetfactory.h \
     iformitemdatafactory.h \
     formglobalmodel.h \
-    formmanagermode.h
+    formmanagermode.h \
+    formplaceholder.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
     iformwidgetfactory.cpp \
     iformitemdatafactory.cpp \
     formglobalmodel.cpp \
-    formmanagermode.cpp
+    formmanagermode.cpp \
+    formplaceholder.cpp
 OTHER_FILES = FormManager.pluginspec
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/formmanagerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/formmanagerplugin_de.ts \

@@ -142,7 +142,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         aPrintPatientInformations(0),
         aShowPatientDatabaseInformations(0)
 {
-    setObjectName("DrugsActionHandler");
+    setObjectName("PatientActionHandler");
     Utils::Log::addMessage(this, "Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();

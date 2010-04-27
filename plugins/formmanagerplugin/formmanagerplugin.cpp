@@ -34,6 +34,8 @@
  ***************************************************************************/
 #include "formmanagerplugin.h"
 #include "formmanagermode.h"
+#include "formmanager.h"
+#include "formplaceholder.h"
 
 #include <utils/log.h>
 
@@ -42,6 +44,7 @@
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
+#include <QWidget>
 #include <QDebug>
 
 using namespace Form;
@@ -86,7 +89,9 @@ void FormManagerPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Add mode
+    FormManager::instance();
     mode = new FormManagerMode(this);
+    mode->setWidget(FormManager::instance()->formPlaceHolder());
     addObject(mode);
 }
 

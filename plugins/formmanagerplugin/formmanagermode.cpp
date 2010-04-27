@@ -39,9 +39,6 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
 
-#include <patientbaseplugin/patientmodel.h>
-#include <patientbaseplugin/patientbar.h>
-
 #include <QWidget>
 #include <QGridLayout>
 #include <QLabel>
@@ -62,13 +59,11 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     setUniqueModeName(Core::Constants::MODE_PATIENT_FILE);
 //    const QList<int> &context;
 //    setContext();
-    m_PatientBar = new Patients::PatientBar;
-    setWidget(w);
+//    setWidget(w);
 }
 
 FormManagerMode::~FormManagerMode()
 {
-    delete m_PatientBar;
 }
 
 

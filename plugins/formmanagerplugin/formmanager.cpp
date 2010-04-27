@@ -34,12 +34,16 @@
  ***************************************************************************/
 #include "formmanager.h"
 #include "iformitem.h"
+#include "iformio.h"
+#include "formplaceholder.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <coreplugin/uniqueidmanager.h>
 
 #include <utils/global.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
@@ -54,22 +58,31 @@
 using namespace Form;
 using namespace Form::Internal;
 
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
+
+
 namespace Form {
 namespace Internal {
 class FormManagerPrivate
 {
 public:
-    FormManagerPrivate() {}
+    FormManagerPrivate() :
+            m_Holder(0)
+    {}
+
     ~FormManagerPrivate()
     {
         if (m_UuidManager) {
             delete m_UuidManager;
             m_UuidManager = 0;
         }
+        if (m_Holder) {
+            delete m_Holder;
+            m_Holder = 0;
+        }
         /** \todo Delete FormItem ?? */
     }
-    QPointer<QStackedLayout> m_Stack;
-    QPointer<QTreeWidget> m_Tree;
+    QPointer<FormPlaceHolder> m_Holder;
     Core::UniqueIDManager *m_UuidManager;
     QMap<int, Form::FormMain *> m_MappedForms;
 
@@ -95,6 +108,7 @@ FormManager::FormManager(QObject *parent)
 {
     setObjectName("Form::FormManager");
     d->m_UuidManager = new Core::UniqueIDManager();
+    d->m_Holder = new FormPlaceHolder;
 }
 
 FormManager::~FormManager()
@@ -144,14 +158,44 @@ FormMain *FormManager::form(const QString &uuid) const
     return d->m_MappedForms.value(id, 0);
 }
 
-QTreeWidget *FormManager::formsTreeWidget(QWidget *parent) const
+bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
-    if (d->m_Tree)
-        delete d->m_Tree;
-    d->m_Tree = qobject_cast<QTreeWidget *>(parent);
-    if (!d->m_Tree) {
-        d->m_Tree = new QTreeWidget(parent);
+    if (filename.isEmpty())
+        return false;
+
+    // get all form readers (IFormIO)
+    Form::IFormIO *reader = 0;
+    QList<Form::IFormIO *> list;
+    if (iolist.isEmpty())
+         list = pluginManager()->getObjects<Form::IFormIO>();
+    else
+        list = iolist;
+
+    // try to read form
+    foreach(Form::IFormIO *io, list) {
+        if (io->setFileName(filename) && io->canReadFile()) {
+            if (io->loadForm())
+                reader = io;
+        }
     }
+    if (!reader)
+        return false;
+
+    // repopulate FormPlaceHolder with new values
+    if (d->m_Holder) {
+        d->m_Holder->formTree()->clear();
+        d->m_Holder->clearFormStackLayout();
+    }
+
+    formsTreeWidget(d->m_Holder->formTree());
+    formsStackedLayout(d->m_Holder->formStackLayout());
+
+    return true;
+}
+
+QTreeWidget *FormManager::formsTreeWidget(QTreeWidget *tree) const
+{
+    Q_ASSERT(tree);
     int i = 0;
     QHash<FormMain *, QTreeWidgetItem *> items;
     foreach(FormMain *form, forms()) {
@@ -159,38 +203,36 @@ QTreeWidget *FormManager::formsTreeWidget(QWidget *parent) const
         if (items.keys().contains(form->formParent()))
             item =  new QTreeWidgetItem(items.value(form->formParent()), QStringList() << form->spec()->label());
         else
-            item =  new QTreeWidgetItem(d->m_Tree, QStringList() << form->spec()->label());
-        items.insert(form,item);
+            item =  new QTreeWidgetItem(tree, QStringList() << form->spec()->label());
+        items.insert(form, item);
         item->setData(0,Qt::UserRole,i);
         if (form->formParent())
             qWarning() << form->formParent()->spec()->label();
         ++i;
     }
-    d->m_Tree->resizeColumnToContents(0);
-    d->m_Tree->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    d->m_Tree->header()->hide();
-    connect(d->m_Tree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
-    return d->m_Tree;
+    tree->resizeColumnToContents(0);
+    tree->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    tree->header()->hide();
+    connect(tree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
+    return tree;
 }
 
-QStackedLayout *FormManager::formsStackedLayout(QWidget *parent) const
+FormPlaceHolder *FormManager::formPlaceHolder() const
 {
-    if (d->m_Stack)
-        delete d->m_Stack;
-    d->m_Stack = new QStackedLayout(parent);
+    return d->m_Holder;
+}
+
+QStackedLayout *FormManager::formsStackedLayout(QStackedLayout *stack) const
+{
+    Q_ASSERT(stack);
     foreach(FormMain *form, forms()) {
 //        Q_ASSERT(form->formWidget());
         if (form->formWidget())
-            d->m_Stack->addWidget(form->formWidget());
+            stack->addWidget(form->formWidget());
     }
-    return d->m_Stack;
+    return stack;
 }
 
-void FormManager::changeStackedLayoutTo(QTreeWidgetItem *item)
-{
-    int id = item->data(0,Qt::UserRole).toInt();
-    d->m_Stack->setCurrentIndex(id);
-}
 
 
 bool FormManager::setFormObjects(QObject *root)
