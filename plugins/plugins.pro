@@ -1,11 +1,14 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    core \
-    mainwin \
-    printer \
     listview \
+    printer \
+    core \
+    patientbase \
+    formmanager \
     texteditor \
+    usermanager \
+    mainwin \
     templates \
     saverestore \
     xmlio \
@@ -13,10 +16,6 @@ SUBDIRS = \
     aggir \
     drugs \
     drugsbase \
-    usermanager \
-    formmanager \
-    patientbase \
-#    identity \
 #    alerts \
 
 core.subdir = fmfcoreplugin
@@ -84,6 +83,5 @@ templates.depends += core
 
 formmanager.subdir = formmanagerplugin
 formmanager.depends += core
+formmanager.depends += patientbase
 
-#identity.subdir = identityplugin
-#identity.depends += core

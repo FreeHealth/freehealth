@@ -39,6 +39,9 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
 
+#include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientbar.h>
+
 #include <QWidget>
 #include <QGridLayout>
 #include <QLabel>
@@ -50,7 +53,8 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 
 FormManagerMode::FormManagerMode(QObject *parent) :
-        Core::BaseMode(parent)
+        Core::BaseMode(parent),
+        m_PatientBar(0)
 {
     setName(tr("Patients Files"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
@@ -58,16 +62,13 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     setUniqueModeName(Core::Constants::MODE_PATIENT_FILE);
 //    const QList<int> &context;
 //    setContext();
-    w = new QWidget;
-    QGridLayout *lay = new QGridLayout(w);
-    QLabel *l = new QLabel("I'm alive", w);
-    lay->addWidget(l);
+    m_PatientBar = new Patients::PatientBar;
     setWidget(w);
 }
 
 FormManagerMode::~FormManagerMode()
 {
-//    delete w;
+    delete m_PatientBar;
 }
 
 

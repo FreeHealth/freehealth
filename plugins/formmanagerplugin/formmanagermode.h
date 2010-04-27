@@ -39,6 +39,10 @@
 
 #include <QObject>
 
+namespace Patients {
+class PatientBar;
+}
+
 namespace Form {
 namespace Internal {
 
@@ -50,7 +54,7 @@ public:
     ~FormManagerMode();
 
 private:
-    QWidget *w;
+    Patients::PatientBar *m_PatientBar;
 };
 
 }  // End namespace Internal

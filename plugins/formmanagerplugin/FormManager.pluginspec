@@ -6,5 +6,6 @@
     <url>http://www.ericmaeker.fr/FreeMedForms/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.9"/>
+        <dependency name="Patients" version="0.0.9"/>
     </dependencyList>
 </plugin>
