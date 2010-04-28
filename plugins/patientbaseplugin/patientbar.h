@@ -20,9 +20,9 @@ public:
     ~PatientBar();
 
     void setPatientModel(PatientModel *model);
-    void setCurrentIndex(const QModelIndex &index);
 
-protected:
+public Q_SLOTS:
+    void setCurrentIndex(const QModelIndex &index);
 
 private:
     Internal::PatientBarPrivate *d;

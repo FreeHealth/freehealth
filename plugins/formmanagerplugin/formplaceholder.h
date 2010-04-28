@@ -18,6 +18,7 @@ class FormPlaceHolderPrivate;
 class FORM_EXPORT FormPlaceHolder : public QWidget
 {
     Q_OBJECT
+
 public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();

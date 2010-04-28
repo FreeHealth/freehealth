@@ -4,6 +4,7 @@
 
 #include <QTreeWidget>
 #include <QStackedLayout>
+#include <QScrollArea>
 
 using namespace Form;
 
@@ -26,6 +27,7 @@ public:
     QTreeWidget *m_Tree;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
+    QScrollArea *m_Scroll;
 };
 }
 }
@@ -34,18 +36,25 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
         QWidget(parent), d(new Internal::FormPlaceHolderPrivate)
 {
     d->m_GeneralLayout = new QGridLayout(this);
+    d->m_GeneralLayout->setObjectName("FormPlaceHolder::GeneralLayout");
+    d->m_GeneralLayout->setMargin(0);
+    d->m_GeneralLayout->setSpacing(0);
     setLayout(d->m_GeneralLayout);
 
     d->m_Tree = new QTreeWidget(this);
-    QWidget *w = new QWidget(this);
-    d->m_Stack = new QStackedLayout(this);
-    w->setLayout(d->m_Stack);
+    d->m_Scroll = new QScrollArea(this);
+    d->m_Stack = new QStackedLayout(d->m_Scroll);
+    d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
+    d->m_Scroll->setLayout(d->m_Stack);
+
     Utils::MiniSplitter *s = new Utils::MiniSplitter(this);
+    s->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    s->setObjectName("FormPlaceHolder::MiniSplitter1");
     s->setOrientation(Qt::Horizontal);
     s->addWidget(d->m_Tree);
-    s->addWidget(w);
+    s->addWidget(d->m_Scroll);
 
-    d->m_GeneralLayout->addWidget(s,0,0);
+    d->m_GeneralLayout->addWidget(s, 100, 0);
 
     connect(d->m_Tree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
 }
@@ -79,12 +88,14 @@ void FormPlaceHolder::clearFormStackLayout()
 
 void FormPlaceHolder::addTopWidget(QWidget *top)
 {
-    d->m_GeneralLayout->addWidget(top, 0, 0, 1, d->m_GeneralLayout->columnCount());
+    static int lastInsertedRow = 0;
+    d->m_GeneralLayout->addWidget(top, lastInsertedRow, 0);
+    ++lastInsertedRow;
 }
 
 void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 {
-    d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 1, d->m_GeneralLayout->columnCount());
+    d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
 }
 
 void FormPlaceHolder::changeStackedLayoutTo(QTreeWidgetItem *item)
