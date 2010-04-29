@@ -74,7 +74,7 @@ QT_END_NAMESPACE
 namespace Form {
 class IFormWidget;
 
-class FormItemIdentifiants : public QObject
+class FORM_EXPORT FormItemIdentifiants : public QObject
 {
 public:
     FormItemIdentifiants(QObject *parent =0) : QObject(parent) {}

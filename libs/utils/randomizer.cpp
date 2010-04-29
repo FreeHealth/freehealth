@@ -2,6 +2,8 @@
 #include "global.h"
 #include "log.h"
 
+#include <time.h>
+
 #include <QFile>
 #include <QVector>
 

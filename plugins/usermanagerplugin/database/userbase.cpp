@@ -68,7 +68,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
-#include <userdata.h>
+#include <usermanagerplugin/userdata.h>
 
 // include Qt headers
 #include <QCoreApplication>

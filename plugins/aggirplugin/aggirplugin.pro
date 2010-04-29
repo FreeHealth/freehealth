@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = Gir
 PACKAGE_VERSION = 0.0.2
-DEFINES += EMPTY_LIBRARY
+DEFINES += AGGIR_LIBRARY
 include(../fmf_plugins.pri)
 include( aggirplugin_dependencies.pri )
 HEADERS = \

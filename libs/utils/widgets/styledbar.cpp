@@ -29,7 +29,7 @@
 
 #include "styledbar.h"
 
-#include "stylehelper.h"
+#include <utils/stylehelper.h>
 
 #include <QtCore/QVariant>
 #include <QtGui/QPainter>

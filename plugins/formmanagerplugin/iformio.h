@@ -40,7 +40,7 @@
 #ifndef IFORMIO_H
 #define IFORMIO_H
 
-#include <coreplugin/core_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h>
 
 #include <QObject>
 #include <QStringList>
@@ -54,7 +54,7 @@
 
 namespace Form {
 
-class CORE_EXPORT IFormIO : public QObject
+class FORM_EXPORT IFormIO : public QObject
 {
     Q_OBJECT
 public:

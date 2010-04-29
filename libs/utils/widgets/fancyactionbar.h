@@ -30,6 +30,8 @@
 #ifndef FANCYACTIONBAR_H
 #define FANCYACTIONBAR_H
 
+#include <utils/global_exporter.h>
+
 #include <QtCore/QMap>
 #include <QtGui/QToolButton>
 
@@ -56,7 +58,7 @@ private:
 
 } // namespace Internal
 
-class FancyActionBar : public QWidget
+class UTILS_EXPORT FancyActionBar : public QWidget
 {
     Q_OBJECT
 

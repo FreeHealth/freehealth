@@ -37,10 +37,10 @@
 
 #include <qglobal.h>
 
-#if defined(BASEFORMWIDGETS_LIBRARY)
-#define BASEWIDGETS_EXPORT Q_DECL_EXPORT
+#if defined(AGGIR_LIBRARY)
+#define AGGIR_EXPORT Q_DECL_EXPORT
 #else
-#define BASEWIDGETS_EXPORT Q_DECL_IMPORT
+#define AGGIR_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif

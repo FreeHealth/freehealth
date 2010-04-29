@@ -1,6 +1,6 @@
 #ifndef GIRWIDGET_H
 #define GIRWIDGET_H
-
+#include <aggirplugin/aggir_exporter.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <QtGui/QWidget>
 #include <QVariant>

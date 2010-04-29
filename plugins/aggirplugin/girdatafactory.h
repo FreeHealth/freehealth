@@ -1,6 +1,8 @@
 #ifndef GIRDATAFACTORY_H
 #define GIRDATAFACTORY_H
 
+#include <aggirplugin/aggir_exporter.h>
+
 #include <formmanagerplugin/iformitemdatafactory.h>
 
 #include <medicalutils/aggir/girscore.h>
@@ -33,7 +35,7 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- GirWidget implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-class CORE_EXPORT GirItemData : public Form::IFormItemData
+class AGGIR_EXPORT GirItemData : public Form::IFormItemData
 {
     Q_OBJECT
     friend class GirDataFactory;

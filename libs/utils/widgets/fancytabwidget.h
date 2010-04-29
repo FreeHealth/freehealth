@@ -30,6 +30,8 @@
 #ifndef FANCYTABWIDGET_H
 #define FANCYTABWIDGET_H
 
+#include <utils/global_exporter.h>
+
 #include <QtGui/QPushButton>
 #include <QtGui/QTabBar>
 #include <QtGui/QStyleOptionTabV2>
@@ -113,7 +115,7 @@ private:
 } // namespace Internal
 
 
-class FancyTabWidget : public QWidget
+class UTILS_EXPORT FancyTabWidget : public QWidget
 {
     Q_OBJECT
 
