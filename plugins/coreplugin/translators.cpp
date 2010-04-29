@@ -105,14 +105,18 @@ Translators::~Translators()
 bool Translators::setPathToTranslations( const QString & path )
 {
     if ( QDir( path ).exists() ) {
-        m_PathToTranslations = QDir::cleanPath( path );
-        Utils::Log::addMessage( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
-                         .arg( Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
-                               QDir::cleanPath(path) ) );
+        m_PathToTranslations = QDir::cleanPath(path);
+        if (WarnTranslatorsErrors) {
+            Utils::Log::addMessage("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+                                    .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
+                                          QDir::cleanPath(path)));
+        }
         return true;
     } else {
-        Utils::Log::addError( "Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                       .arg( QDir::cleanPath( path ) ) );
+        if (WarnTranslatorsErrors) {
+            Utils::Log::addError("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+                                 .arg(QDir::cleanPath(path)));
+        }
         return false;
     }
 }
@@ -146,11 +150,13 @@ void Translators::changeLanguage( const QString & lang )
             else
                 path = m_PathToTranslations;
 
-            if ( !m_Translators[fileMask]->load( f.fileName() + "_" + lang, path ) ) {
+            if (!m_Translators[fileMask]->load( f.fileName() + "_" + lang, path)) {
                 if (WarnTranslatorsErrors)
-                    Utils::Log::addError( this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path ) );
+                    Utils::Log::addError(this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path));
             } else {
-                Utils::Log::addMessage( this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg( f.fileName() + "_" + lang) );
+                if (WarnTranslatorsErrors) {
+                    Utils::Log::addMessage(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg(f.fileName() + "_" + lang));
+                }
             }
         }
 //    }
@@ -182,12 +188,17 @@ bool Translators::addNewTranslator( const QString & fileMask, bool fromDefaultPa
         if ( !m_Translators.contains( QDir::cleanPath( fileMask ) ) ) {
             m_Translators.insert( QDir::cleanPath( fileMask ) , t );
             qApp->installTranslator( t );
-            Utils::Log::addMessage( this, tr( "Add Translator %1." ).arg( file.fileName() + "_" + lang ) );
+            if (WarnTranslatorsErrors) {
+                Utils::Log::addMessage( this, tr("Add Translator %1.").arg(file.fileName() + "_" + lang));
+            }
             return true;
         }
     }
-    else
-        Utils::Log::addMessage( this, tr( "WARNING : Can not be loaded %1 or already loaded." ).arg( file.absoluteFilePath() + "_" + lang )  );
+    else {
+        if (WarnTranslatorsErrors) {
+            Utils::Log::addMessage(this, tr("WARNING : Can not be loaded %1 or already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+        }
+    }
 
     // something gone wrong so clean and exit the member
     delete t;
