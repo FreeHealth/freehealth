@@ -90,25 +90,17 @@ PatientWidgetManager::PatientWidgetManager(QObject *parent) : PatientActionHandl
 
 void PatientWidgetManager::updateContext(Core::IContext *object)
 {
-    //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
-    //    if (object)
-    //        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();
-
     PatientSelector *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-
-            //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
         view = qobject_cast<PatientSelector *>(object->widget());
         if (!view) {
             if (!m_CurrentView)
                 return;
-
-            //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
 
@@ -171,7 +163,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENT_INFOS, ctx);
     cmd->setTranslations(Trans::Constants::PATIENT_INFORMATION);
     menu->addAction(cmd, Constants::G_PATIENTS_INFORMATIONS);
-    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+//    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     // Databases informations
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
@@ -191,7 +183,9 @@ void PatientActionHandler::updateActions()
 {}
 
 void PatientActionHandler::setCurrentView(PatientSelector *view)
-{}
+{
+    m_CurrentView = view;
+}
 
 void PatientActionHandler::viewPatientInformations()
 {}

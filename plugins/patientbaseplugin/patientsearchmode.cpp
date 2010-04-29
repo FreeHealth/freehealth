@@ -39,6 +39,7 @@
  ***************************************************************************/
 #include "patientsearchmode.h"
 #include "patientselector.h"
+#include "patientwidgetmanager.h"
 #include "constants_menus.h"
 
 #include <coreplugin/icore.h>
@@ -61,6 +62,7 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
 {
     m_Selector = new PatientSelector;
     m_Selector->setFieldsToShow(PatientSelector::Gender | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::SurName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
+    PatientWidgetManager::instance()->setCurrentView(m_Selector);
 }
 
 PatientSearchMode::~PatientSearchMode()
