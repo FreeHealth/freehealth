@@ -85,6 +85,9 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     a->setObjectName(name);
     if (!icon.isEmpty())
         a->setIcon(theme()->icon(icon));
+
+    qWarning() << actionName << icon;
+
     if (checkable) {
         a->setCheckable(true);
         a->setChecked(false);
@@ -110,6 +113,10 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     a->setObjectName(name);
     if (!icon.isEmpty())
         a->setIcon(theme()->icon(icon));
+
+    qWarning() << actionName << icon;
+
+
     if (checkable) {
         a->setCheckable(true);
         a->setChecked(false);
@@ -234,7 +241,7 @@ void EditorActionHandler::createActions()
 
     Core::Command *cmd = 0;
 
-    aToggleToolBar = createAction(this, "aToggleToolBar", ICONITALIC, A_EDITOR_TOOGLETOOLBAR, allContexts, EDITOR_TOGGLETOOLBAR_TEXT, cmd, m_ContextualMenu, G_EDITOR_CONTEXT, QKeySequence::UnknownKey, true);
+    aToggleToolBar = createAction(this, "aToggleToolBar", "", A_EDITOR_TOOGLETOOLBAR, allContexts, EDITOR_TOGGLETOOLBAR_TEXT, cmd, m_ContextualMenu, G_EDITOR_CONTEXT, QKeySequence::UnknownKey, true);
 
     // Undo / Redo / Copy / Cut / Paste
     if (!actionManager()->command(Core::Constants::A_EDIT_UNDO)) {
@@ -281,7 +288,7 @@ void EditorActionHandler::createActions()
     QPixmap p(16,16);
     p.fill(Qt::black);
     aColor->setIcon(p);
-//    cmd->setAttribute(Core::Command::CA_UpdateIcon);
+    cmd->setAttribute(Core::Command::CA_UpdateIcon);
 
     // Paragraph actions
 #ifdef Q_OS_MAC
@@ -314,7 +321,7 @@ void EditorActionHandler::createActions()
     aAddRow = createAction(this, "aAddRow", ICONTABLEADDROW, A_TABLE_ADDROW, tableContext, TABLE_ADDROW_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
     aAddCol = createAction(this, "aAddCol", ICONTABLEADDCOLUMN, A_TABLE_ADDCOLUMN, tableContext, TABLE_ADDCOLUMN_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
     aRemoveRow = createAction(this, "aRemoveRow", ICONTABLEREMOVEROW, A_TABLE_REMOVEROW, tableContext, TABLE_REMOVEROW_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
-    aRemoveCol = createAction(this, "aRemoveCol", ICONTABLEREMOVEROW, A_TABLE_REMOVECOLUMN, tableContext, TABLE_REMOVECOLUMN_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
+    aRemoveCol = createAction(this, "aRemoveCol", ICONTABLEREMOVECOLUMN, A_TABLE_REMOVECOLUMN, tableContext, TABLE_REMOVECOLUMN_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
     aMergeCells = createAction(this, "aMergeCells", ICONTABLEMERGECELLS, A_TABLE_MERGECELLS, tableContext, TABLE_MERGECELLS_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
     aSplitCells = createAction(this, "aSplitCells", ICONTABLESPLITCELLS, A_TABLE_SPLITCELLS, tableContext, TABLE_SPLITCELLS_TEXT, cmd, m_TableMenu, G_FORMAT_TABLE);
 
