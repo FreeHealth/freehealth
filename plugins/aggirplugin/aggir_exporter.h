@@ -32,8 +32,8 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef COREEXPORTER_H
-#define COREEXPORTER_H
+#ifndef AGGIREXPORTER_H
+#define AGGIREXPORTER_H
 
 #include <qglobal.h>
 
