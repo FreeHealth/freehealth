@@ -97,6 +97,14 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     if (!patientBase()->isInitialized())
         return false;
 
+    return true;
+}
+
+void PatientBasePlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "PatientBasePlugin::extensionsInitialized";
+
     // create patient widget manager instance
     PatientWidgetManager::instance();
 
@@ -108,31 +116,6 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     prefpage = new PatientBasePreferencesPage(this);
     addObject(prefpage);
     prefpage->checkSettingsValidity();
-
-    return true;
-}
-
-void PatientBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PatientBasePlugin::extensionsInitialized";
-
-    // TEST
-//    QDockWidget *dock = new QDockWidget("patients", qApp->activeWindow());
-//    PatientModel *m = new PatientModel(this);
-//    IdentityWidget *iw = new IdentityWidget(dock);
-//    iw->setCurrentPatientModel(m);
-//    iw->setCurrentIndex(m->index(0,0));
-//    dock->setWidget(iw);
-//    Core::ICore::instance()->mainWindow()->addDockWidget(Qt::LeftDockWidgetArea, dock);
-//    QDockWidget *dock2 = new QDockWidget("patients", qApp->activeWindow());
-//    PatientSelector *s = new PatientSelector(dock2);
-//    s->setPatientModel(m);
-//    dock2->setWidget(s);
-//    Core::ICore::instance()->mainWindow()->addDockWidget(Qt::RightDockWidgetArea, dock2);
-//    connect(s, SIGNAL(patientSelected(QString)), iw, SLOT(setCurrentPatient(QString)));
-//    connect(s, SIGNAL(patientSelected(QModelIndex)), iw, SLOT(setCurrentIndex(QModelIndex)));
-    // END TEST
 }
 
 

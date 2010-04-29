@@ -54,7 +54,6 @@
 #include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <coreplugin/icore.h>

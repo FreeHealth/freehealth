@@ -53,6 +53,8 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEMEDFORMS::MainWinPlugin";
+
+    // Declare MainWindow to the Core
     m_MainWindow = new MainWindow;
     Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->init();
@@ -65,6 +67,7 @@ MainWinPlugin::~MainWinPlugin()
         removeObject(prefPage);
         delete prefPage; prefPage=0;
     }
+    // m_MainWindow is deleted by Core
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -74,7 +77,8 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow->initialize(arguments,errorString);
+
+    m_MainWindow->initialize(arguments, errorString);
     return true;
 }
 

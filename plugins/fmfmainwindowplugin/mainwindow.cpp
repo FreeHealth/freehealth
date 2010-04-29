@@ -53,6 +53,7 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/formplaceholder.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -64,6 +65,10 @@
 #include <fmfcoreplugin/commandlineparser.h>
 
 #include <usermanagerplugin/usermodel.h>
+
+#include <patientbaseplugin/patientbar.h>
+#include <patientbaseplugin/patientsearchmode.h>
+#include <patientbaseplugin/patientwidgetmanager.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -105,11 +110,12 @@ static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finish
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
-        m_modeStack(0)
+        m_modeStack(0),
+        m_PatientBar(0)
 {
     setObjectName("MainWindow");
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     messageSplash(tr("Creating Main Window"));
-
     setAttribute(Qt::WA_QuitOnClose);
 }
 
@@ -117,6 +123,7 @@ void MainWindow::init()
 {
     Q_ASSERT(actionManager());
     Q_ASSERT(contextManager());
+
     // create menus
     createFileMenu();
     createPatientMenu();
@@ -156,7 +163,7 @@ void MainWindow::init()
             Core::MainWindowActions::A_CheckUpdate //|
 //            Core::MainWindowActions::A_QtAbout
             );
-    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
+    actions.setTemplatesActions(Core::MainWindowActions::A_Templates_New);
 
     actions.createEditActions(true);
     createActions(actions);
@@ -164,9 +171,6 @@ void MainWindow::init()
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
-
-    contextManager()->updateContext();
-    actionManager()->retranslateMenusAndActions();
 
     readSettings();
 
@@ -177,6 +181,9 @@ void MainWindow::init()
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION));
+    raise();
+    show();
     return true;
 }
 
@@ -186,12 +193,6 @@ void MainWindow::extensionsInitialized()
     if (!UserPlugin::UserModel::instance()->hasCurrentUser()) {
         return;
     }
-
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
-
-    Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION) );
-    raise();
-
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
@@ -213,13 +214,29 @@ void MainWindow::extensionsInitialized()
 
     setCentralWidget(m_modeStack);
 
-    show();
+    // Connect post core initialization
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 MainWindow::~MainWindow()
 {
     qWarning() << "MainWindow::~MainWindow()";
 }
+
+void MainWindow::postCoreInitialization()
+{
+    // Create and insert the patient tab in the formplaceholder
+    m_PatientBar = new Patients::PatientBar(this);
+    formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);
+
+    // Connect this tab with the patientsearchmode
+    connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
+            m_PatientBar, SLOT(setCurrentIndex(QModelIndex)));
+
+    contextManager()->updateContext();
+    actionManager()->retranslateMenusAndActions();
+}
+
 
 /** \brief Close the main window and the application */
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -234,7 +251,8 @@ void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
 //	m_ui->retranslateUi(this);
-        actionManager()->retranslateMenusAndActions();
+        if (actionManager())
+            actionManager()->retranslateMenusAndActions();
     }
 }
 

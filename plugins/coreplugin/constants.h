@@ -115,6 +115,9 @@ const char * const G_PATIENTS            = "grPatients";     /*!< \brief Default
 // format menu groups
 const char * const G_FORMAT              = "grFormat";            /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_FONT         = "grFormat.Font";       /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FORMAT_FONT_BASE    = "grFormat.FontBase";       /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FORMAT_FONT_SIZE    = "grFormat.FontSize";       /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_FORMAT_FONT_EXTRAS  = "grFormat.FontExtras";       /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_PARAGRAPH    = "grFormat.Paragraph";  /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_TABLE        = "grFormat.Table";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FORMAT_IMAGE        = "grFormat.Image";      /*!< \brief Default group name  \ingroup constants_actionmanager */

@@ -125,11 +125,11 @@ public:
 
         // IO Actions
         if (m_Type & TextEditor::WithIO) {
-            Core::Command *cmd = am->command(Core::Constants::A_EDITOR_FILEOPEN);
-            m_ToolBar->addAction(cmd->action());
-            cmd = am->command(Core::Constants::A_EDITOR_FILESAVE);
-            m_ToolBar->addAction(cmd->action());
-            m_ToolBar->addSeparator();
+//            Core::Command *cmd = am->command(Core::Constants::A_EDITOR_FILEOPEN);
+//            m_ToolBar->addAction(cmd->action());
+//            cmd = am->command(Core::Constants::A_EDITOR_FILESAVE);
+//            m_ToolBar->addAction(cmd->action());
+//            m_ToolBar->addSeparator();
         }
 
         Core::ActionContainer *ac = am->actionContainer(Core::Constants::M_EDIT);

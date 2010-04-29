@@ -39,6 +39,7 @@
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 
+#include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 
 #include <utils/global.h>
@@ -54,6 +55,8 @@
 #include <QHeaderView>
 #include <QPointer>
 #include <QMap>
+#include <QApplication>
+
 
 using namespace Form;
 using namespace Form::Internal;
@@ -72,10 +75,7 @@ public:
 
     ~FormManagerPrivate()
     {
-        if (m_UuidManager) {
-            delete m_UuidManager;
-            m_UuidManager = 0;
-        }
+        // DO NOT DELETE m_UuidManager
         if (m_Holder) {
             delete m_Holder;
             m_Holder = 0;
@@ -107,7 +107,8 @@ FormManager::FormManager(QObject *parent)
         : QObject(parent), d(new Form::Internal::FormManagerPrivate)
 {
     setObjectName("Form::FormManager");
-    d->m_UuidManager = new Core::UniqueIDManager();
+    /** \todo Need to modify UID code to create a new private uid */
+    d->m_UuidManager = Core::ICore::instance()->uniqueIDManager();
     d->m_Holder = new FormPlaceHolder;
 }
 

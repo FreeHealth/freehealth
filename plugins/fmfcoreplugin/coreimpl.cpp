@@ -212,9 +212,9 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     Q_ASSERT(m_ContextManager==0);
     Q_ASSERT(m_ModeManager==0);
     m_MainWindow = win;
-    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
-    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_ModeManager = new ModeManager(m_MainWindow);
+    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
+    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
 }
 
 QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}

@@ -56,7 +56,7 @@ QT_END_NAMESPACE
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 05 Apr 2010
+ * \date 29 Apr 2010
 */
 
 namespace Form {
@@ -65,6 +65,10 @@ class IFormIO;
 
 namespace Utils {
 class FancyTabWidget;
+}
+
+namespace Patients {
+class PatientBar;
 }
 
 namespace MainWin {
@@ -94,7 +98,10 @@ public:
     void createStatusBar();
     QStatusBar *statusBar();
 
-public Q_SLOTS: // Interface of MainWidowActionHandler
+public Q_SLOTS:
+    void postCoreInitialization();
+
+    // Interface of MainWidowActionHandler
 //    bool newFile();
     bool openFile();
     bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
@@ -122,7 +129,7 @@ protected:
 
 public:
     Utils::FancyTabWidget *m_modeStack;
-//    Core::PatientBar *m_PatientBar;
+    Patients::PatientBar *m_PatientBar;
 
     bool              m_HelpTextShow;
     uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */

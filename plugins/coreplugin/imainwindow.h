@@ -52,13 +52,10 @@
  * \file imainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 23 Apr 2010
+ * \date 29 Apr 2010
 */
 
 namespace Core {
-class FancyTabWidget;
-class FancyActionBar;
-class PatientBar;
 
 class CORE_EXPORT IMainWindow : public Internal::MainWindowActionHandler
 {
@@ -70,9 +67,7 @@ public:
     virtual bool initialize(const QStringList &arguments, QString *errorString) = 0;
     virtual void extensionsInitialized() = 0;
 
-//    virtual FancyTabWidget *tabWidget() const {return 0;}
-//    virtual FancyActionBar *actionBar() const {return 0;}
-//    virtual PatientBar *patientBar() const {return 0;}
+//    virtual void postCoreInitialization() = 0;
 
 };
 

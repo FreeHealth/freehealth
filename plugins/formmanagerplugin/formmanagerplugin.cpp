@@ -47,6 +47,7 @@
 #include <QWidget>
 #include <QDebug>
 
+
 using namespace Form;
 using namespace Internal;
 
@@ -77,6 +78,7 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+
 
     return true;
 }

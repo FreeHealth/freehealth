@@ -369,13 +369,13 @@ void informativeMessageBox( const QString &text, const QString &infoText, const 
     mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Information );
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
-        mb.setWindowTitle( title );
+        mb.setWindowTitle(title);
     mb.setText( text );
-    mb.setInformativeText( infoText );
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty())
-        mb.setDetailedText( detail );
+        mb.setDetailedText(detail);
     mb.setStandardButtons(QMessageBox::Ok);
     mb.setDefaultButton(QMessageBox::Ok);
     mb.exec();

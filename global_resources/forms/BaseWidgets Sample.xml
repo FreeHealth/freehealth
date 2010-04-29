@@ -143,12 +143,18 @@
    <Item>
      <name>sampleSpin</name>
      <type>spin</type>
-     <label>This a simple date from the BaseWidgetsForm plugins</label>
+     <label>This a simple spinbox from the BaseWidgetsForm plugins</label>
   </Item>
    <Item>
      <name>sampleButton</name>
      <type>button</type>
-     <label>This a simple date from the BaseWidgetsForm plugins</label>
+     <label>This a simple button from the BaseWidgetsForm plugins</label>
+  </Item>
+
+   <Item>
+     <name>sampleTextEditor</name>
+     <type>texteditor</type>
+     <label>This a simple text editor from the BaseWidgetsForm plugins</label>
   </Item>
 
 </MedForm>

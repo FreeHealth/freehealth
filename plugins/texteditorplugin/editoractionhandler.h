@@ -53,16 +53,21 @@
 #include <QActionGroup>
 #include <QPointer>
 #include <QTextCharFormat>
+#include <QList>
 
 
 /**
  * \file editoractionhandler.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.4.0
+ * \date 29 Apr 2010
 */
 
-// Not exported because part of the internal part of TextEditor
+
+namespace Core {
+class ActionContainer;
+}
+
 namespace Editor {
 class TextEditor;
 
@@ -158,6 +163,22 @@ private:
     QAction *aRemoveCol;
     QAction *aMergeCells;
     QAction *aSplitCells;
+
+    Core::ActionContainer *m_ContextualMenu;
+    Core::ActionContainer *m_FileMenu;
+    Core::ActionContainer *m_EditMenu;
+    Core::ActionContainer *m_FormatMenu;
+    Core::ActionContainer *m_FontMenu;
+    Core::ActionContainer *m_ParagraphMenu;
+    Core::ActionContainer *m_TableMenu;
+
+    QList<int> basicContext, ioContext, tableContext, allContexts;
+
+private:
+    void createContexts();
+    void createMenus();
+    void createActions();
+    void connectActions();
 
 protected:
     uint m_optionalActions;

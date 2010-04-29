@@ -43,7 +43,6 @@
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/modemanager/imode.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
