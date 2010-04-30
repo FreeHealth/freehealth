@@ -85,9 +85,6 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     a->setObjectName(name);
     if (!icon.isEmpty())
         a->setIcon(theme()->icon(icon));
-
-    qWarning() << actionName << icon;
-
     if (checkable) {
         a->setCheckable(true);
         a->setChecked(false);
@@ -113,10 +110,6 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     a->setObjectName(name);
     if (!icon.isEmpty())
         a->setIcon(theme()->icon(icon));
-
-    qWarning() << actionName << icon;
-
-
     if (checkable) {
         a->setCheckable(true);
         a->setChecked(false);
@@ -275,7 +268,6 @@ void EditorActionHandler::createActions()
         aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
     }
 
-
     // Font actions
     aBold = createAction(this, "aBold", ICONBOLD, A_FORMAT_BOLD, allContexts, FORMATBOLD_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Bold, true);
     aItalic = createAction(this, "aItalic", ICONITALIC, A_FORMAT_ITALIC, allContexts, FORMATITALIC_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Italic, true);
@@ -288,7 +280,7 @@ void EditorActionHandler::createActions()
     QPixmap p(16,16);
     p.fill(Qt::black);
     aColor->setIcon(p);
-    cmd->setAttribute(Core::Command::CA_UpdateIcon);
+    actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateIcon);
 
     // Paragraph actions
 #ifdef Q_OS_MAC
@@ -334,7 +326,7 @@ void EditorActionHandler::createActions()
     // File Actions
     aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_FILE_OPEN);
     aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_FILE_SAVE);
-//    cmd->setAttribute(Core::Command::CA_UpdateText);
+    actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateText);
 
     actionManager()->retranslateMenusAndActions();
 }

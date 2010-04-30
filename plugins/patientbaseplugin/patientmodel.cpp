@@ -156,6 +156,19 @@ public:
         }
     }
 
+    QIcon iconizedGender(const QModelIndex &index)
+    {
+        const QString &g = m_SqlPatient->data(m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
+        if (g=="M") {
+            return theme()->icon(Core::Constants::ICONMALE);
+        } else if (g=="F") {
+            return theme()->icon(Core::Constants::ICONFEMALE);
+        } else if (g=="H") {
+            return theme()->icon(Core::Constants::ICONHERMAPHRODISM);
+        }
+        return QIcon();
+    }
+
 public:
     QSqlTableModel *m_SqlPatient;
     QString m_ExtraFilter;
@@ -288,21 +301,13 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
                 return MedicalUtils::readableAge(dob);
             }
+        case IconizedGender: return d->iconizedGender(index);
         }
         return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
     }
     else if (role==Qt::DecorationRole) {
         switch (index.column()) {
-        case IconizedGender:
-            const QString &g = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
-            if (g=="M") {
-                return theme()->icon(Core::Constants::ICONMALE);
-            } else if (g=="F") {
-                return theme()->icon(Core::Constants::ICONFEMALE);
-            } else if (g=="H") {
-                return theme()->icon(Core::Constants::ICONHERMAPHRODISM);
-            }
-            return g;
+        case IconizedGender: return d->iconizedGender(index);
         }
     } else if (role==Qt::BackgroundRole) {
         if (settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool()) {
@@ -445,16 +450,22 @@ void PatientModel::setFilter(const QString &name, const QString &surname, const 
 
 QString PatientModel::filter() const
 {
+    if (d->m_SqlPatient)
+        return d->m_SqlPatient->filter();
+    return QString();
 }
 
 QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int role) const
-{}
+{
+}
 
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
-{}
+{
+}
 
 bool PatientModel::removeRows(int row, int count, const QModelIndex &parent)
-{}
+{
+}
 
 void PatientModel::fetchMore(const QModelIndex &parent)
 {

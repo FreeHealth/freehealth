@@ -85,7 +85,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
-    QWidget(parent), m_CurrentDrugModel(0)
+    QWidget(parent), m_CurrentDrugModel(0), m_ui(0)
 {
     // create instance of DrugsManager
     DrugsWidgetManager::instance();
@@ -120,16 +120,22 @@ bool DrugsCentralWidget::initialize()
 
 QListView *DrugsCentralWidget::prescriptionListView()
 {
+    if (!m_ui)
+        return 0;
     return m_ui->m_PrescriptionView->listview();
 }
 
 PrescriptionViewer *DrugsCentralWidget::prescriptionView()
 {
+    if (!m_ui)
+        return 0;
     return m_ui->m_PrescriptionView;
 }
 
 Internal::DrugSelector *DrugsCentralWidget::drugSelector()
 {
+    if (!m_ui)
+        return 0;
     return m_ui->m_DrugSelector;
 }
 
@@ -140,6 +146,8 @@ DrugsDB::DrugsModel *DrugsCentralWidget::currentDrugsModel() const
 
 void DrugsCentralWidget::setCurrentSearchMethod(int method)
 {
+    if (!m_ui)
+        return;
     m_ui->m_DrugSelector->setSearchMethod(method);
 }
 

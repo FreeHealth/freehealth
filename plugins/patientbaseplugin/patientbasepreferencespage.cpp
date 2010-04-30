@@ -371,6 +371,7 @@ void PatientBasePreferencesWidget::on_populateDb_clicked()
         query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
         query.bindValue(Constants::IDENTITY_NAME, r.getRandomName());
         query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
+        query.bindValue(Constants::IDENTITY_DOB, r.randomDate(1910));
 
         if (r.randomInt(2) == 1) {
             query.bindValue(Constants::IDENTITY_GENDER, "F");

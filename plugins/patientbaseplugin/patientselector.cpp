@@ -143,6 +143,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         setPatientModel(PatientModel::activeModel());
     }
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
+    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SIGNAL(patientSelected(QModelIndex)));
 }
 
 PatientSelector::~PatientSelector()

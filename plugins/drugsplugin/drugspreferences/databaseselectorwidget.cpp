@@ -190,6 +190,8 @@ DatabaseSelectorWidget::~DatabaseSelectorWidget()
 void DatabaseSelectorWidget::setDatasToUi()
 {
     ui->databaseList->clear();
+    if (!selector())
+        return;
     selector()->getAllDatabaseInformations(d->m_PathModel->stringList());
     d->m_Infos = selector()->availableDatabases();
     const DrugsDB::DatabaseInfos *actual = DrugsDB::Internal::DrugsBase::instance()->actualDatabaseInformations();
@@ -207,6 +209,8 @@ void DatabaseSelectorWidget::setDatasToUi()
 
 void DatabaseSelectorWidget::getAllAvailableDatabases()
 {
+    if (!selector())
+        return;
     selector()->getAllDatabaseInformations(d->m_PathModel->stringList());
 }
 

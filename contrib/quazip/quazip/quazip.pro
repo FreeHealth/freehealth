@@ -3,6 +3,8 @@ TARGET    = quazip
 
 DEFINES += QUAZIP_LIBRARY
 
+include( ../../../libs/libsworkbench.pri )
+
 #isEmpty(BUILDING_PROTECTED):include( ../../../config.pri )
 #include( ../../../config.pri )
 
@@ -14,7 +16,6 @@ CONFIG *= dll
 # QT -= gui
 
 # include config file
-include( ../../../libs/libsworkbench.pri )
 
 #CONFIG *= dll
 
@@ -46,4 +47,3 @@ SOURCES += ioapi.c \
            quazipnewinfo.cpp \
            unzip.c \
            zip.c
-

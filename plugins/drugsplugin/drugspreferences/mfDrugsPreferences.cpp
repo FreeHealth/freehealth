@@ -429,7 +429,8 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(S_VIEWFONTSIZE, viewFontSizeSpin->value());
     QFont font = viewFontCombo->currentFont();
     font.setPointSize(viewFontSizeSpin->value());
-    DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
+    if (DrugsWidget::DrugsWidgetManager::instance()->currentView())
+        DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
 
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 }
@@ -504,7 +505,8 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, backgroundAllergiesButton->color());
 
     s->sync();
-    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
+    if (DrugsWidget::DrugsWidgetManager::instance()->currentView())
+        DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }
 
 void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
