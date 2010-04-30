@@ -9,8 +9,6 @@ DEFINES *= MEDICALUTILS_LIBRARY
 include( ../libsworkbench.pri )
 include(../translationutils.pri)
 
-#CONFIG *= plugins
-
 include(aggir/aggir.pri)
 
 HEADERS += global.h \

@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QVector>
 
+#include <time.h>
 
 using namespace Utils;
 using namespace std;

@@ -8,7 +8,7 @@ DEFINES *= TRANSLATIONUTILS_LIBRARY
 # include config file
 include( ../libsworkbench.pri )
 
-CONFIG *= dll
+#CONFIG *= dll
 
 HEADERS += \
     translationutils_exporter.h \
