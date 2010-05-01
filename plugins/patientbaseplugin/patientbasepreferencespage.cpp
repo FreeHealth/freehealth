@@ -432,6 +432,70 @@ void PatientBasePreferencesWidget::on_populateDb_clicked()
 
 }
 
+void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
+{
+    // Prepare virtual episodes
+    QSqlQuery query(patientBase()->database());
+    int nb = nbVirtualEpisodes->value();
+    Utils::Randomizer r;
+
+    // Retreive all patients and create n episodes for them
+    QSet<QString> patients;
+    query.exec(patientBase()->selectDistinct(Constants::Table_IDENT, Constants::IDENTITY_UID));
+    if (query.isActive()) {
+        while (query.next())
+            patients << query.value(0).toString();
+    } else {
+        Utils::Log::addQueryError(this, query);
+    }
+
+    QProgressDialog dlg(tr("Creating %1 virtual episodes").arg(nb * patients.count()), tr("Cancel"), 0, nb * patients.count(), qApp->activeWindow());
+    dlg.setWindowModality(Qt::WindowModal);
+
+    foreach(const QString &uid, patients) {
+        QDateTime date = QDateTime(r.randomDate(2008), QTime(r.randomInt(23), r.randomInt(59), r.randomInt(59), 0));
+
+//        qWarning()<<"xxxxxxxxxxxxxxxxx" << date << uid;
+
+        for(int i = 0; i < nb; ++i) {
+            if (i % 100 == 0) {
+                dlg.setValue(i);
+                patientBase()->database().transaction();
+            }
+            date = r.randomDateTime(date);
+//            qWarning() << date;
+            if (date > QDateTime::currentDateTime())
+                break;
+
+            query.prepare(patientBase()->prepareInsertQuery(Constants::Table_EPISODES));
+            query.bindValue(Constants::EPISODES_ID, QVariant());
+            query.bindValue(Constants::EPISODES_PATIENT_UID, uid);
+            if (r.randomInt(3) == 1)
+                query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 2);
+            else
+                query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 1);
+            query.bindValue(Constants::EPISODES_DATE, date);
+            query.bindValue(Constants::EPISODES_DATEOFCREATION, date);
+            query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
+            query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
+            query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
+
+            if (!query.exec()) {
+                Utils::Log::addQueryError(this, query);
+            }
+            query.finish();
+
+            if (i % 100 == 99)
+                patientBase()->database().commit();
+
+            qApp->processEvents();
+            if (dlg.wasCanceled())
+                break;
+        }
+        patientBase()->database().commit();
+    }
+}
+
 void PatientBasePreferencesWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);

@@ -74,13 +74,13 @@ public:
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
 Q_SIGNALS:
-    void episodeAboutToChange(const QString &newUuid);
-    void episodeAboutToBeDeleted(const QString &uuid);
-    void episodeAboutToBeCreated(const QString &uuid);
+    void episodeAboutToChange(const QModelIndex &index);
+    void episodeAboutToBeDeleted(const QModelIndex &index);
+    void episodeAboutToBeCreated(const QModelIndex &index);
 
-    void episodeChanged(const QString &uuid);
-    void episodeDeleted(const QString &uuid);
-    void episodeCreated(const QString &uuid);
+    void episodeChanged(const QModelIndex &index);
+    void episodeDeleted(const QModelIndex &index);
+    void episodeCreated(const QModelIndex &index);
 
 private:
     Internal::EpisodeModelPrivate *d;

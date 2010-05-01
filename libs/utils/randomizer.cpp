@@ -205,12 +205,63 @@ int Randomizer::randomInt(int max)
     return makeRand(max);
 }
 
-QDate Randomizer::randomDate(int minYear)
+int Randomizer::randomInt(int min, int max)
 {
-    int r = -1;
-    while (r < 0)
-        r = makeRand(QDate::currentDate().year() - minYear);
-    int year = minYear + r;
-    return QDate(year, makeRand(12), makeRand(28));
+    Q_ASSERT(min < max);
+    int i = min;
+    int z = 0;
+    while (i < min) {
+        i = makeRand(max);
+        if (++z == 20) {
+            i = max;
+            break;
+        }
+    }
+    return i;
 }
 
+QDate Randomizer::randomDate(const int minYear, const int minMonth, const int minDay)
+{
+    int r = -1;
+    QDate toReturn(minYear, minMonth, minDay);
+    int i = 0;
+    int days = toReturn.daysTo(QDate::currentDate());
+    if (randomInt(1, 7) > 5) {
+        days = days / 2;
+    }
+    if (days > 1) {
+        while (r < 1) {
+            r = randomInt(days);
+            if (++i == 20)
+                break;
+        }
+    } else {
+        return toReturn.addDays(1);
+    }
+    return toReturn.addDays(r);
+}
+
+QDateTime Randomizer::randomDateTime(const QDateTime &minDate)
+{
+    QDateTime toReturn(randomDate(minDate.date().year(), minDate.date().month(), minDate.date().day()));
+    if (toReturn.date() == minDate.date()) {
+        int i = 0;
+        while (toReturn < minDate) {
+            int r = 0;
+            int j = 0;
+            while (r < 1) {
+                r = randomInt(23452634);
+                if (++j == 20) {
+                    r = i + 1;
+                    break;
+                }
+            }
+            toReturn.addMSecs(r);
+            if (++i == 20)
+                break;
+        }
+    } else {
+        toReturn.setTime(QTime(randomInt(23), randomInt(59), randomInt(59), randomInt(99)));
+    }
+    return toReturn;
+}

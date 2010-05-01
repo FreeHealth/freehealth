@@ -615,7 +615,7 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
     return where;
 }
 
-QString Database::select(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions)const
+QString Database::select(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
 {
     QString toReturn;
     toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
@@ -627,9 +627,25 @@ QString Database::select(const int & tableref, const int & fieldref, const QHash
     return toReturn;
 }
 
-QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions)const
+QString Database::select(const int & tableref, const int & fieldref) const
+{
+    QString toReturn;
+    toReturn = QString("SELECT %1 FROM `%2`")
+            .arg(field(tableref, fieldref))
+            .arg(table(tableref));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
 {
     return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
+}
+
+QString Database::selectDistinct(const int & tableref, const int & fieldref) const
+{
+    return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
 }
 
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const

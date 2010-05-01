@@ -76,6 +76,7 @@ public:
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
     void on_populateDb_clicked();
+    void on_populateEpisodes_clicked();
 
 protected:
     virtual void changeEvent(QEvent *e);

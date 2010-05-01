@@ -145,7 +145,6 @@ PatientBase::PatientBase(QObject *parent) :
     addTable(Table_LK_TOPRACT, "LK_PATIENT_PRACT");
     addField(Table_LK_TOPRACT, LK_TOPRACT_ID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_LK_TOPRACT, LK_TOPRACT_LKID, "LK_ID", FieldIsUUID);
-//    addField(Table_LK_TOPRACT, LK_TOPRACT_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_LK_TOPRACT, LK_TOPRACT_PRACT_UUID, "PRACT_UID", FieldIsUUID);
     addField(Table_LK_TOPRACT, LK_TOPRACT_GROUP_UUID, "GROUP_UID", FieldIsUUID);
 
@@ -159,10 +158,8 @@ PatientBase::PatientBase(QObject *parent) :
     // Clinical episodes
     addTable(Table_EPISODES, "EPISODES");
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
-    addField(Table_EPISODES, EPISODES_UID, "EPISODE_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
-    addField(Table_EPISODES, EPISODES_USER_UID, "USER_UID", FieldIsUUID);
-    addField(Table_EPISODES, EPISODES_GROUP_UID,"GROUP_UID",  FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
     addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);

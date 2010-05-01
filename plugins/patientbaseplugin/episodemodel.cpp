@@ -43,6 +43,8 @@
 
 #include <translationutils/constanttranslations.h>
 
+#include <QSqlTableModel>
+
 using namespace Patients;
 
 using namespace Trans::ConstantTranslations;
@@ -52,11 +54,21 @@ namespace Internal {
 class EpisodeModelPrivate
 {
 public:
-    EpisodeModelPrivate(EpisodeModel *parent) : q(parent) {}
-    ~EpisodeModelPrivate () {}
+    EpisodeModelPrivate(EpisodeModel *parent) : q(parent), m_Sql(0)
+    {
+    }
+
+    ~EpisodeModelPrivate ()
+    {
+        if (m_Sql) {
+            delete m_Sql;
+            m_Sql = 0;
+        }
+    }
 
 private:
     EpisodeModel *q;
+    QSqlTableModel *m_Sql;
 };
 }
 }

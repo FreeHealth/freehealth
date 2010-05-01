@@ -68,8 +68,10 @@ public:
     QPair<int, QString> getRandomFrenchCity();
 
     int randomInt(int max);
+    int randomInt(int min, int max);
 
-    QDate randomDate(int minYear);
+    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
+    QDateTime randomDateTime(const QDateTime &mindate);
 
 private:
     Internal::RandomizerPrivate *d;

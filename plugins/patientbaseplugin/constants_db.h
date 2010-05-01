@@ -92,10 +92,8 @@ namespace Constants {
     };
     enum EpisodesFields {
         EPISODES_ID = 0,
-        EPISODES_UID,
         EPISODES_PATIENT_UID,
-        EPISODES_USER_UID,
-        EPISODES_GROUP_UID,
+        EPISODES_LK_TOPRACT_LKID,
         EPISODES_DATE,
         EPISODES_DATEOFCREATION,
         EPISODES_DATEOFMODIFICATION,
