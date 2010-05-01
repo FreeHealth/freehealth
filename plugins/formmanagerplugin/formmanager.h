@@ -82,6 +82,7 @@ public:
      ~FormManager();
 
      bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
+     void activateMode();
 
 
      Core::UniqueIDManager *uuidManager() const;

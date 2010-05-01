@@ -82,8 +82,11 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
     d->m_Tree = new QTreeWidget(this);
     d->m_Scroll = new QScrollArea(this);
+    d->m_Scroll->setWidgetResizable(false);
+
     d->m_Stack = new QStackedLayout(d->m_Scroll);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
+    d->m_Stack->setSizeConstraint(QLayout::SetFixedSize);
     d->m_Scroll->setLayout(d->m_Stack);
 
     Utils::MiniSplitter *s = new Utils::MiniSplitter(this);

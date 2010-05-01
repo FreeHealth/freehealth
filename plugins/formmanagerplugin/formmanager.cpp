@@ -41,6 +41,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/modemanager/modemanager.h>
 
 #include <utils/global.h>
 
@@ -62,6 +63,7 @@ using namespace Form;
 using namespace Form::Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 
 namespace Form {
@@ -118,6 +120,11 @@ FormManager::~FormManager()
         delete d;
         d = 0;
     }
+}
+
+void FormManager::activateMode()
+{
+    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
 Core::UniqueIDManager *FormManager::uuidManager() const

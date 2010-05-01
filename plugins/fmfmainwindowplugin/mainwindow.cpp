@@ -205,11 +205,6 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-    // Open Last Opened Forms is necessary
-//    if (fileManager()->recentFiles().count() > 0) {
-        connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(openLastOpenedForm()));
-//    }
-
     finishSplash(this);
 
     setCentralWidget(m_modeStack);
@@ -231,12 +226,20 @@ void MainWindow::postCoreInitialization()
 
     // Connect this tab with the patientsearchmode
     connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
-            m_PatientBar, SLOT(setCurrentIndex(QModelIndex)));
+            this, SLOT(setCurrentPatient(QModelIndex)));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+
+    // Open Last Opened Forms is necessary
+    openLastOpenedForm();
 }
 
+void MainWindow::setCurrentPatient(const QModelIndex &index)
+{
+    m_PatientBar->setCurrentIndex(index);
+    formManager()->activateMode();
+}
 
 /** \brief Close the main window and the application */
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -304,48 +307,20 @@ bool MainWindow::openFile()
 
 bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
-//    if (filename.isEmpty())
-//        return false;
-//    Form::IFormIO *reader = 0;
-//    QList<Form::IFormIO *> list;
-//    if (iolist.isEmpty())
-//         list = pluginManager()->getObjects<Form::IFormIO>();
-//    else
-//        list = iolist;
-//
-//    foreach(Form::IFormIO *io, list) {
-//        if (io->setFileName(filename) && io->canReadFile()) {
-//            if (io->loadForm())
-//                reader = io;
-//        }
-//    }
-//    if (!reader)
-//        return false;
-//    fileManager()->setCurrentFile(filename);
-//    fileManager()->addToRecentFiles(filename);
-//
-//    QWidget *w = new QWidget(this);
-//    QHBoxLayout *vb = new QHBoxLayout(w);
-//    w->setLayout(vb);
-//    QTreeWidget *t = formManager()->formsTreeWidget(w);
-//    QWidget *w2 = new QWidget(this);
-//    QStackedLayout *slayout = formManager()->formsStackedLayout(w2);
-//    vb->addWidget(t);
-//    vb->addWidget(w2);
+    if (filename.isEmpty())
+        return false;
 
+    // Get all IFormIO from pluginsmanager
+    QList<Form::IFormIO *> list = iolist;
 
-//    if (formManager()->forms().count()>0) {
-//        if (formManager()->forms().at(0)->formWidget())
-//            vb->addWidget(formManager()->forms().at(0)->formWidget());
-//    }
+    if (iolist.isEmpty())
+        QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
-    /** \todo Add loaded form inside the FormManagerPlaceHolder */
-//    setCentralWidget(w);
-
-//    if (root) {
-//        // inform form manager or create ui
-//        formManager()->setFormObjects(root);
-//    }
+    if (formManager()->loadFile(filename, list)) {
+        fileManager()->setCurrentFile(filename);
+    } else {
+        return false;
+    }
     return true;
 }
 

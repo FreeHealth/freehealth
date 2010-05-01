@@ -50,13 +50,14 @@ QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QTextEdit;
+class QModelIndex;
 QT_END_NAMESPACE
 
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 29 Apr 2010
+ * \date 01 May 2010
 */
 
 namespace Form {
@@ -100,6 +101,7 @@ public:
 
 public Q_SLOTS:
     void postCoreInitialization();
+    void setCurrentPatient(const QModelIndex &index);
 
     // Interface of MainWidowActionHandler
 //    bool newFile();
