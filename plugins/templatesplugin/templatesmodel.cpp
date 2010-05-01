@@ -1243,7 +1243,7 @@ bool TemplatesModel::isCategoryOnly() const
 
 void TemplatesModel::setReadOnly(const bool state)
 {
-    d->m_ReadOnly = true;
+    d->m_ReadOnly = state;
 }
 const ITemplate *TemplatesModel::getTemplate(const QModelIndex &item) const
 {
