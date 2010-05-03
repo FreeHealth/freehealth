@@ -71,8 +71,8 @@ namespace Internal {
 class FormManagerPrivate
 {
 public:
-    FormManagerPrivate() :
-            m_Holder(0)
+    FormManagerPrivate(FormManager *parent) :
+            m_Holder(0), q(parent)
     {}
 
     ~FormManagerPrivate()
@@ -84,11 +84,52 @@ public:
         }
         /** \todo Delete FormItem ?? */
     }
+
+    QTreeWidget *formsTreeWidget(QTreeWidget *tree) const
+    {
+        Q_ASSERT(tree);
+        int i = 0;
+        QHash<FormMain *, QTreeWidgetItem *> items;
+        foreach(FormMain *form, q->forms()) {
+            QTreeWidgetItem *item = 0;
+            if (items.keys().contains(form->formParent()))
+                item =  new QTreeWidgetItem(items.value(form->formParent()), QStringList() << form->spec()->label());
+            else
+                item =  new QTreeWidgetItem(tree, QStringList() << form->spec()->label());
+            items.insert(form, item);
+            item->setData(0,Qt::UserRole,i);
+            if (form->formParent())
+                qWarning() << form->formParent()->spec()->label();
+            ++i;
+        }
+        tree->resizeColumnToContents(0);
+        tree->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        tree->header()->hide();
+        return tree;
+    }
+
+    QStackedLayout *formsStackedLayout(QStackedLayout *stack) const
+    {
+        Q_ASSERT(stack);
+        foreach(FormMain *form, q->forms()) {
+    //        Q_ASSERT(form->formWidget());
+            if (form->formWidget()) {
+                QWidget *w = new QWidget;
+                QVBoxLayout *vl = new QVBoxLayout(w);
+                vl->addWidget(form->formWidget());
+                stack->addWidget(w);
+            }
+        }
+        return stack;
+    }
+
+public:
     QPointer<FormPlaceHolder> m_Holder;
     Core::UniqueIDManager *m_UuidManager;
     QMap<int, Form::FormMain *> m_MappedForms;
 
 private:
+    FormManager *q;
 };
 } // End Internal
 } // End Form
@@ -106,7 +147,7 @@ FormManager *FormManager::instance()
 
 
 FormManager::FormManager(QObject *parent)
-        : QObject(parent), d(new Form::Internal::FormManagerPrivate)
+        : QObject(parent), d(new Form::Internal::FormManagerPrivate(this))
 {
     setObjectName("Form::FormManager");
     /** \todo Need to modify UID code to create a new private uid */
@@ -189,58 +230,23 @@ bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *>
     if (!reader)
         return false;
 
-    // repopulate FormPlaceHolder with new values
+    // populate FormPlaceHolder with new values
     if (d->m_Holder) {
         d->m_Holder->formTree()->clear();
         d->m_Holder->clearFormStackLayout();
     }
 
-    formsTreeWidget(d->m_Holder->formTree());
-    formsStackedLayout(d->m_Holder->formStackLayout());
+    d->formsTreeWidget(d->m_Holder->formTree());
+    d->formsStackedLayout(d->m_Holder->formStackLayout());
 
     return true;
 }
 
-QTreeWidget *FormManager::formsTreeWidget(QTreeWidget *tree) const
-{
-    Q_ASSERT(tree);
-    int i = 0;
-    QHash<FormMain *, QTreeWidgetItem *> items;
-    foreach(FormMain *form, forms()) {
-        QTreeWidgetItem *item = 0;
-        if (items.keys().contains(form->formParent()))
-            item =  new QTreeWidgetItem(items.value(form->formParent()), QStringList() << form->spec()->label());
-        else
-            item =  new QTreeWidgetItem(tree, QStringList() << form->spec()->label());
-        items.insert(form, item);
-        item->setData(0,Qt::UserRole,i);
-        if (form->formParent())
-            qWarning() << form->formParent()->spec()->label();
-        ++i;
-    }
-    tree->resizeColumnToContents(0);
-    tree->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    tree->header()->hide();
-    connect(tree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
-    return tree;
-}
 
 FormPlaceHolder *FormManager::formPlaceHolder() const
 {
     return d->m_Holder;
 }
-
-QStackedLayout *FormManager::formsStackedLayout(QStackedLayout *stack) const
-{
-    Q_ASSERT(stack);
-    foreach(FormMain *form, forms()) {
-//        Q_ASSERT(form->formWidget());
-        if (form->formWidget())
-            stack->addWidget(form->formWidget());
-    }
-    return stack;
-}
-
 
 
 bool FormManager::setFormObjects(QObject *root)

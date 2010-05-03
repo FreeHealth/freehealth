@@ -44,6 +44,8 @@
 #include <QTreeWidget>
 #include <QStackedLayout>
 #include <QScrollArea>
+#include <QTableView>
+#include <QHeaderView>
 
 using namespace Form;
 
@@ -52,18 +54,19 @@ namespace Internal {
 class FormPlaceHolderPrivate
 {
 public:
-    FormPlaceHolderPrivate() : m_Tree(0), m_Stack(0), m_GeneralLayout(0)
+    FormPlaceHolderPrivate() : m_FileTree(0), m_EpisodesTable(0), m_Stack(0), m_GeneralLayout(0)
     {
     }
 
     ~FormPlaceHolderPrivate()
     {
-        delete m_Tree; m_Tree = 0;
+        delete m_FileTree; m_FileTree = 0;
         delete m_Stack; m_Stack = 0;
         delete m_GeneralLayout; m_GeneralLayout=0;
     }
 
-    QTreeWidget *m_Tree;
+    QTreeWidget *m_FileTree;
+    QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
     QScrollArea *m_Scroll;
@@ -80,25 +83,44 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_GeneralLayout->setSpacing(0);
     setLayout(d->m_GeneralLayout);
 
-    d->m_Tree = new QTreeWidget(this);
+    QWidget *w = new QWidget(this);
+    d->m_FileTree = new QTreeWidget(this);
+    d->m_FileTree->setIndentation(5);
     d->m_Scroll = new QScrollArea(this);
-    d->m_Scroll->setWidgetResizable(false);
+    d->m_Scroll->setWidgetResizable(true);
 
-    d->m_Stack = new QStackedLayout(d->m_Scroll);
+    d->m_Stack = new QStackedLayout(w);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
-    d->m_Stack->setSizeConstraint(QLayout::SetFixedSize);
-    d->m_Scroll->setLayout(d->m_Stack);
 
-    Utils::MiniSplitter *s = new Utils::MiniSplitter(this);
-    s->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    s->setObjectName("FormPlaceHolder::MiniSplitter1");
-    s->setOrientation(Qt::Horizontal);
-    s->addWidget(d->m_Tree);
-    s->addWidget(d->m_Scroll);
+    Utils::MiniSplitter *horiz = new Utils::MiniSplitter(this);
+    horiz->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    horiz->setObjectName("FormPlaceHolder::MiniSplitter1");
+    horiz->setOrientation(Qt::Horizontal);
 
-    d->m_GeneralLayout->addWidget(s, 100, 0);
+    Utils::MiniSplitter *vertic = new Utils::MiniSplitter(this);
+    vertic->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    vertic->setObjectName("FormPlaceHolder::MiniSplitter::Vertical");
+    vertic->setOrientation(Qt::Vertical);
 
-    connect(d->m_Tree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
+    d->m_EpisodesTable = new QTableView(this);
+    d->m_EpisodesTable->horizontalHeader()->hide();
+    d->m_EpisodesTable->verticalHeader()->hide();
+
+    horiz->addWidget(d->m_FileTree);
+//    vertic->addWidget(d->m_EpisodesTable);
+    vertic->addWidget(d->m_Scroll);
+    horiz->addWidget(vertic);
+
+    horiz->setStretchFactor(0, 1);
+    horiz->setStretchFactor(1, 3);
+//    vertic->setStretchFactor(0, 1);
+//    vertic->setStretchFactor(1, 3);
+
+    d->m_Scroll->setWidget(w);
+
+    d->m_GeneralLayout->addWidget(horiz, 100, 0);
+
+    connect(d->m_FileTree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -111,7 +133,7 @@ FormPlaceHolder::~FormPlaceHolder()
 
 QTreeWidget *FormPlaceHolder::formTree() const
 {
-    return d->m_Tree;
+    return d->m_FileTree;
 }
 
 QStackedLayout *FormPlaceHolder::formStackLayout() const
