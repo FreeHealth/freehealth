@@ -138,23 +138,23 @@ public:
         q->reset();
     }
 
-    void retreivePractionnerLkIds()
-    {
-        // Get Lk_Ids for this practitionner
-        /** \todo manage user's groups */
-        QHash<int, QString> where;
-        where.clear();
-        where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(m_UserUuid));
-        QString req = patientBase()->select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
-        QSqlQuery query(req, m_SqlPatient->database());
-        if (query.isActive()) {
-            while (query.next())
-                m_LkIds.append(query.value(0).toString() + ",");
-            m_LkIds.chop(1);
-        } else {
-            Utils::Log::addQueryError(q, query);
-        }
-    }
+//    void retreivePractionnerLkIds()
+//    {
+//        // Get Lk_Ids for this practitionner
+//        /** \todo manage user's groups */
+//        QHash<int, QString> where;
+//        where.clear();
+//        where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(m_UserUuid));
+//        QString req = patientBase()->select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
+//        QSqlQuery query(req, m_SqlPatient->database());
+//        if (query.isActive()) {
+//            while (query.next())
+//                m_LkIds.append(query.value(0).toString() + ",");
+//            m_LkIds.chop(1);
+//        } else {
+//            Utils::Log::addQueryError(q, query);
+//        }
+//    }
 
     QIcon iconizedGender(const QModelIndex &index)
     {
@@ -195,7 +195,7 @@ PatientModel::PatientModel(QObject *parent) :
     d->m_SqlPatient = new QSqlTableModel(this, patientBase()->database());
     d->m_SqlPatient->setTable(patientBase()->table(Constants::Table_IDENT));
     d->connectSqlPatientSignals();
-    d->retreivePractionnerLkIds();
+    changeUserUuid(d->m_UserUuid);
     d->refreshFilter();
 //    d->m_SqlPatient->select();
 }
@@ -211,7 +211,11 @@ PatientModel::~PatientModel()
 void PatientModel::changeUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
-    d->retreivePractionnerLkIds();
+    QList<int> ids = patientBase()->retreivePractionnerLkIds(uuid);
+    d->m_LkIds.clear();
+    foreach(int i, ids)
+        d->m_LkIds.append(QString::number(i) + ",");
+    d->m_LkIds.chop(1);
     d->refreshFilter();
 }
 

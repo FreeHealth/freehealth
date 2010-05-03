@@ -82,6 +82,9 @@ Q_SIGNALS:
     void episodeDeleted(const QModelIndex &index);
     void episodeCreated(const QModelIndex &index);
 
+protected Q_SLOTS:
+    void changeUserUuid(const QString &uuid);
+
 private:
     Internal::EpisodeModelPrivate *d;
 };

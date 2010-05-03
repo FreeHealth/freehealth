@@ -222,6 +222,26 @@ bool PatientBase::init()
     return true;
 }
 
+QList<int> PatientBase::retreivePractionnerLkIds(const QString &uid)
+{
+    /** \todo manage user's groups */
+    QList<int> lk_ids;
+    if (uid.isEmpty())
+        return lk_ids;
+
+    QHash<int, QString> where;
+    where.clear();
+    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uid));
+    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
+    QSqlQuery query(req, database());
+    if (query.isActive()) {
+        while (query.next())
+            lk_ids.append(query.value(0).toInt());
+    } else {
+        Utils::Log::addQueryError(this, query);
+    }
+}
+
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,

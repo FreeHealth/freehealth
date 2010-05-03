@@ -41,6 +41,8 @@
 #ifndef PATIENTBAR_H
 #define PATIENTBAR_H
 
+#include <patientbaseplugin/patientbase_exporter.h>
+
 #include <QWidget>
 #include <QModelIndex>
 
@@ -51,7 +53,7 @@ namespace Internal {
 class PatientBarPrivate;
 }
 
-class PatientBar : public QWidget
+class PATIENT_EXPORT PatientBar : public QWidget
 {
     Q_OBJECT
 
