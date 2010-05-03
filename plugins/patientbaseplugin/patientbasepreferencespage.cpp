@@ -455,15 +455,12 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
     foreach(const QString &uid, patients) {
         QDateTime date = QDateTime(r.randomDate(2008), QTime(r.randomInt(23), r.randomInt(59), r.randomInt(59), 0));
 
-//        qWarning()<<"xxxxxxxxxxxxxxxxx" << date << uid;
-
         for(int i = 0; i < nb; ++i) {
             if (i % 100 == 0) {
                 dlg.setValue(i);
                 patientBase()->database().transaction();
             }
             date = r.randomDateTime(date);
-//            qWarning() << date;
             if (date > QDateTime::currentDateTime())
                 break;
 
@@ -479,6 +476,7 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
             query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
             query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
             query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
+            query.bindValue(Constants::EPISODES_FORM_PAGE_UID, QVariant());
 
             if (!query.exec()) {
                 Utils::Log::addQueryError(this, query);

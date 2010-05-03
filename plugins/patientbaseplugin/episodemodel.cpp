@@ -86,24 +86,6 @@ public:
 //        m_Sql->setFilter();
     }
 
-//    void retreivePractionnerLkIds()
-//    {
-//        // Get Lk_Ids for this practitionner
-//        /** \todo manage user's groups */
-//        QHash<int, QString> where;
-//        where.clear();
-//        where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(m_UserUuid));
-//        QString req = patientBase()->select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
-//        QSqlQuery query(req, m_SqlPatient->database());
-//        if (query.isActive()) {
-//            while (query.next())
-//                m_LkIds.append(query.value(0).toString() + ",");
-//            m_LkIds.chop(1);
-//        } else {
-//            Utils::Log::addQueryError(q, query);
-//        }
-//    }
-
 public:
     QSqlTableModel *m_Sql;
     QString m_UserUuid, m_LkIds;

@@ -160,6 +160,7 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
+    addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
