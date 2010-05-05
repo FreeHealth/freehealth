@@ -43,10 +43,7 @@
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
-
-#ifdef FREEMEDFORMS
-#    include "drugswidgetfactory.h"
-#endif
+#include "drugswidgetfactory.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -62,7 +59,6 @@
 #include <QDebug>
 
 using namespace DrugsWidget::Internal;
-//using namespace DrugsWidget;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
@@ -78,11 +74,7 @@ DrugsPlugin::DrugsPlugin() :
 {
     setObjectName("DrugsPlugin");
     if (Utils::Log::warnPluginsCreation())
-#ifdef FREEDIAMS
-        qWarning() << "creating FREEDIAMS::DrugsPlugin";
-#else
         qWarning() << "creating FREEMEDFORMS::DrugsPlugin";
-#endif
 }
 
 DrugsPlugin::~DrugsPlugin()
@@ -127,14 +119,8 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 
-#ifdef FREEDIAMS
-    Utils::Log::addMessage(this,"Running as FreeDiams");
-#endif
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
-
-#ifdef FREEMEDFORMS
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
-#endif
 
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);

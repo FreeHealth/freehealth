@@ -195,12 +195,12 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
     m_UID = -1;
     if (drugsBase()->isDatabaseTheDefaultOne()) {
         setFilter(QString("%1 = \"%2\"")
-                  .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
+                  .arg(database().record(Dosages::Constants::DB_DOSAGES_TABLE_NAME).fieldName(Dosages::Constants::DrugsDatabaseIdentifiant))
                   .arg(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT));
     } else {
         if (drugsBase()->actualDatabaseInformations()) {
             setFilter(QString("%1 = \"%2\"")
-                      .arg(database().tables(QSql::Tables).at(Dosages::Constants::DrugsDatabaseIdentifiant))
+                      .arg(database().record(Dosages::Constants::DB_DOSAGES_TABLE_NAME).fieldName(Dosages::Constants::DrugsDatabaseIdentifiant))
                       .arg(drugsBase()->actualDatabaseInformations()->identifiant));
         }
     }

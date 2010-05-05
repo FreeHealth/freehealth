@@ -128,8 +128,11 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWi
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this );
+    hb->setSpacing(0);
+    hb->setMargin(0);
+
     // Add QLabel
-    hb->addWidget( m_Label );
+    hb->addWidget(m_Label);
 //    if ( !( mfo->options() & mfObjectFundamental::LabelOnTop ) )
 //    {
 //        Qt::Alignment alignment = m_Label->alignment();
@@ -146,15 +149,12 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWi
 //        m_WithPrinting = true;
 
     // intialize drugs database
-    drugsBase();
+//    drugsBase();
 
     // create main widget
     DrugsCentralWidget *centralWidget = new DrugsCentralWidget(this);
     centralWidget->initialize();
     hb->addWidget(centralWidget);
-
-    centralWidget->changeFontTo( QFont(settings()->value( Constants::S_VIEWFONT ).toString(),
-                                 settings()->value( Constants::S_VIEWFONTSIZE ).toInt()) );
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()
