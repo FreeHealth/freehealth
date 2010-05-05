@@ -219,7 +219,8 @@ bool XmlFormIO::loadForm()
 {
     Q_ASSERT(!m_AbsFileName.isEmpty());
     refreshPlugsFactories();
-    return loadForm(m_AbsFileName,0);
+    m_ActualForm = 0;
+    return loadForm(m_AbsFileName, m_ActualForm);
 }
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
@@ -265,11 +266,13 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
             warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
             return false;
         }
-        rootForm = createNewForm(root,0);
+        rootForm = createNewForm(root, m_ActualForm);
+        m_ActualForm = rootForm;
     }
 
-    if (!loadElement(rootForm,root))
+    if (!loadElement(rootForm, root))
         return false;
+
     rootForm->createDebugPage();
     createWidgets();
     return true;
@@ -284,7 +287,7 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         // Create a nem FormItem ?
         i = Constants::createTags.indexOf(element.tagName());
         if (i != -1) {
-            createElement(item,element);
+            createElement(item, element);
             element = element.nextSiblingElement();
             continue;
         }
@@ -351,10 +354,14 @@ bool XmlFormIO::createElement(Form::FormItem *item, QDomElement &element)
     // new form
     if (element.tagName().compare(Constants::TAG_NEW_FORM, Qt::CaseInsensitive)==0) {
         // create a new form
-        item = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text());
+        Form::FormMain *oldRootForm = m_ActualForm;
+        /** \todo add Forms' parent */
+        m_ActualForm = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text(), m_ActualForm);
+        item = m_ActualForm;
         if (item) {
             loadElement(item, element);
             // read specific form's datas
+            m_ActualForm = oldRootForm;
             return true;
         }
         else

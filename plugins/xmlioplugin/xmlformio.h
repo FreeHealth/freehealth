@@ -46,17 +46,11 @@
 #include <QDomNode>
 #include <QObject>
 
-//namespace Core {
-    class mfObject;
-//}
-
 namespace Form {
 class FormItem;
 class FormMain;
 class IFormWidgetFactory;
 }
-
-
 
 namespace XmlForms {
 
@@ -92,6 +86,7 @@ private:
 
 private:
      mutable QString m_AbsFileName;
+     Form::FormMain *m_ActualForm;
 };
 
 }  // End XmlForms
