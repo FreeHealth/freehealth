@@ -44,7 +44,7 @@
 #include <templatesplugin/templates_exporter.h>
 #include <templatesplugin/itemplates.h>
 
-#include <QSqlTableModel>
+#include <QAbstractItemModel>
 #include <QStringList>
 #include <QObject>
 

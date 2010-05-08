@@ -62,7 +62,6 @@
 
 #include <QList>
 #include <QColor>
-#include <QSqlTableModel>
 #include <QDir>
 #include <QMimeData>
 #include <QDomDocument>
@@ -1245,6 +1244,7 @@ void TemplatesModel::setReadOnly(const bool state)
 {
     d->m_ReadOnly = state;
 }
+
 const ITemplate *TemplatesModel::getTemplate(const QModelIndex &item) const
 {
     return d->getItem(item);

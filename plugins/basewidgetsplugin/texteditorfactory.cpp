@@ -64,7 +64,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *linkedObject, QWidget *parent) :
         }
     }
     m_Text = new Editor::TextEditor(this, t);
-    m_Text->setObjectName("TextEditor_" + QString::number(m_LinkedObject->uuid()));
+    m_Text->setObjectName("TextEditor_" + m_LinkedObject->uuid());
     hb->addWidget(m_Text);
     retranslate();
 }

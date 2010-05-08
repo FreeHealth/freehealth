@@ -253,20 +253,21 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case Uid:           col = Constants::IDENTITY_UID;        break;
         case FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
         case BirthName:     col = Constants::IDENTITY_NAME;       break;
-        case SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
-        case Surname:       col = Constants::IDENTITY_SURNAME;       break;
-        case Gender:        col = Constants::IDENTITY_GENDER;       break;
-        case DateOfBirth:   col = Constants::IDENTITY_DOB;       break;
-        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;       break;
+        case SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
+        case Surname:       col = Constants::IDENTITY_SURNAME;           break;
+        case Gender:        col = Constants::IDENTITY_GENDER;            break;
+        case DateOfBirth:   col = Constants::IDENTITY_DOB;               break;
+        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;    break;
         case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
-        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;       break;
-        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;       break;
+        case Profession:    col = Constants::IDENTITY_PROFESSION;        break;
+        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;    break;
+        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;   break;
         case City:          col = Constants::IDENTITY_ADRESS_CITY;       break;
-        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;       break;
-        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;       break;
-        case Mails:         col = Constants::IDENTITY_MAILS;       break;
-        case Tels:          col = Constants::IDENTITY_TELS;       break;
-        case Faxes:         col = Constants::IDENTITY_FAXES;       break;
+        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
+        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
+        case Mails:         col = Constants::IDENTITY_MAILS;             break;
+        case Tels:          col = Constants::IDENTITY_TELS;              break;
+        case Faxes:         col = Constants::IDENTITY_FAXES;             break;
         case Title :
             {
                 col = Constants::IDENTITY_TITLE;
@@ -348,6 +349,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case DateOfBirth:   col = Constants::IDENTITY_DOB;       break;
         case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;       break;
         case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
+        case Profession:    col = Constants::IDENTITY_PROFESSION;       break;
         case Street:        col = Constants::IDENTITY_ADDRESS_STREET;       break;
         case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;       break;
         case City:          col = Constants::IDENTITY_ADRESS_CITY;       break;

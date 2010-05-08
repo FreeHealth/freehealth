@@ -30,6 +30,7 @@ public:
         DateOfBirth,
         Age,
         MaritalStatus,
+        Profession,
         DateOfDeath,
         Street,
         ZipCode,

@@ -365,7 +365,7 @@ BaseCheck::BaseCheck(Form::FormItem *linkedObject, QWidget *parent)
     QHBoxLayout * hb = new QHBoxLayout( this );
     // Add Buttons
     m_Check = new QCheckBox ( this );
-    m_Check->setObjectName( "Checkbox_" + QString::number(m_LinkedObject->uuid()) );
+    m_Check->setObjectName( "Checkbox_" + m_LinkedObject->uuid());
     hb->addWidget(m_Check);
     retranslate();
 }
@@ -507,7 +507,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *linkedObject, QWidget *parent, bo
         //          }
 
         m_Line = new QLineEdit( this );
-        m_Line->setObjectName( "Line_" + QString::number(m_LinkedObject->uuid()) );
+        m_Line->setObjectName( "Line_" + m_LinkedObject->uuid());
         m_Line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
         //          m_Line->setInputMask( mfo(m_LinkedObject)->mask() );
         //          m_Line->setCursorPosition(0);
@@ -520,7 +520,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *linkedObject, QWidget *parent, bo
 
     } else {
         m_Text = new QTextEdit(this);
-        m_Text->setObjectName( "Text_" + QString::number(m_LinkedObject->uuid()) );
+        m_Text->setObjectName( "Text_" + m_LinkedObject->uuid());
         m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
         hb->addWidget(m_Text);
         // Connect list selection changed with mfObject value changed
@@ -594,7 +594,7 @@ BaseHelpText::BaseHelpText(Form::FormItem *linkedObject, QWidget *parent)
     // Add QLabel
     createLabel(m_LinkedObject->spec()->label(), Qt::AlignJustify);
     // Setting objectName to hide/show via a simple option button
-    m_Label->setObjectName("HelpText_" + QString::number(m_LinkedObject->uuid()));
+    m_Label->setObjectName("HelpText_" + m_LinkedObject->uuid());
     hb->addWidget(m_Label);
 }
 
@@ -620,7 +620,7 @@ BaseList::BaseList(Form::FormItem *linkedObject, QWidget *parent, bool uniqueLis
 
     // Add List and manage size
     m_List = new QListWidget(this);
-    m_List->setObjectName("List_" + QString::number(m_LinkedObject->uuid()));
+    m_List->setObjectName("List_" + m_LinkedObject->uuid());
     m_List->setUniformItemSizes(true);
     m_List->addItems( m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible) );
     m_List->setSortingEnabled(false);
@@ -714,7 +714,7 @@ BaseCombo::BaseCombo(Form::FormItem *linkedObject, QWidget *parent)
 
     // Add List and manage size
     m_Combo = new QComboBox(this);
-    m_Combo->setObjectName("Combo_" + QString::number(m_LinkedObject->uuid()));
+    m_Combo->setObjectName("Combo_" + m_LinkedObject->uuid());
     m_Combo->addItems(m_LinkedObject->valueReferences()->values(Form::FormItemValues::Value_Possible));
     hb->addWidget(m_Combo);
     //     if ( mfo(m_LinkedObject)->options() & mfObjectFundamental::SizePreferred )
@@ -799,7 +799,7 @@ BaseDate::BaseDate(Form::FormItem *linkedObject, QWidget *parent)
 
     // Add Date selector and manage date format
     m_Date = new QDateTimeEdit(this);
-    m_Date->setObjectName( "Date_" + QString::number(m_LinkedObject->uuid()));
+    m_Date->setObjectName( "Date_" + m_LinkedObject->uuid());
     m_Date->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
     m_Date->setDisplayFormat(getDateFormat(m_LinkedObject));
     m_Date->setCalendarPopup(true);
@@ -877,7 +877,7 @@ BaseSpin::BaseSpin(Form::FormItem *linkedObject, QWidget *parent)
 
     // Add Date selector and manage date format
     m_Spin = new QSpinBox(this);
-    m_Spin->setObjectName( "Spin_" + QString::number(m_LinkedObject->uuid()) );
+    m_Spin->setObjectName( "Spin_" + m_LinkedObject->uuid());
     m_Spin->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
     //     m_Spin->setValue( mfo(m_LinkedObject)->value().toInt() );
     hb->addWidget(m_Spin);
@@ -932,7 +932,7 @@ BaseButton::BaseButton(Form::FormItem *linkedObject, QWidget *parent)
     hb->addStretch();
 
     m_Button = new QPushButton( this );
-    m_Button->setObjectName( QString::number(m_LinkedObject->uuid()) );
+    m_Button->setObjectName("Button_" + m_LinkedObject->uuid());
     m_Button->setText(m_LinkedObject->spec()->label() );
     m_Button->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
     hb->addWidget(m_Button);

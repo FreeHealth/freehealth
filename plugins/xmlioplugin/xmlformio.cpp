@@ -310,7 +310,7 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         i = ::m_SpecsTypes.value(element.tagName(),-1);
         if (i != -1) {
             QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
-            item->spec()->setValue(::m_SpecsTypes.value(element.tagName()),element.text(), lang);
+            item->spec()->setValue(::m_SpecsTypes.value(element.tagName()), element.text(), lang);
             element = element.nextSiblingElement();
             continue;
         }

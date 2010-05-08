@@ -123,8 +123,9 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_GENDER, "GENDER", FieldIsOneChar);
     addField(Table_IDENT, IDENTITY_TITLE, "TITLE", FieldIsInteger);
     addField(Table_IDENT, IDENTITY_DOB, "DOB", FieldIsDate);
-    addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar);
+    addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
     addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
+    addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
 
     // Contact
     addField(Table_IDENT, IDENTITY_ADDRESS_STREET, "STREET", FieldIsShortText);
@@ -161,6 +162,7 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);

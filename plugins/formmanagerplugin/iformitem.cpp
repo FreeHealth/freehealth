@@ -71,9 +71,9 @@ void FormItemIdentifiants::setUuid(const QString &uuid)
     m_Uuid=uuid;
 }
 
-int FormItemIdentifiants::uuid() const
+QString FormItemIdentifiants::uuid() const
 {
-    return id;
+    return m_Uuid;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -484,7 +484,7 @@ void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const
 FormMainDebugPage::FormMainDebugPage(FormMain *form, QObject *parent) :
         IDebugPage(parent), m_Form(form)
 {
-    setObjectName("FormMainDebugPage_" + QString::number(m_Form->uuid()));
+    setObjectName("FormMainDebugPage_" + m_Form->uuid());
     m_Widget = new QWidget();
     QGridLayout *layout = new QGridLayout(m_Widget);
     layout->setSpacing(0);

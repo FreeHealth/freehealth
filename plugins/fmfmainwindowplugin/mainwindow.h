@@ -70,6 +70,7 @@ class FancyTabWidget;
 
 namespace Patients {
 class PatientBar;
+class EpisodeModel;
 }
 
 namespace MainWin {
@@ -139,6 +140,8 @@ public:
     bool              m_OpenLastOpenedForm;
     QByteArray        windowState;
 
+
+    Patients::EpisodeModel *m_EpisodeModel;
     //     mfRecovererThread thread;
 };
 

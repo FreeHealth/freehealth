@@ -49,6 +49,10 @@ namespace Constants {
     const char * const  S_SELECTOR_SHOWVIRTUALPATIENTS  = "Patients/Selector/ShowVirtual";              /*!< \brief Key for settings. */
     const char * const  S_SELECTOR_USEGENDERCOLORS  = "Patients/Selector/UseGenderColors";
 
+    const char * const  S_EPISODEMODEL_FORM_FOREGROUND  = "EpisodeModel/FormForeGround";
+    const char * const  S_EPISODEMODEL_EPISODE_FOREGROUND  = "EpisodeModel/EpisodeForeGround";
+    const char * const  S_EPISODEMODEL_DATEFORMAT = "EpisodeModel/OutputDateFormat";
+
 }  // End namespace Patients::Constants
 }  // End namespace Patients
 

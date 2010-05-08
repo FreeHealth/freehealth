@@ -99,7 +99,7 @@ public:
             items.insert(form, item);
             item->setData(0,Qt::UserRole,i);
             if (form->formParent())
-                qWarning() << form->formParent()->spec()->label();
+                qWarning() << "Parent" << form->formParent()->spec()->label();
             ++i;
         }
         tree->resizeColumnToContents(0);
@@ -112,7 +112,6 @@ public:
     {
         Q_ASSERT(stack);
         foreach(FormMain *form, q->forms()) {
-    //        Q_ASSERT(form->formWidget());
             if (form->formWidget()) {
                 QWidget *w = new QWidget;
                 QVBoxLayout *vl = new QVBoxLayout(w);
@@ -183,7 +182,7 @@ FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
         f = new FormMain(this);
     if (!uuid.isEmpty())
         f->setUuid(uuid);
-    d->m_MappedForms.insert(f->uuid(), f);
+    d->m_MappedForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
     return f;
 }
 
@@ -232,11 +231,11 @@ bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *>
 
     // populate FormPlaceHolder with new values
     if (d->m_Holder) {
-        d->m_Holder->formTree()->clear();
+//        d->m_Holder->formTree()->clear();
         d->m_Holder->clearFormStackLayout();
     }
 
-    d->formsTreeWidget(d->m_Holder->formTree());
+//    d->formsTreeWidget(d->m_Holder->formTree());
     d->formsStackedLayout(d->m_Holder->formStackLayout());
 
     return true;

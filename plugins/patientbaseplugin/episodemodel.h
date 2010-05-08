@@ -41,23 +41,42 @@
 #ifndef EPISODEMODEL_H
 #define EPISODEMODEL_H
 
-#include <QAbstractTableModel>
+#include <QAbstractItemModel>
 
 namespace Patients {
 namespace Internal {
 class EpisodeModelPrivate;
 }
 
-class EpisodeModel : public QAbstractTableModel
+class EpisodeModel : public QAbstractItemModel
 {
     Q_OBJECT
+
 public:
+
+    enum DataRepresentation {
+        Label = 0,
+        Date,
+        Summary,
+        FullContent,
+        Id,
+        UserUuid,
+        PatientUuid,
+        FormUuid,
+        IsNewlyCreated,
+        IsEpisode,
+        MaxData
+    };
+
     EpisodeModel(QObject *parent);
     ~EpisodeModel();
 
+    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
@@ -73,6 +92,14 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
+    bool isEpisode(const QModelIndex &index) const;
+    bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
+    void setReadOnly(const bool state);
+    bool isReadOnly() const;
+    bool isDirty() const;
+
+    bool submit();
+
 Q_SIGNALS:
     void episodeAboutToChange(const QModelIndex &index);
     void episodeAboutToBeDeleted(const QModelIndex &index);
@@ -82,8 +109,12 @@ Q_SIGNALS:
     void episodeDeleted(const QModelIndex &index);
     void episodeCreated(const QModelIndex &index);
 
-protected Q_SLOTS:
-    void changeUserUuid(const QString &uuid);
+public Q_SLOTS:
+    void setCurrentUser(const QString &uuid);
+    void setCurrentPatient(const QString &uuid);
+    void setCurrentFormUuid(const QString &uuid);
+
+    void onCoreDatabaseServerChanged();
 
 private:
     Internal::EpisodeModelPrivate *d;

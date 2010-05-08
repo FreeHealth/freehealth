@@ -41,11 +41,15 @@
 
 #include <utils/widgets/minisplitter.h>
 
-#include <QTreeWidget>
+#include <QTreeView>
+#include <QTreeWidgetItem>
 #include <QStackedLayout>
 #include <QScrollArea>
 #include <QTableView>
 #include <QHeaderView>
+#include <QPainter>
+#include <QEvent>
+#include <QDebug>
 
 using namespace Form;
 
@@ -65,12 +69,46 @@ public:
         delete m_GeneralLayout; m_GeneralLayout=0;
     }
 
-    QTreeWidget *m_FileTree;
+    QTreeView *m_FileTree;
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
     QScrollArea *m_Scroll;
 };
+
+FormTreeView::FormTreeView(QWidget *parent) : QTreeView(parent)
+{}
+
+FormTreeView::~FormTreeView()
+{}
+
+bool FormTreeView::viewportEvent(QEvent *event)
+{
+    if (event->type()==QEvent::Paint) {
+        qWarning() << "jjjjjjjjjjjjjjjjjjjjj";
+        QPainter p(this);
+//        p.begin();
+
+        QRect rect = viewport()->rect();
+
+        QColor background = QColor(0, 0, 0, 10);
+        QColor light = QColor(255, 255, 255, 40);
+        QColor dark = QColor(0, 0, 0, 60);
+
+        QLinearGradient gr(QPoint(rect.center().x(), 0), QPoint(rect.center().x(), rect.bottom()));
+        gr.setColorAt(0, Qt::white);
+        gr.setColorAt(0.3, QColor(250, 250, 250));
+        gr.setColorAt(0.7, QColor(230, 230, 230));
+
+        p.fillRect(rect, gr);
+        p.setPen(QColor(200, 200, 200));
+        p.drawLine(rect.topLeft(), rect.topRight());
+        p.setPen(QColor(150, 160, 200));
+        p.drawLine(rect.bottomLeft(), rect.bottomRight());
+    }
+    return true;
+}
+
 }
 }
 
@@ -84,8 +122,10 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     setLayout(d->m_GeneralLayout);
 
     QWidget *w = new QWidget(this);
-    d->m_FileTree = new QTreeWidget(this);
-    d->m_FileTree->setIndentation(5);
+    d->m_FileTree = new Internal::FormTreeView(this);
+    d->m_FileTree->setObjectName("FormTree");
+    d->m_FileTree->setIndentation(10);
+//    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
     d->m_Scroll = new QScrollArea(this);
     d->m_Scroll->setWidgetResizable(true);
 
@@ -120,7 +160,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
     d->m_GeneralLayout->addWidget(horiz, 100, 0);
 
-    connect(d->m_FileTree, SIGNAL(itemActivated(QTreeWidgetItem*, int)),this,SLOT(changeStackedLayoutTo(QTreeWidgetItem*)));
+    connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(changeStackedLayoutTo(QModelIndex)));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -131,7 +171,7 @@ FormPlaceHolder::~FormPlaceHolder()
     }
 }
 
-QTreeWidget *FormPlaceHolder::formTree() const
+QTreeView *FormPlaceHolder::formTree() const
 {
     return d->m_FileTree;
 }
@@ -162,8 +202,8 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
     d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
 }
 
-void FormPlaceHolder::changeStackedLayoutTo(QTreeWidgetItem *item)
+void FormPlaceHolder::changeStackedLayoutTo(const QModelIndex &index)
 {
-    int id = item->data(0,Qt::UserRole).toInt();
-    d->m_Stack->setCurrentIndex(id);
+//    int id = item->data(0,Qt::UserRole).toInt();
+//    d->m_Stack->setCurrentIndex(id);
 }

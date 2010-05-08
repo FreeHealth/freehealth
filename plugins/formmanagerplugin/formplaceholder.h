@@ -43,15 +43,27 @@
 #include <formmanagerplugin/formmanager_exporter.h>
 
 #include <QWidget>
+#include <QTreeView>
+
 QT_BEGIN_NAMESPACE
-class QTreeWidget;
 class  QTreeWidgetItem;
 class QStackedLayout;
+class QModelIndex;
 QT_END_NAMESPACE
 
 namespace Form {
 namespace Internal {
 class FormPlaceHolderPrivate;
+class FormTreeView : public QTreeView
+{
+public:
+    FormTreeView(QWidget *parent);
+    ~FormTreeView();
+protected:
+    bool viewportEvent(QEvent *event);
+};
+
+
 }  // End namespace Internal
 
 class FORM_EXPORT FormPlaceHolder : public QWidget
@@ -62,7 +74,7 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
-    QTreeWidget *formTree() const;
+    QTreeView *formTree() const;
     QStackedLayout *formStackLayout() const;
     void clearFormStackLayout();
     
@@ -70,7 +82,7 @@ public:
     void addBottomWidget(QWidget *bottom);
 
 protected Q_SLOTS:
-    void changeStackedLayoutTo(QTreeWidgetItem *item);
+    void changeStackedLayoutTo(const QModelIndex &index);
 
 private:
     Internal::FormPlaceHolderPrivate *d;

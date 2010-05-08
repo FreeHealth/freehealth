@@ -81,7 +81,7 @@ public:
     ~FormItemIdentifiants() {}
 
     void setUuid(const QString &uuid);
-    int uuid() const;
+    QString uuid() const;
 
     // define operator< or > or == for the sorting method of items
 private:

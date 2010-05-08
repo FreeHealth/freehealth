@@ -86,6 +86,12 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
+
+// TEST
+#include <patientbaseplugin/episodemodel.h>
+#include <patientbaseplugin/patientmodel.h>
+// END TEST
+
 using namespace MainWin;
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
@@ -233,12 +239,31 @@ void MainWindow::postCoreInitialization()
 
     // Open Last Opened Forms is necessary
     openLastOpenedForm();
+
+    // TEST
+    // Add EpisodeModel
+    m_EpisodeModel = new Patients::EpisodeModel(this);
+    formManager()->formPlaceHolder()->formTree()->setModel(m_EpisodeModel);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Id, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Date, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::UserUuid, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::PatientUuid, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::FormUuid, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Summary, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::FullContent, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::IsNewlyCreated, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::IsEpisode, true);
+    // END TEST
 }
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)
 {
     m_PatientBar->setCurrentIndex(index);
     formManager()->activateMode();
+
+    // TEST
+    m_EpisodeModel->setCurrentPatient(Patients::PatientModel::activeModel()->index(index.row(), Patients::PatientModel::Uid).data().toString());
+    // END TEST
 }
 
 /** \brief Close the main window and the application */

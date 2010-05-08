@@ -438,6 +438,7 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
     QSqlQuery query(patientBase()->database());
     int nb = nbVirtualEpisodes->value();
     Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
     // Retreive all patients and create n episodes for them
     QSet<QString> patients;
@@ -452,45 +453,56 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
     QProgressDialog dlg(tr("Creating %1 virtual episodes").arg(nb * patients.count()), tr("Cancel"), 0, nb * patients.count(), qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
-    foreach(const QString &uid, patients) {
-        QDateTime date = QDateTime(r.randomDate(2008), QTime(r.randomInt(23), r.randomInt(59), r.randomInt(59), 0));
+    QList<QString> testingForms;
+    testingForms << "episodeTester_1" << "episodeTester_2" << "episodeTester_2.1"
+            << "episodeTester_2.1.1" << "episodeTester_2.2";
 
-        for(int i = 0; i < nb; ++i) {
-            if (i % 100 == 0) {
-                dlg.setValue(i);
-                patientBase()->database().transaction();
+    foreach(const QString &form, testingForms) {
+        foreach(const QString &uid, patients) {
+            QDateTime date = QDateTime(r.randomDate(2008), QTime(r.randomInt(23), r.randomInt(59), r.randomInt(59), 0));
+
+            for(int i = 0; i < nb; ++i) {
+                if (i % 100 == 0) {
+                    dlg.setValue(i);
+                    patientBase()->database().transaction();
+                }
+                date = r.randomDateTime(date);
+                if (date > QDateTime::currentDateTime())
+                    break;
+
+                query.prepare(patientBase()->prepareInsertQuery(Constants::Table_EPISODES));
+                query.bindValue(Constants::EPISODES_ID, QVariant());
+                query.bindValue(Constants::EPISODES_PATIENT_UID, uid);
+                if (r.randomInt(3) == 1)
+                    query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 2);
+                else
+                    query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 1);
+                query.bindValue(Constants::EPISODES_DATE, date);
+                query.bindValue(Constants::EPISODES_DATEOFCREATION, date);
+                query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
+                query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
+                query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
+                query.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
+                QString tmp;
+                for(int i=0; i < r.randomInt(6); ++i)
+                    tmp += r.getRandomName() + " ";
+                tmp.chop(1);
+                query.bindValue(Constants::EPISODES_LABEL, tmp);
+
+                if (!query.exec()) {
+                    Utils::Log::addQueryError(this, query);
+                }
+                query.finish();
+
+                if (i % 100 == 99)
+                    patientBase()->database().commit();
+
+                qApp->processEvents();
+                if (dlg.wasCanceled())
+                    break;
             }
-            date = r.randomDateTime(date);
-            if (date > QDateTime::currentDateTime())
-                break;
-
-            query.prepare(patientBase()->prepareInsertQuery(Constants::Table_EPISODES));
-            query.bindValue(Constants::EPISODES_ID, QVariant());
-            query.bindValue(Constants::EPISODES_PATIENT_UID, uid);
-            if (r.randomInt(3) == 1)
-                query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 2);
-            else
-                query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, 1);
-            query.bindValue(Constants::EPISODES_DATE, date);
-            query.bindValue(Constants::EPISODES_DATEOFCREATION, date);
-            query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
-            query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
-            query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
-            query.bindValue(Constants::EPISODES_FORM_PAGE_UID, QVariant());
-
-            if (!query.exec()) {
-                Utils::Log::addQueryError(this, query);
-            }
-            query.finish();
-
-            if (i % 100 == 99)
-                patientBase()->database().commit();
-
-            qApp->processEvents();
-            if (dlg.wasCanceled())
-                break;
+            patientBase()->database().commit();
         }
-        patientBase()->database().commit();
     }
 }
 
