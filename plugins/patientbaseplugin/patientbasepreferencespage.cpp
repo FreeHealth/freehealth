@@ -58,7 +58,9 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QProgressDialog>
-
+#include <QDir>
+#include <QByteArray>
+#include <QBuffer>
 
 using namespace Patients;
 using namespace Internal;
@@ -70,6 +72,70 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 
+static inline void createPatient(const QString &name, const QString &secondname, const QString &surname,
+                                 const QString &gender, const int title, const QDate &dob,
+                                 const QString &country, const QString &note,
+                                 const QString &street, const QString &zip, const QString &city,
+                                 const QString &uuid, const int lkid,
+                                 const QString &photoFile = QString(), const QDate &death = QDate())
+{
+    QSqlQuery query(patientBase()->database());
+    query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
+    query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
+    query.bindValue(Constants::IDENTITY_NAME, name);
+    query.bindValue(Constants::IDENTITY_SURNAME, surname);
+    query.bindValue(Constants::IDENTITY_SECONDNAME, secondname);
+    query.bindValue(Constants::IDENTITY_GENDER, gender);
+    query.bindValue(Constants::IDENTITY_TITLE, title);
+    query.bindValue(Constants::IDENTITY_DOB, dob);
+    query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, country);
+    query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, note);
+    query.bindValue(Constants::IDENTITY_ADDRESS_STREET, street);
+    query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, zip);
+    query.bindValue(Constants::IDENTITY_ADRESS_CITY, city);
+    query.bindValue(Constants::IDENTITY_UID, uuid);
+    query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
+    query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
+
+    query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
+    query.bindValue(Constants::IDENTITY_FAXES, QVariant());
+    query.bindValue(Constants::IDENTITY_TELS, QVariant());
+    if (death.isValid())
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, death);
+    else
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
+
+    query.bindValue(Constants::IDENTITY_ID, QVariant());
+    query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, lkid);
+    query.bindValue(Constants::IDENT_VERSION, QVariant());
+    query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
+    query.bindValue(Constants::IDENTITY_MAILS, QVariant());
+
+    if (!query.exec()) {
+        Utils::Log::addQueryError("PatientBasePreferencesPage", query);
+    }
+    query.finish();
+
+    if (!photoFile.isEmpty()) {
+        QPixmap pix(photoFile);
+        if (pix.isNull())
+            return;
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
+        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO));
+        query.bindValue(Constants::PHOTO_ID, QVariant());
+        query.bindValue(Constants::PHOTO_UID, QUuid::createUuid().toString());
+        query.bindValue(Constants::PHOTO_PATIENT_UID, uuid);
+        query.bindValue(Constants::PHOTO_BLOB, ba);
+        query.exec();
+        if (!query.isActive()) {
+            Utils::Log::addQueryError("PatientBasePreferencesPage", query);
+        }
+    }
+
+}
 
 PatientBasePreferencesPage::PatientBasePreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
@@ -165,170 +231,23 @@ void PatientBasePreferencesWidget::on_populateDb_clicked()
     where.insert(Constants::IDENTITY_NAME, "LIKE 'DOE'");
     int c = patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, patientBase()->getWhereClause(Constants::Table_IDENT, where));
     if (!c) {
-        query.finish();
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_NAME, "DOE");
-        query.bindValue(Constants::IDENTITY_SURNAME, "John");
-        query.bindValue(Constants::IDENTITY_SECONDNAME, "Junior");
-        query.bindValue(Constants::IDENTITY_GENDER, "M");
-        query.bindValue(Constants::IDENTITY_TITLE, 1);
-        query.bindValue(Constants::IDENTITY_DOB, QDate(1990, 10, 20));
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "France");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "Patient is lost...");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, "21, street Doe");
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, "21213");
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, "NoWhereLand");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
+        QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
+        QString uid = QUuid::createUuid().toString();
+        createPatient("DOE", "Junior", "John", "M", 1, QDate(1990, 10, 20), "France", "Patient is lost...",
+                      "21, street Doe", "21213", "NoWhereLand", uid, 1, path+"johndoe.jpg");
 
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
+        uid = QUuid::createUuid().toString();
+        createPatient("DOE", "ComicsGirl", "Jane", "F", 2, QDate(1985, 04, 20), "France", "SuperJane owns to an unknown user",
+                      "21, street Jane", "21213", "JaneLand", uid, 2);
 
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_NAME, "DOE");
-        query.bindValue(Constants::IDENTITY_SURNAME, "Jane");
-        query.bindValue(Constants::IDENTITY_SECONDNAME, "ComicsGirl");
-        query.bindValue(Constants::IDENTITY_GENDER, "F");
-        query.bindValue(Constants::IDENTITY_TITLE, 2);
-        query.bindValue(Constants::IDENTITY_DOB, QDate(1985, 04, 20));
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "France");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "SuperJane owns to an unknown user");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, "21, street Jane");
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, "54545");
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, "JaneLand");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 2);
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
+        uid = QUuid::createUuid().toString();
+        createPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, 1, path+"captainkirk.jpg");
 
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
-
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_NAME, "KIRK");
-        query.bindValue(Constants::IDENTITY_SURNAME, "James Tiberius");
-        query.bindValue(Constants::IDENTITY_SECONDNAME, "");
-        query.bindValue(Constants::IDENTITY_TITLE, 6);
-        query.bindValue(Constants::IDENTITY_GENDER, "M");
-        query.bindValue(Constants::IDENTITY_DOB, QDate(1968, 04, 20));
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "USA");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "USS Enterprise");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, "21, StarFleet Command");
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, "1968");
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, "EarthTown");
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
-
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_NAME, "PICARD");
-        query.bindValue(Constants::IDENTITY_SURNAME, "Jean-Luc");
-        query.bindValue(Constants::IDENTITY_SECONDNAME, "");
-        query.bindValue(Constants::IDENTITY_TITLE, 6);
-        query.bindValue(Constants::IDENTITY_GENDER, "M");
-        query.bindValue(Constants::IDENTITY_DOB, QDate(1968, 04, 20));
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "USA");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "USS Enterprise");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, "21, StarFleet Command");
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, "2333");
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, "EarthTown");
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
-
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_NAME, "HIPPOCRATE");
-        query.bindValue(Constants::IDENTITY_SURNAME, "Le Grand");
-        query.bindValue(Constants::IDENTITY_SECONDNAME, "");
-        query.bindValue(Constants::IDENTITY_TITLE, 4);
-        query.bindValue(Constants::IDENTITY_GENDER, "M");
-        query.bindValue(Constants::IDENTITY_DOB, QDate(-460, 01, 01));
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QDate(-370, 01, 01));
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "Greece");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, "Heaven");
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, "------");
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, "-------");
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
+        uid = QUuid::createUuid().toString();
+        createPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, 1, path+"captainpicard.jpg");
 
         // create links
         query.prepare(patientBase()->prepareInsertQuery(Constants::Table_LK_TOPRACT));

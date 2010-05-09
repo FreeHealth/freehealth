@@ -58,8 +58,8 @@
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QPixmap>
-#include <QImage>
 #include <QBuffer>
+#include <QByteArray>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -165,11 +165,10 @@ public:
         if (pix.isNull() || patientUid.isEmpty())
             return false;
 
-        QImage image = pix.toImage();
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
-        image.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
+        pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
 
         // need creation or update ?
         QHash<int, QString> where;
