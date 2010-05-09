@@ -57,6 +57,9 @@
 #include <QObject>
 #include <QSqlTableModel>
 #include <QSqlDatabase>
+#include <QPixmap>
+#include <QImage>
+#include <QBuffer>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -73,7 +76,9 @@ class PatientModelPrivate
 {
 public:
     PatientModelPrivate(PatientModel *parent) :
-            m_SqlPatient(0), q(parent)
+            m_SqlPatient(0),
+            m_SqlPhoto(0),
+            q(parent)
     {
         m_UserUuid = userModel()->currentUserData(UserPlugin::User::Uuid).toString();
         q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(changeUserUuid(QString)));
@@ -85,6 +90,10 @@ public:
         if (m_SqlPatient) {
             delete m_SqlPatient;
             m_SqlPatient = 0;
+        }
+        if (m_SqlPhoto) {
+            delete m_SqlPhoto;
+            m_SqlPhoto = 0;
         }
     }
 
@@ -138,24 +147,6 @@ public:
         q->reset();
     }
 
-//    void retreivePractionnerLkIds()
-//    {
-//        // Get Lk_Ids for this practitionner
-//        /** \todo manage user's groups */
-//        QHash<int, QString> where;
-//        where.clear();
-//        where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(m_UserUuid));
-//        QString req = patientBase()->select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
-//        QSqlQuery query(req, m_SqlPatient->database());
-//        if (query.isActive()) {
-//            while (query.next())
-//                m_LkIds.append(query.value(0).toString() + ",");
-//            m_LkIds.chop(1);
-//        } else {
-//            Utils::Log::addQueryError(q, query);
-//        }
-//    }
-
     QIcon iconizedGender(const QModelIndex &index)
     {
         const QString &g = m_SqlPatient->data(m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
@@ -169,8 +160,70 @@ public:
         return QIcon();
     }
 
+    bool savePatientPhoto(const QPixmap &pix, const QString &patientUid)
+    {
+        if (pix.isNull() || patientUid.isEmpty())
+            return false;
+
+        QImage image = pix.toImage();
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
+
+        // need creation or update ?
+        QHash<int, QString> where;
+        where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
+        bool create = patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0;
+
+        QSqlQuery query(patientBase()->database());
+        QString req;
+        if (create) {
+            req = patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO);
+            query.prepare(req);
+            query.bindValue(Constants::PHOTO_ID, QVariant());
+            query.bindValue(Constants::PHOTO_UID, patientUid);
+            query.bindValue(Constants::PHOTO_PATIENT_UID, patientUid);
+            query.bindValue(Constants::PHOTO_BLOB, ba);
+        } else {
+            req = patientBase()->prepareUpdateQuery(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
+            query.prepare(req);
+            query.bindValue(Constants::PHOTO_BLOB, ba);
+        }
+
+        query.exec();
+        if (!query.isActive()) {
+            Utils::Log::addQueryError(q, query);
+            return false;
+        }
+        return true;
+    }
+
+    QPixmap getPatientPhoto(const QString &patientUid)
+    {
+        QHash<int, QString> where;
+        where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
+        if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0)
+            return QPixmap();
+
+        QSqlQuery query(patientBase()->database());
+        QString req = patientBase()->select(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
+        if (!query.exec(req)) {
+            Utils::Log::addQueryError(q, query);
+            return QPixmap();
+        } else {
+            if (query.next()) {
+                QPixmap pix;
+                pix.loadFromData(query.value(0).toByteArray());
+                return pix;
+            }
+        }
+        return QPixmap();
+    }
+
+
 public:
-    QSqlTableModel *m_SqlPatient;
+    QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
@@ -192,8 +245,13 @@ PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
     setObjectName("PatientModel");
+
     d->m_SqlPatient = new QSqlTableModel(this, patientBase()->database());
     d->m_SqlPatient->setTable(patientBase()->table(Constants::Table_IDENT));
+
+    d->m_SqlPhoto = new QSqlTableModel(this, patientBase()->database());
+    d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
+
     d->connectSqlPatientSignals();
     changeUserUuid(d->m_UserUuid);
     d->refreshFilter();
@@ -307,6 +365,11 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 return MedicalUtils::readableAge(dob);
             }
         case IconizedGender: return d->iconizedGender(index);
+        case Photo :
+            {
+                QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+                return d->getPatientPhoto(patientUid);
+            }
         }
         return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
     }
@@ -383,6 +446,12 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case FullName:
             {
                 break;
+            }
+        case Photo:
+            {
+                QPixmap pix = value.value<QPixmap>();
+                QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+                return d->savePatientPhoto(pix, patientUid);
             }
         }
         if (col != -1) {
@@ -463,6 +532,7 @@ QString PatientModel::filter() const
 
 QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    return QVariant();
 }
 
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)

@@ -69,6 +69,9 @@ public Q_SLOTS:
 protected:
     void changeEvent(QEvent *e);
 
+protected Q_SLOTS:
+    void photoButton_clicked();
+
 private:
     Internal::IdentityWidgetPrivate *d;
 };

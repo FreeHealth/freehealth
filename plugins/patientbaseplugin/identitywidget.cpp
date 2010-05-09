@@ -44,23 +44,22 @@
 #include "ui_identitywidget.h"
 
 #include <QDataWidgetMapper>
+#include <QDir>
+#include <QFileDialog>
+
 #include <QDebug>
 
 using namespace Patients;
 
 namespace Patients {
 namespace Internal {
-class IdentityWidgetPrivate : public QObject
+class IdentityWidgetPrivate
 {
-    Q_OBJECT
-
 public:
     IdentityWidgetPrivate(IdentityWidget *parent) :
             ui(new Ui::IdentityWidget), m_Mapper(0), q(parent)
     {
         ui->setupUi(q);
-//        connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(on_nextButton_clicked()));
-//        connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(on_prevButton_clicked()));
     }
 
     ~IdentityWidgetPrivate()
@@ -87,22 +86,8 @@ public:
         m_Mapper->addMapping(ui->city, PatientModel::City, "text");
         m_Mapper->addMapping(ui->zipcode, PatientModel::ZipCode, "text");
         m_Mapper->addMapping(ui->country, PatientModel::Country, "text");
-        // add photo
         m_Mapper->toFirst();
     }
-
-public Q_SLOTS:
-
-    void on_prevButton_clicked()
-    {
-        m_Mapper->toPrevious();
-    }
-
-    void on_nextButton_clicked()
-    {
-        m_Mapper->toNext();
-    }
-
 
 public:
     Ui::IdentityWidget *ui;
@@ -120,6 +105,7 @@ IdentityWidget::IdentityWidget(QWidget *parent) :
     QWidget(parent),
     d(new Internal::IdentityWidgetPrivate(this))
 {
+    connect(d->ui->photoButton, SIGNAL(clicked()), this, SLOT(photoButton_clicked()));
 }
 
 IdentityWidget::~IdentityWidget()
@@ -131,13 +117,14 @@ void IdentityWidget::setCurrentPatientModel(Patients::PatientModel *model)
 {
     d->m_PatientModel = model;
     d->createMapper();
-//    d->ui->numberOfPatients->setText(QString::number(model->rowCount()));
 }
 
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    qWarning() << patientIndex.data();
     d->m_Mapper->setCurrentModelIndex(patientIndex);
+    // load photo
+    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), PatientModel::Photo).data().value<QPixmap>();
+    d->ui->photoButton->setIcon(photo);
 }
 
 void IdentityWidget::setCurrentPatient(const QString &uuid)
@@ -157,4 +144,30 @@ void IdentityWidget::changeEvent(QEvent *e)
     }
 }
 
-#include "identitywidget.moc"
+void IdentityWidget::photoButton_clicked()
+{
+    // if a photo is already loaded --> ask user what to do
+    // show openfiledialog
+    QString file;
+    file = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
+                                        QDir::homePath(),
+                                        "Image (*.png *.jpg *.gif *.tiff)");
+    if (file.isEmpty())
+        return;
+
+    // load pixmap
+    QPixmap photo(file);
+    if (photo.isNull())
+        return;
+
+    // resize pixmap
+    photo = photo.scaled(QSize(50,50), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    // change button pixmap
+    QIcon icon(photo);
+    d->ui->photoButton->setIcon(icon);
+
+    // save to DB
+    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), PatientModel::Photo), photo);
+}
+
