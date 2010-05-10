@@ -16,20 +16,20 @@ QT_END_NAMESPACE
 
 namespace Gir {
 
-class GirDataFactory : public Form::IFormItemDataFactory
-{
-    Q_OBJECT
-public:
-    GirDataFactory(QObject *parent = 0);
-    ~GirDataFactory() {}
-
-    bool initialize(const QStringList &, QString *) {return true;}
-    bool extensionInitialized() {return true;}
-    bool isInitialized() const {return true;}
-
-    QStringList providedItemDatas() const { return QStringList() << "gir" << "aggir"; }
-    Form::IFormItemData *createItemData(Form::FormItem *parent);
-};
+//class GirDataFactory : public Form::IFormItemDataFactory
+//{
+//    Q_OBJECT
+//public:
+//    GirDataFactory(QObject *parent = 0);
+//    ~GirDataFactory() {}
+//
+//    bool initialize(const QStringList &, QString *) {return true;}
+//    bool extensionInitialized() {return true;}
+//    bool isInitialized() const {return true;}
+//
+//    QStringList providedItemDatas() const { return QStringList() << "gir" << "aggir"; }
+//    Form::IFormItemData *createItemData(Form::FormItem *parent);
+//};
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -37,10 +37,8 @@ public:
 //--------------------------------------------------------------------------------------------------------
 class AGGIR_EXPORT GirItemData : public Form::IFormItemData
 {
-    Q_OBJECT
-    friend class GirDataFactory;
-
 public:
+    explicit GirItemData(Form::FormItem *parent) : Form::IFormItemData(parent) {}
     virtual ~GirItemData() {}
     virtual Form::FormItem *parentItem() const
     {
@@ -50,20 +48,11 @@ public:
 
     bool isModified() const;
 
-    virtual void setData(const QVariant &data);
-    virtual QVariant data() const;
-
-    virtual void setWidgetData(const QVariant &data);
-    virtual QVariant widgetData() const;
+    virtual void setData(const QVariant &data, const int role);
+    virtual QVariant data(const int role) const;
 
     virtual void setStorableData(const QVariant &data);
     virtual QVariant storableData() const;
-
-    virtual void setScriptData(const QVariant &data);
-    virtual QVariant scriptData() const;
-
-protected:
-    explicit GirItemData(Form::FormItem *parent) : Form::IFormItemData(parent) {}
 
 private:
     bool m_IsModified;

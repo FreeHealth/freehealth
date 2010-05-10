@@ -65,15 +65,15 @@ public:
 
     virtual void changeEvent(QEvent *event);
 
-    virtual void setLinkedObject(Form::FormItem *link) { m_LinkedObject = link; }
-    virtual Form::FormItem *linkedObject() { return m_LinkedObject; }
+    virtual void setFormItem(Form::FormItem *link) { m_FormItem = link; }
+    virtual Form::FormItem *formItem() { return m_FormItem; }
 
 public Q_SLOTS:
     virtual void retranslate() {}
 
 public:
     QLabel *m_Label;
-    Form::FormItem *m_LinkedObject;
+    Form::FormItem *m_FormItem;
     QString m_OldTrans;
 };
 

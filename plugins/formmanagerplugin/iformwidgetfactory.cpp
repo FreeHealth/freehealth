@@ -14,8 +14,8 @@
 using namespace Form;
 
 
-IFormWidget::IFormWidget(Form::FormItem *linkedObject, QWidget *parent )
-        : QWidget(parent), m_LinkedObject(linkedObject)
+IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent )
+        : QWidget(parent), m_FormItem(formItem)
 {
 }
 

@@ -39,19 +39,19 @@ bool TextEditorFactory::isContainer(const int) const
     return false;
 }
 
-Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent)
+Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
 {
-    return new TextEditorForm(linkedObject, parent);
+    return new TextEditorForm(formItem, parent);
 }
 
 
-TextEditorForm::TextEditorForm(Form::FormItem *linkedObject, QWidget *parent) :
-        Form::IFormWidget(linkedObject,parent), m_Text(0)
+TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
+        Form::IFormWidget(formItem,parent), m_Text(0)
 {
     QHBoxLayout *hb = new QHBoxLayout(this);
     hb->setMargin(0);
     hb->setSpacing(0);
-    const QString &options = linkedObject->extraDatas().value("options");
+    const QString &options = formItem->extraDatas().value("options");
     Editor::TextEditor::Types t = Editor::TextEditor::Simple;
     if (options.compare("FullEditor", Qt::CaseInsensitive) == 0) {
         t = Editor::TextEditor::Full;
@@ -64,7 +64,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *linkedObject, QWidget *parent) :
         }
     }
     m_Text = new Editor::TextEditor(this, t);
-    m_Text->setObjectName("TextEditor_" + m_LinkedObject->uuid());
+    m_Text->setObjectName("TextEditor_" + m_FormItem->uuid());
     hb->addWidget(m_Text);
     retranslate();
 }
@@ -82,5 +82,5 @@ QVariant TextEditorForm::value() const
 void TextEditorForm::retranslate()
 {
     /** \todo iformitem --> one spec per language ? */
-    //     m_Label->setText( m_LinkedObject->spec()->label() );
+    //     m_Label->setText( m_FormItem->spec()->label() );
 }

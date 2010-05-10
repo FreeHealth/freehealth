@@ -81,38 +81,42 @@ static inline void createPatient(const QString &name, const QString &secondname,
 {
     QSqlQuery query(patientBase()->database());
     query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-    query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
+    query.bindValue(Constants::IDENTITY_ID, QVariant());
+    query.bindValue(Constants::IDENTITY_UID, uuid);
+    query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, lkid);
+    query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
+    query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
     query.bindValue(Constants::IDENTITY_NAME, name);
     query.bindValue(Constants::IDENTITY_SURNAME, surname);
-    query.bindValue(Constants::IDENTITY_SECONDNAME, secondname);
+    if (secondname.isEmpty())
+        query.bindValue(Constants::IDENTITY_SECONDNAME, QVariant());
+    else
+        query.bindValue(Constants::IDENTITY_SECONDNAME, secondname);
     query.bindValue(Constants::IDENTITY_GENDER, gender);
     query.bindValue(Constants::IDENTITY_TITLE, title);
     query.bindValue(Constants::IDENTITY_DOB, dob);
-    query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, country);
-    query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, note);
+    query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
+    if (death.isValid()) {
+        query.bindValue(Constants::IDENTITY_ISACTIVE, 0);
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, death);
+    } else {
+        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
+    }
+    query.bindValue(Constants::IDENTITY_PROFESSION, QVariant());
     query.bindValue(Constants::IDENTITY_ADDRESS_STREET, street);
+    query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
     query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, zip);
     query.bindValue(Constants::IDENTITY_ADRESS_CITY, city);
-    query.bindValue(Constants::IDENTITY_UID, uuid);
-    query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-    query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-
-    query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-    query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-    query.bindValue(Constants::IDENTITY_TELS, QVariant());
-    if (death.isValid())
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, death);
-    else
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-
-    query.bindValue(Constants::IDENTITY_ID, QVariant());
-    query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, lkid);
-    query.bindValue(Constants::IDENT_VERSION, QVariant());
-    query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
+    query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, country);
+    query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, note);
     query.bindValue(Constants::IDENTITY_MAILS, QVariant());
+    query.bindValue(Constants::IDENTITY_TELS, QVariant());
+    query.bindValue(Constants::IDENTITY_FAXES, QVariant());
 
     if (!query.exec()) {
         Utils::Log::addQueryError("PatientBasePreferencesPage", query);
+        qWarning() << name << secondname << surname << gender << title<< dob<<country<<note<<street<<zip<<city<<uuid<<lkid<<photoFile<<death;
     }
     query.finish();
 
@@ -286,59 +290,38 @@ void PatientBasePreferencesWidget::on_populateDb_clicked()
             dlg.setValue(i);
             patientBase()->database().transaction();
         }
+        QString name, sur, sec, g;
+        int title, lk;
+        QDate death, dob;
 
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-        query.bindValue(Constants::IDENTITY_NAME, r.getRandomName());
-        query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-        query.bindValue(Constants::IDENTITY_DOB, r.randomDate(1910));
+        name = r.getRandomName();
+        dob = r.randomDate(1910);
 
         if (r.randomInt(2) == 1) {
-            query.bindValue(Constants::IDENTITY_GENDER, "F");
-            query.bindValue(Constants::IDENTITY_SURNAME, r.getRandomSurname(false));
-            query.bindValue(Constants::IDENTITY_SECONDNAME, r.getRandomName());
-            query.bindValue(Constants::IDENTITY_TITLE, 2);
+            g = "F";
+            sur= r.getRandomSurname(false);
+            sec = r.getRandomName();
+            title = 2;
         } else {
-            query.bindValue(Constants::IDENTITY_GENDER, "M");
-            query.bindValue(Constants::IDENTITY_SURNAME, r.getRandomSurname(true));
-            query.bindValue(Constants::IDENTITY_SECONDNAME, QVariant());
-            query.bindValue(Constants::IDENTITY_TITLE, 1);
+            g = "M";
+            sur= r.getRandomSurname(true);
+            sec = r.getRandomName();
+            title = 1;
         }
 
         if (r.randomInt(2)) {
-            query.bindValue(Constants::IDENTITY_DATEOFDEATH, r.randomDate(1980));
-            query.bindValue(Constants::IDENTITY_ISACTIVE, 0);
-        } else {
-            query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
-            query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
+            death = r.randomDate(1980);
         }
-
-        query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, "France");
-        query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, "");
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET, r.getRandomString(65));
         QPair<int, QString> p = r.getRandomFrenchCity();
-        query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, p.first);
-        query.bindValue(Constants::IDENTITY_ADRESS_CITY, p.second);
-
-        query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-        query.bindValue(Constants::IDENTITY_UID, QUuid::createUuid().toString());
         if (r.randomInt(3) == 1)
-            query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 2);
+            lk =  2;
         else
-            query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, 1);
+            lk = 1;
 
-        /** \todo add marital status, faxes, tels and mails to dummy patients */
-        query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-        query.bindValue(Constants::IDENTITY_FAXES, QVariant());
-        query.bindValue(Constants::IDENTITY_TELS, QVariant());
-        query.bindValue(Constants::IDENTITY_ID, QVariant());
-        query.bindValue(Constants::IDENT_VERSION, QVariant());
-        query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-        query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-
-        if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
-        }
-        query.finish();
+        createPatient(name,sec, sur,g,title,
+                      dob,"France","",r.getRandomString(65),
+                      QString::number(p.first), p.second,
+                      QUuid::createUuid().toString(),lk,"",death);
 
         if (i % 100 == 99)
             patientBase()->database().commit();
@@ -376,13 +359,14 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
     testingForms << "episodeTester_1" << "episodeTester_2" << "episodeTester_2.1"
             << "episodeTester_2.1.1" << "episodeTester_2.2";
 
+    int zz = 0;
     foreach(const QString &form, testingForms) {
         foreach(const QString &uid, patients) {
             QDateTime date = QDateTime(r.randomDate(2008), QTime(r.randomInt(23), r.randomInt(59), r.randomInt(59), 0));
 
             for(int i = 0; i < nb; ++i) {
-                if (i % 100 == 0) {
-                    dlg.setValue(i);
+                if (zz % 1000 == 0) {
+                    dlg.setValue(zz);
                     patientBase()->database().transaction();
                 }
                 date = r.randomDateTime(date);
@@ -403,7 +387,7 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
                 query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
                 query.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
                 QString tmp;
-                for(int i=0; i < r.randomInt(6); ++i)
+                for(int z=0; z < r.randomInt(6); ++z)
                     tmp += r.getRandomName() + " ";
                 tmp.chop(1);
                 query.bindValue(Constants::EPISODES_LABEL, tmp);
@@ -413,15 +397,20 @@ void PatientBasePreferencesWidget::on_populateEpisodes_clicked()
                 }
                 query.finish();
 
-                if (i % 100 == 99)
+                if (zz % 1000 == 99)
                     patientBase()->database().commit();
 
                 qApp->processEvents();
                 if (dlg.wasCanceled())
                     break;
+                ++zz;
             }
             patientBase()->database().commit();
+            if (dlg.wasCanceled())
+                break;
         }
+        if (dlg.wasCanceled())
+            break;
     }
 }
 

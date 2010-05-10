@@ -77,7 +77,7 @@ using namespace Utils;
 
 QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
-bool Log::m_MuteConsole = true;
+bool Log::m_MuteConsole = false;
 
 bool Log::warnPluginsCreation() { return false; }
 

@@ -38,12 +38,14 @@
 #include "formplaceholder.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdatafactory.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -67,6 +69,10 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 
 
 namespace Form {
+namespace Constants {
+    const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
+}
+
 namespace Internal {
 class FormManagerPrivate
 {
@@ -85,47 +91,15 @@ public:
         /** \todo Delete FormItem ?? */
     }
 
-    QTreeWidget *formsTreeWidget(QTreeWidget *tree) const
-    {
-        Q_ASSERT(tree);
-        int i = 0;
-        QHash<FormMain *, QTreeWidgetItem *> items;
-        foreach(FormMain *form, q->forms()) {
-            QTreeWidgetItem *item = 0;
-            if (items.keys().contains(form->formParent()))
-                item =  new QTreeWidgetItem(items.value(form->formParent()), QStringList() << form->spec()->label());
-            else
-                item =  new QTreeWidgetItem(tree, QStringList() << form->spec()->label());
-            items.insert(form, item);
-            item->setData(0,Qt::UserRole,i);
-            if (form->formParent())
-                qWarning() << "Parent" << form->formParent()->spec()->label();
-            ++i;
-        }
-        tree->resizeColumnToContents(0);
-        tree->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        tree->header()->hide();
-        return tree;
-    }
-
-    QStackedLayout *formsStackedLayout(QStackedLayout *stack) const
-    {
-        Q_ASSERT(stack);
-        foreach(FormMain *form, q->forms()) {
-            if (form->formWidget()) {
-                QWidget *w = new QWidget;
-                QVBoxLayout *vl = new QVBoxLayout(w);
-                vl->addWidget(form->formWidget());
-                stack->addWidget(w);
-            }
-        }
-        return stack;
-    }
-
 public:
     QPointer<FormPlaceHolder> m_Holder;
     Core::UniqueIDManager *m_UuidManager;
     QMap<int, Form::FormMain *> m_MappedForms;
+
+    /** \todo create a EpisodeData class */
+    int m_ActualEpisode;
+    QString m_ActualEpisode_FormUid;
+
 
 private:
     FormManager *q;
@@ -165,6 +139,7 @@ FormManager::~FormManager()
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+    d->m_Holder->formTree()->expandAll();
 }
 
 Core::UniqueIDManager *FormManager::uuidManager() const
@@ -230,80 +205,14 @@ bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *>
         return false;
 
     // populate FormPlaceHolder with new values
-    if (d->m_Holder) {
-//        d->m_Holder->formTree()->clear();
-        d->m_Holder->clearFormStackLayout();
-    }
-
-//    d->formsTreeWidget(d->m_Holder->formTree());
-    d->formsStackedLayout(d->m_Holder->formStackLayout());
+    d->m_Holder->reset();
 
     return true;
 }
-
 
 FormPlaceHolder *FormManager::formPlaceHolder() const
 {
     return d->m_Holder;
-}
-
-
-bool FormManager::setFormObjects(QObject *root)
-{
-    // cast root
-//    mfObject *rootObject = static_cast<mfObject*>(root);
-//    if (!root)
-//        return false;
-//
-//    // First object must be a form
-//    if (rootObject->type() != mfObject::Type_Form) {
-//        Utils::warningMessageBox(
-//                tr("An error occured while creating the form."),
-//                tr("The first object is not a <form> type."));
-//        return false;
-//    }
-//
-//    qWarning() << "FormManager::setObjects";
-
-//    foreach(mfObject *o, rootObject->mfChildren()) {
-//        warn(o);
-//    }
-
-//    m_Stack->removeWidget( m_Stack->widget( 0 ) );
-//    delete m_Stack->widget( 0 );
-//
-//    // Retrieve Form Widget plugins
-//    m_widgetPlugins = mfCore::pluginsManager()->plugins<mfFormWidgetInterface*>();
-//    if ( m_widgetPlugins.count() < 2 )
-//        tkLog::addError( this, tr( "Warning: missing Widget Plugins." ) );
-//
-//    // Create forms and populate treewidget
-//    createForm( mfo );
-//    m_Tree->resizeColumnToContents( LabelColumn );
-//    m_Tree->setContextMenuPolicy( Qt::CustomContextMenu );
-//
-//    createActions();
-//    createToolBar();
-//    retranslateUi();
-//
-//    // Connect tree with stack
-//    connect( m_Tree, SIGNAL( currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * ) ),
-//             this,   SLOT  ( treeToStack( QTreeWidgetItem * ) ) );
-//    // Connect tree to popupmenu
-//    connect( m_Tree, SIGNAL( customContextMenuRequested ( const QPoint & ) ),
-//             this,   SLOT  ( createTreePopup( const QPoint & ) ) );
-//
-//    // Set the focus on the first tree item
-//    if ( m_Tree->topLevelItemCount() )
-//    {
-//        m_Tree->setCurrentItem( m_Tree->topLevelItem( 0 ) );
-//        m_FormNavList << m_Tree->topLevelItem( 0 );
-//        m_FormNavOffset++;
-//    }
-//
-//    // Run the onLoadScript
-//    mfo->runOnLoadScript();
-    return true;
 }
 
 bool FormManager::translateForms()
@@ -312,6 +221,36 @@ bool FormManager::translateForms()
 //    translateTreeItem( m_Tree->topLevelItem( 0 ) );
 //    m_Tree->resizeColumnToContents( LabelColumn );
 //    retranslateUi();
+    return true;
+}
+
+bool FormManager::activateEpisode(const int id, const QString &formUid, const QString &xmlcontent)
+{
+    // stores the actual episode id
+    d->m_ActualEpisode = id;
+    d->m_ActualEpisode_FormUid = formUid;
+    qWarning() << id << formUid << xmlcontent;
+
+    // read the xml'd content
+    QHash<QString, QString> datas;
+    if (!Utils::readXml(xmlcontent, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+        Utils::Log::addError(this, QString("Error while reading EpisodeContent %1 %2").arg(__LINE__).arg(__FILE__));
+        return false;
+    }
+
+    // put datas into the FormItems of the form
+    // XML content ==
+    // <formitemuid>value</formitemuid>
+    QHash<QString, FormItem *> items;
+    FormMain *form = this->form(formUid);
+    form->clear();
+    foreach(FormItem *it, form->formItemChildren()) {
+        items.insert(it->uuid(), it);
+    }
+    foreach(const QString &s, datas.keys()) {
+        FormItem *it = items.value(s);
+        it->itemDatas()->setStorableData(datas.value(s));
+    }
     return true;
 }
 

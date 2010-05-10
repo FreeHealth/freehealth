@@ -295,11 +295,6 @@ public:
         }
     }
 
-    void refreshFilter()
-    {
-//        m_Sql->setFilter();
-    }
-
     void createFormTree()
     {
         if (m_FormTreeCreated)
@@ -312,10 +307,8 @@ public:
         // create root item
         QHash<int, QVariant> datas;
         datas.insert(EpisodeModel::Label, "ROOT_ITEM");
-//        datas.insert(EpisodeModel::Parent, -1);
         m_RootItem = new TreeItem(datas, 0);
         m_RootItem->setIsEpisode(false);
-//        m_Tree = m_RootItem;
 
         // getting Forms
         Utils::Log::addMessage(q, "Getting Forms");
@@ -328,7 +321,6 @@ public:
             TreeItem *it = new TreeItem(datas, 0);
             it->setIsEpisode(false);
             formsItems.insert(f, it);
-//            qWarning() << "creating form" << f->spec()->label() << formsItems;
         }
         // reparent items
         QHashIterator<Form::FormMain *, TreeItem *> i(formsItems);
@@ -336,13 +328,10 @@ public:
             i.next();
             Form::FormMain *f = i.key();
             TreeItem *it = i.value();
-//            qWarning() << "Parent" << f->spec()->label() << f->formParent();
             if (f->formParent()) {
-//                qWarning() << "reparenting form" << f->spec()->label() << f->formParent()->spec()->label();
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);
             } else {
-//                qWarning() << "reparenting form" << f->spec()->label() << "to rootitem";
                 it->setParent(m_RootItem);
                 m_RootItem->addChildren(it);
             }
@@ -354,6 +343,11 @@ public:
 
     void refreshEpisodes()
     {
+        /** \todo here */
+        // make sure that episode are saved into database
+
+        // delete old episodes
+
         // get Episodes
         Utils::Log::addMessage(q, "Getting Episodes");
         QSqlQuery query(patientBase()->database());
@@ -367,17 +361,21 @@ public:
         foreach(Form::FormMain *f, formsItems.keys()) {
             TreeItem *parent = formsItems.value(f);
             where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(f->uuid()));
-            QString req = patientBase()->select(Patients::Constants::Table_EPISODES, where);
+            QString req = patientBase()->select(Patients::Constants::Table_EPISODES,
+                                                QList<int>() << Constants::EPISODES_ID
+                                                << Constants::EPISODES_DATE
+                                                << Constants::EPISODES_LABEL,
+                                                where);
             req += QString(" ORDER BY %1 ASC LIMIT 5;").arg(patientBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE));
             query.exec(req);
             if (query.isActive()) {
                 QHash<int, QVariant> datas;
                 QList<TreeItem *> items;
                 while (query.next()) {
-                    datas.insert(EpisodeModel::Id, query.value(Constants::EPISODES_ID));
-                    datas.insert(EpisodeModel::Date, query.value(Constants::EPISODES_DATE));
+                    datas.insert(EpisodeModel::Id, query.value(0));
+                    datas.insert(EpisodeModel::Date, query.value(1));
                     datas.insert(EpisodeModel::FormUuid, f->uuid());
-                    datas.insert(EpisodeModel::Label, query.value(Constants::EPISODES_LABEL));
+                    datas.insert(EpisodeModel::Label, query.value(2));
                     TreeItem *it = new TreeItem(datas, 0);
                     it->setIsEpisode(true);
                     it->setModified(false);
@@ -406,6 +404,24 @@ public:
         return m_RootItem;
     }
 
+    void getXmlContent(TreeItem *item)
+    {
+        /** \todo create a QCache system to avoid memory overusage */
+        QHash<int, QString> where;
+        where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(item->data(EpisodeModel::Id).toString()));
+        QString req = patientBase()->select(Patients::Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
+        QSqlQuery query(patientBase()->database());
+        query.exec(req);
+        if (query.isActive()) {
+            if (query.next()) {
+                item->setData(EpisodeModel::XmlContent, query.value(0));
+            }
+        } else {
+            Utils::Log::addQueryError(q, query);
+        }
+        query.finish();
+    }
+
 public:
     QSqlTableModel *m_Sql;
     TreeItem *m_RootItem;
@@ -427,7 +443,6 @@ EpisodeModel::EpisodeModel(QObject *parent) :
     setObjectName("EpisodeModel");
 //    d->connectSqlPatientSignals();
     setCurrentUser(d->m_UserUuid);
-    d->refreshFilter();
     d->createFormTree();
 //    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
 //
@@ -458,7 +473,7 @@ void EpisodeModel::setCurrentUser(const QString &uuid)
     foreach(int i, ids)
         d->m_LkIds.append(QString::number(i) + ",");
     d->m_LkIds.chop(1);
-    d->refreshFilter();
+    d->refreshEpisodes();
 }
 
 void EpisodeModel::setCurrentPatient(const QString &uuid)
@@ -523,15 +538,22 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     if (!item.isValid())
         return QVariant();
 
-    const Internal::TreeItem *it = d->getItem(item);
+    Internal::TreeItem *it = d->getItem(item);
 
     switch (role)
     {
     case Qt::EditRole :
     case Qt::DisplayRole :
         {
-            if (item.column()==Label && it->isEpisode())
+            if (item.column()==Label && it->isEpisode()) {
                 return it->data(Date).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_DATEFORMAT, "MM yyyy").toString()) + " - " + it->data(item.column()).toString();
+            }
+            if (item.column()==XmlContent && it->isEpisode()) {
+                if (it->data(XmlContent).isNull()) {
+                    d->getXmlContent(it);
+                }
+                return it->data(XmlContent);
+            }
             return it->data(item.column());
         }
 //    case Qt::ToolTipRole :

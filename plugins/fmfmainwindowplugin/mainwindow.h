@@ -103,6 +103,7 @@ public:
 public Q_SLOTS:
     void postCoreInitialization();
     void setCurrentPatient(const QModelIndex &index);
+    void setCurrentEpisode(const QModelIndex &index);
 
     // Interface of MainWidowActionHandler
 //    bool newFile();

@@ -848,7 +848,7 @@ QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, 
   \brief Reads a Xml content. Content must be like the one produced by createXml(). The \e readDatas is cleared and filled.
   \sa createXml().
 */
-bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64 )
+bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64)
 {
     if (!xmlContent.contains(generalTag)) {
         Utils::Log::addError("Utils::readXml",QString("Error while reading Xml : tag %1 not found").arg(generalTag));
@@ -862,17 +862,17 @@ bool readXml( const QString &xmlContent, const QString &generalTag, QHash<QStrin
     QDomElement paramElem = root.firstChildElement();
 
     if (valueFromBase64) {
-        while ( !paramElem.isNull() ) {
-            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive ) ) {
+        while (!paramElem.isNull() ) {
+            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive)) {
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
-            readDatas.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toAscii()) );
+            readDatas.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toAscii()));
             paramElem = paramElem.nextSiblingElement();
         }
     } else {
-        while ( !paramElem.isNull() ) {
-            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive ) ) {
+        while (!paramElem.isNull() ) {
+            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive)) {
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }

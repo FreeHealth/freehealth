@@ -53,7 +53,9 @@ namespace Constants {
       Table_IDENT = 0,
       Table_LK_TOPRACT,
       Table_EPISODES,
-      Table_PATIENT_PHOTO
+      Table_EPISODE_CONTENT,
+      Table_PATIENT_PHOTO,
+      Table_VERSION
     };
 
     // Fields
@@ -103,13 +105,21 @@ namespace Constants {
         EPISODES_DATEOFVALIDATION,
         EPISODES_VALIDATED
     };
-
+    enum EpisodesContentFields {
+        EPISODE_CONTENT_ID = 0,
+        EPISODE_CONTENT_EPISODE_ID,
+        EPISODE_CONTENT_XML
+    };
     enum PhotoFields {
         PHOTO_ID = 0 ,
         PHOTO_UID,
         PHOTO_PATIENT_UID,
-        PHOTO_BLOB,
+        PHOTO_BLOB
     };
+    enum VersionFields {
+        VERSION_TEXT = 0
+    };
+
 }  // End namespace Patients::Constants
 }  // End namespace Patients
 

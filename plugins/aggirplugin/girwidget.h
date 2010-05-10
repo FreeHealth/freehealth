@@ -72,8 +72,8 @@ public:
 
     bool isContainer() const {return false;}
 
-    void setValue(const QVariant &) {}
-    QVariant value() const {}
+    void setValue(const QVariant &);
+    QVariant value() const;
 
 public Q_SLOTS:
     void retranslate() {}

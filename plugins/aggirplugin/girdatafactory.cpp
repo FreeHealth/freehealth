@@ -10,41 +10,35 @@ using namespace Gir;
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- Factory -------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-GirDataFactory::GirDataFactory(QObject *parent) :
-        Form::IFormItemDataFactory(parent)
-{
-}
-
-Form::IFormItemData *GirDataFactory::createItemData(Form::FormItem *parent)
-{
-//    if ((name.compare("aggir",Qt::CaseInsensitive)==0) ||
-//        (name.compare("gir",Qt::CaseInsensitive)==0)) {
-//        return 0;//new GirWidget(object, parent);
-//    }
-    return 0;
-}
+//GirDataFactory::GirDataFactory(QObject *parent) :
+//        Form::IFormItemDataFactory(parent)
+//{
+//}
+//
+//Form::IFormItemData *GirDataFactory::createItemData(Form::FormItem *parent)
+//{
+////    if ((name.compare("aggir",Qt::CaseInsensitive)==0) ||
+////        (name.compare("gir",Qt::CaseInsensitive)==0)) {
+////        return 0;//new GirWidget(object, parent);
+////    }
+//    return 0;
+//}
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- ItemData -------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 bool GirItemData::isModified() const
 {
+    return m_IsModified;
 }
 
-void GirItemData::setData(const QVariant &data)
+void GirItemData::setData(const QVariant &data, const int role)
 {
 }
 
-QVariant GirItemData::data() const
+QVariant GirItemData::data(const int role) const
 {
-}
-
-void GirItemData::setWidgetData(const QVariant &data)
-{
-}
-
-QVariant GirItemData::widgetData() const
-{
+    return QVariant();
 }
 
 void GirItemData::setStorableData(const QVariant &data)
@@ -53,13 +47,6 @@ void GirItemData::setStorableData(const QVariant &data)
 
 QVariant GirItemData::storableData() const
 {
-}
-
-void GirItemData::setScriptData(const QVariant &data)
-{
-}
-
-QVariant GirItemData::scriptData() const
-{
+    return QVariant();
 }
 

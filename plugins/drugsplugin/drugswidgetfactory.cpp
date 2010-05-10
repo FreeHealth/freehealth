@@ -114,20 +114,20 @@ bool DrugsWidgetsFactory::isContainer(const int) const
     return false;
 }
 
-Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent)
+Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
 {
-    return new DrugsPrescriptorWidget(linkedObject, parent);
+    return new DrugsPrescriptorWidget(formItem, parent);
 }
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------- DrugsPrescriptorWidget implementation --------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWidget *parent) :
-        Form::IFormWidget(linkedObject,parent),
+DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *formItem, QWidget *parent) :
+        Form::IFormWidget(formItem,parent),
         m_PrescriptionModel(0)
 {
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this );
+    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this );
     hb->setSpacing(0);
     hb->setMargin(0);
 

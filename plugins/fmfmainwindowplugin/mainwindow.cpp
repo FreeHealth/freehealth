@@ -244,15 +244,12 @@ void MainWindow::postCoreInitialization()
     // Add EpisodeModel
     m_EpisodeModel = new Patients::EpisodeModel(this);
     formManager()->formPlaceHolder()->formTree()->setModel(m_EpisodeModel);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Id, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Date, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::UserUuid, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::PatientUuid, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::FormUuid, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Summary, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::FullContent, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::IsNewlyCreated, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::IsEpisode, true);
+    for(int i=0; i<Patients::EpisodeModel::MaxData; ++i)
+        formManager()->formPlaceHolder()->formTree()->setColumnHidden(i, true);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Label, false);
+    formManager()->formPlaceHolder()->formTree()->expandAll();
+
+    connect(formManager()->formPlaceHolder()->formTree(), SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
     // END TEST
 }
 
@@ -264,6 +261,24 @@ void MainWindow::setCurrentPatient(const QModelIndex &index)
     // TEST
     m_EpisodeModel->setCurrentPatient(Patients::PatientModel::activeModel()->index(index.row(), Patients::PatientModel::Uid).data().toString());
     // END TEST
+}
+
+void MainWindow::setCurrentEpisode(const QModelIndex &index)
+{
+    if (index.model() != m_EpisodeModel) {
+        qWarning() << __LINE__ << __FILE__ << "Wrong model";
+        return;
+    }
+    // inform formplaceholder --> refresh form view
+    QString formUuid = m_EpisodeModel->index(index.row(), Patients::EpisodeModel::FormUuid, index.parent()).data().toString();
+    formManager()->formPlaceHolder()->setCurrentForm(formUuid);
+
+    int episode = -1;
+    if (m_EpisodeModel->isEpisode(index)) {
+        episode = m_EpisodeModel->index(index.row(), Patients::EpisodeModel::Id, index.parent()).data().toInt();
+        // inform formmanager
+        formManager()->activateEpisode(episode, formUuid, m_EpisodeModel->index(index.row(), Patients::EpisodeModel::XmlContent, index.parent()).data().toString());
+    }
 }
 
 /** \brief Close the main window and the application */

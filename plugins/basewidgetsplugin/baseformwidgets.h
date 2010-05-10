@@ -47,6 +47,7 @@
 #include <QVariant>
 
 #include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 /**
  * \file baseformwidgets.h
@@ -101,9 +102,6 @@ public:
     void addWidgetToContainer( Form::IFormWidget *widget );
     bool isContainer() const {return true;}
 
-    void setValue(const QVariant &) {}
-    QVariant value() const;
-
 public Q_SLOTS:
     void retranslate();
 
@@ -111,7 +109,6 @@ private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
 };
-
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseGroup implementation --------------------------------------
@@ -125,9 +122,6 @@ public:
 
     void addWidgetToContainer( Form::IFormWidget *widget );
     bool isContainer() const {return true;}
-
-    void setValue(const QVariant &) {}
-    QVariant value() const { return QVariant(); /** \todo this */ }
 
 public Q_SLOTS:
     void retranslate();
@@ -143,24 +137,44 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseCheck implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
+class BaseCheckData;
 class BaseCheck : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    BaseCheck(Form::FormItem *linkedObject, QWidget *parent = 0);
+    BaseCheck(Form::FormItem *formItem, QWidget *parent = 0);
     ~BaseCheck();
-
-    void setValue(const QVariant &) {}
-    QVariant value() const;
 
 public Q_SLOTS:
     void retranslate();
 
-//private Q_SLOTS:
-//    void updateObject( bool chked );
-//    void updateWidget();
+private:
+    QCheckBox *m_Check;
+    BaseCheckData *m_ItemData;
+};
+
+class BaseCheckData : public Form::IFormItemData
+{
+public:
+    BaseCheckData(Form::FormItem *item);
+    ~BaseCheckData();
+
+    void setCheckBox(QCheckBox *chk);
+
+//    virtual void clear() = 0;
+
+    Form::FormItem *parentItem() const;
+    bool isModified() const;
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
 
 private:
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
     QCheckBox *m_Check;
 };
 

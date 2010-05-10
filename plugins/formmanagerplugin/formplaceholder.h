@@ -69,6 +69,7 @@ protected:
 class FORM_EXPORT FormPlaceHolder : public QWidget
 {
     Q_OBJECT
+    friend class FormManager;
 
 public:
     FormPlaceHolder(QWidget *parent = 0);
@@ -76,13 +77,15 @@ public:
 
     QTreeView *formTree() const;
     QStackedLayout *formStackLayout() const;
-    void clearFormStackLayout();
     
     void addTopWidget(QWidget *top);
     void addBottomWidget(QWidget *bottom);
 
+public Q_SLOTS:
+    void setCurrentForm(const QString &formUuid);
+
 protected Q_SLOTS:
-    void changeStackedLayoutTo(const QModelIndex &index);
+    void reset();
 
 private:
     Internal::FormPlaceHolderPrivate *d;

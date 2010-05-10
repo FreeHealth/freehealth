@@ -65,6 +65,7 @@ public:
         FormUuid,
         IsNewlyCreated,
         IsEpisode,
+        XmlContent,
         MaxData
     };
 

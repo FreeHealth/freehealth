@@ -108,10 +108,10 @@ void GirUi::updateGirString(QAbstractButton *radio)
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- GirWidget -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-GirWidget::GirWidget(Form::FormItem *linkedObject, QWidget *parent) :
-    Form::IFormWidget(linkedObject,parent)
+GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent)
 {
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_LinkedObject->spec()->label(), this);
+    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
     m_Label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     hb->addWidget(m_Label);
     hb->addWidget(new GirUi(this));
@@ -122,3 +122,11 @@ GirWidget::~GirWidget()
 {
 }
 
+void GirWidget::setValue(const QVariant &)
+{
+}
+
+QVariant GirWidget::value() const
+{
+    return QVariant();
+}

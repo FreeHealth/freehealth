@@ -84,15 +84,16 @@ public:
      bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
      void activateMode();
 
-
      Core::UniqueIDManager *uuidManager() const;
-     FormMain *createForm(const QString &uuid, FormMain *parent = 0);
 
+     FormMain *createForm(const QString &uuid, FormMain *parent = 0);
      QList<FormMain*> forms() const;
      bool hasForm(const QString &uuid) const;
      FormMain *form(const QString &uuid) const;
 
      FormPlaceHolder *formPlaceHolder() const;
+
+     bool activateEpisode(const int id, const QString &formUid, const QString &xmlcontent);
 
      template <class T>
      T* getParent(FormItem *item)
@@ -110,18 +111,8 @@ public:
          return parent;
      }
 
-     // Preparators
-     /** \todo void formsAreCompleted(); */
-
-     // Uis members --> Privates
-     QTreeWidget *formsTreeWidget(QTreeWidget *tree) const;
-     QStackedLayout *formsStackedLayout(QStackedLayout *stack) const;
-//     void toogleTreeWidget();
-
 public Q_SLOTS:
      bool translateForms();
-     bool setFormObjects(QObject *root); // will be casted to mfObject while creating new class FormWidget
-
 
  private:
      Internal::FormManagerPrivate *d;

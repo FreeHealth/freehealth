@@ -39,6 +39,10 @@
  ***************************************************************************/
 #include "formplaceholder.h"
 
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+
 #include <utils/widgets/minisplitter.h>
 
 #include <QTreeView>
@@ -53,12 +57,17 @@
 
 using namespace Form;
 
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+
+
 namespace Form {
 namespace Internal {
 class FormPlaceHolderPrivate
 {
 public:
-    FormPlaceHolderPrivate() : m_FileTree(0), m_EpisodesTable(0), m_Stack(0), m_GeneralLayout(0)
+    FormPlaceHolderPrivate(FormPlaceHolder *parent) :
+            m_FileTree(0), m_EpisodesTable(0), m_Stack(0), m_GeneralLayout(0),
+            q(parent)
     {
     }
 
@@ -69,11 +78,46 @@ public:
         delete m_GeneralLayout; m_GeneralLayout=0;
     }
 
+    void populateStackLayout()
+    {
+        Q_ASSERT(m_Stack);
+        if (!m_Stack)
+            return;
+        clearStackLayout();
+        foreach(FormMain *form, formManager()->forms()) {
+            if (form->formWidget()) {
+                QWidget *w = new QWidget();
+                QVBoxLayout *vl = new QVBoxLayout(w);
+                vl->setSpacing(0);
+                vl->setMargin(0);
+                vl->addWidget(form->formWidget());
+                int id = m_Stack->addWidget(w);
+                m_StackId_FormUuid.insert(id, form->uuid());
+            }
+        }
+    }
+
+private:
+    void clearStackLayout()
+    {
+        /** \todo check leaks */
+        for(int i = m_Stack->count(); i>0; --i) {
+            QWidget *w = m_Stack->widget(i);
+            m_Stack->removeWidget(w);
+            delete w;
+        }
+    }
+
+public:
     QTreeView *m_FileTree;
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
     QScrollArea *m_Scroll;
+    QHash<int, QString> m_StackId_FormUuid;
+
+private:
+    FormPlaceHolder *q;
 };
 
 FormTreeView::FormTreeView(QWidget *parent) : QTreeView(parent)
@@ -113,7 +157,7 @@ bool FormTreeView::viewportEvent(QEvent *event)
 }
 
 FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
-        QWidget(parent), d(new Internal::FormPlaceHolderPrivate)
+        QWidget(parent), d(new Internal::FormPlaceHolderPrivate(this))
 {
     d->m_GeneralLayout = new QGridLayout(this);
     d->m_GeneralLayout->setObjectName("FormPlaceHolder::GeneralLayout");
@@ -122,10 +166,12 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     setLayout(d->m_GeneralLayout);
 
     QWidget *w = new QWidget(this);
-    d->m_FileTree = new Internal::FormTreeView(this);
+//    d->m_FileTree = new Internal::FormTreeView(this);
+    d->m_FileTree = new QTreeView(this);
     d->m_FileTree->setObjectName("FormTree");
     d->m_FileTree->setIndentation(10);
-//    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
+    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
+    d->m_FileTree->header()->hide();
     d->m_Scroll = new QScrollArea(this);
     d->m_Scroll->setWidgetResizable(true);
 
@@ -159,8 +205,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Scroll->setWidget(w);
 
     d->m_GeneralLayout->addWidget(horiz, 100, 0);
-
-    connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(changeStackedLayoutTo(QModelIndex)));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -171,6 +215,13 @@ FormPlaceHolder::~FormPlaceHolder()
     }
 }
 
+void FormPlaceHolder::reset()
+{
+    d->m_FileTree->update();
+    d->m_FileTree->expandAll();
+    d->populateStackLayout();
+}
+
 QTreeView *FormPlaceHolder::formTree() const
 {
     return d->m_FileTree;
@@ -179,15 +230,6 @@ QTreeView *FormPlaceHolder::formTree() const
 QStackedLayout *FormPlaceHolder::formStackLayout() const
 {
     return d->m_Stack;
-}
-
-void FormPlaceHolder::clearFormStackLayout()
-{
-    for(int i = d->m_Stack->count(); i>0; --i) {
-        QWidget *w = d->m_Stack->widget(i);
-        d->m_Stack->removeWidget(w);
-        delete w;
-    }
 }
 
 void FormPlaceHolder::addTopWidget(QWidget *top)
@@ -202,8 +244,7 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
     d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
 }
 
-void FormPlaceHolder::changeStackedLayoutTo(const QModelIndex &index)
+void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
-//    int id = item->data(0,Qt::UserRole).toInt();
-//    d->m_Stack->setCurrentIndex(id);
+    d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
 }

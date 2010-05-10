@@ -13,20 +13,20 @@ namespace Form {
 class IFormItemData;
 class FormItem;
 
-class FORM_EXPORT IFormItemDataFactory : public QObject
-{
-    Q_OBJECT
-public:
-    IFormItemDataFactory(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFormItemDataFactory() {}
-
-    virtual bool initialize(const QStringList &arguments, QString *errorString) = 0;
-    virtual bool extensionInitialized() = 0;
-    virtual bool isInitialized() const = 0;
-
-    virtual QStringList providedItemDatas() const = 0;
-    virtual Form::IFormItemData *createItemData(Form::FormItem *parent) = 0;
-};
+//class FORM_EXPORT IFormItemDataFactory : public QObject
+//{
+//    Q_OBJECT
+//public:
+//    IFormItemDataFactory(QObject *parent = 0) : QObject(parent) {}
+//    virtual ~IFormItemDataFactory() {}
+//
+//    virtual bool initialize(const QStringList &arguments, QString *errorString) = 0;
+//    virtual bool extensionInitialized() = 0;
+//    virtual bool isInitialized() const = 0;
+//
+//    virtual QStringList providedItemDatas() const = 0;
+//    virtual Form::IFormItemData *createItemData(Form::FormItem *parent) = 0;
+//};
 
 
 class FORM_EXPORT IFormItemData : public QObject
@@ -37,6 +37,8 @@ class FORM_EXPORT IFormItemData : public QObject
 public:
     virtual ~IFormItemData() {}
     inline static int columnCount() { return 4; } // to be improved+++
+
+//    virtual void clear() = 0;
 
     virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;

@@ -74,6 +74,9 @@ public:
         ui->names->setText(m_Model->index(m_Index->row(), PatientModel::FullName).data().toString());
         ui->age->setText(m_Model->index(m_Index->row(), PatientModel::Age).data().toString());
         ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
+        QPixmap photo = m_Model->index(m_Index->row(), PatientModel::Photo).data().value<QPixmap>();
+        photo = photo.scaled(QSize(32,32), Qt::KeepAspectRatio);
+        ui->photo->setPixmap(photo);
     }
 
 public:

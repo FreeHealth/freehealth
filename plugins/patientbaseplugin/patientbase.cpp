@@ -169,9 +169,14 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_DATEOFVALIDATION, "DATEVALIDATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_VALIDATED, "VALIDATED", FieldIsBoolean);
 
+    addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID, "CONTENT_ID", FieldIsUniquePrimaryKey);
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, "EPISODE_ID", FieldIsInteger);
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, "XML_CONTENT", FieldIsBlob);
+
     // Version
-    /** \todo Create a specific table for version */
-    addField(Table_IDENT, IDENT_VERSION, "VERSION", FieldIsShortText);
+    addTable(Table_VERSION, "VERSION");
+    addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }

@@ -363,6 +363,14 @@ FormMain::~FormMain()
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
 
+void FormMain::clear()
+{
+    /** \todo here */
+//    foreach(FormItem *it, this->formItemChildren()) {
+//        it->clear();
+//    }
+}
+
 inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)
 {
     QTreeWidgetItem *i = new QTreeWidgetItem(tree, QStringList() << item->spec()->pluginName() << item->spec()->label());

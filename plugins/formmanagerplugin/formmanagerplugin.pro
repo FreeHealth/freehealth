@@ -13,8 +13,7 @@ HEADERS = formmanagerplugin.h \
     iformitemscripts.h \
     iformitemvalues.h \
     iformwidgetfactory.h \
-    iformitemdatafactory.h \
-    formglobalmodel.h \
+    iformitemdata.h \
     formmanagermode.h \
     formplaceholder.h
 SOURCES = formmanagerplugin.cpp \
@@ -22,7 +21,6 @@ SOURCES = formmanagerplugin.cpp \
     iformitem.cpp \
     iformwidgetfactory.cpp \
     iformitemdatafactory.cpp \
-    formglobalmodel.cpp \
     formmanagermode.cpp \
     formplaceholder.cpp
 OTHER_FILES = FormManager.pluginspec

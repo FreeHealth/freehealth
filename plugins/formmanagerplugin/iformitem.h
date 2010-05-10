@@ -192,6 +192,7 @@ public:
     FormPage *createPage(const QString &uuid = QString::null);
 
     virtual void languageChanged();
+    void clear();
 
     virtual FormMain *formParent() { return qobject_cast<FormMain*>(parent()); }
 
