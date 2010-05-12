@@ -161,9 +161,9 @@ public:
 
     void setCheckBox(QCheckBox *chk);
 
-//    virtual void clear() = 0;
+    void clear();
 
-    Form::FormItem *parentItem() const;
+    Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
     void setData(const QVariant &data, const int role);
@@ -181,6 +181,7 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseRadio implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
+class BaseRadioData;
 class BaseRadio : public Form::IFormWidget
 {
     Q_OBJECT
@@ -188,18 +189,36 @@ public:
     BaseRadio(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseRadio();
 
-    void setValue(const QVariant &) {}
-    QVariant value() const {return QVariant();}
-
 public Q_SLOTS:
     void retranslate();
 
-    //private Q_SLOTS:
-    //     void updateObject( bool chked );
-    //     void updateWidget();
+public:
+    QList<QRadioButton*>  m_RadioList;
+};
+
+class BaseRadioData : public Form::IFormItemData
+{
+public:
+    BaseRadioData(Form::FormItem *item);
+    ~BaseRadioData();
+
+    void setBaseRadio(BaseRadio* radio) {m_Radio = radio; clear();}
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
 
 private:
-    QList<QRadioButton*>  m_RadioList;
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseRadio* m_Radio;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -215,14 +234,34 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-//private Q_SLOTS:
-//     void updateObject( const QString & value );
-//     void updateObject();
-//     void updateWidget();
-
-private:
+public:
      QLineEdit *m_Line;
      QTextEdit *m_Text;
+};
+
+class BaseSimpleTextData : public Form::IFormItemData
+{
+public:
+    BaseSimpleTextData(Form::FormItem *item);
+    ~BaseSimpleTextData();
+
+    void setBaseSimpleText(BaseSimpleText* text) {m_Text = text; clear();}
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private:
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseSimpleText* m_Text;
 };
 
 //--------------------------------------------------------------------------------------------------------

@@ -356,12 +356,12 @@ void BaseGroup::retranslate()
 //--------------------------------------------- BaseCheck ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Check( 0 )
+        : Form::IFormWidget(formItem,parent), m_Check(0)
 {
-    QHBoxLayout * hb = new QHBoxLayout( this );
+    QHBoxLayout * hb = new QHBoxLayout(this);
     // Add Buttons
     m_Check = new QCheckBox(this);
-    m_Check->setObjectName( "Checkbox_" + m_FormItem->uuid());
+    m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
     hb->addWidget(m_Check);
     retranslate();
     // create itemdata
@@ -390,13 +390,23 @@ BaseCheckData::~BaseCheckData()
 void BaseCheckData::setCheckBox(QCheckBox *chk)
 {
     m_Check = chk;
+    clear();
 }
 
-//    virtual void clear() = 0;
-
-Form::FormItem *BaseCheckData::parentItem() const
+void BaseCheckData::clear()
 {
-    return m_FormItem;
+    const QString &s = m_FormItem->valueReferences()->defaultValue().toString();
+    m_Check->setChecked(false);
+
+    if (s.isEmpty())
+        return;
+
+    if (s.compare("checked", Qt::CaseInsensitive)==0)
+        m_Check->setChecked(true);
+    else if (s.compare("unchecked", Qt::CaseInsensitive)==0)
+        m_Check->setChecked(false);
+    else if (s.compare("partial", Qt::CaseInsensitive)==0)
+        m_Check->setCheckState(Qt::PartiallyChecked);
 }
 
 bool BaseCheckData::isModified() const
@@ -406,6 +416,7 @@ bool BaseCheckData::isModified() const
 
 void BaseCheckData::setData(const QVariant &data, const int role)
 {
+    qWarning() << "BaseCheckData::setData" << data << role;
     if (role==Qt::EditRole || role==Qt::DisplayRole) {
         if (data.canConvert(QVariant::Int))  { // Tristate
             m_Check->setCheckState(Qt::CheckState(data.toInt()));
@@ -420,11 +431,15 @@ QVariant BaseCheckData::data(const int role) const
 
 void BaseCheckData::setStorableData(const QVariant &data)
 {
+    if (!data.isValid())
+        return;
+    Qt::CheckState state = Qt::CheckState(data.toInt());
+    m_Check->setCheckState(state);
 }
 
 QVariant BaseCheckData::storableData() const
 {
-    return QVariant();
+    return m_Check->checkState();
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -434,19 +449,11 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent)
 {
     // Prepare Widget Layout and label
-    //     QBoxLayout * hb = getBoxLayout( Label_OnLeft, mfo(m_FormItem)->label(), this );
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this );
 
     // Add QLabel
     m_Label->setSizePolicy( QSizePolicy::Preferred , QSizePolicy::Preferred );
     hb->addWidget(m_Label);
-
-    //     if ( !( mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop ) ) {
-    //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~( Qt::AlignVertical_Mask );
-    //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment( alignment );
-    //     }
 
     // Add Buttons
     QGroupBox *gb = new QGroupBox( this );
@@ -463,7 +470,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
     radioLayout->setContentsMargins( 1, 0, 1, 0 );
     QRadioButton * rb = 0;
     int i = 0;
-    foreach ( QString v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible) ) {
+    foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible) ) {
         rb = new QRadioButton(this);
         rb->setObjectName("Radio");
         rb->setText(v);
@@ -471,43 +478,17 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
         i++;
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
-        // Connect radio button enabled/disabled with mfObject
-        //          connect( rb ,    SIGNAL( clicked( bool ) ),
-        //                   this ,  SLOT  ( updateObject( bool ) ) );
-        //          // Connect object value changed signal with radiobutton
-        //          connect ( mfo(m_FormItem),   SIGNAL( valueChanged() ),
-        //                    this,  SLOT  ( updateWidget() ) );
     }
-    hb->addWidget( gb );
+    hb->addWidget(gb);
 
-    // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
-
+    // create the FormItemData
+    BaseRadioData *data = new BaseRadioData(m_FormItem);
+    data->setBaseRadio(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseRadio::~BaseRadio()
 { }
-
-//void BaseRadio::updateObject( bool )
-//{
-//     QRadioButton * but = qobject_cast<QRadioButton *>( sender() );
-//     mfo(m_FormItem)->selectedValueChangedTo( but->property( "id" ).toInt() );
-//}
-//
-//void BaseRadio::updateWidget()
-//{
-//     QList<QRadioButton*> finded = this->findChildren<QRadioButton *>( "Radio" );
-//     if ( !finded.count() ) return;
-//
-//     foreach( QRadioButton* but , finded )
-//     {
-//          if ( but->property( "id" ).toInt() == *mfo(m_FormItem)->selectedValuesIds().constBegin() )
-//               but->setChecked( true );
-//          else
-//               but->setChecked( false );
-//     }
-//}
 
 void BaseRadio::retranslate()
 {
@@ -525,12 +506,72 @@ void BaseRadio::retranslate()
             return;
         }
         int i = 0;
-        foreach ( QRadioButton * button, m_RadioList ) {
-            button->setText( list.at( i ) );
+        foreach (QRadioButton *button, m_RadioList) {
+            button->setText(list.at(i));
             i++;
         }
     }
 }
+
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseRadioData::BaseRadioData(Form::FormItem *item) :
+        m_FormItem(item), m_Radio(0)
+{
+}
+
+BaseRadioData::~BaseRadioData()
+{}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseRadioData::clear()
+{
+    int id = m_FormItem->valueReferences()->defaultValue().toInt();
+    if (id < m_Radio->m_RadioList.count())
+        m_Radio->m_RadioList.at(id)->setChecked(true);
+}
+
+bool BaseRadioData::isModified() const
+{
+    return m_IsModified;
+}
+
+void BaseRadioData::setData(const QVariant &data, const int role)
+{
+//    qWarning() << "BaseCheckData::setData" << data << role;
+//    if (role==Qt::EditRole || role==Qt::DisplayRole) {
+//        if (data.canConvert(QVariant::Int))  { // Tristate
+//            m_Check->setCheckState(Qt::CheckState(data.toInt()));
+//        }
+//    }
+}
+
+QVariant BaseRadioData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseRadioData::setStorableData(const QVariant &data)
+{
+    // Storable data == id of the selected radio button
+    if (!data.isValid())
+        return;
+    if (data.toInt() < m_Radio->m_RadioList.count())
+        m_Radio->m_RadioList.at(data.toInt())->setChecked(true);
+    else
+        qWarning() << "BaseRadioData::setStorableData : ERROR : Id over the counted list" << data.toInt() << m_Radio->m_RadioList;
+}
+
+QVariant BaseRadioData::storableData() const
+{
+    foreach(QRadioButton *but, m_Radio->m_RadioList) {
+        if (but->isChecked())
+            return but->property("id").toInt();
+    }
+    /** \todo return the default value ? */
+    return QVariant();
+}
+
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -559,75 +600,77 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
         //          m_Line->setInputMask( mfo(m_FormItem)->mask() );
         //          m_Line->setCursorPosition(0);
         hb->addWidget(m_Line);
-        // Connect list selection changed with mfObject value changed
-        //          connect( m_Line,       SIGNAL( textChanged( const QString & ) ),
-        //                   this ,      SLOT  ( updateObject( const QString & ) ) );
-        //          connect( mfo(m_FormItem),        SIGNAL( valueChanged() ),
-        //                   this ,      SLOT  ( updateWidget() ) );
-
     } else {
         m_Text = new QTextEdit(this);
         m_Text->setObjectName( "Text_" + m_FormItem->uuid());
         m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
         hb->addWidget(m_Text);
-        // Connect list selection changed with mfObject value changed
-        //          connect( m_Text,       SIGNAL( textChanged () ),
-        //                   this ,      SLOT  ( updateObject() ) );
-        //          connect( mfo(m_FormItem),        SIGNAL( valueChanged() ),
-        //                   this ,      SLOT  ( updateWidget() ) );
     }
 
-    // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
-
+    // Create the FormItemData
+    BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
+    data->setBaseSimpleText(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseSimpleText::~BaseSimpleText()
 {
 }
 
-//void BaseSimpleText::updateObject( const QString & value )
-//{
-//     mfo(m_FormItem)->disconnect();
-//     mfo(m_FormItem)->selectedValueChangedTo( value );
-//     connect( mfo(m_FormItem),   SIGNAL( valueChanged() ),
-//              this ,      SLOT  ( updateWidget() ) );
-//}
-//
-//void BaseSimpleText::updateObject()
-//{
-//     if ( !m_Text ) return;
-//     mfo(m_FormItem)->disconnect();
-//     mfo(m_FormItem)->selectedValueChangedTo( m_Text->toPlainText() );
-//     connect( mfo(m_FormItem),   SIGNAL( valueChanged() ),
-//              this ,      SLOT  ( updateWidget() ) );
-//
-//}
-
-//void BaseSimpleText::updateWidget()
-//{
-//     // Get text object
-//     if ( m_Line )
-//     {
-//          m_Line->disconnect();
-//          m_Line->setText( mfo(m_FormItem)->value().toString() );
-//          m_Line->repaint();
-//          connect( m_Line,  SIGNAL( textChanged( const QString & ) ),
-//                   this ,   SLOT  ( updateObject( const QString & ) ) );
-//     }
-//     else if ( m_Text )
-//     {
-//          m_Text->disconnect();
-//          m_Text->setPlainText( mfo(m_FormItem)->value().toString() );
-//          connect( m_Text,  SIGNAL( textChanged () ),
-//                   this ,   SLOT  ( updateObject() ) );
-//     }
-//}
-
 void BaseSimpleText::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
+}
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseSimpleTextData::BaseSimpleTextData(Form::FormItem *item) :
+        m_FormItem(item), m_Text(0)
+{
+}
+
+BaseSimpleTextData::~BaseSimpleTextData()
+{}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseSimpleTextData::clear()
+{
+    const QString &s = m_FormItem->valueReferences()->defaultValue().toString();
+    if (m_Text->m_Line)
+        m_Text->m_Line->setText(s);
+    else if (m_Text->m_Text)
+        m_Text->m_Text->setPlainText(s);
+}
+
+bool BaseSimpleTextData::isModified() const
+{
+    return m_IsModified;
+}
+
+void BaseSimpleTextData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant BaseSimpleTextData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseSimpleTextData::setStorableData(const QVariant &data)
+{
+    const QString &s = data.toString();
+    if (m_Text->m_Line)
+        m_Text->m_Line->setText(s);
+    else if (m_Text->m_Text)
+        m_Text->m_Text->setPlainText(s);
+}
+
+QVariant BaseSimpleTextData::storableData() const
+{
+    if (m_Text->m_Line)
+        return m_Text->m_Line->text();
+    else if (m_Text->m_Text)
+        return m_Text->m_Text->toPlainText();
+    return QVariant();
 }
 
 
@@ -680,47 +723,11 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList)
         m_List->setSelectionMode(QAbstractItemView::MultiSelection);
     hb->addWidget(m_List);
 
-    //     // Connect list selection changed with mfObject
-    //     connect( m_List, SIGNAL( itemSelectionChanged() ),
-    //              this ,      SLOT  ( updateObject() ) );
-    //     connect( mfo(m_FormItem),        SIGNAL( valueChanged() ),
-    //              this,       SLOT  ( updateWidget() ) );
-    //
-    //     // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
 }
 
 BaseList::~BaseList()
 {
 }
-
-//void BaseList::updateObject()
-//{
-//     if ( !m_List ) return;
-//
-//     QSet<int> values;
-//     foreach( QListWidgetItem* item, m_List->selectedItems() )
-//     {
-//          values << m_List->row( item );
-//     }
-//     mfo(m_FormItem)->selectedValueChangedTo( values );
-//}
-//
-//void BaseList::updateWidget()
-//{
-//     if ( !m_List ) return;
-//
-//     m_List->disconnect();
-//
-//     m_List->clearSelection();
-//     foreach( int idx, mfo(m_FormItem)->selectedValuesIds() )
-//     m_List->item( idx )->setSelected( true );
-//
-//     connect( m_List, SIGNAL( itemSelectionChanged() ),
-//              this ,      SLOT  ( updateObject() ) );
-//
-//}
 
 void BaseList::retranslate()
 {

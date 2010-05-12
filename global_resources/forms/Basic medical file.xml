@@ -29,6 +29,50 @@
       <type>texteditor</type>
       <label>This a simple text editor from the BaseWidgetsForm plugins</label>
     </Item>
+
+    <Item>
+      <name>shorttext1</name>
+      <type>shorttext</type>
+      <label>This a simple shorttext</label>
+      <value>
+        <default>The default value</default>
+      </value>
+   </Item>
+
+    <Item>
+      <name>longtext1</name>
+      <type>longtext</type>
+      <label>This a simple longtext</label>
+      <value>
+        <default>The default longtext value</default>
+      </value>
+   </Item>
+
+    <Item>
+      <name>check1</name>
+      <type>check</type>
+      <label>sample check box 'check'</label>
+      <value>
+        <default>checked</default>
+      </value>
+    </Item>
+    <Item>
+      <name>radio1</name>
+      <label>There are the radio buttons</label>
+      <type>radio</type>
+      <value>
+        <possible id="0">The first value</possible>
+        <possible id="1">The second value</possible>
+        <possible id="2">The third value</possible>
+        <script id="0">The first interpreted value</script>
+        <script id="1">The second interpreted value</script>
+        <script id="2">The third interpreted value</script>
+        <numerical id="0">1</numerical>
+        <numerical id="1">2</numerical>
+        <numerical id="2">4</numerical>
+        <default>1</default>
+      </value>
+    </Item>
   </MedForm>
 
   <MedForm>

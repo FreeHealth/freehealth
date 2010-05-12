@@ -92,18 +92,12 @@ public:
 
     void setValue(int type, const int id, const QVariant &val, const QString &language = Trans::Constants::ALL_LANGUAGE);
     void setDefaultValue(const QVariant &val, const QString &lang = Trans::Constants::ALL_LANGUAGE);
-
-    // this value represents the one the user's define : text of the LineEdit, value of the spinBox...
-//    void setSelectedValue(const QVariant &val);
-//    QVariant selectedValue() const;
+    QVariant defaultValue(const QString &lang = Trans::Constants::ALL_LANGUAGE);
 
     bool isOptionnal() const;
     void setOptionnal(bool state);
 
     QStringList values(const int typeOfValues) const;
-
-    // unique or historic-values possibilities
-    // actual selected value(s)
 
     // filename
     void setFileName(const QString &fileName) {m_FileName=fileName;}

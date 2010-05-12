@@ -38,7 +38,7 @@
 #include "formplaceholder.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/iformitemdatafactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -229,12 +229,20 @@ bool FormManager::activateEpisode(const int id, const QString &formUid, const QS
     // stores the actual episode id
     d->m_ActualEpisode = id;
     d->m_ActualEpisode_FormUid = formUid;
-    qWarning() << id << formUid << xmlcontent;
+
+    // clear actual form
+    FormMain *form = this->form(formUid);
+    form->clear();
+
+    qWarning() << "FormManager::activateEpisode" << id << formUid << xmlcontent;
+
+    if (xmlcontent.isEmpty())
+        return true;
 
     // read the xml'd content
     QHash<QString, QString> datas;
     if (!Utils::readXml(xmlcontent, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-        Utils::Log::addError(this, QString("Error while reading EpisodeContent %1 %2").arg(__LINE__).arg(__FILE__));
+        Utils::Log::addError(this, QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
         return false;
     }
 
@@ -242,14 +250,22 @@ bool FormManager::activateEpisode(const int id, const QString &formUid, const QS
     // XML content ==
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
-    FormMain *form = this->form(formUid);
-    form->clear();
     foreach(FormItem *it, form->formItemChildren()) {
         items.insert(it->uuid(), it);
     }
+
+//    qWarning() << items << datas;
+
     foreach(const QString &s, datas.keys()) {
-        FormItem *it = items.value(s);
-        it->itemDatas()->setStorableData(datas.value(s));
+        FormItem *it = items.value(s, 0);
+        if (!it)
+            continue;
+        else
+            qWarning() << "FormManager::activateForm :: ERROR : no item :" << s;
+        if (it->itemDatas())
+            it->itemDatas()->setStorableData(datas.value(s));
+        else
+            qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << s;
     }
     return true;
 }

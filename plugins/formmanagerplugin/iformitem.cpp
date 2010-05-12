@@ -44,6 +44,7 @@
 #include <coreplugin/uniqueidmanager.h>
 
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>
@@ -252,6 +253,14 @@ void FormItemValues::setDefaultValue(const QVariant &val, const QString &lang)
     values->m_Default = val;
 }
 
+QVariant FormItemValues::defaultValue(const QString &lang)
+{
+    ValuesBook *values = d->getLanguage(lang);
+    if (values)
+        return values->m_Default;
+    return 0;
+}
+
 //void FormItemValues::setSelectedValue(const QVariant &val)
 //{
 //    d->m_SelectedValue = val;
@@ -366,9 +375,10 @@ FormMain::~FormMain()
 void FormMain::clear()
 {
     /** \todo here */
-//    foreach(FormItem *it, this->formItemChildren()) {
-//        it->clear();
-//    }
+    foreach(FormItem *it, this->formItemChildren()) {
+        if (it->itemDatas())
+            it->itemDatas()->clear();
+    }
 }
 
 inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)

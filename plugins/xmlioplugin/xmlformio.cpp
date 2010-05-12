@@ -110,17 +110,21 @@ inline static Form::FormMain *createNewForm(const QDomElement &element, Form::Fo
 inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
-//    qWarning() << "Values" << root.tagName() << element.tagName();
+
+
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE);
     while (!element.isNull()) {
-        int id = element.attribute(Constants::ATTRIB_ID,0).toInt();
-        QVariant val = element.text();
+
+        qWarning() << "Values" << root.tagName() << element.tagName();
+
+        int id = element.attribute(Constants::ATTRIB_ID, 0).toInt();
+        QString val = element.text();
         int type = ::m_ValuesTypes.value(element.tagName(),-1);
         if (type != -1) {
             item->valueReferences()->setValue(type,id,val,lang);
         } else {
             if (element.tagName().compare(Constants::TAG_VALUE_DEFAULT, Qt::CaseInsensitive)==0) {
-                item->valueReferences()->setDefaultValue(val,lang);
+                item->valueReferences()->setDefaultValue(val, lang);
             }
         }
         element = element.nextSiblingElement();
@@ -307,13 +311,19 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         }
 
         // Spec ?
-        i = ::m_SpecsTypes.value(element.tagName(),-1);
+        i = ::m_SpecsTypes.value(element.tagName(), -1);
         if (i != -1) {
             QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
             item->spec()->setValue(::m_SpecsTypes.value(element.tagName()), element.text(), lang);
             element = element.nextSiblingElement();
             continue;
         }
+
+        // Name ?
+        if (element.tagName() == "name") {
+            item->setUuid(element.text());
+        }
+
     //             // optional?
 //            if (element.hasAttribute(Constants::ATTRIB_OPTIONNAL)) {
 //                if (element.attribute(Constants::ATTRIB_OPTIONNAL).compare("true",Qt::CaseInsensitive)==0)

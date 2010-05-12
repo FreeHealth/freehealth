@@ -20,7 +20,6 @@ SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
     iformwidgetfactory.cpp \
-    iformitemdatafactory.cpp \
     formmanagermode.cpp \
     formplaceholder.cpp
 OTHER_FILES = FormManager.pluginspec
