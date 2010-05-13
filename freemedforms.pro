@@ -14,5 +14,5 @@ SUBDIRS += \
 OTHER_FILES += update-fmf.txt \
                README \
                COPYING \
-               INSTALL
-
+               INSTALL \
+               global_resources/textfiles/freemedforms-todo.txt

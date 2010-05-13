@@ -61,6 +61,7 @@ const char* const TAG_SPEC_PLUGINNAME   = "type";
 const char* const TAG_SPEC_VERSION      = "version";
 
 const char* const TAG_VALUE              = "value";
+const char* const TAG_VALUE_UUID         = "uuid";
 const char* const TAG_VALUE_NUMERICAL    = "numerical";
 const char* const TAG_VALUE_POSSIBLE     = "possible";
 const char* const TAG_VALUE_SCRIPT       = "script";

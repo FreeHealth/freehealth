@@ -254,14 +254,15 @@ bool FormManager::activateEpisode(const int id, const QString &formUid, const QS
         items.insert(it->uuid(), it);
     }
 
-//    qWarning() << items << datas;
+    qWarning() << items;
+    qWarning() << datas;
 
     foreach(const QString &s, datas.keys()) {
         FormItem *it = items.value(s, 0);
-        if (!it)
-            continue;
-        else
+        if (!it) {
             qWarning() << "FormManager::activateForm :: ERROR : no item :" << s;
+            continue;
+        }
         if (it->itemDatas())
             it->itemDatas()->setStorableData(datas.value(s));
         else

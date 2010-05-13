@@ -203,6 +203,7 @@ public:
     QMap<int, QVariant> m_Possible;
     QMap<int, QVariant> m_Script;
     QMap<int, QVariant> m_Numerical;
+    QMap<int, QVariant> m_Uuid;
     QVariant m_Default;
 };
 
@@ -239,11 +240,12 @@ void FormItemValues::setValue(int type, const int id, const QVariant &val, const
     ValuesBook *values = d->createLanguage(language);
     switch (type)
     {
-        case Value_Numerical : values->m_Numerical.insert(id,val); break;
-        case Value_Script :    values->m_Script.insert(id,val); break;
-        case Value_Possible :  values->m_Possible.insert(id,val); break;
-        case Value_Default :   values->m_Default = val; break;
-        case Value_Dependency : break;
+    case Value_Uuid :      values->m_Uuid.insert(id,val); break;
+    case Value_Numerical : values->m_Numerical.insert(id,val); break;
+    case Value_Script :    values->m_Script.insert(id,val); break;
+    case Value_Possible :  values->m_Possible.insert(id,val); break;
+    case Value_Default :   values->m_Default = val; break;
+    case Value_Dependency : break;
     }
 }
 
@@ -292,11 +294,12 @@ QStringList FormItemValues::values(const int typeOfValues) const
     QMap<int, QVariant> map;
     switch (typeOfValues)
     {
-        case Value_Numerical : map = values->m_Numerical; break;
-        case Value_Script :    map = values->m_Script; break;
-        case Value_Possible :  map = values->m_Possible; break;
-        case Value_Default :   return QStringList() << values->m_Default.toString(); break;
-        case Value_Dependency : return QStringList();
+    case Value_Uuid :      map = values->m_Uuid; break;
+    case Value_Numerical : map = values->m_Numerical; break;
+    case Value_Script :    map = values->m_Script; break;
+    case Value_Possible :  map = values->m_Possible; break;
+    case Value_Default :   return QStringList() << values->m_Default.toString(); break;
+    case Value_Dependency : return QStringList();
     }
     QStringList list;
     foreach(int i, map.keys()) {

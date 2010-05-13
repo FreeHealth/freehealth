@@ -50,6 +50,7 @@
 #include <QDateTimeEdit>
 #include <QSpinBox>
 #include <QPushButton>
+#include <QStringListModel>
 
 using namespace BaseWidgets;
 //using namespace BaseWidgets::Internal;
@@ -467,14 +468,18 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
     } else {
         radioLayout = new QBoxLayout( QBoxLayout::TopToBottom, gb );
     }
-    radioLayout->setContentsMargins( 1, 0, 1, 0 );
-    QRadioButton * rb = 0;
+    radioLayout->setContentsMargins(1, 0, 1, 0);
+    QRadioButton *rb = 0;
     int i = 0;
+
+//    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
+//    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+
     foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible) ) {
         rb = new QRadioButton(this);
-        rb->setObjectName("Radio");
+        rb->setObjectName(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(i));
         rb->setText(v);
-        rb->setProperty("id", i);
+        rb->setProperty("id", m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(i));
         i++;
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
@@ -526,9 +531,13 @@ BaseRadioData::~BaseRadioData()
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseRadioData::clear()
 {
-    int id = m_FormItem->valueReferences()->defaultValue().toInt();
-    if (id < m_Radio->m_RadioList.count())
-        m_Radio->m_RadioList.at(id)->setChecked(true);
+    QString id = m_FormItem->valueReferences()->defaultValue().toString();
+    foreach(QRadioButton *b, m_Radio->m_RadioList) {
+        if (b->property("id").toString()==id) {
+            b->setChecked(true);
+            break;
+        }
+    }
 }
 
 bool BaseRadioData::isModified() const
@@ -556,17 +565,20 @@ void BaseRadioData::setStorableData(const QVariant &data)
     // Storable data == id of the selected radio button
     if (!data.isValid())
         return;
-    if (data.toInt() < m_Radio->m_RadioList.count())
-        m_Radio->m_RadioList.at(data.toInt())->setChecked(true);
-    else
-        qWarning() << "BaseRadioData::setStorableData : ERROR : Id over the counted list" << data.toInt() << m_Radio->m_RadioList;
+    QString id = data.toString();
+    foreach(QRadioButton *b, m_Radio->m_RadioList) {
+        if (b->property("id").toString()==id) {
+            b->setChecked(true);
+            break;
+        }
+    }
 }
 
 QVariant BaseRadioData::storableData() const
 {
     foreach(QRadioButton *but, m_Radio->m_RadioList) {
         if (but->isChecked())
-            return but->property("id").toInt();
+            return but->property("id");
     }
     /** \todo return the default value ? */
     return QVariant();
@@ -697,7 +709,6 @@ void BaseHelpText::retranslate()
     m_Label->setText(m_FormItem->spec()->label());
 }
 
-
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseLists --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -709,20 +720,26 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList)
     hb->addWidget(m_Label);
 
     // Add List and manage size
-    m_List = new QListWidget(this);
+    m_List = new QListView(this);
     m_List->setObjectName("List_" + m_FormItem->uuid());
     m_List->setUniformItemSizes(true);
-    m_List->addItems( m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible) );
-    m_List->setSortingEnabled(false);
     m_List->setAlternatingRowColors(true);
     m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
-
     if (uniqueList)
         m_List->setSelectionMode(QAbstractItemView::SingleSelection);
     else
         m_List->setSelectionMode(QAbstractItemView::MultiSelection);
+
+    const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
+    m_Model = new QStringListModel(possibles, this);
+    m_List->setModel(m_Model);
+
     hb->addWidget(m_List);
 
+    // create FormItemData
+    BaseListData *data = new BaseListData(m_FormItem);
+    data->setBaseList(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseList::~BaseList()
@@ -734,7 +751,7 @@ void BaseList::retranslate()
     m_Label->setText(m_FormItem->spec()->label());
     if (m_List) {
         const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        if (list.count() != m_List->count()) {
+        if (list.count() != m_Model->rowCount()) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
                     tr("You asked to change the language of the form to %1.\n"
@@ -743,11 +760,82 @@ void BaseList::retranslate()
                     .arg(QLocale().name(), m_FormItem->spec()->label()).arg(list.count()));
             return;
         }
-        int i = 0;
-        for ( i = 0; i < m_List->count(); i++ )
-            m_List->item(i)->setText(list[i]);
+//        int i = 0;
+//        for (i = 0; i < m_List->count(); i++) {
+//            m_List->item(i)->setText(list[i]);
+//        }
     }
 }
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseListData::BaseListData(Form::FormItem *item) :
+        m_FormItem(item), m_List(0)
+{
+}
+
+BaseListData::~BaseListData()
+{
+}
+
+void BaseListData::setSelectedItems(const QString &s)
+{
+    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
+    selModel->clearSelection();
+    if (s.isEmpty())
+        return;
+
+    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+    if (s.contains("`@`")) {
+        // multilist
+        foreach(const QString &i, s.split("`@`", QString::SkipEmptyParts)) {
+            int row = uuids.lastIndexOf(i);
+            QModelIndex idx = m_List->m_Model->index(row, 0);
+            selModel->select(idx, QItemSelectionModel::Select);
+        }
+    } else {
+        int row = uuids.lastIndexOf(s);
+        QModelIndex idx = m_List->m_Model->index(row, 0);
+        selModel->select(idx, QItemSelectionModel::Select);
+    }
+}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseListData::clear()
+{
+    setSelectedItems(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
+void BaseListData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant BaseListData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseListData::setStorableData(const QVariant &data)
+{    
+    setSelectedItems(data.toString());
+}
+
+QVariant BaseListData::storableData() const
+{
+    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
+
+    if (!selModel->hasSelection())
+        return QVariant();
+
+    QString toReturn;
+    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+    foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+        toReturn += uuids.at(idx.row()) + "`@`";
+    }
+    toReturn.chop(3);
+    return toReturn;
+}
+
+
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseCombo --------------------------------------------------
@@ -776,41 +864,15 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
     //     else
     //          m_Combo->setSizePolicy( QSizePolicy::Expanding , QSizePolicy::Fixed );
 
-
-    //     // Connect list selection changed with mfObject value changed
-    //     connect( m_Combo, SIGNAL( activated ( int ) ),
-    //              this ,   SLOT  ( updateObject( int ) ) );
-    //     connect( mfo(m_FormItem),     SIGNAL( valueChanged() ),
-    //              this,    SLOT( updateWidget() ) );
-    //
-    //     // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
+    // create FormItemData
+    BaseComboData *data = new BaseComboData(m_FormItem);
+    data->setBaseCombo(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseCombo::~BaseCombo()
 {
 }
-
-//void BaseCombo::updateObject( int id )
-//{
-//     mfo(m_FormItem)->selectedValueChangedTo( id );
-//}
-//
-//void BaseCombo::updateWidget()
-//{
-//     if ( !m_Combo ) return;
-//     m_Combo->disconnect();
-//
-//     if ( mfo(m_FormItem)->selectedValuesIds().count() )
-//          m_Combo->setCurrentIndex( *mfo(m_FormItem)->selectedValuesIds().constBegin() );
-//     else
-//          m_Combo->setCurrentIndex( 0 );
-//
-//     connect( m_Combo,  SIGNAL( activated ( int ) ),
-//              this ,    SLOT  ( updateObject( int ) ) );
-//
-//}
 
 void BaseCombo::retranslate()
 {
@@ -833,6 +895,56 @@ void BaseCombo::retranslate()
         m_Combo->setCurrentIndex(id);
     }
 }
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseComboData::BaseComboData(Form::FormItem *item) :
+        m_FormItem(item), m_Combo(0)
+{
+}
+
+BaseComboData::~BaseComboData()
+{
+}
+
+void BaseComboData::setSelectedItems(const QString &s)
+{
+    m_Combo->m_Combo->setCurrentIndex(-1);
+    if (s.isEmpty())
+        return;
+
+    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+    int row = uuids.lastIndexOf(s);
+    m_Combo->m_Combo->setCurrentIndex(row);
+}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseComboData::clear()
+{
+    setSelectedItems(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
+void BaseComboData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant BaseComboData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseComboData::setStorableData(const QVariant &data)
+{
+    setSelectedItems(data.toString());
+}
+
+QVariant BaseComboData::storableData() const
+{
+    int row = m_Combo->m_Combo->currentIndex();
+    if (row < 0)
+        return QVariant();
+    return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(row);
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
@@ -865,52 +977,62 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
     //     if ( options.contains( "now" ) )
     //          m_Date->setDateTime( QDateTime::currentDateTime() );
 
-    //     // Connect list selection changed with mfObject value changed
-    //     connect( m_Date,   SIGNAL( dateTimeChanged ( const QDateTime & ) ),
-    //              this ,  SLOT  ( updateObject( const QDateTime & ) ) );
-    //     connect( m_Date,   SIGNAL( dateChanged ( const QDate & ) ),
-    //              this ,  SLOT  ( updateObject( const QDate & ) ) );
-    //     connect( mfo(m_FormItem),    SIGNAL( valueChanged() ),
-    //              this,   SLOT  ( updateWidget() ) );
-    //
-    //     // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
+    // create FormItemData
+    BaseDateData *data = new BaseDateData(m_FormItem);
+    data->setBaseDate(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseDate::~BaseDate()
 {
 }
 
-//void BaseDate::updateObject( const QDateTime & datetime )
-//{
-//     mfo(m_FormItem)->selectedValueChangedTo( datetime );
-//}
-//
-//void BaseDate::updateObject( const QDate & date )
-//{
-//     mfo(m_FormItem)->selectedValueChangedTo( QDateTime( date ) );
-//}
-//
-//void BaseDate::updateWidget()
-//{
-//     if ( !m_Date ) return;
-//
-//     m_Date->disconnect();
-//
-//     m_Date->setDateTime( mfo(m_FormItem)->dateTime() );
-//
-//     connect( m_Date, SIGNAL( dateTimeChanged ( const QDateTime & ) ),
-//              this ,  SLOT  ( updateObject( const QDateTime & ) ) );
-//     connect( m_Date, SIGNAL( dateChanged ( const QDate & ) ),
-//              this ,  SLOT  ( updateObject( const QDate & ) ) );
-//}
-
 void BaseDate::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
-
 }
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseDateData::BaseDateData(Form::FormItem *item) :
+        m_FormItem(item), m_Date(0)
+{
+}
+
+BaseDateData::~BaseDateData()
+{
+}
+
+void BaseDateData::setDate(const QString &s)
+{
+    m_Date->m_Date->clear();
+    m_Date->m_Date->setDateTime(QDateTime::fromString(s, Qt::ISODate));
+}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseDateData::clear()
+{
+    setDate(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
+void BaseDateData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant BaseDateData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseDateData::setStorableData(const QVariant &data)
+{
+    setDate(data.toString());
+}
+
+QVariant BaseDateData::storableData() const
+{
+    return m_Date->m_Date->dateTime().toString(Qt::ISODate);
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
@@ -936,40 +1058,10 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent)
     //     m_Spin->setValue( mfo(m_FormItem)->value().toInt() );
     hb->addWidget(m_Spin);
 
-    //     // Connect list selection changed with mfObject value changed
-    //     connect( m_Spin,   SIGNAL( valueChanged ( int ) ),
-    //              this ,  SLOT  ( updateObject( int ) ) );
-    //     connect( mfo(m_FormItem),    SIGNAL( valueChanged() ),
-    //              this,   SLOT  ( updateWidget() ) );
-    //
-    //     // if selected data exists fill the widget with
-    //     if ( mfo(m_FormItem)->value() != QVariant() )
-    //          updateWidget();
 }
 
 BaseSpin::~BaseSpin()
 {}
-
-//void BaseSpin::updateObject( int val )
-//{
-//     mfo(m_FormItem)->disconnect();
-//     mfo(m_FormItem)->selectedValueChangedTo( val );
-//     connect( mfo(m_FormItem),    SIGNAL( valueChanged() ),
-//              this,   SLOT  ( updateWidget() ) );
-//
-//}
-//
-//void BaseSpin::updateWidget()
-//{
-//     if ( !m_Spin ) return;
-//
-//     m_Spin->disconnect();
-//
-//     m_Spin->setValue( mfo(m_FormItem)->value().toInt() );
-//
-//     connect( m_Spin,   SIGNAL( valueChanged ( int ) ),
-//              this ,  SLOT  ( updateObject( int ) ) );
-//}
 
 void BaseSpin::retranslate()
 {

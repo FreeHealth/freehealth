@@ -56,11 +56,15 @@
         <default>checked</default>
       </value>
     </Item>
+
     <Item>
       <name>radio1</name>
       <label>There are the radio buttons</label>
       <type>radio</type>
       <value>
+        <uuid id="0">first</uuid>
+        <uuid id="1">second</uuid>
+        <uuid id="2">third</uuid>
         <possible id="0">The first value</possible>
         <possible id="1">The second value</possible>
         <possible id="2">The third value</possible>
@@ -70,9 +74,44 @@
         <numerical id="0">1</numerical>
         <numerical id="1">2</numerical>
         <numerical id="2">4</numerical>
-        <default>1</default>
+        <default>third</default>
       </value>
     </Item>
+
+     <Item>
+       <name>multilist1</name>
+       <type>multilist</type>
+       <label>Multi selection list</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+       </value>
+     </Item>
+
+     <Item>
+       <name>combo1</name>
+       <type>combo</type>
+       <label>Combo test</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+       </value>
+     </Item>
+
+     <Item>
+       <name>date1</name>
+       <type>date</type>
+       <label>Date test</label>
+     </Item>
+
   </MedForm>
 
   <MedForm>

@@ -63,11 +63,12 @@ class QCheckBox;
 class QRadioButton;
 class QLineEdit;
 class QTextEdit;
-class QListWidget;
+class QListView;
 class QComboBox;
 class QDateTimeEdit;
 class QSpinBox;
 class QPushButton;
+class QStringListModel;
 QT_END_NAMESPACE
 
 namespace BaseWidgets {
@@ -291,11 +292,35 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-//private Q_SLOTS:
-//     void updateObject();
-//     void updateWidget();
+public:
+     QListView *m_List;
+     QStringListModel *m_Model;
+};
+
+class BaseListData : public Form::IFormItemData
+{
+public:
+    BaseListData(Form::FormItem *item);
+    ~BaseListData();
+
+    void setBaseList(BaseList* list) {m_List = list; clear();}
+    void setSelectedItems(const QString &s);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const {return m_IsModified;}
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
 private:
-     QListWidget *m_List;
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseList* m_List;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -311,12 +336,34 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-//private Q_SLOTS:
-//     void updateObject( int id );
-//     void updateWidget();
+public:
+     QComboBox *m_Combo;
+};
+
+class BaseComboData : public Form::IFormItemData
+{
+public:
+    BaseComboData(Form::FormItem *item);
+    ~BaseComboData();
+
+    void setBaseCombo(BaseCombo* combo) {m_Combo = combo; clear();}
+    void setSelectedItems(const QString &s);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const {return m_IsModified;}
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
 
 private:
-     QComboBox *m_Combo;
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseCombo* m_Combo;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -332,13 +379,34 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-// private Q_SLOTS:
-//     void updateObject( const QDateTime & datetime );
-//     void updateObject( const QDate & date );
-//     void updateWidget();
+public:
+     QDateTimeEdit *m_Date;
+};
+
+class BaseDateData : public Form::IFormItemData
+{
+public:
+    BaseDateData(Form::FormItem *item);
+    ~BaseDateData();
+
+    void setBaseDate(BaseDate* date) {m_Date = date; clear();}
+    void setDate(const QString &s);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const {return m_IsModified;}
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
 
 private:
-     QDateTimeEdit *m_Date;
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseDate* m_Date;
 };
 
 //--------------------------------------------------------------------------------------------------------

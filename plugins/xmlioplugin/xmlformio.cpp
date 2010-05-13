@@ -119,9 +119,9 @@ inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 
         int id = element.attribute(Constants::ATTRIB_ID, 0).toInt();
         QString val = element.text();
-        int type = ::m_ValuesTypes.value(element.tagName(),-1);
+        int type = ::m_ValuesTypes.value(element.tagName(), -1);
         if (type != -1) {
-            item->valueReferences()->setValue(type,id,val,lang);
+            item->valueReferences()->setValue(type, id, val, lang);
         } else {
             if (element.tagName().compare(Constants::TAG_VALUE_DEFAULT, Qt::CaseInsensitive)==0) {
                 item->valueReferences()->setDefaultValue(val, lang);
@@ -160,6 +160,7 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Form::FormItemScripts::Script_OnValueRequiered);
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Form::FormItemScripts::Script_OnDependentValueChanged);
     ::m_ValuesTypes.clear();
+    ::m_ValuesTypes.insert(Constants::TAG_VALUE_UUID, Form::FormItemValues::Value_Uuid);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_NUMERICAL, Form::FormItemValues::Value_Numerical);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_SCRIPT, Form::FormItemValues::Value_Script);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Form::FormItemValues::Value_Possible);

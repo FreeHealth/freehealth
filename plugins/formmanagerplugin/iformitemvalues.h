@@ -81,7 +81,8 @@ class FORM_EXPORT FormItemValues : public QObject
     Q_OBJECT
 public:
     enum {
-        Value_Possible = 0,
+        Value_Uuid = 0,
+        Value_Possible,
         Value_Script,
         Value_Numerical,
         Value_Default,
