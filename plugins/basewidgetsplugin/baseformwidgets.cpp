@@ -1058,6 +1058,10 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent)
     //     m_Spin->setValue( mfo(m_FormItem)->value().toInt() );
     hb->addWidget(m_Spin);
 
+    // create FormItemData
+    BaseSpinData *data = new BaseSpinData(m_FormItem);
+    data->setBaseSpin(this);
+    m_FormItem->setItemDatas(data);
 }
 
 BaseSpin::~BaseSpin()
@@ -1066,6 +1070,42 @@ BaseSpin::~BaseSpin()
 void BaseSpin::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
+}
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseSpinData::BaseSpinData(Form::FormItem *item) :
+        m_FormItem(item), m_Spin(0)
+{
+}
+
+BaseSpinData::~BaseSpinData()
+{
+}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseSpinData::clear()
+{
+//    setDate(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
+void BaseSpinData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant BaseSpinData::data(const int role) const
+{
+    return QVariant();
+}
+
+void BaseSpinData::setStorableData(const QVariant &data)
+{
+//    setDate(data.toString());
+}
+
+QVariant BaseSpinData::storableData() const
+{
+//    return m_Date->m_Date->dateTime().toString(Qt::ISODate);
+    return QVariant();
 }
 
 //--------------------------------------------------------------------------------------------------------
