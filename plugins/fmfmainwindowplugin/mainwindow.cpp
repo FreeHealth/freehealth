@@ -43,7 +43,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
@@ -69,6 +70,7 @@
 #include <patientbaseplugin/patientbar.h>
 #include <patientbaseplugin/patientsearchmode.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
+#include <patientbaseplugin/patientmodel.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -98,14 +100,19 @@ using namespace Trans::ConstantTranslations;
 
 // Getting the Core instances
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+
 static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
-static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
+
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+
+static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
@@ -117,12 +124,15 @@ static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finish
 MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
         m_modeStack(0),
-        m_PatientBar(0)
+        m_PatientBar(0),
+        m_RecentPatients(0)
 {
     setObjectName("MainWindow");
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     messageSplash(tr("Creating Main Window"));
     setAttribute(Qt::WA_QuitOnClose);
+    m_RecentPatients = new Core::FileManager(this);
+    m_RecentPatients->setSettingsKey(Core::Constants::S_PATIENT_UUID_HISTORY);
 }
 
 void MainWindow::init()
@@ -140,9 +150,13 @@ void MainWindow::init()
     createTemplatesMenu();
     createHelpMenu();
 
+    // Connect menus for recent managers
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     Q_ASSERT(fmenu);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
+    Q_ASSERT(pmenu);
+    connect(pmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentPatients()));
 
     Core::MainWindowActions actions;
 
@@ -153,6 +167,12 @@ void MainWindow::init()
             Core::MainWindowActions::A_FileSaveAs |
             Core::MainWindowActions::A_FilePrint |
             Core::MainWindowActions::A_FileQuit
+            );
+
+    actions.setPatientsActions(
+            Core::MainWindowActions::A_Patients_New |
+            Core::MainWindowActions::A_Patients_ViewIdentity |
+            Core::MainWindowActions::A_Patients_Remove
             );
 
     actions.setConfigurationActions(
@@ -175,6 +195,7 @@ void MainWindow::init()
     createActions(actions);
 
     connectFileActions();
+    connectPatientActions();
     connectConfigurationActions();
     connectHelpActions();
 
@@ -255,11 +276,20 @@ void MainWindow::postCoreInitialization()
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)
 {
+    // Inform Patient Bar and Patient Selector
     m_PatientBar->setCurrentIndex(index);
+    Patients::PatientWidgetManager::instance()->selector()->setSelectedPatient(index);
+
+    // Activate Patient files mode
     formManager()->activateMode();
 
+    // Store the uuids of the patient in the recent manager
+    const QString &uuid = patientModel()->index(index.row(), Patients::PatientModel::Uid).data().toString();
+    m_RecentPatients->setCurrentFile(uuid);
+    m_RecentPatients->addToRecentFiles(uuid);
+
     // TEST
-    m_EpisodeModel->setCurrentPatient(Patients::PatientModel::activeModel()->index(index.row(), Patients::PatientModel::Uid).data().toString());
+    m_EpisodeModel->setCurrentPatient(uuid);
     // END TEST
 }
 
@@ -364,9 +394,20 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
     return true;
 }
 
+bool MainWindow::createNewPatient()
+{
+}
+
+bool MainWindow::viewPatientIdentity()
+{}
+
+bool MainWindow::removePatient()
+{}
+
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()
 {
+    // update recent forms files
     Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_FILE_RECENTFILES);
     if (!recentsMenu)
         return;
@@ -385,18 +426,57 @@ void MainWindow::aboutToShowRecentFiles()
     recentsMenu->menu()->setEnabled(hasRecentFiles);
 }
 
-/** \brief Opens a recent file. This solt must be called by a recent files' menu's action. */
+/** \brief Rebuild the patients' history menu */
+void MainWindow::aboutToShowRecentPatients()
+{
+    // update patient history
+    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_HISTORY);
+    if (!recentsMenu)
+        return;
+    if (!recentsMenu->menu())
+        return;
+    recentsMenu->menu()->clear();
+
+    bool hasRecentFiles = false;
+    const QStringList &uuids = m_RecentPatients->recentFiles();
+    const QStringList &names = Patients::PatientModel::patientName(uuids);
+    for(int i=0; i < names.count(); ++i) {
+        hasRecentFiles = true;
+        QAction *action = recentsMenu->menu()->addAction(names.at(i));
+        action->setData(uuids.at(i));
+        connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
+    }
+    recentsMenu->menu()->setEnabled(hasRecentFiles);    
+}
+
+/** \brief Opens a recent file. This slot is called by a recent files' menu's action. */
 void MainWindow::openRecentFile()
 {
     QAction *action = qobject_cast<QAction*>(sender());
     if (!action)
         return;
-    QString fileName = action->data().toString();
+    const QString &fileName = action->data().toString();
     if (!fileName.isEmpty()) {
         loadFile(fileName);
     }
 }
 
+/** \brief Opens a recent patient selected from the patient history. This slot is called by a recent patients' menu's action. */
+void MainWindow::openRecentPatient()
+{
+    // get the uuid of the sender
+    QAction *a = qobject_cast<QAction*>(sender());
+    if (!a)
+        return;
+    const QString &uuid = a->data().toString();
+    if (uuid.isEmpty())
+        return;
+
+    // get the QModelIndex corresponding to the uuid
+    patientModel()->setFilter("", "", uuid, Patients::PatientModel::FilterOnUuid);
+    QModelIndex index = patientModel()->index(0,0);
+    setCurrentPatient(index);
+}
 
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
@@ -406,6 +486,7 @@ void MainWindow::readSettings()
     // Main Application settings
     settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
+    m_RecentPatients->getRecentFilesFromSettings();
     m_AutomaticSaveInterval = settings()->value(Core::Constants::S_SAVEINTERVAL, 600).toUInt(); // Default = 10 minutes
     m_OpenLastOpenedForm = settings()->value(Core::Constants::S_OPENLAST, true).toBool();
 
@@ -419,7 +500,9 @@ void MainWindow::readSettings()
 void MainWindow::writeSettings()
 {
     settings()->saveState(this);
+    // Recent managers
     fileManager()->saveRecentFiles();
+    m_RecentPatients->saveRecentFiles();
     // Main Application settings
     settings()->setValue(Core::Constants::S_SAVEINTERVAL, m_AutomaticSaveInterval);
     settings()->setValue(Core::Constants::S_OPENLAST, m_OpenLastOpenedForm);
@@ -443,51 +526,3 @@ bool MainWindow::applicationPreferences()
     dlg.exec();
     return true;
 }
-
-//void MainWindow::toolbarToggled(bool state)
-//{
-//    QAction * a = qobject_cast<QAction*>(sender());
-//    // find toolbar and hide it
-//    QToolBar* tb = findChild<QToolBar*>(a->objectName());
-//    if (tb)tb->setVisible(state);
-//}
-//
-//void MainWindow::saveFormData()
-//{
-//#ifdef DEBUG
-//    mfIOInterface *ioPlugin = mfCore::pluginsManager()->currentIO();
-//    if (!ioPlugin)
-//        return;
-//
-//    if (ioPlugin->saveFormData(mfIOPlace::fromLocalFile(m_CurrentFile + ".dat"), *m_pRootObject))
-//        tkLog::addMessage(this,  tr("Form data saved"));
-//    else
-//        tkLog::addError(this, tr("Failure in form data saving operation."));
-//#else
-//    QMessageBox::information(this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED));
-//#endif
-//}
-//
-//void MainWindow::loadFormData()
-//{
-//#ifdef DEBUG
-//    mfIOInterface *ioPlugin = mfCore::pluginsManager()->currentIO();
-//    if (!ioPlugin)
-//        return;
-//
-//    QString fileName = QFileDialog::getOpenFileName(this, tr("choose a file data to load"), mfCore::settings()->formPath());
-//    if (fileName == "")
-//        return;
-//
-//    if (ioPlugin->loadFormData(mfIOPlace::fromLocalFile(fileName), *m_pRootObject))
-//    {
-//        m_pRootObject->setModified(false);
-//        setWindowModified(false);
-//        tkLog::addMessage(this, tr("Form data loaded"));
-//    }
-//    else
-//        tkLog::addError(this, tr("Failure in form data loading operation."));
-//#else
-//    QMessageBox::information(this, qApp->applicationName(), tkTr(FEATURE_NOT_IMPLEMENTED));
-//#endif
-//}

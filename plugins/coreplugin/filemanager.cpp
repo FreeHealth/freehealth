@@ -37,6 +37,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Core::FileManager
+  Manages recent file context.\n
+  Settings management :
+  - You can save/get from settings using getRecentFilesFromSettings() and saveRecentFiles()
+  - You can set a specific settings key (just after instanciation) using setSettingsKey()
+  - The Core::ICore::instance()->settings() is used when accessing to settings
+  Recent managers are limited to 10 entries.
+*/
 #include "filemanager.h"
 
 #include <coreplugin/icore.h>
@@ -74,7 +83,10 @@ void FileManager::saveRecentFiles() const
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
-    s->setValue(Constants::S_RECENTFILES_KEY, m_recentFiles);
+    if (m_Key.isEmpty())
+        s->setValue(Constants::S_RECENTFILES_KEY, m_recentFiles);
+    else
+        s->setValue(m_Key, m_recentFiles);
     s->endGroup();
 }
 
@@ -83,7 +95,10 @@ void FileManager::getRecentFilesFromSettings()
     Core::ISettings *s = Core::ICore::instance()->settings();
     m_recentFiles.clear();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
-    m_recentFiles = s->value(Constants::S_RECENTFILES_KEY).toStringList();
+    if (m_Key.isEmpty())
+        m_recentFiles = s->value(Constants::S_RECENTFILES_KEY).toStringList();
+    else
+        m_recentFiles = s->value(m_Key).toStringList();
     s->endGroup();
 }
 

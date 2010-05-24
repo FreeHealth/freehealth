@@ -198,6 +198,11 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     }
 }
 
+void PatientSelector::setSelectedPatient(const QModelIndex &index)
+{
+    d->ui->tableView->setCurrentIndex(index);
+}
+
 void PatientSelector::changeIdentity(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);

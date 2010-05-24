@@ -81,6 +81,7 @@ public:
     // recent files
     void getRecentFilesFromSettings();
     void addToRecentFiles(const QString &fileName);
+    void setRecentFiles(const QStringList &files) {m_recentFiles = files;}
     QStringList recentFiles() const;
     void saveRecentFiles() const;
 
@@ -88,10 +89,15 @@ public:
     void setCurrentFile(const QString &filePath);
     QString currentFile() const;
 
+    // settings
+    void setSettingsKey(const QString &key) {m_Key = key;}
+    QString settingsKey() const {return m_Key;}
+
 private:
     QStringList m_recentFiles;
     static const int m_maxRecentFiles = 10;
     QString m_currentFile;
+    QString m_Key;
 };
 
 }  // end Core

@@ -460,7 +460,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
     return true;
 }
 
-void PatientModel::setFilter(const QString &name, const QString &surname, const FilterOn on)
+void PatientModel::setFilter(const QString &name, const QString &surname, const QString &uuid, const FilterOn on)
 {
     // Calculate new filter
     switch (on) {
@@ -518,7 +518,16 @@ void PatientModel::setFilter(const QString &name, const QString &surname, const 
 //            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(filter);
             break;
         }
+    case FilterOnUuid:
+        {
+            // WHERE PATIENT_UID='xxxx'
+            d->m_ExtraFilter.clear();
+            d->m_ExtraFilter = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_UID) + " ";
+            d->m_ExtraFilter += QString("='%1'").arg(uuid);
+            break;
+        }
     }
+
     d->refreshFilter();
 }
 
@@ -552,5 +561,31 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 {
     if (d->m_SqlPatient)
         return d->m_SqlPatient->canFetchMore(parent);
+    return false;
 }
 
+/** \brief Return the list patient name corresponding to the uuids list passed as param. */
+QList<QString> PatientModel::patientName(const QList<QString> &uuids)
+{
+    QList<QString> names;
+    if (!patientBase()->database().transaction())
+        Utils::Log::addError("PatientModel", "Unable to set transaction with patient database");
+    foreach(const QString &u, uuids) {
+        QSqlQuery query(patientBase()->database());
+        QHash<int, QString> where;
+        where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(u));
+        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_SURNAME, where);
+        if (query.exec(req)) {
+            if (query.next()) {
+                if (!query.value(1).toString().isEmpty())
+                    names << QString("%1 - %2 %3").arg(query.value(0).toString(), query.value(1).toString(), query.value(2).toString());
+                else
+                    names << QString("%1 %3").arg(query.value(0).toString(), query.value(2).toString());
+            }
+        } else {
+            Utils::Log::addQueryError("PatientModel", query);
+        }
+    }
+    patientBase()->database().rollback();
+    return names;
+}

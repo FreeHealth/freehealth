@@ -58,7 +58,8 @@ public:
     enum FilterOn {
         FilterOnName,
         FilterOnFullName,
-        FilterOnCity
+        FilterOnCity,
+        FilterOnUuid
     };
 
     PatientModel(QObject *parent);
@@ -74,7 +75,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    void setFilter(const QString &name, const QString &surname, const FilterOn on = FilterOnFullName);
+    void setFilter(const QString &name, const QString &surname, const QString &uuid = QString::null, const FilterOn on = FilterOnFullName);
     QString filter() const;
     int numberOfFilteredPatients() const;
 
@@ -101,6 +102,7 @@ public:
 //                                  Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
 //    QSize span(const QModelIndex &index) const;
 
+    static QList<QString> patientName(const QList<QString> &uuids);
 
 
 Q_SIGNALS:

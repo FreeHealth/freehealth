@@ -131,26 +131,27 @@ namespace Time {
 	const char * const  ENGLISH             = QT_TRANSLATE_NOOP("tkConstants", "English");             /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
 
         // Menus translations
-        const char * const  M_FILE_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "File");               /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
+        const char * const  M_FILE_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "File");               /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
         const char * const  M_FILE_RECENTFILES_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Recent files");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
-        const char * const  M_EDIT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Edit");               /*!< \brief Default text for menu Edit  \ingroup constants_actionmanager */
-        const char * const  M_EDIT_SELECT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Selection");          /*!< \brief Default text for menu Selection  \ingroup constants_actionmanager */
-        const char * const  M_EDIT_LIST_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "List");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
-        const char * const  M_EDIT_TEMPLATES_TEXT= QT_TRANSLATE_NOOP("tkConstants", "Templates");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Format");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_FONT_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Font");               /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_PARAGRAPH_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Paragraph");     /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_TABLE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Table");              /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_FORMAT_IMAGE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Image");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
-        const char * const  M_TOOLS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Tools");              /*!< \brief Default text for menu Tools  \ingroup constants_actionmanager */
-        const char * const  M_PLUGINS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Plugins");            /*!< \brief Default text for menu Plugins  \ingroup constants_actionmanager */
-        const char * const  M_CONFIGURATION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Configuration");      /*!< \brief Default text for menu Configuration  \ingroup constants_actionmanager */
-        const char * const  M_TOOLBARS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Toolbars");           /*!< \brief Default text for menu Toolbars  \ingroup constants_actionmanager */
-        const char * const  M_LANGUAGES_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Languages");          /*!< \brief Default text for menu Languages  \ingroup constants_actionmanager */
-        const char * const  M_INTERPRETOR_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Interpretor");        /*!< \brief Default text for menu Interpretor  \ingroup constants_actionmanager */
-        const char * const  M_ABOUT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "About");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
-        const char * const  ABOUTDATABASES_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "About databases");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
-        const char * const  M_UPDATE_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Update available");   /*!< \brief Default text for menu Update  \ingroup constants_actionmanager */
+        const char * const  M_PATIENT_HISTORY_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Patient history");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
+        const char * const  M_EDIT_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "Edit");               /*!< \brief Default text for menu Edit  \ingroup constants_actionmanager */
+        const char * const  M_EDIT_SELECT_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Selection");          /*!< \brief Default text for menu Selection  \ingroup constants_actionmanager */
+        const char * const  M_EDIT_LIST_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "List");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
+        const char * const  M_EDIT_TEMPLATES_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Templates");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "Format");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_FONT_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Font");               /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_PARAGRAPH_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Paragraph");     /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_TABLE_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Table");              /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_FORMAT_IMAGE_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Image");             /*!< \brief Default text for menu Format  \ingroup constants_actionmanager */
+        const char * const  M_TOOLS_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "Tools");              /*!< \brief Default text for menu Tools  \ingroup constants_actionmanager */
+        const char * const  M_PLUGINS_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Plugins");            /*!< \brief Default text for menu Plugins  \ingroup constants_actionmanager */
+        const char * const  M_CONFIGURATION_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Configuration");      /*!< \brief Default text for menu Configuration  \ingroup constants_actionmanager */
+        const char * const  M_TOOLBARS_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Toolbars");           /*!< \brief Default text for menu Toolbars  \ingroup constants_actionmanager */
+        const char * const  M_LANGUAGES_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Languages");          /*!< \brief Default text for menu Languages  \ingroup constants_actionmanager */
+        const char * const  M_INTERPRETOR_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Interpretor");        /*!< \brief Default text for menu Interpretor  \ingroup constants_actionmanager */
+        const char * const  M_ABOUT_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "About");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
+        const char * const  ABOUTDATABASES_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "About databases");              /*!< \brief Default text for menu About  \ingroup constants_actionmanager */
+        const char * const  M_UPDATE_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "Update available");   /*!< \brief Default text for menu Update  \ingroup constants_actionmanager */
 
         // Actions translations
         const char * const  FILENEW_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "New");    /*!< \brief Default action text  \ingroup constants_actionmanager */
@@ -160,6 +161,10 @@ namespace Time {
         const char * const  FILEPRINT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Print...");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  PRINTPREVIEW_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Print preview");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Exit");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+
+        const char * const  PATIENTNEW_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "New Patient");
+        const char * const  PATIENTREMOVE_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Remove Patient");
+        const char * const  PATIENTVIEWIDENTITY_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View Patient Identity");
 
         const char * const  OPENPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Open a prescription");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  SAVEPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Save a prescription");    /*!< \brief Default action text  \ingroup constants_actionmanager */

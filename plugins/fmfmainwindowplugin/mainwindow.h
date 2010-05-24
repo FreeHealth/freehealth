@@ -73,6 +73,10 @@ class PatientBar;
 class EpisodeModel;
 }
 
+namespace Core {
+class FileManager;
+}
+
 namespace MainWin {
 namespace Internal {
 //namespace Ui {
@@ -112,7 +116,11 @@ public Q_SLOTS:
 //    bool saveFile();
 //    bool saveAsFile();
 //    bool print();
-//
+
+    bool createNewPatient();
+    bool viewPatientIdentity();
+    bool removePatient();
+
     bool applicationPreferences();
 //    bool configureMedintux();
 //
@@ -125,7 +133,9 @@ public Q_SLOTS:
 
     void openLastOpenedForm();
     void aboutToShowRecentFiles();
+    void aboutToShowRecentPatients();
     void openRecentFile();
+    void openRecentPatient();
 
 protected:
     void closeEvent( QCloseEvent *event );
@@ -143,6 +153,10 @@ public:
 
 
     Patients::EpisodeModel *m_EpisodeModel;
+
+    /** \todo Move this Patient History in the ICore ? */
+    Core::FileManager *m_RecentPatients;
+
     //     mfRecovererThread thread;
 };
 

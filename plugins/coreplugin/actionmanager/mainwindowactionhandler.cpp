@@ -95,6 +95,9 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aPrint(0),
         aPrintPreview(0),
         aQuit(0),
+        aPatientNew(0),
+        aPatientViewIdentity(0),
+        aPatientRemove(0),
         aUndo(0),
         aRedo(0),
         aCut(0),
@@ -199,8 +202,16 @@ void MainWindowActionHandler::createPatientMenu()
     menubar->appendGroup(Constants::G_PATIENTS);
 
     ActionContainer *menu = actionManager()->createMenu(Constants::M_PATIENTS);
+    menu->appendGroup(Core::Constants::G_PATIENT_HISTORY);
+    menu->appendGroup(Core::Constants::G_PATIENTS);
+    menu->appendGroup(Core::Constants::G_PATIENT_INFORMATIONS);
+
     menubar->addMenu(menu, Constants::G_PATIENTS);
     menu->setTranslations(Trans::Constants::PATIENTS);
+
+    ActionContainer *historyMenu = actionManager()->createMenu(Constants::M_PATIENTS_HISTORY);
+    historyMenu->setTranslations(Trans::Constants::M_PATIENT_HISTORY_TEXT);
+    menu->addMenu(historyMenu, Constants::G_PATIENT_HISTORY);
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
@@ -492,6 +503,55 @@ void MainWindowActionHandler::connectEditActions()
 //    if (aSelectAll) {}
 }
 
+/** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
+void MainWindowActionHandler::createPatientsActions(int actions)
+{
+    /** \todo Patients actions should be exploded into different menus or in a single menu ? */
+    QAction *a = 0;
+    Command *cmd = 0;
+    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_PATIENTS);
+    Q_ASSERT(menu);
+    if (!menu)
+        return;
+
+    if (actions & Core::MainWindowActions::A_Patients_New) {
+        a = aPatientNew = new QAction(this);
+        a->setObjectName("aPatientNew");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
+        menu->addAction(cmd, Constants::G_PATIENTS);
+    }
+    if (actions & Core::MainWindowActions::A_Patients_ViewIdentity) {
+        a = aPatientViewIdentity = new QAction(this);
+        a->setObjectName("aPatientViewIdentity");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_VIEWIDENTITY, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENTVIEWIDENTITY_TEXT);
+        menu->addAction(cmd, Constants::G_PATIENTS);
+    }
+    if (actions & Core::MainWindowActions::A_Patients_Remove) {
+        a = aPatientRemove = new QAction(this);
+        a->setObjectName("aPatientRemove");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_REMOVE, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENTREMOVE_TEXT);
+        menu->addAction(cmd, Constants::G_PATIENTS);
+    }
+}
+
+/** \brief Connect created Patients' menu actions to there standard slots. */
+void MainWindowActionHandler::connectPatientActions()
+{
+    if (aPatientNew)
+        connect(aPatientNew, SIGNAL(triggered()), this, SLOT(createNewPatient()));
+    if (aPatientViewIdentity)
+        connect(aPatientViewIdentity, SIGNAL(triggered()), this, SLOT(viewPatientIdentity()));
+    if (aPatientRemove)
+        connect(aPatientRemove, SIGNAL(triggered()), this, SLOT(removePatient()));
+}
+
 void MainWindowActionHandler::createConfigurationActions(int actions)
 {
     QAction *a = 0;
@@ -564,6 +624,7 @@ void MainWindowActionHandler::switchLanguage(QAction * action)
     Core::ICore::instance()->translators()->changeLanguage(action->data().toString());
     // All GUIs will automatically refresh via changeEvent() members
 }
+
 /** \brief Show standard Help dialog starting at index. \sa Core::HelpDialog */
 bool MainWindowActionHandler::applicationHelp()
 {
@@ -731,6 +792,7 @@ bool MainWindowActionHandler::aboutPlugins()
 void MainWindowActionHandler::createActions(const Core::MainWindowActions &actions)
 {
     createFileActions(actions.fileActions());
+    createPatientsActions(actions.patientsActions());
     createConfigurationActions(actions.configurationActions());
     createHelpActions(actions.helpActions());
     createTemplatesActions(actions.templatesActions());

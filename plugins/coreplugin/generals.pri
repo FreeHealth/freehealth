@@ -2,6 +2,9 @@
 HEADERS += \
     $${PWD}/core_exporter.h \
     $${PWD}/constants.h \
+    $${PWD}/constants_icons.h \
+    $${PWD}/constants_menus.h \
+    $${PWD}/constants_tokensandsettings.h \
     $${PWD}/uniqueidmanager.h \
     $${PWD}/icore.h \
     $${PWD}/icorelistener.h \

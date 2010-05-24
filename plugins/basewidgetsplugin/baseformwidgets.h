@@ -422,11 +422,33 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-// private Q_SLOTS:
-//     void updateObject( int val );
-//     void updateWidget();
 private:
      QSpinBox *m_Spin;
+};
+
+class BaseSpinData : public Form::IFormItemData
+{
+public:
+    BaseSpinData(Form::FormItem *item);
+    ~BaseSpinData();
+
+    void setBaseSpin(BaseSpin* spin) {m_Spin = spin; clear();}
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const {return m_IsModified;}
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private:
+    bool m_IsModified;
+    Form::FormItem *m_FormItem;
+    BaseSpin* m_Spin;
 };
 
 //--------------------------------------------------------------------------------------------------------

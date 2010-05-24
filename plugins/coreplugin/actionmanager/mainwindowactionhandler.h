@@ -72,8 +72,9 @@ public:
     void createFileMenu();
     void connectFileActions();
 
-    void createTemplatesMenu();
     void createPatientMenu();
+    void createPatientsActions(int actions);
+    void connectPatientActions();
 
     void createEditMenu();
     void createEditActions();
@@ -86,6 +87,8 @@ public:
 
     void createHelpMenu();
     void connectHelpActions();
+
+    void createTemplatesMenu();
 
     void createActions(const Core::MainWindowActions &actions);
     void createFileActions(int actions);
@@ -112,6 +115,10 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool print()        {return false;}
     virtual bool printPreview() {return false;}
 
+    virtual bool createNewPatient() {return false;}
+    virtual bool viewPatientIdentity() {return false;}
+    virtual bool removePatient() {return false;}
+
     virtual bool applicationPreferences() {return false;}
     virtual bool configureMedintux()      {return false;}
 
@@ -134,6 +141,10 @@ protected:
     QAction *aPrint;
     QAction *aPrintPreview;
     QAction *aQuit;
+
+    QAction *aPatientNew;
+    QAction *aPatientViewIdentity;
+    QAction *aPatientRemove;
 
     QAction *aUndo;
     QAction *aRedo;

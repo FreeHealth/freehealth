@@ -108,6 +108,13 @@ public:
     };
     Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
 
+    enum PatientsAction {
+        A_Patients_New            = 0x01,
+        A_Patients_ViewIdentity   = 0x02,
+        A_Patients_Remove         = 0x04
+    };
+    Q_DECLARE_FLAGS( PatientsActions, PatientsAction );
+
     MainWindowActions() : file(0), config(0), help(0), templates(0), edit(false) {}
     ~MainWindowActions() {}
 
@@ -116,24 +123,28 @@ public:
     void setConfigurationActions(int actions) { config = actions; }
     void setHelpActions(int actions) { help = actions; }
     void setTemplatesActions(int actions) { templates = actions; }
+    void setPatientsActions(int actions) {patients = actions;}
 
     int fileActions() const { return file; }
     bool editActionsToCreate() const { return edit; }
     int configurationActions() const { return config; }
     int helpActions() const { return help; }
     int templatesActions() const { return templates; }
+    int patientsActions() const {return patients;}
 
 private:
     int file;
     int config;
     int help;
     int templates;
+    int patients;
     bool edit;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::FileActions )
 Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::ConfigurationActions )
 Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::HelpActions )
+Q_DECLARE_OPERATORS_FOR_FLAGS( MainWindowActions::PatientsActions )
 
 }  // end Core
 

@@ -248,6 +248,7 @@ QList<int> PatientBase::retreivePractionnerLkIds(const QString &uid)
     } else {
         Utils::Log::addQueryError(this, query);
     }
+    return lk_ids;
 }
 
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,

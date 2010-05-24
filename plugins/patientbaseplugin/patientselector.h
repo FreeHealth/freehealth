@@ -85,6 +85,7 @@ public:
 
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
+    void setSelectedPatient(const QModelIndex &index);
 
 
 Q_SIGNALS:
