@@ -77,7 +77,6 @@
 #include <QLabel>
 #include <QCoreApplication>
 #include <QEvent>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QList>
 #include <QStringListModel>
@@ -114,15 +113,11 @@ void UserWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         m_Saved = false;
-        QMessageBox mb(this);
-        mb.setIcon(QMessageBox::Critical);
-        mb.setWindowTitle(tr("Data losing"));
-        mb.setText(tr("WARNING ! You don't save this user."));
-        mb.setInformativeText(tr("If you continue changes will be lost.\n"
-                                   "Do you really want to close this dialog ?"));
-        mb.setStandardButtons(QMessageBox::Close | QMessageBox::No);
-        mb.setDefaultButton(QMessageBox::No);
-        if (mb.exec() == QMessageBox::Close)
+        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
+                               tr("If you continue changes will be lost.\n"
+                                  "Do you really want to close this dialog ?"),
+                               "", tr("Data losing"));
+        if (yes)
             QDialog::done(r);
     } else if (m_Saved) {
         QDialog::done(r);
@@ -311,15 +306,10 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
 bool UserIdentityPage::validatePage()
 {
     if (field("Name").toString().isEmpty() || field("Surname").toString().isEmpty()) {
-        QMessageBox mb(this);
-        mb.setIcon(QMessageBox::Critical);
-        mb.setWindowTitle(tr("Forbidden anonymous user."));
-        mb.setText(tr("Forbidden anonymous user."));
-        mb.setInformativeText(tr("All users must have at least a name and a surname.\n"
-                                   "You can not poursue with an anonymous user."));
-        mb.setStandardButtons(QMessageBox::Ok);
-        mb.setDefaultButton(QMessageBox::Ok);
-        mb.exec();
+        Utils::warningMessageBox(tr("Forbidden anonymous user."),
+                                 tr("All users must have at least a name and a surname.\n"
+                                    "You can not poursue with an anonymous user."), "",
+                                 tr("Forbidden anonymous user."));
         return false;
     }
     return true;
@@ -357,39 +347,24 @@ UserLoginPasswordPage::UserLoginPasswordPage(QWidget *parent)
 bool UserLoginPasswordPage::validatePage()
 {
     if (field("Password").toString() != field("ConfirmPassword")) {
-        QMessageBox mb(this);
-        mb.setIcon(QMessageBox::Critical);
-        mb.setWindowTitle(tr("Error"));
-        mb.setText(tr("Password confirmation error."));
-        mb.setInformativeText(tr("You must correctly confirm your password to go throw this page."));
-        mb.setStandardButtons(QMessageBox::Ok);
-        mb.setDefaultButton(QMessageBox::Ok);
-        mb.exec();
+        Utils::warningMessageBox(tr("Password confirmation error."),
+                                 tr("You must correctly confirm your password to go throw this page."),
+                                 "", tr("Wrong password"));
         return false;
     }
     if (field("Login").toString().isEmpty()) {
-        QMessageBox mb(this);
-        mb.setIcon(QMessageBox::Critical);
-        mb.setWindowTitle(tr("Error"));
-        mb.setText(tr("No login."));
-        mb.setInformativeText(tr("You must specify a valid login. Empty login is forbidden."));
-        mb.setStandardButtons(QMessageBox::Ok);
-        mb.setDefaultButton(QMessageBox::Ok);
-        mb.exec();
+        Utils::warningMessageBox(tr("Login error."),
+                                 tr("You must specify a valid login. Empty login is forbidden."),
+                                 "", tr("Wrong login"));
         return false;
     }
     // log/pass already used ?
     if (um()->isCorrectLogin(UserPlugin::loginForSQL(field("Login").toString()),
                             UserPlugin::crypt(field("Password").toString()))) {
-        QMessageBox mb(this);
-        mb.setIcon(QMessageBox::Critical);
-        mb.setWindowTitle(tr("Error, already used"));
-        mb.setText(tr("You can not use this login/password."));
-        mb.setInformativeText(tr("The users' database already contains the same login/password couple.\n"
-                                   "You must specify a different login/password."));
-        mb.setStandardButtons(QMessageBox::Ok);
-        mb.setDefaultButton(QMessageBox::Ok);
-        mb.exec();
+        Utils::warningMessageBox(tr("Login and password already used"),
+                                 tr("The users' database already contains the same login/password couple.\n"
+                                    "You must specify a different login/password."),
+                                 "", tr("Login/Password already used"));
         return false;
     }
     return true;
