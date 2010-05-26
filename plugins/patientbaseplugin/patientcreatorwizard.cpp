@@ -37,135 +37,90 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERWIZARD_H
-#define USERWIZARD_H
+#include "patientcreatorwizard.h"
+#include "identitywidget.h"
+#include "patientmodel.h"
 
-#include <usermanagerplugin/usermanager_exporter.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
-namespace Utils {
-class LineEditEchoSwitcher;
+#include <utils/global.h>
+#include <utils/log.h>
+
+#include <QLabel>
+#include <QLineEdit>
+#include <QDateEdit>
+#include <QComboBox>
+#include <QGridLayout>
+
+using namespace Patients;
+
+static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+
+
+PatientCreatorWizard::PatientCreatorWizard(QWidget *parent)
+{
+    addPage(new IdentityPage(this));
+    setWindowTitle(tr("New Patient"));
+    QList<QWizard::WizardButton> layout;
+    layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
+            << QWizard::NextButton << QWizard::FinishButton;
+    setButtonLayout(layout);
+    setPixmap(QWizard::WatermarkPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
+    setPixmap(QWizard::BackgroundPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
+    setPixmap(QWizard::BannerPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
+    setPixmap(QWizard::LogoPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
 }
 
-#include <QObject>
-#include <QWidget>
-#include <QWizardPage>
-#include <QWizard>
-class QLabel;
-class QEvent;
-class QLineEdit;
-class QPushButton;
-
-
-/**
- * \file userwizard.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 17 Sept 2009
-*/
-
-namespace UserPlugin {
-
-/** \todo create a new wizard manager in Core */
-
-class USER_EXPORT UserWizard : public QWizard
+void PatientCreatorWizard::done(int r)
 {
-    Q_OBJECT
-public:
-    UserWizard(QWidget *parent = 0);
+    if (r == QDialog::Rejected) {
+        m_Saved = false;
+        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't saved this patient."),
+                               tr("If you continue changes will be lost.\n"
+                                  "Do you really want to close this dialog ?"),
+                               "", tr("Patient not saved"));
+        if (yes)
+            QDialog::done(r);
+    } else if (r==QDialog::Accepted) {
+        if (!validateCurrentPage())
+            return;
+        QDialog::done(r);
+    }
+}
 
-    void setModelRow(const int row)        { m_Row = row; }
-    void createUser(bool state = true)     { m_CreateUser = state; }
-
-protected Q_SLOTS:
-    void done(int r);
-
-private:
-    int m_Row;
-    bool m_Saved, m_CreateUser;
-};
-
-
-class UserLanguageSelectorPage: public QWizardPage
+IdentityPage::IdentityPage(QWidget *parent)
+    : QWizardPage(parent)
 {
-    Q_OBJECT
-public:
-    UserLanguageSelectorPage(QWidget *parent = 0);
-private:
-    void changeEvent(QEvent *e);
-    void retranslate();
-    QLabel * lbl;
-};
+    setObjectName("IdentityPage");
+    setTitle(tr("Please enter the patient's identity."));
+    m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
+    m_Model = new PatientModel(this);
+    m_Model->setFilter("", "", "", PatientModel::FilterOnUuid);
+    m_Model->insertRow(0);
+    QString uuid = m_Model->index(0, PatientModel::Uid).data().toString();
 
-class UserIdentityPage: public QWizardPage
+    m_Identity->setCurrentPatientModel(m_Model);
+    m_Identity->setCurrentIndex(m_Model->index(0,0));
+
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    layout->addWidget(m_Identity, 0, 0);
+    setLayout(layout);
+}
+
+bool IdentityPage::validatePage()
 {
-    Q_OBJECT
-public:
-    UserIdentityPage(QWidget *parent = 0);
-    bool validatePage();
-};
-
-class UserAdressPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdressPage(QWidget *parent = 0);
-};
-
-class UserTelsAndMailPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserTelsAndMailPage(QWidget *parent = 0);
-    bool validatePage();
-};
-
-class UserLoginPasswordPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserLoginPasswordPage(QWidget *parent = 0);
-    bool validatePage();
-private:
-    QPushButton *echoConfirmPass, *echoPass;
-    Utils::LineEditEchoSwitcher *leLogin, *lePassword, *lePasswordConfirm;
-};
-
-class UserSpecialiesQualificationsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserSpecialiesQualificationsPage(QWidget *parent = 0);
-};
-
-class UserRightsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserRightsPage(QWidget *parent = 0);
-};
-
-class UserGenericPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserGenericPage(QWidget *parent = 0);
-};
-
-class UserPrescriptionsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserPrescriptionsPage(QWidget *parent = 0);
-};
-
-class UserAdministrativePage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdministrativePage(QWidget *parent = 0);
-};
-
-}  // End UserPlugin
-
-
-#endif // TKUSERWIZARD_H
+    if (!m_Identity->isIdentityValid())
+        return false;
+    bool ok = true;
+    if (m_Identity->submit()) {
+        Utils::Log::addMessage(this, "Patient correctly created");
+    } else {
+        Utils::Log::addMessage(this, "Unable to create patient. IdentityPage::validatePage()");
+        ok = false;
+    }
+    return ok;
+}

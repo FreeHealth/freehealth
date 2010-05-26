@@ -71,6 +71,7 @@
 #include <patientbaseplugin/patientsearchmode.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
 #include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientcreatorwizard.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -396,6 +397,8 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
 
 bool MainWindow::createNewPatient()
 {
+    Patients::PatientCreatorWizard wiz(this);
+    wiz.exec();
 }
 
 bool MainWindow::viewPatientIdentity()

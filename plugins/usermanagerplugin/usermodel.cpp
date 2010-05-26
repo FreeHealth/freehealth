@@ -270,7 +270,7 @@ bool UserModel::hasCurrentUser()
 /** \brief Return the index of the current user. */
 QModelIndex UserModel::currentUserIndex() const
 {
-    qWarning() << "currentUserIndex" << rowCount() << d->m_CurrentUserUuid;
+//    qWarning() << "currentUserIndex" << rowCount() << d->m_CurrentUserUuid;
     if (d->m_CurrentUserUuid.isEmpty())
         return QModelIndex();
     QModelIndexList list = match(createIndex(0, User::Uuid), Qt::DisplayRole, d->m_CurrentUserUuid, 1);

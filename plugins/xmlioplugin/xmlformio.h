@@ -33,9 +33,9 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Guillaume DENRY <guillaume.denry@gmail.com>         *
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Eric MAEKER <eric.maeker@free.fr>                                 *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef XMLFORMIO_H

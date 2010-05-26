@@ -35,64 +35,101 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "identitywidget.h"
 #include "patientmodel.h"
+#include "patientbase.h"
+#include "constants_db.h"
 
 #include "ui_identitywidget.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
+
+#include <utils/global.h>
 
 #include <QDataWidgetMapper>
 #include <QDir>
 #include <QFileDialog>
 
+
 #include <QDebug>
 
 using namespace Patients;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
+
+/**
+  \todo Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
+  \todo Create a viewUi for the readonly mode (more compact) */
+*/
 
 namespace Patients {
 namespace Internal {
 class IdentityWidgetPrivate
 {
 public:
-    IdentityWidgetPrivate(IdentityWidget *parent) :
-            ui(new Ui::IdentityWidget), m_Mapper(0), q(parent)
+    IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
+            editUi(new Ui::IdentityWidget), m_Mapper(0), m_EditMode(mode), q(parent)
     {
-        ui->setupUi(q);
+        editUi->setupUi(q);
+        editUi->genderCombo->addItems(PatientModel::genders());
+        editUi->titleCombo->addItems(PatientModel::titles());
+        editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+        q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
     }
 
     ~IdentityWidgetPrivate()
     {
-        delete ui;
-        delete m_Mapper;
+        if (editUi) {
+            delete editUi;
+            editUi = 0;
+        }
+//        if (viewUi) {
+//            delete viewUi;
+//            viewUi = 0;
+//        }
+        if (m_Mapper) {
+            delete m_Mapper;
+            m_Mapper = 0;
+        }
     }
 
 
     void createMapper()
     {
-        if (m_Mapper) {
-            delete m_Mapper;
-            m_Mapper = 0;
-        }
-        m_Mapper = new QDataWidgetMapper(q);
-        m_Mapper->setModel(m_PatientModel);
-        m_Mapper->addMapping(ui->birthName, PatientModel::BirthName, "text");
-        m_Mapper->addMapping(ui->secondName, PatientModel::SecondName, "text");
-        m_Mapper->addMapping(ui->surname, PatientModel::Surname, "text");
-        m_Mapper->addMapping(ui->genderCombo, PatientModel::Gender);
-        m_Mapper->addMapping(ui->dob, PatientModel::DateOfBirth);
-        m_Mapper->addMapping(ui->street, PatientModel::Street, "plainText");
-        m_Mapper->addMapping(ui->city, PatientModel::City, "text");
-        m_Mapper->addMapping(ui->zipcode, PatientModel::ZipCode, "text");
-        m_Mapper->addMapping(ui->country, PatientModel::Country, "text");
-        m_Mapper->toFirst();
-    }
+//        if (m_EditMode == IdentityWidget::ReadWriteMode) {
 
+            if (m_Mapper) {
+                delete m_Mapper;
+                m_Mapper = 0;
+            }
+            m_Mapper = new QDataWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+            m_Mapper->setModel(m_PatientModel);
+            m_Mapper->addMapping(editUi->birthName, PatientModel::BirthName, "text");
+            m_Mapper->addMapping(editUi->secondName, PatientModel::SecondName, "text");
+            m_Mapper->addMapping(editUi->surname, PatientModel::Surname, "text");
+            m_Mapper->addMapping(editUi->genderCombo, PatientModel::Gender);
+            m_Mapper->addMapping(editUi->titleCombo, PatientModel::Title, "currentText");
+            m_Mapper->addMapping(editUi->dob, PatientModel::DateOfBirth);
+            m_Mapper->addMapping(editUi->street, PatientModel::Street, "plainText");
+            m_Mapper->addMapping(editUi->city, PatientModel::City, "text");
+            m_Mapper->addMapping(editUi->zipcode, PatientModel::ZipCode, "text");
+            m_Mapper->addMapping(editUi->country, PatientModel::Country, "text");
+            m_Mapper->toFirst();
+//        } else {
+            // Fill labels with values, hide editors
+//        }
+    }
 public:
-    Ui::IdentityWidget *ui;
+    Ui::IdentityWidget *editUi;
     QDataWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
+    IdentityWidget::EditMode m_EditMode;
 
 private:
     IdentityWidget *q;
@@ -100,12 +137,10 @@ private:
 }  // End namespace Internal
 }  // End namespace Patients
 
-
-IdentityWidget::IdentityWidget(QWidget *parent) :
+IdentityWidget::IdentityWidget(QWidget *parent, EditMode mode) :
     QWidget(parent),
-    d(new Internal::IdentityWidgetPrivate(this))
+    d(new Internal::IdentityWidgetPrivate(this, mode))
 {
-    connect(d->ui->photoButton, SIGNAL(clicked()), this, SLOT(photoButton_clicked()));
 }
 
 IdentityWidget::~IdentityWidget()
@@ -124,12 +159,53 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
     d->m_Mapper->setCurrentModelIndex(patientIndex);
     // load photo
     QPixmap photo = d->m_PatientModel->index(patientIndex.row(), PatientModel::Photo).data().value<QPixmap>();
-    d->ui->photoButton->setIcon(photo);
+    d->editUi->photoButton->setIcon(photo);
 }
 
-void IdentityWidget::setCurrentPatient(const QString &uuid)
+bool IdentityWidget::isIdentityValid() const
 {
+    if (d->editUi->birthName->text().isEmpty()) {
+        Utils::warningMessageBox(tr("You must specify a birthname."),
+                                 tr("You can not create a patient without a birthname"),
+                                 "", tr("No birthname"));
+        return false;
+    }
+    if (d->editUi->surname->text().isEmpty()) {
+        Utils::warningMessageBox(tr("You must specify a surname."),
+                                 tr("You can not create a patient without a surname"),
+                                 "", tr("No surname"));
+        return false;
+    }
+    if (d->editUi->dob->date().isNull()) {
+        Utils::warningMessageBox(tr("You must specify a date of birth."),
+                                 tr("You can not create a patient without a date of birth"),
+                                 "", tr("No date of birth"));
+        return false;
+    }
+    if (d->editUi->genderCombo->currentIndex() < 0) {
+        Utils::warningMessageBox(tr("You must specify a gender."),
+                                 tr("You can not create a patient without a gender"),
+                                 "", tr("No gender"));
+        return false;
+    }
+    return true;
+}
 
+bool IdentityWidget::isIdentityAlreadyInDatabase() const
+{
+    // check database for doublons
+    QString where = QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME), d->editUi->birthName->text());
+    if (!d->editUi->secondName->text().isEmpty())
+        where += QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
+    where += QString("`%1`='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SURNAME), d->editUi->surname->text());
+    return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, where)>0);
+}
+
+bool IdentityWidget::submit()
+{
+    if ((d->m_EditMode == ReadWriteMode) && (d->m_Mapper))
+            return d->m_Mapper->submit();
+    return false;
 }
 
 void IdentityWidget::changeEvent(QEvent *e)
@@ -137,7 +213,7 @@ void IdentityWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        d->ui->retranslateUi(this);
+        d->editUi->retranslateUi(this);
         break;
     default:
         break;
@@ -146,6 +222,9 @@ void IdentityWidget::changeEvent(QEvent *e)
 
 void IdentityWidget::photoButton_clicked()
 {
+    if (d->m_EditMode != ReadWriteMode)
+        return;
+
     // if a photo is already loaded --> ask user what to do
     // show openfiledialog
     QString file;
@@ -165,7 +244,7 @@ void IdentityWidget::photoButton_clicked()
 
     // change button pixmap
     QIcon icon(photo);
-    d->ui->photoButton->setIcon(icon);
+    d->editUi->photoButton->setIcon(icon);
 
     // save to DB
     d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), PatientModel::Photo), photo);

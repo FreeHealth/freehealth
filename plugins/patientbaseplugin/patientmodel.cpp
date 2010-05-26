@@ -35,7 +35,6 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "patientmodel.h"
@@ -60,6 +59,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QByteArray>
+#include <QUuid>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -120,6 +120,8 @@ public:
 
     void refreshFilter()
     {
+        /** \todo filter photo SQL as well */
+
         // WHERE (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_PRACT_UID='...')) OR
         //       (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_GROUP_UID='...'))
 
@@ -265,6 +267,28 @@ PatientModel::~PatientModel()
     }
 }
 
+QStringList PatientModel::genders() // static
+{
+    return QStringList()
+            << tkTr(Trans::Constants::MALE)
+            << tkTr(Trans::Constants::FEMALE)
+            << tkTr(Trans::Constants::HERMAPHRODISM)
+            ;
+}
+
+QStringList PatientModel::titles() // static
+{
+    return QStringList()
+            << ""
+            << tkTr(Trans::Constants::MISTER)
+            << tkTr(Trans::Constants::MISS)
+            << tkTr(Trans::Constants::MADAM)
+            << tkTr(Trans::Constants::DOCTOR)
+            << tkTr(Trans::Constants::CAPTAIN)
+            ;
+}
+
+
 void PatientModel::changeUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
@@ -330,13 +354,13 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 col = Constants::IDENTITY_TITLE;
                 int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
                 switch (t) {
-                case Mister: return qApp->translate(Constants::TRANS_CONTEXT, Constants::MISTER);
-                case Miss :  return qApp->translate(Constants::TRANS_CONTEXT, Constants::MISS);
-                case Madam :  return qApp->translate(Constants::TRANS_CONTEXT, Constants::MADAM);
-                case Doctor :  return qApp->translate(Constants::TRANS_CONTEXT, Constants::DOCTOR);
-                case Professor :  return qApp->translate(Constants::TRANS_CONTEXT, Constants::PROFESSOR);
-                case Captain :  return qApp->translate(Constants::TRANS_CONTEXT, Constants::CAPTAIN);
-                default : return QString();
+                case Mister:    return tkTr(Trans::Constants::MISTER);
+                case Miss :     return tkTr(Trans::Constants::MISS);
+                case Madam :    return tkTr(Trans::Constants::MADAM);
+                case Doctor :   return tkTr(Trans::Constants::DOCTOR);
+                case Professor: return tkTr(Trans::Constants::PROFESSOR);
+                case Captain :  return tkTr(Trans::Constants::CAPTAIN);
+                default :       return QString();
                 }
                 return QString();
             }
@@ -396,46 +420,48 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (!index.isValid())
         return false;
 
+//    qWarning() << index << value << role << Qt::EditRole;
+
     if (role == Qt::EditRole) {
         int col = -1;
         switch (index.column()) {
         case UsersUidList:  break;
         case GroupsUidList: break;
-        case Id :           col = Constants::IDENTITY_ID;         break;
-        case Uid:           col = Constants::IDENTITY_UID;        break;
-        case FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case BirthName:     col = Constants::IDENTITY_NAME;       break;
+        case Id :           col = Constants::IDENTITY_ID;               break;
+        case Uid:           col = Constants::IDENTITY_UID;              break;
+        case FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
+        case BirthName:     col = Constants::IDENTITY_NAME;             break;
         case SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
-        case Surname:       col = Constants::IDENTITY_SURNAME;       break;
-        case Gender:        col = Constants::IDENTITY_GENDER;       break;
-        case DateOfBirth:   col = Constants::IDENTITY_DOB;       break;
-        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;       break;
-        case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
+        case Surname:       col = Constants::IDENTITY_SURNAME;          break;
+        case Gender:        col = Constants::IDENTITY_GENDER;           break;
+        case DateOfBirth:   col = Constants::IDENTITY_DOB;              break;
+        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;   break;
+        case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;      break;
         case Profession:    col = Constants::IDENTITY_PROFESSION;       break;
-        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;       break;
-        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;       break;
-        case City:          col = Constants::IDENTITY_ADRESS_CITY;       break;
-        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;       break;
-        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;       break;
-        case Mails:         col = Constants::IDENTITY_MAILS;       break;
-        case Tels:          col = Constants::IDENTITY_TELS;       break;
-        case Faxes:         col = Constants::IDENTITY_FAXES;       break;
+        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;   break;
+        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;  break;
+        case City:          col = Constants::IDENTITY_ADRESS_CITY;      break;
+        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;  break;
+        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;     break;
+        case Mails:         col = Constants::IDENTITY_MAILS;            break;
+        case Tels:          col = Constants::IDENTITY_TELS;             break;
+        case Faxes:         col = Constants::IDENTITY_FAXES;            break;
         case Title :
             {
                 QString t = value.toString();
                 int id = -1;
                 col = Constants::IDENTITY_TITLE;
-                if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::MISTER)) {
+                if (t == tkTr(Trans::Constants::MISTER)) {
                     id = Mister;
-                } else if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::MISS)) {
+                } else if (t == tkTr(Trans::Constants::MISS)) {
                     id = Miss;
-                } else if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::MADAM)) {
+                } else if (t == tkTr(Trans::Constants::MADAM)) {
                     id = Madam;
-                } else if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::DOCTOR)) {
+                } else if (t == tkTr(Trans::Constants::DOCTOR)) {
                     id = Doctor;
-                } else if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::PROFESSOR)) {
+                } else if (t == tkTr(Trans::Constants::PROFESSOR)) {
                     id = Professor;
-                } else if (t == qApp->translate(Constants::TRANS_CONTEXT, Constants::CAPTAIN)) {
+                } else if (t == tkTr(Trans::Constants::CAPTAIN)) {
                     id = Captain;
                 }
                 if (id != -1) {
@@ -454,7 +480,11 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             }
         }
         if (col != -1) {
-            return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
+            bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
+            if (!ok)
+                Utils::Log::addQueryError(this, d->m_SqlPatient->query());
+//            qWarning() << d->m_SqlPatient->index(index.row(), col).data() << d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data();
+            return ok;
         }
     }
     return true;
@@ -545,10 +575,37 @@ QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int 
 
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+//    qWarning() << "PatientModel::insertRows" << row << count << parent;
+    bool ok = true;
+    beginInsertRows(parent, row, row+count);
+    for(int i=0; i < count; ++i) {
+        if (!d->m_SqlPatient->insertRow(row+i, parent)) {
+            ok = false;
+            Utils::Log::addError(this, "Unable to create a new patient. PatientModel::insertRows()");
+            continue;
+        }
+        // find an unused uuid
+        bool findUuid = false;
+        QString uuid;
+        while (!findUuid) {
+            /** \todo Take care to inifinite looping... */
+            uuid = QUuid::createUuid().toString();
+            QString f = QString("%1='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
+            findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);
+        }
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
+            ok = false;
+            Utils::Log::addError(this, "Unable to setData to newly created patient. PatientModel::insertRows()");
+        }
+    }
+    endInsertRows();
+    return ok;
 }
 
 bool PatientModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+//    qWarning() << "PatientModel::removeRows" << row << count << parent;
+    return true;
 }
 
 void PatientModel::fetchMore(const QModelIndex &parent)
@@ -564,7 +621,15 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
     return false;
 }
 
-/** \brief Return the list patient name corresponding to the uuids list passed as param. */
+bool PatientModel::submit()
+{
+    bool ok = true;
+    if (!d->m_SqlPatient->submitAll())
+        ok = false;
+    return true;
+}
+
+/** \brief Return the list patient name corresponding to the uuids list passed as param. Static.*/
 QList<QString> PatientModel::patientName(const QList<QString> &uuids)
 {
     QList<QString> names;
@@ -586,6 +651,6 @@ QList<QString> PatientModel::patientName(const QList<QString> &uuids)
             Utils::Log::addQueryError("PatientModel", query);
         }
     }
-    patientBase()->database().rollback();
+    patientBase()->database().commit();
     return names;
 }

@@ -35,7 +35,6 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef IDENTITYWIDGET_H
@@ -57,14 +56,21 @@ class IdentityWidget : public QWidget
     friend class Internal::IdentityWidgetPrivate;
 
 public:
-    IdentityWidget(QWidget *parent = 0);
+    enum EditMode {
+        ReadOnlyMode,
+        ReadWriteMode
+    };
+
+    IdentityWidget(QWidget *parent = 0, EditMode mode = ReadOnlyMode);
     ~IdentityWidget();
 
     void setCurrentPatientModel(Patients::PatientModel *model);
+    bool isIdentityValid() const;
+    bool isIdentityAlreadyInDatabase() const;
 
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);
-    void setCurrentPatient(const QString &uuid);
+    bool submit();
 
 protected:
     void changeEvent(QEvent *e);

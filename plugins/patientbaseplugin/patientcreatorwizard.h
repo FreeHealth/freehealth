@@ -37,135 +37,55 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERWIZARD_H
-#define USERWIZARD_H
+#ifndef PATIENTCREATORWIZARD_H
+#define PATIENTCREATORWIZARD_H
 
-#include <usermanagerplugin/usermanager_exporter.h>
+#include <patientbaseplugin/patientbase_exporter.h>
 
-namespace Utils {
-class LineEditEchoSwitcher;
-}
-
-#include <QObject>
-#include <QWidget>
-#include <QWizardPage>
 #include <QWizard>
-class QLabel;
-class QEvent;
-class QLineEdit;
-class QPushButton;
-
+#include <QWizardPage>
 
 /**
- * \file userwizard.h
+ * \file patientcreatorwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 17 Sept 2009
+ * \version 0.4.0
+ * \date 25 May 2010
 */
 
-namespace UserPlugin {
 
-/** \todo create a new wizard manager in Core */
+namespace Patients {
+class PatientModel;
+class IdentityWidget;
 
-class USER_EXPORT UserWizard : public QWizard
+class PATIENT_EXPORT PatientCreatorWizard : public QWizard
 {
-    Q_OBJECT
 public:
-    UserWizard(QWidget *parent = 0);
+    enum Pages {
+         Page_Identity
+    };
 
-    void setModelRow(const int row)        { m_Row = row; }
-    void createUser(bool state = true)     { m_CreateUser = state; }
+    PatientCreatorWizard(QWidget *parent);
 
-protected Q_SLOTS:
+protected:
     void done(int r);
 
 private:
-    int m_Row;
-    bool m_Saved, m_CreateUser;
+    bool m_Saved;
 };
 
-
-class UserLanguageSelectorPage: public QWizardPage
+class IdentityPage: public QWizardPage
 {
     Q_OBJECT
 public:
-    UserLanguageSelectorPage(QWidget *parent = 0);
+    IdentityPage(QWidget *parent = 0);
+    bool validatePage();
+
 private:
-    void changeEvent(QEvent *e);
-    void retranslate();
-    QLabel * lbl;
+    PatientModel *m_Model;
+    IdentityWidget *m_Identity;
 };
 
-class UserIdentityPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserIdentityPage(QWidget *parent = 0);
-    bool validatePage();
-};
 
-class UserAdressPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdressPage(QWidget *parent = 0);
-};
+} // End namespace Patients
 
-class UserTelsAndMailPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserTelsAndMailPage(QWidget *parent = 0);
-    bool validatePage();
-};
-
-class UserLoginPasswordPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserLoginPasswordPage(QWidget *parent = 0);
-    bool validatePage();
-private:
-    QPushButton *echoConfirmPass, *echoPass;
-    Utils::LineEditEchoSwitcher *leLogin, *lePassword, *lePasswordConfirm;
-};
-
-class UserSpecialiesQualificationsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserSpecialiesQualificationsPage(QWidget *parent = 0);
-};
-
-class UserRightsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserRightsPage(QWidget *parent = 0);
-};
-
-class UserGenericPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserGenericPage(QWidget *parent = 0);
-};
-
-class UserPrescriptionsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserPrescriptionsPage(QWidget *parent = 0);
-};
-
-class UserAdministrativePage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdministrativePage(QWidget *parent = 0);
-};
-
-}  // End UserPlugin
-
-
-#endif // TKUSERWIZARD_H
+#endif // PATIENTCREATORWIZARD_H

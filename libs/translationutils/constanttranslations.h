@@ -456,6 +456,19 @@ namespace Time {
         const char* const PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Patient informations");
         const char* const PATIENT_DATABASE  = QT_TRANSLATE_NOOP("tkConstants", "Patient database");
 
+        // Genders
+        const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
+        const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
+        const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");
+
+        // Titles
+        const char* const MISTER      = QT_TRANSLATE_NOOP("tkConstants", "Mister");
+        const char* const MISS        = QT_TRANSLATE_NOOP("tkConstants", "Miss");
+        const char* const MADAM       = QT_TRANSLATE_NOOP("tkConstants", "Madam");
+        const char* const DOCTOR      = QT_TRANSLATE_NOOP("tkConstants", "Doctor");
+        const char* const PROFESSOR   = QT_TRANSLATE_NOOP("tkConstants", "Professor");
+        const char* const CAPTAIN     = QT_TRANSLATE_NOOP("tkConstants", "Captain");
+
         // ShortCut keys
          /*: Text Align Left shortcut key */
         const char* const K_ALIGNLEFT                = QT_TRANSLATE_NOOP("tkConstants", "Ctrl+L");

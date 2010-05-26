@@ -51,12 +51,6 @@ namespace Constants {
 //    const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
     const char* const   TRANS_CONTEXT          = "Patients";
 
-    const char* const   MISTER          = QT_TRANSLATE_NOOP("Patients", "Mister");
-    const char* const   MISS          = QT_TRANSLATE_NOOP("Patients", "Miss");
-    const char* const   MADAM          = QT_TRANSLATE_NOOP("Patients", "Madam");
-    const char* const   DOCTOR          = QT_TRANSLATE_NOOP("Patients", "Doctor");
-    const char* const   PROFESSOR          = QT_TRANSLATE_NOOP("Patients", "Professor");
-    const char* const   CAPTAIN          = QT_TRANSLATE_NOOP("Patients", "Captain");
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients

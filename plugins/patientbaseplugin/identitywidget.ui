@@ -15,22 +15,22 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="editIdentityGroup">
      <property name="title">
       <string>Identity</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Birth Name</string>
+         <string>Title</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QLineEdit" name="birthName"/>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="titleCombo"/>
       </item>
-      <item row="0" column="3" rowspan="2">
+      <item row="0" column="2" rowspan="2">
        <widget class="QPushButton" name="photoButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -50,6 +50,9 @@
           <height>64</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Click to add/change the photo</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -64,27 +67,44 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Birth Name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="birthName"/>
+      </item>
+      <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Second name</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="secondName"/>
       </item>
-      <item row="2" column="0" colspan="2">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Surname</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="3" column="1">
        <widget class="QLineEdit" name="surname"/>
       </item>
-      <item row="3" column="2">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Gender</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
        <widget class="QComboBox" name="genderCombo"/>
       </item>
       <item row="5" column="0">
@@ -94,21 +114,14 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
+      <item row="5" column="1">
        <widget class="QDateEdit" name="dob"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Gender</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="editAdressGroup">
      <property name="title">
       <string>Adress</string>
      </property>

@@ -68,6 +68,10 @@ public:
     static PatientModel *activeModel() {return m_ActiveModel;}
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
 
+    // for ui preparations (gender, title) you can get translations from here.
+    static QStringList genders();
+    static QStringList titles();
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
@@ -113,6 +117,9 @@ Q_SIGNALS:
     void patientChanged(const QString &uuid);
     void patientDeleted(const QString &uuid);
     void patientCreated(const QString &uuid);
+
+public Q_SLOTS:
+    bool submit();
 
 protected Q_SLOTS:
     void changeUserUuid(const QString &uuid);
