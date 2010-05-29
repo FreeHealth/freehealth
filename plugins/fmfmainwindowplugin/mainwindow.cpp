@@ -111,7 +111,8 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
@@ -263,9 +264,7 @@ void MainWindow::postCoreInitialization()
     openLastOpenedForm();
 
     // TEST
-    // Add EpisodeModel
-    m_EpisodeModel = new Form::EpisodeModel(this);
-    formManager()->formPlaceHolder()->formTree()->setModel(m_EpisodeModel);
+    formManager()->formPlaceHolder()->formTree()->setModel(episodeModel());
     for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
         formManager()->formPlaceHolder()->formTree()->setColumnHidden(i, true);
     formManager()->formPlaceHolder()->formTree()->setColumnHidden(Form::EpisodeModel::Label, false);
@@ -290,25 +289,25 @@ void MainWindow::setCurrentPatient(const QModelIndex &index)
     m_RecentPatients->addToRecentFiles(uuid);
 
     // TEST
-    m_EpisodeModel->setCurrentPatient(uuid);
+    episodeModel()->setCurrentPatient(uuid);
     // END TEST
 }
 
 void MainWindow::setCurrentEpisode(const QModelIndex &index)
 {
-    if (index.model() != m_EpisodeModel) {
+    if (index.model() != episodeModel()) {
         qWarning() << __LINE__ << __FILE__ << "Wrong model";
         return;
     }
     // inform formplaceholder --> refresh form view
-    QString formUuid = m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
+    QString formUuid = episodeModel()->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     formManager()->formPlaceHolder()->setCurrentForm(formUuid);
 
     int episode = -1;
-    if (m_EpisodeModel->isEpisode(index)) {
-        episode = m_EpisodeModel->index(index.row(), Form::EpisodeModel::Id, index.parent()).data().toInt();
-//        m_EpisodeModel->activateEpisode(episode, formUuid, m_EpisodeModel->index(index.row(), Form::EpisodeModel::XmlContent, index.parent()).data().toString());
-        m_EpisodeModel->activateEpisode(index, formUuid);
+    if (episodeModel()->isEpisode(index)) {
+//        episode = episodeModel()->index(index.row(), Form::EpisodeModel::Id, index.parent()).data().toInt();
+//        episodeModel()->activateEpisode(episode, formUuid, episodeModel()->index(index.row(), Form::EpisodeModel::XmlContent, index.parent()).data().toString());
+        episodeModel()->activateEpisode(index, formUuid);
     }
 }
 

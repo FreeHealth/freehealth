@@ -42,8 +42,14 @@
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/episodemodel.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/widgets/minisplitter.h>
+#include <utils/log.h>
 
 #include <QTreeView>
 #include <QTreeWidgetItem>
@@ -51,6 +57,8 @@
 #include <QScrollArea>
 #include <QTableView>
 #include <QHeaderView>
+#include <QPushButton>
+
 #include <QPainter>
 #include <QEvent>
 #include <QDebug>
@@ -58,6 +66,8 @@
 using namespace Form;
 
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::EpisodeModel *episodeModel() { return Form::EpisodeModel::instance(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 
 namespace Form {
@@ -66,7 +76,14 @@ class FormPlaceHolderPrivate
 {
 public:
     FormPlaceHolderPrivate(FormPlaceHolder *parent) :
-            m_FileTree(0), m_EpisodesTable(0), m_Stack(0), m_GeneralLayout(0),
+            m_FileTree(0),
+            m_EpisodesTable(0),
+            m_Stack(0),
+            m_GeneralLayout(0),
+            m_ButtonLayout(0),
+            m_Scroll(0),
+            m_New(0),
+            m_Remove(0),
             q(parent)
     {
     }
@@ -113,8 +130,10 @@ public:
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
+    QGridLayout *m_ButtonLayout;
     QScrollArea *m_Scroll;
     QHash<int, QString> m_StackId_FormUuid;
+    QPushButton *m_New, *m_Remove;
 
 private:
     FormPlaceHolder *q;
@@ -159,12 +178,14 @@ bool FormTreeView::viewportEvent(QEvent *event)
 FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
         QWidget(parent), d(new Internal::FormPlaceHolderPrivate(this))
 {
+    // create general layout
     d->m_GeneralLayout = new QGridLayout(this);
     d->m_GeneralLayout->setObjectName("FormPlaceHolder::GeneralLayout");
     d->m_GeneralLayout->setMargin(0);
     d->m_GeneralLayout->setSpacing(0);
     setLayout(d->m_GeneralLayout);
 
+    // create the tree view
     QWidget *w = new QWidget(this);
 //    d->m_FileTree = new Internal::FormTreeView(this);
     d->m_FileTree = new QTreeView(this);
@@ -172,12 +193,27 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setIndentation(10);
     d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
     d->m_FileTree->header()->hide();
+
+    // create the central view
     d->m_Scroll = new QScrollArea(this);
     d->m_Scroll->setWidgetResizable(true);
-
     d->m_Stack = new QStackedLayout(w);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
 
+    // create the buttons
+    QWidget *wb = new QWidget(this);
+    d->m_ButtonLayout = new QGridLayout(wb);
+    d->m_ButtonLayout->setSpacing(0);
+    d->m_ButtonLayout->setMargin(0);
+    d->m_New = new QPushButton(theme()->icon(Core::Constants::ICONADD), "", wb);
+    d->m_Remove = new QPushButton(theme()->icon(Core::Constants::ICONREMOVE), "", wb);
+    d->m_ButtonLayout->addWidget(d->m_New, 1, 0);
+    d->m_ButtonLayout->addWidget(d->m_Remove, 1, 1);
+    d->m_ButtonLayout->addWidget(d->m_FileTree, 10, 0, 2, 2);
+    connect(d->m_New, SIGNAL(clicked()), this, SLOT(newEpisode()));
+    connect(d->m_Remove, SIGNAL(clicked()), this, SLOT(removeEpisode()));
+
+    // create splitters
     Utils::MiniSplitter *horiz = new Utils::MiniSplitter(this);
     horiz->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     horiz->setObjectName("FormPlaceHolder::MiniSplitter1");
@@ -192,7 +228,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_EpisodesTable->horizontalHeader()->hide();
     d->m_EpisodesTable->verticalHeader()->hide();
 
-    horiz->addWidget(d->m_FileTree);
+//    horiz->setLayout(d->m_ButtonLayout); //addWidget(d->m_FileTree);
+    horiz->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
     vertic->addWidget(d->m_Scroll);
     horiz->addWidget(vertic);
@@ -213,13 +250,6 @@ FormPlaceHolder::~FormPlaceHolder()
         delete d;
         d = 0;
     }
-}
-
-void FormPlaceHolder::reset()
-{
-    d->m_FileTree->update();
-    d->m_FileTree->expandAll();
-    d->populateStackLayout();
 }
 
 QTreeView *FormPlaceHolder::formTree() const
@@ -247,4 +277,39 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
+}
+
+void FormPlaceHolder::reset()
+{
+    d->m_FileTree->update();
+    d->m_FileTree->expandAll();
+    d->populateStackLayout();
+}
+
+void FormPlaceHolder::newEpisode()
+{
+    // get the parent form
+    QModelIndex index;
+    if (!d->m_FileTree->selectionModel()->hasSelection())
+        return;
+    index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
+    while (!episodeModel()->isForm(index)) {
+        index = index.parent();
+    }
+
+    // create a new episode the selected form and its children
+    if (!episodeModel()->insertRow(0, index)) {
+        Utils::Log::addError(this, "Unable to create new episode");
+        return;
+    }
+    // activate the newly created main episode
+    d->m_FileTree->selectionModel()->clearSelection();
+    d->m_FileTree->selectionModel()->setCurrentIndex(episodeModel()->index(0,0,index), QItemSelectionModel::Select);
+    const QString &formUuid = episodeModel()->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
+    setCurrentForm(formUuid);
+    episodeModel()->activateEpisode(episodeModel()->index(0,0,index), formUuid);
+}
+
+void FormPlaceHolder::removeEpisode()
+{
 }

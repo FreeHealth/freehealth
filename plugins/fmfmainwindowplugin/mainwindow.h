@@ -71,9 +71,9 @@ class FancyTabWidget;
 namespace Patients {
 class PatientBar;
 }
-namespace Form {
-class EpisodeModel;
-}
+//namespace Form {
+//class EpisodeModel;
+//}
 
 namespace Core {
 class FileManager;
@@ -154,7 +154,7 @@ public:
     QByteArray        windowState;
 
 
-    Form::EpisodeModel *m_EpisodeModel;
+//    Form::EpisodeModel *m_EpisodeModel;
 
     /** \todo Move this Patient History in the ICore ? */
     Core::FileManager *m_RecentPatients;

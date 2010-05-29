@@ -86,6 +86,8 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void reset();
+    void newEpisode();
+    void removeEpisode();
 
 private:
     Internal::FormPlaceHolderPrivate *d;

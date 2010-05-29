@@ -885,7 +885,7 @@ bool Database::executeSQL(const QString &req, const QSqlDatabase & DB) const
 
 bool Database::createTable(const int & tableref) const
 {
-    if (! d->m_Tables.contains(tableref))
+    if (!d->m_Tables.contains(tableref))
         return false;
     if (! d->m_Tables_Fields.keys().contains(tableref))
         return false;

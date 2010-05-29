@@ -19,7 +19,6 @@ HEADERS = formmanagerplugin.h \
     episodemodel.h \
     episodebase.h \
     constants_db.h
-
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
@@ -28,7 +27,6 @@ SOURCES = formmanagerplugin.cpp \
     formplaceholder.cpp \
     episodemodel.cpp \
     episodebase.cpp
-
 OTHER_FILES = FormManager.pluginspec
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/formmanagerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/formmanagerplugin_de.ts \
