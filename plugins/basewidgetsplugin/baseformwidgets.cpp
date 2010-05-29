@@ -66,6 +66,7 @@ namespace {
         Type_UniqueList,
         Type_MultiList,
         Type_Spin,
+        Type_DoubleSpin,
         Type_ShortText,
         Type_LongText,
         Type_HelpText,
@@ -78,7 +79,7 @@ namespace {
 
     static const QStringList widgetsName =
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
-            << "multicheck" << "uniquelist" << "multilist" << "spin"
+            << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
             << "shorttext" << "longtext" << "helptext" << "file" << "group" << "date" << "button";
 
     const char * const  EXTRAS_KEY              = "option";
@@ -90,6 +91,10 @@ namespace {
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
 
     const char * const  DATE_EXTRAS_KEY         = "dateformat";
+
+    const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
+    const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
+    const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
 
 }
 
@@ -195,12 +200,16 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_Combo : return new BaseCombo(formItem,parent);
     case ::Type_Date : return new BaseDate(formItem,parent);
     case ::Type_Spin : return new BaseSpin(formItem,parent);
+    case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
     default: return 0;
     }
     return 0;
 }
 
+
+
+/** \todo Verify usage of clear() in all itemData() --> originalValue ? */
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -330,23 +339,6 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
     i++;
 }
 
-
-//void BaseGroup::updateObject( bool state )
-//{
-//     mfo(m_FormItem)->disconnect();
-//     mfo(m_FormItem)->selectedValueChangedTo( state );
-//     connect( mfo(m_FormItem), SIGNAL( valueChanged() ),
-//              this,     SLOT  ( updateWidget() ) );
-//}
-
-//void BaseGroup::updateWidget()
-//{
-//     m_Group->disconnect();
-//     m_Group->setChecked( mfo(m_FormItem)->isChecked() );
-//     connect( m_Group, SIGNAL( clicked( bool ) ),
-//              this,    SLOT  ( updateObject( bool ) ) );
-//}
-
 void BaseGroup::retranslate()
 {
     //     m_Group->setTitle( mfo(m_FormItem)->label() );
@@ -412,7 +404,7 @@ void BaseCheckData::clear()
 
 bool BaseCheckData::isModified() const
 {
-    return m_IsModified;
+    return m_OriginalValue != m_Check->checkState();
 }
 
 void BaseCheckData::setData(const QVariant &data, const int role)
@@ -436,6 +428,7 @@ void BaseCheckData::setStorableData(const QVariant &data)
         return;
     Qt::CheckState state = Qt::CheckState(data.toInt());
     m_Check->setCheckState(state);
+    m_OriginalValue = state;
 }
 
 QVariant BaseCheckData::storableData() const
@@ -542,7 +535,13 @@ void BaseRadioData::clear()
 
 bool BaseRadioData::isModified() const
 {
-    return m_IsModified;
+    foreach(QRadioButton *but, m_Radio->m_RadioList) {
+        if (but->isChecked()) {
+//            qWarning() << "Radio selected" << but->property("id").toString() << "modified" << (m_OriginalValue != but->property("id").toString());
+            return m_OriginalValue != but->property("id").toString();
+        }
+    }
+    return true;
 }
 
 void BaseRadioData::setData(const QVariant &data, const int role)
@@ -572,6 +571,8 @@ void BaseRadioData::setStorableData(const QVariant &data)
             break;
         }
     }
+    m_OriginalValue = id;
+//    qWarning() << "Radio orig" << id;
 }
 
 QVariant BaseRadioData::storableData() const
@@ -655,7 +656,11 @@ void BaseSimpleTextData::clear()
 
 bool BaseSimpleTextData::isModified() const
 {
-    return m_IsModified;
+    if (m_Text->m_Line)
+        return m_OriginalValue != m_Text->m_Line->text();
+    else if (m_Text->m_Text)
+        return m_OriginalValue != m_Text->m_Text->toPlainText();
+    return true;
 }
 
 void BaseSimpleTextData::setData(const QVariant &data, const int role)
@@ -669,11 +674,11 @@ QVariant BaseSimpleTextData::data(const int role) const
 
 void BaseSimpleTextData::setStorableData(const QVariant &data)
 {
-    const QString &s = data.toString();
+    m_OriginalValue = data.toString();
     if (m_Text->m_Line)
-        m_Text->m_Line->setText(s);
+        m_Text->m_Line->setText(m_OriginalValue);
     else if (m_Text->m_Text)
-        m_Text->m_Text->setPlainText(s);
+        m_Text->m_Text->setPlainText(m_OriginalValue);
 }
 
 QVariant BaseSimpleTextData::storableData() const
@@ -805,6 +810,12 @@ void BaseListData::clear()
     setSelectedItems(m_FormItem->valueReferences()->defaultValue().toString());
 }
 
+bool BaseListData::isModified() const
+{
+    QStringList actual = storableData().toStringList();
+    return actual != m_OriginalValue;
+}
+
 void BaseListData::setData(const QVariant &data, const int role)
 {
 }
@@ -817,8 +828,11 @@ QVariant BaseListData::data(const int role) const
 void BaseListData::setStorableData(const QVariant &data)
 {    
     setSelectedItems(data.toString());
+    m_OriginalValue = data.toStringList();
+    qSort(m_OriginalValue);
 }
 
+/** \brief Storable data of a List is the uuids of the selected items sorted in alphabetic order. */
 QVariant BaseListData::storableData() const
 {
     QItemSelectionModel *selModel = m_List->m_List->selectionModel();
@@ -826,15 +840,14 @@ QVariant BaseListData::storableData() const
     if (!selModel->hasSelection())
         return QVariant();
 
-    QString toReturn;
+    QStringList selected;
     const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-        toReturn += uuids.at(idx.row()) + "`@`";
+        selected.append(uuids.at(idx.row()));
     }
-    toReturn.chop(3);
-    return toReturn;
+    qSort(selected);
+    return selected.join("`@`");
 }
-
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -906,21 +919,27 @@ BaseComboData::~BaseComboData()
 {
 }
 
-void BaseComboData::setSelectedItems(const QString &s)
+int BaseComboData::selectedItem(const QString &s)
 {
     m_Combo->m_Combo->setCurrentIndex(-1);
     if (s.isEmpty())
-        return;
+        return -1;
 
     const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     int row = uuids.lastIndexOf(s);
     m_Combo->m_Combo->setCurrentIndex(row);
+    return row;
 }
 
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseComboData::clear()
 {
-    setSelectedItems(m_FormItem->valueReferences()->defaultValue().toString());
+    selectedItem(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
+bool BaseComboData::isModified() const
+{
+    return m_OriginalValue != m_Combo->m_Combo->currentIndex();
 }
 
 void BaseComboData::setData(const QVariant &data, const int role)
@@ -934,7 +953,7 @@ QVariant BaseComboData::data(const int role) const
 
 void BaseComboData::setStorableData(const QVariant &data)
 {
-    setSelectedItems(data.toString());
+    m_OriginalValue = selectedItem(data.toString());
 }
 
 QVariant BaseComboData::storableData() const
@@ -965,11 +984,10 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
 
     // Add Date selector and manage date format
     m_Date = new QDateTimeEdit(this);
-    m_Date->setObjectName( "Date_" + m_FormItem->uuid());
+    m_Date->setObjectName("Date_" + m_FormItem->uuid());
     m_Date->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
     m_Date->setDisplayFormat(getDateFormat(m_FormItem));
     m_Date->setCalendarPopup(true);
-    //     m_Date->setDateTime( mfo(m_FormItem)->dateTime() );
     hb->addWidget(m_Date);
 
     // Initialize mfo and dateedit with mfo options
@@ -1011,7 +1029,13 @@ void BaseDateData::setDate(const QString &s)
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseDateData::clear()
 {
-    setDate(m_FormItem->valueReferences()->defaultValue().toString());
+    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toString();
+    setDate(m_OriginalValue);
+}
+
+bool BaseDateData::isModified() const
+{
+    return m_OriginalValue != m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
 void BaseDateData::setData(const QVariant &data, const int role)
@@ -1026,6 +1050,7 @@ QVariant BaseDateData::data(const int role) const
 void BaseDateData::setStorableData(const QVariant &data)
 {
     setDate(data.toString());
+    m_OriginalValue = data.toString();
 }
 
 QVariant BaseDateData::storableData() const
@@ -1037,8 +1062,8 @@ QVariant BaseDateData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Spin( 0 )
+BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin)
+        : Form::IFormWidget(formItem,parent), m_Spin(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1051,12 +1076,27 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent)
     //          m_Label->setAlignment( alignment );
     //     }
 
-    // Add Date selector and manage date format
-    m_Spin = new QSpinBox(this);
-    m_Spin->setObjectName( "Spin_" + m_FormItem->uuid());
+    // Add spin
+    if (doubleSpin) {
+        QDoubleSpinBox *spin = new QDoubleSpinBox(this);
+        spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
+        spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
+        spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
+        spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+        m_Spin = spin;
+    } else {
+        QSpinBox *spin = new QSpinBox(this);
+        spin->setObjectName("Spin_" + m_FormItem->uuid());
+        spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
+        spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
+        spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+        m_Spin = spin;
+    }
     m_Spin->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    //     m_Spin->setValue( mfo(m_FormItem)->value().toInt() );
     hb->addWidget(m_Spin);
+
+    // manage options
+    ;
 
     // create FormItemData
     BaseSpinData *data = new BaseSpinData(m_FormItem);
@@ -1085,7 +1125,21 @@ BaseSpinData::~BaseSpinData()
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseSpinData::clear()
 {
-//    setDate(m_FormItem->valueReferences()->defaultValue().toString());
+    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toDouble();
+    QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
+    if (spin) {
+        spin->setValue(m_FormItem->valueReferences()->defaultValue().toInt());
+    } else {
+        QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
+        if (dspin) {
+            dspin->setValue(m_OriginalValue);
+        }
+    }
+}
+
+bool BaseSpinData::isModified() const
+{
+    return m_OriginalValue != storableData().toDouble();
 }
 
 void BaseSpinData::setData(const QVariant &data, const int role)
@@ -1099,12 +1153,28 @@ QVariant BaseSpinData::data(const int role) const
 
 void BaseSpinData::setStorableData(const QVariant &data)
 {
-//    setDate(data.toString());
+    m_OriginalValue = data.toDouble();
+    QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
+    if (spin) {
+        spin->setValue(data.toInt());
+        return;
+    }
+    QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
+    if (dspin) {
+        dspin->setValue(data.toDouble());
+    }
 }
 
 QVariant BaseSpinData::storableData() const
 {
-//    return m_Date->m_Date->dateTime().toString(Qt::ISODate);
+    QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
+    if (spin) {
+        return spin->value();
+    }
+    QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
+    if (dspin) {
+        return dspin->value();
+    }
     return QVariant();
 }
 

@@ -83,7 +83,7 @@
 
 using namespace UserPlugin;
 
-static inline UserPlugin::UserModel *um() {return UserModel::instance(); }
+static inline UserPlugin::UserModel *userModel() {return UserModel::instance(); }
 
 UserWizard::UserWizard(QWidget *parent)
     : QWizard(parent),
@@ -123,8 +123,8 @@ void UserWizard::done(int r)
         QDialog::done(r);
     } else {
         if ((m_CreateUser) || (m_Row == -1)) {
-            m_Row = um()->rowCount();
-            if (! um()->insertRows(m_Row, 1)) {
+            m_Row = userModel()->rowCount();
+            if (!userModel()->insertRows(m_Row, 1)) {
                 Utils::warningMessageBox(tr("An error occured during database access."),
                                              tr("Logged errors saved. Please refer to the %1 to manage this error.")
                                        .arg(Utils::Log::saveLog()),
@@ -133,92 +133,92 @@ void UserWizard::done(int r)
             }
         }
         QModelIndex idx;
-        idx = um()->index(m_Row, User::DecryptedLogin);
-        um()->setData(idx, field("Login"));
-        idx = um()->index(m_Row, User::Password);
-        um()->setData(idx, UserPlugin::crypt(field("Password").toString()));
+        idx = userModel()->index(m_Row, User::DecryptedLogin);
+        userModel()->setData(idx, field("Login"));
+        idx = userModel()->index(m_Row, User::Password);
+        userModel()->setData(idx, UserPlugin::crypt(field("Password").toString()));
 
-        idx = um()->index(m_Row, User::Name);
-        um()->setData(idx, field("Name"));
-        idx = um()->index(m_Row, User::SecondName);
-        um()->setData(idx, field("SecondName"));
-        idx = um()->index(m_Row, User::Surname);
-        um()->setData(idx, field("Surname"));
-        idx = um()->index(m_Row, User::Title);
-        um()->setData(idx, field("Title"));
-        idx = um()->index(m_Row, User::Gender);
-        um()->setData(idx, field("Gender"));
+        idx = userModel()->index(m_Row, User::Name);
+        userModel()->setData(idx, field("Name"));
+        idx = userModel()->index(m_Row, User::SecondName);
+        userModel()->setData(idx, field("SecondName"));
+        idx = userModel()->index(m_Row, User::Surname);
+        userModel()->setData(idx, field("Surname"));
+        idx = userModel()->index(m_Row, User::Title);
+        userModel()->setData(idx, field("Title"));
+        idx = userModel()->index(m_Row, User::Gender);
+        userModel()->setData(idx, field("Gender"));
 
-        idx = um()->index(m_Row, User::Adress);
-        um()->setData(idx, field("Adress"));
-        idx = um()->index(m_Row, User::Zipcode);
-        um()->setData(idx, field("Zipcode"));
-        idx = um()->index(m_Row, User::City);
-        um()->setData(idx, field("City"));
-        idx = um()->index(m_Row, User::Country);
-        um()->setData(idx, field("Country"));
-        idx = um()->index(m_Row, User::LanguageIndex);
-        um()->setData(idx, field("Language"));
+        idx = userModel()->index(m_Row, User::Adress);
+        userModel()->setData(idx, field("Adress"));
+        idx = userModel()->index(m_Row, User::Zipcode);
+        userModel()->setData(idx, field("Zipcode"));
+        idx = userModel()->index(m_Row, User::City);
+        userModel()->setData(idx, field("City"));
+        idx = userModel()->index(m_Row, User::Country);
+        userModel()->setData(idx, field("Country"));
+        idx = userModel()->index(m_Row, User::LanguageIndex);
+        userModel()->setData(idx, field("Language"));
 
-        idx = um()->index(m_Row, User::Tel1);
-        um()->setData(idx, field("Tel1"));
-        idx = um()->index(m_Row, User::Tel2);
-        um()->setData(idx, field("Tel2"));
-        idx = um()->index(m_Row, User::Tel3);
-        um()->setData(idx, field("Tel3"));
-        idx = um()->index(m_Row, User::Fax);
-        um()->setData(idx, field("Fax"));
-        idx = um()->index(m_Row, User::Mail);
-        um()->setData(idx, field("Mail"));
+        idx = userModel()->index(m_Row, User::Tel1);
+        userModel()->setData(idx, field("Tel1"));
+        idx = userModel()->index(m_Row, User::Tel2);
+        userModel()->setData(idx, field("Tel2"));
+        idx = userModel()->index(m_Row, User::Tel3);
+        userModel()->setData(idx, field("Tel3"));
+        idx = userModel()->index(m_Row, User::Fax);
+        userModel()->setData(idx, field("Fax"));
+        idx = userModel()->index(m_Row, User::Mail);
+        userModel()->setData(idx, field("Mail"));
 
-        idx = um()->index(m_Row, User::Specialities);
-        um()->setData(idx, field("Specialities"));
-        idx = um()->index(m_Row, User::Qualifications);
-        um()->setData(idx, field("Qualifications"));
-        idx = um()->index(m_Row, User::PractitionerId);
-        um()->setData(idx, field("Identifiants"));
+        idx = userModel()->index(m_Row, User::Specialities);
+        userModel()->setData(idx, field("Specialities"));
+        idx = userModel()->index(m_Row, User::Qualifications);
+        userModel()->setData(idx, field("Qualifications"));
+        idx = userModel()->index(m_Row, User::PractitionerId);
+        userModel()->setData(idx, field("Identifiants"));
 
-        idx = um()->index(m_Row, User::ManagerRights);
-        um()->setData(idx, field("UserManager"));
-        idx = um()->index(m_Row, User::DrugsRights);
-        um()->setData(idx, field("DrugsManager"));
-        idx = um()->index(m_Row, User::MedicalRights);
-        um()->setData(idx, field("Medical"));
-        idx = um()->index(m_Row, User::ParamedicalRights);
-        um()->setData(idx, field("Paramedical"));
-        idx = um()->index(m_Row, User::AdministrativeRights);
-        um()->setData(idx, field("Administrative"));
+        idx = userModel()->index(m_Row, User::ManagerRights);
+        userModel()->setData(idx, field("UserManager"));
+        idx = userModel()->index(m_Row, User::DrugsRights);
+        userModel()->setData(idx, field("DrugsManager"));
+        idx = userModel()->index(m_Row, User::MedicalRights);
+        userModel()->setData(idx, field("Medical"));
+        idx = userModel()->index(m_Row, User::ParamedicalRights);
+        userModel()->setData(idx, field("Paramedical"));
+        idx = userModel()->index(m_Row, User::AdministrativeRights);
+        userModel()->setData(idx, field("Administrative"));
 
-        idx = um()->index(m_Row, User::GenericHeader);
-        um()->setData(idx, field("GenericHeader"));
-        idx = um()->index(m_Row, User::GenericFooter);
-        um()->setData(idx, field("GenericFooter"));
+        idx = userModel()->index(m_Row, User::GenericHeader);
+        userModel()->setData(idx, field("GenericHeader"));
+        idx = userModel()->index(m_Row, User::GenericFooter);
+        userModel()->setData(idx, field("GenericFooter"));
 
-        idx = um()->index(m_Row, User::PrescriptionHeader);
-        um()->setData(idx, field("PrescrHeader"));
-        idx = um()->index(m_Row, User::PrescriptionFooter);
-        um()->setData(idx, field("PrescrFooter"));
+        idx = userModel()->index(m_Row, User::PrescriptionHeader);
+        userModel()->setData(idx, field("PrescrHeader"));
+        idx = userModel()->index(m_Row, User::PrescriptionFooter);
+        userModel()->setData(idx, field("PrescrFooter"));
 
-        idx = um()->index(m_Row, User::AdministrativeHeader);
-        um()->setData(idx, field("AdminHeader"));
-        idx = um()->index(m_Row, User::AdministrativeFooter);
-        um()->setData(idx, field("AdminFooter"));
+        idx = userModel()->index(m_Row, User::AdministrativeHeader);
+        userModel()->setData(idx, field("AdminHeader"));
+        idx = userModel()->index(m_Row, User::AdministrativeFooter);
+        userModel()->setData(idx, field("AdminFooter"));
 
 #ifdef DEBUG
         // warn user
-        idx = um()->index(m_Row, User::Warn);
+        idx = userModel()->index(m_Row, User::Warn);
         idx.data();
 #endif
 
-        if (um()->submitRow(m_Row)) {
+        if (userModel()->submitRow(m_Row)) {
             Utils::informativeMessageBox(tr("User correctly saved into database."),
                                              tr("You can poursue with the current user %1 or set this new user to current user.")
-                                             .arg(um()->currentUserData(User::Name).toString()),
+                                             .arg(userModel()->currentUserData(User::Name).toString()),
                                              "", tr("User correctly saved into database."));
             m_Saved = true;
             QDialog::done(r);
         } else {
-            um()->removeRows(m_Row, 1);
+            userModel()->removeRows(m_Row, 1);
             Utils::warningMessageBox(tr("An error occured during database access."),
                                          tr("Logged errors saved. Please refer to the %1 to manage this error.")
                                          .arg(Utils::Log::saveLog()),
@@ -286,8 +286,8 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
     registerField("Title", cbTitle, "currentIndex");
     registerField("Gender", cbGender, "currentIndex");
 
-    cbTitle->addItems(um()->titles());
-    cbGender->addItems(um()->genders());
+    cbTitle->addItems(userModel()->titles());
+    cbGender->addItems(userModel()->genders());
 
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(lblTitle, 0, 0);
@@ -359,7 +359,7 @@ bool UserLoginPasswordPage::validatePage()
         return false;
     }
     // log/pass already used ?
-    if (um()->isCorrectLogin(UserPlugin::loginForSQL(field("Login").toString()),
+    if (userModel()->isCorrectLogin(UserPlugin::loginForSQL(field("Login").toString()),
                             UserPlugin::crypt(field("Password").toString()))) {
         Utils::warningMessageBox(tr("Login and password already used"),
                                  tr("The users' database already contains the same login/password couple.\n"

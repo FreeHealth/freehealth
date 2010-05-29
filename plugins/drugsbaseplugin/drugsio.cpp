@@ -694,7 +694,7 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
                                       QDir::homePath() + "/prescription.di",
                                       tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
     else
-        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
+        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
 
 /**
@@ -720,7 +720,7 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
                                       QDir::homePath() + "/prescription.di",
                                       tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
     else
-        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::DontWarnUser);
+        return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
 
 static QString prepareHeader()

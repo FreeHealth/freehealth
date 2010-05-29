@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
+    <width>495</width>
     <height>314</height>
    </rect>
   </property>
@@ -43,51 +43,10 @@
       <string>Virtual patients</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Populate database with virtual patients</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="3">
+      <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="showVirtualPatients">
         <property name="text">
          <string>Show virtual patients</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="nbVirtualPatients">
-        <property name="maximum">
-         <number>1000000</number>
-        </property>
-        <property name="singleStep">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="populateDb">
-        <property name="text">
-         <string>Populate</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Populate database with virtual episodes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="nbVirtualEpisodes"/>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="populateEpisodes">
-        <property name="text">
-         <string>Populate</string>
         </property>
        </widget>
       </item>

@@ -37,90 +37,64 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef EPISODEMODEL_H
-#define EPISODEMODEL_H
+#ifndef EPISODEBASE_H
+#define EPISODEBASE_H
 
-#include <QAbstractItemModel>
+#include <utils/database.h>
 
-namespace Patients {
+#include <coreplugin/isettings.h>
+
+#include <formmanagerplugin/formmanager_exporter.h>
+
+#include <QObject>
+
+/**
+ * \file episodebase.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 27 May 2010
+*/
+
+namespace Form {
 namespace Internal {
-class EpisodeModelPrivate;
-}
+class EpisodeBasePrivate;
 
-class EpisodeModel : public QAbstractItemModel
+class FORM_EXPORT EpisodeBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+protected:
+    EpisodeBase(QObject *parent = 0);
+    bool init();
 
 public:
+    // Constructor
+    static EpisodeBase *instance();
+    virtual ~EpisodeBase();
 
-    enum DataRepresentation {
-        Label = 0,
-        Date,
-        Summary,
-        FullContent,
-        Id,
-        UserUuid,
-        PatientUuid,
-        FormUuid,
-        IsNewlyCreated,
-        IsEpisode,
-        XmlContent,
-        MaxData
-    };
+//    // initialize
+    bool initialize(Core::ISettings *settings);
+    bool isInitialized() const {return m_initialized;}
 
-    EpisodeModel(QObject *parent);
-    ~EpisodeModel();
+//private:
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                          const QString &pathOrHostName,
+                          TypeOfAccess access, AvailableDrivers driver,
+                          const QString &login, const QString &pass,
+                          const int port,
+                          CreationOption createOption
+                         );
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    QModelIndex parent(const QModelIndex &index) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    void toTreeWidget(QTreeWidget *tree);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    QVariant headerData(int section, Qt::Orientation orientation,
-                                int role = Qt::DisplayRole) const;
-
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
-    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
-    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
-    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
-
-    bool isEpisode(const QModelIndex &index) const;
-    bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
-    void setReadOnly(const bool state);
-    bool isReadOnly() const;
-    bool isDirty() const;
-
-    bool submit();
-
-Q_SIGNALS:
-    void episodeAboutToChange(const QModelIndex &index);
-    void episodeAboutToBeDeleted(const QModelIndex &index);
-    void episodeAboutToBeCreated(const QModelIndex &index);
-
-    void episodeChanged(const QModelIndex &index);
-    void episodeDeleted(const QModelIndex &index);
-    void episodeCreated(const QModelIndex &index);
-
-public Q_SLOTS:
-    void setCurrentUser(const QString &uuid);
-    void setCurrentPatient(const QString &uuid);
-    void setCurrentFormUuid(const QString &uuid);
-
+private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
-    Internal::EpisodeModelPrivate *d;
+    static bool m_initialized;
+    static EpisodeBase *m_Instance;
 };
 
-}  // End namespace Patients
+}  // End namespace Internal
+}  // End namespace Form
 
-
-#endif // End EPISODEMODEL_H
+#endif // PATIENTBASE_H

@@ -66,15 +66,16 @@ class UserData;
 class USER_EXPORT UserBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
-    friend void initLib();
-    friend class UserPlugin::UserModel;
-    friend class UserModelPrivate;
-    friend class UserData;
-    friend class UserIdentifier;
+//    friend void initLib();
+//    friend class UserPlugin::UserModel;
+//    friend class UserModelPrivate;
+//    friend class UserData;
+//    friend class UserIdentifier;
 
 protected:
     UserBase(QObject *parent = 0);
 
+public:
     // Constructor
     static UserBase *instance();
     virtual ~UserBase() {}
@@ -109,6 +110,9 @@ protected:
     bool      checkLogin(const QString &login, const QString &cryptedPassword) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);
 
+    // Linkers
+    int getMaxLinkId();
+    void updateMaxLinkId(const int max);
 
 private:
     // privates retreivers

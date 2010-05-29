@@ -66,7 +66,7 @@ class QTextEdit;
 class QListView;
 class QComboBox;
 class QDateTimeEdit;
-class QSpinBox;
+class QAbstractSpinBox;
 class QPushButton;
 class QStringListModel;
 QT_END_NAMESPACE
@@ -174,9 +174,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     QCheckBox *m_Check;
+    Qt::CheckState m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -217,9 +217,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseRadio* m_Radio;
+    QString m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -260,9 +260,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseSimpleText* m_Text;
+    QString m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -309,7 +309,7 @@ public:
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const {return m_IsModified;}
+    bool isModified() const;
 
     void setData(const QVariant &data, const int role);
     QVariant data(const int role) const;
@@ -318,9 +318,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseList* m_List;
+    QStringList m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -347,12 +347,12 @@ public:
     ~BaseComboData();
 
     void setBaseCombo(BaseCombo* combo) {m_Combo = combo; clear();}
-    void setSelectedItems(const QString &s);
+    int selectedItem(const QString &s);
 
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const {return m_IsModified;}
+    bool isModified() const;
 
     void setData(const QVariant &data, const int role);
     QVariant data(const int role) const;
@@ -361,9 +361,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseCombo* m_Combo;
+    int m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -395,7 +395,7 @@ public:
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const {return m_IsModified;}
+    bool isModified() const;
 
     void setData(const QVariant &data, const int role);
     QVariant data(const int role) const;
@@ -404,9 +404,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseDate* m_Date;
+    QString m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------
@@ -416,14 +416,14 @@ class BaseSpin : public Form::IFormWidget
 {
      Q_OBJECT
 public:
-     BaseSpin(Form::FormItem *linkedObject, QWidget *parent = 0);
+     BaseSpin(Form::FormItem *linkedObject, QWidget *parent = 0, bool doubleSpin = false);
      ~BaseSpin();
 
 public Q_SLOTS:
      void retranslate();
 
-private:
-     QSpinBox *m_Spin;
+public:
+     QAbstractSpinBox *m_Spin;
 };
 
 class BaseSpinData : public Form::IFormItemData
@@ -437,7 +437,7 @@ public:
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const {return m_IsModified;}
+    bool isModified() const;
 
     void setData(const QVariant &data, const int role);
     QVariant data(const int role) const;
@@ -446,9 +446,9 @@ public:
     QVariant storableData() const;
 
 private:
-    bool m_IsModified;
     Form::FormItem *m_FormItem;
     BaseSpin* m_Spin;
+    double m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------

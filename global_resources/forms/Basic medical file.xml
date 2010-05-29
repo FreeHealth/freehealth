@@ -112,6 +112,21 @@
        <label>Date test</label>
      </Item>
 
+     <Item>
+       <name>spin1</name>
+       <type>spin</type>
+       <label>Spin</label>
+     </Item>
+
+     <Item>
+       <name>doublespin1</name>
+       <type>doublespin</type>
+       <label>Double Spin</label>
+       <min>2</min>
+       <max>1324</max>
+       <step>0.1</step>
+     </Item>
+
   </MedForm>
 
   <MedForm>

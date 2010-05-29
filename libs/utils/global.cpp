@@ -244,7 +244,7 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 }
 
 /** \brief Save the string to a text file. You can choose to warn the user or not is an error is encountered. Return true if all gone good. **/
-bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn warnUser, QWidget *parent )
+bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent )
 {
     if (toFile.isEmpty()) {
         Utils::Log::addError( "Utils", "saveStringToFile() : fileName is empty");
@@ -269,8 +269,17 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, const Warn 
                                    QCoreApplication::translate( "Utils" ,
                                                                 "File %1 already exists. Do you want de replace it ?" ).arg(info.fileName()),
                                    QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
-            if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-                Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
+            if (iomode == Overwrite) {
+                if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
+                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
+                    return false;
+                }
+            } else if (iomode == AppendToFile) {
+                if (!file.open(QFile::Append | QIODevice::Text)) {
+                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
+                    return false;
+                }
+            } else {
                 return false;
             }
             file.write(toSave.toAscii());
@@ -303,7 +312,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
                                                     filters);
     if (fileName.isEmpty())
         return false;
-    return Utils::saveStringToFile(toSave, fileName, WarnUser, wgt);
+    return Utils::saveStringToFile(toSave, fileName, Overwrite, WarnUser, wgt);
 }
 
 /** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/

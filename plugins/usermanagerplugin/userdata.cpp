@@ -476,6 +476,8 @@ public:
     QSet< QString > m_ModifiedRoles;
     QHash<QString, UserDynamicData*> m_DynamicDatas;
     bool m_HasModifiedDynamicDatas;
+    QList<int> m_LkIds;
+    QString m_LkIdsToString;
 };
 
 }  // End Internal
@@ -677,6 +679,25 @@ void UserData::addRightsFromDatabase(const char *roleName, const int fieldref, c
     d->m_Role_Rights[roleName].insert(fieldref, val);
     d->m_IsNull = false;
     setModified(true);
+}
+
+void UserData::setLkIds(const QList<int> &lkids)
+{
+    for(int i = 0; i < lkids.count(); ++i) {
+        d->m_LkIdsToString += QString::number(lkids.at(i)) + ",";
+    }
+    d->m_LkIdsToString.chop(1);
+    d->m_LkIds = lkids;
+}
+
+QList<int> UserData::linkIds() const
+{
+    return d->m_LkIds;
+}
+
+QString UserData::linkIdsToString() const
+{
+    return d->m_LkIdsToString;
 }
 
 /**

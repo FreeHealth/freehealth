@@ -78,9 +78,6 @@ public:
     bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-    QList<int> retreivePractionnerLkIds(const QString &uid);
-
-
 //    bool isNewlyCreated() const;
 //    bool isEmpty() const;
 //
@@ -120,6 +117,6 @@ private:
 };
 
 }  // End namespace Internal
-}  // End namespace UserPlugin
+}  // End namespace Patients
 
 #endif // PATIENTBASE_H

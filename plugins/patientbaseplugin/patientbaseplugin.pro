@@ -9,7 +9,6 @@ HEADERS = patientbaseplugin.h \
     patientbase.h \
     patientdata.h \
     patientmodel.h \
-    episodemodel.h \
     identitywidget.h \
     constants_db.h \
     constants_menus.h \
@@ -26,7 +25,6 @@ SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
     patientdata.cpp \
     patientmodel.cpp \
-    episodemodel.cpp \
     identitywidget.cpp \
     patientselector.cpp \
     patientwidgetmanager.cpp \
@@ -37,7 +35,8 @@ SOURCES = patientbaseplugin.cpp \
 FORMS += identitywidget.ui \
     patientselector.ui \
     patientbasepreferencespage.ui \
-    patientbar.ui
+    patientbar.ui \
+    identityviewer.ui
 OTHER_FILES = PatientBase.pluginspec
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/patientbaseplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/patientbaseplugin_de.ts \

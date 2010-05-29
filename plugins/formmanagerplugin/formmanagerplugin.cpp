@@ -36,6 +36,7 @@
 #include "formmanagermode.h"
 #include "formmanager.h"
 #include "formplaceholder.h"
+#include "episodebase.h"
 
 #include <utils/log.h>
 
@@ -50,6 +51,8 @@
 
 using namespace Form;
 using namespace Internal;
+
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 
 FormManagerPlugin::FormManagerPlugin() :
@@ -79,6 +82,10 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
 
+    // Initialize patient base
+    episodeBase();
+    if (!episodeBase()->isInitialized())
+        return false;
 
     return true;
 }

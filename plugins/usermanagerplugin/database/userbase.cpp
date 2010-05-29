@@ -115,6 +115,7 @@ UserBase::UserBase(QObject *parent)
     setObjectName("UserBase");
     m_initialized = false;
     m_IsNewlyCreated = false;
+
     // populate tables and fields of database
     addTable(Table_USERS,  "USERS");
     addTable(Table_DATAS,  "DATAS");
@@ -155,6 +156,17 @@ UserBase::UserBase(QObject *parent)
     addField(Table_GROUPS, GROUPS_USER_UID,         "USER_UID",   FieldIsUUID);
     addField(Table_GROUPS, GROUPS_PARENT_GROUP_UID, "PARENT_GROUP_UID", FieldIsUUID);
 
+    // links
+    addTable(Table_USER_LK_ID, "LK_USER");
+    addField(Table_USER_LK_ID, LK_ID,         "ID", FieldIsUniquePrimaryKey);
+    addField(Table_USER_LK_ID, LK_LKID,       "LK_ID", FieldIsUUID);
+    addField(Table_USER_LK_ID, LK_USER_UUID,  "USER_UID", FieldIsUUID);
+    addField(Table_USER_LK_ID, LK_GROUP_UUID, "GROUP_UID", FieldIsUUID);
+
+    // informations
+    addTable(Table_INFORMATIONS, "INFORMATIONS");
+    addField(Table_INFORMATIONS, INFO_VERSION,  "VERSION", FieldIsShortText);
+    addField(Table_INFORMATIONS, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
 
     initialize(Core::ICore::instance()->settings());
 }
@@ -304,8 +316,30 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
     if (list.count())
         toReturn->addDynamicDatasFromDatabase(list);
 
+    // get LKID Table
+    where.clear();
+    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
+    req = select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
+    QList<int> lkids;
+    {
+        QSqlQuery q(req, DB);
+        if (q.isActive()) {
+            while (q.next()) {
+                lkids << q.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addQueryError("UserBase", q);
+        }
+        if (lkids.count() < 1) {
+            Utils::Log::addError(this, QString("No linker for user %1").arg(toReturn->uuid()));
+            return 0;
+        }
+        toReturn->setLkIds(lkids);
+    }
+
     if (toReturn)
         toReturn->setModified(false);
+
     return toReturn;
 }
 
@@ -338,7 +372,6 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
     // get the asked user
     return getUser(where);
 }
-
 
 /**
   \brief Retreive all users datas from the users' database. If an error occurs, it returns 0.
@@ -493,7 +526,10 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAdress(DEFAULT_USER_ADRESS);
     user->setSurname(DEFAULT_USER_SURNAME);
-    user->setRights(USER_ROLE_USERMANAGER, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
+    user->setRights(Constants::USER_ROLE_USERMANAGER, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
+    user->setRights(Constants::USER_ROLE_MEDICAL, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
+    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
+    user->setRights(Constants::USER_ROLE_PARAMEDICAL, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
 
     QList<UserDynamicData*> list;
 
@@ -517,13 +553,34 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
 
     user->addDynamicDatasFromDatabase(list);
 
+    /** \todo add a transaction */
     saveUser(user);
+
+    // create the linker
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
+    query.bindValue(Constants::LK_ID, QVariant());
+    query.bindValue(Constants::LK_GROUP_UUID, QVariant());
+    query.bindValue(Constants::LK_USER_UUID, user->uuid());
+    query.bindValue(Constants::LK_LKID, 1);
+    if (!query.exec()) {
+        Utils::Log::addQueryError(this, query);
+    }
+
     delete user; // list is deleted here
     if (extraFooter)
         delete extraFooter;
     if (headerDoc)
         delete headerDoc;
 
+    // Table INFORMATIONS
+    query.finish();
+    query.prepare(prepareInsertQuery(Constants::Table_INFORMATIONS));
+    query.bindValue(Constants::INFO_VERSION, Constants::USER_DB_VERSION);
+    query.bindValue(Constants::INFO_MAX_LKID, 1);
+    if (!query.exec()) {
+        Utils::Log::addQueryError(this, query);
+    }
 
     // database is readable/writable
     Utils::Log::addMessage("UserBase", QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
@@ -702,9 +759,8 @@ bool UserBase::saveUser(UserData *user)
 }
 
 /**
-  \brief Delete an user identified by ots \e uuid from the database.
-  \todo delete
-  \todo delete table RIGHTS
+  \brief Delete an user identified by its \e uuid from the database.
+  \todo delete the user's LKID
 */
 bool UserBase::deleteUser(const QString & uuid)
 {
@@ -713,16 +769,51 @@ bool UserBase::deleteUser(const QString & uuid)
     if (! DB.open())
 	Utils::Log::addError("UserBase", QCoreApplication::translate("UserBase", "Unable to open database %1").arg(DB.connectionName()));
 
-    QSqlQuery q(DB);
+    QSqlQuery query(DB);
 
     // delete table USERS
     QHash<int,QString> where;
-    where.insert(USER_UUID, QString("='%1'").arg(uuid));
-    if (! q.exec(prepareDeleteQuery(Table_USERS, where)))
-    {
-	Utils::Log::addQueryError(this, q);
+    where.insert(Constants::USER_UUID, QString("='%1'").arg(uuid));
+    if (!query.exec(prepareDeleteQuery(Table_USERS, where))) {
+        Utils::Log::addQueryError(this, query);
         return false;
     }
+    query.finish();
+    where.clear();
+    where.insert(Constants::DATAS_USER_UUID, QString("='%1'").arg(uuid));
+    if (!query.exec(prepareDeleteQuery(Table_RIGHTS, where))) {
+        Utils::Log::addQueryError(this, query);
+        return false;
+    }
+    query.finish();
+    where.clear();
+    where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
+    if (!query.exec(prepareDeleteQuery(Table_DATAS, where))) {
+        Utils::Log::addQueryError(this, query);
+        return false;
+    }
+    query.finish();
     return true;
 }
 
+int UserBase::getMaxLinkId()
+{
+    QSqlQuery query(database());
+    if (!query.exec(select(Constants::Table_INFORMATIONS, Constants::INFO_MAX_LKID))) {
+        Utils::Log::addQueryError(this, query);
+        return 0;
+    } else {
+        if (query.next())
+            return query.value(0).toInt();
+    }
+    return 0;
+}
+
+void UserBase::updateMaxLinkId(const int max)
+{
+    QSqlQuery query(database());
+    query.prepare(prepareUpdateQuery(Constants::Table_INFORMATIONS, Constants::INFO_MAX_LKID));
+    query.bindValue(0, max);
+    if (!query.exec())
+        Utils::Log::addQueryError(this, query);
+}

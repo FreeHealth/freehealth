@@ -13,7 +13,8 @@ SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp
 
-FORMS = mainwindowpreferenceswidget.ui
+FORMS = mainwindowpreferenceswidget.ui \
+    virtualbasepage.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \

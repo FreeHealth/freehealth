@@ -35,133 +35,22 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEMEDFORMS_MAINWINDOW_H
-#define FREEMEDFORMS_MAINWINDOW_H
-
-#include <fmfmainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
-
-#include <QCloseEvent>
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-class QModelIndex;
-QT_END_NAMESPACE
-
-/**
- * \file mainwindow.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 01 May 2010
-*/
+#ifndef FORMMANAGER_SETTINGS_CONSTANTS_H
+#define FORMMANAGER_SETTINGS_CONSTANTS_H
 
 namespace Form {
-class IFormIO;
-}
+namespace Constants {
 
-namespace Utils {
-class FancyTabWidget;
-}
+    const char * const  S_EPISODEMODEL_FORM_FOREGROUND    = "EpisodeModel/FormForeGround";
+    const char * const  S_EPISODEMODEL_EPISODE_FOREGROUND = "EpisodeModel/EpisodeForeGround";
+    const char * const  S_EPISODEMODEL_DATEFORMAT         = "EpisodeModel/OutputDateFormat";
 
-namespace Patients {
-class PatientBar;
-}
-namespace Form {
-class EpisodeModel;
-}
+    const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
 
-namespace Core {
-class FileManager;
-}
+}  // End namespace Form::Constants
+}  // End namespace Form
 
-namespace MainWin {
-namespace Internal {
-//namespace Ui {
-//class MainWindow;
-//}  // End Ui
-}  // End Internal
-
-class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
-{
-    Q_OBJECT
-    enum { MaxRecentFiles = 10 };
-
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    void init();
-
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-    void refreshPatient() const;
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    QStatusBar *statusBar();
-
-public Q_SLOTS:
-    void postCoreInitialization();
-    void setCurrentPatient(const QModelIndex &index);
-    void setCurrentEpisode(const QModelIndex &index);
-
-    // Interface of MainWidowActionHandler
-//    bool newFile();
-    bool openFile();
-    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
-//    bool saveFile();
-//    bool saveAsFile();
-//    bool print();
-
-    bool createNewPatient();
-    bool viewPatientIdentity();
-    bool removePatient();
-
-    bool applicationPreferences();
-//    bool configureMedintux();
-//
-//    virtual bool aboutApplication();
-//    bool applicationHelp();
-//    bool aboutQt();
-//    bool aboutPlugins();
-
-    void updateCheckerEnd();
-
-    void openLastOpenedForm();
-    void aboutToShowRecentFiles();
-    void aboutToShowRecentPatients();
-    void openRecentFile();
-    void openRecentPatient();
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-
-public:
-    Utils::FancyTabWidget *m_modeStack;
-    Patients::PatientBar *m_PatientBar;
-
-    bool              m_HelpTextShow;
-    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
-    int               m_TimerId;
-    bool              m_OpenLastOpenedForm;
-    QByteArray        windowState;
-
-
-    Form::EpisodeModel *m_EpisodeModel;
-
-    /** \todo Move this Patient History in the ICore ? */
-    Core::FileManager *m_RecentPatients;
-
-    //     mfRecovererThread thread;
-};
-
-} // End Core
-
-#endif  // FREEMEDFORMS_MAINWINDOW_H
+#endif // FORMMANAGER_SETTINGS_CONSTANTS_H

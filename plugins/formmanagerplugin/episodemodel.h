@@ -35,133 +35,95 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEMEDFORMS_MAINWINDOW_H
-#define FREEMEDFORMS_MAINWINDOW_H
+#ifndef EPISODEMODEL_H
+#define EPISODEMODEL_H
 
-#include <fmfmainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
-
-#include <QCloseEvent>
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-class QModelIndex;
-QT_END_NAMESPACE
-
-/**
- * \file mainwindow.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 01 May 2010
-*/
+#include <QAbstractItemModel>
 
 namespace Form {
-class IFormIO;
-}
-
-namespace Utils {
-class FancyTabWidget;
-}
-
-namespace Patients {
-class PatientBar;
-}
-namespace Form {
-class EpisodeModel;
-}
-
-namespace Core {
-class FileManager;
-}
-
-namespace MainWin {
 namespace Internal {
-//namespace Ui {
-//class MainWindow;
-//}  // End Ui
-}  // End Internal
+class EpisodeModelPrivate;
+}
 
-class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
+class EpisodeModel : public QAbstractItemModel
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    void init();
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+    enum DataRepresentation {
+        Label = 0,
+        Date,
+        Summary,
+        FullContent,
+        Id,
+        UserUuid,
+        PatientUuid,
+        FormUuid,
+        IsNewlyCreated,
+        IsEpisode,
+        XmlContent,
+        MaxData
+    };
 
-    void refreshPatient() const;
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    QStatusBar *statusBar();
+    EpisodeModel(QObject *parent);
+    ~EpisodeModel();
+
+    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
+    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
+    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
+    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
+
+    bool isEpisode(const QModelIndex &index) const;
+    bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
+    void setReadOnly(const bool state);
+    bool isReadOnly() const;
+    bool isDirty() const;
+
+    bool submit();
+
+Q_SIGNALS:
+    void episodeAboutToChange(const QModelIndex &index);
+    void episodeAboutToBeDeleted(const QModelIndex &index);
+    void episodeAboutToBeCreated(const QModelIndex &index);
+
+    void episodeChanged(const QModelIndex &index);
+    void episodeDeleted(const QModelIndex &index);
+    void episodeCreated(const QModelIndex &index);
 
 public Q_SLOTS:
-    void postCoreInitialization();
-    void setCurrentPatient(const QModelIndex &index);
-    void setCurrentEpisode(const QModelIndex &index);
+    void setCurrentUser(const QString &uuid);
+    void setCurrentPatient(const QString &uuid);
+    void setCurrentFormUuid(const QString &uuid);
 
-    // Interface of MainWidowActionHandler
-//    bool newFile();
-    bool openFile();
-    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
-//    bool saveFile();
-//    bool saveAsFile();
-//    bool print();
+    bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);
+//    bool saveEpisode(const int id, const QString &formUid);
 
-    bool createNewPatient();
-    bool viewPatientIdentity();
-    bool removePatient();
+    void onCoreDatabaseServerChanged();
 
-    bool applicationPreferences();
-//    bool configureMedintux();
-//
-//    virtual bool aboutApplication();
-//    bool applicationHelp();
-//    bool aboutQt();
-//    bool aboutPlugins();
-
-    void updateCheckerEnd();
-
-    void openLastOpenedForm();
-    void aboutToShowRecentFiles();
-    void aboutToShowRecentPatients();
-    void openRecentFile();
-    void openRecentPatient();
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-
-public:
-    Utils::FancyTabWidget *m_modeStack;
-    Patients::PatientBar *m_PatientBar;
-
-    bool              m_HelpTextShow;
-    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
-    int               m_TimerId;
-    bool              m_OpenLastOpenedForm;
-    QByteArray        windowState;
-
-
-    Form::EpisodeModel *m_EpisodeModel;
-
-    /** \todo Move this Patient History in the ICore ? */
-    Core::FileManager *m_RecentPatients;
-
-    //     mfRecovererThread thread;
+private:
+    Internal::EpisodeModelPrivate *d;
 };
 
-} // End Core
+}  // End namespace Form
 
-#endif  // FREEMEDFORMS_MAINWINDOW_H
+
+#endif // End EPISODEMODEL_H

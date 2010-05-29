@@ -54,6 +54,7 @@
 namespace MainWin {
 namespace Internal {
 class MainWindowPreferencesPage;
+class VirtualBasePage;
 } // End Internal
 
 class MainWindow;
@@ -71,6 +72,7 @@ public:
 private:
     MainWindow *m_MainWindow;
     Internal::MainWindowPreferencesPage *prefPage;
+    Internal::VirtualBasePage *virtualBasePage;
 };
 
 

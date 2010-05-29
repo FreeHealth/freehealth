@@ -653,6 +653,8 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
     QString req = QString("SELECT count(%1) FROM %2").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
+    if (WarnSqlCommands)
+        qWarning() << req;
     QSqlQuery q(req, database());
     if (q.isActive()) {
         if (q.next()) {
@@ -664,6 +666,29 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
         Utils::Log::addQueryError("Database", q);
     }
     return -1;
+}
+
+double Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
+{
+    QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
+                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Tables[tableref])
+                  .arg(d->m_Fields.value(1000 * tableref + groupBy));
+    if (!filter.isEmpty())
+        req += " WHERE " + filter;
+//    if (WarnSqlCommands)
+        qWarning() << req;
+    QSqlQuery q(req, database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0).toDouble();
+        } else {
+            Utils::Log::addQueryError("Database", q);
+        }
+    } else {
+        Utils::Log::addQueryError("Database", q);
+    }
+    return 0;
 }
 
 QString Database::select(const int & tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions)const
@@ -754,7 +779,7 @@ QString Database::prepareInsertQuery(const int & tableref) const
     }
     fields.chop(2);
     numbers.chop(2);
-    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES(%3);")
+    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES (%3);")
             .arg(table(tableref))
             .arg(fields)
             .arg(numbers);

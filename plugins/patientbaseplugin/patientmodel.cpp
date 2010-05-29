@@ -292,7 +292,7 @@ QStringList PatientModel::titles() // static
 void PatientModel::changeUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
-    QList<int> ids = patientBase()->retreivePractionnerLkIds(uuid);
+    QList<int> ids = userModel()->practionnerLkIds(uuid);
     d->m_LkIds.clear();
     foreach(int i, ids)
         d->m_LkIds.append(QString::number(i) + ",");

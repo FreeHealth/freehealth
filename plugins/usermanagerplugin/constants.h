@@ -52,6 +52,7 @@ namespace Constants {
 
     // User Database connection
     const char * const USER_DB_CONNECTION           = "users";
+    const char * const USER_DB_VERSION              = "0.4";
 
     // constants for DATAS table represent DATANAME field
     const char * const USER_DATAS_TITLE             = "identity.title";
@@ -137,7 +138,12 @@ namespace Constants {
     /** \brief Enumerates all the tables of the users' database */
     enum Tables
     {
-        Table_USERS=0, Table_DATAS, Table_RIGHTS, Table_GROUPS,
+        Table_USERS=0,
+        Table_DATAS,
+        Table_RIGHTS,
+        Table_GROUPS,
+        Table_USER_LK_ID,
+        Table_INFORMATIONS,
         Table_MaxParam
     };
 
@@ -177,6 +183,18 @@ namespace Constants {
         GROUPS_UID,
         GROUPS_USER_UID,
         GROUPS_PARENT_GROUP_UID
+    };
+
+    enum LK_Fields {
+        LK_ID = 0,
+        LK_LKID,
+        LK_USER_UUID,
+        LK_GROUP_UUID
+    };
+
+    enum INFO_Fields {
+        INFO_VERSION = 0,
+        INFO_MAX_LKID
     };
 
 }  // End Constants

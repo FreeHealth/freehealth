@@ -49,7 +49,7 @@
 using namespace MainWin;
 
 MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0)
+        m_MainWindow(0), prefPage(0), virtualBasePage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEMEDFORMS::MainWinPlugin";
@@ -66,6 +66,10 @@ MainWinPlugin::~MainWinPlugin()
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;
+    }
+    if (virtualBasePage) {
+        removeObject(virtualBasePage);
+        delete virtualBasePage; virtualBasePage=0;
     }
     // m_MainWindow is deleted by Core
 }
@@ -95,6 +99,8 @@ void MainWinPlugin::extensionsInitialized()
     // Add preferences pages
     prefPage = new Internal::MainWindowPreferencesPage();
     addObject(prefPage);
+    virtualBasePage = new Internal::VirtualBasePage();
+    addObject(virtualBasePage);
 
     m_MainWindow->extensionsInitialized();
 }

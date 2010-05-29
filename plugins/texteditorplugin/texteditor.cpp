@@ -361,8 +361,8 @@ void TextEditor::saveAs()
                                                      QString(), tr( "HTML-Files (*.htm *.html);;All Files (*)" ) );
     if ( fileName.isEmpty() )
         return ;
-    if (Utils::saveStringToFile( Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
-                                    fileName, Utils::WarnUser, this ))
+    if (Utils::saveStringToFile(Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
+                                fileName, Utils::Overwrite, Utils::WarnUser, this ))
         textEdit()->document()->setModified( false );
 }
 

@@ -37,7 +37,7 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "patientbase.h"
+#include "episodebase.h"
 #include "constants_db.h"
 
 #include <utils/global.h>
@@ -62,93 +62,65 @@
 #include <QTreeWidgetItem>
 #include <QFont>
 
-using namespace Patients::Internal;
+using namespace Form::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 
-
-/** \todo move getLkId into UserModel/UserBase */
-
 //namespace Patients {
 //namespace Internal {
-//class PatientBasePrivate
+//class EpisodeBasePrivate
 //{
 //public:
-//    PatientBasePrivate(PatientBase *parent = 0) : q(parent) {}
-//    ~PatientBasePrivate () {}
+//    EpisodeBasePrivate(EpisodeBase *parent = 0) : q(parent) {}
+//    ~EpisodeBasePrivate () {}
 //
 //    void checkDatabaseVersion()
 //    {}
 //
 //private:
-//    PatientBase *q;
+//    EpisodeBase *q;
 //};
 //}
 //}
 
-PatientBase *PatientBase::m_Instance = 0;
-bool PatientBase::m_initialized = false;
+EpisodeBase *EpisodeBase::m_Instance = 0;
+bool EpisodeBase::m_initialized = false;
 
-PatientBase *PatientBase::instance()
+EpisodeBase *EpisodeBase::instance()
 {
     if (!m_Instance) {
-        m_Instance = new PatientBase(qApp);
+        m_Instance = new EpisodeBase(qApp);
         m_Instance->init();
     }
     return m_Instance;
 }
 
-PatientBase::PatientBase(QObject *parent) :
+EpisodeBase::EpisodeBase(QObject *parent) :
         QObject(parent), Utils::Database()
-//        d_prt(new PatientBasePrivate(this))
+//        d_prt(new EpisodeBasePrivate(this))
 {
-    setObjectName("PatientBase");
+    setObjectName("EpisodeBase");
 
-    using namespace Patients::Constants;
-    addTable(Table_IDENT, "PATIENT_IDENTITY");
+    using namespace Form::Constants;
 
-    // Identifiers
-    addField(Table_IDENT, IDENTITY_ID, "IDENT_ID", FieldIsUniquePrimaryKey);
-    addField(Table_IDENT, IDENTITY_UID, "IDENT_UID", FieldIsUUID);
-    addField(Table_IDENT, IDENTITY_LK_TOPRACT_LKID, "TO_PRACT_LKID", FieldIsLongInteger);
-    addField(Table_IDENT, IDENTITY_FAMILY_UID, "IDENT_FAMILY_UID", FieldIsUUID);
-    addField(Table_IDENT, IDENTITY_ISACTIVE, "IDENT_ISACTIVE", FieldIsBoolean, "1");
-    addField(Table_IDENT, IDENTITY_ISVIRTUAL, "IDENT_ISVIRTUAL", FieldIsBoolean, "0");
+    addTable(Table_EPISODES, "EPISODES");
+    addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
+    addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
+    addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
+    addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_DATEOFVALIDATION, "DATEVALIDATION", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_VALIDATED, "VALIDATED", FieldIsBoolean);
 
-    // Identity
-    addField(Table_IDENT, IDENTITY_NAME, "NAME", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_SURNAME, "SURNAME", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_SECONDNAME, "SECONDNAME", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_GENDER, "GENDER", FieldIsOneChar);
-    addField(Table_IDENT, IDENTITY_TITLE, "TITLE", FieldIsInteger);
-    addField(Table_IDENT, IDENTITY_DOB, "DOB", FieldIsDate);
-    addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
-    addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
-    addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
-
-    // Contact
-    addField(Table_IDENT, IDENTITY_ADDRESS_STREET, "STREET", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADDRESS_STREET_NUMBER, "STREET_NUMBER", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADDRESS_ZIPCODE, "ZIP", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADRESS_CITY, "CITY", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADDRESS_COUNTRY, "COUNTRY", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADDRESS_NOTE, "NOTE", FieldIsLongText);
-    addField(Table_IDENT, IDENTITY_MAILS, "MAILS", FieldIsLongText);  // Context:Value;Context;Value... Work:eric@work.fr...
-    addField(Table_IDENT, IDENTITY_TELS, "TELS", FieldIsLongText);  // Context:Value;Context;Value...
-    addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
-
-    // Automate Indexes creation ? or hard coding of indexes
-    // Needed : documents, prescriptions...
-    // Insurances ?
-
-    // Photo
-    addTable(Table_PATIENT_PHOTO, "PATIENT_PHOTO");
-    addField(Table_PATIENT_PHOTO, PHOTO_ID, "PHOTO_ID", FieldIsUniquePrimaryKey);
-    addField(Table_PATIENT_PHOTO, PHOTO_UID, "PHOTO_UID", FieldIsUUID);
-    addField(Table_PATIENT_PHOTO, PHOTO_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
-    addField(Table_PATIENT_PHOTO, PHOTO_BLOB, "PHOTO", FieldIsBlob);
+    addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID, "CONTENT_ID", FieldIsUniquePrimaryKey);
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, "EPISODE_ID", FieldIsInteger);
+    addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, "XML_CONTENT", FieldIsBlob);
 
     // Version
     addTable(Table_VERSION, "VERSION");
@@ -157,7 +129,7 @@ PatientBase::PatientBase(QObject *parent) :
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
-PatientBase::~PatientBase()
+EpisodeBase::~EpisodeBase()
 {
 //    if (d) {
 //        delete d;
@@ -165,7 +137,7 @@ PatientBase::~PatientBase()
 //    }
 }
 
-bool PatientBase::init()
+bool EpisodeBase::init()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -206,7 +178,7 @@ bool PatientBase::init()
     return true;
 }
 
-bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
+bool EpisodeBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
                     const QString & login, const QString & pass,
@@ -239,33 +211,33 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
         if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "PATIENTS_CREATOR");
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "EPISODE_CREATOR");
             d.setHostName(pathOrHostName);
             d.setUserName(login);
             d.setPassword(pass);
             d.setPort(port);
             if (!d.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Patient's database host."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to connect the episodes' database host."),tr("Please contact dev team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
                 Utils::Log::addQueryError("Database", q);
-                Utils::warningMessageBox(tr("Unable to create the Patients database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to create the episodes database."),tr("Please contact dev team."));
                 qApp->exit(1);
                 return false;
             }
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Patients database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to connect the episodes database."),tr("Please contact dev team."));
                 qApp->exit(1);
                 return false;
             }
             DB.setDatabaseName(dbName);
         }
-        if (QSqlDatabase::connectionNames().contains("PATIENTS_CREATOR"))
-            QSqlDatabase::removeDatabase("PATIENTS_CREATOR");
+        if (QSqlDatabase::connectionNames().contains("EPISODE_CREATOR"))
+            QSqlDatabase::removeDatabase("EPISODE_CREATOR");
         if (!DB.open()) {
-            Utils::warningMessageBox(tr("Unable to connect the Patients database."),tr("Please contact dev team."));
+            Utils::warningMessageBox(tr("Unable to connect the episodes database."),tr("Please contact dev team."));
             qApp->exit(1);
             return false;
         }
@@ -284,19 +256,10 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
         return false;
     }
 
-    // inform the version
-    QSqlQuery query(database());
-    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
-    if (!query.exec()) {
-        Utils::Log::addQueryError(this, query);
-        return false;
-    }
-
     return true;
 }
 
-void PatientBase::onCoreDatabaseServerChanged()
+void EpisodeBase::onCoreDatabaseServerChanged()
 {
 //    m_initialized = false;
 //    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
@@ -305,13 +268,13 @@ void PatientBase::onCoreDatabaseServerChanged()
 //    init();
 }
 
-void PatientBase::toTreeWidget(QTreeWidget *tree)
+void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
     QString uuid = userModel()->currentUserData(UserPlugin::User::Uuid).toString();
     QHash<int, QString> where;
+    where.clear();
     /** \todo here */
-//    where.clear();
 //    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
 //    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
 //    where.clear();
@@ -319,9 +282,8 @@ void PatientBase::toTreeWidget(QTreeWidget *tree)
 //    req = getWhereClause(Constants::Table_IDENT, where);
     QFont bold;
     bold.setBold(true);
-    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Patients count");
+    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Episodes count");
     db->setFont(0, bold);
-    new QTreeWidgetItem(db, QStringList() << "Total patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID)));
-//    new QTreeWidgetItem(db, QStringList() << "User's patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID, req)));
+    new QTreeWidgetItem(db, QStringList() << "Total episodes" << QString::number(count(Constants::Table_EPISODES, Constants::EPISODES_ID)));
     tree->expandAll();
 }

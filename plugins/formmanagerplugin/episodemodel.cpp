@@ -38,7 +38,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "episodemodel.h"
-#include "patientbase.h"
+#include "episodebase.h"
 #include "constants_db.h"
 #include "constants_settings.h"
 
@@ -47,6 +47,7 @@
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/icorelistener.h>
@@ -78,25 +79,24 @@ enum {
 #endif
 
 
-using namespace Patients;
-
+using namespace Form;
 using namespace Trans::ConstantTranslations;
 
-static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline QString currentUserUuid() {return userModel()->currentUserData(UserPlugin::User::Uuid).toString();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
 
-namespace Patients {
+namespace Form {
 namespace Internal {
 
 class EpisodesCoreListener : public Core::ICoreListener
 {
     Q_OBJECT
 public:
-    EpisodesCoreListener(Patients::EpisodeModel *parent) : Core::ICoreListener(parent)
+    EpisodesCoreListener(Form::EpisodeModel *parent) : Core::ICoreListener(parent)
     {
         Q_ASSERT(parent);
         m_Model = parent;
@@ -121,7 +121,7 @@ public:
     }
 
 private:
-    Patients::EpisodeModel *m_Model;
+    Form::EpisodeModel *m_Model;
 };
 
 
@@ -273,16 +273,19 @@ private:
     QHash<int, QVariant> m_Datas;
 };
 
-
 class EpisodeModelPrivate
 {
 public:
     EpisodeModelPrivate(EpisodeModel *parent) :
             m_Sql(0), m_RootItem(0),
             m_FormTreeCreated(false),
+            m_ReadOnly(true),
+            m_ActualEpisode(0),
             q(parent)
     {
         m_UserUuid = currentUserUuid();
+        m_TmpFile = settings()->path(Core::ISettings::ApplicationTempPath) + "/FreeMedForms_Episodes.xml";
+        Utils::Log::addMessage(q, "Using temporary path " + m_TmpFile);
         q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(setCurrentUser(QString)));
     }
 
@@ -349,7 +352,7 @@ public:
 
         // get Episodes
         Utils::Log::addMessage(q, "Getting Episodes");
-        QSqlQuery query(patientBase()->database());
+        QSqlQuery query(episodeBase()->database());
         QList<TreeItem *> episodes;
 
         /** \todo add LIMIT to SQL command */
@@ -360,12 +363,12 @@ public:
         foreach(Form::FormMain *f, formsItems.keys()) {
             TreeItem *parent = formsItems.value(f);
             where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(f->uuid()));
-            QString req = patientBase()->select(Patients::Constants::Table_EPISODES,
+            QString req = episodeBase()->select(Form::Constants::Table_EPISODES,
                                                 QList<int>() << Constants::EPISODES_ID
                                                 << Constants::EPISODES_DATE
                                                 << Constants::EPISODES_LABEL,
                                                 where);
-            req += QString(" ORDER BY %1 ASC LIMIT 5;").arg(patientBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE));
+            req += QString(" ORDER BY %1 ASC LIMIT 5;").arg(episodeBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE));
             query.exec(req);
             if (query.isActive()) {
                 QHash<int, QVariant> datas;
@@ -405,11 +408,12 @@ public:
 
     void getXmlContent(TreeItem *item)
     {
+        qWarning() << "getXmlContent" << item;
         /** \todo create a QCache system to avoid memory overusage */
         QHash<int, QString> where;
         where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(item->data(EpisodeModel::Id).toString()));
-        QString req = patientBase()->select(Patients::Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
-        QSqlQuery query(patientBase()->database());
+        QString req = episodeBase()->select(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
+        QSqlQuery query(episodeBase()->database());
         query.exec(req);
         if (query.isActive()) {
             if (query.next()) {
@@ -421,6 +425,77 @@ public:
         query.finish();
     }
 
+    bool saveEpisode(TreeItem *item, const QString &formUid)
+    {
+        qWarning() << "saveEpisode" << item << formUid;
+        // check each item --> isModified ?
+        FormMain *form = formManager()->form(formUid);
+        if (!form)
+            return false;
+
+        bool formIsModified = false;
+        QHash<QString, FormItem *> items;
+        foreach(FormItem *it, form->formItemChildren()) {
+            /** \todo check nested items */
+            if (it->itemDatas()) {
+                if (it->itemDatas()->isModified()) {
+                    qWarning() << it->uuid() << "is modified";
+                    formIsModified = true;
+                }
+                items.insert(it->uuid(), it);
+            }
+        }
+
+        // no changes == nothing to do
+        if (!formIsModified)
+            return true;
+
+        // ask user what to do
+//        if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
+//            bool yes = Utils::yesNoMessageBox(tr("Save episode ?"),
+//                                              tr("The actual episode has been modified. Do you want to save changes in your database ?\n"
+//                                                 "Answering 'No' will cause definitve data lose."),
+//                                              "", tr("Save episode"));
+//            if (!yes)
+//                return true;
+//        }
+
+        // create the XML episode file
+        QHash<QString, QString> datas;
+        foreach(FormItem *it, items) {
+            datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
+        }
+
+        QString xml = Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
+
+        item->setData(EpisodeModel::XmlContent, xml);
+//        qWarning() << "SAVE" << item->data(EpisodeModel::XmlContent);
+
+
+        // save the XML episode into temporary file
+        /** \todo save modified xmlcontent to the item (into a temp db ?), create a cache for the xmlcontent. */
+        // Utils::saveStringToFile(xml, m_TmpFile, Utils::AppendToFile, Utils::DontWarnUser);
+        QSqlQuery query(episodeBase()->database());
+        QHash<int, QString> where;
+        where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, "="+QString::number(item->data(EpisodeModel::Id).toInt()));
+        // first check that the episodeId already exists
+        int count = episodeBase()->count(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_EPISODE_ID, episodeBase()->getWhereClause(Constants::Table_EPISODE_CONTENT, where));
+        if (count) {
+            query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where));
+            query.bindValue(0, xml);
+        } else {
+            query.prepare(episodeBase()->prepareInsertQuery(Constants::Table_EPISODE_CONTENT));
+            query.bindValue(Constants::EPISODE_CONTENT_ID, QVariant());
+            query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, item->data(EpisodeModel::Id).toInt());
+            query.bindValue(Constants::EPISODE_CONTENT_XML, xml);
+        }
+        if (!query.exec()) {
+            Utils::Log::addQueryError(q, query);
+        }
+
+        return true;
+    }
+
 public:
     QSqlTableModel *m_Sql;
     TreeItem *m_RootItem;
@@ -428,6 +503,9 @@ public:
     bool m_FormTreeCreated;
     bool m_ReadOnly;
     QHash<Form::FormMain *, TreeItem *> formsItems;
+    TreeItem *m_ActualEpisode;
+    QString m_ActualEpisode_FormUid;
+    QString m_TmpFile;
 
 private:
     EpisodeModel *q;
@@ -437,9 +515,10 @@ private:
 
 
 EpisodeModel::EpisodeModel(QObject *parent) :
-        QAbstractItemModel(parent), d(new Internal::EpisodeModelPrivate(this))
+        QAbstractItemModel(parent), d(0)
 {
     setObjectName("EpisodeModel");
+    d = new Internal::EpisodeModelPrivate(this);
 //    d->connectSqlPatientSignals();
     setCurrentUser(d->m_UserUuid);
     d->createFormTree();
@@ -467,11 +546,12 @@ void EpisodeModel::onCoreDatabaseServerChanged()
 void EpisodeModel::setCurrentUser(const QString &uuid)
 {
     d->m_UserUuid = uuid;
-    QList<int> ids = patientBase()->retreivePractionnerLkIds(uuid);
-    d->m_LkIds.clear();
-    foreach(int i, ids)
-        d->m_LkIds.append(QString::number(i) + ",");
-    d->m_LkIds.chop(1);
+    /** \todo here */
+//    QList<int> ids = episodeBase()->retreivePractionnerLkIds(uuid);
+//    d->m_LkIds.clear();
+//    foreach(int i, ids)
+//        d->m_LkIds.append(QString::number(i) + ",");
+//    d->m_LkIds.chop(1);
     d->refreshEpisodes();
 }
 
@@ -705,7 +785,6 @@ bool EpisodeModel::isDirty() const
     return false;
 }
 
-
 bool EpisodeModel::submit()
 {
 //    if (d->m_ReadOnly)
@@ -713,5 +792,66 @@ bool EpisodeModel::submit()
 //
 //    d->saveModelDatas();
 //    d->deleteRowsInDatabase();
+    return true;
+}
+
+bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &formUid) //, const QString &xmlcontent)
+{
+    // save actual episode if needed
+    if (d->m_ActualEpisode) {
+        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid))
+            Utils::Log::addError(this, "Unable to save actual episode before editing a new one");
+    }
+
+    // stores the actual episode id
+    d->m_ActualEpisode = d->getItem(index);
+    d->m_ActualEpisode_FormUid = formUid;
+
+    // clear actual form
+    FormMain *form = formManager()->form(formUid);
+    if (!form)
+        return false;
+    form->clear();
+
+    qWarning() << "EpisodeModel::activateEpisode" << d->m_ActualEpisode->data(Id).toInt() << formUid;
+//    qWarning() << xmlcontent;
+
+    QString xml = d->m_ActualEpisode->data(XmlContent).toString();
+    if (xml.isEmpty()) {
+        d->getXmlContent(d->m_ActualEpisode);
+        xml = d->m_ActualEpisode->data(XmlContent).toString();
+    }
+//    qWarning() << xml;
+
+    if (xml.isEmpty())
+        return true;
+
+    // read the xml'd content
+    QHash<QString, QString> datas;
+    if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+        Utils::Log::addError(this, QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
+        return false;
+    }
+
+    // put datas into the FormItems of the form
+    // XML content ==
+    // <formitemuid>value</formitemuid>
+    QHash<QString, FormItem *> items;
+    foreach(FormItem *it, form->formItemChildren()) {
+        /** \todo check nested items */
+        items.insert(it->uuid(), it);
+    }
+
+    foreach(const QString &s, datas.keys()) {
+        FormItem *it = items.value(s, 0);
+        if (!it) {
+            qWarning() << "FormManager::activateForm :: ERROR : no item :" << s;
+            continue;
+        }
+        if (it->itemDatas())
+            it->itemDatas()->setStorableData(datas.value(s));
+        else
+            qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << s;
+    }
     return true;
 }

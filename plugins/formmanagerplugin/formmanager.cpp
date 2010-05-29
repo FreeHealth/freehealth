@@ -41,6 +41,8 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 
@@ -66,6 +68,7 @@ using namespace Form::Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 
 namespace Form {
@@ -78,7 +81,7 @@ class FormManagerPrivate
 {
 public:
     FormManagerPrivate(FormManager *parent) :
-            m_Holder(0), q(parent)
+            m_Holder(0), m_ActualEpisode(-1), q(parent)
     {}
 
     ~FormManagerPrivate()
@@ -226,12 +229,20 @@ bool FormManager::translateForms()
 
 bool FormManager::activateEpisode(const int id, const QString &formUid, const QString &xmlcontent)
 {
+    // save actual episode if needed
+    if (d->m_ActualEpisode!=-1) {
+        if (!saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid))
+            Utils::Log::addError(this, "Unable to save actual episode before editing a new one");
+    }
+
     // stores the actual episode id
     d->m_ActualEpisode = id;
     d->m_ActualEpisode_FormUid = formUid;
 
     // clear actual form
     FormMain *form = this->form(formUid);
+    if (!form)
+        return false;
     form->clear();
 
     qWarning() << "FormManager::activateEpisode" << id << formUid << xmlcontent;
@@ -251,11 +262,12 @@ bool FormManager::activateEpisode(const int id, const QString &formUid, const QS
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
     foreach(FormItem *it, form->formItemChildren()) {
+        /** \todo check nested items */
         items.insert(it->uuid(), it);
     }
 
-    qWarning() << items;
-    qWarning() << datas;
+//    qWarning() << items;
+//    qWarning() << datas;
 
     foreach(const QString &s, datas.keys()) {
         FormItem *it = items.value(s, 0);
@@ -271,148 +283,49 @@ bool FormManager::activateEpisode(const int id, const QString &formUid, const QS
     return true;
 }
 
-//void mfMainWidget::addNewFile()
-//{
-//    QTreeWidgetItem * item = m_Tree->currentItem();
-//    if ( !item ) return;
-//
-//    // Append retrieved form to the actual form inside the good object
-//    mfObject * parent = m_FormList.at( item->data( LabelColumn, Qt::UserRole ).toInt() );
-//    if ( !parent ) return;
-//
-//    // Ask for a file and retreive the form using mfFormsIO
-//    mfIOInterface *ioPlugin = mfCore::pluginsManager()->currentIO();
-//    if ( !ioPlugin )
-//    {
-//        tkLog::addError( this , tr( "Main Wigdet ERROR : Laoding form : no IO plugin defined." ) );
-//        return;
-//    }
-//
-//    // Ask a file
-//    QString fileName = QFileDialog::getOpenFileName( this, qApp->applicationName() , mfCore::settings()->formPath() );
-//    if ( fileName.isEmpty() ) return;
-//
-//    mfObject * mfo = ioPlugin->loadForm( mfIOPlace::fromLocalFile( fileName ) );
-//    if ( !mfo ) return;
-//
-//    mfo->setParent( parent );
-//    createForm( mfo, item );
-//    m_Tree->resizeColumnToContents( LabelColumn );
-//    tkLog::addMessage( this , tr ( "Main Widget INFO : Form %1 correctly added" ).arg( fileName ) );
-//}
+bool FormManager::saveEpisode(const int id, const QString &formUid)
+{
+    // check each item --> isModified ?
+    FormMain *form = this->form(formUid);
+    if (!form)
+        return false;
 
+    bool formIsModified = false;
+    QHash<QString, FormItem *> items;
+    foreach(FormItem *it, form->formItemChildren()) {
+        /** \todo check nested items */
+        if (it->itemDatas()) {
+            if (it->itemDatas()->isModified()) {
+                qWarning() << it->uuid() << "is modified";
+                formIsModified = true;
+            }
+            items.insert(it->uuid(), it);
+        }
+    }
 
-//void mfMainWidget::removeSubForm()
-//{
-//    QTreeWidgetItem * item = m_Tree->currentItem();
-//    if ( !item ) return;
-//    if ( ( item == m_Tree->topLevelItem( 0 ) ) ||  ( m_FormList.count() < 2 ) )
-//    {
-//        QMessageBox::warning( this, qApp->applicationName(),
-//                              tr( "You can not delete the root form." ) );
-//        return;
-//    }
-//
-//    // get selected treeitem
-//    int id = item->data( LabelColumn, Qt::UserRole ).toInt();
-//    //     qWarning() << id;
-//    mfObject * mfo = m_FormList[id];
-//
-//    if ( mfo->isModified() )
-//    {
-//        if ( QMessageBox::warning( this, qApp->applicationName(),
-//                                   tr( "The form %1 has been modified.\n"
-//                                       "Do you really want to delete it ?" ).arg( mfo->label() ),
-//                                   QMessageBox::Ok | QMessageBox::Cancel ) == QMessageBox::Cancel )
-//            return;
-//    }
-//
-//    // delete all reference to itemwidget
-//    if ( m_FormNavRecord )
-//        m_FormNavOffset -= m_FormNavList.removeAll( item );
-//
-//    // clear all and redraw form
-//    m_Tree->clear();
-//    m_FormList.clear();
-//
-//    int i = 0;
-//    for ( i = m_Stack->count(); i > -1; --i )
-//    {
-//        m_Stack->removeWidget( m_Stack->widget( i ) );
-//        delete m_Stack->widget( i );
-//    }
-//
-//    delete mfo;
-//    createForm( m_RootObject );
-//
-//}
+    // no changes == nothing to do
+    if (!formIsModified)
+        return true;
 
-//void mfMainWidget::hideShowTree()
-//{
-//    m_Tree->setVisible( !m_Tree->isVisible() );
-//}
+    // ask user what to do
+    if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
+        bool yes = Utils::yesNoMessageBox(tr("Save episode ?"),
+                                          tr("The actual episode has been modified. Do you want to save changes in your database ?\n"
+                                             "Answering 'No' will cause definitve data lose."),
+                                          "", tr("Save episode"));
+        if (!yes)
+            return true;
+    }
 
+    // create the XML episode file
+    QHash<QString, QString> datas;
+    foreach(FormItem *it, items) {
+        datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
+    }
 
-//void mfMainWidget::translateTreeItem( QTreeWidgetItem * item )
-//{
-//    if ( !item ) return;
-//    int id = item->data( LabelColumn, Qt::UserRole ).toInt();
-//    item->setText( LabelColumn, m_FormList[id]->label() );
-//    translateTreeItem( m_Tree->itemBelow( item ) );
-//}
+    QString xml = Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
 
-//void mfMainWidget::aboutToShowAddMenu()
-//{
-//    m_addMenu->clear();
-//
-//    QMenu *menu = m_addMenu->addMenu( tr( "a new form" ) );
-//    QAction *action;
-//
-//    if ( m_Tree->currentItem() )
-//    {
-//        action = menu->addAction( tr( "as a child of \"%1\"" ).arg( m_Tree->currentItem()->text( 0 ) ) );
-//        connect( action, SIGNAL( triggered() ), this, SLOT( addChildOnCurrentForm() ) );
-//    }
-//    action = menu->addAction( tr( "as a root" ) );
-//    connect( action, SIGNAL( triggered() ), this, SLOT( addRootForm() ) );
-//}
+    // save the XML episode file in database
 
-//void mfMainWidget::addRootForm()
-//{
-//}
-
-//void mfMainWidget::gotoPrevious()
-//{
-//    if ( m_FormNavOffset > 0 )
-//    {
-//        m_FormNavOffset--;
-//        m_FormNavRecord = false;
-//        m_Tree->setCurrentItem( m_FormNavList[m_FormNavOffset] );
-//        m_FormNavRecord = true;
-//    }
-//    nextAct->setEnabled( nextIsPossible() );
-//    previousAct->setEnabled( previousIsPossible() );
-//}
-
-//void mfMainWidget::gotoNext()
-//{
-//    if ( m_FormNavOffset >= 0 && m_FormNavOffset < m_FormNavList.count() - 1 )
-//    {
-//        m_FormNavOffset++;
-//        m_FormNavRecord = false;
-//        m_Tree->setCurrentItem( m_FormNavList[m_FormNavOffset] );
-//        m_FormNavRecord = true;
-//    }
-//    nextAct->setEnabled( nextIsPossible() );
-//    previousAct->setEnabled( previousIsPossible() );
-//}
-
-//bool mfMainWidget::previousIsPossible() const
-//{
-//    return m_FormNavOffset > 0;
-//}
-
-//bool mfMainWidget::nextIsPossible() const
-//{
-//    return m_FormNavOffset < m_FormNavList.count() - 1;
-//}
+    return true;
+}

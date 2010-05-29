@@ -40,8 +40,6 @@
 #ifndef USERMODEL_H
 #define USERMODEL_H
 
-class tkTextDocumentExtra;
-
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <usermanagerplugin/global.h>
 #include <usermanagerplugin/constants.h>
@@ -108,6 +106,9 @@ public:
     { return QStringList() << tr("Mister") << tr("Miss") << tr("Misses") << tr("Child") << tr("Doctor") << tr("Professor") << tr("Director"); }
     QStringList genders() const
     { return QStringList() << tr("F") << tr("M"); }
+
+
+    QList<int> practionnerLkIds(const QString &uid);
 
     int numberOfUsersInMemory();
 

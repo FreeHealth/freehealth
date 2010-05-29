@@ -81,6 +81,8 @@ using namespace UserPlugin;
 using namespace UserPlugin::Constants;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
+
 
 namespace UserPlugin {
 namespace Internal {
@@ -355,24 +357,38 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
     for (i=0;i<count;i++)
     {
         // create a new empty tkUser
-        if (! QSqlTableModel::insertRows(row + i, 1, parent)) {
+        if (!QSqlTableModel::insertRows(row + i, 1, parent)) {
             Utils::Log::addError(this, QString("Can not create a new user into SQL Table."));
             return i;
         }
-        QString uuid = d->createNewEmptyUser(this, row+i);
         // feed the QSqlTableModel with uuid and crypted empty password
+        QString uuid = d->createNewEmptyUser(this, row+i);
         QModelIndex newIndex = index(row+i, User::Uuid);
-        if (! QSqlTableModel::setData(newIndex, uuid, Qt::EditRole)) {
+        if (!QSqlTableModel::setData(newIndex, uuid, Qt::EditRole)) {
             Utils::Log::addError(this, QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
         }
         newIndex = index(row+i, User::Password);
-        if (! QSqlTableModel::setData(newIndex, UserPlugin::crypt(""), Qt::EditRole)) {
+        if (!QSqlTableModel::setData(newIndex, UserPlugin::crypt(""), Qt::EditRole)) {
             Utils::Log::addError(this, QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
         }
+        // define a lkid for this user
+        int maxLkId = userBase()->getMaxLinkId();
+        qWarning() << maxLkId;
+        /** \todo user already have a lkid ? --> manage this */
+        QSqlQuery query(database());
+        query.prepare(userBase()->prepareInsertQuery(Constants::Table_USER_LK_ID));
+        query.bindValue(Constants::LK_ID, QVariant());
+        query.bindValue(Constants::LK_GROUP_UUID, QVariant());
+        query.bindValue(Constants::LK_USER_UUID, uuid);
+        query.bindValue(Constants::LK_LKID, maxLkId + 1);
+        if (!query.exec()) {
+            Utils::Log::addQueryError(this, query);
+        }
+        userBase()->updateMaxLinkId(maxLkId + 1);
     }
     emit memoryUsageChanged();
     return i;
@@ -684,8 +700,7 @@ void UserModel::revertRow(int row)
 {
     QString uuid = QSqlTableModel::index(row, USER_UUID).data().toString();
     QSqlTableModel::revertRow(row);
-    if (d->m_Uuid_UserList.keys().contains(uuid))
-    {
+    if (d->m_Uuid_UserList.keys().contains(uuid)) {
         delete d->m_Uuid_UserList[uuid];
         d->m_Uuid_UserList[uuid] = 0;
         d->m_Uuid_UserList.remove(uuid);
@@ -718,6 +733,31 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
     filter.chop(5);
     QSqlTableModel::setFilter(filter);
 //    qWarning() << filter;
+}
+
+QList<int> UserModel::practionnerLkIds(const QString &uid)
+{
+    /** \todo manage user's groups */
+    if (d->m_Uuid_UserList.keys().contains(uid)) {
+        Internal::UserData *user = d->m_Uuid_UserList.value(uid);
+        return user->linkIds();
+    }
+    QList<int> lk_ids;
+    if (uid.isEmpty())
+        return lk_ids;
+
+    QHash<int, QString> where;
+    where.clear();
+    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uid));
+    QString req = userBase()->select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
+    QSqlQuery query(req, userBase()->database());
+    if (query.isActive()) {
+        while (query.next())
+            lk_ids.append(query.value(0).toInt());
+    } else {
+        Utils::Log::addQueryError("UserModel", query);
+    }
+    return lk_ids;
 }
 
 /** \brief Returns the number of user stored into the memory. */

@@ -91,7 +91,7 @@
 
 
 // TEST
-#include <patientbaseplugin/episodemodel.h>
+#include <formmanagerplugin/episodemodel.h>
 #include <patientbaseplugin/patientmodel.h>
 // END TEST
 
@@ -264,11 +264,11 @@ void MainWindow::postCoreInitialization()
 
     // TEST
     // Add EpisodeModel
-    m_EpisodeModel = new Patients::EpisodeModel(this);
+    m_EpisodeModel = new Form::EpisodeModel(this);
     formManager()->formPlaceHolder()->formTree()->setModel(m_EpisodeModel);
-    for(int i=0; i<Patients::EpisodeModel::MaxData; ++i)
+    for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
         formManager()->formPlaceHolder()->formTree()->setColumnHidden(i, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Patients::EpisodeModel::Label, false);
+    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Form::EpisodeModel::Label, false);
     formManager()->formPlaceHolder()->formTree()->expandAll();
 
     connect(formManager()->formPlaceHolder()->formTree(), SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
@@ -301,14 +301,14 @@ void MainWindow::setCurrentEpisode(const QModelIndex &index)
         return;
     }
     // inform formplaceholder --> refresh form view
-    QString formUuid = m_EpisodeModel->index(index.row(), Patients::EpisodeModel::FormUuid, index.parent()).data().toString();
+    QString formUuid = m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     formManager()->formPlaceHolder()->setCurrentForm(formUuid);
 
     int episode = -1;
     if (m_EpisodeModel->isEpisode(index)) {
-        episode = m_EpisodeModel->index(index.row(), Patients::EpisodeModel::Id, index.parent()).data().toInt();
-        // inform formmanager
-        formManager()->activateEpisode(episode, formUuid, m_EpisodeModel->index(index.row(), Patients::EpisodeModel::XmlContent, index.parent()).data().toString());
+        episode = m_EpisodeModel->index(index.row(), Form::EpisodeModel::Id, index.parent()).data().toInt();
+//        m_EpisodeModel->activateEpisode(episode, formUuid, m_EpisodeModel->index(index.row(), Form::EpisodeModel::XmlContent, index.parent()).data().toString());
+        m_EpisodeModel->activateEpisode(index, formUuid);
     }
 }
 
@@ -399,13 +399,19 @@ bool MainWindow::createNewPatient()
 {
     Patients::PatientCreatorWizard wiz(this);
     wiz.exec();
+    return true;
 }
 
 bool MainWindow::viewPatientIdentity()
-{}
+{
+    return true;
+}
 
 bool MainWindow::removePatient()
-{}
+{
+    /** \todo write MainWindow::removePatient() */
+    return true;
+}
 
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()

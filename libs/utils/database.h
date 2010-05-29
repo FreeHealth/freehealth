@@ -197,7 +197,9 @@ public:
     virtual QString select(const int & tableref, const int & fieldref) const;
     virtual QString selectDistinct( const int & tableref, const int & fieldref, const QHash<int, QString> &conditions ) const;
     virtual QString selectDistinct( const int & tableref, const int & fieldref ) const;
+
     virtual int count( const int & tableref, const int & fieldref, const QString &filter = QString()) const;
+    virtual double max( const int & tableref, const int & fieldref, const int &groupBy, const QString &filter = QString()) const;
 
     virtual QString prepareInsertQuery( const int & tableref ) const;
 

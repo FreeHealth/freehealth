@@ -235,6 +235,10 @@ public:
     // Rights getters
     QVariant rightsValue(const char *name) const;
 
+    // Linkers
+    QList<int> linkIds() const;
+    QString linkIdsToString() const;
+
     // viewers
     void warn() const;
     QStringList warnText() const;
@@ -245,6 +249,7 @@ protected: // use only with database tkUserBase
     void setValue(const int tableref, const int fieldref, const QVariant & val);
     void addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list);
     void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val);
+    void setLkIds(const QList<int> &lkids);
 
     // getters for database
     bool hasModifiedDynamicDatasToStore() const;

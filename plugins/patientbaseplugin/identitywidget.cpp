@@ -43,6 +43,7 @@
 #include "constants_db.h"
 
 #include "ui_identitywidget.h"
+#include "ui_identityviewer.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -64,7 +65,7 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 
 /**
   \todo Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
-  \todo Create a viewUi for the readonly mode (more compact) */
+  \todo Create a viewUi for the readonly mode (more compact)
 */
 
 namespace Patients {
@@ -73,13 +74,19 @@ class IdentityWidgetPrivate
 {
 public:
     IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
-            editUi(new Ui::IdentityWidget), m_Mapper(0), m_EditMode(mode), q(parent)
+            editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), q(parent)
     {
-        editUi->setupUi(q);
-        editUi->genderCombo->addItems(PatientModel::genders());
-        editUi->titleCombo->addItems(PatientModel::titles());
-        editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
-        q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+        if (mode==IdentityWidget::ReadOnlyMode) {
+            viewUi = new Ui::IdentityViewer;
+            viewUi->setupUi(q);
+        } else {
+            editUi = new Ui::IdentityWidget;
+            editUi->setupUi(q);
+            editUi->genderCombo->addItems(PatientModel::genders());
+            editUi->titleCombo->addItems(PatientModel::titles());
+            editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+            q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+        }
     }
 
     ~IdentityWidgetPrivate()
@@ -88,21 +95,19 @@ public:
             delete editUi;
             editUi = 0;
         }
-//        if (viewUi) {
-//            delete viewUi;
-//            viewUi = 0;
-//        }
+        if (viewUi) {
+            delete viewUi;
+            viewUi = 0;
+        }
         if (m_Mapper) {
             delete m_Mapper;
             m_Mapper = 0;
         }
     }
 
-
     void createMapper()
     {
-//        if (m_EditMode == IdentityWidget::ReadWriteMode) {
-
+        if (m_EditMode == IdentityWidget::ReadWriteMode) {
             if (m_Mapper) {
                 delete m_Mapper;
                 m_Mapper = 0;
@@ -121,12 +126,11 @@ public:
             m_Mapper->addMapping(editUi->zipcode, PatientModel::ZipCode, "text");
             m_Mapper->addMapping(editUi->country, PatientModel::Country, "text");
             m_Mapper->toFirst();
-//        } else {
-            // Fill labels with values, hide editors
-//        }
+        }
     }
 public:
     Ui::IdentityWidget *editUi;
+    Ui::IdentityViewer *viewUi;
     QDataWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityWidget::EditMode m_EditMode;
@@ -156,10 +160,34 @@ void IdentityWidget::setCurrentPatientModel(Patients::PatientModel *model)
 
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    d->m_Mapper->setCurrentModelIndex(patientIndex);
-    // load photo
     QPixmap photo = d->m_PatientModel->index(patientIndex.row(), PatientModel::Photo).data().value<QPixmap>();
-    d->editUi->photoButton->setIcon(photo);
+    if (d->m_Mapper) {
+        d->m_Mapper->setCurrentModelIndex(patientIndex);
+        d->editUi->photoButton->setIcon(photo);
+    } else {
+        d->viewUi->name->clear();
+        d->viewUi->photoLabel->clear();
+        d->viewUi->ageDOB->clear();
+        d->viewUi->sex->clear();
+        d->viewUi->fullAdress1->clear();
+        d->viewUi->fullAdress2->clear();
+        QString name = d->m_PatientModel->index(patientIndex.row(), PatientModel::FullName).data().toString();
+        const QString &title = d->m_PatientModel->index(patientIndex.row(), PatientModel::Title).data().toString();
+        if (!title.isEmpty())
+            name.prepend(title + " ");
+        d->viewUi->name->setText(name);
+        d->viewUi->photoLabel->setPixmap(photo);
+        const QString &age = d->m_PatientModel->index(patientIndex.row(), PatientModel::Age).data().toString();
+        const QString &dob = d->m_PatientModel->index(patientIndex.row(), PatientModel::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
+        if (!age.isEmpty() && !dob.isEmpty())
+            d->viewUi->ageDOB->setText(age + "; " + tr("born on") + " " + dob);
+        const QIcon &icon = d->m_PatientModel->index(patientIndex.row(), PatientModel::IconizedGender).data().value<QIcon>();
+        d->viewUi->sex->setPixmap(icon.pixmap(QSize(64,64)));
+        d->viewUi->fullAdress1->setText(d->m_PatientModel->index(patientIndex.row(), PatientModel::Street).data().toString());
+        d->viewUi->fullAdress2->setText(d->m_PatientModel->index(patientIndex.row(), PatientModel::City).data().toString() + " " +
+                                        d->m_PatientModel->index(patientIndex.row(), PatientModel::ZipCode).data().toString() + " " +
+                                        d->m_PatientModel->index(patientIndex.row(), PatientModel::Country).data().toString());
+    }
 }
 
 bool IdentityWidget::isIdentityValid() const
