@@ -65,12 +65,15 @@ public:
         IsNewlyCreated,
         IsEpisode,
         XmlContent,
+        EmptyColumn1,
+        EmptyColumn2,
         MaxData
     };
 
     EpisodeModel(QObject *parent);
     ~EpisodeModel();
     static EpisodeModel *instance();
+    void init();
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     QModelIndex parent(const QModelIndex &index) const;

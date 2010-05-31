@@ -43,6 +43,7 @@
 #include "constants_settings.h"
 
 #include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/constants.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -230,7 +231,6 @@ public:
 
     bool removeEpisodes()
     {
-        qWarning() << "remove" << data(EpisodeModel::Label);
         foreach(TreeItem *item, m_Children) {
             if (item->isEpisode()) {
                 m_Children.removeAll(item);
@@ -316,6 +316,7 @@ public:
 
         if (m_RootItem) {
             delete m_RootItem;
+            m_RootItem = 0;
         }
 
         // create root item
@@ -351,6 +352,7 @@ public:
             }
             it->setModified(false);
         }
+
 //        sortItems();
         m_FormTreeCreated = true;
     }
@@ -379,6 +381,8 @@ public:
 
         // delete old episodes
         deleteEpisodes(m_RootItem);
+        m_ActualEpisode = 0;
+        m_ActualEpisode_FormUid = "";
 
         // get Episodes
         Utils::Log::addMessage(q, "Getting Episodes");
@@ -415,9 +419,11 @@ public:
                     datas.clear();
                 }
                 // reparent items in reverse order (items.prepend -- not append) to keep the SQL order
+                int zz = 0;
                 foreach(TreeItem *it, items) {
                     it->setParent(parent);
-                    parent->addChildren(it);
+                    parent->insertChild(zz, it);
+                    ++zz;
                 }
             } else {
                 Utils::Log::addQueryError(q, query);
@@ -438,7 +444,7 @@ public:
 
     void getXmlContent(TreeItem *item)
     {
-//        qWarning() << "getXmlContent" << item;
+//        qWarning() << "getXmlContent" << item->data(EpisodeModel::Label);
         /** \todo create a QCache system to avoid memory overusage */
         if (item->isNewlyCreated())
             return;
@@ -517,53 +523,87 @@ public:
         }
 
         // no changes == nothing to do
-        if (!formIsModified)
-            return true;
+        if (formIsModified) {
+            // ask user what to do
+            if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
+                bool yes = Utils::yesNoMessageBox(q->tr("Save episode ?"),
+                                                  q->tr("The actual episode has been modified. Do you want to save changes in your database ?\n"
+                                                     "Answering 'No' will cause definitve data lose."),
+                                                  "", q->tr("Save episode"));
+                if (!yes) {
+                    saveEpisodeHeaders(form, item);
+                    return true;
+                }
+            }
 
-        // ask user what to do
-//        if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
-//            bool yes = Utils::yesNoMessageBox(tr("Save episode ?"),
-//                                              tr("The actual episode has been modified. Do you want to save changes in your database ?\n"
-//                                                 "Answering 'No' will cause definitve data lose."),
-//                                              "", tr("Save episode"));
-//            if (!yes)
-//                return true;
-//        }
+            // create the XML episode file
+            QHash<QString, QString> datas;
+            foreach(FormItem *it, items) {
+                datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
+            }
 
-        // create the XML episode file
-        QHash<QString, QString> datas;
-        foreach(FormItem *it, items) {
-            datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
+            QString xml = Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
+
+            item->setData(EpisodeModel::XmlContent, xml);
+            //        qWarning() << "SAVE" << item->data(EpisodeModel::XmlContent);
+
+            // save the XML episode into temporary file
+            /** \todo save modified xmlcontent to the item (into a temp db ?), create a cache for the xmlcontent. */
+            // Utils::saveStringToFile(xml, m_TmpFile, Utils::AppendToFile, Utils::DontWarnUser);
+            QSqlQuery query(episodeBase()->database());
+            QHash<int, QString> where;
+            where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, "="+QString::number(item->data(EpisodeModel::Id).toInt()));
+            // first check that the episodeId already exists
+            int count = episodeBase()->count(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_EPISODE_ID, episodeBase()->getWhereClause(Constants::Table_EPISODE_CONTENT, where));
+            if (count) {
+                query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where));
+                query.bindValue(0, xml);
+            } else {
+                query.prepare(episodeBase()->prepareInsertQuery(Constants::Table_EPISODE_CONTENT));
+                query.bindValue(Constants::EPISODE_CONTENT_ID, QVariant());
+                query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, item->data(EpisodeModel::Id).toInt());
+                query.bindValue(Constants::EPISODE_CONTENT_XML, xml);
+            }
+            if (!query.exec()) {
+                Utils::Log::addQueryError(q, query);
+            }
+            query.finish();
         }
 
-        QString xml = Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
+        saveEpisodeHeaders(form, item);
 
-        item->setData(EpisodeModel::XmlContent, xml);
-//        qWarning() << "SAVE" << item->data(EpisodeModel::XmlContent);
+        return true;
+    }
 
+    void saveEpisodeHeaders(FormMain *form, TreeItem *itemToSave)
+    {
+        // retreive date/label of episode
+        const QString &newLabel = form->itemDatas()->data(IFormItemData::ID_EpisodeLabel).toString();
+        const QDateTime &newDate = form->itemDatas()->data(IFormItemData::ID_EpisodeDate).toDateTime();
+        if ((newLabel==itemToSave->data(EpisodeModel::Label).toString()) &&
+            (newDate==itemToSave->data(EpisodeModel::Date).toDateTime()))
+            return;
 
-        // save the XML episode into temporary file
-        /** \todo save modified xmlcontent to the item (into a temp db ?), create a cache for the xmlcontent. */
-        // Utils::saveStringToFile(xml, m_TmpFile, Utils::AppendToFile, Utils::DontWarnUser);
+        const QString &episodeId = itemToSave->data(EpisodeModel::Id).toString();
+        itemToSave->setData(EpisodeModel::Label, newLabel);
+        itemToSave->setData(EpisodeModel::Date, newDate);
+
+        // save label and date
         QSqlQuery query(episodeBase()->database());
         QHash<int, QString> where;
-        where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, "="+QString::number(item->data(EpisodeModel::Id).toInt()));
-        // first check that the episodeId already exists
-        int count = episodeBase()->count(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_EPISODE_ID, episodeBase()->getWhereClause(Constants::Table_EPISODE_CONTENT, where));
-        if (count) {
-            query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where));
-            query.bindValue(0, xml);
-        } else {
-            query.prepare(episodeBase()->prepareInsertQuery(Constants::Table_EPISODE_CONTENT));
-            query.bindValue(Constants::EPISODE_CONTENT_ID, QVariant());
-            query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, item->data(EpisodeModel::Id).toInt());
-            query.bindValue(Constants::EPISODE_CONTENT_XML, xml);
-        }
+        where.insert(Constants::EPISODES_ID, "="+episodeId);
+        query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_LABEL, where));
+        query.bindValue(0, itemToSave->data(EpisodeModel::Label));
         if (!query.exec()) {
             Utils::Log::addQueryError(q, query);
         }
-
-        return true;
+        query.finish();
+        query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_DATE, where));
+        query.bindValue(0, itemToSave->data(EpisodeModel::Date));
+        if (!query.exec()) {
+            Utils::Log::addQueryError(q, query);
+        }
+        query.finish();
     }
 
 public:
@@ -596,6 +636,11 @@ EpisodeModel::EpisodeModel(QObject *parent) :
         QAbstractItemModel(parent), d(0)
 {
     setObjectName("EpisodeModel");
+    init();
+}
+
+void EpisodeModel::init()
+{
     d = new Internal::EpisodeModelPrivate(this);
 //    d->connectSqlPatientSignals();
     setCurrentUser(d->m_UserUuid);
@@ -656,7 +701,7 @@ QModelIndex EpisodeModel::index(int row, int column, const QModelIndex &parent) 
      Internal::TreeItem *parentItem = d->getItem(parent);
      Internal::TreeItem *childItem = 0;
      childItem = parentItem->child(row);
-     if (childItem) {
+     if (childItem) { // && childItem != d->m_RootItem) {
          return createIndex(row, column, childItem);
      }
      return QModelIndex();
@@ -695,6 +740,11 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     if (!item.isValid())
         return QVariant();
 
+    if (item.column() == EmptyColumn1)
+        return QVariant();
+    if (item.column() == EmptyColumn2)
+        return QVariant();
+
     Internal::TreeItem *it = d->getItem(item);
 
     switch (role)
@@ -724,6 +774,15 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             } else {
                 return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "#000").toString());
             }
+        }
+    case Qt::FontRole :
+        {
+            if (!it->isEpisode()) {
+                QFont bold;
+                bold.setBold(true);
+                return bold;
+            }
+            return QFont();
         }
 //    case Qt::BackgroundRole :
 //        {
@@ -893,14 +952,20 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     d->m_ActualEpisode = d->getItem(index);
     d->m_ActualEpisode_FormUid = formUid;
 
-    // clear actual form
+    // clear actual form and fill episode datas
     FormMain *form = formManager()->form(formUid);
     if (!form)
         return false;
     form->clear();
+    form->itemDatas()->setData(d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
+    form->itemDatas()->setData(d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
+    const QString &username = userModel()->currentUserData(UserPlugin::User::Name).toString();
+    if (username.isEmpty())
+        form->itemDatas()->setData(tr("No user"), IFormItemData::ID_UserName);
+    else
+        form->itemDatas()->setData(username, IFormItemData::ID_UserName);
 
     qWarning() << "EpisodeModel::activateEpisode" << d->m_ActualEpisode->data(Id).toInt() << formUid;
-//    qWarning() << xmlcontent;
 
     QString xml = d->m_ActualEpisode->data(XmlContent).toString();
     if (xml.isEmpty()) {

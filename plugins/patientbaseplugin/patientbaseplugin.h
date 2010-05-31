@@ -57,6 +57,7 @@ class PatientBasePreferencesPage;
 class PatientSearchMode;
 }  // End namespace Internal
 
+
 class PatientBasePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
@@ -70,6 +71,7 @@ public:
 private:
     Internal::PatientSearchMode *m_Mode;
     Internal::PatientBasePreferencesPage *prefpage;
+
 };
 
 

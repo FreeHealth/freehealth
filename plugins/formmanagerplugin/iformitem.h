@@ -108,17 +108,7 @@ public:
             m_ItemDatas(0)
             {}
 
-    virtual ~FormItem()
-    {
-        if (m_Spec) {
-            delete m_Spec;
-            m_Spec = 0;
-        }
-        if (m_Scripts) {
-            delete m_Scripts;
-            m_Scripts = 0;
-        }
-    }
+    virtual ~FormItem();
 
     Form::FormItemSpec *spec() const {return m_Spec;}
     Form::FormItemScripts *scripts() const {return m_Scripts;}
@@ -127,6 +117,7 @@ public:
     // Access to database values. Pointer will not be deleted
     void setItemDatas(Form::IFormItemData *data) {m_ItemDatas = data;}
     Form::IFormItemData *itemDatas() {return m_ItemDatas;}
+    /** \todo add m_IsUniqueStorableData */
 
     // Access to the user's widget
     virtual void setFormWidget(Form::IFormWidget *w) {m_FormWidget=w;}
@@ -186,7 +177,7 @@ class FORM_EXPORT FormMain : public FormItem
     Q_OBJECT
 public:
     FormMain(QObject *parent=0) :
-            FormItem(parent), m_DebugPage(0) {}
+            FormItem(parent), m_DebugPage(0), m_Multi(true) {}
     ~FormMain();
 
     FormPage *createPage(const QString &uuid = QString::null);
@@ -196,11 +187,15 @@ public:
 
     virtual FormMain *formParent() { return qobject_cast<FormMain*>(parent()); }
 
+    virtual void setMultiEpisode(bool state) {m_Multi = state;}
+    virtual bool isMultiEpisode() const {return m_Multi;}
+
     void createDebugPage();
     void toTreeWidget(QTreeWidget *tree);
 
 private:
     FormMainDebugPage *m_DebugPage;
+    bool m_Multi;
 };
 
 class FORM_EXPORT FormMainDebugPage : public Core::IDebugPage

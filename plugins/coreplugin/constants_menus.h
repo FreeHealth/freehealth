@@ -308,6 +308,7 @@ const char * const G_EDITOR_FILE         = "group.Editor.File";
 const char * const G_EDITOR_CONTEXT      = "group.Editor.Context";
 const char * const A_EDITOR_FILEOPEN     = "action.Editor.Open";
 const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
+const char * const A_EDITOR_FILEPRINT    = "action.Editor.Print";
 
 }  // end Constants
 } // end Core

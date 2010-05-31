@@ -318,6 +318,22 @@ void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormItem  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FormItem::~FormItem()
+{
+    if (m_Spec) {
+        delete m_Spec;
+        m_Spec = 0;
+    }
+    if (m_Scripts) {
+        delete m_Scripts;
+        m_Scripts = 0;
+    }
+    if (m_ItemDatas) {
+        delete m_ItemDatas;
+        m_ItemDatas = 0;
+    }
+}
+
 void FormItem::addExtraData(const QString &id, const QString &data)
 {
     if (m_ExtraDatas.keys().indexOf(id,Qt::CaseInsensitive)!=-1) {

@@ -51,6 +51,12 @@ class FORM_EXPORT IFormItemData //: public QObject
 {
 //    Q_OBJECT
 public:
+    enum DataRepresentation {
+        ID_EpisodeDate = 0,
+        ID_EpisodeLabel,
+        ID_UserName
+    };
+
 //    explicit IFormItemData(Form::FormItem *parent) : QObject(parent) {}
     IFormItemData() {}
     virtual ~IFormItemData() {}

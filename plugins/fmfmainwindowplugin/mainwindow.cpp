@@ -264,13 +264,7 @@ void MainWindow::postCoreInitialization()
     openLastOpenedForm();
 
     // TEST
-    formManager()->formPlaceHolder()->formTree()->setModel(episodeModel());
-    for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
-        formManager()->formPlaceHolder()->formTree()->setColumnHidden(i, true);
-    formManager()->formPlaceHolder()->formTree()->setColumnHidden(Form::EpisodeModel::Label, false);
-    formManager()->formPlaceHolder()->formTree()->expandAll();
-
-    connect(formManager()->formPlaceHolder()->formTree(), SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+    formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
     // END TEST
 }
 
@@ -288,27 +282,14 @@ void MainWindow::setCurrentPatient(const QModelIndex &index)
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
 
-    // TEST
+    // inform formplaceholder and episodemodel
     episodeModel()->setCurrentPatient(uuid);
-    // END TEST
+    formManager()->setCurrentPatient(uuid);
 }
 
-void MainWindow::setCurrentEpisode(const QModelIndex &index)
+QString MainWindow::currentPatient() const
 {
-    if (index.model() != episodeModel()) {
-        qWarning() << __LINE__ << __FILE__ << "Wrong model";
-        return;
-    }
-    // inform formplaceholder --> refresh form view
-    QString formUuid = episodeModel()->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
-    formManager()->formPlaceHolder()->setCurrentForm(formUuid);
-
-    int episode = -1;
-    if (episodeModel()->isEpisode(index)) {
-//        episode = episodeModel()->index(index.row(), Form::EpisodeModel::Id, index.parent()).data().toInt();
-//        episodeModel()->activateEpisode(episode, formUuid, episodeModel()->index(index.row(), Form::EpisodeModel::XmlContent, index.parent()).data().toString());
-        episodeModel()->activateEpisode(index, formUuid);
-    }
+    return m_RecentPatients->currentFile();
 }
 
 /** \brief Close the main window and the application */

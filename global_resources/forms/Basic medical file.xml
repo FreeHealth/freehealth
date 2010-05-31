@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
-<MedForm>
-  <version>0.3.0</version>
-  <name>episodeTester</name>
-  <label>Nested forms examples</label>
-  <type>form</type>
-  <creationdate>2010-05-05</creationdate>
-  <categorie>samples</categorie>
-  <authors>Eric Maeker, MD</authors>
-  <description>Small description here</description>
-  <bibliography>Small bibliography</bibliography>
-  <licence>Licence terms here</licence>
+<FreeMedForms>
+  <MedForm>
+    <version>0.3.0</version>
+    <creationdate>2010-05-05</creationdate>
+    <categorie>samples</categorie>
+    <authors>Eric Maeker, MD</authors>
+    <description>Small description here</description>
+    <bibliography>Small bibliography</bibliography>
+    <licence>Licence terms here</licence>
 
-  <label lang="fr">Exemple de Formulaires imbriqués</label>
-  <categorie lang="fr">samples</categorie>
-  <authors lang="fr">Dr Eric Maeker</authors>
-  <description lang="fr">Petite description ici</description>
-  <bibliography lang="fr">Bibliographie ici</bibliography>
-  <licence lang="fr">Termes de la license</licence>
-  <option>compact</option>
+    <label lang="fr">Exemple de Formulaires imbriqués</label>
+    <categorie lang="fr">samples</categorie>
+    <authors lang="fr">Dr Eric Maeker</authors>
+    <description lang="fr">Petite description ici</description>
+    <bibliography lang="fr">Bibliographie ici</bibliography>
+    <licence lang="fr">Termes de la license</licence>
+    <option>compact</option>
+
+    <name>episodeTester</name>
+    <label>Identity</label>
+    <type>form</type>
+
+    <Item>
+      <type>identity</type>
+      <name>identity</name>
+      <label lang="en">Full Identity</label>
+      <label lang="fr">Identité</label>
+    </Item>
+  </MedForm>
+
 
   <MedForm>
     <type>form</type>
     <name>episodeTester_1</name>
     <label>Form1</label>
+    <option>compact</option>
     <Item>
       <name>s1</name>
       <type>texteditor</type>
@@ -147,16 +159,6 @@
         <type>texteditor</type>
         <label>This a simple text editor from the BaseWidgetsForm plugins</label>
       </Item>
-      <MedForm>
-        <type>form</type>
-        <name>episodeTester_2.1.1</name>
-        <label>Form2.1.1</label>
-        <Item>
-          <name>s2.1.1</name>
-          <type>texteditor</type>
-          <label>This a simple text editor from the BaseWidgetsForm plugins</label>
-        </Item>
-      </MedForm>
     </MedForm>
     <MedForm>
       <type>form</type>
@@ -170,4 +172,11 @@
     </MedForm>
   </MedForm>
 
+
+<MedForm>
+  <type>form</type>
+  <name>qfgsdf</name>
+  <label>sdfqsdf</label>
 </MedForm>
+
+</FreeMedForms>

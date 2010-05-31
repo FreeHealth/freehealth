@@ -115,7 +115,7 @@ inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE);
     while (!element.isNull()) {
 
-        qWarning() << "Values" << root.tagName() << element.tagName();
+//        qWarning() << "Values" << root.tagName() << element.tagName();
 
         int id = element.attribute(Constants::ATTRIB_ID, 0).toInt();
         QString val = element.text();
@@ -267,18 +267,18 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
     QDomElement root = document.documentElement();
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
     if (!rootForm) {
-        if ((root.tagName().compare(Constants::TAG_NEW_FORM)!=0) && (root.tagName().compare(Constants::TAG_ADDFILE)!=0)) {
-            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
+        if ((root.tagName().compare(Constants::TAG_MAINXMLTAG)!=0) && (root.tagName().compare(Constants::TAG_ADDFILE)!=0)) {
+            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_MAINXMLTAG));
             return false;
         }
-        rootForm = createNewForm(root, m_ActualForm);
-        m_ActualForm = rootForm;
+//        rootForm = createNewForm(root, m_ActualForm);
+//        m_ActualForm = rootForm;
     }
 
     if (!loadElement(rootForm, root))
         return false;
 
-    rootForm->createDebugPage();
+//    rootForm->createDebugPage();
     createWidgets();
     return true;
 }
@@ -333,7 +333,7 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
 //                    item->valueReferences()->setOptionnal(false);
 
         // Add a file ?
-        if (element.tagName().compare(Constants::TAG_ADDFILE,Qt::CaseInsensitive)==0) {
+        if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
             QDomDocument doc;
             QString fileName = element.text();
             if (QFileInfo(fileName).isRelative())

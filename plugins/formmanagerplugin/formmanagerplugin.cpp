@@ -37,6 +37,7 @@
 #include "formmanager.h"
 #include "formplaceholder.h"
 #include "episodebase.h"
+#include "episodemodel.h"
 
 #include <utils/log.h>
 

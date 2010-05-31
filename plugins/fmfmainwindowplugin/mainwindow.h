@@ -105,11 +105,11 @@ public:
     void writeSettings();
     void createStatusBar();
     QStatusBar *statusBar();
+    QString currentPatient() const;
 
 public Q_SLOTS:
     void postCoreInitialization();
     void setCurrentPatient(const QModelIndex &index);
-    void setCurrentEpisode(const QModelIndex &index);
 
     // Interface of MainWidowActionHandler
 //    bool newFile();
@@ -147,19 +147,14 @@ public:
     Utils::FancyTabWidget *m_modeStack;
     Patients::PatientBar *m_PatientBar;
 
-    bool              m_HelpTextShow;
-    uint              m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
-    int               m_TimerId;
-    bool              m_OpenLastOpenedForm;
-    QByteArray        windowState;
-
-
-//    Form::EpisodeModel *m_EpisodeModel;
-
     /** \todo Move this Patient History in the ICore ? */
     Core::FileManager *m_RecentPatients;
 
-    //     mfRecovererThread thread;
+    bool m_HelpTextShow;
+    uint m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
+    int  m_TimerId;
+    bool m_OpenLastOpenedForm;
+    QByteArray windowState;
 };
 
 } // End Core

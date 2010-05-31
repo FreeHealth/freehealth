@@ -1,26 +1,24 @@
-TEMPLATE        = lib
-TARGET          = BaseWidgets
+TEMPLATE = lib
+TARGET = BaseWidgets
 PACKAGE_VERSION = 0.0.2
-
 DEFINES += BASEFORMWIDGETS_LIBRARY
-
 include(../fmf_plugins.pri)
 include( basewidgetsplugin_dependencies.pri )
+HEADERS += basewidgetsplugin.h \
+    baseformwidgets.h \
+    baseformwidgetsoptionspage.h \
+    texteditorfactory.h \
+    identitywidgetfactory.h
 
-HEADERS += \
-          basewidgetsplugin.h \
-          baseformwidgets.h \
-          baseformwidgetsoptionspage.h \
-          texteditorfactory.h
-#          baseformwidgetsaboutpage.h
-#basewigets_exporter.h \
-
+# baseformwidgetsaboutpage.h
+# basewigets_exporter.h \
 SOURCES += basewidgetsplugin.cpp \
-           baseformwidgets.cpp \
-           baseformwidgetsoptionspage.cpp \
-           texteditorfactory.cpp
-#          baseformwidgetsaboutpage.cpp
+    baseformwidgets.cpp \
+    baseformwidgetsoptionspage.cpp \
+    texteditorfactory.cpp \
+    identitywidgetfactory.cpp
 
-FORMS += baseformwidgetsoptionspage.ui
-
+# baseformwidgetsaboutpage.cpp
+FORMS += baseformwidgetsoptionspage.ui \
+    baseformwidget.ui
 OTHER_FILES = BaseWidgets.pluginspec

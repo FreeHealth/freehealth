@@ -165,6 +165,7 @@ namespace Time {
         const char * const  PATIENTNEW_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "New Patient");
         const char * const  PATIENTREMOVE_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Remove Patient");
         const char * const  PATIENTVIEWIDENTITY_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "View Patient Identity");
+        const char * const  IDENTITY_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "Identity");
 
         const char * const  OPENPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Open a prescription");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  SAVEPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Save a prescription");    /*!< \brief Default action text  \ingroup constants_actionmanager */

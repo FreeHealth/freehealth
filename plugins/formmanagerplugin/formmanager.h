@@ -92,11 +92,6 @@ public:
 
      FormPlaceHolder *formPlaceHolder() const;
 
-
-     bool activateEpisode(const int id, const QString &formUid, const QString &xmlcontent);
-     bool saveEpisode(const int id, const QString &formUid);
-
-
      template <class T>
      T* getParent(FormItem *item)
      {
@@ -115,6 +110,7 @@ public:
 
 public Q_SLOTS:
      bool translateForms();
+     void setCurrentPatient(const QString &uuid);
 
  private:
      Internal::FormManagerPrivate *d;

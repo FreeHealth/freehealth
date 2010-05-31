@@ -52,6 +52,8 @@
 #include <QPushButton>
 #include <QStringListModel>
 
+#include "ui_baseformwidget.h"
+
 using namespace BaseWidgets;
 //using namespace BaseWidgets::Internal;
 
@@ -175,10 +177,10 @@ QStringList BaseWidgetsFactory::providedWidgets() const
     return ::widgetsName;
 }
 
-bool BaseWidgetsFactory::isContainer( const int idInStringList ) const
+bool BaseWidgetsFactory::isContainer(const int idInStringList) const
 {
-    return ( idInStringList == ::Type_Form ) ||
-            ( idInStringList == ::Type_Group );
+    return (idInStringList == ::Type_Form) ||
+            (idInStringList == ::Type_Group);
 }
 
 Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
@@ -221,26 +223,32 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
    - "col=" ; "numberOfColumns"
 */
 
-BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_ContainerLayout( 0 )
+BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
+        Form::IFormWidget(formItem,parent),
+        m_ContainerLayout(0),
+        m_Header(0)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
+
+    QWidget *header = new QWidget(this);
+    m_Header = new Ui::BaseFormWidget;
+    m_Header->setupUi(header);
+
+    m_EpisodeDate = m_Header->dateEdit;
+    m_EpisodeDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+    m_EpisodeLabel = m_Header->lineEdit;
+    m_UserName = m_Header->label_2;
+    m_Header->label->setText(m_FormItem->spec()->label());
+
+    // create main widget
     QWidget *mainWidget = new QWidget;
     mainLayout->addWidget(mainWidget);
     mainLayout->addStretch();
 
+    // create container layout
     m_ContainerLayout = new QGridLayout(mainWidget);
-    IFormWidget::createLabel(m_FormItem->spec()->label(), Qt::AlignCenter );
-    m_Label->setFrameStyle(FormLabelFrame);
-    QFont font = m_Label->font();
-    font.setBold(true);
-    m_Label->setFont(font);
-    QSizePolicy sizePolicy = m_Label->sizePolicy();
-    sizePolicy.setVerticalPolicy( QSizePolicy::Fixed );
-    m_Label->setSizePolicy( sizePolicy );
-
     // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
     numberColumns = getNumberOfColumns(m_FormItem);
     if (isCompactView(m_FormItem)) {
@@ -249,14 +257,24 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent)
         m_ContainerLayout->setMargin(0);
         m_ContainerLayout->setSpacing(2);
     }
-    m_ContainerLayout->addWidget(m_Label, 0, 0,  1, numberColumns);
-    i = numberColumns;
+
+    m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
+    i = numberColumns * 2;
     row = 0;
     col = 0;
+
+    // create itemdata
+    BaseFormData *datas = new BaseFormData(formItem);
+    datas->setForm(this);
+    formItem->setItemDatas(datas);
 }
 
 BaseForm::~BaseForm()
 {
+    if (m_Header) {
+        delete m_Header;
+        m_Header = 0;
+    }
 }
 
 void BaseForm::addWidgetToContainer(IFormWidget * widget)
@@ -277,9 +295,48 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
 void BaseForm::retranslate()
 {
     /** \todo iformitem --> one spec per language ? */
-    //     m_Label->setText( m_FormItem->spec()->label() );
+    //     m_Label->setText(m_FormItem->spec()->label());
 }
 
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseFormData::BaseFormData(Form::FormItem *item) :
+        m_FormItem(item), m_Form(0)
+{}
+
+BaseFormData::~BaseFormData()
+{}
+
+void BaseFormData::clear()
+{
+    m_Form->m_EpisodeDate->setDate(QDate::currentDate());
+    m_Form->m_EpisodeLabel->clear();
+    m_Form->m_UserName->clear();
+}
+
+bool BaseFormData::isModified() const
+{
+    /** \todo here */
+    return true;
+}
+
+void BaseFormData::setData(const QVariant &data, const int role)
+{
+    switch (role) {
+    case ID_EpisodeDate: m_Form->m_EpisodeDate->setDate(data.toDate()); break;
+    case ID_EpisodeLabel: m_Form->m_EpisodeLabel->setText(data.toString()); break;
+    case ID_UserName: m_Form->m_UserName->setText(data.toString()); break;
+    }
+}
+
+QVariant BaseFormData::data(const int role) const
+{
+    switch (role) {
+    case ID_EpisodeDate: return m_Form->m_EpisodeDate->date(); break;
+    case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text(); break;
+    case ID_UserName: return m_Form->m_UserName->text(); break;
+    }
+    return QVariant();
+}
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -288,17 +345,17 @@ void BaseForm::retranslate()
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
 {
-    QVBoxLayout * vblayout = new QVBoxLayout( this );
-    m_Group = new QGroupBox( this );
+    QVBoxLayout * vblayout = new QVBoxLayout(this);
+    m_Group = new QGroupBox(this);
     m_Group->setTitle(m_FormItem->spec()->label());
-    vblayout->addWidget( m_Group );
-    this->setLayout( vblayout );
+    vblayout->addWidget(m_Group);
+    this->setLayout(vblayout);
 
     // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
     numberColumns = getNumberOfColumns(m_FormItem, 2);
 
     // Create the gridlayout with all the widgets
-    m_ContainerLayout = new QGridLayout( m_Group );
+    m_ContainerLayout = new QGridLayout(m_Group);
     i = 0;
     row = 0;
     col = 0;
@@ -310,12 +367,12 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent)
     }
 
     if (isGroupCheckable(m_FormItem, false)) {
-        m_Group->setCheckable( true );
+        m_Group->setCheckable(true);
         m_Group->setChecked(isGroupChecked(m_FormItem,false));
-        //          connect( m_Group, SIGNAL( clicked( bool ) ),
-        //                   this,    SLOT  ( updateObject( bool ) ) );
-        //          connect( mfo(m_FormItem), SIGNAL( valueChanged() ),
-        //                   this,     SLOT  ( updateWidget() ) );
+        //          connect(m_Group, SIGNAL(clicked(bool)),
+        //                   this,    SLOT  (updateObject(bool)));
+        //          connect(mfo(m_FormItem), SIGNAL(valueChanged()),
+        //                   this,     SLOT  (updateWidget()));
     }
     m_Group->setLayout(m_ContainerLayout);
 }
@@ -341,7 +398,7 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
 
 void BaseGroup::retranslate()
 {
-    //     m_Group->setTitle( mfo(m_FormItem)->label() );
+    //     m_Group->setTitle(mfo(m_FormItem)->label());
 }
 
 
@@ -443,23 +500,23 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent)
 {
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this );
+    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
 
     // Add QLabel
-    m_Label->setSizePolicy( QSizePolicy::Preferred , QSizePolicy::Preferred );
+    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
     hb->addWidget(m_Label);
 
     // Add Buttons
-    QGroupBox *gb = new QGroupBox( this );
-    //     gb->setFlat( true );
+    QGroupBox *gb = new QGroupBox(this);
+    //     gb->setFlat(true);
     //     QSizePolicy sizePolicy = gb->sizePolicy();
-    //     sizePolicy.setHorizontalPolicy( QSizePolicy::Fixed );
-    //     gb->setSizePolicy( sizePolicy );
+    //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
+    //     gb->setSizePolicy(sizePolicy);
     QBoxLayout *radioLayout = 0;
     if (isRadioHorizontalAlign(m_FormItem)) {
-        radioLayout = new QBoxLayout( QBoxLayout::LeftToRight, gb );
+        radioLayout = new QBoxLayout(QBoxLayout::LeftToRight, gb);
     } else {
-        radioLayout = new QBoxLayout( QBoxLayout::TopToBottom, gb );
+        radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
     }
     radioLayout->setContentsMargins(1, 0, 1, 0);
     QRadioButton *rb = 0;
@@ -468,7 +525,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
 //    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
 //    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
 
-    foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible) ) {
+    foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible)) {
         rb = new QRadioButton(this);
         rb->setObjectName(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(i));
         rb->setText(v);
@@ -492,9 +549,9 @@ void BaseRadio::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
 
-    if ( m_RadioList.size() ) {
+    if (m_RadioList.size()) {
         const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        if ( list.count() != m_RadioList.count() ) {
+        if (list.count() != m_RadioList.count()) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
                     tr("You asked to change the language of the form to %1.\n"
@@ -602,20 +659,20 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
         //          if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
         //          {
         //               Qt::Alignment alignment = m_Label->alignment();
-        //               alignment &= ~( Qt::AlignVertical_Mask );
+        //               alignment &= ~(Qt::AlignVertical_Mask);
         //               alignment |= Qt::AlignVCenter;
-        //               m_Label->setAlignment( alignment );
+        //               m_Label->setAlignment(alignment);
         //          }
 
-        m_Line = new QLineEdit( this );
-        m_Line->setObjectName( "Line_" + m_FormItem->uuid());
+        m_Line = new QLineEdit(this);
+        m_Line->setObjectName("Line_" + m_FormItem->uuid());
         m_Line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-        //          m_Line->setInputMask( mfo(m_FormItem)->mask() );
+        //          m_Line->setInputMask(mfo(m_FormItem)->mask());
         //          m_Line->setCursorPosition(0);
         hb->addWidget(m_Line);
     } else {
         m_Text = new QTextEdit(this);
-        m_Text->setObjectName( "Text_" + m_FormItem->uuid());
+        m_Text->setObjectName("Text_" + m_FormItem->uuid());
         m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
         hb->addWidget(m_Text);
     }
@@ -697,7 +754,7 @@ QVariant BaseSimpleTextData::storableData() const
 BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent)
 {
-    QHBoxLayout * hb = new QHBoxLayout( this );
+    QHBoxLayout * hb = new QHBoxLayout(this);
     // Add QLabel
     createLabel(m_FormItem->spec()->label(), Qt::AlignJustify);
     // Setting objectName to hide/show via a simple option button
@@ -718,7 +775,7 @@ void BaseHelpText::retranslate()
 //----------------------------------------- BaseLists --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList)
-        : Form::IFormWidget(formItem,parent), m_List( 0 )
+        : Form::IFormWidget(formItem,parent), m_List(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -854,17 +911,17 @@ QVariant BaseListData::storableData() const
 //----------------------------------------- BaseCombo --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Combo( 0 )
+        : Form::IFormWidget(formItem,parent), m_Combo(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
-    //     if ( !( mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop ) )
+    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
     //     {
     //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~( Qt::AlignVertical_Mask );
+    //          alignment &= ~(Qt::AlignVertical_Mask);
     //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment( alignment );
+    //          m_Label->setAlignment(alignment);
     //     }
 
     // Add List and manage size
@@ -872,10 +929,10 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
     m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
     hb->addWidget(m_Combo);
-    //     if ( mfo(m_FormItem)->options() & mfObjectFundamental::SizePreferred )
-    //          m_Combo->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+    //     if (mfo(m_FormItem)->options() & mfObjectFundamental::SizePreferred)
+    //          m_Combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     //     else
-    //          m_Combo->setSizePolicy( QSizePolicy::Expanding , QSizePolicy::Fixed );
+    //          m_Combo->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
 
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
@@ -969,17 +1026,17 @@ QVariant BaseComboData::storableData() const
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Date( 0 )
+        : Form::IFormWidget(formItem,parent), m_Date(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget( m_Label );
-    //     if ( !( mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop ) )
+    hb->addWidget(m_Label);
+    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
     //     {
     //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~( Qt::AlignVertical_Mask );
+    //          alignment &= ~(Qt::AlignVertical_Mask);
     //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment( alignment );
+    //          m_Label->setAlignment(alignment);
     //     }
 
     // Add Date selector and manage date format
@@ -991,9 +1048,9 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
     hb->addWidget(m_Date);
 
     // Initialize mfo and dateedit with mfo options
-    //     const QStringList &options = mfo(m_FormItem)->param( mfObject::Param_Options ).toStringList();
-    //     if ( options.contains( "now" ) )
-    //          m_Date->setDateTime( QDateTime::currentDateTime() );
+    //     const QStringList &options = mfo(m_FormItem)->param(mfObject::Param_Options).toStringList();
+    //     if (options.contains("now"))
+    //          m_Date->setDateTime(QDateTime::currentDateTime());
 
     // create FormItemData
     BaseDateData *data = new BaseDateData(m_FormItem);
@@ -1068,12 +1125,12 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin)
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
-    //     if ( !( mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop ) )
+    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
     //     {
     //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~( Qt::AlignVertical_Mask );
+    //          alignment &= ~(Qt::AlignVertical_Mask);
     //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment( alignment );
+    //          m_Label->setAlignment(alignment);
     //     }
 
     // Add spin
@@ -1182,17 +1239,17 @@ QVariant BaseSpinData::storableData() const
 //------------------------------------------ BaseButton ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Button( 0 )
+        : Form::IFormWidget(formItem,parent), m_Button(0)
 {
     QHBoxLayout * hb = new QHBoxLayout(this);
     hb->addStretch();
 
-    m_Button = new QPushButton( this );
+    m_Button = new QPushButton(this);
     m_Button->setObjectName("Button_" + m_FormItem->uuid());
-    m_Button->setText(m_FormItem->spec()->label() );
+    m_Button->setText(m_FormItem->spec()->label());
     m_Button->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
     hb->addWidget(m_Button);
-    connect( m_Button, SIGNAL(clicked()) , this , SLOT(buttonClicked()));
+    connect(m_Button, SIGNAL(clicked()) , this , SLOT(buttonClicked()));
 }
 
 BaseButton::~BaseButton()

@@ -63,6 +63,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/constants_menus.h>
 
 // include Qt headers
 #include <QLocale>
@@ -122,41 +123,73 @@ public:
     {
         Core::ActionManager *am = Core::ICore::instance()->actionManager();
         m_ToolBar->clear();
+        QStringList actions;
 
         // IO Actions
         if (m_Type & TextEditor::WithIO) {
-//            Core::Command *cmd = am->command(Core::Constants::A_EDITOR_FILEOPEN);
-//            m_ToolBar->addAction(cmd->action());
-//            cmd = am->command(Core::Constants::A_EDITOR_FILESAVE);
-//            m_ToolBar->addAction(cmd->action());
-//            m_ToolBar->addSeparator();
+            actions << Core::Constants::A_EDITOR_FILEOPEN
+                    << Core::Constants::A_EDITOR_FILESAVE
+                    << Core::Constants::A_EDITOR_FILEPRINT
+                    ;
+            foreach(const QString &a, actions) {
+                Core::Command *cmd = am->command(a);
+                if (cmd)
+                    m_ToolBar->addAction(cmd->action());
+            }
+            m_ToolBar->addSeparator();
         }
 
-        Core::ActionContainer *ac = am->actionContainer(Core::Constants::M_EDIT);
-        if (!ac) {
-            ac = am->actionContainer(Core::Constants::M_EDITOR_EDIT);
+        actions.clear();
+        actions << Core::Constants::A_EDIT_COPY
+                << Core::Constants::A_EDIT_PASTE
+                << Core::Constants::A_EDIT_CUT
+                ;
+        foreach(const QString &a, actions) {
+            Core::Command *cmd = am->command(a);
+            if (cmd)
+                m_ToolBar->addAction(cmd->action());
         }
-        if (ac) {
-            foreach (QAction *action, ac->menu()->actions())
-                m_ToolBar->addAction(action);
-            m_ToolBar->addSeparator();
+        m_ToolBar->addSeparator();
+
+        actions.clear();
+        actions << Core::Constants::A_EDIT_UNDO
+                << Core::Constants::A_EDIT_REDO
+                ;
+        foreach(const QString &a, actions) {
+            Core::Command *cmd = am->command(a);
+            if (cmd)
+                m_ToolBar->addAction(cmd->action());
         }
-        ac = am->actionContainer(Core::Constants::M_FORMAT_FONT);
-        if (ac) {
-            foreach (QAction *action, ac->menu()->actions())
-                m_ToolBar->addAction(action);
-            m_ToolBar->addSeparator();
+        m_ToolBar->addSeparator();
+
+        QAction *previous = 0;
+        if (m_Type & TextEditor::WithTables) {
+            actions << Core::Constants::M_FORMAT_FONT
+                    << Core::Constants::M_FORMAT_PARAGRAPH
+                    << Core::Constants::M_FORMAT_TABLE
+                    ;
+        } else {
+            actions << Core::Constants::M_FORMAT_FONT
+                    << Core::Constants::M_FORMAT_PARAGRAPH
+                    ;
         }
-        ac = am->actionContainer(Core::Constants::M_FORMAT_PARAGRAPH);
-        if (ac) {
-            foreach (QAction *action, ac->menu()->actions())
-                m_ToolBar->addAction(action);
-            m_ToolBar->addSeparator();
-        }
-        ac = am->actionContainer(Core::Constants::M_FORMAT_TABLE);
-        if (ac) {
-            foreach (QAction *action, ac->menu()->actions()) {
-                m_ToolBar->addAction(action);
+
+        foreach(const QString &m, actions) {
+            Core::ActionContainer *ac = am->actionContainer(m);
+            if (ac) {
+                foreach (QAction *action, ac->menu()->actions()) {
+                    if (previous) {
+                        if (previous->isSeparator() && action->isSeparator()) {
+                            continue;
+                        }
+                    } else {
+                        if (action->isSeparator())
+                            continue;
+                    }
+                    m_ToolBar->addAction(action);
+                    previous = action;
+                }
+                previous = m_ToolBar->addSeparator();
             }
         }
     }
@@ -251,53 +284,92 @@ QMenu* TextEditor::getContextMenu()
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
     mc->setTitle(tkTr(Trans::Constants::EDITORMENU_TEXT));
 
-    Core::ActionContainer *cMenu = am->actionContainer(Core::Constants::M_EDITOR_CONTEXT);
-    if (cMenu) {
-        foreach (QAction *action, cMenu->menu()->actions())
-            mc->addAction(action);
+//    Core::ActionContainer *cMenu = am->actionContainer(Core::Constants::M_EDITOR_CONTEXT);
+//    if (cMenu) {
+//        foreach (QAction *action, cMenu->menu()->actions())
+//            mc->addAction(action);
+//    }
+    Core::Command *cmd = 0;
+    QStringList actions;
+
+    cmd = am->command(Core::Constants::A_EDITOR_TOOGLETOOLBAR);
+    if (cmd) {
+        mc->addAction(cmd->action());
+        mc->addSeparator();
     }
+
     if (d->m_Type & WithIO) {
         QMenu *m = new QMenu(this);
         m->setTitle(tkTr(Trans::Constants::M_FILE_TEXT));
-        Core::Command *cmd = am->command(Core::Constants::A_EDITOR_FILEOPEN);
-        m->addAction(cmd->action());
-        cmd = am->command(Core::Constants::A_EDITOR_FILESAVE);
-        m->addAction(cmd->action());
-        mc->addMenu(m);
-    }
-    cMenu = am->actionContainer(Core::Constants::M_EDIT);
-    if (cMenu) {
-        QMenu *m = new QMenu(cMenu->menu()->title(), this);
-        foreach (QAction *action, cMenu->menu()->actions())
-            m->addAction(action);
-        mc->addMenu(m);
-    }
-    cMenu = am->actionContainer(Core::Constants::M_FORMAT_FONT);
-    if (cMenu) {
-        QMenu *m = new QMenu(cMenu->menu()->title(), this);
-        foreach (QAction *action, cMenu->menu()->actions())
-            m->addAction(action);
-        mc->addMenu(m);
-    }
-    cMenu = am->actionContainer(Core::Constants::M_FORMAT_PARAGRAPH);
-    if (cMenu) {
-        QMenu *m = new QMenu(cMenu->menu()->title(), this);
-        foreach (QAction *action, cMenu->menu()->actions())
-            m->addAction(action);
-        mc->addMenu(m);
-    }
-    cMenu = am->actionContainer(Core::Constants::M_FORMAT_TABLE);
-    if (cMenu) {
-        QMenu *m = new QMenu(cMenu->menu()->title(), this);
-        int i = 0;
-        foreach (QAction *action, cMenu->menu()->actions()) {
-            if (i==0)
-                m->addAction(action);
-            ++i;
-            if (d->textEdit->textCursor().currentTable())
-                m->addAction(action);
+        actions << Core::Constants::A_EDITOR_FILEOPEN
+                << Core::Constants::A_EDITOR_FILESAVE
+                << Core::Constants::A_EDITOR_FILEPRINT
+                ;
+        foreach(const QString &a, actions) {
+            cmd = am->command(a);
+            if (cmd)
+                m->addAction(cmd->action());
         }
         mc->addMenu(m);
+    }
+
+    actions.clear();
+    QMenu *medit = new QMenu(this);
+    medit->setTitle(tkTr(Trans::Constants::M_EDIT_TEXT));
+    actions << Core::Constants::A_EDIT_COPY
+            << Core::Constants::A_EDIT_PASTE
+            << Core::Constants::A_EDIT_CUT
+            ;
+    foreach(const QString &a, actions) {
+        Core::Command *cmd = am->command(a);
+        if (cmd)
+            medit->addAction(cmd->action());
+    }
+    medit->addSeparator();
+
+    actions.clear();
+    actions << Core::Constants::A_EDIT_UNDO
+            << Core::Constants::A_EDIT_REDO
+            ;
+    foreach(const QString &a, actions) {
+        Core::Command *cmd = am->command(a);
+        if (cmd)
+            medit->addAction(cmd->action());
+    }
+    mc->addMenu(medit);
+
+    QAction *previous = 0;
+    if (d->m_Type & WithTables) {
+        actions << Core::Constants::M_FORMAT_FONT
+                << Core::Constants::M_FORMAT_PARAGRAPH
+                << Core::Constants::M_FORMAT_TABLE
+                ;
+    } else {
+        actions << Core::Constants::M_FORMAT_FONT
+                << Core::Constants::M_FORMAT_PARAGRAPH
+                ;
+    }
+
+    foreach(const QString &m, actions) {
+        Core::ActionContainer *ac = am->actionContainer(m);
+        if (ac) {
+            QMenu *menu = new QMenu(this);
+            menu->setTitle(ac->menu()->title());
+            foreach (QAction *action, ac->menu()->actions()) {
+                if (previous) {
+                    if (previous->isSeparator() && action->isSeparator()) {
+                        continue;
+                    }
+                } else {
+                    if (action->isSeparator())
+                        continue;
+                }
+                menu->addAction(action);
+                previous = action;
+            }
+            previous = 0;
+            mc->addMenu(menu);
+        }
     }
     return mc;
 }

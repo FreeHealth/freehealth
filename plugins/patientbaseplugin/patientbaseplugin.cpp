@@ -47,18 +47,13 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-//#include <QDockWidget>
-//#include <QGridLayout>
-//#include "identitywidget.h"
-//#include "patientselector.h"
-//#include "patientmodel.h"
-//#include <coreplugin/imainwindow.h>
 
 using namespace Patients;
 using namespace Internal;
 
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+
 
 PatientBasePlugin::PatientBasePlugin() :
         m_Mode(0), prefpage(0)

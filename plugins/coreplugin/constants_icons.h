@@ -64,6 +64,12 @@ const char * const  ICONPRINTPREVIEW = "fileprintpreview.png";
 const char * const  ICONQUIT =         "exit.png";
 const char * const  ICONEXIT =         "exit.png";
 const char * const  ICONTEMPLATES =    "templates.png";
+const char * const  ICONCLOSELIGHT =   "closebuttonlight.png";
+const char * const  ICONCLOSEDARK =    "closebuttondark.png";
+const char * const  ICONADDLIGHT =     "addbuttonlight.png";
+const char * const  ICONADDDARK =      "addbuttondark.png";
+const char * const  ICONVALIDATELIGHT= "validatebuttonlight.png";
+const char * const  ICONVALIDATEDARK = "validatebuttondark.png";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";

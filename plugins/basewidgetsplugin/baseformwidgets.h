@@ -38,8 +38,8 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFBASEFORMWIDGET_H
-#define MFBASEFORMWIDGET_H
+#ifndef BASEFORMWIDGET_H
+#define BASEFORMWIDGET_H
 
 //#include "basewigets_exporter.h"
 
@@ -72,6 +72,9 @@ class QStringListModel;
 QT_END_NAMESPACE
 
 namespace BaseWidgets {
+namespace Ui {
+class BaseFormWidget;
+}
 
 class BaseWidgetsFactory : public Form::IFormWidgetFactory
 {
@@ -106,9 +109,42 @@ public:
 public Q_SLOTS:
     void retranslate();
 
+public:
+    QDateTimeEdit *m_EpisodeDate;
+    QLineEdit *m_EpisodeLabel;
+    QLabel *m_UserName;
+
 private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
+    Ui::BaseFormWidget *m_Header;
+};
+
+// Used to pass episode date, label, user...
+class BaseFormData : public Form::IFormItemData
+{
+public:
+    BaseFormData(Form::FormItem *item);
+    ~BaseFormData();
+
+    void setForm(BaseForm *form) {m_Form = form; clear();}
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    // Use setData/Data for episode datas
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    // No storable datas for forms
+    void setStorableData(const QVariant &) {}
+    QVariant storableData() const {return QVariant();}
+
+private:
+    Form::FormItem *m_FormItem;
+    BaseForm *m_Form;
+    QHash<int, QVariant> m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------

@@ -44,6 +44,7 @@
 
 #include <QWidget>
 #include <QTreeView>
+#include <QStyledItemDelegate>
 
 QT_BEGIN_NAMESPACE
 class  QTreeWidgetItem;
@@ -52,19 +53,28 @@ class QModelIndex;
 QT_END_NAMESPACE
 
 namespace Form {
+class EpisodeModel;
+
 namespace Internal {
+
 class FormPlaceHolderPrivate;
-class FormTreeView : public QTreeView
+
+class FormItemDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
-    FormTreeView(QWidget *parent);
-    ~FormTreeView();
-protected:
-    bool viewportEvent(QEvent *event);
+    FormItemDelegate(QObject *parent = 0);
+    void setEpisodeModel(EpisodeModel *model);
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
+
+    mutable QModelIndex pressedIndex;
+    EpisodeModel *m_EpisodeModel;
 };
-
-
 }  // End namespace Internal
+
 
 class FORM_EXPORT FormPlaceHolder : public QWidget
 {
@@ -75,6 +85,8 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
+    void setEpisodeModel(EpisodeModel *model);
+
     QTreeView *formTree() const;
     QStackedLayout *formStackLayout() const;
     
@@ -83,11 +95,15 @@ public:
 
 public Q_SLOTS:
     void setCurrentForm(const QString &formUuid);
+    void setCurrentEpisode(const QModelIndex &index);
 
 protected Q_SLOTS:
     void reset();
     void newEpisode();
     void removeEpisode();
+    void validateEpisode();
+    void handlePressed(const QModelIndex &index);
+    void handleClicked(const QModelIndex &index);
 
 private:
     Internal::FormPlaceHolderPrivate *d;

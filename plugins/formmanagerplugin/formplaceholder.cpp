@@ -58,15 +58,15 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <QPushButton>
-
+#include <QMouseEvent>
 #include <QPainter>
 #include <QEvent>
+
 #include <QDebug>
 
 using namespace Form;
 
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
-static inline Form::EpisodeModel *episodeModel() { return Form::EpisodeModel::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 
@@ -76,7 +76,9 @@ class FormPlaceHolderPrivate
 {
 public:
     FormPlaceHolderPrivate(FormPlaceHolder *parent) :
+            m_EpisodeModel(0),
             m_FileTree(0),
+            m_Delegate(0),
             m_EpisodesTable(0),
             m_Stack(0),
             m_GeneralLayout(0),
@@ -126,7 +128,9 @@ private:
     }
 
 public:
+    EpisodeModel *m_EpisodeModel;
     QTreeView *m_FileTree;
+    FormItemDelegate *m_Delegate;
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
@@ -139,37 +143,51 @@ private:
     FormPlaceHolder *q;
 };
 
-FormTreeView::FormTreeView(QWidget *parent) : QTreeView(parent)
-{}
-
-FormTreeView::~FormTreeView()
-{}
-
-bool FormTreeView::viewportEvent(QEvent *event)
+FormItemDelegate::FormItemDelegate(QObject *parent)
+ : QStyledItemDelegate(parent)
 {
-    if (event->type()==QEvent::Paint) {
-        qWarning() << "jjjjjjjjjjjjjjjjjjjjj";
-        QPainter p(this);
-//        p.begin();
+}
 
-        QRect rect = viewport()->rect();
+void FormItemDelegate::setEpisodeModel(EpisodeModel *model)
+{
+    m_EpisodeModel = model;
+}
 
-        QColor background = QColor(0, 0, 0, 10);
-        QColor light = QColor(255, 255, 255, 40);
-        QColor dark = QColor(0, 0, 0, 60);
-
-        QLinearGradient gr(QPoint(rect.center().x(), 0), QPoint(rect.center().x(), rect.bottom()));
-        gr.setColorAt(0, Qt::white);
-        gr.setColorAt(0.3, QColor(250, 250, 250));
-        gr.setColorAt(0.7, QColor(230, 230, 230));
-
-        p.fillRect(rect, gr);
-        p.setPen(QColor(200, 200, 200));
-        p.drawLine(rect.topLeft(), rect.topRight());
-        p.setPen(QColor(150, 160, 200));
-        p.drawLine(rect.bottomLeft(), rect.bottomRight());
+void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+           const QModelIndex &index) const
+{
+    if (option.state & QStyle::State_MouseOver) {
+        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
+            pressedIndex = QModelIndex();
+        QBrush brush = option.palette.alternateBase();
+        if (index == pressedIndex)
+            brush = option.palette.dark();
+        painter->fillRect(option.rect, brush);
     }
-    return true;
+
+    QStyledItemDelegate::paint(painter, option, index);
+
+    if (index.column()==EpisodeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
+        QIcon icon;
+        if (option.state & QStyle::State_Selected) {
+            if (m_EpisodeModel->isEpisode(index))
+                icon = theme()->icon(Core::Constants::ICONVALIDATELIGHT);
+            else
+                icon = theme()->icon(Core::Constants::ICONADDLIGHT);
+        } else {
+            if (m_EpisodeModel->isEpisode(index))
+                icon = theme()->icon(Core::Constants::ICONVALIDATEDARK);
+            else
+                icon = theme()->icon(Core::Constants::ICONADDDARK);
+        }
+
+        QRect iconRect(option.rect.right() - option.rect.height(),
+                       option.rect.top(),
+                       option.rect.height(),
+                       option.rect.height());
+
+        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
+    }
 }
 
 }
@@ -187,12 +205,21 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
     // create the tree view
     QWidget *w = new QWidget(this);
-//    d->m_FileTree = new Internal::FormTreeView(this);
     d->m_FileTree = new QTreeView(this);
     d->m_FileTree->setObjectName("FormTree");
     d->m_FileTree->setIndentation(10);
-    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
-    d->m_FileTree->header()->hide();
+    d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
+    d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
+    d->m_FileTree->setFrameStyle(QFrame::NoFrame);
+    d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
+//    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
+
+    connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
+    connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
+    connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+
+//    connect(m_ui.editorList, SIGNAL(customContextMenuRequested(QPoint)),
+//            this, SLOT(contextMenuRequested(QPoint)));
 
     // create the central view
     d->m_Scroll = new QScrollArea(this);
@@ -201,17 +228,17 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
 
     // create the buttons
-    QWidget *wb = new QWidget(this);
-    d->m_ButtonLayout = new QGridLayout(wb);
-    d->m_ButtonLayout->setSpacing(0);
-    d->m_ButtonLayout->setMargin(0);
-    d->m_New = new QPushButton(theme()->icon(Core::Constants::ICONADD), "", wb);
-    d->m_Remove = new QPushButton(theme()->icon(Core::Constants::ICONREMOVE), "", wb);
-    d->m_ButtonLayout->addWidget(d->m_New, 1, 0);
-    d->m_ButtonLayout->addWidget(d->m_Remove, 1, 1);
-    d->m_ButtonLayout->addWidget(d->m_FileTree, 10, 0, 2, 2);
-    connect(d->m_New, SIGNAL(clicked()), this, SLOT(newEpisode()));
-    connect(d->m_Remove, SIGNAL(clicked()), this, SLOT(removeEpisode()));
+//    QWidget *wb = new QWidget(this);
+//    d->m_ButtonLayout = new QGridLayout(wb);
+//    d->m_ButtonLayout->setSpacing(0);
+//    d->m_ButtonLayout->setMargin(0);
+//    d->m_New = new QPushButton(theme()->icon(Core::Constants::ICONADD), "", wb);
+//    d->m_Remove = new QPushButton(theme()->icon(Core::Constants::ICONREMOVE), "", wb);
+//    d->m_ButtonLayout->addWidget(d->m_New, 1, 0);
+//    d->m_ButtonLayout->addWidget(d->m_Remove, 1, 1);
+//    d->m_ButtonLayout->addWidget(d->m_FileTree, 10, 0, 2, 2);
+//    connect(d->m_New, SIGNAL(clicked()), this, SLOT(newEpisode()));
+//    connect(d->m_Remove, SIGNAL(clicked()), this, SLOT(removeEpisode()));
 
     // create splitters
     Utils::MiniSplitter *horiz = new Utils::MiniSplitter(this);
@@ -228,8 +255,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_EpisodesTable->horizontalHeader()->hide();
     d->m_EpisodesTable->verticalHeader()->hide();
 
-//    horiz->setLayout(d->m_ButtonLayout); //addWidget(d->m_FileTree);
-    horiz->addWidget(wb);
+    horiz->addWidget(d->m_FileTree);
+//    horiz->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
     vertic->addWidget(d->m_Scroll);
     horiz->addWidget(vertic);
@@ -249,6 +276,51 @@ FormPlaceHolder::~FormPlaceHolder()
     if (d) {
         delete d;
         d = 0;
+    }
+}
+
+void FormPlaceHolder::setEpisodeModel(EpisodeModel *model)
+{
+    d->m_EpisodeModel = model;
+    d->m_Delegate->setEpisodeModel(model);
+    d->m_FileTree->setModel(model);
+    d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
+        d->m_FileTree->setColumnHidden(i, true);
+    d->m_FileTree->setColumnHidden(Form::EpisodeModel::Label, false);
+    d->m_FileTree->setColumnHidden(Form::EpisodeModel::EmptyColumn1, false);
+    d->m_FileTree->header()->hide();
+    d->m_FileTree->header()->setStretchLastSection(false);
+    d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::Label, QHeaderView::Stretch);
+    d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::EmptyColumn1, QHeaderView::Fixed);
+    d->m_FileTree->header()->resizeSection(Form::EpisodeModel::EmptyColumn1, 16);
+}
+
+void FormPlaceHolder::handlePressed(const QModelIndex &index)
+{
+    if (index.column() == EpisodeModel::Label) {
+//        d->m_EpisodeModel->activateEpisode(index);
+    } else if (index.column() == EpisodeModel::EmptyColumn1) {
+        d->m_Delegate->pressedIndex = index;
+    }
+}
+
+void FormPlaceHolder::handleClicked(const QModelIndex &index)
+{
+    if (index.column() == EpisodeModel::EmptyColumn1) { // the funky button
+        if (d->m_EpisodeModel->isForm(index)) {
+            newEpisode();
+        } else {
+            /** \todo validateEpisode */
+//            validateEpisode();
+        }
+
+        // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
+        QPoint cursorPos = QCursor::pos();
+        QWidget *vp = d->m_FileTree->viewport();
+        QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
+        QCoreApplication::sendEvent(vp, &e);
     }
 }
 
@@ -279,6 +351,15 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
 }
 
+void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
+{
+    const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
+    setCurrentForm(formUuid);
+    if (d->m_EpisodeModel->isEpisode(index)) {
+        d->m_EpisodeModel->activateEpisode(index, formUuid);
+    }
+}
+
 void FormPlaceHolder::reset()
 {
     d->m_FileTree->update();
@@ -293,23 +374,29 @@ void FormPlaceHolder::newEpisode()
     if (!d->m_FileTree->selectionModel()->hasSelection())
         return;
     index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
-    while (!episodeModel()->isForm(index)) {
+    while (!d->m_EpisodeModel->isForm(index)) {
         index = index.parent();
     }
 
     // create a new episode the selected form and its children
-    if (!episodeModel()->insertRow(0, index)) {
+    if (!d->m_EpisodeModel->insertRow(0, index)) {
         Utils::Log::addError(this, "Unable to create new episode");
         return;
     }
     // activate the newly created main episode
     d->m_FileTree->selectionModel()->clearSelection();
-    d->m_FileTree->selectionModel()->setCurrentIndex(episodeModel()->index(0,0,index), QItemSelectionModel::Select);
-    const QString &formUuid = episodeModel()->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
+    d->m_FileTree->selectionModel()->setCurrentIndex(d->m_EpisodeModel->index(0,0,index), QItemSelectionModel::Select);
+    const QString &formUuid = d->m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
-    episodeModel()->activateEpisode(episodeModel()->index(0,0,index), formUuid);
+    d->m_EpisodeModel->activateEpisode(d->m_EpisodeModel->index(0,0,index), formUuid);
 }
 
 void FormPlaceHolder::removeEpisode()
 {
+    /** \todo removeEpisode */
+}
+
+void FormPlaceHolder::validateEpisode()
+{
+    /** \todo validateEpisode */
 }

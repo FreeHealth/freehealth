@@ -1,3 +1,42 @@
+/***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *   eric.maeker@free.fr                                                   *
+ *   All rights reserved.                                                  *
+ *                                                                         *
+ *   This program is a free and open source software.                      *
+ *   It is released under the terms of the new BSD License.                *
+ *                                                                         *
+ *   Redistribution and use in source and binary forms, with or without    *
+ *   modification, are permitted provided that the following conditions    *
+ *   are met:                                                              *
+ *   - Redistributions of source code must retain the above copyright      *
+ *   notice, this list of conditions and the following disclaimer.         *
+ *   - Redistributions in binary form must reproduce the above copyright   *
+ *   notice, this list of conditions and the following disclaimer in the   *
+ *   documentation and/or other materials provided with the distribution.  *
+ *   - Neither the name of the FreeMedForms' organization nor the names of *
+ *   its contributors may be used to endorse or promote products derived   *
+ *   from this software without specific prior written permission.         *
+ *                                                                         *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+ *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+ *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+ *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+ *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+ *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+ *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+ *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+ *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+ *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "texteditorfactory.h"
 
 //#include <texteditorplugin/texteditor.h>
@@ -31,7 +70,7 @@ bool TextEditorFactory::isInitialized() const
 
 QStringList TextEditorFactory::providedWidgets() const
 {
-    return QStringList() << "texteditor" << "richtext" << "richtexteditor" << "editor";
+    return QStringList() << "texteditor" << "richtext" << "richtexteditor" << "editor" << "html";
 }
 
 bool TextEditorFactory::isContainer(const int) const
@@ -66,6 +105,12 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     m_Text = new Editor::TextEditor(this, t);
     m_Text->setObjectName("TextEditor_" + m_FormItem->uuid());
     hb->addWidget(m_Text);
+
+    // create item data
+    TextEditorData *data = new TextEditorData(formItem);
+    data->setEditor(m_Text);
+    formItem->setItemDatas(data);
+
     retranslate();
 }
 
@@ -73,14 +118,62 @@ TextEditorForm::~TextEditorForm()
 {
 }
 
-QVariant TextEditorForm::value() const
-{
-    /** \todo this */
-    return "needs to implement script engine and ask it for the scripted value of the form";
-}
-
 void TextEditorForm::retranslate()
 {
     /** \todo iformitem --> one spec per language ? */
     //     m_Label->setText( m_FormItem->spec()->label() );
 }
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+TextEditorData::TextEditorData(Form::FormItem *item) :
+        m_FormItem(item), m_Editor(0)
+{}
+
+TextEditorData::~TextEditorData()
+{}
+
+void TextEditorData::clear()
+{
+    setStorableData(m_FormItem->valueReferences()->defaultValue());
+}
+
+bool TextEditorData::isModified() const
+{
+    return m_OriginalValue != m_Editor->textEdit()->toHtml();
+}
+
+void TextEditorData::setData(const QVariant &data, const int role)
+{
+    qWarning() << "TextEditorData::setData" << data << role;
+    if (role==Qt::EditRole || role==Qt::DisplayRole) {
+//        if (data.canConvert(QVariant::Int))  { // Tristate
+//            m_Check->setCheckState(Qt::CheckState(data.toInt()));
+//        }
+    }
+}
+
+QVariant TextEditorData::data(const int role) const
+{
+//    return m_Check->checkState();
+    return QVariant();
+}
+
+void TextEditorData::setStorableData(const QVariant &data)
+{
+//    qWarning() << "TextEditorData::setStorableData" << data;
+    if (!data.isValid())
+        return;
+    if (data.isNull()) {
+        m_OriginalValue.clear();
+        m_Editor->textEdit()->clear();
+    } else {
+        m_OriginalValue = data.toString();
+        m_Editor->setHtml(m_OriginalValue);
+    }
+}
+
+QVariant TextEditorData::storableData() const
+{
+    return m_Editor->textEdit()->toHtml();
+}
+

@@ -45,6 +45,8 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
             createLabel(text, Qt::AlignTop | Qt::AlignRight );
         }
     }
+    hb->setSpacing(5);
+    hb->setMargin(5);
     return hb;
 }
 

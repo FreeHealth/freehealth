@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,68 +32,99 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "basewidgetsplugin.h"
-#include "baseformwidgets.h"
-#include "baseformwidgetsoptionspage.h"
-#include "texteditorfactory.h"
-#include "identitywidgetfactory.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef IDENTITYWIDGETFACTORY_H
+#define IDENTITYWIDGETFACTORY_H
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
-#include <utils/log.h>
+#include <QStringList>
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
-using namespace BaseWidgets;
+/**
+ * \file patientbaseplugin.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.4
+ * \date 11 Aug 2009
+*/
 
-BaseWidgetsPlugin::BaseWidgetsPlugin() :
-        m_Factory(0),
-        m_OptionsPage(0)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating BaseWidgetsPlugin";
+namespace Patients {
+class IdentityWidget;
 }
 
-BaseWidgetsPlugin::~BaseWidgetsPlugin()
+namespace BaseWidgets {
+
+class IdentityWidgetFactory : public Form::IFormWidgetFactory
 {
-    if (m_Factory) {
-        removeObject(m_Factory);
-        delete m_Factory;
-        m_Factory = 0;
-    }
-    if (m_OptionsPage) {
-//        removeObject(m_OptionsPage);
-        delete m_OptionsPage;
-        m_OptionsPage = 0;
-    }
-}
+    Q_OBJECT
+public:
+    IdentityWidgetFactory(QObject *parent = 0);
+    ~IdentityWidgetFactory();
 
-bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorString)
+    bool initialize(const QStringList &arguments, QString *errorString);
+    bool extensionInitialized();
+    bool isInitialized() const;
+
+    bool isContainer(const int idInStringList) const;
+    QStringList providedWidgets() const;
+    Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
+};
+
+class IdentityFormItemData;
+class IdentityFormWidget : public Form::IFormWidget
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "BaseWidgetsPlugin::initialize";
+    Q_OBJECT
+public:
+    IdentityFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
+    ~IdentityFormWidget();
 
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    m_Factory = new BaseWidgetsFactory(this);
-    m_OptionsPage = new Internal::BaseFormWidgetsOptionsPage(this);
-    m_Factory->initialize(arguments,errorString);
-    return true;
-}
+    void addWidgetToContainer(IFormWidget * widget);
 
-void BaseWidgetsPlugin::extensionsInitialized()
+public Q_SLOTS:
+    void retranslate();
+    void setCurrentPatient(const QModelIndex &index);
+
+public:
+    Patients::IdentityWidget *m_Identity;
+
+private:
+    QGridLayout *m_ContainerLayout;
+    int i, row, col, numberColumns;
+    IdentityFormItemData *m_ItemData;
+};
+
+class IdentityFormItemData : public Form::IFormItemData
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "BaseWidgetsPlugin::extensionsInitialized";
+public:
+    IdentityFormItemData(Form::FormItem *item);
+    ~IdentityFormItemData();
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addObject(m_Factory);
-    addAutoReleasedObject(new TextEditorFactory(this));
-    addAutoReleasedObject(new IdentityWidgetFactory(this));
+    void setIdentityFormWidget(IdentityFormWidget *form);
 
-//    addObject(m_OptionsPage);
-}
+    void clear();
 
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
 
-Q_EXPORT_PLUGIN(BaseWidgetsPlugin)
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private:
+    Form::FormItem *m_FormItem;
+    IdentityFormWidget *m_Identity;
+};
+
+}  // End namespace BaseWidgets
+
+#endif // IDENTITYWIDGETFACTORY_H

@@ -44,6 +44,7 @@ namespace Constants {
 const char* const DOCTYPE_NAME     = "freemedforms";
 const char* const DOCTYPE_EXTENSION= "xml";
 
+const char* const TAG_MAINXMLTAG   = "FreeMedForms";
 const char* const TAG_NEW_FORM     = "MedForm";
 const char* const TAG_NEW_PAGE     = "Page";
 const char* const TAG_NEW_ITEM     = "Item";

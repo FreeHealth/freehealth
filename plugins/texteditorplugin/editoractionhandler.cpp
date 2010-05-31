@@ -46,6 +46,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QAction>
 #include <QApplication>
@@ -60,7 +62,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 
@@ -277,10 +278,10 @@ void EditorActionHandler::createActions()
     aFontSmaller = createAction(this, "aFontSmaller", ICONFONTSMALLER, A_FORMAT_SMALLER, allContexts, FORMATSMALLER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
     aFontFormat = createAction(this, "aFontFormat", ICONFONTFORMAT, A_FORMAT_FONT, allContexts, FORMATFONT_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
     aColor = createAction(this, "aColor", "", A_FORMAT_FONTCOLOR, allContexts, FORMATFONTCOLOR_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
+    actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateIcon);
     QPixmap p(16,16);
     p.fill(Qt::black);
     aColor->setIcon(p);
-    actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateIcon);
 
     // Paragraph actions
 #ifdef Q_OS_MAC
