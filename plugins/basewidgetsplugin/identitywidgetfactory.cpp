@@ -130,7 +130,10 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
 //        m_ContainerLayout->setSpacing(2);
 //    }
     m_ContainerLayout->addWidget(m_Label, 0, 0,  1, numberColumns);
-    m_Identity = new Patients::IdentityWidget(this);
+    if (formItem->extraDatas().value("option", QString()).compare("readonly", Qt::CaseInsensitive) == 0)
+        m_Identity = new Patients::IdentityWidget(this);
+    else
+        m_Identity = new Patients::IdentityWidget(this, Patients::IdentityWidget::ReadWriteMode);
     m_Identity->setCurrentPatientModel(Patients::PatientModel::activeModel());
     m_ContainerLayout->addWidget(m_Identity, 1, 0,  1, numberColumns);
     i = numberColumns;
