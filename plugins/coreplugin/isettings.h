@@ -95,16 +95,19 @@ public:
     virtual QSettings *getQSettings() = 0;
 
     // QSettings wrappers
-    virtual void beginGroup ( const QString & prefix ) = 0;
-    virtual QStringList childGroups () const = 0;
-    virtual QStringList childKeys () const = 0;
-    virtual bool contains ( const QString & key ) const = 0;
-    virtual void endGroup () = 0;
-    virtual QString fileName () const = 0;
-    virtual QString group () const = 0;
+    virtual void beginGroup( const QString & prefix ) = 0;
+    virtual QStringList childGroups() const = 0;
+    virtual QStringList childKeys() const = 0;
+    virtual bool contains( const QString & key ) const = 0;
+    virtual void endGroup() = 0;
+    virtual QString fileName() const = 0;
+    virtual QString group() const = 0;
 
-    virtual void setValue ( const QString & key, const QVariant & value ) = 0;
-    virtual QVariant value ( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
+    virtual void setValue( const QString & key, const QVariant & value ) = 0;
+    virtual QVariant value( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
+
+    virtual bool firstTimeRunning() const = 0;
+    virtual void noMoreFirstTimeRunning() = 0;
 
     virtual void sync() = 0;
 

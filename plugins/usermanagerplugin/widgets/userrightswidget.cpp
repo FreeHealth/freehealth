@@ -39,7 +39,7 @@
  ***************************************************************************/
 /**
   \class UserRightsWidget
-  \brief This widget is specifically develop for tkUserViewer rights datamapper.
+  \brief This widget is specifically develop for UserViewer rights datamapper.
   \ingroup usertoolkit widget_usertoolkit usermanager
 */
 
@@ -51,81 +51,81 @@
 
 using namespace UserPlugin::Internal;
 
-UserRightsWidget::UserRightsWidget( QWidget * parent )
-    : QListWidget( parent )
+UserRightsWidget::UserRightsWidget(QWidget * parent)
+    : QListWidget(parent)
 {
     static int handle = 0;
     ++handle;
     setObjectName("UserRightsWidget_"+QString::number(handle));
-    connect( this, SIGNAL(itemActivated(QListWidgetItem*)),
-             this, SLOT( on_m_RightsListWidget_itemActivated(QListWidgetItem*)) );
-    connect( this, SIGNAL(itemClicked(QListWidgetItem*)),
-             this, SLOT( on_m_RightsListWidget_itemActivated(QListWidgetItem*)) );
+    connect(this, SIGNAL(itemActivated(QListWidgetItem*)),
+             this, SLOT(on_m_RightsListWidget_itemActivated(QListWidgetItem*)));
+    connect(this, SIGNAL(itemClicked(QListWidgetItem*)),
+             this, SLOT(on_m_RightsListWidget_itemActivated(QListWidgetItem*)));
     retranslate();
 }
 
-void UserRightsWidget::on_m_RightsListWidget_itemActivated( QListWidgetItem *item )
+void UserRightsWidget::on_m_RightsListWidget_itemActivated(QListWidgetItem *item)
 {
-    if ( ! item )
+    if (!item)
         return;
 
     // if no rights is checked ans user clicked another rights --> pass
-    if ( ( this->item(0)->checkState() == Qt::Checked ) &&
-         (item != this->item(0) ) )
+    if ((this->item(0)->checkState() == Qt::Checked) &&
+         (item != this->item(0)))
         return;
 
     bool resetRights = false;
 
     // change the checkstate of the clicked item
-    if ( item->checkState() == Qt::Checked ) {
-        item->setCheckState( Qt::Unchecked );
+    if (item->checkState() == Qt::Checked) {
+        item->setCheckState(Qt::Unchecked);
     } else {
-        item->setCheckState( Qt::Checked );
+        item->setCheckState(Qt::Checked);
     }
     Qt::CheckState s = item->checkState();
 
     // specific items (No rights, ReadAll, WriteAll)
-    if ( ( item->data( Qt::UserRole ).toInt() == User::NoRights ) &&
-         ( s == Qt::Checked ) ) {
+    if ((item->data(Qt::UserRole).toInt() == User::NoRights) &&
+         (s == Qt::Checked)) {
         int i;
-        for( i=0; i < count(); ++i)
-            this->item( i )->setCheckState( Qt::Unchecked );
-        item->setCheckState( s );
-    } else if ( ( item->data( Qt::UserRole ).toInt() == User::ReadAll ) &&
-                ( s == Qt::Checked ) ) {
+        for(i=0; i < count(); ++i)
+            this->item(i)->setCheckState(Qt::Unchecked);
+        item->setCheckState(s);
+    } else if ((item->data(Qt::UserRole).toInt() == User::ReadAll) &&
+                (s == Qt::Checked)) {
         resetRights = true;
-    } else if ( ( item->data( Qt::UserRole ).toInt() == User::WriteAll ) &&
-                ( s == Qt::Checked ) ) {
+    } else if ((item->data(Qt::UserRole).toInt() == User::WriteAll) &&
+                (s == Qt::Checked)) {
         resetRights = true;
     }
 
     // store result to the m_Rights
     m_Rights = User::NoRights;
     int i;
-    for( i = 0; i < count(); ++i) {
-        if ( this->item( i )->checkState() == Qt::Checked )
-            m_Rights |= User::UserRights( this->item( i )->data( Qt::UserRole ).toInt() );
+    for(i = 0; i < count(); ++i) {
+        if (this->item(i)->checkState() == Qt::Checked)
+            m_Rights |= User::UserRights(this->item(i)->data(Qt::UserRole).toInt());
     }
 
     // if needed reset rights to the listwidget (ReadAll, WriteAll need that)
-    if ( resetRights )
+    if (resetRights)
         setCurrentRightsToWidget();
 }
 
 void UserRightsWidget::retranslate()
 {
     clear();
-    addItems( QStringList()
-              << tr( "No rigths" )
-              << tr( "Can read own datas" )
-              << tr( "Can read delegates datas" )
-              << tr( "Can read all datas" )
-              << tr( "Can write own datas" )
-              << tr( "Can write delegates datas" )
-              << tr( "Can write all datas" )
-              << tr( "Can print" )
-              << tr( "Can create new datas" )
-              << tr( "Can delete datas" ) );
+    addItems(QStringList()
+              << tr("No rigths")
+              << tr("Can read own datas")
+              << tr("Can read delegates datas")
+              << tr("Can read all datas")
+              << tr("Can write own datas")
+              << tr("Can write delegates datas")
+              << tr("Can write all datas")
+              << tr("Can print")
+              << tr("Can create new datas")
+              << tr("Can delete datas"));
 
     QList<int> rightsFlags;
     rightsFlags
@@ -133,9 +133,9 @@ void UserRightsWidget::retranslate()
             << User::WriteOwn << User::WriteDelegates << User::WriteAll
             << User::Print << User::Create << User::Delete;
     int i;
-    for( i = 0; i < count(); ++i) {
-        item( i )->setFlags( Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
-        item( i )->setData( Qt::UserRole, rightsFlags.at( i ) );
+    for(i = 0; i < count(); ++i) {
+        item(i)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item(i)->setData(Qt::UserRole, rightsFlags.at(i));
     }
 
     setCurrentRightsToWidget();
@@ -144,24 +144,24 @@ void UserRightsWidget::retranslate()
 void UserRightsWidget::setCurrentRightsToWidget()
 {
     int i;
-    if ( m_Rights == User::NoRights ) {
+    if (m_Rights == User::NoRights) {
         // User don't have any rights
-        for( i = 0; i < count(); ++i)
-            this->item( i )->setCheckState( Qt::Unchecked );
-        this->item(0)->setCheckState( Qt::Checked );
+        for(i = 0; i < count(); ++i)
+            this->item(i)->setCheckState(Qt::Unchecked);
+        this->item(0)->setCheckState(Qt::Checked);
     } else {
         // User have some rights
-        for( i = 0; i < count(); ++i) {
-            if ( m_Rights & User::UserRights( this->item( i )->data( Qt::UserRole ).toInt() ) )
-                this->item( i )->setCheckState( Qt::Checked );
+        for(i = 0; i < count(); ++i) {
+            if (m_Rights & User::UserRights(this->item(i)->data(Qt::UserRole).toInt()))
+                this->item(i)->setCheckState(Qt::Checked);
             else
-                this->item( i )->setCheckState( Qt::Unchecked );
+                this->item(i)->setCheckState(Qt::Unchecked);
         }
     }
 }
 
 void UserRightsWidget::changeEvent(QEvent *e)
 {
-    if ( (e->type() == QEvent::LanguageChange) )
+    if ((e->type() == QEvent::LanguageChange))
         retranslate();
 }

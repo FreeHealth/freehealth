@@ -105,6 +105,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aPaste(0),
         aSelectAll(0),
         aAppPrefs(0),
+        aAppConfigurator(0),
         aPlugsPrefs(0),
         aMedinTux(0),
         aLanguageGroup(0),
@@ -562,6 +563,14 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
     if (!menu)
         return;
 
+    if (actions & Core::MainWindowActions::A_AppConfigurator) {
+        a = aAppConfigurator = new QAction(this);
+        a->setObjectName("aAppConfigurator");
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
+        cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
+        menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
+    }
     if (actions & Core::MainWindowActions::A_AppPreferences) {
         a = aAppPrefs = new QAction(this);
         a->setObjectName("aAppPrefs");
@@ -637,6 +646,8 @@ void MainWindowActionHandler::connectConfigurationActions()
 {
     if (aAppPrefs)
         connect(aAppPrefs, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
+    if (aAppConfigurator)
+        connect(aAppConfigurator, SIGNAL(triggered()), this, SLOT(applicationConfiguratorWizard()));
     if (aMedinTux)
         connect(aMedinTux, SIGNAL(triggered()), this, SLOT(configureMedintux()));
 }

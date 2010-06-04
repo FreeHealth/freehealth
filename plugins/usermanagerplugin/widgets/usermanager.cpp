@@ -250,8 +250,8 @@ bool UserManagerPrivate::initialize()
     updateStatusBar();
     connect(UserModel::instance(), SIGNAL(memoryUsageChanged()), this, SLOT(updateStatusBar()));
 
-    if (Utils::isDebugCompilation())
-        connect(userTableView,SIGNAL(activated(QModelIndex)), this, SLOT(showUserDebugDialog(QModelIndex)));
+//    if (Utils::isDebugCompilation())
+//        connect(userTableView,SIGNAL(activated(QModelIndex)), this, SLOT(showUserDebugDialog(QModelIndex)));
 
     // manage theme / icons
     Core::ITheme *th = Core::ICore::instance()->theme();

@@ -89,13 +89,13 @@ UserViewerPrivate::UserViewerPrivate(QObject *parent)
     m_Row = UserModel::instance()->currentUserIndex().row();
 }
 
-/** \brief Change current viewing user to \e modelRow from tkUserModel */
+/** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewer::changeUserTo(const int modelRow)
 {
     d->changeUserIndex(modelRow);
 }
 
-/** \brief Change current viewing user to \e modelRow from tkUserModel */
+/** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewerPrivate::changeUserIndex(const int modelRow)
 {
     int oldRow = m_Row;
@@ -234,7 +234,7 @@ void UserViewerPrivate::checkUserRights()
         c->setEnabled(m_CanModify);
 }
 
-/** \brief Lange change requested by user from the ui */
+/** \brief Lang change requested by user from the ui */
 void UserViewerPrivate::on_languageCombo_activated(int)
 {
     Core::Translators::instance()->changeLanguage(languageCombo->currentText());

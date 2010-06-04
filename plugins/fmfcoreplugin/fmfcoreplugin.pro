@@ -1,5 +1,5 @@
-TEMPLATE        = lib
-TARGET          = Core
+TEMPLATE = lib
+TARGET = Core
 PACKAGE_VERSION = 0.0.2
 
 # include shared files for the coreplugin.
@@ -8,27 +8,18 @@ PACKAGE_VERSION = 0.0.2
 # <fmfcoreplugin/...>
 include(../coreplugin/common_core.pri)
 include(../coreplugin/modemanager/modemanager.pri)
-
 DEFINES += FREEMEDFORMS
-
 QT *= script
 
 # specific derivative files
-HEADERS += \
-    coreplugin.h \
+HEADERS += coreplugin.h \
     coreimpl.h \
     commandlineparser.h \
     appaboutpage.h
-
-SOURCES += \
-    coreplugin.cpp \
-    coreimpl.cpp \
-#    mainwindow.cpp \
+SOURCES += coreplugin.cpp \
+    coreimpl.cpp \ # mainwindow.cpp \
     appaboutpage.cpp
-
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfcoreplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/fmfcoreplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/fmfcoreplugin_es.ts
-
-
+    $${SOURCES_TRANSLATIONS}/fmfcoreplugin_de.ts \
+    $${SOURCES_TRANSLATIONS}/fmfcoreplugin_es.ts
 OTHER_FILES = Core.pluginspec

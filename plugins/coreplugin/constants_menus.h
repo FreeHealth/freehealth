@@ -278,6 +278,7 @@ const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";   /*!< \brie
 
 // Configuration Menu Action's name
 const char * const  A_PREFERENCES        = "actionConfigure";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPCONFIGURATOR    = "actionAppConfigurator";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_PLUGINS_PREFERENCES= "actionPlugPrefs";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CONFIGURE_MEDINTUX = "actionConfMedintux";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 

@@ -241,7 +241,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
         if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::BSD ))
             return false;
 #endif
-        m_Settings->noMoreFirstTimeRunning();
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         // show the license agreement dialog

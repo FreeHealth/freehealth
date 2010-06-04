@@ -241,7 +241,8 @@ void IdentityWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        d->editUi->retranslateUi(this);
+        if (d->editUi)
+            d->editUi->retranslateUi(this);
         break;
     default:
         break;

@@ -7,11 +7,15 @@ include( fmfmainwindowplugin_dependencies.pri )
 HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
-    mainwindowpreferences.h
+    mainwindowpreferences.h \
+    appconfigwizard.h
+
 
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
-    mainwindowpreferences.cpp
+    mainwindowpreferences.cpp \
+    appconfigwizard.cpp
+
 
 FORMS = mainwindowpreferenceswidget.ui \
     virtualbasepage.ui

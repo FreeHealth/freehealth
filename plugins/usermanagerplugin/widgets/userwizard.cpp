@@ -84,6 +84,7 @@
 using namespace UserPlugin;
 
 static inline UserPlugin::UserModel *userModel() {return UserModel::instance(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 UserWizard::UserWizard(QWidget *parent)
     : QWizard(parent),
@@ -329,6 +330,9 @@ UserLoginPasswordPage::UserLoginPasswordPage(QWidget *parent)
     leLogin->toogleEchoMode();
     lePassword->toogleEchoMode();
     lePasswordConfirm->toogleEchoMode();
+    leLogin->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    lePassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    lePasswordConfirm->setIcon(theme()->icon(Core::Constants::ICONEYES));
 
     registerField("Login", leLogin, "text");
     registerField("Password", lePassword, "text");
@@ -482,11 +486,18 @@ UserRightsPage::UserRightsPage(QWidget *parent)
 {
     setTitle(tr("Define user's rights."));
     setSubTitle(tr("Role by role, define the user's rights."));
-    QLabel * lblUM = new QLabel(tr("User Management"), this);
-    QLabel * lblDrugs = new QLabel(tr("Drugs dosages Management"), this);
-    QLabel * lblMed = new QLabel(tr("Medicals"), this);
-    QLabel * lblUParaMed = new QLabel(tr("Paramedicals"), this);
-    QLabel * lblUAdminist = new QLabel(tr("Administrative"), this);
+    QLabel *lblUM = new QLabel(tr("User Management"), this);
+    QLabel *lblDrugs = new QLabel(tr("Drugs dosages Management"), this);
+    QLabel *lblMed = new QLabel(tr("Medicals"), this);
+    QLabel *lblUParaMed = new QLabel(tr("Paramedicals"), this);
+    QLabel *lblUAdminist = new QLabel(tr("Administrative"), this);
+    QFont bold;
+    bold.setBold(true);
+    lblUM->setFont(bold);
+    lblDrugs->setFont(bold);
+    lblMed->setFont(bold);
+    lblUParaMed->setFont(bold);
+    lblUAdminist->setFont(bold);
 
     Internal::UserRightsWidget * um = new Internal::UserRightsWidget(this);
     Internal::UserRightsWidget * drugs = new Internal::UserRightsWidget(this);

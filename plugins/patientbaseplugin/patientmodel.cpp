@@ -568,10 +568,10 @@ QString PatientModel::filter() const
     return QString();
 }
 
-QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    return QVariant();
-}
+//QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int role) const
+//{
+//    return QVariant();
+//}
 
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {

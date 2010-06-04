@@ -86,7 +86,8 @@ public:
         A_AppPreferences     = 0x01,
         A_PluginsPreferences = 0x02,
         A_ConfigureMedinTux  = 0x04,
-        A_LangageChange      = 0x08
+        A_LangageChange      = 0x08,
+        A_AppConfigurator    = 0x10
     };
     Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
 

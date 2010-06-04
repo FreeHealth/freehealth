@@ -35,130 +35,117 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEMEDFORMS_MAINWINDOW_H
-#define FREEMEDFORMS_MAINWINDOW_H
+#ifndef APPCONFIGWIZARD_H
+#define APPCONFIGWIZARD_H
 
 #include <fmfmainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
 
-#include <QCloseEvent>
+#include <QObject>
+#include <QWidget>
+#include <QWizardPage>
+#include <QWizard>
 
 QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-class QModelIndex;
+class QLabel;
+class QLineEdit;
 QT_END_NAMESPACE
 
 /**
- * \file mainwindow.h
+ * \file appconfigwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 01 May 2010
+ * \date 04 June 2010
 */
-
-namespace Form {
-class IFormIO;
-}
-
-namespace Utils {
-class FancyTabWidget;
-}
-
-namespace Patients {
-class PatientBar;
-}
-//namespace Form {
-//class EpisodeModel;
-//}
-
-namespace Core {
-class FileManager;
-}
 
 namespace MainWin {
 namespace Internal {
-//namespace Ui {
-//class MainWindow;
-//}  // End Ui
-}  // End Internal
 
-class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
+    namespace Ui{
+        class MainWindowPreferencesWidget;
+    }
+}
+
+class MAINWIN_EXPORT AppConfigWizard : public QWizard
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
-
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    void init();
+    AppConfigWizard(QWidget *parent = 0);
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+protected Q_SLOTS:
+    void done(int r);
 
-    void refreshPatient() const;
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    QStatusBar *statusBar();
-    QString currentPatient() const;
-
-public Q_SLOTS:
-    void postCoreInitialization();
-    void setCurrentPatient(const QModelIndex &index);
-    void episodeSelected(const QModelIndex &index);
-
-    // Interface of MainWidowActionHandler
-//    bool newFile();
-    bool openFile();
-    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
-//    bool saveFile();
-//    bool saveAsFile();
-//    bool print();
-
-    bool createNewPatient();
-    bool viewPatientIdentity();
-    bool removePatient();
-
-    bool applicationPreferences();
-    bool applicationConfiguratorWizard();
-//    bool configureMedintux();
-//
-//    virtual bool aboutApplication();
-//    bool applicationHelp();
-//    bool aboutQt();
-//    bool aboutPlugins();
-
-    void updateCheckerEnd();
-
-    void openPatientFormsFile();
-    void aboutToShowRecentFiles();
-    void aboutToShowRecentPatients();
-    void openRecentFile();
-    void openRecentPatient();
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-
-public:
-    Utils::FancyTabWidget *m_modeStack;
-    Patients::PatientBar *m_PatientBar;
-
-    /** \todo Move this Patient History in the ICore ? */
-    Core::FileManager *m_RecentPatients;
-
-    bool m_HelpTextShow;
-    uint m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
-    int  m_TimerId;
-    bool m_OpenLastOpenedForm;
-    QByteArray windowState;
+private:
 };
 
-} // End Core
+class BeginConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    BeginConfigPage(QWidget *parent = 0);
 
-#endif  // FREEMEDFORMS_MAINWINDOW_H
+protected:
+    void retranslate();
+    void done(int r);
+
+private:
+    QLabel *intro;
+    QLabel *langLabel;
+};
+
+
+class CreateNewUserPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    CreateNewUserPage(QWidget *parent = 0);
+
+private Q_SLOTS:
+    void createNewUser();
+
+};
+
+class DatabaseConfigurationPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    DatabaseConfigurationPage(QWidget *parent = 0);
+    ~DatabaseConfigurationPage();
+    bool validatePage();
+
+private Q_SLOTS:
+    void on_testButton_clicked();
+
+private:
+    Internal::Ui::MainWindowPreferencesWidget *m_ui;
+};
+
+class PatientFilePage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    PatientFilePage(QWidget *parent = 0);
+    bool validatePage();
+
+private Q_SLOTS:
+    void selectPatientFile();
+
+private:
+    QLabel *intro, *lbl;
+    QLineEdit *fileName;
+    QString formsFile;
+};
+
+class EndConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    EndConfigPage(QWidget *parent = 0);
+};
+
+
+}  // End namespace Core
+
+
+#endif // APPCONFIGWIZARD_H

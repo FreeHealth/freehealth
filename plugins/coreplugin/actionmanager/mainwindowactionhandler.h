@@ -120,6 +120,7 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool removePatient() {return false;}
 
     virtual bool applicationPreferences() {return false;}
+    virtual bool applicationConfiguratorWizard() {return false;}
     virtual bool configureMedintux()      {return false;}
 
     virtual bool aboutApplication();
@@ -154,6 +155,7 @@ protected:
     QAction *aSelectAll;
 
     QAction *aAppPrefs;
+    QAction *aAppConfigurator;
     QAction *aPlugsPrefs;
     QAction *aMedinTux;
     QActionGroup *aLanguageGroup;

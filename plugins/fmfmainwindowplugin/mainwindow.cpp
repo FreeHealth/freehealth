@@ -33,6 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "mainwindow.h"
+#include "appconfigwizard.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -179,6 +180,7 @@ void MainWindow::init()
 
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
+            Core::MainWindowActions::A_AppConfigurator |
             Core::MainWindowActions::A_PluginsPreferences |
             Core::MainWindowActions::A_LangageChange
             );
@@ -222,6 +224,12 @@ void MainWindow::extensionsInitialized()
     if (!UserPlugin::UserModel::instance()->hasCurrentUser()) {
         return;
     }
+
+    if (settings()->firstTimeRunning()) {
+        applicationConfiguratorWizard();
+        settings()->noMoreFirstTimeRunning();
+    }
+
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
@@ -261,7 +269,7 @@ void MainWindow::postCoreInitialization()
     actionManager()->retranslateMenusAndActions();
 
     // Open Last Opened Forms is necessary
-    openLastOpenedForm();
+    openPatientFormsFile();
 
     // TEST
     formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
@@ -320,14 +328,10 @@ void MainWindow::updateCheckerEnd()
 //    delete statusBar();
 }
 
-void MainWindow::openLastOpenedForm()
+void MainWindow::openPatientFormsFile()
 {
-    // Open the last form
-    if ((m_OpenLastOpenedForm) && (fileManager()->recentFiles().count())) {
-        QFile file(fileManager()->recentFiles().at(0));
-        if (file.exists())
-            loadFile(file.fileName());
-    }
+    /** \todo Save patient forms file to database */
+    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
 }
 
 bool MainWindow::openFile()
@@ -514,4 +518,10 @@ bool MainWindow::applicationPreferences()
     Core::SettingsDialog dlg(this);
     dlg.exec();
     return true;
+}
+
+bool MainWindow::applicationConfiguratorWizard()
+{
+    AppConfigWizard wiz(this);
+    wiz.exec();
 }

@@ -71,6 +71,8 @@ const char * const  S_LASTLOGIN         = "Login/userLogin";
 const char * const  S_LASTPASSWORD      = "Login/userPassword";
 const char * const  S_DATEFORMAT        = "Dates/Format";
 
+const char * const  S_PATIENTFORMS_FILENAME  = "Core/PatientFormsFile";
+
 const char * const  S_USE_EXTERNAL_DATABASE  = "ExternalDatabase/UseIt";
 const char * const  S_EXTERNAL_DATABASE_LOG  = "ExternalDatabase/Log";
 const char * const  S_EXTERNAL_DATABASE_PASS = "ExternalDatabase/Pass";

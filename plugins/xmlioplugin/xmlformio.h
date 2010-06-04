@@ -72,7 +72,7 @@ public:
     bool setFileName(const QString &absFileName);
 
     bool loadForm();
-    bool saveForm(QObject *treeRoot) { return true; }
+    bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     static QString lastestXmlVersion();
 
