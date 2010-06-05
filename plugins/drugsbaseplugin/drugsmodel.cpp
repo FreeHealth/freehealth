@@ -108,7 +108,7 @@ class DrugsModelPrivate
 public:
     DrugsModelPrivate() :
             m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
-            m_SelectionOnlyMode(false)
+            m_SelectionOnlyMode(false), m_IsDirty(false)
     {
     }
 
@@ -149,6 +149,7 @@ public:
             TextualDrugsData *td = static_cast<TextualDrugsData*>(drug);
             if (td) {
                 td->setDenomination(value.toString());
+                m_IsDirty = true;
                 return true;
             } else {
                 return false;
@@ -158,8 +159,10 @@ public:
             return false;
         if (column == Prescription::Note) {
             drug->setPrescriptionValue(column, value.toString().replace("[","{").replace("]","}"));
+            m_IsDirty = true;
         } else {
             drug->setPrescriptionValue(column, value);
+            m_IsDirty = true;
         }
         return true;
     }
@@ -308,7 +311,7 @@ public:
     mutable QHash<int, QPointer<DosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
     DrugsData *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
     InteractionsManager *m_InteractionsManager;
-    bool m_ShowTestingDrugs, m_SelectionOnlyMode;
+    bool m_ShowTestingDrugs, m_SelectionOnlyMode, m_IsDirty;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -535,6 +538,7 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex & parent)
     checkInteractions();
     endRemoveRows();
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return toReturn;
 }
@@ -552,6 +556,7 @@ int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &
     drug->setPrescriptionValue(Constants::Prescription::IsTextualOnly, true);
     d->m_DrugsList << drug;
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return d->m_DrugsList.indexOf(drug);
 }
@@ -575,6 +580,7 @@ int DrugsModel::addDrug(Internal::DrugsData *drug, bool automaticInteractionChec
         d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     }
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return d->m_DrugsList.indexOf(drug);
 }
@@ -606,6 +612,7 @@ void DrugsModel::clearDrugsList()
     d->m_TestingDrugsList.clear();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
 }
 
@@ -621,6 +628,7 @@ void DrugsModel::setDrugsList(QDrugsList &list)
     checkInteractions();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
 }
 
@@ -726,6 +734,17 @@ bool DrugsModel::isSelectionOnlyMode() const
     return d->m_SelectionOnlyMode;
 }
 
+void DrugsModel::setModified(bool state)
+{
+    d->m_IsDirty = state;
+}
+
+bool DrugsModel::isModified() const
+{
+    return d->m_IsDirty;
+}
+
+
 /** \brief Returns the dosage model for the selected drug */
 Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 {
@@ -745,7 +764,7 @@ Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 /** \brief Returns the dosage model for the selected drug */
 Internal::DosageModel *DrugsModel::dosageModel(const QModelIndex &drugIndex)
 {
-    if (! drugIndex.isValid())
+    if (!drugIndex.isValid())
         return 0;
     if (drugIndex.column() != Constants::Drug::UID)
         return 0;
@@ -775,6 +794,7 @@ int DrugsModel::removeDrug(const int uid)
     }
     checkInteractions();
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return i;
 }
@@ -791,6 +811,7 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_DrugsList.removeLast();
     checkInteractions();
     reset();
+    d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return 1;
 }

@@ -41,6 +41,9 @@
 #ifndef DRUGSWIDGETFACTORY_H
 #define DRUGSWIDGETFACTORY_H
 
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
+
 namespace DrugsDB {
 class DrugsModel;
 }
@@ -51,9 +54,6 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-#include <formmanagerplugin/iformwidgetfactory.h>
-
-
 /**
  * \file drugswidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
@@ -62,6 +62,7 @@ QT_END_NAMESPACE
 */
 
 namespace DrugsWidget {
+class DrugsCentralWidget;
 namespace Internal {
 
 class DrugsWidgetsFactory : public Form::IFormWidgetFactory
@@ -83,20 +84,52 @@ public:
 
 
 //--------------------------------------------------------------------------------------------------------
-//------------------------------------ mfDrugsWidget implementation --------------------------------------
+//------------------------------------  DrugsWidget implementation  --------------------------------------
 //--------------------------------------------------------------------------------------------------------
 class DrugsPrescriptorWidget : public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    DrugsPrescriptorWidget(Form::FormItem *linkedObject, QWidget *parent);
+    DrugsPrescriptorWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent);
     ~DrugsPrescriptorWidget();
 
-private:
+public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
+
+private:
+    DrugsWidget::DrugsCentralWidget *m_CentralWidget;
     QString     m_iniPath;
     bool        m_WithPrescribing, m_WithPrinting;
 };
+
+//--------------------------------------------------------------------------------------------------------
+//----------------------------------  DrugsWidgetData implementation  ------------------------------------
+//--------------------------------------------------------------------------------------------------------
+class DrugsWidgetData : public Form::IFormItemData
+{
+public:
+    DrugsWidgetData(Form::FormItem *item);
+    ~DrugsWidgetData();
+
+    void setDrugsPrescriptorWidget(DrugsPrescriptorWidget *widget);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    void setData(const QVariant &data, const int role);
+    QVariant data(const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private:
+    Form::FormItem *m_FormItem;
+    DrugsPrescriptorWidget *m_Widget;
+    QString m_OriginalValue;
+};
+
 
 }  // End Internal
 }  // End DrugsWidget

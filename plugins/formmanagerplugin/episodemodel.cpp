@@ -336,13 +336,15 @@ public:
             TreeItem *it = new TreeItem(datas, 0);
             it->setIsEpisode(false);
             formsItems.insert(f, it);
+            qWarning() << f << f->uuid();
         }
         // reparent items
-        QHashIterator<Form::FormMain *, TreeItem *> i(formsItems);
+        QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
         while (i.hasNext()) {
             i.next();
             Form::FormMain *f = i.key();
             TreeItem *it = i.value();
+            qWarning() << f << f->uuid();
             if (f->formParent()) {
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);
@@ -401,7 +403,11 @@ public:
                                                 << Constants::EPISODES_DATE
                                                 << Constants::EPISODES_LABEL,
                                                 where);
-            req += QString(" ORDER BY %1 ASC LIMIT 5;").arg(episodeBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE));
+            int limit;
+            f->isUniqueEpisode() ? limit=1 : limit=5;
+            req += QString(" ORDER BY %1 ASC LIMIT %2;")
+                   .arg(episodeBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE))
+                   .arg(limit);
             query.exec(req);
             if (query.isActive()) {
                 QHash<int, QVariant> datas;
@@ -612,7 +618,7 @@ public:
     QString m_UserUuid, m_LkIds, m_CurrentPatient, m_CurrentForm;
     bool m_FormTreeCreated;
     bool m_ReadOnly;
-    QHash<Form::FormMain *, TreeItem *> formsItems;
+    QMap<Form::FormMain *, TreeItem *> formsItems;
     TreeItem *m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
     QString m_TmpFile;
@@ -772,6 +778,13 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             if (it->isEpisode()) {
                 return QColor(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue").toString());
             } else {
+                /** \todo remove this */
+                Form::FormMain *form = d->formsItems.key(it);
+                if (form) {
+                    if (form->isUniqueEpisode())
+                        return QColor("red");
+                }
+                // End remove
                 return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "#000").toString());
             }
         }

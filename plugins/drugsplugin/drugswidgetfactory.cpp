@@ -42,6 +42,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/drugsio.h>
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
@@ -106,7 +107,7 @@ bool DrugsWidgetsFactory::extensionInitialized()
 
 QStringList DrugsWidgetsFactory::providedWidgets() const
 {
-     return QStringList() << "drugs";  /** \todo add more type of plugs ? */
+     return QStringList() << "drugs" << "prescription" << "prescriptor" << "drugselector";  /** \todo add more type of plugs ? */
 }
 
 bool DrugsWidgetsFactory::isContainer(const int) const
@@ -116,13 +117,13 @@ bool DrugsWidgetsFactory::isContainer(const int) const
 
 Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
 {
-    return new DrugsPrescriptorWidget(formItem, parent);
+    return new DrugsPrescriptorWidget(name, formItem, parent);
 }
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------- DrugsPrescriptorWidget implementation --------------------------------
 //--------------------------------------------------------------------------------------------------------
-DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *formItem, QWidget *parent) :
+DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormItem *formItem, QWidget *parent) :
         Form::IFormWidget(formItem,parent),
         m_PrescriptionModel(0)
 {
@@ -143,20 +144,79 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(Form::FormItem *formItem, QWidget
 
 //    // Get options
 //    const QStringList &options = mfo->param( mfObject::Param_Options ).toStringList();
-//    if ( options.contains( OPTION_WITHPRESCRIBING, Qt::CaseInsensitive ) )
-//        m_WithPrescribing = true;
 //    if ( options.contains( OPTION_WITHPRINTING, Qt::CaseInsensitive ) )
 //        m_WithPrinting = true;
 
     // intialize drugs database
 //    drugsBase();
 
+    if (formItem->extraDatas().value("options").contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
+        m_WithPrescribing = true;
+    } else if (name=="drugselector") {
+        m_WithPrescribing = false;
+    } else if (name=="prescription" || name=="prescriptor") {
+        m_WithPrescribing = true;
+    }
+
     // create main widget
-    DrugsCentralWidget *centralWidget = new DrugsCentralWidget(this);
-    centralWidget->initialize();
-    hb->addWidget(centralWidget);
+    m_CentralWidget = new DrugsCentralWidget(this);
+    m_CentralWidget->initialize();
+    m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
+    m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
+    hb->addWidget(m_CentralWidget);
+
+    // create formitemdata
+    DrugsWidgetData *datas = new DrugsWidgetData(formItem);
+    datas->setDrugsPrescriptorWidget(this);
+    formItem->setItemDatas(datas);
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()
 {
+}
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+DrugsWidgetData::DrugsWidgetData(Form::FormItem *item) :
+        Form::IFormItemData(), m_FormItem(item), m_Widget(0)
+{}
+
+DrugsWidgetData::~DrugsWidgetData()
+{}
+
+void DrugsWidgetData::setDrugsPrescriptorWidget(DrugsPrescriptorWidget *widget)
+{
+    m_Widget = widget;
+    clear();
+}
+
+void DrugsWidgetData::clear()
+{
+    m_Widget->m_PrescriptionModel->clearDrugsList();
+}
+
+bool DrugsWidgetData::isModified() const
+{
+    return m_Widget->m_PrescriptionModel->isModified();
+}
+
+void DrugsWidgetData::setData(const QVariant &data, const int role)
+{
+}
+
+QVariant DrugsWidgetData::data(const int role) const
+{
+    return QVariant();
+}
+
+void DrugsWidgetData::setStorableData(const QVariant &data)
+{
+    if (!data.isValid())
+        return;
+    DrugsDB::DrugsIO::prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
+    m_Widget->m_PrescriptionModel->setModified(false);
+}
+
+QVariant DrugsWidgetData::storableData() const
+{
+    return DrugsDB::DrugsIO::prescriptionToXml(m_Widget->m_PrescriptionModel);
 }

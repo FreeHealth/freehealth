@@ -21,6 +21,7 @@
     <name>episodeTester</name>
     <label>Identity</label>
     <type>form</type>
+    <options>unique</options>
 
     <Item>
       <type>identity</type>
@@ -139,6 +140,22 @@
        <step>0.1</step>
      </Item>
 
+  </MedForm>
+
+  <MedForm>
+    <type>form</type>
+    <name>chronictherapeutic</name>
+    <label>Chronic therapeutic</label>
+    <Item>
+      <name>chronicdrugs</name>
+      <type>prescriptor</type>
+      <label>Chronic therapeutic</label>
+    </Item>
+    <Item>
+      <type>texteditor</type>
+      <name>drugsremark</name>
+      <label>Comment on this prescription</label>
+    </Item>
   </MedForm>
 
   <MedForm>

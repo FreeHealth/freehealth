@@ -343,7 +343,15 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         }
 
         // Options
-        item->addExtraData(element.tagName(), element.text());
+        if (element.tagName().compare(Constants::TAG_OPTIONS)==0) {
+            if (element.text().contains(Constants::TAG_OPTIONS_UNIQUE_EPISODE)) {
+                if (item==m_ActualForm)
+                    m_ActualForm->setUniqueEpisode(true);
+            } else {
+                item->addExtraData(element.tagName(), element.text());
+            }
+        }
+
         element = element.nextSiblingElement();
     }
     return true;

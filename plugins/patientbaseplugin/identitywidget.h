@@ -65,8 +65,12 @@ public:
     ~IdentityWidget();
 
     void setCurrentPatientModel(Patients::PatientModel *model);
+    Patients::PatientModel *patientModel() const;
+
     bool isIdentityValid() const;
     bool isIdentityAlreadyInDatabase() const;
+
+    bool isModified() const;
 
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);

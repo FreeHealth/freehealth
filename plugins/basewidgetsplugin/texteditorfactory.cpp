@@ -55,6 +55,8 @@ TextEditorFactory::~TextEditorFactory()
 
 bool TextEditorFactory::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     return true;
 }
 

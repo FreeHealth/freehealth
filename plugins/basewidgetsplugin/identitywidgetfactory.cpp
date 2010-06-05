@@ -92,6 +92,7 @@ Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form
     return new IdentityFormWidget(formItem,parent);
 }
 
+
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
     if (!item->extraDatas().value("column").isEmpty())
@@ -112,14 +113,14 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     mainLayout->addStretch();
 
     m_ContainerLayout = new QGridLayout(mainWidget);
-    IFormWidget::createLabel(tkTr(Trans::Constants::IDENTITY_TEXT), Qt::AlignCenter);
-    m_Label->setFrameStyle(FormLabelFrame);
-    QFont font = m_Label->font();
-    font.setBold(true);
-    m_Label->setFont(font);
-    QSizePolicy sizePolicy = m_Label->sizePolicy();
-    sizePolicy.setVerticalPolicy(QSizePolicy::Fixed);
-    m_Label->setSizePolicy(sizePolicy);
+//    IFormWidget::createLabel(tkTr(Trans::Constants::IDENTITY_TEXT), Qt::AlignCenter);
+//    m_Label->setFrameStyle(FormLabelFrame);
+//    QFont font = m_Label->font();
+//    font.setBold(true);
+//    m_Label->setFont(font);
+//    QSizePolicy sizePolicy = m_Label->sizePolicy();
+//    sizePolicy.setVerticalPolicy(QSizePolicy::Fixed);
+//    m_Label->setSizePolicy(sizePolicy);
 
     // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
     numberColumns = getNumberOfColumns(m_FormItem);
@@ -129,7 +130,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
 //        m_ContainerLayout->setMargin(0);
 //        m_ContainerLayout->setSpacing(2);
 //    }
-    m_ContainerLayout->addWidget(m_Label, 0, 0,  1, numberColumns);
+//    m_ContainerLayout->addWidget(m_Label, 0, 0,  1, numberColumns);
     if (formItem->extraDatas().value("option", QString()).compare("readonly", Qt::CaseInsensitive) == 0)
         m_Identity = new Patients::IdentityWidget(this);
     else
@@ -142,6 +143,11 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
 
     connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
             this, SLOT(setCurrentPatient(QModelIndex)));
+
+    // create itemdata
+    IdentityWidgetData *datas = new IdentityWidgetData(m_FormItem);
+    datas->setIdentityFormWiget(this);
+    m_FormItem->setItemDatas(datas);
 }
 
 IdentityFormWidget::~IdentityFormWidget()
@@ -171,3 +177,14 @@ void IdentityFormWidget::retranslate()
     //     m_Label->setText(m_FormItem->spec()->label());
 }
 
+
+
+bool IdentityWidgetData::isModified() const
+{
+    return m_Widget->m_Identity->isModified();
+}
+
+QVariant IdentityWidgetData::storableData() const
+{
+    m_Widget->m_Identity->submit(); return QVariant();
+}

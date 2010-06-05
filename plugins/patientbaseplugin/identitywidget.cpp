@@ -158,6 +158,11 @@ void IdentityWidget::setCurrentPatientModel(Patients::PatientModel *model)
     d->createMapper();
 }
 
+Patients::PatientModel *IdentityWidget::patientModel() const
+{
+    return d->m_PatientModel;
+}
+
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
     QPixmap photo = d->m_PatientModel->index(patientIndex.row(), PatientModel::Photo).data().value<QPixmap>();
@@ -228,6 +233,14 @@ bool IdentityWidget::isIdentityAlreadyInDatabase() const
     where += QString("`%1`='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SURNAME), d->editUi->surname->text());
     return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, where)>0);
 }
+
+bool IdentityWidget::isModified() const
+{
+    if (d->m_EditMode==ReadOnlyMode)
+        return false;
+    return true;
+}
+
 
 bool IdentityWidget::submit()
 {

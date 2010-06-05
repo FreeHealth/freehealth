@@ -78,7 +78,6 @@ public:
     Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
 };
 
-class IdentityFormItemData;
 class IdentityFormWidget : public Form::IFormWidget
 {
     Q_OBJECT
@@ -98,31 +97,34 @@ public:
 private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
-    IdentityFormItemData *m_ItemData;
 };
 
-class IdentityFormItemData : public Form::IFormItemData
+class IdentityWidgetData : public Form::IFormItemData
 {
 public:
-    IdentityFormItemData(Form::FormItem *item);
-    ~IdentityFormItemData();
+    IdentityWidgetData(Form::FormItem *item) :
+            m_FormItem(item), m_Widget(0)
+    {}
 
-    void setIdentityFormWidget(IdentityFormWidget *form);
+    ~IdentityWidgetData() {}
 
-    void clear();
+    void setIdentityFormWiget(IdentityFormWidget *widget) {m_Widget = widget; clear();}
+    void clear() {}
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    // Use setData/Data for episode datas
+    void setData(const QVariant &data, const int role) {Q_UNUSED(data); Q_UNUSED(role);}
+    QVariant data(const int role) const {Q_UNUSED(role); return QVariant();}
 
-    void setStorableData(const QVariant &data);
+    // No storable datas for forms
+    void setStorableData(const QVariant &) {}
     QVariant storableData() const;
 
 private:
     Form::FormItem *m_FormItem;
-    IdentityFormWidget *m_Identity;
+    IdentityFormWidget *m_Widget;
 };
 
 }  // End namespace BaseWidgets

@@ -175,7 +175,7 @@ void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
 /**
   \brief Slot called when is selected from the drugSelector.
   Verify that the drug isn't already prescribed (if it is warn user and stop). \n
-  Add the drug to the mfDrugsModel and open the mfDosageCreatorDialog\n
+  Add the drug to the DrugsModel and open the DosageCreatorDialog\n
 */
 void DrugsCentralWidget::selector_drugSelected(const int uid)
 {
@@ -191,7 +191,8 @@ void DrugsCentralWidget::selector_drugSelected(const int uid)
     }
 //    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
     m_CurrentDrugModel->addDrug(uid);
-    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
+//    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
+    if (!m_CurrentDrugModel->isSelectionOnlyMode()) {
         Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));
         if (dlg.exec()==QDialog::Rejected) {
             m_CurrentDrugModel->removeLastInsertedDrug();

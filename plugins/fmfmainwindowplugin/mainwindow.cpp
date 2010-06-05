@@ -523,5 +523,6 @@ bool MainWindow::applicationPreferences()
 bool MainWindow::applicationConfiguratorWizard()
 {
     AppConfigWizard wiz(this);
-    wiz.exec();
+    int r = wiz.exec();
+    return r==QDialog::Accepted;
 }

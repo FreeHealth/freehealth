@@ -753,8 +753,11 @@ bool PluginSpecPrivate::resolveDependencies(const QList<PluginSpec *> &specs)
 */
 bool PluginSpecPrivate::loadLibrary()
 {
-    if (hasError)
+//    qWarning() << "LOADING PLUGIN :: " << name;
+    if (hasError) {
+        qWarning() << this->errorString;
         return false;
+    }
     if (state != PluginSpec::Resolved) {
         if (state == PluginSpec::Loaded)
             return true;

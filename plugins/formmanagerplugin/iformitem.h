@@ -190,6 +190,9 @@ public:
     virtual void setMultiEpisode(bool state) {m_Multi = state;}
     virtual bool isMultiEpisode() const {return m_Multi;}
 
+    virtual void setUniqueEpisode(bool state) {m_Multi = !state;}
+    virtual bool isUniqueEpisode() const {return !m_Multi;}
+
     void createDebugPage();
     void toTreeWidget(QTreeWidget *tree);
 
