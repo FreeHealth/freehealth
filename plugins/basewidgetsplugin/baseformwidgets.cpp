@@ -238,7 +238,9 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 
     m_EpisodeDate = m_Header->dateEdit;
     m_EpisodeDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+    m_EpisodeDate->setEnabled(false);
     m_EpisodeLabel = m_Header->lineEdit;
+    m_EpisodeLabel->setEnabled(false);
     m_UserName = m_Header->label_2;
     m_Header->label->setText(m_FormItem->spec()->label());
 
@@ -311,6 +313,8 @@ void BaseFormData::clear()
     m_Form->m_EpisodeDate->setDate(QDate::currentDate());
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_UserName->clear();
+    m_Form->m_EpisodeLabel->setEnabled(false);
+    m_Form->m_EpisodeDate->setEnabled(false);
 }
 
 bool BaseFormData::isModified() const
@@ -322,8 +326,18 @@ bool BaseFormData::isModified() const
 void BaseFormData::setData(const QVariant &data, const int role)
 {
     switch (role) {
-    case ID_EpisodeDate: m_Form->m_EpisodeDate->setDate(data.toDate()); break;
-    case ID_EpisodeLabel: m_Form->m_EpisodeLabel->setText(data.toString()); break;
+    case ID_EpisodeDate:
+        {
+            m_Form->m_EpisodeDate->setDate(data.toDate());
+            m_Form->m_EpisodeDate->setEnabled(true);
+            break;
+        }
+    case ID_EpisodeLabel:
+        {
+            m_Form->m_EpisodeLabel->setText(data.toString());
+            m_Form->m_EpisodeLabel->setEnabled(true);
+            break;
+        }
     case ID_UserName: m_Form->m_UserName->setText(data.toString()); break;
     }
 }
