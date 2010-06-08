@@ -71,12 +71,21 @@ public:
     bool canReadFile() const;
     bool setFileName(const QString &absFileName);
 
+    QString formAuthor() const {return m_Author;}
+    QString formVersion() const {return m_Version;}
+    QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    void formDescriptionToTreeWidget(QTreeWidget *tree = 0, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+
+
     bool loadForm();
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     static QString lastestXmlVersion();
 
+    QString lastError() const {return m_Error.join("\n");}
+
 private:
+    void readFileInformations() const;
     bool loadForm(const QString &file, Form::FormMain *rootForm);
     bool loadElement(Form::FormItem *item, QDomElement &rootElement);
     bool createElement(Form::FormItem *item, QDomElement &element);
@@ -86,6 +95,10 @@ private:
 
 private:
      mutable QString m_AbsFileName;
+     mutable QStringList m_Error;
+     mutable QDomDocument m_MainDoc;
+     mutable QString m_Author, m_Version;
+     mutable QHash<QString, QString> m_Desc;
      Form::FormMain *m_ActualForm;
 };
 

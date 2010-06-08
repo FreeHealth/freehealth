@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
+  <version>0.3.0</version>
+  <authors>Eric Maeker, MD</authors>
+  <description>Small description here</description>
+  <bibliography>Small bibliography</bibliography>
+  <licence>Licence terms here</licence>
+
+
+
   <MedForm>
-    <version>0.3.0</version>
     <creationdate>2010-05-05</creationdate>
     <categorie>samples</categorie>
-    <authors>Eric Maeker, MD</authors>
-    <description>Small description here</description>
-    <bibliography>Small bibliography</bibliography>
-    <licence>Licence terms here</licence>
 
     <label lang="fr">Exemple de Formulaires imbriqués</label>
     <categorie lang="fr">samples</categorie>

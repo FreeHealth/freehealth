@@ -38,6 +38,7 @@
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
 
@@ -63,6 +64,7 @@
 
 
 using namespace XmlForms;
+using namespace Trans::ConstantTranslations;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
@@ -193,11 +195,16 @@ QStringList XmlFormIO::fileFilters() const
 
 bool XmlFormIO::setFileName(const QString &absFileName)
 {
-    if (!QFile(absFileName).exists())
+    if (!QFile(absFileName).exists()) {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(absFileName));
         return false;
+    }
+
     if (QFileInfo(absFileName).suffix()==managedFileExtension()) {
         m_AbsFileName = absFileName;
         return true;
+    } else {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(absFileName));
     }
     return false;
 }
@@ -210,14 +217,87 @@ bool XmlFormIO::canReadFile() const
     if (QFileInfo(m_AbsFileName).suffix()!=managedFileExtension()) {
         return false;
     }
+
     // Check contents
+    bool ok = true;
     QString contents = Utils::readTextFile(m_AbsFileName, Utils::DontWarnUser);
-    if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") == contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
-        return true;
-    } else {
+    if (contents.isEmpty()) {
+        /** \todo return a FormObject with a helptext that explains the error ? */
+        warnXmlReadError(m_AbsFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
+        return false;
+    }
+    if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") != contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
+        ok = false;
+        m_Error.append(tr("Wrong number of tags (%1)").arg(Constants::TAG_NEW_FORM));
         Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(m_AbsFileName));
     }
-    return false;
+    if ((contents.count(QString("<%1>").arg(Constants::TAG_MAINXMLTAG)) != 1) ||
+        (contents.count(QString("</%1>").arg(Constants::TAG_MAINXMLTAG)) != 1)) {
+        m_Error.append(tr("Wrong number of tags (%1)").arg(Constants::TAG_NEW_FORM));
+        ok = false;
+    }
+
+    // load document
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if (!m_MainDoc.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
+        warnXmlReadError(m_AbsFileName, errorMsg, errorLine, errorColumn);
+        m_Error.append(errorMsg);
+        ok = false;
+    }
+
+    // Check doctype name
+    if (m_MainDoc.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
+        const QString &error = tr("This file is not a FreeMedForms XML file. Document type name mismatch.");
+        warnXmlReadError(m_AbsFileName, error);
+        m_Error.append(error);
+        ok = false;
+    }
+
+    /** \todo check version of the file */
+//    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
+//        const QString &error = tr("No version number defined");
+//        warnXmlReadError(file, error);
+//        m_Error.append(error);
+//        return false;
+//    } else {
+//        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
+//        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
+//        QString version = contents.mid(beg, end-beg).simplified();
+//    }
+
+    if (ok)
+        readFileInformations();
+
+    return ok;
+}
+
+QString XmlFormIO::formDescription(const QString &lang) const
+{
+    if (m_Desc.value(lang).isEmpty())
+        return m_Desc.value(Trans::Constants::ALL_LANGUAGE);
+    return m_Desc.value(lang);
+}
+
+void XmlFormIO::formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang) const
+{
+}
+
+void XmlFormIO::readFileInformations() const
+{
+    QDomElement root = m_MainDoc.documentElement();
+    // get version
+    m_Version = root.firstChildElement(Constants::TAG_SPEC_VERSION).text();
+    // get author
+    m_Author = root.firstChildElement(Constants::TAG_SPEC_AUTHORS).text();
+    // get descriptions
+    QDomElement desc = root.firstChildElement(Constants::TAG_SPEC_DESCRIPTION);
+    while (!desc.isNull()) {
+        m_Desc.insert(desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE), desc.text());
+        desc = root.nextSiblingElement(Constants::TAG_SPEC_DESCRIPTION);
+    }
+    qWarning() << m_Version << m_Author << m_Desc;
 }
 
 bool XmlFormIO::loadForm()
@@ -230,48 +310,18 @@ bool XmlFormIO::loadForm()
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 {
-    // Read contents if necessary
-    QString contents;
-    contents = Utils::readTextFile(file, Utils::DontWarnUser);
-    if (contents.isEmpty()) {
-        warnXmlReadError(file, tr("File is empty."));
-        /** \todo return a FormObject with a helptext that explains the error ? */
-        return false;
-    }
-
-    QDomDocument document;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if (!document.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
-        warnXmlReadError(file, errorMsg, errorLine, errorColumn);
-        return false;
-    }
-
-    // Check doctype name
-    if (document.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
-        warnXmlReadError(file, tr("This file is not a FreeMedForms XML file. Document type name mismatch."));
-        return false;
-    }
-
-    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
-        warnXmlReadError(file, tr("No version number defined"));
-        return false;
-    } else {
-//        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
-//        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
-//        QString version = contents.mid(beg, end-beg).simplified();
-        /** \todo check version of the file */
-    }
-
     // Check root element --> must be a form type
-    QDomElement root = document.documentElement();
+    QDomElement root = m_MainDoc.firstChildElement(Constants::TAG_MAINXMLTAG);
+    QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
+    QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
+
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
     if (!rootForm) {
-        if ((root.tagName().compare(Constants::TAG_MAINXMLTAG)!=0) && (root.tagName().compare(Constants::TAG_ADDFILE)!=0)) {
-            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_MAINXMLTAG));
+        if (addFile.isNull() && newForm.isNull()) {
+            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
             return false;
         }
-//        rootForm = createNewForm(root, m_ActualForm);
+//        rootForm = createNewForm(newForm, m_ActualForm);
 //        m_ActualForm = rootForm;
     }
 
@@ -293,6 +343,12 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         i = Constants::createTags.indexOf(element.tagName());
         if (i != -1) {
             createElement(item, element);
+            element = element.nextSiblingElement();
+            continue;
+        }
+
+        // if there is no item defined then go nextSibling till we find a new form, item, page...
+        if (!item) {
             element = element.nextSiblingElement();
             continue;
         }

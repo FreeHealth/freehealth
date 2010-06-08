@@ -42,14 +42,18 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QObject>
+#include <QString>
 #include <QStringList>
+#include <QTreeWidget>
 
 /**
  * \file iformio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 09 Aug 2009
+ * \version 0.4.0
+ * \date 08 June 2010
 */
 
 namespace Form {
@@ -68,8 +72,16 @@ public:
     virtual QString managedFileExtension() const = 0;
     virtual bool canReadFile() const = 0;
 
+    // canReadFile() must be called first, no need to loadForm to get these informations
+    virtual QString formAuthor() const = 0;
+    virtual QString formVersion() const = 0;
+    virtual QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+    virtual void formDescriptionToTreeWidget(QTreeWidget *tree = 0, const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+
     virtual bool loadForm() = 0;
     virtual bool saveForm(QObject *treeRoot) = 0;
+
+    virtual QString lastError() const = 0;
 };
 
 } // end Form

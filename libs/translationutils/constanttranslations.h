@@ -356,6 +356,8 @@ namespace Time {
         const char* const FILE_1_ISNOT_READABLE              = QT_TRANSLATE_NOOP("tkConstants", "File %1 is not readable");
         const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
         const char* const FILE_1_LOADED                      = QT_TRANSLATE_NOOP("tkConstants", "File %1 loaded");
+        const char* const FILE_1_ISEMPTY                     = QT_TRANSLATE_NOOP("tkConstants", "File %1 is empty");
+
         const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
         const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
         const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
