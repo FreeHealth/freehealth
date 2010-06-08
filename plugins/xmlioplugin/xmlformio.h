@@ -46,6 +46,13 @@
 #include <QDomNode>
 #include <QObject>
 
+/**
+ * \file xmlformio.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 08 June 2010
+*/
+
 namespace Form {
 class FormItem;
 class FormMain;
@@ -71,10 +78,11 @@ public:
     bool canReadFile() const;
     bool setFileName(const QString &absFileName);
 
+    bool readFileInformations();
     QString formAuthor() const {return m_Author;}
     QString formVersion() const {return m_Version;}
     QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
-    void formDescriptionToTreeWidget(QTreeWidget *tree = 0, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
 
 
     bool loadForm();
@@ -85,7 +93,6 @@ public:
     QString lastError() const {return m_Error.join("\n");}
 
 private:
-    void readFileInformations() const;
     bool loadForm(const QString &file, Form::FormMain *rootForm);
     bool loadElement(Form::FormItem *item, QDomElement &rootElement);
     bool createElement(Form::FormItem *item, QDomElement &element);

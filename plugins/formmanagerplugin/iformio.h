@@ -73,10 +73,11 @@ public:
     virtual bool canReadFile() const = 0;
 
     // canReadFile() must be called first, no need to loadForm to get these informations
+    virtual bool readFileInformations() = 0;
     virtual QString formAuthor() const = 0;
     virtual QString formVersion() const = 0;
     virtual QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
-    virtual void formDescriptionToTreeWidget(QTreeWidget *tree = 0, const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+    virtual void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
 
     virtual bool loadForm() = 0;
     virtual bool saveForm(QObject *treeRoot) = 0;

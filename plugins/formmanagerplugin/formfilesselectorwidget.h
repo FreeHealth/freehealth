@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,82 +32,56 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "formmanagerplugin.h"
-#include "formmanagermode.h"
-#include "formmanager.h"
-#include "formplaceholder.h"
-#include "episodebase.h"
-#include "episodemodel.h"
-#include "formmanagerpreferencespage.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef FORMFILESSELECTORWIDGET_H
+#define FORMFILESSELECTORWIDGET_H
 
-#include <utils/log.h>
-
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
-
-#include <QtCore/QtPlugin>
 #include <QWidget>
-#include <QDebug>
+#include <QModelIndex>
 
+QT_BEGIN_NAMESPACE
+class QFileSystemModel;
+QT_END_NAMESPACE
 
-using namespace Form;
-using namespace Internal;
+/**
+ * \file formfileselectorwidget.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 08 June 2010
+*/
 
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+namespace Form {
+class IFormIO;
 
-
-FormManagerPlugin::FormManagerPlugin() :
-        mode(0)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating FormManagerPlugin";
+namespace Internal {
+namespace Ui {
+class FormFilesSelectorWidget;
 }
 
-FormManagerPlugin::~FormManagerPlugin()
-{
-    qWarning() << "FormManagerPlugin::~FormManagerPlugin()";
-    if (mode) {
-        removeObject(mode);
-        delete mode;
-        mode = 0;
-    }
-}
+class FormFilesSelectorWidget : public QWidget {
+    Q_OBJECT
+public:
+    FormFilesSelectorWidget(QWidget *parent = 0);
+    ~FormFilesSelectorWidget();
 
-bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "FormManagerPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
+private Q_SLOTS:
+    void on_useButton_clicked();
+    void on_listView_activated(const QModelIndex &index);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+protected:
+    void changeEvent(QEvent *e);
 
-    // Initialize patient base
-    episodeBase();
-    if (!episodeBase()->isInitialized())
-        return false;
+private:
+    Internal::Ui::FormFilesSelectorWidget *ui;
+    QFileSystemModel *dirModel;
+    QList<Form::IFormIO*> ios;
+};
 
-    return true;
-}
+}  // End namespace Internal
+}  // End namespace Form
 
-void FormManagerPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "FormManagerPlugin::extensionsInitialized";
-
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add mode
-    FormManager::instance();
-    mode = new FormManagerMode(this);
-    mode->setWidget(FormManager::instance()->formPlaceHolder());
-    addObject(mode);
-
-    // Add options page
-    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
-}
-
-
-Q_EXPORT_PLUGIN(FormManagerPlugin)
+#endif // FORMFILESSELECTORWIDGET_H

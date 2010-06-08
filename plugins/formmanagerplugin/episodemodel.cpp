@@ -336,7 +336,7 @@ public:
             TreeItem *it = new TreeItem(datas, 0);
             it->setIsEpisode(false);
             formsItems.insert(f, it);
-            qWarning() << f << f->uuid();
+//            qWarning() << f << f->uuid();
         }
         // reparent items
         QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
@@ -344,7 +344,7 @@ public:
             i.next();
             Form::FormMain *f = i.key();
             TreeItem *it = i.value();
-            qWarning() << f << f->uuid();
+//            qWarning() << f << f->uuid();
             if (f->formParent()) {
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);

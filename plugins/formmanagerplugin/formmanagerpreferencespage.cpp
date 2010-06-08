@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -32,82 +32,87 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "formmanagerplugin.h"
-#include "formmanagermode.h"
-#include "formmanager.h"
-#include "formplaceholder.h"
-#include "episodebase.h"
-#include "episodemodel.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "formmanagerpreferencespage.h"
+#include "formfilesselectorwidget.h"
 
-#include <utils/log.h>
-
-#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
-#include <QtCore/QtPlugin>
-#include <QWidget>
-#include <QDebug>
+#include <QHBoxLayout>
 
-
-using namespace Form;
-using namespace Internal;
-
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+using namespace Form::Internal;
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 
-FormManagerPlugin::FormManagerPlugin() :
-        mode(0)
+FormManagerPreferencesPage::FormManagerPreferencesPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0)
+{ setObjectName("FormManagerPreferencesPage"); }
+
+FormManagerPreferencesPage::~FormManagerPreferencesPage()
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating FormManagerPlugin";
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
 }
 
-FormManagerPlugin::~FormManagerPlugin()
+QString FormManagerPreferencesPage::id() const { return objectName(); }
+QString FormManagerPreferencesPage::name() const { return tr("Selector"); }
+QString FormManagerPreferencesPage::category() const { return tr("Forms"); }
+
+void FormManagerPreferencesPage::resetToDefaults()
 {
-    qWarning() << "FormManagerPlugin::~FormManagerPlugin()";
-    if (mode) {
-        removeObject(mode);
-        delete mode;
-        mode = 0;
+    m_Widget->writeDefaultSettings(settings());
+}
+
+void FormManagerPreferencesPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
     }
+    m_Widget->saveToSettings(settings());
 }
 
-bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
+void FormManagerPreferencesPage::finish() { delete m_Widget; }
+
+void FormManagerPreferencesPage::checkSettingsValidity()
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "FormManagerPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
-
-    // Initialize patient base
-    episodeBase();
-    if (!episodeBase()->isInitialized())
-        return false;
-
-    return true;
+//    QHash<QString, QVariant> defaultvalues;
+//    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+//    defaultvalues.insert(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
+//
+//    foreach(const QString &k, defaultvalues.keys()) {
+//        if (settings()->value(k) == QVariant())
+//            settings()->setValue(k, defaultvalues.value(k));
+//    }
+//    settings()->sync();
 }
 
-void FormManagerPlugin::extensionsInitialized()
+QWidget *FormManagerPreferencesPage::createPage(QWidget *parent)
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "FormManagerPlugin::extensionsInitialized";
-
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add mode
-    FormManager::instance();
-    mode = new FormManagerMode(this);
-    mode->setWidget(FormManager::instance()->formPlaceHolder());
-    addObject(mode);
-
-    // Add options page
-    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new FormManagerPreferencesWidget(parent);
+    return m_Widget;
 }
 
 
-Q_EXPORT_PLUGIN(FormManagerPlugin)
+FormManagerPreferencesWidget::FormManagerPreferencesWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    m_Selector = new FormFilesSelectorWidget(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->setMargin(0);
+    l->setSpacing(0);
+    l->addWidget(m_Selector);
+}
+
+void FormManagerPreferencesWidget::saveToSettings(Core::ISettings *)
+{}
+
+void FormManagerPreferencesWidget::changeEvent(QEvent *e)
+{}
