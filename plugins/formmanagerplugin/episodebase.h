@@ -72,7 +72,6 @@ public:
     virtual ~EpisodeBase();
 
 //    // initialize
-    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
 //private:
