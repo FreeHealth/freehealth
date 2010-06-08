@@ -40,6 +40,7 @@
 #ifndef PATIENTSELECTOR_H
 #define PATIENTSELECTOR_H
 
+#include <patientbaseplugin/patientbase_exporter.h>
 #include <coreplugin/modemanager/basemode.h>
 
 #include <QWidget>
@@ -52,7 +53,7 @@ namespace Internal {
 class PatientSelectorPrivate;
 }  // End namespace Internal
 
-class PatientSelector : public QWidget
+class PATIENT_EXPORT PatientSelector : public QWidget
 {
     Q_OBJECT
     friend class Internal::PatientSelectorPrivate;

@@ -40,6 +40,8 @@
 #ifndef EPISODEMODEL_H
 #define EPISODEMODEL_H
 
+#include <formmanagerplugin/formmanager_exporter.h>
+
 #include <QAbstractItemModel>
 
 namespace Form {
@@ -47,7 +49,7 @@ namespace Internal {
 class EpisodeModelPrivate;
 }
 
-class EpisodeModel : public QAbstractItemModel
+class FORM_EXPORT EpisodeModel : public QAbstractItemModel
 {
     Q_OBJECT
 

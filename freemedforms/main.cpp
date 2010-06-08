@@ -47,14 +47,14 @@
 
 #include <iostream>
 
-enum { WarnAllPluginSpecs=false };
+enum { WarnAllPluginSpecs=true };
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 static const char* USERPLUGINSNAME = "UserManager";
 
 static const QString VERSION_MESSAGE =
-        QString("FreeDiams %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        QString("FreeMedForms %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
         .arg(PACKAGE_VERSION)
 #ifdef LINUX_INTEGRATED
 #  ifdef DEBUG

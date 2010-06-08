@@ -40,6 +40,8 @@
 #ifndef IDENTITYWIDGET_H
 #define IDENTITYWIDGET_H
 
+#include <patientbaseplugin/patientbase_exporter.h>
+
 #include <QWidget>
 #include <QModelIndex>
 
@@ -50,7 +52,7 @@ namespace Internal {
 class IdentityWidgetPrivate;
 }
 
-class IdentityWidget : public QWidget
+class PATIENT_EXPORT IdentityWidget : public QWidget
 {
     Q_OBJECT
     friend class Internal::IdentityWidgetPrivate;
