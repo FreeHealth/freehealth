@@ -44,11 +44,17 @@
       <attribute name="horizontalHeaderVisible">
        <bool>false</bool>
       </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
       </attribute>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderVisible">
        <bool>false</bool>
@@ -85,12 +91,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>splitter</zorder>
-  <zorder>label_2</zorder>
-  <zorder>searchName</zorder>
-  <zorder>label_3</zorder>
-  <zorder>searchSurname</zorder>
-  <zorder>numberOfPatients</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -68,7 +68,7 @@ class VirtualDatabasePreferences : public QWidget, private Ui::VirtualDatabasePr
 public:
     VirtualDatabasePreferences(QWidget *parent);
 
-    static void writeDefaultSettings(Core::ISettings *) {}
+    static void writeDefaultSettings(Core::ISettings *);
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *) {}

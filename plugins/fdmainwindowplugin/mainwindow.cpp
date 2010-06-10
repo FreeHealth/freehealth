@@ -219,7 +219,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
-    actionManager()->retranslateMenusAndActions();
+//    actionManager()->retranslateMenusAndActions();
 
     return true;
 }
@@ -310,6 +310,9 @@ void MainWindow::extensionsInitialized()
     readSettings();
     show();
     raise();
+
+    // Connect post core initialization
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 MainWindow::~MainWindow()
@@ -318,6 +321,13 @@ MainWindow::~MainWindow()
     delete m_TemplatesDock;
     m_TemplatesDock = 0;
 }
+
+void MainWindow::postCoreInitialization()
+{
+    contextManager()->updateContext();
+    actionManager()->retranslateMenusAndActions();
+}
+
 
 /**
   \brief Refresh the ui data refering to the patient

@@ -110,6 +110,8 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
+static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
@@ -131,7 +133,6 @@ MainWindow::MainWindow(QWidget *parent) :
         m_RecentPatients(0)
 {
     setObjectName("MainWindow");
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     messageSplash(tr("Creating Main Window"));
     setAttribute(Qt::WA_QuitOnClose);
     m_RecentPatients = new Core::FileManager(this);
@@ -221,12 +222,13 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 void MainWindow::extensionsInitialized()
 {
     // First check if there is a logged user
-    if (!UserPlugin::UserModel::instance()->hasCurrentUser()) {
+    if (!userModel()->hasCurrentUser()) {
         return;
     }
 
     if (settings()->firstTimeRunning()) {
         if (!applicationConfiguratorWizard()) {
+            finishSplash(this);
             qApp->exit(1234);
             return;
         }
@@ -260,6 +262,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::postCoreInitialization()
 {
+    on_currentUser_Changed();
+    connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
     // Create and insert the patient tab in the formplaceholder
     m_PatientBar = new Patients::PatientBar(this);
     formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);
@@ -277,6 +281,12 @@ void MainWindow::postCoreInitialization()
     // TEST
     formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
     // END TEST
+}
+
+void MainWindow::on_currentUser_Changed()
+{
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
+                   userModel()->currentUserData(UserPlugin::User::FullName).toString());
 }
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)

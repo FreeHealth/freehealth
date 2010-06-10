@@ -100,6 +100,8 @@ public:
 
     bool isEpisode(const QModelIndex &index) const;
     bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
+    bool isUniqueEpisode(const QModelIndex &index) const;
+    bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
     void setReadOnly(const bool state);
     bool isReadOnly() const;
     bool isDirty() const;
@@ -121,7 +123,7 @@ public Q_SLOTS:
     void setCurrentFormUuid(const QString &uuid);
 
     bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);
-//    bool saveEpisode(const int id, const QString &formUid);
+    bool saveEpisode(const QModelIndex &index, const QString &formUid = QString::null);
 
     void onCoreDatabaseServerChanged();
 

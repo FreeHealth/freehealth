@@ -266,7 +266,9 @@ void DrugSelector::retranslateUi(const QString &)
 void DrugSelector::setSearchMethod(int method)
 {
     if (method == Constants::SearchCommercial) {
+#ifdef FREEDIAMS
         Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHCOMMERCIAL_TEXT));
+#endif
         m_filterModel = "";
         InnView->hide();
         m_SearchMethod = method;
@@ -283,7 +285,9 @@ void DrugSelector::setSearchMethod(int method)
         }
     }
     else if (method == Constants::SearchMolecules) {
+#ifdef FREEDIAMS
         Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHMOLECULES_TEXT));
+#endif
         m_filterModel = "";
         InnView->hide();
         m_SearchMethod = method;
@@ -302,7 +306,9 @@ void DrugSelector::setSearchMethod(int method)
         m_filterModel = drugsBase()->getWhereClause(DrugsDB::Constants::Table_DRUGS, where);
     }
     else if (method == Constants::SearchInn) {
+#ifdef FREEDIAMS
         Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHINN_TEXT));
+#endif
         m_filterModel = "";
         // show inn model and view
         InnView->show();

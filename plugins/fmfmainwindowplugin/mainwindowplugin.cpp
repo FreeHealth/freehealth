@@ -98,8 +98,10 @@ void MainWinPlugin::extensionsInitialized()
 
     // Add preferences pages
     prefPage = new Internal::MainWindowPreferencesPage();
-    addObject(prefPage);
     virtualBasePage = new Internal::VirtualBasePage();
+    prefPage->checkSettingsValidity();
+    virtualBasePage->checkSettingsValidity();
+    addObject(prefPage);
     addObject(virtualBasePage);
 
     m_MainWindow->extensionsInitialized();

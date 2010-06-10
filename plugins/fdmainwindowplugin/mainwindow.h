@@ -91,7 +91,10 @@ public:
     void changeFontTo(const QFont &font);
 
 
-public Q_SLOTS: // Interface of MainWidowActionHandler
+public Q_SLOTS:
+    void postCoreInitialization();
+
+    // Interface of MainWidowActionHandler
     bool newFile();
     bool openFile();
     void readFile(const QString &file);

@@ -42,6 +42,7 @@
 #include <usermanagerplugin/usermodel.h>
 
 #include <patientbaseplugin/patientbase.h>
+#include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/constants_db.h>
 
 #include <formmanagerplugin/episodemodel.h>
@@ -53,6 +54,7 @@
 
 #include <utils/randomizer.h>
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QDir>
 #include <QSqlDatabase>
@@ -64,10 +66,12 @@
 
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
+static inline Patients::PatientModel *patientModel()  { return Patients::PatientModel::activeModel(); }
 static inline Form::Internal::EpisodeBase *episodeBase()  { return Form::Internal::EpisodeBase::instance(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 using namespace MainWin::Internal;
+using namespace Trans::ConstantTranslations;
 
 
 static inline void createPatient(const QString &name, const QString &secondname, const QString &surname,
@@ -140,6 +144,11 @@ static inline void createPatient(const QString &name, const QString &secondname,
 }
 
 
+static inline void refreshPatientModel()
+{
+    if (patientModel())
+        patientModel()->refreshModel();
+}
 
 VirtualDatabasePreferences::VirtualDatabasePreferences(QWidget *parent) :
         QWidget(parent)
@@ -147,14 +156,15 @@ VirtualDatabasePreferences::VirtualDatabasePreferences(QWidget *parent) :
     setupUi(this);
 }
 
-void VirtualDatabasePreferences::on_populateDb_clicked()
+void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
 {
-    QSqlQuery query(patientBase()->database());
+    Utils::Log::addMessage("VirtualDatabasePreferences", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabasePreferences"));
     QHash<int, QString> where;
     where.insert(Patients::Constants::IDENTITY_NAME, "LIKE 'DOE'");
-    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
     int c = patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME, patientBase()->getWhereClause(Patients::Constants::Table_IDENT, where));
+    qWarning() << "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" << c;
     if (!c) {
+        int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
         QString uid = QUuid::createUuid().toString();
@@ -173,10 +183,16 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         createPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
                       "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.jpg");
 
+        refreshPatientModel();
     }
+}
 
+void VirtualDatabasePreferences::on_populateDb_clicked()
+{
+    writeDefaultSettings(0);
     // Prepare virtual patients
     int nb = nbVirtualPatients->value();
+    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
     QProgressDialog dlg(tr("Creating %1 virtual patients").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
@@ -230,6 +246,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     }
     patientBase()->database().commit();
 
+    refreshPatientModel();
 }
 
 void VirtualDatabasePreferences::on_populateEpisodes_clicked()

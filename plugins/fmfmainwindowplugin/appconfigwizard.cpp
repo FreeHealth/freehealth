@@ -142,14 +142,14 @@ CreateNewUserPage::CreateNewUserPage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Create a new user"));
-    QLabel *lbl = new QLabel(tr("It is recommended to create a new user instead of using the default one."));
+    setSubTitle(tr("It is recommended to create a new user instead of using the default one."));
     QPushButton *but = new QPushButton(tr("Click here to create a new user"), this);
     newUserName = new QLabel(" ", this);
     connect(but, SIGNAL(clicked()), this, SLOT(createNewUser()));
 
     QGridLayout *layout = new QGridLayout(this);
-    layout->addWidget(lbl, 0, 0);
-    layout->addWidget(but, 1, 0);
+    layout->addWidget(but, 0, 0);
+    layout->addWidget(newUserName, 1, 0);
     setLayout(layout);
 }
 

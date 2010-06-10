@@ -243,7 +243,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                                         Trans::Constants::TEMPLATES_DATABASE_INFORMATIONS_TEXT,
                                         QList<int>() << Core::Constants::C_GLOBAL_ID, this);
         connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformations()));
-        contextManager()->updateContext();
+//        contextManager()->updateContext();
     }
 
     updateActions();

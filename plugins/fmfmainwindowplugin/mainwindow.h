@@ -109,6 +109,7 @@ public:
 
 public Q_SLOTS:
     void postCoreInitialization();
+    void on_currentUser_Changed();
     void setCurrentPatient(const QModelIndex &index);
 
     // Interface of MainWidowActionHandler

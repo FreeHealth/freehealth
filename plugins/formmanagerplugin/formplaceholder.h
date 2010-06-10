@@ -98,12 +98,12 @@ public Q_SLOTS:
     void setCurrentEpisode(const QModelIndex &index);
 
 protected Q_SLOTS:
+    void handlePressed(const QModelIndex &index);
+    void handleClicked(const QModelIndex &index);
     void reset();
     void newEpisode();
     void removeEpisode();
     void validateEpisode();
-    void handlePressed(const QModelIndex &index);
-    void handleClicked(const QModelIndex &index);
 
 private:
     Internal::FormPlaceHolderPrivate *d;

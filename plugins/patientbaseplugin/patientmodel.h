@@ -149,6 +149,9 @@ public:
 
     static QList<QString> patientName(const QList<QString> &uuids);
 
+public Q_SLOTS:
+    bool submit();
+    bool refreshModel();
 
 Q_SIGNALS:
     void patientAboutToChange(const QString &newUuid);
@@ -158,9 +161,6 @@ Q_SIGNALS:
     void patientChanged(const QString &uuid);
     void patientDeleted(const QString &uuid);
     void patientCreated(const QString &uuid);
-
-public Q_SLOTS:
-    bool submit();
 
 protected Q_SLOTS:
     void changeUserUuid(const QString &uuid);

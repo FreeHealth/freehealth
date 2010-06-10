@@ -82,10 +82,7 @@ public:
             m_EpisodesTable(0),
             m_Stack(0),
             m_GeneralLayout(0),
-            m_ButtonLayout(0),
             m_Scroll(0),
-            m_New(0),
-            m_Remove(0),
             q(parent)
     {
     }
@@ -134,10 +131,8 @@ public:
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
-    QGridLayout *m_ButtonLayout;
     QScrollArea *m_Scroll;
     QHash<int, QString> m_StackId_FormUuid;
-    QPushButton *m_New, *m_Remove;
 
 private:
     FormPlaceHolder *q;
@@ -212,11 +207,15 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
     d->m_FileTree->setFrameStyle(QFrame::NoFrame);
     d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
 //    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
 
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+
+    /** \todo problem with selectionModel == 0 ???? */
+    connect(d->m_FileTree->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(treeItemChanged(QModelIndex, QModelIndex)));
 
 //    connect(m_ui.editorList, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -226,19 +225,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Scroll->setWidgetResizable(true);
     d->m_Stack = new QStackedLayout(w);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
-
-    // create the buttons
-//    QWidget *wb = new QWidget(this);
-//    d->m_ButtonLayout = new QGridLayout(wb);
-//    d->m_ButtonLayout->setSpacing(0);
-//    d->m_ButtonLayout->setMargin(0);
-//    d->m_New = new QPushButton(theme()->icon(Core::Constants::ICONADD), "", wb);
-//    d->m_Remove = new QPushButton(theme()->icon(Core::Constants::ICONREMOVE), "", wb);
-//    d->m_ButtonLayout->addWidget(d->m_New, 1, 0);
-//    d->m_ButtonLayout->addWidget(d->m_Remove, 1, 1);
-//    d->m_ButtonLayout->addWidget(d->m_FileTree, 10, 0, 2, 2);
-//    connect(d->m_New, SIGNAL(clicked()), this, SLOT(newEpisode()));
-//    connect(d->m_Remove, SIGNAL(clicked()), this, SLOT(removeEpisode()));
 
     // create splitters
     Utils::MiniSplitter *horiz = new Utils::MiniSplitter(this);
@@ -354,11 +340,14 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
 {
+//    d->m_LastEpisode = index;
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
     if (d->m_EpisodeModel->isEpisode(index)) {
         d->m_Stack->currentWidget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
+    } else {
+        d->m_EpisodeModel->activateEpisode(QModelIndex(), formUuid);
     }
 }
 
@@ -379,6 +368,10 @@ void FormPlaceHolder::newEpisode()
     while (!d->m_EpisodeModel->isForm(index)) {
         index = index.parent();
     }
+
+    // test the form to be unique oor multiple episode
+    if (d->m_EpisodeModel->isUniqueEpisode(index) && d->m_EpisodeModel->rowCount(index) == 1)
+        return;
 
     // create a new episode the selected form and its children
     if (!d->m_EpisodeModel->insertRow(0, index)) {

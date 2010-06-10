@@ -543,9 +543,9 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     const Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
     // check user write rights
     if (user->isCurrent()) {
-        if (! d->m_CurrentUserRights &User::ReadOwn)
+        if (!d->m_CurrentUserRights & User::ReadOwn)
             return QVariant();
-    } else if (! d->m_CurrentUserRights &User::ReadAll)
+    } else if (!d->m_CurrentUserRights & User::ReadAll)
             return QVariant();
     /** \todo if user if a delegate of current user */
 
@@ -574,6 +574,13 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case User::Name : toReturn = user->name(); break;
             case User::SecondName : toReturn = user->secondName(); break;
             case User::Surname : toReturn = user->surname(); break;
+            case User::FullName :
+                {
+                    QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->surname();
+                    r.replace("  ", " ");
+                    toReturn = r;
+                    break;
+                }
             case User::Mail : toReturn = user->mail(); break;
             case User::Language : toReturn = user->language(); break;
             case User::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;

@@ -469,8 +469,9 @@ public:
         query.finish();
     }
 
-    void saveFullEpisode(TreeItem *item, const QString &formUid)
+    bool saveFullEpisode(TreeItem *item, const QString &formUid)
     {
+        bool ok = true;
         // first, save Table_EPISODE
         QSqlQuery query(episodeBase()->database());
         query.prepare(episodeBase()->prepareInsertQuery(Constants::Table_EPISODES));
@@ -484,8 +485,10 @@ public:
         query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
         query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
         query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
-        if (!query.exec())
+        if (!query.exec()) {
+            ok = false;
             Utils::Log::addQueryError(q, query);
+        }
         item->setData(EpisodeModel::Id, query.lastInsertId());
         query.finish();
 
@@ -494,15 +497,26 @@ public:
         query.bindValue(Constants::EPISODE_CONTENT_ID, QVariant());
         query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, item->data(EpisodeModel::Id));
         query.bindValue(Constants::EPISODE_CONTENT_XML, item->data(EpisodeModel::XmlContent));
-        if (!query.exec())
+        if (!query.exec()) {
             Utils::Log::addQueryError(q, query);
+            ok = false;
+        }
         query.finish();
+
+        if (ok)
+            item->setNewlyCreated(false);
+
+        return ok;
     }
 
-    bool saveEpisode(TreeItem *item, const QString &formUid)
+    bool saveEpisode(TreeItem *item, const QString &fuid)
     {
         if (!item)
             return true;
+
+        QString formUid = fuid;
+        if (formUid.isEmpty())
+            formUid = item->data(EpisodeModel::FormUuid).toString();
 
         qWarning() << "saveEpisode" << item << formUid;
         // check each item --> isModified ? isNewlyCreated ?
@@ -513,11 +527,11 @@ public:
 
         bool formIsModified = false;
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, form->formItemChildren()) {
-            /** \todo check nested items */
-            if (item->isNewlyCreated()) {
-                saveFullEpisode(item, formUid);
-            } else {
+        if (item->isNewlyCreated()) {
+            saveFullEpisode(item, formUid);
+        } else {
+            foreach(FormItem *it, form->formItemChildren()) {
+                /** \todo check nested items */
                 if (it->itemDatas()) {
                     if (it->itemDatas()->isModified()) {
                         qWarning() << it->uuid() << "is modified";
@@ -578,6 +592,18 @@ public:
 
         saveEpisodeHeaders(form, item);
 
+//        foreach(FormItem *it, form->formItemChildren()) {
+//            /** \todo check nested items */
+//            if (it->itemDatas()) {
+//                    it->itemDatas()->
+//                        qWarning() << it->uuid() << "is modified";
+//                        formIsModified = true;
+//                    }
+//                    items.insert(it->uuid(), it);
+//                }
+//            }
+//        }
+
         return true;
     }
 
@@ -593,6 +619,8 @@ public:
         const QString &episodeId = itemToSave->data(EpisodeModel::Id).toString();
         itemToSave->setData(EpisodeModel::Label, newLabel);
         itemToSave->setData(EpisodeModel::Date, newDate);
+
+        /** \todo emit dataChanged signal with the right index */
 
         // save label and date
         QSqlQuery query(episodeBase()->database());
@@ -928,6 +956,14 @@ bool EpisodeModel::isEpisode(const QModelIndex &index) const
     return it->isEpisode();
 }
 
+bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    Internal::TreeItem *item = d->getItem(index);
+    return formManager()->form(item->data(FormUuid).toString())->isUniqueEpisode();
+}
+
 void EpisodeModel::setReadOnly(const bool state)
 {
     d->m_ReadOnly = state;
@@ -961,8 +997,18 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
             Utils::Log::addError(this, "Unable to save actual episode before editing a new one");
     }
 
+    if (!index.isValid()) {
+        d->m_ActualEpisode = 0;
+        return false;
+    }
+
     // stores the actual episode id
-    d->m_ActualEpisode = d->getItem(index);
+    Internal::TreeItem *item = d->getItem(index);
+    if (!item->isEpisode()) {
+        d->m_ActualEpisode = 0;
+        return false;
+    }
+    d->m_ActualEpisode = item;
     d->m_ActualEpisode_FormUid = formUid;
 
     // clear actual form and fill episode datas
@@ -1018,4 +1064,9 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
             qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << s;
     }
     return true;
+}
+
+bool EpisodeModel::saveEpisode(const QModelIndex &index, const QString &formUid)
+{
+    return d->saveEpisode(d->getItem(index), formUid);
 }

@@ -143,7 +143,7 @@ public:
     QString category() const;
 
     void resetToDefaults() {}
-    void checkSettingsValidity() {}
+    void checkSettingsValidity() {VirtualDatabasePreferences::writeDefaultSettings(0);}
     void applyChanges() {}
     void finish();
 

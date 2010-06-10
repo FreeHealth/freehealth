@@ -629,6 +629,13 @@ bool PatientModel::submit()
     return true;
 }
 
+bool PatientModel::refreshModel()
+{
+    d->m_SqlPatient->select();
+    reset();
+    return true;
+}
+
 /** \brief Return the list patient name corresponding to the uuids list passed as param. Static.*/
 QList<QString> PatientModel::patientName(const QList<QString> &uuids)
 {
