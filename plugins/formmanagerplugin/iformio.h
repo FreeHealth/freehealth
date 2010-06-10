@@ -65,6 +65,10 @@ public:
     IFormIO(const QString &absFileName, QObject *parent=0) : QObject(parent) { Q_UNUSED(absFileName); }
     virtual ~IFormIO() {}
 
+    virtual QString name() const = 0;
+
+    virtual void muteUserWarnings(bool state) = 0;
+
     virtual bool setFileName(const QString &absFileName) = 0;
 
     virtual QStringList fileFilters() const = 0;

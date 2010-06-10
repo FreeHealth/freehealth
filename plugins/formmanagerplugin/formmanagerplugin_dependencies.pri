@@ -1,2 +1,3 @@
 include( ../coreplugin/coreplugin.pri )
-include( ../patientbaseplugin/patientbaseplugin.pri )
+include( ../usermanagerplugin/usermanagerplugin.pri )
+#include( ../patientbaseplugin/patientbaseplugin.pri )

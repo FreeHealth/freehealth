@@ -393,7 +393,6 @@ FormMain::~FormMain()
 
 void FormMain::clear()
 {
-    /** \todo here */
     foreach(FormItem *it, this->formItemChildren()) {
         if (it->itemDatas())
             it->itemDatas()->clear();

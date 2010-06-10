@@ -45,6 +45,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 
+#include <formmanagerplugin/formfilesselectorwidget.h>
+
 #include <usermanagerplugin/widgets/userwizard.h>
 
 #include <utils/log.h>
@@ -54,8 +56,6 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <QFileDialog>
-#include <QDir>
 
 #include "ui_mainwindowpreferenceswidget.h"
 
@@ -142,6 +142,7 @@ CreateNewUserPage::CreateNewUserPage(QWidget *parent) :
     setTitle(tr("Create a new user"));
     QLabel *lbl = new QLabel(tr("It is recommended to create a new user instead of using the default one."));
     QPushButton *but = new QPushButton(tr("Click here to create a new user"), this);
+    newUserName = new QLabel(" ", this);
     connect(but, SIGNAL(clicked()), this, SLOT(createNewUser()));
 
     QGridLayout *layout = new QGridLayout(this);
@@ -155,12 +156,14 @@ void CreateNewUserPage::createNewUser()
     UserPlugin::UserWizard wiz(this);
     wiz.createUser(true);
     wiz.exec();
+    newUserName->setText(tr("New user created."));
 }
 
 DatabaseConfigurationPage::DatabaseConfigurationPage(QWidget *parent) :
         QWizardPage(parent), m_ui(0)
 {
     setTitle(tr("Update checking and database configuration"));
+    setSubTitle(tr("By default, FreeMedForms is configured to use a local SQLite database. You can choose an external server."));
     m_ui = new Internal::Ui::MainWindowPreferencesWidget;
     m_ui->setupUi(this);
     m_ui->label_2->hide();
@@ -226,47 +229,22 @@ void DatabaseConfigurationPage::on_testButton_clicked()
 
 
 
-/** \todo add default value */
 PatientFilePage::PatientFilePage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Patients Forms File"));
     this->setSubTitle(tr("FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms."));
-    lbl = new QLabel(tr("Select patient forms file"), this);
-    fileName = new QLineEdit(this);
-    fileName->setText(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
-    formsFile = fileName->text();
-    QPushButton *but = new QPushButton(tr("Select a file"), this);
-    connect(but, SIGNAL(clicked()), this, SLOT(selectPatientFile()));
-    // set data
+
+    selector = new Form::FormFilesSelectorWidget(this);
+
     QGridLayout *layout = new QGridLayout(this);
-//    layout->addWidget(intro, 0, 0, 0 , 2);
-    layout->addWidget(lbl, 0, 0);
-    layout->addWidget(fileName, 0, 1);
-    layout->addWidget(but, 1, 1);
+    layout->addWidget(selector, 0, 0);
     setLayout(layout);
 }
 
 bool PatientFilePage::validatePage()
 {
-    if (formsFile.isEmpty())
-        return false;
-    settings()->setValue(Core::Constants::S_PATIENTFORMS_FILENAME, formsFile);
-    return true;
-}
-
-void PatientFilePage::selectPatientFile()
-{
-    QString path;
-    if (!formsFile.isEmpty()) {
-        path = QFileInfo(formsFile).absolutePath();
-    } else {
-        path = QDir::homePath();
-    }
-    formsFile = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                             path,
-                                             tkTr(Core::Constants::FREEMEDFORMS_FILEFILTER));
-    fileName->setText(formsFile);
+    return QFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString()).exists();
 }
 
 

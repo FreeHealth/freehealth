@@ -71,7 +71,7 @@ public:
     static EpisodeBase *instance();
     virtual ~EpisodeBase();
 
-//    // initialize
+    // initialize
     bool isInitialized() const {return m_initialized;}
 
 //private:

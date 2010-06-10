@@ -54,6 +54,7 @@ public:
     LineEditEchoSwitcherPrivate( QWidget *parent ) : m_Parent(parent), toogler(0),lineEdit(0)
     {
         toogler = new QPushButton(parent);
+        toogler->setFocusPolicy(Qt::ClickFocus);
 //        toogler->setIcon( tkTheme::icon(ICONEYES) );
         toogler->setSizePolicy( QSizePolicy::Fixed , QSizePolicy::Fixed );
         toogler->setFlat(true);

@@ -61,4 +61,4 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
     $${SOURCES_TRANSLATIONS}/utils_es.ts
 
 # resources
-RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
+#RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg

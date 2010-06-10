@@ -45,62 +45,123 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QFileSystemModel>
+#include <QFileIconProvider>
+#include <QModelIndex>
 
 #include <QDebug>
 
-using namespace Form::Internal;
+using namespace Form;
+using namespace Internal;
 
 //inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 inline static QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
 
 
-FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Internal::Ui::FormFilesSelectorWidget)
+namespace Form {
+namespace Internal {
+class FormFilesIcons : public QFileIconProvider
 {
-    ui->setupUi(this);
-    // get IFormIO
-    ios = refreshIOPlugs();
-    // construct filters
-    QStringList filters;
-    foreach(const Form::IFormIO *io, ios) {
-        filters.append(io->fileFilters());
+public:
+    FormFilesIcons() : QFileIconProvider() {}
+
+    QIcon icon(const QFileInfo &info) const
+    {
+        if (!m_Files.contains(info.fileName()))
+            testFile(info);
+
+        if (m_Files.value(info.fileName()))
+            return theme()->icon(Core::Constants::ICONOK);
+        else
+            return theme()->icon(Core::Constants::ICONHELP);
+
+        return QIcon();
     }
 
-    dirModel = new QFileSystemModel(this);
-//    dirModel->setReadOnly(true);
-    dirModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
-    dirModel->setRootPath(settings()->path(Core::ISettings::SampleFormsPath));
-//    dirModel->setNameFilters(filters);
-
-    ui->listView->setModel(dirModel);
-    ui->listView->setRootIndex(dirModel->index(settings()->path(Core::ISettings::SampleFormsPath)));
-
-    QFont bold;
-    bold.setBold(true);
-    for(int i=0; i < dirModel->rowCount(dirModel->index(settings()->path(Core::ISettings::SampleFormsPath))); ++i) {
-        QModelIndex index = dirModel->index(i,0);
-        const QString &file = index.data().toString();
+private:
+    void testFile(const QFileInfo &file) const
+    {
+        QList<Form::IFormIO*> ios = refreshIOPlugs();
+        const QString &path = settings()->path(Core::ISettings::SampleFormsPath);
+        const QString &fileName = file.fileName();
         foreach(Form::IFormIO *io, ios) {
-            if (io->setFileName(settings()->path(Core::ISettings::SampleFormsPath) + QDir::separator() + file) && io->canReadFile()) {
-                dirModel->setData(index, bold, Qt::FontRole);
+            io->muteUserWarnings(true);
+            if (io->setFileName(path + QDir::separator() + fileName) && io->canReadFile()) {
+                m_Files.insert(file.fileName(), true);
+                return;
             }
         }
+        m_Files.insert(file.fileName(), false);
     }
+
+    mutable QHash<QString, bool> m_Files;
+};
+
+class FormFilesSelectorWidgetPrivate
+{
+public:
+    FormFilesSelectorWidgetPrivate() : ui(new Ui::FormFilesSelectorWidget) {}
+
+    ~FormFilesSelectorWidgetPrivate()
+    {
+        delete ui;
+        delete m_IconProvider;
+    }
+
+public:
+    Ui::FormFilesSelectorWidget *ui;
+    QFileSystemModel *dirModel;
+    FormFilesIcons *m_IconProvider;
+    QList<Form::IFormIO*> ios;
+};
+
+}  // End namespace Internal
+}  // End namespace Form
+
+
+
+FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
+    QWidget(parent),
+    d(new FormFilesSelectorWidgetPrivate)
+{
+    d->ui->setupUi(this);
+    d->ui->actualFile->setText(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
+    // get IFormIO
+    d->ios = refreshIOPlugs();
+    // construct filters
+    QStringList filters;
+    foreach(const Form::IFormIO *io, d->ios) {
+        filters.append(io->managedFileExtension());
+    }
+
+    d->dirModel = new QFileSystemModel(this);
+//    d->dirModel->setReadOnly(true);
+    d->dirModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    d->dirModel->setIconProvider(d->m_IconProvider = new Internal::FormFilesIcons());
+    d->dirModel->setRootPath(settings()->path(Core::ISettings::SampleFormsPath));
+//    d->dirModel->setNameFilters(filters);
+
+    d->ui->listView->setModel(d->dirModel);
+    d->ui->listView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::SampleFormsPath)));
+
+    connect(d->ui->listView, SIGNAL(activated(QModelIndex)),this, SLOT(on_listView_activated(QModelIndex)));
+    connect(d->ui->useButton, SIGNAL(clicked()),this, SLOT(on_useButton_clicked()));
 }
 
 FormFilesSelectorWidget::~FormFilesSelectorWidget()
 {
-    delete ui;
+    delete d;
 }
 
 void FormFilesSelectorWidget::on_useButton_clicked()
 {
-    if (!ui->listView->selectionModel()->hasSelection())
+    if (!d->ui->listView->selectionModel()->hasSelection())
         return;
 }
 
@@ -108,17 +169,27 @@ void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
+    d->ui->treeWidget->clear();
     // get the fileName
-    const QString &file = ui->listView->currentIndex().data().toString();
+    const QString &file = d->ui->listView->currentIndex().data().toString();
     // ask ios to generate description in the treeview
-    foreach(Form::IFormIO *io, ios) {
-        if (io->setFileName(settings()->path(Core::ISettings::SampleFormsPath) + QDir::separator() + file) && io->canReadFile()) {
-            io->readFileInformations();
-            io->formDescriptionToTreeWidget(ui->treeWidget, QLocale().name().left(2));
-            return;
+    foreach(Form::IFormIO *io, d->ios) {
+        if (io->setFileName(settings()->path(Core::ISettings::SampleFormsPath) + QDir::separator() + file)) {
+            if (io->canReadFile()) {
+                io->readFileInformations();
+                io->formDescriptionToTreeWidget(d->ui->treeWidget, QLocale().name().left(2));
+                return;
+            } else {
+                QTreeWidgetItem *item = new QTreeWidgetItem(d->ui->treeWidget, QStringList() << io->name());
+                item->setExpanded(true);
+                QFont bold;
+                bold.setBold(true);
+                item->setFont(0, bold);
+                foreach(const QString &err, io->lastError().split("\n"))
+                    QTreeWidgetItem *z = new QTreeWidgetItem(item, QStringList() << err);
+            }
         }
     }
-    ui->treeWidget->clear();
 }
 
 void FormFilesSelectorWidget::changeEvent(QEvent *e)
@@ -126,8 +197,8 @@ void FormFilesSelectorWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        if (ui)
-            ui->retranslateUi(this);
+        if (d->ui)
+            d->ui->retranslateUi(this);
         break;
     default:
         break;

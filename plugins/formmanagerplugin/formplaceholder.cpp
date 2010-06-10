@@ -349,6 +349,7 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
+    d->m_Stack->currentWidget()->setEnabled(false);
 }
 
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
@@ -356,6 +357,7 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
     if (d->m_EpisodeModel->isEpisode(index)) {
+        d->m_Stack->currentWidget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
     }
 }
@@ -388,6 +390,7 @@ void FormPlaceHolder::newEpisode()
     d->m_FileTree->selectionModel()->setCurrentIndex(d->m_EpisodeModel->index(0,0,index), QItemSelectionModel::Select);
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
+    d->m_Stack->currentWidget()->setEnabled(true);
     d->m_EpisodeModel->activateEpisode(d->m_EpisodeModel->index(0,0,index), formUuid);
 }
 

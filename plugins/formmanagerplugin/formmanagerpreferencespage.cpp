@@ -46,7 +46,10 @@
 
 #include <QHBoxLayout>
 
-using namespace Form::Internal;
+using namespace Form;
+using namespace Internal;
+
+
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 
@@ -104,7 +107,7 @@ QWidget *FormManagerPreferencesPage::createPage(QWidget *parent)
 FormManagerPreferencesWidget::FormManagerPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
-    m_Selector = new FormFilesSelectorWidget(this);
+    m_Selector = new Form::FormFilesSelectorWidget(this);
     QHBoxLayout *l = new QHBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);

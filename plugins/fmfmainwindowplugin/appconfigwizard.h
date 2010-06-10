@@ -59,13 +59,16 @@ QT_END_NAMESPACE
  * \date 04 June 2010
 */
 
+namespace Form {
+class FormFilesSelectorWidget;
+}
+
 namespace MainWin {
 namespace Internal {
-
-    namespace Ui{
-        class MainWindowPreferencesWidget;
-    }
-}
+namespace Ui{
+class MainWindowPreferencesWidget;
+}  // End namespace Ui
+}  // End namespace Internal
 
 class MAINWIN_EXPORT AppConfigWizard : public QWizard
 {
@@ -94,7 +97,6 @@ private:
     QLabel *langLabel;
 };
 
-
 class CreateNewUserPage: public QWizardPage
 {
     Q_OBJECT
@@ -104,6 +106,8 @@ public:
 private Q_SLOTS:
     void createNewUser();
 
+private:
+    QLabel *newUserName;
 };
 
 class DatabaseConfigurationPage: public QWizardPage
@@ -128,13 +132,8 @@ public:
     PatientFilePage(QWidget *parent = 0);
     bool validatePage();
 
-private Q_SLOTS:
-    void selectPatientFile();
-
 private:
-    QLabel *intro, *lbl;
-    QLineEdit *fileName;
-    QString formsFile;
+    Form::FormFilesSelectorWidget *selector;
 };
 
 class EndConfigPage: public QWizardPage
@@ -145,7 +144,7 @@ public:
 };
 
 
-}  // End namespace Core
+}  // End namespace MainWin
 
 
 #endif // APPCONFIGWIZARD_H

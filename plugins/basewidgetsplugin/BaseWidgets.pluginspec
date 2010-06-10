@@ -8,5 +8,6 @@
         <dependency name="Core" version="0.0.9"/>
         <dependency name="TextEditor" version="0.0.9"/>
         <dependency name="FormManager" version="0.0.9"/>
+        <dependency name="PatientBase" version="0.0.9"/>
     </dependencyList>
 </plugin>

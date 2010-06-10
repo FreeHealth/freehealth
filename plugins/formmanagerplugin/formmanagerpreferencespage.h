@@ -58,8 +58,9 @@ class ISettings;
 }
 
 namespace Form {
-namespace Internal {
 class FormFilesSelectorWidget;
+
+namespace Internal {
 
 class FormManagerPreferencesWidget : public QWidget
 {
@@ -78,7 +79,7 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    FormFilesSelectorWidget *m_Selector;
+    Form::FormFilesSelectorWidget *m_Selector;
 };
 
 

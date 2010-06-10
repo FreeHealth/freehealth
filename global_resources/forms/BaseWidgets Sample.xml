@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
-<MedForm>
+<FreeMedForms>
   <version>0.3.0</version>
+  <authors>Eric Maeker, MD</authors>
+  <description lang="fr"></description>
+  <description lang="en"></description>
+  <bibliography>Small bibliography</bibliography>
+  <licence>Licence terms here</licence>
+
+<MedForm>
   <name>baseWidgetsFormSample</name>
   <label>BaseWidgets examples</label>
   <type>form</type>
   <creationdate>27-08-2009</creationdate>
   <categorie>samples</categorie>
-  <authors>Eric Maeker, MD</authors>
-  <description>Small description here</description>
-  <bibliography>Small bibliography</bibliography>
-  <licence>Licence terms here</licence>
 
   <label lang="fr">Exemple de BaseWidgets</label>
   <categorie lang="fr">samples</categorie>
@@ -140,9 +143,9 @@
        <possible id="0">First Combo's Element</possible>
        <possible id="1">Second Combo's Element</possible>
        <possible id="2">Third Combo's Element</possible>
-       <uuid id="0">firstcombo</possible>
-       <uuid id="1">secondcombo</possible>
-       <uuid id="2">thirdcombo</possible>
+       <uuid id="0">firstcombo</uuid>
+       <uuid id="1">secondcombo</uuid>
+       <uuid id="2">thirdcombo</uuid>
      </value>
   </Item>
 
@@ -170,3 +173,4 @@
   </Item>
 
 </MedForm>
+</FreeMedForms>

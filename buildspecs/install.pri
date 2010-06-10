@@ -40,6 +40,7 @@ DEFINES *= "INSTALL_BINARY_PATH=\"\\\"$$INSTALL_BINARY_PATH\\\"\"" \
 INSTALL_TRANSLATIONS_PATH = $${INSTALL_RESOURCES_PATH}/translations
 INSTALL_DATABASES_PATH    = $${INSTALL_RESOURCES_PATH}/databases
 INSTALL_FORMS_PATH        = $${INSTALL_RESOURCES_PATH}
+INSTALL_TEXTFILES_PATH    = $${INSTALL_RESOURCES_PATH}/textfiles
 INSTALL_SMALLPIX_PATH     = $${INSTALL_RESOURCES_PATH}/pixmap/16x16
 INSTALL_MEDIUMPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/32x32
 INSTALL_BIGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/64x64
@@ -152,7 +153,7 @@ pix16.path = $${INSTALL_SMALLPIX_PATH}
 pix16.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/*.png
 pix32.path = $${INSTALL_MEDIUMPIX_PATH}
 pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
-pix64.path = $${INSTALL_BIGPIX_PATH}/64x64
+pix64.path = $${INSTALL_BIGPIX_PATH}
 pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
 pixsvg.path = $${INSTALL_BIGPIX_PATH}/svg
 pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
@@ -165,6 +166,13 @@ desk.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/$${TARGET}.desktop
 desk_icon.path=$${INSTALL_DESKTOP_ICON_PATH}
 desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${TARGET}.svg
 INSTALLS+= desk desk_icon
+}
+
+# Install textfiles (mostly used in debug mode)
+!isEmpty(INSTALL_TEXTFILES_PATH){
+tf.path=$${INSTALL_TEXTFILES_PATH}
+tf.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
+INSTALLS+= tf
 }
 
 # Documentation

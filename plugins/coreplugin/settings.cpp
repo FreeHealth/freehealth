@@ -619,7 +619,9 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     QTreeWidgetItem * sysItem = new QTreeWidgetItem(tree, QStringList() << tr("System informations"));
     sysItem->setFont(0,bold);
     new QTreeWidgetItem(sysItem, QStringList() << tr("Operating System") << Utils::osName());
+#ifndef Q_OS_WIN32
     new QTreeWidgetItem(sysItem, QStringList() << tr("uname output") << Utils::uname());
+#endif
 
     // add compilation informations
     QTreeWidgetItem * compilItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS));
@@ -627,15 +629,15 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
     new QTreeWidgetItem(compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
-    new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg(qApp->applicationVersion()));
+    new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
     if (Utils::isDebugCompilation())
-        new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
+        new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
     else
-        new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
+        new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
     if (Utils::isFullApplication())
-        new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
+        new QTreeWidgetItem(compilItem, QStringList() << tr("Application source") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
     else
-        new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
+        new QTreeWidgetItem(compilItem, QStringList() << tr("Application source") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
 
 
     // add paths

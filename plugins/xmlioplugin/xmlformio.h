@@ -72,7 +72,12 @@ public:
     XmlFormIO(const QString &absFileName, QObject *parent=0);
     ~XmlFormIO();
 
+    QString name() const {return "XmlFormIO";}
+
+    void muteUserWarnings(bool state) {m_Mute = state;}
     QStringList fileFilters() const;
+
+    void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = 0, const int col = 0) const;
 
     QString managedFileExtension() const { return QString("xml"); }
     bool canReadFile() const;
@@ -106,6 +111,7 @@ private:
      mutable QDomDocument m_MainDoc;
      mutable QString m_Author, m_Version;
      mutable QHash<QString, QString> m_Desc;
+     bool m_Mute;
      Form::FormMain *m_ActualForm;
 };
 

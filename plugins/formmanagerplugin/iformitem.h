@@ -117,7 +117,6 @@ public:
     // Access to database values. Pointer will not be deleted
     void setItemDatas(Form::IFormItemData *data) {m_ItemDatas = data;}
     Form::IFormItemData *itemDatas() {return m_ItemDatas;}
-    /** \todo add m_IsUniqueStorableData */
 
     // Access to the user's widget
     virtual void setFormWidget(Form::IFormWidget *w) {m_FormWidget=w;}

@@ -41,11 +41,11 @@
 #define FORMFILESSELECTORWIDGET_H
 
 #include <QWidget>
-#include <QModelIndex>
 
 QT_BEGIN_NAMESPACE
-class QFileSystemModel;
+class QModelIndex;
 QT_END_NAMESPACE
+
 
 /**
  * \file formfileselectorwidget.h
@@ -58,11 +58,12 @@ namespace Form {
 class IFormIO;
 
 namespace Internal {
-namespace Ui {
-class FormFilesSelectorWidget;
-}
+class FormFilesSelectorWidgetPrivate;
+}  // End namespace Internal
 
-class FormFilesSelectorWidget : public QWidget {
+/** \todo add default management */
+class FormFilesSelectorWidget : public QWidget
+{
     Q_OBJECT
 public:
     FormFilesSelectorWidget(QWidget *parent = 0);
@@ -76,12 +77,9 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::FormFilesSelectorWidget *ui;
-    QFileSystemModel *dirModel;
-    QList<Form::IFormIO*> ios;
+    Internal::FormFilesSelectorWidgetPrivate *d;
 };
 
-}  // End namespace Internal
 }  // End namespace Form
 
 #endif // FORMFILESSELECTORWIDGET_H

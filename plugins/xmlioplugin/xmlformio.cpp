@@ -79,19 +79,6 @@ namespace {
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
-inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
-{
-    Utils::Log::addError("XmlFormIO",
-                         Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
-                         Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                         .arg(msg).arg(line).arg(col));
-
-    Utils::warningMessageBox(
-            Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file),
-            Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-            .arg(msg).arg(line).arg(col),"",qApp->applicationName());
-}
-
 inline static void refreshPlugsFactories()
 {
     ::m_PlugsFactories.clear();
@@ -151,7 +138,7 @@ inline static bool populateScripts(Form::FormItem *item, const QDomElement &root
 //////////////////////////////////////////////  XmlFormIO  /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
-        IFormIO(absFileName, parent), m_AbsFileName(absFileName)
+        IFormIO(absFileName, parent), m_AbsFileName(absFileName), m_Mute(false)
 {
     setObjectName("XmlFormIO");
     ::m_ScriptsTypes.clear();
@@ -193,6 +180,23 @@ QStringList XmlFormIO::fileFilters() const
     return QStringList() << tr("FreeMedForms Form File (*.%1)").arg(Constants::DOCTYPE_EXTENSION);
 }
 
+void XmlFormIO::warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line, const int col) const
+{
+    QString m = Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
+                  Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                  .arg(msg).arg(line).arg(col);
+    Utils::Log::addError(this, m);
+    m_Error.append(Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                   .arg(msg).arg(line).arg(col));
+//    m_Error.append(m_MainDoc);
+
+    if (!muteUserWarnings)
+        Utils::warningMessageBox(
+            Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file),
+            Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+            .arg(msg).arg(line).arg(col),"",qApp->applicationName());
+}
+
 bool XmlFormIO::setFileName(const QString &absFileName)
 {
     m_Author.clear();
@@ -230,7 +234,7 @@ bool XmlFormIO::canReadFile() const
     QString contents = Utils::readTextFile(m_AbsFileName, Utils::DontWarnUser);
     if (contents.isEmpty()) {
         /** \todo return a FormObject with a helptext that explains the error ? */
-        warnXmlReadError(m_AbsFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
+        warnXmlReadError(m_Mute, m_AbsFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
         m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
         return false;
     }
@@ -249,24 +253,21 @@ bool XmlFormIO::canReadFile() const
     QString errorMsg;
     int errorLine, errorColumn;
     if (!m_MainDoc.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
-        warnXmlReadError(m_AbsFileName, errorMsg, errorLine, errorColumn);
-        m_Error.append(errorMsg);
+        warnXmlReadError(m_Mute, m_AbsFileName, errorMsg, errorLine, errorColumn);
         ok = false;
     }
 
     // Check doctype name
     if (m_MainDoc.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
         const QString &error = tr("This file is not a FreeMedForms XML file. Document type name mismatch.");
-        warnXmlReadError(m_AbsFileName, error);
-        m_Error.append(error);
+        warnXmlReadError(m_Mute, m_AbsFileName, error);
         ok = false;
     }
 
     /** \todo check version of the file */
 //    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
 //        const QString &error = tr("No version number defined");
-//        warnXmlReadError(file, error);
-//        m_Error.append(error);
+//        warnXmlReadError(m_Mute, file, error);
 //        return false;
 //    } else {
 //        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
@@ -341,7 +342,7 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
     if (!rootForm) {
         if (addFile.isNull() && newForm.isNull()) {
-            warnXmlReadError(file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
+            warnXmlReadError(m_Mute, file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
             return false;
         }
 //        rootForm = createNewForm(newForm, m_ActualForm);

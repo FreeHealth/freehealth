@@ -3,7 +3,8 @@
 <FreeMedForms>
   <version>0.3.0</version>
   <authors>Eric Maeker, MD</authors>
-  <description>Small description here</description>
+  <description lang="fr"></description>
+  <description lang="en"></description>
   <bibliography>Small bibliography</bibliography>
   <licence>Licence terms here</licence>
 
