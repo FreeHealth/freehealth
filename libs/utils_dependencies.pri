@@ -1,3 +1,2 @@
-include( translationutils.pri )
-#CONFIG += sql xml
-QT += sql xml
+include(translationutils.pri)
+QT += sql xml network

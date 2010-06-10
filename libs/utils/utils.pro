@@ -7,12 +7,7 @@ DEFINES *= UTILS_LIBRARY
 # include config file
 include(../libsworkbench.pri)
 include(../utils_dependencies.pri)
-CONFIG *= dll \
-    sql \
-    network
-QT *= sql \
-    network \
-    svg
+
 HEADERS += global_exporter.h \
     global.h \
     database.h \

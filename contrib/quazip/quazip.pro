@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
-CONFIG += ordered
+CONFIG *= ordered
 
-SUBDIRS = zlib-1.2.3 \
-          quazip
+SUBDIRS += zlib-1.2.3 quazip
+
+

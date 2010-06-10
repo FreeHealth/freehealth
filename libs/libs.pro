@@ -2,10 +2,10 @@ TEMPLATE = subdirs
 
 CONFIG *= ordered
 
-SUBDIRS +=  \
-    translationutils \
+SUBDIRS += translationutils \
     medicalutils \
     aggregation \
     extensionsystem \
     utils \
-    ../contrib/quazip/
+    ../contrib/quazip
+
