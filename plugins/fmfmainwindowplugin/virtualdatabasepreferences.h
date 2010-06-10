@@ -36,22 +36,18 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MAINWINDOWPREFERENCES_H
-#define MAINWINDOWPREFERENCES_H
+#ifndef VIRTUALDATABASEPREFERENCES_H
+#define VIRTUALDATABASEPREFERENCES_H
 
 #include <coreplugin/ioptionspage.h>
 
-#include <fmfmainwindowplugin/virtualdatabasepreferences.h>
+#include <QWidget>
 
-#include "ui_mainwindowpreferenceswidget.h"
-
-#include <QPointer>
-#include <QObject>
+#include "ui_virtualbasepage.h"
 
 /**
- * \file mainwindowpreferences.h
+ * \file virtualdatabasepreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
  * \date 10 June 2010
@@ -64,100 +60,27 @@ class ISettings;
 namespace MainWin {
 namespace Internal {
 
-class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPreferencesWidget
+class VirtualDatabasePreferences : public QWidget, private Ui::VirtualDatabasePreferences
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MainWindowPreferencesWidget)
+    Q_DISABLE_COPY(VirtualDatabasePreferences)
 
 public:
-    explicit MainWindowPreferencesWidget(QWidget *parent = 0);
+    VirtualDatabasePreferences(QWidget *parent);
 
-    static void writeDefaultSettings(Core::ISettings *s);
-    void setDatasToUi();
+    static void writeDefaultSettings(Core::ISettings *) {}
 
 public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-    void on_testButton_clicked();
+    void saveToSettings(Core::ISettings *) {}
+    void on_populateDb_clicked();
+    void on_populateEpisodes_clicked();
+    void on_populateUsers_clicked();
 
 protected:
     virtual void changeEvent(QEvent *e);
 };
 
+}  // End namespace MainWin
+}  // End namespace Internal
 
-class MainWindowPreferencesPage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    MainWindowPreferencesPage(QObject *parent = 0);
-    ~MainWindowPreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<MainWindowPreferencesWidget> m_Widget;
-};
-
-
-//class VirtualBaseWidget : public QWidget, private Ui::VirtualBaseWidget
-//{
-//    Q_OBJECT
-//    Q_DISABLE_COPY(VirtualBaseWidget)
-//
-//public:
-//    explicit VirtualBaseWidget(QWidget *parent = 0);
-//
-//    static void writeDefaultSettings(Core::ISettings *) {}
-//
-//public Q_SLOTS:
-//    void saveToSettings(Core::ISettings *) {}
-//    void on_populateDb_clicked();
-//    void on_populateEpisodes_clicked();
-//    void on_populateUsers_clicked();
-//
-//protected:
-//    virtual void changeEvent(QEvent *e);
-//};
-
-
-class VirtualBasePage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    VirtualBasePage(QObject *parent = 0);
-    ~VirtualBasePage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults() {}
-    void checkSettingsValidity() {}
-    void applyChanges() {}
-    void finish();
-
-    QString helpPage() {return QString();}
-
-    static void writeDefaultSettings(Core::ISettings *s) {VirtualDatabasePreferences::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<VirtualDatabasePreferences> m_Widget;
-};
-
-
-}  // End Internal
-}  // End MainWin
-
-#endif // MAINWINDOWPREFERENCES_H
+#endif // VIRTUALDATABASEPREFERENCES_H

@@ -8,20 +8,16 @@ HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
     mainwindowpreferences.h \
-    appconfigwizard.h
-
-
+    appconfigwizard.h \
+    virtualdatabasepreferences.h
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp \
-    appconfigwizard.cpp
-
-
+    appconfigwizard.cpp \
+    virtualdatabasepreferences.cpp
 FORMS = mainwindowpreferenceswidget.ui \
     virtualbasepage.ui
-
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_es.ts
-
 OTHER_FILES = MainWindow.pluginspec

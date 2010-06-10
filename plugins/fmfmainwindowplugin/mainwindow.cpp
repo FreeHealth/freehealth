@@ -226,7 +226,10 @@ void MainWindow::extensionsInitialized()
     }
 
     if (settings()->firstTimeRunning()) {
-        applicationConfiguratorWizard();
+        if (!applicationConfiguratorWizard()) {
+            qApp->exit(1234);
+            return;
+        }
         settings()->noMoreFirstTimeRunning();
     }
 

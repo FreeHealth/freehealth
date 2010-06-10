@@ -136,6 +136,13 @@ private:
     Form::FormFilesSelectorWidget *selector;
 };
 
+class VirtualDatabasePage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    VirtualDatabasePage(QWidget *parent = 0);
+};
+
 class EndConfigPage: public QWizardPage
 {
     Q_OBJECT

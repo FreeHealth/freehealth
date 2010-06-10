@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWin::Internal::VirtualBaseWidget</class>
- <widget class="QWidget" name="MainWin::Internal::VirtualBaseWidget">
+ <class>MainWin::Internal::VirtualDatabasePreferences</class>
+ <widget class="QWidget" name="MainWin::Internal::VirtualDatabasePreferences">
   <property name="geometry">
    <rect>
     <x>0</x>

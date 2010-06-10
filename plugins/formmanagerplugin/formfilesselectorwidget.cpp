@@ -163,6 +163,8 @@ void FormFilesSelectorWidget::on_useButton_clicked()
 {
     if (!d->ui->listView->selectionModel()->hasSelection())
         return;
+    QFileInfo selected = d->dirModel->fileInfo(d->ui->listView->currentIndex());
+    settings()->setValue(Core::Constants::S_PATIENTFORMS_FILENAME, selected.absoluteFilePath());
 }
 
 void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)

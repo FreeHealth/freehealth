@@ -38,6 +38,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "appconfigwizard.h"
+#include "virtualdatabasepreferences.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -69,11 +70,12 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
 {
-    addPage(new BeginConfigPage);
-    addPage(new CreateNewUserPage);
-    addPage(new DatabaseConfigurationPage);
-    addPage(new PatientFilePage);
-    addPage(new EndConfigPage);
+    addPage(new BeginConfigPage(this));
+    addPage(new CreateNewUserPage(this));
+    addPage(new DatabaseConfigurationPage(this));
+    addPage(new PatientFilePage(this));
+    addPage(new VirtualDatabasePage(this));
+    addPage(new EndConfigPage(this));
     this->setWindowTitle(tr("Application Configurator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
@@ -233,7 +235,7 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Patients Forms File"));
-    this->setSubTitle(tr("FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms."));
+    setSubTitle(tr("FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms."));
 
     selector = new Form::FormFilesSelectorWidget(this);
 
@@ -247,6 +249,21 @@ bool PatientFilePage::validatePage()
     return QFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString()).exists();
 }
 
+
+VirtualDatabasePage::VirtualDatabasePage(QWidget *parent) :
+        QWizardPage(parent)
+{
+    setTitle(tr("Create Virtual Patients"));
+    setSubTitle(tr("You can create some virtual patients and users in order to test FreeMedForms.\n"
+                   "Just select the number of patients/users you want to create and click on the "
+                   "'populate' button."));
+
+    Internal::VirtualDatabasePreferences *vd = new Internal::VirtualDatabasePreferences(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->setSpacing(0);
+    l->setMargin(0);
+    l->addWidget(vd);
+}
 
 
 EndConfigPage::EndConfigPage(QWidget *parent) :
