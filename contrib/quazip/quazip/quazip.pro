@@ -5,27 +5,7 @@ DEFINES += QUAZIP_LIBRARY
 
 include( ../../../libs/libsworkbench.pri )
 
-#isEmpty(BUILDING_PROTECTED):include( ../../../config.pri )
-#include( ../../../config.pri )
-
-#DESTDIR = ../
-
-CONFIG *= dll
-#CONFIG *= staticlib
-# CONFIG *= qt warn_on staticlib
-# QT -= gui
-
-# include config file
-
-#CONFIG *= dll
-
-unix {
-    LIBS *= -lz
-} else {
-    message( Win32 compilation of Quazip )
-    PRE_TARGETDEPS += ../zlib-1.2.3
-    LIBS *= -L../zlib-1.2.3 -lz
-}
+LIBS *= -L../ -lz
 
 DEPENDPATH += .
 INCLUDEPATH += .
