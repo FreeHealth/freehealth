@@ -175,8 +175,14 @@ class FORM_EXPORT FormMain : public FormItem
 {
     Q_OBJECT
 public:
+    enum EpisodeCountPossibilities {
+        NoEpisode = 0,
+        UniqueEpisode,
+        MultiEpisode,
+    };
+
     FormMain(QObject *parent=0) :
-            FormItem(parent), m_DebugPage(0), m_Multi(true) {}
+            FormItem(parent), m_DebugPage(0), m_Episode(MultiEpisode) {}
     ~FormMain();
 
     FormPage *createPage(const QString &uuid = QString::null);
@@ -186,18 +192,15 @@ public:
 
     virtual FormMain *formParent() { return qobject_cast<FormMain*>(parent()); }
 
-    virtual void setMultiEpisode(bool state) {m_Multi = state;}
-    virtual bool isMultiEpisode() const {return m_Multi;}
-
-    virtual void setUniqueEpisode(bool state) {m_Multi = !state;}
-    virtual bool isUniqueEpisode() const {return !m_Multi;}
+    virtual void setEpisodePossibilities(const int i) {m_Episode = i;}
+    virtual int episodePossibilities() const {return m_Episode;}
 
     void createDebugPage();
     void toTreeWidget(QTreeWidget *tree);
 
 private:
     FormMainDebugPage *m_DebugPage;
-    bool m_Multi;
+    int m_Episode;
 };
 
 class FORM_EXPORT FormMainDebugPage : public Core::IDebugPage

@@ -498,12 +498,7 @@ void FormItemSpec::setValue(int type, const QVariant &val, const QString &langua
 
 QVariant FormItemSpec::value(const int type, const QString &lang) const
 {
-    SpecsBook *values = 0;
-    if (lang==Trans::Constants::ALL_LANGUAGE)
-        values = d->getLanguage(QLocale().name().left(2));
-    if (!values)
-        values = d->getLanguage(lang);
-//    qWarning() << "SPEC" << type << this << values;
+    SpecsBook *values = d->getLanguage(lang);
     if (!values)
         return QString();
     QVariant val = values->m_Specs.value(type);

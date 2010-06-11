@@ -102,6 +102,7 @@ public:
     bool isEpisode(const QModelIndex &index) const;
     bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
     bool isUniqueEpisode(const QModelIndex &index) const;
+    bool isNoEpisode(const QModelIndex &index);
     bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
     void setReadOnly(const bool state);
     bool isReadOnly() const;

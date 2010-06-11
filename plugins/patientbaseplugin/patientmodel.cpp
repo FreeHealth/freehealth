@@ -425,6 +425,19 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case Surname:       col = Constants::IDENTITY_SURNAME;          break;
         case GenderIndex:
             {
+                col = Constants::IDENTITY_GENDER;
+                QString g;
+                switch (value.toInt())
+                {
+                case 0: g = "M"; break;
+                case 1: g = "F"; break;
+                case 2: g = "H"; break;
+                }
+                return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
+                break;
+            }
+        case Gender:
+            {
                 const QString &g = value.toString();
                 QString toSave;
                 switch (genders().indexOf(g)) {

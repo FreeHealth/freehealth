@@ -165,15 +165,27 @@ void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (index.column()==EpisodeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
         QIcon icon;
         if (option.state & QStyle::State_Selected) {
-            if (m_EpisodeModel->isEpisode(index))
+            if (m_EpisodeModel->isEpisode(index)) {
                 icon = theme()->icon(Core::Constants::ICONVALIDATELIGHT);
-            else
+            } else {
+                // test the form to be unique or multiple episode
+                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
+                    return;
+                if (m_EpisodeModel->isNoEpisode(index))
+                    return;
                 icon = theme()->icon(Core::Constants::ICONADDLIGHT);
+            }
         } else {
-            if (m_EpisodeModel->isEpisode(index))
+            if (m_EpisodeModel->isEpisode(index)) {
                 icon = theme()->icon(Core::Constants::ICONVALIDATEDARK);
-            else
+            } else {
+                // test the form to be unique or multiple episode
+                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
+                    return;
+                if (m_EpisodeModel->isNoEpisode(index))
+                    return;
                 icon = theme()->icon(Core::Constants::ICONADDDARK);
+            }
         }
 
         QRect iconRect(option.rect.right() - option.rect.height(),
@@ -369,8 +381,10 @@ void FormPlaceHolder::newEpisode()
         index = index.parent();
     }
 
-    // test the form to be unique oor multiple episode
+    // test the form to be unique or multiple episode
     if (d->m_EpisodeModel->isUniqueEpisode(index) && d->m_EpisodeModel->rowCount(index) == 1)
+        return;
+    if (d->m_EpisodeModel->isNoEpisode(index))
         return;
 
     // create a new episode the selected form and its children

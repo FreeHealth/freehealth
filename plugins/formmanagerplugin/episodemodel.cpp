@@ -407,7 +407,7 @@ public:
                                                 << Constants::EPISODES_LABEL,
                                                 where);
             int limit;
-            f->isUniqueEpisode() ? limit=1 : limit=5;
+            f->episodePossibilities()==FormMain::UniqueEpisode ? limit=1 : limit=5;
             req += QString(" ORDER BY %1 ASC LIMIT %2;")
                    .arg(episodeBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE))
                    .arg(limit);
@@ -812,7 +812,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 /** \todo remove this */
                 Form::FormMain *form = d->formsItems.key(it);
                 if (form) {
-                    if (form->isUniqueEpisode())
+                    if (form->episodePossibilities()==FormMain::UniqueEpisode)
                         return QColor("red");
                 }
                 // End remove
@@ -968,7 +968,15 @@ bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
     if (!index.isValid())
         return false;
     Internal::TreeItem *item = d->getItem(index);
-    return formManager()->form(item->data(FormUuid).toString())->isUniqueEpisode();
+    return formManager()->form(item->data(FormUuid).toString())->episodePossibilities()==FormMain::UniqueEpisode;
+}
+
+bool EpisodeModel::isNoEpisode(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return false;
+    Internal::TreeItem *item = d->getItem(index);
+    return formManager()->form(item->data(FormUuid).toString())->episodePossibilities()==FormMain::NoEpisode;
 }
 
 void EpisodeModel::setReadOnly(const bool state)

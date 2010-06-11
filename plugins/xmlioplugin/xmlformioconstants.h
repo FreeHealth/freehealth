@@ -81,6 +81,7 @@ const char* const TAG_SCRIPT_ONDEPENDENCIESCHANGED = "ondependencieschanged";
 
 const char* const TAG_OPTIONS                   = "options";
 const char* const TAG_OPTIONS_UNIQUE_EPISODE    = "unique";
+const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
 
 const char* const ATTRIB_ID           = "id";
 const char* const ATTRIB_COMPLETION   = "completion";
