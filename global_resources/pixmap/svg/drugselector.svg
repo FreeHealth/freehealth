@@ -9,8 +9,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="48"
+   width="16"
+   height="16"
    id="svg2458"
    sodipodi:version="0.32"
    inkscape:version="0.46"
@@ -168,6 +168,13 @@
        y1="44.229939"
        x2="251.76022"
        y2="44.229939" />
+    <inkscape:perspective
+       id="perspective2536"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -176,9 +183,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="49.412847"
-     inkscape:cy="10.774839"
+     inkscape:zoom="11.2"
+     inkscape:cx="-4.6931276"
+     inkscape:cy="7.5817829"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -201,13 +208,6 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="fill:#f5f5f5;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect3223"
-       width="37.754456"
-       height="38.133259"
-       x="5.1770315"
-       y="5.0685167" />
     <text
        xml:space="preserve"
        style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia;-inkscape-font-specification:Georgia"
@@ -216,39 +216,12 @@
        id="text3495"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan3497" /></text>
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#969696;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 6.0609157,25.943523 L 42.552676,25.943523"
-       id="path2447"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#f1f1f1;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 6.1871847,30.090098 L 42.173869,29.963829"
-       id="path3219"
-       sodipodi:nodetypes="cc" />
-    <rect
-       style="fill:none;stroke:#969696;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect3221"
-       width="43.815365"
-       height="43.815365"
-       x="2.1465759"
-       y="2.1643271"
-       rx="0"
-       ry="0" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#969696;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 5.9977807,37.373093 L 42.489541,37.373093"
-       id="path3225"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#f2f2f2;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 6.2503188,41.330263 L 42.237003,41.203994"
-       id="path3229"
-       sodipodi:nodetypes="cc" />
+         id="tspan3497"
+         x="72.321426"
+         y="33.357143" /></text>
     <g
        id="g3233"
-       transform="matrix(0.7440363,0.6681392,-0.6681392,0.7440363,22.202316,-7.5137493)">
+       transform="matrix(0.5371913,-4.411947e-2,4.411947e-2,0.5371913,-1.1129599,0.4193038)">
       <rect
          transform="matrix(0.6649322,0.7469037,-0.7469037,0.6649322,0,0)"
          rx="5.1048422"
@@ -291,5 +264,13 @@
            id="tspan3489"
            sodipodi:role="line">FreeDiams</tspan></text>
     </g>
+    <image
+       y="5.6546478"
+       x="5.0358181"
+       id="image2538"
+       height="10.24"
+       width="10.24"
+       sodipodi:absref="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16/search.png"
+       xlink:href="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16/search.png" />
   </g>
 </svg>

@@ -123,6 +123,7 @@ void PrescriptionViewer::createActionsAndToolbar()
 #endif
     QStringList actionsToAdd;
     actionsToAdd
+            << Constants::A_TOGGLE_DRUGSELECTOR
             << Core::Constants::A_FILE_OPEN
             << Core::Constants::A_FILE_SAVE
             << Core::Constants::A_FILE_SAVEAS

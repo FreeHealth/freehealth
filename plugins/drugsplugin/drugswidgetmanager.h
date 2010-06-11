@@ -100,6 +100,7 @@ public Q_SLOTS:
     void drugsModelChanged();
 
 private Q_SLOTS:
+    void toggleDrugSelector();
     void moveUp();
     void moveDown();
     void sortDrugs();
@@ -129,6 +130,7 @@ private:
     void updateActions();
 
 protected:
+    QAction *aToggleDrugSelector;
     QAction *aAddRow;
     QAction *aRemoveRow;
     QAction *aDown;

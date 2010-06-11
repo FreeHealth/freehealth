@@ -23,7 +23,8 @@
     <option>compact</option>
 
     <name>episodeTester</name>
-    <label>Identity</label>
+    <label lang="xx">Identity</label>
+    <label lang="fr">Identité</label>
     <type>form</type>
     <options>unique</options>
 
@@ -148,18 +149,47 @@
 
   <MedForm>
     <type>form</type>
-    <name>chronictherapeutic</name>
-    <label>Chronic therapeutic</label>
-    <Item>
-      <name>chronicdrugs</name>
-      <type>prescriptor</type>
-      <label>Chronic therapeutic</label>
-    </Item>
-    <Item>
-      <type>texteditor</type>
-      <name>drugsremark</name>
-      <label>Comment on this prescription</label>
-    </Item>
+    <name>drugs</name>
+    <label lang="xx">Drugs</label>
+    <label lang="fr">Médicaments</label>
+
+    <MedForm>
+      <type>form</type>
+      <name>chronictherapeutic</name>
+      <label lang="xx">Chronic therapeutic</label>
+      <label lang="fr">Traitement chronique</label>
+      <Item>
+        <name>chronicdrugs</name>
+        <type>prescriptor</type>
+        <label lang="xx">Chronic therapeutic</label>
+        <label lang="fr">Traitement chronique</label>
+      </Item>
+      <Item>
+        <type>texteditor</type>
+        <name>drugsremark</name>
+        <label lang="xx">Comments</label>
+        <label lang="fr">Remarques</label>
+      </Item>
+    </MedForm>
+
+    <MedForm>
+      <type>form</type>
+      <name>drugsallergiesform</name>
+      <label lang="xx">Allergies</label>
+      <Item>
+        <name>drugsallergies</name>
+        <type>drugselector</type>
+        <label lang="xx">Known drugs allergies</label>
+        <label lang="fr">Allergies médicamenteuses connues</label>
+        <options>hideselector</options>
+      </Item>
+      <Item>
+        <type>texteditor</type>
+        <name>drugsallergiesremark</name>
+        <label lang="xx">Comments</label>
+        <label lang="xx">Remarques</label>
+      </Item>
+    </MedForm>
   </MedForm>
 
   <MedForm>

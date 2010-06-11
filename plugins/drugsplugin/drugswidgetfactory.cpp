@@ -69,6 +69,7 @@
 
 
 namespace mfDrugsWidgetPluginsPrivateConstants {
+    const char* const OPTION_HIDESELECTOR     = "hideselector";
     const char* const OPTION_WITHPRESCRIBING  = "withprescribing";
     const char* const OPTION_WITHPRINTING     = "withprinting";
 }
@@ -157,10 +158,9 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     } else if (name=="prescription" || name=="prescriptor") {
         m_WithPrescribing = true;
     }
-
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
-    m_CentralWidget->initialize();
+    m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
     m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
     m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
     hb->addWidget(m_CentralWidget);

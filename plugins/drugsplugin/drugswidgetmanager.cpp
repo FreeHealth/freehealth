@@ -132,6 +132,7 @@ DrugsCentralWidget *DrugsWidgetManager::currentView() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         QObject(parent),
+        aToggleDrugSelector(0),
         aAddRow(0),
         aRemoveRow(0),
         aDown(0),
@@ -188,6 +189,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 #endif
 
     // Create local actions
+    a = aToggleDrugSelector = new QAction(this);
+    a->setObjectName("aToggleDrugSelector");
+    a->setIcon(th->icon(Constants::I_TOGGLEDRUGSELECTOR));
+    cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_DRUGSELECTOR, ctx);
+    cmd->setTranslations(Constants::TOGGLEDRUGSELECTOR_TEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    connect(a, SIGNAL(triggered()), this, SLOT(toggleDrugSelector()));
+
     a = aClear = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONCLEAR));
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
@@ -474,6 +483,12 @@ void DrugsActionHandler::updateActions()
 {
     listViewItemChanged();
     drugsModelChanged();
+}
+
+void DrugsActionHandler::toggleDrugSelector()
+{
+    if (m_CurrentView)
+        m_CurrentView->drugSelector()->setVisible(!m_CurrentView->drugSelector()->isVisible());
 }
 
 bool DrugsActionHandler::canMoveUp()

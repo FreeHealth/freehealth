@@ -66,6 +66,7 @@ namespace Constants {
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
 
+    const char* const   A_TOGGLE_DRUGSELECTOR   = "a.DrugsPlug.ToggleDrugSelector";
     const char* const   A_VIEW_INTERACTIONS     = "a.DrugsPlug.ViewInteractions";
     const char* const   A_CHANGE_DURATION       = "a.DrugsPlug.ChangeDuration";
     const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
@@ -84,6 +85,7 @@ namespace Constants {
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
+    const char* const   TOGGLEDRUGSELECTOR_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toggle drug selector");
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search method");
     const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");
     const char* const   SEARCHINN_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by INN");
@@ -98,6 +100,7 @@ namespace Constants {
     const char* const   RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Reset the prescription sentence to the default one");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
+    const char * const  I_TOGGLEDRUGSELECTOR       =  "drugselector.png";       /*!< \brief Themed icon name for Commercial search. */
 
     // Search Method
     enum SearchMethod {

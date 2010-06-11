@@ -81,7 +81,7 @@ class DRUGS_EXPORT DrugsCentralWidget : public QWidget
 
 public:
     DrugsCentralWidget(QWidget *parent = 0);
-    bool initialize();
+    bool initialize(bool hideSelector = false);
 
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;

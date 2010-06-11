@@ -92,7 +92,7 @@ DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
 }
 
 /** \brief Initialize the widget after the ui was setted */
-bool DrugsCentralWidget::initialize()
+bool DrugsCentralWidget::initialize(bool hideSelector)
 {
     m_ui = new DrugsWidget::Internal::Ui::DrugsCentralWidget();
     m_ui->setupUi(this);
@@ -108,8 +108,9 @@ bool DrugsCentralWidget::initialize()
     m_ui->m_PrescriptionView->setModel(m_CurrentDrugModel);
 
     m_ui->m_DrugSelector->initialize();
-
     m_ui->m_DrugSelector->setFocus();
+    if (hideSelector)
+        m_ui->m_DrugSelector->hide();
 
     DrugsWidgetManager::instance()->setCurrentView(this);
 
