@@ -213,6 +213,8 @@ void MainWindow::init()
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION));
     raise();
     show();

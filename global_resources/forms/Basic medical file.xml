@@ -21,6 +21,7 @@
     <bibliography lang="fr">Bibliographie ici</bibliography>
     <licence lang="fr">Termes de la license</licence>
     <option>compact</option>
+    <icon>%theme%/identity.png</icon>
 
     <name>episodeTester</name>
     <label lang="xx">Identity</label>
@@ -152,6 +153,7 @@
     <name>drugs</name>
     <label lang="xx">Drugs</label>
     <label lang="fr">Médicaments</label>
+    <icon>%theme%/freediams.png</icon>
 
     <MedForm>
       <type>form</type>

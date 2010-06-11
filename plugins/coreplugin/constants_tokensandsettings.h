@@ -58,7 +58,7 @@ const char * const  TOKEN_NUMBEROFDRUGS = "NBDRUGS";
 
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";
-
+const char * const  TAG_APPLICATION_THEME_PATH     = "%theme%";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";

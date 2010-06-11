@@ -333,10 +333,14 @@ public:
             datas.clear();
             datas.insert(EpisodeModel::FormUuid, f->uuid());
             datas.insert(EpisodeModel::Label, f->spec()->label());
+            QString icon = f->spec()->value(FormItemSpec::Spec_IconFileName).toString();
+            icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
+            if (QFileInfo(icon).isRelative())
+                icon.append(qApp->applicationDirPath());
+            datas.insert(EpisodeModel::Icon, QIcon(icon));
             TreeItem *it = new TreeItem(datas, 0);
             it->setIsEpisode(false);
             formsItems.insert(f, it);
-//            qWarning() << f << f->uuid();
         }
         // reparent items
         QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
@@ -344,7 +348,6 @@ public:
             i.next();
             Form::FormMain *f = i.key();
             TreeItem *it = i.value();
-//            qWarning() << f << f->uuid();
             if (f->formParent()) {
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);
@@ -799,7 +802,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         }
 //    case Qt::ToolTipRole :
 //        {
-//            return it->data(Constants::Data_Summary);
+//            return it->data();
 //        }
     case Qt::ForegroundRole :
         {
@@ -824,6 +827,10 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 return bold;
             }
             return QFont();
+        }
+    case Qt::DecorationRole :
+        {
+            return it->data(Icon);
         }
 //    case Qt::BackgroundRole :
 //        {

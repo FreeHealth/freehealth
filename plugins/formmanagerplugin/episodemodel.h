@@ -67,6 +67,7 @@ public:
         IsNewlyCreated,
         IsEpisode,
         XmlContent,
+        Icon,
         EmptyColumn1,
         EmptyColumn2,
         MaxData

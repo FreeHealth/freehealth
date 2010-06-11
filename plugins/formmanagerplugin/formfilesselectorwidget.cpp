@@ -188,7 +188,7 @@ void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)
                 bold.setBold(true);
                 item->setFont(0, bold);
                 foreach(const QString &err, io->lastError().split("\n"))
-                    QTreeWidgetItem *z = new QTreeWidgetItem(item, QStringList() << err);
+                    new QTreeWidgetItem(item, QStringList() << err);
             }
         }
     }

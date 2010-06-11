@@ -89,7 +89,8 @@ Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::Fo
 TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         Form::IFormWidget(formItem,parent), m_Text(0)
 {
-    QHBoxLayout *hb = new QHBoxLayout(this);
+    QBoxLayout *hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+    hb->addWidget(m_Label);
     hb->setMargin(0);
     hb->setSpacing(0);
     const QString &options = formItem->extraDatas().value("options");

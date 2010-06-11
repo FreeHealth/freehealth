@@ -60,6 +60,8 @@ const char* const TAG_SPEC_DESCRIPTION  = "description";
 const char* const TAG_SPEC_LABEL        = "label";
 const char* const TAG_SPEC_PLUGINNAME   = "type";
 const char* const TAG_SPEC_VERSION      = "version";
+const char* const TAG_SPEC_ICON         = "icon";
+const char* const TAG_SPEC_TOOLTIP      = "tooltip";
 
 const char* const TAG_VALUE              = "value";
 const char* const TAG_VALUE_UUID         = "uuid";

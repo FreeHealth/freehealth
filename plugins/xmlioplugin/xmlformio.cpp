@@ -164,6 +164,7 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_DESCRIPTION, Form::FormItemSpec::Spec_Description);
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Form::FormItemSpec::Spec_Label);
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
+    ::m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
 }
 
 XmlFormIO::~XmlFormIO()
