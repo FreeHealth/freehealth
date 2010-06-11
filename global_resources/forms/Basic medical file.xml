@@ -20,7 +20,7 @@
     <description lang="fr">Petite description ici</description>
     <bibliography lang="fr">Bibliographie ici</bibliography>
     <licence lang="fr">Termes de la license</licence>
-    <option>compact</option>
+    <options>compact</options>
     <icon>%theme%/identity.png</icon>
 
     <name>episodeTester</name>
@@ -37,12 +37,25 @@
     </Item>
   </MedForm>
 
+  <MedForm>
+    <type>form</type>
+    <name>medicalHistoryForm</name>
+    <label lang="xx">Medical history</label>
+    <label lang="fr">Antécédents</label>
+    <options>compact;unique</options>
+    <Item>
+      <name>medicalhistory</name>
+      <type>texteditor</type>
+      <label lang="xx">Medical history</label>
+      <label lang="fr">Antécédents</label>
+    </Item>
+  </MedForm>
 
   <MedForm>
     <type>form</type>
     <name>episodeTester_1</name>
     <label>Form1</label>
-    <option>compact</option>
+    <options>compact</options>
     <Item>
       <name>s1</name>
       <type>texteditor</type>
