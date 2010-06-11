@@ -113,6 +113,8 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     mainLayout->addStretch();
 
     m_ContainerLayout = new QGridLayout(mainWidget);
+    m_ContainerLayout->setMargin(0);
+    m_ContainerLayout->setSpacing(0);
 //    IFormWidget::createLabel(tkTr(Trans::Constants::IDENTITY_TEXT), Qt::AlignCenter);
 //    m_Label->setFrameStyle(FormLabelFrame);
 //    QFont font = m_Label->font();

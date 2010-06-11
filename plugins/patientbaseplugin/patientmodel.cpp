@@ -267,28 +267,6 @@ PatientModel::~PatientModel()
     }
 }
 
-QStringList PatientModel::genders() // static
-{
-    return QStringList()
-            << tkTr(Trans::Constants::MALE)
-            << tkTr(Trans::Constants::FEMALE)
-            << tkTr(Trans::Constants::HERMAPHRODISM)
-            ;
-}
-
-QStringList PatientModel::titles() // static
-{
-    return QStringList()
-            << ""
-            << tkTr(Trans::Constants::MISTER)
-            << tkTr(Trans::Constants::MISS)
-            << tkTr(Trans::Constants::MADAM)
-            << tkTr(Trans::Constants::DOCTOR)
-            << tkTr(Trans::Constants::CAPTAIN)
-            ;
-}
-
-
 void PatientModel::changeUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
@@ -337,6 +315,17 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
         case Surname:       col = Constants::IDENTITY_SURNAME;           break;
         case Gender:        col = Constants::IDENTITY_GENDER;            break;
+        case GenderIndex:
+            {
+                const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
+                if (g=="M")
+                    return 0;
+                if (g=="F")
+                    return 1;
+                if (g=="H")
+                    return 2;
+                return -1;
+            }
         case DateOfBirth:   col = Constants::IDENTITY_DOB;               break;
         case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;    break;
         case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
@@ -349,17 +338,18 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case Mails:         col = Constants::IDENTITY_MAILS;             break;
         case Tels:          col = Constants::IDENTITY_TELS;              break;
         case Faxes:         col = Constants::IDENTITY_FAXES;             break;
+        case TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
         case Title :
             {
                 col = Constants::IDENTITY_TITLE;
-                int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
+                int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
                 switch (t) {
-                case Mister:    return tkTr(Trans::Constants::MISTER);
-                case Miss :     return tkTr(Trans::Constants::MISS);
-                case Madam :    return tkTr(Trans::Constants::MADAM);
-                case Doctor :   return tkTr(Trans::Constants::DOCTOR);
-                case Professor: return tkTr(Trans::Constants::PROFESSOR);
-                case Captain :  return tkTr(Trans::Constants::CAPTAIN);
+                case Trans::Constants::Mister:    return tkTr(Trans::Constants::MISTER);
+                case Trans::Constants::Miss :     return tkTr(Trans::Constants::MISS);
+                case Trans::Constants::Madam :    return tkTr(Trans::Constants::MADAM);
+                case Trans::Constants::Doctor :   return tkTr(Trans::Constants::DOCTOR);
+                case Trans::Constants::Professor: return tkTr(Trans::Constants::PROFESSOR);
+                case Trans::Constants::Captain :  return tkTr(Trans::Constants::CAPTAIN);
                 default :       return QString();
                 }
                 return QString();
@@ -433,7 +423,19 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case BirthName:     col = Constants::IDENTITY_NAME;             break;
         case SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
         case Surname:       col = Constants::IDENTITY_SURNAME;          break;
-        case Gender:        col = Constants::IDENTITY_GENDER;           break;
+        case GenderIndex:
+            {
+                const QString &g = value.toString();
+                QString toSave;
+                switch (genders().indexOf(g)) {
+                case 0 : toSave = "M"; break;
+                case 1 : toSave = "F"; break;
+                case 2:  toSave = "H"; break;
+                default: Utils::Log::addError(this, "Unknown gender " + g);
+                }
+                return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
+                break;
+            }
         case DateOfBirth:   col = Constants::IDENTITY_DOB;              break;
         case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;   break;
         case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;      break;
@@ -452,17 +454,17 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 int id = -1;
                 col = Constants::IDENTITY_TITLE;
                 if (t == tkTr(Trans::Constants::MISTER)) {
-                    id = Mister;
+                    id = Trans::Constants::Mister;
                 } else if (t == tkTr(Trans::Constants::MISS)) {
-                    id = Miss;
+                    id = Trans::Constants::Miss;
                 } else if (t == tkTr(Trans::Constants::MADAM)) {
-                    id = Madam;
+                    id = Trans::Constants::Madam;
                 } else if (t == tkTr(Trans::Constants::DOCTOR)) {
-                    id = Doctor;
+                    id = Trans::Constants::Doctor;
                 } else if (t == tkTr(Trans::Constants::PROFESSOR)) {
-                    id = Professor;
+                    id = Trans::Constants::Professor;
                 } else if (t == tkTr(Trans::Constants::CAPTAIN)) {
-                    id = Captain;
+                    id = Trans::Constants::Captain;
                 }
                 if (id != -1) {
                     return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
@@ -470,7 +472,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             }
         case FullName:
             {
-                break;
+                return true;
             }
         case Photo:
             {

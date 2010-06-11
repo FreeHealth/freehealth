@@ -71,6 +71,8 @@
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/widgets/userrightswidget.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QComboBox>
@@ -82,6 +84,7 @@
 #include <QStringListModel>
 
 using namespace UserPlugin;
+using namespace Trans::ConstantTranslations;
 
 static inline UserPlugin::UserModel *userModel() {return UserModel::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -287,8 +290,8 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
     registerField("Title", cbTitle, "currentIndex");
     registerField("Gender", cbGender, "currentIndex");
 
-    cbTitle->addItems(userModel()->titles());
-    cbGender->addItems(userModel()->genders());
+    cbTitle->addItems(titles());
+    cbGender->addItems(genders());
 
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(lblTitle, 0, 0);

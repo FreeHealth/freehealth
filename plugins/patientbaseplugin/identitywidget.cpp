@@ -50,6 +50,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QDataWidgetMapper>
 #include <QDir>
@@ -59,6 +60,7 @@
 #include <QDebug>
 
 using namespace Patients;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
@@ -82,8 +84,8 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
-            editUi->genderCombo->addItems(PatientModel::genders());
-            editUi->titleCombo->addItems(PatientModel::titles());
+            editUi->genderCombo->addItems(genders());
+            editUi->titleCombo->addItems(titles());
             editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         }
@@ -118,8 +120,8 @@ public:
             m_Mapper->addMapping(editUi->birthName, PatientModel::BirthName, "text");
             m_Mapper->addMapping(editUi->secondName, PatientModel::SecondName, "text");
             m_Mapper->addMapping(editUi->surname, PatientModel::Surname, "text");
-            m_Mapper->addMapping(editUi->genderCombo, PatientModel::Gender);
-            m_Mapper->addMapping(editUi->titleCombo, PatientModel::Title, "currentText");
+            m_Mapper->addMapping(editUi->genderCombo, PatientModel::GenderIndex, "currentIndex");
+            m_Mapper->addMapping(editUi->titleCombo, PatientModel::TitleIndex, "currentIndex");
             m_Mapper->addMapping(editUi->dob, PatientModel::DateOfBirth);
             m_Mapper->addMapping(editUi->street, PatientModel::Street, "plainText");
             m_Mapper->addMapping(editUi->city, PatientModel::City, "text");

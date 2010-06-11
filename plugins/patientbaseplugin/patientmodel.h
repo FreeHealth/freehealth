@@ -63,11 +63,13 @@ public:
         FamilyUid,
         IconizedGender,
         Title,
+        TitleIndex,
         FullName,
         BirthName,
         SecondName,
         Surname,
         Gender,
+        GenderIndex,
         DateOfBirth,
         Age,
         MaritalStatus,
@@ -86,16 +88,6 @@ public:
         NumberOfColumns
     };
 
-    enum TitleInterpret {
-        NoTitle = 0,
-        Mister = 1,
-        Miss = 2,
-        Madam = 3,
-        Doctor = 4,
-        Professor = 5,
-        Captain = 6
-    };
-
     enum FilterOn {
         FilterOnName,
         FilterOnFullName,
@@ -108,10 +100,6 @@ public:
 
     static PatientModel *activeModel() {return m_ActiveModel;}
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
-
-    // for ui preparations (gender, title) you can get translations from here.
-    static QStringList genders();
-    static QStringList titles();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;

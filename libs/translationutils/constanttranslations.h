@@ -127,6 +127,20 @@ namespace Time {
 }
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Time::DailySchemes)
 
+
+enum TitleInterpret {
+    NoTitle = 0,
+    Mister,
+    Miss,
+    Madam,
+    Doctor,
+    Professor,
+    Captain
+};
+
+
+
+
 	// Used for the language menu
 	const char * const  ENGLISH             = QT_TRANSLATE_NOOP("tkConstants", "English");             /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
 
@@ -533,6 +547,9 @@ TRUTILS_EXPORT QString dailyScheme(const int dailySchemeFlag);
 TRUTILS_EXPORT QStringList preDeterminedAges();
 TRUTILS_EXPORT QStringList mealTime();
 TRUTILS_EXPORT QString mealTime(const int index);
+
+TRUTILS_EXPORT QStringList genders();
+TRUTILS_EXPORT QStringList titles();
 
 } // end  ConstantTranslations
 

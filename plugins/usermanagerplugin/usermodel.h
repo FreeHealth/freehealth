@@ -101,13 +101,6 @@ public:
     QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const
     { return createIndex(row, column); }
 
-    /** \todo move to trans */
-    QStringList titles() const
-    { return QStringList() << tr("Mister") << tr("Miss") << tr("Misses") << tr("Child") << tr("Doctor") << tr("Professor") << tr("Director"); }
-    QStringList genders() const
-    { return QStringList() << tr("F") << tr("M"); }
-
-
     QList<int> practionnerLkIds(const QString &uid);
 
     int numberOfUsersInMemory();

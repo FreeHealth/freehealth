@@ -193,7 +193,7 @@ public:
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName();
     int     title() const                { return dynamicDataValue(USER_DATAS_TITLE).toInt(); }
-    int     gender() const               { return dynamicDataValue(USER_DATAS_GENDER).toInt(); }
+    int     genderIndex() const          { return dynamicDataValue(USER_DATAS_GENDER).toInt(); }
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
     QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
     QString surname() const              { return value(Table_USERS, USER_SURNAME).toString(); }

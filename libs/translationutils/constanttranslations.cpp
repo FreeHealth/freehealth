@@ -247,16 +247,28 @@ QString mealTime(const int index)
 }
 
 
-//    m_Pregnancy =
-//            QStringList()
-//            << tr( "usable during whole pregnancy" )
-//            << tr( "usable during the first quarter of pregnancy" )
-//            << tr( "usable during the second quarter of pregnancy" )
-//            << tr( "usable during the third quarter of pregnancy" )
-//            << tr( "usable during pregnancy with warnings" )
-//            << tr( "not usable during pregnancy" );
+QStringList genders()
+{
+    return QStringList()
+            << tkTr(Trans::Constants::MALE)
+            << tkTr(Trans::Constants::FEMALE)
+            << tkTr(Trans::Constants::HERMAPHRODISM)
+            ;
+}
 
+QStringList titles()
+{
+    return QStringList()
+            << ""
+            << tkTr(Trans::Constants::MISTER)
+            << tkTr(Trans::Constants::MISS)
+            << tkTr(Trans::Constants::MADAM)
+            << tkTr(Trans::Constants::DOCTOR)
+            << tkTr(Trans::Constants::PROFESSOR)
+            << tkTr(Trans::Constants::CAPTAIN)
+            ;
+}
 
 } // End ConstantTranslations
 
-} // End Core
+} // End Trans

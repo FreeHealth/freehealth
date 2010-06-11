@@ -47,6 +47,7 @@
 
 #include <utils/global.h>
 #include <utils/serializer.h>
+#include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
 
@@ -64,7 +65,8 @@
 #include <QTextEdit>
 
 using namespace UserPlugin;
-using namespace UserPlugin::Internal;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Constructors / Destructors --------------------------------------
@@ -125,8 +127,8 @@ void UserViewerPrivate::initialize()
     editorsPrescriptionLayout->addWidget(prescriptionPreview, 0,0);
 
     // populate combos
-    titleCombo->addItems(UserModel::instance()->titles());
-    genderCombo->addItems(UserModel::instance()->genders());
+    titleCombo->addItems(titles());
+    genderCombo->addItems(genders());
     languageCombo->addItems(Core::Translators::availableLocales());
     // QListView need to be managed by hand
     QStringListModel * modelspe = new QStringListModel(this);

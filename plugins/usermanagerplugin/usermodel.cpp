@@ -59,6 +59,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
 
@@ -79,6 +80,7 @@
 
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
@@ -567,9 +569,9 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case User::DecryptedLogin : toReturn = user->decryptedLogin(); break;
             case User::Password : toReturn = user->cryptedPassword(); break;
             case User::LastLogin : toReturn = user->lastLogin(); break;
-            case User::GenderIndex : toReturn = user->gender(); break;
+            case User::GenderIndex : toReturn = user->genderIndex(); break;
             case User::TitleIndex : toReturn = user->title(); break;
-            case User::Gender : toReturn = genders().at(user->gender()); break;
+            case User::Gender : toReturn = genders().at(user->genderIndex()); break;
             case User::Title : toReturn = titles().at(user->title()); break;
             case User::Name : toReturn = user->name(); break;
             case User::SecondName : toReturn = user->secondName(); break;
