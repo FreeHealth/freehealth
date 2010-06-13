@@ -48,6 +48,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/ipatient.h>
 
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
@@ -117,16 +118,16 @@ public:
             m_Mapper = new QDataWidgetMapper(q);
             m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
             m_Mapper->setModel(m_PatientModel);
-            m_Mapper->addMapping(editUi->birthName, PatientModel::BirthName, "text");
-            m_Mapper->addMapping(editUi->secondName, PatientModel::SecondName, "text");
-            m_Mapper->addMapping(editUi->surname, PatientModel::Surname, "text");
-            m_Mapper->addMapping(editUi->genderCombo, PatientModel::GenderIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->titleCombo, PatientModel::TitleIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->dob, PatientModel::DateOfBirth);
-            m_Mapper->addMapping(editUi->street, PatientModel::Street, "plainText");
-            m_Mapper->addMapping(editUi->city, PatientModel::City, "text");
-            m_Mapper->addMapping(editUi->zipcode, PatientModel::ZipCode, "text");
-            m_Mapper->addMapping(editUi->country, PatientModel::Country, "text");
+            m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
+            m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
+            m_Mapper->addMapping(editUi->surname, Core::IPatient::Surname, "text");
+            m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
+            m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
+            m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth);
+            m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
+            m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
+            m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
+            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "text");
             m_Mapper->toFirst();
         }
     }
@@ -167,7 +168,7 @@ Patients::PatientModel *IdentityWidget::patientModel() const
 
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), PatientModel::Photo).data().value<QPixmap>();
+    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo).data().value<QPixmap>();
     if (d->m_Mapper) {
         d->m_Mapper->setCurrentModelIndex(patientIndex);
         d->editUi->photoButton->setIcon(photo);
@@ -178,22 +179,22 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->viewUi->sex->clear();
         d->viewUi->fullAdress1->clear();
         d->viewUi->fullAdress2->clear();
-        QString name = d->m_PatientModel->index(patientIndex.row(), PatientModel::FullName).data().toString();
-        const QString &title = d->m_PatientModel->index(patientIndex.row(), PatientModel::Title).data().toString();
+        QString name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
+        const QString &title = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Title).data().toString();
         if (!title.isEmpty())
             name.prepend(title + " ");
         d->viewUi->name->setText(name);
         d->viewUi->photoLabel->setPixmap(photo);
-        const QString &age = d->m_PatientModel->index(patientIndex.row(), PatientModel::Age).data().toString();
-        const QString &dob = d->m_PatientModel->index(patientIndex.row(), PatientModel::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
+        const QString &age = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Age).data().toString();
+        const QString &dob = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
         if (!age.isEmpty() && !dob.isEmpty())
             d->viewUi->ageDOB->setText(age + "; " + tr("born on") + " " + dob);
-        const QIcon &icon = d->m_PatientModel->index(patientIndex.row(), PatientModel::IconizedGender).data().value<QIcon>();
+        const QIcon &icon = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::IconizedGender).data().value<QIcon>();
         d->viewUi->sex->setPixmap(icon.pixmap(QSize(64,64)));
-        d->viewUi->fullAdress1->setText(d->m_PatientModel->index(patientIndex.row(), PatientModel::Street).data().toString());
-        d->viewUi->fullAdress2->setText(d->m_PatientModel->index(patientIndex.row(), PatientModel::City).data().toString() + " " +
-                                        d->m_PatientModel->index(patientIndex.row(), PatientModel::ZipCode).data().toString() + " " +
-                                        d->m_PatientModel->index(patientIndex.row(), PatientModel::Country).data().toString());
+        d->viewUi->fullAdress1->setText(d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Street).data().toString());
+        d->viewUi->fullAdress2->setText(d->m_PatientModel->index(patientIndex.row(), Core::IPatient::City).data().toString() + " " +
+                                        d->m_PatientModel->index(patientIndex.row(), Core::IPatient::ZipCode).data().toString() + " " +
+                                        d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Country).data().toString());
     }
 }
 
@@ -291,6 +292,6 @@ void IdentityWidget::photoButton_clicked()
     d->editUi->photoButton->setIcon(icon);
 
     // save to DB
-    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), PatientModel::Photo), photo);
+    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo), photo);
 }
 

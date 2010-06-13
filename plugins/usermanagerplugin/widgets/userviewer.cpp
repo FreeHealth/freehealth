@@ -50,6 +50,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
+#include <coreplugin/iuser.h>
 
 #include <listviewplugin/stringlistview.h>
 
@@ -159,46 +160,46 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper = new QDataWidgetMapper(m_Parent);
     m_Mapper->setModel(UserModel::instance());
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->addMapping(uuidLineEdit, User::Uuid);
-    m_Mapper->addMapping(titleCombo, User::TitleIndex, "currentIndex");
-    m_Mapper->addMapping(genderCombo, User::GenderIndex, "currentIndex");
-    m_Mapper->addMapping(nameLineEdit, User::Name);
-    m_Mapper->addMapping(loginLineEdit, User::DecryptedLogin);
-    m_Mapper->addMapping(secNameLineEdit, User::SecondName);
-    m_Mapper->addMapping(surnameLineEdit, User::Surname);
-    m_Mapper->addMapping(lastLoginDateTimeEdit, User::LastLogin);
-    m_Mapper->addMapping(languageCombo, User::LanguageIndex, "currentIndex");
-    m_Mapper->addMapping(specialtyListView, User::Specialities);
-    m_Mapper->addMapping(adressTextEdit, User::Adress, "plainText");
-    m_Mapper->addMapping(countryLineEdit, User::Country);
-    m_Mapper->addMapping(zipcodeLineEdit, User::Zipcode);
-    m_Mapper->addMapping(cityLineEdit, User::City);
-    m_Mapper->addMapping(tel1LineEdit, User::Tel1);
-    m_Mapper->addMapping(tel2LineEdit, User::Tel2);
-    m_Mapper->addMapping(tel3LineEdit, User::Tel3);
-    m_Mapper->addMapping(faxLineEdit, User::Fax);
-    m_Mapper->addMapping(mailLineEdit, User::Mail);
-    m_Mapper->addMapping(specialtyListView, User::Specialities, "stringList");
-    m_Mapper->addMapping(qualificationsListView, User::Qualifications, "stringList");
-    m_Mapper->addMapping(practIdsListView, User::PractitionerId, "stringList");
+    m_Mapper->addMapping(uuidLineEdit, Core::IUser::Uuid);
+    m_Mapper->addMapping(titleCombo, Core::IUser::TitleIndex, "currentIndex");
+    m_Mapper->addMapping(genderCombo, Core::IUser::GenderIndex, "currentIndex");
+    m_Mapper->addMapping(nameLineEdit, Core::IUser::Name);
+    m_Mapper->addMapping(loginLineEdit, Core::IUser::DecryptedLogin);
+    m_Mapper->addMapping(secNameLineEdit, Core::IUser::SecondName);
+    m_Mapper->addMapping(surnameLineEdit, Core::IUser::Surname);
+    m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
+    m_Mapper->addMapping(languageCombo, Core::IUser::LanguageIndex, "currentIndex");
+    m_Mapper->addMapping(specialtyListView, Core::IUser::Specialities);
+    m_Mapper->addMapping(adressTextEdit, Core::IUser::Adress, "plainText");
+    m_Mapper->addMapping(countryLineEdit, Core::IUser::Country);
+    m_Mapper->addMapping(zipcodeLineEdit, Core::IUser::Zipcode);
+    m_Mapper->addMapping(cityLineEdit, Core::IUser::City);
+    m_Mapper->addMapping(tel1LineEdit, Core::IUser::Tel1);
+    m_Mapper->addMapping(tel2LineEdit, Core::IUser::Tel2);
+    m_Mapper->addMapping(tel3LineEdit, Core::IUser::Tel3);
+    m_Mapper->addMapping(faxLineEdit, Core::IUser::Fax);
+    m_Mapper->addMapping(mailLineEdit, Core::IUser::Mail);
+    m_Mapper->addMapping(specialtyListView, Core::IUser::Specialities, "stringList");
+    m_Mapper->addMapping(qualificationsListView, Core::IUser::Qualifications, "stringList");
+    m_Mapper->addMapping(practIdsListView, Core::IUser::PractitionerId, "stringList");
 
-    m_Mapper->addMapping(genericPreview->headerEditor() , User::GenericHeader, "html");
-    m_Mapper->addMapping(genericPreview->footerEditor() , User::GenericFooter, "html");
-    m_Mapper->addMapping(genericPreview->watermarkEditor(), User::GenericWatermark, "html");
+    m_Mapper->addMapping(genericPreview->headerEditor() , Core::IUser::GenericHeader, "html");
+    m_Mapper->addMapping(genericPreview->footerEditor() , Core::IUser::GenericFooter, "html");
+    m_Mapper->addMapping(genericPreview->watermarkEditor(), Core::IUser::GenericWatermark, "html");
 
-    m_Mapper->addMapping(adminPreview->headerEditor(), User::AdministrativeHeader, "html");
-    m_Mapper->addMapping(adminPreview->footerEditor(), User::AdministrativeFooter, "html");
-    m_Mapper->addMapping(adminPreview->watermarkEditor(), User::AdministrativeWatermark, "html");
+    m_Mapper->addMapping(adminPreview->headerEditor(), Core::IUser::AdministrativeHeader, "html");
+    m_Mapper->addMapping(adminPreview->footerEditor(), Core::IUser::AdministrativeFooter, "html");
+    m_Mapper->addMapping(adminPreview->watermarkEditor(), Core::IUser::AdministrativeWatermark, "html");
 
-    m_Mapper->addMapping(prescriptionPreview->headerEditor(), User::PrescriptionHeader, "html");
-    m_Mapper->addMapping(prescriptionPreview->footerEditor(), User::PrescriptionFooter, "html");
-    m_Mapper->addMapping(prescriptionPreview->watermarkEditor(), User::PrescriptionWatermark, "html");
+    m_Mapper->addMapping(prescriptionPreview->headerEditor(), Core::IUser::PrescriptionHeader, "html");
+    m_Mapper->addMapping(prescriptionPreview->footerEditor(), Core::IUser::PrescriptionFooter, "html");
+    m_Mapper->addMapping(prescriptionPreview->watermarkEditor(), Core::IUser::PrescriptionWatermark, "html");
 
-    m_Mapper->addMapping(userManagerRightsListWidget, User::ManagerRights, "rights");
-    m_Mapper->addMapping(drugsRightsListWidget, User::DrugsRights, "rights");
-    m_Mapper->addMapping(medicalRightsListWidget, User::MedicalRights, "rights");
-    m_Mapper->addMapping(paramedicalRightsWidget, User::ParamedicalRights, "rights");
-    m_Mapper->addMapping(administrativeRightsWidget, User::AdministrativeRights, "rights");
+    m_Mapper->addMapping(userManagerRightsListWidget, Core::IUser::ManagerRights, "rights");
+    m_Mapper->addMapping(drugsRightsListWidget, Core::IUser::DrugsRights, "rights");
+    m_Mapper->addMapping(medicalRightsListWidget, Core::IUser::MedicalRights, "rights");
+    m_Mapper->addMapping(paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
+    m_Mapper->addMapping(administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
 
     m_Mapper->setCurrentModelIndex(UserModel::instance()->currentUserIndex());
     // make connections
@@ -218,14 +219,14 @@ void UserViewerPrivate::checkUserRights()
     int currentUserRow = m->currentUserIndex().row();
     if (currentUserRow == m_Row){
         // showing currentuser
-        User::UserRights r = User::UserRights(m->index(currentUserRow, User::ManagerRights).data().toInt());
-        m_CanModify = (r ^ User::WriteOwn);
-        m_CanRead = (r ^ User::ReadOwn);
+        Core::IUser::UserRights r = Core::IUser::UserRights(m->index(currentUserRow, Core::IUser::ManagerRights).data().toInt());
+        m_CanModify = (r ^ Core::IUser::WriteOwn);
+        m_CanRead = (r ^ Core::IUser::ReadOwn);
     } else {
         // not showing currentuser
-        User::UserRights r = User::UserRights(m->index(currentUserRow, User::ManagerRights).data().toInt());
-        m_CanModify = (r & User::WriteAll);
-        m_CanRead = (r & User::ReadAll);
+        Core::IUser::UserRights r = Core::IUser::UserRights(m->index(currentUserRow, Core::IUser::ManagerRights).data().toInt());
+        m_CanModify = (r & Core::IUser::WriteAll);
+        m_CanRead = (r & Core::IUser::ReadAll);
     }
     // enable editors
     foreach(QLineEdit *l, findChildren<QLineEdit *>())
@@ -246,11 +247,11 @@ void UserViewerPrivate::on_languageCombo_activated(int)
 void UserViewerPrivate::on_but_changePassword_clicked()
 {
     UserModel *m = UserModel::instance();
-    UserPasswordDialog d(m->index(m_Row, User::Password).data().toString(), m_Parent);
+    UserPasswordDialog d(m->index(m_Row, Core::IUser::Password).data().toString(), m_Parent);
     if (d.exec() == QDialog::Accepted){
         if (! d.canGetNewPassword())
             return;
-        QModelIndex idx = m->index(m_Row, User::Password);
+        QModelIndex idx = m->index(m_Row, Core::IUser::Password);
         m->setData(idx, d.cryptedPassword());
     }
 }
@@ -260,8 +261,8 @@ void UserViewerPrivate::on_but_viewHistory_clicked()
     UserModel *m = UserModel::instance();
     Utils::informativeMessageBox(tr("Login history."),
                                      tr("User %1\nLast connection : %2")
-                           .arg(m->index(m_Row,User::Name).data().toString())
-                           .arg(m->index(m_Row,User::LastLogin).data().toDateTime().toString()),
-                            m->index(m_Row,User::LoginHistory).data().toString(),
+                           .arg(m->index(m_Row,Core::IUser::Name).data().toString())
+                           .arg(m->index(m_Row,Core::IUser::LastLogin).data().toDateTime().toString()),
+                            m->index(m_Row,Core::IUser::LoginHistory).data().toString(),
                             qApp->applicationName());
 }

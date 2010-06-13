@@ -48,6 +48,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <medicalutils/global.h>
 #include <utils/log.h>
@@ -72,18 +74,48 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 namespace Patients {
 namespace Internal {
+
+/** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
+class PatientModelWrapper : public Core::IPatient
+{
+public:
+    PatientModelWrapper(PatientModel *model) :
+            Core::IPatient(), m_Model(model) {}
+
+    ~PatientModelWrapper() {}
+
+    // IPatient interface
+    void clear() {}
+    bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
+
+    QVariant value(const int ref) const {return m_Model->data(m_Model->index(m_Model->currentPatient().row(), ref));}
+    bool setValue(const int ref, const QVariant &value) {return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);}
+
+    /** \todo Is this needed in freemedforms ? */
+    QString toXml() const {return QString();}
+    bool fromXml(const QString &xml) {return true;}
+
+private:
+    PatientModel *m_Model;
+};
+
+
+
 class PatientModelPrivate
 {
 public:
     PatientModelPrivate(PatientModel *parent) :
             m_SqlPatient(0),
             m_SqlPhoto(0),
+            m_PatientWrapper(new PatientModelWrapper(parent)),
             q(parent)
     {
-        m_UserUuid = userModel()->currentUserData(UserPlugin::User::Uuid).toString();
+        m_UserUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
         q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(changeUserUuid(QString)));
-    }
 
+        // install the Core Patient wrapper
+        Core::ICore::instance()->setPatient(m_PatientWrapper);
+    }
 
     ~PatientModelPrivate ()
     {
@@ -94,6 +126,10 @@ public:
         if (m_SqlPhoto) {
             delete m_SqlPhoto;
             m_SqlPhoto = 0;
+        }
+        if (m_PatientWrapper) {
+            delete m_PatientWrapper;
+            m_PatientWrapper = 0;
         }
     }
 
@@ -225,6 +261,7 @@ public:
 
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
+    PatientModelWrapper *m_PatientWrapper;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
@@ -285,7 +322,7 @@ int PatientModel::rowCount(const QModelIndex &parent) const
 
 int PatientModel::columnCount(const QModelIndex &parent) const
 {
-    return NumberOfColumns;
+    return Core::IPatient::NumberOfColumns;
 }
 
 int PatientModel::numberOfFilteredPatients() const
@@ -304,18 +341,19 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role==Qt::DisplayRole || role==Qt::ToolTipRole || role==Qt::EditRole) {
+        using namespace Core;
         int col = -1;
         switch (index.column()) {
-        case UsersUidList:  break;
-        case GroupsUidList: break;
-        case Id :           col = Constants::IDENTITY_ID;         break;
-        case Uid:           col = Constants::IDENTITY_UID;        break;
-        case FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case BirthName:     col = Constants::IDENTITY_NAME;       break;
-        case SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
-        case Surname:       col = Constants::IDENTITY_SURNAME;           break;
-        case Gender:        col = Constants::IDENTITY_GENDER;            break;
-        case GenderIndex:
+        case IPatient::UsersUidList:  break;
+        case IPatient::GroupsUidList: break;
+        case IPatient::Id :           col = Constants::IDENTITY_ID;         break;
+        case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
+        case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_NAME;       break;
+        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
+        case IPatient::Surname:       col = Constants::IDENTITY_SURNAME;           break;
+        case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
+        case IPatient::GenderIndex:
             {
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
@@ -326,20 +364,20 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                     return 2;
                 return -1;
             }
-        case DateOfBirth:   col = Constants::IDENTITY_DOB;               break;
-        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;    break;
-        case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
-        case Profession:    col = Constants::IDENTITY_PROFESSION;        break;
-        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;    break;
-        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;   break;
-        case City:          col = Constants::IDENTITY_ADRESS_CITY;       break;
-        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
-        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
-        case Mails:         col = Constants::IDENTITY_MAILS;             break;
-        case Tels:          col = Constants::IDENTITY_TELS;              break;
-        case Faxes:         col = Constants::IDENTITY_FAXES;             break;
-        case TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
-        case Title :
+        case IPatient::DateOfBirth:   col = Constants::IDENTITY_DOB;               break;
+        case IPatient::MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;    break;
+        case IPatient::DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;       break;
+        case IPatient::Profession:    col = Constants::IDENTITY_PROFESSION;        break;
+        case IPatient::Street:        col = Constants::IDENTITY_ADDRESS_STREET;    break;
+        case IPatient::ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;   break;
+        case IPatient::City:          col = Constants::IDENTITY_ADRESS_CITY;       break;
+        case IPatient::Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
+        case IPatient::AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
+        case IPatient::Mails:         col = Constants::IDENTITY_MAILS;             break;
+        case IPatient::Tels:          col = Constants::IDENTITY_TELS;              break;
+        case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;             break;
+        case IPatient::TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
+        case IPatient::Title:
             {
                 col = Constants::IDENTITY_TITLE;
                 int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
@@ -354,7 +392,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 }
                 return QString();
             }
-        case FullName:
+        case IPatient::FullName:
             {
                 const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_NAME)).toString();
                 const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
@@ -365,20 +403,20 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                     return QString("%1 %2").arg(name, sur);
                 }
             }
-        case FullAddress:
+        case IPatient::FullAddress:
             {
                 const QString &street = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_STREET)).toString();
                 const QString &city = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADRESS_CITY)).toString();
                 const QString &zip = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_ZIPCODE)).toString();
                 return QString("%1 %2 %3").arg(street, city, zip);
             }
-        case Age:
+        case IPatient::Age:
             {
                 const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
                 return MedicalUtils::readableAge(dob);
             }
-        case IconizedGender: return d->iconizedGender(index);
-        case Photo :
+        case IPatient::IconizedGender: return d->iconizedGender(index);
+        case IPatient::Photo :
             {
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
                 return d->getPatientPhoto(patientUid);
@@ -388,7 +426,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
     }
     else if (role==Qt::DecorationRole) {
         switch (index.column()) {
-        case IconizedGender: return d->iconizedGender(index);
+        case Core::IPatient::IconizedGender: return d->iconizedGender(index);
         }
     } else if (role==Qt::BackgroundRole) {
         if (settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool()) {
@@ -413,17 +451,18 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 //    qWarning() << index << value << role << Qt::EditRole;
 
     if (role == Qt::EditRole) {
+        using namespace Core;
         int col = -1;
         switch (index.column()) {
-        case UsersUidList:  break;
-        case GroupsUidList: break;
-        case Id :           col = Constants::IDENTITY_ID;               break;
-        case Uid:           col = Constants::IDENTITY_UID;              break;
-        case FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
-        case BirthName:     col = Constants::IDENTITY_NAME;             break;
-        case SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
-        case Surname:       col = Constants::IDENTITY_SURNAME;          break;
-        case GenderIndex:
+        case IPatient::UsersUidList:  break;
+        case IPatient::GroupsUidList: break;
+        case IPatient::Id :           col = Constants::IDENTITY_ID;               break;
+        case IPatient::Uid:           col = Constants::IDENTITY_UID;              break;
+        case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_NAME;             break;
+        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
+        case IPatient::Surname:       col = Constants::IDENTITY_SURNAME;          break;
+        case IPatient::GenderIndex:
             {
                 col = Constants::IDENTITY_GENDER;
                 QString g;
@@ -436,7 +475,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
                 break;
             }
-        case Gender:
+        case IPatient::Gender:
             {
                 const QString &g = value.toString();
                 QString toSave;
@@ -449,19 +488,19 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
                 break;
             }
-        case DateOfBirth:   col = Constants::IDENTITY_DOB;              break;
-        case MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;   break;
-        case DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;      break;
-        case Profession:    col = Constants::IDENTITY_PROFESSION;       break;
-        case Street:        col = Constants::IDENTITY_ADDRESS_STREET;   break;
-        case ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;  break;
-        case City:          col = Constants::IDENTITY_ADRESS_CITY;      break;
-        case Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;  break;
-        case AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;     break;
-        case Mails:         col = Constants::IDENTITY_MAILS;            break;
-        case Tels:          col = Constants::IDENTITY_TELS;             break;
-        case Faxes:         col = Constants::IDENTITY_FAXES;            break;
-        case Title :
+        case IPatient::DateOfBirth:   col = Constants::IDENTITY_DOB;              break;
+        case IPatient::MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;   break;
+        case IPatient::DateOfDeath:   col = Constants::IDENTITY_DATEOFDEATH;      break;
+        case IPatient::Profession:    col = Constants::IDENTITY_PROFESSION;       break;
+        case IPatient::Street:        col = Constants::IDENTITY_ADDRESS_STREET;   break;
+        case IPatient::ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;  break;
+        case IPatient::City:          col = Constants::IDENTITY_ADRESS_CITY;      break;
+        case IPatient::Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;  break;
+        case IPatient::AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;     break;
+        case IPatient::Mails:         col = Constants::IDENTITY_MAILS;            break;
+        case IPatient::Tels:          col = Constants::IDENTITY_TELS;             break;
+        case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;            break;
+        case IPatient::Title :
             {
                 QString t = value.toString();
                 int id = -1;
@@ -483,11 +522,11 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                     return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
                 }
             }
-        case FullName:
+        case IPatient::FullName:
             {
                 return true;
             }
-        case Photo:
+        case IPatient::Photo:
             {
                 QPixmap pix = value.value<QPixmap>();
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();

@@ -42,6 +42,8 @@
 #include "constants_db.h"
 #include "constants_settings.h"
 
+#include <coreplugin/iuser.h>
+
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/constants.h>
 
@@ -85,7 +87,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline QString currentUserUuid() {return userModel()->currentUserData(UserPlugin::User::Uuid).toString();}
+static inline QString currentUserUuid() {return userModel()->currentUserData(Core::IUser::Uuid).toString();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
@@ -1033,7 +1035,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     form->clear();
     form->itemDatas()->setData(d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
     form->itemDatas()->setData(d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
-    const QString &username = userModel()->currentUserData(UserPlugin::User::Name).toString();
+    const QString &username = userModel()->currentUserData(Core::IUser::Name).toString();
     if (username.isEmpty())
         form->itemDatas()->setData(tr("No user"), IFormItemData::ID_UserName);
     else

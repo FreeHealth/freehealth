@@ -56,12 +56,15 @@
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/formplaceholder.h>
+#include <formmanagerplugin/episodemodel.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <fmfcoreplugin/coreimpl.h>
 #include <fmfcoreplugin/commandlineparser.h>
@@ -73,6 +76,8 @@
 #include <patientbaseplugin/patientwidgetmanager.h>
 #include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/patientcreatorwizard.h>
+
+#include <drugsbaseplugin/userdatas.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -90,11 +95,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-
-// TEST
-#include <formmanagerplugin/episodemodel.h>
-#include <patientbaseplugin/patientmodel.h>
-// END TEST
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -266,6 +266,8 @@ void MainWindow::postCoreInitialization()
 {
     on_currentUser_Changed();
     connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
+    connect(userModel(), SIGNAL(userDocumentsChanged()), this, SLOT(on_currentUser_Changed()));
+    
     // Create and insert the patient tab in the formplaceholder
     m_PatientBar = new Patients::PatientBar(this);
     formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);
@@ -287,8 +289,9 @@ void MainWindow::postCoreInitialization()
 
 void MainWindow::on_currentUser_Changed()
 {
+    // Change window title
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
-                   userModel()->currentUserData(UserPlugin::User::FullName).toString());
+                   userModel()->currentUserData(Core::IUser::FullName).toString());
 }
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)
@@ -301,13 +304,14 @@ void MainWindow::setCurrentPatient(const QModelIndex &index)
     formManager()->activateMode();
 
     // Store the uuids of the patient in the recent manager
-    const QString &uuid = patientModel()->index(index.row(), Patients::PatientModel::Uid).data().toString();
+    const QString &uuid = patientModel()->index(index.row(), Core::IPatient::Uid).data().toString();
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
 
-    // inform formplaceholder and episodemodel
+    // inform formplaceholder; episodemodel and patient model
     episodeModel()->setCurrentPatient(uuid);
     formManager()->setCurrentPatient(uuid);
+    patientModel()->setCurrentPatient(index);
 }
 
 QString MainWindow::currentPatient() const

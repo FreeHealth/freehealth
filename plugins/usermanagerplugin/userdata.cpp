@@ -405,15 +405,15 @@ public:
 
     void feedStaticHash()
     {
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICHEADER, User::GenericHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICFOOTER, User::GenericFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICWATERMARK, User::GenericWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEHEADER, User::AdministrativeHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEFOOTER, User::AdministrativeFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEWATERMARK, User::AdministrativeWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONHEADER, User::PrescriptionHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONFOOTER, User::PrescriptionFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONWATERMARK, User::PrescriptionWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICHEADER, Core::IUser::GenericHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICFOOTER, Core::IUser::GenericFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICWATERMARK, Core::IUser::GenericWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEHEADER, Core::IUser::AdministrativeHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEFOOTER, Core::IUser::AdministrativeFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEWATERMARK, Core::IUser::AdministrativeWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONHEADER, Core::IUser::PrescriptionHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONFOOTER, Core::IUser::PrescriptionFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONWATERMARK, Core::IUser::PrescriptionWatermark);
     }
 
     ~UserDataPrivate()
@@ -490,7 +490,7 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
   \brief Constructor
   Some default values are setted :
   \li automatic uuid setting to a fresh new one
-  \li rights for UserManager are setted to User::ReadOwn and User::WriteOwn
+  \li rights for UserManager are setted to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
   \li empty password is setted encrypted
   \li locker is unsetted
@@ -501,11 +501,11 @@ UserData::UserData()
     d = new UserDataPrivate();
     d->m_Modifiable = true;
     setValue(Table_USERS, USER_ID, -1);
-    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn);
-    setRights(USER_ROLE_MEDICAL, User::NoRights);
-    setRights(USER_ROLE_DOSAGES, User::NoRights);
-    setRights(USER_ROLE_PARAMEDICAL, User::NoRights);
-    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights);
+    setRights(USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::WriteOwn);
+    setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);
+    setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
+    setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
+    setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
     setCryptedPassword(UserPlugin::crypt(""));
     setLocker(false);
     createUuid();
@@ -520,7 +520,7 @@ UserData::UserData()
 /**
   \brief Constructor with a determined uuid
   Some default values are setted :
-  \li rights for UserManager are setted to User::ReadOwn and User::WriteOwn
+  \li rights for UserManager are setted to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
   \li empty password is setted encrypted
   \li locker is unsetted
@@ -532,11 +532,11 @@ UserData::UserData(const QString & uuid)
     d->m_Modifiable = true;
     setValue(Table_USERS, USER_ID, -1);
     setUuid(uuid);
-    setRights(USER_ROLE_USERMANAGER, User::ReadOwn | User::WriteOwn);
-    setRights(USER_ROLE_MEDICAL, User::NoRights);
-    setRights(USER_ROLE_DOSAGES, User::NoRights);
-    setRights(USER_ROLE_PARAMEDICAL, User::NoRights);
-    setRights(USER_ROLE_ADMINISTRATIVE, User::NoRights);
+    setRights(USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::WriteOwn);
+    setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);
+    setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
+    setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
+    setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
     setCryptedPassword(UserPlugin::crypt(""));
     setLocker(false);
     d->m_IsNull = true;
@@ -737,13 +737,13 @@ void UserData::setDynamicDataValue(const char *name, const QVariant & val, UserD
 /**
   \todo document
 */
-void UserData::setRights(const char *roleName, const User::UserRights rights)
+void UserData::setRights(const char *roleName, const Core::IUser::UserRights rights)
 {
-    User::UserRights r = rights;
-    if (rights & User::ReadAll)
-        r |= User::ReadOwn | User::ReadDelegates;
-    if (rights & User::WriteAll)
-        r |= User::WriteOwn | User::WriteDelegates;
+    Core::IUser::UserRights r = rights;
+    if (rights & Core::IUser::ReadAll)
+        r |= Core::IUser::ReadOwn | Core::IUser::ReadDelegates;
+    if (rights & Core::IUser::WriteAll)
+        r |= Core::IUser::WriteOwn | Core::IUser::WriteDelegates;
     d->m_Role_Rights[roleName].insert(RIGHTS_RIGHTS, int(r));
     if (!d->m_ModifiedRoles.contains(roleName))
         d->m_ModifiedRoles.insert(roleName);

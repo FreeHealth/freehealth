@@ -307,7 +307,7 @@ The structure of this file must meet the following requirements.
   <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
   <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <Patient>
-    <Identity name="Name Of Patient" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
+    <Identity name="Name Of Patient" secondname="" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
     <Creatinine value="12" unit="mg/l or mmol/l"/>
     <Weight value="70" unit="kg or lbs" />
     <Height value="170" unit="cm or "/>

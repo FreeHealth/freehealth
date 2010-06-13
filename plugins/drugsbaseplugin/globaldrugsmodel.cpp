@@ -48,10 +48,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
-
-#ifdef FREEDIAMS
-#  include <fdcoreplugin/patient.h>
-#endif
+#include <coreplugin/ipatient.h>
 
 #include <QList>
 #include <QColor>
@@ -64,10 +61,7 @@
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
-
-#ifdef FREEDIAMS
-static inline Core::Patient *patient() {return Core::ICore::instance()->patient();}
-#endif
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 /**
   \todo no singleton otherwise search filter is applied to all views.
@@ -190,10 +184,8 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     where.insert(Constants::DRUGS_MARKET, "=1");
     setFilter(drugsBase()->getWhereClause(Constants::Table_DRUGS, where));
     select();
-#ifdef FREEDIAMS
-    d->uidAllergies = patient()->value(Core::Patient::DrugsUidAllergies).toStringList();
-    d->atcAllergies = patient()->value(Core::Patient::DrugsAtcAllergies).toStringList();
-#endif
+    d->uidAllergies = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
+    d->atcAllergies = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
     d->uidAllergies.removeAll("");
     d->atcAllergies.removeAll("");
     d->testAtc = !d->atcAllergies.isEmpty();

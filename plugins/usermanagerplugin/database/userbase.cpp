@@ -64,6 +64,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 #include <printerplugin/textdocumentextra.h>
+#include <coreplugin/iuser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -526,10 +527,10 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAdress(DEFAULT_USER_ADRESS);
     user->setSurname(DEFAULT_USER_SURNAME);
-    user->setRights(Constants::USER_ROLE_USERMANAGER, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
-    user->setRights(Constants::USER_ROLE_MEDICAL, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
-    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
-    user->setRights(Constants::USER_ROLE_PARAMEDICAL, User::ReadAll | User::WriteAll | User::Create | User::Delete | User::Print);
+    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
 
     QList<UserDynamicData*> list;
 

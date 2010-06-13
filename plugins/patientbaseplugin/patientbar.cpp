@@ -41,6 +41,8 @@
 #include "patientmodel.h"
 #include "ui_patientbar.h"
 
+#include <coreplugin/ipatient.h>
+
 #include <QDataWidgetMapper>
 #include <QIcon>
 #include <QPainter>
@@ -69,11 +71,11 @@ public:
     void setUi()
     {
         Q_ASSERT(m_Model);
-        QIcon icon = m_Model->index(m_Index->row(), PatientModel::IconizedGender).data().value<QIcon>();
-        ui->names->setText(m_Model->index(m_Index->row(), PatientModel::FullName).data().toString());
-        ui->age->setText(m_Model->index(m_Index->row(), PatientModel::Age).data().toString());
+        QIcon icon = m_Model->index(m_Index->row(), Core::IPatient::IconizedGender).data().value<QIcon>();
+        ui->names->setText(m_Model->index(m_Index->row(), Core::IPatient::FullName).data().toString());
+        ui->age->setText(m_Model->index(m_Index->row(), Core::IPatient::Age).data().toString());
         ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
-        QPixmap photo = m_Model->index(m_Index->row(), PatientModel::Photo).data().value<QPixmap>();
+        QPixmap photo = m_Model->index(m_Index->row(), Core::IPatient::Photo).data().value<QPixmap>();
         photo = photo.scaled(QSize(32,32), Qt::KeepAspectRatio);
         ui->photo->setPixmap(photo);
     }
@@ -120,6 +122,7 @@ void PatientBar::paintEvent(QPaintEvent *)
 
     QRect rect = this->rect();
 
+    /** \todo define in settings() */
     QColor background = QColor(0, 0, 0, 10);
     QColor light = QColor(255, 255, 255, 40);
     QColor dark = QColor(0, 0, 0, 60);

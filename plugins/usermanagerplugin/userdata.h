@@ -43,6 +43,8 @@
 #include <utils/serializer.h>
 #include <printerplugin/textdocumentextra.h>
 
+#include <coreplugin/iuser.h>
+
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <usermanagerplugin/constants.h>
 #include <usermanagerplugin/global.h>
@@ -143,7 +145,7 @@ public:
 
     // setters to create or change the values
     void setDynamicDataValue(const char * name, const QVariant & val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
-    void setRights(const char * roleName, const User::UserRights rights);
+    void setRights(const char * roleName, const Core::IUser::UserRights rights);
 
 
     // simplified setters (TODO : some must be logged)

@@ -181,7 +181,7 @@ UserManagerPrivate::UserManagerPrivate(QMainWindow * parent)
     m_PermanentWidget(0),
     m_Context(0)
 {
-    m_SearchBy = User::Name;
+    m_SearchBy = Core::IUser::Name;
 }
 
 bool UserManagerPrivate::initialize()
@@ -282,12 +282,12 @@ void UserManagerPrivate::analyseCurrentUserRights()
 {
     // retreive user manager rights from model
     UserModel *m = UserModel::instance();
-    User::UserRights r (m->data(m->index(m->currentUserIndex().row(), User::ManagerRights)).toInt());
+    Core::IUser::UserRights r (m->data(m->index(m->currentUserIndex().row(), Core::IUser::ManagerRights)).toInt());
     // translate to bools
-    m_CanModify = (r & User::WriteAll);
-    m_CanCreate = (r & User::Create);
-    m_CanViewAllUsers = (r & User::ReadAll);
-    m_CanDelete = (r & User::Delete);
+    m_CanModify = (r & Core::IUser::WriteAll);
+    m_CanCreate = (r & Core::IUser::Create);
+    m_CanViewAllUsers = (r & Core::IUser::ReadAll);
+    m_CanDelete = (r & Core::IUser::Delete);
 
     // manage ui <-> rights
     createNewUserAct->setEnabled(m_CanCreate);
@@ -314,7 +314,7 @@ void UserManagerPrivate::updateStatusBar()
     memoryUsageLabel->setText(tr("Database usage : %1,\nMemory usage : %2")
                                      .arg(m->rowCount())
                                      .arg(m->numberOfUsersInMemory()));
-    m_PermanentUserName->setText(m->index(m->currentUserIndex().row(), User::Name).data().toString());
+    m_PermanentUserName->setText(m->index(m->currentUserIndex().row(), Core::IUser::Name).data().toString());
     m_Parent->statusBar()->addPermanentWidget(m_PermanentWidget);
 }
 
@@ -322,13 +322,13 @@ void UserManagerPrivate::updateStatusBar()
 void UserManagerPrivate::on_m_SearchToolButton_triggered(QAction * act)
 {
     if (act == searchByNameAct)
-        m_SearchBy= User::Name;
+        m_SearchBy= Core::IUser::Name;
     else if (act == searchBySurnameAct)
-        m_SearchBy= User::Surname;
+        m_SearchBy= Core::IUser::Surname;
     else if (act == searchByNameAndSurnameAct)
         m_SearchBy= -1;
     else if (act == searchByCityAct)
-        m_SearchBy= User::City;
+        m_SearchBy= Core::IUser::City;
 }
 
 /**
@@ -434,6 +434,6 @@ void UserManagerPrivate::retranslate()
 void UserManagerPrivate::showUserDebugDialog(const QModelIndex &id)
 {
     QStringList list;
-    list << UserModel::instance()->index(id.row(), User::WarnText).data(Qt::DisplayRole).toStringList();
+    list << UserModel::instance()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
     Utils::quickDebugDialog(list);
 }

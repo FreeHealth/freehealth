@@ -53,10 +53,10 @@
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/ipatient.h>
 
 #include <fdcoreplugin/coreimpl.h>
 #include <fdcoreplugin/commandlineparser.h>
-#include <fdcoreplugin/patient.h>
 
 #include <fdmainwindowplugin/medintux.h>
 
@@ -93,11 +93,12 @@ using namespace Trans::ConstantTranslations;
 
 // Getting the Core instances
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::Patient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
+static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
@@ -335,31 +336,31 @@ void MainWindow::postCoreInitialization()
 */
 void MainWindow::refreshPatient()
 {
-    m_ui->patientName->setText(patient()->value(Core::Patient::Name).toString());
+    m_ui->patientName->setText(patient()->value(Core::IPatient::BirthName).toString());
     m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
                                      "Taille : %5<br />Clearance : %6")
-                             .arg( patient()->value(Core::Patient::Name).toString(),
-                                   patient()->value(Core::Patient::Surname).toString(),
-                                   patient()->value(Core::Patient::DateOfBirth).toString(),
-                                   patient()->value(Core::Patient::Weight).toString() )
-                             .arg( patient()->value(Core::Patient::Height).toString(),
-                                   patient()->value(Core::Patient::CreatinClearance).toString() ));
-    m_ui->patientSurname->setText(patient()->value(Core::Patient::Surname).toString());
-    m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
-    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Gender).toString(), Qt::MatchFixedString));
+                             .arg( patient()->value(Core::IPatient::BirthName).toString(),
+                                   patient()->value(Core::IPatient::Surname).toString(),
+                                   patient()->value(Core::IPatient::DateOfBirth).toString(),
+                                   patient()->value(Core::IPatient::Weight).toString() )
+                             .arg( patient()->value(Core::IPatient::Height).toString(),
+                                   patient()->value(Core::IPatient::CreatinClearance).toString() ));
+    m_ui->patientSurname->setText(patient()->value(Core::IPatient::Surname).toString());
+    m_ui->dobDateEdit->setDate(patient()->value(Core::IPatient::DateOfBirth).toDate());
+    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::IPatient::Gender).toString(), Qt::MatchFixedString));
 
-    m_ui->weightUnit->setCurrentIndex(m_ui->weightUnit->findText(patient()->value(Core::Patient::WeightUnit).toString(), Qt::MatchFixedString));
-    m_ui->sizeUnit->setCurrentIndex(m_ui->sizeUnit->findText(patient()->value(Core::Patient::HeightUnit).toString(), Qt::MatchFixedString));
-    m_ui->creatinineUnit->setCurrentIndex(m_ui->creatinineUnit->findText(patient()->value(Core::Patient::CreatinineUnit).toString(), Qt::MatchFixedString));
-    m_ui->crClUnit->setCurrentIndex(m_ui->crClUnit->findText(patient()->value(Core::Patient::CreatinClearanceUnit).toString(), Qt::MatchFixedString));
+    m_ui->weightUnit->setCurrentIndex(m_ui->weightUnit->findText(patient()->value(Core::IPatient::WeightUnit).toString(), Qt::MatchFixedString));
+    m_ui->sizeUnit->setCurrentIndex(m_ui->sizeUnit->findText(patient()->value(Core::IPatient::HeightUnit).toString(), Qt::MatchFixedString));
+    m_ui->creatinineUnit->setCurrentIndex(m_ui->creatinineUnit->findText(patient()->value(Core::IPatient::CreatinineUnit).toString(), Qt::MatchFixedString));
+    m_ui->crClUnit->setCurrentIndex(m_ui->crClUnit->findText(patient()->value(Core::IPatient::CreatinClearanceUnit).toString(), Qt::MatchFixedString));
 
-    m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
-    m_ui->patientSize->setValue(patient()->value(Core::Patient::Height).toInt());
-    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
-    m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinine).toDouble());
-    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
+    m_ui->patientWeight->setValue(patient()->value(Core::IPatient::Weight).toInt());
+    m_ui->patientSize->setValue(patient()->value(Core::IPatient::Height).toInt());
+    m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
+    m_ui->patientCreatinin->setValue(patient()->value(Core::IPatient::Creatinine).toDouble());
+    m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
     /** \todo manage allergies */
-    m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAtcAllergies).toString());
+    m_ui->listOfAllergies->setText(patient()->value(Core::IPatient::DrugsAtcAllergies).toString());
 }
 
 /**
@@ -396,7 +397,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
                 if (format=="html_xml" || format=="html") {
                     tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
                     tmp.replace("font-weight:bold;", "font-weight:600;");
-                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::DontWarnUser);
+                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
                 } else if (format=="xml") {
 //                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToXml(drugModel());
                     savePrescription(exfile);
@@ -404,7 +405,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
             } else {
                 if (format=="html_xml" || format=="html") {
                     tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
-                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::DontWarnUser);
+                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
                 } else if (format=="xml") {
 //                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToXml(drugModel());
                     savePrescription(exfile);
@@ -421,10 +422,10 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        QVariant sex = patient()->value(Core::Patient::Gender);
+        QVariant sex = patient()->value(Core::IPatient::Gender);
 	m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
-        patient()->setValue(Core::Patient::Gender, sex);
+        patient()->setValue(Core::IPatient::Gender, sex);
         refreshPatient();
     }
 }
@@ -629,47 +630,47 @@ void MainWindow::createDockWindows()
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientName_textChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::Name, text);
+    patient()->setValue(Core::IPatient::BirthName, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientSurname_textChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::Surname, text);
+    patient()->setValue(Core::IPatient::Surname, text);
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_sexCombo_currentIndexChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::Gender, text);
+    patient()->setValue(Core::IPatient::Gender, text);
     refreshPatient();
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientWeight_valueChanged(const QString &text)
 {
-    patient()->setValue(Core::Patient::Weight, text);
+    patient()->setValue(Core::IPatient::Weight, text);
     refreshPatient();
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientSize_valueChanged(const QString & text)
 {
-    patient()->setValue(Core::Patient::Height, text);
+    patient()->setValue(Core::IPatient::Height, text);
     refreshPatient();
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientClCr_valueChanged(const QString & text)
 {
-    patient()->setValue(Core::Patient::CreatinClearance, text);
+    patient()->setValue(Core::IPatient::CreatinClearance, text);
     refreshPatient();
 }
 
 /** \brief Always keep uptodate patient's datas */
 void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
 {
-    patient()->setValue(Core::Patient::Creatinine, text);
+    patient()->setValue(Core::IPatient::Creatinine, text);
     refreshPatient();
 }
 
@@ -677,6 +678,6 @@ void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
 void MainWindow::on_listOfAllergies_textChanged(const QString &text)
 {
     /** \todo manage allergies */
-    patient()->setValue(Core::Patient::DrugsAtcAllergies, text);
+    patient()->setValue(Core::IPatient::DrugsAtcAllergies, text);
     refreshPatient();
 }

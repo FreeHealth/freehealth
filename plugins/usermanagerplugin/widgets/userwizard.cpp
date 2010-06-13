@@ -63,6 +63,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/iuser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -86,7 +87,7 @@
 using namespace UserPlugin;
 using namespace Trans::ConstantTranslations;
 
-static inline UserPlugin::UserModel *userModel() {return UserModel::instance(); }
+static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 UserWizard::UserWizard(QWidget *parent)
@@ -137,87 +138,87 @@ void UserWizard::done(int r)
             }
         }
         QModelIndex idx;
-        idx = userModel()->index(m_Row, User::DecryptedLogin);
+        idx = userModel()->index(m_Row, Core::IUser::DecryptedLogin);
         userModel()->setData(idx, field("Login"));
-        idx = userModel()->index(m_Row, User::Password);
+        idx = userModel()->index(m_Row, Core::IUser::Password);
         userModel()->setData(idx, UserPlugin::crypt(field("Password").toString()));
 
-        idx = userModel()->index(m_Row, User::Name);
+        idx = userModel()->index(m_Row, Core::IUser::Name);
         userModel()->setData(idx, field("Name"));
-        idx = userModel()->index(m_Row, User::SecondName);
+        idx = userModel()->index(m_Row, Core::IUser::SecondName);
         userModel()->setData(idx, field("SecondName"));
-        idx = userModel()->index(m_Row, User::Surname);
+        idx = userModel()->index(m_Row, Core::IUser::Surname);
         userModel()->setData(idx, field("Surname"));
-        idx = userModel()->index(m_Row, User::Title);
+        idx = userModel()->index(m_Row, Core::IUser::Title);
         userModel()->setData(idx, field("Title"));
-        idx = userModel()->index(m_Row, User::Gender);
+        idx = userModel()->index(m_Row, Core::IUser::Gender);
         userModel()->setData(idx, field("Gender"));
 
-        idx = userModel()->index(m_Row, User::Adress);
+        idx = userModel()->index(m_Row, Core::IUser::Adress);
         userModel()->setData(idx, field("Adress"));
-        idx = userModel()->index(m_Row, User::Zipcode);
+        idx = userModel()->index(m_Row, Core::IUser::Zipcode);
         userModel()->setData(idx, field("Zipcode"));
-        idx = userModel()->index(m_Row, User::City);
+        idx = userModel()->index(m_Row, Core::IUser::City);
         userModel()->setData(idx, field("City"));
-        idx = userModel()->index(m_Row, User::Country);
+        idx = userModel()->index(m_Row, Core::IUser::Country);
         userModel()->setData(idx, field("Country"));
-        idx = userModel()->index(m_Row, User::LanguageIndex);
+        idx = userModel()->index(m_Row, Core::IUser::LanguageIndex);
         userModel()->setData(idx, field("Language"));
 
-        idx = userModel()->index(m_Row, User::Tel1);
+        idx = userModel()->index(m_Row, Core::IUser::Tel1);
         userModel()->setData(idx, field("Tel1"));
-        idx = userModel()->index(m_Row, User::Tel2);
+        idx = userModel()->index(m_Row, Core::IUser::Tel2);
         userModel()->setData(idx, field("Tel2"));
-        idx = userModel()->index(m_Row, User::Tel3);
+        idx = userModel()->index(m_Row, Core::IUser::Tel3);
         userModel()->setData(idx, field("Tel3"));
-        idx = userModel()->index(m_Row, User::Fax);
+        idx = userModel()->index(m_Row, Core::IUser::Fax);
         userModel()->setData(idx, field("Fax"));
-        idx = userModel()->index(m_Row, User::Mail);
+        idx = userModel()->index(m_Row, Core::IUser::Mail);
         userModel()->setData(idx, field("Mail"));
 
-        idx = userModel()->index(m_Row, User::Specialities);
+        idx = userModel()->index(m_Row, Core::IUser::Specialities);
         userModel()->setData(idx, field("Specialities"));
-        idx = userModel()->index(m_Row, User::Qualifications);
+        idx = userModel()->index(m_Row, Core::IUser::Qualifications);
         userModel()->setData(idx, field("Qualifications"));
-        idx = userModel()->index(m_Row, User::PractitionerId);
+        idx = userModel()->index(m_Row, Core::IUser::PractitionerId);
         userModel()->setData(idx, field("Identifiants"));
 
-        idx = userModel()->index(m_Row, User::ManagerRights);
+        idx = userModel()->index(m_Row, Core::IUser::ManagerRights);
         userModel()->setData(idx, field("UserManager"));
-        idx = userModel()->index(m_Row, User::DrugsRights);
+        idx = userModel()->index(m_Row, Core::IUser::DrugsRights);
         userModel()->setData(idx, field("DrugsManager"));
-        idx = userModel()->index(m_Row, User::MedicalRights);
+        idx = userModel()->index(m_Row, Core::IUser::MedicalRights);
         userModel()->setData(idx, field("Medical"));
-        idx = userModel()->index(m_Row, User::ParamedicalRights);
+        idx = userModel()->index(m_Row, Core::IUser::ParamedicalRights);
         userModel()->setData(idx, field("Paramedical"));
-        idx = userModel()->index(m_Row, User::AdministrativeRights);
+        idx = userModel()->index(m_Row, Core::IUser::AdministrativeRights);
         userModel()->setData(idx, field("Administrative"));
 
-        idx = userModel()->index(m_Row, User::GenericHeader);
+        idx = userModel()->index(m_Row, Core::IUser::GenericHeader);
         userModel()->setData(idx, field("GenericHeader"));
-        idx = userModel()->index(m_Row, User::GenericFooter);
+        idx = userModel()->index(m_Row, Core::IUser::GenericFooter);
         userModel()->setData(idx, field("GenericFooter"));
 
-        idx = userModel()->index(m_Row, User::PrescriptionHeader);
+        idx = userModel()->index(m_Row, Core::IUser::PrescriptionHeader);
         userModel()->setData(idx, field("PrescrHeader"));
-        idx = userModel()->index(m_Row, User::PrescriptionFooter);
+        idx = userModel()->index(m_Row, Core::IUser::PrescriptionFooter);
         userModel()->setData(idx, field("PrescrFooter"));
 
-        idx = userModel()->index(m_Row, User::AdministrativeHeader);
+        idx = userModel()->index(m_Row, Core::IUser::AdministrativeHeader);
         userModel()->setData(idx, field("AdminHeader"));
-        idx = userModel()->index(m_Row, User::AdministrativeFooter);
+        idx = userModel()->index(m_Row, Core::IUser::AdministrativeFooter);
         userModel()->setData(idx, field("AdminFooter"));
 
 #ifdef DEBUG
         // warn user
-        idx = userModel()->index(m_Row, User::Warn);
+        idx = userModel()->index(m_Row, Core::IUser::Warn);
         idx.data();
 #endif
 
         if (userModel()->submitRow(m_Row)) {
             Utils::informativeMessageBox(tr("User correctly saved into database."),
                                              tr("You can poursue with the current user %1 or set this new user to current user.")
-                                             .arg(userModel()->currentUserData(User::Name).toString()),
+                                             .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
                                              "", tr("User correctly saved into database."));
             m_Saved = true;
             QDialog::done(r);

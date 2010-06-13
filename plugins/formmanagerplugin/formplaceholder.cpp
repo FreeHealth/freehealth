@@ -226,10 +226,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
 
-    /** \todo problem with selectionModel == 0 ???? */
-    connect(d->m_FileTree->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(treeItemChanged(QModelIndex, QModelIndex)));
-
-//    connect(m_ui.editorList, SIGNAL(customContextMenuRequested(QPoint)),
+//    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
 
     // create the central view

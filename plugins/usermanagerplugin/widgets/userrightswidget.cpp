@@ -45,6 +45,8 @@
 
 #include "userrightswidget.h"
 
+#include <coreplugin/iuser.h>
+
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 #include <QEvent>
@@ -57,17 +59,17 @@ UserRightsModel::UserRightsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     retranslate();
-    m_NameToRole.insert(0, User::NoRights);
-    m_NameToRole.insert(1, User::ReadOwn | User::ReadDelegates | User::ReadAll | User::WriteOwn | User::WriteDelegates | User::WriteAll | User::Print | User::Create | User::Delete);
-    m_NameToRole.insert(2, User::ReadOwn);
-    m_NameToRole.insert(3, User::ReadDelegates);
-    m_NameToRole.insert(4, User::ReadAll);
-    m_NameToRole.insert(5, User::WriteOwn);
-    m_NameToRole.insert(6, User::WriteDelegates);
-    m_NameToRole.insert(7, User::WriteAll);
-    m_NameToRole.insert(8, User::Print);
-    m_NameToRole.insert(9, User::Create);
-    m_NameToRole.insert(10, User::Delete);
+    m_NameToRole.insert(0, Core::IUser::NoRights);
+    m_NameToRole.insert(1, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::WriteAll | Core::IUser::Print | Core::IUser::Create | Core::IUser::Delete);
+    m_NameToRole.insert(2, Core::IUser::ReadOwn);
+    m_NameToRole.insert(3, Core::IUser::ReadDelegates);
+    m_NameToRole.insert(4, Core::IUser::ReadAll);
+    m_NameToRole.insert(5, Core::IUser::WriteOwn);
+    m_NameToRole.insert(6, Core::IUser::WriteDelegates);
+    m_NameToRole.insert(7, Core::IUser::WriteAll);
+    m_NameToRole.insert(8, Core::IUser::Print);
+    m_NameToRole.insert(9, Core::IUser::Create);
+    m_NameToRole.insert(10, Core::IUser::Delete);
 }
 
 int UserRightsModel::rowCount(const QModelIndex &parent) const

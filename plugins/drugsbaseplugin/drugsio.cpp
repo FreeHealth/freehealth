@@ -65,10 +65,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
-
-#ifdef FREEDIAMS
-#  include <fdcoreplugin/patient.h>
-#endif
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <QApplication>
 #include <QHash>
@@ -725,28 +723,24 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
 
 static QString prepareHeader()
 {
-    QString header;
-#ifdef FREEDIAMS
-    Core::Patient *patient = Core::ICore::instance()->patient();
-    header = settings()->value(Constants::S_USERHEADER).toString();
-    patient->replaceTokens(header);
+    Core::IUser *user = Core::ICore::instance()->user();
+    QString header = user->value(Core::IUser::PrescriptionHeader).toString();
+    user->replaceTokens(header);
     /** \todo Create a prefs for Date format */
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
-#endif
+    Core::IPatient *patient = Core::ICore::instance()->patient();
+    patient->replaceTokens(header);
     return header;
 }
 
 static QString prepareFooter(DrugsDB::DrugsModel *model)
 {
-    QString footer;
-#ifdef FREEDIAMS
-    footer = settings()->value(Constants::S_USERFOOTER).toString();
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(QCoreApplication::translate("DrugsIO", "Made with FreeDiams.")));
+    Core::IUser *user = Core::ICore::instance()->user();
+    QString footer = user->value(Core::IUser::PrescriptionFooter).toString();
+    user->replaceTokens(footer);
     Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
-#else
-    footer = "Work in progress";
-#endif
+    Core::IPatient *patient = Core::ICore::instance()->patient();
+    patient->replaceTokens(footer);
     return footer;
 }
 
@@ -757,20 +751,14 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
         if (!p.askForPrinter(qApp->activeWindow()))
             return false;
     QString footer;
-#ifdef FREEDIAMS
-    Core::Patient *patient = Core::ICore::instance()->patient();
+    Core::IPatient *patient = Core::ICore::instance()->patient();
     footer = prepareFooter(model);
-    QString tmp = patient->value(Core::Patient::Name).toString() + "_" + patient->value(Core::Patient::Surname).toString();
-    p.printer()->setDocName("FreeDiams - " + tmp.leftJustified(50,'_'));
-    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
-                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
-                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
-#else
-    /** \todo FreeMedForms prescription printing */
-    footer = "<body><p>Work in progress</p></body>";
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeMedForms.")));
-#endif
+    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
+    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+//    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
+//                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
+//                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
+
     p.setHeader(prepareHeader());
     p.setFooter(footer);
     p.previewer(qApp->activeWindow());
@@ -787,21 +775,14 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
     p.setPrinter(printer);
     QString footer;
-#ifdef FREEDIAMS
-    Core::Patient *patient = Core::ICore::instance()->patient();
+    Core::IPatient *patient = Core::ICore::instance()->patient();
     footer = prepareFooter(model);
-    QString tmp = patient->value(Core::Patient::Name).toString() + "_" + patient->value(Core::Patient::Surname).toString();
-    p.printer()->setDocName("FreeDiams - " + tmp.leftJustified(50,'_'));
-    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
-                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
-                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
-#else
-    /** \todo FreeMedForms prescription printing */
-    QString header = "Work in progress";
-    footer = "<body><p>Work in progress</p></body>";
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeMedForms.")));
-#endif
+    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
+    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+//    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
+//                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
+//                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
+
     p.setHeader(prepareHeader());
     p.setFooter(footer);
     /** \todo Use NormalVersion instead of MedinTuxversion */

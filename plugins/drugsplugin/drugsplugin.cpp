@@ -43,7 +43,9 @@
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
-#include "drugswidgetfactory.h"
+#ifdef FREEMEDFORMS
+#    include "drugswidgetfactory.h"
+#endif
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -120,7 +122,10 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
+
+#ifdef FREEMEDFORMS
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
+#endif
 
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);

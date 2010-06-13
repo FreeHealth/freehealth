@@ -317,7 +317,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     connect(aPrintPrescription,SIGNAL(triggered()), this, SLOT(printPrescription()));
 
     a = aPrintPreview = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+    a->setIcon(th->icon(Core::Constants::ICONPRINTPREVIEW));
     //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
     cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);

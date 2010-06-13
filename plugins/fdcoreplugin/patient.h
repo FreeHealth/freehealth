@@ -42,60 +42,35 @@
 #define FREEDIAMS_PATIENT_H
 
 #include <coreplugin/core_exporter.h>
+#include <coreplugin/ipatient.h>
 
 #include <QVariant>
 
 /**
  * \file patient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 16 Sept 2009
+ * \version 0.4.0
+ * \date 13 June 2010
 */
 namespace Core {
 namespace Internal {
 class PatientPrivate;
 }
 
-class CORE_EXPORT Patient
+class CORE_EXPORT Patient : public IPatient
 {
 public:
-    enum Reference {
-        UID = 0,
-        Name,
-        Surname,
-        Gender,
-        DateOfBirth,
-        Age,
-        YearsOld,
-        Weight,
-        WeightUnit,
-        Height,
-        HeightUnit,
-        IMC,
-        Creatinine,
-        CreatinineUnit,
-        CreatinClearance,
-        CreatinClearanceUnit,
-        DrugsUidAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsInnAtcAllergies,     //  see tkSerializer --> string<->stringlist
-        ICD10Deceases,      //  see tkSerializer --> string<->stringlist
-    };
-
     Patient();
     ~Patient();
 
     void clear();
-    bool has(const Reference ref ) const;
+    bool has(const int ref) const;
 
-    QVariant value( Reference ref ) const;
-    void setValue( Reference ref, const QVariant &value );
+    QVariant value(const int ref) const;
+    bool setValue(const int ref, const QVariant &value);
 
     QString toXml() const;
     bool fromXml(const QString &xml);
-
-    void replaceTokens(QString &stringWillBeModified);
 
 private:
     Internal::PatientPrivate *d;

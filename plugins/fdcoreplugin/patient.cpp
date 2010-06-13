@@ -70,26 +70,27 @@ class PatientPrivate
 public:
     PatientPrivate()
     {
-        m_XmlTags.insert(Patient::UID ,        "UID");
-        m_XmlTags.insert(Patient::Name ,       "Name" );
-        m_XmlTags.insert(Patient::Surname ,    "Surname" );
-        m_XmlTags.insert(Patient::Gender ,     "Gender" );
-        m_XmlTags.insert(Patient::DateOfBirth ,"DateOfbirth");
-        m_XmlTags.insert(Patient::Weight ,     "Weight");
-        m_XmlTags.insert(Patient::WeightUnit , "WeightUnit");
-        m_XmlTags.insert(Patient::Height ,     "Height" );
-        m_XmlTags.insert(Patient::HeightUnit , "HeightUnit" );
-        m_XmlTags.insert(Patient::Creatinine,  "Creatinine" );
-        m_XmlTags.insert(Patient::CreatinineUnit,  "CreatinineUnit" );
-        m_XmlTags.insert(Patient::IMC ,        "IMC");
-        m_XmlTags.insert(Patient::CreatinClearance , "CreatinClearance" );
-        m_XmlTags.insert(Patient::ICD10Deceases ,    "ICD10Deceases");
-        m_XmlTags.insert(Patient::DrugsAtcAllergies ,   "DrugsAtcAllergies" );
-        m_XmlTags.insert(Patient::DrugsUidAllergies ,   "DrugsUidAllergies" );
-        m_XmlTags.insert(Patient::DrugsInnAllergies ,   "DrugsInnAllergies" );
-        m_XmlTags.insert(Patient::DrugsInnAtcAllergies ,   "DrugsInnAtcAllergies" );
-//        m_XmlTags.insert(Patient::ATCAllergies ,   "ATCAllergies" );
-//        m_XmlTags.insert(Patient::INNAllergies ,   "INNAllergies" );
+        m_XmlTags.insert(IPatient::Uid ,        "UID");
+        m_XmlTags.insert(IPatient::BirthName ,  "Name" );
+        m_XmlTags.insert(IPatient::Surname ,    "Surname" );
+        m_XmlTags.insert(IPatient::SecondName , "SecondName" );
+        m_XmlTags.insert(IPatient::Gender ,     "Gender" );
+        m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");
+        m_XmlTags.insert(IPatient::Weight ,     "Weight");
+        m_XmlTags.insert(IPatient::WeightUnit , "WeightUnit");
+        m_XmlTags.insert(IPatient::Height ,     "Height" );
+        m_XmlTags.insert(IPatient::HeightUnit , "HeightUnit" );
+        m_XmlTags.insert(IPatient::Creatinine,  "Creatinine" );
+        m_XmlTags.insert(IPatient::CreatinineUnit,  "CreatinineUnit" );
+        m_XmlTags.insert(IPatient::IMC ,        "IMC");
+        m_XmlTags.insert(IPatient::CreatinClearance , "CreatinClearance" );
+        m_XmlTags.insert(IPatient::ICD10Diseases ,    "ICD10Diseases");
+        m_XmlTags.insert(IPatient::DrugsAtcAllergies ,   "DrugsAtcAllergies" );
+        m_XmlTags.insert(IPatient::DrugsUidAllergies ,   "DrugsUidAllergies" );
+        m_XmlTags.insert(IPatient::DrugsInnAllergies ,   "DrugsInnAllergies" );
+        m_XmlTags.insert(IPatient::DrugsInnAtcAllergies ,   "DrugsInnAtcAllergies" );
+//        m_XmlTags.insert(IPatient::ATCAllergies ,   "ATCAllergies" );
+//        m_XmlTags.insert(IPatient::INNAllergies ,   "INNAllergies" );
     }
 
     QString getXmlTag(const int key) const
@@ -113,7 +114,8 @@ public:
 
 
 /** Constructor */
-Patient::Patient() : d(new PatientPrivate)
+Patient::Patient() :
+        IPatient(), d(new PatientPrivate)
 {
     Q_ASSERT(d);
 }
@@ -132,14 +134,14 @@ void Patient::clear()
 }
 
 /** \brief Return trus if patient has got the data referenced by enumerator Patient::Reference */
-bool Patient::has(const Reference ref) const
+bool Patient::has(const int ref) const
 {
     return d->m_Values.keys().contains(ref);
 }
 
 
 /** \brief Get the value of the patient according to the enumerator Patient::Reference. */
-QVariant Patient::value(Reference ref) const
+QVariant Patient::value(const int ref) const
 {
     switch (ref)
     {
@@ -156,7 +158,7 @@ QVariant Patient::value(Reference ref) const
                 return d->m_Values.value(ref);
             if (has(DateOfBirth)) {
                 QString tmp;
-                tmp = MedicalUtils::readableAge(d->m_Values.value(DateOfBirth).toDateTime());
+                tmp = MedicalUtils::readableAge(d->m_Values.value(IPatient::DateOfBirth).toDate());
                 d->m_Values.insert(Age,tmp);
                 return tmp;
             }
@@ -188,9 +190,10 @@ QVariant Patient::value(Reference ref) const
 }
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
-void Patient::setValue(Reference ref, const QVariant &value)
+bool Patient::setValue(const int ref, const QVariant &value)
 {
     d->m_Values.insert(ref, value);
+    return true;
 }
 
 /**
@@ -234,26 +237,3 @@ bool Patient::fromXml(const QString &xml)
     return true;
 }
 
-/**
-  \brief Find and replace all tokens that refering to the patient datas.
-  Tokens are :
-  - [[NAME]]
-  - [[FULLNAME]]
-  - [[DATEOFBIRTH]]
-  - [[AGE]]
-  - [[WEIGHT]]
-  - [[HEIGHT]]
-  - [[CLCR]]
-  \sa Utils::replaceTokens(), mfDrugsConstants
-*/
-void Patient::replaceTokens(QString &stringWillBeModified)
-{
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(Patient::Name).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSURNAME, value(Patient::Surname).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD, value(Patient::YearsOld).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(Patient::Age).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(Patient::Weight).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,        value(Patient::Height).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_DATEOFBIRTH, value(Patient::DateOfBirth).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,        value(Patient::CreatinClearance).toString() );
-}

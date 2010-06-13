@@ -51,6 +51,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/iuser.h>
 
 #include <utils/randomizer.h>
 #include <utils/log.h>
@@ -163,7 +164,7 @@ void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
     where.insert(Patients::Constants::IDENTITY_NAME, "LIKE 'DOE'");
     int c = patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME, patientBase()->getWhereClause(Patients::Constants::Table_IDENT, where));
     if (!c) {
-        int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
+        int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
         QString uid = QUuid::createUuid().toString();
@@ -191,7 +192,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     writeDefaultSettings(0);
     // Prepare virtual patients
     int nb = nbVirtualPatients->value();
-    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
+    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     QProgressDialog dlg(tr("Creating %1 virtual patients").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
@@ -275,7 +276,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
             << "episodeTester_2.1.1" << "episodeTester_2.2";
 
     int zz = 0;
-    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
+    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     QSqlQuery episodeQuery(episodeBase()->database());
 
     foreach(const QString &form, testingForms) {
@@ -360,10 +361,10 @@ void VirtualDatabasePreferences::on_populateUsers_clicked()
         using namespace UserPlugin;
         userModel()->insertRow(0);
         int genderIndex = r.randomInt(1);
-        userModel()->setData(userModel()->index(0, User::Name), r.getRandomName());
-        userModel()->setData(userModel()->index(0, User::Surname), r.getRandomSurname(genderIndex==1));
-        userModel()->setData(userModel()->index(0, User::TitleIndex), 4);
-        userModel()->setData(userModel()->index(0, User::GenderIndex), genderIndex);
-        userModel()->submitUser(userModel()->index(0, User::Uuid).data().toString());
+        userModel()->setData(userModel()->index(0, Core::IUser::Name), r.getRandomName());
+        userModel()->setData(userModel()->index(0, Core::IUser::Surname), r.getRandomSurname(genderIndex==1));
+        userModel()->setData(userModel()->index(0, Core::IUser::TitleIndex), 4);
+        userModel()->setData(userModel()->index(0, Core::IUser::GenderIndex), genderIndex);
+        userModel()->submitUser(userModel()->index(0, Core::IUser::Uuid).data().toString());
     }
 }

@@ -47,7 +47,7 @@
 namespace Patients {
 namespace Internal {
 class PatientModelPrivate;
-}
+}  // End namespace Internal
 
 class PATIENT_EXPORT PatientModel : public QAbstractTableModel
 {
@@ -55,38 +55,7 @@ class PATIENT_EXPORT PatientModel : public QAbstractTableModel
     friend class Internal::PatientModelPrivate;
 
 public:
-    enum DataRepresentation {
-        Id = 0,
-        Uid,
-        UsersUidList,
-        GroupsUidList,
-        FamilyUid,
-        IconizedGender,
-        Title,
-        TitleIndex,
-        FullName,
-        BirthName,
-        SecondName,
-        Surname,
-        Gender,
-        GenderIndex,
-        DateOfBirth,
-        Age,
-        MaritalStatus,
-        Profession,
-        DateOfDeath,
-        Street,
-        ZipCode,
-        City,
-        Country,
-        AddressNote,
-        FullAddress,
-        Mails,
-        Tels,
-        Faxes,
-        Photo,
-        NumberOfColumns
-    };
+    // Data representation is stored in Core::IPatient
 
     enum FilterOn {
         FilterOnName,
@@ -100,6 +69,9 @@ public:
 
     static PatientModel *activeModel() {return m_ActiveModel;}
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
+
+    void setCurrentPatient(const QModelIndex &index) {m_CurrentPatient = index;}
+    QModelIndex currentPatient() const {return m_CurrentPatient;}
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -156,6 +128,7 @@ protected Q_SLOTS:
 private:
     Internal::PatientModelPrivate *d;
     static PatientModel *m_ActiveModel;
+    QPersistentModelIndex m_CurrentPatient;
 };
 
 }  // End namespace Patients

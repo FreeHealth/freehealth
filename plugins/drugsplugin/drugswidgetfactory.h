@@ -77,7 +77,7 @@ public:
 
     bool isContainer( const int idInStringList ) const;
     QStringList providedWidgets() const;
-    bool isInitialized() const { /** \todo here */ return true; }
+    bool isInitialized() const { return true; }
 
     Form::IFormWidget *createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent = 0);
 };

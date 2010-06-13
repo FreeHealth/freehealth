@@ -42,9 +42,6 @@
 #include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
-#include <fdcoreplugin/coreimpl.h>
-#include <fdcoreplugin/commandlineparser.h>
-
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QSpacerItem>

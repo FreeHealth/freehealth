@@ -42,6 +42,8 @@
 #define COREIMPL_H
 
 #include <coreplugin/icore.h>
+#include <fdcoreplugin/patient.h>
+#include <coreplugin/ipatient.h>
 
 /**
  * \file coreimpl.h
@@ -56,6 +58,7 @@ class Configuration;
 }
 
 namespace Core {
+    class Patient;
 
 namespace Internal {
     class ThemePrivate;
@@ -110,7 +113,13 @@ public:
 
     // FreeDiams specific
     MedinTux::Configuration *medintuxConfiguration() const;
-    Patient *patient() const;
+
+    // Patient's datas wrapper
+    IPatient *patient() const {return m_Patient;}
+    void setPatient(IPatient *patient) {}
+
+    IUser *user() const {return m_User;}
+    void setUser(IUser *user) {m_User=user;}
 
 
 private:
@@ -126,6 +135,7 @@ private:
     CommandLine *m_CommandLine;
     mutable MedinTux::Configuration *m_MedinTux;
     Patient *m_Patient;
+    IUser *m_User;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
 };

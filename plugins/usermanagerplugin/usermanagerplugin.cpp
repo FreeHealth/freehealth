@@ -43,6 +43,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/iuser.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -86,7 +87,7 @@ static inline bool identifyUser()
     }
     // messageBox : Welcome User
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                 .arg(userModel()->currentUserData(User::Name).toString()),
+                                 .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
                                  tkTr(Trans::Constants::WELCOME_USER));
     return true;
 }

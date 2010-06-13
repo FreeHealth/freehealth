@@ -71,7 +71,8 @@ class ISettings;
 class IMainWindow;
 class ModeManager;
 class CommandLine;
-class Patient;
+class IPatient;
+class IUser;
 class FileManager;
 }
 
@@ -87,34 +88,39 @@ public:
 
     static ICore *instance();
 
-
     // Splash screen functions
     virtual void createSplashScreen(const QPixmap &pix) = 0;
     virtual void finishSplashScreen(QWidget *w) = 0;
     virtual void messageSplashScreen(const QString &msg) = 0;
     virtual QSplashScreen *splashScreen() = 0;
 
-
+    // Action manager, ContextManager, ModeManager, FileManager
     virtual ActionManager *actionManager() const = 0;
     virtual ContextManager *contextManager() const = 0;
     virtual UniqueIDManager *uniqueIDManager() const = 0;
+    virtual ModeManager *modeManager() const {return 0;}
     virtual FileManager *fileManager() const = 0;
 
+    // Themes, settings, translations
     virtual ITheme *theme() const = 0;
     virtual Translators *translators() const = 0;
     virtual ISettings *settings() const = 0;
+
     virtual CommandLine *commandLine() const = 0;
     virtual Utils::UpdateChecker *updateChecker() const = 0;
 
     virtual void setMainWindow(IMainWindow *) = 0;
     virtual IMainWindow *mainWindow() const = 0;
 
-    // Use this with precaution (only used by FreeDiams)
-    virtual Patient *patient() const {return 0;}
+    // Patient's datas wrapper
+    virtual IPatient *patient() const = 0;
+    virtual void setPatient(IPatient *patient) = 0;
+
+    virtual IUser *user() const = 0;
+    virtual void setUser(IUser *user) = 0;
 
 //    virtual IFormManager *formManager() const = 0;
 
-    virtual ModeManager *modeManager() const {return 0;}
 
 
 //    virtual MessageManager *messageManager() const = 0;

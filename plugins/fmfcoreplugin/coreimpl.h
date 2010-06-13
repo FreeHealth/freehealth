@@ -99,6 +99,14 @@ public:
     Utils::UpdateChecker *updateChecker() const;
     FileManager *fileManager() const;
 
+    // Patient's datas wrapper
+    virtual IPatient *patient() const {return m_Patient;}
+    virtual void setPatient(IPatient *patient) {m_Patient=patient;}
+
+    // User's datas wrapper
+    virtual IUser *user() const {return m_User;}
+    virtual void setUser(IUser *user) {m_User = user;}
+
     // initialization
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
@@ -117,6 +125,8 @@ private:
     FileManager *m_FileManager;
     CommandLine *m_CommandLine;
     ModeManager *m_ModeManager;
+    IPatient *m_Patient;
+    IUser *m_User;
 };
 
 } // namespace Internal

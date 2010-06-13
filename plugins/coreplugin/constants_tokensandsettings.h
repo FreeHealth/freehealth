@@ -45,16 +45,31 @@ namespace Core {
 namespace Constants {
 
 // TEXT COMPLETION tokens
-const char * const  TOKEN_PATIENTAGE   ="AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTYEARSOLD ="YEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTNAME  ="PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTSURNAME  ="PATIENTSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_DATEOFBIRTH  ="DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_WEIGHT       ="WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_HEIGHT       ="HEIGHT";          /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_CLCR         ="CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_DATE         ="DATE";
-const char * const  TOKEN_NUMBEROFDRUGS = "NBDRUGS";
+
+// For Patients
+const char * const  TOKEN_PATIENTAGE        = "AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTYEARSOLD   = "YEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTSURNAME    = "PATIENTSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTDATEOFBIRTH= "DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_WEIGHT            = "WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_HEIGHT            = "HEIGHT";          /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_CLCR              = "CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_DATE              = "DATE";
+const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
+
+// For Users
+const char * const  TOKEN_USERAGE        = "USERAGE";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERYEARSOLD   = "USERYEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERFULLNAME   = "USERFULLNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERNAME       = "USERNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERSECONDNAME = "USERSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERSURNAME    = "USERSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERSPECIALITIES    = "USERSPECIALITIES";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERIDENTIFIANTS    = "USERIDENTIFIANTS";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERQUALIFICATIONS    = "USERQUALIFICATIONS";   /*!< /brief Tokens for Patient::replaceTokens() */
 
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";

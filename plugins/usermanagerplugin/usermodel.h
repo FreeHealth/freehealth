@@ -83,7 +83,7 @@ public:
 
     virtual QSqlDatabase database() const;
 
-    virtual int columnCount(const QModelIndex & = QModelIndex()) { return User::MaxParam; }
+    virtual int columnCount(const QModelIndex & = QModelIndex());
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -110,7 +110,7 @@ public:
 public Q_SLOTS:
     virtual bool submitAll();
     virtual bool submitUser(const QString &uuid);
-    virtual bool submitRow(const int row) { return submitUser(index(row,User::Uuid).data().toString()); }
+    virtual bool submitRow(const int row);
     virtual bool revertAll();
 
 Q_SIGNALS:
@@ -119,6 +119,7 @@ Q_SIGNALS:
     void userConnected(const QString &uuid) const;
     void userAboutToDisconnect(const QString &uuid) const;
     void userDisconnected(const QString &uuid) const;
+    void userDocumentsChanged() const;
 
 private:
     QModelIndex createIndex(int row, int column, void * ptr = 0) const;

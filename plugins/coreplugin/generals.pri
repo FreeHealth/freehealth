@@ -1,6 +1,5 @@
 # SOURCES and HEADERS needed by context manager
-HEADERS += \
-    $${PWD}/core_exporter.h \
+HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/constants.h \
     $${PWD}/constants_icons.h \
     $${PWD}/constants_menus.h \
@@ -18,14 +17,14 @@ HEADERS += \
     $${PWD}/ioptionspage.h \
     $${PWD}/imainwindow.h \
     $${PWD}/filemanager.h \
-
-
-SOURCES += \
-    $${PWD}/uniqueidmanager.cpp \
+    $${PWD}/ipatient.h \
+    $${PWD}/iuser.h
+SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \
     $${PWD}/theme.cpp \
     $${PWD}/translators.cpp \
     $${PWD}/settings.cpp \
     $${PWD}/imainwindow.cpp \
     $${PWD}/filemanager.cpp \
-
+    $${PWD}/ipatient.cpp \
+    $${PWD}/iuser.cpp

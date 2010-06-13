@@ -51,6 +51,7 @@
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
+#include <coreplugin/ipatient.h>
 
 #include <fdcoreplugin/commandlineparser.h>
 #include <fdcoreplugin/patient.h>
@@ -94,7 +95,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_ContextManager(0),
         m_UID(new UniqueIDManager),
         m_MedinTux(0),
-        m_Patient(new Patient)
+        m_Patient(new Patient),
+        m_User(0)
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);
@@ -240,8 +242,6 @@ MedinTux::Configuration *CoreImpl::medintuxConfiguration() const
         m_MedinTux = MedinTux::Configuration::instance();  // need to be deleted
     return m_MedinTux;
 }
-
-Patient *CoreImpl::patient() const { return m_Patient; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 {

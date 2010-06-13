@@ -271,27 +271,27 @@ public:
 
     void feedPatientDatas(Core::Patient *patient)
     {
-        patient->setValue(Patient::UID,            value.value(CommandLine::CL_PatientUid));
-        patient->setValue(Patient::DateOfBirth,    value.value(CommandLine::CL_DateOfBirth));
-        patient->setValue(Patient::Height,         value.value(CommandLine::CL_Height));
-        patient->setValue(Patient::HeightUnit,     value.value(CommandLine::CL_Height_Unit));
-        patient->setValue(Patient::Weight,         value.value(CommandLine::CL_Weight));
-        patient->setValue(Patient::WeightUnit,     value.value(CommandLine::CL_Weight_Unit));
-        patient->setValue(Patient::Creatinine,     value.value(CommandLine::CL_Creatinine));
-        patient->setValue(Patient::CreatinineUnit, value.value(CommandLine::CL_Creatinine_Unit));
-        patient->setValue(Patient::Name,           value.value(CommandLine::CL_PatientName));
-        patient->setValue(Patient::Surname,        value.value(CommandLine::CL_PatientSurname));
-        patient->setValue(Patient::Gender,         value.value(CommandLine::CL_PatientGender));
+        patient->setValue(IPatient::Uid,            value.value(CommandLine::CL_PatientUid));
+        patient->setValue(IPatient::DateOfBirth,    value.value(CommandLine::CL_DateOfBirth));
+        patient->setValue(IPatient::Height,         value.value(CommandLine::CL_Height));
+        patient->setValue(IPatient::HeightUnit,     value.value(CommandLine::CL_Height_Unit));
+        patient->setValue(IPatient::Weight,         value.value(CommandLine::CL_Weight));
+        patient->setValue(IPatient::WeightUnit,     value.value(CommandLine::CL_Weight_Unit));
+        patient->setValue(IPatient::Creatinine,     value.value(CommandLine::CL_Creatinine));
+        patient->setValue(IPatient::CreatinineUnit, value.value(CommandLine::CL_Creatinine_Unit));
+        patient->setValue(IPatient::BirthName,      value.value(CommandLine::CL_PatientName));
+        patient->setValue(IPatient::Surname,        value.value(CommandLine::CL_PatientSurname));
+        patient->setValue(IPatient::Gender,         value.value(CommandLine::CL_PatientGender));
         QStringList tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
-        patient->setValue(Patient::DrugsAtcAllergies, tmp);
+        patient->setValue(IPatient::DrugsAtcAllergies, tmp);
         tmp = value.value(CommandLine::CL_InnAllergies).toString().split(";");
-        patient->setValue(Patient::DrugsInnAllergies, tmp);
+        patient->setValue(IPatient::DrugsInnAllergies, tmp);
         tmp = value.value(CommandLine::CL_DrugsAllergies).toString().split(";");
-        patient->setValue(Patient::DrugsUidAllergies, tmp);
-        //        patient->setValue(Patient::DrugsInnAtcAllergies, value.value(CommandLine::CL_InnAtcAllergies));
+        patient->setValue(IPatient::DrugsUidAllergies, tmp);
+        //        patient->setValue(IPatient::DrugsInnAtcAllergies, value.value(CommandLine::CL_InnAtcAllergies));
         if (value.value(CommandLine::CL_CrCl).isValid()) {
-            patient->setValue(Patient::CreatinClearance,     value.value(CommandLine::CL_CrCl));
-            patient->setValue(Patient::CreatinClearanceUnit, value.value(CommandLine::CL_CrCl_Unit));
+            patient->setValue(IPatient::CreatinClearance,     value.value(CommandLine::CL_CrCl));
+            patient->setValue(IPatient::CreatinClearanceUnit, value.value(CommandLine::CL_CrCl_Unit));
         }
     }
 

@@ -17,7 +17,7 @@ HEADERS += coreplugin.h \
     commandlineparser.h \
     appaboutpage.h
 SOURCES += coreplugin.cpp \
-    coreimpl.cpp \ # mainwindow.cpp \
+    coreimpl.cpp \
     appaboutpage.cpp
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfcoreplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfcoreplugin_de.ts \

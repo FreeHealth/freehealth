@@ -47,6 +47,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/iuser.h>
 
 #include <usermanagerplugin/usermodel.h>
 
@@ -308,7 +309,7 @@ void PatientBase::onCoreDatabaseServerChanged()
 void PatientBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
-    QString uuid = userModel()->currentUserData(UserPlugin::User::Uuid).toString();
+    QString uuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
     QHash<int, QString> where;
     /** \todo here */
 //    where.clear();

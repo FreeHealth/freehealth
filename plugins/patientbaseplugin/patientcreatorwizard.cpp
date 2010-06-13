@@ -44,6 +44,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipatient.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -99,7 +100,7 @@ IdentityPage::IdentityPage(QWidget *parent)
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "", PatientModel::FilterOnUuid);
     m_Model->insertRow(0);
-    QString uuid = m_Model->index(0, PatientModel::Uid).data().toString();
+    QString uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
     m_Identity->setCurrentPatientModel(m_Model);
     m_Identity->setCurrentIndex(m_Model->index(0,0));

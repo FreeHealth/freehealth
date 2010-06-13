@@ -86,7 +86,9 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_ModeManager(0)
+        m_ModeManager(0),
+        m_Patient(0),
+        m_User(0)
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);

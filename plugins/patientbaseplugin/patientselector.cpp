@@ -48,6 +48,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/ipatient.h>
 
 #include <QToolButton>
 
@@ -168,33 +169,33 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
 {
     d->m_Fields = fields;
     // Hide all columns of the table view
-    for(int i=0; i < PatientModel::NumberOfColumns; ++i) {
+    for(int i=0; i < Core::IPatient::NumberOfColumns; ++i) {
         d->ui->tableView->hideColumn(i);
     }
     // Show selected columns
     if (fields & PatientSelector::BirthName) {
-        d->ui->tableView->showColumn(PatientModel::BirthName);
+        d->ui->tableView->showColumn(Core::IPatient::BirthName);
     }
     if (fields & PatientSelector::SecondName) {
-        d->ui->tableView->showColumn(PatientModel::SecondName);
+        d->ui->tableView->showColumn(Core::IPatient::SecondName);
     }
     if (fields & PatientSelector::SurName) {
-        d->ui->tableView->showColumn(PatientModel::Surname);
+        d->ui->tableView->showColumn(Core::IPatient::Surname);
     }
     if (fields & PatientSelector::FullName) {
-        d->ui->tableView->showColumn(PatientModel::FullName);
+        d->ui->tableView->showColumn(Core::IPatient::FullName);
     }
     if (fields & PatientSelector::Gender) {
-        d->ui->tableView->showColumn(PatientModel::IconizedGender);
+        d->ui->tableView->showColumn(Core::IPatient::IconizedGender);
     }
     if (fields & PatientSelector::Title) {
-        d->ui->tableView->showColumn(PatientModel::Title);
+        d->ui->tableView->showColumn(Core::IPatient::Title);
     }
     if (fields & PatientSelector::DateOfBirth) {
-        d->ui->tableView->showColumn(PatientModel::DateOfBirth);
+        d->ui->tableView->showColumn(Core::IPatient::DateOfBirth);
     }
     if (fields & PatientSelector::FullAdress) {
-        d->ui->tableView->showColumn(PatientModel::FullAddress);
+        d->ui->tableView->showColumn(Core::IPatient::FullAddress);
     }
 }
 

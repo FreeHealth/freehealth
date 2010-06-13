@@ -19,6 +19,7 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsdatabaseaboutpage.h \
     $${PWD}/drugstemplateprinter.h \
     $${PWD}/drugsdatabaseselector.h
+
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/interactionsbase.cpp \

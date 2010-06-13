@@ -300,7 +300,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     userUuid = DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID;
 #else
     /** \todo FMF : add user */
-    //    userUuid = tkUserModel::instance()->currentUserData(User::Uuid).toString();
+    //    userUuid = tkUserModel::instance()->currentUserData(Core::IUser::Uuid).toString();
 #endif
     int i;
     int createdRow;
@@ -480,16 +480,16 @@ QStringList DosageModel::isDosageValid(const int row)
 //bool DosageModel::userCanRead()
 //{
 //    //TODO --> test
-//    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData(User::DrugsRights).toInt());
-//    return (r & User::ReadOwn) || (r & User::ReadAll);
+//    Core::IUser::UserRights r = Core::IUser::UserRights(tkUserModel::instance()->currentUserData(Core::IUser::DrugsRights).toInt());
+//    return (r & Core::IUser::ReadOwn) || (r & Core::IUser::ReadAll);
 //}
 //
 ///** \brief Test user's permissions for the drugs write access */
 //bool DosageModel::userCanWrite()
 //{
 //    //TODO  --> test
-//    User::UserRights r = User::UserRights(tkUserModel::instance()->currentUserData(User::DrugsRights).toInt());
-//    return (r & User::WriteOwn) || (r & User::WriteAll);
+//    Core::IUser::UserRights r = Core::IUser::UserRights(tkUserModel::instance()->currentUserData(Core::IUser::DrugsRights).toInt());
+//    return (r & Core::IUser::WriteOwn) || (r & Core::IUser::WriteAll);
 //}
 #endif
 
