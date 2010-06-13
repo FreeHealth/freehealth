@@ -40,6 +40,8 @@
 #ifndef FORMFILESSELECTORWIDGET_H
 #define FORMFILESSELECTORWIDGET_H
 
+#include <formmanagerplugin/formmanager_exporter.h>
+
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -55,16 +57,15 @@ QT_END_NAMESPACE
 */
 
 namespace Form {
-class IFormIO;
-
 namespace Internal {
 class FormFilesSelectorWidgetPrivate;
 }  // End namespace Internal
 
 /** \todo add default management */
-class FormFilesSelectorWidget : public QWidget
+class FORM_EXPORT FormFilesSelectorWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     FormFilesSelectorWidget(QWidget *parent = 0);
     ~FormFilesSelectorWidget();

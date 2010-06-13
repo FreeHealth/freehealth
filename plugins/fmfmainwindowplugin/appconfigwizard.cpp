@@ -114,6 +114,7 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     } else {
         cbLanguage->setCurrentIndex(actual);
     }
+    /** \todo connection here ... */
     connect(cbLanguage, SIGNAL(activated(QString)), Core::Translators::instance(), SLOT(changeLanguage(const QString &)));
 
     registerField("Language", cbLanguage , "currentIndex");

@@ -90,7 +90,6 @@ public:
 
 protected:
     void retranslate();
-    void done(int r);
 
 private:
     QLabel *intro;

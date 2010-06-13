@@ -110,27 +110,6 @@ private:
 };
 
 
-//class VirtualBaseWidget : public QWidget, private Ui::VirtualBaseWidget
-//{
-//    Q_OBJECT
-//    Q_DISABLE_COPY(VirtualBaseWidget)
-//
-//public:
-//    explicit VirtualBaseWidget(QWidget *parent = 0);
-//
-//    static void writeDefaultSettings(Core::ISettings *) {}
-//
-//public Q_SLOTS:
-//    void saveToSettings(Core::ISettings *) {}
-//    void on_populateDb_clicked();
-//    void on_populateEpisodes_clicked();
-//    void on_populateUsers_clicked();
-//
-//protected:
-//    virtual void changeEvent(QEvent *e);
-//};
-
-
 class VirtualBasePage : public Core::IOptionsPage
 {
     Q_OBJECT

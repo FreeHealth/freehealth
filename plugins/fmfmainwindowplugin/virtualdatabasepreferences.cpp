@@ -162,7 +162,6 @@ void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
     QHash<int, QString> where;
     where.insert(Patients::Constants::IDENTITY_NAME, "LIKE 'DOE'");
     int c = patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME, patientBase()->getWhereClause(Patients::Constants::Table_IDENT, where));
-    qWarning() << "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" << c;
     if (!c) {
         int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(UserPlugin::User::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();

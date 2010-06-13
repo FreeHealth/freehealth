@@ -37,41 +37,63 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUSERRIGHTSWIDGET_H
-#define TKUSERRIGHTSWIDGET_H
+#ifndef USERRIGHTSWIDGET_H
+#define USERRIGHTSWIDGET_H
 
 #include <usermanagerplugin/constants.h>
 
-#include <QListWidget>
-#include <QListWidgetItem>
+//#include <QListWidget>
+#include <QListView>
+#include <QAbstractListModel>
 class QEvent;
 
 namespace UserPlugin {
 namespace Internal {
 
-class UserRightsWidget : public QListWidget
+class UserRightsModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    UserRightsModel(QObject *parent);
+    ~UserRightsModel() {}
+
+    void setRigths(const int r)     { m_Rights = r; }
+    int  getRigths()                { return m_Rights; }
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void retranslate();
+
+private:
+    QStringList m_RightsName;
+    QHash<int, int> m_NameToRole;
+    int m_Rights;
+};
+
+
+class UserRightsWidget : public QListView
 {
     Q_OBJECT
     Q_PROPERTY(int rights    READ getRigths    WRITE setRigths    USER true)
 public:
     UserRightsWidget(QWidget * parent = 0);
 
-    void setRigths(const int r)     { m_Rights = User::UserRights(r);   setCurrentRightsToWidget(); }
-    int  getRigths()                { return m_Rights; }
+    void setRigths(const int r)     { m_Model->setRigths(r); }
+    int  getRigths()                { return m_Model->getRigths(); }
 
 private:
     void changeEvent(QEvent *e);
-    void retranslate();
-    void setCurrentRightsToWidget();
-
-private Q_SLOTS:
-    void on_m_RightsListWidget_itemActivated(QListWidgetItem *item);
 
 private:
-    User::UserRights m_Rights;
+    UserRightsModel *m_Model;
 };
 
 }  // End Internal
 }  // End UserPlugin
 
-#endif // TKUSERRIGHTSWIDGET_H
+#endif // USERRIGHTSWIDGET_H
