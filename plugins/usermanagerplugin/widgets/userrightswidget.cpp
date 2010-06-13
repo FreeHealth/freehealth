@@ -58,15 +58,16 @@ UserRightsModel::UserRightsModel(QObject *parent) :
 {
     retranslate();
     m_NameToRole.insert(0, User::NoRights);
-    m_NameToRole.insert(1, User::ReadOwn);
-    m_NameToRole.insert(2, User::ReadDelegates);
-    m_NameToRole.insert(3, User::ReadAll);
-    m_NameToRole.insert(4, User::WriteOwn);
-    m_NameToRole.insert(5, User::WriteDelegates);
-    m_NameToRole.insert(6, User::WriteAll);
-    m_NameToRole.insert(7, User::Print);
-    m_NameToRole.insert(8, User::Create);
-    m_NameToRole.insert(9, User::Delete);
+    m_NameToRole.insert(1, User::ReadOwn | User::ReadDelegates | User::ReadAll | User::WriteOwn | User::WriteDelegates | User::WriteAll | User::Print | User::Create | User::Delete);
+    m_NameToRole.insert(2, User::ReadOwn);
+    m_NameToRole.insert(3, User::ReadDelegates);
+    m_NameToRole.insert(4, User::ReadAll);
+    m_NameToRole.insert(5, User::WriteOwn);
+    m_NameToRole.insert(6, User::WriteDelegates);
+    m_NameToRole.insert(7, User::WriteAll);
+    m_NameToRole.insert(8, User::Print);
+    m_NameToRole.insert(9, User::Create);
+    m_NameToRole.insert(10, User::Delete);
 }
 
 int UserRightsModel::rowCount(const QModelIndex &parent) const
@@ -85,6 +86,8 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     if (role==Qt::CheckStateRole) {
+        if (index.row()==1) // All Rights
+            return m_Rights == m_NameToRole.value(1) ? Qt::Checked : Qt::Unchecked;
         if (m_Rights & m_NameToRole.value(index.row(), 0))
             return Qt::Checked;
         return Qt::Unchecked;
@@ -100,20 +103,43 @@ bool UserRightsModel::setData(const QModelIndex &index, const QVariant &value, i
 
     if (role==Qt::CheckStateRole) {
         if (value.toInt() == Qt::Checked) {
-            if (index.row()==0) {
-                m_Rights = 0;
-                Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
-            } else {
+            switch (index.row()) {
+            case 0 :  // No Rights
+                {
+                    m_Rights = 0;
+                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
+                    break;
+                }
+            case 1 :  // All Rights
+                {
+                    m_Rights = m_NameToRole.value(index.row(), 0);
+                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
+                    break;
+                }
+            default :
+            {
                 m_Rights |= m_NameToRole.value(index.row(), 0);
+                Q_EMIT dataChanged(index, index);
+                Q_EMIT dataChanged(this->index(1,0), this->index(1,0));
+            }
+        }  // End switch
+            return true;
+        } else {
+            switch (index.row()) {
+            case 1 :
+                {
+                    m_Rights = 0;
+                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
+                    break;
+                }
+            default :
+            {
+                m_Rights ^= m_NameToRole.value(index.row(), 0);
                 Q_EMIT dataChanged(index, index);
             }
             return true;
-        } else {
-            m_Rights ^= m_NameToRole.value(index.row(), 0);
-            Q_EMIT dataChanged(index, index);
-            return true;
+        }  // End switch
         }
-
         return false;
     }
 
@@ -131,7 +157,8 @@ void UserRightsModel::retranslate()
 {
     m_RightsName.clear();
     m_RightsName
-            << tr("No rigths")
+            << tr("No Rights")
+            << tr("All Rights")
             << tr("Can read own datas")
             << tr("Can read delegates datas")
             << tr("Can read all datas")

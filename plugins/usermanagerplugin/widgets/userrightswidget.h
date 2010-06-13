@@ -57,8 +57,8 @@ public:
     UserRightsModel(QObject *parent);
     ~UserRightsModel() {}
 
-    void setRigths(const int r)     { m_Rights = r; }
-    int  getRigths()                { return m_Rights; }
+    void setRights(const int r)     { m_Rights = r; }
+    int  getRights()                { return m_Rights; }
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
@@ -79,12 +79,12 @@ private:
 class UserRightsWidget : public QListView
 {
     Q_OBJECT
-    Q_PROPERTY(int rights    READ getRigths    WRITE setRigths    USER true)
+    Q_PROPERTY(int rights    READ getRights    WRITE setRights    USER true)
 public:
     UserRightsWidget(QWidget * parent = 0);
 
-    void setRigths(const int r)     { m_Model->setRigths(r); }
-    int  getRigths()                { return m_Model->getRigths(); }
+    void setRights(const int r)     { m_Model->setRights(r); }
+    int  getRights()                { return m_Model->getRights(); }
 
 private:
     void changeEvent(QEvent *e);
