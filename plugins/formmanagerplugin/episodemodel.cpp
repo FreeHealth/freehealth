@@ -45,6 +45,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <usermanagerplugin/usermodel.h>

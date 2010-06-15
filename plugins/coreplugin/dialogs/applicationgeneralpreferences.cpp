@@ -49,6 +49,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/theme.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_icons.h>
 
 using namespace Trans::ConstantTranslations;
 using namespace Core;

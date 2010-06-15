@@ -67,10 +67,6 @@
 
 #include <templatesplugin/templatescreationdialog.h>
 
-#ifdef FREEDIAMS
-#  include <fdcoreplugin/patient.h>
-#endif
-
 #include "ui_mfDrugsCentralWidget.h"
 #include <QTreeWidget>
 

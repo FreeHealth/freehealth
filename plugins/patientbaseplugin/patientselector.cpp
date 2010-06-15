@@ -49,6 +49,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QToolButton>
 

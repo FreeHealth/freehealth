@@ -41,7 +41,6 @@
 
 //#include <extensionsystem/pluginspec.h>
 
-#include <coreplugin/constants.h>
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 

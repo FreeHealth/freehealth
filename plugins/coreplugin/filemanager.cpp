@@ -50,12 +50,15 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <QDir>
 #include <QDebug>
 
 using namespace Core;
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 
 /*!
     Adds the \a fileName to the list of recent files.
@@ -81,7 +84,7 @@ QStringList FileManager::recentFiles() const
 
 void FileManager::saveRecentFiles() const
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
     if (m_Key.isEmpty())
         s->setValue(Constants::S_RECENTFILES_KEY, m_recentFiles);
@@ -92,7 +95,7 @@ void FileManager::saveRecentFiles() const
 
 void FileManager::getRecentFilesFromSettings()
 {
-    Core::ISettings *s = Core::ICore::instance()->settings();
+    Core::ISettings *s = settings();
     m_recentFiles.clear();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
     if (m_Key.isEmpty())

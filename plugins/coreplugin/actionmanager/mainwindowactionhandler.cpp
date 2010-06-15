@@ -59,7 +59,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/debugdialog.h>
 #include <coreplugin/dialogs/aboutdialog.h>

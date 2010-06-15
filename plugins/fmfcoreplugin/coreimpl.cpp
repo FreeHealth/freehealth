@@ -50,6 +50,7 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/constants_icons.h>
 
 #include <fmfcoreplugin/commandlineparser.h>
 

@@ -54,6 +54,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constanttranslations.h>
 

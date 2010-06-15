@@ -32,65 +32,20 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef TEXTEDITORTABLEDIALOG_H
-#define TEXTEDITORTABLEDIALOG_H
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef CORE_CONSTANTS_H
+#define CORE_CONSTANTS_H
 
-#include <coreplugin/itheme.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/constants_icons.h>
+namespace Core {
+namespace Constants {
 
-#include <QDialog>
-#include <QTextEdit>
-#include <QTextCursor>
-#include <QTextTable>
-#include <QTextTableFormat>
+const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Context for translations of constants  \ingroup toolkit_constants */
 
-// include UI headers
-#include "ui_tabledialog.h"
+}  // end Constants
+} // end Core
 
-namespace Editor {
-namespace Internal {
-
-class TableDialog : public QDialog, private Ui::TableDialog
-{
-    Q_OBJECT
-public:
-    TableDialog( QWidget *parent = 0 ) :
-            QDialog( parent )
-    {
-        setupUi( this );
-        setWindowTitle(qApp->applicationName() + " - Rich Text Widget");
-        setWindowIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONTABLE));
-    }
-
-    ~TableDialog() {}
-
-    int rows() { return rowSpin->value() ; }
-    int cols() { return colSpin->value() ; }
-    int cellSpacing() { return cellSpacingSpin->value(); }
-    int cellPadding() { return cellPaddingSpin->value(); }
-    int border() { return borderSpin->value(); }
-
-    QTextTableFormat format()
-    {
-        QTextTableFormat format;
-        format.setCellPadding( cellPadding() );
-        format.setCellSpacing( cellSpacing() );
-        format.setBorder( border() );
-        format.setWidth( QTextLength( QTextLength::PercentageLength, 100 ) );
-        int i = 0;
-        QVector<QTextLength> lengths;
-        for ( i = 0; i < cols(); i++ ) {
-            lengths << QTextLength( QTextLength::PercentageLength, 100 / cols() );
-        }
-        format.setColumnWidthConstraints( lengths );
-        if ( header->isChecked() ) format.setHeaderRowCount( 1 );
-        else format.setHeaderRowCount( 0 );
-        return format;
-    }
-};
-
-}  // End Internal
-}  // End Editor
-
-#endif // TEXTEDITORTABLEDIALOG_H
+#endif // CORE_CONSTANTS_H

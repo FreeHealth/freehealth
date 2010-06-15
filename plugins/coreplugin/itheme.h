@@ -41,7 +41,6 @@
 #define ITHEME_H
 
 #include <coreplugin/core_exporter.h>
-#include <coreplugin/constants.h>
 
 #include <QObject>
 #include <QIcon>

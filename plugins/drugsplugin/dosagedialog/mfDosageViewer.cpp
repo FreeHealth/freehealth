@@ -68,9 +68,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/constants_icons.h>
 
-
-// include Qt headers
 #include <QHeaderView>
 #include <QRadioButton>
 #include <QCheckBox>

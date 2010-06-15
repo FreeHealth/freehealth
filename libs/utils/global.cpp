@@ -58,6 +58,8 @@
 #include <QTextDocument>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPushButton>
+#include <QAbstractButton>
 
 
 /**
@@ -441,34 +443,33 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
   \brief Creates a messagebox with many buttons.
   Return -1 if dialog was cancelled, or the index of the button into the stringlist.
 **/
-int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title )
+int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title, bool withCancelButton )
 {
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
     mb.setIcon( QMessageBox::Question );
     if (title.isEmpty())
         mb.setWindowTitle( qApp->applicationName() );
     else
-        mb.setWindowTitle( title );
-    mb.setText( text );
-    mb.setInformativeText( infoText );
+        mb.setWindowTitle(title);
+    mb.setText(text);
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty())
-        mb.setDetailedText( detail );
-    QPushButton *defaultButton = 0;
-    foreach( const QString &s, buttonsText) {
-        if (!defaultButton)
-            defaultButton = mb.addButton(s, QMessageBox::YesRole);
-        else
-            mb.addButton(s, QMessageBox::YesRole);
+        mb.setDetailedText(detail);
+    QList<QPushButton *> buttons;
+    foreach(const QString &s, buttonsText) {
+        buttons << mb.addButton(s, QMessageBox::YesRole);
     }
-    mb.addButton(QApplication::translate("Utils", "Cancel"), QMessageBox::RejectRole);
-    mb.setDefaultButton(defaultButton);
+    if (withCancelButton) {
+        buttons << mb.addButton(QApplication::translate("Utils", "Cancel"), QMessageBox::RejectRole);
+    }
+    mb.setDefaultButton(buttons.at(0));
     int r = mb.exec();
     qApp->setActiveWindow(parent);
     if (r==buttonsText.count())
         return -1;
-    return r;
+    return buttons.indexOf(static_cast<QPushButton*>(mb.clickedButton()));
 }
 
 /**

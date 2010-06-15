@@ -1,6 +1,6 @@
 #include "contextmanager_p.h"
 
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>

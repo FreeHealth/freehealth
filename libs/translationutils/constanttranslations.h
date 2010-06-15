@@ -354,7 +354,7 @@ enum TitleInterpret {
 
         // Users related msessage
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
-        const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as user %1.");
+        const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as\n  %1");
         const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConstants", "No user connected.");
         const char* const USER                              = QT_TRANSLATE_NOOP("tkConstants", "User");
         const char* const USER_DATAS                        = QT_TRANSLATE_NOOP("tkConstants", "User datas");

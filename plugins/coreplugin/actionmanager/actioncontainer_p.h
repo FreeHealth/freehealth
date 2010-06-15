@@ -33,7 +33,7 @@
 #include "actionmanager_p.h"
 #include "command.h"
 
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_trans.h>
 #include <coreplugin/uniqueidmanager.h>
 
 #include <QCoreApplication>

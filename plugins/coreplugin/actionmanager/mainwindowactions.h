@@ -71,49 +71,46 @@ class CORE_EXPORT MainWindowActions
 {
 public:
     enum FileAction {
-        A_FileNew    = 0x01,
-        A_FileOpen   = 0x02,
-        A_FileSave   = 0x04,
-        A_FileSaveAs = 0x08,
-        A_FileClose  = 0x10,
-        A_FilePrint  = 0x20,
-        A_FilePrintPreview = 0x40,
-        A_FileQuit   = 0x88
+        A_FileNew                = 0x00000001,
+        A_FileOpen               = 0x00000002,
+        A_FileSave               = 0x00000004,
+        A_FileSaveAs             = 0x00000008,
+        A_FileClose              = 0x00000010,
+        A_FilePrint              = 0x00000020,
+        A_FilePrintPreview       = 0x00000040,
+        A_FileQuit               = 0x00000080
     };
-    Q_DECLARE_FLAGS( FileActions, FileAction );
-
     enum ConfigurationAction {
-        A_AppPreferences     = 0x01,
-        A_PluginsPreferences = 0x02,
-        A_ConfigureMedinTux  = 0x04,
-        A_LangageChange      = 0x08,
-        A_AppConfigurator    = 0x10
+        A_AppPreferences         = 0x00000100,
+        A_PluginsPreferences     = 0x00000200,
+        A_ConfigureMedinTux      = 0x00000400,
+        A_LangageChange          = 0x00000800,
+        A_AppConfigurator        = 0x00001000
     };
-    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
-
     enum HelpAction {
-        A_AppAbout     = 0x01,
-        A_AppHelp      = 0x02,
-        A_QtAbout      = 0x04,
-        A_DebugDialog  = 0x08,
-        A_PluginsAbout = 0x10,
-        A_FormsAbout   = 0x20,
-        A_CheckUpdate  = 0x40
+        A_AppAbout               = 0x00002000,
+        A_AppHelp                = 0x00004000,
+        A_QtAbout                = 0x00008000,
+        A_DebugDialog            = 0x00010000,
+        A_PluginsAbout           = 0x00020000,
+        A_FormsAbout             = 0x00040000,
+        A_CheckUpdate            = 0x00080000
     };
-    Q_DECLARE_FLAGS( HelpActions, HelpAction );
-
     enum TemplatesAction {
-        A_Templates_New          = 0x01,
-        A_Templates_Manager      = 0x02,
-        A_Templates_ToogleViewer = 0x04
+        A_Templates_New          = 0x00100000,
+        A_Templates_Manager      = 0x00200000,
+        A_Templates_ToogleViewer = 0x00400000
     };
-    Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
-
     enum PatientsAction {
-        A_Patients_New            = 0x01,
-        A_Patients_ViewIdentity   = 0x02,
-        A_Patients_Remove         = 0x04
+        A_Patients_New           = 0x08000000,
+        A_Patients_ViewIdentity  = 0x10000000,
+        A_Patients_Remove        = 0x20000000
     };
+
+    Q_DECLARE_FLAGS( FileActions, FileAction );
+    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
+    Q_DECLARE_FLAGS( HelpActions, HelpAction );
+    Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
     Q_DECLARE_FLAGS( PatientsActions, PatientsAction );
 
     MainWindowActions() : file(0), config(0), help(0), templates(0), patients(0), edit(false) {}

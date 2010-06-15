@@ -64,6 +64,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/log.h>
 #include <utils/global.h>

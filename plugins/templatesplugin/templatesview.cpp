@@ -49,7 +49,8 @@
 #include "templateseditdialog.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 

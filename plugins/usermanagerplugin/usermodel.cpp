@@ -321,6 +321,16 @@ QSqlDatabase UserModel::database() const
     return Internal::UserBase::instance()->database();
 }
 
+/** \brief Clears the content of the model. Silently save users if needed. */
+void UserModel::clear()
+{
+    submitAll();
+    d->m_CurrentUserRights = 0;
+    d->m_CurrentUserUuid.clear();
+    qDeleteAll(d->m_Uuid_UserList);
+    d->m_Uuid_UserList.clear();
+}
+
 /** \brief Check login/password validity. \sa UserBase::checkLogin(). */
 bool UserModel::isCorrectLogin(const QString &logbase64, const QString &cryptpassbase64)
 {

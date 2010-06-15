@@ -43,11 +43,11 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_trans.h>
 
 namespace Core {
 namespace Constants {
 
-const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Context for translations of constants  \ingroup toolkit_constants */
 const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
 const char* const   FREEMEDFORMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeMedForms Forms File (*.xml)");
 

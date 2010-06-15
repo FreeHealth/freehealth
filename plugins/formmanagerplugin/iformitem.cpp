@@ -40,7 +40,6 @@
 #include "iformitem.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/constants.h>
 #include <coreplugin/uniqueidmanager.h>
 
 #include <formmanagerplugin/formmanager.h>

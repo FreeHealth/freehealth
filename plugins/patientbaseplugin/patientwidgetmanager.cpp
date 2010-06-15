@@ -47,7 +47,8 @@
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>

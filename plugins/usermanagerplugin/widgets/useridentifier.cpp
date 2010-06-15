@@ -64,6 +64,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/widgets/lineeditechoswitcher.h>
 

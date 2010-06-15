@@ -47,7 +47,7 @@
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>

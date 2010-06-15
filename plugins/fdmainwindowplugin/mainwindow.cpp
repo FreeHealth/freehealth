@@ -253,7 +253,7 @@ void MainWindow::extensionsInitialized()
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Manage patient datas
-    m_ui->morePatientInfoButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONADD));
+    m_ui->morePatientInfoButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
     refreshPatient();
 

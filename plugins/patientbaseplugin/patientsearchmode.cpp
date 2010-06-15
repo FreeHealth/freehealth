@@ -47,6 +47,8 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constanttranslations.h>
 

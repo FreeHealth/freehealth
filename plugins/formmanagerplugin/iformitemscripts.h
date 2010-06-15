@@ -42,7 +42,6 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
-#include <coreplugin/constants.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QObject>

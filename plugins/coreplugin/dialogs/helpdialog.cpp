@@ -52,6 +52,7 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/global.h>

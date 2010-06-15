@@ -41,7 +41,6 @@
 #define IFORMITEM_H
 
 #include <coreplugin/idebugpage.h>
-#include <coreplugin/constants.h>
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <formmanagerplugin/iformitemspec.h>

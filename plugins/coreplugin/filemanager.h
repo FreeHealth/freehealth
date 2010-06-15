@@ -42,7 +42,6 @@
 
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/idebugpage.h>
-#include <coreplugin/constants.h>
 
 #include <QObject>
 #include <QString>
@@ -51,9 +50,6 @@
 #include <QVariant>
 #include <QPointer>
 #include <QHash>
-
-
-#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;

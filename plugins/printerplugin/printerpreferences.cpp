@@ -46,7 +46,6 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
 
 #include <QPrinterInfo>
 

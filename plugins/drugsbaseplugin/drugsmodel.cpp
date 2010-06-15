@@ -65,7 +65,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_icons.h>
 
 #include <templatesplugin/constants.h>
 #include <templatesplugin/itemplates.h>

@@ -47,6 +47,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <QFileSystemModel>
 #include <QFileIconProvider>

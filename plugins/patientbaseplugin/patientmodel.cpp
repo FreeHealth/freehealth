@@ -50,6 +50,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_icons.h>
 
 #include <medicalutils/global.h>
 #include <utils/log.h>

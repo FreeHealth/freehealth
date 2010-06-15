@@ -57,7 +57,7 @@
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>

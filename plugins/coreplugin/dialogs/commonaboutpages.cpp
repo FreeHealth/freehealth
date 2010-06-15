@@ -44,8 +44,6 @@
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
-#include <coreplugin/constants.h>
-
 #include <QApplication>
 #include <QLabel>
 #include <QVBoxLayout>

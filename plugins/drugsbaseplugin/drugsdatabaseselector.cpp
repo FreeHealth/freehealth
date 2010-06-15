@@ -42,7 +42,6 @@
 #include "drugsbase.h"
 #include "constants.h"
 
-#include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 

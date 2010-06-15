@@ -51,6 +51,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/global.h>
 #include <utils/log.h>

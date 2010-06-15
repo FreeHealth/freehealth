@@ -31,7 +31,7 @@
 
 #include "command.h"
 #include "actionmanager_p.h"
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_trans.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMultiMap>

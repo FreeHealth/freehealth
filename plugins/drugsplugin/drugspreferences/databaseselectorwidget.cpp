@@ -49,7 +49,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>

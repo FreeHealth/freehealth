@@ -59,6 +59,8 @@
 #include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/widgets/userviewer.h>

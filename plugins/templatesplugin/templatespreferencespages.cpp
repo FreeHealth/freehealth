@@ -45,7 +45,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>

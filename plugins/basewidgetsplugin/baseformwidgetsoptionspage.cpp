@@ -3,7 +3,6 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
 #include <translationutils/constanttranslations.h>
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}

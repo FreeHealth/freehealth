@@ -43,7 +43,6 @@
 #include <formmanagerplugin/formmanager_exporter.h>
 
 #include <coreplugin/idebugpage.h>
-#include <coreplugin/constants.h>
 
 #include <translationutils/constanttranslations.h>
 

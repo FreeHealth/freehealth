@@ -69,9 +69,26 @@ static inline bool identifyUser()
     userModel();
     QString log = settings()->value(Core::Constants::S_LASTLOGIN).toString();
     QString pass = settings()->value(Core::Constants::S_LASTPASSWORD).toString();
+    bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
             userModel()->setCurrentUser(log, pass);
+            if (ask) {
+                int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
+                                                     .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
+                                                     QApplication::translate("UserManagerPlugin", "You can pursue with this user or connect with another one."),
+                                                     "", QStringList()
+                                                     << QApplication::translate("UserManagerPlugin", "Stay connected")
+                                                     << QApplication::translate("UserManagerPlugin", "Change the current user"));
+                if (r==1) {
+                    log.clear();
+                    pass.clear();
+                    userModel()->clear();
+                    ask = false;
+                    continue;
+                }
+                break;
+            }
             break;
         } else {
             log.clear();
@@ -85,10 +102,6 @@ static inline bool identifyUser()
             settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
         }
     }
-    // messageBox : Welcome User
-    Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                 .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
-                                 tkTr(Trans::Constants::WELCOME_USER));
     return true;
 }
 

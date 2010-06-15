@@ -53,7 +53,7 @@
 
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>

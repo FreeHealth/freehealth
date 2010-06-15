@@ -62,7 +62,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
 

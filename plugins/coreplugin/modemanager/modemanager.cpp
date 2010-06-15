@@ -41,7 +41,7 @@
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/modemanager/imode.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
