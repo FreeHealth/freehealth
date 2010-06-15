@@ -253,7 +253,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     if (!searchmenu) {
         searchmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_SEARCH);
         searchmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-        searchmenu->setTranslations(DrugsWidget::Constants::SEARCHMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
+        searchmenu->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
         menu->addMenu(searchmenu, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     }
     Q_ASSERT(searchmenu);

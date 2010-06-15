@@ -48,12 +48,13 @@
 #include <coreplugin/dialogs/commondebugpages.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/dialogs/applicationgeneralpreferences.h>
 
 #include <QtCore/QtPlugin>
 
 using namespace Core::Internal;
 
-CorePlugin::CorePlugin() : m_CoreImpl(0)
+CorePlugin::CorePlugin() : m_CoreImpl(0), prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CorePlugin";
@@ -62,27 +63,29 @@ CorePlugin::CorePlugin() : m_CoreImpl(0)
 
 CorePlugin::~CorePlugin()
 {
-    qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
-//    if (m_welcomeMode) {
-//        removeObject(m_welcomeMode);
-//        delete m_welcomeMode;
-//    }
-//    if (m_editMode) {
-//        removeObject(m_editMode);
-//        delete m_editMode;
-//    }
-//
-//    // delete FileIconProvider singleton
-//    delete FileIconProvider::instance();
-//
-//    if (m_CoreImpl->mainWindow())
-//        delete m_CoreImpl->mainWindow();
+    qWarning() << "CorePlugin::~CorePlugin()";
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CorePlugin::initialize";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("utils");
+    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
+    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
+    Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
+
+    // add preferences page
+    prefPage = new ApplicationGeneralPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addObject(prefPage);
+
     return m_CoreImpl->initialize(arguments,errorMessage);
 //    Q_UNUSED(arguments);
 //    const bool success = m_mainWindow->init(errorMessage);
@@ -114,12 +117,6 @@ void CorePlugin::extensionsInitialized()
     this->addAutoReleasedObject(new SettingDebugPage(this));
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
-    Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

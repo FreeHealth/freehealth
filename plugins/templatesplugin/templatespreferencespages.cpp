@@ -106,7 +106,6 @@ void TemplatesPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_SPLITTER_SIZES, QVariant());
     defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, true);
     defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, false);
-    defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, true);
     defaultvalues.insert(Constants::S_PROMPTFORDELETION, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -136,7 +135,6 @@ TemplatesPreferencesWidget::TemplatesPreferencesWidget(QWidget *parent) :
 
 void TemplatesPreferencesWidget::setDatasToUi()
 {
-    promptBox->setChecked(settings()->value(Constants::S_SAVEDATAWITHOUTPROMPTING).toBool());
     deletionBox->setChecked(settings()->value(Constants::S_PROMPTFORDELETION).toBool());
     autoExpandBox->setChecked(settings()->value(Constants::S_ALWAYSSHOWEXPANDED).toBool());
     lockViewBox->setChecked(settings()->value(Constants::S_LOCKCATEGORYVIEW).toBool());
@@ -166,8 +164,7 @@ void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
     defaultvalues.insert(Constants::S_BACKGROUND_TEMPLATES, templateBackgroundButton->color().name());
     defaultvalues.insert(Constants::S_FOREGROUND_CATEGORIES, categoryForegroundButton->color().name());
     defaultvalues.insert(Constants::S_FOREGROUND_TEMPLATES, templateForegroundButton->color().name());
-    defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, promptBox->isChecked());
-    defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, autoExpandBox->isChecked());
+    defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, autoExpandBox->isChecked());
     defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, lockViewBox->isChecked());
     defaultvalues.insert(Constants::S_PROMPTFORDELETION, deletionBox->isChecked());
 
@@ -196,7 +193,6 @@ void TemplatesPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     defaultvalues.insert(Constants::S_SPLITTER_SIZES, QVariant());
     defaultvalues.insert(Constants::S_ALWAYSSHOWEXPANDED, true);
     defaultvalues.insert(Constants::S_LOCKCATEGORYVIEW, false);
-    defaultvalues.insert(Constants::S_SAVEDATAWITHOUTPROMPTING, true);
     defaultvalues.insert(Constants::S_PROMPTFORDELETION, true);
 
     foreach(const QString &k, defaultvalues.keys()) {

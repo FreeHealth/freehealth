@@ -59,6 +59,13 @@ class PATIENT_EXPORT PatientSelector : public QWidget
     friend class Internal::PatientSelectorPrivate;
 
 public:
+    enum SearchMethod {
+        SearchByName = 0,
+        SearchBySurname,
+        SearchByNameSurname,
+        SearchByDOB
+    };
+
     enum FieldToShow {
         None        = 0x0000,
         BirthName   = 0x0001,
@@ -84,6 +91,9 @@ public:
     PatientSelector(QWidget *parent = 0, const FieldsToShow fields = None);
     ~PatientSelector();
 
+    void init();
+
+    void setSearchMode(const int search);
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
     void setSelectedPatient(const QModelIndex &index);

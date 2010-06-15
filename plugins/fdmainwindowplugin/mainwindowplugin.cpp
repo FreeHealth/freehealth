@@ -34,7 +34,6 @@
  ***************************************************************************/
 #include "mainwindowplugin.h"
 #include "mainwindow.h"
-#include "mainwindowpreferences.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -48,20 +47,18 @@
 using namespace MainWin;
 
 MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0)
+        m_MainWindow(0)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating MainWinPlugin";
+        qWarning() << "creating FREEDIAMS::MainWinPlugin";
 }
 
 MainWinPlugin::~MainWinPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (m_MainWindow)
         delete m_MainWindow;
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -83,10 +80,6 @@ void MainWinPlugin::extensionsInitialized()
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
-
-    // Add preferences pages
-    prefPage = new Internal::MainWindowPreferencesPage();
-    addObject(prefPage);
 
     m_MainWindow->extensionsInitialized();
 }

@@ -117,6 +117,9 @@ public:
         DrugsInnAtcAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsChronicTherapeutics,
         ICD10Diseases,      //  see tkSerializer --> string<->stringlist
+
+        // For debugging purpose
+        PractitionnerLkID,
         NumberOfColumns
     };
 

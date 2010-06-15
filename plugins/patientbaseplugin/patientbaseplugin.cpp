@@ -87,6 +87,11 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // Add Translators
     Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
 
+    // add preference page
+    prefpage = new PatientBasePreferencesPage(this);
+    addObject(prefpage);
+    prefpage->checkSettingsValidity();
+
     // Initialize patient base
     patientBase();
     if (!patientBase()->isInitialized())
@@ -106,11 +111,6 @@ void PatientBasePlugin::extensionsInitialized()
     // add mode patient search
     m_Mode = new PatientSearchMode(this);
     addObject(m_Mode);
-
-    // add preference page
-    prefpage = new PatientBasePreferencesPage(this);
-    addObject(prefpage);
-    prefpage->checkSettingsValidity();
 }
 
 

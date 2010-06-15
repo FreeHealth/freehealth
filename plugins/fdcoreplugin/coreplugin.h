@@ -46,10 +46,11 @@
  * \file coreplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 12 Mar 2010
+ * \date 15 June 2010
 */
 
 namespace Core {
+    class ApplicationGeneralPreferencesPage;
 namespace Internal {
     class CoreImpl;
 }
@@ -74,6 +75,7 @@ public Q_SLOTS:
 
 private:
     CoreImpl *m_CoreImpl;
+    ApplicationGeneralPreferencesPage *prefPage;
 };
 
 } // namespace Internal

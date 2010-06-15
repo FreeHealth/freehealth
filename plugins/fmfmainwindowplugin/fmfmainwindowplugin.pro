@@ -15,8 +15,7 @@ SOURCES = mainwindowplugin.cpp \
     mainwindowpreferences.cpp \
     appconfigwizard.cpp \
     virtualdatabasepreferences.cpp
-FORMS = mainwindowpreferenceswidget.ui \
-    virtualbasepage.ui
+FORMS = virtualbasepage.ui
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_es.ts

@@ -12,15 +12,12 @@ include( fdmainwindowplugin_dependencies.pri )
 HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
-    medintux.h \
-    mainwindowpreferences.h
+    medintux.h
 
 SOURCES = mainwindowplugin.cpp \
-    mainwindow.cpp \
-    mainwindowpreferences.cpp
+    mainwindow.cpp
 
-FORMS = mainwindow.ui \
-    mainwindowpreferenceswidget.ui
+FORMS = mainwindow.ui
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_fr.ts \

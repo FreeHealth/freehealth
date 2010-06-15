@@ -89,6 +89,9 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     if (!episodeBase()->isInitialized())
         return false;
 
+    // Add options page
+    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
+
     return true;
 }
 
@@ -104,9 +107,6 @@ void FormManagerPlugin::extensionsInitialized()
     mode = new FormManagerMode(this);
     mode->setWidget(FormManager::instance()->formPlaceHolder());
     addObject(mode);
-
-    // Add options page
-    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
 }
 
 

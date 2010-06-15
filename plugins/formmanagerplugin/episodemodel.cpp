@@ -42,7 +42,10 @@
 #include "constants_db.h"
 #include "constants_settings.h"
 
+#include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/constants.h>
@@ -86,10 +89,13 @@ using namespace Form;
 using namespace Trans::ConstantTranslations;
 
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline QString currentUserUuid() {return userModel()->currentUserData(Core::IUser::Uuid).toString();}
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 
 namespace Form {
@@ -345,11 +351,13 @@ public:
             formsItems.insert(f, it);
         }
         // reparent items
-        QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
-        while (i.hasNext()) {
-            i.next();
-            Form::FormMain *f = i.key();
-            TreeItem *it = i.value();
+        foreach(Form::FormMain *f, formManager()->forms()) {
+//        QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
+//        while (i.hasNext()) {
+//            i.next();
+//            Form::FormMain *f = i.key();
+//            TreeItem *it = i.value();
+            TreeItem *it = formsItems.value(f);
             if (f->formParent()) {
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);
@@ -684,6 +692,11 @@ void EpisodeModel::init()
 //    d->connectSqlPatientSignals();
     setCurrentUser(d->m_UserUuid);
     d->createFormTree();
+
+    // connect the save action
+    Core::Command * cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(submit()));
+
 //    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
 //
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -998,21 +1011,18 @@ bool EpisodeModel::isDirty() const
 
 bool EpisodeModel::submit()
 {
-//    if (d->m_ReadOnly)
-//        return false;
-//
-//    d->saveModelDatas();
-//    d->deleteRowsInDatabase();
-    return true;
-}
-
-bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &formUid) //, const QString &xmlcontent)
-{
     // save actual episode if needed
     if (d->m_ActualEpisode) {
         if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid))
             Utils::Log::addError(this, "Unable to save actual episode before editing a new one");
     }
+    return true;
+}
+
+bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &formUid) //, const QString &xmlcontent)
+{
+    // submit actual episode
+    submit();
 
     if (!index.isValid()) {
         d->m_ActualEpisode = 0;

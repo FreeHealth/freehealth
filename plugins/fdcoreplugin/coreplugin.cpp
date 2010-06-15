@@ -48,18 +48,24 @@
 #include <coreplugin/dialogs/commondebugpages.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/dialogs/applicationgeneralpreferences.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Core::Internal;
 
-CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this))
+CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this)), prefPage(0)
 {
 }
 
 CorePlugin::~CorePlugin()
 {
+    qWarning() << "CorePlugin::~CorePlugin()";
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -86,6 +92,17 @@ void CorePlugin::extensionsInitialized()
     addAutoReleasedObject(new SettingDebugPage(this));
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // add preferences page
+    prefPage = new ApplicationGeneralPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addObject(prefPage);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("utils");
+    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
+    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
+    Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
 }
 
 void CorePlugin::remoteArgument(const QString &arg)

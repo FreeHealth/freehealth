@@ -101,7 +101,7 @@ void DrugSelector::initialize()
     createINNModelView();
     createDrugsHistoryActions();
 
-    // select last search method (stored into qApp S_SEARCHMETHOD)
+    // select last search method
     int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
     setSearchMethod(m);
     QAction *a = 0;

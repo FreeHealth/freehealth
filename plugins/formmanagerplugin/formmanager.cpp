@@ -32,6 +32,11 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+   \class Form::FormManager
+   \brief This class manages all aspect of the patient's forms.
+*/
+
 #include "formmanager.h"
 #include "iformitem.h"
 #include "iformio.h"
@@ -123,7 +128,6 @@ FormManager *FormManager::instance()
     return m_Instance;
 }
 
-
 FormManager::FormManager(QObject *parent)
         : QObject(parent), d(new Form::Internal::FormManagerPrivate(this))
 {
@@ -141,6 +145,7 @@ FormManager::~FormManager()
     }
 }
 
+/** \brief Activate the Form Mode in the main window. */
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
@@ -154,7 +159,6 @@ Core::UniqueIDManager *FormManager::uuidManager() const
 
 FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
 {
-    qWarning() << "FormManager Creating Form" << uuid;
     FormMain *f = 0;
     if (parent)
         f = new FormMain(parent);
@@ -163,9 +167,11 @@ FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
     if (!uuid.isEmpty())
         f->setUuid(uuid);
     d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
+    qWarning() << "FormManager Creating Form" << uuid; // << f << d->m_UuidManager->uniqueIdentifier(f->uuid());
     return f;
 }
 
+/** \brief return forms in creation order */
 QList<FormMain*> FormManager::forms() const
 {
     return d->m_HashForms.values();

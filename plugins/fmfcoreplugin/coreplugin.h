@@ -43,6 +43,7 @@
 #include <extensionsystem/iplugin.h>
 
 namespace Core {
+    class ApplicationGeneralPreferencesPage;
 namespace Internal {
     class CoreImpl;
 }
@@ -67,6 +68,7 @@ public Q_SLOTS:
 
 private:
     CoreImpl *m_CoreImpl;
+    ApplicationGeneralPreferencesPage *prefPage;
 };
 
 } // namespace Internal

@@ -55,11 +55,13 @@ namespace Constants {
     const char * const  G_PATIENTS_HISTORY      = "Patients.groupHistory";
     const char * const  G_PATIENTS_INFORMATIONS = "Patients.groupInfos";
 
-    const char * const  A_SEARCH_BY_NAME       = "Patients.SearchByName";
-    const char * const  A_SEARCH_BY_CITY       = "Patients.SearchByName";
-    const char * const  A_SEARCH_BY_DOB        = "Patients.SearchByName";
-    const char * const  A_VIEWPATIENT_INFOS    = "Patient.Informations";
-    const char * const  A_VIEWPATIENTDATABASE_INFOS    = "Patient.DB.Informations";
+    const char * const  A_SEARCH_PATIENTS_BY_NAME         = "Patients.SearchByName";
+    const char * const  A_SEARCH_PATIENTS_BY_SURNAME      = "Patients.SearchSurname";
+    const char * const  A_SEARCH_PATIENTS_BY_NAMESURNAME  = "Patients.SearchNameSurname";
+    const char * const  A_SEARCH_PATIENTS_BY_DOB          = "Patients.SearchByDOB";
+
+    const char * const  A_VIEWPATIENT_INFOS               = "Patient.Informations";
+    const char * const  A_VIEWPATIENTDATABASE_INFOS       = "Patient.DB.Informations";
 
 
     const char * const  C_PATIENTS             = "Patients.Context";

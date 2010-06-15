@@ -508,6 +508,8 @@ void MainWindowActionHandler::connectEditActions()
 void MainWindowActionHandler::createPatientsActions(int actions)
 {
     /** \todo Patients actions should be exploded into different menus or in a single menu ? */
+    if (actions==0)
+        return;
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;

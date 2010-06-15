@@ -239,6 +239,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_EpisodeDate = m_Header->dateEdit;
     m_EpisodeDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
     m_EpisodeDate->setEnabled(false);
+    m_EpisodeDate->setCalendarPopup(true);
     m_EpisodeLabel = m_Header->lineEdit;
     m_EpisodeLabel->setEnabled(false);
     m_UserName = m_Header->label_2;

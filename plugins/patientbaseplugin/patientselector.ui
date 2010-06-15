@@ -14,7 +14,24 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="5">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Search</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Utils::QButtonLineEdit" name="searchLine"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="numberOfPatients">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -61,33 +78,6 @@
       </attribute>
      </widget>
      <widget class="Patients::IdentityWidget" name="identity" native="true"/>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="Utils::QButtonLineEdit" name="searchName"/>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Surname</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="Utils::QButtonLineEdit" name="searchSurname"/>
-   </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="numberOfPatients">
-     <property name="text">
-      <string/>
-     </property>
     </widget>
    </item>
   </layout>

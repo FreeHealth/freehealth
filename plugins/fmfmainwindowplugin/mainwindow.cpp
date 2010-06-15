@@ -77,8 +77,6 @@
 #include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/patientcreatorwizard.h>
 
-#include <drugsbaseplugin/userdatas.h>
-
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -283,8 +281,12 @@ void MainWindow::postCoreInitialization()
     openPatientFormsFile();
 
     // TEST
+    Patients::PatientWidgetManager::instance()->postCoreInitialization();
     formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
     // END TEST
+
+    // clear the focus of the mainwin so that the lineeditbuton show the tooltip
+    statusBar()->setFocus();
 }
 
 void MainWindow::on_currentUser_Changed()

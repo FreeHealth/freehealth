@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -38,58 +38,66 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MAINWINDOWPREFERENCES_H
-#define MAINWINDOWPREFERENCES_H
+#ifndef APPLICATIONGENERALPREFERENCES_H
+#define APPLICATIONGENERALPREFERENCES_H
 
+#include <coreplugin/core_exporter.h>
 #include <coreplugin/ioptionspage.h>
 
-#include "ui_mainwindowpreferenceswidget.h"
+#include <QWidget>
 
 #include <QPointer>
 #include <QObject>
 
 /**
- * \file mainwindowpreferences.h
+ * \file applicationgeneralpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.1
- * \date 19 Oct 2009
+ * \version 0.4.0
+ * \date 15 June 2010
 */
+
 
 namespace Core {
 class ISettings;
+
+namespace Internal {
+namespace Ui {
+class ApplicationGeneralPreferencesWidget;
 }
 
-namespace MainWin {
-namespace Internal {
-
-class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPreferencesWidget
+class ApplicationGeneralPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MainWindowPreferencesWidget)
+    Q_DISABLE_COPY(ApplicationGeneralPreferencesWidget)
 
 public:
-    explicit MainWindowPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    explicit ApplicationGeneralPreferencesWidget(QWidget *parent = 0);
 
     static void writeDefaultSettings(Core::ISettings *s);
+    void setDatasToUi();
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-
-private Q_SLOTS:
     void on_testButton_clicked();
+    void toggleDatabaseConfiguration(bool state);
 
 protected:
     virtual void changeEvent(QEvent *e);
+
+private:
+    Ui::ApplicationGeneralPreferencesWidget *ui;
 };
 
+}  // End namespace Internal
 
-class MainWindowPreferencesPage : public Core::IOptionsPage
+
+
+class CORE_EXPORT ApplicationGeneralPreferencesPage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    MainWindowPreferencesPage(QObject *parent = 0);
-    ~MainWindowPreferencesPage();
+    ApplicationGeneralPreferencesPage(QObject *parent = 0);
+    ~ApplicationGeneralPreferencesPage();
 
     QString id() const;
     QString name() const;
@@ -102,14 +110,16 @@ public:
 
     QString helpPage() {return "parametrer.html";}
 
-    static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::ApplicationGeneralPreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<MainWindowPreferencesWidget> m_Widget;
+    QPointer<Internal::ApplicationGeneralPreferencesWidget> m_Widget;
 };
 
-}  // End Internal
-}  // End MainWin
 
-#endif // MAINWINDOWPREFERENCES_H
+
+}  // End namespace Core
+
+
+#endif // APPLICATIONGENERALPREFERENCES_H

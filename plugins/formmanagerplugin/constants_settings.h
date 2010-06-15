@@ -47,6 +47,7 @@ namespace Constants {
     const char * const  S_EPISODEMODEL_FORM_FOREGROUND    = "EpisodeModel/FormForeGround";
     const char * const  S_EPISODEMODEL_EPISODE_FOREGROUND = "EpisodeModel/EpisodeForeGround";
     const char * const  S_EPISODEMODEL_DATEFORMAT         = "EpisodeModel/OutputDateFormat";
+    const char * const  S_PLACEHOLDERSPLITTER_SIZES       = "Splitters/PlaceHolderSizes";
 
     const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
 

@@ -84,6 +84,7 @@ public:
 
 
 private Q_SLOTS:
+    void searchActionChanged(QAction *action);
     void viewPatientInformations();
     void printPatientsInformations();
 
@@ -93,9 +94,15 @@ private:
     void updateActions();
 
 protected:
+    QAction *aSearchName;
+    QAction *aSearchSurname;
+    QAction *aSearchNameSurname;
+    QAction *aSearchDob;
     QAction *aViewPatientInformations;
     QAction *aPrintPatientInformations;
     QAction *aShowPatientDatabaseInformations;
+
+    QActionGroup *gSearchMethod;
 
     // setDeceased
     // writeALetter...
@@ -114,6 +121,8 @@ class PATIENT_EXPORT PatientWidgetManager : public Internal::PatientActionHandle
 public:
     static PatientWidgetManager *instance();
     ~PatientWidgetManager() {}
+
+    void postCoreInitialization();
 
     PatientSelector  *selector() const;
 

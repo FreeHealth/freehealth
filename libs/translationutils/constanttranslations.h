@@ -175,6 +175,7 @@ enum TitleInterpret {
         const char * const  FILEPRINT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Print...");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  PRINTPREVIEW_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Print preview");    /*!< \brief Default action text  \ingroup constants_actionmanager */
         const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Exit");    /*!< \brief Default action text  \ingroup constants_actionmanager */
+        const char * const  SEARCHMENU_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Search...");
 
         const char * const  PATIENTNEW_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "New Patient");
         const char * const  PATIENTREMOVE_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Remove Patient");
@@ -408,6 +409,7 @@ enum TitleInterpret {
         const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
         const char* const YES                                = QT_TRANSLATE_NOOP("tkConstants", "Yes");
         const char* const NO                                 = QT_TRANSLATE_NOOP("tkConstants", "No");
+        const char* const GENERAL                            = QT_TRANSLATE_NOOP("tkConstants", "General");
         const char* const APPLICATION_FAILURE                = QT_TRANSLATE_NOOP("tkConstants", "Fatal error : Application failure. Please restart application.");
 
         const char* const TRYING_TO_CREATE_1_PLACE_2         = QT_TRANSLATE_NOOP("tkConstants", "Trying to create %1 \nPlace : %2");

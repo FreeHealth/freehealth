@@ -38,6 +38,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "formplaceholder.h"
+#include "constants_settings.h"
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -46,6 +47,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
 
 #include <utils/widgets/minisplitter.h>
@@ -68,6 +70,7 @@ using namespace Form;
 
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 
 namespace Form {
@@ -83,6 +86,7 @@ public:
             m_Stack(0),
             m_GeneralLayout(0),
             m_Scroll(0),
+            horizSplitter(0),
             q(parent)
     {
     }
@@ -113,6 +117,14 @@ public:
         }
     }
 
+    void saveSettings()
+    {
+        QList<QVariant> sizes;
+        foreach(int s, horizSplitter->sizes())
+            sizes << s;
+        settings()->setValue(Constants::S_PLACEHOLDERSPLITTER_SIZES, sizes);
+    }
+
 private:
     void clearStackLayout()
     {
@@ -133,6 +145,7 @@ public:
     QGridLayout *m_GeneralLayout;
     QScrollArea *m_Scroll;
     QHash<int, QString> m_StackId_FormUuid;
+    Utils::MiniSplitter *horizSplitter;
 
 private:
     FormPlaceHolder *q;
@@ -236,10 +249,10 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
 
     // create splitters
-    Utils::MiniSplitter *horiz = new Utils::MiniSplitter(this);
-    horiz->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    horiz->setObjectName("FormPlaceHolder::MiniSplitter1");
-    horiz->setOrientation(Qt::Horizontal);
+    d->horizSplitter = new Utils::MiniSplitter(this);
+    d->horizSplitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->horizSplitter->setObjectName("FormPlaceHolder::MiniSplitter1");
+    d->horizSplitter->setOrientation(Qt::Horizontal);
 
     Utils::MiniSplitter *vertic = new Utils::MiniSplitter(this);
     vertic->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -250,24 +263,30 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_EpisodesTable->horizontalHeader()->hide();
     d->m_EpisodesTable->verticalHeader()->hide();
 
-    horiz->addWidget(d->m_FileTree);
-//    horiz->addWidget(wb);
+    d->horizSplitter->addWidget(d->m_FileTree);
+//    d->horizSplitter->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
     vertic->addWidget(d->m_Scroll);
-    horiz->addWidget(vertic);
+    d->horizSplitter->addWidget(vertic);
 
-    horiz->setStretchFactor(0, 1);
-    horiz->setStretchFactor(1, 3);
+    QList<QVariant> sizesVar = settings()->value(Constants::S_PLACEHOLDERSPLITTER_SIZES).toList();
+    QList<int> sizes;
+    foreach(const QVariant &v, sizesVar)
+        sizes << v.toInt();
+    d->horizSplitter->setSizes(sizes);
+//    d->horizSplitter->setStretchFactor(0, 1);
+//    d->horizSplitter->setStretchFactor(1, 3);
 //    vertic->setStretchFactor(0, 1);
 //    vertic->setStretchFactor(1, 3);
 
     d->m_Scroll->setWidget(w);
 
-    d->m_GeneralLayout->addWidget(horiz, 100, 0);
+    d->m_GeneralLayout->addWidget(d->horizSplitter, 100, 0);
 }
 
 FormPlaceHolder::~FormPlaceHolder()
 {
+    d->saveSettings();
     if (d) {
         delete d;
         d = 0;

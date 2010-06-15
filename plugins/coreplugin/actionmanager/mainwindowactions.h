@@ -116,7 +116,7 @@ public:
     };
     Q_DECLARE_FLAGS( PatientsActions, PatientsAction );
 
-    MainWindowActions() : file(0), config(0), help(0), templates(0), edit(false) {}
+    MainWindowActions() : file(0), config(0), help(0), templates(0), patients(0), edit(false) {}
     ~MainWindowActions() {}
 
     void setFileActions(int actions) { file = actions; }

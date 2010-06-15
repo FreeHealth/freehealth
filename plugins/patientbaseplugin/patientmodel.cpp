@@ -175,7 +175,7 @@ public:
 
         filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME));
 
-//        qWarning() << filter;
+        qWarning() << filter;
 
         m_SqlPatient->setFilter(filter);
         m_SqlPatient->select();
@@ -402,6 +402,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 } else {
                     return QString("%1 %2").arg(name, sur);
                 }
+                break;
             }
         case IPatient::FullAddress:
             {
@@ -421,6 +422,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
                 return d->getPatientPhoto(patientUid);
             }
+        case IPatient::PractitionnerLkID: return d->m_LkIds;
         }
         return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
     }
@@ -685,6 +687,7 @@ bool PatientModel::submit()
 
 bool PatientModel::refreshModel()
 {
+    d->refreshFilter();
     d->m_SqlPatient->select();
     reset();
     return true;

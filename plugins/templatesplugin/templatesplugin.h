@@ -47,11 +47,14 @@
 /**
  * \file templatesplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.0
- * \date 30 Nov 2009
+ * \version 0.4.0
+ * \date 16 June 2010
 */
 
 namespace Templates {
+    namespace Internal {
+        class TemplatesPreferencesPage;
+    }
 
 class TemplatesPlugin : public ExtensionSystem::IPlugin
 {
@@ -62,6 +65,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    Internal::TemplatesPreferencesPage *prefPage;
 };
 
 

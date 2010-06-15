@@ -58,6 +58,11 @@ TemplatesPlugin::TemplatesPlugin()
 
 TemplatesPlugin::~TemplatesPlugin()
 {
+    qWarning() << "TemplatesPlugin::~TemplatesPlugin()";
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
 }
 
 bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -70,6 +75,12 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
 
+    // add plugin info page
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    prefPage = new Internal::TemplatesPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addObject(prefPage);
+
     // Initialize template database
     Templates::TemplateBase::instance();
 
@@ -80,10 +91,6 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
-
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new Internal::TemplatesPreferencesPage(this));
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);

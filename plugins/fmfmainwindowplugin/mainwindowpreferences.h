@@ -45,8 +45,6 @@
 
 #include <fmfmainwindowplugin/virtualdatabasepreferences.h>
 
-#include "ui_mainwindowpreferenceswidget.h"
-
 #include <QPointer>
 #include <QObject>
 
@@ -54,7 +52,7 @@
  * \file mainwindowpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 10 June 2010
+ * \date 15 June 2010
 */
 
 namespace Core {
@@ -63,52 +61,6 @@ class ISettings;
 
 namespace MainWin {
 namespace Internal {
-
-class MainWindowPreferencesWidget : public QWidget, private Ui::MainWindowPreferencesWidget
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(MainWindowPreferencesWidget)
-
-public:
-    explicit MainWindowPreferencesWidget(QWidget *parent = 0);
-
-    static void writeDefaultSettings(Core::ISettings *s);
-    void setDatasToUi();
-
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-    void on_testButton_clicked();
-
-protected:
-    virtual void changeEvent(QEvent *e);
-};
-
-
-class MainWindowPreferencesPage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    MainWindowPreferencesPage(QObject *parent = 0);
-    ~MainWindowPreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<MainWindowPreferencesWidget> m_Widget;
-};
-
 
 class VirtualBasePage : public Core::IOptionsPage
 {

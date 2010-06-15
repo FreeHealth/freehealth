@@ -44,13 +44,6 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="0">
-       <widget class="QCheckBox" name="promptBox">
-        <property name="text">
-         <string>Always save data without prompting user</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
        <widget class="QCheckBox" name="deletionBox">
         <property name="text">
          <string>Always ask for confirmation before deletion</string>

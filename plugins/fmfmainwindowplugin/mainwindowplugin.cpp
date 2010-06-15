@@ -63,10 +63,6 @@ MainWinPlugin::MainWinPlugin() :
 MainWinPlugin::~MainWinPlugin()
 {
     qWarning() << "MainWinPlugin::~MainWinPlugin()";
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
     if (virtualBasePage) {
         removeObject(virtualBasePage);
         delete virtualBasePage; virtualBasePage=0;
@@ -82,6 +78,15 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
+
+    // Add preferences pages
+    virtualBasePage = new Internal::VirtualBasePage();
+    virtualBasePage->checkSettingsValidity();
+    addObject(virtualBasePage);
+
+
     m_MainWindow->initialize(arguments, errorString);
     return true;
 }
@@ -92,18 +97,6 @@ void MainWinPlugin::extensionsInitialized()
         qWarning() << "FREEMEDFORMS::MainWinPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
-
-    // Add preferences pages
-    prefPage = new Internal::MainWindowPreferencesPage();
-    virtualBasePage = new Internal::VirtualBasePage();
-    prefPage->checkSettingsValidity();
-    virtualBasePage->checkSettingsValidity();
-    addObject(prefPage);
-    addObject(virtualBasePage);
-
     m_MainWindow->extensionsInitialized();
 }
 

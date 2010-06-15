@@ -48,15 +48,11 @@
 /**
  * \file mainwindowplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 11 Sept 2009
+ * \version 0.4.0
+ * \date 15 June 2010
 */
 
 namespace MainWin {
-namespace Internal {
-class MainWindowPreferencesPage;
-} // End Internal
-
 class MainWindow;
 
 class MainWinPlugin : public ExtensionSystem::IPlugin
@@ -71,7 +67,6 @@ public:
 
 private:
     MainWindow *m_MainWindow;
-    Internal::MainWindowPreferencesPage *prefPage;
 };
 
 

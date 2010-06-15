@@ -76,8 +76,7 @@ public:
             q(parent)
     {
         ui->setupUi(q);
-        q->connect(ui->searchName, SIGNAL(textChanged(QString)), q, SLOT(refreshFilter(QString)));
-        q->connect(ui->searchSurname, SIGNAL(textChanged(QString)), q, SLOT(refreshFilter(QString)));
+        q->connect(ui->searchLine, SIGNAL(textChanged(QString)), q, SLOT(refreshFilter(QString)));
     }
 
     ~PatientSelectorPrivate()
@@ -85,30 +84,41 @@ public:
         delete ui;
     }
 
-//    void createSearchToolButtons()
-//    {
-//        m_SearchToolButton = new QToolButton(searchLine);   // parent object will be redefined
-//        m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
-//        m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-//
-//        Core::Command *cmd = actionManager()->command(Constants::A_SEARCH_BY_NAME);
-//        m_SearchToolButton->addAction(cmd->action());
-//        cmd->action()->trigger();
-//
-//        cmd = am->command(Constants::A_SEARCH_BY_NAME_SURNAME);
-//        m_SearchToolButton->addAction(cmd->action());
-//        cmd = am->command(Constants::A_SEARCH_INN);
-//        m_SearchToolButton->addAction(cmd->action());
-//
-//        m_DrugsHistoricButton = new QToolButton(searchLine);
-//        m_DrugsHistoricButton->setPopupMode(QToolButton::InstantPopup);
-//        m_DrugsHistoricButton->setToolTip(tr("Selected drugs historic."));
-//        m_DrugsHistoricButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT));
-//
-//        // add buttons to search line
-//        searchLine->setLeftButton(m_SearchToolButton);
-//        searchLine->setRightButton(m_DrugsHistoricButton);
-//    }
+    void createSearchToolButtons()
+    {
+        m_SearchToolButton = new QToolButton(ui->searchLine);   // parent object will be redefined
+        m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
+        m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+
+        Core::Command *cmd;
+        QStringList actions;
+        actions
+                << Constants::A_SEARCH_PATIENTS_BY_NAME
+                << Constants::A_SEARCH_PATIENTS_BY_SURNAME
+                << Constants::A_SEARCH_PATIENTS_BY_NAMESURNAME
+                << Constants::A_SEARCH_PATIENTS_BY_DOB;
+
+        QList<QAction *> l;
+        foreach(const QString &a, actions) {
+            cmd = actionManager()->command(a);
+            m_SearchToolButton->addAction(cmd->action());
+            l << cmd->action();
+        }
+
+        // add buttons to search line
+        ui->searchLine->setLeftButton(m_SearchToolButton);
+
+        int id = settings()->value(Constants::S_SEARCHMETHOD, 0).toInt();
+        if (id < l.count() && id >= 0) {
+            l.at(id)->trigger();
+            l.at(id)->setChecked(true);
+        }
+    }
+
+    void saveSettings()
+    {
+        settings()->setValue(Constants::S_SEARCHMETHOD, m_SearchMethod);
+    }
 
 
 public:
@@ -116,6 +126,7 @@ public:
     PatientModel *m_Model;
     PatientSelector::FieldsToShow m_Fields;
     QToolButton *m_SearchToolButton;
+    int m_SearchMethod;
 
 private:
     PatientSelector *q;
@@ -149,10 +160,21 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 
 PatientSelector::~PatientSelector()
 {
+    d->saveSettings();
     if (d) {
         delete d;
         d = 0;
     }
+}
+
+void PatientSelector::init()
+{
+    d->createSearchToolButtons();
+}
+
+void PatientSelector::setSearchMode(const int search)
+{
+    d->m_SearchMethod = search;
 }
 
 void PatientSelector::setPatientModel(PatientModel *m)
@@ -197,6 +219,9 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     if (fields & PatientSelector::FullAdress) {
         d->ui->tableView->showColumn(Core::IPatient::FullAddress);
     }
+
+    // debug
+    d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
@@ -210,20 +235,25 @@ void PatientSelector::changeIdentity(const QModelIndex &current, const QModelInd
     d->ui->identity->setCurrentIndex(current);
 }
 
-
-void PatientSelector::refreshFilter(const QString &text)
+void PatientSelector::refreshFilter(const QString &)
 {
     if (!d->m_Model)
         return;
+    QString text = d->ui->searchLine->searchText();
     if (text.length() < 3)
         return;
-    const QString &name = d->ui->searchName->text();
-    const QString &sur = d->ui->searchSurname->text();
-    if (name.length() >= 3 || sur.length() >= 3)
-        d->m_Model->setFilter(name, sur);
+    QString name, surname;
+    switch (d->m_SearchMethod) {
+    case SearchByName: name = text; break;
+    case SearchByNameSurname: name = text.mid(0,text.indexOf(";")).trimmed(); surname = text.right(text.indexOf(";")); break;
+    case SearchBySurname: surname = text; break;
+    case SearchByDOB: break;
+    }
+
+    if (name.length() >= 3 || surname.length() >= 3)
+        d->m_Model->setFilter(name, surname);
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
-
 
 void PatientSelector::changeEvent(QEvent *e)
 {
@@ -236,5 +266,3 @@ void PatientSelector::changeEvent(QEvent *e)
         break;
     }
 }
-
-//#include "patientselector.moc"

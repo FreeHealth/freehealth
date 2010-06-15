@@ -63,11 +63,12 @@ namespace Form {
 class FormFilesSelectorWidget;
 }
 
+namespace Core {
+class IOptionsPage;
+}
+
 namespace MainWin {
 namespace Internal {
-namespace Ui{
-class MainWindowPreferencesWidget;
-}  // End namespace Ui
 }  // End namespace Internal
 
 class MAINWIN_EXPORT AppConfigWizard : public QWizard
@@ -121,7 +122,7 @@ private Q_SLOTS:
     void on_testButton_clicked();
 
 private:
-    Internal::Ui::MainWindowPreferencesWidget *m_ui;
+    QList<Core::IOptionsPage *> pages;
 };
 
 class PatientFilePage: public QWizardPage
