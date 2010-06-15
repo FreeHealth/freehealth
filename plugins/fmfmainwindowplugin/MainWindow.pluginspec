@@ -6,11 +6,9 @@
     <url>http://www.ericmaeker.fr/FreeMedForms/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.9"/>
-        <dependency name="Drugs" version="0.0.9"/>
         <dependency name="Printer" version="0.0.9"/>
         <dependency name="FormManager" version="0.0.9"/>
         <dependency name="UserManager" version="0.0.9"/>
         <dependency name="PatientBase" version="0.0.9"/>
-        <dependency name="DrugsBase" version="0.0.9"/>
     </dependencyList>
 </plugin>
