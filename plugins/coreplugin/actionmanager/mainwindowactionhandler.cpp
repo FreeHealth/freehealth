@@ -89,6 +89,12 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         QMainWindow(parent),
+        aGeneralNew(0), aGeneralOpen(0), aGeneralSave(0), aGeneralSaveAs(0), aGeneralPrint(0), aGeneralPrintPreview(0), aGeneralQuit(0),
+        aGeneralPatientNew(0), aGeneralPatientViewIdentity(0), aGeneralPatientRemove(0),
+        aGeneralUndo(0), aGeneralRedo(0), aGeneralCut(0), aGeneralCopy(0), aGeneralPaste(0), aGeneralSelectAll(0),
+        aGeneralAppPrefs(0), aGeneralAppConfigurator(0), aGeneralPlugsPrefs(0), aGeneralMedinTux(0),
+        aGeneralAppAbout(0), aGeneralPlugsAbout(0), aGeneralAppHelp(0), aGeneralQtAbout(0), aGeneralDebugDialog(0),
+        aGeneralCheckUpdate(0), aGeneralUpdateAvailable(0),
         aNew(0),
         aOpen(0),
         aSave(0),
@@ -124,6 +130,382 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
 
 MainWindowActionHandler::~MainWindowActionHandler()
 {
+}
+
+void MainWindowActionHandler::createGeneralMenu()
+{
+    // creates menu bar
+    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    if (!menubar) {
+        menubar = actionManager()->createMenuBar(Constants::MENUBAR);
+#ifndef Q_WS_MAC
+        setMenuBar(menubar->menuBar());
+#endif
+    }
+    menubar->appendGroup(Constants::G_GENERAL);
+
+    // Create menu
+    ActionContainer *menu = actionManager()->createMenu(Constants::M_GENERAL);
+    menubar->addMenu(menu, Constants::G_GENERAL);
+    menu->setTranslations(Trans::Constants::GENERAL);
+    menu->appendGroup(Constants::G_GENERAL_FILE);
+    menu->appendGroup(Constants::G_GENERAL_RECENTS);
+    menu->appendGroup(Constants::G_GENERAL_EDIT);
+    menu->appendGroup(Constants::G_GENERAL_PATIENTS);
+    menu->appendGroup(Constants::G_GENERAL_USERS);
+    menu->appendGroup(Constants::G_GENERAL_PRINT);
+    menu->appendGroup(Constants::G_GENERAL_CONFIG);
+    menu->appendGroup(Constants::G_GENERAL_HELP);
+    menu->appendGroup(Constants::G_GENERAL_OTHERS);
+    menu->appendGroup(Constants::G_GENERAL_EXIT);
+    ActionContainer *newmenu = actionManager()->createMenu(Constants::M_GENERAL_NEW);
+    newmenu->setTranslations(Trans::Constants::FILENEW_TEXT);
+    menu->addMenu(newmenu, Constants::G_GENERAL_FILE);
+    newmenu->appendGroup(Constants::G_GENERAL_NEW);
+}
+
+void MainWindowActionHandler::createGeneralActions(const int actions)
+{
+    if (!actions)
+        return;
+
+    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    ActionContainer *menu = actionManager()->actionContainer(Constants::M_GENERAL);
+    Q_ASSERT(menu);
+    if (!menu)
+        return;
+    ActionContainer *newmenu = actionManager()->createMenu(Constants::M_GENERAL_NEW);
+    Q_ASSERT(newmenu);
+    if (!newmenu)
+        return;
+
+    QAction *a = 0;
+    Command *cmd = 0;
+    QString group = Constants::G_GENERAL_FILE;
+
+    // New File Action
+    if (actions & Core::MainWindowActions::A_FileNew) {
+        a = aGeneralNew = new QAction(this);
+        a->setIcon(QIcon(Constants::ICONFILENEW));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_NEW, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::New);
+        cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
+        newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
+    }
+    
+    // Open Action
+    if (actions & Core::MainWindowActions::A_FileOpen) {
+        // Create action
+        a = aGeneralOpen = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONOPEN));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_OPEN, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::Open);
+        cmd->setTranslations(Trans::Constants::FILEOPEN_TEXT );
+        menu->addAction(cmd, group);
+    }
+
+    // Save Action
+    if (actions & Core::MainWindowActions::A_FileSave) {
+        a = aGeneralSave = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONSAVE));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVE, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::Save);
+        cmd->setTranslations(Trans::Constants::FILESAVE_TEXT );
+//        cmd->setAttribute(Command::CA_UpdateText);
+        menu->addAction(cmd, group);
+    }
+
+    // SaveAs Action
+    if (actions & Core::MainWindowActions::A_FileSaveAs) {
+        a = aGeneralSaveAs = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONSAVEAS));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
+#if QT_VERSION >= 0x040500
+        cmd->setDefaultKeySequence(QKeySequence::SaveAs);
+#else
+        cmd->setDefaultKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+#endif
+        cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
+        menu->addAction(cmd, group);
+    }
+
+    group = Constants::G_GENERAL_PRINT;
+
+    // Print Action
+    if (actions & Core::MainWindowActions::A_FilePrint) {
+        a = aGeneralPrint = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONPRINT));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::Print);
+        cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
+        menu->addAction(cmd, group);
+    }
+
+    // Print Preview
+    if (actions & Core::MainWindowActions::A_FilePrintPreview) {
+        a = aGeneralPrintPreview = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONPRINTPREVIEW));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINTPREVIEW, ctx);
+//        cmd->setDefaultKeySequence(QKeySequence::Print);
+        cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT );
+        menu->addAction(cmd, group);
+    }
+
+    group = Constants::G_GENERAL_EXIT;
+
+    // Quit Action
+    if (actions & Core::MainWindowActions::A_FileQuit) {
+        a = aGeneralQuit = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONQUIT));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
+        cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
+        cmd->action()->setMenuRole(QAction::QuitRole);
+        menu->addAction(cmd, group);
+        connect(aQuit, SIGNAL(triggered()), this, SLOT(close()));
+    }
+
+//    group = Constants::G_GENERAL_EDIT;
+//
+//    // Undo Action
+//    if (actions & Core::MainWindowActions::A_) {
+//    a = aGeneralUndo = new QAction(this);
+//    a->setObjectName("aGeneralUndo");
+//    a->setIcon(theme()->icon(Constants::ICONUNDO));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_UNDO, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::Undo);
+//    //    cmd->setAttribute(Command::CA_UpdateText);
+//    cmd->setTranslations(Trans::Constants::EDITUNDO_TEXT);
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+//
+//    // Redo Action
+//    a = aGeneralRedo = new QAction(this);
+//    a->setObjectName("aGeneralRedo");
+//    a->setIcon(theme()->icon(Constants::ICONREDO));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_REDO, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::Redo);
+//    //    cmd->setAttribute(Command::CA_UpdateText);
+//    cmd->setTranslations(Trans::Constants::EDITREDO_TEXT);
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+//
+//    // Cut Action
+//    a = aGeneralCut = new QAction(this);
+//    a->setObjectName("aGeneralCut");
+//    a->setIcon(theme()->icon(Constants::ICONCUT));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_CUT, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::Cut);
+//    cmd->setTranslations(Trans::Constants::EDITCUT_TEXT );
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+//
+//    // Copy Action
+//    a = aGeneralCopy = new QAction(this);
+//    a->setObjectName("aGeneralCopy");
+//    a->setIcon(theme()->icon(Constants::ICONCOPY));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_COPY, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::Copy);
+//    cmd->setTranslations(Trans::Constants::EDITCOPY_TEXT );
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+//
+//    // Paste Action
+//    a = aGeneralPaste = new QAction(this);
+//    a->setObjectName("aGeneralPaste");
+//    a->setIcon(theme()->icon(Constants::ICONPASTE));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_PASTE, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::Paste);
+//    cmd->setTranslations(Trans::Constants::EDITPASTE_TEXT );
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+//
+//    // SelectAll Action
+//    a = aGeneralSelectAll = new QAction(this);
+//    a->setObjectName("aGeneralSelectAll");
+//    a->setIcon(theme()->icon(Constants::ICONSELECTALL));
+//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_SELECTALL, ctx);
+//    cmd->setDefaultKeySequence(QKeySequence::SelectAll);
+//    cmd->setTranslations(Trans::Constants::EDITSELECTALL_TEXT );
+//    menu->addAction(cmd, group);
+//    a->setEnabled(false);
+
+    group = Constants::G_GENERAL_PATIENTS;
+
+    // Patient's new
+    if (actions & Core::MainWindowActions::A_Patients_New) {
+        a = aGeneralPatientNew = new QAction(this);
+        a->setObjectName("aGeneralPatientNew");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENT);
+        newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
+    }
+    // Patient's identity
+    if (actions & Core::MainWindowActions::A_Patients_ViewIdentity) {
+        a = aGeneralPatientViewIdentity = new QAction(this);
+        a->setObjectName("aGeneralPatientViewIdentity");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_VIEWIDENTITY, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENTVIEWIDENTITY_TEXT);
+        menu->addAction(cmd, group);
+    }
+    // Patient's remove
+    if (actions & Core::MainWindowActions::A_Patients_Remove) {
+        a = aGeneralPatientRemove = new QAction(this);
+        a->setObjectName("aGeneralPatientRemove");
+        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        cmd = actionManager()->registerAction(a, Constants::A_PATIENT_REMOVE, ctx);
+        cmd->setTranslations(Trans::Constants::PATIENTREMOVE_TEXT);
+        menu->addAction(cmd, group);
+    }
+
+    group = Constants::G_GENERAL_CONFIG;
+
+    // Configuration
+    if (actions & Core::MainWindowActions::A_AppConfigurator) {
+        a = aGeneralAppConfigurator = new QAction(this);
+        a->setObjectName("aGeneralAppConfigurator");
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
+        cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_AppPreferences) {
+        a = aGeneralAppPrefs = new QAction(this);
+        a->setObjectName("aGeneralAppPrefs");
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        a->setMenuRole(QAction::PreferencesRole);
+        cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
+        cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_PluginsPreferences) {
+        a = aGeneralPlugsPrefs = new QAction(this);
+        a->setObjectName("aGeneralPlugsPrefs");
+        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::SelectAll);
+        cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
+        a = aGeneralMedinTux = new QAction(this);
+        a->setObjectName("aGeneralMedinTux");
+        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
+        cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
+        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
+        menu->addAction(cmd, group);
+    }
+
+    group = Constants::G_GENERAL_HELP;
+
+    // Help menu
+    if (actions & Core::MainWindowActions::A_AppAbout) {
+        a = aGeneralAppAbout = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONABOUT));
+        a->setMenuRole(QAction::AboutRole);
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
+        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_PluginsAbout) {
+        a = aGeneralPlugsAbout = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
+        cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_AppHelp) {
+        a = aGeneralAppHelp = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_APPLICATIONHELP, ctx);
+        cmd->setDefaultKeySequence(QKeySequence::HelpContents);
+        cmd->setTranslations(Trans::Constants::HELP_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_QtAbout) {
+        a = aGeneralQtAbout = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONABOUT));
+        a->setMenuRole(QAction::AboutQtRole);
+        cmd = actionManager()->registerAction(a, Constants::A_ABOUTQT, ctx);
+        cmd->setTranslations(Trans::Constants::ABOUTQT_TEXT);
+        menu->addAction(cmd, group);
+    }
+    if (actions & Core::MainWindowActions::A_DebugDialog) {
+        a = aGeneralDebugDialog = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Constants::A_DEBUGHELPER, ctx);
+        cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
+        menu->addAction(cmd, group);
+    }
+
+    if (actions & Core::MainWindowActions::A_CheckUpdate) {
+        a = aGeneralCheckUpdate = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
+        cmd = actionManager()->registerAction(a, Constants::A_CHECKUPDATE, ctx);
+        cmd->setTranslations(Trans::Constants::CHECKUPDATE);
+        menu->addAction(cmd, group);
+    }
+
+}
+
+void MainWindowActionHandler::connectGeneralActions()
+{
+    if (aGeneralNew)
+        connect(aGeneralNew, SIGNAL(triggered()), this, SLOT(newFile()));
+
+    if (aGeneralOpen)
+        connect(aGeneralOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+
+    if (aGeneralSave)
+        connect(aGeneralSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+
+    if (aGeneralSaveAs)
+        connect(aGeneralSaveAs, SIGNAL(triggered()), this, SLOT(saveAsFile()));
+
+    if (aGeneralPrint)
+        connect(aGeneralPrint, SIGNAL(triggered()), this, SLOT(print()));
+
+    if (aGeneralPrintPreview)
+        connect(aGeneralPrintPreview, SIGNAL(triggered()), this, SLOT(printPreview()));
+
+    if (aGeneralQuit)
+        connect(aGeneralQuit, SIGNAL(triggered()), this, SLOT(close()));
+    //    if (aGeneralUndo) {}
+    //    if (aGeneralRedo) {}
+    //    if (aGeneralCut) {}
+    //    if (aGeneralCopy) {}
+    //    if (aGeneralPaste) {}
+    //    if (aGeneralSelectAll) {}
+    if (aGeneralPatientNew)
+        connect(aGeneralPatientNew, SIGNAL(triggered()), this, SLOT(createNewPatient()));
+    if (aGeneralPatientViewIdentity)
+        connect(aGeneralPatientViewIdentity, SIGNAL(triggered()), this, SLOT(viewPatientIdentity()));
+    if (aGeneralPatientRemove)
+        connect(aGeneralPatientRemove, SIGNAL(triggered()), this, SLOT(removePatient()));
+    if (aGeneralAppPrefs)
+        connect(aGeneralAppPrefs, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
+    if (aGeneralAppConfigurator)
+        connect(aGeneralAppConfigurator, SIGNAL(triggered()), this, SLOT(applicationConfiguratorWizard()));
+    if (aGeneralMedinTux)
+        connect(aGeneralMedinTux, SIGNAL(triggered()), this, SLOT(configureMedintux()));
+    if (aGeneralAppAbout)
+        connect(aGeneralAppAbout, SIGNAL(triggered()), this, SLOT(aboutApplication()));
+
+    if (aGeneralPlugsAbout)
+        connect(aGeneralPlugsAbout, SIGNAL(triggered()), this, SLOT(aboutPlugins()));
+
+    if (aGeneralAppHelp)
+        connect(aGeneralAppHelp, SIGNAL(triggered()), this, SLOT(applicationHelp()));
+
+    if (aGeneralQtAbout)
+        connect(aGeneralQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
+
+    if (aGeneralDebugDialog)
+        connect(aGeneralDebugDialog, SIGNAL(triggered()), this, SLOT(debugDialog()));
+
+    if (aGeneralCheckUpdate)
+        connect(aGeneralCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
@@ -307,6 +689,9 @@ void MainWindowActionHandler::createUpdateMenu()
 /** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
 void MainWindowActionHandler::createFileActions(int actions)
 {
+    if (!actions)
+        return;
+
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
     ActionContainer *mfile = actionManager()->actionContainer(Constants::M_FILE);
     mfile->setTranslations(Trans::Constants::M_FILE_TEXT);
@@ -509,8 +894,9 @@ void MainWindowActionHandler::connectEditActions()
 void MainWindowActionHandler::createPatientsActions(int actions)
 {
     /** \todo Patients actions should be exploded into different menus or in a single menu ? */
-    if (actions==0)
+    if (!actions)
         return;
+
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
@@ -558,6 +944,9 @@ void MainWindowActionHandler::connectPatientActions()
 
 void MainWindowActionHandler::createConfigurationActions(int actions)
 {
+    if (!actions)
+        return;
+
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
@@ -657,6 +1046,9 @@ void MainWindowActionHandler::connectConfigurationActions()
 
 void MainWindowActionHandler::createHelpActions(int actions)
 {
+    if (!actions)
+        return;
+
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
@@ -748,6 +1140,7 @@ void MainWindowActionHandler::createTemplatesActions(int actions)
 {
     if (!actions)
         return;
+
     QAction *a = 0;
     Command *cmd = 0;
     QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
@@ -805,6 +1198,7 @@ bool MainWindowActionHandler::aboutPlugins()
 /** \brief Manage action creation. Actions are not connected. \sa Core::MainWindowActions */
 void MainWindowActionHandler::createActions(const Core::MainWindowActions &actions)
 {
+    createGeneralActions(actions.generalActions());
     createFileActions(actions.fileActions());
     createPatientsActions(actions.patientsActions());
     createConfigurationActions(actions.configurationActions());

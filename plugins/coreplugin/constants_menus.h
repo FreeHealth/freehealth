@@ -51,6 +51,8 @@ namespace Constants {
 
 // Menu's name
 const char * const  MENUBAR              = "menuBar";           /*!< \brief Default menubar object name  \ingroup constants_actionmanager */
+const char * const  M_GENERAL            = "menuGeneral";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
+const char * const  M_GENERAL_NEW        = "menuGeneral.New";
 const char * const  M_FILE               = "menuFile";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_TEMPLATES          = "menuTemplates";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
@@ -78,6 +80,21 @@ const char * const  M_HELP_DATABASES     = "menuHelp.DB";       /*!< \brief Defa
 const char * const  M_UPDATE             = "menuUpdate";        /*!< \brief Default menu Update object name  \ingroup constants_actionmanager */
 
 // Groups' name
+// file menu groups
+const char * const G_GENERAL          = "grGeneral";          /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_FILE     = "grGeneral.File";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_NEW      = "grGeneral.New";      /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_RECENTS  = "grGeneral.Recents";  /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_PATIENTS = "grGeneral.Patients";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_USERS    = "grGeneral.Users";  /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_EDIT     = "grGeneral.Edit";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_PRINT    = "grGeneral.Print";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_PLUGINS  = "grGeneral.Plugins";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_CONFIG   = "grGeneral.Config";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_HELP     = "grGeneral.Help";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_OTHERS   = "grGeneral.Others";    /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_GENERAL_EXIT     = "grGeneral.Exit";     /*!< \brief Default group name  \ingroup constants_actionmanager */
+
 // file menu groups
 const char * const G_FILE                = "grFile";          /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_FILE_NEW            = "grFile.New";      /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -265,7 +282,8 @@ const char * const  A_TABLE_SPLITCELLS    = "actionTableSplitCells";     /*!< \b
 const char * const  A_INTERPRETOR_GENERAL     = "actionInterpretor";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // FreeMedForms Tools Actions
-const char * const  A_USERMANAGER     = "actionUserManager";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_USERMANAGER     = "aUserManager";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CREATEUSER      = "aCreateUser";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // About Menu Action's name
 const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */

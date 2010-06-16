@@ -135,7 +135,8 @@ void PrescriptionViewer::createActionsAndToolbar()
 
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);
-        m_ToolBar->addAction(cmd->action());
+        if (cmd)
+            m_ToolBar->addAction(cmd->action());
     }
 
     actionsToAdd.clear();
@@ -149,7 +150,8 @@ void PrescriptionViewer::createActionsAndToolbar()
     m_ToolBar->addSeparator();
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);
-        m_ToolBar->addAction(cmd->action());
+        if (cmd)
+            m_ToolBar->addAction(cmd->action());
     }
     m_ToolBar->addSeparator();
 
@@ -161,8 +163,10 @@ void PrescriptionViewer::createActionsAndToolbar()
 
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);
-        m_ToolBar->addAction(cmd->action());
-        m_ToolBar->addSeparator();
+        if (cmd) {
+            m_ToolBar->addAction(cmd->action());
+            m_ToolBar->addSeparator();
+        }
     }
 
     m_ToolBar->setFocusPolicy(Qt::ClickFocus);

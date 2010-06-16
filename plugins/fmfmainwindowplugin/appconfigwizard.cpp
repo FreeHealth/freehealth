@@ -182,53 +182,18 @@ DatabaseConfigurationPage::DatabaseConfigurationPage(QWidget *parent) :
 
 DatabaseConfigurationPage::~DatabaseConfigurationPage()
 {
-//    if (m_ui) {
-//        delete m_ui;
-//        m_ui = 0;
-//    }
-}
-
-static void saveExternalDatabase(bool use, const QString &host, const QString &log, const QString &pass, const int port)
-{
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool() != use) {
-//        settings()->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, use);
-//        settings()->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(host.toAscii().toBase64()));
-//        settings()->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(port).toAscii().toBase64());
-//        settings()->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(log.toAscii().toBase64()));
-//        settings()->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(pass.toAscii().toBase64()));
-//        Core::ICore::instance()->databaseServerLoginChanged();
-//    }
 }
 
 bool DatabaseConfigurationPage::validatePage()
 {
-//    settings()->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, m_ui->autoSave->isChecked());
-//    settings()->setValue(Utils::Constants::S_CHECKUPDATE, m_ui->updateCheckingCombo->currentIndex());
-//    saveExternalDatabase(m_ui->useExternalDB->isChecked(), m_ui->host->text(), m_ui->log->text(), m_ui->pass->text(), m_ui->port->value());
+    foreach(Core::IOptionsPage *p, pages) {
+        if (p->name()==tkTr(Trans::Constants::GENERAL)) {
+            p->applyChanges();
+            p->finish();
+        }
+    }
     return true;
 }
-
-void DatabaseConfigurationPage::on_testButton_clicked()
-{
-//    m_ui->testConnectionLabel->setText(tr("Test in progress..."));
-//    {
-//        QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "APPCONFIGWIZARD_TEST");
-//        test.setHostName(m_ui->host->text());
-//        test.setPort(m_ui->port->value());
-//        test.setUserName(m_ui->log->text());
-//        test.setPassword(m_ui->pass->text());
-//        if (!test.open()) {
-//            m_ui->testButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
-//            m_ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
-//            m_ui->testConnectionLabel->setToolTip(test.lastError().text());
-//        } else {
-//            m_ui->testButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-//            m_ui->testConnectionLabel->setText(tr("Connected"));
-//        }
-//    }
-//    QSqlDatabase::removeDatabase("APPCONFIGWIZARD_TEST");
-}
-
 
 
 PatientFilePage::PatientFilePage(QWidget *parent) :

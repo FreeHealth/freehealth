@@ -69,9 +69,11 @@ public:
 
 private Q_SLOTS:
     void showUserManager();
+    void createUser();
 
 private:
     QAction *aUserManager;
+    QAction *aCreateUser;
     QPointer<UserManager> m_UserManager;
 };
 

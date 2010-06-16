@@ -143,7 +143,8 @@ void MainWindow::init()
     Q_ASSERT(contextManager());
 
     // create menus
-    createFileMenu();
+//    createFileMenu();
+    createGeneralMenu();
     createPatientMenu();
     createEditMenu();
     createFormatMenu();
@@ -153,26 +154,34 @@ void MainWindow::init()
     createHelpMenu();
 
     // Connect menus for recent managers
-    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-    Q_ASSERT(fmenu);
-    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+//    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+//    Q_ASSERT(fmenu);
+//    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
     Q_ASSERT(pmenu);
     connect(pmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentPatients()));
 
     Core::MainWindowActions actions;
 
-    actions.setFileActions(
+//    actions.setFileActions(
+//            Core::MainWindowActions::A_FileNew  |
+//            Core::MainWindowActions::A_FileOpen |
+//            Core::MainWindowActions::A_FileSave |
+//            Core::MainWindowActions::A_FileSaveAs |
+//            Core::MainWindowActions::A_FilePrint |
+//            Core::MainWindowActions::A_FileQuit
+//            );
+
+    actions.setGeneralActions(
             Core::MainWindowActions::A_FileNew  |
-            Core::MainWindowActions::A_FileOpen |
             Core::MainWindowActions::A_FileSave |
-            Core::MainWindowActions::A_FileSaveAs |
             Core::MainWindowActions::A_FilePrint |
-            Core::MainWindowActions::A_FileQuit
+            Core::MainWindowActions::A_FilePrintPreview |
+            Core::MainWindowActions::A_FileQuit |
+            Core::MainWindowActions::A_Patients_New
             );
 
     actions.setPatientsActions(
-            Core::MainWindowActions::A_Patients_New |
             Core::MainWindowActions::A_Patients_ViewIdentity |
             Core::MainWindowActions::A_Patients_Remove
             );
@@ -198,6 +207,7 @@ void MainWindow::init()
     createActions(actions);
 
     connectFileActions();
+    connectGeneralActions();
     connectPatientActions();
     connectConfigurationActions();
     connectHelpActions();

@@ -36,6 +36,7 @@
 #include "usermodel.h"
 #include "widgets/usermanager.h"
 #include "widgets/useridentifier.h"
+#include "widgets/userwizard.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -107,7 +108,7 @@ static inline bool identifyUser()
 
 
 UserManagerPlugin::UserManagerPlugin() :
-        m_UserManager(0)
+        m_UserManager(0), aCreateUser(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
@@ -143,18 +144,41 @@ void UserManagerPlugin::extensionsInitialized()
         qWarning() << "UserManagerPlugin::extensionsInitialized";
 
     // add UserManager toogler action to plugin menu
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PLUGINS);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
     Q_ASSERT(menu);
+    if (!menu)
+        return;
+    Core::ActionContainer *newmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
+    Q_ASSERT(newmenu);
+    if (!newmenu)
+        return;
+
     QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
-    aUserManager = new QAction(this);
-    aUserManager->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
-    Core::Command *cmd = actionManager()->registerAction(aUserManager, Core::Constants::A_USERMANAGER, ctx);
+    QAction *a = 0;
+    Core::Command *cmd = 0;
+
+    // User Manager action
+    a = aUserManager = new QAction(this);
+    a->setObjectName("aUserManager");
+    a->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
+    cmd = actionManager()->registerAction(aUserManager, Core::Constants::A_USERMANAGER, ctx);
     Q_ASSERT(cmd);
-//    cmd->setDefaultKeySequence(QKeySequence::New);
     cmd->setTranslations(Trans::Constants::USERMANAGER_TEXT);
-    menu->addAction(cmd,Core::Constants::G_PLUGINS_USERMANAGER);
+    menu->addAction(cmd, Core::Constants::G_GENERAL_USERS);
     cmd->retranslate();
     connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
+
+    // Create user
+    a = aCreateUser = new QAction(this);
+    a->setObjectName("aCreateUser");
+    a->setIcon(QIcon(Core::Constants::ICONNEWUSER));
+    cmd = actionManager()->registerAction(aCreateUser, Core::Constants::A_CREATEUSER, ctx);
+    Q_ASSERT(cmd);
+    cmd->setTranslations(Trans::Constants::USER);
+    newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
+    cmd->retranslate();
+    connect(aCreateUser, SIGNAL(triggered()), this, SLOT(createUser()));
+
     // Update context is necessary
     contextManager()->updateContext();
 
@@ -171,5 +195,11 @@ void UserManagerPlugin::showUserManager()
     }
 }
 
+void UserManagerPlugin::createUser()
+{
+    UserWizard wiz;
+    wiz.createUser(true);
+    wiz.exec();
+}
 
 Q_EXPORT_PLUGIN(UserManagerPlugin)

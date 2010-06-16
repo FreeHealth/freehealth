@@ -54,7 +54,10 @@
 namespace Core {
 
 /** Use this class to pass informations on the desired actions to be created by the
-   Core::IMainWindow
+   Core::IMainWindow.
+
+   The general menu accept all actions.
+
    \code
        class MyMainWindow : public IMainWindow { .... }
 
@@ -113,9 +116,14 @@ public:
     Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
     Q_DECLARE_FLAGS( PatientsActions, PatientsAction );
 
-    MainWindowActions() : file(0), config(0), help(0), templates(0), patients(0), edit(false) {}
+    MainWindowActions() :
+            general(0), file(0), config(0), help(0), templates(0), patients(0), edit(false)
+    {
+    }
+
     ~MainWindowActions() {}
 
+    void setGeneralActions(int actions) { general = actions; }
     void setFileActions(int actions) { file = actions; }
     void createEditActions(bool yesOrNO) { edit = yesOrNO; }
     void setConfigurationActions(int actions) { config = actions; }
@@ -123,6 +131,7 @@ public:
     void setTemplatesActions(int actions) { templates = actions; }
     void setPatientsActions(int actions) {patients = actions;}
 
+    int generalActions() const { return general; }
     int fileActions() const { return file; }
     bool editActionsToCreate() const { return edit; }
     int configurationActions() const { return config; }
@@ -131,6 +140,7 @@ public:
     int patientsActions() const {return patients;}
 
 private:
+    int general;
     int file;
     int config;
     int help;

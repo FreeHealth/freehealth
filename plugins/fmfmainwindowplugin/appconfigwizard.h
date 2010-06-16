@@ -118,9 +118,6 @@ public:
     ~DatabaseConfigurationPage();
     bool validatePage();
 
-private Q_SLOTS:
-    void on_testButton_clicked();
-
 private:
     QList<Core::IOptionsPage *> pages;
 };

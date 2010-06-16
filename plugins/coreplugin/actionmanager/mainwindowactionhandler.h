@@ -69,6 +69,9 @@ public:
     MainWindowActionHandler(QWidget *parent = 0);
     ~MainWindowActionHandler();
 
+    void createGeneralMenu();
+    void connectGeneralActions();
+
     void createFileMenu();
     void connectFileActions();
 
@@ -91,6 +94,7 @@ public:
     void createTemplatesMenu();
 
     void createActions(const Core::MainWindowActions &actions);
+    void createGeneralActions(const int actions);
     void createFileActions(int actions);
     void createConfigurationActions(int actions);
     void createHelpActions(int actions);
@@ -135,6 +139,13 @@ public Q_SLOTS:
 
 
 protected:
+    QAction *aGeneralNew, *aGeneralOpen, *aGeneralSave, *aGeneralSaveAs, *aGeneralPrint, *aGeneralPrintPreview, *aGeneralQuit;
+    QAction *aGeneralPatientNew, *aGeneralPatientViewIdentity, *aGeneralPatientRemove;
+    QAction *aGeneralUndo, *aGeneralRedo, *aGeneralCut, *aGeneralCopy, *aGeneralPaste, *aGeneralSelectAll;
+    QAction *aGeneralAppPrefs, *aGeneralAppConfigurator, *aGeneralPlugsPrefs, *aGeneralMedinTux;
+    QAction *aGeneralAppAbout, *aGeneralPlugsAbout, *aGeneralAppHelp, *aGeneralQtAbout, *aGeneralDebugDialog;
+    QAction *aGeneralCheckUpdate, *aGeneralUpdateAvailable;
+
     QAction *aNew;
     QAction *aOpen;
     QAction *aSave;
