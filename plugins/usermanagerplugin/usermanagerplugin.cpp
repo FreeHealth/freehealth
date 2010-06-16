@@ -108,7 +108,7 @@ static inline bool identifyUser()
 
 
 UserManagerPlugin::UserManagerPlugin() :
-        m_UserManager(0), aCreateUser(0)
+        aUserManager(0), aCreateUser(0), aChangeUser(0), m_UserManager(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
@@ -179,6 +179,18 @@ void UserManagerPlugin::extensionsInitialized()
     cmd->retranslate();
     connect(aCreateUser, SIGNAL(triggered()), this, SLOT(createUser()));
 
+    // Change current user
+    a = aChangeUser = new QAction(this);
+    a->setObjectName("aChangeUser");
+    a->setIcon(QIcon(Core::Constants::ICONUSER));
+    cmd = actionManager()->registerAction(aChangeUser, "aChangeCurrentUser", ctx);
+    Q_ASSERT(cmd);
+    cmd->setTranslations(tr("Change current user"));
+    menu->addAction(cmd, Core::Constants::G_GENERAL_USERS);
+    cmd->retranslate();
+    connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
+
+
     // Update context is necessary
     contextManager()->updateContext();
 
@@ -200,6 +212,19 @@ void UserManagerPlugin::createUser()
     UserWizard wiz;
     wiz.createUser(true);
     wiz.exec();
+}
+
+void UserManagerPlugin::changeCurrentUser()
+{
+    Internal::UserIdentifier ident;
+    if (ident.exec() == QDialog::Rejected)
+        return;
+    QString log = ident.login();
+    QString pass = ident.cryptedPassword();
+    settings()->setValue(Core::Constants::S_LASTLOGIN, log);
+    settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
+    Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
+                                 .arg(userModel()->currentUserData(Core::IUser::Name).toString()),"","","");
 }
 
 Q_EXPORT_PLUGIN(UserManagerPlugin)

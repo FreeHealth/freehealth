@@ -70,10 +70,12 @@ public:
 private Q_SLOTS:
     void showUserManager();
     void createUser();
+    void changeCurrentUser();
 
 private:
     QAction *aUserManager;
     QAction *aCreateUser;
+    QAction *aChangeUser;
     QPointer<UserManager> m_UserManager;
 };
 

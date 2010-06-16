@@ -87,7 +87,8 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
 {
     // initialization
     setObjectName("UserIdentifier");
-    Core::ICore::instance()->splashScreen()->hide();
+    if (Core::ICore::instance()->splashScreen())
+        Core::ICore::instance()->splashScreen()->hide();
     m_ui = new Ui::UserIdentifier();
     m_ui->setupUi(this);
     m_ui->login->setIcon(theme()->icon(Core::Constants::ICONEYES));
@@ -130,7 +131,8 @@ void UserIdentifier::done(int result)
         } else {
             Utils::Log::addMessage(this, tr("User is identified."));
 	    m->setCurrentUser(login(), cryptedPassword());
-            Core::ICore::instance()->splashScreen()->show();
+            if (Core::ICore::instance()->splashScreen())
+                Core::ICore::instance()->splashScreen()->show();
             QDialog::done(QDialog::Accepted);
         }
     }
