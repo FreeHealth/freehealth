@@ -61,8 +61,9 @@ void ContextManagerPrivate::removeContextObject(IContext *context)
         return;
 
     m_contextWidgets.remove(widget);
-    if (m_activeContext == context)
+    if (m_activeContext == context) {
         updateContextObject(0);
+    }
 }
 
 void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
@@ -160,8 +161,8 @@ void ContextManagerPrivate::updateContext()
 
 void ContextManagerPrivate::updateContextObject(IContext *context)
 {
-    if (!context)
-        return;
+//    if (!context)
+//        return;
 
     if (context == m_activeContext)
         return;
