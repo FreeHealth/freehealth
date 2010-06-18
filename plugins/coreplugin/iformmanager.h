@@ -63,6 +63,14 @@ public:
     IFormManager(QObject *parent) : QObject(parent) {}
     virtual ~IFormManager() {}
 
+    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
+    void activateMode();
+
+    QList<FormMain*> forms() const;
+    bool hasForm(const QString &uuid) const;
+    FormMain *form(const QString &uuid) const;
+
+
     virtual UniqueIDManager *uniqueIDManager() const = 0;
     virtual bool intialize() = 0;
     virtual void extensionsInitialized() = 0;

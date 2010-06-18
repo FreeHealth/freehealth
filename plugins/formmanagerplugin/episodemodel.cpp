@@ -43,6 +43,7 @@
 #include "constants_settings.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
@@ -86,6 +87,13 @@ enum {
 #endif
 
 
+/**
+  \todo When currentpatient change --> read all last episodes of forms and feed the patient model of the
+  PatientDataRepresentation
+*/
+
+
+
 using namespace Form;
 using namespace Trans::ConstantTranslations;
 
@@ -97,6 +105,7 @@ static inline QString currentUserUuid() {return userModel()->currentUserData(Cor
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 
 namespace Form {
@@ -353,11 +362,6 @@ public:
         }
         // reparent items
         foreach(Form::FormMain *f, formManager()->forms()) {
-//        QMapIterator<Form::FormMain *, TreeItem *> i(formsItems);
-//        while (i.hasNext()) {
-//            i.next();
-//            Form::FormMain *f = i.key();
-//            TreeItem *it = i.value();
             TreeItem *it = formsItems.value(f);
             if (f->formParent()) {
                 it->setParent(formsItems.value(f->formParent()));
@@ -368,8 +372,6 @@ public:
             }
             it->setModified(false);
         }
-
-//        sortItems();
         m_FormTreeCreated = true;
     }
 
@@ -654,6 +656,23 @@ public:
         query.finish();
     }
 
+    void feelItemDatasWithXmlContent(Form::FormMain *form, const QString &xml)
+    {
+    }
+
+    void feedPatientModelWithLastEpisodes()
+    {
+        /** \todo here --> read all last episodes and feed patient model with represented datas */
+        foreach(Form::FormMain *f, formManager()->forms()) {
+            foreach(Form::FormItem *item, f->formItemChildren()) {
+                if (item->itemDatas()) {
+                    if (item->patientDataRepresentation()!=-1)
+                        patient()->setValue(item->patientDataRepresentation(), item->itemDatas()->data(Form::IFormItemData::ID_ForPatientModel));
+                }
+            }
+        }
+    }
+
 public:
     QSqlTableModel *m_Sql;
     TreeItem *m_RootItem;
@@ -735,6 +754,7 @@ void EpisodeModel::setCurrentPatient(const QString &uuid)
 {
     d->m_CurrentPatient = uuid;
     d->refreshEpisodes();
+    d->feedPatientModelWithLastEpisodes();
     reset();
 }
 
@@ -1054,12 +1074,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 
     qWarning() << "EpisodeModel::activateEpisode" << d->m_ActualEpisode->data(Id).toInt() << formUid;
 
+
+    /** \todo move this part into a specific member of the private part */
     QString xml = d->m_ActualEpisode->data(XmlContent).toString();
     if (xml.isEmpty()) {
         d->getXmlContent(d->m_ActualEpisode);
         xml = d->m_ActualEpisode->data(XmlContent).toString();
     }
-//    qWarning() << xml;
 
     if (xml.isEmpty())
         return true;

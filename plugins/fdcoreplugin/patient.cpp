@@ -114,8 +114,8 @@ public:
 
 
 /** Constructor */
-Patient::Patient() :
-        IPatient(), d(new PatientPrivate)
+Patient::Patient(QObject *parent) :
+        IPatient(parent), d(new PatientPrivate)
 {
     Q_ASSERT(d);
 }

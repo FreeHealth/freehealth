@@ -36,47 +36,48 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEDIAMS_PATIENT_H
-#define FREEDIAMS_PATIENT_H
+#include "patientmodelwrapper.h"
 
-#include <coreplugin/core_exporter.h>
-#include <coreplugin/ipatient.h>
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformitemdata.h>
 
-#include <QVariant>
+#include <patientbaseplugin/patientmodel.h>
 
-/**
- * \file patient.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 13 June 2010
-*/
-namespace Core {
-namespace Internal {
-class PatientPrivate;
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+
+using namespace MainWin::Internal;
+
+PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
+        Core::IPatient(model), m_Model(model)
+{
 }
 
-class CORE_EXPORT Patient : public IPatient
+PatientModelWrapper::~PatientModelWrapper()
 {
-    Q_OBJECT
-public:
-    Patient(QObject *parent = 0);
-    ~Patient();
+}
 
-    void clear();
-    bool has(const int ref) const;
+QVariant PatientModelWrapper::value(const int ref) const
+{
+    // get datas from the model
+    QVariant result = m_Model->data(m_Model->index(m_Model->currentPatient().row(), ref));
+    if (!result.isNull())
+        return result;
+    foreach(Form::FormMain *f, formManager()->forms()) {
+        foreach(Form::FormItem *item, f->formItemChildren()) {
+            if (item->itemDatas()) {
+                if (item->patientDataRepresentation() == ref)
+                    return item->itemDatas()->data(Form::IFormItemData::ID_ForPatientModel);
+            }
+        }
+    }
+    return QVariant();
+}
 
-    QVariant value(const int ref) const;
-    bool setValue(const int ref, const QVariant &value);
+bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
+{
+    qWarning() << " PatientModelWrapper::setValue" << ref << value;
+    return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);
+}
 
-    QString toXml() const;
-    bool fromXml(const QString &xml);
-
-private:
-    Internal::PatientPrivate *d;
-};
-
-}  // End Core
-
-#endif // FREEDIAMS_PATIENT_H

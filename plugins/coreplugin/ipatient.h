@@ -44,12 +44,13 @@
 #include <coreplugin/core_exporter.h>
 
 #include <QVariant>
+#include <QObject>
 
 /**
  * \file ipatient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 13 June 2010
+ * \date 18 June 2010
 */
 
 
@@ -59,8 +60,9 @@ namespace Core {
   \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to patients datas.
 */
 
-class CORE_EXPORT IPatient
+class CORE_EXPORT IPatient : public QObject
 {
+        Q_OBJECT
 public:
     enum DataRepresentation {
         Id = 0,
@@ -111,6 +113,7 @@ public:
         CreatinClearanceUnit,
 
         // Drugs and diseases
+        DrugsAllergiesWithoutPrecision,
         DrugsUidAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
@@ -123,7 +126,7 @@ public:
         NumberOfColumns
     };
 
-    IPatient() {}
+    IPatient(QObject * parent = 0) : QObject(parent) {}
     virtual ~IPatient() {}
 
     virtual void clear() = 0;

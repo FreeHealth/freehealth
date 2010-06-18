@@ -135,7 +135,9 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
+#ifdef FREEDIAMS
     userPage = new DrugsUserOptionsPage(this);
+#endif
     extraPage = new DrugsExtraOptionsPage(this);
     databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
     protocolPage = new ProtocolPreferencesPage(this);
@@ -145,7 +147,9 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
         selectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         printPage->writeDefaultSettings(Core::ICore::instance()->settings());
+#ifdef FREEDIAMS
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
+#endif
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
         databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         protocolPage->writeDefaultSettings(Core::ICore::instance()->settings());
@@ -153,7 +157,9 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
         viewPage->checkSettingsValidity();
         selectorPage->checkSettingsValidity();
         printPage->checkSettingsValidity();
+#ifdef FREEDIAMS
         userPage->checkSettingsValidity();
+#endif
         extraPage->checkSettingsValidity();
         databaseSelectorPage->checkSettingsValidity();
         protocolPage->checkSettingsValidity();
@@ -162,7 +168,9 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addObject(viewPage);
     addObject(selectorPage);
     addObject(printPage);
+#ifdef FREEDIAMS
     addObject(userPage);
+#endif
     addObject(extraPage);
     addObject(databaseSelectorPage);
     addObject(protocolPage);

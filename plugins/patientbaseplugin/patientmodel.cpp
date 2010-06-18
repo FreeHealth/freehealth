@@ -76,31 +76,6 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 namespace Patients {
 namespace Internal {
 
-/** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
-class PatientModelWrapper : public Core::IPatient
-{
-public:
-    PatientModelWrapper(PatientModel *model) :
-            Core::IPatient(), m_Model(model) {}
-
-    ~PatientModelWrapper() {}
-
-    // IPatient interface
-    void clear() {}
-    bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
-
-    QVariant value(const int ref) const {return m_Model->data(m_Model->index(m_Model->currentPatient().row(), ref));}
-    bool setValue(const int ref, const QVariant &value) {return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);}
-
-    /** \todo Is this needed in freemedforms ? */
-    QString toXml() const {return QString();}
-    bool fromXml(const QString &xml) {return true;}
-
-private:
-    PatientModel *m_Model;
-};
-
-
 
 class PatientModelPrivate
 {
@@ -108,14 +83,14 @@ public:
     PatientModelPrivate(PatientModel *parent) :
             m_SqlPatient(0),
             m_SqlPhoto(0),
-            m_PatientWrapper(new PatientModelWrapper(parent)),
+//            m_PatientWrapper(new PatientModelWrapper(parent)),
             q(parent)
     {
         m_UserUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
         q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(changeUserUuid(QString)));
 
         // install the Core Patient wrapper
-        Core::ICore::instance()->setPatient(m_PatientWrapper);
+//        Core::ICore::instance()->setPatient(m_PatientWrapper);
     }
 
     ~PatientModelPrivate ()
@@ -128,10 +103,10 @@ public:
             delete m_SqlPhoto;
             m_SqlPhoto = 0;
         }
-        if (m_PatientWrapper) {
-            delete m_PatientWrapper;
-            m_PatientWrapper = 0;
-        }
+//        if (m_PatientWrapper) {
+//            delete m_PatientWrapper;
+//            m_PatientWrapper = 0;
+//        }
     }
 
     void connectSqlPatientSignals()
@@ -262,7 +237,7 @@ public:
 
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
-    PatientModelWrapper *m_PatientWrapper;
+//    PatientModelWrapper *m_PatientWrapper;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;

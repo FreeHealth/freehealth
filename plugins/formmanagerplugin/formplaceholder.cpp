@@ -93,9 +93,15 @@ public:
 
     ~FormPlaceHolderPrivate()
     {
-        delete m_FileTree; m_FileTree = 0;
-        delete m_Stack; m_Stack = 0;
-        delete m_GeneralLayout; m_GeneralLayout=0;
+        if (m_FileTree) {
+            delete m_FileTree; m_FileTree = 0;
+        }
+        if (m_Stack) {
+            delete m_Stack; m_Stack = 0;
+        }
+        if (m_GeneralLayout) {
+            delete m_GeneralLayout; m_GeneralLayout=0;
+        }
     }
 
     void populateStackLayout()

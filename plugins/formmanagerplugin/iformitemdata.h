@@ -53,7 +53,8 @@ public:
     enum DataRepresentation {
         ID_EpisodeDate = 0,
         ID_EpisodeLabel,
-        ID_UserName
+        ID_UserName,
+        ID_ForPatientModel
     };
 
     IFormItemData() {}

@@ -34,6 +34,7 @@
  ***************************************************************************/
 #include "mainwindow.h"
 #include "appconfigwizard.h"
+#include "patientmodelwrapper.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -128,7 +129,8 @@ MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
         m_modeStack(0),
         m_PatientBar(0),
-        m_RecentPatients(0)
+        m_RecentPatients(0),
+        m_PatientModelWrapper(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -162,15 +164,6 @@ void MainWindow::init()
     connect(pmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentPatients()));
 
     Core::MainWindowActions actions;
-
-//    actions.setFileActions(
-//            Core::MainWindowActions::A_FileNew  |
-//            Core::MainWindowActions::A_FileOpen |
-//            Core::MainWindowActions::A_FileSave |
-//            Core::MainWindowActions::A_FileSaveAs |
-//            Core::MainWindowActions::A_FilePrint |
-//            Core::MainWindowActions::A_FileQuit
-//            );
 
     actions.setGeneralActions(
             Core::MainWindowActions::A_FileNew  |
@@ -268,14 +261,23 @@ void MainWindow::extensionsInitialized()
 MainWindow::~MainWindow()
 {
     qWarning() << "MainWindow::~MainWindow()";
+//    if (m_PatientModelWrapper) {
+//        delete m_PatientModelWrapper;
+//        m_PatientModelWrapper = 0;
+//    }
 }
 
 void MainWindow::postCoreInitialization()
 {
+    // Manage current user
     on_currentUser_Changed();
     connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
     connect(userModel(), SIGNAL(userDocumentsChanged()), this, SLOT(on_currentUser_Changed()));
     
+    // Create IPatient
+    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
+    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
+
     // Create and insert the patient tab in the formplaceholder
     m_PatientBar = new Patients::PatientBar(this);
     formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);

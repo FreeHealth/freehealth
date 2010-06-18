@@ -43,6 +43,7 @@
     <label lang="xx">Medical history</label>
     <label lang="fr">Antécédents</label>
     <options>compact;unique</options>
+    <icon>%theme%/previous.png</icon>
     <Item>
       <name>medicalhistory</name>
       <type>texteditor</type>
@@ -180,6 +181,7 @@
         <type>prescriptor</type>
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
+        <patientdata>drugs::chronic</patientdata>
       </Item>
       <Item>
         <type>texteditor</type>
@@ -199,6 +201,7 @@
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
         <options>hideselector</options>
+        <patientdata>drugs::allergies</patientdata>
       </Item>
       <Item>
         <type>texteditor</type>
@@ -213,6 +216,7 @@
     <type>form</type>
     <name>soap_form</name>
     <label>SOAP</label>
+    <icon>%theme%/edit.png</icon>
     <Item>
       <name>soap_subjective</name>
       <type>texteditor</type>

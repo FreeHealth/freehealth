@@ -95,7 +95,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_ContextManager(0),
         m_UID(new UniqueIDManager),
         m_MedinTux(0),
-        m_Patient(new Patient),
+        m_Patient(new Patient(this)),
         m_User(0)
 {
     m_Settings = new SettingsPrivate(this);
@@ -178,7 +178,7 @@ CoreImpl::~CoreImpl()
     delete m_UID;
     delete m_CommandLine;
     delete m_MedinTux;
-    delete m_Patient;
+//    delete m_Patient;
 }
 
 void CoreImpl::createSplashScreen(const QPixmap &pix)

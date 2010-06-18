@@ -41,6 +41,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -74,6 +75,7 @@ namespace {
     static QHash<QString, int> m_ScriptsTypes;
     static QHash<QString, int> m_ValuesTypes;
     static QHash<QString, int> m_SpecsTypes;
+    static QHash<QString, int> m_PatientDatas;
 }
 
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
@@ -141,6 +143,7 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
         IFormIO(absFileName, parent), m_AbsFileName(absFileName), m_Mute(false)
 {
     setObjectName("XmlFormIO");
+
     ::m_ScriptsTypes.clear();
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Form::FormItemScripts::Script_OnLoad);
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_POSTLOAD, Form::FormItemScripts::Script_PostLoad);
@@ -148,12 +151,14 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUECHANGED, Form::FormItemScripts::Script_OnValueChanged);
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Form::FormItemScripts::Script_OnValueRequiered);
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Form::FormItemScripts::Script_OnDependentValueChanged);
+
     ::m_ValuesTypes.clear();
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_UUID, Form::FormItemValues::Value_Uuid);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_NUMERICAL, Form::FormItemValues::Value_Numerical);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_SCRIPT, Form::FormItemValues::Value_Script);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Form::FormItemValues::Value_Possible);
     ::m_ValuesTypes.insert(Constants::TAG_VALUE_DEPENDENCIES, Form::FormItemValues::Value_Dependency);
+
     ::m_SpecsTypes.clear();
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_PLUGINNAME, Form::FormItemSpec::Spec_Plugin);
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_AUTHORS, Form::FormItemSpec::Spec_Author);
@@ -165,6 +170,12 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Form::FormItemSpec::Spec_Label);
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
+
+    ::m_PatientDatas.clear();
+    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
+    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
+    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
+    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
 }
 
 XmlFormIO::~XmlFormIO()
@@ -404,6 +415,12 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         // Name ?
         if (element.tagName() == "name") {
             item->setUuid(element.text());
+        }
+
+        // Patient Data Representation ?
+        i = ::m_PatientDatas.value(element.tagName(), -1);
+        if (i != -1) {
+            item->setPatientDataRepresentation(i);
         }
 
     //             // optional?

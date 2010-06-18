@@ -81,9 +81,7 @@ class FileManager;
 
 namespace MainWin {
 namespace Internal {
-//namespace Ui {
-//class MainWindow;
-//}  // End Ui
+class PatientModelWrapper;
 }  // End Internal
 
 class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
@@ -157,6 +155,8 @@ public:
     int  m_TimerId;
     bool m_OpenLastOpenedForm;
     QByteArray windowState;
+
+    Internal::PatientModelWrapper *m_PatientModelWrapper;
 };
 
 } // End Core

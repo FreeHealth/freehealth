@@ -36,47 +36,50 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEDIAMS_PATIENT_H
-#define FREEDIAMS_PATIENT_H
+#ifndef PATIENTMODELWRAPPER_H
+#define PATIENTMODELWRAPPER_H
 
-#include <coreplugin/core_exporter.h>
 #include <coreplugin/ipatient.h>
 
-#include <QVariant>
-
 /**
- * \file patient.h
+ * \file patientmodelwrapper.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 13 June 2010
+ * \date 18 June 2010
 */
-namespace Core {
-namespace Internal {
-class PatientPrivate;
+
+namespace Patients {
+class PatientModel;
 }
 
-class CORE_EXPORT Patient : public IPatient
+namespace MainWin {
+namespace Internal {
+
+/** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
+class PatientModelWrapper : public Core::IPatient
 {
     Q_OBJECT
 public:
-    Patient(QObject *parent = 0);
-    ~Patient();
+    PatientModelWrapper(Patients::PatientModel *model);
+    ~PatientModelWrapper();
 
-    void clear();
-    bool has(const int ref) const;
+    // IPatient interface
+    void clear() {}
+    bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
 
     QVariant value(const int ref) const;
     bool setValue(const int ref, const QVariant &value);
 
-    QString toXml() const;
-    bool fromXml(const QString &xml);
+    /** \todo Is this needed in freemedforms ? */
+    QString toXml() const {return QString();}
+    bool fromXml(const QString &xml) {return true;}
 
 private:
-    Internal::PatientPrivate *d;
+    Patients::PatientModel *m_Model;
 };
 
-}  // End Core
+}  // End namespace Internal
+}  // End namespace MainWin
 
-#endif // FREEDIAMS_PATIENT_H
+#endif // PATIENTMODELWRAPPER_H

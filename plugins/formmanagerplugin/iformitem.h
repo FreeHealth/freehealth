@@ -104,7 +104,8 @@ public:
             m_Spec(new FormItemSpec),
             m_Scripts(new FormItemScripts),
             m_Values(new FormItemValues(this)),
-            m_ItemDatas(0)
+            m_ItemDatas(0),
+            m_PatientData(-1)
             {}
 
     virtual ~FormItem();
@@ -131,6 +132,10 @@ public:
     virtual QHash<QString,QString> extraDatas() const {return m_ExtraDatas;}
     virtual void clearExtraDatas() {m_ExtraDatas.clear();}
 
+    // Data representation
+    virtual void setPatientDataRepresentation(const int ref) {m_PatientData = ref;}
+    virtual int patientDataRepresentation() const {return m_PatientData;}
+
 public Q_SLOTS:
     virtual void languageChanged();
 
@@ -141,6 +146,7 @@ private:
     Form::IFormWidget *m_FormWidget;
     Form::IFormItemData *m_ItemDatas;
     QHash<QString, QString> m_ExtraDatas;
+    int m_PatientData;
 };
 inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
 {
