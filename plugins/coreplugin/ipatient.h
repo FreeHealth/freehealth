@@ -140,6 +140,10 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
+Q_SIGNALS:
+    void currentPatientChanged();
+    void dataSetted();
+    void dataChanged(const int ref);
 };
 
 }  // End Core
