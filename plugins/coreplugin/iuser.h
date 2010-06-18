@@ -121,7 +121,8 @@ public:
         WriteAll       = 0x00000040,
         Print          = 0x00000100,
         Create         = 0x00000200,
-        Delete         = 0x00000400
+        Delete         = 0x00000400,
+        AllRights      = ReadOwn | ReadDelegates | ReadAll | WriteOwn | WriteDelegates | WriteAll | Print | Create | Delete
     };
     Q_DECLARE_FLAGS(UserRights, UserRight);
 

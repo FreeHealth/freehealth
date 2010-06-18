@@ -55,6 +55,8 @@
 #include <QStringList>
 #include <QList>
 
+#include <QDebug>
+
 namespace Views {
 namespace Internal {
 
@@ -92,6 +94,11 @@ StringListModel::~StringListModel()
 {
     if (d) delete d;
     d=0;
+}
+
+void StringListModel::setReadOnly(bool state)
+{
+    setStringEditable(!state);
 }
 
 void StringListModel::setCheckable( bool state )
@@ -155,12 +162,11 @@ int StringListModel::rowCount( const QModelIndex & ) const
 
 Qt::ItemFlags StringListModel::flags( const QModelIndex & index ) const
 {
-    Qt::ItemFlags f = QAbstractListModel::flags( index );
+    Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     if (d->m_Checkable)
         f |= Qt::ItemIsUserCheckable;
     if (d->m_StringEditable)
         f |= Qt::ItemIsEditable;
-    f |= Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     return f;
 }
 

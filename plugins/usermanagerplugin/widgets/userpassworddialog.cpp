@@ -79,6 +79,11 @@ UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWi
    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 }
 
+void UserPasswordDialog::changeTitle(const QString &title)
+{
+    m_ui->label->setText(title);
+}
+
 /** \brief Return the state of verification. Verification is done when user accepts the dialog. */
 bool UserPasswordDialog::canGetNewPassword()
 {
@@ -97,8 +102,6 @@ void UserPasswordDialog::accept()
 {
     const QString &cryptedNewPass = UserPlugin::crypt(m_ui->newPass->lineEdit()->text());
     const QString &oldPass = UserPlugin::crypt(m_ui->oldPass->lineEdit()->text());
-
-    qWarning() << oldPass << m_ActualPass << cryptedNewPass;
 
     if ((oldPass == m_ActualPass) &&
         (m_ui->newPass->lineEdit()->text() == m_ui->newControl->lineEdit()->text())) {

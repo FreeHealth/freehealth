@@ -53,9 +53,16 @@
 /**
  * \file usermodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 08 March 2009
+ * \version 0.4.0
+ * \date 16 June 2010
 */
+
+namespace Print {
+class PrinterPreviewer;
+class TextDocumentExtra;
+}
+
+
 namespace UserPlugin {
 namespace Internal {
 class UserModelPrivate;
@@ -86,8 +93,11 @@ public:
     virtual void clear();
 
     virtual int columnCount(const QModelIndex & = QModelIndex());
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
     virtual QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    virtual bool setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra);
+
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     virtual void revertRow(int row);

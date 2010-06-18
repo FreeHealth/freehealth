@@ -622,9 +622,14 @@ QDateTime UserBase::recordLastLogin(const QString & log, const QString & pass)
 */
 bool UserBase::saveUser(UserData *user)
 {
+    if (!user->isModified())
+        return true;
+
+    qWarning() << "save user" << user->name();
+
     // connect user database
     QSqlDatabase DB = database();
-    if (! DB.open())
+    if (!DB.open())
 	Utils::Log::addError("UserBase", QCoreApplication::translate("UserBase", "Unable to open database %1").arg(DB.connectionName()));
 
     // if user already exists ==> update   else ==> insert
@@ -663,7 +668,7 @@ bool UserBase::saveUser(UserData *user)
 	    q.bindValue(USER_MAIL, user->mail());
 	    q.bindValue(USER_LANGUAGE, user->language());
 	    q.bindValue(USER_LOCKER, user->locker());
-	    if (! q.exec()) {
+            if (!q.exec()) {
                 error = true;
 		Utils::Log::addQueryError("UserBase", q);
             }
@@ -696,9 +701,11 @@ bool UserBase::saveUser(UserData *user)
                     dyn->setDirty(false);
             }
         }
-        // TODO --> update rights
-        if (!error)
+        /** \todo --> update rights */
+        if (!error) {
 	    Utils::Log::addMessage("UserBase", QCoreApplication::translate("UserBase", "User %1 correctly updated.").arg(user->uuid()));
+            user->setModified(false);
+        }
     } else {
         // INSERT USER
         // add Table USERS
@@ -720,6 +727,7 @@ bool UserBase::saveUser(UserData *user)
             q.exec();
 	    if (! q.isActive())
 		Utils::Log::addQueryError("UserBase", q);
+            user->setId(q.lastInsertId());
         }
         // add dynamic datas
 	if (user->hasModifiedDynamicDatasToStore()) {

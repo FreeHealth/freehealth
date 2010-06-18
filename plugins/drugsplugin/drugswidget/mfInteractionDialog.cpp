@@ -47,9 +47,9 @@
 
 #include "mfInteractionDialog.h"
 
-#ifdef FREEDIAMS
-#  include <fdcoreplugin/patient.h>
-#endif
+#include <coreplugin/ipatient.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/constants.h>
@@ -74,7 +74,7 @@ using namespace DrugsWidget::Internal;
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-
+inline static Core::IUser *user() {return Core::ICore::instance()->user();}
 
 InteractionDialog::InteractionDialog(QWidget *parent) :
     QDialog(parent)
@@ -106,21 +106,23 @@ void InteractionDialog::on_printButton_clicked()
 {
     /** \todo add functionnality to FMF */
     Core::ISettings *s = settings();
-#ifdef FREEDIAMS
     Print::Printer p(this);
     p.askForPrinter(this);
     p.printWithDuplicata(false);
-    QString header = s->value(DrugsDB::Constants::S_USERHEADER).toString();
-    Core::ICore::instance()->patient()->replaceTokens(header);
-    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString( QLocale().dateFormat() ) );
-    p.setHeader(header);
-    header = s->value(DrugsDB::Constants::S_USERFOOTER).toString();
-    header.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with FreeDiams.")));
-    p.setFooter(header);
-    p.addTextWatermark(tr("Made with FreeDiams."), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
-    p.print( textBrowser->toHtml() );
-#endif
+
+    QString paper = user()->value(Core::IUser::PrescriptionHeader).toString();
+    user()->replaceTokens(paper);
+    Core::ICore::instance()->patient()->replaceTokens(paper);
+//    Utils::replaceToken(paper, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
+    p.setHeader(paper);
+
+    paper = user()->value(Core::IUser::PrescriptionFooter).toString();
+    paper.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(tr("Made with %1.").arg(qApp->applicationName())));
+    p.setFooter(paper);
+
+    p.addTextWatermark(tr("Made with %1.").arg(qApp->applicationName()), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
+    p.print(textBrowser->toHtml());
 }
 
 void InteractionDialog::on_zoomIn_clicked()

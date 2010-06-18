@@ -94,6 +94,7 @@ class UserManagerContext : public Core::IContext
 public:
     UserManagerContext(UserManager *parent) : Core::IContext(parent), wgt(parent)
     {
+        setObjectName("UserManagerContext");
         ctx << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Core::Constants::C_USERMANAGER);
     }
     ~UserManagerContext() {}
@@ -167,6 +168,10 @@ UserManager::~UserManager()
     if (Utils::isDebugCompilation())
         qWarning() << "~UserManager";
     Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
 /**

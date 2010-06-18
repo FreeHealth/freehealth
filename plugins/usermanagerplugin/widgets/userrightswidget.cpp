@@ -90,6 +90,8 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     if (role==Qt::CheckStateRole) {
         if (index.row()==1) // All Rights
             return m_Rights == m_NameToRole.value(1) ? Qt::Checked : Qt::Unchecked;
+        if (index.row()==0)
+            return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
         if (m_Rights & m_NameToRole.value(index.row(), 0))
             return Qt::Checked;
         return Qt::Unchecked;

@@ -74,7 +74,7 @@ public:
     QString category() const;
 
     void resetToDefaults() {}
-    void checkSettingsValidity() {VirtualDatabasePreferences::writeDefaultSettings(0);}
+    void checkSettingsValidity() {}
     void applyChanges() {}
     void finish();
 

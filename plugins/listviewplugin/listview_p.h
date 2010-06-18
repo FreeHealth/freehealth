@@ -69,6 +69,7 @@ class ListViewContext : public Core::IContext
 public:
     ListViewContext(ListView *parent) : Core::IContext(parent), w(parent)
     {
+        setObjectName("ListViewContext");
     }
 
     void addContext( int uid )

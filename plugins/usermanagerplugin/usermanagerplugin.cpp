@@ -76,7 +76,7 @@ static inline bool identifyUser()
             userModel()->setCurrentUser(log, pass);
             if (ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                                     .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
+                                                     .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
                                                      QApplication::translate("UserManagerPlugin", "You can pursue with this user or connect with another one."),
                                                      "", QStringList()
                                                      << QApplication::translate("UserManagerPlugin", "Stay connected")
@@ -174,6 +174,7 @@ void UserManagerPlugin::extensionsInitialized()
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));
     cmd = actionManager()->registerAction(aCreateUser, Core::Constants::A_CREATEUSER, ctx);
     Q_ASSERT(cmd);
+    cmd->setDefaultKeySequence(QKeySequence(Qt::CTRL + Qt::Key_N, Qt::CTRL + Qt::Key_U));
     cmd->setTranslations(Trans::Constants::USER);
     newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
     cmd->retranslate();
@@ -192,7 +193,7 @@ void UserManagerPlugin::extensionsInitialized()
 
 
     // Update context is necessary
-    contextManager()->updateContext();
+//    contextManager()->updateContext();
 
 }
 
@@ -224,7 +225,7 @@ void UserManagerPlugin::changeCurrentUser()
     settings()->setValue(Core::Constants::S_LASTLOGIN, log);
     settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                 .arg(userModel()->currentUserData(Core::IUser::Name).toString()),"","","");
+                                 .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),"","","");
 }
 
 Q_EXPORT_PLUGIN(UserManagerPlugin)

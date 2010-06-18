@@ -57,6 +57,7 @@ class TemplatesViewContext : public Core::IContext
 public:
     TemplatesViewContext(Templates::TemplatesView *parent) : Core::IContext(parent), w(parent)
     {
+        setObjectName("TemplatesViewContext");
     }
 
     void addContext(int uid)

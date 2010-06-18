@@ -48,6 +48,7 @@
       <type>texteditor</type>
       <label lang="xx">Medical history</label>
       <label lang="fr">Antécédents</label>
+      <options>FullEditor</options>
     </Item>
   </MedForm>
 

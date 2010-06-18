@@ -64,12 +64,16 @@ const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 const char * const  TOKEN_USERAGE        = "USERAGE";           /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERYEARSOLD   = "USERYEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERFULLNAME   = "USERFULLNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERTITLE      = "USERTITLE";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERNAME       = "USERNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERSECONDNAME = "USERSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERSURNAME    = "USERSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERSPECIALITIES    = "USERSPECIALITIES";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERIDENTIFIANTS    = "USERIDENTIFIANTS";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_USERQUALIFICATIONS    = "USERQUALIFICATIONS";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERFULLADRESS    = "USERFULLADRESS";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";   /*!< /brief Tokens for Patient::replaceTokens() */
+
 
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";

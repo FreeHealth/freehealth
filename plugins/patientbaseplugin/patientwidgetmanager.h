@@ -64,7 +64,7 @@ namespace Internal {
 class PatientContext : public Core::IContext
 {
 public:
-    PatientContext(QWidget *w) : Core::IContext(w), wgt(w) {}
+    PatientContext(QWidget *w) : Core::IContext(w), wgt(w) { setObjectName("PatientContext"); }
     void setContext(QList<int> c) { ctx = c; }
     QList<int> context() const { return ctx; }
     QWidget *widget() { return wgt; }

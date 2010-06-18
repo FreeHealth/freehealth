@@ -82,7 +82,7 @@ public:
     void setObjectName( const QString &name );
 
     virtual QListView *listView() const;
-    virtual QAbstractItemModel * model () const;
+    virtual QAbstractItemModel *model() const;
     virtual void setModel( QAbstractItemModel * model );
     void setModelColumn( int column );
     int modelColumn () const;

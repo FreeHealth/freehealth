@@ -68,7 +68,7 @@ namespace Internal {
 class DrugsContext : public Core::IContext
 {
 public:
-    DrugsContext(DrugsCentralWidget *w) : Core::IContext(w), wgt(w) {}
+    DrugsContext(DrugsCentralWidget *w) : Core::IContext(w), wgt(w) { setObjectName("DrugsContext"); }
 
     void setContext(QList<int> c) { ctx = c; }
 

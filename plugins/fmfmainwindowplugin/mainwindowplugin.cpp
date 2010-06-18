@@ -86,7 +86,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     virtualBasePage->checkSettingsValidity();
     addObject(virtualBasePage);
 
-
     m_MainWindow->initialize(arguments, errorString);
     return true;
 }

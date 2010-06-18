@@ -75,6 +75,7 @@ public:
     virtual bool insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
     virtual bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
 
+    void setReadOnly(bool state);
     void setCheckable( bool state );
     void setStringEditable( bool state );
     void setStringList( const QStringList & strings );

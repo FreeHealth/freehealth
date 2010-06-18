@@ -69,6 +69,8 @@ class TextDocumentExtra;
 }
 
 namespace UserPlugin {
+class UserModel;
+
 namespace Internal {
 class UserDataPrivate;
 class UserDynamicDataPrivate;
@@ -96,7 +98,9 @@ public:
     bool isNull() const;
     bool isDirty() const;
     void setDirty(bool state);
+
     DynamicDataType type() const;
+
     QString name() const;
     void setName(const QString &name);
     int id() const;
@@ -126,20 +130,23 @@ using namespace UserPlugin::Constants;
 class USER_EXPORT UserData
 {
     friend class UserBase;
+    friend class UserPlugin::UserModel;
+
 public:
-    UserData();//(QObject * parent = 0);
-    //UserData(const UserData&);
+    UserData();
     UserData(const QString & uuid);//(QObject * parent = 0);
     ~UserData();
 
     void setModifiable(bool state);
     void setModified(bool state);
     void setCurrent(bool state);
+
     bool isCurrent() const;
     bool isModifiable() const;
     bool isModified() const;
     bool isNull() const;
     bool isEmpty() const;
+
     bool createUuid();
     void setUuid(const QString & val);
 
@@ -151,7 +158,7 @@ public:
     // simplified setters (TODO : some must be logged)
     void  setId(const QVariant & val)                  { setValue(Table_USERS, USER_ID, val); }
     void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
-    void  setLocker(const QVariant & val)               { setValue(Table_USERS, USER_LOCKER ,val); }
+    void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
     void  setLogin(const QVariant & val)               { setValue(Table_USERS, USER_LOGIN, val); }
     void  setCryptedPassword(const QVariant & val)     { setValue(Table_USERS, USER_PASSWORD, val); }
     void  setLastLogin(const QVariant & val)           { setValue(Table_USERS, USER_LASTLOG, val); }
@@ -255,8 +262,8 @@ protected: // use only with database tkUserBase
 
     // getters for database
     bool hasModifiedDynamicDatasToStore() const;
-    QList<UserDynamicData*> modifiedDynamicDatas() const;
     bool hasModifiedRightsToStore() const;
+    QList<UserDynamicData*> modifiedDynamicDatas() const;
     QStringList modifiedRoles() const;
 
     // generic getters for database

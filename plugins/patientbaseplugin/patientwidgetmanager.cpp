@@ -163,6 +163,9 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         return;
     }
     Q_ASSERT(menu);
+    if (!menu)
+        return;
+
     menu->appendGroup(Constants::G_PATIENTS);
     menu->appendGroup(Constants::G_PATIENTS_NEW);
     menu->appendGroup(Constants::G_PATIENTS_SEARCH);
@@ -227,6 +230,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 
 
     a = aViewPatientInformations = new QAction(this);
+    a->setObjectName("aViewPatientInformations");
 //    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
     cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENT_INFOS, globalcontext);
     cmd->setTranslations(Trans::Constants::PATIENT_INFORMATION);
@@ -235,15 +239,17 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 
     // Databases informations
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    if (!hmenu)
+        return;
+
     a = aShowPatientDatabaseInformations = new QAction(this);
+    a->setObjectName("aShowPatientDatabaseInformations");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENTDATABASE_INFOS, globalcontext);
     cmd->setTranslations(Trans::Constants::PATIENT_DATABASE);
     cmd->retranslate();
-    if (hmenu) {
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
-        contextManager()->updateContext();
-    }
+    hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+
     connect(aShowPatientDatabaseInformations,SIGNAL(triggered()), this, SLOT(showPatientDatabaseInformations()));
 
 //    contextManager()->updateContext();

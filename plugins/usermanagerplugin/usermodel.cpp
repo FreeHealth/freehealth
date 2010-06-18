@@ -257,8 +257,20 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
             return false;
     }
 
-    // 2. Get user from Database
-    QString uuid = d->addUserFromDatabase(log64, cryptpass64);
+    // 2. Check "in memory" users
+    QString uuid;
+    foreach(Internal::UserData *u, d->m_Uuid_UserList.values()) {
+        if (u->login()==log64 && u->cryptedPassword()==cryptpass64) {
+            uuid = u->uuid();
+            qWarning() << "Getting user from memory";
+            break;
+        }
+    }
+
+    // 3. Get user from Database
+    if (uuid.isEmpty()) {
+        uuid = d->addUserFromDatabase(log64, cryptpass64);
+    }
     if (uuid.isEmpty()) {
         Utils::Log::addError(this, tr("Unable to retreive user into the model using login and password."));
         return false;
@@ -394,7 +406,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
 /** \brief Create a new row (new user) into the model. */
 bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    if (! d->m_CurrentUserRights & Core::IUser::Create)
+    if (!d->m_CurrentUserRights & Core::IUser::Create)
         return false;
     int i=0;
     for (i=0;i<count;i++)
@@ -406,6 +418,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         // feed the QSqlTableModel with uuid and crypted empty password
         QString uuid = d->createNewEmptyUser(this, row+i);
+        Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
         QModelIndex newIndex = index(row+i, Core::IUser::Uuid);
         if (!QSqlTableModel::setData(newIndex, uuid, Qt::EditRole)) {
             Utils::Log::addError(this, QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
@@ -420,7 +433,6 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         // define a lkid for this user
         int maxLkId = userBase()->getMaxLinkId();
-        qWarning() << maxLkId;
         /** \todo user already have a lkid ? --> manage this */
         QSqlQuery query(database());
         query.prepare(userBase()->prepareInsertQuery(Constants::Table_USER_LK_ID));
@@ -432,6 +444,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
             Utils::Log::addQueryError(this, query);
         }
         userBase()->updateMaxLinkId(maxLkId + 1);
+        user->setLkIds(QList<int>() << maxLkId+1);
     }
     emit memoryUsageChanged();
     return i;
@@ -445,25 +458,29 @@ int UserModel::columnCount(const QModelIndex &)
 /** \brief Define the datas of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
-    if (! value.isValid())
+    if (!value.isValid())
         return false;
-    if(! item.isValid())
+
+    if(!item.isValid())
         return false;
+
     // work only for EditRole
     if (role != Qt::EditRole)
         return false;
+
     // get uuid from real database
     QString uuid = QSqlTableModel::data(QSqlTableModel::index(item.row(), USER_UUID), Qt::DisplayRole).toString();
-    if (! d->m_Uuid_UserList.keys().contains(uuid)) {
+    if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
         emit memoryUsageChanged();
     }
+
     Internal::UserData *user = d->m_Uuid_UserList[uuid];
     // check user write rights
     if (user->isCurrent()) {
-        if (! d->m_CurrentUserRights & Core::IUser::WriteOwn)
+        if (!d->m_CurrentUserRights & Core::IUser::WriteOwn)
             return false;
-    } else if (! d->m_CurrentUserRights & Core::IUser::WriteAll)
+    } else if (!d->m_CurrentUserRights & Core::IUser::WriteAll)
         return false;
     /** \todo if user if a delegate of current user */
 
@@ -496,7 +513,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         case Core::IUser::Language :  user->setLanguage(value); break;
         case Core::IUser::LanguageIndex :
             {
-                if (Core::Translators::availableLocales().count() < value.toInt())
+                if (value.toInt() < Core::Translators::availableLocales().count())
                     user->setLanguage(Core::Translators::availableLocales().at(value.toInt()));
                 break;
             }
@@ -531,14 +548,14 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
         default : return false;
     };
-    emit dataChanged(index(item.row(), 0), index(item.row(), this->columnCount()));
+    Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), this->columnCount()));
     return true;
 }
 
 /** \brief Returns the datas of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
-    if (! item.isValid())
+    if (!item.isValid())
         return QVariant();
 
     // get user
@@ -549,7 +566,8 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     {
         QFont font;
         if (d->m_Uuid_UserList.keys().contains(uuid)) {
-            if (d->m_Uuid_UserList.value(uuid)->isModified())
+            Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+            if (user->isModified())
                  font.setBold(true);
              else
                  font.setBold(false);
@@ -650,7 +668,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case Core::IUser::AdministrativeHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
             case Core::IUser::AdministrativeFooter : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeFooter); break;
             case Core::IUser::AdministrativeWatermark : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeWatermark); break;
-            case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
+            case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionHeader); break;
             case Core::IUser::PrescriptionFooter : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionFooter); break;
             case Core::IUser::PrescriptionWatermark : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionWatermark); break;
 
@@ -689,6 +707,19 @@ void UserModel::setFilter(const QString &/*filter*/)
 {
 }
 
+bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra)
+{
+    Internal::UserData *user = d->m_Uuid_UserList[uuid];
+    if (!user)
+        return false;
+    user->setExtraDocument(extra, ref);
+    user->setModified(true);
+//    foreach(const Internal::UserDynamicData* data, user->modifiedDynamicDatas())
+//        qWarning() << data->name() << data->isDirty();
+//    qWarning();
+    return true;
+}
+
 /** \brief Returns true if model has dirty rows that need to be saved into database. */
 bool UserModel::hasUserToSave()
 {
@@ -722,13 +753,13 @@ bool UserModel::submitUser(const QString &uuid)
         return false;
     // act only on modified users
     if (d->m_Uuid_UserList.value(uuid)->isModified()) {
-        Internal::UserData * user = d->m_Uuid_UserList[uuid];
+        Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
         // check user write rights
         if ((user->isCurrent()) &&
-             (! d->m_CurrentUserRights & Core::IUser::WriteOwn))
+             (!d->m_CurrentUserRights & Core::IUser::WriteOwn))
             toReturn = false;
-        else if ((! user->isCurrent()) &&
-                  (! d->m_CurrentUserRights & Core::IUser::WriteAll))
+        else if ((!user->isCurrent()) &&
+                  (!d->m_CurrentUserRights & Core::IUser::WriteAll))
             toReturn = false;
         else if (!Internal::UserBase::instance()->saveUser(user))
             toReturn = false;
@@ -799,6 +830,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     /** \todo manage user's groups */
     if (d->m_Uuid_UserList.keys().contains(uid)) {
         Internal::UserData *user = d->m_Uuid_UserList.value(uid);
+        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
         return user->linkIds();
     }
     QList<int> lk_ids;
@@ -816,6 +848,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     } else {
         Utils::Log::addQueryError("UserModel", query);
     }
+    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
     return lk_ids;
 }
 

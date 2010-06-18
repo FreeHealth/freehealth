@@ -67,6 +67,7 @@ class UserPasswordDialog : public QDialog
 public:
     explicit UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent = 0);
 
+    void changeTitle(const QString &title);
     bool canGetNewPassword();
     QString cryptedPassword();
 

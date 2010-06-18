@@ -101,6 +101,20 @@ void UserViewer::changeUserTo(const int modelRow)
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewerPrivate::changeUserIndex(const int modelRow)
 {
+    // clear ui
+    genericPreview->headerEditor()->clear();
+    genericPreview->footerEditor()->clear();
+    genericPreview->watermarkEditor()->clear();
+
+    adminPreview->headerEditor()->clear();
+    adminPreview->footerEditor()->clear();
+    adminPreview->watermarkEditor()->clear();
+
+    prescriptionPreview->headerEditor()->clear();
+    prescriptionPreview->footerEditor()->clear();
+    prescriptionPreview->watermarkEditor()->clear();
+
+    // manage row changing
     int oldRow = m_Row;
     m_Row = modelRow;
     checkUserRights();
@@ -169,7 +183,6 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(surnameLineEdit, Core::IUser::Surname);
     m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
     m_Mapper->addMapping(languageCombo, Core::IUser::LanguageIndex, "currentIndex");
-    m_Mapper->addMapping(specialtyListView, Core::IUser::Specialities);
     m_Mapper->addMapping(adressTextEdit, Core::IUser::Adress, "plainText");
     m_Mapper->addMapping(countryLineEdit, Core::IUser::Country);
     m_Mapper->addMapping(zipcodeLineEdit, Core::IUser::Zipcode);

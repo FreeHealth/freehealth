@@ -107,6 +107,8 @@ public:
 
     ~TextEditorPrivate()
     {
+        delete m_Context;
+        m_Context = 0;
     }
 
     void createToolBar()

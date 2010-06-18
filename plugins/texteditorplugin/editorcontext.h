@@ -50,6 +50,7 @@ class EditorContext : public Core::IContext
 public:
     EditorContext(TextEditor *parent) : Core::IContext(parent), w(parent)
     {
+        setObjectName("EditorContext");
     }
 
     void addContext( int uid )

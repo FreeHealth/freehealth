@@ -42,26 +42,38 @@
 
 #include <usermanagerplugin/usermanager_exporter.h>
 
-namespace Utils {
-class LineEditEchoSwitcher;
-}
-
 #include <QObject>
 #include <QWidget>
 #include <QWizardPage>
 #include <QWizard>
+#include <QHash>
+#include <QString>
 class QLabel;
 class QEvent;
 class QLineEdit;
 class QPushButton;
-
+class QCheckBox;
 
 /**
  * \file userwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 17 Sept 2009
+ * \version 0.4.0
+ * \date 16 June 2010
 */
+
+namespace Views {
+class StringListView;
+}
+
+namespace Utils {
+class LineEditEchoSwitcher;
+}
+
+namespace Print {
+class PrinterPreviewer;
+class TextDocumentExtra;
+}
+
 
 namespace UserPlugin {
 
@@ -71,10 +83,28 @@ class USER_EXPORT UserWizard : public QWizard
 {
     Q_OBJECT
 public:
+    enum Pages {
+        LanguageSelectorPage,
+        LoginPasswordPage,
+        IdentityPage,
+        AdressPage,
+        TelsAndMailPage,
+        ProfilPage,
+        SpecialiesQualificationsPage,
+        RightsPage,
+        PaperGenericPage,
+        PaperAdministrativePage,
+        PaperPrescriptionsPage
+    };
+
     UserWizard(QWidget *parent = 0);
 
     void setModelRow(const int row)        { m_Row = row; }
     void createUser(bool state = true)     { m_CreateUser = state; }
+
+    bool setCreatedUserAsCurrent() const;
+
+    static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}
 
 protected Q_SLOTS:
     void done(int r);
@@ -82,6 +112,7 @@ protected Q_SLOTS:
 private:
     int m_Row;
     bool m_Saved, m_CreateUser;
+    static QHash<int, QString> m_Papers;
 };
 
 
@@ -130,6 +161,21 @@ private:
     Utils::LineEditEchoSwitcher *leLogin, *lePassword, *lePasswordConfirm;
 };
 
+class UserProfilPage : public QWizardPage
+{
+    Q_OBJECT
+public:
+    UserProfilPage(QWidget *parent = 0);
+    bool validatePage();
+
+    int nextId() const {return next;}
+
+private:
+    Views::StringListView *view;
+    QCheckBox *box;
+    int next;
+};
+
 class UserSpecialiesQualificationsPage: public QWizardPage
 {
     Q_OBJECT
@@ -144,26 +190,34 @@ public:
     UserRightsPage(QWidget *parent = 0);
 };
 
-class UserGenericPage: public QWizardPage
+class UserPaperPage: public QWizardPage
 {
     Q_OBJECT
 public:
-    UserGenericPage(QWidget *parent = 0);
+    UserPaperPage(const QString &paperName, QWidget *parent = 0);
+    bool validatePage();
+
+    int nextId() const;
+
+private:
+    Print::TextDocumentExtra *header, *footer, *wm;
+    Print::PrinterPreviewer *previewer;
+    QString type;
 };
 
-class UserPrescriptionsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserPrescriptionsPage(QWidget *parent = 0);
-};
-
-class UserAdministrativePage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdministrativePage(QWidget *parent = 0);
-};
+//class UserPrescriptionsPage: public QWizardPage
+//{
+//    Q_OBJECT
+//public:
+//    UserPrescriptionsPage(QWidget *parent = 0);
+//};
+//
+//class UserAdministrativePage: public QWizardPage
+//{
+//    Q_OBJECT
+//public:
+//    UserAdministrativePage(QWidget *parent = 0);
+//};
 
 }  // End UserPlugin
 

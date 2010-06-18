@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKSTRINGLISTVIEW_H
-#define TKSTRINGLISTVIEW_H
+#ifndef STRINGLISTVIEW_H
+#define STRINGLISTVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
 #include <listviewplugin/listview.h>
@@ -49,7 +49,7 @@
 #include <QStringListModel>
 
 /**
- * \file tkStringListView.h
+ * \file stringlistview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.3
  * \date 08 March 2009
@@ -77,4 +77,4 @@ public:
 };
 
 }  // End Views
-#endif // TKSTRINGLISTVIEW_H
+#endif // STRINGLISTVIEW_H

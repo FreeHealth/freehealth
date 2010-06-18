@@ -301,6 +301,9 @@ void MainWindow::postCoreInitialization()
 
 void MainWindow::on_currentUser_Changed()
 {
+    patientModel()->setCurrentPatient(patientModel()->index(0,0));
+    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
+
     // Change window title
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
                    userModel()->currentUserData(Core::IUser::FullName).toString());

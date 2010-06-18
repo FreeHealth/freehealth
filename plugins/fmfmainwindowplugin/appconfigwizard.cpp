@@ -46,10 +46,13 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/ioptionspage.h>
+#include <coreplugin/iuser.h>
 
 #include <formmanagerplugin/formfilesselectorwidget.h>
 
 #include <usermanagerplugin/widgets/userwizard.h>
+#include <usermanagerplugin/widgets/userpassworddialog.h>
+#include <usermanagerplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -67,6 +70,8 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
 
 AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
@@ -82,7 +87,10 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
     setButtonLayout(layout);
-    //    setAttribute(Qt::WA_DeleteOnClose);
+
+    // Delete the login information in settings
+    settings()->setValue(Core::Constants::S_LASTLOGIN, QVariant());
+    settings()->setValue(Core::Constants::S_LASTPASSWORD, QVariant());
 }
 
 void AppConfigWizard::done(int r)
@@ -103,7 +111,6 @@ void AppConfigWizard::done(int r)
 BeginConfigPage::BeginConfigPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    intro = new QLabel(this);
     langLabel = new QLabel(this);
     retranslate();
 
@@ -115,14 +122,13 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     } else {
         cbLanguage->setCurrentIndex(actual);
     }
-    /** \todo connection here ... */
+    /** \todo connection here to retranslate (changeEvent())... */
     connect(cbLanguage, SIGNAL(activated(QString)), Core::Translators::instance(), SLOT(changeLanguage(const QString &)));
 
     registerField("Language", cbLanguage , "currentIndex");
 
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
-    layout->addWidget(intro, 0, 0, 1, 1);
     layout->addWidget(langLabel, 2, 0);
     layout->addWidget(cbLanguage, 2, 1);
     setLayout(layout);
@@ -131,20 +137,36 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
 void BeginConfigPage::retranslate()
 {
     setTitle(tr("Welcome to FreeMedForms"));
+    setSubTitle(tr("<b>Welcome to FreeMedForms</b><br /><br />"
+                   "This wizard will help you to configure the base parameters of the application.<br />"
+                   "At any time, you can cancel this wizard, the default values will be activated "
+                   "for the undefined parameters."));
     langLabel->setText(tr("Select your language"));
-    intro->setText(tr("<b>Welcome to FreeMedForms</b><br /><br />"
-                      "This wizard will help you to configure the base parameters of the application.<br />"
-                      "At any time, you can cancel this wizard, the default values will be activated "
-                      "for the undefined parameters."));
+}
+
+bool BeginConfigPage::validatePage()
+{
+    // if user is admin && password == "admin"
+    if ((user()->value(Core::IUser::Login).toString()==UserPlugin::Constants::DEFAULT_USER_LOGIN) &&
+        (user()->value(Core::IUser::Password).toString()==UserPlugin::Constants::DEFAULT_USER_PASSWORD)) {
+        // ask for a new password
+        UserPlugin::UserPasswordDialog dlg(user()->value(Core::IUser::Password).toString(), this);
+        dlg.changeTitle(tr("You must redefine the default administrator's password"));
+        dlg.exec();
+        if (dlg.canGetNewPassword())
+            user()->setValue(Core::IUser::Password, dlg.cryptedPassword());
+    }
+    return true;
 }
 
 
-
 CreateNewUserPage::CreateNewUserPage(QWidget *parent) :
-        QWizardPage(parent)
+        QWizardPage(parent), passredefined(false)
 {
-    setTitle(tr("Create a new user"));
-    setSubTitle(tr("It is recommended to create a new user instead of using the default one."));
+    setTitle(tr("Create a new user and redefine admin's password."));
+    setSubTitle(tr("It is recommended to create a new user instead of using the default one.\n"
+                   "The default administrator's password must be redefined here."));
+
     QPushButton *but = new QPushButton(tr("Click here to create a new user"), this);
     newUserName = new QLabel(" ", this);
     connect(but, SIGNAL(clicked()), this, SLOT(createNewUser()));
@@ -159,8 +181,19 @@ void CreateNewUserPage::createNewUser()
 {
     UserPlugin::UserWizard wiz(this);
     wiz.createUser(true);
-    wiz.exec();
-    newUserName->setText(tr("New user created."));
+    if (wiz.exec()==QDialog::Accepted) {
+        if (!wiz.setCreatedUserAsCurrent()) {
+            Utils::Log::addError(this, "Can not define the current user to the newly created");
+            newUserName->setText(tr("Can not define the current user to the newly created"));
+        } else {
+            newUserName->setText(tr("New user created."));
+        }
+    }
+}
+
+bool CreateNewUserPage::validatePage()
+{
+    return true;
 }
 
 DatabaseConfigurationPage::DatabaseConfigurationPage(QWidget *parent) :
@@ -223,11 +256,16 @@ VirtualDatabasePage::VirtualDatabasePage(QWidget *parent) :
                    "Just select the number of patients/users you want to create and click on the "
                    "'populate' button."));
 
-    Internal::VirtualDatabasePreferences *vd = new Internal::VirtualDatabasePreferences(this);
+    vd = new Internal::VirtualDatabasePreferences(this);
     QHBoxLayout *l = new QHBoxLayout(this);
     l->setSpacing(0);
     l->setMargin(0);
     l->addWidget(vd);
+}
+
+void VirtualDatabasePage::initializePage()
+{
+    vd->writeDefaultSettings(0);
 }
 
 

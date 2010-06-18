@@ -69,6 +69,7 @@ class IOptionsPage;
 
 namespace MainWin {
 namespace Internal {
+class VirtualDatabasePreferences;
 }  // End namespace Internal
 
 class MAINWIN_EXPORT AppConfigWizard : public QWizard
@@ -88,6 +89,7 @@ class BeginConfigPage: public QWizardPage
     Q_OBJECT
 public:
     BeginConfigPage(QWidget *parent = 0);
+    bool validatePage();
 
 protected:
     void retranslate();
@@ -102,12 +104,15 @@ class CreateNewUserPage: public QWizardPage
     Q_OBJECT
 public:
     CreateNewUserPage(QWidget *parent = 0);
+    bool validatePage();
 
 private Q_SLOTS:
     void createNewUser();
+//    void redefineAdminPassword();
 
 private:
     QLabel *newUserName;
+    bool passredefined;
 };
 
 class DatabaseConfigurationPage: public QWizardPage
@@ -138,6 +143,10 @@ class VirtualDatabasePage: public QWizardPage
     Q_OBJECT
 public:
     VirtualDatabasePage(QWidget *parent = 0);
+    void initializePage();
+
+private:
+    Internal::VirtualDatabasePreferences *vd;
 };
 
 class EndConfigPage: public QWizardPage

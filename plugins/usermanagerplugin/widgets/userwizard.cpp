@@ -58,9 +58,14 @@
 
 #include <texteditorplugin/texteditor.h>
 
+#include <printerplugin/printer.h>
+#include <printerplugin/textdocumentextra.h>
+
 #include <listviewplugin/stringlistview.h>
+#include <listviewplugin/stringlistmodel.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iuser.h>
@@ -83,13 +88,17 @@
 #include <QEvent>
 #include <QPushButton>
 #include <QList>
-#include <QStringListModel>
+#include <QCheckBox>
 
 using namespace UserPlugin;
 using namespace Trans::ConstantTranslations;
 
 static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
+
+QHash<int, QString> UserWizard::m_Papers;
 
 UserWizard::UserWizard(QWidget *parent)
     : QWizard(parent),
@@ -97,17 +106,19 @@ UserWizard::UserWizard(QWidget *parent)
       m_Saved(false),
       m_CreateUser(false)
 {
-    addPage(new UserLanguageSelectorPage);
-    addPage(new UserLoginPasswordPage);
-    addPage(new UserIdentityPage);
-    addPage(new UserAdressPage);
-    addPage(new UserTelsAndMailPage);
-    addPage(new UserSpecialiesQualificationsPage);
-    addPage(new UserRightsPage);
-    addPage(new UserGenericPage);
-    addPage(new UserAdministrativePage);
-    addPage(new UserPrescriptionsPage);
-    this->setWindowTitle(tr("User Creator Wizard"));
+    setPage(LanguageSelectorPage, new UserLanguageSelectorPage(this));
+    setPage(LoginPasswordPage, new UserLoginPasswordPage(this));
+    setPage(IdentityPage, new UserIdentityPage(this));
+    setPage(AdressPage, new UserAdressPage(this));
+    setPage(TelsAndMailPage, new UserTelsAndMailPage(this));
+    setPage(ProfilPage, new UserProfilPage(this));
+    setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
+    setPage(RightsPage, new UserRightsPage(this));
+    setPage(PaperGenericPage, new UserPaperPage("Generic", this));
+    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", this));
+    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", this));
+
+    setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
@@ -117,6 +128,7 @@ UserWizard::UserWizard(QWidget *parent)
 
 void UserWizard::done(int r)
 {
+    validateCurrentPage();
     if (r == QDialog::Rejected) {
         m_Saved = false;
         bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
@@ -195,20 +207,13 @@ void UserWizard::done(int r)
         idx = userModel()->index(m_Row, Core::IUser::AdministrativeRights);
         userModel()->setData(idx, field("Administrative"));
 
-        idx = userModel()->index(m_Row, Core::IUser::GenericHeader);
-        userModel()->setData(idx, field("GenericHeader"));
-        idx = userModel()->index(m_Row, Core::IUser::GenericFooter);
-        userModel()->setData(idx, field("GenericFooter"));
+        const QString &uuid = userModel()->index(m_Row, Core::IUser::Uuid).data().toString();
+        QHashIterator<int, QString> it(m_Papers);
+        while (it.hasNext()) {
+             it.next();
+             userModel()->setPaper(uuid, it.key(), Print::TextDocumentExtra::fromXml(it.value()));
+         }
 
-        idx = userModel()->index(m_Row, Core::IUser::PrescriptionHeader);
-        userModel()->setData(idx, field("PrescrHeader"));
-        idx = userModel()->index(m_Row, Core::IUser::PrescriptionFooter);
-        userModel()->setData(idx, field("PrescrFooter"));
-
-        idx = userModel()->index(m_Row, Core::IUser::AdministrativeHeader);
-        userModel()->setData(idx, field("AdminHeader"));
-        idx = userModel()->index(m_Row, Core::IUser::AdministrativeFooter);
-        userModel()->setData(idx, field("AdminFooter"));
 
 #ifdef DEBUG
         // warn user
@@ -235,6 +240,16 @@ void UserWizard::done(int r)
     }
 }
 
+bool UserWizard::setCreatedUserAsCurrent() const
+{
+    if (!m_CreateUser)
+        return false;
+    return userModel()->setCurrentUser(loginForSQL(field("Login").toString()),
+                                       crypt(field("Password").toString()));
+}
+
+
+
 UserLanguageSelectorPage::UserLanguageSelectorPage(QWidget *parent)
     : QWizardPage(parent), lbl(0)
 {
@@ -243,7 +258,7 @@ UserLanguageSelectorPage::UserLanguageSelectorPage(QWidget *parent)
     QComboBox * cbLanguage = new QComboBox(this);
 
     cbLanguage->addItems(Core::Translators::availableLocales());
-    cbLanguage->setCurrentIndex(Core::Translators::availableLocales().indexOf("en"));
+    cbLanguage->setCurrentIndex(Core::Translators::availableLocales().indexOf(QLocale().name().left(2)));
     connect(cbLanguage, SIGNAL(activated(QString)), Core::Translators::instance(), SLOT(changeLanguage(const QString &)));
 
     registerField("Language", cbLanguage , "currentIndex");
@@ -453,14 +468,69 @@ bool UserTelsAndMailPage::validatePage()
     return true;
 }
 
+
+UserProfilPage::UserProfilPage(QWidget *parent) :
+        QWizardPage(parent)
+{
+    setTitle(tr("Select a profil"));
+    setSubTitle(tr("FreeMedForms allows you to create users using predefined profils. Select your profil and options."));
+
+    registerField("isMedical", new QWidget(this));
+    registerField("UserManager", new QWidget(this));
+    registerField("DrugsManager", new QWidget(this));
+    registerField("Medical", new QWidget(this));
+    registerField("Paramedical", new QWidget(this));
+    registerField("Administrative", new QWidget(this));
+
+    Views::StringListModel *model = new Views::StringListModel(this);
+    model->setStringList(QStringList() << tkTr(Trans::Constants::DOCTOR) << tr("Software administrator"));
+    model->setCheckable(true);
+    model->setReadOnly(true);
+    view = new Views::StringListView(this);
+    view->setModel(model);
+    view->setActions(0);
+
+    box = new QCheckBox(tr("Define all rights"), this);
+
+    QGridLayout *layout = new QGridLayout(this);
+    layout->addWidget(view, 0, 0);
+    layout->addWidget(box, 1, 0);
+}
+
+bool UserProfilPage::validatePage()
+{
+    setField("UserManager",  Core::IUser::NoRights);
+    setField("DrugsManager",  Core::IUser::NoRights);
+    setField("Medical", Core::IUser::NoRights);
+    setField("Paramedical", Core::IUser::NoRights);
+    setField("Administrative", Core::IUser::NoRights);
+    setField("isMedical", false);
+    next = UserWizard::PaperGenericPage;
+    QStringList result = view->getCheckedStringList().toStringList();
+    if (result.contains(tkTr(Trans::Constants::DOCTOR))) {
+        setField("DrugsManager",  Core::IUser::AllRights);
+        setField("Medical", Core::IUser::AllRights);
+        setField("Paramedical", int(Core::IUser::ReadAll | Core::IUser::Print));
+        setField("Administrative", Core::IUser::NoRights);
+        setField("isMedical", true);
+        next = UserWizard::SpecialiesQualificationsPage;
+    }
+    if (result.contains(tr("Software administrator"))) {
+        setField("UserManager",  Core::IUser::AllRights);
+    }
+    if (box->isChecked()) {
+        next = UserWizard::RightsPage;
+        return true;
+    }
+    return true;
+}
+
 UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *parent)
         : QWizardPage(parent)
 {
     setTitle(tr("Define user's specialties and qualifications."));
     setSubTitle(tr("Use the context menu to add, remove, move up or down items."));
-    QLabel * lblSpe = new QLabel(tr("Specialities"), this);
-    QLabel * lblQua = new QLabel(tr("Qualifications"), this);
-    QLabel * lblId = new QLabel(tr("Identifiants"), this);
+    QTabWidget *tab = new QTabWidget(this);
 
     QStringListModel * modelspe = new QStringListModel(this);
     Views::StringListView * speView = new Views::StringListView(this);
@@ -472,17 +542,16 @@ UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *pare
     Views::StringListView * idsView = new Views::StringListView(this);
     idsView->setModel(modelids);
 
+    tab->addTab(speView, tr("Specialities"));
+    tab->addTab(quaView, tr("Qualifications"));
+    tab->addTab(idsView, tr("Identifiants"));
+
     registerField("Specialities", speView, "stringList");
     registerField("Qualifications", quaView, "stringList");
     registerField("Identifiants", idsView, "stringList");
 
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblSpe, 0, 1);
-    layout->addWidget(speView, 1, 1);
-    layout->addWidget(lblQua, 2, 1);
-    layout->addWidget(quaView, 3, 1);
-    layout->addWidget(lblId, 4, 1);
-    layout->addWidget(idsView, 5, 1);
+    layout->addWidget(tab, 0, 1);
     setLayout(layout);
 }
 
@@ -491,25 +560,28 @@ UserRightsPage::UserRightsPage(QWidget *parent)
 {
     setTitle(tr("Define user's rights."));
     setSubTitle(tr("Role by role, define the user's rights."));
-    QLabel *lblUM = new QLabel(tr("User Management"), this);
-    QLabel *lblDrugs = new QLabel(tr("Drugs dosages Management"), this);
-    QLabel *lblMed = new QLabel(tr("Medicals"), this);
-    QLabel *lblUParaMed = new QLabel(tr("Paramedicals"), this);
-    QLabel *lblUAdminist = new QLabel(tr("Administrative"), this);
-    QFont bold;
-    bold.setBold(true);
-    lblUM->setFont(bold);
-    lblDrugs->setFont(bold);
-    lblMed->setFont(bold);
-    lblUParaMed->setFont(bold);
-    lblUAdminist->setFont(bold);
 
-    Internal::UserRightsWidget * um = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget * drugs = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget * med = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget * paramed = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget * administ = new Internal::UserRightsWidget(this);
+    QTabWidget *tab = new QTabWidget(this);
 
+    Internal::UserRightsWidget *um = new Internal::UserRightsWidget(this);
+    Internal::UserRightsWidget *drugs = new Internal::UserRightsWidget(this);
+    Internal::UserRightsWidget *med = new Internal::UserRightsWidget(this);
+    Internal::UserRightsWidget *paramed = new Internal::UserRightsWidget(this);
+    Internal::UserRightsWidget *administ = new Internal::UserRightsWidget(this);
+
+    um->setRights(field("UserManager").toInt());
+    um->setRights(field("DrugsManager").toInt());
+    um->setRights(field("Medical").toInt());
+    um->setRights(field("Paramedical").toInt());
+    um->setRights(field("Administrative").toInt());
+
+    tab->addTab(um, tr("Users"));
+    tab->addTab(drugs, tr("Drugs"));
+    tab->addTab(med, tr("Medicals"));
+    tab->addTab(paramed, tr("Paramedicals"));
+    tab->addTab(administ, tr("Administrative"));
+
+    /** \todo set the values of the rights */
     registerField("UserManager", um, "rights");
     registerField("DrugsManager", drugs, "rights");
     registerField("Medical", med, "rights");
@@ -517,90 +589,89 @@ UserRightsPage::UserRightsPage(QWidget *parent)
     registerField("Administrative", administ, "rights");
 
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblUM, 0, 0);
-    layout->addWidget(um, 1, 0);
-    layout->addWidget(lblMed, 2, 0);
-    layout->addWidget(med, 3, 0);
-    layout->addWidget(lblDrugs, 4, 0);
-    layout->addWidget(drugs, 5, 0);
-    layout->addWidget(lblUParaMed, 6, 0);
-    layout->addWidget(paramed, 7, 0);
-    layout->addWidget(lblUAdminist, 8, 0);
-    layout->addWidget(administ, 9, 0);
+    layout->addWidget(tab, 0, 0);
     setLayout(layout);
 }
 
-UserGenericPage::UserGenericPage(QWidget *parent) :
-        QWizardPage(parent)
+
+
+static inline QString defaultHeader()
 {
-    setTitle(tr("Setup generic headers and footers"));
-    setSubTitle(tr("You can define three types of headers and footers : one to use by default, "
-                    "one for the prescriptions, one for administrative correspondance.\n"
-                    "These header and footer will be used by default while printing.\n"));
-    QLabel * lblH = new QLabel(tr("Header"), this);
-    QLabel * lblF = new QLabel(tr("Footer"), this);
-
-    /** \todo use tkPrinterPreviewer instead of Editor::TextEditors */
-    Editor::TextEditor * head = new Editor::TextEditor(this);
-    Editor::TextEditor * foot = new Editor::TextEditor(this);
-
-    registerField("GenericHeader", head, "html");
-    registerField("GenericFooter", foot, "html");
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblH, 0, 0);
-    layout->addWidget(head, 1, 0);
-    layout->addWidget(lblF, 2, 0);
-    layout->addWidget(foot, 3, 0);
-    setLayout(layout);
+    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_header.htm");
 }
 
-UserPrescriptionsPage::UserPrescriptionsPage(QWidget *parent) :
-        QWizardPage(parent)
+static inline QString defaultFooter()
 {
-    setTitle(tr("Setup prescriptions headers and footers"));
-    setSubTitle(tr("You can define three types of headers and footers : one to use by default, "
-                    "one for the prescriptions, one for administrative correspondance.\n"
-                    "These header and footer will be used by default while printing prescriptions.\n"));
-    QLabel * lblH = new QLabel(tr("Header"), this);
-    QLabel * lblF = new QLabel(tr("Footer"), this);
-
-    /** \todo use Print::PrinterPreviewer instead of Editor::TextEditors */
-    Editor::TextEditor * head = new Editor::TextEditor(this);
-    Editor::TextEditor * foot = new Editor::TextEditor(this);
-
-    registerField("PrescrHeader", head, "html");
-    registerField("PrescrFooter", foot, "html");
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblH, 0, 0);
-    layout->addWidget(head, 1, 0);
-    layout->addWidget(lblF, 2, 0);
-    layout->addWidget(foot, 3, 0);
-    setLayout(layout);
+    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
 }
 
-UserAdministrativePage::UserAdministrativePage(QWidget *parent) :
-        QWizardPage(parent)
+UserPaperPage::UserPaperPage(const QString &paperName, QWidget *parent) :
+        QWizardPage(parent), type(paperName)
 {
-    setTitle(tr("Setup administrative headers and footers"));
-    setSubTitle(tr("You can define three types of headers and footers : one to use by default, "
-                    "one for the prescriptions, one for administrative correspondance.\n"
-                    "These header and footer will be used by default while printing administrative correspondance.\n"));
-    QLabel * lblH = new QLabel(tr("Header"), this);
-    QLabel * lblF = new QLabel(tr("Footer"), this);
+    QString title;
+    if (type=="Generic")
+        title = tr("Generic");
+    else if (type == "Prescription")
+        title = tr("Prescription");
+    else if (type == "Administrative")
+            title = tr("Administrative");
+    setTitle(tr("%1 headers and footers").arg(title));
 
-    /** \todo use tkPrinterPreviewer instead of Editor::TextEditors */
-    Editor::TextEditor * head = new Editor::TextEditor(this);
-    Editor::TextEditor * foot = new Editor::TextEditor(this);
-
-    registerField("AdminHeader", head, "html");
-    registerField("AdminFooter", foot, "html");
+    header = new Print::TextDocumentExtra;
+    footer = new Print::TextDocumentExtra;
+    wm = new Print::TextDocumentExtra;
+    previewer = Print::Printer::previewer(this);
 
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblH, 0, 0);
-    layout->addWidget(head, 1, 0);
-    layout->addWidget(lblF, 2, 0);
-    layout->addWidget(foot, 3, 0);
+    layout->addWidget(previewer, 0, 0);
     setLayout(layout);
+
+    header->setHtml(defaultHeader());
+    footer->setHtml(defaultFooter());
+
+    if (type=="Prescription") {
+        wm->setPresence(Print::Printer::DuplicataOnly);
+    }
+
+    previewer->setHeader(header);
+    previewer->setFooter(footer);
+    previewer->setWatermark(wm);
+}
+
+bool UserPaperPage::validatePage()
+{
+    Print::TextDocumentExtra *tmp = new Print::TextDocumentExtra;
+    int header, footer, wmk;
+    if (type=="Generic") {
+        header = Core::IUser::GenericHeader;
+        footer = Core::IUser::GenericFooter;
+        wmk = Core::IUser::GenericWatermark;
+    } else if (type == "Prescription") {
+        header = Core::IUser::PrescriptionHeader;
+        footer = Core::IUser::PrescriptionFooter;
+        wmk = Core::IUser::PrescriptionWatermark;
+    } else if (type == "Administrative") {
+        header = Core::IUser::AdministrativeHeader;
+        footer = Core::IUser::AdministrativeFooter;
+        wmk = Core::IUser::AdministrativeWatermark;
+    }
+
+    previewer->headerToPointer(tmp);
+    UserWizard::setUserPaper(header, tmp->toXml());
+
+    previewer->footerToPointer(tmp);
+    UserWizard::setUserPaper(footer, tmp->toXml());
+
+    previewer->watermarkToPointer(tmp);
+    UserWizard::setUserPaper(wmk, tmp->toXml());
+
+    return true;
+}
+
+
+int UserPaperPage::nextId() const
+{
+    if (field("isMedical").toBool() && wizard()->page(UserWizard::PaperPrescriptionsPage)!=this)
+        return UserWizard::PaperPrescriptionsPage;
+    return -1;
 }

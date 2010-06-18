@@ -254,6 +254,9 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value)
 /** \brief Defines this dynamic data as a tkTextDocumentExtra. */
 void UserDynamicData::setValue(Print::TextDocumentExtra *extra)
 {
+    if (!extra)
+        return;
+    d->m_Type = ExtraDocument;
     if (d->m_Doc)
         delete d->m_Doc;
     d->m_Doc = extra;
@@ -371,10 +374,10 @@ void UserDynamicData::warn() const
 QString UserDynamicData::warnText() const
 {
     QString tmp;
-    tmp = QString("Name : %1, Type : %2, Value : %3, Lang : %4, Dirt %5 Null %6 , UserUuid : %7, Id : %8")
+    tmp = QString("Name : %1, Type : %2, Size : %3, Lang : %4, Dirt %5 Null %6 , UserUuid : %7, Id : %8")
           .arg(name())
           .arg(type())
-          .arg(value().toString())
+          .arg(value().toString().size())
           .arg(d->m_Language)
           .arg(isDirty())
           .arg(isNull())
@@ -566,11 +569,23 @@ bool UserData::isModifiable() const
 void UserData::setModified(bool state)
 {
     d->m_Modified = state;
+    if (!state) {
+        foreach(UserDynamicData *data, this->modifiedDynamicDatas()) {
+            data->setDirty(false);
+        }
+        d->m_ModifiedRoles.clear();
+    }
 }
 
 bool UserData::isModified() const
 {
-    return d->m_Modified;
+    if (d->m_Modified)
+        return true;
+    if (hasModifiedDynamicDatasToStore())
+        return true;
+    if (hasModifiedRightsToStore())
+        return true;
+    return false;
 }
 
 bool UserData::isNull() const
@@ -625,7 +640,7 @@ void UserData::setUuid(const QString & val)
  If user is modifiable, set the value \e val for the table \e tableref index and \e fieldref field index. \n
  Values must be determined fields values not dynamicValues.
 */
-void UserData::setValue(const int tableref, const int fieldref, const QVariant & val)
+void UserData::setValue(const int tableref, const int fieldref, const QVariant &val)
 {
     if (!d->m_Modifiable)
         return;
@@ -850,6 +865,25 @@ QStringList UserData::modifiedRoles() const
 }
 
 // HEADER/FOOTER/WATERMARK MANAGEMENT
+
+void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index)
+{
+    if (!extra)
+        return;
+    QString name = d->documentIndexToName(index);
+    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty())
+        return;
+    if (!d->m_DynamicDatas.keys().contains(name)) {
+        UserDynamicData *data = new UserDynamicData();
+        data->setName(name);
+        data->setUserUuid(uuid());
+        d->m_DynamicDatas.insert(name, data);
+    }
+    d->m_DynamicDatas[name]->setValue(extra);
+    d->m_DynamicDatas[name]->setDirty(true);
+}
+
 /**
   \brief Defines the header, footer and watermark (exactly in this order) to use for generic printing.
   \sa tkTextDocumentExtra, tkTextDocumentExtra::toXml()
@@ -867,6 +901,7 @@ void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
         d->m_DynamicDatas.insert(name,data);
     }
     d->m_DynamicDatas[name]->setValue(val);
+    d->m_DynamicDatas[name]->setDirty(true);
 }
 
 QVariant UserData::extraDocumentHtml(const int index) const
@@ -915,10 +950,10 @@ QStringList UserData::warnText() const
 
     const QList<UserDynamicData*> &dynList = modifiedDynamicDatas();
 
-    if (d->m_DynamicDatas.count() == 0)
-        list << "    /!\\ NO DATAS RECORDED /!\\ ";
+    if (dynList.count() == 0)
+        list << "    /!\\ NO DATAS MODIFIED /!\\ ";
     else
-        foreach(const UserDynamicData *dyn, d->m_DynamicDatas) {
+        foreach(const UserDynamicData *dyn, dynList) {
             tmp += "\n\nDATA : " + dyn->name() + "\n";
             tmp += QString("%1\n").arg(dyn->warnText());
         }
