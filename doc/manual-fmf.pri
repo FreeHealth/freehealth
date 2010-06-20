@@ -42,9 +42,9 @@ isEmpty(HELPGENERATOR) {
 #}
 
 # create the HTML output of Doxygen
-#IN_DOXYFILE = $${PWD}/usermanual/freemedforms/Doxyfile
-#html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
-#QMAKE_EXTRA_TARGETS += html_docs
+IN_DOXYFILE = $${PWD}/usermanual/freemedforms/Doxyfile_en
+html_docs.commands = $$DOXYGEN $${IN_DOXYFILE}
+QMAKE_EXTRA_TARGETS += html_docs
 
 OTHER_FILES += $${PWD}/usermanual/freemedforms/freemedforms.qdoc \
                $${PWD}/usermanual/usermanager/usermanager.qdoc \
@@ -60,5 +60,5 @@ OTHER_FILES += $${PWD}/usermanual/freemedforms/freemedforms.qdoc \
                $${PWD}/usermanual/tokensmanager/tokens.qdoc \
                $${PWD}/usermanual/templates/templates.qdoc \
                $${PWD}/usermanual/saverestore/saverestore.qdoc \
-               $${PWD}/usermanual/freemedforms/Doxyfile \
+               $${PWD}/usermanual/freemedforms/Doxyfile_en \
                $${PWD}/usermanual/freemedforms/doxygen.css
