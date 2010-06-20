@@ -324,7 +324,7 @@ bool BaseFormData::isModified() const
     return true;
 }
 
-void BaseFormData::setData(const QVariant &data, const int role)
+bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 {
     switch (role) {
     case ID_EpisodeDate:
@@ -341,9 +341,10 @@ void BaseFormData::setData(const QVariant &data, const int role)
         }
     case ID_UserName: m_Form->m_UserName->setText(data.toString()); break;
     }
+    return true;
 }
 
-QVariant BaseFormData::data(const int role) const
+QVariant BaseFormData::data(const int ref, const int role) const
 {
     switch (role) {
     case ID_EpisodeDate: return m_Form->m_EpisodeDate->date(); break;
@@ -479,7 +480,7 @@ bool BaseCheckData::isModified() const
     return m_OriginalValue != m_Check->checkState();
 }
 
-void BaseCheckData::setData(const QVariant &data, const int role)
+bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
     qWarning() << "BaseCheckData::setData" << data << role;
     if (role==Qt::EditRole || role==Qt::DisplayRole) {
@@ -487,9 +488,10 @@ void BaseCheckData::setData(const QVariant &data, const int role)
             m_Check->setCheckState(Qt::CheckState(data.toInt()));
         }
     }
+    return true;
 }
 
-QVariant BaseCheckData::data(const int role) const
+QVariant BaseCheckData::data(const int ref, const int role) const
 {
     return m_Check->checkState();
 }
@@ -616,7 +618,7 @@ bool BaseRadioData::isModified() const
     return true;
 }
 
-void BaseRadioData::setData(const QVariant &data, const int role)
+bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
 //    qWarning() << "BaseCheckData::setData" << data << role;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
@@ -624,9 +626,10 @@ void BaseRadioData::setData(const QVariant &data, const int role)
 //            m_Check->setCheckState(Qt::CheckState(data.toInt()));
 //        }
 //    }
+    return true;
 }
 
-QVariant BaseRadioData::data(const int role) const
+QVariant BaseRadioData::data(const int ref, const int role) const
 {
     return QVariant();
 }
@@ -735,11 +738,12 @@ bool BaseSimpleTextData::isModified() const
     return true;
 }
 
-void BaseSimpleTextData::setData(const QVariant &data, const int role)
+bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant BaseSimpleTextData::data(const int role) const
+QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
     return QVariant();
 }
@@ -888,11 +892,12 @@ bool BaseListData::isModified() const
     return actual != m_OriginalValue;
 }
 
-void BaseListData::setData(const QVariant &data, const int role)
+bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant BaseListData::data(const int role) const
+QVariant BaseListData::data(const int ref, const int role) const
 {
     return QVariant();
 }
@@ -1014,11 +1019,12 @@ bool BaseComboData::isModified() const
     return m_OriginalValue != m_Combo->m_Combo->currentIndex();
 }
 
-void BaseComboData::setData(const QVariant &data, const int role)
+bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant BaseComboData::data(const int role) const
+QVariant BaseComboData::data(const int ref, const int role) const
 {
     return QVariant();
 }
@@ -1110,11 +1116,12 @@ bool BaseDateData::isModified() const
     return m_OriginalValue != m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
-void BaseDateData::setData(const QVariant &data, const int role)
+bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant BaseDateData::data(const int role) const
+QVariant BaseDateData::data(const int ref, const int role) const
 {
     return QVariant();
 }
@@ -1214,11 +1221,12 @@ bool BaseSpinData::isModified() const
     return m_OriginalValue != storableData().toDouble();
 }
 
-void BaseSpinData::setData(const QVariant &data, const int role)
+bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant BaseSpinData::data(const int role) const
+QVariant BaseSpinData::data(const int ref, const int role) const
 {
     return QVariant();
 }

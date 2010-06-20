@@ -626,8 +626,8 @@ public:
     void saveEpisodeHeaders(FormMain *form, TreeItem *itemToSave)
     {
         // retreive date/label of episode
-        const QString &newLabel = form->itemDatas()->data(IFormItemData::ID_EpisodeLabel).toString();
-        const QDateTime &newDate = form->itemDatas()->data(IFormItemData::ID_EpisodeDate).toDateTime();
+        const QString &newLabel = form->itemDatas()->data(0, IFormItemData::ID_EpisodeLabel).toString();
+        const QDateTime &newDate = form->itemDatas()->data(0, IFormItemData::ID_EpisodeDate).toDateTime();
         if ((newLabel==itemToSave->data(EpisodeModel::Label).toString()) &&
             (newDate==itemToSave->data(EpisodeModel::Date).toDateTime()))
             return;
@@ -656,22 +656,101 @@ public:
         query.finish();
     }
 
-    void feelItemDatasWithXmlContent(Form::FormMain *form, const QString &xml)
+    void feedItemDatasWithXmlContent(Form::FormMain *form, TreeItem *episode, bool feedPatientModel = false)
     {
+        getXmlContent(episode);
+        const QString &xml = episode->data(EpisodeModel::XmlContent).toString();
+        if (xml.isEmpty()) {
+            return;
+        }
+
+        // read the xml'd content
+        QHash<QString, QString> datas;
+        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+            Utils::Log::addError(q, QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
+            return;
+        }
+
+        // put datas into the FormItems of the form
+        // XML content ==
+        // <formitemuid>value</formitemuid>
+        QHash<QString, FormItem *> items;
+        foreach(FormItem *it, form->formItemChildren()) {
+            /** \todo check nested items */
+            items.insert(it->uuid(), it);
+        }
+
+        // feed the formitemdatas for this form and get the data for the patientmodel
+        foreach(FormItem *it, items.values()) {
+            if (!it) {
+                qWarning() << "FormManager::activateForm :: ERROR : no item :" << items.key(it);
+                continue;
+            }
+            if (it->itemDatas()) {
+                it->itemDatas()->setStorableData(datas.value(it->uuid()));
+                if (feedPatientModel)
+                    patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+            }
+            else
+                qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << items.key(it);
+        }
     }
 
-    void feedPatientModelWithLastEpisodes()
+    void getLastEpisodesAndFeedPatientModel()
     {
-        /** \todo here --> read all last episodes and feed patient model with represented datas */
-        foreach(Form::FormMain *f, formManager()->forms()) {
+        if (m_CurrentPatient.isEmpty())
+            return;
+
+        QHash<int, QString> where;
+        where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(m_CurrentPatient));
+
+        foreach(Form::FormMain *f, formsItems.keys()) {
+
+            // test all children FormItem for patientDataRepresentation
+            bool hasPatientDatas = false;
             foreach(Form::FormItem *item, f->formItemChildren()) {
                 if (item->itemDatas()) {
-                    if (item->patientDataRepresentation()!=-1)
-                        patient()->setValue(item->patientDataRepresentation(), item->itemDatas()->data(Form::IFormItemData::ID_ForPatientModel));
+                    if (item->patientDataRepresentation()!=-1) {
+                        hasPatientDatas = true;
+                        break;
+                    }
                 }
+            }
+            qWarning() << "<<<<<<<<<<<< test last episode for"<<f->spec()->label() << hasPatientDatas;
+            if (!hasPatientDatas)
+                continue;
+
+            // get the form's XML content for the last episode, feed it with the XML code
+            TreeItem *formItem = formsItems.value(f);
+            if (!formItem->childCount())
+                continue;  // No episodes
+
+            // get last episode
+            int i = 0;
+            TreeItem *lastEpisode = formItem->child(i);
+            while (!lastEpisode->isEpisode() && i < formItem->childCount())
+                lastEpisode = formItem->child(i);
+
+            qWarning() << "Last episode" << lastEpisode->data(EpisodeModel::Label) << lastEpisode->isEpisode();
+
+            if (lastEpisode->isEpisode()) {
+                feedItemDatasWithXmlContent(f, lastEpisode, true);
             }
         }
     }
+
+//    void feedPatientModelWithLastEpisodes()
+//    {
+//        /** \todo here --> read all last episodes and feed patient model with represented datas */
+//        foreach(Form::FormMain *f, formManager()->forms()) {
+//            foreach(Form::FormItem *item, f->formItemChildren()) {
+//                if (item->itemDatas()) {
+//                    if (item->patientDataRepresentation()!=-1)
+//                        patient()->setValue(item->patientDataRepresentation(), item->itemDatas()->data(item->patientDataRepresentation(), Form::IFormItemData::ID_ForPatientModel));
+//                }
+//            }
+//        }
+//    }
 
 public:
     QSqlTableModel *m_Sql;
@@ -754,7 +833,7 @@ void EpisodeModel::setCurrentPatient(const QString &uuid)
 {
     d->m_CurrentPatient = uuid;
     d->refreshEpisodes();
-    d->feedPatientModelWithLastEpisodes();
+    d->getLastEpisodesAndFeedPatientModel();
     reset();
 }
 
@@ -1064,13 +1143,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     if (!form)
         return false;
     form->clear();
-    form->itemDatas()->setData(d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
-    form->itemDatas()->setData(d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
+    form->itemDatas()->setData(0, d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
+    form->itemDatas()->setData(0, d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
     const QString &username = userModel()->currentUserData(Core::IUser::Name).toString();
     if (username.isEmpty())
-        form->itemDatas()->setData(tr("No user"), IFormItemData::ID_UserName);
+        form->itemDatas()->setData(0, tr("No user"), IFormItemData::ID_UserName);
     else
-        form->itemDatas()->setData(username, IFormItemData::ID_UserName);
+        form->itemDatas()->setData(0, username, IFormItemData::ID_UserName);
 
     qWarning() << "EpisodeModel::activateEpisode" << d->m_ActualEpisode->data(Id).toInt() << formUid;
 

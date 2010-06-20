@@ -37,12 +37,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUSERPASSWORDDIALOG_H
-#define TKUSERPASSWORDDIALOG_H
+#ifndef USERPASSWORDDIALOG_H
+#define USERPASSWORDDIALOG_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
 
-class tkUserPasswordDialogPrivate;
 #include <QDialog>
 
 /**
@@ -59,7 +58,7 @@ class  UserPasswordDialog;
 }  // End ui
 }  // End Internal
 
-class UserPasswordDialog : public QDialog
+class USER_EXPORT UserPasswordDialog : public QDialog
 {
     Q_OBJECT
     Q_DISABLE_COPY(UserPasswordDialog)
@@ -84,4 +83,4 @@ private:
 
 }  // End UserPlugin
 
-#endif // TKUSERPASSWORDDIALOG_H
+#endif // USERPASSWORDDIALOG_H

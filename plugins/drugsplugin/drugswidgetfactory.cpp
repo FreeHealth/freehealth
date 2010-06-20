@@ -52,6 +52,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/ipatient.h>
 
 #include <formmanagerplugin/iformitem.h>
 
@@ -199,12 +200,31 @@ bool DrugsWidgetData::isModified() const
     return m_Widget->m_PrescriptionModel->isModified();
 }
 
-void DrugsWidgetData::setData(const QVariant &data, const int role)
+bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
 }
 
-QVariant DrugsWidgetData::data(const int role) const
+QVariant DrugsWidgetData::data(const int ref, const int role) const
 {
+    qWarning() << "DrugsWidgetData::data(" << ref << role << ");  -->> " <<
+            DrugsDB::DrugsIO::prescriptionToXml(m_Widget->m_PrescriptionModel);
+
+    if (ref != Form::IFormItemData::ID_ForPatientModel)
+        return QVariant();
+
+    DrugsDB::DrugsModel *model = m_Widget->m_PrescriptionModel;
+
+    switch (ref) {
+    case Core::IPatient::DrugsInnAllergies:
+        {
+            QStringList inns;
+            for(int i=0; model->rowCount(); ++i) {
+                inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
+            }
+            qWarning() << inns;
+        }
+    }
+
     return QVariant();
 }
 

@@ -51,11 +51,12 @@ bool GirItemData::isModified() const
     return m_IsModified;
 }
 
-void GirItemData::setData(const QVariant &data, const int role)
+bool GirItemData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
-QVariant GirItemData::data(const int role) const
+QVariant GirItemData::data(const int ref, const int role) const
 {
     return QVariant();
 }

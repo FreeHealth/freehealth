@@ -134,8 +134,8 @@ public:
     bool isModified() const;
 
     // Use setData/Data for episode datas
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     // No storable datas for forms
     void setStorableData(const QVariant &) {}
@@ -203,8 +203,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -246,8 +246,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -289,8 +289,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -347,8 +347,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -390,8 +390,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -433,8 +433,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
@@ -475,8 +475,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;

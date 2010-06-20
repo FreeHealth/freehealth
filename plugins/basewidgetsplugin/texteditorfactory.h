@@ -95,8 +95,8 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    void setData(const QVariant &data, const int role);
-    QVariant data(const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;

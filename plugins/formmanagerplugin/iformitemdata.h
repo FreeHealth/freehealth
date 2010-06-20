@@ -65,8 +65,8 @@ public:
     virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;
 
-    virtual void setData(const QVariant &data, const int role) = 0;
-    virtual QVariant data(const int role) const = 0;
+    virtual bool setData(const int ref, const QVariant &data, const int role) = 0;
+    virtual QVariant data(const int ref, const int role) const = 0;
 
     virtual void setStorableData(const QVariant &data) = 0;
     virtual QVariant storableData() const = 0;

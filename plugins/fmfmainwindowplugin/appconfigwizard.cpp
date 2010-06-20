@@ -203,7 +203,7 @@ DatabaseConfigurationPage::DatabaseConfigurationPage(QWidget *parent) :
     setSubTitle(tr("By default, FreeMedForms is configured to use a local SQLite database. You can choose an external server."));
 
     // get all optionpages in "general" category
-    QWidget *w;
+    QWidget *w = 0;
     pages = ExtensionSystem::PluginManager::instance()->getObjects<Core::IOptionsPage>();
     foreach(Core::IOptionsPage *p, pages) {
         if (p->name()==tkTr(Trans::Constants::GENERAL))

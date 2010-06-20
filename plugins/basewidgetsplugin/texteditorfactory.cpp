@@ -145,17 +145,13 @@ bool TextEditorData::isModified() const
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
-void TextEditorData::setData(const QVariant &data, const int role)
+bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
     qWarning() << "TextEditorData::setData" << data << role;
-    if (role==Qt::EditRole || role==Qt::DisplayRole) {
-//        if (data.canConvert(QVariant::Int))  { // Tristate
-//            m_Check->setCheckState(Qt::CheckState(data.toInt()));
-//        }
-    }
+    return true;
 }
 
-QVariant TextEditorData::data(const int role) const
+QVariant TextEditorData::data(const int ref, const int role) const
 {
 //    return m_Check->checkState();
     return QVariant();

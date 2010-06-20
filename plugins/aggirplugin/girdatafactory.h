@@ -67,8 +67,8 @@ public:
 
     bool isModified() const;
 
-    virtual void setData(const QVariant &data, const int role);
-    virtual QVariant data(const int role) const;
+    virtual bool setData(const int ref, const QVariant &data, const int role);
+    virtual QVariant data(const int ref, const int role) const;
 
     virtual void setStorableData(const QVariant &data);
     virtual QVariant storableData() const;

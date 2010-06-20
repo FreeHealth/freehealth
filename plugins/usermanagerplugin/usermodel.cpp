@@ -95,7 +95,7 @@ class UserModelWrapper : public Core::IUser
 {
 public:
     UserModelWrapper(UserModel *model) :
-            Core::IUser(), m_Model(model) {}
+            Core::IUser(model), m_Model(model) {}
 
     ~UserModelWrapper() {}
 
@@ -104,7 +104,14 @@ public:
     bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
 
     QVariant value(const int ref) const {return m_Model->currentUserData(ref);}
-    bool setValue(const int ref, const QVariant &value) {return m_Model->setData(m_Model->index(m_Model->currentUserIndex().row(), ref), value);}
+    bool setValue(const int ref, const QVariant &value)
+    {
+        if (m_Model->setData(m_Model->index(m_Model->currentUserIndex().row(), ref), value)) {
+            Q_EMIT this->userDataChanged(ref);
+            return true;
+        }
+        return false;
+    }
 
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
