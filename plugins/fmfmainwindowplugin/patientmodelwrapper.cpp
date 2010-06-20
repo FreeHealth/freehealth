@@ -78,6 +78,12 @@ QVariant PatientModelWrapper::value(const int ref) const
 bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
 {
     qWarning() << " PatientModelWrapper::setValue" << ref << value;
-    return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);
+    if (!has(ref))
+        return false;
+    if (m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value)) {
+        Q_EMIT dataChanged(ref);
+        return true;
+    }
+    return false;
 }
 

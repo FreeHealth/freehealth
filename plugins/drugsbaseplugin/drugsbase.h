@@ -100,6 +100,7 @@ public:
     DrugsData *getDrugByCIP(const QVariant & CIP_id);
     DrugsData *getDrugByUID(const QVariant &UID);
     int        getUIDFromCIP(int CIP);
+    QStringList getDrugInns(const QVariant &uid);
 
     // Manage Dosages
     void checkDosageDatabaseVersion();

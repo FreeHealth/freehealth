@@ -73,7 +73,8 @@ namespace Internal {
 class GlobalDrugsModelPrivate
 {
 public:
-    GlobalDrugsModelPrivate(GlobalDrugsModel *parent) : q(parent)
+    GlobalDrugsModelPrivate(GlobalDrugsModel *parent) :
+            q(parent), testAtc(false), testUid(false), testInn(false)
     {
         Q_ASSERT(q);
         ++numberOfInstances;
@@ -86,6 +87,11 @@ public:
             m_CachedAvailableDosageForUID.clear();
             drugAllergyCache.clear();
         }
+    }
+
+    void clearDrugAllergyCache()
+    {
+        drugAllergyCache.clear();
     }
 
     static void updateCachedAvailableDosage()
@@ -124,6 +130,16 @@ public:
         if (drugAllergyCache.contains(uid)) {
             return drugAllergyCache.value(uid);
         }
+        if (testInn) {
+            // get all drugs inns
+            const QStringList &inns = DrugsDB::Internal::DrugsBase::instance()->getDrugInns(q->index(item.row(), Constants::DRUGS_UID).data().toString());
+            foreach(const QString &druginn, inns) {
+                if (innAllergies.contains(druginn)) {
+                    drugAllergyCache.insert(uid, true);
+                    return true;
+                }
+            }
+        }
         if (testAtc) {
             QString atc = q->index(item.row(), Constants::DRUGS_ATC).data().toString();
             if (atcAllergies.contains(atc)) {
@@ -139,7 +155,7 @@ public:
         }
         drugAllergyCache.insert(uid, false);
 
-        if (drugAllergyCache.size() > 5000) {
+        if (drugAllergyCache.size() > 10000) {
             drugAllergyCache.remove(drugAllergyCache.begin().key());
         }
 
@@ -148,8 +164,8 @@ public:
 
 
 public:
-    QStringList atcAllergies, uidAllergies;
-    bool testAtc, testUid;
+    QStringList atcAllergies, uidAllergies, innAllergies;
+    bool testAtc, testUid, testInn;
 
 private:
     static QHash<int, bool> drugAllergyCache;
@@ -184,14 +200,9 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     where.insert(Constants::DRUGS_MARKET, "=1");
     setFilter(drugsBase()->getWhereClause(Constants::Table_DRUGS, where));
     select();
-    d->uidAllergies = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
-    d->atcAllergies = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
-    d->uidAllergies.removeAll("");
-    d->atcAllergies.removeAll("");
-    d->testAtc = !d->atcAllergies.isEmpty();
-    d->testUid = !d->uidAllergies.isEmpty();
 
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
+    connect(patient(), SIGNAL(dataChanged(int)), this, SLOT(refreshDrugsAllergies(int)));
 }
 
 GlobalDrugsModel::~GlobalDrugsModel()
@@ -199,6 +210,28 @@ GlobalDrugsModel::~GlobalDrugsModel()
     if (d) {
         delete d;
         d=0;
+    }
+}
+
+void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
+{
+    if (ref==Core::IPatient::DrugsAllergiesWithoutPrecision ||
+        ref==Core::IPatient::DrugsUidAllergies ||
+        ref==Core::IPatient::DrugsInnAtcAllergies ||
+        ref==Core::IPatient::DrugsInnAllergies ||
+        ref==Core::IPatient::DrugsAtcAllergies) {
+        qWarning() << "Updating Global Drugs Model";
+        d->uidAllergies = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
+        d->atcAllergies = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
+        d->innAllergies = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
+        d->uidAllergies.removeAll("");
+        d->atcAllergies.removeAll("");
+        d->innAllergies.removeAll("");
+        d->testAtc = !d->atcAllergies.isEmpty();
+        d->testUid = !d->uidAllergies.isEmpty();
+        d->testInn = !d->innAllergies.isEmpty();
+        qWarning() << d->innAllergies << d->testInn;
+        d->clearDrugAllergyCache();
     }
 }
 

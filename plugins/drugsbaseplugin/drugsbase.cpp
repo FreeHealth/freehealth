@@ -996,3 +996,32 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     return toReturn;
 }
 
+QStringList DrugsBase::getDrugInns(const QVariant &uid)
+{
+    QStringList toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    if (!DB.open()) {
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
+        return toReturn;
+    }
+    // get all code_subst for the drug
+    QHash<int, QString> where;
+    where.insert(Constants::COMPO_UID, QString("='%1'").arg(uid.toString()));
+    QString req = select(Constants::Table_COMPO, Constants::COMPO_MOL_CODE, where);
+    QList<int> codes;
+    {
+        QSqlQuery query(req, DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                codes.append(query.value(0).toInt());
+            }
+        }
+    }
+    foreach(int id, codes) {
+        const QString &n = getInnDenominationFromSubstanceCode(id);
+        if (!toReturn.contains(n))
+            toReturn.append(n);
+    }
+    return toReturn;
+}

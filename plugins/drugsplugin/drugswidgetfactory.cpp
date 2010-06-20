@@ -202,26 +202,41 @@ bool DrugsWidgetData::isModified() const
 
 bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
+    return true;
 }
 
 QVariant DrugsWidgetData::data(const int ref, const int role) const
 {
-    qWarning() << "DrugsWidgetData::data(" << ref << role << ");  -->> " <<
-            DrugsDB::DrugsIO::prescriptionToXml(m_Widget->m_PrescriptionModel);
+    qWarning() << "DrugsWidgetData::data(" << ref << role << ");" << Core::IPatient::DrugsInnAllergies;
 
-    if (ref != Form::IFormItemData::ID_ForPatientModel)
+    if (role != Form::IFormItemData::ID_ForPatientModel)
         return QVariant();
 
     DrugsDB::DrugsModel *model = m_Widget->m_PrescriptionModel;
+    int rowCount = model->rowCount();
+
+//    QList<int> refs;
+//    if (ref==Core::IPatient::DrugsAllergiesWithoutPrecision)
 
     switch (ref) {
+//    case :
+//        {
+//            // setting inns
+//            QStringList inns;
+//            for(int i=0; i < rowCount; ++i) {
+//                inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
+//            }
+//            return inns;
+//            break;
+//        }
     case Core::IPatient::DrugsInnAllergies:
         {
             QStringList inns;
-            for(int i=0; model->rowCount(); ++i) {
+            for(int i=0; i < rowCount; ++i) {
                 inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
             }
-            qWarning() << inns;
+            return inns;
+            break;
         }
     }
 

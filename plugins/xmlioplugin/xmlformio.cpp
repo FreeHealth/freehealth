@@ -172,7 +172,7 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
     ::m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
 
     ::m_PatientDatas.clear();
-    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
+    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsInnAllergies);
     ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
     ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
     ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
@@ -538,19 +538,6 @@ bool XmlFormIO::createItemWidget(Form::FormItem *item, QWidget *parent)
     Form::IFormWidget *p = qobject_cast<Form::IFormWidget*>(parent);
     if (p)
         p->addWidgetToContainer(w);
-
-//    toReturn = plug->getWidget( mfo, parent );
-//
-//    if ( plug->isContainer( widgetId ) )
-//    {
-//        foreach( mfObject * chd, mfo->mfChildren() )
-//        {
-//            mfAbstractWidget * chdWgt = getWidget( chd, toReturn );
-//            if ( chdWgt )
-//                toReturn->addWidgetToContainer( chdWgt );
-//        }
-//    }
-//
     return true;
 }
 
@@ -560,23 +547,6 @@ bool XmlFormIO::createFormWidget(Form::FormMain *form)
     QWidget *w = new QWidget();
     if (!createItemWidget(form, 0))
         return false;
-//    m_WidgetToStack->setParent( this );
-
-//    // All this goes into a scrollarea
-//    QScrollArea * area = new QScrollArea( m_Stack );
-//    area->setWidget( m_WidgetToStack );
-//    area->setWidgetResizable( true );
-//
-//    // Add widget to stack
-//    int id = m_Stack->addWidget( area );
-//    m_FormList.append( mfo );
-//    // save id in treeitem with Qt::UserRole
-//    item->setData( LabelColumn, Qt::UserRole, id );
-
-    // Analysing all children, take care to the tree !!!
-//    foreach( mfObject* chd, mfo->mfChildren() )
-//        createForm( chd, item );
-    //      else                 createForm(mfo->children().first(), m_Item->parent());
     return true;
 }
 

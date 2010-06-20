@@ -165,7 +165,7 @@ public:
         // get user from database
         QString uuid = UserBase::instance()->getUuid(log64, pass64);
         if (uuid.isEmpty())
-            return uuid;
+            return QString();
         // make sure it is not already in the hash
         if (m_Uuid_UserList.keys().contains(uuid)) {
             return uuid;
@@ -269,7 +269,6 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values()) {
         if (u->login()==log64 && u->cryptedPassword()==cryptpass64) {
             uuid = u->uuid();
-            qWarning() << "Getting user from memory";
             break;
         }
     }

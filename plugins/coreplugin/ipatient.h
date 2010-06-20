@@ -142,7 +142,6 @@ public:
 
 Q_SIGNALS:
     void currentPatientChanged();
-    void dataSetted();
     void dataChanged(const int ref);
 };
 

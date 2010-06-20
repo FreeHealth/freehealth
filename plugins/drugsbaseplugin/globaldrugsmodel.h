@@ -75,6 +75,9 @@ public:
 public Q_SLOTS:
     void updateCachedAvailableDosage();
 
+private Q_SLOTS:
+    void refreshDrugsAllergies(const int ref);
+
 private:
     Internal::GlobalDrugsModelPrivate *d;
 };
