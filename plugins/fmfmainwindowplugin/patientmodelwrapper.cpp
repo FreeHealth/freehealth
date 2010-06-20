@@ -68,7 +68,7 @@ QVariant PatientModelWrapper::value(const int ref) const
         foreach(Form::FormItem *item, f->formItemChildren()) {
             if (item->itemDatas()) {
                 if (item->patientDataRepresentation() == ref)
-                    return item->itemDatas()->data(Form::IFormItemData::ID_ForPatientModel);
+                    return item->itemDatas()->data(item->patientDataRepresentation(), Form::IFormItemData::ID_ForPatientModel);
             }
         }
     }

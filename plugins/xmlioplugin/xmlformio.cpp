@@ -418,9 +418,11 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         }
 
         // Patient Data Representation ?
-        i = ::m_PatientDatas.value(element.tagName(), -1);
-        if (i != -1) {
-            item->setPatientDataRepresentation(i);
+        if (element.tagName().compare(Constants::TAG_DATAPATIENT,Qt::CaseInsensitive)==0) {
+            i = ::m_PatientDatas.value(element.text(), -1);
+            if (i != -1) {
+                item->setPatientDataRepresentation(i);
+            }
         }
 
     //             // optional?
