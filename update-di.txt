@@ -1,6 +1,6 @@
-version=0.3.9
+version=0.4.0
 {
-    * Avril 2010
+    * Juin 2010
 
     * Version de la base de données thérapeutique :
       * Médicaments :  AFSSAPS - 05/03/2010

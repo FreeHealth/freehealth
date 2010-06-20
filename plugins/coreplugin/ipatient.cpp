@@ -57,5 +57,6 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,        value(IPatient::Height).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFBIRTH, value(IPatient::DateOfBirth).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,        value(IPatient::CreatinClearance).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,  value(IPatient::Title).toString() );
 }
 

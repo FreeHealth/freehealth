@@ -74,6 +74,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/iuser.h>
 
 /** \todo reimplement user management */
 
@@ -89,6 +90,9 @@
 /**
   \todo remove QCache of DasogeModels
 */
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
 
 
 namespace mfDosageModelConstants {
@@ -295,13 +299,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
 bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(m_UID != -1, "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
-    QString userUuid;
-#ifdef FREEDIAMS
-    userUuid = DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID;
-#else
-    /** \todo FMF : add user */
-    //    userUuid = tkUserModel::instance()->currentUserData(Core::IUser::Uuid).toString();
-#endif
+    QString userUuid = user()->value(Core::IUser::Uuid).toString();
     int i;
     int createdRow;
     bool toReturn = true;

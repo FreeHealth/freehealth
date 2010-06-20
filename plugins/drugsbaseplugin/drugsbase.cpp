@@ -441,6 +441,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
 
 QString DrugsBase::dosageCreateTableSqlQuery()
 {
+    /** \todo add UserUuid field or lkid */
     return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
            "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
            "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL

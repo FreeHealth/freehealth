@@ -1,7 +1,6 @@
 TEMPLATE = lib
 TARGET = Core
 PACKAGE_VERSION = 0.0.2
-
 DEFINES += FREEDIAMS
 FREEDIAMS = 1
 
@@ -17,13 +16,14 @@ HEADERS += coreplugin.h \
     coreimpl.h \ # mainwindow.h \
     appaboutpage.h \
     commandlineparser.h \
-    patient.h
-
+    patient.h \
+    user.h
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \ # mainwindow.cpp \
     appaboutpage.cpp \
     patient.cpp \
-    commandlineparser.cpp
+    commandlineparser.cpp \
+    user.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdcoreplugin_fr.ts \

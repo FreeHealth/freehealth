@@ -76,6 +76,7 @@
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 
 namespace DrugsIOConstants {
@@ -723,9 +724,8 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
 
 static QString prepareHeader()
 {
-    Core::IUser *user = Core::ICore::instance()->user();
-    QString header = user->value(Core::IUser::PrescriptionHeader).toString();
-    user->replaceTokens(header);
+    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
+    user()->replaceTokens(header);
     /** \todo Create a prefs for Date format */
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
     Core::IPatient *patient = Core::ICore::instance()->patient();
@@ -735,13 +735,21 @@ static QString prepareHeader()
 
 static QString prepareFooter(DrugsDB::DrugsModel *model)
 {
-    Core::IUser *user = Core::ICore::instance()->user();
-    QString footer = user->value(Core::IUser::PrescriptionFooter).toString();
-    user->replaceTokens(footer);
+    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
+    user()->replaceTokens(footer);
     Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
     Core::IPatient *patient = Core::ICore::instance()->patient();
     patient->replaceTokens(footer);
+    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(QCoreApplication::translate("DrugsIO", "Made with %1.").arg(qApp->applicationName())));
     return footer;
+}
+
+static inline void setUserWatermark(Print::Printer *p)
+{
+    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
+                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
+                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
 }
 
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
@@ -755,12 +763,10 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     footer = prepareFooter(model);
     QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
     p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
-//    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
-//                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
-//                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
 
     p.setHeader(prepareHeader());
     p.setFooter(footer);
+    setUserWatermark(&p);
     p.previewer(qApp->activeWindow());
     p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
     /** \todo Use NormalVersion instead of MedinTuxversion */
@@ -779,12 +785,10 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     footer = prepareFooter(model);
     QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
     p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
-//    p.addHtmlWatermark(settings()->value(Constants::S_WATERMARK_HTML).toString(),
-//                       Print::Printer::Presence(settings()->value(Constants::S_WATERMARKPRESENCE).toInt()),
-//                       Qt::AlignmentFlag(settings()->value(Constants::S_WATERMARKALIGNEMENT).toInt()));
 
     p.setHeader(prepareHeader());
     p.setFooter(footer);
+    setUserWatermark(&p);
     /** \todo Use NormalVersion instead of MedinTuxversion */
     p.setContent(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
     p.previewDialog(qApp->activeWindow());

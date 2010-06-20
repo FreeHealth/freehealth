@@ -52,9 +52,12 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/constants_icons.h>
 
 #include <fdcoreplugin/commandlineparser.h>
 #include <fdcoreplugin/patient.h>
+#include <fdcoreplugin/user.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -96,7 +99,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_UID(new UniqueIDManager),
         m_MedinTux(0),
         m_Patient(new Patient(this)),
-        m_User(0)
+        m_User(new User(this))
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);

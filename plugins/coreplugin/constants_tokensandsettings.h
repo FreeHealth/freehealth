@@ -53,6 +53,7 @@ const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";   /*!< /brief T
 const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTSURNAME    = "PATIENTSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_PATIENTDATEOFBIRTH= "DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_WEIGHT            = "WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
 const char * const  TOKEN_HEIGHT            = "HEIGHT";          /*!< /brief Tokens for Patient::replaceTokens() */

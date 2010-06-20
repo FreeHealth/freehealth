@@ -64,6 +64,7 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/iuser.h>
 
 #include <templatesplugin/templatescreationdialog.h>
 
@@ -77,6 +78,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 
 /** \brief Constructor */
@@ -226,11 +228,7 @@ bool DrugsCentralWidget::createTemplate()
     dlg.setTemplateContent(content);
     dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, DrugsDB::DrugsIO::SimpleVersion));
     dlg.setTemplateMimeTypes(DrugsDB::DrugsIO::prescriptionMimeTypes());
-#ifdef FREEDIAMS
-    dlg.setUserUuid(DrugsDB::Constants::FREEDIAMS_DEFAULT_USER_UUID);
-#else
-    /** \todo FMF : add user uuid */
-#endif
+    dlg.setUserUuid(user()->value(Core::IUser::Uuid).toString());
     dlg.exec();
     return true;
 }

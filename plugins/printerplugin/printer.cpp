@@ -781,8 +781,14 @@ bool Printer::getUserPrinter()
     d->m_Printer = 0;
     QString name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
     if (name == "System") {
-        d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(),
-                                    QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+        if (QPrinterInfo::defaultPrinter().isNull()) {
+            d->m_Printer = new QPrinter;
+            d->m_Printer->setPageSize(QPrinter::A4);
+            d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
+        } else {
+            d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(),
+                                        QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+        }
     } else if (name == "User") {
         askForPrinter(qApp->activeWindow());
     } else {

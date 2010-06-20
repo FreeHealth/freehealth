@@ -43,6 +43,7 @@
 
 #include <coreplugin/core_exporter.h>
 
+#include <QObject>
 #include <QVariant>
 
 /**
@@ -52,15 +53,15 @@
  * \date 13 June 2010
 */
 
-
 namespace Core {
 
 /**
   \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to patients datas.
 */
 
-class CORE_EXPORT IUser
+class CORE_EXPORT IUser : public QObject
 {
+    Q_OBJECT
 public:
     enum DataRepresentation {
         // ORDER SHOULD NEVER CHANGE
@@ -84,17 +85,21 @@ public:
         Adress, Zipcode, City, Country, Tel1, Tel2, Tel3, Fax, PractitionerId,
         Specialities, Qualifications, Preferences,
 
-        GenericHeader,            /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        GenericFooter,            /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        GenericWatermark,         /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        GenericHeader,
+        GenericFooter,
+        GenericWatermark,
 
-        AdministrativeHeader,     /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        AdministrativeFooter,     /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        AdministrativeWatermark,  /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        AdministrativeHeader,
+        AdministrativeFooter,
+        AdministrativeWatermark,
 
-        PrescriptionHeader,       /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        PrescriptionFooter,       /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
-        PrescriptionWatermark,    /*!< \brief Html content of the Extra Document \sa tkTextDocumentExtra */
+        PrescriptionHeader,
+        PrescriptionFooter,
+        PrescriptionWatermark,
+        PrescriptionHeaderPresence,
+        PrescriptionFooterPresence,
+        PrescriptionWatermarkPresence,
+        PrescriptionWatermarkAlignement,
 
         ManagerRights,
         DrugsRights,
@@ -126,7 +131,7 @@ public:
     };
     Q_DECLARE_FLAGS(UserRights, UserRight);
 
-    IUser() {}
+    IUser(QObject *parent) : QObject(parent) {}
     virtual ~IUser() {}
 
     virtual void clear() = 0;
@@ -140,6 +145,9 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
+Q_SIGNALS:
+    void userChanged();
+    void userDataChanged(const int ref);
 };
 
 }  // End Core

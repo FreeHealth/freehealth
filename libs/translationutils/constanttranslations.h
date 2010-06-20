@@ -306,7 +306,7 @@ enum TitleInterpret {
         const char* const WEEKS      = QT_TRANSLATE_NOOP("tkConstants", "week(s)");
         const char* const MONTHS     = QT_TRANSLATE_NOOP("tkConstants", "month(s)");
         const char* const QUARTERS   = QT_TRANSLATE_NOOP("tkConstants", "quarter(s)");
-        const char* const YEARS      = QT_TRANSLATE_NOOP("tkConstants", "years(s)");
+        const char* const YEARS      = QT_TRANSLATE_NOOP("tkConstants", "year(s)");
         const char* const DECADES    = QT_TRANSLATE_NOOP("tkConstants", "decade(s)");
 
         // Day
