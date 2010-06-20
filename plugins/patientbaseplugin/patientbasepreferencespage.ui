@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="1">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -30,14 +30,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="1">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="1">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Virtual patients</string>
@@ -53,7 +53,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="1">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Patient selector</string>
@@ -69,7 +69,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -82,8 +82,50 @@
      </property>
     </spacer>
    </item>
+   <item row="4" column="1">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Patient bar</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Background color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="Utils::ColorButtonChooser" name="patientBarColor">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::ColorButtonChooser</class>
+   <extends>QPushButton</extends>
+   <header location="global">utils/widgets/colorbuttonchooser.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

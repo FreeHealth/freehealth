@@ -99,6 +99,7 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_SELECTOR_FIELDSTOSHOW, PatientSelector::Default);
     defaultvalues.insert(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, true);
     defaultvalues.insert(Constants::S_SELECTOR_USEGENDERCOLORS, true);
+    defaultvalues.insert(Constants::S_PATIENTBARCOLOR, Qt::white);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -128,6 +129,7 @@ void PatientBasePreferencesWidget::setDatasToUi()
 {
     showVirtualPatients->setChecked(settings()->value(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS).toBool());
     genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
+    patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
 }
 
 void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -140,6 +142,7 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
 
     s->setValue(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, showVirtualPatients->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, genderColor->isChecked());
+    s->setValue(Constants::S_PATIENTBARCOLOR, patientBarColor->color());
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -148,6 +151,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     Utils::Log::addMessage("PatientBasePreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
     s->setValue(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, true);
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
+    s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->sync();
 }
 

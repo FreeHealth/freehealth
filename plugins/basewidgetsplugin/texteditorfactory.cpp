@@ -39,8 +39,6 @@
  ***************************************************************************/
 #include "texteditorfactory.h"
 
-//#include <texteditorplugin/texteditor.h>
-
 #include <formmanagerplugin/iformitem.h>
 
 using namespace BaseWidgets;
@@ -153,16 +151,15 @@ bool TextEditorData::setData(const int ref, const QVariant &data, const int role
 
 QVariant TextEditorData::data(const int ref, const int role) const
 {
-//    return m_Check->checkState();
-    return QVariant();
+    return m_Editor->textEdit()->toHtml();
 }
 
 void TextEditorData::setStorableData(const QVariant &data)
 {
 //    qWarning() << "TextEditorData::setStorableData" << data;
-    if (!data.isValid())
+    if (!data.isValid()) 
         return;
-    if (data.isNull()) {
+    if (data.isNull() || (data.toString().size()==1 && data.toString() == "0")) {
         m_OriginalValue.clear();
         m_Editor->textEdit()->clear();
     } else {

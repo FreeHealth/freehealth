@@ -51,9 +51,6 @@ namespace Constants {
     // Tables
     enum Tables {
       Table_IDENT = 0,
-//      Table_LK_TOPRACT,
-//      Table_EPISODES,
-//      Table_EPISODE_CONTENT,
       Table_PATIENT_PHOTO,
       Table_VERSION
     };
@@ -89,27 +86,9 @@ namespace Constants {
     enum LkFields {
         LK_TOPRACT_ID = 0,
         LK_TOPRACT_LKID,
-//        LK_TOPRACT_PATIENT_UID,
         LK_TOPRACT_PRACT_UUID,
         LK_TOPRACT_GROUP_UUID
     };
-//    enum EpisodesFields {
-//        EPISODES_ID = 0,
-//        EPISODES_PATIENT_UID,
-//        EPISODES_LK_TOPRACT_LKID,
-//        EPISODES_FORM_PAGE_UID,
-//        EPISODES_LABEL,
-//        EPISODES_DATE,
-//        EPISODES_DATEOFCREATION,
-//        EPISODES_DATEOFMODIFICATION,
-//        EPISODES_DATEOFVALIDATION,
-//        EPISODES_VALIDATED
-//    };
-//    enum EpisodesContentFields {
-//        EPISODE_CONTENT_ID = 0,
-//        EPISODE_CONTENT_EPISODE_ID,
-//        EPISODE_CONTENT_XML
-//    };
     enum PhotoFields {
         PHOTO_ID = 0 ,
         PHOTO_UID,

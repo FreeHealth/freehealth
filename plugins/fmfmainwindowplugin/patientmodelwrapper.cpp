@@ -52,6 +52,7 @@ using namespace MainWin::Internal;
 PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
         Core::IPatient(model), m_Model(model)
 {
+    connect(model, SIGNAL(patientChanged(QString)), this, SIGNAL(currentPatientChanged()));
 }
 
 PatientModelWrapper::~PatientModelWrapper()
@@ -87,3 +88,8 @@ bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
     return false;
 }
 
+void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
+{
+    if (m_Model->currentPatient().row() == index.row())
+        Q_EMIT this->dataChanged(index.column());
+}

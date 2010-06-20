@@ -70,12 +70,7 @@ namespace Constants {
     const char * const  MODE_SEARCH_UNIQUENAME = "PatientModeSearch";
     const int           P_MODE_SEARCH          = 1;
 
-    // navigation history
-//    const char* const   A_VIEW_INTERACTIONS     = "a.PatientsPlug.ViewInteractions";
+}  // End namespace Patients::Constants
+}  // End namespace Patients
 
-    // search actions
-
-}  // End namespace DrugsWidget::Constants
-}  // End namespace DrugsWidget
-
-#endif // DRUGSCONSTANTS_H
+#endif // PATIENTS_MENUS_CONSTANTS_H

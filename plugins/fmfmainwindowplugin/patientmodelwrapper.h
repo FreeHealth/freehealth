@@ -42,11 +42,16 @@
 
 #include <coreplugin/ipatient.h>
 
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
+
+
 /**
  * \file patientmodelwrapper.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.4.0
- * \date 18 June 2010
+ * \date 20 June 2010
 */
 
 namespace Patients {
@@ -74,6 +79,9 @@ public:
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
     bool fromXml(const QString &xml) {return true;}
+
+private Q_SLOTS:
+    void patientDataChanged(const QModelIndex &index);
 
 private:
     Patients::PatientModel *m_Model;

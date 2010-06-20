@@ -39,9 +39,12 @@
  ***************************************************************************/
 #include "patientbar.h"
 #include "patientmodel.h"
+#include "constants_settings.h"
 #include "ui_patientbar.h"
 
 #include <coreplugin/ipatient.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
 #include <QDataWidgetMapper>
 #include <QIcon>
@@ -50,6 +53,8 @@
 #include <QDebug>
 
 using namespace Patients;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace Patients {
 namespace Internal {
@@ -122,10 +127,8 @@ void PatientBar::paintEvent(QPaintEvent *)
 
     QRect rect = this->rect();
 
-    /** \todo define in settings() */
-    QColor background = QColor(0, 0, 0, 10);
-    QColor light = QColor(255, 255, 255, 40);
-    QColor dark = QColor(0, 0, 0, 60);
+    QColor background = QColor(settings()->value(Constants::S_PATIENTBARCOLOR, Qt::white).toString());
+    background.setAlpha(50);
 
     QLinearGradient gr(QPoint(rect.center().x(), 0), QPoint(rect.center().x(), rect.bottom()));
     gr.setColorAt(0, Qt::white);
@@ -133,29 +136,10 @@ void PatientBar::paintEvent(QPaintEvent *)
     gr.setColorAt(0.7, QColor(230, 230, 230));
 
     p.fillRect(rect, gr);
+    p.fillRect(rect, background);
+
     p.setPen(QColor(200, 200, 200));
     p.drawLine(rect.topLeft(), rect.topRight());
     p.setPen(QColor(150, 160, 200));
     p.drawLine(rect.bottomLeft(), rect.bottomRight());
-
-//    QString tabText(this->tabText(tabIndex));
-//    QRect tabTextRect(tabRect(tabIndex));
-//    QRect tabIconRect(tabTextRect);
-//    QFont boldFont(painter->font());
-//    boldFont.setPointSizeF(Utils::StyleHelper::sidebarFontSize());
-//    boldFont.setBold(true);
-//    painter->setFont(boldFont);
-//    painter->setPen(selected ? Utils::StyleHelper::panelTextColor() : QColor(30, 30, 30, 80));
-//    int textFlags = Qt::AlignCenter | Qt::AlignBottom | Qt::ElideRight | Qt::TextWordWrap;
-//    painter->drawText(tabTextRect, textFlags, tabText);
-//    painter->setPen(selected ? QColor(60, 60, 60) : Utils::StyleHelper::panelTextColor());
-//    int textHeight = painter->fontMetrics().boundingRect(QRect(0, 0, width(), height()), Qt::TextWordWrap, tabText).height();
-//    tabIconRect.adjust(0, 4, 0, -textHeight);
-//    int iconSize = qMin(tabIconRect.width(), tabIconRect.height());
-//    if (iconSize > 4)
-//        style()->drawItemPixmap(painter, tabIconRect, Qt::AlignCenter | Qt::AlignVCenter,
-//                                tabIcon(tabIndex).pixmap(tabIconRect.size()));
-//    painter->translate(0, -1);
-//    painter->drawText(tabTextRect, textFlags, tabText);
-//    painter->restore();
 }
