@@ -40,11 +40,13 @@
 #include "documentprinter.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <printerplugin/printer.h>
+#include <printerplugin/constants.h>
 
 #include <utils/global.h>
 
@@ -59,6 +61,7 @@ using namespace Print::Internal;
 
 inline static Core::IUser *user() {return Core::ICore::instance()->user();}
 inline static Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 DocumentPrinter::DocumentPrinter(QObject *parent) :
         Core::IDocumentPrinter(parent)
@@ -132,6 +135,12 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
                        Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
 }
 
+void DocumentPrinter::setDocumentName(Print::Printer *p) const
+{
+    QString tmp = patient()->value(Core::IPatient::BirthName).toString() + "_" + patient()->value(Core::IPatient::Surname).toString();
+    p->printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+}
+
 bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool printDuplicata) const
 {
     Print::Printer p;
@@ -139,9 +148,8 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
         if (!p.askForPrinter(qApp->activeWindow()))
             return false;
     /** \todo Ask user for printing configuration */
-    QString tmp = patient()->value(Core::IPatient::BirthName).toString() + "_" + patient()->value(Core::IPatient::Surname).toString();
-    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
 
+    setDocumentName(&p);
     prepareHeader(&p, papers);
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
@@ -161,4 +169,23 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
     QTextDocument doc;
     doc.setHtml(html);
     return print(doc, papers, printDuplicata);
+}
+
+bool DocumentPrinter::printPreview(const QString &html, const int papers, bool printDuplicata) const
+{
+    Print::Printer p;
+    QPrinter *printer = new QPrinter;
+    printer->setPageSize(QPrinter::A4);
+    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
+    p.setPrinter(printer);
+
+    setDocumentName(&p);
+    prepareHeader(&p, papers);
+    prepareFooter(&p, papers);
+    prepareWatermark(&p, papers);
+
+    p.setContent(html);
+    p.printWithDuplicata(printDuplicata);
+    p.previewDialog(qApp->activeWindow());
+    // QPrinter is deleted by ~Printer
 }

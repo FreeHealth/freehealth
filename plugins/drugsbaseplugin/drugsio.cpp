@@ -725,35 +725,35 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
 
-static QString prepareHeader()
-{
-    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
-    user()->replaceTokens(header);
-    /** \todo Create a prefs for Date format */
-    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
-    Core::IPatient *patient = Core::ICore::instance()->patient();
-    patient->replaceTokens(header);
-    return header;
-}
-
-static QString prepareFooter(DrugsDB::DrugsModel *model)
-{
-    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
-    user()->replaceTokens(footer);
-    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
-    Core::IPatient *patient = Core::ICore::instance()->patient();
-    patient->replaceTokens(footer);
-    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(QCoreApplication::translate("DrugsIO", "Made with %1.").arg(qApp->applicationName())));
-    return footer;
-}
-
-static inline void setUserWatermark(Print::Printer *p)
-{
-    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
-                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
-                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
-}
+//static QString prepareHeader()
+//{
+//    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
+//    user()->replaceTokens(header);
+//    /** \todo Create a prefs for Date format */
+//    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
+//    Core::IPatient *patient = Core::ICore::instance()->patient();
+//    patient->replaceTokens(header);
+//    return header;
+//}
+//
+//static QString prepareFooter(DrugsDB::DrugsModel *model)
+//{
+//    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
+//    user()->replaceTokens(footer);
+//    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
+//    Core::IPatient *patient = Core::ICore::instance()->patient();
+//    patient->replaceTokens(footer);
+//    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+//                   .arg(QCoreApplication::translate("DrugsIO", "Made with %1.").arg(qApp->applicationName())));
+//    return footer;
+//}
+//
+//static inline void setUserWatermark(Print::Printer *p)
+//{
+//    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
+//                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
+//                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
+//}
 
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 {
@@ -767,46 +767,22 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion),
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-
-//    Print::Printer p;
-//    if (!p.getUserPrinter())
-//        if (!p.askForPrinter(qApp->activeWindow()))
-//            return false;
-//    QString footer;
-//    Core::IPatient *patient = Core::ICore::instance()->patient();
-//    footer = prepareFooter(model);
-//    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
-//    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
-//
-//    p.setHeader(prepareHeader());
-//    p.setFooter(footer);
-//    setUserWatermark(&p);
-//    p.previewer(qApp->activeWindow());
-//    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-//    /** \todo Use NormalVersion instead of MedinTuxversion */
-//    return p.print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
 }
 
 void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
 {
-    Print::Printer p;
-    QPrinter *printer = new QPrinter;
-    printer->setPageSize(QPrinter::A4);
-    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
-    p.setPrinter(printer);
-    QString footer;
-    Core::IPatient *patient = Core::ICore::instance()->patient();
-    footer = prepareFooter(model);
-    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
-    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+    Core::IDocumentPrinter *p = printer();
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
 
-    p.setHeader(prepareHeader());
-    p.setFooter(footer);
-    setUserWatermark(&p);
-    /** \todo Use NormalVersion instead of MedinTuxversion */
-    p.setContent(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
-    p.previewDialog(qApp->activeWindow());
-    // QPrinter is deleted by ~Printer
+    /** \todo add EPISODE_DATE token for FMF */
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    /** \todo add more options for the user : select papers, print duplicatas... */
+    p->printPreview(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion),
+             Core::IDocumentPrinter::Papers_Prescription_User,
+             settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }
 
 /**

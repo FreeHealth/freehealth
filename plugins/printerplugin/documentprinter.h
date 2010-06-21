@@ -73,10 +73,13 @@ public:
     bool print(QTextDocument *text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
     bool print(const QString &html, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
 
+    bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const;
+
 private:
     void prepareHeader(Print::Printer *p, const int papers) const;
     void prepareFooter(Print::Printer *p, const int papers) const;
     void prepareWatermark(Print::Printer *p, const int papers) const;
+    void setDocumentName(Print::Printer *p) const;
 
 private:
     QHash<QString, QVariant> headerTokens, footerTokens, watermarkTokens, globalTokens;
