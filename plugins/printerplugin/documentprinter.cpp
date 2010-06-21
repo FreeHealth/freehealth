@@ -188,4 +188,5 @@ bool DocumentPrinter::printPreview(const QString &html, const int papers, bool p
     p.printWithDuplicata(printDuplicata);
     p.previewDialog(qApp->activeWindow());
     // QPrinter is deleted by ~Printer
+    return true;
 }

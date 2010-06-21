@@ -116,7 +116,7 @@ public:
 
     // Patient's datas wrapper
     IPatient *patient() const {return m_Patient;}
-    void setPatient(IPatient *patient) {}
+    void setPatient(IPatient *) {}
 
     IUser *user() const {return m_User;}
     void setUser(IUser *user) {m_User=user;}

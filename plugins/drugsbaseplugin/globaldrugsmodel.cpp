@@ -74,7 +74,7 @@ class GlobalDrugsModelPrivate
 {
 public:
     GlobalDrugsModelPrivate(GlobalDrugsModel *parent) :
-            q(parent), testAtc(false), testUid(false), testInn(false)
+            testAtc(false), testUid(false), testInn(false), q(parent)
     {
         Q_ASSERT(q);
         ++numberOfInstances;

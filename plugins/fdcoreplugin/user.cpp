@@ -114,6 +114,8 @@ QVariant User::value(const int ref) const
 bool User::setValue(const int ref, const QVariant &value)
 {
     /** \todo code this ??? FREEDIAMS::User::setValue(const int ref, const QVariant &value)*/
+    Q_UNUSED(ref);
+    Q_UNUSED(value);
     return true;
 }
 
@@ -124,6 +126,7 @@ QString User::toXml() const
 
 bool User::fromXml(const QString &xml)
 {
+    Q_UNUSED(xml);
     return true;
 }
 
