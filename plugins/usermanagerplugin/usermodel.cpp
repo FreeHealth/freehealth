@@ -537,15 +537,26 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         case Core::IUser::Preferences :  user->setPreferences(value); break;
 
         /** \todo Add Xml extra document to model */
-        case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::GenericFooter :  user->setExtraDocumentHtml(value, Core::IUser::GenericFooter); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::GenericWatermark :  user->setExtraDocumentHtml(value, Core::IUser::GenericWatermark); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::AdministrativeHeader : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeHeader); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::AdministrativeFooter : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeFooter); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::AdministrativeWatermark : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeWatermark); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::PrescriptionHeader : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeHeader); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::PrescriptionFooter : user->setExtraDocumentHtml(value, Core::IUser::PrescriptionFooter); Q_EMIT(userDocumentsChanged()); break;
-        case Core::IUser::PrescriptionWatermark : user->setExtraDocumentHtml(value, Core::IUser::PrescriptionWatermark); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericFooter :  user->setExtraDocumentHtml(value, Core::IUser::GenericFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericWatermark :  user->setExtraDocumentHtml(value, Core::IUser::GenericWatermark); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericHeaderPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericFooterPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::GenericFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::GenericWatermarkPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::GenericWatermark); Q_EMIT(userDocumentsChanged()); break;
+
+    case Core::IUser::AdministrativeHeader : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::AdministrativeFooter : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::AdministrativeWatermark : user->setExtraDocumentHtml(value, Core::IUser::AdministrativeWatermark); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::AdministrativeHeaderPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::AdministrativeHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::AdministrativeFooterPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::AdministrativeFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::AdministrativeWatermarkPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::AdministrativeWatermark); Q_EMIT(userDocumentsChanged()); break;
+
+    case Core::IUser::PrescriptionHeader : user->setExtraDocumentHtml(value, Core::IUser::PrescriptionHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::PrescriptionFooter : user->setExtraDocumentHtml(value, Core::IUser::PrescriptionFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::PrescriptionWatermark : user->setExtraDocumentHtml(value, Core::IUser::PrescriptionWatermark); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::PrescriptionHeaderPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionHeader); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::PrescriptionFooterPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionFooter); Q_EMIT(userDocumentsChanged()); break;
+    case Core::IUser::PrescriptionWatermarkPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionWatermark); Q_EMIT(userDocumentsChanged()); break;
 
         case Core::IUser::ManagerRights : user->setRights(USER_ROLE_USERMANAGER, Core::IUser::UserRights(value.toInt())); break;
         case Core::IUser::MedicalRights : user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt())); break;
@@ -668,15 +679,82 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
             case Core::IUser::Preferences : toReturn = user->preferences(); break;
 
-            case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
-            case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
-            case Core::IUser::GenericWatermark :  toReturn = user->extraDocumentHtml(Core::IUser::GenericWatermark); break;
-            case Core::IUser::AdministrativeHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
-            case Core::IUser::AdministrativeFooter : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeFooter); break;
-            case Core::IUser::AdministrativeWatermark : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeWatermark); break;
-            case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionHeader); break;
-            case Core::IUser::PrescriptionFooter : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionFooter); break;
-            case Core::IUser::PrescriptionWatermark : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionWatermark); break;
+        case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
+        case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
+        case Core::IUser::GenericWatermark :  toReturn = user->extraDocumentHtml(Core::IUser::GenericWatermark); break;
+
+        case Core::IUser::GenericHeaderPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericHeader);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::GenericFooterPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericFooter);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::GenericWatermarkPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericWatermark);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::GenericWatermarkAlignement :
+            {
+                /** \todo return Watermark alignement */
+                return Qt::AlignCenter;
+            }
+
+        case Core::IUser::AdministrativeHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
+        case Core::IUser::AdministrativeFooter : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeFooter); break;
+        case Core::IUser::AdministrativeWatermark : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeWatermark); break;
+        case Core::IUser::AdministrativeWatermarkPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeWatermark);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::AdministrativeWatermarkAlignement :
+            {
+                /** \todo return Watermark alignement */
+                return Qt::AlignCenter;
+            }
+
+        case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionHeader); break;
+        case Core::IUser::PrescriptionFooter : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionFooter); break;
+        case Core::IUser::PrescriptionWatermark : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionWatermark); break;
+        case Core::IUser::PrescriptionHeaderPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionHeader);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::PrescriptionFooterPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionFooter);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::PrescriptionWatermarkPresence :
+            {
+                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionWatermark);
+                if (doc)
+                    return doc->presence();
+                return Print::Printer::EachPages;
+            }
+        case Core::IUser::PrescriptionWatermarkAlignement :
+            {
+                /** \todo return Watermark alignement */
+                return Qt::AlignCenter;
+            }
 
             case Core::IUser::IsModified : toReturn = user->isModified(); break;
             case Core::IUser::ManagerRights : toReturn = user->rightsValue(USER_ROLE_USERMANAGER); break;

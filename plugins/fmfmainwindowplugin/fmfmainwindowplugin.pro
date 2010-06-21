@@ -11,12 +11,14 @@ HEADERS = mainwindowplugin.h \
     appconfigwizard.h \
     virtualdatabasepreferences.h \
     patientmodelwrapper.h
+
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp \
     appconfigwizard.cpp \
     virtualdatabasepreferences.cpp \
     patientmodelwrapper.cpp
+
 FORMS = virtualbasepage.ui
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \

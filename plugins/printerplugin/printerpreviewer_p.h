@@ -68,13 +68,29 @@ public:
 
     void initialize();
 
-    QTextEdit *headerEditor();
-    QTextEdit *footerEditor();
-    QTextEdit *watermarkEditor();
+    QTextEdit *headerEditor() const;
+    QTextEdit *footerEditor() const;
+    QTextEdit *watermarkEditor() const;
 
-    void setHeader(const QString &html, Printer::Presence p = Printer::EachPages);
-    void setFooter(const QString &html, Printer::Presence p = Printer::EachPages);
-    void setWatermark(const QString &html, Printer::Presence p = Printer::EachPages);
+    QComboBox *headerPresenceCombo() const;
+    QComboBox *footerPresenceCombo() const;
+    QComboBox *watermarkPresenceCombo() const;
+
+    void setHeaderHtml(const QString &html);
+    void setFooterHtml(const QString &html);
+    void setWatermarkHtml(const QString &html);
+
+    QString headerToHtml() const;
+    QString footerToHtml() const;
+    QString watermarkToHtml() const;
+
+    void setHeaderPresence(const int presence);
+    void setFooterPresence(const int presence);
+    void setWatermarkPresence(const int presence);
+
+    int headerPresence() const;
+    int footerPresence() const;
+    int watermarkPresence() const;
 
     void setHeader(const TextDocumentExtra *extra);
     void setFooter(const TextDocumentExtra *extra);
@@ -84,15 +100,9 @@ public:
     void footerToPointer(TextDocumentExtra *extra);
     void watermarkToPointer(TextDocumentExtra *extra);
 
-    QString headerToHtml();
-    QString footerToHtml();
-    QString watermarkToHtml();
-    int headerPresence();
-    int footerPresence();
-    int watermarkPresence();
 
     void setExtraDocument(const QVariant &doc);
-    QVariant extraDocument();
+    QVariant extraDocument() const;
 
 
 private Q_SLOTS:
@@ -108,7 +118,9 @@ private:
     void resizeEvent(QResizeEvent *e);
 
 private:
-    Editor::TextEditor *m_EditorHeader, *m_EditorFooter, *m_EditorWatermark;
+    mutable Editor::TextEditor *m_EditorHeader;
+    mutable Editor::TextEditor *m_EditorFooter;
+    mutable Editor::TextEditor *m_EditorWatermark;
     bool m_AutoCheck;
     Printer printer;
     QPixmap m_PreviewPixmap;

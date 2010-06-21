@@ -197,16 +197,25 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(practIdsListView, Core::IUser::PractitionerId, "stringList");
 
     m_Mapper->addMapping(genericPreview->headerEditor() , Core::IUser::GenericHeader, "html");
+    m_Mapper->addMapping(genericPreview->headerPresenceCombo(), Core::IUser::GenericHeaderPresence, "currentIndex");
     m_Mapper->addMapping(genericPreview->footerEditor() , Core::IUser::GenericFooter, "html");
+    m_Mapper->addMapping(genericPreview->headerPresenceCombo(), Core::IUser::GenericFooterPresence, "currentIndex");
     m_Mapper->addMapping(genericPreview->watermarkEditor(), Core::IUser::GenericWatermark, "html");
+    m_Mapper->addMapping(genericPreview->watermarkPresenceCombo(), Core::IUser::GenericWatermarkPresence, "currentIndex");
 
     m_Mapper->addMapping(adminPreview->headerEditor(), Core::IUser::AdministrativeHeader, "html");
+    m_Mapper->addMapping(adminPreview->headerPresenceCombo(), Core::IUser::AdministrativeHeaderPresence, "currentIndex");
     m_Mapper->addMapping(adminPreview->footerEditor(), Core::IUser::AdministrativeFooter, "html");
+    m_Mapper->addMapping(adminPreview->footerPresenceCombo(), Core::IUser::AdministrativeFooterPresence, "currentIndex");
     m_Mapper->addMapping(adminPreview->watermarkEditor(), Core::IUser::AdministrativeWatermark, "html");
+    m_Mapper->addMapping(adminPreview->watermarkPresenceCombo(), Core::IUser::AdministrativeWatermarkPresence, "currentIndex");
 
     m_Mapper->addMapping(prescriptionPreview->headerEditor(), Core::IUser::PrescriptionHeader, "html");
+    m_Mapper->addMapping(prescriptionPreview->headerPresenceCombo(), Core::IUser::PrescriptionHeaderPresence, "currentIndex");
     m_Mapper->addMapping(prescriptionPreview->footerEditor(), Core::IUser::PrescriptionFooter, "html");
+    m_Mapper->addMapping(prescriptionPreview->footerPresenceCombo(), Core::IUser::PrescriptionFooterPresence, "currentIndex");
     m_Mapper->addMapping(prescriptionPreview->watermarkEditor(), Core::IUser::PrescriptionWatermark, "html");
+    m_Mapper->addMapping(prescriptionPreview->watermarkPresenceCombo(), Core::IUser::PrescriptionWatermarkPresence, "currentIndex");
 
     m_Mapper->addMapping(userManagerRightsListWidget, Core::IUser::ManagerRights, "rights");
     m_Mapper->addMapping(drugsRightsListWidget, Core::IUser::DrugsRights, "rights");

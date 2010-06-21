@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                     **
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -37,42 +37,87 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef PRINTERTPLUGIN_H
-#define PRINTERTPLUGIN_H
+#include "documentprinter.h"
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 
-#include <QtCore/QObject>
+#include <printerplugin/printer.h>
 
-/**
- * \file printerplugin.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.3.0
- * \date 30 Jan 2010
-*/
+#include <utils/global.h>
 
-namespace Print {
-namespace Internal {
-class PrinterPreferencesPage;
-class DocumentPrinter;
+#include <QTextDocument>
+#include <QString>
+
+
+using namespace Print;
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
+static inline void prepareHeader(Printer *p, const int papers)
+{
+    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
+    user()->replaceTokens(header);
+    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
+    Core::IPatient *patient = Core::ICore::instance()->patient();
+    patient->replaceTokens(header);
+    p->setHeader(header);
 }
 
-class PrinterPlugin : public ExtensionSystem::IPlugin
+static inline void prepareFooter(Printer *p, const int papers)
 {
-    Q_OBJECT
-public:
-    PrinterPlugin();
-    ~PrinterPlugin();
+    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
+    user()->replaceTokens(footer);
+    Core::IPatient *patient = Core::ICore::instance()->patient();
+    patient->replaceTokens(footer);
+    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
+                   .arg(QCoreApplication::translate("Print", "Made with %1.").arg(qApp->applicationName())));
+    p->setFooter(footer);
+}
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+static inline void prepareWatermark(Printer *p, const int papers)
+{
+    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
+                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
+                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
+}
 
-private:
-    Print::Internal::PrinterPreferencesPage *prefPage;
-    Internal::DocumentPrinter *docPrinter;
-};
+DocumentPrinter::DocumentPrinter(QObject *parent) :
+        Core::IDocumentPrinter(parent)
+{
+}
 
+void DocumentPrinter::addTokens(const int tokenWhere, const QHash<QString, QVariant> &tokensAndValues)
+{
+}
 
-} // End Print
+void DocumentPrinter::print(const QTextDocument &text) const
+{
+    Print::Printer p;
+    if (!p.getUserPrinter())
+        if (!p.askForPrinter(qApp->activeWindow()))
+            return false;
+    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
+    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
 
-#endif  // PRINTERTPLUGIN_H
+    prepareHeader(&p, m_Papers);
+    prepareFooter(&p, m_Papers);
+    prepareWatermark(&p, m_Papers);
+
+    p.previewer(qApp->activeWindow());
+    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+    /** \todo Use NormalVersion instead of MedinTuxversion */
+    return p.print(text);
+}
+
+void DocumentPrinter::print(QTextDocument *text) const
+{
+    print(*text);
+}
+
+void DocumentPrinter::print(const QString &html) const
+{
+    QTextDocument doc;
+    doc.setHtml(html);
+    print(doc);
+}

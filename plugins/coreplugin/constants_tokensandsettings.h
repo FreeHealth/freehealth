@@ -46,34 +46,38 @@ namespace Constants {
 
 // TEXT COMPLETION tokens
 
+// For Documents
+const char * const  TOKEN_DOCUMENTTITLE     = "DOCUMENTTITLE";
+
+
 // For Patients
-const char * const  TOKEN_PATIENTAGE        = "AGE";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTYEARSOLD   = "YEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTSURNAME    = "PATIENTSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_PATIENTDATEOFBIRTH= "DATEOFBIRTH";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_WEIGHT            = "WEIGHT";        /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_HEIGHT            = "HEIGHT";          /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_CLCR              = "CLCR";          /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_PATIENTAGE        = "AGE";
+const char * const  TOKEN_PATIENTYEARSOLD   = "YEARSOLD";
+const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";
+const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";
+const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";
+const char * const  TOKEN_PATIENTSURNAME    = "PATIENTSURNAME";
+const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";
+const char * const  TOKEN_PATIENTDATEOFBIRTH= "DATEOFBIRTH";
+const char * const  TOKEN_WEIGHT            = "WEIGHT";
+const char * const  TOKEN_HEIGHT            = "HEIGHT";
+const char * const  TOKEN_CLCR              = "CLCR";
 const char * const  TOKEN_DATE              = "DATE";
 const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 
 // For Users
-const char * const  TOKEN_USERAGE        = "USERAGE";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERYEARSOLD   = "USERYEARSOLD";           /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERFULLNAME   = "USERFULLNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERTITLE      = "USERTITLE";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERNAME       = "USERNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERSECONDNAME = "USERSECONDNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERSURNAME    = "USERSURNAME";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERSPECIALITIES    = "USERSPECIALITIES";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERIDENTIFIANTS    = "USERIDENTIFIANTS";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERQUALIFICATIONS    = "USERQUALIFICATIONS";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERFULLADRESS    = "USERFULLADRESS";   /*!< /brief Tokens for Patient::replaceTokens() */
-const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";   /*!< /brief Tokens for Patient::replaceTokens() */
+const char * const  TOKEN_USERAGE        = "USERAGE";
+const char * const  TOKEN_USERYEARSOLD   = "USERYEARSOLD";
+const char * const  TOKEN_USERFULLNAME   = "USERFULLNAME";
+const char * const  TOKEN_USERTITLE      = "USERTITLE";
+const char * const  TOKEN_USERNAME       = "USERNAME";
+const char * const  TOKEN_USERSECONDNAME = "USERSECONDNAME";
+const char * const  TOKEN_USERSURNAME    = "USERSURNAME";
+const char * const  TOKEN_USERSPECIALITIES    = "USERSPECIALITIES";
+const char * const  TOKEN_USERIDENTIFIANTS    = "USERIDENTIFIANTS";
+const char * const  TOKEN_USERQUALIFICATIONS    = "USERQUALIFICATIONS";
+const char * const  TOKEN_USERFULLADRESS    = "USERFULLADRESS";
+const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 
 
 // Some path tags

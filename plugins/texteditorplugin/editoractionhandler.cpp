@@ -46,8 +46,13 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/idocumentprinter.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QAction>
 #include <QApplication>
@@ -63,6 +68,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
@@ -125,7 +131,7 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 
 EditorActionHandler::EditorActionHandler(QObject *parent) :
         QObject(parent),
-        aOpen(0), aSave(0),
+        aOpen(0), aSave(0), aPrint(0),
         aUndo(0), aRedo(0),
         aCut(0), aCopy(0), aPaste(0),
         aBold(0), aUnderline(0), aStrike(0),
@@ -237,6 +243,14 @@ void EditorActionHandler::createActions()
 
     aToggleToolBar = createAction(this, "aToggleToolBar", "", A_EDITOR_TOOGLETOOLBAR, allContexts, EDITOR_TOGGLETOOLBAR_TEXT, cmd, m_ContextualMenu, G_EDITOR_CONTEXT, QKeySequence::UnknownKey, true);
 
+    // Print
+    if (!actionManager()->command(Core::Constants::A_FILE_PRINT)) {
+        aPrint = createAction(this, "aPrinte", ICONPRINT, A_FILE_PRINT, allContexts, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
+        aPrint->setEnabled(false);
+    } else {
+        aPrint = registerAction(Core::Constants::A_FILE_PRINT, allContexts, this);
+    }
+
     // Undo / Redo / Copy / Cut / Paste
     if (!actionManager()->command(Core::Constants::A_EDIT_UNDO)) {
         aUndo = createAction(this, "aUndo", ICONUNDO, A_EDIT_UNDO, allContexts, EDITUNDO_TEXT, cmd, m_EditMenu, G_EDIT_UNDOREDO, QKeySequence::Undo);
@@ -335,6 +349,7 @@ void EditorActionHandler::createActions()
 void EditorActionHandler::connectActions()
 {
     connect(aToggleToolBar, SIGNAL(triggered()), this, SLOT(toogleToolbar()));
+    connect(aPrint,SIGNAL(triggered()),this,SLOT(print()));
     connect(aUndo,SIGNAL(triggered()),this,SLOT(undo()));
     connect(aRedo,SIGNAL(triggered()),this,SLOT(redo()));
     connect(aCopy,SIGNAL(triggered()),this,SLOT(copy()));
@@ -511,6 +526,19 @@ void EditorActionHandler::toogleToolbar()
 {
     if (m_CurrentEditor)
         m_CurrentEditor->toogleToolbar(aToggleToolBar->isChecked());
+}
+
+void EditorActionHandler::print()
+{
+    if (m_CurrentEditor) {
+        Core::IDocumentPrinter *p = printer();
+        p->clearTokens();
+        QHash<QString, QVariant> tokens;
+        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, "");
+        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+        /** \todo add more options for the user : select papers, print duplicatas... */
+        p->print(m_CurrentEditor->textEdit()->document(), Core::IDocumentPrinter::Papers_Generic_User, false);
+    }
 }
 
 void EditorActionHandler::fileOpen()

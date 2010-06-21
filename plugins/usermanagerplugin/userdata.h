@@ -236,7 +236,10 @@ public:
 
     void setExtraDocument(Print::TextDocumentExtra *extra, const int index);
     void setExtraDocumentHtml(const QVariant &val, const int index);
+    void setExtraDocumentPresence(const int presence, const int index);
+
     QVariant extraDocumentHtml(const int index) const;
+    Print::TextDocumentExtra *extraDocument(const int index) const;
 
     QString preferences() const          { return dynamicDataValue(USER_DATAS_PREFERENCES).toString(); }
     QString loginHistory() const         { return dynamicDataValue(USER_DATAS_LOGINHISTORY).toString(); }

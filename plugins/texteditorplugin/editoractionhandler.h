@@ -100,6 +100,7 @@ private Q_SLOTS:
     void toogleToolbar();
 
     // wrap actions slots to current editor slots
+    void print();
     void fileOpen();
     void saveAs();
 
@@ -135,6 +136,7 @@ private:
 
     QAction *aOpen;
     QAction *aSave;
+    QAction *aPrint;
 
     QAction *aUndo;
     QAction *aRedo;

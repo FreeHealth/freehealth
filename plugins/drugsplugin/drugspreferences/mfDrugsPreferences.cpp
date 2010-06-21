@@ -671,10 +671,10 @@ DrugsUserWidget::DrugsUserWidget(QWidget *parent) :
 void DrugsUserWidget::setDatasToUi()
 {
     Core::ISettings *s = settings();
-    previewer->setHeader(s->value(DrugsDB::Constants::S_USERHEADER).toString());
-    previewer->setFooter(s->value(DrugsDB::Constants::S_USERFOOTER).toString());
-    previewer->setWatermark(s->value(DrugsDB::Constants::S_WATERMARK_HTML).toString(),
-                             Print::Printer::Presence(s->value(DrugsDB::Constants::S_WATERMARKPRESENCE).toInt()));
+    previewer->setHeaderHtml(s->value(DrugsDB::Constants::S_USERHEADER).toString());
+    previewer->setFooterHtml(s->value(DrugsDB::Constants::S_USERFOOTER).toString());
+    previewer->setWatermarkHtml(s->value(DrugsDB::Constants::S_WATERMARK_HTML).toString());
+    previewer->setWatermarkPresence(s->value(DrugsDB::Constants::S_WATERMARKPRESENCE).toInt());
 }
 
 void DrugsUserWidget::saveToSettings(Core::ISettings *sets)

@@ -88,10 +88,18 @@ public:
         GenericHeader,
         GenericFooter,
         GenericWatermark,
+        GenericHeaderPresence,
+        GenericFooterPresence,
+        GenericWatermarkPresence,
+        GenericWatermarkAlignement,
 
         AdministrativeHeader,
         AdministrativeFooter,
         AdministrativeWatermark,
+        AdministrativeHeaderPresence,
+        AdministrativeFooterPresence,
+        AdministrativeWatermarkPresence,
+        AdministrativeWatermarkAlignement,
 
         PrescriptionHeader,
         PrescriptionFooter,

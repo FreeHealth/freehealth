@@ -52,13 +52,17 @@
 #include <QFont>
 #include <QColor>
 #include <QVariant>
+
+QT_BEGIN_NAMESPACE
 class QTextEdit;
+class QComboBox;
+QT_END_NAMESPACE
 
 /**
  * \file printer.h
  * \author Eric Maeker and the QPrinterEasy Team
- * \version 0.3.0
- * \date 05 Fev 2010
+ * \version 0.4.0
+ * \date 21 June 2010
 */
 
 
@@ -194,10 +198,15 @@ class PrinterPreviewer : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(PrinterPreviewer)
-    Q_PROPERTY(QString htmlHeader  READ headerToHtml WRITE setHeader USER true)
-    Q_PROPERTY(QString htmlFooter  READ footerToHtml WRITE setFooter USER true)
 
-//    Q_PROPERTY(QVariant extraDoc  READ extraDocument  WRITE setExtraDocument   USER true)
+    Q_PROPERTY(QString htmlHeader     READ headerToHtml    WRITE setHeaderHtml    USER true)
+    Q_PROPERTY(QString htmlFooter     READ footerToHtml    WRITE setFooterHtml    USER true)
+    Q_PROPERTY(QString htmlWatermark  READ watermarkToHtml WRITE setWatermarkHtml USER true)
+
+    Q_PROPERTY(int headerPresence     READ headerPresence    WRITE setHeaderPresence    USER true)
+    Q_PROPERTY(int footerPresence     READ footerPresence    WRITE setFooterPresence    USER true)
+    Q_PROPERTY(int watermarkPresence  READ watermarkPresence WRITE setWatermarkPresence NOTIFY watermarkPresenceChanged USER true)
+
 
 public:
     explicit PrinterPreviewer(QWidget *parent = 0) : QWidget(parent) {}
@@ -205,29 +214,44 @@ public:
 
     virtual void initialize() = 0;
 
-    virtual void setHeader(const QString &html, Printer::Presence p = Printer::EachPages) = 0;
-    virtual void setFooter(const QString &html, Printer::Presence p = Printer::EachPages) = 0;
-    virtual void setWatermark(const QString &html, Printer::Presence p = Printer::EachPages) = 0;
+    // Properties used in QDataWidgetMapper
+    virtual void setHeaderHtml(const QString &html) = 0;
+    virtual void setFooterHtml(const QString &html) = 0;
+    virtual void setWatermarkHtml(const QString &html) = 0;
 
+    virtual void setHeaderPresence(const int presence) = 0;
+    virtual void setFooterPresence(const int presence) = 0;
+    virtual void setWatermarkPresence(const int presence) = 0;
+
+    virtual QString headerToHtml() const = 0;
+    virtual QString footerToHtml() const = 0;
+    virtual QString watermarkToHtml() const = 0;
+
+    virtual int headerPresence() const = 0;
+    virtual int footerPresence() const = 0;
+    virtual int watermarkPresence() const = 0;
+
+    // manual setter / getters
     virtual void setHeader(const TextDocumentExtra *extra) = 0;
     virtual void setFooter(const TextDocumentExtra *extra) = 0;
     virtual void setWatermark(const TextDocumentExtra *extra) = 0;
 
-    virtual QTextEdit *headerEditor() = 0;
-    virtual QTextEdit *footerEditor() = 0;
-    virtual QTextEdit *watermarkEditor() = 0;
-
-    virtual QString headerToHtml() = 0;
-    virtual QString footerToHtml() = 0;
-    virtual QString watermarkToHtml() = 0;
-
-    virtual int headerPresence() = 0;
-    virtual int footerPresence() = 0;
-    virtual int watermarkPresence() = 0;
-
     virtual void headerToPointer(TextDocumentExtra *extra) = 0;
     virtual void footerToPointer(TextDocumentExtra *extra) = 0;
     virtual void watermarkToPointer(TextDocumentExtra *extra) = 0;
+
+    // Editor's access
+    virtual QTextEdit *headerEditor() const = 0;
+    virtual QTextEdit *footerEditor() const = 0;
+    virtual QTextEdit *watermarkEditor() const = 0;
+
+    // Presence combos
+    virtual QComboBox *headerPresenceCombo() const = 0;
+    virtual QComboBox *footerPresenceCombo() const = 0;
+    virtual QComboBox *watermarkPresenceCombo() const = 0;
+
+Q_SIGNALS:
+    void watermarkPresenceChanged(const int presence);
 };
 
 } // End Print

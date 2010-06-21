@@ -61,13 +61,14 @@ static QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QStri
     QWidget *w = new QWidget(parent);
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QGridLayout *grid = new QGridLayout(w);
-    QLabel *l = new QLabel( "<b>"+QApplication::translate("PrinterPreviewer", title.toAscii() )+"</b>", w);
+    QLabel *l = new QLabel("<b>"+QApplication::translate("PrinterPreviewer", title.toAscii())+"</b>", w);
     QComboBox *c = new QComboBox(w);
-    c->setObjectName( title );
-    c->insertItems( 0, Printer::presencesAvailable() );
-    grid->addWidget( l, 0, 0 );
-    grid->addWidget( c, 0, 1 );
-    grid->addWidget( t, 1, 0, 2, 2);
+    c->setObjectName(title);
+    c->insertItems(0, Printer::presencesAvailable());
+    c->setFocusPolicy(Qt::ClickFocus);
+    grid->addWidget(l, 0, 0);
+    grid->addWidget(c, 0, 1);
+    grid->addWidget(t, 1, 0, 2, 2);
     grid->setMargin(2);
     grid->setSpacing(2);
     return w;
@@ -81,91 +82,116 @@ static QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QStri
   \todo pageNumberSpinBox
 */
 PrinterPreviewerPrivate::PrinterPreviewerPrivate(QWidget *parent) :
-    PrinterPreviewer(parent), m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0), m_AutoCheck(false)
+    PrinterPreviewer(parent),
+    m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0),
+    m_AutoCheck(false)
 {
     printer.setContent(EXAMPLE_CONTENT);
-    printer.setPrinter( new QPrinter(QPrinter::ScreenResolution) );
-    printer.printer()->setPaperSize( QPrinter::A4 );
-    printer.printer()->setPageMargins( 10., 10., 10., 10., QPrinter::Millimeter );
+    printer.setPrinter(new QPrinter(QPrinter::ScreenResolution));
+    printer.printer()->setPaperSize(QPrinter::A4);
+    printer.printer()->setPageMargins(10., 10., 10., 10., QPrinter::Millimeter);
 }
 
-QTextEdit *PrinterPreviewerPrivate::headerEditor()
+void PrinterPreviewerPrivate::initialize()
 {
-    if (!m_EditorHeader)
-        setHeader("");
+    setupUi(this);
+    if (!m_EditorHeader) {
+        m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER)));
+    }
+    if (!m_EditorFooter) {
+        m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER)));
+    }
+    if (!m_EditorWatermark) {
+        m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK)));
+    }
+}
+
+QTextEdit *PrinterPreviewerPrivate::headerEditor() const
+{
     return m_EditorHeader->textEdit();
 }
-QTextEdit *PrinterPreviewerPrivate::footerEditor()
+QTextEdit *PrinterPreviewerPrivate::footerEditor() const
 {
-    if (!m_EditorFooter)
-        setFooter("");
     return m_EditorFooter->textEdit();
 }
-QTextEdit *PrinterPreviewerPrivate::watermarkEditor()
+QTextEdit *PrinterPreviewerPrivate::watermarkEditor() const
 {
-    if (!m_EditorWatermark)
-        setWatermark("");
     return m_EditorWatermark->textEdit();
 }
+QComboBox *PrinterPreviewerPrivate::headerPresenceCombo() const
+{
+    return this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+}
 
-void PrinterPreviewerPrivate::setHeader(const QString &html, Printer::Presence p)
+QComboBox *PrinterPreviewerPrivate::footerPresenceCombo() const
+{
+    return this->findChild<QComboBox *>(tkTr(Trans::Constants::FOOTER));
+}
+
+QComboBox *PrinterPreviewerPrivate::watermarkPresenceCombo() const
+{
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+    return c;
+}
+
+void PrinterPreviewerPrivate::setHeaderHtml(const QString &html)
 {
     if (!m_EditorHeader) {
         m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Full);
-        editorLayout->insertWidget(0, createEditor( this, m_EditorHeader, tkTr(Trans::Constants::HEADER) ) );
+        editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER)));
     }
 //    qWarning() << html;
-    printer.setHeader(html,p);
+//    printer.setHeader(html,p);
     m_EditorHeader->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::HEADER) );
-    if (c)
-        return c->setCurrentIndex(p);
+//    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+//    if (c)
+//        return c->setCurrentIndex(p);
     connectPreview(m_EditorHeader);
 }
 
-void PrinterPreviewerPrivate::setFooter(const QString &html, Printer::Presence p)
+void PrinterPreviewerPrivate::setFooterHtml(const QString &html)
 {
     if (!m_EditorFooter) {
         m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Full);
-        editorLayout->insertWidget(1, createEditor( this, m_EditorFooter, tkTr(Trans::Constants::FOOTER) ) );
+        editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER)));
     }
-    printer.setFooter(html,p);
+//    printer.setFooter(html,p);
     m_EditorFooter->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::FOOTER) );
-    if (c)
-        return c->setCurrentIndex(p);
     connectPreview(m_EditorFooter);
 }
 
-void PrinterPreviewerPrivate::setWatermark(const QString &html, Printer::Presence p)
+void PrinterPreviewerPrivate::setWatermarkHtml(const QString &html)
 {
     if (!m_EditorWatermark) {
         m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Full);
-        editorLayout->insertWidget(2, createEditor( this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK) ) );
+        editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK)));
     }
-    printer.addHtmlWatermark(html,p);
+//    printer.addHtmlWatermark(html,p);
     m_EditorWatermark->textEdit()->setHtml(html);
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::WATERMARK) );
-    if (c)
-        return c->setCurrentIndex(p);
+//    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+//    if (c)
+//        return c->setCurrentIndex(p);
     connectPreview(m_EditorWatermark);
 }
 
-QString PrinterPreviewerPrivate::headerToHtml()
+QString PrinterPreviewerPrivate::headerToHtml() const
 {
     if (m_EditorHeader)
         return m_EditorHeader->textEdit()->toHtml();
     return QString();
 }
 
-QString PrinterPreviewerPrivate::footerToHtml()
+QString PrinterPreviewerPrivate::footerToHtml() const
 {
     if (m_EditorFooter)
         return m_EditorFooter->textEdit()->toHtml();
     return QString();
 }
 
-QString PrinterPreviewerPrivate::watermarkToHtml()
+QString PrinterPreviewerPrivate::watermarkToHtml() const
 {
     if (m_EditorWatermark)
         return m_EditorWatermark->textEdit()->toHtml();
@@ -175,25 +201,28 @@ QString PrinterPreviewerPrivate::watermarkToHtml()
 
 void PrinterPreviewerPrivate::setHeader(const TextDocumentExtra *extra)
 {
-    setHeader( extra->toHtml(), extra->presence() );
+    setHeaderHtml(extra->toHtml());
+    setHeaderPresence(extra->presence());
 }
 
 void PrinterPreviewerPrivate::setFooter(const TextDocumentExtra *extra)
 {
-    setFooter( extra->toHtml(), extra->presence() );
+    setFooterHtml(extra->toHtml());
+    setFooterPresence(extra->presence());
 }
 
 void PrinterPreviewerPrivate::setWatermark(const TextDocumentExtra *extra)
 {
-    setWatermark( extra->toHtml(), extra->presence() );
+    setWatermarkHtml(extra->toHtml());
+    setWatermarkPresence(extra->presence());
 }
 
 void PrinterPreviewerPrivate::headerToPointer(TextDocumentExtra *extra)
 {
     if (m_EditorHeader) {
-        extra->setHtml( m_EditorHeader->textEdit()->toHtml() );
-        extra->setPresence( Printer::Presence(headerPresence()) );
-//        extra->setPriority( Printer::Priority(headerPriority()) );
+        extra->setHtml(m_EditorHeader->textEdit()->toHtml());
+        extra->setPresence(Printer::Presence(headerPresence()));
+//        extra->setPriority(Printer::Priority(headerPriority()));
     } else {
         delete extra;
         extra = 0;
@@ -204,9 +233,9 @@ void PrinterPreviewerPrivate::headerToPointer(TextDocumentExtra *extra)
 void PrinterPreviewerPrivate::footerToPointer(TextDocumentExtra *extra)
 {
     if (m_EditorFooter) {
-        extra->setHtml( m_EditorFooter->textEdit()->toHtml() );
-        extra->setPresence( Printer::Presence(footerPresence()) );
-//        extra->setPriority( Printer::Priority(hfooterPriority() ));
+        extra->setHtml(m_EditorFooter->textEdit()->toHtml());
+        extra->setPresence(Printer::Presence(footerPresence()));
+//        extra->setPriority(Printer::Priority(hfooterPriority()));
     } else {
         delete extra;
         extra = 0;
@@ -217,9 +246,9 @@ void PrinterPreviewerPrivate::footerToPointer(TextDocumentExtra *extra)
 void PrinterPreviewerPrivate::watermarkToPointer(TextDocumentExtra *extra)
 {
     if (m_EditorWatermark) {
-        extra->setHtml( m_EditorWatermark->textEdit()->toHtml() );
-        extra->setPresence( Printer::Presence(watermarkPresence()) );
-//        extra->setPriority(Printer::Priority( watermarkPriority()) );
+        extra->setHtml(m_EditorWatermark->textEdit()->toHtml());
+        extra->setPresence(Printer::Presence(watermarkPresence()));
+//        extra->setPriority(Printer::Priority(watermarkPriority()));
     } else {
         delete extra;
         extra = 0;
@@ -227,24 +256,19 @@ void PrinterPreviewerPrivate::watermarkToPointer(TextDocumentExtra *extra)
     }
 }
 
-QVariant PrinterPreviewerPrivate::extraDocument()
+QVariant PrinterPreviewerPrivate::extraDocument() const
 {
 //    qWarning() << "PrinterPreviewerPrivate::extraDocument()";
     QVariantList list;
     QVariant q;
-    TextDocumentExtra(headerToHtml(), headerPresence(), Printer::First );
-    q.setValue(TextDocumentExtra(headerToHtml(), headerPresence(), Printer::First ));
+    TextDocumentExtra(headerToHtml(), headerPresence(), Printer::First);
+    q.setValue(TextDocumentExtra(headerToHtml(), headerPresence(), Printer::First));
     list << q;
-    q.setValue(TextDocumentExtra(footerToHtml(), footerPresence(), Printer::First ));
+    q.setValue(TextDocumentExtra(footerToHtml(), footerPresence(), Printer::First));
     list << q;
-    q.setValue(TextDocumentExtra(watermarkToHtml(), watermarkPresence(), Printer::First ));
+    q.setValue(TextDocumentExtra(watermarkToHtml(), watermarkPresence(), Printer::First));
     list << q;
     return list;
-}
-
-void PrinterPreviewerPrivate::initialize()
-{
-    setupUi(this);
 }
 
 
@@ -261,37 +285,60 @@ void PrinterPreviewerPrivate::changeEvent(QEvent *e)
 }
 
 /** \brief Connect or disconnect editor \e t to update previewer, according to m_AutoCheck. */
-void PrinterPreviewerPrivate::connectPreview( Editor::TextEditor * t )
+void PrinterPreviewerPrivate::connectPreview(Editor::TextEditor * t)
 {
     if (!t)
         return;
     if (m_AutoCheck)
-        connect(t->textEdit(), SIGNAL(textChanged()), this, SLOT( on_updatePreviewButton_clicked() ));
+        connect(t->textEdit(), SIGNAL(textChanged()), this, SLOT(on_updatePreviewButton_clicked()));
     else
-        disconnect(t->textEdit(), SIGNAL(textChanged()), this, SLOT( on_updatePreviewButton_clicked() ));
+        disconnect(t->textEdit(), SIGNAL(textChanged()), this, SLOT(on_updatePreviewButton_clicked()));
 }
 
-int PrinterPreviewerPrivate::headerPresence()
+void PrinterPreviewerPrivate::setHeaderPresence(const int presence)
 {
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::HEADER) );
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+    if (c)
+        c->setCurrentIndex(presence);
+}
+
+void PrinterPreviewerPrivate::setFooterPresence(const int presence)
+{
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::FOOTER));
+    if (c)
+        c->setCurrentIndex(presence);
+}
+
+void PrinterPreviewerPrivate::setWatermarkPresence(const int presence)
+{
+    qWarning() << "setWatermarkPresence" << presence;
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+    if (c)
+        c->setCurrentIndex(presence);
+}
+
+int PrinterPreviewerPrivate::headerPresence() const
+{
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
     if (c)
         return c->currentIndex();
     return 0;
 
 }
 
-int PrinterPreviewerPrivate::footerPresence()
+int PrinterPreviewerPrivate::footerPresence() const
 {
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::FOOTER) );
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::FOOTER));
     if (c)
         return c->currentIndex();
     return 0;
 
 }
 
-int PrinterPreviewerPrivate::watermarkPresence()
+int PrinterPreviewerPrivate::watermarkPresence() const
 {
-    QComboBox *c = this->findChild<QComboBox *>( tkTr(Trans::Constants::WATERMARK) );
+    qWarning() << "watermarkPresence";
+    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
     if (c)
         return c->currentIndex();
     return 0;
@@ -304,13 +351,13 @@ void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
     printer.clearFooters();
     printer.clearWatermark();
     if (m_EditorHeader) {
-        printer.setHeader( m_EditorHeader->textEdit()->toHtml(), Printer::Presence(headerPresence()) );
+        printer.setHeader(m_EditorHeader->textEdit()->toHtml(), Printer::Presence(headerPresence()));
     }
     if (m_EditorFooter) {
-        printer.setFooter( m_EditorFooter->textEdit()->toHtml(), Printer::Presence(footerPresence() ));
+        printer.setFooter(m_EditorFooter->textEdit()->toHtml(), Printer::Presence(footerPresence()));
     }
     if (m_EditorWatermark) {
-        printer.addHtmlWatermark( m_EditorWatermark->textEdit()->toHtml(), Printer::Presence(watermarkPresence()) );
+        printer.addHtmlWatermark(m_EditorWatermark->textEdit()->toHtml(), Printer::Presence(watermarkPresence()));
     }
     printer.previewToPixmap(m_PreviewPixmap, printer.printer());
     if (this->previewLabel->size().height() < m_PreviewPixmap.size().height()) {
@@ -327,7 +374,7 @@ void PrinterPreviewerPrivate::resizeEvent(QResizeEvent *e)
     }
 }
 
-void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged( int checkstate )
+void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged(int checkstate)
 {
     if (checkstate==Qt::Unchecked) {
         m_AutoCheck=false;
@@ -339,7 +386,7 @@ void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged( int checksta
     connectPreview(m_EditorWatermark);
 }
 
-void PrinterPreviewerPrivate::on_duplicataCheck_stateChanged( int state )
+void PrinterPreviewerPrivate::on_duplicataCheck_stateChanged(int state)
 {
     if (state == Qt::Checked)
         printer.printWithDuplicata(true);
@@ -350,8 +397,8 @@ void PrinterPreviewerPrivate::on_duplicataCheck_stateChanged( int state )
 
 void PrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
 {
-    /** \todo needs modification of Printer::previewToPixmap( QPixmap &drawTo, QPrinter *printer ) to
-              Printer::previewToPixmap( QPixmap &drawTo, QPrinter *printer, int pageNumber )
+    /** \todo needs modification of Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer) to
+              Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer, int pageNumber)
     */
 }
 

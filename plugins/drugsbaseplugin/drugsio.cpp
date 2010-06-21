@@ -57,16 +57,18 @@
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
 
-#include <translationutils/constanttranslations.h>
-#include <utils/log.h>
-#include <utils/global.h>
-#include <utils/messagesender.h>
-
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/idocumentprinter.h>
+
+#include <translationutils/constanttranslations.h>
+#include <utils/log.h>
+#include <utils/global.h>
+#include <utils/messagesender.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
 #include <QHash>
@@ -77,6 +79,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 namespace DrugsIOConstants {
@@ -754,23 +757,34 @@ static inline void setUserWatermark(Print::Printer *p)
 
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 {
-    Print::Printer p;
-    if (!p.getUserPrinter())
-        if (!p.askForPrinter(qApp->activeWindow()))
-            return false;
-    QString footer;
-    Core::IPatient *patient = Core::ICore::instance()->patient();
-    footer = prepareFooter(model);
-    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
-    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+    Core::IDocumentPrinter *p = printer();
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
+    /** \todo add EPISODE_DATE token for FMF */
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    /** \todo add more options for the user : select papers, print duplicatas... */
+    return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion),
+                    Core::IDocumentPrinter::Papers_Prescription_User,
+                    settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 
-    p.setHeader(prepareHeader());
-    p.setFooter(footer);
-    setUserWatermark(&p);
-    p.previewer(qApp->activeWindow());
-    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-    /** \todo Use NormalVersion instead of MedinTuxversion */
-    return p.print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
+//    Print::Printer p;
+//    if (!p.getUserPrinter())
+//        if (!p.askForPrinter(qApp->activeWindow()))
+//            return false;
+//    QString footer;
+//    Core::IPatient *patient = Core::ICore::instance()->patient();
+//    footer = prepareFooter(model);
+//    QString tmp = patient->value(Core::IPatient::BirthName).toString() + "_" + patient->value(Core::IPatient::Surname).toString();
+//    p.printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
+//
+//    p.setHeader(prepareHeader());
+//    p.setFooter(footer);
+//    setUserWatermark(&p);
+//    p.previewer(qApp->activeWindow());
+//    p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+//    /** \todo Use NormalVersion instead of MedinTuxversion */
+//    return p.print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion));
 }
 
 void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)

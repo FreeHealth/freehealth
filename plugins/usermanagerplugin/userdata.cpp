@@ -277,7 +277,7 @@ void UserDynamicData::setValue(const QVariant &value)
 }
 
 /**
-  \brief Return the tkTextdocumentExtra related to this user dynamic data or 0 if this data does not correspond to a tkTextDocuementExtra.
+  \brief Return the Print::TextDocumentExtra related to this user dynamic data or 0 if this data does not correspond to a tkTextDocuementExtra.
   The returned pointer SHOULD NOT BE deleted !!!
   \sa UserDynamicData::DynamicDataType
 */
@@ -886,7 +886,7 @@ void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index
 
 /**
   \brief Defines the header, footer and watermark (exactly in this order) to use for generic printing.
-  \sa tkTextDocumentExtra, tkTextDocumentExtra::toXml()
+  \sa Print::TextDocumentExtra, Print::TextDocumentExtra::toXml()
 */
 void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
 {
@@ -904,6 +904,23 @@ void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
     d->m_DynamicDatas[name]->setDirty(true);
 }
 
+void UserData::setExtraDocumentPresence(const int presence, const int index)
+{
+    QString name = d->documentIndexToName(index);
+    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty())
+        return ;
+    if (!d->m_DynamicDatas.keys().contains(name)) {
+        UserDynamicData *data = new UserDynamicData();
+        data->setName(name); // define type as well
+        data->setUserUuid(uuid());
+        d->m_DynamicDatas.insert(name,data);
+    }
+    Print::TextDocumentExtra *t = d->m_DynamicDatas.value(name)->extraDocument();
+    t->setPresence(Print::Printer::Presence(presence));
+    d->m_DynamicDatas[name]->setDirty(true);
+}
+
 QVariant UserData::extraDocumentHtml(const int index) const
 {
     QString name = d->documentIndexToName(index);
@@ -918,6 +935,19 @@ QVariant UserData::extraDocumentHtml(const int index) const
     return QVariant();
 }
 
+Print::TextDocumentExtra *UserData::extraDocument(const int index) const
+{
+    QString name = d->documentIndexToName(index);
+    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty())
+        return 0;
+
+    if (d->m_DynamicDatas.keys().contains(name)) {
+        if (d->m_DynamicDatas.value(name)->type() == UserDynamicData::ExtraDocument)
+            return d->m_DynamicDatas.value(name)->extraDocument();
+    }
+    return 0;
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------------ Viewers -----------------------------------------------

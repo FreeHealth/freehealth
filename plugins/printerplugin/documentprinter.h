@@ -32,80 +32,58 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#include "printerplugin.h"
-#include "printerpreferences.h"
-#include "documentprinter.h"
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef DOCUMENTPRINTER_H
+#define DOCUMENTPRINTER_H
 
-#include <utils/log.h>
-#include <utils/global.h>
+#include <coreplugin/idocumentprinter.h>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+QT_BEGIN_NAMESPACE
+class QTextDocument;
+QT_END_NAMESPACE
 
-#include <QtCore/QtPlugin>
-#include <QPrinterInfo>
+/**
+ * \file documentprinter.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 20 June 2010
+*/
 
-#include <QDebug>
 
-using namespace Print;
+namespace Print {
+class Printer;
+namespace Internal {
 
-PrinterPlugin::PrinterPlugin() :
-        prefPage(0), docPrinter(0)
+class DocumentPrinter : public Core::IDocumentPrinter
 {
-    setObjectName("PrinterPlugin");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PrinterPlugin";
-}
+    Q_OBJECT
 
-PrinterPlugin::~PrinterPlugin()
-{
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
-    if (docPrinter) {
-        removeObject(docPrinter);
-        delete docPrinter; docPrinter=0;
-    }
-}
+public:
+    DocumentPrinter(QObject *parent = 0);
+    ~DocumentPrinter();
 
-bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
+    void clearTokens();
+    void addTokens(const int tokenWhere, const QHash<QString, QVariant> &tokensAndValues);
 
-    // Add translator
-    Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
+    bool print(const QTextDocument &text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
+    bool print(QTextDocument *text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
+    bool print(const QString &html, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
 
-    return true;
-}
+private:
+    void prepareHeader(Print::Printer *p, const int papers) const;
+    void prepareFooter(Print::Printer *p, const int papers) const;
+    void prepareWatermark(Print::Printer *p, const int papers) const;
 
-void PrinterPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PrinterPlugin::extensionsInitialized";
+private:
+    QHash<QString, QVariant> headerTokens, footerTokens, watermarkTokens, globalTokens;
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+};
 
-    // Add preferences pages, printer manager
-    prefPage = new Print::Internal::PrinterPreferencesPage(this);
-    addObject(prefPage);
-    docPrinter = new Internal::DocumentPrinter(this);
-    addObject(docPrinter);
+}  // End namespace Internal
+}  // End namespace Print
 
-    // Check system for existing printers
-//    if (QPrinterInfo::availablePrinters().count()) {
-    if (QPrinterInfo::availablePrinters().isEmpty()) {
-        Utils::Log::addError(this, "No printer installed in this system.");
-        Utils::warningMessageBox(tr("No printer"),
-                                 tr("No printer is configured in your system. The print preview and printing will not work."),
-                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
-                                 qApp->applicationName());
-    }
-}
-
-
-Q_EXPORT_PLUGIN(PrinterPlugin)
+#endif // DOCUMENTPRINTER_H

@@ -915,10 +915,19 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             }
             return it->data(item.column());
         }
-//    case Qt::ToolTipRole :
-//        {
-//            return it->data();
-//        }
+    case Qt::ToolTipRole :
+        {
+            if (item.column()==Label && it->isEpisode()) {
+                return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
+                        .arg(it->data(Date).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_DATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
+                        .arg(it->data(item.column()).toString().replace(" ", "&nbsp;"))
+                        .arg(userModel()->currentUserData(Core::IUser::FullName).toString());
+            }
+//            if (!it->isEpisode()) {
+//                return it->data(EpisodeModel::FormToolTip);
+//            }
+            break;
+        }
     case Qt::ForegroundRole :
         {
             if (it->isEpisode()) {
@@ -1145,7 +1154,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     form->clear();
     form->itemDatas()->setData(0, d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
     form->itemDatas()->setData(0, d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
-    const QString &username = userModel()->currentUserData(Core::IUser::Name).toString();
+    const QString &username = userModel()->currentUserData(Core::IUser::FullName).toString();
     if (username.isEmpty())
         form->itemDatas()->setData(0, tr("No user"), IFormItemData::ID_UserName);
     else

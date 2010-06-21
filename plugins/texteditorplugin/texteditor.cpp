@@ -142,7 +142,9 @@ public:
         }
 
         actions.clear();
-        actions << Core::Constants::A_EDIT_COPY
+        actions
+                << Core::Constants::A_FILE_PRINT
+                << Core::Constants::A_EDIT_COPY
                 << Core::Constants::A_EDIT_PASTE
                 << Core::Constants::A_EDIT_CUT
                 ;

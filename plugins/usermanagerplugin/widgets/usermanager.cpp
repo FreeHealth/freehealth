@@ -179,14 +179,14 @@ UserManager::~UserManager()
   \internal
   \ingroup widget_usertoolkit usertoolkit usermanager
 */
-UserManagerPrivate::UserManagerPrivate(QMainWindow * parent)
-    : QObject(parent),
-    m_Parent(parent),
-    m_SearchToolBut(0),
-    searchByNameAct(0), searchBySurnameAct(0), searchByNameAndSurnameAct(0), searchByCityAct(0),
-    m_PermanentUserName(0),
-    m_PermanentWidget(0),
-    m_Context(0)
+UserManagerPrivate::UserManagerPrivate(QMainWindow * parent) :
+        QObject(parent),
+        m_Parent(parent),
+        m_SearchToolBut(0),
+        searchByNameAct(0), searchBySurnameAct(0), searchByNameAndSurnameAct(0), searchByCityAct(0),
+        m_PermanentUserName(0),
+        m_PermanentWidget(0),
+        m_Context(0)
 {
     m_SearchBy = Core::IUser::Name;
 }
@@ -388,8 +388,10 @@ void UserManagerPrivate::on_clearModificationsAct_triggered()
 
 void UserManagerPrivate::on_saveAct_triggered()
 {
-    if ((! m_CanModify) || (! m_CanCreate))
+    if ((!m_CanModify) || (! m_CanCreate))
         return;
+    // redefine focus
+    m_Parent->statusBar()->setFocus();
     // save changes to database
     if (UserModel::instance()->submitAll())
         m_Parent->statusBar()->showMessage(tr("User saved"), 2000);
