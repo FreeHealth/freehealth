@@ -217,8 +217,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION));
-    raise();
-    show();
     return true;
 }
 
@@ -229,18 +227,20 @@ void MainWindow::extensionsInitialized()
         return;
     }
 
+    finishSplash(this);
+
     if (settings()->firstTimeRunning()) {
         if (!applicationConfiguratorWizard()) {
-            finishSplash(this);
             qApp->exit(1234);
             return;
         }
         settings()->noMoreFirstTimeRunning();
     }
 
+    raise();
+    show();
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
@@ -250,7 +250,6 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-    finishSplash(this);
 
     setCentralWidget(m_modeStack);
 

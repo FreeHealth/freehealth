@@ -76,7 +76,7 @@ public:
     };
     Q_DECLARE_FLAGS( AvailableActions, AvailableAction );
 
-    ListView( QWidget *parent = 0, AvailableActions actions = DefaultActions );
+    ListView(QWidget *parent = 0, AvailableActions actions = DefaultActions);
     virtual ~ListView();
 
     void setObjectName( const QString &name );

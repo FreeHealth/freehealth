@@ -77,6 +77,7 @@ UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWi
    m_AllIsGood = false;
    // connect buttons
    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+   m_ui->oldPass->lineEdit()->setFocus();
 }
 
 void UserPasswordDialog::changeTitle(const QString &title)

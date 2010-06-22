@@ -68,11 +68,14 @@ public:
     ~StringListView();
 
     QVariant getStringList() const              { return static_cast<QStringListModel*>(this->model())->stringList(); }
-    void setStringList( const QVariant & list ) { static_cast<QStringListModel*>(this->model())->setStringList( list.toStringList()); }
+    void setStringList( const QVariant & list ) { static_cast<QStringListModel*>(this->model())->setStringList(list.toStringList()); }
 
     void setItemsCheckable( bool state );
     QVariant getCheckedStringList() const;
     void setCheckedStringList( const QVariant & list );
+
+Q_SIGNALS:
+    void stringListChanged(const QStringList &newList);
 
 };
 

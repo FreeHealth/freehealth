@@ -60,7 +60,7 @@ UserRightsModel::UserRightsModel(QObject *parent) :
 {
     retranslate();
     m_NameToRole.insert(0, Core::IUser::NoRights);
-    m_NameToRole.insert(1, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::WriteAll | Core::IUser::Print | Core::IUser::Create | Core::IUser::Delete);
+    m_NameToRole.insert(1, Core::IUser::AllRights);
     m_NameToRole.insert(2, Core::IUser::ReadOwn);
     m_NameToRole.insert(3, Core::IUser::ReadDelegates);
     m_NameToRole.insert(4, Core::IUser::ReadAll);
@@ -89,8 +89,8 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     }
     if (role==Qt::CheckStateRole) {
         if (index.row()==1) // All Rights
-            return m_Rights == m_NameToRole.value(1) ? Qt::Checked : Qt::Unchecked;
-        if (index.row()==0)
+            return m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked;
+        if (index.row()==0) // No Rights
             return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
         if (m_Rights & m_NameToRole.value(index.row(), 0))
             return Qt::Checked;

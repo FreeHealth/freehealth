@@ -99,6 +99,8 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 
 QHash<int, QString> UserWizard::m_Papers;
+QHash<int, int> UserWizard::m_Rights;
+
 
 UserWizard::UserWizard(QWidget *parent)
     : QWizard(parent),
@@ -196,16 +198,10 @@ void UserWizard::done(int r)
         idx = userModel()->index(m_Row, Core::IUser::PractitionerId);
         userModel()->setData(idx, field("Identifiants"));
 
-        idx = userModel()->index(m_Row, Core::IUser::ManagerRights);
-        userModel()->setData(idx, field("UserManager"));
-        idx = userModel()->index(m_Row, Core::IUser::DrugsRights);
-        userModel()->setData(idx, field("DrugsManager"));
-        idx = userModel()->index(m_Row, Core::IUser::MedicalRights);
-        userModel()->setData(idx, field("Medical"));
-        idx = userModel()->index(m_Row, Core::IUser::ParamedicalRights);
-        userModel()->setData(idx, field("Paramedical"));
-        idx = userModel()->index(m_Row, Core::IUser::AdministrativeRights);
-        userModel()->setData(idx, field("Administrative"));
+        foreach(int role, m_Rights.keys()) {
+            idx = userModel()->index(m_Row, role);
+            userModel()->setData(idx, m_Rights.value(role));
+        }
 
         const QString &uuid = userModel()->index(m_Row, Core::IUser::Uuid).data().toString();
         QHashIterator<int, QString> it(m_Papers);
@@ -475,12 +471,12 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
     setTitle(tr("Select a profil"));
     setSubTitle(tr("FreeMedForms allows you to create users using predefined profils. Select your profil and options."));
 
-    registerField("isMedical", new QWidget(this));
-    registerField("UserManager", new QWidget(this));
-    registerField("DrugsManager", new QWidget(this));
-    registerField("Medical", new QWidget(this));
-    registerField("Paramedical", new QWidget(this));
-    registerField("Administrative", new QWidget(this));
+//    registerField("isMedical", new QWidget(this));
+//    registerField("UserManager", new QWidget(this));
+//    registerField("DrugsManager", new QWidget(this));
+//    registerField("Medical", new QWidget(this));
+//    registerField("Paramedical", new QWidget(this));
+//    registerField("Administrative", new QWidget(this));
 
     Views::StringListModel *model = new Views::StringListModel(this);
     model->setStringList(QStringList() << tkTr(Trans::Constants::DOCTOR) << tr("Software administrator"));
@@ -499,25 +495,25 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
 
 bool UserProfilPage::validatePage()
 {
-    setField("UserManager",  Core::IUser::NoRights);
-    setField("DrugsManager",  Core::IUser::NoRights);
-    setField("Medical", Core::IUser::NoRights);
-    setField("Paramedical", Core::IUser::NoRights);
-    setField("Administrative", Core::IUser::NoRights);
-    setField("isMedical", false);
+    UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
+    UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::NoRights);
+    UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
+    UserWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
+    UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
     next = UserWizard::PaperGenericPage;
     QStringList result = view->getCheckedStringList().toStringList();
     if (result.contains(tkTr(Trans::Constants::DOCTOR))) {
-        setField("DrugsManager",  Core::IUser::AllRights);
-        setField("Medical", Core::IUser::AllRights);
-        setField("Paramedical", int(Core::IUser::ReadAll | Core::IUser::Print));
-        setField("Administrative", Core::IUser::NoRights);
-        setField("isMedical", true);
+        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
+        UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
+        UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
+        UserWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
+        UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
         next = UserWizard::SpecialiesQualificationsPage;
     }
     if (result.contains(tr("Software administrator"))) {
-        setField("UserManager",  Core::IUser::AllRights);
+        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
     }
+
     if (box->isChecked()) {
         next = UserWizard::RightsPage;
         return true;
@@ -563,17 +559,11 @@ UserRightsPage::UserRightsPage(QWidget *parent)
 
     QTabWidget *tab = new QTabWidget(this);
 
-    Internal::UserRightsWidget *um = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget *drugs = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget *med = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget *paramed = new Internal::UserRightsWidget(this);
-    Internal::UserRightsWidget *administ = new Internal::UserRightsWidget(this);
-
-    um->setRights(field("UserManager").toInt());
-    um->setRights(field("DrugsManager").toInt());
-    um->setRights(field("Medical").toInt());
-    um->setRights(field("Paramedical").toInt());
-    um->setRights(field("Administrative").toInt());
+    um = new Internal::UserRightsWidget(this);
+    drugs = new Internal::UserRightsWidget(this);
+    med = new Internal::UserRightsWidget(this);
+    paramed = new Internal::UserRightsWidget(this);
+    administ = new Internal::UserRightsWidget(this);
 
     tab->addTab(um, tr("Users"));
     tab->addTab(drugs, tr("Drugs"));
@@ -581,19 +571,30 @@ UserRightsPage::UserRightsPage(QWidget *parent)
     tab->addTab(paramed, tr("Paramedicals"));
     tab->addTab(administ, tr("Administrative"));
 
-    /** \todo set the values of the rights */
-    registerField("UserManager", um, "rights");
-    registerField("DrugsManager", drugs, "rights");
-    registerField("Medical", med, "rights");
-    registerField("Paramedical", paramed, "rights");
-    registerField("Administrative", administ, "rights");
-
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(tab, 0, 0);
     setLayout(layout);
 }
 
+void UserRightsPage::initializePage()
+{
+    um->setRights(UserWizard::userRights(Core::IUser::ManagerRights));
+    drugs->setRights(UserWizard::userRights(Core::IUser::DrugsRights));
+    med->setRights(UserWizard::userRights(Core::IUser::MedicalRights));
+    paramed->setRights(UserWizard::userRights(Core::IUser::ParamedicalRights));
+    administ->setRights(UserWizard::userRights(Core::IUser::AdministrativeRights));
 
+}
+
+bool UserRightsPage::validatePage()
+{
+    UserWizard::setUserRights(Core::IUser::ManagerRights, um->getRights());
+    UserWizard::setUserRights(Core::IUser::DrugsRights, drugs->getRights());
+    UserWizard::setUserRights(Core::IUser::MedicalRights, med->getRights());
+    UserWizard::setUserRights(Core::IUser::ParamedicalRights, paramed->getRights());
+    UserWizard::setUserRights(Core::IUser::AdministrativeRights, administ->getRights());
+    return true;
+}
 
 static inline QString defaultHeader()
 {
@@ -671,7 +672,7 @@ bool UserPaperPage::validatePage()
 
 int UserPaperPage::nextId() const
 {
-    if (field("isMedical").toBool() && wizard()->page(UserWizard::PaperPrescriptionsPage)!=this)
+//    if (field("isMedical").toBool() && wizard()->page(UserWizard::PaperPrescriptionsPage)!=this)
         return UserWizard::PaperPrescriptionsPage;
-    return -1;
+//    return -1;
 }

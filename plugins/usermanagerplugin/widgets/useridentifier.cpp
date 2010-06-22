@@ -112,6 +112,7 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
 
 //    m_ui->lblAppName->setText(qApp->applicationName());
     m_ui->password->toogleEchoMode();
+    m_ui->login->lineEdit()->setFocus();
 }
 
 void UserIdentifier::done(int result)

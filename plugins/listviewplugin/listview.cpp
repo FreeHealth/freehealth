@@ -366,6 +366,8 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
     connect(d->m_ListView, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(contextMenu(const QPoint &)));
 
+    d->m_ListView->setFocusProxy(this);
+
     d->populateToolbar();
 }
 

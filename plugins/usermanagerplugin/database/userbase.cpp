@@ -479,6 +479,16 @@ QString UserBase::createNewUuid()
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Datas savers ---------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+static inline QString defaultHeader()
+{
+    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_header.htm");
+}
+
+static inline QString defaultFooter()
+{
+    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
+}
+
 /**
   \brief Create the default users database if it does not exists.
   Actually this function only supports SQLite database.
@@ -523,10 +533,10 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     user->setCryptedPassword(DEFAULT_USER_PASSWORD);
     user->setValidity(true);
     user->setName(DEFAULT_USER_NAME);
+    user->setSurname(DEFAULT_USER_SURNAME);
     user->setLanguage(QLocale().name().left(2));
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAdress(DEFAULT_USER_ADRESS);
-    user->setSurname(DEFAULT_USER_SURNAME);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
@@ -536,7 +546,7 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
 
     // Create default header
     Print::TextDocumentExtra *headerDoc = new Print::TextDocumentExtra();
-    headerDoc->setHtml(DEFAULT_USER_HEADER);
+    headerDoc->setHtml(defaultHeader());
     UserDynamicData *header = new UserDynamicData();
     header->setName(USER_DATAS_GENERICHEADER);
     header->setValue(headerDoc);
@@ -546,7 +556,7 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     // Create default footer
     UserDynamicData *footer = new UserDynamicData();
     Print::TextDocumentExtra *extraFooter = new Print::TextDocumentExtra();
-    extraFooter->setHtml(DEFAULT_USER_FOOTER);
+    extraFooter->setHtml(defaultFooter());
     footer->setName(USER_DATAS_GENERICFOOTER);
     footer->setValue(extraFooter);
     footer->setUserUuid(user->uuid());

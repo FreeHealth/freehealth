@@ -76,6 +76,9 @@ class TextDocumentExtra;
 
 
 namespace UserPlugin {
+namespace Internal {
+class UserRightsWidget;
+}
 
 /** \todo create a new wizard manager in Core */
 
@@ -105,6 +108,8 @@ public:
     bool setCreatedUserAsCurrent() const;
 
     static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}
+    static void setUserRights(const int role, const int value) {m_Rights.insert(role, value);}
+    static int userRights(const int role) {return m_Rights.value(role,0);}
 
 protected Q_SLOTS:
     void done(int r);
@@ -113,6 +118,7 @@ private:
     int m_Row;
     bool m_Saved, m_CreateUser;
     static QHash<int, QString> m_Papers;
+    static QHash<int, int> m_Rights;
 };
 
 
@@ -188,6 +194,11 @@ class UserRightsPage: public QWizardPage
     Q_OBJECT
 public:
     UserRightsPage(QWidget *parent = 0);
+    void initializePage();
+    bool validatePage();
+
+private:
+    Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
 };
 
 class UserPaperPage: public QWizardPage
