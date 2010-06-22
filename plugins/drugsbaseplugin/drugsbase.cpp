@@ -342,6 +342,8 @@ void DrugsBase::logChronos(bool state)
 
 const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
 {
+    if (!d->m_ActualDBInfos)
+        return new DatabaseInfos;
     return d->m_ActualDBInfos;
 }
 

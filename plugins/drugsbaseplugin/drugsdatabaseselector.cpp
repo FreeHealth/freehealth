@@ -101,6 +101,12 @@ DrugsDatabaseSelector *DrugsDatabaseSelector::instance()
     return m_Instance;
 }
 
+DatabaseInfos::DatabaseInfos() :
+        name(Constants::DB_DEFAULT_IDENTIFIANT),
+        identifiant(Constants::DB_DEFAULT_IDENTIFIANT)
+{
+}
+
 void DatabaseInfos::setDrugsNameConstructor(const QString &s)
 {
     drugsNameConstructor = s;

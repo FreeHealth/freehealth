@@ -661,7 +661,11 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
 
     // Add drugsBase identifiant
-    QString dbName = drugsBase()->actualDatabaseInformations()->identifiant;
+    QString dbName;
+    if (drugsBase()->actualDatabaseInformations())
+        dbName = drugsBase()->actualDatabaseInformations()->identifiant;
+    else
+        dbName = Constants::DB_DEFAULT_IDENTIFIANT;
     xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
 
     // Add the main root node

@@ -93,11 +93,14 @@
       <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="horizontalSpacing">
+       <number>2</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>5</number>
+      </property>
       <property name="margin">
        <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>2</number>
       </property>
       <item row="1" column="0">
        <widget class="QDateEdit" name="dateEdit"/>
@@ -165,6 +168,7 @@
         </property>
         <property name="font">
          <font>
+          <pointsize>12</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>

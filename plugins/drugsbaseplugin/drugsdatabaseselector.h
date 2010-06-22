@@ -60,6 +60,7 @@ class DrugsDatabaseSelectorPrivate;
 class DRUGSBASE_EXPORT DatabaseInfos
 {
 public:
+    DatabaseInfos();
     void warn();
     QString translatedName() const;
     QHash<QString, QString> names() const;
