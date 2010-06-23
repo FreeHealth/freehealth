@@ -783,11 +783,14 @@ bool Printer::getUserPrinter()
     if (name == "System") {
         if (QPrinterInfo::defaultPrinter().isNull()) {
             d->m_Printer = new QPrinter;
+            d->m_Printer->setResolution(QPrinter::ScreenResolution);
             d->m_Printer->setPageSize(QPrinter::A4);
             d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
         } else {
             d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(),
-                                        QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+                                        QPrinter::ScreenResolution);
+                                        //QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+            d->m_Printer->setPaperSize(QPrinter::A4);
         }
     } else if (name == "User") {
         askForPrinter(qApp->activeWindow());
@@ -796,6 +799,8 @@ bool Printer::getUserPrinter()
             if (info.printerName() == name) {
                 d->m_Printer = new QPrinter(info,
                                             QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
+                d->m_Printer->setPageSize(QPrinter::A4);
+                d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
                 break;
             }
         }

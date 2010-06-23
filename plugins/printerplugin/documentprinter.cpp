@@ -173,11 +173,15 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
 
 bool DocumentPrinter::printPreview(const QString &html, const int papers, bool printDuplicata) const
 {
+//    Print::Printer p;
+//    QPrinter *printer = new QPrinter;
+//    printer->setPageSize(QPrinter::A4);
+//    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
+//    p.setPrinter(printer);
     Print::Printer p;
-    QPrinter *printer = new QPrinter;
-    printer->setPageSize(QPrinter::A4);
-    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
-    p.setPrinter(printer);
+    if (!p.getUserPrinter())
+        if (!p.askForPrinter(qApp->activeWindow()))
+            return false;
 
     setDocumentName(&p);
     prepareHeader(&p, papers);
