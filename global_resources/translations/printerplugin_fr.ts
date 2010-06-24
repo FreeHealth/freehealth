@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
+    <name>Print</name>
+    <message>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="127"/>
+        <source>Made with %1.</source>
+        <translation>Réalisé avec %1.</translation>
+    </message>
+</context>
+<context>
     <name>Print::Internal::PrinterPreferences</name>
     <message>
         <location filename="../../plugins/printerplugin/printerpreferences.ui" line="14"/>
@@ -68,7 +76,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="134"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="133"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -82,12 +90,12 @@ Veuillez configurer une imprimante.
 Référez-vous à la documentation de votre système d&apos;exploitation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="162"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="161"/>
         <source>Always use system&apos;s default printer</source>
         <translation>Toujours utiliser l&apos;imprimante système par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="166"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="165"/>
         <source>Always ask user for the printer</source>
         <translation>Toujours demander à l&apos;utilisateur</translation>
     </message>
@@ -140,47 +148,47 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="91"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="95"/>
         <source>Each Pages</source>
         <translation>Toutes les pages</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="92"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="96"/>
         <source>First page only</source>
         <translation>Première page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="93"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="97"/>
         <source>Second page only</source>
         <translation>Seconde page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="94"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="98"/>
         <source>Last page only</source>
         <translation>Dernière page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="95"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="99"/>
         <source>All pages but first</source>
         <translation>Toutes les pages sauf la première</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="96"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="100"/>
         <source>Odd pages</source>
         <translation>Pages impairs</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="97"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="101"/>
         <source>Even pages</source>
         <translation>Pages pairs</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="98"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="102"/>
         <source>Duplicatas only</source>
         <translation>Duplicatas seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="812"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="823"/>
         <source>Print Document</source>
         <translation>Impression de document</translation>
     </message>
@@ -188,17 +196,17 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
 <context>
     <name>Print::PrinterPlugin</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="93"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="103"/>
         <source>No printer</source>
         <translation>Pas d&apos;imprimante</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="94"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="104"/>
         <source>No printer is configured in your system. The print preview and printing will not work.</source>
         <translation>Aucune imprimante configurée dnas votre système. La prévisualisation de l&apos;impression et l&apos;impression ne fonctionneront pas.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="95"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="105"/>
         <source>You must configure at least on printer. Please refer to your system documentation. 
 </source>
         <translation>Vous devez configurer au moins un imprimante. Référez-vous à la documentation de votre système d&apos;exploitation.

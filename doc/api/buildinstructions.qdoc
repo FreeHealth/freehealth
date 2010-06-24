@@ -74,30 +74,54 @@ You can combine Linux integration and root path when building a debian package
 or a rpm package.
 Actually only valid for Linux.
 
+\subsection install_root_path Specify the install libs path
 
-\subsection build_link Create a symbolic link to the binary
+The <em>"LIBRARY_BASENAME=lib64"</em> used to tell the installation process where
+to install plugins and libs. This is only valid in LINUX_INTEGRATED configuration.\n
+The lib path will be : \e /usr/LIBRARY_BASENAME/FreeMedForms.
 
-The <em>"LINK_ROOT_PATH=/usr/bin"</em>, if specified, creates,
-at the time of installation, a symbolic link to the application in
-specified directory. Here a link named \e FreeMedForms will be created
-in the directory <em>/usr/bin</em> and point to the binary
-the installed application (see INSTALL_ROOT_PATH). Only valid for Linux.
+\subsection install_code_samples Code samples
 
 \code
-# Command to execute when building a Linux package into a fake root system
+# FreeMedForms Sample
+# 1. Building a Linux package into a fake root system
 cd svn-freemedforms
-qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=%build__path/usr/share/FreeMedForms"
+qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=%build__path/usr/"
 make
 make install
-\endcode
 
-\code
-# sample code to build an independant package containing Qt libs and plugs
+# 2. Fresh compilation and install without aiming to create a package
+cd svn-freemedforms
+qmake freemedforms.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=/usr/"
+make
+make install
+
+# 3. Building an independant package containing Qt libs and plugs
 cd svn-freemedforms
 qmake freemedforms.pro -r -config release
 make
 make install
 ./packages/linux/FreeMedForms/FreeMedForms
+
+# FreeDiams Sample
+# 1. Building a Linux package into a fake root system
+cd svn-freediams
+qmake freediams.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=%build__path/usr/"
+make
+make install
+
+# 2. Fresh compilation and install without aiming to create a package
+cd svn-freediams
+qmake freediams.pro -r -config release "CONFIG+="LINUX_INTEGRATED" "INSTALL_ROOT_PATH=/usr/"
+make
+make install
+
+# 3. Building an independant package containing Qt libs and plugs
+cd svn-freediams
+qmake freediams.pro -r -config release
+make
+make install
+./packages/linux/FreeDiams/FreeDiams
 \endcode
 
 

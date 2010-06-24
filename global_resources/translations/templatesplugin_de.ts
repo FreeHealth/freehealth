@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="126"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="124"/>
         <source>Save templates .</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="127"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
@@ -105,46 +105,41 @@
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="49"/>
-        <source>Always save data without prompting user</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="56"/>
         <source>Always ask for confirmation before deletion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="66"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="59"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="74"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="67"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="89"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="82"/>
         <source>Always expand categories and templates tree</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="103"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="96"/>
         <source>Category background color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="129"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="122"/>
         <source>Category foreground color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="181"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="174"/>
         <source>Template foreground color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="155"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="148"/>
         <source>Template background color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -155,7 +150,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="96"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="89"/>
         <source>Lock category view at startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,24 +171,24 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="357"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="362"/>
         <source>Unable to connect the Templates host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="357"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="362"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="368"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="372"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="368"/>
         <source>Unable to create the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="372"/>
         <source>Unable to connect the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +196,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1028"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1030"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,17 +204,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="622"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="623"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="623"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="624"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="624"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>

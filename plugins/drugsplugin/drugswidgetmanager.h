@@ -79,7 +79,7 @@ private:
     QList<int> ctx;
 };
 
-class DrugsActionHandler : public QObject
+class DRUGS_EXPORT DrugsActionHandler : public QObject
 {
     Q_OBJECT
 public:

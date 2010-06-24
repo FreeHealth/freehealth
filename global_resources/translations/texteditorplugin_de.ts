@@ -209,18 +209,18 @@
 <context>
     <name>Editor::TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="341"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="417"/>
         <source>HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="361"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="437"/>
         <source>HTML-Files (*.htm *.html);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="379"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="381"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="455"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="457"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>
