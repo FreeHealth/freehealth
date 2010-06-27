@@ -107,6 +107,7 @@ private Q_SLOTS:
     void removeItem();
     void clear();
     void viewInteractions();
+    void searchTriggered();
     void listViewItemChanged();
     void searchActionChanged(QAction *a);
     void printPrescription();
@@ -139,6 +140,7 @@ protected:
     QAction *aEdit;
     QAction *aClear;
     QAction *aViewInteractions;
+    QAction *aSearch;
     QActionGroup *gSearchMethod;
     QAction *aSearchCommercial;
     QAction *aSearchMolecules;

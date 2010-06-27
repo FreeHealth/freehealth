@@ -181,6 +181,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
+    createEditMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
@@ -212,8 +213,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_CheckUpdate //|
 //            Core::MainWindowActions::A_QtAbout
             );
-    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
-    actions.createEditActions(false);
+    actions.setTemplatesActions(Core::MainWindowActions::A_Templates_New);
+    actions.createEditActions(true);
     createActions(actions);
 
     connectFileActions();

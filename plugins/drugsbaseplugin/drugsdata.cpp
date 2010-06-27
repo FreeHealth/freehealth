@@ -52,13 +52,10 @@
 
 #include "drugsdata.h"
 
-// include drugswidget headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/interactionsmanager.h>
-
-//#include <drugsmodel/mfDosageModel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -80,6 +77,8 @@ using namespace Trans::ConstantTranslations;
 
 static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
@@ -107,8 +106,8 @@ public:
         m_Compositions.clear();
     }
 
-    QString prescriptionToText( bool toHtml );
-    bool usesFromTo( const QString &from, QString &to, const int prescriptionIndex );
+    QString prescriptionToText(bool toHtml);
+    bool usesFromTo(const QString &from, QString &to, const int prescriptionIndex);
 
 
     QList<DrugComposition *>     m_Compositions;
@@ -148,22 +147,22 @@ DrugsData::~DrugsData()
 //--------------------------------------------------------------------------------------------------------
 /**
   \brief Stores \e value of drugs referenced by its source table index /e tableref, source field \e fieldref.
-  \sa mfDrugsBase::getDrugByCIS()
+  \sa DrugsBase::getDrugByCIS()
   \sa mfDrugsConstants
 */
-void DrugsData::setValue( const int tableref, const int fieldref, const QVariant & value )
+void DrugsData::setValue(const int tableref, const int fieldref, const QVariant & value)
 {
     switch(tableref)
     {
     case Table_DRUGS : d->m_CISValues[fieldref] = value; break;
     case Table_COMPO :
         {
-            if ( fieldref == COMPO_IAM_DENOMINATION )
-                d->m_COMPOValues.insertMulti( fieldref, value );
-            else if ( fieldref == COMPO_IAM_CLASS_DENOMINATION )
-                d->m_COMPOValues.insert( fieldref, value );
-            else if ( !d->m_COMPOValues.values( fieldref ).contains( value ) )
-                d->m_COMPOValues.insertMulti( fieldref, value );
+            if (fieldref == COMPO_IAM_DENOMINATION)
+                d->m_COMPOValues.insertMulti(fieldref, value);
+            else if (fieldref == COMPO_IAM_CLASS_DENOMINATION)
+                d->m_COMPOValues.insert(fieldref, value);
+            else if (!d->m_COMPOValues.values(fieldref).contains(value))
+                d->m_COMPOValues.insertMulti(fieldref, value);
             break;
         }
     default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::setValue()."); break;
@@ -176,20 +175,20 @@ void DrugsData::addComposition(DrugComposition *compo)
     d->m_Compositions.append(compo);
 }
 
-void DrugsData::addCIP( const int CIP, const QString &denomination, QDate date )
+void DrugsData::addCIP(const int CIP, const QString &denomination, QDate date)
 {
     /** \todo one drug can have multi presentations ==> list */
     DrugsDataPrivate::structCIP st;
     st.CIP = CIP;
     st.denomination = denomination;
     st.date = date;
-    d->m_CIPs.append( st );
+    d->m_CIPs.append(st);
 }
 
-/** \brief Stores a new INN and IamClasses codes for this drug assuming no doublons. Only used by mfDrugsBase::getDrugByCIS(). */
-void DrugsData::addInnAndIamClasses( const QSet<int> &codes )
+/** \brief Stores a new INN and IamClasses codes for this drug assuming no doublons. Only used by DrugsBase::getDrugByCIS(). */
+void DrugsData::addInnAndIamClasses(const QSet<int> &codes)
 {
-    foreach( const int i, codes) {
+    foreach(const int i, codes) {
         if (d->m_IamCodes.contains(i))
            continue;
         d->m_IamCodes << i;
@@ -200,7 +199,7 @@ void DrugsData::addInnAndIamClasses( const QSet<int> &codes )
   \brief Stores \e value of drugs' prescription source field \e fieldref.
   \sa mfDrugsModel mfDosageDialog
 */
-void DrugsData::setPrescriptionValue( const int fieldref, const QVariant & value )
+void DrugsData::setPrescriptionValue(const int fieldref, const QVariant & value)
 {
     if (d->m_PrescriptionValues.value(fieldref) != value) {
         d->m_PrescriptionChanges = true;
@@ -215,24 +214,24 @@ void DrugsData::setPrescriptionValue( const int fieldref, const QVariant & value
   \brief Return the drugs' value referenced by its table and field reference : \e tableref, \e fieldref.
   \sa mfDrugsConstants
 */
-QVariant DrugsData::value( const int tableref, const int fieldref ) const
+QVariant DrugsData::value(const int tableref, const int fieldref) const
 {
     switch (tableref)
     {
     case Table_DRUGS :
         {
-            if ( d->m_CISValues.contains( fieldref ) )
+            if (d->m_CISValues.contains(fieldref))
                 return d->m_CISValues.value(fieldref);
             return QVariant();
         }
     case Table_COMPO :
         {
-            if ( d->m_COMPOValues.contains( fieldref ) ) {
-                if ( fieldref == COMPO_IAM_CLASS_DENOMINATION )
-                    return d->m_COMPOValues.value( fieldref );
+            if (d->m_COMPOValues.contains(fieldref)) {
+                if (fieldref == COMPO_IAM_CLASS_DENOMINATION)
+                    return d->m_COMPOValues.value(fieldref);
             }
             else {
-                return d->m_COMPOValues.values( fieldref );
+                return d->m_COMPOValues.values(fieldref);
             }
             return QVariant();
         }
@@ -249,7 +248,7 @@ bool DrugsData::hasPrescription() const
 {
     // TODO this needs improvments +++
     int i =0;
-    foreach( const QVariant &q , d->m_PrescriptionValues ) {
+    foreach(const QVariant &q , d->m_PrescriptionValues) {
         if (!q.isNull())
             i++;
     }
@@ -260,7 +259,7 @@ bool DrugsData::hasPrescription() const
   \brief Return the prescription value referenced by its field \e fieldref.
   \sa mfDrugsConstants::Prescription
 */
-QVariant DrugsData::prescriptionValue( const int fieldref ) const
+QVariant DrugsData::prescriptionValue(const int fieldref) const
 {
     // manage some particularities
     switch (fieldref)
@@ -299,7 +298,7 @@ QString DrugsData::denomination() const
         }
         return d->m_NoLaboDenomination;
     }
-    return value(Constants::Table_DRUGS,Constants::DRUGS_NAME ).toString();
+    return value(Constants::Table_DRUGS,Constants::DRUGS_NAME).toString();
 }
 
 /** \brief Returns the list of all the molecules' code of the drug composition */
@@ -317,7 +316,7 @@ QStringList DrugsData::listOfInnClasses() const
     QStringList tmp;
     foreach(int i, this->allInnAndIamClasses())
         if (i < 999)
-            tmp << DrugsBase::instance()->getInnDenomination(i);
+            tmp << drugsBase()->getInnDenomination(i);
     return tmp;
 }
 
@@ -368,7 +367,7 @@ int DrugsData::mainInnCode() const
 /** \brief Returns the main Inn for this drug. If there is more than one inn or no inn, it returns a null string.*/
 QString DrugsData::mainInnName() const
 {
-    return DrugsBase::instance()->getInnDenomination(mainInnCode());
+    return drugsBase()->getInnDenomination(mainInnCode());
 }
 
 /**
@@ -380,7 +379,7 @@ QString DrugsData::mainInnDosage() const
     QString toReturn;
     int main = mainInnCode();
     if (main != -1) {
-        foreach( DrugComposition *compo, d->m_Compositions )
+        foreach(DrugComposition *compo, d->m_Compositions)
             if ((compo->m_InnCode==main) && (compo->isTheActiveSubstance()))
                 return compo->innDosage();
     }
@@ -392,11 +391,11 @@ QString DrugsData::mainInnDosage() const
 //    /** \todo add dosage of molecules */
 //    QStringList toReturn;
 //    QString tmp = "";
-//    const QVariantList &poso = d->m_COMPOValues.values( COMPO_DOSAGE );
-//    const QVariantList &refPoso = d->m_COMPOValues.values( COMPO_REF_DOSAGE );
+//    const QVariantList &poso = d->m_COMPOValues.values(COMPO_DOSAGE);
+//    const QVariantList &refPoso = d->m_COMPOValues.values(COMPO_REF_DOSAGE);
 //    int idx = 0;
-//    foreach( const QVariant &q, d->m_COMPOValues.values( COMPO_IAM_DENOMINATION ) ) {
-//        if ( tmp != q.toString() ) {
+//    foreach(const QVariant &q, d->m_COMPOValues.values(COMPO_IAM_DENOMINATION)) {
+//        if (tmp != q.toString()) {
 //            toReturn << q.toString() + " " + poso.at(idx).toString() + " / " + refPoso.at(idx).toString();
 //            tmp = q.toString();
 //        }
@@ -416,19 +415,21 @@ QStringList DrugsData::dosageOfMolecules() const
 }
 
 /**
-  /~english \brief Return true if drug an be scored.
+  /~english \brief Return true if drug can be scored.
   /~french  \brief Retourne true si le médicament est sécable.
 */
 bool DrugsData::isScoredTablet() const
 {
-    /** \todo manage all databases */
-    return denomination().contains( QRegExp( "s.cable", Qt::CaseInsensitive ) );
+    if (drugsBase()->actualDatabaseInformations()->identifiant==Constants::DB_DEFAULT_IDENTIFIANT)
+        return denomination().contains(QRegExp("s.cable", Qt::CaseInsensitive));
+    /** \todo manage drug's form */
+    return true;
 }
 
 QList<QVariant> DrugsData::CIPs() const
 {
     QList<QVariant> ret;
-    foreach( const DrugsDataPrivate::structCIP &s, d->m_CIPs )
+    foreach(const DrugsDataPrivate::structCIP &s, d->m_CIPs)
         ret << s.CIP;
     return ret;
 }
@@ -436,7 +437,7 @@ QList<QVariant> DrugsData::CIPs() const
 QStringList DrugsData::CIPsDenominations() const
 {
     QStringList ret;
-    foreach( const DrugsDataPrivate::structCIP &s, d->m_CIPs )
+    foreach(const DrugsDataPrivate::structCIP &s, d->m_CIPs)
         ret << s.denomination;
     return ret;
 }
@@ -460,7 +461,7 @@ QString DrugsData::innComposition() const
 {
     QString toReturn;
     QString lastInn;
-    foreach( DrugComposition *compo, d->m_Compositions) {
+    foreach(DrugComposition *compo, d->m_Compositions) {
         if (lastInn!=compo->innName())
             toReturn += QString("%1 %2 + ").arg(compo->innName(), compo->innDosage());
         lastInn = compo->innName();
@@ -477,22 +478,21 @@ QString DrugsData::toHtml() const
 {
     QString msg;
 
-    const QStringList & mols = this->listOfMolecules();
-    const QStringList & iams = this->listOfInn();
-    const QStringList & iamClass = this->listOfInnClasses();
+    const QStringList &mols = this->listOfMolecules();
+    const QStringList &iams = this->listOfInn();
+    const QStringList &iamClass = this->listOfInnClasses();
     QString textIams, textClass;
-
-    if ( iams.isEmpty() )
-        textIams = QCoreApplication::translate( "DrugsData", "No INN found." );
+    if (iams.isEmpty())
+        textIams = QCoreApplication::translate("DrugsData", "No INN found.");
     else
-        textIams = iams.join( "<br>" );
+        textIams = iams.join("<br>");
 
-    if ( iamClass.isEmpty() )
-        textClass = QCoreApplication::translate( "DrugsData", "No interaction class found." );
+    if (iamClass.isEmpty())
+        textClass = QCoreApplication::translate("DrugsData", "No interaction class found.");
     else
-        textClass = iamClass.join( "<br>" );
+        textClass = iamClass.join("<br>");
 
-    msg += QString( "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+    msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
@@ -507,52 +507,52 @@ QString DrugsData::toHtml() const
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1>%6</td>\n"
                     " </tr>\n"
-                    "</table>\n\n" )
-            .arg( denomination() )
-            .arg( value(Table_DRUGS, DRUGS_UID).toString() )
-            .arg( value(Table_DRUGS, DRUGS_ATC).toString() )
-            .arg( mols.join( "<br>" ) )
-            .arg( textIams )
-            .arg( textClass );
+                    "</table>\n\n")
+            .arg(denomination())
+            .arg(value(Table_DRUGS, DRUGS_UID).toString())
+            .arg(value(Table_DRUGS, DRUGS_ATC).toString())
+            .arg(mols.join("<br>"))
+            .arg(textIams)
+            .arg(textClass);
     return msg;
 }
 
 inline static DrugsDB::InteractionsManager *new_im() {return new DrugsDB::InteractionsManager();}
 
-QString DrugsData::drugsListToHtml( const QDrugsList & list )
+QString DrugsData::drugsListToHtml(const QDrugsList & list)
 {
     QString msg;
 
 //    // check interactions of the drugs list
 //    mfDrugsBase *b = mfDrugsBase::instance();
-//    b->interactions( list );
+//    b->interactions(list);
     InteractionsManager *im = new_im();
     im->setDrugsList(list);
     im->checkInteractions();
 
     // title
-    msg = QString( "<html>\n"
+    msg = QString("<html>\n"
                    "<head>\n"
                    "<meta http-equiv=\"content-type \" content=\"text/html; charset=UTF-8\">\n"
                    "<title>%1</title>\n"
                    "<meta name=\"author\" content=\"%1\">\n"
                    "<meta name=\"description\" content=\"%1\">\n"
                    "</head>\n"
-                   "<body>\n" )
-            .arg( qApp->applicationName() );
+                   "<body>\n")
+            .arg(qApp->applicationName());
 
-    msg += QString( "<p align=center><b>%1</b></p>\n" ).arg( qApp->applicationName() );
+    msg += QString("<p align=center><b>%1</b></p>\n").arg(qApp->applicationName());
 
-    foreach( DrugsData* d, list ) {
+    foreach(DrugsData* d, list) {
         msg += d->toHtml() + "<br>\n\n";
-        if ( im->drugHaveInteraction(d) ) {
-            const QList<DrugsInteraction *> &listDI = im->getInteractions( d );
-            msg.append( im->listToHtml( listDI, true ) );
+        if (im->drugHaveInteraction(d)) {
+            const QList<DrugsInteraction *> &listDI = im->getInteractions(d);
+            msg.append(im->listToHtml(listDI, true));
 
-            msg.append( "<br></ul>" );
+            msg.append("<br></ul>");
         }
     }
-    msg.append( "</body>\n</html>\n" );
+    msg.append("</body>\n</html>\n");
 
     delete im;
 
@@ -560,7 +560,7 @@ QString DrugsData::drugsListToHtml( const QDrugsList & list )
 }
 
 
-bool DrugsData::lessThan( const DrugsData *drug1, const DrugsData *drug2 )
+bool DrugsData::lessThan(const DrugsData *drug1, const DrugsData *drug2)
 {
     bool ald1, ald2;
     ald1 = drug1->prescriptionValue(Prescription::IsALD).toBool();
@@ -589,19 +589,19 @@ QString DrugsData::warnText() const
     if (!Utils::isDebugCompilation())
         return QString();
     QString tmp;
-    foreach( const int i, d->m_CISValues.keys() )
-        tmp += QString( "CIS : %1 == %2\n" )
-                           .arg( DrugsBase::instance()->field(Table_DRUGS, i) )
-                           .arg( d->m_CISValues[i].toString() );
-    foreach( DrugComposition *compo, d->m_Compositions )
+    foreach(const int i, d->m_CISValues.keys())
+        tmp += QString("CIS : %1 == %2\n")
+                           .arg(DrugsBase::instance()->field(Table_DRUGS, i))
+                           .arg(d->m_CISValues[i].toString());
+    foreach(DrugComposition *compo, d->m_Compositions)
         tmp += compo->warnText();
-    foreach( const int i, d->m_PrescriptionValues.keys() )
-        tmp += QString( "Prescription : %1 == %2\n" )
-                           .arg( i )
-                           .arg( d->m_PrescriptionValues[i].toString() );
-    tmp += QString( "Distinct INN = %1\n" ).arg( listOfInn().join( "; " ) );
-    tmp += QString( "NumberOfINN = %1\n" ).arg( numberOfInn() );
-    tmp += QString( "Scored Tablet = %1\n" ).arg( isScoredTablet() );
+    foreach(const int i, d->m_PrescriptionValues.keys())
+        tmp += QString("Prescription : %1 == %2\n")
+                           .arg(i)
+                           .arg(d->m_PrescriptionValues[i].toString());
+    tmp += QString("Distinct INN = %1\n").arg(listOfInn().join("; "));
+    tmp += QString("NumberOfINN = %1\n").arg(numberOfInn());
+    tmp += QString("Scored Tablet = %1\n").arg(isScoredTablet());
     return tmp;
 }
 
@@ -612,7 +612,7 @@ void DrugsData::smallDrugWarn() const
         return;
     Utils::Log::addMessage("DrugsData", QString("get drug: %1 \t %2 \t %3 \t %4")
                       .arg(this->UID())
-                      .arg( this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
+                      .arg(this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
 }
 
 

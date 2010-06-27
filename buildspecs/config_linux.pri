@@ -1,4 +1,4 @@
-linux-g++{
+linux*{
 
   !CONFIG(debug, debug|release):CONFIG(LINUX_INTEGRATED){
      message( *********** Building Linux Integrated Spec ********** )

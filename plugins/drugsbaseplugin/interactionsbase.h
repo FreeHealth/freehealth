@@ -57,6 +57,8 @@
 
 
 namespace DrugsDB {
+class DatabaseInfos;
+
 namespace Internal {
 class InteractionsBasePrivate;
 class DrugsInteraction;
@@ -70,14 +72,16 @@ public:
     virtual ~InteractionsBase();
 
     // INITIALIZER
-    virtual bool init();
+    virtual bool init(bool refreshCache = false);
     bool isInitialized() const;
     static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
+    virtual const DatabaseInfos *actualDatabaseInformations() const = 0;
+
     virtual void logChronos(bool state);
     QString iamTable(const int ref) const;
     QString getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const;
 
-    // link to mfDrugsBase
+    // link to DrugsBase
     int getInnCodeForCodeMolecule(const int code) const;
     QString getInnDenomination(const int inncode) const;
     QString getInnDenominationFromSubstanceCode(const int code_subst) const;

@@ -416,6 +416,7 @@ public:
     void manageContexts(Templates::TemplatesView::EditModes editModes)
     {
         m_Context->clearContext();
+        m_Context->addContext(Core::Constants::C_GLOBAL_ID);
         if (editModes==0) {
             this->m_ToolBar->hide();
             return;

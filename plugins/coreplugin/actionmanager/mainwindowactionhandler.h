@@ -164,6 +164,7 @@ protected:
     QAction *aCopy;
     QAction *aPaste;
     QAction *aSelectAll;
+    QAction *aSearch;
 
     QAction *aAppPrefs;
     QAction *aAppConfigurator;

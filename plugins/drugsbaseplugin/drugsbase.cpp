@@ -288,6 +288,9 @@ bool DrugsBase::init()
             Utils::Log::addError(this, "No drugs database found.");
             return false;
         }
+
+        // refresh InteractionsBase cache
+        InteractionsBase::init(true);
     }
 
 
@@ -375,8 +378,6 @@ bool DrugsBase::refreshDrugsBase()
     bool r = init();
     if (r)
         Q_EMIT drugsBaseHasChanged();
-//    else
-//        Utils::Log::addError(this, "kjkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk");
     return r;
 }
 

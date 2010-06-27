@@ -225,6 +225,7 @@ const char * const  A_EDIT_UNDO           = "actionEditUndo";      /*!< \brief D
 const char * const  A_EDIT_REDO           = "actionEditRedo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_EDIT_SELECTALL      = "actionEditSelectAll"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_EDIT_DESELECT       = "actionEditDeselect";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_SEARCH         = "actionEditSearch";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // List actions's
 const char * const  A_LIST_ADD            = "actionListAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */

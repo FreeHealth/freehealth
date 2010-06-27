@@ -142,6 +142,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aEdit(0),
         aClear(0),
         aViewInteractions(0),
+        aSearch(0),
         gSearchMethod(0),
         aSearchCommercial(0),
         aSearchMolecules(0),
@@ -239,6 +240,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(Trans::Constants::VIEWINTERACTIONS_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
     connect(a, SIGNAL(triggered()), this, SLOT(viewInteractions()));
+
+    a = aSearch = new QAction(this);
+#ifdef FREEDIAMS
+    cmd = actionManager()->registerAction(a, Core::Constants::A_EDIT_SEARCH, globalcontext);
+#else
+    cmd = actionManager()->registerAction(a, Core::Constants::A_EDIT_SEARCH, ctx);
+#endif
+    connect(a, SIGNAL(triggered()), this, SLOT(searchTriggered()));
 
     a = aToggleTestingDrugs = new QAction(this);
     a->setIcon(th->icon(DrugsWidget::Constants::I_TOGGLETESTINGDRUGS));
@@ -561,6 +570,13 @@ void DrugsActionHandler::viewInteractions()
     if (m_CurrentView) {
         Q_ASSERT(m_CurrentView->prescriptionView());
         m_CurrentView->prescriptionView()->viewInteractions();
+    }
+}
+
+void DrugsActionHandler::searchTriggered()
+{
+    if (m_CurrentView) {
+        m_CurrentView->drugSelector()->setFocus();
     }
 }
 

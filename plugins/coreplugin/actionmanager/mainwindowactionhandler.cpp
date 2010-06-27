@@ -111,6 +111,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aCopy(0),
         aPaste(0),
         aSelectAll(0),
+        aSearch(0),
         aAppPrefs(0),
         aAppConfigurator(0),
         aPlugsPrefs(0),
@@ -877,6 +878,16 @@ void MainWindowActionHandler::createEditActions()
     cmd->setTranslations(Trans::Constants::EDITSELECTALL_TEXT );
     medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
     a->setEnabled(false);
+
+    // Search Action
+    a = aSearch = new QAction(this);
+    a->setObjectName("aSearch");
+    a->setIcon(theme()->icon(Constants::ICONSEARCH));
+    cmd = actionManager()->registerAction(a, Constants::A_EDIT_SEARCH, ctx);
+    cmd->setDefaultKeySequence(QKeySequence::Find);
+    cmd->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
+    medit->addAction(cmd, Constants::G_EDIT_FIND);
+    a->setEnabled(false);
 }
 
 /** \todo actually does nothing usefull */
@@ -888,6 +899,7 @@ void MainWindowActionHandler::connectEditActions()
 //    if (aCopy) {}
 //    if (aPaste) {}
 //    if (aSelectAll) {}
+//    if (aSearch) {}
 }
 
 /** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */

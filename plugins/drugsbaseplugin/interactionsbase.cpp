@@ -55,6 +55,8 @@
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsinteraction.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include "drugsdatabaseselector.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -113,6 +115,13 @@ public:
     {
          if ((!m_Lk_iamCode_substCode.isEmpty()) && (!m_Lk_classCode_iamCode.isEmpty()))
              return;
+
+         qWarning() << "retrieveLinkTable" << m_Parent->actualDatabaseInformations()->identifiant;
+
+         if (m_Parent->actualDatabaseInformations()->identifiant != Constants::DB_DEFAULT_IDENTIFIANT) {
+             qWarning() << "not FR  return";
+             return;
+         }
 
          QString tmp;
          {
@@ -267,10 +276,10 @@ InteractionsBase::~InteractionsBase()
 }
 
 /** \brief Initializer for the database. Return the error state. */
-bool InteractionsBase::init()
+bool InteractionsBase::init(bool refreshCache)
 {
     // only one base can be initialized
-    if (di->m_initialized)
+    if (di->m_initialized && !refreshCache)
         return true;
 
     QString pathToDb = "";
@@ -297,6 +306,9 @@ bool InteractionsBase::init()
             di->m_Iams.insertMulti( q.value(0).toInt(), q.value(1).toInt());
 
     // retreive links tables for speed improvements
+    if (refreshCache) {
+        di->m_Lk_iamCode_substCode.clear();
+    }
     di->retreiveLinkTables();
 
     di->m_initialized = true;
