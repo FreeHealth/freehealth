@@ -19,9 +19,7 @@ DEFINES *= MEDINTUX_LIBRARY
 HEADERS += configuration.h \
     medintux_exporter.h
 
-# protected files
-exists( $${SOURCES_PROTECTED_PATH} ):SOURCES += $${SOURCES_PROTECTED_PATH}/medintuxtoolkit/configuration_pro.cpp
-else:SOURCES += configuration.cpp
+SOURCES += configuration.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/medintuxtoolkit_fr.ts \

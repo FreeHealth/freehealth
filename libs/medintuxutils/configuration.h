@@ -32,8 +32,13 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef TKMEDINTUXCONFIGURATION_H
-#define TKMEDINTUXCONFIGURATION_H
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef MEDINTUXCONFIGURATION_H
+#define MEDINTUXCONFIGURATION_H
 
 #include <medintuxutils/medintux_exporter.h>
 
@@ -126,4 +131,4 @@ private:
 
 }
 
-#endif // TKMEDINTUXCONFIGURATION_H
+#endif // MEDINTUXCONFIGURATION_H
