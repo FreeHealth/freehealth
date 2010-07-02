@@ -43,8 +43,8 @@
 /**
  * \file QButtonLineEdit.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 08 Sept 2009
+ * \version 0.4.2
+ * \date 30 June 2010
 */
 
 #include <utils/global_exporter.h>
@@ -52,6 +52,7 @@
 #include <QLineEdit>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QKeyEvent>
 #include <QStyle>
 #include <QToolButton>
 #include <QAction>
@@ -76,6 +77,7 @@ public:
     QString searchText() const;
 
 private:
+    void keyPressEvent(QKeyEvent *event);
     void resizeEvent( QResizeEvent * );
     void focusInEvent ( QFocusEvent * event );
     void focusOutEvent ( QFocusEvent * event );

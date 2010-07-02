@@ -938,7 +938,11 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                     tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
                     tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
                     tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
-                    tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
+                    // limit strength to three maximum --> if > 3 do not add strength
+                    if (toReturn->strength().count(";") <= 3)
+                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
+                    else
+                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), "");
                     toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
                 }
             }

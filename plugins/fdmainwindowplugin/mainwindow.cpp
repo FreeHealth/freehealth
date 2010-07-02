@@ -167,6 +167,7 @@ static const char* const  SETTINGS_COUNTDOWN = "transmissionCountDown";
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow( QWidget * parent ) :
         Core::IMainWindow(parent),
+        aClearPatient(0),
         m_TemplatesDock(0),
         d(new Internal::MainWinPrivate(this))
 {
@@ -221,6 +222,17 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
+    // aClearPatient
+    aClearPatient = new QAction(this);
+    aClearPatient->setObjectName("aClearPatient");
+    aClearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
+    Core::Command *cmd = actionManager()->registerAction(aClearPatient, "aClearPatient", QList<int>() << Core::Constants::C_GLOBAL_ID);
+    cmd->setTranslations(QString("%1 %2").arg(Trans::Constants::CLEAR).arg(Trans::Constants::PATIENT));
+    cmd->setDefaultKeySequence(QKeySequence(Qt::Key_C + Qt::CTRL + Qt::SHIFT));
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    menu->addAction(cmd, Core::Constants::G_FILE_NEW);
+    connect(aClearPatient, SIGNAL(triggered()), this, SLOT(clearPatientInfos()));
+
 //    actionManager()->retranslateMenusAndActions();
 
     return true;
@@ -256,6 +268,8 @@ void MainWindow::extensionsInitialized()
     // Manage patient datas
     m_ui->morePatientInfoButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     m_ui->patientInformations->hide();
+    m_ui->clearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
+    connect(m_ui->clearPatient, SIGNAL(clicked()), this, SLOT(clearPatientInfos()));
     refreshPatient();
 
     messageSplash(tr("Initializing drugs database"));
@@ -458,6 +472,14 @@ void MainWindow::openRecentFile()
     if (!fileName.isEmpty()) {
         readFile(fileName);
     }
+}
+
+void MainWindow::clearPatientInfos()
+{
+    if (commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool())
+        return;
+    patient()->clear();
+    this->refreshPatient();
 }
 
 void MainWindow::updateCheckerEnd()

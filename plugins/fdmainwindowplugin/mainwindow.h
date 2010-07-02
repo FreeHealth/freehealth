@@ -111,6 +111,8 @@ public Q_SLOTS:
     void aboutToShowRecentFiles();
     void openRecentFile();
 
+    void clearPatientInfos();
+
 
     // slots for patient's datas
     void on_patientName_textChanged(const QString &text);
@@ -127,6 +129,7 @@ protected:
     void changeEvent(QEvent *event);
 
 public:
+    QAction *aClearPatient;
     Internal::Ui::MainWindow *m_ui;
     QDockWidget *m_TemplatesDock;
     Internal::MainWinPrivate *d;

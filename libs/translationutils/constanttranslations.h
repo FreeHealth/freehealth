@@ -379,6 +379,8 @@ enum TitleInterpret {
 
         // Messages and errors
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
+        const char* const CANCEL                             = QT_TRANSLATE_NOOP("tkConstants", "Cancel");
+        const char* const CLEAR                              = QT_TRANSLATE_NOOP("tkConstants", "Clear");
         const char* const VERSION                            = QT_TRANSLATE_NOOP("tkConstants", "Version");
         const char* const DESCRIPTION                        = QT_TRANSLATE_NOOP("tkConstants", "Description");
         const char* const AUTHOR                             = QT_TRANSLATE_NOOP("tkConstants", "Author");

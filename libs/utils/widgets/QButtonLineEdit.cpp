@@ -46,6 +46,8 @@
 #include "QButtonLineEdit.h"
 #include <QApplication>
 #include <QTextDocument>
+#include <QAction>
+//#include <QToolTip>
 
 #include <QDebug>
 
@@ -147,27 +149,65 @@ void QButtonLineEdit::prepareConnections()
     connect( m_leftButton, SIGNAL( triggered( QAction* ) ), this, SLOT( leftTrig( QAction* ) ) );
 }
 
-void QButtonLineEdit::leftTrig( QAction * action )
+void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction( action );
-    if ( text().isEmpty() || ( text() == m_emptyString ) ) {
+    if (text().isEmpty() || (text() == m_emptyString)) {
         m_emptyString = cleanString(action->toolTip());
         setText(cleanString(action->toolTip()));
         setSpecificStyleSheet( "color:gray;" );
     }
+//    QString t = ;
+//    t.replace(" ", "&nbsp;");
+//    t.append("<p style='white-space:pre'>");
+//    t.prepend("</p>");
+    setToolTip(action->toolTip());
     clearFocus();
 }
 
-void QButtonLineEdit::focusInEvent( QFocusEvent * event )
+void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    if (event->modifiers() == Qt::AltModifier) {
+        const QList<QAction *> &list = m_leftButton->actions();
+
+        if (list.count()) {
+            int actual = list.indexOf(m_leftButton->defaultAction());
+            QAction *a = 0;
+
+            if (event->key()==Qt::Key_Down) {
+                ++actual;
+                if (actual>=list.count())
+                    actual = 0;
+                a = list.at(actual);
+            } else if (event->key()==Qt::Key_Up) {
+                --actual;
+                if (actual<0)
+                    actual = list.count() - 1;
+                a = list.at(actual);
+            }
+            if (a) {
+                a->trigger();
+                leftTrig(a);
+                setFocus();
+                QHelpEvent *e = new QHelpEvent(QEvent::ToolTip, pos(), mapToGlobal(pos()));
+                QLineEdit::event(e);
+                return;
+            }
+        }
+    }
+    QLineEdit::keyPressEvent(event);
+}
+
+void QButtonLineEdit::focusInEvent(QFocusEvent *event)
 {
      if (text()==m_emptyString) {
          clear();
          setSpecificStyleSheet( "color:black;" );
      }
-     QLineEdit::focusInEvent( event );
+     QLineEdit::focusInEvent(event);
 }
 
-void QButtonLineEdit::focusOutEvent( QFocusEvent * event )
+void QButtonLineEdit::focusOutEvent(QFocusEvent *event)
 {
     if (text().isEmpty()) {
         bool block = blockSignals(true);
@@ -202,8 +242,8 @@ void QButtonLineEdit::setRoundedCorners()
                                   "}" ).arg( objectName() ) );
 }
 
-void QButtonLineEdit::setSpecificStyleSheet( const QString & css )
+void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
 {
-    setStyleSheet( QString( "QLineEdit#%1 { %2; %3 }" ).arg( objectName(), m_CSS, css ) );
+    setStyleSheet(QString("QLineEdit#%1 { %2; %3 }").arg(objectName(), m_CSS, css));
 }
 

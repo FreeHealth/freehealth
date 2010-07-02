@@ -173,4 +173,116 @@
   </Item>
 
 </MedForm>
+
+  <MedForm>
+    <type>form</type>
+    <name>episodeTester_1</name>
+    <label>Form1</label>
+    <options>compact</options>
+    <Item>
+      <name>s1</name>
+      <type>texteditor</type>
+      <label>This a simple text editor from the BaseWidgetsForm plugins</label>
+    </Item>
+
+    <Item>
+      <name>shorttext1</name>
+      <type>shorttext</type>
+      <label>This a simple shorttext</label>
+      <value>
+        <default>The default value</default>
+      </value>
+   </Item>
+
+    <Item>
+      <name>longtext1</name>
+      <type>longtext</type>
+      <label>This a simple longtext</label>
+      <value>
+        <default>The default longtext value</default>
+      </value>
+   </Item>
+
+    <Item>
+      <name>check1</name>
+      <type>check</type>
+      <label>sample check box 'check'</label>
+      <value>
+        <default>checked</default>
+      </value>
+    </Item>
+
+    <Item>
+      <name>radio1</name>
+      <label>There are the radio buttons</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">first</uuid>
+        <uuid id="1">second</uuid>
+        <uuid id="2">third</uuid>
+        <possible id="0">The first value</possible>
+        <possible id="1">The second value</possible>
+        <possible id="2">The third value</possible>
+        <script id="0">The first interpreted value</script>
+        <script id="1">The second interpreted value</script>
+        <script id="2">The third interpreted value</script>
+        <numerical id="0">1</numerical>
+        <numerical id="1">2</numerical>
+        <numerical id="2">4</numerical>
+        <default>third</default>
+      </value>
+    </Item>
+
+     <Item>
+       <name>multilist1</name>
+       <type>multilist</type>
+       <label>Multi selection list</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+       </value>
+     </Item>
+
+     <Item>
+       <name>combo1</name>
+       <type>combo</type>
+       <label>Combo test</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+       </value>
+     </Item>
+
+     <Item>
+       <name>date1</name>
+       <type>date</type>
+       <label>Date test</label>
+     </Item>
+
+     <Item>
+       <name>spin1</name>
+       <type>spin</type>
+       <label>Spin</label>
+     </Item>
+
+     <Item>
+       <name>doublespin1</name>
+       <type>doublespin</type>
+       <label>Double Spin</label>
+       <min>2</min>
+       <max>1324</max>
+       <step>0.1</step>
+     </Item>
+
+  </MedForm>
+
+
 </FreeMedForms>

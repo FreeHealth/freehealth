@@ -1,3 +1,14 @@
+version=0.4.2
+{
+    * July 2010
+
+    * New feature :
+      * added a search keyboard shortcut (Ctrl+F)
+
+    * Bug correction
+      * Scored tablet for all database is by default activated
+
+}
 version=0.4.0
 {
     * Juin 2010

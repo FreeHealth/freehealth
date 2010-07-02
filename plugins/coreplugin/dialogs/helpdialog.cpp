@@ -56,6 +56,7 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/global.h>
+#include <utils/widgets/minisplitter.h>
 
 #include <QApplication>
 #include <QTextBrowser>
@@ -65,7 +66,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGridLayout>
-#include <QSplitter>
 #include <QHash>
 #include <QString>
 #include <QDir>
@@ -206,7 +206,7 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     layout->setMargin(0);
     layout->setSpacing(0);
     layout->addWidget(d->m_ToolBar);//,0,0,1,2);
-    QSplitter *split = new QSplitter(this);
+    Utils::MiniSplitter *split = new Utils::MiniSplitter(this);
     split->addWidget(d->m_Tree);
     split->addWidget(d->m_Browser);
     layout->addWidget(split);

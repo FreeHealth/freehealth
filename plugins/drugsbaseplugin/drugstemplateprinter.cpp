@@ -43,9 +43,13 @@
 #include "drugsio.h"
 
 #include <utils/global.h>
+#include <translationutils/constanttranslations.h>
+
 
 using namespace DrugsDB;
 using namespace DrugsDB::Internal;
+using namespace Trans::ConstantTranslations;
+
 
 QString DrugsTemplatePrinter::mimeType() const
 {
@@ -64,17 +68,23 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
                                tr("You have selected multiple templates, would you "
                                   "print them separately or merge templates for printing "
                                   "on a single order ?"), "",
-                               QStringList() << tr("Print separately") << tr("Merge and print"));
+                               QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
             DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
             foreach(const Templates::ITemplate *t, iTemplates) {
                 DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
             }
+//            if (model->prescriptionHasInteractions()) {
+//                int r = Utils::withButtonsMessageBox(tr("Interactions found."),
+//                                       tr("The actual precription contains interactions. What do you want to do"), "",
+//                                       QStringList() << tr("Print") << tr("View interactions") << tkTr(Trans::Constants::CANCEL));
+//
+//            }
             bool r = DrugsIO::printPrescription(model);
             delete model;
             model = 0;
             return r;
-        } else if (r==-1) {
+        } else if (r==-1 && r==2) {
             return false;
         }
     }
