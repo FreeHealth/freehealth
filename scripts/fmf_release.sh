@@ -14,7 +14,7 @@
 QMAKE="-recursive -Wnone -config release"
 QMAKE_BIN=""
 ARCH_TO_BUILD=""
-VERSION="alpha"
+VERSION="alpha-0.4.0"
 #clean project before all make
 DONT_CLEAN=0
 
@@ -121,12 +121,12 @@ if [ $ARCH_TO_BUILD = "mac" ] ; then
    # link frameworks
    echo "*** Linking Frameworks..."
    cd $PACKAGES_PATH/mac/FreeMedForms/
-   "$MAC_SCRIPTS_PATH"/macDeploy.sh -a FreeMedForms -p sqldrivers
+   "$MAC_SCRIPTS_PATH"/macDeploy.sh -a FreeMedForms -p imageformats -p sqldrivers -p accessible
 
    # clean old dmg and create new one
    echo "*** Creating DMG archive for MacOsX..."
    find ./ -type f -name '*.dmg' -exec rm {} \;
-   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a FreeMedForms -p ./ -s 100
+   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a FreeMedForms -p ./ -s 180
    # move archive to right place
    mv FreeMedForms.dmg "$PACKAGES_PATH"/FreeMedForms-$VERSION.dmg
 
