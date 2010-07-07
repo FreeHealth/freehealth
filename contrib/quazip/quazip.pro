@@ -1,7 +1,10 @@
 TEMPLATE = subdirs
 
-CONFIG *= ordered
+win32 {
+    SUBDIRS += zlib-1.2.3
+    CONFIG *= ordered
+}
 
-SUBDIRS += zlib-1.2.3 quazip
+SUBDIRS += quazip
 
 

@@ -78,7 +78,7 @@ public:
 
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
-    bool fromXml(const QString &xml) {return true;}
+    bool fromXml(const QString &) {return true;}
 
 private Q_SLOTS:
     void patientDataChanged(const QModelIndex &index);

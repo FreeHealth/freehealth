@@ -239,6 +239,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setFrameStyle(QFrame::NoFrame);
     d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
 //    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
 
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));

@@ -5,7 +5,10 @@ DEFINES += QUAZIP_LIBRARY
 
 include( ../../../libs/libsworkbench.pri )
 
-LIBS *= -L../ -lz
+win32:LIBS *= -L../
+#else:linux*:LIBS *= -L/lib
+
+LIBS *= -lz
 
 DEPENDPATH += .
 INCLUDEPATH += .

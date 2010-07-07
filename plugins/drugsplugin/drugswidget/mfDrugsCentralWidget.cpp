@@ -152,17 +152,17 @@ void DrugsCentralWidget::setCurrentSearchMethod(int method)
 
 void DrugsCentralWidget::createConnections()
 {
-    connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT( selector_drugSelected(const int) ) );
+    connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(int)), this, SLOT(selector_drugSelected(const int)));
     connect(prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
-            m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)) );
+            m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)));
 }
 
 void DrugsCentralWidget::disconnect()
 {
     prescriptionListView()->disconnect( prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
-             m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)) );
+             m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)));
     m_ui->m_DrugSelector->disconnect(m_ui->m_DrugSelector, SIGNAL(drugSelected(int)),
-                                     this, SLOT( selector_drugSelected(const int) ) );
+                                     this, SLOT(selector_drugSelected(const int)));
 }
 
 void DrugsCentralWidget::focusInEvent(QFocusEvent *event)

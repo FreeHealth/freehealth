@@ -253,6 +253,9 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 /** \brief Opens the mfDosageDialog for the selected drug. */
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
+    if (drugModel()->isSelectionOnlyMode())
+        return;
+
     int row;
     if (!item.isValid()) {
         row = listView->currentIndex().row();

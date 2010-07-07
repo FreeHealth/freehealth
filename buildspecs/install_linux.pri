@@ -6,6 +6,7 @@ else {
  !CONFIG(LINUX_INTEGRATED):message(Preparing installation for Unix)
  else:message(Preparing installation for integrated Linux)
 
+ QMAKE_INSTALL_FILE=cp -a
  CONFIG(LINUX_INTEGRATED){
    # Redefine the default install paths
    isEmpty(INSTALL_ROOT_PATH):INSTALL_ROOT_PATH = $${SOURCES_ROOT_PATH}/packages/linux-integrated/usr
