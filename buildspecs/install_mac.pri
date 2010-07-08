@@ -3,6 +3,10 @@ message( No installation available in Debug mode )
 }
 else {
  !macx:error(install_mac.pri should only be used when building Mac version)
+
+ QMAKE_INSTALL_FILE=cp -R
+ QMAKE_COPY_FILE=cp -R
+
  # Qt libs and plugs are installed by the bash scripts
  INSTALL_QT_LIBS_PATH    =
  INSTALL_QT_PLUGINS_PATH =
