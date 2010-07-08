@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>300</height>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="strengthBox">
         <property name="text">
          <string>Strength</string>
         </property>

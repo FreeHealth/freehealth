@@ -370,7 +370,8 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
-    d->m_Stack->currentWidget()->setEnabled(false);
+    if (d->m_Stack->currentWidget())
+        d->m_Stack->currentWidget()->setEnabled(false);
 }
 
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)

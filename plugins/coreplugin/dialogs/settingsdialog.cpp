@@ -194,7 +194,7 @@ void SettingsDialog::apply()
 void SettingsDialog::restoreDefaults()
 {
     QTreeWidgetItem *item = m_ui->pageTree->currentItem();
-    PageData data = item->data(0, Qt::UserRole).value<PageData>();
+    const PageData &data = item->data(0, Qt::UserRole).value<PageData>();
     int index = data.index;
     m_pages.at(index)->resetToDefaults();
 }
@@ -202,7 +202,7 @@ void SettingsDialog::restoreDefaults()
 void SettingsDialog::showHelp()
 {
     QTreeWidgetItem *item = m_ui->pageTree->currentItem();
-    PageData data = item->data(0, Qt::UserRole).value<PageData>();
+    const PageData &data = item->data(0, Qt::UserRole).value<PageData>();
     int index = data.index;
     HelpDialog::showPage(m_pages.at(index)->helpPage());
 }

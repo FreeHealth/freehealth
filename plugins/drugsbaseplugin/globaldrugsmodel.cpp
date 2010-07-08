@@ -55,6 +55,7 @@
 #include <QDir>
 #include <QCache>
 #include <QSqlError>
+#include <QFontMetrics>
 
 #include <QDebug>
 
@@ -107,21 +108,24 @@ public:
 
     QString getConstructedDrugName(const int row)
     {
+        const QString &drugName = q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString();
         if (drugsBase()->actualDatabaseInformations()) {
             QString tmp = drugsBase()->actualDatabaseInformations()->drugsNameConstructor;
             if (!tmp.isEmpty()) {
-                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME),
-                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString());
+                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME), drugName);
                 tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_FORM),
                             q->QSqlTableModel::data(q->index(row, Constants::DRUGS_FORM)).toString());
                 tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
                             q->QSqlTableModel::data(q->index(row, Constants::DRUGS_ROUTE)).toString());
-                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH),
-                            q->QSqlTableModel::data(q->index(row, Constants::DRUGS_STRENGTH)).toString());
+                const QString &s = q->QSqlTableModel::data(q->index(row, Constants::DRUGS_STRENGTH)).toString();
+                if (s.count(";") < 3)
+                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), s);
+                else
+                    tmp.remove(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH));
                 return tmp;
             }
         }
-        return q->QSqlTableModel::data(q->index(row, Constants::DRUGS_NAME)).toString();
+        return drugName;
     }
 
     bool hasAllergie(const QModelIndex &item)
@@ -241,8 +245,16 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole) {
-        if (item.column() == DrugsDB::Constants::DRUGS_NAME) {
-            return d->getConstructedDrugName(item.row());
+        switch (item.column()) {
+        case DrugsDB::Constants::DRUGS_NAME: return d->getConstructedDrugName(item.row());
+        case DrugsDB::Constants::DRUGS_STRENGTH:
+            {
+                const QString &s = QSqlTableModel::data(item,role).toString();
+                if (s.count(";") > 2)
+                    return QVariant();
+                else
+                    return s;
+            }
         }
     } else if (role == Qt::BackgroundRole) {
         // test atc's patient allergies

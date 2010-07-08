@@ -169,6 +169,7 @@ void DrugsSelectorOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME,true);
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
+    defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH, false);
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, false);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
@@ -481,6 +482,7 @@ void DrugsSelectorWidget::setDatasToUi()
     routeBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
     formBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
     compoBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES).toBool());
+    strengthBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH).toBool());
 
     useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
     backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
@@ -499,6 +501,7 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, routeBox->isChecked());
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM, formBox->isChecked());
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, compoBox->isChecked());
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH, strengthBox->isChecked());
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES, useBackgroundForDosages->isChecked());
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
@@ -518,6 +521,7 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWFORM, false);
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, false);
+    s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH, false);
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);

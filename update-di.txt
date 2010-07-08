@@ -3,11 +3,22 @@ version=0.4.2
     * July 2010
 
     * New feature :
+      * FreeDiams goes "Full Source"
+      * added 'clear patient' action/button
       * added a search keyboard shortcut (Ctrl+F)
+      * added shortcut in the search line (Alt+up/Down)
+      * limiting global_strength of drugs for Canadian db
+      * Creating an edit menu (for the search action) Undo/Redo are not actually effective
+      * added a Cancel button when printing (multiple) templates
+      * using a minisplitter in the Help Dialog
 
     * Bug correction
+      * INN links are refreshed when changing the DB without restarting FreeDiams
       * Scored tablet for all database is by default activated
-
+      * In selection mode --> does not show the protocole dialog when double clicked in the prescription view
+      * Under Linux, zlib is now dynamically linked instead of beeing recompiled inside the QuaZip project
+      * Symlinks of libs (Linux/MacOs) are kept (Thanks to Andreas)
+      * Limiting drug brand name length with a user's preference length
 }
 version=0.4.0
 {

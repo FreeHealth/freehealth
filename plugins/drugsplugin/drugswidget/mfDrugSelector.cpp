@@ -178,13 +178,16 @@ void DrugSelector::createDrugModelView()
     updateDrugsViewColumns();
     drugsView->verticalHeader()->hide();
     drugsView->horizontalHeader()->hide();
-    drugsView->resizeColumnsToContents();
+    drugsView->horizontalHeader()->setStretchLastSection(false);
+    drugsView->horizontalHeader()->setResizeMode(DrugsDB::Constants::DRUGS_NAME, QHeaderView::Stretch);
+//    drugsView->resizeColumnsToContents();
 }
 
 void DrugSelector::updateDrugsViewColumns()
 {
     drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_ROUTE, !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
     drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_FORM , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
+    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_STRENGTH , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH).toBool());
     // managing model fields
     drugsView->hideColumn(DrugsDB::Constants::DRUGS_LINK_SPC);
     drugsView->hideColumn(DrugsDB::Constants::DRUGS_MARKET);

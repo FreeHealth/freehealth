@@ -71,7 +71,6 @@
 #include <templatesplugin/itemplates.h>
 #include <templatesplugin/templatesmodel.h>
 
-// include Qt headers
 #include <QApplication>
 #include <QIcon>
 #include <QFont>

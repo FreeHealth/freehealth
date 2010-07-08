@@ -939,10 +939,10 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                     tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
                     tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
                     // limit strength to three maximum --> if > 3 do not add strength
-                    if (toReturn->strength().count(";") <= 3)
-                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
-                    else
+                    if (toReturn->strength().count(";") >= 3)
                         tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), "");
+                    else
+                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
                     toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
                 }
             }

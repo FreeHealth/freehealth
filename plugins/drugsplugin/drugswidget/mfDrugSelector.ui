@@ -89,7 +89,7 @@
        <enum>QAbstractItemView::ScrollPerPixel</enum>
       </property>
       <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
+       <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -104,7 +104,7 @@
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
+       <bool>true</bool>
       </attribute>
      </widget>
     </widget>
