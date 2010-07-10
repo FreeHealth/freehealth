@@ -38,47 +38,61 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef INTERACTIONDIALOG_H
-#define INTERACTIONDIALOG_H
+#ifndef SIMPLETEXTDIALOG_H
+#define SIMPLETEXTDIALOG_H
 
-#include "ui_mfInteractionDialog.h"
+#include <coreplugin/core_exporter.h>
+#include <coreplugin/idocumentprinter.h>
+
+#include <QDialog>
+#include <QString>
+
 /**
- * \file mfInteractionDialog.h
+ * \file simpletextdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.4.4
+ * \date 10 July 2010
 */
 
-namespace DrugsWidget {
+
+namespace Core {
 namespace Internal {
+namespace Ui {
+class SimpleTextDialog;
+}
+}  // End Internal
 
-/**
-  \brief Shows a dialog with all interaction text with ability to print.
-  \ingroup freediams drugswidget
-*/
-class InteractionDialog : public QDialog, private Ui::InteractionDialog
+class CORE_EXPORT SimpleTextDialog : public QDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(InteractionDialog)
 
 public:
-    explicit InteractionDialog(QWidget *parent = 0);
-    ~InteractionDialog();
+    SimpleTextDialog(const QString &title, const QString &zoomSettingKey = QString::null, QWidget *parent = 0);
+    ~SimpleTextDialog();
 
-private Q_SLOTS:
-    void on_printButton_clicked();
-    void on_helpButton_clicked();
-    void on_zoomIn_clicked();
-    void on_zoomOut_clicked();
+    void setHtml(const QString &html);
+    void setPlainText(const QString &text);
+    void setHelpPageUrl(const QString &url) {m_HelpUrl = url;}
+    void setUserPaper(const int iDocumentPaper) {m_Papers = iDocumentPaper;}
+    void setPrintDuplicata(const bool state) {m_Duplicata = state;}
 
 protected:
-    virtual void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e);
+
+protected Q_SLOTS:
+    void print();
+    void showHelp();
+    void zoomIn();
+    void zoomOut();
 
 private:
+    Internal::Ui::SimpleTextDialog *ui;
     int m_Zoom;
+    QString m_Key, m_HelpUrl;
+    int m_Papers;
+    bool m_Duplicata;
 };
 
-}
-}  // End DrugsWidget
+}  // End namespace Core
 
-#endif // INTERACTIONDIALOG_H
+#endif // SIMPLETEXTDIALOG_H

@@ -135,8 +135,10 @@ public:
     void setOrientation(QPrinter::Orientation orientation);
     void setPaperSize(QPrinter::PaperSize size);
 
+    // UNFINISHED MEMBERS
     bool preparePages(QPrinter *printer = 0);
     bool print();
+    // END UNFINISHED
 
 public Q_SLOTS:
     // Watermark management

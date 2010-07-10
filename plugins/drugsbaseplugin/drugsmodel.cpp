@@ -49,13 +49,13 @@
 
 #include "drugsmodel.h"
 
-// include drugwidgets headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/interactionsmanager.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/dailyschememodel.h>
+#include <drugsbaseplugin/globaldrugsmodel.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -79,6 +79,7 @@
 #include <QStringList>
 #include <QMimeData>
 #include <QDomDocument>
+#include <QDir>
 
 
 namespace mfDrugsModelConstants {
@@ -468,7 +469,12 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::ToolTipRole) {
         QString display;
-        display = drug->toHtml();
+        if (GlobalDrugsModel::hasAllergy(drug)) {
+            display += QString("<span style=\"align:center;vertical-align:middle\"><img src=\"%1\"><span style=\"color:red;font-weight:600\">%2</span><img src=\"%1\"></span><br />")
+                   .arg(settings()->path(Core::ISettings::MediumPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
+                   .arg(tr("KNOWN ALLERGY"));
+        }
+        display += drug->toHtml();
 
         if (d->m_InteractionsManager->drugHaveInteraction(drug)) {
             const QList<Internal::DrugsInteraction *> &list = d->m_InteractionsManager->getInteractions(drug);
@@ -484,14 +490,14 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         // Drugs only for testings
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_BACKGROUND_COLOR);
+        // Allergy
+        if (GlobalDrugsModel::hasAllergy(drug))
+            return QColor(Qt::red);
     }
     else if (role == Qt::ForegroundRole) {
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_FOREROUND_COLOR);
     }
-    //     else if (role == Qt::SizeHintRole) {
-    //         return QSize(d->m_RowSize[index.row()],d->m_RowSize[index.row()]);
-    //     }
     return QVariant();
 }
 
@@ -645,6 +651,15 @@ bool DrugsModel::prescriptionHasInteractions()
     return (d->m_InteractionsManager->getAllInteractionsFound().count()>0);
 }
 
+bool DrugsModel::prescriptionHasAllergies()
+{
+    foreach(const Internal::DrugsData *drug, d->m_DrugsList) {
+        if (GlobalDrugsModel::hasAllergy(drug))
+            return true;
+    }
+
+    return false;
+}
 
 /**
   \brief Sort the drugs inside prescription. \sa DrugsDB::lessThan().

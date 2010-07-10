@@ -101,6 +101,7 @@ public:
     Qt::ItemFlags flags( const QModelIndex &index ) const;
 
     bool prescriptionHasInteractions();
+    bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS
     void setDrugsList( QDrugsList &list );

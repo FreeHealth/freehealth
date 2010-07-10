@@ -7,7 +7,8 @@ SOURCES += $${PWD}/aboutdialog.cpp \
     $${PWD}/settingsdialog.cpp \
     $${PWD}/pluginaboutpage.cpp \
     $${PWD}/helpdialog.cpp \
-    $${PWD}/applicationgeneralpreferences.cpp
+    $${PWD}/applicationgeneralpreferences.cpp \
+    $${PWD}/simpletextdialog.cpp
 HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/commonaboutpages.h \
     $${PWD}/debugdialog.h \
@@ -16,8 +17,10 @@ HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/settingsdialog.h \
     $${PWD}/pluginaboutpage.h \
     $${PWD}/helpdialog.h \
-    $${PWD}/applicationgeneralpreferences.h
+    $${PWD}/applicationgeneralpreferences.h \
+    $${PWD}/simpletextdialog.h
 FORMS += $${PWD}/aboutdialog.ui \
     $${PWD}/debugdialog.ui \
     $${PWD}/settingsdialog.ui \
-    $${PWD}/applicationgeneralpreferences.ui
+    $${PWD}/applicationgeneralpreferences.ui \
+    $${PWD}/simpletextdialog.ui

@@ -42,7 +42,6 @@
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
-#include <drugsplugin/drugswidget/mfInteractionDialog.h>
 #include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
 #include <drugsplugin/dosagedialog/mfDosageDialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
@@ -51,15 +50,16 @@
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
 
-#include <translationutils/constanttranslations.h>
-
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
+#include <coreplugin/dialogs/simpletextdialog.h>
 
 #include <fdmainwindowplugin/mainwindow.h>
+
+#include <translationutils/constanttranslations.h>
 
 #include <QFileDialog>
 #include <QPrinter>
@@ -291,9 +291,14 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 /** \brief Opens the InteractionDialog. */
 void PrescriptionViewer::viewInteractions()
 {
-     Internal::InteractionDialog dlg(this);
-     dlg.resize(Core::ICore::instance()->mainWindow()->size());
-     dlg.exec();
+    Core::SimpleTextDialog dlg(tr("Synthetic interactions") + " - " + qApp->applicationName(),
+                               Constants::S_INTERACTIONVIEW_ZOOM,
+                               Core::ICore::instance()->mainWindow());
+    dlg.setHtml(drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString());
+    dlg.setPrintDuplicata(true);
+    dlg.setUserPaper(Core::IDocumentPrinter::Papers_Prescription_User);
+    dlg.setHelpPageUrl("iamtesteur.html#synthetiseur_iam");
+    dlg.exec();
 }
 
 /** \brief Presents a QMenu to the user, and change duration of all drugs in the prescription */

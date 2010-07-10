@@ -45,6 +45,10 @@
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
+#include <coreplugin/dialogs/simpletextdialog.h>
+
 
 using namespace DrugsDB;
 using namespace DrugsDB::Internal;
@@ -62,34 +66,67 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     int n = iTemplates.count();
     if (!n)
         return true;
+    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
+    int r = 1;
     if (n > 1) {
+        // Check interactions in the merged templates
+        foreach(const Templates::ITemplate *t, iTemplates) {
+            DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
+        }
+        bool interactions = model->prescriptionHasInteractions();
+        bool allergy = model->prescriptionHasAllergies();
+        if (interactions || allergy) {
+            QString title = tr("Warning : ");
+            if (interactions)
+                title += tr("Interactions found. ");
+            if (allergy)
+                title += tr("Allergies found. ");
+            int cancel;
+            while (r!=0) {
+                if (interactions) {
+                    r = Utils::withButtonsMessageBox(title,
+                                                     tr("What do you want to do ?"), "",
+                                                     QStringList() << tkTr(Trans::Constants::FILEPRINT_TEXT) << tkTr(Trans::Constants::VIEWINTERACTIONS_TEXT) << tkTr(Trans::Constants::CANCEL));
+                    cancel = 2;
+                } else {
+                    r = Utils::withButtonsMessageBox(title,
+                                                     tr("What do you want to do ?"), "",
+                                                     QStringList() << tkTr(Trans::Constants::FILEPRINT_TEXT) << tkTr(Trans::Constants::CANCEL));
+                    cancel = 1;
+                }
+
+                if (r==cancel)
+                    return true;
+                if (interactions && r==1) {
+                    Core::SimpleTextDialog dlg(tr("Synthetic interactions") + " - " + qApp->applicationName(),
+                                               "",
+                                               Core::ICore::instance()->mainWindow());
+                    dlg.setHtml(model->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString());
+                    dlg.setPrintDuplicata(true);
+                    dlg.setUserPaper(Core::IDocumentPrinter::Papers_Prescription_User);
+                    dlg.setHelpPageUrl("iamtesteur.html#synthetiseur_iam");
+                    dlg.exec();
+                }
+            }
+        }
+
         // Ask user : print separately or merge into an unique prescription
-        int r = Utils::withButtonsMessageBox(tr("Print separately or merge printing."),
+        r = Utils::withButtonsMessageBox(tr("Print separately or merge printing."),
                                tr("You have selected multiple templates, would you "
                                   "print them separately or merge templates for printing "
                                   "on a single order ?"), "",
                                QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
-            DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
-            foreach(const Templates::ITemplate *t, iTemplates) {
-                DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
-            }
-//            if (model->prescriptionHasInteractions()) {
-//                int r = Utils::withButtonsMessageBox(tr("Interactions found."),
-//                                       tr("The actual precription contains interactions. What do you want to do"), "",
-//                                       QStringList() << tr("Print") << tr("View interactions") << tkTr(Trans::Constants::CANCEL));
-//
-//            }
-            bool r = DrugsIO::printPrescription(model);
+            bool ok = DrugsIO::printPrescription(model);
             delete model;
             model = 0;
-            return r;
-        } else if (r==-1 && r==2) {
+            return ok;
+        } else if (r==-1 || r==2) {
             return false;
         }
     }
 
-    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel;
+    model->clearDrugsList();
     foreach(const Templates::ITemplate *t, iTemplates) {
         DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
         DrugsIO::printPrescription(model);

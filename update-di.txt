@@ -1,3 +1,15 @@
+version=0.4.4
+{
+    * 2010
+
+    * New features:
+      * Prescription View now show allergy too
+      * when printing templates allergies and interactions are tested before the print process, user is informed
+
+    * Bug correction:
+      * Drugs allergies wasn't taken into account at startup
+
+}
 version=0.4.2
 {
     * July 2010

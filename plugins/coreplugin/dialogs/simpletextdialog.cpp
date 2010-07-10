@@ -40,111 +40,142 @@
  ***************************************************************************/
 
 /**
-   \class InteractionDialog
+   \class Core::SimpleTextDialog
    \brief Show a dialog that presents the synthesis of interactions.
    Result can be printed.
 */
 
-#include "mfInteractionDialog.h"
+#include "simpletextdialog.h"
+#include "ui_simpletextdialog.h"
 
 #include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
-
-#include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/constants.h>
-
-#include <drugsplugin/constants.h>
-#include <drugsplugin/drugswidgetmanager.h>
-
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/dialogs/helpdialog.h>
-
-#include <printerplugin/printer.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 
-using namespace DrugsWidget;
-using namespace DrugsWidget::Internal;
+#include <extensionsystem/pluginmanager.h>
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+#include <QPushButton>
+#include <QDialogButtonBox>
+
+using namespace Core;
+using namespace Trans::ConstantTranslations;
+
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 inline static Core::IUser *user() {return Core::ICore::instance()->user();}
+inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
-InteractionDialog::InteractionDialog(QWidget *parent) :
-    QDialog(parent)
+SimpleTextDialog::SimpleTextDialog(const QString &title, const QString &zoomSettingKey, QWidget *parent) :
+    QDialog(parent),
+    ui(new Internal::Ui::SimpleTextDialog),
+    m_Key(zoomSettingKey),
+    m_Papers(Core::IDocumentPrinter::Papers_Generic_User),
+    m_Duplicata(false)
 {
-    setupUi(this);
-    setObjectName("InteractionDialog");
-    printButton->setIcon( theme()->icon(Core::Constants::ICONPRINT) );
-    zoomIn->setIcon( theme()->icon(Core::Constants::ICONFONTBIGGER) );
-    zoomOut->setIcon( theme()->icon(Core::Constants::ICONFONTSMALLER) );
-    setWindowTitle( tr("Synthetic interactions") + " - " + qApp->applicationName() );
-    textBrowser->setHtml( drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString() );
-    m_Zoom = settings()->value(Constants::S_INTERACTIONVIEW_ZOOM,1).toInt();
-    textBrowser->zoomIn(m_Zoom);
+    ui->setupUi(this);
+    setObjectName("SimpleTextDialog");
+//    setAttribute(Qt::WA_DeleteOnClose);
+    setAttribute(Qt::WA_GroupLeader);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+
+    setWindowTitle(title);
+    ui->label->setText(title);
+
+    QPushButton *printButton = new QPushButton(tkTr(Trans::Constants::FILEPRINT_TEXT), this);
+    printButton->setIcon(theme()->icon(Core::Constants::ICONPRINT));
+    ui->buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
+
+    ui->zoomIn->setIcon(theme()->icon(Core::Constants::ICONFONTBIGGER));
+    ui->zoomOut->setIcon(theme()->icon(Core::Constants::ICONFONTSMALLER));
+
+    connect(printButton, SIGNAL(clicked()), this, SLOT(print()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(showHelp()));
+    connect(ui->zoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    connect(ui->zoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
+
+    if (!m_Key.isEmpty()) {
+        m_Zoom = settings()->value(m_Key, 1).toInt();
+        ui->textBrowser->zoomIn(m_Zoom);
+    }
+
+    if (parent)
+        Utils::resizeAndCenter(this, parent);
+    else
+        Utils::resizeAndCenter(this, Core::ICore::instance()->mainWindow());
 }
 
-InteractionDialog::~InteractionDialog()
+SimpleTextDialog::~SimpleTextDialog()
 {
-    settings()->setValue(Constants::S_INTERACTIONVIEW_ZOOM, m_Zoom);
-    settings()->sync();
+    if (!m_Key.isEmpty()) {
+        settings()->setValue(m_Key, m_Zoom);
+        settings()->sync();
+    }
+    delete ui;
 }
 
-void InteractionDialog::on_helpButton_clicked()
+void SimpleTextDialog::setHtml(const QString &html)
 {
-    Core::HelpDialog::showPage("iamtesteur.html#synthetiseur_iam");
+    ui->textBrowser->setHtml(html);
 }
 
-
-void InteractionDialog::on_printButton_clicked()
+void SimpleTextDialog::setPlainText(const QString &text)
 {
-    /** \todo add functionnality to FMF */
-    Core::ISettings *s = settings();
-    Print::Printer p(this);
-    p.askForPrinter(this);
-    p.printWithDuplicata(false);
-
-    QString paper = user()->value(Core::IUser::PrescriptionHeader).toString();
-    user()->replaceTokens(paper);
-    Core::ICore::instance()->patient()->replaceTokens(paper);
-//    Utils::replaceToken(paper, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
-    p.setHeader(paper);
-
-    paper = user()->value(Core::IUser::PrescriptionFooter).toString();
-    paper.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-                   .arg(tr("Made with %1.").arg(qApp->applicationName())));
-    p.setFooter(paper);
-
-    p.addTextWatermark(tr("Made with %1.").arg(qApp->applicationName()), Print::Printer::EachPages, Qt::AlignCenter, Qt::AlignCenter,QFont(), QColor(200,200,200));
-    p.print(textBrowser->toHtml());
+    ui->textBrowser->setPlainText(text);
 }
 
-void InteractionDialog::on_zoomIn_clicked()
+void SimpleTextDialog::showHelp()
 {
-    textBrowser->zoomIn(2);
+    if (!m_HelpUrl.isEmpty())
+        Core::HelpDialog::showPage(m_HelpUrl);
+}
+
+void SimpleTextDialog::print()
+{
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        Utils::Log::addError(this, "No IDocumentPrinter found");
+        return;
+    }
+
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    p->print(ui->textBrowser->toHtml(), m_Papers, m_Duplicata);
+}
+
+void SimpleTextDialog::zoomIn()
+{
+    ui->textBrowser->zoomIn(2);
     m_Zoom += 2;
 }
 
-void InteractionDialog::on_zoomOut_clicked()
+void SimpleTextDialog::zoomOut()
 {
-    textBrowser->zoomOut(2);
+    ui->textBrowser->zoomOut(2);
     m_Zoom -= 2;
 }
 
-void InteractionDialog::changeEvent(QEvent *e)
+void SimpleTextDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        retranslateUi(this);
+        ui->retranslateUi(this);
         break;
     default:
         break;
     }
 }
+
