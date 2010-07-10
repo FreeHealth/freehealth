@@ -53,6 +53,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QPixmap>
+#include <QPicture>
 #include <QSizeF>
 #include <QRectF>
 #include <QRect>
@@ -185,7 +186,7 @@ public:
     {
         // TODO returns a QList< TextDocumentExtra *> sorted by priority
         QList<QTextDocument *> list;
-        foreach( const TextDocumentExtra *doc, m_Headers ) {
+        foreach(const TextDocumentExtra *doc, m_Headers) {
             if (presenceIsRequiredAtPage(pageNumber, doc->presence()))
                 list << doc->document();
         }
@@ -207,7 +208,7 @@ public:
     {
         // TODO returns a QList< TextDocumentExtra *> sorted by priority
         QList< QTextDocument *> list;
-        foreach( const TextDocumentExtra *doc, m_Footers ) {
+        foreach(const TextDocumentExtra *doc, m_Footers) {
 //            qWarning() << "tkPrinterPrivate::footers" << doc->presence();
             if (presenceIsRequiredAtPage(pageNumber, doc->presence()))
                 list << doc->document();
@@ -257,14 +258,14 @@ public:
     // used by complexDraw()
     // creates a new page into the painter, recalculates all sizes and return the pageNumber of the created one.
     // all its params will be modified
-    int complexDrawNewPage( QPainter &p, QSizeF & headerSize, QSizeF & footerSize,
+    int complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF & footerSize,
                             QSizeF & pageSize, int & correctedY, QSizeF & drawnedSize,
-                            int currentPageNumber );
+                            int currentPageNumber);
 
     /** \brief Used by Watermark drawing functions. */
     static QRectF rotatedBoundingRect(const QRectF &rect, const int rotation)
     {
-        QRectF centeredRect = rect.translated( - rect.center() );
+        QRectF centeredRect = rect.translated(- rect.center());
         QPolygonF polygon(centeredRect);
         QTransform transform;
         transform.rotate(rotation);
@@ -272,18 +273,18 @@ public:
         return polygon.boundingRect().translated(rect.center());
     }
     /** \brief Calculate the median angle of the page */
-    static double medianAngle( const QRectF & rect )
+    static double medianAngle(const QRectF & rect)
     {
         double pi = 3.14159265;
         double calculatedTang = rect.height() / rect.width();
-        return -atan( calculatedTang ) * 180.0 / pi;
+        return -atan(calculatedTang) * 180.0 / pi;
     }
     /** \brief calculate rotation angle of watermark using the alignment (return the angle). */
-    static int calculateWatermarkRotation( const QRectF pageRect, const Qt::Alignment watermarkAlignment )
+    static int calculateWatermarkRotation(const QRectF pageRect, const Qt::Alignment watermarkAlignment)
     {
         int angle = 0;
-        if ( ( watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter) ) || (watermarkAlignment == Qt::AlignCenter ) ) {
-            angle = medianAngle( pageRect );
+        if ((watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter)) || (watermarkAlignment == Qt::AlignCenter)) {
+            angle = medianAngle(pageRect);
         } else if (watermarkAlignment == Qt::AlignBottom) {
             angle = 0;
         } else if (watermarkAlignment == Qt::AlignTop) {
@@ -296,38 +297,38 @@ public:
         return angle;
     }
     /** */
-    static void moveTextRect( QRectF & textRect, const QRectF pageRect, const Qt::Alignment watermarkAlignment, const double scaleFactor = 1.0 )
+    static void moveTextRect(QRectF & textRect, const QRectF pageRect, const Qt::Alignment watermarkAlignment, const double scaleFactor = 1.0)
     {
         double textHeight  = textRect.height() * scaleFactor;
-        if ( ( watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter) ) || (watermarkAlignment == Qt::AlignCenter ) ) {
-            textRect.moveCenter( pageRect.center() );
+        if ((watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter)) || (watermarkAlignment == Qt::AlignCenter)) {
+            textRect.moveCenter(pageRect.center());
         } else if (watermarkAlignment == Qt::AlignBottom) {
-            textRect.moveCenter( QPointF( pageRect.center().x(), (pageRect.height() - (textHeight/2)) ) );
+            textRect.moveCenter(QPointF(pageRect.center().x(), (pageRect.height() - (textHeight/2))));
         } else if (watermarkAlignment == Qt::AlignTop) {
-            textRect.moveCenter( QPointF( pageRect.center().x(), textHeight/2 ) );
+            textRect.moveCenter(QPointF(pageRect.center().x(), textHeight/2));
         } else if (watermarkAlignment == Qt::AlignRight) {
-            textRect.moveCenter( QPointF(pageRect.width() - (textHeight/2), pageRect.center().y()) );
+            textRect.moveCenter(QPointF(pageRect.width() - (textHeight/2), pageRect.center().y()));
         } else if (watermarkAlignment == Qt::AlignLeft) {
-            textRect.moveCenter( QPointF( (textHeight/2), pageRect.center().y()) );
+            textRect.moveCenter(QPointF((textHeight/2), pageRect.center().y()));
         }
     }
 
     /** \brief Return true if the document must be added at page \e page assuming that document as a Presence like \e presence. */
-    bool presenceIsRequiredAtPage( const int page, const int presence)
+    bool presenceIsRequiredAtPage(const int page, const int presence)
     {
         if ((presence == Printer::DuplicataOnly) && (m_PrintingDuplicata))
             return true;
         if (presence == Printer::EachPages)
             return true;
-        if ( ( presence == Printer::OddPages ) && ((page % 2) == 1) )
+        if ((presence == Printer::OddPages) && ((page % 2) == 1))
             return true;
-        if ( ( presence == Printer::EvenPages ) && ((page % 2) == 0) )
+        if ((presence == Printer::EvenPages) && ((page % 2) == 0))
             return true;
-        if ( (presence == Printer::FirstPageOnly) && (page==1) )
+        if ((presence == Printer::FirstPageOnly) && (page==1))
             return true;
-        if ( (presence == Printer::SecondPageOnly) && (page==2) )
+        if ((presence == Printer::SecondPageOnly) && (page==2))
             return true;
-        if ( (presence == Printer::ButFirstPage) && (page!=1) )
+        if ((presence == Printer::ButFirstPage) && (page!=1))
             return true;
         // TODO LastPageOnly need to know the pageCount of the doc too
         return false;
@@ -338,11 +339,11 @@ public:
     /** \brief Use simpleDraw or complexDraw method ? \sa simpleDraw(), complexDraw() */
     bool isSimple() const
     {
-        return ((m_Headers.count()==1) && (m_Footers.count()==1) );//&& m_Watermark.isNull());
+        return ((m_Headers.count()==1) && (m_Footers.count()==1));//&& m_Watermark.isNull());
     }
 
     bool simpleDraw();
-    bool simpleDrawToPainter( QPainter &painter, QRect &contentRect );
+    bool simpleDrawPreparePages(QRect &contentRect);
 
     bool complexDraw();
 
@@ -351,75 +352,75 @@ public:
     {
         int height = m_Printer->pageRect().height();
         bool footerMargin = false;
-        foreach( QTextDocument *doc, headers(1) ) {
+        foreach(QTextDocument *doc, headers(1)) {
             height -= doc->size().height();
         }
-        foreach( QTextDocument *doc, footers(1) ) {
+        foreach(QTextDocument *doc, footers(1)) {
             footerMargin = true;
             height -= doc->size().height();
         }
         if (footerMargin)
             height -= FOOTER_BOTTOM_MARGIN;
-        return QSizeF( this->pageWidth(), height );
+        return QSizeF(this->pageWidth(), height);
     }
 
     /** \brief Returns the current rectangle for the simple drawing (current rect is the rectangle left for printing the content document). */
     QRect getSimpleDrawCurrentRectangle(int pageNumber)
     {
         int headerHeight = 0;
-        foreach( QTextDocument *doc, headers(pageNumber) ) {
+        foreach(QTextDocument *doc, headers(pageNumber)) {
             headerHeight += doc->size().height();
         }
         int footerHeight = FOOTER_BOTTOM_MARGIN;
-        foreach( QTextDocument *doc, footers(pageNumber) ) {
+        foreach(QTextDocument *doc, footers(pageNumber)) {
             footerHeight += doc->size().height();
         }
         if (footerHeight==FOOTER_BOTTOM_MARGIN)
             footerHeight=0;
         int currentHeight = m_Printer->pageRect().height() - headerHeight - footerHeight;
-        return QRect(QPoint(0,0), QSize( pageWidth(), currentHeight ) );
+        return QRect(QPoint(0,0), QSize(pageWidth(), currentHeight));
     }
 
     /** \brief Draws the headers and footers for the simpleDraw method. Painter must be translated to the beginning of the paperPage.*/
-    void simpleDrawHeaderFooter( QPainter &painter,
-                                  QSizeF &headerSize, QSizeF &footerSize, const int currentPageNumber )
+    void simpleDrawHeaderFooter(QPainter &painter,
+                                  QSizeF &headerSize, QSizeF &footerSize, const int currentPageNumber)
     {
         int headerHeight = 0;
         painter.save();         // keep page beginning location
-        foreach( QTextDocument *doc, headers(currentPageNumber) ) {
+        foreach(QTextDocument *doc, headers(currentPageNumber)) {
             headerSize = doc->size();
             headerHeight += doc->size().height();
-            QRectF headRect = QRectF(QPoint(0,0), headerSize );
-            doc->drawContents( &painter, headRect );
-            painter.translate( 0, doc->size().height() );
+            QRectF headRect = QRectF(QPoint(0,0), headerSize);
+            doc->drawContents(&painter, headRect);
+            painter.translate(0, doc->size().height());
         }
-        headerSize.setHeight( headerHeight );
+        headerSize.setHeight(headerHeight);
         painter.restore();    // return to page beginning
 
         // do we have to include the footer ?
         int footerHeight = FOOTER_BOTTOM_MARGIN;
-        foreach( QTextDocument *doc, footers(currentPageNumber) ) {
+        foreach(QTextDocument *doc, footers(currentPageNumber)) {
             footerSize = doc->size();
             footerHeight += doc->size().height();
             painter.save();
             painter.translate(0, m_Printer->pageRect().bottom() - footerHeight);
-            QRectF footRect = QRectF(QPoint(0,0), QSizeF( doc->size().width(), footerHeight) );
+            QRectF footRect = QRectF(QPoint(0,0), QSizeF(doc->size().width(), footerHeight));
             doc->drawContents(&painter, footRect);
             painter.restore();
         }
         if (footerHeight==FOOTER_BOTTOM_MARGIN)
             footerHeight=0;
-        footerSize.setHeight( footerHeight );
+        footerSize.setHeight(footerHeight);
     }
 
 private:
     /** \brief Draws the watermark for the simpleDraw method. Painter must be translated to the beginning of the paperPage. */
-    void simpleDrawWatermark( QPainter &painter, const int pageNumber )
+    void simpleDrawWatermark(QPainter &painter, const int pageNumber)
     {
         // Add watermark, painter must be translated to the beginning of the page before
         if (presenceIsRequiredAtPage(pageNumber, m_WatermarkPresence)) {
             painter.save();
-            painter.drawPixmap( m_Printer->pageRect().topLeft(), m_Watermark );
+            painter.drawPixmap(m_Printer->pageRect().topLeft(), m_Watermark);
             painter.restore();
         }
     }
@@ -430,13 +431,13 @@ private:
                 Content must be sized before, otherwise pagebreaks can cut text/tables... inside a line.
                 \sa getSimpleDrawContentPageSize()
     */
-    void simpleDrawContent( QPainter &painter, const QSizeF &headerSize, QRect &currentRect, const int drawnedHeight)
+    void simpleDrawContent(QPainter &painter, const QSizeF &headerSize, QRect &currentRect, const int drawnedHeight)
     {
         painter.save();
         // go under the header
         painter.translate(0, headerSize.height());
         // negative translate in order to print the currentRect in the current page
-        painter.translate(0, -drawnedHeight );
+        painter.translate(0, -drawnedHeight);
         currentRect.translate(0, drawnedHeight);
         m_Content->drawContents(&painter, currentRect);
         painter.restore();
@@ -452,6 +453,7 @@ public:
     QList<TextDocumentExtra*> m_Footers;
     QTextDocument *m_Content;                             // TODO transform to QPointer<QTextDocument> ?
     bool m_WithDuplicata, m_PrintingDuplicata;
+    QList<QPicture *> m_Pages;
 };
 
 }  // End Internal
@@ -495,38 +497,38 @@ bool PrinterPrivate::complexDraw()
     QTextFrame::iterator it;
 
     for (it = frame->begin(); !(it.atEnd()); ++it) {
-        QTextFrame *table = qobject_cast<QTextTable*>( it.currentFrame() );
+        QTextFrame *table = qobject_cast<QTextTable*>(it.currentFrame());
         block = it.currentBlock();
 
         if (table) {
             // calculate table height
             QRectF tableRect = m_Content->documentLayout()->frameBoundingRect(it.currentFrame());
             painter.drawRect(tableRect);
-            painter.drawText(tableRect, QString("\n Tables are not yet supported in complex drawing.") );
+            painter.drawText(tableRect, QString("\n Tables are not yet supported in complex drawing."));
 
             // need new page ?
-            if ( tableRect.height() + drawnedSize.height() > pageSize.height() )
-                pageNumber = complexDrawNewPage( painter, headerSize, footerSize, pageSize,
-                                                 correctedY, drawnedSize, pageNumber );
+            if (tableRect.height() + drawnedSize.height() > pageSize.height())
+                pageNumber = complexDrawNewPage(painter, headerSize, footerSize, pageSize,
+                                                 correctedY, drawnedSize, pageNumber);
 
-            QPointF TablePos = QPointF( tableRect.x(), drawnedSize.height() );
+            QPointF TablePos = QPointF(tableRect.x(), drawnedSize.height());
             // get position of the table into the painter
             // draw all frames/blocks of the table
             // modify drawnedRect / actualRect...
-            drawnedSize.setHeight( drawnedSize.height() + tableRect.size().height() +
-                                   (tableRect.top() - lastDrawnedRect.bottom() ) );
+            drawnedSize.setHeight(drawnedSize.height() + tableRect.size().height() +
+                                   (tableRect.top() - lastDrawnedRect.bottom()));
             lastDrawnedRect = tableRect;
 
-        } else if ( block.isValid() ) {
+        } else if (block.isValid()) {
 
             blockRect = m_Content->documentLayout()->blockBoundingRect(block);
 
             // need new page ?
-            if ( (drawnedSize.height() + blockRect.size().height()) > pageSize.height() ) {
+            if ((drawnedSize.height() + blockRect.size().height()) > pageSize.height()) {
 
                 int i = 0;
                 QTextLayout *layout = block.layout();
-                if ( layout->lineCount() > 1 ) {
+                if (layout->lineCount() > 1) {
 
 
                     // TODO --> draw line by line
@@ -536,25 +538,25 @@ bool PrinterPrivate::complexDraw()
                     int heightSave = drawnedSize.height();
                     // draw the maximum lines into the page before creating a new one
                     while (layout->lineAt(i).height() + drawnedSize.height() < pageSize.height()) {
-                        //                        layout->lineAt(i).draw( &painter, layout->lineAt(i).position() );
-                        drawnedSize.setHeight( drawnedSize.height() + layout->lineAt(i).height());
+                        //                        layout->lineAt(i).draw(&painter, layout->lineAt(i).position());
+                        drawnedSize.setHeight(drawnedSize.height() + layout->lineAt(i).height());
 //                        qWarning() << "draw line" << i;
                         ++i;
                     }
-                    drawnedSize.setHeight( heightSave );
+                    drawnedSize.setHeight(heightSave);
 
 
                     // END TODO
 
                 }
-                pageNumber = complexDrawNewPage( painter, headerSize, footerSize, pageSize,
-                                                 correctedY, drawnedSize, pageNumber );
+                pageNumber = complexDrawNewPage(painter, headerSize, footerSize, pageSize,
+                                                 correctedY, drawnedSize, pageNumber);
             }
 
-            block.layout()->draw( &painter, QPointF(0,0) );
+            block.layout()->draw(&painter, QPointF(0,0));
 
-            drawnedSize.setHeight( drawnedSize.height() + blockRect.size().height() +
-                                   ( blockRect.top() - lastDrawnedRect.bottom() ) );
+            drawnedSize.setHeight(drawnedSize.height() + blockRect.size().height() +
+                                   (blockRect.top() - lastDrawnedRect.bottom()));
             lastDrawnedRect = blockRect;
         }
     }
@@ -563,9 +565,9 @@ bool PrinterPrivate::complexDraw()
     return true;
 }
 
-int PrinterPrivate::complexDrawNewPage( QPainter &p, QSizeF & headerSize, QSizeF & footerSize,
+int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF & footerSize,
                                           QSizeF & pageSize, int & correctedY, QSizeF & drawnedSize,
-                                          int currentPageNumber )
+                                          int currentPageNumber)
 {
     bool headerDrawned = false;
     bool footerDrawned = false;
@@ -573,65 +575,65 @@ int PrinterPrivate::complexDrawNewPage( QPainter &p, QSizeF & headerSize, QSizeF
     // correctedY --> translate painter to  (0, correctedY)  in order to paint with pageRect coordonnates
 
     // do we have to create a newpage into printer ?
-    if ( currentPageNumber != 0 ) {
+    if (currentPageNumber != 0) {
         m_Printer->newPage();
         p.restore();
         int previousHeaderHeight = 0;
-        foreach( QTextDocument *doc, headers(currentPageNumber) ) {
+        foreach(QTextDocument *doc, headers(currentPageNumber)) {
             previousHeaderHeight += doc->size().height();
         }
-        p.translate( 0, -drawnedSize.height() - previousHeaderHeight );
+        p.translate(0, -drawnedSize.height() - previousHeaderHeight);
         correctedY += drawnedSize.height();
         p.save();
         // painter points at the beginning of the page
     }
 
     // do we have to include a watermark ?
-    if ( presenceIsRequiredAtPage( currentPageNumber+1 , m_WatermarkPresence ) ) {
+    if (presenceIsRequiredAtPage(currentPageNumber+1 , m_WatermarkPresence)) {
         p.save();
-        p.translate(0, correctedY );
-        p.drawPixmap( m_Printer->pageRect(), m_Watermark );
+        p.translate(0, correctedY);
+        p.drawPixmap(m_Printer->pageRect(), m_Watermark);
         p.restore();
     }
 
     // do we have to include the header ?
     int specialY = correctedY;
     int headerHeight = 0;
-    foreach( QTextDocument *doc, headers(currentPageNumber + 1) ) {
+    foreach(QTextDocument *doc, headers(currentPageNumber + 1)) {
         headerSize = doc->size();
         // draw all headers
         p.save();
-        p.translate(0, specialY );
+        p.translate(0, specialY);
         specialY = 0;
         headerHeight += doc->size().height();
-        QRectF headRect = QRectF(QPoint(0,0), headerSize );
-        doc->drawContents( &p, headRect );
+        QRectF headRect = QRectF(QPoint(0,0), headerSize);
+        doc->drawContents(&p, headRect);
         p.restore();
         // translate painter under the header
         p.restore();
-        p.translate( 0, doc->size().height() );
+        p.translate(0, doc->size().height());
         p.save();
         headerDrawned = true;
     }
-    headerSize.setHeight( headerHeight );
+    headerSize.setHeight(headerHeight);
 
 
     // do we have to include the footer ?
     int footHeight = 0;
-    foreach( QTextDocument *doc, footers(currentPageNumber + 1) ) {
+    foreach(QTextDocument *doc, footers(currentPageNumber + 1)) {
         footerSize = QSizeF(doc->size().width(),0);
         footHeight += doc->size().height();
         p.save();
         p.translate(0, m_Printer->pageRect().bottom() + correctedY - footHeight - headerSize.height());
-        QRectF footRect = QRectF(QPoint(0,0), QSizeF( doc->size().width(), footHeight) );
+        QRectF footRect = QRectF(QPoint(0,0), QSizeF(doc->size().width(), footHeight));
         doc->drawContents(&p, footRect);
         p.restore();
         footerDrawned = true;
     }
-    footerSize.setHeight( footHeight );
+    footerSize.setHeight(footHeight);
 
     // recalculate the content size of the content page
-    pageSize = QSizeF( pageWidth(),
+    pageSize = QSizeF(pageWidth(),
                        m_Printer->pageRect().height() - headerSize.height() - footerSize.height());
 
     // reset drawnedSize (nothing is drawned into the new page)
@@ -648,7 +650,7 @@ int PrinterPrivate::complexDrawNewPage( QPainter &p, QSizeF & headerSize, QSizeF
 bool PrinterPrivate::simpleDraw()
 {
     if (!m_Content) {
-        Utils::Log::addError( "tkPrinter", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw).") );
+        Utils::Log::addError("tkPrinter", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw)."));
         return false;
     }
     m_PrintingDuplicata = false;
@@ -657,35 +659,70 @@ bool PrinterPrivate::simpleDraw()
     int _pageWidth = pageWidth();                     //TODO add margins
     this->setTextWidth(_pageWidth);
 
-    m_Content->setPageSize( getSimpleDrawContentPageSize() );
+    m_Content->setPageSize(getSimpleDrawContentPageSize());
 //    qWarning() << getSimpleDrawContentPageSize();
     m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
-    QRect contentRect = QRect(QPoint(0,0), m_Content->size().toSize() );     // whole document drawing rectangle
+    QRect contentRect = QRect(QPoint(0,0), m_Content->size().toSize());     // whole document drawing rectangle
 
-    // prepare painter then draw
-    QPainter painter(m_Printer);
-    return simpleDrawToPainter(painter, contentRect);
+    if (!simpleDrawPreparePages(contentRect))
+        return false;
+
+    QPainter print;
+    print.begin(m_Printer);
+    int i = 0;
+    foreach(QPicture *pic, m_Pages) {
+        ++i;
+        pic->play(&print);
+        if (i<m_Pages.count())
+            m_Printer->newPage();
+    }
+    print.end();
+
+    if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
+        QPainter pdf;
+        QPrinter pdfPrinter(QPrinter::ScreenResolution);
+        pdfPrinter.setOutputFormat(QPrinter::PdfFormat);
+        pdfPrinter.setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
+        pdfPrinter.setDocName(qApp->applicationName() + "_");
+        pdfPrinter.setOutputFileName("/Users/eric/Desktop/essai.pdf");
+        pdf.begin(&pdfPrinter);
+        int j = 0;
+        foreach(QPicture *pic, m_Pages) {
+            ++j;
+            pic->play(&pdf);
+            if (j<m_Pages.count())
+                pdfPrinter.newPage();
+        }
+        pdf.end();
+    }
+
+    return true;
 }
 
 /**
-  \brief Draws to the painter the headers/footers/watermarks and the content to the QPainter \e painter using the simpleDraw method.
+  \brief Draws the pages into the m_Pages (QPicture) with the headers/footers/watermarks and the content using the simpleDraw method.
   \sa isSimple(), simpleDraw(), Printer::previewToPixmap()
 */
-bool PrinterPrivate::simpleDrawToPainter( QPainter &painter, QRect &contentRect )
+bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
 {
+    qDeleteAll(m_Pages);
+    m_Pages.clear();
     int _pageWidth = contentRect.size().width();
     QSizeF headerSize(_pageWidth, 0);
     QSizeF footerSize(_pageWidth, 0);
     int pageNumber = 1;
     int drawnedHeight = 0;
-    QRectF headRect = QRectF(QPoint(0,0), headerSize );
+    QRectF headRect = QRectF(QPoint(0,0), headerSize);
     QRect currentRect = contentRect;
     int fromPage = m_Printer->fromPage();
     int toPage = m_Printer->toPage();
     bool fromToPage = ((fromPage>0) || (toPage>0));
     while (currentRect.intersects(contentRect)) {
+        QPicture *pic = new QPicture;
+        QPainter painter;
+        painter.begin(pic);
         currentRect = getSimpleDrawCurrentRectangle(pageNumber);
         if (fromToPage) {
             if (pageNumber>toPage)
@@ -697,8 +734,8 @@ bool PrinterPrivate::simpleDrawToPainter( QPainter &painter, QRect &contentRect 
             }
         }
         // at the beginning of the while, painter is translated to the 0,0 position of the new page
-        simpleDrawWatermark( painter, pageNumber );
-        simpleDrawHeaderFooter( painter, headerSize, footerSize, pageNumber );
+        simpleDrawWatermark(painter, pageNumber);
+        simpleDrawHeaderFooter(painter, headerSize, footerSize, pageNumber);
 
         // draw content for this page
         simpleDrawContent(painter, headerSize, currentRect, drawnedHeight);
@@ -709,7 +746,7 @@ bool PrinterPrivate::simpleDrawToPainter( QPainter &painter, QRect &contentRect 
             if (m_PrintingDuplicata) {
                 drawnedHeight += currentRect.height();
                 // duplicata is drawn --> translate the currentRect to the beginning of the next page
-                currentRect.translate(0, currentRect.height() );
+                currentRect.translate(0, currentRect.height());
                 pageNumber++;
             }
             m_PrintingDuplicata=!m_PrintingDuplicata;
@@ -728,15 +765,15 @@ bool PrinterPrivate::simpleDrawToPainter( QPainter &painter, QRect &contentRect 
             } else
                     m_Printer->newPage();
         }
+        m_Pages.append(pic);
     }
-    painter.end();
     return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  PUBLIC PART  ////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Printer::Printer( QObject * parent )
+Printer::Printer(QObject * parent)
     : QObject(parent),
     d(0)
 {
@@ -784,29 +821,22 @@ bool Printer::getUserPrinter()
         if (QPrinterInfo::defaultPrinter().isNull()) {
             d->m_Printer = new QPrinter;
             d->m_Printer->setResolution(QPrinter::ScreenResolution);
-            d->m_Printer->setPageSize(QPrinter::A4);
-            d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
         } else {
-            d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(),
-                                        QPrinter::ScreenResolution);
-                                        //QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
-            d->m_Printer->setPaperSize(QPrinter::A4);
+            d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(), QPrinter::ScreenResolution);
         }
     } else if (name == "User") {
         askForPrinter(qApp->activeWindow());
     } else {
         foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
             if (info.printerName() == name) {
-                d->m_Printer = new QPrinter(info,
-                                            QPrinter::PrinterMode(settings()->value(Constants::S_RESOLUTION).toInt()));
-                d->m_Printer->setPageSize(QPrinter::A4);
-                d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
+                d->m_Printer = new QPrinter(info, QPrinter::ScreenResolution);
                 break;
             }
         }
     }
     if (d->m_Printer) {
         d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
+        d->m_Printer->setPageSize(QPrinter::A4);
         return true;
     }
     return false;
@@ -827,7 +857,7 @@ bool Printer::askForPrinter(QWidget *parent)
 }
 
 /** \brief Defines the printer to use. */
-void Printer::setPrinter( QPrinter * printer )
+void Printer::setPrinter(QPrinter * printer)
 {
     if (printer)
         d->m_Printer = printer;
@@ -844,7 +874,7 @@ QPrinter *Printer::printer()
 /**
   \brief Set a header content, presence and priority.
 */
-void Printer::setHeader( const QString & html, Presence presence, Printer::Priority prior )
+void Printer::setHeader(const QString & html, Presence presence, Printer::Priority prior)
 {
     d->m_Headers.append(new TextDocumentExtra(html, presence, prior));
 }
@@ -852,16 +882,23 @@ void Printer::setHeader( const QString & html, Presence presence, Printer::Prior
 /**
   \brief Set a footer content, presence and priority.
 */
-void Printer::setFooter( const QString & html, Presence presence, Printer::Priority prior )
+void Printer::setFooter(const QString & html, Presence presence, Printer::Priority prior)
 {
     d->m_Footers.append(new TextDocumentExtra(html, presence, prior));
 }
 
 /** \brief Set the main text to print/ */
-void Printer::setContent( const QString & html )
+void Printer::setContent(const QString & html)
 {
     d->renewContent();
-    d->content()->setHtml( html );
+    d->content()->setHtml(html);
+}
+
+/** \brief Set the main text to print/ */
+void Printer::setContent(const QTextDocument & docToPrint)
+{
+    d->renewContent();
+    d->m_Content = docToPrint.clone();
 }
 
 /** \brief Try to find the default system printer and use it without annoying user. */
@@ -885,7 +922,7 @@ void Printer::setOrientation(QPrinter::Orientation orientation)
         d->renewPrinter();
     d->m_Printer->setOrientation(orientation);
     // TODO Manage Margins
-    d->setTextWidth( d->pageWidth() );
+    d->setTextWidth(d->pageWidth());
 }
 
 void Printer::setPaperSize(QPrinter::PaperSize size)
@@ -895,6 +932,16 @@ void Printer::setPaperSize(QPrinter::PaperSize size)
     d->m_Printer->setPaperSize(size);
     // TODO Manage Margins
     d->setTextWidth(d->pageWidth());
+}
+
+bool Printer::preparePages(QPrinter *printer)
+{
+    /** \todo HERE */
+}
+
+bool Printer::print()
+{
+    /** \todo HERE */
 }
 
 /** \brief Shows the print preview dialog. \e test param should only be used for debugging. */
@@ -923,22 +970,22 @@ bool Printer::previewDialog(QWidget *parent, bool test)
 /**
   \brief Print the documents as the content (headers, footers and watermark must be defined before).
 */
-bool Printer::print( const QTextDocument & docToPrint )
+bool Printer::print(const QTextDocument &docToPrint)
 {
     d->renewContent();
     d->m_Content = docToPrint.clone();
-    print( d->m_Printer );
+    print(d->m_Printer);
     return true;
 }
 
 /**
   \brief Print the documents as the content (headers, footers and watermark must be defined before).
 */
-bool Printer::print( const QString &htmlToPrint )
+bool Printer::print(const QString &htmlToPrint)
 {
     QTextDocument t;
-    t.setHtml( htmlToPrint );
-    return print( t );
+    t.setHtml(htmlToPrint);
+    return print(t);
 }
 
 /**
@@ -946,7 +993,7 @@ bool Printer::print( const QString &htmlToPrint )
   If set to true, the duplicatas are printed just after the page, not at the end of the whole printing.\n
   Setting your printer driver to 2n-up should be fine to print one the left the original and on the right the duplicata.
 */
-bool Printer::printWithDuplicata( bool state )
+bool Printer::printWithDuplicata(bool state)
 {
     d->m_WithDuplicata=state;
     return true;
@@ -956,9 +1003,9 @@ bool Printer::printWithDuplicata( bool state )
   \brief Print all documents (headers, footers, watermark and content) to the printer \e printer
   This member is used by QPrintDialogPreview in order to refresh the preview.\n
   You should not use this function directly.
-  \sa print( const QTextDocument &), print( const QString &)
+  \sa print(const QTextDocument &), print(const QString &)
 */
-bool Printer::print( QPrinter *printer )
+bool Printer::print(QPrinter *printer)
 {
     if (!printer)
         printer = d->m_Printer;
@@ -977,52 +1024,52 @@ bool Printer::print( QPrinter *printer )
 }
 
 /** \brief Defines the QPixmap to use for the Watermark */
-void Printer::addPixmapWatermark( const QPixmap & pix, const Presence p , const Qt::AlignmentFlag watermarkAlignment )
+void Printer::addPixmapWatermark(const QPixmap & pix, const Presence p , const Qt::AlignmentFlag watermarkAlignment)
 {
-    if ( ! d->m_Printer )
+    if (! d->m_Printer)
         return;
     d->m_WatermarkPresence = p;
     QRectF pageRect = d->m_Printer->pageRect();
 
     // prepare watermark pixmap
     if (d->m_Watermark.isNull()) {
-        d->m_Watermark = QPixmap( pageRect.width(), pageRect.height() );
+        d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
         d->m_Watermark.fill();
     }
 
     // TODO page margins
     // TODO manageDPI of pixmap
     QRectF pixRect = pix.rect();
-    int rotationAngle = d->calculateWatermarkRotation( pageRect, watermarkAlignment );
+    int rotationAngle = d->calculateWatermarkRotation(pageRect, watermarkAlignment);
 
     // Prepare painter
     QPainter painter;
-    painter.begin( &d->m_Watermark );
-    painter.translate( -pageRect.topLeft() );  // TODO : this is wrong because we loose the margins
+    painter.begin(&d->m_Watermark);
+    painter.translate(-pageRect.topLeft());  // TODO : this is wrong because we loose the margins
     painter.save();
     // rotate the painter from its middle
-    if ( rotationAngle != 0 ) {
-        painter.translate( pixRect.center() );
-        painter.rotate( rotationAngle );
+    if (rotationAngle != 0) {
+        painter.translate(pixRect.center());
+        painter.rotate(rotationAngle);
         // scale textRect to feet inside the pageRect - margins
         QRectF boundingRect = d->rotatedBoundingRect(pixRect, rotationAngle);
-        double scale = qMin( pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height() );
-        painter.scale( scale, scale );
-        painter.translate( -pixRect.center() );
+        double scale = qMin(pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height());
+        painter.scale(scale, scale);
+        painter.translate(-pixRect.center());
     }
-    painter.drawRect( pixRect );
-    painter.drawPixmap( pixRect, pix, QRectF() );
+    painter.drawRect(pixRect);
+    painter.drawPixmap(pixRect, pix, QRectF());
     painter.restore();
     painter.end();
 }
 
 /** \brief Defines the html text to use for the Watermark */
-void Printer::addHtmlWatermark( const QString & html,
+void Printer::addHtmlWatermark(const QString & html,
                                   const Presence p,
                                   const Qt::Alignment watermarkAlignment,
-                                  const int orientation )
+                                  const int orientation)
 {
-    if ( ! d->m_Printer )
+    if (! d->m_Printer)
         return;
     d->m_WatermarkPresence = p;
 
@@ -1031,20 +1078,20 @@ void Printer::addHtmlWatermark( const QString & html,
     // get some values about the printing page and prepare the pixmap
     QRectF pageRect = d->m_Printer->pageRect();
 
-    d->m_Watermark = QPixmap( pageRect.width(), pageRect.height() );
+    d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
     d->m_Watermark.fill();
-    previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation );
+    previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation);
 }
 
 /**
   \brief Draws to the QPixmap \e drawTo the watermark defined by the QTextDocument \e doc.
   \todo When asking multi watermarks, is watermarks does not have the same presence --> Bug. Need to store d->watermarks into a hash<presence,qpixmap>
 */
-void Printer::previewDocumentWatermark( QPixmap &drawTo,
+void Printer::previewDocumentWatermark(QPixmap &drawTo,
                                           QTextDocument *doc,
                                           const Presence p,
                                           const Qt::Alignment watermarkAlignment,
-                                          const int orientation )
+                                          const int orientation)
 {
     Q_UNUSED(p);
     Q_UNUSED(orientation);
@@ -1057,82 +1104,82 @@ void Printer::previewDocumentWatermark( QPixmap &drawTo,
     opt.setWrapMode(QTextOption::NoWrap);
     doc->setDefaultTextOption(opt);
     doc->adjustSize();
-    QPointF pageCenter( drawTo.rect().center() );
+    QPointF pageCenter(drawTo.rect().center());
     QRect pageRect = drawTo.rect();
     // Calculates the painting area for the text
-    QRectF textRect = QRectF( QPointF(0,0), doc->size() );
-    int rotationAngle = PrinterPrivate::calculateWatermarkRotation( pageRect, watermarkAlignment );
+    QRectF textRect = QRectF(QPointF(0,0), doc->size());
+    int rotationAngle = PrinterPrivate::calculateWatermarkRotation(pageRect, watermarkAlignment);
 
     // Prepare painter
     QPainter painter;
-    painter.begin( &drawTo );
-    painter.translate( -pageRect.topLeft() );  // TODO : this is wrong because we loose the margins
+    painter.begin(&drawTo);
+    painter.translate(-pageRect.topLeft());  // TODO : this is wrong because we loose the margins
     painter.save();
     // rotate the painter from its middle
-//    if ( rotationAngle != 0 ) {
+//    if (rotationAngle != 0) {
     {
         QRectF boundingRect = PrinterPrivate::rotatedBoundingRect(textRect, rotationAngle);
-        double scale = qMin( pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height() );
-        PrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale );
-        painter.translate( textRect.center() );
-        painter.rotate( rotationAngle );
-        painter.scale( scale, scale );
+        double scale = qMin(pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height());
+        PrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale);
+        painter.translate(textRect.center());
+        painter.rotate(rotationAngle);
+        painter.scale(scale, scale);
         // scale textRect to feet inside the pageRect - margins
-        painter.translate( -textRect.center() );
+        painter.translate(-textRect.center());
     }
 //    else {
 //        QSizeF docSize = wm.size();
-////    painter.translate( textRect.topLeft() );
-//        double scale = qMin( pageRect.width() / docSize.width(), pageRect.height() / docSize.height() );
-//        tkPrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale );
-//        painter.scale( scale, scale );
-////    painter.translate( -textRect.topLeft() );
+////    painter.translate(textRect.topLeft());
+//        double scale = qMin(pageRect.width() / docSize.width(), pageRect.height() / docSize.height());
+//        tkPrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale);
+//        painter.scale(scale, scale);
+////    painter.translate(-textRect.topLeft());
 //    }
 
-    painter.translate( textRect.topLeft() );
-    doc->drawContents( &painter );//, textRect );
-    painter.translate( -textRect.topLeft() );
+    painter.translate(textRect.topLeft());
+    doc->drawContents(&painter);//, textRect);
+    painter.translate(-textRect.topLeft());
 
     painter.restore();
     painter.end();
-    doc->setDefaultTextOption( docOptionSave );
-    doc->setPageSize( docSizeSave );
+    doc->setDefaultTextOption(docOptionSave);
+    doc->setPageSize(docSizeSave);
 }
 
 /** \brief Draws the \e html text watermark to QPixmap \e drawTo */
-void Printer::previewHtmlWatermark( QPixmap &drawTo,
+void Printer::previewHtmlWatermark(QPixmap &drawTo,
                                       const QString & html,
                                       const Presence p,
                                       const Qt::Alignment watermarkAlignment,
-                                      const int orientation )
+                                      const int orientation)
 {
     QTextDocument wm;
-    wm.setHtml( html );
-    previewDocumentWatermark( drawTo, &wm, p, watermarkAlignment, orientation );
+    wm.setHtml(html);
+    previewDocumentWatermark(drawTo, &wm, p, watermarkAlignment, orientation);
 }
 
 /** \brief Draws the plain text \e plainText watermark to QPixmap \e drawTo */
-void Printer::previewTextWatermark( QPixmap &drawTo,
+void Printer::previewTextWatermark(QPixmap &drawTo,
                                       const QString & plainText,
                                       const Presence p,
                                       const Qt::Alignment watermarkAlignment,
-                                      const int orientation )
+                                      const int orientation)
 {
     QTextDocument wm;
-    wm.setPlainText( plainText );
-    previewDocumentWatermark( drawTo, &wm, p, watermarkAlignment, orientation );
+    wm.setPlainText(plainText);
+    previewDocumentWatermark(drawTo, &wm, p, watermarkAlignment, orientation);
 }
 
 /** \brief Defines the plain text to use for the Watermark */
-void Printer::addTextWatermark( const QString & plainText,
+void Printer::addTextWatermark(const QString & plainText,
                                   const Presence p,
                                   const Qt::Alignment watermarkAlignment,
                                   const Qt::Alignment textAlignment,
                                   const QFont & font,
                                   const QColor & color,
-                                  const int orientation )
+                                  const int orientation)
 {
-    if ( ! d->m_Printer )
+    if (! d->m_Printer)
         return;
     d->m_WatermarkPresence = p;
 
@@ -1142,7 +1189,7 @@ void Printer::addTextWatermark( const QString & plainText,
     QRectF pageRect = d->m_Printer->pageRect();
 
     if (d->m_Watermark.isNull()) {
-        d->m_Watermark = QPixmap( pageRect.width(), pageRect.height() );
+        d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
         d->m_Watermark.fill();
     }
 
@@ -1151,14 +1198,14 @@ void Printer::addTextWatermark( const QString & plainText,
                    .arg(Utils::fontToHtml(font, color))
                    .arg(plainText);
     html.replace("\n", "<br/>");
-    previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation );
+    previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation);
 }
 
 /**
   \brief Returns the Previewer widget
   \sa tkPrinterPreviewer
 */
-PrinterPreviewer *Printer::previewer( QWidget *parent )
+PrinterPreviewer *Printer::previewer(QWidget *parent)
 {
     PrinterPreviewerPrivate *prev= new PrinterPreviewerPrivate(parent);
     prev->initialize();
@@ -1170,43 +1217,45 @@ PrinterPreviewer *Printer::previewer( QWidget *parent )
   \e drawTo must be sized before.\n
   You must specify the printer to use for the previewing. This function does not use the class printer.
 */
-void Printer::previewToPixmap( QPixmap &drawTo, QPrinter *printer )
+void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
 {
     Q_ASSERT(printer);
     QSize savePixSize = drawTo.size();
     if (!d->m_Content) {
         d->m_Content = new QTextDocument(this);
-        d->m_Content->setHtml( "<p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p>" );
+        d->m_Content->setHtml("<p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p>");
     }
     d->m_PrintingDuplicata = false;
 
     int _pageWidth = printer->pageRect().width();//d->pageWidth();
     d->setTextWidth(_pageWidth);
 
-    d->m_Content->setPageSize( printer->pageRect().size() );//d->getSimpleDrawContentPageSize() );
+    d->m_Content->setPageSize(printer->pageRect().size());//d->getSimpleDrawContentPageSize());
     d->m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
-    QRect contentRect = QRect(QPoint(0,0), d->m_Content->size().toSize() );     // whole document drawing rectangle
+    QRect contentRect = QRect(QPoint(0,0), d->m_Content->size().toSize());     // whole document drawing rectangle
 
     // prepare painter then draw
-    drawTo = QPixmap( _pageWidth, printer->pageRect().height() + 30 );
+    drawTo = QPixmap(_pageWidth, printer->pageRect().height() + 30);
     drawTo.fill();
     QPainter painter;
     painter.begin(&drawTo);
-    d->simpleDrawToPainter(painter, contentRect);
-    drawTo = drawTo.scaled( 250, 250, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    /** \todo HERE */
+//    d->simpleDrawToPainter(painter, contentRect);
+    drawTo = drawTo.scaled(250, 250, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
 /** \brief Draw the header and footer passed as params into \e drawTo. \e drawTo must be sized before. */
-void Printer::previewHeaderFooter( QPixmap &drawTo,
+void Printer::previewHeaderFooter(QPixmap &drawTo,
                                      const QString &headerHtml,
-                                     const QString &footerHtml )
+                                     const QString &footerHtml)
 {
     QSize savePixSize = drawTo.size();
     // prepare pseudo printer
     QPrinter *printer = new QPrinter;
-    printer->setPaperSize( QPrinter::A4 );
+    printer->setPaperSize(QPrinter::A4);
     setPrinter(printer);
 
     setHeader(headerHtml);
@@ -1220,26 +1269,26 @@ void Printer::previewHeaderFooter( QPixmap &drawTo,
 
     QTextDocument *headerDoc = d->header(Printer::EachPages);
     if (headerDoc) {
-        headerDoc->setTextWidth( _pageWidth );
+        headerDoc->setTextWidth(_pageWidth);
         headerSize.setHeight(headerDoc->size().height());
     }
     QTextDocument *footerDoc = d->footer(Printer::EachPages);
     if (footerDoc) {
-        footerDoc->setTextWidth( _pageWidth );
+        footerDoc->setTextWidth(_pageWidth);
         footerSize.setHeight(footerDoc->size().height());
     }
 
     // prepare painter
-    drawTo = QPixmap( _pageWidth, printer->pageRect().height() );
+    drawTo = QPixmap(_pageWidth, printer->pageRect().height());
     drawTo.fill();
     QPainter painter;
     painter.begin(&drawTo);
-//    painter.translate( 11, 11);
-    d->simpleDrawHeaderFooter( painter, headerSize, footerSize, 1 );
+//    painter.translate(11, 11);
+    d->simpleDrawHeaderFooter(painter, headerSize, footerSize, 1);
     // scale painter
     // close painter
     painter.end();
-    drawTo = drawTo.scaled( 250, 250, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    drawTo = drawTo.scaled(250, 250, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
 /**
@@ -1286,6 +1335,6 @@ bool Printer::toPdf(const QString &fileName, const QString &html)
 */
 bool Printer::toPdf(const QString &fileName, const QTextDocument & docToPrint)
 {
-    d->m_Content->setHtml( docToPrint.toHtml() );
+    d->m_Content->setHtml(docToPrint.toHtml());
     return toPdf(fileName);
 }

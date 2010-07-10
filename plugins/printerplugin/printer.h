@@ -118,21 +118,25 @@ public:
     bool getUserPrinter();
     bool askForPrinter( QWidget *parent = 0 );
     bool useDefaultPrinter();
-    void setPrinter( QPrinter * printer );
+    void setPrinter(QPrinter *printer);
     QPrinter *printer();
 
-    bool previewDialog( QWidget *parent = 0, bool test = false );
+    bool previewDialog(QWidget *parent = 0, bool test = false);
 
-    void setHeader( const QString & html, Presence p = EachPages, Printer::Priority prior = First );
+    void setHeader(const QString &html, Presence p = EachPages, Printer::Priority prior = First);
     void clearHeaders();
 
-    void setFooter( const QString & html, Presence p = EachPages, Printer::Priority prior = First );
+    void setFooter(const QString &html, Presence p = EachPages, Printer::Priority prior = First);
     void clearFooters();
 
-    void setContent( const QString & html );
+    void setContent(const QString &html);
+    void setContent(const QTextDocument & docToPrint);
 
     void setOrientation(QPrinter::Orientation orientation);
     void setPaperSize(QPrinter::PaperSize size);
+
+    bool preparePages(QPrinter *printer = 0);
+    bool print();
 
 public Q_SLOTS:
     // Watermark management
@@ -153,9 +157,9 @@ public Q_SLOTS:
                            const Qt::Alignment watermarkAlignment = Qt::AlignCenter,
                            const int orientation = -1 );
 
-    static PrinterPreviewer *previewer( QWidget *parent );
+    static PrinterPreviewer *previewer(QWidget *parent);
 
-    void previewToPixmap( QPixmap &drawTo, QPrinter *printer );
+    void previewToPixmap(QPixmap &drawTo, QPrinter *printer);
 
     void previewHeaderFooter( QPixmap &drawTo,
                               const QString &headerHtml,
@@ -179,16 +183,17 @@ public Q_SLOTS:
 
     void clearWatermark();
 
-    bool print( const QTextDocument & docToPrint );
-    bool printWithDuplicata( bool state = true );
-    bool print( const QString &htmlToPrint );
+    bool printWithDuplicata(bool state = true);
+
+    bool print(const QTextDocument & docToPrint);
+    bool print(const QString &htmlToPrint);
 
     bool toPdf(const QString &fileName);
     bool toPdf(const QString &fileName, const QString &html);
     bool toPdf(const QString &fileName, const QTextDocument & docToPrint);
 
 protected Q_SLOTS:
-    bool print( QPrinter *printer = 0 );  // used by tkPrinter PreviewDialog
+    bool print(QPrinter *printer);  // used by tkPrinter PreviewDialog
 
 private:
     Internal::PrinterPrivate *d;
