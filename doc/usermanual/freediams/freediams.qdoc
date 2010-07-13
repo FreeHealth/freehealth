@@ -264,15 +264,15 @@ Not yet documented :
 Examples :
 - Linux/*BSD :
 \code
-freediams --exchange-in="/home/me/exchang-in.xml"
+freediams --exchange-in="/home/me/exchange-in.xml"
 \endcode
 - Win :
 \code
-freediams.exe --exchange-in="c:\Files\exchang-in.xml"
+freediams.exe --exchange-in="c:\Files\exchangein.xml"
 \endcode
 - Mac (don't forget the bundle) :
 \code
-FreeDiams.app/Contents/MacOs/FreeDiams --exchange-in="/Users/me/exchang-in.xml"
+FreeDiams.app/Contents/MacOs/FreeDiams --exchange-in="/Users/me/exchange-in.xml"
 \endcode
 
 \~french \section exchange-in Le fichier d'échange entrant
