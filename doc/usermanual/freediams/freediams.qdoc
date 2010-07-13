@@ -214,7 +214,7 @@ Les paramètres suivants sont disponibles :
 \li \e --selection-only : Démarre \freediams en mode de sélection seulement.
 \li \e --medintux : définit une utilisation spécifique à MedinTux.
 \li \e --exchange-in="/path/to/xml/exchange-in.xml" : définit le fichier d'échange entrant.
-\li \e --exchange="xxx" : définit le fichier d'échange entre les deux applications. Le fichier doit exister.
+\li \e --exchange-out="xxx" : définit le fichier que FreeDiams va écrire, selon de propre droits de chemin d'accès.
 \li \e --exchange-format="xml html html_xml" : format du fichier d'échange de sortie
 \li \e --patientname="xx xx xx" : définit le nom du patient.
 \li \e --patientsurname="xx xx" : définti le prénom du patient.
@@ -233,8 +233,8 @@ The following settings are available:
 \li \e --selection-only : Starts \freediams in Selection Only Mode
 \li \e --medintux: defines a specific user MedinTux.
 \li \e --exchange-in="/path/to/xml/exchange-in.xml" : defines the "in" exchange file.
-\li \e --exchange="xxx" : "xxx" identifies the exchange file between the two applications. File must exist.
-\li \e --exchange-format="xml html html_xml" : format of the exchange out file
+\li \e --exchange-out="xxx" : "xxx" is the file that FreeDiams will write, given PATH write permission.
+\li \e --exchange-format="xml html html_xml" : format of the exchange out file (default html_xml)
 \li \e --patientname="xx xx xx" defines the name of the patient.
 \li \e --patientsurname="xx xx" define the surname of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
@@ -256,7 +256,7 @@ Not yet documented :
 \li \e --height-unit : value can be : cm/
 \li \e --crcl-unit
 \li \e --creatinine-unit
-\li \e --blockpatientdatas : value can be : 0 or 1. User can/can't modify patients' datas
+\li \e --blockpatientdatas : value can be : 0 or 1. User can/can't modify patient's datas
 \li \e --drugs-uid-allergies
 \li \e --atc-allergies
 \li \e --inn-allergies
@@ -264,15 +264,15 @@ Not yet documented :
 Examples :
 - Linux/*BSD :
 \code
-freediams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+freediams --exchange-in="/home/me/exchang-in.xml"
 \endcode
 - Win :
 \code
-freediams.exe --exhange-in="c:\Files\exchang-in.xml" --exchange="c:\Files\exchange.exc"
+freediams.exe --exchange-in="c:\Files\exchang-in.xml"
 \endcode
 - Mac (don't forget the bundle) :
 \code
-FreeDiams.app/Contents/MacOs/FreeDiams --exhange-in="/home/me/exchang-in.xml" --exchange="/home/me/exchange.exc"
+FreeDiams.app/Contents/MacOs/FreeDiams --exchange-in="/Users/me/exchang-in.xml"
 \endcode
 
 \~french \section exchange-in Le fichier d'échange entrant
@@ -301,9 +301,9 @@ The structure of this file must meet the following requirements.
 
 \~
 \verbatim
-<FreeDiams_In version="0.4.0">
-  <ConfigFile value="/path/to/the/requiered/configFile.ini"/>
-  <OutFile value="/path/to/the/requiered/exchange_File.txt" format="xml html html_xml"/>
+<FreeDiams_In version="0.4.3">
+  <ConfigFile value="/absolute/file/specification/to/the/required/configFile.ini"/>
+  <ExchangeOut value="/absolute/file/specification/to/the/required/exchange_File.txt" format="xml html html_xml	"/>
   <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
   <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <Patient>
@@ -320,14 +320,29 @@ The structure of this file must meet the following requirements.
 </FreeDiams_In>
 \endverbatim
 
+\note
+Please note the difference between relative and absolute path.
+   - absolute path starts with <em>'/'</em> or <em>'X:\\'</em>
+   - relative path starts with <em>'./'</em> or <em>'../'</em>
+The relative path are calculated from the application's binary. They
+should be different for each OS:
+   - under Linux, the binary is installed in \e /usr/bin
+   - under MacOs, binary is inside the Bundle \e
+/Path/To/Application.app/Contents/MacOs
+   - under Windows, binary is installed in \e C:\\Path\\To\\FreeDiams
+It is recommended to use absolute full path inside the XML exhange in
+file, so that the calls to \freediams will be fully multi-OS.
+\endnote
+
 - ConfigFile : tells \freediams to use the specified config file. If this file does not exist, \freediams
 will use the default one.
-- OutFile :
-- DrugsDatabase : specify the Drugs Database to use. The \e uid is the \freediams unique identifier.
-- EMR : these params will be returned in the out exchange file, so that EMR can test and check the files.
+- ExchangeOut :
+- DrugsDatabase : specify the \freediams "Identifiant" to use e.g. FR_AFSSAPS, CA_HCDPD as it appears
+in > Preferences > Database selector > Database informations … Filename and identifiant.
+- EMR : these params will be returned in the exchang-out file, so that EMR can test and check the files.
 - UI : \freediams can be used in different editing mode, you can define it here. Use he \e blockPatientDatas
 when user should not be able to change patient's datas.
-- Patient's datas : please note the date format (yyyy/MM/dd) and the list model : item1;item2;item3.
+- Patient's data : please note the date format (yyyy/MM/dd) and the list model : item1;item2;item3.
 
 \~french \subsection exchange-in-xml-defaults Valeurs par défaut
 \~english \subsection exchange-in-xml-defaults Defaults
