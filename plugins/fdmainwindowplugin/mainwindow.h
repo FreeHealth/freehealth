@@ -56,8 +56,8 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 18 Apr 2010
+ * \version 0.4.2
+ * \date 11 July 2010
 */
 
 namespace MainWin {

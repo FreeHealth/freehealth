@@ -3,8 +3,10 @@ version=0.4.4
     * 2010
 
     * New features:
+      * ATC Classes allergies are now integrated (allergy to ATC code < 7 char is a class ATC allergy)
       * Prescription View now show allergy too
       * when printing templates allergies and interactions are tested before the print process, user is informed
+      * PDF print cache is enable, see apps preferences
 
     * Bug correction:
       * Drugs allergies wasn't taken into account at startup

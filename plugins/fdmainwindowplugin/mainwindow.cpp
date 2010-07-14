@@ -54,6 +54,7 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <fdcoreplugin/coreimpl.h>
 #include <fdcoreplugin/commandlineparser.h>
@@ -101,6 +102,8 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
@@ -233,8 +236,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     menu->addAction(cmd, Core::Constants::G_FILE_NEW);
     connect(aClearPatient, SIGNAL(triggered()), this, SLOT(clearPatientInfos()));
 
-//    actionManager()->retranslateMenusAndActions();
-
     return true;
 }
 
@@ -270,7 +271,6 @@ void MainWindow::extensionsInitialized()
     m_ui->patientInformations->hide();
     m_ui->clearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     connect(m_ui->clearPatient, SIGNAL(clicked()), this, SLOT(clearPatientInfos()));
-    refreshPatient();
 
     messageSplash(tr("Initializing drugs database"));
     m_ui->m_CentralWidget->initialize();
@@ -342,6 +342,7 @@ void MainWindow::postCoreInitialization()
 {
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+    refreshPatient();
 }
 
 
@@ -351,6 +352,24 @@ void MainWindow::postCoreInitialization()
 */
 void MainWindow::refreshPatient()
 {
+    bool state = true;
+    m_ui->centralwidget->blockSignals(state);
+    m_ui->crClUnit->blockSignals(state);
+    m_ui->creatinineUnit->blockSignals(state);
+    m_ui->dobDateEdit->blockSignals(state);
+    m_ui->listOfAllergies->blockSignals(state);
+    m_ui->m_CentralWidget->blockSignals(state);
+    m_ui->patientClCr->blockSignals(state);
+    m_ui->patientCreatinin->blockSignals(state);
+    m_ui->patientInformations->blockSignals(state);
+    m_ui->patientName->blockSignals(state);
+    m_ui->patientSize->blockSignals(state);
+    m_ui->patientSurname->blockSignals(state);
+    m_ui->patientWeight->blockSignals(state);
+    m_ui->sexCombo->blockSignals(state);
+    m_ui->sizeUnit->blockSignals(state);
+    m_ui->weightUnit->blockSignals(state);
+
     m_ui->patientName->setText(patient()->value(Core::IPatient::BirthName).toString());
     m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
                                      "Taille : %5<br />Clearance : %6")
@@ -375,7 +394,36 @@ void MainWindow::refreshPatient()
     m_ui->patientCreatinin->setValue(patient()->value(Core::IPatient::Creatinine).toDouble());
     m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
     /** \todo manage allergies */
-    m_ui->listOfAllergies->setText(patient()->value(Core::IPatient::DrugsAtcAllergies).toString());
+    QString a;
+    const QStringList &drug = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
+    if (!drug.isEmpty())
+        a += tr("Drugs(%1) // ").arg(drug.join(";"));
+    const QStringList &inns = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
+    if (!inns.isEmpty())
+        a += tr("INN(%1) // ").arg(inns.join(";"));
+    const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
+    if (!atc.isEmpty())
+        a += tr("ATC(%1) // ").arg(atc.join(";"));
+    a.chop(4);
+    m_ui->listOfAllergies->setText(a);
+
+    state = false;
+    m_ui->centralwidget->blockSignals(state);
+    m_ui->crClUnit->blockSignals(state);
+    m_ui->creatinineUnit->blockSignals(state);
+    m_ui->dobDateEdit->blockSignals(state);
+    m_ui->listOfAllergies->blockSignals(state);
+    m_ui->m_CentralWidget->blockSignals(state);
+    m_ui->patientClCr->blockSignals(state);
+    m_ui->patientCreatinin->blockSignals(state);
+    m_ui->patientInformations->blockSignals(state);
+    m_ui->patientName->blockSignals(state);
+    m_ui->patientSize->blockSignals(state);
+    m_ui->patientSurname->blockSignals(state);
+    m_ui->patientWeight->blockSignals(state);
+    m_ui->sexCombo->blockSignals(state);
+    m_ui->sizeUnit->blockSignals(state);
+    m_ui->weightUnit->blockSignals(state);
 }
 
 /**
@@ -402,30 +450,38 @@ void MainWindow::closeEvent( QCloseEvent *event )
         Utils::Log::addMessage(this, QString("Exchange File : %1 - %2")
                                .arg(exfile)
                                .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-//        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
         QString format = commandLine()->value(Core::CommandLine::CL_ExchangeFileFormat).toString();
-//        qWarning() << format;
-            QString tmp;
-            // Manage specific MedinTux output exchange file format
-            if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
-                commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {
-                if (format=="html_xml" || format=="html") {
-                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
-                    tmp.replace("font-weight:bold;", "font-weight:600;");
-                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
-                } else if (format=="xml") {
-//                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToXml(drugModel());
-                    savePrescription(exfile);
-                }
-            } else {
-                if (format=="html_xml" || format=="html") {
-                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), DrugsDB::DrugsIO::MedinTuxVersion);
-                    Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
-                } else if (format=="xml") {
-//                    tmp = DrugsDB::DrugsIO::instance()->prescriptionToXml(drugModel());
-                    savePrescription(exfile);
-                }
+        QString tmp;
+
+        // create PDF cache printed docs XML lines
+        const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
+        QString extraDatas = patient()->toXml();
+        foreach(const Core::PrintedDocumentTracer &t, pdfs) {
+            extraDatas += QString("  <Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
+                           .arg(t.fileName())
+                           .arg(t.documentName())
+                           .arg(t.dateTime().toString(Qt::ISODate))
+                           .arg(t.userUid());
+        }
+
+        // Manage specific MedinTux output exchange file format
+        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
+            commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {
+            if (format=="html_xml" || format=="html") {
+                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp.replace("font-weight:bold;", "font-weight:600;");
+                Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+            } else if (format=="xml") {
+                savePrescription(exfile);
             }
+        } else {
+            if (format=="html_xml" || format=="html") {
+                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+            } else if (format=="xml") {
+                savePrescription(exfile);
+            }
+        }
     }
 
     Core::ICore::instance()->coreIsAboutToClose();
@@ -438,13 +494,49 @@ void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
         QVariant sex = patient()->value(Core::IPatient::Gender);
+        bool state = true;
+        m_ui->centralwidget->blockSignals(state);
+        m_ui->crClUnit->blockSignals(state);
+        m_ui->creatinineUnit->blockSignals(state);
+        m_ui->dobDateEdit->blockSignals(state);
+        m_ui->listOfAllergies->blockSignals(state);
+        m_ui->m_CentralWidget->blockSignals(state);
+        m_ui->patientClCr->blockSignals(state);
+        m_ui->patientCreatinin->blockSignals(state);
+        m_ui->patientInformations->blockSignals(state);
+        m_ui->patientName->blockSignals(state);
+        m_ui->patientSize->blockSignals(state);
+        m_ui->patientSurname->blockSignals(state);
+        m_ui->patientWeight->blockSignals(state);
+        m_ui->sexCombo->blockSignals(state);
+        m_ui->sizeUnit->blockSignals(state);
+        m_ui->weightUnit->blockSignals(state);
+
 	m_ui->retranslateUi(this);
+
+        state = false;
+        m_ui->centralwidget->blockSignals(state);
+        m_ui->crClUnit->blockSignals(state);
+        m_ui->creatinineUnit->blockSignals(state);
+        m_ui->dobDateEdit->blockSignals(state);
+        m_ui->listOfAllergies->blockSignals(state);
+        m_ui->m_CentralWidget->blockSignals(state);
+        m_ui->patientClCr->blockSignals(state);
+        m_ui->patientCreatinin->blockSignals(state);
+        m_ui->patientInformations->blockSignals(state);
+        m_ui->patientName->blockSignals(state);
+        m_ui->patientSize->blockSignals(state);
+        m_ui->patientSurname->blockSignals(state);
+        m_ui->patientWeight->blockSignals(state);
+        m_ui->sexCombo->blockSignals(state);
+        m_ui->sizeUnit->blockSignals(state);
+        m_ui->weightUnit->blockSignals(state);
+
         actionManager()->retranslateMenusAndActions();
         patient()->setValue(Core::IPatient::Gender, sex);
         refreshPatient();
     }
 }
-
 
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()
@@ -479,7 +571,7 @@ void MainWindow::clearPatientInfos()
     if (commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool())
         return;
     patient()->clear();
-    this->refreshPatient();
+    refreshPatient();
 }
 
 void MainWindow::updateCheckerEnd()
@@ -584,16 +676,24 @@ bool MainWindow::saveFile()
 */
 bool MainWindow::savePrescription(const QString &fileName)
 {
-    QString xmlExtra = patient()->toXml();
-    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-            xmlExtra.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
-        }
-        xmlExtra.append("/>");
+    const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
+    QString extraDatas = patient()->toXml();
+    foreach(const Core::PrintedDocumentTracer &t, pdfs) {
+        extraDatas += QString("<Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
+                       .arg(t.fileName())
+                       .arg(t.documentName())
+                       .arg(t.dateTime().toString(Qt::ISODate))
+                       .arg(t.userUid());
     }
-//    qWarning() << xmlExtra;
-    return DrugsDB::DrugsIO::savePrescription(drugModel(), xmlExtra, fileName);
+    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+        extraDatas.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+            extraDatas.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
+        }
+        extraDatas.append("/>");
+    }
+//    qWarning() << extraDatas;
+    return DrugsDB::DrugsIO::savePrescription(drugModel(), extraDatas, fileName);
 }
 
 /**
