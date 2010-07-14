@@ -146,7 +146,7 @@
   Usefull for populating a QComboBox for example.
 */
 
-static const int FOOTER_BOTTOM_MARGIN = 10;
+static const int FOOTER_BOTTOM_MARGIN = 15;
 
 using namespace Print;
 using namespace Print::Internal;
@@ -160,7 +160,12 @@ namespace Internal {
 class PrinterPrivate
 {
 public:
-    PrinterPrivate() : m_Printer(0), m_Content(0), m_WithDuplicata(false), m_PrintingDuplicata(false) {}
+    PrinterPrivate(Printer *parent) :
+            m_TwoNUp(false), m_Printer(0), m_Content(0), m_WithDuplicata(false), m_PrintingDuplicata(false),
+            q(parent)
+    {
+        m_TwoNUp = settings()->value(Print::Constants::S_TWONUP).toBool();
+    }
     ~PrinterPrivate()
     {
         if (m_Printer)
@@ -230,7 +235,7 @@ public:
     int pageWidth()
     {
         if (m_Printer)
-            return m_Printer->pageRect().width() - 20;
+            return m_Printer->paperRect().width() - 20;
         return 0;
     }
 
@@ -253,6 +258,8 @@ public:
             m_Printer=0;
         }
         m_Printer = new QPrinter;
+        m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
+        m_Printer->setPageSize(QPrinter::A4);
     }
 
     // used by complexDraw()
@@ -280,11 +287,11 @@ public:
         return -atan(calculatedTang) * 180.0 / pi;
     }
     /** \brief calculate rotation angle of watermark using the alignment (return the angle). */
-    static int calculateWatermarkRotation(const QRectF pageRect, const Qt::Alignment watermarkAlignment)
+    static int calculateWatermarkRotation(const QRectF paperRect, const Qt::Alignment watermarkAlignment)
     {
         int angle = 0;
         if ((watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter)) || (watermarkAlignment == Qt::AlignCenter)) {
-            angle = medianAngle(pageRect);
+            angle = medianAngle(paperRect);
         } else if (watermarkAlignment == Qt::AlignBottom) {
             angle = 0;
         } else if (watermarkAlignment == Qt::AlignTop) {
@@ -297,19 +304,19 @@ public:
         return angle;
     }
     /** */
-    static void moveTextRect(QRectF & textRect, const QRectF pageRect, const Qt::Alignment watermarkAlignment, const double scaleFactor = 1.0)
+    static void moveTextRect(QRectF & textRect, const QRectF paperRect, const Qt::Alignment watermarkAlignment, const double scaleFactor = 1.0)
     {
         double textHeight  = textRect.height() * scaleFactor;
         if ((watermarkAlignment == (Qt::AlignHCenter | Qt::AlignVCenter)) || (watermarkAlignment == Qt::AlignCenter)) {
-            textRect.moveCenter(pageRect.center());
+            textRect.moveCenter(paperRect.center());
         } else if (watermarkAlignment == Qt::AlignBottom) {
-            textRect.moveCenter(QPointF(pageRect.center().x(), (pageRect.height() - (textHeight/2))));
+            textRect.moveCenter(QPointF(paperRect.center().x(), (paperRect.height() - (textHeight/2))));
         } else if (watermarkAlignment == Qt::AlignTop) {
-            textRect.moveCenter(QPointF(pageRect.center().x(), textHeight/2));
+            textRect.moveCenter(QPointF(paperRect.center().x(), textHeight/2));
         } else if (watermarkAlignment == Qt::AlignRight) {
-            textRect.moveCenter(QPointF(pageRect.width() - (textHeight/2), pageRect.center().y()));
+            textRect.moveCenter(QPointF(paperRect.width() - (textHeight/2), paperRect.center().y()));
         } else if (watermarkAlignment == Qt::AlignLeft) {
-            textRect.moveCenter(QPointF((textHeight/2), pageRect.center().y()));
+            textRect.moveCenter(QPointF((textHeight/2), paperRect.center().y()));
         }
     }
 
@@ -350,7 +357,7 @@ public:
     /** \brief Calculate the space left for the content printing when adding all headers / footers. */
     QSizeF getSimpleDrawContentPageSize()
     {
-        int height = m_Printer->pageRect().height();
+        int height = m_Printer->paperRect().height();
         bool footerMargin = false;
         foreach(QTextDocument *doc, headers(1)) {
             height -= doc->size().height();
@@ -377,7 +384,7 @@ public:
         }
         if (footerHeight==FOOTER_BOTTOM_MARGIN)
             footerHeight=0;
-        int currentHeight = m_Printer->pageRect().height() - headerHeight - footerHeight;
+        int currentHeight = m_Printer->paperRect().height() - headerHeight - footerHeight;
         return QRect(QPoint(0,0), QSize(pageWidth(), currentHeight));
     }
 
@@ -403,7 +410,7 @@ public:
             footerSize = doc->size();
             footerHeight += doc->size().height();
             painter.save();
-            painter.translate(0, m_Printer->pageRect().bottom() - footerHeight);
+            painter.translate(0, m_Printer->paperRect().bottom() - footerHeight);
             QRectF footRect = QRectF(QPoint(0,0), QSizeF(doc->size().width(), footerHeight));
             doc->drawContents(&painter, footRect);
             painter.restore();
@@ -420,7 +427,7 @@ private:
         // Add watermark, painter must be translated to the beginning of the page before
         if (presenceIsRequiredAtPage(pageNumber, m_WatermarkPresence)) {
             painter.save();
-            painter.drawPixmap(m_Printer->pageRect().topLeft(), m_Watermark);
+            painter.drawPixmap(m_Printer->paperRect().topLeft(), m_Watermark);
             painter.restore();
         }
     }
@@ -447,6 +454,7 @@ private:
 public:
     QPixmap m_Watermark; // null watermark at constructor time
     int m_WatermarkPresence;
+    bool m_TwoNUp;
     QPrinter *m_Printer;
     //    QPointer<QPrinter> m_Printer;  // QPrinter is not a QObject so it cannot be protected by QPointer....
     QList<TextDocumentExtra*> m_Headers;
@@ -454,6 +462,9 @@ public:
     QTextDocument *m_Content;                             // TODO transform to QPointer<QTextDocument> ?
     bool m_WithDuplicata, m_PrintingDuplicata;
     QList<QPicture *> m_Pages;
+
+private:
+    Printer *q;
 };
 
 }  // End Internal
@@ -572,7 +583,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
     bool headerDrawned = false;
     bool footerDrawned = false;
 
-    // correctedY --> translate painter to  (0, correctedY)  in order to paint with pageRect coordonnates
+    // correctedY --> translate painter to  (0, correctedY)  in order to paint with paperRect coordonnates
 
     // do we have to create a newpage into printer ?
     if (currentPageNumber != 0) {
@@ -592,7 +603,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
     if (presenceIsRequiredAtPage(currentPageNumber+1 , m_WatermarkPresence)) {
         p.save();
         p.translate(0, correctedY);
-        p.drawPixmap(m_Printer->pageRect(), m_Watermark);
+        p.drawPixmap(m_Printer->paperRect(), m_Watermark);
         p.restore();
     }
 
@@ -624,7 +635,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
         footerSize = QSizeF(doc->size().width(),0);
         footHeight += doc->size().height();
         p.save();
-        p.translate(0, m_Printer->pageRect().bottom() + correctedY - footHeight - headerSize.height());
+        p.translate(0, m_Printer->paperRect().bottom() + correctedY - footHeight - headerSize.height());
         QRectF footRect = QRectF(QPoint(0,0), QSizeF(doc->size().width(), footHeight));
         doc->drawContents(&p, footRect);
         p.restore();
@@ -634,7 +645,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
 
     // recalculate the content size of the content page
     pageSize = QSizeF(pageWidth(),
-                       m_Printer->pageRect().height() - headerSize.height() - footerSize.height());
+                       m_Printer->paperRect().height() - headerSize.height() - footerSize.height());
 
     // reset drawnedSize (nothing is drawned into the new page)
     drawnedSize = QSizeF(0,0);
@@ -668,35 +679,6 @@ bool PrinterPrivate::simpleDraw()
 
     if (!simpleDrawPreparePages(contentRect))
         return false;
-
-    QPainter print;
-    print.begin(m_Printer);
-    int i = 0;
-    foreach(QPicture *pic, m_Pages) {
-        ++i;
-        pic->play(&print);
-        if (i<m_Pages.count())
-            m_Printer->newPage();
-    }
-    print.end();
-
-    if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
-        QPainter pdf;
-        QPrinter pdfPrinter(QPrinter::ScreenResolution);
-        pdfPrinter.setOutputFormat(QPrinter::PdfFormat);
-        pdfPrinter.setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
-        pdfPrinter.setDocName(qApp->applicationName() + "_");
-        pdfPrinter.setOutputFileName("/Users/eric/Desktop/essai.pdf");
-        pdf.begin(&pdfPrinter);
-        int j = 0;
-        foreach(QPicture *pic, m_Pages) {
-            ++j;
-            pic->play(&pdf);
-            if (j<m_Pages.count())
-                pdfPrinter.newPage();
-        }
-        pdf.end();
-    }
 
     return true;
 }
@@ -778,7 +760,7 @@ Printer::Printer(QObject * parent)
     d(0)
 {
     setObjectName("Printer");
-    d = new PrinterPrivate;
+    d = new PrinterPrivate(this);
     Q_ASSERT(d);
 }
 
@@ -816,16 +798,15 @@ bool Printer::getUserPrinter()
 {
     delete d->m_Printer;
     d->m_Printer = 0;
-    QString name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
-    if (name == "System") {
+    d->m_TwoNUp = settings()->value(Print::Constants::S_TWONUP).toBool();
+    const QString &name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
+    if (name.compare("system",Qt::CaseInsensitive)==0 || name.compare("user", Qt::CaseInsensitive)==0) {
         if (QPrinterInfo::defaultPrinter().isNull()) {
             d->m_Printer = new QPrinter;
             d->m_Printer->setResolution(QPrinter::ScreenResolution);
         } else {
             d->m_Printer = new QPrinter(QPrinterInfo::defaultPrinter(), QPrinter::ScreenResolution);
         }
-    } else if (name == "User") {
-        askForPrinter(qApp->activeWindow());
     } else {
         foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
             if (info.printerName() == name) {
@@ -837,6 +818,7 @@ bool Printer::getUserPrinter()
     if (d->m_Printer) {
         d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
         d->m_Printer->setPageSize(QPrinter::A4);
+//        d->m_Printer->setPageMargins(50,50,50,50, QPrinter::DevicePixel);
         return true;
     }
     return false;
@@ -912,7 +894,7 @@ bool Printer::useDefaultPrinter()
         delete d->m_Printer;
         d->m_Printer = 0;
     }
-    d->m_Printer = new QPrinter(def, QPrinter::PrinterResolution);
+    d->m_Printer = new QPrinter(def, QPrinter::ScreenResolution);
     return true;
 }
 
@@ -934,15 +916,36 @@ void Printer::setPaperSize(QPrinter::PaperSize size)
     d->setTextWidth(d->pageWidth());
 }
 
-bool Printer::preparePages(QPrinter *printer)
+void Printer::setTwoNUp(bool state)
 {
-    /** \todo HERE */
+    d->m_TwoNUp = state;
 }
 
-bool Printer::print()
+bool Printer::isTwoNUp() const
 {
-    /** \todo HERE */
+    return d->m_TwoNUp;
 }
+
+bool Printer::preparePages()
+{
+    if (!d->m_Printer)
+        return false;
+
+    if (d->isSimple()) {
+        Utils::Log::addMessage(this, "Printing using simpleDraw method.");
+        return d->simpleDraw();
+    }
+    else {
+        Utils::Log::addMessage(this, "WARNING : Printing using complexDraw method (should be buggy).");
+        return d->complexDraw();
+    }
+}
+
+QList<QPicture *> Printer::pages() const
+{
+    return d->m_Pages;
+}
+
 
 /** \brief Shows the print preview dialog. \e test param should only be used for debugging. */
 bool Printer::previewDialog(QWidget *parent, bool test)
@@ -961,6 +964,7 @@ bool Printer::previewDialog(QWidget *parent, bool test)
         Q_UNUSED(test);
     }
 
+    preparePages();
     QPrintPreviewDialog dialog(d->m_Printer, parent, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)));
     dialog.exec();
@@ -988,15 +992,56 @@ bool Printer::print(const QString &htmlToPrint)
     return print(t);
 }
 
+/** \brief Re-Print the same documents as the previous call of print(). */
+bool Printer::reprint(QPrinter *printer)
+{
+    if (!printer)
+        return false;
+    if (!printer->isValid())
+        return false;
+
+    if (d->m_TwoNUp)
+        printer->setOrientation(QPrinter::Landscape);
+    else
+        printer->setOrientation(QPrinter::Portrait);
+
+    QPainter print;
+    print.begin(printer);
+    int from;
+    int to;
+    if (printer->printRange()==QPrinter::PageRange) {
+        from = printer->fromPage();
+        to = printer->toPage();
+    } else {
+        from = 1;
+        to = d->m_Pages.count();
+    }
+//    qWarning() << from << to << d->m_TwoNUp;
+    while (from <= to) {
+        pageToPainter(&print, from, d->m_TwoNUp, false);
+        d->m_TwoNUp ? from += 2 : ++from;
+//        qWarning() << from;
+        if (from <= to)
+            if (!printer->newPage())
+                return false;
+    }
+    print.end();
+    return true;
+}
+
 /**
   \brief Inform the printing engine that it must print duplicatas too.
   If set to true, the duplicatas are printed just after the page, not at the end of the whole printing.\n
   Setting your printer driver to 2n-up should be fine to print one the left the original and on the right the duplicata.
 */
-bool Printer::printWithDuplicata(bool state)
+void Printer::setPrintWithDuplicata(bool state)
 {
     d->m_WithDuplicata=state;
-    return true;
+}
+
+bool Printer::printWithDuplicatas() const
+{
+    return d->m_WithDuplicata;
 }
 
 /**
@@ -1013,14 +1058,8 @@ bool Printer::print(QPrinter *printer)
     if (!printer)
         return false;
 
-    if (d->isSimple()) {
-        Utils::Log::addMessage(this, "Printing using simpleDraw method.");
-        return d->simpleDraw();
-    }
-    else {
-        Utils::Log::addMessage(this, "WARNING : Printing using complexDraw method (should be buggy).");
-        return d->complexDraw();
-    }
+    reprint(d->m_Printer);
+    return true;
 }
 
 /** \brief Defines the QPixmap to use for the Watermark */
@@ -1029,31 +1068,31 @@ void Printer::addPixmapWatermark(const QPixmap & pix, const Presence p , const Q
     if (! d->m_Printer)
         return;
     d->m_WatermarkPresence = p;
-    QRectF pageRect = d->m_Printer->pageRect();
+    QRectF paperRect = d->m_Printer->paperRect();
 
     // prepare watermark pixmap
     if (d->m_Watermark.isNull()) {
-        d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
+        d->m_Watermark = QPixmap(paperRect.width(), paperRect.height());
         d->m_Watermark.fill();
     }
 
     // TODO page margins
     // TODO manageDPI of pixmap
     QRectF pixRect = pix.rect();
-    int rotationAngle = d->calculateWatermarkRotation(pageRect, watermarkAlignment);
+    int rotationAngle = d->calculateWatermarkRotation(paperRect, watermarkAlignment);
 
     // Prepare painter
     QPainter painter;
     painter.begin(&d->m_Watermark);
-    painter.translate(-pageRect.topLeft());  // TODO : this is wrong because we loose the margins
+    painter.translate(-paperRect.topLeft());  // TODO : this is wrong because we loose the margins
     painter.save();
     // rotate the painter from its middle
     if (rotationAngle != 0) {
         painter.translate(pixRect.center());
         painter.rotate(rotationAngle);
-        // scale textRect to feet inside the pageRect - margins
+        // scale textRect to feet inside the paperRect - margins
         QRectF boundingRect = d->rotatedBoundingRect(pixRect, rotationAngle);
-        double scale = qMin(pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height());
+        double scale = qMin(paperRect.width() / boundingRect.width(), paperRect.height() / boundingRect.height());
         painter.scale(scale, scale);
         painter.translate(-pixRect.center());
     }
@@ -1076,9 +1115,9 @@ void Printer::addHtmlWatermark(const QString & html,
     // TODO Manage page margins +++
 
     // get some values about the printing page and prepare the pixmap
-    QRectF pageRect = d->m_Printer->pageRect();
+    QRectF paperRect = d->m_Printer->paperRect();
 
-    d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
+    d->m_Watermark = QPixmap(paperRect.width(), paperRect.height());
     d->m_Watermark.fill();
     previewHtmlWatermark(d->m_Watermark, html, p, watermarkAlignment, orientation);
 }
@@ -1105,33 +1144,33 @@ void Printer::previewDocumentWatermark(QPixmap &drawTo,
     doc->setDefaultTextOption(opt);
     doc->adjustSize();
     QPointF pageCenter(drawTo.rect().center());
-    QRect pageRect = drawTo.rect();
+    QRect paperRect = drawTo.rect();
     // Calculates the painting area for the text
     QRectF textRect = QRectF(QPointF(0,0), doc->size());
-    int rotationAngle = PrinterPrivate::calculateWatermarkRotation(pageRect, watermarkAlignment);
+    int rotationAngle = PrinterPrivate::calculateWatermarkRotation(paperRect, watermarkAlignment);
 
     // Prepare painter
     QPainter painter;
     painter.begin(&drawTo);
-    painter.translate(-pageRect.topLeft());  // TODO : this is wrong because we loose the margins
+    painter.translate(-paperRect.topLeft());  // TODO : this is wrong because we loose the margins
     painter.save();
     // rotate the painter from its middle
 //    if (rotationAngle != 0) {
     {
         QRectF boundingRect = PrinterPrivate::rotatedBoundingRect(textRect, rotationAngle);
-        double scale = qMin(pageRect.width() / boundingRect.width(), pageRect.height() / boundingRect.height());
-        PrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale);
+        double scale = qMin(paperRect.width() / boundingRect.width(), paperRect.height() / boundingRect.height());
+        PrinterPrivate::moveTextRect(textRect, paperRect, watermarkAlignment, scale);
         painter.translate(textRect.center());
         painter.rotate(rotationAngle);
         painter.scale(scale, scale);
-        // scale textRect to feet inside the pageRect - margins
+        // scale textRect to feet inside the paperRect - margins
         painter.translate(-textRect.center());
     }
 //    else {
 //        QSizeF docSize = wm.size();
 ////    painter.translate(textRect.topLeft());
-//        double scale = qMin(pageRect.width() / docSize.width(), pageRect.height() / docSize.height());
-//        tkPrinterPrivate::moveTextRect(textRect, pageRect, watermarkAlignment, scale);
+//        double scale = qMin(paperRect.width() / docSize.width(), paperRect.height() / docSize.height());
+//        tkPrinterPrivate::moveTextRect(textRect, paperRect, watermarkAlignment, scale);
 //        painter.scale(scale, scale);
 ////    painter.translate(-textRect.topLeft());
 //    }
@@ -1186,10 +1225,10 @@ void Printer::addTextWatermark(const QString & plainText,
     // TODO Manage page margins +++
 
     // get some values about the printing page and prepare the pixmap
-    QRectF pageRect = d->m_Printer->pageRect();
+    QRectF paperRect = d->m_Printer->paperRect();
 
     if (d->m_Watermark.isNull()) {
-        d->m_Watermark = QPixmap(pageRect.width(), pageRect.height());
+        d->m_Watermark = QPixmap(paperRect.width(), paperRect.height());
         d->m_Watermark.fill();
     }
 
@@ -1227,17 +1266,17 @@ void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
     }
     d->m_PrintingDuplicata = false;
 
-    int _pageWidth = printer->pageRect().width();//d->pageWidth();
+    int _pageWidth = printer->paperRect().width();//d->pageWidth();
     d->setTextWidth(_pageWidth);
 
-    d->m_Content->setPageSize(printer->pageRect().size());//d->getSimpleDrawContentPageSize());
+    d->m_Content->setPageSize(printer->paperRect().size());//d->getSimpleDrawContentPageSize());
     d->m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
     QRect contentRect = QRect(QPoint(0,0), d->m_Content->size().toSize());     // whole document drawing rectangle
 
     // prepare painter then draw
-    drawTo = QPixmap(_pageWidth, printer->pageRect().height() + 30);
+    drawTo = QPixmap(_pageWidth, printer->paperRect().height() + 30);
     drawTo.fill();
     QPainter painter;
     painter.begin(&drawTo);
@@ -1279,7 +1318,7 @@ void Printer::previewHeaderFooter(QPixmap &drawTo,
     }
 
     // prepare painter
-    drawTo = QPixmap(_pageWidth, printer->pageRect().height());
+    drawTo = QPixmap(_pageWidth, printer->paperRect().height());
     drawTo.fill();
     QPainter painter;
     painter.begin(&drawTo);
@@ -1292,39 +1331,125 @@ void Printer::previewHeaderFooter(QPixmap &drawTo,
 }
 
 /**
+  \brief Draws the selected page into the painter. The painter is not ended.
+If \e twoNUp is specified two consecutive pages are drawned.
+The \e pageNumber should be ranged into [1, ...]. Page number must exist.
+  \code
+    Print::Printer *printer = new Print::Printer;
+    // Draw page 1-2 in 2-N-Up to a pixmap
+    QPixMap pix(size);
+    QPainter paint;
+    paint.begin(&pix);
+    printer->pageToPainter(&paint, 1, true, true);
+    paint.end();
+    pix.scale(...);
+
+    // Print page 1-2 in 2-N-Up to a printer
+    QPrinter print;
+    print.setResolution(QPrinter::ScreenResolution);
+    QPainter paint;
+    paint.begin(&print);
+    printer->pageToPainter(&paint, 1, true, false);
+  \endcode
+*/
+bool Printer::pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp, bool pixmapPreview)
+{
+    if (!d->m_Printer)
+        return false;
+
+    if (pageNumber>d->m_Pages.count())
+        return false;
+
+    if (pageNumber<=0)
+        return false;
+
+    const QSizeF &paperSize = d->m_Printer->paperRect(QPrinter::DevicePixel).size();
+    const QSizeF &pageSize = d->m_Printer->pageRect(QPrinter::DevicePixel).size();
+
+    if (paint)
+        paint->save();
+
+    if (!twoNUp) {
+        QPicture *page = d->m_Pages.at(pageNumber-1);
+        if (!page) {
+            paint->restore();
+            return false;
+        }
+        paint->scale(0.95, 0.95); // here is the pseudo margins management
+        if (pixmapPreview)
+            paint->translate((paperSize.width() - pageSize.width()), (paperSize.height()-pageSize.height()));
+        page->play(paint);
+    } else {
+        QPicture *page1 = d->m_Pages.at(pageNumber-1);
+
+        // landscape printing
+        QSizeF pageS = pageSize;
+        QSizeF paperS = paperSize;
+        if (pageSize.width() > pageSize.height()) {
+            pageS = QSizeF(pageSize.height(), pageSize.width());
+        }
+        if (paperSize.width() > paperSize.height()) {
+            paperS = QSizeF(paperSize.height(), paperSize.width());
+        }
+
+        if (!page1) {
+            paint->restore();
+            return false;
+        }
+        QPicture *page2 = 0;
+        if (pageNumber<d->m_Pages.count())
+            page2 = d->m_Pages.at(pageNumber);
+
+        // First page
+        paint->scale(0.7, 0.68);
+        if (pixmapPreview)
+            paint->translate((paperS.height() - pageS.height()), (paperS.width()-pageS.width()));  // here is the pseudo margins management
+//        paint->translate((paperSize.height() - pageSize.height()), (paperSize.width()-pageSize.width()));  // here is the pseudo margins management
+        page1->play(paint);
+
+        // Second page
+        if (page2) {
+            if (pixmapPreview)
+                paint->translate(pageSize.width()+(paperSize.width() - pageSize.width())/2.0, 0);  // here is the pseudo margins management
+            else
+                paint->translate(pageS.width(), 0);
+//            paint->translate(pageSize.height(), 0);  // landscape printing
+            page2->play(paint);
+        }
+    }
+    paint->restore();
+    return true;
+}
+
+/**
   \brief Prints the recorded headers/footers/watermarks and content to a PDF file named \e fileName.
   \e fileName must be an absolute path file name and will be replaced without warning if it already exists.
   The QPrinter MUST BE specified FIRST !
 */
-bool Printer::toPdf(const QString &fileName)
+bool Printer::toPdf(const QString &fileName, const QString &docName)
 {
-    Q_ASSERT(d->m_Printer);
-    if (!d->m_Printer)
-        return false;
     Q_ASSERT(!fileName.isEmpty());
     if (fileName.isEmpty())
         return false;
     QString tmp = fileName;
     if (QFileInfo(tmp).suffix().isEmpty())
         tmp.append(".pdf");
-    QPrinter::OutputFormat out = d->m_Printer->outputFormat();
-    d->m_Printer->setOutputFormat(QPrinter::PdfFormat);
-    d->m_Printer->setOutputFileName(tmp);
-    print();
-    d->m_Printer->setOutputFormat(out);
+    QPrinter pdfPrinter(QPrinter::ScreenResolution);
+    pdfPrinter.setOutputFormat(QPrinter::PdfFormat);
+    pdfPrinter.setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
+    pdfPrinter.setOutputFileName(tmp);
+    pdfPrinter.setDocName(docName);
+    if (d->m_Printer) {
+        pdfPrinter.setPrintRange(d->m_Printer->printRange());
+        pdfPrinter.setFromTo(d->m_Printer->fromPage(), d->m_Printer->toPage());
+//        pdfPrinter.setCollateCopies(d->m_Printer->collateCopies());
+//        pdfPrinter.setColorMode(d->m_Printer->colorMode());
+//        pdfPrinter.setDoubleSidedPrinting(d->m_Printer->doubleSidedPrinting());
+//        pdfPrinter.setDuplex(d->m_Printer->duplex());
+//        pdfPrinter.setPageOrder(d->m_Printer->pageOrder());
+    }
+    reprint(&pdfPrinter);
     return true;
-}
-
-/**
-  \brief Prints the \e html content with the recorded headers/footers/watermarks to a PDF file named \e fileName.
-  \e fileName must be an absolute path file name and will be replaced without warning if it already exists.\n
-  This function replaces the actual content of this class.
-  The QPrinter MUST BE specified FIRST !
-*/
-bool Printer::toPdf(const QString &fileName, const QString &html)
-{
-    d->m_Content->setHtml(html);
-    return toPdf(fileName);
 }
 
 /**
@@ -1333,8 +1458,8 @@ bool Printer::toPdf(const QString &fileName, const QString &html)
   This function replaces the actual content of this class.
   The QPrinter MUST BE specified FIRST !
 */
-bool Printer::toPdf(const QString &fileName, const QTextDocument & docToPrint)
+bool Printer::toPdf(const QString &fileName, const QTextDocument &docToPrint)
 {
     d->m_Content->setHtml(docToPrint.toHtml());
-    return toPdf(fileName);
+    return toPdf(fileName, "");
 }

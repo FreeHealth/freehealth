@@ -45,6 +45,8 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QComboBox>
+#include <QPainter>
+#include <QPixmap>
 
 using namespace Print;
 using namespace Print::Internal;
@@ -89,7 +91,6 @@ PrinterPreviewerPrivate::PrinterPreviewerPrivate(QWidget *parent) :
     printer.setContent(EXAMPLE_CONTENT);
     printer.setPrinter(new QPrinter(QPrinter::ScreenResolution));
     printer.printer()->setPaperSize(QPrinter::A4);
-    printer.printer()->setPageMargins(10., 10., 10., 10., QPrinter::Millimeter);
 }
 
 void PrinterPreviewerPrivate::initialize()
@@ -359,19 +360,29 @@ void PrinterPreviewerPrivate::on_updatePreviewButton_clicked()
     if (m_EditorWatermark) {
         printer.addHtmlWatermark(m_EditorWatermark->textEdit()->toHtml(), Printer::Presence(watermarkPresence()));
     }
-    printer.previewToPixmap(m_PreviewPixmap, printer.printer());
-    if (this->previewLabel->size().height() < m_PreviewPixmap.size().height()) {
-        m_PreviewPixmap = m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio);
-    }
-    this->previewLabel->setPixmap(m_PreviewPixmap);
+
+    printer.preparePages();
+    resizeEvent(0);
 }
 
 void PrinterPreviewerPrivate::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e);
-    if (!m_PreviewPixmap.isNull()) {
-        this->previewLabel->setPixmap(m_PreviewPixmap.scaled(this->previewLabel->size(),Qt::KeepAspectRatio));
+    QSizeF s = printer.printer()->paperRect(QPrinter::DevicePixel).size();
+    QPixmap pix(s.width(), s.height());
+    pix.fill();
+    QPainter paint;
+    paint.begin(&pix);
+    if (printer.printWithDuplicatas())
+        printer.pageToPainter(&paint, 2, false, true);
+    else
+        printer.pageToPainter(&paint, 1, false, true);
+    paint.end();
+
+    if (previewLabel->size().height() < pix.size().height()) {
+        pix = pix.scaled(previewLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+    previewLabel->setPixmap(pix);
 }
 
 void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged(int checkstate)
@@ -389,9 +400,9 @@ void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged(int checkstat
 void PrinterPreviewerPrivate::on_duplicataCheck_stateChanged(int state)
 {
     if (state == Qt::Checked)
-        printer.printWithDuplicata(true);
+        printer.setPrintWithDuplicata(true);
     else
-        printer.printWithDuplicata(false);
+        printer.setPrintWithDuplicata(false);
     on_updatePreviewButton_clicked();
 }
 

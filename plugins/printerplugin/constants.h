@@ -49,6 +49,7 @@ namespace Constants {
     const char * const  S_DEFAULT_PRINTER = "Printer/DefaultPrinter";
     const char * const  S_COLOR_PRINT     = "Printer/Color";
     const char * const  S_RESOLUTION      = "Printer/Resolution";
+    const char * const  S_TWONUP          = "Printer/TwoNUp";
     const char * const  S_KEEP_PDF        = "Printer/KeepPdf";
     const char * const  S_PDF_FOLDER      = "Printer/PdfFolder";
 

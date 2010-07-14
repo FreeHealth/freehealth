@@ -1,0 +1,343 @@
+/***************************************************************************
+ *   FreeMedicalForms                                                      *
+ *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *   eric.maeker@free.fr                                                   *
+ *   All rights reserved.                                                  *
+ *                                                                         *
+ *   This program is a free and open source software.                      *
+ *   It is released under the terms of the new BSD License.                *
+ *                                                                         *
+ *   Redistribution and use in source and binary forms, with or without    *
+ *   modification, are permitted provided that the following conditions    *
+ *   are met:                                                              *
+ *   - Redistributions of source code must retain the above copyright      *
+ *   notice, this list of conditions and the following disclaimer.         *
+ *   - Redistributions in binary form must reproduce the above copyright   *
+ *   notice, this list of conditions and the following disclaimer in the   *
+ *   documentation and/or other materials provided with the distribution.  *
+ *   - Neither the name of the FreeMedForms' organization nor the names of *
+ *   its contributors may be used to endorse or promote products derived   *
+ *   from this software without specific prior written permission.         *
+ *                                                                         *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+ *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+ *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+ *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+ *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+ *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+ *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+ *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+ *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+ *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ ***************************************************************************/
+#include "printdialog.h"
+#include "ui_printdialog.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/idocumentprinter.h>
+
+#include <printerplugin/printer.h>
+#include <printerplugin/constants.h>
+
+#include <translationutils/constanttranslations.h>
+
+#include <extensionsystem/pluginmanager.h>
+
+#include <QPrinter>
+#include <QPrinterInfo>
+#include <QPainter>
+#include <QPicture>
+#include <QPushButton>
+#include <QDir>
+#include <QDateTime>
+#include <QFileDialog>
+
+#include <QDebug>
+
+using namespace Print::Internal;
+using namespace Trans::ConstantTranslations;
+
+inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+inline static Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+inline static Core::IUser *user() {return Core::ICore::instance()->user();}
+inline static Core::IDocumentPrinter *docPrinter() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+
+
+PrintDialog::PrintDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Internal::Ui::PrintDialog)
+{
+    ui->setupUi(this);
+//    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    // Set icons
+    ui->nextButton->setIcon(theme()->icon(Core::Constants::ICONONERIGHTARROW));
+    ui->prevButton->setIcon(theme()->icon(Core::Constants::ICONONELEFTARROW));
+    ui->firstButton->setIcon(theme()->icon(Core::Constants::ICONTWOLEFTARROW));
+    ui->lastButton->setIcon(theme()->icon(Core::Constants::ICONTWORIGHTARROW));
+
+    // Fill printer combo
+    foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
+        ui->printerCombo->addItem(info.printerName());
+    }
+
+    // Some preparation
+    ui->allPages->setChecked(true);
+    ui->copies->setText("1");
+
+    // Change the buttons of the dialog
+    QPushButton *print = ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT), QDialogButtonBox::YesRole);
+    QPushButton *topdf = ui->buttonBox->addButton("PDF", QDialogButtonBox::ActionRole);
+    connect(topdf, SIGNAL(clicked()), this, SLOT(toPdf()));
+}
+
+PrintDialog::~PrintDialog()
+{
+    delete ui;
+}
+
+void PrintDialog::accept()
+{
+    // Print the doc
+    int copies = ui->copies->text().toInt();
+    m_Printer->printer()->setNumCopies(copies);
+    if (ui->allPages->isChecked()) {
+        m_Printer->printer()->setPrintRange(QPrinter::AllPages);
+    } else {
+        m_Printer->printer()->setPrintRange(QPrinter::PageRange);
+        m_Printer->printer()->setFromTo(ui->pageFrom->value(), ui->pageTo->value());
+    }
+
+    if (!m_Printer->reprint(m_Printer->printer()))
+        return;
+
+    // Duplicate to a pdf file
+    if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
+        QString docName = QString("%1_%2_%3.pdf")
+                          .arg(patient()->value(Core::IPatient::FullName).toString().replace(" ", "_"))
+                          .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
+                          .arg(qApp->applicationName());
+
+        QString fileName = settings()->value(Constants::S_PDF_FOLDER).toString();
+        if (fileName.isEmpty())
+            fileName = settings()->path(Core::ISettings::ApplicationTempPath);
+        if (QFileInfo(fileName).isRelative())
+            fileName.append(qApp->applicationDirPath());
+        if (!QDir(fileName).exists())
+            QDir().mkpath(fileName);
+        fileName.append(QDir::separator() + docName);
+        m_Printer->toPdf(fileName, docName);
+        docPrinter()->addPrintedDoc(fileName,docName,QDateTime::currentDateTime(), user()->value(Core::IUser::Uuid).toString());
+    }
+    QDialog::accept();
+}
+
+void PrintDialog::setPrinter(Print::Printer *printer)
+{
+    m_Printer = printer;
+    const QString &name = printer->printer()->printerName();
+    ui->printerCombo->setCurrentIndex(ui->printerCombo->findText(name, Qt::MatchCaseSensitive));
+    // read options
+    ui->duplicatas->blockSignals(true);
+    ui->nup->blockSignals(true);
+    ui->duplicatas->setChecked(printer->printWithDuplicatas());
+    ui->nup->setChecked(printer->isTwoNUp());
+    ui->duplicatas->blockSignals(false);
+    ui->nup->blockSignals(false);
+    // read settings
+    ui->createPdf->setChecked(settings()->value(Constants::S_KEEP_PDF).toBool());
+    ui->createPdf->setEnabled(false);
+    // manage pages
+    ui->pageFrom->blockSignals(true);
+    ui->pageTo->blockSignals(true);
+    ui->pageFrom->setValue(1);
+    ui->pageFrom->setMaximum(m_Printer->pages().count());
+    ui->pageTo->setValue(m_Printer->pages().count());
+    ui->pageTo->setMaximum(m_Printer->pages().count());
+    ui->pageFrom->blockSignals(false);
+    ui->pageTo->blockSignals(false);
+    previewPage(0);
+}
+
+Print::Printer *PrintDialog::printer() const
+{
+    return m_Printer;
+}
+
+void PrintDialog::setTwoNUp(bool state)
+{
+    ui->nup->setChecked(state);
+    if (m_Printer)
+        m_Printer->setTwoNUp(true);
+}
+
+bool PrintDialog::isTwoNUp() const
+{
+    return ui->nup->isChecked();
+}
+
+void PrintDialog::setPdfCache(bool state)
+{
+    ui->createPdf->setChecked(state);
+}
+
+bool PrintDialog::isPdfCacheEnabled() const
+{
+    return ui->createPdf->isChecked();
+}
+
+static inline QSize onePageSize() {return QSize(189, 263);}
+static inline QSize twoNUpPagesSize() {return QSize(263,189);}
+
+static inline QPixmap onePagePreview(const QSize &paperSize, const QSize &pageSize, const QSize &final, int page, Print::Printer *printer)
+{
+    QPixmap pix(paperSize);
+    pix.fill();
+    QPainter paint;
+    paint.begin(&pix);
+
+    printer->pageToPainter(&paint, page, false, true);
+
+    paint.end();
+    pix = pix.scaled(final, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    return pix;
+}
+
+static inline QPixmap twoNUpPreview(const QSize &paperSize, const QSize &pageSize, const QSize &final, int page, Print::Printer *printer)
+{
+    QPixmap pix(paperSize.height(), paperSize.width());
+    pix.fill();
+    QPainter paint;
+    paint.begin(&pix);
+
+    printer->pageToPainter(&paint, page, true, true);
+
+    paint.end();
+    pix = pix.scaled(final, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    return pix;
+}
+
+void PrintDialog::previewPage(int n)
+{
+    if (n >= m_Printer->pages().count())
+        return;
+
+    if (n < 0)
+        return;
+
+    m_PreviewingPage = n;
+
+    if (!ui->nup->isChecked()) {
+        ui->preview->setMinimumSize(onePageSize());
+        ui->preview->setMaximumSize(onePageSize());
+        ui->preview->setPixmap(onePagePreview(m_Printer->printer()->paperRect().size(),
+                                              m_Printer->printer()->pageRect().size(),
+                                              ui->preview->size(),
+                                              n+1, m_Printer));
+        ui->viewPageLabel->setText(QString("%1 of %2").arg(n+1).arg(m_Printer->pages().count()));
+    } else {
+        ui->preview->setMinimumSize(twoNUpPagesSize());
+        ui->preview->setMaximumSize(twoNUpPagesSize());
+        ui->preview->setPixmap(twoNUpPreview(m_Printer->printer()->paperRect().size(),
+                                             m_Printer->printer()->pageRect().size(),
+                                             ui->preview->size(),
+                                             n+1, m_Printer));
+        ui->viewPageLabel->setText(QString("%1-%2 of %3").arg(n+1).arg(n+2).arg(m_Printer->pages().count()));
+    }
+}
+
+void PrintDialog::toPdf()
+{
+    QString f = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                             QDir::homePath(),
+                                             tr("PDF file (*.pdf)"));
+    if (f.isEmpty())
+        return;
+    if (QFileInfo(f).completeSuffix().compare(".pdf", Qt::CaseInsensitive)==0)
+        f.append(".pdf");
+    if (m_Printer)
+        m_Printer->toPdf(f, "DFSDF");
+}
+
+void PrintDialog::on_duplicatas_toggled(bool state)
+{
+    m_Printer->setPrintWithDuplicata(state);
+    m_Printer->preparePages();
+    // manage pages
+    ui->pageFrom->blockSignals(true);
+    ui->pageTo->blockSignals(true);
+    ui->pageFrom->setValue(1);
+    ui->pageFrom->setMaximum(m_Printer->pages().count());
+    ui->pageTo->setValue(m_Printer->pages().count());
+    ui->pageTo->setMaximum(m_Printer->pages().count());
+    ui->pageFrom->blockSignals(false);
+    ui->pageTo->blockSignals(false);
+    previewPage(0);
+}
+
+void PrintDialog::on_nup_toggled(bool state)
+{
+    if (m_Printer)
+        m_Printer->setTwoNUp(state);
+    previewPage(0);
+}
+
+void PrintDialog::on_nextButton_clicked()
+{
+    if (ui->nup->isChecked())
+        previewPage(m_PreviewingPage+2);
+    else
+        previewPage(m_PreviewingPage+1);
+}
+
+void PrintDialog::on_prevButton_clicked()
+{
+    if (ui->nup->isChecked())
+        previewPage(m_PreviewingPage-2);
+    else
+        previewPage(m_PreviewingPage-1);
+}
+
+void PrintDialog::on_firstButton_clicked()
+{
+    previewPage(0);
+}
+
+void PrintDialog::on_lastButton_clicked()
+{
+    if (ui->nup->isChecked())
+        m_Printer->pages().count()%2==0 ? previewPage(m_Printer->pages().count()-2) : previewPage(m_Printer->pages().count()-1);
+    else
+        previewPage(m_Printer->pages().count()-1);
+}
+
+void PrintDialog::on_pageFrom_valueChanged(int)
+{
+    ui->pagesRange->setChecked(true);
+}
+
+void PrintDialog::on_pageTo_valueChanged(int)
+{
+    ui->pagesRange->setChecked(true);
+}
+
+void PrintDialog::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}

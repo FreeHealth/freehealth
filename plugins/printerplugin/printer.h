@@ -61,8 +61,8 @@ QT_END_NAMESPACE
 /**
  * \file printer.h
  * \author Eric Maeker and the QPrinterEasy Team
- * \version 0.4.0
- * \date 21 June 2010
+ * \version 0.4.2
+ * \date 14 July 2010
 */
 
 
@@ -134,11 +134,11 @@ public:
 
     void setOrientation(QPrinter::Orientation orientation);
     void setPaperSize(QPrinter::PaperSize size);
+    void setTwoNUp(bool state = true);
+    bool isTwoNUp() const;
 
-    // UNFINISHED MEMBERS
-    bool preparePages(QPrinter *printer = 0);
-    bool print();
-    // END UNFINISHED
+    bool preparePages();
+    QList<QPicture *> pages() const;
 
 public Q_SLOTS:
     // Watermark management
@@ -185,17 +185,20 @@ public Q_SLOTS:
 
     void clearWatermark();
 
-    bool printWithDuplicata(bool state = true);
+    void setPrintWithDuplicata(bool state = true);
+    bool printWithDuplicatas() const;
 
     bool print(const QTextDocument & docToPrint);
     bool print(const QString &htmlToPrint);
+    bool reprint(QPrinter *printer);
 
-    bool toPdf(const QString &fileName);
-    bool toPdf(const QString &fileName, const QString &html);
+    bool pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp = false, bool pixmapPreview = false);
+
+    bool toPdf(const QString &fileName, const QString &docName);
     bool toPdf(const QString &fileName, const QTextDocument & docToPrint);
 
 protected Q_SLOTS:
-    bool print(QPrinter *printer);  // used by tkPrinter PreviewDialog
+    bool print(QPrinter *printer = 0);  // used by tkPrinter PreviewDialog
 
 private:
     Internal::PrinterPrivate *d;

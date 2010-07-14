@@ -10,17 +10,18 @@ HEADERS = $${PWD}/printerplugin.h \
     $${PWD}/printerpreviewer_p.h \
     $${PWD}/textdocumentextra.h \ # textdocumentheader.h
     $${PWD}/printerpreferences.h \
-    $${PWD}/documentprinter.h
-
+    $${PWD}/documentprinter.h \
+    $${PWD}/printdialog.h
 SOURCES = $${PWD}/printerplugin.cpp \
     $${PWD}/printer.cpp \
     $${PWD}/printerpreviewer_p.cpp \
     $${PWD}/textdocumentextra.cpp \
     $${PWD}/printerpreferences.cpp \
-    $${PWD}/documentprinter.cpp
-
+    $${PWD}/documentprinter.cpp \
+    $${PWD}/printdialog.cpp
 FORMS = $${PWD}/printerpreviewer_p.ui \
-    $${PWD}/printerpreferences.ui
+    $${PWD}/printerpreferences.ui \
+    $${PWD}/printdialog.ui
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/printerplugin_fr.ts \

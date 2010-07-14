@@ -32,82 +32,66 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
- ***************************************************************************/
-#ifndef PRINTERPREFERENCES_H
-#define PRINTERPREFERENCES_H
+#ifndef PRINTDIALOG_H
+#define PRINTDIALOG_H
 
-#include <coreplugin/ioptionspage.h>
-
-#include "ui_printerpreferences.h"
-
-#include <QPointer>
-#include <QObject>
+#include <QDialog>
 
 /**
- * \file printerpreferences.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.3.0
- * \date 30 Jan 2010
+ * \file printdialog.h
+ * \author Eric Maeker
+ * \version 0.4.2
+ * \date 13 July 2010
 */
 
-namespace Core {
-class ISettings;
+namespace Print {
+class Printer;
+
+namespace Internal {
+namespace Ui {
+class PrintDialog;
 }
 
-namespace Print {
-namespace Internal {
-
-class PrinterPreferencesWidget : public QWidget, private Ui::PrinterPreferences
+class PrintDialog : public QDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(PrinterPreferencesWidget)
-
 public:
-    explicit PrinterPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    PrintDialog(QWidget *parent = 0);
+    ~PrintDialog();
 
-    static void writeDefaultSettings(Core::ISettings *s);
+    void setPrinter(Print::Printer *printer);
+    Print::Printer *printer() const;
 
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-    void on_selectFolderButton_clicked();
+    void setTwoNUp(bool state);
+    bool isTwoNUp() const;
+
+    void setPdfCache(bool state);
+    bool isPdfCacheEnabled() const;
+
+    void previewPage(int n);
 
 protected:
-    virtual void changeEvent(QEvent *e);
-};
+    void changeEvent(QEvent *e);
 
+private Q_SLOTS:
+    void accept();
+    void toPdf();
+    void on_duplicatas_toggled(bool);
+    void on_nup_toggled(bool);
+    void on_nextButton_clicked();
+    void on_prevButton_clicked();
+    void on_firstButton_clicked();
+    void on_lastButton_clicked();
+    void on_pageFrom_valueChanged(int);
+    void on_pageTo_valueChanged(int);
 
-class PrinterPreferencesPage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    PrinterPreferencesPage(QObject *parent = 0);
-    ~PrinterPreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {PrinterPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<PrinterPreferencesWidget> m_Widget;
+    Ui::PrintDialog *ui;
+    Print::Printer *m_Printer;
+    int m_PreviewingPage;
 };
 
-}  // End Internal
-}  // End Printer
+}  // End namespace Internal
+}  // End namespace Print
 
-#endif // PRINTERPREFERENCES_H
+#endif // PRINTDIALOG_H

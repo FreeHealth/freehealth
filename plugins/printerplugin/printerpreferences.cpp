@@ -48,6 +48,8 @@
 #include <coreplugin/isettings.h>
 
 #include <QPrinterInfo>
+#include <QFileDialog>
+#include <QDir>
 
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;
@@ -92,7 +94,8 @@ void PrinterPreferencesPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Print::Constants::S_DEFAULT_PRINTER, QString("System"));
     defaultvalues.insert(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
-    defaultvalues.insert(Print::Constants::S_RESOLUTION, QPrinter::PrinterResolution);
+    defaultvalues.insert(Print::Constants::S_RESOLUTION, QPrinter::ScreenResolution);
+    defaultvalues.insert(Print::Constants::S_TWONUP, false);
     defaultvalues.insert(Print::Constants::S_KEEP_PDF, false);
     defaultvalues.insert(Print::Constants::S_PDF_FOLDER, QVariant());
 
@@ -174,12 +177,13 @@ void PrinterPreferencesWidget::setDatasToUi()
         grayBox->setChecked(true);
     }
 
-    // Resolution
+    // Resolution / 2Nup
     resolutionCombo->setCurrentIndex(settings()->value(Print::Constants::S_RESOLUTION).toInt());
+    nupBox->setChecked(settings()->value(Print::Constants::S_TWONUP).toBool());
 
     // Pdf
     keepPdfBox->setChecked(settings()->value(Print::Constants::S_KEEP_PDF).toBool());
-//    S_PDF_FOLDER
+    folderName->setText(settings()->value(Print::Constants::S_PDF_FOLDER).toString());
 }
 
 void PrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -209,12 +213,13 @@ void PrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s->setValue(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
 
-    // Resolution
+    // Resolution - 2NUp
     s->setValue(Print::Constants::S_RESOLUTION, resolutionCombo->currentIndex());
+    s->setValue(Print::Constants::S_TWONUP, nupBox->isChecked());
 
     // Pdf
     s->setValue(Print::Constants::S_KEEP_PDF, keepPdfBox->isChecked());
-    //    S_PDF_FOLDER
+    s->setValue(Print::Constants::S_PDF_FOLDER, folderName->text());
 }
 
 void PrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -222,10 +227,20 @@ void PrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     Utils::Log::addMessage("PrinterPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("Printer"));
     s->setValue(Print::Constants::S_DEFAULT_PRINTER, QString("System"));
     s->setValue(Print::Constants::S_COLOR_PRINT, QPrinter::GrayScale);
-    s->setValue(Print::Constants::S_RESOLUTION, QPrinter::PrinterResolution);
+    s->setValue(Print::Constants::S_RESOLUTION, QPrinter::ScreenResolution);
+    s->setValue(Print::Constants::S_TWONUP, false);
     s->setValue(Print::Constants::S_KEEP_PDF, false);
     s->setValue(Print::Constants::S_PDF_FOLDER, QVariant());
     s->sync();
+}
+
+void PrinterPreferencesWidget::on_selectFolderButton_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select a directory"),
+                                                    QDir::homePath(),
+                                                     QFileDialog::ShowDirsOnly
+                                                     );
+    folderName->setText(dir);
 }
 
 void PrinterPreferencesWidget::changeEvent(QEvent *e)

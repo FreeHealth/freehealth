@@ -43,10 +43,12 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
+#include <printerplugin/printdialog.h>
 
 #include <utils/global.h>
 
@@ -55,6 +57,9 @@
 #include <QDate>
 #include <QLocale>
 #include <QApplication>
+#include <QDir>
+
+#include <QDebug>
 
 
 using namespace Print::Internal;
@@ -137,26 +142,38 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
 
 void DocumentPrinter::setDocumentName(Print::Printer *p) const
 {
-    QString tmp = patient()->value(Core::IPatient::BirthName).toString() + "_" + patient()->value(Core::IPatient::Surname).toString();
+    QString tmp = patient()->value(Core::IPatient::FullName).toString().replace(" ", "_");
     p->printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
 }
 
 bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool printDuplicata) const
 {
     Print::Printer p;
-    if (!p.getUserPrinter())
-        if (!p.askForPrinter(qApp->activeWindow()))
-            return false;
-    /** \todo Ask user for printing configuration */
+    const QString &name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
+    if (!p.getUserPrinter()) {
+        QPrinter *print = new QPrinter;
+        print->setResolution(QPrinter::ScreenResolution);
+        p.setPrinter(print);
+    }
 
     setDocumentName(&p);
     prepareHeader(&p, papers);
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
+    p.setContent(text);
+    p.setPrintWithDuplicata(printDuplicata);
 
-    p.previewer(qApp->activeWindow());
-    p.printWithDuplicata(printDuplicata);
-    return p.print(text);
+    if (!p.preparePages()) {
+        qWarning() << "prepare pages wrong";
+    }
+
+    Internal::PrintDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setPrinter(&p);
+    int r = dlg.exec();
+    if (r==QDialog::Accepted)
+        return true;
+    return false;
 }
 
 bool DocumentPrinter::print(QTextDocument *text, const int papers, bool printDuplicata) const
@@ -173,11 +190,6 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
 
 bool DocumentPrinter::printPreview(const QString &html, const int papers, bool printDuplicata) const
 {
-//    Print::Printer p;
-//    QPrinter *printer = new QPrinter;
-//    printer->setPageSize(QPrinter::A4);
-//    printer->setColorMode(QPrinter::ColorMode(settings()->value(Print::Constants::S_COLOR_PRINT).toInt()));
-//    p.setPrinter(printer);
     Print::Printer p;
     if (!p.getUserPrinter())
         if (!p.askForPrinter(qApp->activeWindow()))
@@ -189,7 +201,7 @@ bool DocumentPrinter::printPreview(const QString &html, const int papers, bool p
     prepareWatermark(&p, papers);
 
     p.setContent(html);
-    p.printWithDuplicata(printDuplicata);
+    p.setPrintWithDuplicata(printDuplicata);
     p.previewDialog(qApp->activeWindow());
     // QPrinter is deleted by ~Printer
     return true;
