@@ -1,179 +1,68 @@
--- $Source: create-ca.sql
--- $Revision: 1 $
--- Authors: Jim Busser, GNUmed project; Eric Maeker, FreeDiams project
--- script to create a sqlite db from Health Canada Drug Product Data
--- July 9, 2010 supports new (April 2010) HC drug field DESCRIPTOR VARCHAR2(150) 
--- July 9, 2010 bugfix: made the INSERT into DRUGS to be SELECT DISTINCT
--- NOTE: INSERT INTO "INFORMATIONS" ( needs manual updating as to
---   i)  the version of the drug db that it is to be known as
---   ii) the compatible version of FreeDiams
+-- /***************************************************************************
+-- *   FreeMedicalForms                                                      *
+-- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+-- *   eric.maeker@free.fr                                                   *
+-- *   All rights reserved.                                                  *
+-- *                                                                         *
+-- *   This program is a free and open source software.                      *
+-- *   It is released under the terms of the new BSD License.                *
+-- *                                                                         *
+-- *   Redistribution and use in source and binary forms, with or without    *
+-- *   modification, are permitted provided that the following conditions    *
+-- *   are met:                                                              *
+-- *   - Redistributions of source code must retain the above copyright      *
+-- *   notice, this list of conditions and the following disclaimer.         *
+-- *   - Redistributions in binary form must reproduce the above copyright   *
+-- *   notice, this list of conditions and the following disclaimer in the   *
+-- *   documentation and/or other materials provided with the distribution.  *
+-- *   - Neither the name of the FreeMedForms' organization nor the names of *
+-- *   its contributors may be used to endorse or promote products derived   *
+-- *   from this software without specific prior written permission.         *
+-- *                                                                         *
+-- *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
+-- *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
+-- *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
+-- *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
+-- *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
+-- *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
+-- *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
+-- *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
+-- *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
+-- *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
+-- *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
+-- *   POSSIBILITY OF SUCH DAMAGE.                                           *
+-- ***************************************************************************/
+-- /**************************************************************************
+-- *   Main Developper : Jim Busser, MD <jbusser@interchange.ubc.ca>         *
+-- *   Contributors :                                                        *
+-- *       Eric MAEKER, MD <eric.maeker@free.fr>                             *
+-- ***************************************************************************/
 
+-- /**
+--  * \file canadian_db_finalize.sql
+--  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
+--  * \version 0.4.4
+--  * \date 14 July 2010
+--  */
 
--- ****************************************************************
--- prepare to import, and import, the Canadian Drug Product Data  *
--- ****************************************************************
-.mode csv
-.separator "|"
-
-CREATE TABLE IF NOT EXISTS "drug" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "PRODUCT_CATEGORIZATION" VARCHAR2(80),
-    "CLASS" VARCHAR2(40),
-    "DRUG_IDENTIFICATION_NUMBER" VARCHAR2(8),
-    "BRAND_NAME" VARCHAR2(200),
-    "DESCRIPTOR" VARCHAR2(150),
-    "PEDIATRIC_FLAG" VARCHAR2(1),
-    "ACCESSION_NUMBER" VARCHAR2(5),
-    "NUMBER_OF_AIS" VARCHAR2(10),
-    "LAST_UPDATE_DATE" DATE,
-    "AI_GROUP_NO" VARCHAR2(10)
-);
-
-
-CREATE TABLE IF NOT EXISTS "form" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "PHARM_FORM_CODE" INTEGER(7),
-    "PHARMACEUTICAL_FORM" VARCHAR2(40)
-);
-
-CREATE TABLE IF NOT EXISTS "route" (
-    "DRUG_CODE" INTEGER(8)  NOT NULL ,
-    "ROUTE_OF_ADMINISTRATION_CODE" INTEGER(6),
-    "ROUTE_OF_ADMINISTRATION" VARCHAR2(40)
-);
-
-CREATE  TABLE IF NOT EXISTS "status" (
-    "DRUG_CODE" INTEGER(8)  NOT NULL ,
-    "CURRENT_STATUS_FLAG" VARCHAR2(1),
-    "STATUS" VARCHAR2(40),
-    "HISTORY_DATE" DATE
-);
-
-CREATE TABLE IF NOT EXISTS "ingred" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "ACTIVE_INGREDIENT_CODE" INTEGER(6),
-    "INGREDIENT" VARCHAR2(240),
-    "INGREDIENT_SUPPLIED_IND" VARCHAR2(1),
-    "STRENGTH" VARCHAR2(20),
-    "STRENGTH_UNIT" VARCHAR2(40),
-    "STRENGTH_TYPE" VARCHAR2(40),
-    "DOSAGE_VALUE" VARCHAR2(20),
-    "BASE" VARCHAR2(1),
-    "DOSAGE_UNIT" VARCHAR2(40),
-    "NOTES" VARCHAR2(2000)
-);
-
-
-CREATE TABLE IF NOT EXISTS "ther" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "TC_ATC_NUMBER" VARCHAR2(8),
-    "TC_ATC" VARCHAR2(120),
-    "TC_AHFS_NUMBER" VARCHAR2(20),
-    "TC_AHFS" VARCHAR2(80)
-);
-
-CREATE TABLE IF NOT EXISTS "package" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "UPC" VARCHAR2(12),
-    "PACKAGE_SIZE_UNIT" VARCHAR2(40),
-    "PACKAGE_TYPE" VARCHAR2(40),
-    "PACKAGE_SIZE" VARCHAR2(5),
-    "PRODUCT_INFORMATION" VARCHAR2(80)
-);
-
--- the following depend on files fetched (and created) by download-and-create-ca.sh
--- reminder to self: SQLite has weak support of cross-table column value updating,
--- also certain unzip seems to output files into a subdirectory allfiles/
--- in this case enable the following instead:
--- .import allfiles/drug.csv drug
--- .import allfiles/form.csv form
--- .import allfiles/route.csv route
--- .import allfiles/status.csv status
--- .import allfiles/ingred.csv ingred
--- .import allfiles/ther.csv ther
--- .import allfiles/package.csv package
-
-.import drug.csv drug
-.import formshort.csv form
-.import route.csv route
-.import status.csv status
-.import ingred.csv ingred
-.import ther.csv ther
-.import package.csv package
+-- /**
+--  * \brief This script creates the FreeDiams Canadian's drugs database itself.
+--  *
+--  * July 14, 2010 initial release
+--  *
+--  * NOTE: INSERT INTO "INFORMATIONS" (needs manual updating as to
+--  *  i)  the version of the drug db that it is to be known as
+--  *  ii) the compatible version of FreeDiams
+--  */
 
 
 -- ********************************
--- Create *new* FreeDiams tables  *
+-- Feed FreeDiams tables
 -- ********************************
--- Create FreeDiams tables using the SVN sql code
---   http://code.google.com/p/freemedforms/source/browse/trunk/global_resources/sql/drugs_schema.sql
--- docs
---   http://ericmaeker.fr/FreeMedForms/di-manual/en/html/drugsdatabaseschema.html
-
-CREATE TABLE IF NOT EXISTS "COMPOSITION" (
-    "UID" int(10) NOT NULL,
-    "MOLECULE_FORM" varchar(100),
-    "MOLECULE_CODE" int(11) NOT NULL,
-    "MOLECULE_NAME" varchar(200) NOT NULL,
-    "DOSAGE" varchar(100)  NOT NULL,
-    "DOSAGE_REF" varchar(50)  NOT NULL,
-    "NATURE" varchar(2) NOT NULL DEFAULT "SA",
-    "LK_NATURE" int(11) NOT NULL DEFAULT 1
-);
-
--- CHECK definition on GLOBAL_STRENGTH
-CREATE TABLE IF NOT EXISTS "DRUGS" (
-    "UID" int(11) NOT NULL,
-    "NAME" varchar(1000) NOT NULL,
-    "FORM" varchar(500),
-    "ROUTE" varchar(100),
-    "ATC" varchar(7),
-    "GLOBAL_STRENGTH" varchar(100),
-    "TYPE_MP" varchar(1),
-    "AUTHORIZATION" varchar(1),
-    "MARKETED" bool NOT NULL DEFAULT 1,
-    "LINK_SPC" varchar(250)
-);
-
-CREATE TABLE IF NOT EXISTS "INFORMATIONS" (
-    "VERSION" varchar(10),
-    "NAME" varchar(2000),
-    "IDENTIFIANT" varchar(50),
-    "COMPAT_VERSION" varchar(10),
-    "PROVIDER" varchar(200),
-    "WEBLINK" varchar(500),
-    "AUTHOR" varchar(200),
-    "LICENSE" varchar(1000),
-    "LICENSE_TERMS" varchar(10000),
-    "DATE" varchar(20),
-    "DRUG_UID_NAME" varchar(50),
-    "PACK_MAIN_CODE_NAME" varchar(50),
-    "ATC" bool NOT NULL,
-    "INTERACTIONS"  bool NOT NULL DEFAULT FALSE,
-    "AUTHOR_COMMENTS" varchar(10000),
-    "LANGUAGE_COUNTRY" varchar(5),
-    "DRUGS_NAME_CONSTRUCTOR" varchar(100)
-);
-
-CREATE TABLE IF NOT EXISTS "PACKAGING" (
-    "UID" int(11) NOT NULL,
-    "PACKAGE_UID" int(20) NOT NULL,
-    "LABEL" varchar(500) NOT NULL,
-    "STATUS" varchar(1),
-    "MARKETING" varchar(1) NOT NULL,
-    "DATE" varchar(25),
-    "OPTIONAL_CODE" int(20)
-);
-
-CREATE TABLE IF NOT EXISTS "MOLECULE_2_ATC" (
-    "MOLECULE_CODE" int(11) NOT NULL,
-    "ATC" varchar(7)
-);
-
 -- feed table DRUGS
 -- these are Branded products
--- the drugs must be distinct on {drug or combination} plus strength)
--- note FD's DRUGS table needs its records pre-ordered ASC on NAME
+-- the drugs must be distinct on {drug or combination} plus strength
+-- note FreeDiam's DRUGS table needs its records pre-ordered ASC on NAME
 
 INSERT INTO DRUGS ("UID", "NAME", "FORM", "ROUTE", "ATC")
 SELECT DISTINCT
@@ -200,7 +89,6 @@ LIMIT 10);
 
 
 -- feed table COMPOSITION (molecular ingredients)
-
 INSERT INTO "COMPOSITION"
    ("UID", "MOLECULE_FORM", "MOLECULE_CODE", "MOLECULE_NAME", "DOSAGE", "DOSAGE_REF", "NATURE", "LK_NATURE")
 SELECT
@@ -248,17 +136,17 @@ WHERE
 -- out of the set of 3096 distinct molecules overall probably the main ones
 -- (there exists an unexplained difference: 1183 distinct vs 1164 in source):
 
-INSERT INTO MOLECULE_2_ATC (
-    MOLECULE_CODE,
-    ATC
-    )
-SELECT DISTINCT
-    A1.MOLECULE_CODE,
-    A2.ATC
-FROM COMPOSITION A1, DRUGS A2, drug A3
-WHERE A1.UID = A2.UID AND
-    (A1.UID = A3.DRUG_CODE AND A3.NUMBER_OF_AIS = 1 AND
-    LENGTH(A2.ATC)=7);
+-- INSERT INTO MOLECULE_2_ATC (
+--     MOLECULE_CODE,
+--     ATC
+--     )
+-- SELECT DISTINCT
+--     A1.MOLECULE_CODE,
+--     A2.ATC
+-- FROM COMPOSITION A1, DRUGS A2, drug A3
+-- WHERE A1.UID = A2.UID AND
+--     (A1.UID = A3.DRUG_CODE AND A3.NUMBER_OF_AIS = 1 AND
+--     LENGTH(A2.ATC)=7);
     
 -- to display ATC orphans e.g. CA molecule code 3123 UID 14681, 48348
 --         or UID 15224 TICARCILLIN, molecule 19818	
@@ -269,8 +157,6 @@ WHERE A1.UID = A2.UID AND
 
 
 -- feed table INFORMATIONS (info about the drug data source)
-
-
 INSERT INTO "INFORMATIONS" (
     "VERSION",
     "NAME",
@@ -290,13 +176,12 @@ INSERT INTO "INFORMATIONS" (
     "LANGUAGE_COUNTRY",
     "DRUGS_NAME_CONSTRUCTOR")
 VALUES (
-    "0.4.3",
-    "en=Canadian Drug Product Database
+    "0.4.4",
+    "xx=Canadian Drug Product Database
     fr=Base de données thérapeutique Canadienne
-    xx=Canadian Drug Product Database
     ",
     "CA_HCDPD",
-    "0.4.0",
+    "0.4.4",
     "HC: Health Canada Drug Product Database",
     "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
     "Jim Busser, MD & Eric Maeker, MD",
@@ -344,33 +229,31 @@ SELECT A7.DRUG_CODE, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || "
 FROM package A7
 WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION = "";
 
+
 -- the Canadian products mostly lack any unique UPC
 -- a pseudo PACKAGE_UID is possible, but might be inconstant
 UPDATE package SET UPC = ROWID;
 
+-- Drop the DPD staging tables
+DROP TABLE drug;
+DROP TABLE form;
+DROP TABLE form-abbr;
+DROP TABLE route;
+DROP TABLE status;
+DROP TABLE ingred;
+DROP TABLE ther;
+DROP TABLE package;
 
 
--- uncomment the following to automatically drop the DPD staging tables
--- DROP TABLE drug;
--- DROP TABLE form;
--- DROP TABLE form-abbr;
--- DROP TABLE route;
--- DROP TABLE status;
--- DROP TABLE ingred;
--- DROP TABLE ther;
--- DROP TABLE package;
 
-
-.exit
-
--- the remainder of this file (below .exit) are notes kept for reference
+-- Kept for reference
 
 -- SELECTS to examine data
 -- SELECT A1.NAME, A2.MOLECULE_NAME, A1.ATC, A3.TC_ATC
 -- FROM DRUGS A1, COMPOSITION A2, ther A3
 -- WHERE A1.UID = A2.UID AND A1.UID = A3.DRUG_CODE
--- returns after nearly 5-10 minutes 52,635 columns
--- DRUGS 23,124 columns
+-- returns after nearly 5-10 minutes 52,635 rows
+-- DRUGS 23,124 rows
 -- COMPO 38,883
 -- THER 16,965
 -- some which lack ATCs are homeopathic products
