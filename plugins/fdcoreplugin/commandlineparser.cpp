@@ -24,7 +24,7 @@ namespace Constants {
     const char *const XML_HEADER                  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     const char *const XML_GENERAL_TAG             = "FreeDiams_In";
     const char *const XML_CONFIG_FILE             = "ConfigFile";
-    const char *const XML_OUT_FILE                = "OutFile";
+    const char *const XML_OUT_FILE                = "ExchangeOut";
     const char *const XML_DRUGS_DATABASE          = "DrugsDatabase";
     const char *const XML_EMR                     = "EMR";
     const char *const XML_PATIENT                 = "Patient";
@@ -71,7 +71,7 @@ public:
         params.insert(CommandLine::CL_EMR_Uid,           "--emr-uid");
         params.insert(CommandLine::CL_SelectionOnly,     "--selection-only");
         params.insert(CommandLine::CL_DrugsDatabaseUid,  "--drugsdb-uid");
-        params.insert(CommandLine::CL_ExchangeFile,      "--exchange");
+        params.insert(CommandLine::CL_ExchangeFile,      "--exchange-out");
         params.insert(CommandLine::CL_ExchangeFileFormat,"--exchange-format");
         params.insert(CommandLine::CL_ExchangeInFile,    "--exchange-in");
         params.insert(CommandLine::CL_PatientUid,        "--patientuid");
@@ -282,13 +282,19 @@ public:
         patient->setValue(IPatient::BirthName,      value.value(CommandLine::CL_PatientName));
         patient->setValue(IPatient::Surname,        value.value(CommandLine::CL_PatientSurname));
         patient->setValue(IPatient::Gender,         value.value(CommandLine::CL_PatientGender));
+
         QStringList tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
+        tmp.removeAll("");
         patient->setValue(IPatient::DrugsAtcAllergies, tmp);
+
         tmp = value.value(CommandLine::CL_InnAllergies).toString().split(";");
+        tmp.removeAll("");
         patient->setValue(IPatient::DrugsInnAllergies, tmp);
+
         tmp = value.value(CommandLine::CL_DrugsAllergies).toString().split(";");
+        tmp.removeAll("");
         patient->setValue(IPatient::DrugsUidAllergies, tmp);
-        //        patient->setValue(IPatient::DrugsInnAtcAllergies, value.value(CommandLine::CL_InnAtcAllergies));
+
         if (value.value(CommandLine::CL_CrCl).isValid()) {
             patient->setValue(IPatient::CreatinClearance,     value.value(CommandLine::CL_CrCl));
             patient->setValue(IPatient::CreatinClearanceUnit, value.value(CommandLine::CL_CrCl_Unit));
