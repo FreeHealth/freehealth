@@ -177,7 +177,74 @@ When an update is available, the menu <b>Update Available</b> appears.
 /**
 \~french \page installation_cle_usb Installation sur clé USB multi-plateforme
 \~english \page installation_cle_usb USB key, multi-platform installation
-En cours de rédaction.
+
+\~
+\section prerequired Prerequired
+
+<b>The USB Key feature is only available with \freediams >= 0.4.4.</b>
+
+Of course, you need to download all OS version needed of \freediams.
+Let's assume that you need all the OS version running from a unique USB
+Key with shared datas. There are two ways to store your personnal
+datas with \freediams : SQLite local files or MySQL external database.
+
+You should format the key in FAT32 format. This format is recognized by all the OS.
+
+Create a directory tree like:
+- FreeDiamsAllConfigs
+    - Linux
+    - MacOs
+    - Win32
+    - SharedResources
+- FreeDiamsDownloads
+
+\section downloading Downloads
+
+You will need the different downloads :
+- \freediams for Win32 : zip format. Store the zip file on the USB Key.
+- \freediams for MacOS : DMG format. Store the dmg file on the USB Key.
+- \freediams for Linux (zipped binary package) : do not download the .deb file or the .rpm. Store
+the file on th USB Key.
+
+Unzip and copy packages to the OS representative path. Copy the MacOS \freediams application to
+its USB Key folder.
+
+\section install_configuration_files Create and install the USB Key configuration file
+
+The USB Key configuration file does only contains the path to config.ini to use
+(and the resources path). <b>It must stand just next the \freediams executable whatever is the
+OS</b>.
+
+Create for each packages a file called \e pathtoconfig.ini and write inside the path to the
+shared \e config.ini. Use relative path.
+
+- For Linux: executable lies in <em>FreeDiamsAllConfigs/Linux/</em>. Content of the \e pathtoconfig.ini file:
+\code
+../SharedResources/config.ini
+\endcode
+- For MacOs: executable lies in <em>FreeDiamsAllConfigs/MacOs/FreeDiams.app/Contents/MacOs</em>. Content of the \e pathtoconfig.ini file:
+\code
+../../../../../SharedResources/config.ini
+\endcode
+- For Windows: executable lies in <em>FreeDiamsAllConfigs/Win32</em>. Content of the \e pathtoconfig.ini file:
+\code
+../SharedResources/config.ini
+\endcode
+
+
+\section run_on_usbkey Run on the USB Key
+
+Know that's really easy:
+- \freediams should never be called with the command line \e --config param.
+- Just run \freediams depending on the OS
+- Have multi-OS fun !
+
+\section autostart Making the USB Key automatically starts \freediams when inserted
+
+Linux, MacOS and Windows offers to the user the possibility to automatically start a command
+when a USB Key is inserted and recognize by the OS.
+
+
 
 \ref index
 */

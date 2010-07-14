@@ -129,6 +129,22 @@ public:
         return drugName;
     }
 
+    static bool testAtcAllergies(const QString &atc, const int uid)
+    {
+        if (fullAtcAllergies.contains(atc)) {
+            drugAllergyCache.insert(uid, true);
+            return true;
+        }
+        foreach(const QString &atcClass, classAtcAllergies) {
+            if (atc.startsWith(atcClass)) {
+                drugAllergyCache.insert(uid, true);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /** \todo improve ATC testing to all ATC molecules of the drug */
     static bool hasAllergy(const int uid, const QStringList &inns, const QString &atc)
     {
@@ -145,10 +161,8 @@ public:
             }
         }
         if (testAtc) {
-            if (atcAllergies.contains(atc)) {
-                drugAllergyCache.insert(uid, true);
+            if (testAtcAllergies(atc, uid))
                 return true;
-            }
         }
         if (testUid) {
             if (uidAllergies.contains(QString::number(uid))) {
@@ -182,11 +196,8 @@ public:
             }
         }
         if (testAtc) {
-            const QString &atc = model->index(item.row(), Constants::DRUGS_ATC).data().toString();
-            if (atcAllergies.contains(atc)) {
-                drugAllergyCache.insert(uid, true);
+            if (testAtcAllergies(model->index(item.row(), Constants::DRUGS_ATC).data().toString(), uid))
                 return true;
-            }
         }
         if (testUid) {
             if (uidAllergies.contains(QString::number(uid))) {
@@ -205,7 +216,7 @@ public:
 
 
 public:
-    static QStringList atcAllergies, uidAllergies, innAllergies;
+    static QStringList fullAtcAllergies, classAtcAllergies, uidAllergies, innAllergies;
     static bool testAtc, testUid, testInn;
 
 private:
@@ -218,7 +229,8 @@ private:
 QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
 QHash<int, bool> GlobalDrugsModelPrivate::drugAllergyCache;
 int GlobalDrugsModelPrivate::numberOfInstances;
-QStringList GlobalDrugsModelPrivate::atcAllergies, GlobalDrugsModelPrivate::uidAllergies, GlobalDrugsModelPrivate::innAllergies;
+QStringList GlobalDrugsModelPrivate::fullAtcAllergies, GlobalDrugsModelPrivate::classAtcAllergies;
+QStringList GlobalDrugsModelPrivate::uidAllergies, GlobalDrugsModelPrivate::innAllergies;
 bool GlobalDrugsModelPrivate::testAtc = false;
 bool GlobalDrugsModelPrivate::testUid = false;
 bool GlobalDrugsModelPrivate::testInn = false;
@@ -272,17 +284,21 @@ void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
         ref==Core::IPatient::DrugsInnAtcAllergies ||
         ref==Core::IPatient::DrugsInnAllergies ||
         ref==Core::IPatient::DrugsAtcAllergies) {
-//        qWarning() << "Updating Global Drugs Model";
         d->uidAllergies = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
-        d->atcAllergies = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
+        foreach(const QString &atc, patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList()) {
+            if (atc.length()==7)
+                d->fullAtcAllergies.append(atc);
+            else
+                d->classAtcAllergies.append(atc);
+        }
         d->innAllergies = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
         d->uidAllergies.removeAll("");
-        d->atcAllergies.removeAll("");
+        d->fullAtcAllergies.removeAll("");
+        d->classAtcAllergies.removeAll("");
         d->innAllergies.removeAll("");
-        d->testAtc = !d->atcAllergies.isEmpty();
+        d->testAtc = !d->fullAtcAllergies.isEmpty() || !d->classAtcAllergies.isEmpty();
         d->testUid = !d->uidAllergies.isEmpty();
         d->testInn = !d->innAllergies.isEmpty();
-        qWarning() << d->innAllergies << d->testInn;
         d->clearDrugAllergyCache();
     }
 }

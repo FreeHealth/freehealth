@@ -90,7 +90,7 @@ public:
     static bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
 
     static QString prescriptionToXml(DrugsDB::DrugsModel *model);
-    static QString prescriptionToHtml(DrugsDB::DrugsModel *model, int version = MedinTuxVersion);
+    static QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
 
     static bool printPrescription(DrugsDB::DrugsModel *model); //,
 //                                  const QString &header, const QString &footer,

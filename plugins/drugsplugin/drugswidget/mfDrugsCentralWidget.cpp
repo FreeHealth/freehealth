@@ -226,7 +226,7 @@ bool DrugsCentralWidget::createTemplate()
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
-    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, DrugsDB::DrugsIO::SimpleVersion));
+    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
     dlg.setTemplateMimeTypes(DrugsDB::DrugsIO::prescriptionMimeTypes());
     dlg.setUserUuid(user()->value(Core::IUser::Uuid).toString());
     dlg.exec();

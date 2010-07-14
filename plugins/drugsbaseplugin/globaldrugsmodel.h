@@ -49,8 +49,8 @@
 /**
  * \file globaldrugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 16 Mar 2010
+ * \version 0.4.2
+ * \date 11 July 2010
 */
 
 namespace DrugsDB {

@@ -452,7 +452,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
   Prescription is automatically sorted.\n
   The XML encoded prescription is added inside the HTML code.\n
 */
-QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
+QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlExtraDatas, int version)
 {
     Q_ASSERT(m);
     // clean the model (sort it, hide testing drugs)
@@ -561,10 +561,20 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, int version)
 
     toReturn.replace("{GENERATOR}", qApp->applicationName());
     toReturn.replace("{PRESCRIPTION}", tmp );
+
+    // add XML extraDatas
+    QString xmldPrescription = prescriptionToXml(m);
+    if (!xmlExtraDatas.isEmpty()) {
+        xmldPrescription.append(tmp);
+        QString z = QString("</%1>\n").arg(XML_ROOT_TAG);
+        xmldPrescription.remove(z);
+        xmldPrescription.append(z);
+    }
+
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
 //                         .arg(QString(prescriptionToXml(m))));
-                     .arg(QString(prescriptionToXml(m).toAscii().toBase64())));
+                     .arg(QString(xmldPrescription.toAscii().toBase64())));
 
 //    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
@@ -729,36 +739,6 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
 
-//static QString prepareHeader()
-//{
-//    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
-//    user()->replaceTokens(header);
-//    /** \todo Create a prefs for Date format */
-//    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
-//    Core::IPatient *patient = Core::ICore::instance()->patient();
-//    patient->replaceTokens(header);
-//    return header;
-//}
-//
-//static QString prepareFooter(DrugsDB::DrugsModel *model)
-//{
-//    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
-//    user()->replaceTokens(footer);
-//    Utils::replaceToken(footer, Core::Constants::TOKEN_NUMBEROFDRUGS, QString::number(model->rowCount()));
-//    Core::IPatient *patient = Core::ICore::instance()->patient();
-//    patient->replaceTokens(footer);
-//    footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
-//                   .arg(QCoreApplication::translate("DrugsIO", "Made with %1.").arg(qApp->applicationName())));
-//    return footer;
-//}
-//
-//static inline void setUserWatermark(Print::Printer *p)
-//{
-//    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
-//                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
-//                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
-//}
-
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 {
     Core::IDocumentPrinter *p = printer();
@@ -768,7 +748,7 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     /** \todo add EPISODE_DATE token for FMF */
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     /** \todo add more options for the user : select papers, print duplicatas... */
-    return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion),
+    return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }
@@ -784,7 +764,7 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     /** \todo add more options for the user : select papers, print duplicatas... */
-    p->printPreview(DrugsDB::DrugsIO::prescriptionToHtml(model, DrugsIO::MedinTuxVersion),
+    p->printPreview(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
              Core::IDocumentPrinter::Papers_Prescription_User,
              settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }

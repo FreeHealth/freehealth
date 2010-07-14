@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class DosageCreator
+  \class DrugsWidget::DosageCreator
   \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.
@@ -139,6 +139,7 @@ public:
     DrugsDB::Internal::DosageModel *m_DosageModel;
     QString      m_ActualDosageUuid;
     bool         m_SaveProtocolToBase;
+    int m_InitialNumberOfRow;
 
 private:
     DosageCreatorDialog *m_Parent;
@@ -170,14 +171,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 //    buttonBox->addButton(tr("Prescribe only"), QDialogButtonBox::ActionRole);
 //    buttonBox->addButton(tr("Test only"), QDialogButtonBox::ActionRole);
 
-    // create toolbar
-//    QToolBar *t = new QToolBar(this);
-    // Save and Prescribe
-    // Save protocol
-    // Prescribe only
-    // For test only
-
-
+    d->m_InitialNumberOfRow = dosageModel->rowCount();
     // Drug informations
     int UID = dosageModel->drugUID();
     drugNameLabel->setText( drugModel()->drugData(UID, Drug::Denomination).toString() );
@@ -191,7 +185,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     availableDosagesListView->setModel(dosageModel);
     availableDosagesListView->setModelColumn(Dosages::Constants::Label);
     availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
-    if (dosageModel->rowCount()==0) {
+    if (d->m_InitialNumberOfRow==0) {
         dosageModel->insertRow(0);
         dosageViewer->changeCurrentRow(0);
     } else {
@@ -229,6 +223,11 @@ void DosageCreatorDialog::done(int r)
         dosageViewer->done(r);
         /** \todo check validity of the dosage before submition */
     }
+    // if user deleted all protocols --> update cached data in global drugs model
+//    qWarning() << d->m_DosageModel->rowCount() << d->m_InitialNumberOfRow;
+//    if ((d->m_InitialNumberOfRow > 0) && (d->m_DosageModel->rowCount()==0)) {
+//        DrugsDB::GlobalDrugsModel::updateAvailableDosages();
+//    }
     QDialog::done(r);
 }
 
