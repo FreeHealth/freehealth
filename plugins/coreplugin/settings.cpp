@@ -452,7 +452,8 @@ void SettingsPrivate::setLicenseApprovedApplicationNumber(const QString &version
   \brief Returns the ini file to use the the initialization of QSettings. See constructor.
   Test in this order :
   \li command line --config="/abs/path/to/config.ini" or --config="../relative/path/to/config.ini". If the ini file can be used it is returned.
-  \li home path
+  \li read the applicationBinaryPath/pathtoconfig.ini and search for the config.ini in the specified file
+  \li /homePath/.(qApp->applicationName)
 */
 QString SettingsPrivate::getIniFile(const QString & appName, const QString & fileName)
 {
@@ -471,11 +472,12 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
 
     // if QApplication args contains "--config=iniFileName.ini" use it if possible
     // retreive command line arguments
+    /** \todo get the command line args through the Core::ICommandLine */
     QStringList list = QCoreApplication::arguments();
     int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
 
     if (index != -1) {
-        QString iniFileName = list[ index ];
+        QString iniFileName = list[index];
         iniFileName = iniFileName.mid(iniFileName.indexOf("=") + 1);
         Utils::Log::addMessage("Settings", tr("Passing command line ini file : %1").arg(iniFileName));
 
@@ -503,7 +505,36 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
         }
     }
 
-    // try to use 'config.ini' inside the bundle (ex : /usr/share/application/config.ini , appli.app/Resources/config.ini)
+    // try to use read the 'pathtoconfig.ini' inside the bundle
+    if (QFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath())).exists()) {
+        QString content = Utils::readTextFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath()), Utils::DontWarnUser);
+        content = content.trimmed();
+        if (!content.isEmpty()) {
+            if (QDir::isRelativePath(content))
+                content.prepend(qApp->applicationDirPath() + QDir::separator());
+            content = QDir::cleanPath(content);
+
+            QFileInfo info(content);
+            if (info.exists() && info.isReadable()) {
+                if (info.isWritable()) {
+                    Utils::Log::addMessage("Settings", tr("Using ini file %1.").arg(content));
+                    return content;
+                }
+                else
+                    Utils::Log::addError("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(content)) ;
+            } else {
+                // can we create and access to ini file ?
+                QFile file(content);
+                if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                    Utils::Log::addMessage("Settings", tr("Using ini file %1").arg(content));
+                    return content;
+                }
+                else
+                    Utils::Log::addMessage("Settings", tr("WARNING : Ini file %1 can not be used.").arg(content));
+            }
+        }
+    }
+
     QString iniFile;
 //    if (Utils::isRunningOnMac())
 //        iniFile = QDir::cleanPath(qApp->applicationDirPath() + "/../Resources") + QDir::separator() + tmpFileName;

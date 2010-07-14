@@ -61,6 +61,6 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLCONTACT,   value(IUser::Mail).toString());
 
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERDATEOFBIRTH, value(IUser::DateOfBirth).toString() );
-    /** \todo add Adress / Contact / Spe / Rigths ??? */
+    /** \todo improve manage of token mail, tels, faxes */
 }
 

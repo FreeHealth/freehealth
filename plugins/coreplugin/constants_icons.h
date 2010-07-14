@@ -96,6 +96,10 @@ const char * const  ICONPREVIOUS =     "previous.png";
 const char * const  ICONHOME =         "gohome.png";
 const char * const  ICONLOCK =         "lock.png";
 const char * const  ICONUNLOCK =       "unlock.png";
+const char * const  ICONONELEFTARROW = "1leftarrow.png";
+const char * const  ICONTWOLEFTARROW = "2leftarrow.png";
+const char * const  ICONONERIGHTARROW = "1rightarrow.png";
+const char * const  ICONTWORIGHTARROW = "2rightarrow.png";
 
 // menu View
 const char * const  ICONEYES =         "eyes.png";

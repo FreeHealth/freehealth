@@ -29,4 +29,5 @@ SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/imainwindow.cpp \
     $${PWD}/filemanager.cpp \
     $${PWD}/ipatient.cpp \
-    $${PWD}/iuser.cpp
+    $${PWD}/iuser.cpp \
+    $${PWD}/idocumentprinter.cpp

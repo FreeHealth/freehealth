@@ -37,89 +37,28 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IDOCUMENTPRINTER_H
-#define IDOCUMENTPRINTER_H
-
-#include <coreplugin/core_exporter.h>
-
-#include <QObject>
-#include <QString>
-#include <QDateTime>
-#include <QHash>
-
-QT_BEGIN_NAMESPACE
-class QTextDocument;
-class QVariant;
-QT_END_NAMESPACE
+#include "idocumentprinter.h"
 
 /**
- * \file idocumentprinter.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.2
- * \date 13 July 2010
+  \class Core::IDocumentPrinter
+  \brief This class is a Document Printer's manager.
+  The printerplugin will create one instance of it and leave it in the pluginmanager pool.
+  Get it, and use it for your printing. But remember to never delete it.
+  If in user settings, PDF cached is enabled, you can retrieve all printed docs in the QList<Doc>.
+
+  \todo create a queue that manages printing jobs
 */
 
+using namespace Core;
 
-namespace Core {
-class IDocumentPrinter;
+QList<PrintedDocumentTracer> Core::IDocumentPrinter::m_Docs;
 
-class CORE_EXPORT PrintedDocumentTracer
+void IDocumentPrinter::addPrintedDoc(const QString &fileName, const QString &docName, const QDateTime &dt, const QString &userUid)
 {
-    friend class IDocumentPrinter;
-
-public:
-    PrintedDocumentTracer() {}
-    ~PrintedDocumentTracer() {}
-
-    QString documentName() const {return m_docName;}
-    QString fileName() const {return m_fileName;}
-    QString userUid() const {return m_userUid;}
-    QDateTime dateTime() const {return m_dateTime;}
-
-protected:
-    QString m_docName, m_fileName, m_userUid;
-    QDateTime m_dateTime;
-};
-
-class CORE_EXPORT IDocumentPrinter : public QObject
-{
-    Q_OBJECT
-
-public:
-    enum PapersToUse {
-        Papers_Generic_User = 0,
-        Papers_Administrative_User,
-        Papers_Prescription_User
-    };
-
-    enum TokensWhere {
-        Tokens_Header = 0,
-        Tokens_Footer,
-        Tokens_Watermark,
-        Tokens_Global
-    };
-
-    IDocumentPrinter(QObject *parent) : QObject(parent) {}
-    virtual ~IDocumentPrinter() {}
-
-    virtual void clearTokens() = 0;
-    virtual void addTokens(const int tokenWhere, const QHash<QString, QVariant> &tokensAndValues) = 0;
-
-    virtual bool print(const QTextDocument &text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
-    virtual bool print(QTextDocument *text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
-    virtual bool print(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
-
-    virtual bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
-
-    static void addPrintedDoc(const QString &fileName, const QString &docName, const QDateTime &dt, const QString &userUid);
-    static QList<PrintedDocumentTracer> printedDocs() {return m_Docs;}
-
-private:
-    static QList<PrintedDocumentTracer> m_Docs;
-};
-
-
-}  // End namespace Core
-
-
-#endif // IDOCUMENTPRINTER_H
+    PrintedDocumentTracer d;
+    d.m_docName = docName;
+    d.m_fileName = fileName;
+    d.m_userUid = userUid;
+    d.m_dateTime = dt;
+    m_Docs.append(d);
+}
