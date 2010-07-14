@@ -145,14 +145,14 @@ QVariant Patient::value(const int ref) const
 {
     switch (ref)
     {
-        case YearsOld :
+    case YearsOld :
         {
             if (has(DateOfBirth)) {
                 return MedicalUtils::ageYears(d->m_Values.value(DateOfBirth).toDate());
             }
             break;
         }
-        case Age :
+    case Age :
         {
             if (d->m_Values.contains(ref))
                 return d->m_Values.value(ref);
@@ -164,7 +164,7 @@ QVariant Patient::value(const int ref) const
             }
             break;
         }
-        case CreatinClearance :
+    case CreatinClearance :
         {
             if (has(ref) && (!d->m_Values.value(ref).isNull()))
                 return d->m_Values.value(ref);
@@ -180,6 +180,21 @@ QVariant Patient::value(const int ref) const
             }
             break;
         }
+    case FullName:
+        {
+            QString r;
+            if (has(SecondName))
+                r = QString("%1 - %2 %3")
+                .arg(d->m_Values.value(BirthName).toString())
+                .arg(d->m_Values.value(SecondName).toString())
+                .arg(d->m_Values.value(Surname).toString());
+            else
+                r = QString("%1 %3")
+                .arg(d->m_Values.value(BirthName).toString())
+                .arg(d->m_Values.value(Surname).toString());
+            return r;
+        }
+
         default :
         {
             if (d->m_Values.contains(ref))
