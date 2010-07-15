@@ -56,7 +56,6 @@
 #include <QDir>
 #include <QCache>
 #include <QSqlError>
-#include <QFontMetrics>
 
 #include <QDebug>
 
@@ -64,10 +63,6 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-
-/**
-  \todo no singleton otherwise search filter is applied to all views.
-*/
 
 namespace DrugsDB {
 namespace Internal {

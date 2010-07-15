@@ -254,6 +254,7 @@ InteractionsBase::InteractionsBase()
 
     di->m_DB->addTable(Table_IAM, "IAM_IMPORT");
     di->m_DB->addTable(Table_IAM_DENOMINATION, "IAM_DENOMINATION");
+    di->m_DB->addTable(Table_ATC, "ATC");
 
     di->m_DB->addField(Table_IAM_DENOMINATION, IAM_DENOMINATION_ID, "ID_DENOMINATION");
     di->m_DB->addField(Table_IAM_DENOMINATION, IAM_DENOMINATION,    "DENOMINATION");
@@ -264,6 +265,11 @@ InteractionsBase::InteractionsBase()
     di->m_DB->addField(Table_IAM, IAM_TYPE,     "TYPE");
     di->m_DB->addField(Table_IAM, IAM_TEXT_IAM, "TEXT_IAM");
     di->m_DB->addField(Table_IAM, IAM_TEXT_CAT, "TEXT_CAT");
+
+    di->m_DB->addField(Table_ATC, ATC_ID,    "ATC_ID");
+    di->m_DB->addField(Table_ATC, ATC_CODE,  "ATC_CODE");
+    di->m_DB->addField(Table_ATC, ATC_EN,    "ATC_EN");
+    di->m_DB->addField(Table_ATC, ATC_FR,    "ATC_FR");
 }
 
 /** \brief Destructor. */

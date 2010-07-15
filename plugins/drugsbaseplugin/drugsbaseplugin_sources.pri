@@ -18,8 +18,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/versionupdater.h \
     $${PWD}/drugsdatabaseaboutpage.h \
     $${PWD}/drugstemplateprinter.h \
-    $${PWD}/drugsdatabaseselector.h
-
+    $${PWD}/drugsdatabaseselector.h \
+    $${PWD}/atctreemodel.h
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/interactionsbase.cpp \
@@ -35,12 +35,18 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/versionupdater.cpp \
     $${PWD}/drugsdatabaseaboutpage.cpp \
     $${PWD}/drugstemplateprinter.cpp \
-    $${PWD}/drugsdatabaseselector.cpp
+    $${PWD}/drugsdatabaseselector.cpp \
+    $${PWD}/atctreemodel.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/drugsbaseplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/drugsbaseplugin_es.ts
+
+# /** \todo TO BE REMOVED */
+OTHER_FILES = \
+    $${SOURCES_PROTECTED_PATH}/afssaps_db/bin/resources/processed/link-class-substances.csv \
+    $${SOURCES_PROTECTED_PATH}/afssaps_db/bin/resources/processed/inns_molecules_link.csv \
 
 # protected
 exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc

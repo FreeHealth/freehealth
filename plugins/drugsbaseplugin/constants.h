@@ -235,7 +235,7 @@ namespace Constants {
     enum Tables
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_INFORMATION,
-        Table_IAM, Table_IAM_DENOMINATION, Table_DOSAGE,
+        Table_IAM, Table_IAM_DENOMINATION, Table_ATC, Table_DOSAGE,
         Table_MaxParam
     };
 
@@ -279,6 +279,11 @@ namespace Constants {
       IAM_MaxParam, IAM_MAIN, IAM_INTERACTOR
     };
 
+    /** \brief Represents the fields index of drugs database table ATC */
+    enum ATCfields
+    { ATC_ID = 0, ATC_CODE, ATC_EN, ATC_FR,
+      ATC_MaxParam
+    };
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------
