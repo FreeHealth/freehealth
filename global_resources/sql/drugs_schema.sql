@@ -32,6 +32,12 @@ CREATE TABLE IF NOT EXISTS `PACKAGING` (
   `OPTIONAL_CODE` int(20)
 );
 
+-- Link table : molecule code  1<->N  ATC id
+CREATE TABLE IF NOT EXISTS `LK_MOL_ATC`  (
+  `MOLECULE_CODE`  integer NOT NULL,
+  `ATC_ID`         integer NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `INFORMATIONS` (
   `VERSION` varchar(10),
   `NAME` varchar(2000),

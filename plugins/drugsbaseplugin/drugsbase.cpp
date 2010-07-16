@@ -171,6 +171,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addTable(Table_DRUGS,       "DRUGS");
     addTable(Table_COMPO,       "COMPOSITION");
     addTable(Table_PACKAGING,   "PACKAGING");
+    addTable(Table_LK_MOL_ATC,  "LK_MOL_ATC");
     addTable(Table_INFORMATION, "INFORMATIONS");
 
     addField(Table_DRUGS, DRUGS_UID ,           "UID");
@@ -200,6 +201,9 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_COMPO, COMPO_REF_DOSAGE,   "DOSAGE_REF");
     addField(Table_COMPO, COMPO_NATURE,       "NATURE");
     addField(Table_COMPO, COMPO_LK_NATURE,    "LK_NATURE");
+
+    addField(Table_LK_MOL_ATC, LK_MOLECULECODE,"MOLECULE_CODE");
+    addField(Table_LK_MOL_ATC, LK_ATC_ID,      "ATC_ID");
 
     addField(Table_INFORMATION, INFO_VERSION,           "VERSION");
     addField(Table_INFORMATION, INFO_NAME,              "NAME");

@@ -64,6 +64,8 @@
 -- the drugs must be distinct on {drug or combination} plus strength
 -- note FreeDiam's DRUGS table needs its records pre-ordered ASC on NAME
 
+BEGIN
+
 INSERT INTO DRUGS ("UID", "NAME", "FORM", "ROUTE", "ATC")
 SELECT DISTINCT
    A1.DRUG_CODE,
@@ -228,6 +230,8 @@ INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
 SELECT A7.DRUG_CODE, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
 FROM package A7
 WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION = "";
+
+COMMIT
 
 
 -- the Canadian products mostly lack any unique UPC

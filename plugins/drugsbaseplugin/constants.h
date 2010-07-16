@@ -234,7 +234,7 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables
     {
-        Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_INFORMATION,
+        Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
         Table_IAM, Table_IAM_DENOMINATION, Table_ATC, Table_DOSAGE,
         Table_MaxParam
     };
