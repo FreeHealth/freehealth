@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `INFORMATIONS` (
   `COMPAT_VERSION` varchar(10),
   `PROVIDER` varchar(200),
   `WEBLINK` varchar(500),
+  `COMPLEMENTARY_WEBSITE` varchar(200),
   `AUTHOR` varchar(200),
   `LICENSE` varchar(1000),
   `LICENSE_TERMS` varchar(10000),

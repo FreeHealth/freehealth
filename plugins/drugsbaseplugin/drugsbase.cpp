@@ -211,6 +211,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_COMPAT_VERSION,    "COMPAT_VERSION");
     addField(Table_INFORMATION, INFO_PROVIDER,          "PROVIDER");
     addField(Table_INFORMATION, INFO_WEBLINK,           "WEBLINK");
+    addField(Table_INFORMATION, INFO_COMPLEMENTARY_WWW, "COMPLEMENTARY_WEBSITE");
     addField(Table_INFORMATION, INFO_AUTHOR,            "AUTHOR");
     addField(Table_INFORMATION, INFO_LICENSE,           "LICENSE");
     addField(Table_INFORMATION, INFO_LICENSE_TERMS,     "LICENSE_TERMS");
