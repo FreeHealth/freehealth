@@ -121,6 +121,7 @@ public:
             case CommandLine::CL_ExchangeInFile :    value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientUid :        value.insert(CommandLine::CL_PatientUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientName :       value.insert(CommandLine::CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_PatientSurname :    value.insert(CommandLine::CL_PatientSurname, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientGender :     value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_DateOfBirth :       value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_Weight :            value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;

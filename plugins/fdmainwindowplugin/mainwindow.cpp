@@ -370,6 +370,8 @@ void MainWindow::refreshPatient()
     m_ui->sizeUnit->blockSignals(state);
     m_ui->weightUnit->blockSignals(state);
 
+    qWarning() << patient()->toXml();
+
     m_ui->patientName->setText(patient()->value(Core::IPatient::BirthName).toString());
     m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
                                      "Taille : %5<br />Clearance : %6")
