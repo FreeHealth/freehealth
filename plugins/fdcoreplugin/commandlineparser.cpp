@@ -146,18 +146,22 @@ public:
 
         if (!value.value(CommandLine::CL_ExchangeInFile).isNull()) {
             QString file = value.value(CommandLine::CL_ExchangeInFile).toString();
+            Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
             if (QDir::isRelativePath(file)) {
                 file.prepend(qApp->applicationDirPath() + QDir::separator());
                 file = QDir::cleanPath(file);
             }
             if (QFile::exists(file)) {
                 readInFileXml(file);
+            } else {
+                Utils::Log::addError("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
             }
         }
     }
 
     bool readInFileXml(const QString &file)
     {
+        Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Reading exchange in file : %1").arg(QFileInfo(file).absoluteFilePath()));
         // Read contents if necessary
         QString contents;
         contents = Utils::readTextFile(file, Utils::DontWarnUser);
