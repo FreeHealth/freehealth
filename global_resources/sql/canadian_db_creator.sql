@@ -64,6 +64,9 @@
 -- Prepare Canadian temporary database
 .read canadian_db_preparation.sql
 
+-- Imports Canadian raw datas
+.read canadian_db_imports.sql
+
 -- Create FreeDiams tables
 .read drugs_schema.sql
 

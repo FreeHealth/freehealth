@@ -39,10 +39,10 @@
 -- ***************************************************************************/
 
 -- /**
---  * \file canadian_db_preparation.sql
+--  * \file canadian_db_imports.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
 --  * \version 0.4.4
---  * \date 14 July 2010
+--  * \date 22 July 2010
 --  */
 
 -- /**
@@ -54,69 +54,26 @@
 --  *
 --  */
 
+-- the following depend on files fetched (and created) by download-and-create-ca.sh
+-- reminder to self: SQLite has weak support of cross-table column value updating,
+-- also certain unzip seems to output files into a subdirectory allfiles/
+-- in this case enable the following instead:
 
--- Create the temporary database schema for importation of the Canadian files
-CREATE TABLE IF NOT EXISTS "drug" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "PRODUCT_CATEGORIZATION" VARCHAR2(80),
-    "CLASS" VARCHAR2(40),
-    "DRUG_IDENTIFICATION_NUMBER" VARCHAR2(8),
-    "BRAND_NAME" VARCHAR2(200),
-    "DESCRIPTOR" VARCHAR2(150),
-    "PEDIATRIC_FLAG" VARCHAR2(1),
-    "ACCESSION_NUMBER" VARCHAR2(5),
-    "NUMBER_OF_AIS" VARCHAR2(10),
-    "LAST_UPDATE_DATE" DATE,
-    "AI_GROUP_NO" VARCHAR2(10)
-);
+.mode csv
+.separator "|"
 
-CREATE TABLE IF NOT EXISTS "form" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "PHARM_FORM_CODE" INTEGER(7),
-    "PHARMACEUTICAL_FORM" VARCHAR2(40)
-);
+-- .import allfiles/drug.csv drug
+-- .import allfiles/form.csv form
+-- .import allfiles/route.csv route
+-- .import allfiles/status.csv status
+-- .import allfiles/ingred.csv ingred
+-- .import allfiles/ther.csv ther
+-- .import allfiles/package.csv package
 
-CREATE TABLE IF NOT EXISTS "route" (
-    "DRUG_CODE" INTEGER(8)  NOT NULL ,
-    "ROUTE_OF_ADMINISTRATION_CODE" INTEGER(6),
-    "ROUTE_OF_ADMINISTRATION" VARCHAR2(40)
-);
-
-CREATE  TABLE IF NOT EXISTS "status" (
-    "DRUG_CODE" INTEGER(8)  NOT NULL ,
-    "CURRENT_STATUS_FLAG" VARCHAR2(1),
-    "STATUS" VARCHAR2(40),
-    "HISTORY_DATE" DATE
-);
-
-CREATE TABLE IF NOT EXISTS "ingred" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "ACTIVE_INGREDIENT_CODE" INTEGER(6),
-    "INGREDIENT" VARCHAR2(240),
-    "INGREDIENT_SUPPLIED_IND" VARCHAR2(1),
-    "STRENGTH" VARCHAR2(20),
-    "STRENGTH_UNIT" VARCHAR2(40),
-    "STRENGTH_TYPE" VARCHAR2(40),
-    "DOSAGE_VALUE" VARCHAR2(20),
-    "BASE" VARCHAR2(1),
-    "DOSAGE_UNIT" VARCHAR2(40),
-    "NOTES" VARCHAR2(2000)
-);
-
-CREATE TABLE IF NOT EXISTS "ther" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "TC_ATC_NUMBER" VARCHAR2(8),
-    "TC_ATC" VARCHAR2(120),
-    "TC_AHFS_NUMBER" VARCHAR2(20),
-    "TC_AHFS" VARCHAR2(80)
-);
-
-CREATE TABLE IF NOT EXISTS "package" (
-    "DRUG_CODE" INTEGER(8) NOT NULL ,
-    "UPC" VARCHAR2(12),
-    "PACKAGE_SIZE_UNIT" VARCHAR2(40),
-    "PACKAGE_TYPE" VARCHAR2(40),
-    "PACKAGE_SIZE" VARCHAR2(5),
-    "PRODUCT_INFORMATION" VARCHAR2(80)
-);
-
+.import drug.csv drug
+.import formshort.csv form
+.import route.csv route
+.import status.csv status
+.import ingred.csv ingred
+.import ther.csv ther
+.import package.csv package

@@ -48,6 +48,8 @@
 -- /**
 --  * \brief This script creates the FreeDiams Canadian's drugs database itself.
 --  *
+--  * \warning SQL commands MUST end with \e ;
+--  *
 --  * July 14, 2010 initial release
 --  *
 --  * NOTE: INSERT INTO "INFORMATIONS" (needs manual updating as to
@@ -63,8 +65,6 @@
 -- these are Branded products
 -- the drugs must be distinct on {drug or combination} plus strength
 -- note FreeDiam's DRUGS table needs its records pre-ordered ASC on NAME
-
-BEGIN
 
 INSERT INTO DRUGS ("UID", "NAME", "FORM", "ROUTE", "ATC")
 SELECT DISTINCT
@@ -82,47 +82,43 @@ ORDER BY A1.BRAND_NAME;
 
 -- to adjust for the lack of strengths in some brand names
 UPDATE DRUGS
-SET GLOBAL_STRENGTH=
-(SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
-FROM ingred
-WHERE DRUG_CODE=DRUGS.UID
-GROUP BY DRUG_CODE
-LIMIT 10);
+SET GLOBAL_STRENGTH =
+  (
+    SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
+    FROM ingred
+    WHERE DRUG_CODE=DRUGS.UID
+    GROUP BY DRUG_CODE
+    LIMIT 10
+  );
 
 
 -- feed table COMPOSITION (molecular ingredients)
-INSERT INTO "COMPOSITION"
-   ("UID", "MOLECULE_FORM", "MOLECULE_CODE", "MOLECULE_NAME", "DOSAGE", "DOSAGE_REF", "NATURE", "LK_NATURE")
-SELECT
-   A1.DRUG_CODE,
-   A2.PHARMACEUTICAL_FORM, 
-   A1.ACTIVE_INGREDIENT_CODE,
-   A1.INGREDIENT,
-   A1.STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT,
-   "",
-   "SA",
-   1
-FROM ingred A1, form A2
-WHERE
-   (A1.DRUG_CODE = A2.DRUG_CODE) AND
-   (A1.DOSAGE_VALUE != "");
+INSERT INTO `COMPOSITION`
+   (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
+  SELECT
+    A1.DRUG_CODE,
+    A2.PHARMACEUTICAL_FORM,
+    A1.ACTIVE_INGREDIENT_CODE,
+    A1.INGREDIENT,
+    A1.STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT
+  FROM ingred A1, form A2
+  WHERE
+    (A1.DRUG_CODE = A2.DRUG_CODE) AND
+    (A1.DOSAGE_VALUE != "");
 
 
-INSERT INTO COMPOSITION
-   ("UID", "MOLECULE_FORM", "MOLECULE_CODE", "MOLECULE_NAME", "DOSAGE", "DOSAGE_REF", "NATURE", "LK_NATURE")
-SELECT
-   A1.DRUG_CODE,
-   A2.PHARMACEUTICAL_FORM,
-   A1.ACTIVE_INGREDIENT_CODE,
-   A1.INGREDIENT,
-   A1.STRENGTH || A1.STRENGTH_UNIT,
-   "",
-   "SA",
-   1
-FROM ingred A1, form A2
-WHERE
-   (A1.DRUG_CODE = A2.DRUG_CODE) AND
-   (A1.DOSAGE_VALUE = "");
+INSERT INTO `COMPOSITION`
+   (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
+  SELECT
+    A1.DRUG_CODE,
+    A2.PHARMACEUTICAL_FORM,
+    A1.ACTIVE_INGREDIENT_CODE,
+    A1.INGREDIENT,
+    A1.STRENGTH || A1.STRENGTH_UNIT
+  FROM ingred A1, form A2
+  WHERE
+    (A1.DRUG_CODE = A2.DRUG_CODE) AND
+    (A1.DOSAGE_VALUE = "");
 
 
 -- Canada (2010-03) provides 1416 distinct 7-character ATCs for its drugs
@@ -232,8 +228,6 @@ INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
 SELECT A7.DRUG_CODE, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
 FROM package A7
 WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION = "";
-
-COMMIT
 
 
 -- the Canadian products mostly lack any unique UPC
