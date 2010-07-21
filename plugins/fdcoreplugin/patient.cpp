@@ -208,7 +208,6 @@ QVariant Patient::value(const int ref) const
 bool Patient::setValue(const int ref, const QVariant &value)
 {
     d->m_Values.insert(ref, value);
-    qWarning() << ref << value << d->getXmlTag(ref);
     return true;
 }
 
