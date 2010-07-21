@@ -167,7 +167,7 @@ void QButtonLineEdit::leftTrig(QAction *action)
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() == Qt::AltModifier) {
+    if (event->modifiers() & Qt::AltModifier) {
         const QList<QAction *> &list = m_leftButton->actions();
 
         if (list.count()) {
