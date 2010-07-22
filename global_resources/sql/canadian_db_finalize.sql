@@ -237,13 +237,13 @@ UPDATE package SET UPC = ROWID;
 -- Drop the DPD staging tables
 DROP TABLE drug;
 DROP TABLE form;
-DROP TABLE form-abbr;
 DROP TABLE route;
 DROP TABLE status;
 DROP TABLE ingred;
 DROP TABLE ther;
 DROP TABLE package;
 
+--DROP TABLE form-abbr;
 
 
 -- Kept for reference
