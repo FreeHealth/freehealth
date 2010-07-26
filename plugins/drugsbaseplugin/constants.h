@@ -235,7 +235,7 @@ namespace Constants {
     enum Tables
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
-        Table_IAM, Table_IAM_DENOMINATION, Table_ATC, Table_DOSAGE,
+        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_DOSAGE,
         Table_MaxParam
     };
 
@@ -255,7 +255,9 @@ namespace Constants {
 
     /** \brief Represents the fields index of drugs database table COMPO */
     enum COMPOSITIONfields
-    { COMPO_UID = 0, COMPO_MOL_FORM, COMPO_MOL_CODE, COMPO_MOL_NAME, COMPO_DOSAGE, COMPO_REF_DOSAGE,
+    { COMPO_UID = 0, COMPO_MOL_FORM, COMPO_MOL_CODE, COMPO_MOL_NAME,
+//      COMPO_MOL_ATC,
+      COMPO_DOSAGE, COMPO_REF_DOSAGE,
       COMPO_NATURE, COMPO_LK_NATURE,
       COMPO_MaxParam, COMPO_IAM_DENOMINATION, COMPO_IAM_CLASS_DENOMINATION, COMPO_VeryMaxParam
     };
@@ -265,29 +267,37 @@ namespace Constants {
     };
 
     enum INFOfields
-    { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK, INFO_COMPLEMENTARY_WWW,
+    { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK,
+      INFO_COMPLEMENTARY_WWW,
       INFO_AUTHOR, INFO_LICENSE, INFO_LICENSE_TERMS, INFO_DATE, INFO_DRUG_UID_NAME, INFO_PACK_MAIN_CODE_NAME,
       INFO_ATC, INFO_INTERACTIONS, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY, INFO_DRUGS_NAME_CONSTRUCTOR,
       INFO_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table IAM_DENOMINATION */
-    enum IAM_DENOMINATIONfields
-    { IAM_DENOMINATION_ID = 0, IAM_DENOMINATION,
-      IAM_DENOMINATION_MaxParam
+    enum INTERACTIONSfields
+    { IA_ID = 0, IA_ATC1, IA_ATC2, IA_IAK_ID,
+      IA_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table IAM_IMPORT */
-    enum IAMfields
-    { IAM_ID = 0, IAM_ID1, IAM_ID2, IAM_TYPE, IAM_TEXT_IAM, IAM_TEXT_CAT,
-      IAM_MaxParam, IAM_MAIN, IAM_INTERACTOR
+    enum INTERACTION_KNOWLEDGEfields
+    { IAK_ID = 0, IAK_TYPE, IAK_RISK_FR, IAK_MANAGEMENT_FR, IAK_RISK_EN, IAK_MANAGEMENT_EN,
+      IAK_MaxParam
     };
 
     /** \brief Represents the fields index of drugs database table ATC */
     enum ATCfields
-    { ATC_ID = 0, ATC_CODE, ATC_EN, ATC_FR,
+    { ATC_ID = 0, ATC_CODE, ATC_EN, ATC_FR, ATC_DE,
       ATC_MaxParam
     };
+
+    /** \brief Represents the fields index of drugs database table ATC */
+    enum IAM_TREEfields
+    { TREE_ID_CLASS = 0, TREE_ID_ATC,
+      TREE_MaxParam
+    };
+
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------

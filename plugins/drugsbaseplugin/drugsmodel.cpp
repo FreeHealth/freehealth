@@ -207,7 +207,8 @@ public:
                 toReturn << tkTr(Trans::Constants::INTAKES);
                 if (drug->numberOfInn() == 1) {
                     toReturn << QApplication::translate("DrugsModel", "x %1 of %2")
-                            .arg(drug->dosageOfMolecules().at(0) , drug->listOfInn().at(0));
+                            .arg(drug->dosageOfMolecules().at(0))
+                            .arg(drug->listOfInn().at(0));
                 }
                 if (!settings()->value(Constants::S_USERRECORDEDFORMS).isNull()) {
                     foreach(const QString &s, settings()->value(Constants::S_USERRECORDEDFORMS).toStringList())
@@ -873,6 +874,7 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     tokens_value.insert("MEAL", "");
     tokens_value.insert("PERIOD", "");
     tokens_value.insert("NOTE", "");
+    tokens_value.insert("MIN_INTERVAL", "");
 
     // Manage Textual drugs only
     if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
@@ -939,6 +941,15 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     } else {
         tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
     }
+
+    // Min interval
+    const QVariant &interval = drug->prescriptionValue(Constants::Prescription::IntakesIntervalOfTime);
+    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalScheme);
+    if ((!interval.isNull() && !intervalScheme.isNull()) &&
+        interval.toInt() > 0) {
+        tokens_value["MIN_INTERVAL"] = interval.toString() + " " + period(intervalScheme.toInt());
+    }
+
     Utils::replaceTokens(tmp, tokens_value);
     return tmp;
 }

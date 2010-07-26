@@ -246,9 +246,9 @@ QHash<QString, QString> DatabaseInfos::names() const
 {
     QHash<QString, QString> langs;
     int l = 0;
-    foreach(const QString &line, name.split("\n")) {
+    foreach(const QString &line, name.split("\n", QString::SkipEmptyParts)) {
         l++;
-        if (line.isEmpty())
+        if (line.simplified().isEmpty())
             continue;
         QStringList lang = line.split("=");
         if (lang.count() != 2) {
@@ -263,7 +263,7 @@ QHash<QString, QString> DatabaseInfos::names() const
                                  .arg(name));
             continue;
         }
-        langs.insert(lang.at(0), lang.at(1));
+        langs.insert(lang.at(0).simplified(), lang.at(1).simplified());
     }
     return langs;
 }

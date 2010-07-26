@@ -69,6 +69,26 @@ class DRUGSBASE_EXPORT DrugsInteraction
     friend class InteractionsBase;
     friend class InteractionsBasePrivate;
 public:
+    enum DataRepresentation {
+        DI_Id = 0,
+        DI_LinkId,
+        DI_Type,
+        DI_ATC1,
+        DI_ATC2,
+        DI_ATC1_Label,
+        DI_ATC2_Label,
+        DI_Risk,
+        DI_Management,
+
+        // only used for set
+        DI_RiskFr,
+        DI_RiskEn,
+        DI_ManagementFr,
+        DI_ManagementEn,
+        DI_Xml
+    };
+
+
     DrugsInteraction() {}
     ~DrugsInteraction() {}
 

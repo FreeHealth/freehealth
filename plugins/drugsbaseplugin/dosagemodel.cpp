@@ -54,6 +54,7 @@
   database(DB_DOSAGES_NAME) should be defined BEFORE instance()
 
   \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
+  \todo Get user's right throught Core::IUser
 
   \ingroup freediams drugswidget
 */
@@ -471,25 +472,6 @@ QStringList DosageModel::isDosageValid(const int row)
     //TODO
     return errors;
 }
-
-#ifndef FREEDIAMS
-/** \todo here */
-///** \brief Test user's permissions for the drugs read access */
-//bool DosageModel::userCanRead()
-//{
-//    //TODO --> test
-//    Core::IUser::UserRights r = Core::IUser::UserRights(tkUserModel::instance()->currentUserData(Core::IUser::DrugsRights).toInt());
-//    return (r & Core::IUser::ReadOwn) || (r & Core::IUser::ReadAll);
-//}
-//
-///** \brief Test user's permissions for the drugs write access */
-//bool DosageModel::userCanWrite()
-//{
-//    //TODO  --> test
-//    Core::IUser::UserRights r = Core::IUser::UserRights(tkUserModel::instance()->currentUserData(Core::IUser::DrugsRights).toInt());
-//    return (r & Core::IUser::WriteOwn) || (r & Core::IUser::WriteAll);
-//}
-#endif
 
 /**
   \brief Transforms a dosage to a drug's prescription.

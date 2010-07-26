@@ -84,7 +84,6 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 
-// include Qt headers
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -197,6 +196,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_COMPO, COMPO_MOL_FORM,     "MOLECULE_FORM");
     addField(Table_COMPO, COMPO_MOL_CODE,     "MOLECULE_CODE");
     addField(Table_COMPO, COMPO_MOL_NAME,     "MOLECULE_NAME");
+//    addField(Table_COMPO, COMPO_MOL_ATC,      "MOLECULE_ATC");
     addField(Table_COMPO, COMPO_DOSAGE,       "DOSAGE");
     addField(Table_COMPO, COMPO_REF_DOSAGE,   "DOSAGE_REF");
     addField(Table_COMPO, COMPO_NATURE,       "NATURE");
@@ -922,7 +922,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
 
     // get DRUGS table
     QString req = select(Table_DRUGS, where);
-    DrugsData * toReturn = 0;
+    DrugsData *toReturn = 0;
     {
         QSqlQuery q(req , DB);
         if (q.isActive()) {
@@ -967,7 +967,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
         DrugComposition *precedent = 0;
         QSqlQuery q(req , DB);
         if (q.isActive()) {
-            QList<DrugComposition*> list;
+            QList<DrugComposition *> list;
             while (q.next()) {
                 if (q.record().count() != COMPO_MaxParam)
                     Utils::Log::addError("DrugsBase", QCoreApplication::translate("DrugsBase",
@@ -999,8 +999,8 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
     }
 
-    //     if (toReturn)
-    //         toReturn->warn();
+//    if (toReturn)
+//        toReturn->warn();
 
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");

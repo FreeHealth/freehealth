@@ -173,12 +173,12 @@
 
 
 /**
-  \todo Manage settings stored into external database using : ICore::databaseServerChanged()
+  \todo Manage user's settings stored into database
 */
 
 namespace SettingsPrivateConstants {
 
-    static const char* const WEBSITE              = "http://www.ericmaeker.fr/FreeMedForms";
+    static const char* const WEBSITE              = "http://www.freemedforms.org/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
 #ifdef DEBUG

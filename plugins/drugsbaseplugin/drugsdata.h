@@ -173,12 +173,12 @@ public:
     {
         QString tmp;
         tmp += "Composition : " + m_MoleculeName
-               + "\nForm : " + m_Form + "\ninn : " + m_InnName +  "\ndosage : " + m_Dosage
-               + "\nrefDosagase : " + m_RefDosage + "\nnature : " + m_Nature;
+               + "\n  Form : " + m_Form + "\n  inn : " + m_InnName +  "\n  dosage : " + m_Dosage
+               + "\n  refDosagase : " + m_RefDosage + "\n  nature : " + m_Nature;
         if (m_Link)
-            tmp += "\n Linked";
-        tmp += "\ninnName() : " + innName() + "\ninnDosage() : " + innDosage();
-        tmp += "\niamClasses() : " + iamClasses().join("; ");
+            tmp += "\n  Linked";
+        tmp += "\n    innName() : " + innName() + "\n    innDosage() : " + innDosage();
+        tmp += "\n    iamClasses() : " + iamClasses().join("; ");
         return tmp + "\n";
     }
 

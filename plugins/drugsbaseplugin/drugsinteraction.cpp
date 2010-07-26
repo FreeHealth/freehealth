@@ -72,10 +72,12 @@ using namespace DrugsDB;
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+
 /** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
 void DrugsInteraction::setValue( const int fieldref, const QVariant & value )
 {
-    if ( fieldref == Constants::IAM_TYPE )
+    if (fieldref == DI_Type)
     {
         if ( value.toInt() == Constants::Interaction::Information ) {
             m_Infos.insert( fieldref, Constants::Interaction::Information );
@@ -98,18 +100,39 @@ void DrugsInteraction::setValue( const int fieldref, const QVariant & value )
         }
     }
     else
-        m_Infos.insert( fieldref, value );
+        m_Infos.insert(fieldref, value);
 }
 
 /** \brief Get values of the interaction class. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
-QVariant DrugsInteraction::value( const int fieldref ) const
+QVariant DrugsInteraction::value(const int fieldref) const
 {
-     if ( fieldref == IAM_TYPE )
-          return typeOfIAM( m_Infos.value( fieldref ).toInt() );
-     else
-          if ( m_Infos.contains( fieldref ) )
-               return m_Infos.value( fieldref );
-     return QVariant();
+    switch (fieldref) {
+    case DI_Type: return typeOfIAM(m_Infos.value(fieldref).toInt());
+    case DI_ATC1_Label: return drugsBase()->getAtcLabel(m_Infos.value(DI_ATC1).toInt());
+    case DI_ATC2_Label: return drugsBase()->getAtcLabel(m_Infos.value(DI_ATC2).toInt());
+    case DI_Risk:
+        {
+            QString l = QLocale().name().left(2);
+            QString r;
+            if (l=="en")
+                r = m_Infos.value(DI_RiskEn).toString();
+            else
+                r = m_Infos.value(DI_RiskFr).toString();
+            return r.replace("<br />", "<br>");
+        }
+    case DI_Management:
+        {
+            QString l = QLocale().name().left(2);
+            QString r;
+            if (l=="en")
+                r = m_Infos.value(DI_ManagementEn).toString();
+            else
+                r = m_Infos.value(DI_ManagementFr).toString();
+            return r.replace("<br />", "<br>");
+        }
+    default: return m_Infos.value(fieldref, QVariant());
+    }
+    return QVariant();
 }
 
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
@@ -140,8 +163,8 @@ QString DrugsInteraction::typeOfIAM( const int & t ) const
 /** \brief Returns the type of interactions. Type refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 Constants::Interaction::TypesOfIAM DrugsInteraction::type() const
 {
-     if ( m_Infos.uniqueKeys().contains( IAM_TYPE ) )
-          return Constants::Interaction::TypesOfIAM( m_Infos.value( IAM_TYPE ).toInt() );
+     if ( m_Infos.uniqueKeys().contains(DI_Type) )
+          return Constants::Interaction::TypesOfIAM( m_Infos.value(DI_Type).toInt() );
      else
           return Constants::Interaction::TypesOfIAM( 0 );
 }
@@ -154,7 +177,7 @@ QList<DrugsData *> DrugsInteraction::drugs() const
 /** \brief for debugging purpose */
 void DrugsInteraction::warn() const
 {
-     qWarning() << "mfDrugsInteraction Warning";
+     qWarning() << "DrugsInteraction Warning";
      foreach( const int i, m_Infos.keys() )
          qWarning() << i << m_Infos.value(i).toString();
      foreach(DrugsData * dr, m_InteractingDrugs)
@@ -163,18 +186,18 @@ void DrugsInteraction::warn() const
 
 QString DrugsInteraction::header() const
 {
-    return value( IAM_MAIN ).toString() + " - " + value( IAM_INTERACTOR ).toString() ;
+    return drugsBase()->getAtcLabel(value(DI_ATC1).toInt()) + " - " + drugsBase()->getAtcLabel(value(DI_ATC2).toInt());
 }
 
 /** \brief Returns the information's text of the interaction */
 QString DrugsInteraction::information() const
 {
-    return value( IAM_TEXT_IAM ).toString();
+    return value(DI_Risk).toString();
 }
 
 /** \brief Returns the recommandation's text of the interaction */
 QString DrugsInteraction::whatToDo() const
 {
-    return value( IAM_TEXT_CAT ).toString();
+    return value(DI_Management).toString();
 }
 

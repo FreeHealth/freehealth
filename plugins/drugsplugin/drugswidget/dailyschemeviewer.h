@@ -67,7 +67,10 @@ class DailySchemeViewerPrivate;
 class DailySchemeViewer : public QWidget
 {
     Q_OBJECT
-    /** \todo Add properties for the mapper ? */
+    /**
+      \todo Add properties for the mapper ?
+      \todo Add a undo/redo possibility (when changing the view mode)
+    */
 
 public:
     DailySchemeViewer(QWidget *parent = 0);

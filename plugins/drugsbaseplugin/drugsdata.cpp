@@ -315,8 +315,8 @@ QStringList DrugsData::listOfInnClasses() const
 {
     QStringList tmp;
     foreach(int i, this->allInnAndIamClasses())
-        if (i < 999)
-            tmp << drugsBase()->getInnDenomination(i);
+        if ((200000 < i) && (i < 299999))
+            tmp << drugsBase()->getAtcLabel(i);
     return tmp;
 }
 
@@ -367,7 +367,7 @@ int DrugsData::mainInnCode() const
 /** \brief Returns the main Inn for this drug. If there is more than one inn or no inn, it returns a null string.*/
 QString DrugsData::mainInnName() const
 {
-    return drugsBase()->getInnDenomination(mainInnCode());
+    return drugsBase()->getAtcLabel(mainInnCode());
 }
 
 /**
@@ -589,12 +589,16 @@ QString DrugsData::warnText() const
     if (!Utils::isDebugCompilation())
         return QString();
     QString tmp;
+    tmp += d->m_CISValues[Constants::DRUGS_NAME].toString() + "\n";
+
     foreach(const int i, d->m_CISValues.keys())
-        tmp += QString("CIS : %1 == %2\n")
+        tmp += QString("  %1 = %2\n")
                            .arg(DrugsBase::instance()->field(Table_DRUGS, i))
                            .arg(d->m_CISValues[i].toString());
+
     foreach(DrugComposition *compo, d->m_Compositions)
         tmp += compo->warnText();
+
     foreach(const int i, d->m_PrescriptionValues.keys())
         tmp += QString("Prescription : %1 == %2\n")
                            .arg(i)

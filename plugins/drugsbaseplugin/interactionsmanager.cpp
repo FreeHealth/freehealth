@@ -309,28 +309,28 @@ QIcon InteractionsManager::iamIcon(const Internal::DrugsData * drug, const int &
 }
 
 /** \brief Transforms a list of interactions to human readable Html (static). */
-QString InteractionsManager::listToHtml( const QList<Internal::DrugsInteraction*> & list, bool fullInfos ) // static
+QString InteractionsManager::listToHtml(const QList<Internal::DrugsInteraction*> &list, bool fullInfos) // static
 {
     using namespace DrugsDB::Constants;
     QString tmp, toReturn;
     QList<int> id_di;
-    foreach( Internal::DrugsInteraction *di, list ) {
-        if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
+    foreach(Internal::DrugsInteraction *di, list) {
+        if ( id_di.contains( di->value(Internal::DrugsInteraction::DI_Id).toInt() ) )
             continue;
-        id_di << di->value( IAM_ID ).toInt();
+        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
         tmp += QString( LIST_BASIC_INFO )
-               .arg( di->value( IAM_TYPE ).toString() )
-               .arg( di->value( IAM_MAIN ).toString() )
-               .arg( di->value( IAM_INTERACTOR ).toString() );
+               .arg( di->value(Internal::DrugsInteraction::DI_Type).toString() )
+               .arg( di->value(Internal::DrugsInteraction::DI_ATC1_Label).toString() )
+               .arg( di->value(Internal::DrugsInteraction::DI_ATC2_Label).toString() );
         if ( fullInfos ) {
             tmp += QString( LIST_FULL_INFO )
                    .arg( tr( "Nature of the risk: " ) )
-                   .arg( di->value( IAM_TEXT_IAM ).toString()
+                   .arg( di->value( Internal::DrugsInteraction::DI_Risk ).toString()
                          .replace( "<br>", " " )
                          .replace( "<", "&lt;" )
                          .replace( ">", "&gt;" ) )
                    .arg( tr( "What to do: " ) )
-                   .arg( di->value( IAM_TEXT_CAT ).toString()
+                   .arg( di->value( Internal::DrugsInteraction::DI_Management ).toString()
                          .replace( "<br>", "__" )
                          .replace( "<", "&lt;" )
                          .replace( ">", "&gt;" )
@@ -343,35 +343,35 @@ QString InteractionsManager::listToHtml( const QList<Internal::DrugsInteraction*
 }
 
 /** \brief Transform a list of interactions to a human readable synthesis Html */
-QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugsInteraction *> & list, bool fullInfos ) // static
+QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugsInteraction *> &list, bool fullInfos ) // static
 {
     using namespace DrugsDB::Constants;
-     QString tmp, toReturn;
-     QList<int> id_di;
-     foreach( Internal::DrugsInteraction * di, list ) {
-          if ( id_di.contains( di->value( IAM_ID ).toInt() ) )
-               continue;
-          id_di << di->value( IAM_ID ).toInt();
-          tmp += QString( LIST_BASIC_INFO )
-                 .arg( di->value( IAM_TYPE ).toString() )
-                 .arg( di->value( IAM_MAIN ).toString() )
-                 .arg( di->value( IAM_INTERACTOR ).toString() );
-          if ( fullInfos ) {
-               tmp += QString( LIST_FULL_INFO )
-                      .arg( tr( "Nature of the risk: " ) )
-                      .arg( di->value( IAM_TEXT_IAM ).toString()
-                            .replace( "<br>", " " )
-                            .replace( "<", "&lt;" )
-                            .replace( ">", "&gt;" ) )
-                      .arg( tr( "What to do: " ) )
-                      .arg( di->value( IAM_TEXT_CAT ).toString()
-                            .replace( "<br>", "__" )
-                            .replace( "<", "&lt;" )
-                            .replace( ">", "&gt;" )
-                            .replace( "__", "<br>" ) );
-          }
-     }
-     toReturn.append( QString( LIST_MASK )
-                      .arg(tr("Interaction(s) Found : ") , tmp));
-     return toReturn;
+    QString tmp, toReturn;
+    QList<int> id_di;
+    foreach( Internal::DrugsInteraction * di, list ) {
+        if ( id_di.contains( di->value( Internal::DrugsInteraction::DI_Id ).toInt() ) )
+            continue;
+        id_di << di->value( Internal::DrugsInteraction::DI_Id ).toInt();
+        tmp += QString( LIST_BASIC_INFO )
+               .arg( di->value( Internal::DrugsInteraction::DI_Type ).toString() )
+               .arg( di->value( Internal::DrugsInteraction::DI_ATC1_Label ).toString() )
+               .arg( di->value( Internal::DrugsInteraction::DI_ATC2_Label ).toString() );
+        if ( fullInfos ) {
+            tmp += QString( LIST_FULL_INFO )
+                   .arg( tr( "Nature of the risk: " ) )
+                   .arg( di->value( Internal::DrugsInteraction::DI_Risk ).toString()
+                         .replace( "<br>", " " )
+                         .replace( "<", "&lt;" )
+                         .replace( ">", "&gt;" ) )
+                   .arg( tr( "What to do: " ) )
+                   .arg( di->value( Internal::DrugsInteraction::DI_Management ).toString()
+                         .replace( "<br>", "__" )
+                         .replace( "<", "&lt;" )
+                         .replace( ">", "&gt;" )
+                         .replace( "__", "<br>" ) );
+        }
+    }
+    toReturn.append( QString( LIST_MASK )
+                     .arg(tr("Interaction(s) Found : ") , tmp));
+    return toReturn;
 }

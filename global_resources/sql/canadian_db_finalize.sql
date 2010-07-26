@@ -136,7 +136,7 @@ INSERT INTO `COMPOSITION`
 
 -- INSERT INTO MOLECULE_2_ATC (
 --     MOLECULE_CODE,
---     ATC
+--     MOLECULE_ATC
 --     )
 -- SELECT DISTINCT
 --     A1.MOLECULE_CODE,
@@ -191,7 +191,7 @@ VALUES (
     "DRUG_CODE",
     "UPC",
     1,
-    0,
+    1,
     "While the download is technically open, the data is copyright. Please report any problem to the author.",
     "en_CA",
     "NAME (FORM, GLOBAL_STRENGTH)"

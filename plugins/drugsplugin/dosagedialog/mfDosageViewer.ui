@@ -90,7 +90,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabBasics">
       <attribute name="title">
@@ -299,7 +299,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>During</string>
+               <string>For</string>
               </property>
              </widget>
             </item>

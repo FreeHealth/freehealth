@@ -201,11 +201,12 @@ void DrugSelector::createINNModelView()
     using namespace DrugsDB::Constants;
     // create model and tableview for Iam Class / INNs
     m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(DrugsDB::Constants::DB_IAM_NAME));
-    m_InnModel->setTable(drugsBase()->iamTable(Table_IAM_DENOMINATION));
+    m_InnModel->setTable(drugsBase()->iamTable(Table_ATC));
     m_InnModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    QHashWhere where;
-    where.insert(IAM_DENOMINATION_ID, ">999");
-    m_InnModel->setFilter(drugsBase()->getIamWhereClause(Table_IAM_DENOMINATION, where));
+    /** \todo HERE --> filter */
+//    QHashWhere where;
+//    where.insert(IAM_DENOMINATION_ID, ">999");
+//    m_InnModel->setFilter(drugsBase()->getIamWhereClause(Table_IAM_DENOMINATION, where));
     m_InnModel->select();
     InnView->setModel(m_InnModel);
     InnView->setColumnHidden(0 , true);
@@ -357,16 +358,16 @@ void DrugSelector::updateModelFilter()
     } else {
         // Search By INN
         // refresh inn view and model
-        QHashWhere where;
-        where.insert(DrugsDB::Constants::IAM_DENOMINATION , QString("LIKE '%1%' ").arg(search));
-        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
-        // retreive code_subst associated with searched text
-        QList<int> codes = drugsBase()->getLinkedSubstCode(search);
-        QString list = "";
-        foreach(int i, codes)
-            list += QString::number(i) + ", " ;
-        list.chop(2);
-        m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
+//        QHashWhere where;
+//        where.insert(DrugsDB::Constants::IAM_DENOMINATION , QString("LIKE '%1%' ").arg(search));
+//        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
+//        // retreive code_subst associated with searched text
+//        QList<int> codes = drugsBase()->getLinkedSubstCode(search);
+//        QString list = "";
+//        foreach(int i, codes)
+//            list += QString::number(i) + ", " ;
+//        list.chop(2);
+//        m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
         if (WarnSearchFilter)
             qWarning() << "Search filter" << tmp;
     }
