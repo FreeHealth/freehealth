@@ -286,7 +286,7 @@ Les paramètres suivants sont disponibles :
 \li \e --patientname="xx xx xx" : définit le nom du patient.
 \li \e --patientsurname="xx xx" : définti le prénom du patient.
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
-\li \e --dateofbirth="dd/MM/yyyy" : définit la data de naissance du patient (la date doit être transmise sous la forme : dd/MM/yyyy)
+\li \e --dateofbirth="yyyy/MM/dd" : définit la data de naissance du patient
 \li \e --weight="dd" : définit le poids du patient (en kg)
 \li \e --height="ddd" : définit la taille du patient (en cm)
 \li \e --crcl="dd.d" : définit la clairance de la créatinine du patient (en ml/min)
@@ -305,7 +305,7 @@ The following settings are available:
 \li \e --patientname="xx xx xx" defines the name of the patient.
 \li \e --patientsurname="xx xx" define the surname of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
-\li \e --dateofbirth="dd/MM/yyyy" defines the data of birth of patient (date must be transmitted in the form dd/mm/yyyy)
+\li \e --dateofbirth="yyyy/MM/dd" defines the data of birth of patient
 \li \e --weight="dd" defines the patient's weight (kg)
 \li \e --height="ddd": sets the size of the patient (cm)
 \li \e --crcl="dd.d" defines the clearance of creatinine of the patient (ml/min)

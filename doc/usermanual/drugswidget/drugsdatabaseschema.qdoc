@@ -46,6 +46,7 @@ Les différentes tables sont :
 - DRUGS : contient l'UID, le nom commercial du médicament et des informations concernant sa commercialisation ;
 - COMPOSITION : contient le descriptif des différentes molécules composant le médicament
 - PACKAGING : contient le mode de présentation du traitement (la boîte)
+- LK_MOL_ATC : contient les liens entre les codes des molécules et les codes ATC (ids)
 
 Jusqu'à présent, \freediams ne prend pas en compte la table PACKAGING.
 
@@ -60,6 +61,7 @@ The various tables are:
 - DRUGS: contains the UID, the name of the drug and information on marketing;
 - COMPOSITION: Contains a description of various molecules to the drug
 - PACKAGING: contains the format of treatment (packaging)
+- LK_MOL_ATC : contains links between code molecules and ATC codes (ids)
 
 So far, \freediams does not take into account the table PACKAGING.
 
@@ -134,6 +136,31 @@ Schema:
 - LK_NATURE :
     - Link from SA to FT
 
+
+\~french \subsection drugsdb_table_linkmolatc La table LK_MOL_ATC
+\~english \subsection drugsdb_table_linkmolatc The LK_MOL_ATC table
+
+\~french
+Cette table est indispensable pour le calcul des interactions médicamenteuses.\n
+Le moteur de recherche d'interaction utilise la composition moléculaire des médicaments. Chaque molécule
+doit être liée à un code ATC (par le biais de son identifiant dans la base \e iam). Les interactions sont
+calculés sur la base des codes ATC.
+
+Schéma :
+- MOLECULE_CODE = lien vers COMPOSITION.MOLECULE_CODE
+- ATC_ID = lien vers INTERACTION_DATABASE.ATC.ID (pas CODE)
+
+\~english
+This table is essential for the calculation of drug interactions. \n
+The interactions' search engine uses the molecular composition of drugs. Each molecule
+must be linked to a code ATC (via its identifier from the database \e iam). Interactions are
+calculated on the basis of ATC codes.
+
+Schema :
+- MOLECULE_CODE = link to COMPOSITION.MOLECULE_CODE
+- ATC_ID = link to INTERACTION_DATABASE.ATC.ID (not the CODE)
+
+
 \~french \subsection drugsdb_table_pack La table PACKAGING
 \~english \subsection drugsdb_table_pack The PACKAGING table
 
@@ -198,6 +225,7 @@ xx=All other languages
 - COMPAT_VERSION : FreeDiams application version dependency
 - PROVIDER : Provider of the datas (eg FDA)
 - WEBLINK : Web site of the provider
+- COMPLEMENTARY_WEBSITE : Web site of additionnal informations on the database
 - AUTHOR : Author of the database (eg Me)
 - LICENSE :
 - DATE : Date of release; format MUST BE formatted : yyyy-MM-dd
@@ -226,32 +254,49 @@ by their values. You can use these tokens :
 \~english \section interactionsdb Interactions database
 
 \~french
-Jusqu'à présent la base de données des interactions n'est disponible qu'en français. Une équipe de
-traducteur pourrait assurer les versions anglaises et allemandes.
+Les interactions sont calculées depuis les codes ATC des composants de chaque médicaments.\n
+Certaines molécules sont regroupées au sein de "classes d'interactions" qui figurent
+dans la classification ATC aux codes \e ZXX.\n
+Toute base de données thérapeutiques qui peut lier les composants de médicaments aux codes
+ATC connues donne accès au calcul des interactions médicamenteuses.
 
 \~english
-Till now, interactions' database is french only. May be a translator team can ensure english and deutsch
-versions.
+Interactions are calculated from ATC code of each components of drugs.\n
+Some components are grouped into "interactions classes" which are shown in the ATC classification
+under the codes \e ZXX.\n
+Each drugs databases that provides links from their components to ATC codes, give the
+possibilities to calculate the drugs interactions.
 
-\~french \subsection interactionsdb_table_IAM Table IAM
-\~english \subsection interactionsdb_table_IAM Table IAM
 
-- IAM_ID : id of the interaction
-- ID1 : id of the first interacting INN
-- ID2 : id of the second interacting INN
-- TYPE : nature of the risk (encoded)
+\~french \subsection interactionsdb_table_INTERACTIONS Table INTERACTIONS
+\~english \subsection interactionsdb_table_INTERACTIONS Table INTERACTIONS
+
+\~
+Is mainly a link table.
+
+- ID : unique identifier of the interaction
+- ATC_ID1 : link to ATC.ID of the first interacting molecule or class
+- ATC_ID2 : link to ATC.ID of the second interacting molecule or class
+- INTERACTION_KNOWLEDGE_ID : link to the INTERACTION_KNOWLEDGE
+
+
+\~french \subsection interactionsdb_table_INTERACTION_KNOWLEDGE Table INTERACTION_KNOWLEDGE
+\~english \subsection interactionsdb_table_INTERACTION_KNOWLEDGE Table INTERACTION_KNOWLEDGE
+
+\~
+This table contains the content of the interaction.
+
+- ID : unique identifier
+- TYPE : type of interaction (encoded integer)
     - 0001 = Precaution
     - 0010 = Take in account
     - 0100 = Inadvisable
-    - 1000 = contraindication
-- TEXT_IAM : Nature of the risk
-- TEXT_CAT : What to do in case of an interaction
-
-\~french \subsection interactionsdb_table_IAM Table IAM
-\~english \subsection interactionsdb_table_IAM Table IAM
-
-\~
-This part need to be clarified...
+    - 1000 = Contraindication
+- RISK_FR : risk content in french
+- MANAGEMENT_FR : management of the interaction in french
+- RISK_EN : risk content in english
+- MANAGEMENT_EN : management of the interaction in english
+- XML : XML encoded (future use)
 
 
 \~french \section db_infos Informations concernant la base de données
@@ -259,14 +304,15 @@ This part need to be clarified...
 
 \~french
 Les base de données sont présentes dans le répertoire <em>/Resources/databases/drugs</em>.\n
-Le nom doit être formaté de la sorte : <em>drugs-XX.db</em> où \e XX correspond au code ISO du pays :
-fr, us, de, sp...
+N'importe quel nom de fichier peut êetre utilisé. Il faut toutefois qu'il se termine obligatoirement
+par \e .db. La table INFORMATIONS sera examinée systématiquement. Si elle ne contient pas d'erreur la
+base de données sera considérée comme utilisable par \freediams.
 
 \~english
 Drugs databases are stored inside <em>/Resources/databases/drugs</em>.\n
-Name must formatted as above : <em>drugs-XX.db</em> where \e XX correspond to the two letters ISO encoded country :
-fr, us, de, sp...
-
+You can use whatever file name you want. File name must end with \e .db file extension. The INFORMATIONS
+table will be examinated. If it does not contains errors, the drugs database will be concidered as
+usable by \freediams.
 
 \~french \section drugs_sql Schéma SQL : Base de données thérapeutique
 \~english \section drugs_sql SQL Schema : Drugs database

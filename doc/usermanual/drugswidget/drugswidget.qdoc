@@ -751,6 +751,7 @@ Les étiquettes utilisables sont les suivantes :
 - <em>[[D_SCHEME]]</em> pour la durée prescrite : texte
 - <em>[[NOTE]]</em> pour la note
 - <em>[[MEAL]]</em> pour la relation avec le repas.
+- <em>[[MIN_INTERVAL]]</em> pour l'intervalle libre minimum à respecter entre deux prises.
 
 Vous pouvez appliquer des formats de polices différents aux étiquettes, les inclure dans des tableaux...
 Tout sera respecté selon le moteur d'étiquettes (n'oubliez pas que les textes conditionnels
@@ -799,7 +800,8 @@ The labels used are the following:
 - <em> [[D_TO]] </em> for the prescribed period "to"
 - <em> [[D_SCHEME]] </em> for the time specified: text
 - <em> [[NOTE]] </em> to note
-- <em> [[Meal]] </em> for the relationship with the meal.
+- <em> [[MEAL]] </em> for the relationship with the meal.
+- <em> [[MIN_INTERVAL]] </em> for the minimal interval to respect between two intakes.
 
 You can apply font formats for different labels, including in tables ...
 Everything will be respected by the label's engine (remember the conditionnal texts
