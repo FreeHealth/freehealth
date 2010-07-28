@@ -185,12 +185,12 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     availableDosagesListView->setModel(dosageModel);
     availableDosagesListView->setModelColumn(Dosages::Constants::Label);
     availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
-    if (d->m_InitialNumberOfRow==0) {
-        dosageModel->insertRow(0);
-        dosageViewer->changeCurrentRow(0);
-    } else {
-        dosageViewer->changeCurrentRow(0);
-    }
+//    if (d->m_InitialNumberOfRow==0) {
+//        dosageModel->insertRow(0);
+//        dosageViewer->changeCurrentRow(0);
+//    } else {
+//        dosageViewer->changeCurrentRow(0);
+//    }
 
     // Create connections
 //    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),

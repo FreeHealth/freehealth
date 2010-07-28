@@ -88,8 +88,10 @@
 #include <QColor>
 #include <QLocale>
 
+enum Warn { WarnDebuggingDatas = true };
+
 /**
-  \todo remove QCache of DasogeModels
+  \todo remove QCache of DosageModels
 */
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -300,6 +302,8 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
 bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(m_UID != -1, "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
+    if (WarnDebuggingDatas)
+        qWarning() << "DosageModel::insertRows (row:" << row << ";count" << count << ")" << parent;
     QString userUuid = user()->value(Core::IUser::Uuid).toString();
     int i;
     int createdRow;
@@ -355,6 +359,8 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(m_UID != -1, "DosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
+    if (WarnDebuggingDatas)
+        qWarning() << "DosageModel::removeRows (row:" << row << ";count" << count << ")" << parent;
 
     if (row < 0)
         return false;
@@ -429,7 +435,10 @@ bool DosageModel::setDrugUID(const int uid)
                     .arg(m_DrugsModel->drugData(uid, Constants::Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }        
-//    qWarning() << "filter" << filter;
+
+    if (WarnDebuggingDatas)
+        qWarning() << "DosageModel filter" << filter;
+
     setFilter(filter);
     select();
     return true;
