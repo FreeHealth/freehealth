@@ -388,6 +388,7 @@ public:
         m_ui->setupUi(q);
         m_ui->categoryLayout->insertWidget(1, m_ToolBar);
         m_Model = new TemplatesModel(this);
+        m_Model->setObjectName("TemplateViewModel");
         m_ui->categoryTreeView->setModel(m_Model);
         if (settings()->value(Templates::Constants::S_ALWAYSSHOWEXPANDED, true).toBool())
             m_ui->categoryTreeView->expandAll();

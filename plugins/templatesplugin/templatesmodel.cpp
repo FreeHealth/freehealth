@@ -330,9 +330,10 @@ public:
         /** \todo improve this */
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
-                pr->q->beginInsertRows(parent, first, last);
-                }
+                QModelIndex idx = pr->q->index(parent.row(), parent.column(), parent.parent());
+                pr->q->beginInsertRows(idx, first, last);
             }
+        }
     }
 
     void allInstancesEndInsertRows()
@@ -341,8 +342,8 @@ public:
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 pr->q->endInsertRows();
-                }
             }
+        }
     }
 
     void allInstancesBeginRemoveRows(const QModelIndex &parent, int first, int last)
@@ -351,8 +352,8 @@ public:
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 pr->q->beginRemoveRows(parent,first,last);
-                }
             }
+        }
     }
 
     void allInstancesEndRemoveRows()

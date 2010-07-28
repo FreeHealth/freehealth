@@ -56,6 +56,7 @@ TemplatesCreationDialog::TemplatesCreationDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + ui->label->text());
+    ui->parentCategory->templatesModel()->setObjectName("TemplateCategoryParent");
     ui->parentCategory->templatesModel()->setReadOnly(true);
     ui->parentCategory->setViewContent(TemplatesView::CategoriesOnly);
     ui->parentCategory->setEditMode(TemplatesView::None);
@@ -78,6 +79,7 @@ void TemplatesCreationDialog::done(int r)
         }
         // model --> insert row in parent index
         TemplatesModel *model = new TemplatesModel(this);
+        model->setObjectName("TemplateCreatorSaver");
         QModelIndex parent = ui->parentCategory->currentItem();
         int row = model->rowCount(parent);
         if (!model->insertRow(row, parent)) {
