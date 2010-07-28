@@ -245,6 +245,7 @@ DROP TABLE package;
 
 --DROP TABLE form-abbr;
 
+VACUUM;
 
 -- Kept for reference
 
