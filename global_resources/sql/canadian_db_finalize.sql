@@ -55,6 +55,7 @@
 --  * NOTE: INSERT INTO "INFORMATIONS" (needs manual updating as to
 --  *  i)  the version of the drug db that it is to be known as
 --  *  ii) the compatible version of FreeDiams
+--  *  iii) manual insertion into LK_MOL_ATC until scriptable
 --  */
 
 
@@ -120,38 +121,11 @@ INSERT INTO `COMPOSITION`
     (A1.DRUG_CODE = A2.DRUG_CODE) AND
     (A1.DOSAGE_VALUE = "");
 
-
--- Canada (2010-03) provides 1416 distinct 7-character ATCs for its drugs
--- 1164 of these are for single-active-ingredient drugs
--- another 318 are for multi-molecule drugs
---   e.g. UID 728 (molecules 6301 clidinium, 10260 chlordiazepoxide)
---   this has ATC A03CA02 meaning "clidinium and psycholeptics"
---   with a few exceptions, these ATCs may not be as badly needed.
--- also supplied are another 82 ATCs which are < 7-character
---
--- The following SQL will populate a link table with ~ 1394 records
--- having a 7-character ATC; these represent 1183 distinct molecules
--- out of the set of 3096 distinct molecules overall probably the main ones
--- (there exists an unexplained difference: 1183 distinct vs 1164 in source):
-
--- INSERT INTO MOLECULE_2_ATC (
+-- TO DO -- need suitable insert from CSV or other source
+-- INSERT INTO "LK_MOL_ATC" (
 --     MOLECULE_CODE,
---     MOLECULE_ATC
+--     ATC_ID
 --     )
--- SELECT DISTINCT
---     A1.MOLECULE_CODE,
---     A2.ATC
--- FROM COMPOSITION A1, DRUGS A2, drug A3
--- WHERE A1.UID = A2.UID AND
---     (A1.UID = A3.DRUG_CODE AND A3.NUMBER_OF_AIS = 1 AND
---     LENGTH(A2.ATC)=7);
-    
--- to display ATC orphans e.g. CA molecule code 3123 UID 14681, 48348
---         or UID 15224 TICARCILLIN, molecule 19818	
--- SELECT  A1.UID, A1.MOLECULE_CODE, A1.MOLECULE_NAME
--- FROM COMPOSITION A1 LEFT JOIN MOLECULE_2_ATC A2 ON A1.MOLECULE_CODE = A2.MOLECULE_CODE
--- WHERE A2.ATC ISNULL
--- ORDER BY A1.MOLECULE_NAME
 
 
 -- feed table INFORMATIONS (info about the drug data source)
@@ -175,7 +149,7 @@ INSERT INTO "INFORMATIONS" (
     "LANGUAGE_COUNTRY",
     "DRUGS_NAME_CONSTRUCTOR")
 VALUES (
-    "0.4.4",
+    "0.4.5",
     "xx=Canadian Drug Product Database
     fr=Base de données thérapeutique Canadienne
     ",

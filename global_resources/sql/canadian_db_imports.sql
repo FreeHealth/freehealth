@@ -42,7 +42,7 @@
 --  * \file canadian_db_imports.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
 --  * \version 0.4.4
---  * \date 22 July 2010
+--  * \date 27 July 2010
 --  */
 
 -- /**
@@ -54,14 +54,13 @@
 --  *
 --  */
 
--- the following depend on files fetched (and created) by download-and-create-ca.sh
--- reminder to self: SQLite has weak support of cross-table column value updating,
--- also certain unzip seems to output files into a subdirectory allfiles/
--- in this case enable the following instead:
+-- NB must first run download-and-reformat-ca.sh to obtain the .csv files below
 
 .mode csv
 .separator "|"
 
+-- variants of unzip may output the files into a subdirectory allfiles/
+-- for such variants, uncomment-enable instead the following :
 -- .import allfiles/drug.csv drug
 -- .import allfiles/form.csv form
 -- .import allfiles/route.csv route

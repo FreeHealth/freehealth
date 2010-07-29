@@ -1,0 +1,55 @@
+README about drugs_databases
+
+Anyone can build a drug database for use with FreeDiams. For maximum
+efficiency, and in the hope you would contribute your data source(s)
+and code to the FreeDiams (FreeMedForms) project, the following is
+proposed:
+
+1.  Check any licensing restrictions around the use, and any sharing,
+    of your data source(s).
+
+2.  Develop and split your scripts under the following approach:
+
+2.1 - a script to download and reformat a copy of the source data:
+      e.g. download-and-reformat-ca.sh
+      Suggested to be written as bash shell script or as C++.
+      Suggested will create a folder ~/tmp/drugsxx
+        (xx = ISO country code or equivalent).
+      Suggested will copy to ~/tmp/drugsxx any required scripts from
+        TRUNK/global_resources/sql (see paragraph 2.2)
+      Suggested will use wget or (Macs lacking wget) curl
+      Suggested will reformat the data as follows:
+      - remove Windows' carriage returns (if applicable)
+      - replace csv (double-quoting and) comma-separators with
+        pipe-separators more-reliably handled by SQLite
+      - any other reformatting, substitution or stripping to convert
+        to SQLite importable form.
+      Suggested will then
+      - call sqlite with dbname and the _creator sql script (see 2.2)
+        dbname must adhere to FreeDiams' requirements:
+          drugs-foo[2charCOUNTRY_2charLANGUAGE].db
+      - following completion of the sql scripts
+          - move the db up a level into ~/tmp
+          - unless user indicates otherwise (for debugging):
+              drop the staging tables
+              vacuum
+
+2.2 - four, SQLite-compatible .sql scripts:
+
+      country_db_creation script to call the following:
+      
+      country_db_preparation script
+        - to define / create staging tables for the source drugs data
+      
+      country_db_imports script
+        - to import the data created and handled per paragraph 2.1
+      
+      global_resource FreeDiams drugs_schema.sql (schema creation) script
+        - to create within the db the tables needed by FreeDiams
+        - this is already provided (hence only 4 scripts, not 5, to make)
+        
+      country_db_finalize script
+        - to perform the insertions needed to populate drugs-foo.db
+
+See for example TRUNK/scripts/drugs_databases/download-and-reformat-ca.sh
+See for example TRUNK/global_resources/sql/canadian*.*
