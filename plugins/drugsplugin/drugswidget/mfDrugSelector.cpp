@@ -123,6 +123,8 @@ void DrugSelector::initialize()
 
     retranslateUi("");
 
+    searchLine->setDelayedSignals(true);
+
     connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
 }
 
@@ -362,7 +364,7 @@ void DrugSelector::updateModelFilter()
 //        where.insert(DrugsDB::Constants::IAM_DENOMINATION , QString("LIKE '%1%' ").arg(search));
 //        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
 //        // retreive code_subst associated with searched text
-//        QList<int> codes = drugsBase()->getLinkedSubstCode(search);
+//        QList<int> codes = drugsBase()->getLinkedMoleculeCodes(search);
 //        QString list = "";
 //        foreach(int i, codes)
 //            list += QString::number(i) + ", " ;
@@ -384,7 +386,7 @@ void DrugSelector::on_InnView_clicked(const QModelIndex &index)
     QString inn = index.data().toString();
     // retreive code_subst associated with searched text
     QString tmp = m_filterModel;
-    QList<int> codes = drugsBase()->getLinkedSubstCode(inn);
+    QList<int> codes = drugsBase()->getLinkedMoleculeCodes(inn);
     QString list = "";
     foreach(int i, codes)
         list += QString::number(i) + ", " ;

@@ -56,6 +56,7 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QAction>
+#include <QTimer>
 
 namespace Utils {
 
@@ -69,8 +70,10 @@ public:
     /** \brief destructor*/
     ~QButtonLineEdit();
 
-    void setLeftButton( QToolButton * button );
-    void setRightButton( QToolButton * button );
+    void setDelayedSignals(bool state);
+
+    void setLeftButton(QToolButton *button);
+    void setRightButton(QToolButton *button);
 
     void setRoundedCorners();
 
@@ -85,13 +88,17 @@ private:
     void prepareConnections();
 
 private Q_SLOTS:
+    void emitTextChangedSignal();
+
     void leftTrig( QAction * action );
 
 private:
-    QToolButton * m_leftButton;
-    QToolButton * m_rightButton;
-    QString       m_CSS;
-    QString       m_emptyString;
+    QToolButton *m_leftButton;
+    QToolButton *m_rightButton;
+    QString m_CSS;
+    QString m_emptyString;
+    QTimer *m_Timer;
+    bool m_Delayed;
 };
 
 }

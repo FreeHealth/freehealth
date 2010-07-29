@@ -64,17 +64,32 @@ static inline QString cleanString(const QString &s)
 }
 
 
-QButtonLineEdit::QButtonLineEdit( QWidget * parent ) 
-                : QLineEdit( parent ), m_leftButton( 0 ), m_rightButton( 0 )
+QButtonLineEdit::QButtonLineEdit(QWidget *parent)
+                : QLineEdit(parent), m_leftButton(0), m_rightButton(0), m_Delayed(false)
 {
     static int handle = 0;
     handle++;
     if ( objectName().isNull() )
-        setObjectName( "QButtonLineEdit_" + QString::number( handle ) );
+        setObjectName( "QButtonLineEdit_" + QString::number(handle));
+    m_Timer = new QTimer(this);
+    m_Timer->setSingleShot(true);
 }
 
 QButtonLineEdit::~QButtonLineEdit()
 {
+}
+
+void QButtonLineEdit::setDelayedSignals(bool state)
+{
+    m_Delayed = state;
+    m_Timer->stop();
+    if (state) {
+        blockSignals(true);
+        connect(m_Timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+    } else {
+        blockSignals(false);
+        disconnect(m_Timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+    }
 }
 
 /**
@@ -149,6 +164,18 @@ void QButtonLineEdit::prepareConnections()
     connect( m_leftButton, SIGNAL( triggered( QAction* ) ), this, SLOT( leftTrig( QAction* ) ) );
 }
 
+void QButtonLineEdit::emitTextChangedSignal()
+{
+    blockSignals(false);
+    Q_EMIT textChanged(searchText());
+//    Q_EMIT cursorPositionChanged(int, int);
+//    Q_EMIT editingFinished();
+    Q_EMIT returnPressed();
+//    Q_EMIT selectionChanged();
+//    Q_EMIT textEdited(QString);
+    blockSignals(true);
+}
+
 void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction( action );
@@ -167,6 +194,8 @@ void QButtonLineEdit::leftTrig(QAction *action)
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 {
+    if (m_Delayed)
+        m_Timer->stop();
     if (event->modifiers() & Qt::AltModifier) {
         const QList<QAction *> &list = m_leftButton->actions();
 
@@ -192,6 +221,25 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
                 QHelpEvent *e = new QHelpEvent(QEvent::ToolTip, pos(), mapToGlobal(pos()));
                 QLineEdit::event(e);
                 return;
+            }
+        }
+    } else if (m_Delayed) {
+        if (event->key()==Qt::Key_Enter) {
+            blockSignals(false);
+            Q_EMIT returnPressed();
+            blockSignals(true);
+        } else {
+            const QString &t = searchText();
+            if (t.isEmpty()) {
+                blockSignals(false);
+                Q_EMIT returnPressed();
+                Q_EMIT textChanged("");
+                blockSignals(true);
+            } else {
+                int delay = 300 - t.length()*t.length()*10;
+                if (delay < 0)
+                    delay = 0;
+                m_Timer->start(delay);
             }
         }
     }
