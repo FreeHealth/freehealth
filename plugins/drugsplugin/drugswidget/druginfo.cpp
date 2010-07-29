@@ -248,7 +248,7 @@ void DrugInfoPrivate::on_butSendINN_clicked()
     Utils::MessageSender::typeOfMessage t;
 
     if ( rbINNOk->isChecked() ) {
-        foreach( QVariant code,  drugModel()->drugData( m_CIS, DrugsDB::Constants::Drug::CodeMoleculesList).toList()) //m_Drug->listOfCodeMolecules().toList() )
+        foreach(QVariant code,  drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::CodeMoleculesList).toList()) //m_Drug->listOfCodeMolecules().toList() )
             msg +=  code.toString() + "\n";
         t = Utils::MessageSender::CorrectDrugsCoding;
     } else {

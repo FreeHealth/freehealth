@@ -116,7 +116,7 @@ class DrugsBasePrivate
 {
 public:
     DrugsBasePrivate(DrugsBase * base) :
-            m_DrugsBase(base),
+            q(base),
             m_ActualDBInfos(0),
             m_LogChrono(false),
             m_RefreshDrugsBase(false),
@@ -127,9 +127,8 @@ public:
     {
     }
 
-
 public:
-    DrugsBase *m_DrugsBase;
+    DrugsBase *q;
     DatabaseInfos *m_ActualDBInfos;
     bool m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase;
 };
@@ -740,7 +739,7 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
     QMultiHash<int, minimalCompo> cis_compo;
     foreach(int inn, inn_dosageRef.keys()) {
 //            foreach(int code, d->m_Lk_iamCode_substCode.values(inn)) {
-            foreach(int code, getLinkedCodeSubst(inn)) {
+            foreach(int code, getLinkedMoleculeCodes(inn)) {
             if (!code_subst.contains(code))
                 code_subst << code;
         }
@@ -765,7 +764,7 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
             int cis = query.value(0).toInt();
             minimalCompo compo;
 //            compo.inn = d->m_Lk_iamCode_substCode.key(query.value(1).toInt());
-            compo.inn = getLinkedIamCode(query.value(1).toInt()).at(0);
+            compo.inn = getLinkedAtcIds(query.value(1).toInt()).at(0);
             compo.dosage = query.value(2).toString();
             cis_compo.insertMulti(cis, compo);
         }
@@ -843,9 +842,9 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
 /** \brief Return true if all the INNs of the drug are known. */
 bool DrugsBase::drugsINNIsKnown(const DrugsData *drug)
 {
-    const QList<QVariant> & list = drug->listOfCodeMolecules().toList(); //->value(Table_COMPO, COMPO_MOL_CODE).toList();
+    const QList<int> &list = drug->listOfCodeMolecules(); //->value(Table_COMPO, COMPO_MOL_CODE).toList();
     foreach(QVariant q, list)
-        if (getLinkedIamCode(q.toInt()).count() == 0)
+        if (getLinkedAtcIds(q.toInt()).count() == 0)
 //            if (d->m_Lk_iamCode_substCode.key(q.toInt()).count() == 0)
             return false;
     return true;
@@ -1005,6 +1004,37 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");
 
+    return toReturn;
+}
+
+QStringList DrugsBase::getDrugCompositionAtcCodes(const int uid)
+{
+    /** \todo create a cache */
+    QStringList toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    if (!DB.open()) {
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                             .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
+        return toReturn;
+    }
+    // get all molecule_code for the drug
+    QHash<int, QString> where;
+    where.insert(Constants::COMPO_UID, QString("='%1'").arg(uid));
+    QString req = select(Constants::Table_COMPO, Constants::COMPO_MOL_CODE, where);
+    QList<int> molecule_codes;
+    {
+        QSqlQuery query(req, DB);
+        if (query.isActive()) {
+            while (query.next()) {
+                molecule_codes.append(query.value(0).toInt());
+            }
+        }
+    }
+    foreach(int id, getLinkedAtcIds(molecule_codes)) {
+        const QString &n = getAtcCode(id);
+        if (!toReturn.contains(n))
+            toReturn.append(n);
+    }
     return toReturn;
 }
 

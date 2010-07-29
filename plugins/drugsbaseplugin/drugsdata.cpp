@@ -302,9 +302,9 @@ QString DrugsData::denomination() const
 }
 
 /** \brief Returns the list of all the molecules' code of the drug composition */
-QVariant DrugsData::listOfCodeMolecules() const
+QList<int> DrugsData::listOfCodeMolecules() const
 {
-    QVariantList tmp;
+    QList<int> tmp;
     foreach(DrugComposition *compo, d->m_Compositions)
         tmp << compo->m_CodeMolecule;
     return tmp;

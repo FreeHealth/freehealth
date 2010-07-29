@@ -113,11 +113,17 @@ public:
         CreatinClearanceUnit,
 
         // Drugs and diseases
+        // Allergies
         DrugsAllergiesWithoutPrecision,
         DrugsUidAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsInnAtcAllergies,     //  see tkSerializer --> string<->stringlist
+        // Intolerances
+        DrugsUidIntolerances,     //  see tkSerializer --> string<->stringlist
+        DrugsAtcIntolerances,     //  see tkSerializer --> string<->stringlist
+        DrugsInnIntolerances,     //  see tkSerializer --> string<->stringlist
+        DrugsInnAtcIntolerances,     //  see tkSerializer --> string<->stringlist
+
         DrugsChronicTherapeutics,
         ICD10Diseases,      //  see tkSerializer --> string<->stringlist
 

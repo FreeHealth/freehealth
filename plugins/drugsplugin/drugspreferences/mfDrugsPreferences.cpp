@@ -174,6 +174,7 @@ void DrugsSelectorOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     defaultvalues.insert(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
+    defaultvalues.insert(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, "yellow");
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -487,6 +488,7 @@ void DrugsSelectorWidget::setDatasToUi()
     useBackgroundForDosages->setChecked(settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool());
     backgroundDosagesAvailableButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString()));
     backgroundAllergiesButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString()));
+    backgroundIntoleranceButton->setColor(QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString()));
 }
 
 void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
@@ -506,6 +508,7 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES, useBackgroundForDosages->isChecked());
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, backgroundDosagesAvailableButton->color());
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, backgroundAllergiesButton->color());
+    s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, backgroundIntoleranceButton->color());
 
     s->sync();
     if (DrugsWidget::DrugsWidgetManager::instance()->currentView())
@@ -526,6 +529,7 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
+    s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, "yellow");
 
     s->sync();
 

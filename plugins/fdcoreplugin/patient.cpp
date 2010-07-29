@@ -88,7 +88,9 @@ public:
         m_XmlTags.insert(IPatient::DrugsAtcAllergies ,   "DrugsAtcAllergies" );
         m_XmlTags.insert(IPatient::DrugsUidAllergies ,   "DrugsUidAllergies" );
         m_XmlTags.insert(IPatient::DrugsInnAllergies ,   "DrugsInnAllergies" );
-        m_XmlTags.insert(IPatient::DrugsInnAtcAllergies ,   "DrugsInnAtcAllergies" );
+        m_XmlTags.insert(IPatient::DrugsAtcIntolerances ,   "DrugsAtcIntolerances" );
+        m_XmlTags.insert(IPatient::DrugsUidIntolerances ,   "DrugsUidIntolerances" );
+        m_XmlTags.insert(IPatient::DrugsInnIntolerances ,   "DrugsInnIntolerances" );
 //        m_XmlTags.insert(IPatient::ATCAllergies ,   "ATCAllergies" );
 //        m_XmlTags.insert(IPatient::INNAllergies ,   "INNAllergies" );
     }

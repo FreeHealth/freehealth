@@ -82,21 +82,22 @@ public:
     QString getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const;
 
     // link to DrugsBase
-    int getInnCodeForCodeMolecule(const int code) const;
+    int getInnCodeForCodeMolecule(const int molecule_code) const;
     QString getAtcLabel(const int inncode) const;
-    QString getInnDenominationFromSubstanceCode(const int code_subst) const;
+    QString getAtcCode(const int atc_id) const;
+    QString getInnDenominationFromSubstanceCode(const int molecule_code) const;
 
-    QStringList getIamClassDenomination(const int & code_subst);
-    QSet<int> getAllInnAndIamClassesIndex(const int code_subst);
+    QStringList getIamClassDenomination(const int &molecule_code);
+    QSet<int> getAllInnAndIamClassesIndex(const int molecule_code);
 
     // Interactions base
     QList<DrugsInteraction*> calculateInteractions(const QList<DrugsData *> &drugs);
 
-    QList<int> getLinkedCodeSubst(QList<int> & code_iam) const;
-    QList<int> getLinkedCodeSubst(const int code_iam) const;
-    QList<int> getLinkedSubstCode(const QString &iamDenomination) const;
-    QList<int> getLinkedIamCode(QList<int> & code_subst) const;
-    QList<int> getLinkedIamCode(const int code_subst) const;
+    QList<int> getLinkedMoleculeCodes(QList<int> &atc_ids) const;
+    QList<int> getLinkedMoleculeCodes(const int atc_id) const;
+    QList<int> getLinkedMoleculeCodes(const QString &iamDenomination) const;
+    QList<int> getLinkedAtcIds(const QList<int> &molecule_codes) const;
+    QList<int> getLinkedAtcIds(const int molecule_code) const;
 
 private:
     InteractionsBasePrivate *di;

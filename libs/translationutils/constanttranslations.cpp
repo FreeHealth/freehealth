@@ -225,7 +225,15 @@ QStringList mealTime()
            << tkTr(Constants::DURINGMEAL)
            << tkTr(Constants::BEFOREMEAL)
            << tkTr(Constants::AFTERMEAL)
-           << tkTr(Constants::NOTDURINGMEAL);
+           << tkTr(Constants::NOTDURINGMEAL)
+           << tkTr(Constants::ONLYIFMEAL)
+           << tkTr(Constants::SEPARATEDFROMFOOD)
+           << tkTr(Constants::SUGGESTEDWITHFOOD)
+           << tkTr(Constants::WITHORWITHOUTFOOD)
+//           << tkTr(Constants::)
+//           << tkTr(Constants::)
+//           << tkTr(Constants::)
+           ;
 }
 
 /**
@@ -236,12 +244,16 @@ QStringList mealTime()
 QString mealTime(const int index)
 {
     switch (index) {
-         case Constants::Time::Undefined : return QString();
-         case Constants::Time::NoRelationWithMeal : return tkTr(Constants::NOMEALRELATION);
-         case Constants::Time::DuringMeal: return tkTr(Constants::DURINGMEAL);
-         case Constants::Time::BeforeMeal: return tkTr(Constants::BEFOREMEAL);
-         case Constants::Time::AfterMeal: return tkTr(Constants::AFTERMEAL);
-         case Constants::Time::OutsideMeal: return tkTr(Constants::NOTDURINGMEAL);
+    case Constants::Time::Undefined : return QString();
+    case Constants::Time::NoRelationWithMeal : return tkTr(Constants::NOMEALRELATION);
+    case Constants::Time::DuringMeal: return tkTr(Constants::DURINGMEAL);
+    case Constants::Time::BeforeMeal: return tkTr(Constants::BEFOREMEAL);
+    case Constants::Time::AfterMeal: return tkTr(Constants::AFTERMEAL);
+    case Constants::Time::OutsideMeal: return tkTr(Constants::NOTDURINGMEAL);
+    case Constants::Time::OnlyIfMeal: return tkTr(Constants::NOTDURINGMEAL);
+    case Constants::Time::SeparatedFromFood: return tkTr(Constants::SEPARATEDFROMFOOD);
+    case Constants::Time::SuggestedWithFood: return tkTr(Constants::SUGGESTEDWITHFOOD);
+    case Constants::Time::WithOrWithoutFood: return tkTr(Constants::WITHORWITHOUTFOOD);
     }
     return QString();
 }

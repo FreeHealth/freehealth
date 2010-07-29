@@ -394,18 +394,44 @@ void MainWindow::refreshPatient()
     m_ui->patientCreatinin->setValue(patient()->value(Core::IPatient::Creatinine).toDouble());
     m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
 
-    QString a;
-    const QStringList &drug = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
-    if (!drug.isEmpty())
-        a += tr("Drugs(%1) // ").arg(drug.join(";"));
-    const QStringList &inns = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
-    if (!inns.isEmpty())
-        a += tr("INN(%1) // ").arg(inns.join(";"));
-    const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
-    if (!atc.isEmpty())
-        a += tr("ATC(%1) // ").arg(atc.join(";"));
-    a.chop(4);
-    m_ui->listOfAllergies->setText(a);
+    QString allergies;
+    {
+        const QStringList &drug = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
+        if (!drug.isEmpty())
+            allergies += tr("Drugs(%1), ").arg(drug.join(";"));
+        const QStringList &inns = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
+        if (!inns.isEmpty())
+            allergies += tr("INN(%1), ").arg(inns.join(";"));
+        const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
+        if (!atc.isEmpty())
+            allergies += tr("ATC(%1), ").arg(atc.join(";"));
+        allergies.chop(2);
+        if (!allergies.isEmpty()) {
+            allergies.prepend(tr("Allergies to: "));
+        }
+    }
+
+    QString intolerances;
+    {
+        const QStringList &drug = patient()->value(Core::IPatient::DrugsUidIntolerances).toStringList();
+        if (!drug.isEmpty())
+            intolerances += tr("Drugs(%1), ").arg(drug.join(";"));
+        const QStringList &inns = patient()->value(Core::IPatient::DrugsInnIntolerances).toStringList();
+        if (!inns.isEmpty())
+            intolerances += tr("INN(%1), ").arg(inns.join(";"));
+        const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcIntolerances).toStringList();
+        if (!atc.isEmpty())
+            intolerances += tr("ATC(%1), ").arg(atc.join(";"));
+        intolerances.chop(4);
+        if (!intolerances.isEmpty()) {
+            intolerances.prepend(tr("Intolerances to: "));
+            if (!allergies.isEmpty())
+                intolerances.prepend(" // ");
+        }
+    }
+
+    m_ui->listOfAllergies->setText(allergies + intolerances);
+    m_ui->listOfAllergies->setToolTip(m_ui->listOfAllergies->text().replace(" // ", "\n"));
 
     state = false;
     m_ui->centralwidget->blockSignals(state);

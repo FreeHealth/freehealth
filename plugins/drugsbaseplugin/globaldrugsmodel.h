@@ -68,8 +68,9 @@ public:
     ~GlobalDrugsModel();
 
     static void updateAvailableDosages();
-//    static bool hasAllergy(const QString &drugUid);
+
     static bool hasAllergy(const DrugsDB::Internal::DrugsData *drug);
+    static bool hasIntolerance(const DrugsDB::Internal::DrugsData *drug);
 
     bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;

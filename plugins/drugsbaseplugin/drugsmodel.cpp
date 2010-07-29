@@ -197,7 +197,13 @@ public:
         case Drug::MaximumLevelOfInteraction : return int(m_InteractionsManager->getMaximumTypeOfIAM(drug));
         case Drug::CompositionString :  return drug->toHtml();
         case Drug::InnCompositionString :  return drug->innComposition();
-        case Drug::CodeMoleculesList :  return drug->listOfCodeMolecules();
+        case Drug::CodeMoleculesList :
+            {
+                QVariantList list;
+                foreach(int code, drug->listOfCodeMolecules())
+                    list << code;
+                return list;
+            }
         case Drug::HasPrescription :    return drug->hasPrescription();
         case Drug::LinkToSCP :          return drug->linkToSCP();
         case Drug::AvailableForms :

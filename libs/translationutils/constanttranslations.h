@@ -105,7 +105,11 @@ namespace Time {
         DuringMeal,
         BeforeMeal,
         AfterMeal,
-        OutsideMeal
+        OutsideMeal,
+        OnlyIfMeal,
+        SeparatedFromFood,
+        SuggestedWithFood,
+        WithOrWithoutFood
     };
 
 
@@ -328,6 +332,10 @@ enum TitleInterpret {
         const char* const AFTERMEAL           = QT_TRANSLATE_NOOP("tkConstants", "after meal");
         const char* const BEFOREMEAL          = QT_TRANSLATE_NOOP("tkConstants", "before meal");
         const char* const NOTDURINGMEAL       = QT_TRANSLATE_NOOP("tkConstants", "not during meal");
+        const char* const ONLYIFMEAL          = QT_TRANSLATE_NOOP("tkConstants", "only if meal");
+        const char* const SEPARATEDFROMFOOD   = QT_TRANSLATE_NOOP("tkConstants", "separated from food (1-2 hours)");
+        const char* const SUGGESTEDWITHFOOD   = QT_TRANSLATE_NOOP("tkConstants", "suggested with food");
+        const char* const WITHORWITHOUTFOOD   = QT_TRANSLATE_NOOP("tkConstants", "with or without food");
 
         // Splashscreen messages
         const char* const USING_LIBRARY_1                   = QT_TRANSLATE_NOOP("tkConstants", "Using library : %1");

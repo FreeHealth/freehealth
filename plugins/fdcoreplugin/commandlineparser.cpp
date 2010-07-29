@@ -36,6 +36,9 @@ namespace Constants {
     const char *const XML_INN_ALLERGIES           = "InnAllergies";
     const char *const XML_DRUGS_ALLERGIES         = "DrugsUidAllergies";
     const char *const XML_ATC_ALLERGIES           = "ATCAllergies";
+    const char *const XML_INN_INTOLERANCES        = "InnIntolerances";
+    const char *const XML_DRUGS_INTOLERANCES      = "DrugsUidIntolerances";
+    const char *const XML_ATC_INTOLERANCES        = "ATCIntolerances";
     const char *const XML_ICD10                   = "ICD10";
     const char *const XML_UI                      = "Ui";
 
@@ -240,6 +243,9 @@ public:
 //            <InnAllergies value="inn1;inn2;inn3"/>
 //            <ATCAllergies value="ATC1;ATC2;ATC3"/>
 //            <DrugsUidAllergies value="7655668;876769;656789"/>
+//            <InnIntolerances value="inn1;inn2;inn3"/>
+//            <ATCIntolerances value="ATC1;ATC2;ATC3"/>
+//            <DrugsUidIntolerances value="7655668;876769;656789"/>
 //            <ICD10 value="J11.0;A22;Z23"/>
 //        </Patient>
         QDomElement element = rootElement.firstChildElement();
@@ -268,6 +274,12 @@ public:
                 value.insert(CommandLine::CL_InnAllergies, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_DRUGS_ALLERGIES) {
                 value.insert(CommandLine::CL_DrugsAllergies, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+            } else if (element.tagName() == Internal::Constants::XML_ATC_INTOLERANCES) {
+                value.insert(CommandLine::CL_AtcIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+            } else if (element.tagName() == Internal::Constants::XML_INN_INTOLERANCES) {
+                value.insert(CommandLine::CL_InnIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+            } else if (element.tagName() == Internal::Constants::XML_DRUGS_INTOLERANCES) {
+                value.insert(CommandLine::CL_DrugsIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             }
             element = element.nextSiblingElement();
         }
@@ -288,7 +300,9 @@ public:
         patient->setValue(IPatient::Surname,        value.value(CommandLine::CL_PatientSurname));
         patient->setValue(IPatient::Gender,         value.value(CommandLine::CL_PatientGender));
 
-        QStringList tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
+        QStringList tmp;
+        // Allergies
+        tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
         tmp.removeAll("");
         patient->setValue(IPatient::DrugsAtcAllergies, tmp);
 
@@ -300,6 +314,20 @@ public:
         tmp.removeAll("");
         patient->setValue(IPatient::DrugsUidAllergies, tmp);
 
+        // Intolerances
+        tmp = value.value(CommandLine::CL_AtcIntolerances).toString().split(";");
+        tmp.removeAll("");
+        patient->setValue(IPatient::DrugsAtcIntolerances, tmp);
+
+        tmp = value.value(CommandLine::CL_DrugsIntolerances).toString().split(";");
+        tmp.removeAll("");
+        patient->setValue(IPatient::DrugsUidIntolerances, tmp);
+
+        tmp = value.value(CommandLine::CL_InnIntolerances).toString().split(";");
+        tmp.removeAll("");
+        patient->setValue(IPatient::DrugsInnAtcIntolerances, tmp);
+
+        // Creatinin clearance
         if (value.value(CommandLine::CL_CrCl).isValid()) {
             patient->setValue(IPatient::CreatinClearance,     value.value(CommandLine::CL_CrCl));
             patient->setValue(IPatient::CreatinClearanceUnit, value.value(CommandLine::CL_CrCl_Unit));

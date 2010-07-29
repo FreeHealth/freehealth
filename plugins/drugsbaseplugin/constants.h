@@ -102,6 +102,7 @@ namespace Constants {
     const char * const S_SELECTOR_SHOWSTRENGTH    = "DrugsWidget/Selector/ShowStrength";
     const char * const S_SELECTOR_SHOWMOLECULES   = "DrugsWidget/Selector/ToolTipShowMolecules";
     const char * const S_ALLERGYBACKGROUNDCOLOR   = "DrugsWidget/Selector/AllergiesBackground";
+    const char * const S_INTOLERANCEBACKGROUNDCOLOR = "DrugsWidget/Selector/IntolerancesBackground";
     const char * const S_MARKDRUGSWITHAVAILABLEDOSAGES = "DrugsWidget/MarkDrugsWithAvailableDosages";      /*!< \brief Key for settings. */
     const char * const S_AVAILABLEDOSAGESBACKGROUNGCOLOR = "DrugsWidget/AvailableDosagesColorBackGround";      /*!< \brief Key for settings. */
     const char * const S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR = "#ffdddd";

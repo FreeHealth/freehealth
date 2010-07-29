@@ -224,7 +224,7 @@ public:
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
      QStringList       listOfMolecules() const;
-     QVariant          listOfCodeMolecules() const;
+     QList<int>        listOfCodeMolecules() const;
 
      QStringList       listOfInn() const;
      int               numberOfInn() const        { return allInnAndIamClasses().count(); }
