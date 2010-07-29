@@ -260,10 +260,10 @@ public:
 
         // Link to French RCP
         if (!drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToSCP).isNull()) {
-            q->frenchRCPButton->setEnabled(true);
-            q->frenchRCPButton->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToSCP).toString());
+            q->monographButton->setEnabled(true);
+            q->monographButton->setToolTip(drugModel()->drugData(m_CIS, DrugsDB::Constants::Drug::LinkToSCP).toString());
         } else {
-            q->frenchRCPButton->setEnabled(false);
+            q->monographButton->setEnabled(false);
         }
     }
 
@@ -638,7 +638,7 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
         d->setCheckBoxStateToModel(DrugsDB::Constants::Prescription::IsALD, state);
 }
 
-void DosageViewer::on_frenchRCPButton_clicked()
+void DosageViewer::on_monographButton_clicked()
 {
     QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::LinkToSCP).toString()));
 }

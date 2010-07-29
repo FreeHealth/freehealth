@@ -97,7 +97,7 @@ private Q_SLOTS:
     void on_userformsButton_clicked();
     void on_dosageForAllInnCheck_stateChanged(int state);
     void on_aldCheck_stateChanged(int state);
-    void on_frenchRCPButton_clicked();
+    void on_monographButton_clicked();
     void on_tabWidget_currentChanged(int);
     void onDailySchemeModelDataChanged(const QModelIndex &index);
 
