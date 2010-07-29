@@ -298,7 +298,7 @@ QString DrugsData::denomination() const
         }
         return d->m_NoLaboDenomination;
     }
-    return value(Constants::Table_DRUGS,Constants::DRUGS_NAME).toString();
+    return value(Constants::Table_DRUGS, Constants::DRUGS_NAME).toString();
 }
 
 /** \brief Returns the list of all the molecules' code of the drug composition */
@@ -356,7 +356,7 @@ int DrugsData::mainInnCode() const
 {
     QSet<int> list;
     foreach(int i, d->m_IamCodes) {
-        if (i>999)
+        if (i < 99999)
             list << i;
     }
     if (list.count() == 1)
@@ -558,7 +558,6 @@ QString DrugsData::drugsListToHtml(const QDrugsList & list)
 
     return msg;
 }
-
 
 bool DrugsData::lessThan(const DrugsData *drug1, const DrugsData *drug2)
 {
