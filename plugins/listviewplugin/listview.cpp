@@ -453,7 +453,7 @@ QMenu * ListView::getContextMenu()
 
 void ListView::addItem()
 {
-    if (! d->m_ListView->model())
+    if (!d->m_ListView->model())
         return;
     
     // insert a row into model
@@ -474,6 +474,7 @@ void ListView::addItem()
     if (d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers) {
         d->m_ListView->edit(index);
     }
+    Q_EMIT addRequested();
 }
 
 void ListView::removeItem()
@@ -490,6 +491,7 @@ void ListView::removeItem()
                              .arg(row)
                              .arg(model()->objectName()));
     }
+    Q_EMIT removeRequested();
 }
 
 void ListView::moveDown()
@@ -517,6 +519,7 @@ void ListView::moveDown()
 
     if (moved)
         d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()+1,0));
+    Q_EMIT moveDownRequested();
 }
 
 void ListView::moveUp()
@@ -542,6 +545,7 @@ void ListView::moveUp()
 
     if (moved)
         d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()-1,0));
+    Q_EMIT moveUpRequested();
 }
 
 void ListView::on_edit_triggered()
