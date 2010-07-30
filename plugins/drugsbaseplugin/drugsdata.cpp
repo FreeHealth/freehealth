@@ -351,6 +351,30 @@ QSet<int> DrugsData::allInnAndIamClasses() const
     return d->m_IamCodes;
 }
 
+QSet<int> DrugsData::allSevenCharsAtcIds() const
+{
+    QSet<int> list;
+    foreach(int i, d->m_IamCodes) {
+        if (i < 99999) {
+            if (drugsBase()->getAtcCode(i).length()==7) {
+                list << i;
+            }
+        }
+    }
+    return list;
+}
+
+QSet<int> DrugsData::allAtcIds() const
+{
+    QSet<int> list;
+    foreach(int i, d->m_IamCodes) {
+        if (i < 99999) {
+            list << i;
+        }
+    }
+    return list;
+}
+
 /** \brief Returns all Inn and IamClasses codes knwon for this drug. */
 int DrugsData::mainInnCode() const
 {
@@ -447,7 +471,7 @@ QString DrugsData::linkToSCP() const
     QString toReturn;
     if (!value(Table_DRUGS, DRUGS_LINK_SPC).toString().isEmpty()) {
         if (Internal::DrugsBase::instance()->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
-            toReturn = QString(FRENCH_RPC_LINK).arg(value(Table_DRUGS, DRUGS_LINK_SPC).toString().rightJustified(7,'0'));
+            toReturn = value(Table_DRUGS, DRUGS_LINK_SPC).toString().rightJustified(7,'0');
         else
             toReturn = value(Table_DRUGS, DRUGS_LINK_SPC).toString();
     }

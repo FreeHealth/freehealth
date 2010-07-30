@@ -38,60 +38,40 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DOSAGECREATORDIALOG_H
-#define DOSAGECREATORDIALOG_H
+#ifndef DRUGSEARCHENGINE_H
+#define DRUGSEARCHENGINE_H
 
-// include Qt headers
-#include <QtGlobal>
-QT_BEGIN_NAMESPACE
-class QDataWidgetMapper;
-QT_END_NAMESPACE
+#include <translationutils/constanttranslations.h>
 
-// include Ui
-#include "ui_mfDosageCreatorDialog.h"
-
-/**
- * \file mfDosageDialog.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
-*/
+#include <QString>
 
 namespace DrugsDB {
 namespace Internal {
-class DosageModel;
-}  // End Internal
-}  // End DrugsDB
+class DrugsData;
+class DrugSearchEnginePrivate;
 
-namespace DrugsWidget {
-namespace Internal {
-class DosageModel;
-class DosageCreatorDialogPrivate;
-
-class DosageCreatorDialog : public QDialog, public Ui::DosageCreatorDialog
+class DrugSearchEngine
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(DosageCreatorDialog);
-
+    DrugSearchEngine();
 public:
-    explicit DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel );
-    ~DosageCreatorDialog();
+    static DrugSearchEngine *instance();
+    ~DrugSearchEngine();
 
-private Q_SLOTS:
-    void done(int r);
-    void saveRequested();
-    void prescribeRequested();
-    void saveAndPrescribeRequested();
-    void helpRequested();
-    void drugsInformationsRequested();
-    void addTestOnlyRequested();
+    void addNewEngine(const QString &label, const QString &url, const QString &lang = Trans::Constants::ALL_LANGUAGE);
+
+    void setDrug(const DrugsData *drug);
+
+    QStringList processedLabels(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    QStringList processedUrls(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+
+    int numberOfEngines() const;
 
 private:
-    DosageCreatorDialogPrivate *d;
+    DrugSearchEnginePrivate *d;
+    static DrugSearchEngine *m_Instance;
 };
 
-}  // End Internal
-}  // End DrugsWidget
+}  // End namespace Internal
+}  // End namespace DrugsDB
 
-
-#endif // DOSAGECREATORDIALOG_H
+#endif // DRUGSEARCHENGINE_H

@@ -19,7 +19,9 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsdatabaseaboutpage.h \
     $${PWD}/drugstemplateprinter.h \
     $${PWD}/drugsdatabaseselector.h \
-    $${PWD}/atctreemodel.h
+    $${PWD}/atctreemodel.h \
+    $${PWD}/drugsearchengine.h
+
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/interactionsbase.cpp \
@@ -36,7 +38,8 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsdatabaseaboutpage.cpp \
     $${PWD}/drugstemplateprinter.cpp \
     $${PWD}/drugsdatabaseselector.cpp \
-    $${PWD}/atctreemodel.cpp
+    $${PWD}/atctreemodel.cpp \
+    $${PWD}/drugsearchengine.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \

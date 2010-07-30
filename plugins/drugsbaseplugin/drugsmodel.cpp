@@ -652,6 +652,13 @@ bool DrugsModel::containsDrug(const int uid) const
     return false;
 }
 
+/** \brief direct access to the DrugsData pointer. The pointer MUST BE DELETED. */
+Internal::DrugsData *DrugsModel::getDrug(const int uid) const
+{
+    return d->getDrug(uid);
+//    return new Internal::DrugsData(*d->getDrug(uid));
+}
+
 /** \brief Returns true if the actual prescription has interaction(s). */
 bool DrugsModel::prescriptionHasInteractions()
 {

@@ -75,6 +75,7 @@
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
+#include <drugsbaseplugin/drugsearchengine.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -104,6 +105,7 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
 static inline QString defaultDatabaseFileName() {return settings()->databasePath() + QDir::separator() + QString(DB_DRUGS_NAME) + QDir::separator() + QString(DB_DRUGS_NAME) + "-fr_FR.db";}
 
 namespace DrugsDB {
@@ -171,6 +173,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addTable(Table_PACKAGING,   "PACKAGING");
     addTable(Table_LK_MOL_ATC,  "LK_MOL_ATC");
     addTable(Table_INFORMATION, "INFORMATIONS");
+    addTable(Table_SEARCHENGINES, "SEARCH_ENGINES");
 
     addField(Table_DRUGS, DRUGS_UID ,           "UID");
     addField(Table_DRUGS, DRUGS_NAME ,          "NAME");
@@ -222,6 +225,10 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
     addField(Table_INFORMATION, INFO_LANGUAGE_COUNTRY,  "LANGUAGE_COUNTRY");
     addField(Table_INFORMATION, INFO_DRUGS_NAME_CONSTRUCTOR, "DRUGS_NAME_CONSTRUCTOR");
+
+    addField(Table_SEARCHENGINES, SEARCHENGINE_ID, "ID");
+    addField(Table_SEARCHENGINES, SEARCHENGINE_LABEL, "LABEL");
+    addField(Table_SEARCHENGINES, SEARCHENGINE_URL, "URL");
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -297,7 +304,6 @@ bool DrugsBase::init()
         InteractionsBase::init(true);
     }
 
-
     // Connect and check Dosage Database
     // Check settings --> SQLite or MySQL ?
     // remove drugs database connection if exists
@@ -330,6 +336,19 @@ bool DrugsBase::init()
         }
         checkDosageDatabaseVersion();
     }
+
+    // get all Drugs search engines
+    QSqlQuery search(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    QString req = select(Constants::Table_SEARCHENGINES);
+    if (search.exec(req)) {
+        while (search.next()) {
+            searchEngine()->addNewEngine(search.value(Constants::SEARCHENGINE_LABEL).toString(),
+                                         search.value(Constants::SEARCHENGINE_URL).toString());
+        }
+    } else {
+        Utils::Log::addQueryError(this, search);
+    }
+    Utils::Log::addMessage(this, QString("Getting %1 Drugs Search Engines").arg(searchEngine()->numberOfEngines()));
 
     // Initialize
     InteractionsBase::init();

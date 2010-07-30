@@ -109,6 +109,7 @@ using namespace mfDosageModelConstants;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- Static Datas --------------------------------------------
@@ -118,7 +119,6 @@ QStringList DosageModel::m_ScoredTabletScheme = QStringList();
 QStringList DosageModel::m_PreDeterminedForms = QStringList();
 QString     DosageModel::m_ActualLangage = "";
 
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Translations ----------------------------------------
@@ -467,8 +467,10 @@ QStringList DosageModel::isDosageValid(const int row)
     Q_ASSERT_X(m_UID != -1, "DosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
     QStringList errors;
     // Label
-    if (index(row, Dosages::Constants::Label).data().toString().isEmpty())
-        errors << tr("The protocol must be labelled.");
+    if (index(row, Dosages::Constants::Label).data().toString().isEmpty()) {
+        QString label = m_DrugsModel->getFullPrescription(m_DrugsModel->getDrug(m_UID), false, Constants::PROTOCOL_AUTOMATIC_LABEL_MASK);
+        setData(index(row, Dosages::Constants::Label), label);
+    }
     // Intakes
     if (index(row, Dosages::Constants::IntakesScheme).data().toString().isEmpty())
         errors << tr("The intakes' scheme must be defined.");

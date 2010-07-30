@@ -12,6 +12,9 @@
     <InnAllergies value=""/>
     <ATCAllergies value="D10AD02;V03A"/>
     <DrugsUidAllergies value="68586203;62869109"/>
+    <InnIntolerances value=""/>
+    <ATCIntolerances value="B05B"/>
+    <DrugsUidIntolerances value="68586203;62869109"/>
     <ICD10 value="J11.0;A22;Z23"/>
   </Patient>
   <Ui editmode="select-only" blockPatientDatas="1"/>

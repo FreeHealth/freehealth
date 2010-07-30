@@ -113,6 +113,7 @@ public:
     int removeDrug(const int uid);
     int removeLastInsertedDrug();
     bool containsDrug(const int uid) const;
+    Internal::DrugsData *getDrug(const int uid) const;
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );

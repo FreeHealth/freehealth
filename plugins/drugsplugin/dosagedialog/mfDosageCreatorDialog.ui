@@ -120,12 +120,21 @@
    <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QPushButton" name="helpButton">
+      <widget class="QToolButton" name="helpButton">
        <property name="text">
-        <string>Help</string>
+        <string/>
        </property>
-       <property name="autoDefault">
-        <bool>false</bool>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::InstantPopup</enum>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
       </widget>
      </item>
@@ -143,76 +152,37 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="testOnlyButton">
-       <property name="toolTip">
-        <string>The drug will be added in your prescription only for interactions testing.</string>
-       </property>
+      <widget class="QToolButton" name="validateButton">
        <property name="text">
-        <string>For test only</string>
+        <string/>
        </property>
-       <property name="autoDefault">
-        <bool>false</bool>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::MenuButtonPopup</enum>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="prescribeButton">
-       <property name="toolTip">
-        <string>The current protocol will be used for your actual prescription,
- but will not be saved in your personnal database.</string>
-       </property>
+      <widget class="QToolButton" name="cancelButton">
        <property name="text">
-        <string>Prescribe only</string>
+        <string/>
        </property>
-       <property name="autoDefault">
-        <bool>false</bool>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="6" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="saveButton">
-       <property name="toolTip">
-        <string>The current protocol will be saved in your personal database, but not included in this prescription.</string>
-       </property>
-       <property name="text">
-        <string>Save changes</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="saveAndPrescribeButton">
-       <property name="toolTip">
-        <string>The current protocol will be used for your actual prescription,
-and saved in your personal database.</string>
-       </property>
-       <property name="text">
-        <string>Save and prescribe</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="toolTip">
-        <string>Cancel this window, all changes will be lost.</string>
-       </property>
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
       </widget>
      </item>
@@ -233,27 +203,6 @@ and saved in your personal database.</string>
    <header location="global">listviewplugin/listview.h</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>prescribeButton</tabstop>
-  <tabstop>helpButton</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>DrugsWidget::Internal::DosageCreatorDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>168</x>
-     <y>439</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>76</x>
-     <y>431</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

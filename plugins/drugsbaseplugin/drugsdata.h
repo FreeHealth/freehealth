@@ -230,6 +230,8 @@ public:
      int               numberOfInn() const        { return allInnAndIamClasses().count(); }
      QStringList       listOfInnClasses() const;
      QSet<int>         allInnAndIamClasses() const;
+     QSet<int>         allSevenCharsAtcIds() const;
+     QSet<int>         allAtcIds() const;
      int               mainInnCode() const;
      QString           mainInnName() const;
      QString           mainInnDosage() const;

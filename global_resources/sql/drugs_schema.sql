@@ -60,6 +60,14 @@ CREATE TABLE IF NOT EXISTS `INFORMATIONS` (
   `DRUGS_NAME_CONSTRUCTOR` varchar(200)
 );
 
+CREATE TABLE IF NOT EXISTS `SEARCH_ENGINES` (
+  `ID` integer primary key,
+  `LABEL` varchar(25),
+  `URL` varchar(1000)
+);
+
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO ATC description", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
+
 CREATE TABLE IF NOT EXISTS `DB_SCHEMA_VERSION` (
   `VERSION` varchar(10),
   `DATE`  date,

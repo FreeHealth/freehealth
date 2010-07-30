@@ -116,6 +116,13 @@ namespace Constants {
     const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_SEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */
     const char * const  I_SEARCHINN =         "black_dci.png";         /*!< \brief Themed icon name for INN search. */
+
+    const char * const  I_DRUGSINFOS =        "drug_infos.png";
+    const char * const  I_PROTOCOL_PRESCRIBEANDSAVE =  "protocol_saveandprescribe.png";
+    const char * const  I_PROTOCOL_PRESCRIBE =         "protocol_prescribe.png";
+    const char * const  I_PROTOCOL_SAVE =              "protocol_save.png";
+    const char * const  I_PROTOCOL_TESTONLY =          "protocol_testonly.png";
+
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
@@ -125,7 +132,8 @@ namespace Constants {
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
-    // HTML MASKS
+    // MASKS
+    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =  QT_TRANSLATE_NOOP("mfDrugsConstants", "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]");
     const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
             "<html>\n"
             "<head>\n"
@@ -237,6 +245,7 @@ namespace Constants {
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
         Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_DOSAGE,
+        Table_SEARCHENGINES,
         Table_MaxParam
     };
 
@@ -297,6 +306,10 @@ namespace Constants {
     enum IAM_TREEfields
     { TREE_ID_CLASS = 0, TREE_ID_ATC,
       TREE_MaxParam
+    };
+
+    enum SEARCHENGINESfields {
+        SEARCHENGINE_ID, SEARCHENGINE_LABEL, SEARCHENGINE_URL
     };
 
     //--------------------------------------------------------------------------------------------------------
