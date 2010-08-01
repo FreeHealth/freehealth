@@ -60,6 +60,8 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsearchengine.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -85,6 +87,7 @@ using namespace Trans::ConstantTranslations;
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 namespace DrugsWidget {
 namespace Internal {
@@ -113,6 +116,17 @@ public:
         QAction *help = new QAction(tkTr(Trans::Constants::HELP_TEXT), m_HelpMenu);
         m_HelpMenu->addAction(help);
         q->connect(help, SIGNAL(triggered()), q, SLOT(helpRequested()));
+
+        // Show database COMPLEMENTARY_WEBSITE
+        if (drugsBase()->actualDatabaseInformations()) {
+            const QString &url = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+            if (!url.isEmpty()) {
+                QAction *drugsDbWeb = new QAction(q->tr("Drugs database website"), m_HelpMenu);
+                drugsDbWeb->setData(url);
+                m_HelpMenu->addAction(drugsDbWeb);
+                q->connect(drugsDbWeb, SIGNAL(triggered()), q, SLOT(drugsInformationsRequested()));
+            }
+        }
 
         // Show drugs database search engine actions
         int UID = m_DosageModel->drugUID();

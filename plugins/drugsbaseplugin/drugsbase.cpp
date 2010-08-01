@@ -453,6 +453,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
             info->authorComments = q.value(Constants::INFO_AUTHOR_COMMENTS).toString();
             info->lang_country = q.value(Constants::INFO_LANGUAGE_COUNTRY).toString();
             info->setDrugsNameConstructor(q.value(Constants::INFO_DRUGS_NAME_CONSTRUCTOR).toString());
+            info->complementaryWebsite = q.value(Constants::INFO_COMPLEMENTARY_WWW).toString();
             info->connectionName = db.connectionName();
             if (db.driverName() == "QSQLITE") {
                 info->fileName = db.databaseName();
