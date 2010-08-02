@@ -63,6 +63,7 @@
 #include <QSqlRecord>
 #include <QSqlTableModel>
 #include <QHeaderView>
+#include <QScrollBar>
 
 #include <QDebug>
 
@@ -81,6 +82,8 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
+
 
 DrugSelector::DrugSelector(QWidget *parent) :
         QWidget(parent),
@@ -91,10 +94,17 @@ DrugSelector::DrugSelector(QWidget *parent) :
 {
 }
 
+DrugSelector::~DrugSelector()
+{
+    mainWindow()->setWindowTitle(m_WinTitle);
+}
+
 void DrugSelector::initialize()
 {
     setupUi(this);
     textButton->setIcon(theme()->icon(Core::Constants::ICONPENCIL));
+
+    m_WinTitle = mainWindow()->windowTitle();
 
     createToolButtons();
 
@@ -274,7 +284,7 @@ void DrugSelector::setSearchMethod(int method)
 {
     if (method == Constants::SearchCommercial) {
 #ifdef FREEDIAMS
-        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHCOMMERCIAL_TEXT));
+        mainWindow()->setWindowTitle(m_WinTitle + " - " + tkTr(Constants::SEARCHCOMMERCIAL_TEXT));
 #endif
         m_filterModel = "";
         InnView->hide();
@@ -293,7 +303,7 @@ void DrugSelector::setSearchMethod(int method)
     }
     else if (method == Constants::SearchMolecules) {
 #ifdef FREEDIAMS
-        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHMOLECULES_TEXT));
+        mainWindow()->setWindowTitle(m_WinTitle + " - " + tkTr(Constants::SEARCHMOLECULES_TEXT));
 #endif
         m_filterModel = "";
         InnView->hide();
@@ -314,7 +324,7 @@ void DrugSelector::setSearchMethod(int method)
     }
     else if (method == Constants::SearchInn) {
 #ifdef FREEDIAMS
-        Core::ICore::instance()->mainWindow()->setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " - " + tkTr(Constants::SEARCHINN_TEXT));
+        mainWindow()->setWindowTitle(m_WinTitle + " - " + tkTr(Constants::SEARCHINN_TEXT));
 #endif
         m_filterModel = "";
         // show inn model and view

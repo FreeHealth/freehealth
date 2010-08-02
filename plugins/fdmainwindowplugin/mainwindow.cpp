@@ -264,7 +264,16 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid())
+        setWindowTitle(QString("%1 - %2 [%3 %4]")
+                       .arg(qApp->applicationName())
+                       .arg(qApp->applicationVersion())
+                       .arg(tr("Connected to"))
+                       .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+    else
+        setWindowTitle(QString("%1 - %2")
+                       .arg(qApp->applicationName())
+                       .arg(qApp->applicationVersion()));
 
     // Manage patient datas
     m_ui->morePatientInfoButton->setIcon(theme()->icon(Core::Constants::ICONADD));

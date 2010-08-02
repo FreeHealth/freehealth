@@ -69,6 +69,8 @@ class DrugSelector : public QWidget, private Ui::DrugSelector
 
 public:
     explicit DrugSelector(QWidget *parent = 0);
+    ~DrugSelector();
+
     void initialize();
     void updateDrugsViewColumns();
 
@@ -118,6 +120,7 @@ private:
 
     // filter for drugs model
     QString          m_filterModel;           // '__replaceit__' must be replaced by search text.
+    QString m_WinTitle;
 
     // search method and history
     int    m_SearchMethod;              /*!< \sa mfDrugsConstants::SearchMethod */
