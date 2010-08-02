@@ -149,11 +149,8 @@ public:
          if ((!m_AtcToMol.isEmpty()) && (!m_ClassToAtcs.isEmpty()))
              return;
 
-         qWarning() << "retrieveLinkTable" << m_Parent->actualDatabaseInformations()->identifiant;
-
          if (m_Parent->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT) {
              /** \todo retrieve this from database instead of resource file */
-             qWarning() << "from resources";
              QString tmp;
              {
                  QFile file(":/inns_molecules_link.csv");
@@ -171,7 +168,6 @@ public:
              }
          } else {
              /** \todo WARNING FULL SQL COMMAND */
-             qWarning() << "from DB";
              QSqlDatabase drugs = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
              if (!drugs.open())
                  Utils::Log::addError("InteractionBase", "Drugs database not opened");
@@ -184,7 +180,6 @@ public:
                  Utils::Log::addQueryError("InteractionBase", query);
              }
          }
-         qWarning() << m_AtcToMol.count();
 
          // Retreive Interacting classes (1) ---> (n) ATC tree
          QSqlDatabase DB = QSqlDatabase::database(Constants::DB_IAM_NAME);
@@ -209,17 +204,17 @@ public:
     QList<DrugsInteraction*> getAllInteractionsFound();
 
 public:
-    InteractionsBase     *m_Parent;
-    Utils::Database      *m_DB;
-    QMap<int, int>        m_InteractionsIDs;        /*!<  All possible interactions based on ATC IDs*/
-    QMultiMap< int, int>  m_IamFound;               /*!< modified by checkDrugInteraction() */
-    bool                  m_LogChrono;
-    bool                  m_initialized;
+    InteractionsBase *m_Parent;
+    Utils::Database *m_DB;
+    QMap<int, int> m_InteractionsIDs;        /*!<  All possible interactions based on ATC IDs*/
+    QMultiMap<int, int> m_IamFound;               /*!< modified by checkDrugInteraction() */
+    bool m_LogChrono;
+    bool m_initialized;
 
     // These variables are used or speed improvments and database protection
-    QHash<int, QString>       m_IamDenominations;       /*!< INN and class denominations */
-    QMultiHash< int, int >    m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
-    QMultiHash< int, int >    m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
+    QHash<int, QString> m_IamDenominations;       /*!< INN and class denominations */
+    QMultiHash<int, int> m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
+    QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
     QCache<int, AtcLabel> m_AtcLabelCache;
     QCache<int, QString> m_AtcCodeCache;
 };

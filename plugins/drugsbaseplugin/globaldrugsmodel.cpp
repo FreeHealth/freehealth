@@ -59,6 +59,7 @@
 #include <QCache>
 #include <QSqlError>
 #include <QPersistentModelIndex>
+#include <QTimer>
 
 #include <qtconcurrentrun.h>
 #include <QFuture>
@@ -90,6 +91,7 @@ public:
         if (numberOfInstances==0) {
             m_CachedAvailableDosageForUID.clear();
             drugAllergyCache.clear();
+            delete m_Timer;
         }
     }
 
@@ -141,7 +143,6 @@ public:
         foreach(const QString &code, atc) {
             if (fullAtcAllergies.contains(code)) {
                 drugAllergyCache.insert(uid, true);
-                qWarning() << "  nnnnnn";
                 return true;
             }
             foreach(const QString &atcClass, classAtcAllergies) {
@@ -222,6 +223,7 @@ public:
             atcs << model->index(item.row(), Constants::DRUGS_ATC).data().toString();
             atcs.removeAll("");
             testAtcAllergies(atcs, uid);
+//            atcs.clear();
         }
         if (m_testUidAllergies) {
             if (uidAllergies.contains(QString::number(uid))) {
@@ -317,8 +319,8 @@ public:
             QStringList atcs;
             atcs << drugsBase()->getDrugCompositionAtcCodes(uid);
             atcs << model->index(item.row(), Constants::DRUGS_ATC).data().toString();
-//            qWarning() << model->index(item.row(), Constants::DRUGS_NAME).data().toString() << atcs;
             testAtcIntolerances(atcs, uid);
+//            atcs.clear();
         }
 
         if (m_testUidIntolerances) {
@@ -345,10 +347,13 @@ public:
 
 public:
     static QStringList fullAtcAllergies, classAtcAllergies, uidAllergies, innAllergies;
+    static QStringList fullAtcSuspectedAllergies, classAtcSuspectedAllergies, uidSuspectedAllergies, innSuspectedAllergies;
     static QStringList fullAtcIntolerances, classAtcIntolerances, uidIntolerances, innIntolerances;
     static bool m_testAtcAllergies, m_testUidAllergies, m_testInnAllergies;
     static bool m_testAtcIntolerances, m_testUidIntolerances, m_testInnIntolerances;
     static QVector<int> m_ProcessedUid;
+    static QVector<QPersistentModelIndex> m_UidToProcess;
+    QTimer *m_Timer;
 
 private:
     static QHash<int, bool> drugAllergyCache;
@@ -378,7 +383,7 @@ bool GlobalDrugsModelPrivate::m_testUidIntolerances = false;
 bool GlobalDrugsModelPrivate::m_testInnIntolerances = false;
 
 QVector<int> GlobalDrugsModelPrivate::m_ProcessedUid;
-
+QVector<QPersistentModelIndex> GlobalDrugsModelPrivate::m_UidToProcess;
 }  // End Internal
 }  // End DrugsDB
 
@@ -414,6 +419,11 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
 {
     d = new Internal::GlobalDrugsModelPrivate(this);
     d->updateCachedAvailableDosage();
+
+    d->m_Timer = new QTimer;
+    d->m_Timer->setSingleShot(true);
+    connect(d->m_Timer, SIGNAL(timeout()), this, SLOT(processPhysiology()));
+
     setTable(drugsBase()->table(Constants::Table_DRUGS));
     setEditStrategy( QSqlTableModel::OnManualSubmit );
     QHashWhere where;
@@ -432,7 +442,6 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
 GlobalDrugsModel::~GlobalDrugsModel()
 {
     qWarning() << "GlobalDrugsModel::~GlobalDrugsModel()";
-    qWarning() << d->m_Watchers.count();
     for(int i = 0; i < d->m_Watchers.count() ; ++i) {
         d->m_Watchers.at(i)->cancel();
     }
@@ -494,32 +503,53 @@ void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
         d->m_testUidIntolerances = !d->uidIntolerances.isEmpty();
         d->clearDrugIntoleranceCache();
     }
-
+    d->m_ProcessedUid.clear();
+    reset();
 }
 
-void GlobalDrugsModel::physiologyProcessed()
-{
-    QFutureWatcher<QPersistentModelIndex> *watch = static_cast< QFutureWatcher<QPersistentModelIndex> *>(sender());
-    if (!watch) {
-        return;
-    }
-    if (!watch->future().isFinished()) {
-        Utils::Log::addMessage(this, "Future is not finished.");
-        return;
-    }
-    QPersistentModelIndex idx = watch->result();
-    int id = d->m_Watchers.indexOf(watch);
-    if (id<0) {
-        Utils::Log::addMessage(this, "FutureWatcher not in vector.");
-        return;
-    }
-    d->m_Watchers.remove(id);
+//void GlobalDrugsModel::physiologyProcessed()
+//{
+//    // OBSOLETE
+//    QFutureWatcher<QPersistentModelIndex> *watch = static_cast< QFutureWatcher<QPersistentModelIndex> *>(sender());
+//    if (!watch) {
+//        return;
+//    }
+//    if (!watch->future().isFinished()) {
+//        Utils::Log::addMessage(this, "Future is not finished.");
+//        return;
+//    }
+//    QPersistentModelIndex idx = watch->result();
+//    int id = d->m_Watchers.indexOf(watch);
+//    if (id<0) {
+//        Utils::Log::addMessage(this, "FutureWatcher not in vector.");
+//        return;
+//    }
 
-    qWarning() << d->m_Watchers.count();
-
-    delete watch;
 //    Q_EMIT dataChanged(idx, idx);
-}
+
+//    d->m_Watchers.remove(id);
+//    delete watch;
+//    qWarning() << d->m_Watchers.count();// << idx.data();
+//}
+
+//void GlobalDrugsModel::processPhysiology()
+//{
+//    // OBSOLETE
+//    qWarning() << " GlobalDrugsModel::processPhysiology()" <<  d->m_UidToProcess.count();
+//    for(int i = 0 ; i < d->m_UidToProcess.count(); ++i) {
+////        QFuture<QPersistentModelIndex> processPhysiology = QtConcurrent::run(DrugsDB::Internal::GlobalDrugsModelPrivate::checkPhysiology, d->m_UidToProcess.at(i), this);
+////        QFutureWatcher<QPersistentModelIndex> *watch = new QFutureWatcher<QPersistentModelIndex>;
+////        watch->setFuture(processPhysiology);
+////        d->m_Watchers.append(watch);
+////        connect(watch, SIGNAL(finished()), this, SLOT(physiologyProcessed()));
+////        connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), watch, SLOT(cancel()));
+
+//        QFuture<QPersistentModelIndex> processPhysiology = QtConcurrent::run(DrugsDB::Internal::GlobalDrugsModelPrivate::checkPhysiology, d->m_UidToProcess.at(i), this);
+//        processPhysiology.waitForFinished();
+//        Q_EMIT dataChanged(d->m_UidToProcess.at(i), d->m_UidToProcess.at(i));
+//    }
+//    d->m_UidToProcess.clear();
+//}
 
 QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 {
@@ -538,95 +568,98 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                     return s;
             }
         }
-        return QSqlTableModel::data(item,role);
+        return QSqlTableModel::data(item, role);
     }
 
     // Cache processed UIDs for allergies and intolerances
     // If cached  --> start the process in a QFuture ; connect QFuture to Model::dataChanged()
     // If !cached --> ok to return the values
     int uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toInt();
+
     if (!d->m_ProcessedUid.contains(uid)) {
-        QFuture<QPersistentModelIndex> processPhysiology = QtConcurrent::run(DrugsDB::Internal::GlobalDrugsModelPrivate::checkPhysiology, item, this);
-        QFutureWatcher<QPersistentModelIndex> *watch = new QFutureWatcher<QPersistentModelIndex>;
-        watch->setFuture(processPhysiology);
-        d->m_Watchers.append(watch);
-        connect(watch, SIGNAL(finished()), this, SLOT(physiologyProcessed()));
-        connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), watch, SLOT(cancel()));
+//        d->m_UidToProcess.append(item);
         d->m_ProcessedUid.append(uid);
-    } else {
-        if (role == Qt::BackgroundRole) {
-            // test atc's patient allergies
-            if (d->hasAllergy(item, this)) {
-                QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-                c.setAlpha(190);
-                return c;
-            } else if (d->hasIntolerance(item, this)) {
-                QColor c = QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
-                c.setAlpha(190);
-                return c;
-            }
-
-            if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
-                QModelIndex uid = index(item.row(), Constants::DRUGS_UID);
-                if (d->UIDHasRecordedDosage(uid.data().toInt())) {
-                    QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
-                    c.setAlpha(125);
-                    return c;
-                }
-            }
-
-        } else if (role == Qt::ToolTipRole) {
-            QString tmp = "<html><body>";
-            if (d->hasAllergy(item, this)) {
-                tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
-                       .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
-                       .arg(tr("KNOWN ALLERGY"));
-            } else if (d->hasIntolerance(item, this)) {
-                tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
-                       .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
-                       .arg(tr("KNOWN INTOLERANCE"));
-            }
-            tmp += "<b>" + d->getConstructedDrugName(item.row()) + "</b><br>";
-            QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
-            // get form / route
-            tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "<br />";
-            tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "<br />";
-            if (atc.isEmpty())
-                tmp += tr("No ATC found");
-            else
-                tmp += atc;
-            tmp += "<br>";
-            // get composition
-            if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {
-                int uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toInt();
-                QSqlTableModel compo(0, database());
-                compo.setTable(drugsBase()->table(Constants::Table_COMPO));
-                QHash<int, QString> where;
-                where.insert(Constants::COMPO_UID, QString("=%1").arg(uid));
-                compo.setFilter(drugsBase()->getWhereClause(Constants::Table_COMPO, where));
-                compo.select();
-                tmp += tr("Composition:<br>");
-                for(int i=0; i< compo.rowCount(); ++i) {
-                    tmp +=  "&nbsp;&nbsp;&nbsp;*&nbsp;" + compo.data(compo.index(i, Constants::COMPO_MOL_NAME)).toString() + "<br>";
-                }
-                tmp += tr("ATC codes (for interaction engine):<br>");
-                if (!atc.isEmpty())
-                    tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
-                else
-                    tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + "<br>";
-            }
-            tmp += "</body></html>";
-
-            return tmp;
-        } else if (role == Qt::DecorationRole) {
-            if (d->hasAllergy(item, this))
-                return theme()->icon(Core::Constants::ICONFORBIDDEN);
-            else if (d->hasIntolerance(item, this))
-                return theme()->icon(Core::Constants::ICONWARNING);
-        }
+        QFuture<QPersistentModelIndex> processPhysiology = QtConcurrent::run(DrugsDB::Internal::GlobalDrugsModelPrivate::checkPhysiology, item, this);
+        processPhysiology.waitForFinished();
+//        if (d->m_UidToProcess.count() == 20) {
+//            d->m_Timer->start();
+//            qApp->processEvents();
+//        } else {
+//            d->m_Timer->start(1);
+//        }
     }
-    return QSqlTableModel::data(item,role);
-//    return QVariant();
+    if (role == Qt::BackgroundRole) {
+        // test atc's patient allergies
+        if (d->hasAllergy(item, this)) {
+            QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+            c.setAlpha(190);
+            return c;
+        } else if (d->hasIntolerance(item, this)) {
+            QColor c = QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
+            c.setAlpha(190);
+            return c;
+        }
+
+        if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
+            QModelIndex uid = index(item.row(), Constants::DRUGS_UID);
+            if (d->UIDHasRecordedDosage(uid.data().toInt())) {
+                QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
+                c.setAlpha(125);
+                return c;
+            }
+        }
+
+    } else if (role == Qt::ToolTipRole) {
+        QString tmp = "<html><body>";
+        if (d->hasAllergy(item, this)) {
+            tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
+                   .arg(tr("KNOWN ALLERGY"));
+        } else if (d->hasIntolerance(item, this)) {
+            tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
+                   .arg(tr("KNOWN INTOLERANCE"));
+        }
+        tmp += "<b>" + d->getConstructedDrugName(item.row()) + "</b><br>";
+        QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
+        // get form / route
+        tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "<br />";
+        tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "<br />";
+        if (atc.isEmpty())
+            tmp += tr("No ATC found");
+        else
+            tmp += atc;
+        tmp += "<br>";
+        // get composition
+        if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {
+            int uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toInt();
+            QSqlTableModel compo(0, database());
+            compo.setTable(drugsBase()->table(Constants::Table_COMPO));
+            QHash<int, QString> where;
+            where.insert(Constants::COMPO_UID, QString("=%1").arg(uid));
+            compo.setFilter(drugsBase()->getWhereClause(Constants::Table_COMPO, where));
+            compo.select();
+            tmp += tr("Composition:<br>");
+            for(int i=0; i< compo.rowCount(); ++i) {
+                tmp +=  "&nbsp;&nbsp;&nbsp;*&nbsp;" + compo.data(compo.index(i, Constants::COMPO_MOL_NAME)).toString() + "<br>";
+            }
+            tmp += tr("ATC codes (for interaction engine):<br>");
+            if (!atc.isEmpty())
+                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
+            else
+                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + "<br>";
+        }
+        tmp += "</body></html>";
+
+        return tmp;
+    } else if (role == Qt::DecorationRole) {
+        if (d->hasAllergy(item, this))
+            return theme()->icon(Core::Constants::ICONFORBIDDEN);
+        else if (d->hasIntolerance(item, this))
+            return theme()->icon(Core::Constants::ICONWARNING);
+    }
+//    return QSqlTableModel::data(item,role);
+        return QVariant();
 }
 
 Qt::ItemFlags GlobalDrugsModel::flags(const QModelIndex &) const

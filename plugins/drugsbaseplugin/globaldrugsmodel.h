@@ -83,7 +83,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void refreshDrugsAllergies(const int ref);
-    void physiologyProcessed();
+//    void physiologyProcessed();
+//    void processPhysiology();
 
 private:
     Internal::GlobalDrugsModelPrivate *d;
