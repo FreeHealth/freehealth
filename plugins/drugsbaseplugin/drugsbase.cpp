@@ -334,6 +334,9 @@ bool DrugsBase::init()
                              "log", "pas", 0,
                              Utils::Database::CreateDatabase);
         }
+        if (!QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).open())
+            Utils::Log::addError("DrugsBase", tr("WARNING : can not open database %1 : %2 \n %3 ")
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).lastError().driverText(), QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).lastError().databaseText()));
         checkDosageDatabaseVersion();
     }
 
@@ -418,7 +421,7 @@ bool DrugsBase::refreshDosageBase()
 DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
 {
     QSqlDatabase db = QSqlDatabase::database(connectionName);
-    if (!db.open())
+    if (!db.isOpen())
         return 0;
 
     // check table INFORMATIONS
@@ -629,10 +632,13 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
 {
     QHash<QString, QString> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!DB.open()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
-        return toReturn;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()) + " " +
+                                 QString("%1 %2 %3").arg(__FILE__).arg(__LINE__));
+            return toReturn;
+        }
     }
     QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
     {
@@ -677,10 +683,13 @@ bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
     if (dosageUuids.count()==0)
         return true;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!DB.open()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
-        return false;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()) + " " +
+                                 QString("%1 %2 %3").arg(__FILE__).arg(__LINE__));
+            return false;
+        }
     }
     QStringList reqs;
     foreach(const QString &s, dosageUuids) {
@@ -717,10 +726,13 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
         return toReturn;
 
     QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if ((DosageDB.isOpen()) && (!DosageDB.open())) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DosageDB.lastError().text()));
-        return toReturn;
+    if (DosageDB.isOpen()) {
+        if (!DosageDB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DosageDB.lastError().text()) + " " +
+                                 QString("%1 %2 %3").arg(__FILE__).arg(__LINE__));
+            return toReturn;
+        }
     }
     QString req;
     if (m_IsDefaultDB) {
@@ -749,7 +761,7 @@ QList<int> DrugsBase::getAllUIDThatHaveRecordedDosages() const
     QString tmp;
     QList<int> code_subst;
     QSqlDatabase DrugsDB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if ((DrugsDB.isOpen()) && (!DrugsDB.open())) {
+    if (DrugsDB.isOpen()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                              .arg(Constants::DB_DRUGS_NAME).arg(DrugsDB.lastError().text()));
         return toReturn;
@@ -828,10 +840,13 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
 {
     QMultiHash<int,QString> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!DB.open()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()));
-        return toReturn;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME).arg(DB.lastError().text()) + " " +
+                                 QString("%1 %2 %3").arg(__FILE__).arg(__LINE__));
+            return toReturn;
+        }
     }
     QString req;
     if (m_IsDefaultDB) {
@@ -914,10 +929,12 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     t.start();
 
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if ((!DB.open()) && (!DB.isOpen())) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
-        return 0;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
+            return 0;
+        }
     }
 
     // construct the where clause
@@ -1029,14 +1046,21 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
 
 QStringList DrugsBase::getDrugCompositionAtcCodes(const int uid)
 {
-    /** \todo create a cache */
-    QStringList toReturn;
+    static QMultiHash<int, QString> cache_uid_atcLabel;
+
+    if (cache_uid_atcLabel.keys().contains(uid))
+        return cache_uid_atcLabel.values(uid);
+
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if (!DB.open()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                             .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
-        return toReturn;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()) + " " +
+                                 QString("%1 %2 %3").arg(__FILE__).arg(__LINE__));
+            return cache_uid_atcLabel.values(uid);
+        }
     }
+
     // get all molecule_code for the drug
     QHash<int, QString> where;
     where.insert(Constants::COMPO_UID, QString("='%1'").arg(uid));
@@ -1050,19 +1074,22 @@ QStringList DrugsBase::getDrugCompositionAtcCodes(const int uid)
             }
         }
     }
+    QStringList atcs;
     foreach(int id, getLinkedAtcIds(molecule_codes)) {
         const QString &n = getAtcCode(id);
-        if (!toReturn.contains(n))
-            toReturn.append(n);
+        if (!atcs.contains(n)) {
+            atcs.append(n);
+            cache_uid_atcLabel.insertMulti(uid, n);
+        }
     }
-    return toReturn;
+    return cache_uid_atcLabel.values(uid);
 }
 
 QStringList DrugsBase::getDrugInns(const QVariant &uid)
 {
     QStringList toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if (!DB.open()) {
+    if (!DB.isOpen()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                              .arg(Constants::DB_DRUGS_NAME).arg(DB.lastError().text()));
         return toReturn;

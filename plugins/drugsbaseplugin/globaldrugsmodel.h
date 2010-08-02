@@ -63,6 +63,8 @@ class DrugsData;
 class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlTableModel
 {
     Q_OBJECT
+    friend class Internal::GlobalDrugsModelPrivate;
+
 public:
     GlobalDrugsModel(QObject * parent = 0);
     ~GlobalDrugsModel();
@@ -81,6 +83,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void refreshDrugsAllergies(const int ref);
+    void physiologyProcessed();
 
 private:
     Internal::GlobalDrugsModelPrivate *d;
