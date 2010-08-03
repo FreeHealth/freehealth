@@ -44,6 +44,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtGui/QWidget>
+#include <QtGui/QIcon>
 
 
 class  IToolPage : public QObject

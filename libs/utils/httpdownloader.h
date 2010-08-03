@@ -37,38 +37,56 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef CANADIANDRUGSDATABASEWIDGET_H
-#define CANADIANDRUGSDATABASEWIDGET_H
+#ifndef HTTPDOWNLOADER_H
+#define HTTPDOWNLOADER_H
 
-#include <QWidget>
+#include <QObject>
 
-namespace Ui {
-    class CanadianDrugsDatabaseWidget;
-}
+#include <QNetworkAccessManager>
+#include <QUrl>
 
-class CanadianDrugsDatabaseWidget : public QWidget
+class QFile;
+class QProgressDialog;
+class QNetworkReply;
+class QMainWindow;
+
+
+class HttpDownloader : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit CanadianDrugsDatabaseWidget(QWidget *parent = 0);
-    ~CanadianDrugsDatabaseWidget();
+    explicit HttpDownloader(QObject *parent = 0);
+
+    void setMainWindow(QMainWindow *win);
+    void setUrl(const QUrl &url);
+    void setOutputPath(const QString &absolutePath);
+
+    void startDownload();
+
+Q_SIGNALS:
+    void downloadFinished();
 
 private Q_SLOTS:
-    void on_startJobs_clicked();
-
-protected:
-    void changeEvent(QEvent *e);
-    bool downloadFiles();
-    bool unzipFiles();
-    bool prepareDatas();
-    bool createDatabase();
-    bool populateDatabase();
-    bool linkMolecules();
+    void startRequest(const QUrl &url);
+    void downloadFile();
+    void cancelDownload();
+    void httpFinished();
+    void httpReadyRead();
+    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+//    void slotAuthenticationRequired(QNetworkReply*,QAuthenticator *);
+//#ifndef QT_NO_OPENSSL
+//    void sslErrors(QNetworkReply*,const QList<QSslError> &errors);
+//#endif
 
 private:
-    Ui::CanadianDrugsDatabaseWidget *ui;
-    QString m_WorkingPath;
+    QString m_Path;
+    QUrl m_Url;
+    QNetworkAccessManager qnam;
+    QNetworkReply *reply;
+    QFile *file;
+    QProgressDialog *progressDialog;
+    int httpGetId;
+    bool httpRequestAborted;
 };
 
-#endif // CANADIANDRUGSDATABASEWIDGET_H
+#endif // HTTPDOWNLOADER_H
