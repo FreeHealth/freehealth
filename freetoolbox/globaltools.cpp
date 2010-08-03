@@ -243,10 +243,10 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName)
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
     if (!DB.open())
         return false;
-    if (!DB.transaction()) {
-        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()");
-        return false;
-    }
+//    if (!DB.transaction()) {
+//        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()");
+//        return false;
+//    }
 
     req.clear();
     QStringList queries;
@@ -286,13 +286,13 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName)
         QSqlQuery query(sql, DB);
         if (!query.isActive()) {
             Utils::Log::addError("Tools", QString("SQL ERROR : %1 \"%2\"").arg(query.lastError().text(), sql));
-            DB.rollback();
+//            DB.rollback();
             return false;
         } else {
             Utils::Log::addMessage("Tools", QString("Query correctly done (%1 ms)").arg(time.elapsed()));
         }
     }
-    DB.commit();
+//    DB.commit();
     return true;
 }
 
