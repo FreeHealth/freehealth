@@ -51,6 +51,7 @@
 #include <coreplugin/contextmanager/contextmanager_p.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
+#include <coreplugin/constants_icons.h>
 
 #include <faccountcoreplugin/commandlineparser.h>
 

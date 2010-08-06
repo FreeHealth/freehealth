@@ -52,6 +52,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 using namespace Account;
 using namespace Account::Internal;

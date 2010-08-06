@@ -101,6 +101,14 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
+
+    // Patient's datas wrapper
+    virtual IPatient *patient() const {}
+    virtual void setPatient(IPatient *patient) {}
+
+    virtual IUser *user() const {}
+    virtual void setUser(IUser *user) {}
+
 private:
     QSplashScreen *m_Splash;
     IMainWindow *m_MainWindow;

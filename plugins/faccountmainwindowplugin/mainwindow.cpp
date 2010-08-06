@@ -44,6 +44,7 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/filemanager.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
@@ -92,7 +93,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::Patient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
+static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 
 // SplashScreen Messagers
