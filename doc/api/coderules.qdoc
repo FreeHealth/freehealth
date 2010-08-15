@@ -121,79 +121,41 @@ Lisez le code déjà écrit et présentez votre code de la même manière.
 
 Lorsque vous ajoutez une classe à freemedforms ou aux toolkits, assurez-vous d'exporter correctement votre travail.
     - inclure le fichier d'import/export adéquat qui se nomme `xxXxxxExporter.h`
-        - `mfExporter.h` pour freemedforms
-        - `tkExporter.h` pour le toolkit principal
-        - `tkUserExporter.h` pour le toolkit utilisateur
-        - `tkMedintuxExporter.h` pour le toolkit de medintux
+        - `pluginname_exporter.h` pour freemedforms
+        - `libname_exporter.h` pour les librairies
     - utilisez ensuite la macro d'import/export
-        - \e Q_FMF_EXPORT pour les objects de freemedforms
-        - \e Q_TK_EXPORT pour le toolkit principal
-        - \e Q_TKUSER_EXPORT pour le toolkit utilisateur
-        - \e Q_TKMT_EXPORT pour le toolkit de medintux
-
-\code
-#include <mfExporter.h> // Pour un objet/widget de freemedforms
-
-class Q_FMF_EXPORT mfMyClass
- {
-    [ ... ]
-};
-\endcode
-
-\code
-#include <tkExporter.h> // Pour un objet/widget du toolkit
-
-class Q_TK_EXPORT tkMyClass
- {
-    [ ... ]
-};
-\endcode
-
-\code
-#include <tkUserExporter.h> // Pour un objet/widget du usertoolkit
-
-class Q_TKUSER_EXPORT tkUserMyClass
- {
-    [ ... ]
-};
-\endcode
-
+        - \e CORE_EXPORT pour les objects de freemedforms
+        - \e UTILS_EXPORT pour les librairies (ici l'exemple de la librairie Utils)
+        - ...
 
 
 \section namespaces Règle de nommage des classes, espaces de noms et données de classe
 
-Préfixe des classes selon la portée de votre code :
-    - Toutes les classes intéressant FreeMedForms ou ses plugins débutent toutes par `mf`en minuscule
-    - Toutes les classes intéressant DrugsInteractions et qui ne font pas partie du project FreeMedForms
-    débutent par `di`en minuscule. Si une classe est partagée entre une application et FreeMedForms
-    c'est `mf` qui prime
-    - Toutes les classes intéressant ToolKit débutent par `tk`
-    - Toutes les classes intéressant UserToolKit débutent par `tkUser`
-    - Toutes les classes intéressant MedintuxToolKit débutent par `tkMedintux`
+Nom des fichiers:
+    - Doivent TOUJOURS être en minuscule.
+    - Au besoin créez des sous-répertoires à vos plugins.
 
 Nom des classes :
     - Doivent être le plus explicite possible
     - La première lettre de chacun des mots constituant le nom de la classe est en majuscule
     - Stéréotypes :
-        - post-fixe pour les gestionnaires des bases de données : `Base` pour le gestionnaire de la base,
-      `Tables` pour le descripteur des tables de la base de données (ex : mfDrugsBase, mfDrugsTables)
+        - post-fixe pour les gestionnaires des bases de données : `Base` pour le gestionnaire de la base
         - post-fixe : `Dialog` et `Model` pour les dialogues et les modèles spécifiques à une classe concrète
 
   Les données de classes, celles déclarées dans l'entête, sont préfixées par `m_` immédiatement suivi
   d'une majuscule. Au besoin, il est bon de rappeler dans le nom de la variable son type. \n
-  Essayer de garder aligner les noms des variables. Exemple :
+  Exemple :
 \code
-class Q_YOUR_EXPORTER mfYourObject
+class YOUR_EXPORTER YourObject
 {
 public:
-    mfYourObject();
-    ~ mfYourObject() {}
+    YourObject();
+    ~ YourObject() {}
     [...]
 
 private:
-    int                    m_Handler;
-    mfDrugs *              m_Drug;
-    mfOneObject &          m_OneObject;
+    int m_Handler;
+    DrugsData *m_Drug;
     QMap<QString, QString> m_MapNameSurname;
 };
 \endcode
@@ -202,45 +164,28 @@ private:
 
     - L'interface publique doit être simple et claire.
     - Lorsqu'un membre est suffisamment général pour s'appliquer à plusieurs sous-projets de FreeMedForms,
-    celui-ci doit être introduit dans la partie globale du toolkit (`toolkit/tkGlobal.h` et `toolkit/tkGlobal.cpp`).
-    - Attention toutefois, les objets globaux (`xxGlobal`) ne doivent comprendre que des membres pas de données
-    et sont des espace de nom pas des objets.
+    celui-ci doit être introduit dans la partie globale de la librairie Utils (`utils/global.h`).
     - Lorsqu'un objet entier est suffisamment général pour être réutilisé par d'autres sous-projet,
-    il doit être ajouté au toolkit.
+    il doit être ajouté aux librairies ou à un plugin générique (Editor par exemple).
 
 \section dirs Structure des répertoires
 
-    - Tant que possible, l'arborescence sera riche est détaillée. Les répertoires regrouperont les objets
-    ayant des rôles proches.
-    - Un répertoire `sdk` devra contenir les entêtes incluant les entêtes de votre sous-projet. Exemple :
-    \code
-         Fichier sdk/mfMyObject.h
-         #include "../../path/to/the/real/mfMyObject.h"
-    \endcode
-    - Pour les librairies et certains plugins, un fichier d'inclusion de projet sera créé pour inclure
-    le répertoire de votre SDK dans la recherche des entêtes. Pour les librairies dans le répertoire `libs`
-    et pour les plugins dans le répertoire `plugins`. Ce fichier sera préfixé par `sdk_`.
-    Exemple : `libs/sdk_toolkit.pri`.
-    \code
-         # include path for toolkit
-         INCLUDEPATH *= $${PWD}/toolkit/sdk
-    \endcode
-
+    - L'arborescence est fixée. Respectez la.
 
 \section codedocumentation Documentation du code
 
   Le code sera \b obligatoirement \b documenté selon la méthode de `doxygen`.
   Merci de vous référer à la <a href="http://www.doxygen.org">documentation de Doxygen</a>.
-  Lorsque vous écrivez une documentation à l'extérieur de vos fichiers de code, placez les dans le répertoire 'doc'.
-  Les fonctions dont le nom seul permet de comprendre son action ne sont pas forcément documentées (`mfDrugs::setValue()`).
-  Les fonctions complexes seront documentées (`mfDrugBase::createConnection()`).
-  Pour améliorer la correction de bugs merci d'ajouter ce cadre de documentation dans le fichier entête de votre code.
+  Les fonctions dont le nom seul permet de comprendre son action ne sont pas forcément documentées.
+  Les fonctions complexes seront documentées.
+  Pour améliorer la correction de bugs merci d'ajouter ce cadre de documentation dans le fichier
+  entête de votre code (ou la version correspond à la version de release de l'objet).
 
 \verbatim
 /**
- * \file nameOfTheCurrentFile.h
+ * \file nameofthecurrentfile.h
  * \author AUTHOR_NAME <MAIL@ADRESS>
- * \version 0.03
+ * \version 0.0.3
  * \date DATE_DD_MMM_YYYY
 *\/
 \endverbatim
@@ -258,52 +203,40 @@ private:
 
     - Il peut être utile pour des membres complexes de documenter le code au fur et à mesure de son
     implémentation. Les commentaires sont ajoutés à la mode C++ `//`. Pour des raison de commodité,
-    les commentaires marqués par \verbatim `\/*`et `*\/` \endverbatim sont utilisés par les administrateurs
-    pour neutraliser de grandes parties de code lors de tests.
+    les commentaires marqués par \verbatim `\/*`et `*\/` \endverbatim sont utilisés uniquement
+    par les administrateur pour neutraliser de grandes parties de code lors de tests.
 
     - Ne commentez pas \e abusivement votre code source, cela peut nuire à la lisibilité.
-    Privilégiez des variables et des fonctions bien nommées (`mfDrugBase` plutôt que `m1`) et
+    Privilégiez des variables et des fonctions bien nommées (`DrugBase` plutôt que `m1`) et
     le code devrait pouvoir se lire naturellement. Par exemple, pas la peine d'écrire en commentaire
     que l'appel à la méthode `resetDatabase()` va remettre à zero la base de données.
     Néanmoins, certaines portions de code compliquées méritent parfois des commentaires.
 
-    - Lorsque la documentation est riche, celle-ci sera extraite de l'implémentation et de la description
-    pour être sauvegardé dans un fichier `.dox`. Dans le cas contraire la documentation est présentée
-    dans l'implémentation.
+    - La documentation est rédigée en anglais.
 
-    - La documentation est rédigée en anglais. Une traduction française peut être proposée (cf : `mfObjects.dox`).
+    - Les chemins d'inclusions sont définis dans le projet comme suit:
+        - \e ./plugins
+        - \e ./libs
+        - \e ./contrib
 
-    - Les INCLUDEPATH des projets peuvent rendre la lecture des inclusions difficile.
-    Pour faciliter la lecture, lors de l'inclusion des entêtes au sein de vos classes,
-    spécifiez le projet de provenance en respectant l'ordre suivant, et en espaçant chaque
-    inclusions par une ligne vierge et le commentaire présenté dans l'exemple :
-    - freemedforms headers
-    - toolkit headers
-    - usertoolkit headers
-    - medintuxtoolkit headers
-    - yourproject headers
-    - Qt headers
+    - Pour faciliter la lecture, lors de l'inclusion des entêtes au sein de vos classes,
+    respectez l'ordre suivant :
+        - plugins (regroupés en bloques par plugins)
+        - librairies FreeMedForms (regroupés en bloques par librairies)
+        - Qt headers
+
+
 \code
-// include freemedforms headers
-#include <mfCore.h>
-#include <mfSettings.h>
+#include <pluginname1/filename.h>
+#include <pluginname1/subdir/filename2.h>
 
-// include toolkit headers
-#include <tkLog.h>
-#include <tkGlobal.h>
+#include <pluginname2/filename.h>
+#include <pluginname2/subdir/filename2.h>
 
-// include usertoolkit headers
-#include <tkUserGlobal.h>
-#include <tkUserBase.h>
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
-// include medintuxtoolkit headers
-#include <tkMedintuxConfiguration.h>
-
-// include YOURTOOLKIT/SUBPROJECT headers
-#include <mfMyObject.h>
-#include <mfAnotherObject.h>
-
-// include Qt headers
 #include <QApplication>
 #include <QMessageBox>
 \endcode
@@ -312,52 +245,62 @@ private:
 
 \subsection messageboxes Utilisation des Message Box
 
-    - Les QMessageBox ne doivent pas être utilisées.
-    - Le toolkit fournit toutes les fonctions nécessaire pour vos MessageBoxes.
-    - informativeMessageBox() (juste avec Ok)
-    - yesNoMessageBox() (renvoie true si Yes)
-    - okCancelMessageBox() (renvoie true si Ok)
+    - <b>Les QMessageBox ne doivent pas être utilisées</b>.
+    - La librairie Utils fournit toutes les fonctions pour vos MessageBoxes.
+    - Utils::informativeMessageBox() (juste avec Ok)
+    - Utils::yesNoMessageBox() (renvoie true si Yes)
+    - Utils::okCancelMessageBox() (renvoie true si Ok)
     - Un texte d'une à deux phrases décrit brièvement le message à l'utilisateur.
     - Un texte d'information et un texte détaillé accompagnent ce message.
 \code
     // CECI EST ACCEPTE
-    tkGlobal::okCancelMessageBox( tr("Text") , tr("Informative"), tr("Detailled"), tr("Title is faculative, application name will appear if no text is passed.") );
+    Utils::okCancelMessageBox( tr("Text") , tr("Informative"), tr("Detailled"), tr("Title is faculative, application name will appear if no text is passed.") );
 
     // CECI NE L'EST PAS
     QMessageBox[...]
 
-    // Si vous ne trouvez pas votre bonheur dans tkGlobal, merci d'enrichir sur le même modèle
+    // Si vous ne trouvez pas votre bonheur dans Utils, merci d'enrichir sur le même modèle
 \endcode
 
 \subsection i18n Internationalisation
 
     - Tous les textes à traduire sont écrits dans un anglais correct et simple.
     - Les fonctions tr(), QCoreApplication::transalate() sont utilisées pour traduire le texte.
-    - Toutes les widgets doivent pouvoir être traduits lorsqu'un nouveau dictionnaire est chargé par l'application. Pour cela, utilisez l'évènement QEvent::LanguageChange qui est émis à chaque modification de dictionnaire.
+    - Toutes les widgets doivent pouvoir être traduits lorsqu'un nouveau dictionnaire est chargé
+      par l'application. Pour cela, utilisez l'évènement QEvent::LanguageChange qui est émis
+      à chaque modification de dictionnaire.
 \code
-void mfMyClass::changeEvent(QEvent *e)
+void MyWidget::changeEvent(QEvent *e)
 {
     if ( (e->type() == QEvent::LanguageChange) )
         retranslate();
 }
 \endcode
-    - Les éléments de formulaire dérivent la classe mfAbstractWidget qui implémente déjà cette fonctionnalité (cf doc).
+    - La classe Form::IFormItem implémente déjà cette fonctionnalité (cf doc).
 
 \section building Gestion des OS et mode de compilation
 
-  La librairie `toolkit` propose des fonctions d'identification de l'OS :
+  - La librairie `utils` propose des fonctions d'identification de l'OS :
   `isRunningOn...()`. Lorsque cela est possible utilisez ces fontions au lieu de `#ifdef Q_OS_MAC`.
-   Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation des macros sera incontournable.
+   Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation
+   des macros sera incontournable.
 
-  Deux fonctions permettent d'identifier le mode de compilation de l'application : `isDebugCompilation()` et
+  - Deux fonctions permettent d'identifier le mode de compilation de l'application : `isDebugCompilation()` et
   `isFullApplication()`. Ces fonctions utilisent des macros définies dans `config.pri` qui est utilisé par tous
    les projets de FreeMedForms.
 
 \section optimisations Optimisations
 
-Naturellement un code optimisé est préférable à du code inutilement lourd, néanmoins de manière générale, il faut éviter d'écrire du code optimisé au détriment de la lisibilité et de l'évolutivité; nous n'écrivons pas un OS temps réel mais des outils qui ne devraient pas mettre votre machine à genoux :)
-N'utilisez pas les objets pour leurs performances mais pour leur spécificité. Par exemple, pour stocker une liste d'objets, le QList est plus indiqué que le QVector, même si ce dernier est plus performant dans certains cas.
-Gardons les idées d'optimisations pour les endroits clefs et à usage intensif des applications (comme par exemple des manipulations lourdes dans les bases de données).
+Un code optimisé est préférable à du code inutilement lourd, néanmoins de manière générale,
+il faut éviter d'écrire du code optimisé au détriment de la lisibilité et de l'évolutivité;
+ nous n'écrivons pas un OS temps réel mais des outils qui ne devraient pas mettre votre machine à genoux :)
+
+N'utilisez pas les objets pour leurs performances mais pour leur spécificité.
+ Par exemple, pour stocker une liste d'objets, le QList est plus indiqué que le QVector,
+ même si ce dernier est plus performant dans certains cas.
+
+Gardons les idées d'optimisations pour les endroits clefs et à usage intensif
+des applications (comme par exemple des manipulations lourdes dans les bases de données).
 
 \subsection useforeach Utilisez foreach
 
@@ -365,8 +308,7 @@ Gardons les idées d'optimisations pour les endroits clefs et à usage intensif 
     - Chaque fois qu'il est possible, utilisez comme variable du foreach une référence constante (pour limiter les copies)
 \code
     // Ceci est correct si s n'est pas modifié dans la boucle
-    foreach( const QString & s, stringList)
-    {
+    foreach(const QString &s, stringList) {
         [ ... ]
     }
 \endcode

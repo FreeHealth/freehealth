@@ -84,33 +84,9 @@ FreeMedForms and derivatives use :
   - Bash for some scripts
 
 
-   \section authors Authors and contributors
-    - Creator and Main author :
-        - Éric Maeker, MD <eric.maeker@free.fr> : Main manager.
+   \section mainwebsite Main website
 
-    - Contributors :
-        - Guillaume Denry <guillaume.denry@gmail.com> : coder, debugger, informatic advisor
-        - Sébastien Belin, MD <belin.s@wanadoo.fr> : junior coder, medical advisor
-        - Laurent Masson, MD <> : medical advisor
-
-    - Helpers :
-        -  Filipe Azevedo <pasnox@gmail.com> : coder helper, debugger helper, Qt advisor.
-        -  David Geldreich <david.geldreich@free.fr> : C++ advisor,
-        -  Jourdan Romain  <No@Mail.com> : coder helper on printer engine
-
-    - Testers :
-        - Many french anonymous testers.
-
-    - Translators :
-        - Éric Maeker, MD
-        - Sacha Manns (germany) <Sascha.Manns@directbox.com>
-        - We need help !!!
-
-    -  French Public Mailing :
-        -  <a href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</a>
-
-    - WebMaster
-        - Vincent Perez, MD <vinperez@gmail.com>
+   \htmlonly <a href="http://www.freemedforms.org">Find all informations about the FreeMedForms project in the main website</a> \endhtmlonly
 
 
    \section toc Table of contents
@@ -153,7 +129,5 @@ FreeMedForms and derivatives use :
     - drugs database checking
     - medical doctors to help us in providing a better application
     - translators (from english to german, spanish, italian...).
-    Please find more informations on the web site.
-    \htmlonly <a href="http://www.ericmaeker.fr/FreeMedForms">http://www.ericmaeker.fr/FreeMedForms</a> \endhtmlonly
-    \latexonly http://www.ericmaeker.fr/FreeMedForms \endlatexonly
+   \htmlonly <a href="http://www.freemedforms.org">Find all informations about the FreeMedForms project in the main website</a> \endhtmlonly
 */

@@ -368,20 +368,33 @@ The structure of this file must meet the following requirements.
 
 \~
 \verbatim
-<FreeDiams_In version="0.4.3">
+<FreeDiams_In version="0.5.0">
   <ConfigFile value="/absolute/file/specification/to/the/required/configFile.ini"/>
-  <ExchangeOut value="/absolute/file/specification/to/the/required/exchange_File.txt" format="xml html html_xml	"/>
+  <ExchangeOut value="/absolute/file/specification/to/the/required/exchange_File.txt" format="xml html html_xml"/>
   <DrugsDatabase uid="FREEDIAMS_DRUGS_DATABASE_UID"/>
-  <EMR name="NameOfTheCallingEMR" uid="SessionUIDWillBeReturnedInOutputFile"/>
+  <EMR name="NameWillBeShownInTheMainWindowTitle" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <Patient>
-    <Identity name="Name Of Patient" secondname="" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
+    <Identity name="Name Of Patient"
+              secondname=""
+              surname="James"
+              uid="EMR Patient's UID"
+              dob="yyyy/MM/dd"
+              gender="M or F or H"/>
+
     <Creatinine value="12" unit="mg/l or mmol/l"/>
     <Weight value="70" unit="kg or lbs" />
     <Height value="170" unit="cm or "/>
-    <InnAllergies value="inn1;inn2;inn3"/>
-    <ATCAllergies value="ATC1;ATC2;ATC3"/>
-    <DrugsUidAllergies value="7655668;876769;656789"/>
+
+    <InnAllergies certain="inn1;inn2;inn3" suspected="inn1;inn2;inn3"/>
+    <ATCAllergies certain="ATC1;ATC2;ATC3" suspected="ATC1;ATC2;ATC3"/>
+    <DrugsUidAllergies certain="7655668;876769;656789" suspected="7655668;876769;656789"/>
+
+    <InnIntolerances certain="inn1;inn2;inn3" suspected="inn1;inn2;inn3"/>
+    <ATCIntolerances certain="ATC1;ATC2;ATC3" suspected="ATC1;ATC2;ATC3"/>
+    <DrugsUidIntolerances certain="7655668;876769;656789" suspected="7655668;876769;656789"/>
+
     <ICD10 value="J11.0;A22;Z23"/>
+
   </Patient>
   <Ui editmode="select-only or prescriber" blockPatientDatas="0/1"/>
 </FreeDiams_In>
@@ -399,11 +412,13 @@ should be different for each OS:
    - under Windows, binary is installed in \e C:\\Path\\To\\FreeDiams
 It is recommended to use absolute full path inside the XML exhange in
 file, so that the calls to \freediams will be fully multi-OS.
-\endnote
 
+
+- When passing ATC codes for allergies or intolerances, you can pass <em>Class ATC Codes</em>
+which are less than 7 char length.
 - ConfigFile : tells \freediams to use the specified config file. If this file does not exist, \freediams
 will use the default one.
-- ExchangeOut :
+- ExchangeOut : Specify the output file where \freediams will write the datas at closing time.
 - DrugsDatabase : specify the \freediams "Identifiant" to use e.g. FR_AFSSAPS, CA_HCDPD as it appears
 in > Preferences > Database selector > Database informations … Filename and identifiant.
 - EMR : these params will be returned in the exchang-out file, so that EMR can test and check the files.
