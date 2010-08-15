@@ -78,8 +78,11 @@ public:
     virtual const DatabaseInfos *actualDatabaseInformations() const = 0;
 
     virtual void logChronos(bool state);
+
+    // link to Utils::Database
     QString iamTable(const int ref) const;
-    QString getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const;
+    QString getIamWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
+    QString selectInteractionsSql(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const;
 
     // link to DrugsBase
     int getInnCodeForCodeMolecule(const int molecule_code) const;

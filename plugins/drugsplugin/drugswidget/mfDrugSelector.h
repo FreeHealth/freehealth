@@ -55,6 +55,10 @@ class QToolButton;
  * \date 15 Feb 2010
  */
 
+namespace DrugsDB {
+class AtcTreeModel;
+}
+
 namespace DrugsWidget {
 namespace Internal {
 
@@ -111,7 +115,8 @@ private Q_SLOTS:
 private:
     // models
     QSqlTableModel *m_DrugsModel;
-    QSqlTableModel *m_InnModel;
+    //QSqlTableModel *m_InnModel;
+    DrugsDB::AtcTreeModel *m_InnModel;
 
     // widgets and actions
     QToolButton  *m_SearchToolButton;      // toolbutton that goes to the searchline (left)

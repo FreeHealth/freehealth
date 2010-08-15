@@ -66,9 +66,11 @@ class DRUGSBASE_EXPORT AtcTreeModel : public QAbstractItemModel
 
 public:
     enum DataRepresentation {
-        ATC_Code = 0,
+        ATC_Label = 0,
+        ATC_Code,
         ATC_EnglishLabel,
-        ATC_FrenchLabel
+        ATC_FrenchLabel,
+        ATC_DeutschLabel
     };
 
     AtcTreeModel(QObject * parent = 0);
@@ -84,6 +86,7 @@ public:
     bool setData(const QModelIndex &, const QVariant &, int) {return false;}
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
 private:
     Internal::AtcTreeModelPrivate *d;

@@ -921,7 +921,7 @@ DrugsData *DrugsBase::getDrugByCIP(const QVariant & CIP_id)
 DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
 {
     if (!d->m_ActualDBInfos) {
-        DrugsData * toReturn = new DrugsData;
+        DrugsData *toReturn = new DrugsData;
         toReturn->setValue(Table_DRUGS, DRUGS_NAME, QString("No drugs database loaded."));
         return toReturn;
     }
@@ -971,6 +971,8 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                 toReturn = new DrugsData();
                 for (i = 0; i < DRUGS_MaxParam; ++i)
                     toReturn->setValue(Table_DRUGS, i, q.value(i));
+            } else {
+                qWarning() << "XXXXXXXXXXXXXXXXXXXXXXX" << req;
             }
             // manage drugs denomination according to the database informations
             if (d->m_ActualDBInfos) {

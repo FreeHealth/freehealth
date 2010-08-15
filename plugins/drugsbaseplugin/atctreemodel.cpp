@@ -49,6 +49,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QLocale>
 
 #include <QDebug>
 
@@ -100,7 +101,19 @@ public:
     void setData(const int id, const QVariant &value) {m_Datas.insert(id, value.toString());}
 
     // Access to datas
-    QString data(const int id) const {return m_Datas.value(id);}
+    QString data(const int id) const
+    {
+        if (id == AtcTreeModel::ATC_Label) {
+            QString l = QLocale().name().left(2);
+            if (l=="fr")
+                return m_Datas.value(AtcTreeModel::ATC_FrenchLabel);
+            else if (l=="de")
+                return m_Datas.value(AtcTreeModel::ATC_DeutschLabel);
+            else
+                return m_Datas.value(AtcTreeModel::ATC_EnglishLabel);
+        }
+        return m_Datas.value(id);
+    }
     QString code() const {return m_Datas.value(AtcTreeModel::ATC_Code);}
     QString english() const {return m_Datas.value(AtcTreeModel::ATC_EnglishLabel);}
     QString french() const {return m_Datas.value(AtcTreeModel::ATC_FrenchLabel);}
@@ -135,13 +148,13 @@ public:
     {
         QHash<int, QString> where;
         where.insert(Constants::ATC_ID, " < 100000");
-        QSqlQuery query(drugsBase()->select(Constants::Table_ATC,
-                                            QList<int>()
-                                            << Constants::ATC_CODE
-                                            << Constants::ATC_EN
-                                            << Constants::ATC_FR,
-                                            where),
-                        drugsBase()->database());
+        QString req = drugsBase()->selectInteractionsSql(Constants::Table_ATC,
+                                         QList<int>()
+                                         << Constants::ATC_CODE
+                                         << Constants::ATC_EN
+                                         << Constants::ATC_FR,
+                                         where);
+        QSqlQuery query(req, QSqlDatabase::database(Constants::DB_IAM_NAME));
         QList<AtcItem *> list;
         if (query.isActive()) {
             while (query.next()) {
@@ -156,9 +169,6 @@ public:
         }
         query.finish();
 
-        qWarning() << "get"<< list.count() << "ATC";
-
-        QList<AtcItem *> three, four, five, six;
         AtcItem *last = 0;
         AtcItem *lastOne = 0;
         AtcItem *lastThree = 0;
@@ -326,3 +336,13 @@ Qt::ItemFlags AtcTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
+QVariant AtcTreeModel::headerData(int section, Qt::Orientation orientation, int) const
+{
+     if (orientation == Qt::Horizontal) {
+        if (section==0)
+            return tr("Label");
+        if (section==1)
+            return tr("Code");
+    }
+    return QVariant();
+}

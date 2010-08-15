@@ -335,9 +335,14 @@ QString InteractionsBase::iamTable(const int ref) const
     return di->m_DB->table(ref);
 }
 
-QString InteractionsBase::getIamWhereClause(const int & tableref, const QHash<int, QString> & conditions) const
+QString InteractionsBase::getIamWhereClause(const int &tableref, const QHash<int, QString> &conditions) const
 {
     return di->m_DB->getWhereClause(tableref, conditions);
+}
+
+QString InteractionsBase::selectInteractionsSql(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const
+{
+    return di->m_DB->select(tableref, fieldsref, conditions);
 }
 
 /** \brief Return the interaction's state of a \e drug when prescribed in association with \e drugList. */
