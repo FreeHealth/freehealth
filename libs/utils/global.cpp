@@ -64,9 +64,7 @@
 
 /**
   \namespace Utils
-  \brief Some global funtions for the applications.
-  \ingroup toolkit
-  \ingroup object_toolkit
+  \brief Some global funtions and classes for the applications.
 */
 
 using namespace Utils;

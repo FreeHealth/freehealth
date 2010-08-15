@@ -37,6 +37,14 @@ QT_BEGIN_NAMESPACE
 class QPushButton;
 QT_END_NAMESPACE
 
+/**
+ * \file plugindialog.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 08 June 2010
+*/
+
+
 namespace ExtensionSystem {
 class PluginSpec;
 class PluginView;

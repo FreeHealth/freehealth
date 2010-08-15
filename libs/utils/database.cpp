@@ -38,7 +38,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class Database
+  \class Utils::Database
  \brief this class is a base class for databases. It manages scheme and creates SQL queries.
     The idea is to create a database scheme dynamically. Your superbase must hold the enums
     corresponding to the tables and the fields of each tables.\n
@@ -71,8 +71,6 @@
     // If you want to create database if it doesn't exist define the member createDatabase() in your superclass.
 
     \endcode
-  \ingroup toolkit
-  \ingroup database_toolkit
 */
 
 #include "database.h"

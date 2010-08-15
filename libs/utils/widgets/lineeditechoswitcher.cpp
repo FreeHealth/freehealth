@@ -37,6 +37,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Utils::LineEditEchoSwitcher
+  Simple Widget with:
+  - a QLineEdit
+  - a simple button connected with the switchEchoMode() of the QLineEdit
+  When using this widget please inform the icon of the button with LineEditEchoSwitcher::setIcon()
+*/
+
 #include "lineeditechoswitcher.h"
 
 #include <QPushButton>

@@ -34,7 +34,7 @@
  ***************************************************************************/
 
 /**
-  \class Translators
+  \class Core::Translators
   \brief This class is a QTranslator manager. All translations files are loaded using the pathToTranslations().
 
   In first, instanciate this class inside the core of the app.
@@ -48,9 +48,6 @@
   Use changeLangage() to automacally reload all translators with the right language.Toolkit manages its own translator.
 
   Get availables languages and locales with : availableLocales(), availableLanguages(), availableLocalesAndLanguage().
-
-  \ingroup toolkit
-  \ingroup object_toolkit
 */
 
 #include "translators.h"

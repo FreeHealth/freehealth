@@ -30,6 +30,12 @@
  *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
  *   eric.maeker@free.fr                                                   *
  ***************************************************************************/
+
+/**
+  \class Core::SettingsDialog
+  Dialogs that presents all the IOptionsPage stored in the plugin manager.
+*/
+
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 

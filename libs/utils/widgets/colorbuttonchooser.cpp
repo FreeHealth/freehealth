@@ -37,6 +37,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class Utils::ColorButtonChooser
+  Simple button for color selection.
+*/
+
 #include "colorbuttonchooser.h"
 
 #include <QColorDialog>

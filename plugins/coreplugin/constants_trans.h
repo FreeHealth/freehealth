@@ -40,10 +40,17 @@
 #ifndef CORE_CONSTANTS_H
 #define CORE_CONSTANTS_H
 
+/**
+ * \file constants_trans.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 13 June 2010
+*/
+
 namespace Core {
 namespace Constants {
 
-const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Context for translations of constants  \ingroup toolkit_constants */
+const char *const  TK_CONSTANTS_CONTEXT  = "tkConstants";      /*!< \brief Context for translations of constants */
 
 }  // end Constants
 } // end Core

@@ -38,6 +38,13 @@
 #include <QDialog>
 #include <QList>
 
+/**
+ * \file settingsdialog.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.8
+ * \date 08 Sept 2009
+*/
+
 namespace Core {
 class IOptionsPage;
 

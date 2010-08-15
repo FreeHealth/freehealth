@@ -44,10 +44,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class TextEditor
+  \class Editor::TextEditor
   \todo Document code.
-  \ingroup toolkit
-  \ingroup widget_toolkit
 */
 
 #include "texteditor.h"
@@ -95,6 +93,27 @@ using namespace Trans::ConstantTranslations;
 
 namespace Editor {
 namespace Internal {
+
+class TextEditorHtmlPaster : public QTextEdit
+{
+public:
+    TextEditorHtmlPaster(QWidget *parent = 0) : QTextEdit(parent) {}
+    TextEditorHtmlPaster(const QString &text, QWidget *parent = 0) : QTextEdit(text, parent) {}
+    ~TextEditorHtmlPaster() {}
+
+    bool canInsertFromMimeData(const QMimeData *source) const {qWarning() << source; return true;}
+    void insertFromMimeData(const QMimeData *source)
+    {
+        qWarning() << source->formats();
+        qWarning() << "hasHtml" << source->hasHtml();
+        qWarning() << "mime" << source->data(source->formats().at(0));
+        QString h = "html";
+        qWarning() << "clipboard text" << QApplication::clipboard()->text();
+        qWarning() << "clip formats" << QApplication::clipboard()->mimeData()->formats();
+    }
+
+};
+
 class TextEditorPrivate
 {
 public:
@@ -102,6 +121,7 @@ public:
             : m_Type(type), m_Context(0), textEdit(0), m_Parent(parent), m_ToolBarIsVisible(false)
     {
         textEdit = new QTextEdit(m_Parent);
+        //textEdit = new TextEditorHtmlPaster(m_Parent);
         textEdit->setContextMenuPolicy( Qt::CustomContextMenu );
     }
 
@@ -213,6 +233,7 @@ public:
     EditorContext *m_Context;
     QToolBar *m_ToolBar;
     QTextEdit *textEdit;
+    //TextEditorHtmlPaster *textEdit;
     QWidget *m_Parent;
     bool m_ToolBarIsVisible;
 };

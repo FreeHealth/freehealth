@@ -32,6 +32,12 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+
+/**
+  \namespace Editor
+  Specific text editor of the FreeMedForms project.
+*/
+
 #include "texteditorplugin.h"
 #include "editormanager.h"
 

@@ -81,67 +81,66 @@
 #include <math.h>
 
 /**
-  \class PrinterPreviewer
+  \class Print::PrinterPreviewer
   \brief QWidget for printing previewing. Must be instanciate by Printer::previewer().
-  \ingroup toolkit widget_toolkit
  */
 
 /**
-  \class Printer
+  \class Print::Printer
   \todo Write Documentation
 */
 
 /**
-  \enum Printer::Presence
+  \enum Print::Printer::Presence
   \brief This enum is used to define the presence of headers, footers, watermarks
 */
 
 /**
-  \var Printer::Presence Printer::EachPages
+  \var Print::Printer::Presence Printer::EachPages
   The document is present on each pages to print
 */
 
 /**
-  \var Printer::Presence Printer::FirstPageOnly
+  \var Print::Printer::Presence Printer::FirstPageOnly
   The document is present on the first page only
 */
 
 /**
-  \var Printer::Presence Printer::SecondPageOnly
+  \var Print::Printer::Presence Printer::SecondPageOnly
   The document is present on the second page only
 */
 
 /**
-  \var Printer::Presence Printer::LastPageOnly
+  \var Print::Printer::Presence Printer::LastPageOnly
   The document is present on the last page only
 */
 
 /**
-  \var Printer::Presence Printer::ButFirstPage
+  \var Print::Printer::Presence Printer::ButFirstPage
   The document is present on all pages but the first
 */
 
 /**
-  \var Printer::Presence Printer::OddPages
+  \var Print::Printer::Presence Printer::OddPages
 */
 
 /**
-  \var Printer::Presence Printer::EvenPages
+  \var Print::Printer::Presence Printer::EvenPages
 */
 
 /**
-  \var Printer::Presence Printer::DuplicataOnly
+  \var Print::Printer::Presence Printer::DuplicataOnly
   The document is present on the duplicatas only
   \sa printDuplicata()
 */
 
 /**
-  \enum Printer::Priority
+  \enum Print::Printer::Priority
   \brief Not used for now
 */
 
 /**
-  \fn static QStringList Printer::presencesAvailable()
+  \fn static QStringList Print::Printer::presencesAvailable()
   \brief Returns the QStringList of the availables Presence in the order of the enum QPrinterEasy::Presence
   Usefull for populating a QComboBox for example.
 */

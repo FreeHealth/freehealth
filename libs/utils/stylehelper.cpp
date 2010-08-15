@@ -27,6 +27,11 @@
 **
 **************************************************************************/
 
+/**
+  \class Utils::StyleHelper
+  Pasted from QtCreator, needed by Utils::FancyTabWidget
+*/
+
 #include "stylehelper.h"
 
 #include <QtGui/QPixmapCache>

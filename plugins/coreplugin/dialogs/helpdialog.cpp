@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class HelpDialog
+  \class Core::HelpDialog
   \brief Creates an "autodeletion on close" dialog help viewer.
   It works great with ISettings::DocumentationPath.\n
   You SHOULD NOT delete the dialog.

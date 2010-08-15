@@ -48,6 +48,8 @@
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.10
  * \date 09 Aug 2009
+ * \class Core::ICommandLine
+ * \brief Command line parser interface.
 */
 
 namespace Core {

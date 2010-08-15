@@ -45,6 +45,13 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_trans.h>
 
+/**
+ * \file constants.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 13 June 2010
+*/
+
 namespace Core {
 namespace Constants {
 

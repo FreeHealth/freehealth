@@ -38,6 +38,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Core::IPatient
+  Abstract interface provided to access Patient's datas.
+  \sa Core::setPatient(), Core::patient()
+*/
+
 #include "ipatient.h"
 #include "constants_tokensandsettings.h"
 

@@ -40,6 +40,14 @@
 #ifndef CORE_CONSTANTS_TOKENS_SETTINGS_H
 #define CORE_CONSTANTS_TOKENS_SETTINGS_H
 
+/**
+ * \file constants_tokensandsettings.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 13 June 2010
+*/
+
+
 namespace Core {
 
 namespace Constants {

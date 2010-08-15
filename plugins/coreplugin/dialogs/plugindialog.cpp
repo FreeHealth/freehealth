@@ -27,6 +27,11 @@
 **
 **************************************************************************/
 
+/**
+  \class Core::PluginDialog
+  Shows informations about plugins.
+*/
+
 #include "plugindialog.h"
 
 #include <extensionsystem/pluginmanager.h>

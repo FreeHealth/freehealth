@@ -50,6 +50,7 @@ class QProgressDialog;
 class QNetworkReply;
 class QMainWindow;
 
+namespace Utils {
 
 class HttpDownloader : public QObject
 {
@@ -88,5 +89,7 @@ private:
     int httpGetId;
     bool httpRequestAborted;
 };
+
+}
 
 #endif // HTTPDOWNLOADER_H

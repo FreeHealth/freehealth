@@ -7,6 +7,15 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
+/**
+ * \file idebugpage.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.10
+ * \date 09 Aug 2009
+ * \class Core::IDebugPage
+ * \brief Derive objects from this interface and set it inside the PluginManager oject pool to get the page in the Core::DebugDialog.
+*/
+
 namespace Core {
 
 class CORE_EXPORT IDebugPage : public QObject

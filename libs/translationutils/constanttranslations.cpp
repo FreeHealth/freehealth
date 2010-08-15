@@ -39,7 +39,7 @@
  ***************************************************************************/
 
 /**
-  \namespace ConstantTranslations
+  \namespace Trans::ConstantTranslations
   \brief This namespace regroups some usefull translations that you can easily use in your app ou plugs
   The tkTr() function helps you to translate its constants.\n
   There are a lot of enums defined here for data comprehension. You should them for your models/database...\n

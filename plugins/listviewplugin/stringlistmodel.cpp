@@ -40,14 +40,12 @@
  ***************************************************************************/
 
 /**
-  \class StringListModel
+  \class Views::StringListModel
   * \brief Provides a stringlist model to use with tkStringListView.
   * You can set items checkable and/or string editable with constructor or with setCheckable(), setStringEditable().
   * There are functions to moveUp() moveDown() items.
   * You can set/get checkedItems with getCheckedItems() and setCheckedItems().
   * You can set/get all strings using setStringList().
-  \ingroup toolkit
-  \ingroup object_toolkit
 */
 
 #include "stringlistmodel.h"

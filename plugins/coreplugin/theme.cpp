@@ -39,13 +39,11 @@
  ***************************************************************************/
 
 /**
-  \class ThemePrivate
+  \class Core::ITheme
   \brief this is the theme manager. Actually manages only the icons of the app.
   You first need to instanciate it, inform it of path to use. Then ask the needed QIcon.\n
   There is a cache of asked icons. Limit of the cache can be dynamycally setted using setCacheMaxCost().
 
-  \ingroup toolkit
-  \ingroup object_toolkit
   \sa constants_theme
   \todo write full documentation
 */
@@ -55,7 +53,6 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 
-// include Qt headers
 #include <QCache>
 #include <QString>
 #include <QApplication>

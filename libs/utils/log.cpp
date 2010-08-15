@@ -33,17 +33,15 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /**
-  \class LogData
+  \class Utils::LogData
   Represents a message to log.
-  \ingroup toolkit
-  \ingroup object_toolkit
-  \sa Log
+  \sa Utils::Log
 */
 
 
 
 /**
-  \class Log
+  \class Utils::Log
   \brief this class holds the logs messages.
     Set messages with addMessage() or addMessages(), set errors with setError() or setErrors().\n
     The strings are stored and you can retreive messages with messages() and errors with errors().\n
@@ -56,9 +54,7 @@
      - ClassNameAsker : DateOftheLog - SQL Error : Driver : xxxxx, Database : xxxx, Query : xxxxxx
 
      You can directly save the logs via saveLog(), or retreive a string formatted using toString().
-  \ingroup toolkit
-  \ingroup object_toolkit
-  \sa DataLog
+  \sa Utils::LogData
 */
 
 #include "log.h"

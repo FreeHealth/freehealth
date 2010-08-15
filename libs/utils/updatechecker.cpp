@@ -34,24 +34,22 @@
  ***************************************************************************/
 
 /**
-  \class UpdateChecker
+  \class Utils::UpdateChecker
   \brief Threaded update checker over the internet. Connect the SIGNAL to catch the update.
   - Usage :
   \code
-      UpdateChecker::instance()->check("http://my.url.com/update.file.txt");
-      connect( UpdateChecker::instance(), SIGNAL(updateFound()), this, SLOT(on_UpdateFound()));
+      Utils::UpdateChecker::instance()->check("http://my.url.com/update.file.txt");
+      connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound()), this, SLOT(on_UpdateFound()));
       // OR
-      connect( UpdateChecker::instance(), SIGNAL(updateFound(const QString &)), this, SLOT(on_UpdateFound(const QString &)));
+      connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound(const QString &)), this, SLOT(on_UpdateFound(const QString &)));
       // OR
-      connect( UpdateChecker::instance(), SIGNAL(updateFound()), UpdateChecker::instance(), SLOT(showUpdateInformations()));
+      connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound()), UpdateChecker::instance(), SLOT(showUpdateInformations()));
   \endcode
 
   - You can :
       - check for update with hasUpdate(),
       - get the extracted update's text using updateText(),
       - stop the downloading of the file using cancel().
-  \ingroup toolkit
-  \ingroup object_toolkit
 */
 
 #include "updatechecker.h"
@@ -60,7 +58,6 @@
 
 #include <translationutils/constanttranslations.h>
 
-// include Qt headers
 #include <QApplication>
 #include <QDialog>
 #include <QTextBrowser>
@@ -79,10 +76,6 @@ using namespace Trans::ConstantTranslations;
 namespace Utils {
 namespace Internal {
 
-/**
-  \brief Privat part of UpdateChecker
-  \internal
-*/
 UpdateCheckerPrivate::UpdateCheckerPrivate( QObject *parent )
           : QObject(parent), m_ProgressBar(0)
 {

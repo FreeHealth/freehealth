@@ -39,6 +39,11 @@
  ***************************************************************************/
 #include "imainwindow.h"
 
+/**
+  \class Core::IMainWindow
+  Main window of the Core.
+*/
+
 using namespace Core;
 using namespace Core::Internal;
 

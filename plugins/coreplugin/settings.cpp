@@ -33,18 +33,21 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /**
-  \class Settings
+  \class Core::ISettings
   \brief This class is a multiOS settings manager.
     When instanciating this class, the ini file is determined using member getIniFile().\n
-    If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
-    Else the better ini file is retreived (testing first into app bundle, then user home dir).
+     - If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
+     - Else :
+         - try ini file in home path
+         - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
+         ini file to use (this feature is used for the USB-Key multi-OS configuration)
 
     m_ResourcesPath is protected and can be defined, retreive it using resourcesPath().\n
     m_DatabasePath is protected and can be defined, retreive it using databasePath().
 
-    The debugging members are used by tkDebugDialog :\n
-    getTreeWidget() returns a treeWidget containing all values of the QSettings\n
-    toString() is idem but returns a QString formatted.
+    The debugging members are used by Core::DebugDialog :
+        - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
+        - toString() is idem but returns a QString formatted.
 
     You can store extra-datas such as webSiteUrl().
 
@@ -65,7 +68,9 @@
         |                                     |
         `- databases                          `- databases
          |                                     |
-         `- drugs (dosages)                    `- drugs (dosages)
+         |- drugs                              |- drugs
+         |- templates                          |- templates
+         `- ...                                `- ...
 
 
        ApplicationName.app                   Application-Version
@@ -75,12 +80,8 @@
           |                                  |
           |- Resources                       |- Resources                <-- ReadOnly Resources at least
           |   |                              |  |
-          |   |- CONFIG.INI                  |  |- CONFIG.INI            <-- if user can write into bundle
-          |   |                              |  |
           |   |- databases                   |  |- databases
-          |   |  |- datas                    |  |  |- datas              <-- if user can write into bundle
           |   |  |- drugs                    |  |  |- drugs
-          |   |  `- users                    |  |  `- users              <-- if user can write into bundle
           |   |                              |  |
           |   |- doc/application/html        |  |- doc/application/html  <-- user's manual
           |   |                              |  |
@@ -96,63 +97,160 @@
           |                                  |
           `- FrameWorks (Qt FrameWorks)      `- libs (Qt if needed)
 \endverbatim
-
-  \ingroup toolkit
-  \ingroup object_toolkit
-*/
-
-/**
-  \enum Paths
-        ResourcesPath = 0,
-        ApplicationPath,
-        BundleResourcesPath,
-        ReadOnlyDatabasesPath,
-        ReadWriteDatabasesPath,
-        TranslationsPath,
-        QtPlugInsPath,
-        QtFrameWorksPath,
-        FMFPlugInsPath,
-        SmallPixmapPath,
-        MediumPixmapPath,
-        BigPixmapPath,
-        SystemTempPath,
-        ApplicationTempPath,
-        FormsPath,
-        SampleFormsPath,
-        WebSiteUrl
 */
 
 /*!
- \enum Settings::Paths
+ \enum Core::ISettings::Paths
  Defines the availables paths to use with setPath() and path().\n
- Some paths are calculated when setting the ApplicationPath, BundleRootPath and the ResourcesPath.
+ Some paths are calculated when setting the
+ Core::ISettings::ApplicationPath,
+ Core::ISettings::BundleRootPath and the
+ Core::ISettings::ResourcesPath.
 */
 
-/*! \var Settings::Paths Settings::ResourcesPath
+/*! \var Core::ISettings::Paths Core::ISettings::ResourcesPath
  * Defines the users' resources path. This path is readable and writable for the user.
+ * When setting this path, the Core::ISettings::ReadWriteDatabasesPath is automatically calculated.
 */
 
-/*! \var Settings::Paths Settings::ApplicationPath
- * Defines the users' resources path. This path is readable and writable for the user.
+/*! \var Core::ISettings::Paths Core::ISettings::ApplicationPath
+ * Defines the application path. This path is to be concidered as read-only for the application.
+ * When this path is defined, some paths are automatically calculated:
+     - Core::ISettings::QtFrameWorksPath
+     - Core::ISettings::FMFPlugInsPath
+     - Core::ISettings::QtPlugInsPath
+     - Core::ISettings::BundleRootPath
 */
 
-/*! \var Settings::Paths Settings::BundleRootPath
+/*! \var Core::ISettings::Paths Core::ISettings::BundleRootPath
  * Defines the root path of the bundle. On MacOs, the path is the one where lies the \e Application.app. On other OS,
  * the path is the path where stands the \e Application path.
 */
 
-/*! \var Settings::Paths Settings::BundleResourcesPath
- * Defines the users' resources path. This path is readable and writable for the user.
+/*! \var Core::ISettings::Paths Core::ISettings::BundleResourcesPath
+ * Defines the application bundle resources path. This path is to be concidered as read-only for the application.
+ * When setting this path, some paths are calculated:
+     - Core::ISettings::BundleResourcesPath
+     - Core::ISettings::ReadOnlyDatabasesPath
+     - Core::ISettings::TranslationsPath
+     - Core::ISettings::ThemeRootPath
+     - Core::ISettings::SmallPixmapPath
+     - Core::ISettings::MediumPixmapPath
+     - Core::ISettings::BigPixmapPath
+     - Core::ISettings::SampleFormsPath
+     - Core::ISettings::DocumentationPath
 */
 
-/*! \var Settings::Paths Settings::ReadOnlyDatabasesPath
- * Defines the users' resources path. This path is readable and writable for the user.
+/*! \var Core::ISettings::Paths Core::ISettings::ReadOnlyDatabasesPath
+ * Defines the read only databases path (mainly stored in application's bundle resources path).
 */
 
-/*! \var Settings::Paths Settings::DocumentationPath
+/*! \var Core::ISettings::Paths Core::ISettings::ReadWriteDatabasesPath
+ * Defines the read-write databases path (mainly stored in user's resources path).
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::TranslationsPath
+ * Defines the translations dictionnaries path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::QtPlugInsPath
+ * Linked to the application path. Represents the application linked Qt plugins path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::QtFrameWorksPath
+ * Linked to the application path. Represents the application linked Qt framework path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::FMFPlugInsPath
+ * Linked to the application path. Represents the application plugin path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::ThemeRootPath
+ * Defines the theme root path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::SmallPixmapPath
+ * Defines the theme 16x16 pixmap.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::MediumPixmapPath
+ * Defines the theme 32x32 pixmap.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::BigPixmapPath
+ * Defines the theme 64x64 pixmap.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::SystemTempPath
+ * Defines the system temporary path (accessible in read-write mode).
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::ApplicationTempPath
+ * Defines the temporary application path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::FormsPath
+ * Defines the users' forms path (FreeMedForms only).
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::SampleFormsPath
+ * Defines the Bundled forms (used only with FreeMedForms).
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
  * Defines the users' manual path.
+ * When the application is build with the LINUX_INTEGRATED config flag, the DocumentationPath is setted to <em>/usr/share/doc/ApplicationName-doc/html/</em>.
+ * Otherwise it is setted inside the Bundle.
 */
 
+/*! \var Core::ISettings::Paths Core::ISettings::WebSiteUrl
+ * Defines the application main web site.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::UpdateUrl
+ * Defines the URL to use for the update changelog retriever.
+*/
+
+/**
+ \fn virtual void Core::ISettings::beginGroup( const QString & prefix ) = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual QStringList Core::ISettings::childGroups() const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual QStringList Core::ISettings::childKeys() const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual bool Core::ISettings::contains( const QString & key ) const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual void Core::ISettings::endGroup() = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual QString Core::ISettings::fileName() const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual QString Core::ISettings::group() const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual void Core::ISettings::setValue( const QString & key, const QVariant & value ) = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual QVariant Core::ISettings::value( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
+/**
+ \fn virtual void Core::ISettings::sync () = 0;
+ Wrapper member to QSettings. Read QSettings documentation.
+*/
 
 #include "isettings.h"
 #include "settings_p.h"
@@ -224,9 +322,6 @@ using namespace Core;
 using namespace Core::Internal;
 using namespace SettingsPrivateConstants;
 
-//Settings::Settings(QObject *parent, const QString &appName, const QString &fileName)
-//        : QSettings(getIniFile(appName, fileName) , QSettings::IniFormat, parent) {}
-
 
 /**
   \brief Protected Constructor. Use instance() to create a new instance of this class.
@@ -297,12 +392,17 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 SettingsPrivate::~SettingsPrivate()
 {}
 
+/**
+  \fn QSettings *Core::ISettings::getQSettings()
+  Using this member should be avoid in your code.
+*/
 QSettings *SettingsPrivate::getQSettings()
 {
     return this;
 }
 
 /**
+  \fn void Core::ISettings::setPath(const int type, const QString & absPath)
   \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, SampleFormsPath.\n
@@ -403,7 +503,10 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
     }
 }
 
-/** \brief Returns the path according to the enumerator Settings::Paths */
+/**
+  \fn QString Core::ISettings::path(const int type) const
+  \brief Returns the path according to the enumerator Settings::Paths
+*/
 QString SettingsPrivate::path(const int type) const
 {
     if (type == ISettings::DocumentationPath) {
@@ -420,6 +523,7 @@ QString SettingsPrivate::path(const int type) const
 }
 
 /**
+  \fn bool Core::ISettings::firstTimeRunning() const
   \brief Return true if the application runs for the first time.
   \sa noMoreFirstTimeRunning()
 */
@@ -429,6 +533,7 @@ bool SettingsPrivate::firstTimeRunning() const
 }
 
 /**
+  \fn void Core::ISettings::noMoreFirstTimeRunning()
   \brief Set the first time running of this application to false.
   \sa firstTimeRunning()
 */
@@ -438,17 +543,24 @@ void SettingsPrivate::noMoreFirstTimeRunning()
     m_FirstTime = false;
 }
 
+/**
+  \fn QString Core::ISettings::licenseApprovedApplicationNumber() const
+*/
 QString SettingsPrivate::licenseApprovedApplicationNumber() const
 {
     return value(LICENSE_VERSION).toString();
 }
 
+/**
+  \fn void Core::ISettings::setLicenseApprovedApplicationNumber(const QString &version)
+*/
 void SettingsPrivate::setLicenseApprovedApplicationNumber(const QString &version)
 {
     setValue(LICENSE_VERSION, version);
 }
 
 /**
+  \fn QString Core::ISettings::getIniFile(const QString & appName, const QString & fileName)
   \brief Returns the ini file to use the the initialization of QSettings. See constructor.
   Test in this order :
   \li command line --config="/abs/path/to/config.ini" or --config="../relative/path/to/config.ini". If the ini file can be used it is returned.
@@ -573,7 +685,10 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     return iniFile;
 }
 
-/** \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same Settings */
+/**
+  \fn void Core::ISettings::restoreState(QMainWindow * window, const QString & prefix)
+  \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same settings
+*/
 void SettingsPrivate::restoreState(QMainWindow * window, const QString & prefix)
 {
     if (!window)
@@ -599,7 +714,10 @@ void SettingsPrivate::restoreState(QMainWindow * window, const QString & prefix)
     }
 }
 
-/** \brief Main windows save state. \e prefix can be used if you store multiple main window in the same Settings */
+/**
+  \fn void Core::ISettings::saveState(QMainWindow * window, const QString & prefix)
+  \brief Main windows save state. \e prefix can be used if you store multiple main window in the same Settings
+*/
 void SettingsPrivate::saveState(QMainWindow * window, const QString & prefix)
 {
     if (!window)
@@ -613,6 +731,7 @@ void SettingsPrivate::saveState(QMainWindow * window, const QString & prefix)
 }
 
 /**
+  \fn void Core::ISettings::appendToValue(const QString &key, const QString &value)
   \brief Append a string \e value to the stringlist represented by the \e key in settings assuming no doublon.
 */
 void SettingsPrivate::appendToValue(const QString &key, const QString &value)
@@ -630,6 +749,7 @@ void SettingsPrivate::appendToValue(const QString &key, const QString &value)
 }
 
 /**
+  \fn QTreeWidget* Core::ISettings::getTreeWidget(QWidget *parent) const
   \brief For debugging purpose.
   If \e parent is a QTreeWidget, it will be populated with datas and returned. Otherwise a
   QTreeWidget is created with \e parent as parent and returned.
@@ -744,7 +864,10 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     return tree;
 }
 
-/** \brief For debugging purpose. */
+/**
+ \fn QString Core::ISettings::toString() const
+ \brief For debugging purpose.
+*/
 QString SettingsPrivate::toString() const
 {
     QString tmp = "\n\n";

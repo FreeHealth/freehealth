@@ -20,7 +20,9 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/filemanager.h \
     $${PWD}/ipatient.h \
     $${PWD}/iuser.h \
-    $${PWD}/idocumentprinter.h
+    $${PWD}/idocumentprinter.h \
+    $${PWD}/icommandline.h
+
 SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \
     $${PWD}/theme.cpp \

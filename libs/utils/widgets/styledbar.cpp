@@ -26,6 +26,10 @@
 ** contact the sales department at http://qt.nokia.com/contact.
 **
 **************************************************************************/
+/**
+  \class Utils::StyledBar
+  Mainly pasted from QtCreator code
+*/
 
 #include "styledbar.h"
 

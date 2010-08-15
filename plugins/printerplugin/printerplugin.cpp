@@ -32,6 +32,11 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \namespace Print
+  Printing engine of the FreeMedForms project
+*/
+
 #include "printerplugin.h"
 #include "printerpreferences.h"
 #include "documentprinter.h"

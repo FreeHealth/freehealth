@@ -37,6 +37,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Utils::Randomizer
+  Randomizer can be used for populating database with random: names, surnames, zipcodes and cities, strings, numbers, dates...
+*/
+
 #include "randomizer.h"
 #include "global.h"
 #include "log.h"

@@ -40,9 +40,12 @@
 #ifndef CORE_CONSTANTS_MENUS_H
 #define CORE_CONSTANTS_MENUS_H
 
-
 /**
-  Regroups Menus, Actions, Groups and Modes identifiers
+ * \file constants_menus.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 13 June 2010
+ * \brief Regroups Menus, Actions, Groups and Modes identifiers
 */
 
 namespace Core {

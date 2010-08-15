@@ -44,7 +44,7 @@
 #include <QHash>
 
 /**
- * \file debugdialog.h
+ * \file aboutdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.0.8
  * \date 08 Sept 2009

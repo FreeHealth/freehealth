@@ -38,11 +38,9 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-
 /**
    \class Core::SimpleTextDialog
-   \brief Show a dialog that presents the synthesis of interactions.
-   Result can be printed.
+   \brief Show a dialog that presents a text (HTML or plain text) that can be easily printed.
 */
 
 #include "simpletextdialog.h"

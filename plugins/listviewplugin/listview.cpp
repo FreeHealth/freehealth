@@ -38,7 +38,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  * \class ListView
+  * \class Views::ListView
   * \brief This widget shows a QListView with some buttons and a context menu.
   * Actions inside the contextual menu and the toolbar can be setted using
     AvailableActions param and setActions().\n
@@ -48,8 +48,6 @@
     You can reimplement getContextMenu() in order to use your own contextMenu.\n
     Remember that the poped menu will be deleted after execution. \n
   \todo There is a problem when including this widget into a QDataWidgetMapper, when this widget loses focus, datas are not retreived.
-  \ingroup toolkit
-  \ingroup widget_toolkit
 */
 
 #include "listview.h"

@@ -33,11 +33,9 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /**
-  \class DebugDialog
+  \class Core::DebugDialog
   \brief This class is a QDialog that shows the content of the tkLog class of this library.
   It can send message over the web with the tkSendMessage class (part of freemedforms).
-  \ingroup toolkit
-  \ingroup widget_toolkit
 */
 #include "debugdialog.h"
 #include "ui_debugdialog.h"

@@ -34,8 +34,7 @@
  ***************************************************************************/
 /**
   \class ScrollingWidget
-  \ingroup toolkit
-  \ingroup widget_toolkit
+  Simple QWidget with scrolling text content.
 */
 
 #include "scrollingwidget.h"

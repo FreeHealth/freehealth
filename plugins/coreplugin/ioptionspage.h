@@ -7,6 +7,15 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
+/**
+ * \file ioptionspage.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.0.10
+ * \date 09 Aug 2009
+ * \class Core::IOptionsPage
+ * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager oject pool to get the page in the Core::SettingsDialog.
+*/
+
 namespace Core {
 
 class CORE_EXPORT IOptionsPage : public QObject

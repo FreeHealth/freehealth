@@ -40,6 +40,13 @@
 #ifndef CORE_CONSTANTS_ICONS_H
 #define CORE_CONSTANTS_ICONS_H
 
+/**
+ * \file constants_icons.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 13 June 2010
+*/
+
 namespace Core {
 
 namespace Constants {

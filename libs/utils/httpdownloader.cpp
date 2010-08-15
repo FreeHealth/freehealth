@@ -37,8 +37,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Utils::HttpDownloader
+  Simple Http downlader. The object must be deleted during download process.
+*/
+
 #include "httpdownloader.h"
-//#include "ui_authenticationdialog.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -51,6 +55,9 @@
 #include <QUrl>
 #include <QDir>
 #include <QMainWindow>
+
+
+using namespace Utils;
 
 HttpDownloader::HttpDownloader(QObject *parent)
     : QObject(parent)

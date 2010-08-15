@@ -37,8 +37,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKLINEEDITECHOSWITCHER_H
-#define TKLINEEDITECHOSWITCHER_H
+#ifndef LINEEDITECHOSWITCHER_H
+#define LINEEDITECHOSWITCHER_H
 
 #include <utils/global_exporter.h>
 
@@ -59,12 +59,6 @@ namespace Internal {
 class LineEditEchoSwitcherPrivate;
 }
 
-/** \brief This widget is a set of two : one lineEdit and one pushButton. When button is clicked the echoMode of the lineEdit
-    changes.
-    Its property \e text assumes this widget to be inserted into QDataWidgetMapper.
-  \ingroup toolkit
-  \ingroup widget_toolkit
- */
 class UTILS_EXPORT LineEditEchoSwitcher : public QWidget
 {
     Q_OBJECT
@@ -91,4 +85,4 @@ private:
 
 }  // End Utils
 
-#endif // TKLINEEDITECHOSWITCHER_H
+#endif // LINEEDITECHOSWITCHER_H
