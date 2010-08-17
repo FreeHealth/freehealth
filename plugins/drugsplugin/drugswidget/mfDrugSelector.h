@@ -44,15 +44,16 @@
 // include form headers
 #include "ui_mfDrugSelector.h"
 
+QT_BEGIN_NAMESPACE
 class QSqlTableModel;
 class QToolButton;
-
+QT_END_NAMESPACE
 
 /**
  * \file mfDrugsSelector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.3.1
- * \date 15 Feb 2010
+ * \version 0.5.0
+ * \date 16 Aug 2010
  */
 
 namespace DrugsDB {
@@ -61,6 +62,7 @@ class AtcTreeModel;
 
 namespace DrugsWidget {
 namespace Internal {
+class TreeProxyModel;
 
 /**
  \brief Creates a QWidget that contains a search line, and views to drugs and inn. Emit signal drugSelected( int ) when a drug is selected. int is the CIS of the selected drug.
@@ -117,6 +119,7 @@ private:
     QSqlTableModel *m_DrugsModel;
     //QSqlTableModel *m_InnModel;
     DrugsDB::AtcTreeModel *m_InnModel;
+    TreeProxyModel *m_AtcProxyModel;
 
     // widgets and actions
     QToolButton  *m_SearchToolButton;      // toolbutton that goes to the searchline (left)

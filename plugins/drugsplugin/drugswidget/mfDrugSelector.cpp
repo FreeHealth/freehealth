@@ -65,6 +65,7 @@
 #include <QSqlTableModel>
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QSortFilterProxyModel>
 
 #include <QDebug>
 
@@ -85,10 +86,52 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
+namespace DrugsWidget {
+namespace Internal {
+
+class TreeProxyModel : public QSortFilterProxyModel
+{
+public:
+    TreeProxyModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+    {
+        setFilterCaseSensitivity(Qt::CaseInsensitive);
+    }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+    {
+        if(filterRegExp().isEmpty())
+            return true;
+
+        QModelIndex current(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
+
+        if(sourceModel()->hasChildren(current)) {
+            bool atLeastOneValidChild = false;
+            int i = 0;
+            while(!atLeastOneValidChild) {
+                const QModelIndex child(current.child(i, current.column()));
+                if (!child.isValid())
+                    // No valid child
+                    break;
+
+                atLeastOneValidChild = filterAcceptsRow(i, current);
+                i++;
+            }
+            return atLeastOneValidChild;
+        }
+
+        return sourceModel()->data(current).toString().contains(filterRegExp());
+    }
+};
+
+}
+}
+
 
 DrugSelector::DrugSelector(QWidget *parent) :
         QWidget(parent),
-        m_DrugsModel(0), m_InnModel(0),
+        m_DrugsModel(0), m_InnModel(0), m_AtcProxyModel(0),
         m_SearchToolButton(0),
         m_DrugsHistoricButton(0),
         m_HistoryAct(0)
@@ -217,7 +260,12 @@ void DrugSelector::createINNModelView()
     // create model and tableview for Iam Class / INNs
     m_InnModel = new DrugsDB::AtcTreeModel(this);
     m_InnModel->init();
-    InnView->setModel(m_InnModel);
+
+    m_AtcProxyModel = new TreeProxyModel(this);
+    m_AtcProxyModel->setSourceModel(m_InnModel);
+    InnView->setModel(m_AtcProxyModel);
+
+    //InnView->setModel(m_InnModel);
     InnView->header()->setStretchLastSection(false);
     InnView->header()->setResizeMode(0, QHeaderView::Stretch);
     InnView->hide();
@@ -361,6 +409,7 @@ void DrugSelector::updateModelFilter()
         if (WarnSearchFilter)
             qWarning() << "No search filter";
         m_DrugsModel->setFilter("");
+        m_AtcProxyModel->setFilterWildcard("*");
         return;
     }
     QString tmp = m_filterModel;
@@ -371,28 +420,9 @@ void DrugSelector::updateModelFilter()
             qWarning() << "Search filter" << tmp;
     } else {
         // Search By INN
-        // refresh inn view and model
-//        QHashWhere where;
-//        where.insert(DrugsDB::Constants::IAM_DENOMINATION , QString("LIKE '%1%' ").arg(search));
-//        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_IAM_DENOMINATION, where));
-//        // retreive code_subst associated with searched text
-//        QList<int> codes = drugsBase()->getLinkedMoleculeCodes(search);
-//        QString list = "";
-//        foreach(int i, codes)
-//            list += QString::number(i) + ", " ;
-//        list.chop(2);
-//        m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
-
-        QHashWhere where;
-        QString l = QLocale().name().left(2);
-        if (l == "fr")
-            where.insert(DrugsDB::Constants::ATC_FR , QString("LIKE '%1%' ").arg(search));
-        else if (l == "de")
-            where.insert(DrugsDB::Constants::ATC_DE , QString("LIKE '%1%' ").arg(search));
-        else
-            where.insert(DrugsDB::Constants::ATC_EN , QString("LIKE '%1%' ").arg(search));
-
-//        m_InnModel->setFilter(drugsBase()->getIamWhereClause(DrugsDB::Constants::Table_ATC, where));
+        m_AtcProxyModel->setFilterWildcard(search + "*");
+        m_AtcProxyModel->setFilterKeyColumn(0);
+        InnView->expandAll();
 
         // retreive molecule_codes associated with searched text
         QList<int> codes = drugsBase()->getLinkedMoleculeCodes(search);
