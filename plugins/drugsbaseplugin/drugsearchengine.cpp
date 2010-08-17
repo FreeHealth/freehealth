@@ -146,6 +146,7 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
 //    tokens.insert("CONSTRUCTED_DRUG_NAME", d->m_Drug->);
 
     foreach(Engine *e, d->m_Engines) {
+        e->processedLabel_Url.clear();
         if (e->url.contains("[[ONE_ATC_CODE]]")) {
             foreach(const QString &code, codes) {
                 QString url = e->url;

@@ -67,6 +67,8 @@ CREATE TABLE IF NOT EXISTS `SEARCH_ENGINES` (
 );
 
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO ATC description", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Search drug name @ NIH", "http://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&query=[[DRUG_NAME]]&x=0&y=0");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Search INN name @ NIH", "http://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&query=[[ONE_ATC_CODE]]&x=0&y=0");
 
 CREATE TABLE IF NOT EXISTS `DB_SCHEMA_VERSION` (
   `VERSION` varchar(10),

@@ -225,126 +225,6 @@ public:
 
 bool InteractionsBase::m_InteractionsDatabaseAvailable = false;
 
-
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- Initializing Database -------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-/**
-   \brief Constructor.
-   \private
-*/
-InteractionsBase::InteractionsBase()
-        : di(0)
-{
-    di = new InteractionsBasePrivate(this);
-    di->m_DB = new Utils::Database();
-
-    di->m_DB->addTable(Table_INTERACTIONS, "INTERACTIONS");
-    di->m_DB->addTable(Table_INTERACTION_KNOWLEDGE, "INTERACTION_KNOWLEDGE");
-    di->m_DB->addTable(Table_ATC, "ATC");
-    di->m_DB->addTable(Table_IAM_TREE, "IAM_TREE");
-
-    di->m_DB->addField(Table_ATC, ATC_ID,    "ID");
-    di->m_DB->addField(Table_ATC, ATC_CODE,  "CODE");
-    di->m_DB->addField(Table_ATC, ATC_EN,    "ENGLISH");
-    di->m_DB->addField(Table_ATC, ATC_FR,    "FRENCH");
-    di->m_DB->addField(Table_ATC, ATC_DE,    "DEUSTCH");
-
-    di->m_DB->addField(Table_INTERACTIONS, IA_ID,     "ID");
-    di->m_DB->addField(Table_INTERACTIONS, IA_ATC1,   "ATC_ID1");
-    di->m_DB->addField(Table_INTERACTIONS, IA_ATC2,   "ATC_ID2");
-    di->m_DB->addField(Table_INTERACTIONS, IA_IAK_ID, "INTERACTION_KNOWLEDGE_ID");
-
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_ID,    "ID");
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_TYPE,    "TYPE");
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_RISK_FR,    "RISK_FR");
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_FR,    "MANAGEMENT_FR");
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_RISK_EN,    "RISK_EN");
-    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_EN,    "MANAGEMENT_EN");
-
-    di->m_DB->addField(Table_IAM_TREE, TREE_ID_CLASS,    "ID_CLASS");
-    di->m_DB->addField(Table_IAM_TREE, TREE_ID_ATC,      "ID_ATC");
-}
-
-/** \brief Destructor. */
-InteractionsBase::~InteractionsBase()
-{
-    if (di) {
-        delete di;
-        di=0;
-    }
-}
-
-/** \brief Initializer for the database. Return the error state. */
-bool InteractionsBase::init(bool refreshCache)
-{
-    // only one base can be initialized
-    if (di->m_initialized && !refreshCache)
-        return true;
-
-    QString pathToDb = "";
-
-    if (Utils::isRunningOnMac())
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
-    else
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
-
-    di->m_DB->createConnection(DB_IAM_NAME, DB_IAM_FILENAME, pathToDb,
-                               Utils::Database::ReadOnly, Utils::Database::SQLite);
-
-
-    // retreive interactions into m_InteractionsIDs for speed improvements
-    if (!di->m_DB->database().isOpen())
-        if (!di->m_DB->database().open())
-            Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()));
-
-    QList<int> fields;
-    fields << IA_ATC1 << IA_ATC2;
-    QString req = di->m_DB->select(Table_INTERACTIONS, fields);
-    QSqlQuery q(req , di->m_DB->database());
-    if (q.isActive())
-        while (q.next())
-            di->m_InteractionsIDs.insertMulti( q.value(0).toInt(), q.value(1).toInt());
-
-    // retreive links tables for speed improvements
-    if (refreshCache) {
-        di->m_AtcToMol.clear();
-    }
-    di->retreiveLinkTables();
-
-    di->m_initialized = true;
-    return true;
-}
-
-bool InteractionsBase::isInitialized() const
-{
-     return di->m_initialized;
-}
-
-/**
-  \brief This is for debugging purpose. Log timers for some crucial functions.
-  \sa checkInteractions(), getDrugsByCIS()
-*/
-void InteractionsBase::logChronos(bool state)
-{
-    di->m_LogChrono = state;
-}
-
-QString InteractionsBase::iamTable(const int ref) const
-{
-    return di->m_DB->table(ref);
-}
-
-QString InteractionsBase::getIamWhereClause(const int &tableref, const QHash<int, QString> &conditions) const
-{
-    return di->m_DB->getWhereClause(tableref, conditions);
-}
-
-QString InteractionsBase::selectInteractionsSql(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const
-{
-    return di->m_DB->select(tableref, fieldsref, conditions);
-}
-
 /** \brief Return the interaction's state of a \e drug when prescribed in association with \e drugList. */
 bool InteractionsBasePrivate::checkDrugInteraction( DrugsData *drug, const QList<DrugsData *> &drugsList )
 {
@@ -501,7 +381,7 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
     // get denomination from iam_denomination where ID1 ID2
 //    dint->setValue(IAM_MAIN, m_Parent->getInnDenomination(_id1));
 //    dint->setValue(IAM_INTERACTOR, m_Parent->getInnDenomination(id2));
-    
+
     return dint;
 }
 
@@ -526,6 +406,137 @@ QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
           ++i;
      }
      return toReturn;
+}
+
+
+//--------------------------------------------------------------------------------------------------------
+//-------------------------------------- Initializing Database -------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+/**
+   \brief Constructor.
+   \private
+*/
+InteractionsBase::InteractionsBase()
+        : di(0)
+{
+    di = new InteractionsBasePrivate(this);
+    di->m_DB = new Utils::Database();
+
+    di->m_DB->addTable(Table_INTERACTIONS, "INTERACTIONS");
+    di->m_DB->addTable(Table_INTERACTION_KNOWLEDGE, "INTERACTION_KNOWLEDGE");
+    di->m_DB->addTable(Table_ATC, "ATC");
+    di->m_DB->addTable(Table_IAM_TREE, "IAM_TREE");
+
+    di->m_DB->addField(Table_ATC, ATC_ID,    "ID");
+    di->m_DB->addField(Table_ATC, ATC_CODE,  "CODE");
+    di->m_DB->addField(Table_ATC, ATC_EN,    "ENGLISH");
+    di->m_DB->addField(Table_ATC, ATC_FR,    "FRENCH");
+    di->m_DB->addField(Table_ATC, ATC_DE,    "DEUSTCH");
+
+    di->m_DB->addField(Table_INTERACTIONS, IA_ID,     "ID");
+    di->m_DB->addField(Table_INTERACTIONS, IA_ATC1,   "ATC_ID1");
+    di->m_DB->addField(Table_INTERACTIONS, IA_ATC2,   "ATC_ID2");
+    di->m_DB->addField(Table_INTERACTIONS, IA_IAK_ID, "INTERACTION_KNOWLEDGE_ID");
+
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_ID,    "ID");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_TYPE,    "TYPE");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_RISK_FR,    "RISK_FR");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_FR,    "MANAGEMENT_FR");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_RISK_EN,    "RISK_EN");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_EN,    "MANAGEMENT_EN");
+
+    di->m_DB->addField(Table_IAM_TREE, TREE_ID_CLASS,    "ID_CLASS");
+    di->m_DB->addField(Table_IAM_TREE, TREE_ID_ATC,      "ID_ATC");
+}
+
+/** \brief Destructor. */
+InteractionsBase::~InteractionsBase()
+{
+    if (di) {
+        delete di;
+        di=0;
+    }
+}
+
+/** \brief Initializer for the database. Return the error state. */
+bool InteractionsBase::init(bool refreshCache)
+{
+    // only one base can be initialized
+    if (di->m_initialized && !refreshCache)
+        return true;
+
+    QString pathToDb = "";
+
+    if (Utils::isRunningOnMac())
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
+    else
+        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
+
+    di->m_DB->createConnection(DB_IAM_NAME, DB_IAM_FILENAME, pathToDb,
+                               Utils::Database::ReadOnly, Utils::Database::SQLite);
+
+
+    // retreive interactions into m_InteractionsIDs for speed improvements
+    if (!di->m_DB->database().isOpen())
+        if (!di->m_DB->database().open())
+            Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()));
+
+    QList<int> fields;
+    fields << IA_ATC1 << IA_ATC2;
+    QString req = di->m_DB->select(Table_INTERACTIONS, fields);
+    QSqlQuery q(req , di->m_DB->database());
+    if (q.isActive())
+        while (q.next())
+            di->m_InteractionsIDs.insertMulti( q.value(0).toInt(), q.value(1).toInt());
+
+    // retreive links tables for speed improvements
+    if (refreshCache) {
+        di->m_AtcToMol.clear();
+    }
+    di->retreiveLinkTables();
+
+    di->m_initialized = true;
+    return true;
+}
+
+bool InteractionsBase::isInitialized() const
+{
+     return di->m_initialized;
+}
+
+/**
+  \brief This is for debugging purpose. Log timers for some crucial functions.
+  \sa checkInteractions(), getDrugsByCIS()
+*/
+void InteractionsBase::logChronos(bool state)
+{
+    di->m_LogChrono = state;
+}
+
+QString InteractionsBase::iamTable(const int ref) const
+{
+    return di->m_DB->table(ref);
+}
+
+QString InteractionsBase::getIamWhereClause(const int &tableref, const QHash<int, QString> &conditions) const
+{
+    return di->m_DB->getWhereClause(tableref, conditions);
+}
+
+QString InteractionsBase::selectInteractionsSql(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const
+{
+    return di->m_DB->select(tableref, fieldsref, conditions);
+}
+
+/**
+  \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule.
+  \todo this should return a list of integer not an unique integer
+*/
+int InteractionsBase::getInnCodeForCodeMolecule(const int molecule_code) const
+{
+    if (di->m_AtcToMol.values().contains(molecule_code))
+        return di->m_AtcToMol.key(molecule_code);
+    return -1;
 }
 
 QString InteractionsBase::getAtcLabel(const int inncode) const
@@ -594,74 +605,6 @@ QString InteractionsBase::getInnDenominationFromSubstanceCode(const int molecule
 //     return di->m_IamDenominations.value(di->m_AtcToMol.key(molecule_code));
 }
 
-
-/**
-  \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule.
-  \todo this should return a list of integer not an unique integer
-*/
-int InteractionsBase::getInnCodeForCodeMolecule(const int molecule_code) const
-{
-    if (di->m_AtcToMol.values().contains(molecule_code))
-        return di->m_AtcToMol.key(molecule_code);
-    return -1;
-}
-
-/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(QList<int> &atc_ids) const
-{
-    QList<int> toReturn;
-    foreach(int i, atc_ids)
-        toReturn << di->m_AtcToMol.values(i);
-    return toReturn;
-}
-
-/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(const int atc_id) const
-{
-    return di->m_AtcToMol.values(atc_id);
-}
-
-/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
-QList<int> InteractionsBase::getLinkedAtcIds(const QList<int> &molecule_codes) const
-{
-    QList<int> toReturn;
-    foreach(int i, molecule_codes)
-        toReturn << di->m_AtcToMol.keys(i);
-    return toReturn;
-}
-
-/** \brief Return the list of the INN code linked to the molecule code \e code_subst. */
-QList<int> InteractionsBase::getLinkedAtcIds(const int molecule_code) const
-{
-    return di->m_AtcToMol.keys(molecule_code);
-}
-
-/** \brief Retreive from database the Molecules Codes where denomination of the INN is like 'iamDenomination%' */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(const QString &iamDenomination) const
-{
-     QSqlDatabase DB = di->m_DB->database();
-     if (!DB.isOpen())
-          DB.open();
-
-     // get iamSubstCode
-     QString tmp = iamDenomination;
-     const QString &lang = QLocale().name().left(2);
-     QHash<int, QString> where;
-     if (lang=="fr")
-         where.insert(ATC_FR, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     else if (lang=="de")
-         where.insert(ATC_DE, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     else
-         where.insert(ATC_EN, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     QList<int> atcIds;
-     QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
-     QSqlQuery q(req , di->m_DB->database());
-     if (q.isActive())
-         while (q.next())
-             atcIds << q.value(0).toInt();
-     return getLinkedMoleculeCodes(atcIds);
-}
-
 /** \brief Returns the name of the INN for the substance code \e code_subst. */
 QStringList InteractionsBase::getIamClassDenomination(const int &molecule_code)
 {
@@ -699,4 +642,80 @@ QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
 //    qWarning() << di->m_AtcToMol.keys(molecule_code) << di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code));
 
     return toReturn;
+}
+
+/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+QList<int> InteractionsBase::getLinkedMoleculeCodes(QList<int> &atc_ids) const
+{
+    QList<int> toReturn;
+    foreach(int i, atc_ids)
+        toReturn << di->m_AtcToMol.values(i);
+    return toReturn;
+}
+
+/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+QList<int> InteractionsBase::getLinkedMoleculeCodes(const int atc_id) const
+{
+    return di->m_AtcToMol.values(atc_id);
+}
+
+/** \brief Retreive from database the Molecules Codes where denomination of the INN is like 'iamDenomination%' */
+QList<int> InteractionsBase::getLinkedMoleculeCodes(const QString &iamDenomination) const
+{
+     QSqlDatabase DB = di->m_DB->database();
+     if (!DB.isOpen())
+          DB.open();
+
+     // get iamSubstCode
+     QString tmp = iamDenomination;
+     const QString &lang = QLocale().name().left(2);
+     QHash<int, QString> where;
+     if (lang=="fr")
+         where.insert(ATC_FR, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+     else if (lang=="de")
+         where.insert(ATC_DE, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+     else
+         where.insert(ATC_EN, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+     QList<int> atcIds;
+     QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
+     QSqlQuery q(req , di->m_DB->database());
+     if (q.isActive())
+         while (q.next())
+             atcIds << q.value(0).toInt();
+     return getLinkedMoleculeCodes(atcIds);
+}
+
+/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
+QList<int> InteractionsBase::getLinkedAtcIds(const QList<int> &molecule_codes) const
+{
+    QList<int> toReturn;
+    foreach(int i, molecule_codes)
+        toReturn << di->m_AtcToMol.keys(i);
+    return toReturn;
+}
+
+/** \brief Return the list of the INN code linked to the molecule code \e code_subst. */
+QList<int> InteractionsBase::getLinkedAtcIds(const int molecule_code) const
+{
+    return di->m_AtcToMol.keys(molecule_code);
+}
+
+QList<int> InteractionsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &code) const
+{
+    QSqlDatabase DB = di->m_DB->database();
+    if (!DB.isOpen())
+         DB.open();
+
+    QHash<int, QString> where;
+    where.insert(ATC_CODE, QString("LIKE '%1%'").arg(code));
+    QList<int> atcIds;
+    QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
+    QSqlQuery q(req , di->m_DB->database());
+    if (q.isActive())
+        while (q.next())
+            atcIds << q.value(0).toInt();
+
+    qWarning() << req;
+
+    return getLinkedMoleculeCodes(atcIds);
 }

@@ -249,6 +249,24 @@ by their values. You can use these tokens :
     - Eg : NAME, FORM, ROUTE -- GLOBAL_STRENGTH == AMOXICILLINE, TABLETS, ORAL -- 1g
 
 
+\~french \section drugsdb_table_info La table SEARCH_ENGINES
+\~english \section interactionsdb The SEARCH_ENGINES table
+
+\~french
+
+\~english
+
+\~
+Available tokens:
+- [[ONE_ATC_CODE]] --> 1 ATC CODE == 1 more link
+- [[DRUG_ATC]] --> if known the DRUGS.ATC value (ATC code)
+- [[ATC_CODES]] --> all know ATC Codes of the drug (and its molecular components)
+- [[ATC_LABELS]] --> all known ATC Label of the drug (and its molecular components)
+- [[DRUG_NAME]] --> exact value of the DRUGS.NAME field
+- [[CONSTRUCTED_DRUG_NAME]] --> the constructed drug name like inform in the INFORMATIONS table
+- [[DRUG_UID]] --> the UID of the drug
+
+
 
 \~french \section interactionsdb Base de données des interactions
 \~english \section interactionsdb Interactions database

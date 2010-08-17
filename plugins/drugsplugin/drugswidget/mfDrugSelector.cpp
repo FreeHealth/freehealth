@@ -69,7 +69,7 @@
 #include <QDebug>
 
 #ifdef DEBUG
-enum { WarnSearchFilter = true };
+enum { WarnSearchFilter = false };
 #else
 enum { WarnSearchFilter = false };
 #endif
@@ -139,6 +139,7 @@ void DrugSelector::initialize()
     connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
 }
 
+/** \brief Define the \e font to use on all the views */
 void DrugSelector::setFont(const QFont &font)
 {
     drugsView->setFont(font);
@@ -170,6 +171,7 @@ void DrugSelector::createToolButtons()
     searchLine->setRightButton(m_DrugsHistoricButton);
 }
 
+/** \brief Update the views if user selected another drugs database */
 void DrugSelector::onDrugsBaseChanged()
 {
     delete m_DrugsModel;
@@ -215,16 +217,7 @@ void DrugSelector::createINNModelView()
     // create model and tableview for Iam Class / INNs
     m_InnModel = new DrugsDB::AtcTreeModel(this);
     m_InnModel->init();
-    //m_InnModel = new QSqlTableModel(this, QSqlDatabase::database(DrugsDB::Constants::DB_IAM_NAME));
-    //m_InnModel->setTable(drugsBase()->iamTable(Table_ATC));
-    //m_InnModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    /** \todo HERE --> filter */
-//    QHashWhere where;
-//    where.insert(IAM_DENOMINATION_ID, ">999");
-//    m_InnModel->setFilter(drugsBase()->getIamWhereClause(Table_IAM_DENOMINATION, where));
-//    m_InnModel->select();
     InnView->setModel(m_InnModel);
-//    InnView->setColumnHidden(0 , true);
     InnView->header()->setStretchLastSection(false);
     InnView->header()->setResizeMode(0, QHeaderView::Stretch);
     InnView->hide();
@@ -248,11 +241,13 @@ void DrugSelector::createDrugsHistoryActions()
     m_DrugsHistoricButton->addActions(m_HistoryAct->actions());
 }
 
+/** \brief Connect the search line edit to the filter update */
 void DrugSelector::connectFilter()
 {
     connect(searchLine, SIGNAL(textChanged(const QString &)), this, SLOT(updateModelFilter()));
 }
 
+/** \brief Disconnect the search line edit to the filter update */
 void DrugSelector::disconnectFilter()
 {
     disconnect(searchLine, SIGNAL(textChanged(const QString &)), this, SLOT(updateModelFilter()));
@@ -282,6 +277,7 @@ void DrugSelector::retranslateUi(const QString &)
 //    }
 }
 
+/** \brief Prepare the filter's masks according to the selected search method. */
 void DrugSelector::setSearchMethod(int method)
 {
     if (method == Constants::SearchCommercial) {
@@ -355,6 +351,10 @@ void DrugSelector::setSearchMethod(int method)
     updateModelFilter();
 }
 
+/**
+  \brief update the GlobalDrugModel filter according to the search method and the search text.
+  \sa void DrugSelector::setSearchMethod(int method)
+*/
 void DrugSelector::updateModelFilter()
 {
     if (searchLine->searchText().isEmpty()) {
@@ -415,14 +415,16 @@ void DrugSelector::on_InnView_clicked(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    QString inn = index.data().toString();
-    // retreive code_subst associated with searched text
+    QString inn = m_InnModel->index(index.row(), DrugsDB::AtcTreeModel::ATC_Code, index.parent()).data().toString();
+    // retreive molecule_codes associated with searched text
     QString tmp = m_filterModel;
-    QList<int> codes = drugsBase()->getLinkedMoleculeCodes(inn);
+    QList<int> codes = drugsBase()->getAllMoleculeCodeWithAtcStartingWith(inn);
     QString list = "";
     foreach(int i, codes)
         list += QString::number(i) + ", " ;
     list.chop(2);
+    if (WarnSearchFilter)
+        qWarning() << "Search filter" << tmp.replace("__replaceit__", list);
     m_DrugsModel->setFilter(tmp.replace("__replaceit__", list));
 }
 

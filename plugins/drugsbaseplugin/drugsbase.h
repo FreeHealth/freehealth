@@ -45,7 +45,6 @@
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/interactionsbase.h>
 
-// include Qt headers
 #include <QVariant>
 #include <QStringList>
 #include <QMap>

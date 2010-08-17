@@ -248,7 +248,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 
     // Ui initialization
     setupUi(this);
-    setWindowTitle( tr( "Drug Dosage Creator" ) + " - " + qApp->applicationName() );
+    setWindowTitle(tr("Drug Dosage Creator") + " - " + qApp->applicationName());
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
     d->m_InitialNumberOfRow = dosageModel->rowCount();

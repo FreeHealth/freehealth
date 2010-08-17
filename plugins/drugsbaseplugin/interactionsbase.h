@@ -102,6 +102,8 @@ public:
     QList<int> getLinkedAtcIds(const QList<int> &molecule_codes) const;
     QList<int> getLinkedAtcIds(const int molecule_code) const;
 
+    QList<int> getAllMoleculeCodeWithAtcStartingWith(const QString &code) const;
+
 private:
     InteractionsBasePrivate *di;
     static bool m_InteractionsDatabaseAvailable;
