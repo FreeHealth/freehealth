@@ -40,7 +40,7 @@
  ***************************************************************************/
 
 /**
-  \class DosageViewer
+  \class DrugsWidget::DosageViewer
   \brief QWidget for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.\n
@@ -85,6 +85,8 @@ using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
 
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
 
 namespace DrugsWidget {
 namespace Internal {
@@ -418,7 +420,10 @@ DosageViewer::DosageViewer(QWidget *parent)
     // Ui initialization
     setupUi(this);
     setWindowTitle(tr("Drug Dosage Creator") + " - " + qApp->applicationName());
-    userformsButton->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONEDIT));
+    userformsButton->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+    intakesCombo->setRemoveLightIcon(theme()->icon(Core::Constants::ICONCLOSELIGHT));
+    intakesCombo->setMoveUpLightIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
+    intakesCombo->setMoveDownLightIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
     // remove last page of tabWidget (TODO page)
     tabWidget->removeTab(tabWidget->count()-1);
 
@@ -517,13 +522,8 @@ void DosageViewer::changeCurrentRow(const QModelIndex &current, const QModelInde
 void DosageViewer::done(int r)
 {
     if (r == QDialog::Accepted) {
-        // match the user's form for the settings
-        const QStringList &pre = DrugsDB::Internal::DosageModel::predeterminedForms();
-        const QStringList &av  = drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::AvailableForms).toStringList();
-        if ((pre.indexOf(intakesCombo->currentText()) == -1) &&
-            (av.indexOf(intakesCombo->currentText()) == -1)) {
-            Core::ICore::instance()->settings()->appendToValue(S_USERRECORDEDFORMS, intakesCombo->currentText());
-        }
+        // save user's intake forms
+        Core::ICore::instance()->settings()->setValue(S_USERRECORDEDFORMS, intakesCombo->items());
     }
 }
 

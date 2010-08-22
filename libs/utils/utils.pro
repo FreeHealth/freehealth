@@ -29,7 +29,8 @@ HEADERS += global_exporter.h \
     widgets/fancyactionbar.h \
     widgets/fancytabwidget.h \
     widgets/minisplitter.h \
-    httpdownloader.h
+    httpdownloader.h \
+    widgets/combowithfancybutton.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -49,7 +50,8 @@ SOURCES += global.cpp \
     widgets/fancyactionbar.cpp \
     widgets/fancytabwidget.cpp \
     widgets/minisplitter.cpp \
-    httpdownloader.cpp
+    httpdownloader.cpp \
+    widgets/combowithfancybutton.cpp
 
 
 # translators

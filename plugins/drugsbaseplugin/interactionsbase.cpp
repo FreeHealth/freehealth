@@ -714,8 +714,5 @@ QList<int> InteractionsBase::getAllMoleculeCodeWithAtcStartingWith(const QString
     if (q.isActive())
         while (q.next())
             atcIds << q.value(0).toInt();
-
-    qWarning() << req;
-
     return getLinkedMoleculeCodes(atcIds);
 }

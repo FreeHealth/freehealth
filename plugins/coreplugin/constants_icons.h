@@ -76,6 +76,8 @@ const char * const  ICONADDLIGHT =     "addbuttonlight.png";
 const char * const  ICONADDDARK =      "addbuttondark.png";
 const char * const  ICONVALIDATELIGHT= "validatebuttonlight.png";
 const char * const  ICONVALIDATEDARK = "validatebuttondark.png";
+const char * const  ICONMOVEUPLIGHT=   "arrowuplight.png";
+const char * const  ICONMOVEDOWNLIGHT= "arrowdownlight.png";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";
