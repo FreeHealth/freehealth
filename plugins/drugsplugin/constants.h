@@ -131,6 +131,8 @@ namespace Constants {
 
     const char * const  S_STATEPREFIX            = "DrugsWidget/";
 
+    const char * const  USERRECORDEDFORMS_COLOR  = "#FFE4E0";
+
 
 }  // End namespace DrugsWidget::Constants
 }  // End namespace DrugsWidget

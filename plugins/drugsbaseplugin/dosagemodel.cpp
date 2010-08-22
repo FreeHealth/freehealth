@@ -88,7 +88,7 @@
 #include <QColor>
 #include <QLocale>
 
-enum Warn { WarnDebuggingDatas = true };
+enum Warn { WarnDebuggingDatas = false };
 
 /**
   \todo remove QCache of DosageModels
@@ -141,6 +141,8 @@ void DosageModel::retranslate()
 
     // store the langage and retranslate
     m_ActualLangage = QLocale().name().left(2);
+    m_ScoredTabletScheme.clear();
+    m_PreDeterminedForms.clear();
 
     m_ScoredTabletScheme =
             QStringList()
@@ -164,8 +166,6 @@ void DosageModel::retranslate()
             << tr("eyewash")
             << tr("instillation")
             << tr("pulverization");
-
-
 }
 
 

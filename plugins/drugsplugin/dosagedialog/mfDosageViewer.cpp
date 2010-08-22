@@ -83,9 +83,11 @@
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
+using namespace Trans::ConstantTranslations;
 
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 
 namespace DrugsWidget {
@@ -313,8 +315,12 @@ public:
         q->intervalTimeSchemeCombo->clear();
         q->intervalTimeSchemeCombo->addItems(Trans::ConstantTranslations::periods());
         q->intervalTimeSchemeCombo->setCurrentIndex(Trans::Constants::Time::Days);
-        q->intakesCombo->addItems(drugModel()->drugData(m_CIS, Drug::AvailableForms).toStringList());
+
+        q->intakesCombo->fancyClear();
+        q->intakesCombo->addItems(drugModel()->drugData(m_CIS, Drug::AvailableForms).toStringList(), "Model");
+        q->intakesCombo->addItems(settings()->value(Constants::S_USERRECORDEDFORMS).toStringList(), Constants::USERRECORDEDFORMS_COLOR);
         q->intakesCombo->setCurrentIndex(0);
+
         q->mealTimeCombo->clear();
         q->mealTimeCombo->addItems(Trans::ConstantTranslations::mealTime());
 
@@ -397,6 +403,7 @@ public:
     QString             m_ActualDosageUuid;
     int                 m_CIS;
     Utils::SpinBoxDelegate *m_SpinDelegate;
+
 private:
     DosageViewer *q;
 };
@@ -523,7 +530,12 @@ void DosageViewer::done(int r)
 {
     if (r == QDialog::Accepted) {
         // save user's intake forms
-        Core::ICore::instance()->settings()->setValue(S_USERRECORDEDFORMS, intakesCombo->items());
+        QStringList list = intakesCombo->items(Constants::USERRECORDEDFORMS_COLOR);
+        list.insert(0, intakesCombo->currentText());
+        list.removeDuplicates();
+        list.removeAll(tkTr(Trans::Constants::INTAKES));
+        settings()->setValue(S_USERRECORDEDFORMS, list);
+        settings()->sync();
     }
 }
 
@@ -574,10 +586,10 @@ void DosageViewer::on_durationFromSpin_valueChanged(double value)
 /** \brief Show a menu with the user recorded forms */
 void DosageViewer::on_userformsButton_clicked()
 {
-    if (Core::ICore::instance()->settings()->value(S_USERRECORDEDFORMS, QVariant()).isNull())
+    if (settings()->value(S_USERRECORDEDFORMS, QVariant()).isNull())
         return;
 
-    const QStringList &ulist = Core::ICore::instance()->settings()->value(S_USERRECORDEDFORMS).toStringList();
+    const QStringList &ulist = settings()->value(S_USERRECORDEDFORMS).toStringList();
     QList<QAction*> list;
     foreach(const QString &form, ulist) {
         if (!form.isEmpty())
@@ -590,7 +602,7 @@ void DosageViewer::on_userformsButton_clicked()
     if (!a)
         return;
     if (a == aclear) {
-        Core::ICore::instance()->settings()->setValue(S_USERRECORDEDFORMS, QString());
+        settings()->setValue(S_USERRECORDEDFORMS, QString());
     } else {
         intakesCombo->setEditText(a->text());
         if (d->m_DosageModel)

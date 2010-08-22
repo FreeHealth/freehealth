@@ -216,12 +216,6 @@ public:
                             .arg(drug->dosageOfMolecules().at(0))
                             .arg(drug->listOfInn().at(0));
                 }
-                if (!settings()->value(Constants::S_USERRECORDEDFORMS).isNull()) {
-                    foreach(const QString &s, settings()->value(Constants::S_USERRECORDEDFORMS).toStringList())
-                        if (!s.isEmpty())
-                            toReturn << s;
-                }
-                toReturn << DosageModel::predeterminedForms();
                 return toReturn;
                 break;
             }

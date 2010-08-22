@@ -72,9 +72,10 @@ public:
     void setRemoveItems(bool state);
     void setMoveItems(bool state);
 
-    void addItems(const QStringList &list);
-    void addItem(const QString &item);
-    QStringList items() const;
+    void addItems(const QStringList &list, const QVariant &userData = QVariant());
+    void addItem(const QString & text, const QVariant &userData = QVariant());
+    QStringList items(const QVariant &userData = QVariant()) const;
+
 
     //    void setSettings(QSettings *settings) {m_Settings = settings;}
     //    void setSettingsKey(const QString &key) {m_Key = key;}
@@ -84,6 +85,9 @@ public:
     void setRemoveLightIcon(const QIcon &icon);
     void setMoveUpLightIcon(const QIcon &icon);
     void setMoveDownLightIcon(const QIcon &icon);
+
+public Q_SLOTS:
+    void fancyClear();
 
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
@@ -99,7 +103,7 @@ private:
     QSettings *m_Settings;
     Internal::StringModel *model;
     QString m_Key;
-    bool m_ignoreHide;
+    bool m_ignoreHide, m_editableState;
 };
 
 }  // End namespace Utils

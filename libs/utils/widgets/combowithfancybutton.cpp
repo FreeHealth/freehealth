@@ -69,51 +69,117 @@ namespace Internal {
         ColumnRemove
     };
 
+    struct String {
+        QString s;
+        QVariant userData;
+    };
+
 class StringModel : public QStringListModel
 {
 public:
     StringModel(QObject *parent = 0) : QStringListModel(parent) {}
 
+    int rowCount(const QModelIndex & = QModelIndex()) const {return m_List.count();}
     int columnCount(const QModelIndex & = QModelIndex()) const {return 4;}
+
+    void clear() {m_List.clear();}
+
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
     {
-        if (index.column() < 1)
-            return QStringListModel::data(index, role);
+        if (!index.isValid())
+            return QVariant();
+
+        if (index.row() >= m_List.count())
+            return QVariant();
+
+        if (index.row() < 0)
+            return QVariant();
+
+        if (role == Qt::DisplayRole || role == Qt::EditRole) {
+            if (index.column() == 0) {
+                return m_List.at(index.row()).s;
+            }
+        } else if (role == Qt::BackgroundRole) {
+            const QString &user = m_List.at(index.row()).userData.toString();
+            if (user.startsWith("#")) {
+                QColor color(user);
+                color.setAlpha(125);
+                return color;
+            }
+        }
         return QVariant();
     }
 
-    bool moveUp(const QModelIndex &index)
+    void setStringList(const QStringList &strings, const QVariant &userData = QVariant())
     {
-        qWarning() << "moveUp";
-        if (!index.isValid())
+        m_List.clear();
+        addStringList(strings, userData);
+    }
+
+    void addStringList(const QStringList &strings, const QVariant &userData = QVariant())
+    {
+        foreach(const QString &str, strings) {
+            if (str.isEmpty())
+                continue;
+            String s;
+            s.s = str;
+            s.userData = userData;
+            m_List << s;
+        }
+        reset();
+    }
+
+    QStringList stringList(const QVariant &userData = QVariant()) const
+    {
+        QStringList list;
+        bool all = userData.isNull();
+        qWarning() << all << userData;
+        foreach(const String &str, m_List) {
+            if (all)
+                list << str.s;
+            else if (str.userData == userData)
+                list << str.s;
+        }
+        return list;
+    }
+
+    bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex())
+    {
+        beginRemoveRows(parent, row, row+count-1);
+        for(int i=0; i < count; ++i) {
+            m_List.removeAt(row);
+        }
+        endRemoveRows();
+    }
+
+    bool moveUp(const QModelIndex &item)
+    {
+        if (!item.isValid())
             return false;
 
-        if (index.row() >= 1) {
-            QStringList list = stringList();
-            list.move(index.row(), index.row()-1);
-            setStringList(list);
-//            reset();
+        if (item.row() >= 1) {
+            m_List.move(item.row(), item.row()-1);
+            Q_EMIT dataChanged(index(item.row()-1, 0), item);
             return true;
         }
         return false;
     }
 
-    bool moveDown(const QModelIndex &index)
+    bool moveDown(const QModelIndex &item)
     {
-        qWarning() << "moveDown";
-        if (!index.isValid())
+        if (!item.isValid())
             return false;
 
-        if (index.row() < (rowCount()-1)) {
-            QStringList list = stringList();
-            list.move(index.row(), index.row()+1);
-            setStringList(list);
-//            reset();
+        if (item.row() < (rowCount()-1)) {
+            m_List.move(item.row(), item.row()+1);
+            Q_EMIT dataChanged(index(item.row()+1, 0), item);
             return true;
         }
         return false;
     }
 
+private:
+    QList<String> m_List;
 };
 
 class ItemDelegate : public QStyledItemDelegate
@@ -188,6 +254,7 @@ ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     view->setSelectionMode(QAbstractItemView::SingleSelection);
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
     view->setIndentation(0);
+    view->setAlternatingRowColors(true);
 
     delegate = new Internal::ItemDelegate(view);
     model = new Internal::StringModel(this);
@@ -226,22 +293,20 @@ void ComboWithFancyButton::setMoveItems(bool state)
     view->setColumnHidden(1, !state);
 }
 
-void ComboWithFancyButton::addItems(const QStringList &list)
+void ComboWithFancyButton::addItems(const QStringList &list, const QVariant &userData)
 {
-    model->setStringList(model->stringList() + list);
+    model->addStringList(list, userData);
 }
 
-void ComboWithFancyButton::addItem(const QString &item)
+void ComboWithFancyButton::addItem(const QString &text, const QVariant &userData)
 {
-    model->insertRow(model->rowCount());
-    model->setData(model->index(model->rowCount()-1,0), item);
-//    model->setStringList(model->stringList() + item);
+    model->addStringList(QStringList() << text, userData);
 }
 
-QStringList ComboWithFancyButton::items() const
+QStringList ComboWithFancyButton::items(const QVariant &userData) const
 {
     if (model)
-        return model->stringList();
+        return model->stringList(userData);
     return QStringList();
 }
 
@@ -272,6 +337,12 @@ void ComboWithFancyButton::setMoveDownLightIcon(const QIcon &icon)
     Q_ASSERT(delegate);
     if (delegate)
         delegate->m_MoveDownLight = icon;
+}
+
+void ComboWithFancyButton::fancyClear()
+{
+    if (model)
+        model->clear();
 }
 
 void ComboWithFancyButton::handlePressed(const QModelIndex &index)
@@ -305,6 +376,10 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
 //            QComboBox::showPopup();
             break;
         }
+    default:
+        {
+            setCurrentIndex(index.row());
+        }
     }
 }
 
@@ -312,6 +387,7 @@ void ComboWithFancyButton::showPopup()
 {
 //    this->setCurrentIndex(0);
 //    setRootModelIndex(QModelIndex());
+    m_editableState = isEditable();
 #ifdef Q_OS_MAC
     setEditable(true);
 #endif
@@ -327,7 +403,7 @@ void ComboWithFancyButton::hidePopup()
         setCurrentIndex(view->currentIndex().row());
         QComboBox::hidePopup();
 #ifdef Q_OS_MAC
-        setEditable(false);
+        setEditable(m_editableState);
 #endif
     }
 }
