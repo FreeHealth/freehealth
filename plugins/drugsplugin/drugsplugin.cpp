@@ -43,6 +43,7 @@
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
+
 #ifdef FREEMEDFORMS
 #    include "drugswidgetfactory.h"
 #endif

@@ -499,6 +499,9 @@ void MainWindow::closeEvent( QCloseEvent *event )
                            .arg(t.userUid());
         }
 
+        // Add date of creation
+        extraDatas.prepend(QString("  <DateOfCreation>%1</DateOfCreation>").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+
         // Manage specific MedinTux output exchange file format
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
             commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {

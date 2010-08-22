@@ -251,27 +251,34 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     // first time runnning ?
+    QString msg;
+    bool first = false;
     if (m_Settings->firstTimeRunning()) {
-        // show the license agreement dialog
+        msg = QCoreApplication::translate("Core", "You are running FreeDiams for the first time. You need to approve the licence terms.");
+        first = true;
+
+    } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
+        msg = QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement.");
+    }
+
+    if (!msg.isEmpty()) {
 #ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::BSD ))
+        if (!Utils::defaultLicenceAgreementDialog(msg, Utils::LicenseTerms::BSD))
             return false;
 #endif
+        // update some preferences ?
+        bool yes = Utils::yesNoMessageBox(
+                QCoreApplication::translate("Core", "You are updating FreeDiams, do you want to update your personnal preferences ?"),
+                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences."));
+        if (yes) {
+            m_UpdatePreferences = true;
+        }
         m_Settings->noMoreFirstTimeRunning();
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
 
-    } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        // show the license agreement dialog
-#ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog(
-                QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement."),
-                Utils::LicenseTerms::BSD ))
-            return false;
-#endif
-        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     }
 
-    return true;
+        return true;
 }
 
 void CoreImpl::extensionsInitialized()

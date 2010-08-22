@@ -39,6 +39,7 @@
 #include "drugsdatabaseselector.h"
 
 #include <utils/log.h>
+
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -85,6 +86,7 @@ void DrugsBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsDatabaseAboutPage(this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));

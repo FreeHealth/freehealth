@@ -237,6 +237,19 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
             settings()->setValue(k, defaultvalues.value(k));
     }
 
+    defaultvalues.clear();
+
+    if (Core::ICore::instance()->updatePreferences()) {
+        Utils::Log::addMessage(this, tr("Updating posologic sentence."));
+        defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
+                             QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+        defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
+                             QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+        foreach(const QString &k, defaultvalues.keys()) {
+            settings()->setValue(k, defaultvalues.value(k));
+        }
+    }
+
     QTextDocument t;
     t.setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     if (settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN).isNull() ||

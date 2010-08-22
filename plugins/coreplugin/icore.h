@@ -52,8 +52,8 @@ class QWidget;
 /**
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 24 Apr 2010
+ * \version 0.5.0
+ * \date 22 Aug 2010
 */
 
 
@@ -83,7 +83,7 @@ class CORE_EXPORT ICore : public QObject
     Q_OBJECT
 
 public:
-    ICore(QObject *parent) : QObject(parent) {}
+    ICore(QObject *parent) : QObject(parent), m_UpdatePreferences(false) {}
     virtual ~ICore() {}
 
     static ICore *instance();
@@ -93,6 +93,9 @@ public:
     virtual void finishSplashScreen(QWidget *w) = 0;
     virtual void messageSplashScreen(const QString &msg) = 0;
     virtual QSplashScreen *splashScreen() = 0;
+
+    // Some informations
+    virtual bool updatePreferences() const {return m_UpdatePreferences;}
 
     // Action manager, ContextManager, ModeManager, FileManager
     virtual ActionManager *actionManager() const = 0;
@@ -150,6 +153,8 @@ Q_SIGNALS:
 
     void databaseServerChanged();
 
+protected:
+    bool m_UpdatePreferences;
 };
 
 } // namespace Core
