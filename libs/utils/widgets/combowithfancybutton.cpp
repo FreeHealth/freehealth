@@ -133,7 +133,6 @@ public:
     {
         QStringList list;
         bool all = userData.isNull();
-        qWarning() << all << userData;
         foreach(const String &str, m_List) {
             if (all)
                 list << str.s;
@@ -347,11 +346,9 @@ void ComboWithFancyButton::fancyClear()
 
 void ComboWithFancyButton::handlePressed(const QModelIndex &index)
 {
-    qWarning() << "col" << index.column();
     switch (index.column()) {
     case Internal::ColumnRemove:
         {
-            qWarning() << "remove";
             delegate->pressedIndex = index;
             model->removeRow(index.row());
             m_ignoreHide = true;
