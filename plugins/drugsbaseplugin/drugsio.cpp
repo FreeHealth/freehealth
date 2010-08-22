@@ -118,6 +118,7 @@ namespace DrugsIOConstants {
     const char *const XML_PRESCRIPTION_TOHTML              = "Html";
     const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
     const char *const XML_FULLPRESCRIPTION_TAG             = "FullPrescription";
+    const char *const XML_DATEOFGENERATION_TAG             = "DateOfGeneration";
 
     const char *const XML_DRUG_DENOMINATION            = "DrugName";
     const char *const XML_DRUG_INNS                    = "DrugINN";
@@ -677,6 +678,9 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m)
     else
         dbName = Constants::DB_DEFAULT_IDENTIFIANT;
     xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
+
+    // Add the date of generation
+    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 
     // Add the main root node
     xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
