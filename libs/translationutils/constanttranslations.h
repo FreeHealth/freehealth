@@ -287,6 +287,10 @@ enum TitleInterpret {
         const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
         const char* const ALLERGY_TO_1                  = QT_TRANSLATE_NOOP("tkConstants", "Allergy to %1");
         const char* const INTOLERANCE_TO_1              = QT_TRANSLATE_NOOP("tkConstants", "Intolerance to %1");
+        const char* const NO_ALLERGIES_INTOLERANCES     = QT_TRANSLATE_NOOP("tkConstants", "No known allergies / intolerances");
+        const char* const KNOWN_ALLERGIES               = QT_TRANSLATE_NOOP("tkConstants", "Known allergies");
+        const char* const KNOWN_INTOLERANCES            = QT_TRANSLATE_NOOP("tkConstants", "Known intolerances");
+
         // Drugs Interactions
         const char* const INTERACTION                   = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
         const char* const TAKE_INTO_ACCOUNT             = QT_TRANSLATE_NOOP("tkConstants", "Take into account");

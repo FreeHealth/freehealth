@@ -121,7 +121,7 @@ public:
         if (drugsBase()->actualDatabaseInformations()) {
             const QString &url = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
             if (!url.isEmpty()) {
-                QAction *drugsDbWeb = new QAction(drugsDBLabel, m_HelpMenu);
+                QAction *drugsDbWeb = new QAction(drugDBLabel, m_HelpMenu);
                 drugsDbWeb->setData(url);
                 m_HelpMenu->addAction(drugsDbWeb);
                 q->connect(drugsDbWeb, SIGNAL(triggered()), q, SLOT(drugsInformationsRequested()));
@@ -144,8 +144,8 @@ public:
 
     void createValidateMenu(const QString &prescribeOnly,
                             const QString &savePrescribe,
-                            const QString &save,
-                            const QString &test)
+                            const QString &saveOnly,
+                            const QString &testOnly)
     {
         prescribe = new QAction(prescribeOnly, q->validateButton);
         prescribe->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_PRESCRIBE, Core::ITheme::MediumIcon));
@@ -157,12 +157,12 @@ public:
         prescribeAndSave->setIconVisibleInMenu(true);
         q->connect(prescribeAndSave, SIGNAL(triggered()), q, SLOT(saveAndPrescribeRequested()));
 
-        save = new QAction(save, q->validateButton);
+        save = new QAction(saveOnly, q->validateButton);
         save->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_SAVE, Core::ITheme::MediumIcon));
         save->setIconVisibleInMenu(true);
         q->connect(save, SIGNAL(triggered()), q, SLOT(saveRequested()));
 
-        test = new QAction(test, q->validateButton);
+        test = new QAction(testOnly, q->validateButton);
         test->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_TESTONLY, Core::ITheme::MediumIcon));
         test->setIconVisibleInMenu(true);
         q->connect(test, SIGNAL(triggered()), q, SLOT(addTestOnlyRequested()));

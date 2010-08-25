@@ -133,11 +133,11 @@ public:
         m_AllergiesView = 0;
     }
 
-    bool readExchangeFile()
+    bool readExchangeFile(const QString &msg)
     {
         QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
         if (!exfile.isEmpty()) {
-            messageSplash(q->tr("Reading exchange file..."));
+            messageSplash(msg);
             if (QFileInfo(exfile).isRelative())
                 exfile.prepend(qApp->applicationDirPath() + QDir::separator());
             QString tmp;
@@ -248,12 +248,12 @@ public:
             atcIntolerances.isEmpty() &&
             uidsIntolerances.isEmpty() &&
             innsIntolerances.isEmpty()) {
-            QStandardItem *uniqueItem = new QStandardItem(q->tr("No known allergies / intolerances"));
+            QStandardItem *uniqueItem = new QStandardItem(tkTr(Trans::Constants::NO_ALLERGIES_INTOLERANCES));
             uniqueItem->setFont(bold);
             rootItem->appendRow(uniqueItem);
         } else {
-            QStandardItem *allergiesItem = new QStandardItem(q->tr("Known allergies"));
-            QStandardItem *intolerancesItem = new QStandardItem(q->tr("Known intolerances"));
+            QStandardItem *allergiesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_ALLERGIES));
+            QStandardItem *intolerancesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_INTOLERANCES));
             allergiesItem->setFont(bold);
             intolerancesItem->setFont(bold);
             QBrush allergiesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString()).darker(300));
@@ -439,8 +439,8 @@ void MainWindow::extensionsInitialized()
     }
 
     // If needed read exchange file
-    if (!d->readExchangeFile()) {
-        Utils::Log::addError(this, "Unable to read exchange file");
+    if (!d->readExchangeFile(tr("Reading exchange file..."))) {
+        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString()));
     }
 
     // Start the update checker
