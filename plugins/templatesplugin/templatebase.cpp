@@ -108,11 +108,13 @@ public:
                     << "ALTER TABLE `TEMPLATES` RENAME TO `OLD_TEMPLATES`;";
 
             if (!q->executeSQL(reqs, q->database()))
-                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)",
+                                     __FILE__, __LINE__);
 
             // 2. Recreate the db schema
             if (!q->createTables())
-                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)",
+                                     __FILE__, __LINE__);
 
             reqs.clear();
             reqs << QString("INSERT INTO `CATEGORIES` (%1) SELECT %1 FROM `OLD_CATEGORIES`;")
@@ -146,7 +148,8 @@ public:
 
             // Reinsert datas to new tables
             if (!q->executeSQL(reqs, q->database()))
-                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
+                Utils::Log::addError(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)",
+                                     __FILE__, __LINE__);
 
             // Refresh db version
             version = "0.4.0";
@@ -340,14 +343,16 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
         DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
         if (!QDir(pathOrHostName).exists()) {
             if (!QDir().mkpath(pathOrHostName)) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
+                Utils::Log::addError(this, tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName),
+                                     __FILE__, __LINE__);
             } else {
                 Utils::Log::addMessage(this, tkTr(Trans::Constants::CREATE_DIR_1).arg(pathOrHostName));
             }
         }
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         if (!DB.open())
-            Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+            Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()),
+                                 __FILE__, __LINE__);
         setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
@@ -388,7 +393,8 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
         Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
         Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()));
+                         .arg(dbName, DB.lastError().text()),
+                         __FILE__, __LINE__);
         return false;
     }
 

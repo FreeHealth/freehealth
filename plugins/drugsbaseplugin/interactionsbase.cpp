@@ -170,7 +170,7 @@ public:
              /** \todo WARNING FULL SQL COMMAND */
              QSqlDatabase drugs = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
              if (!drugs.open())
-                 Utils::Log::addError("InteractionBase", "Drugs database not opened");
+                 Utils::Log::addError("InteractionBase", "Drugs database not opened", __FILE__, __LINE__);
              QSqlQuery query("SELECT * FROM `LK_MOL_ATC`", drugs);
              if (query.isActive()) {
                  while (query.next()) {
@@ -479,7 +479,7 @@ bool InteractionsBase::init(bool refreshCache)
     // retreive interactions into m_InteractionsIDs for speed improvements
     if (!di->m_DB->database().isOpen())
         if (!di->m_DB->database().open())
-            Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()));
+            Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()), __FILE__, __LINE__);
 
     QList<int> fields;
     fields << IA_ATC1 << IA_ATC2;
@@ -679,7 +679,7 @@ QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
     QSet<int> toReturn;
 
     if (di->m_AtcToMol.keys(molecule_code).count()>1)
-        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code));
+        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
 
     toReturn = di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code)).toSet();
     if (di->m_AtcToMol.values().contains(molecule_code))

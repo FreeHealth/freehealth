@@ -447,7 +447,7 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
-        Utils::Log::addError(this, "setCurrentView : no view");
+        Utils::Log::addError(this, "setCurrentView : no view", __FILE__, __LINE__);
         return;
     }
     //    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";

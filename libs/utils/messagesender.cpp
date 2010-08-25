@@ -188,8 +188,8 @@ void MessageSender::httpDone( bool error )
         Utils::Log::addMessage( this, ret );
     } else {
         ret = tkTr(Trans::Constants::ERROR_1_OCCURED_WHILE_2).arg(tkTr(Trans::Constants::POST_TO_1).arg(d->http.errorString()) );
-        Utils::Log::addError( this, ret );
-        Utils::Log::addError( this, d->m_Buffer->data() );
+        Utils::Log::addError( this, ret, __FILE__, __LINE__ );
+        Utils::Log::addError( this, d->m_Buffer->data() , __FILE__, __LINE__);
     }
 
     d->m_LastResult = QString( d->m_Buffer->data() );

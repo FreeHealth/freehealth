@@ -300,7 +300,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             bool ok = DB.open();
             if (!ok) {
                 Utils::Log::addError("Database", QString("Unable to connect to the server %1 - %2")
-                                     .arg(pathOrHostName).arg(DB.lastError().text()));
+                                     .arg(pathOrHostName).arg(DB.lastError().text()),
+                                     __FILE__, __LINE__);
                 return false;
             }
             Utils::Log::addMessage("Database", QString("Connected to host %1").arg(pathOrHostName));
@@ -340,7 +341,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             bool ok = DB.open();
             if (!ok) {
                 Utils::Log::addError("Database", QString("Unable to connect to the database %1 - %2")
-                                     .arg(dbName).arg(DB.lastError().text()));
+                                     .arg(dbName).arg(DB.lastError().text()),
+                                     __FILE__, __LINE__);
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
@@ -910,7 +912,8 @@ bool Database::createTables() const
     foreach(const int & i, list)
         if(!createTable(i)) {
             toReturn = false;
-            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)),
+                                 __FILE__, __LINE__);
         }
     return toReturn;
 }

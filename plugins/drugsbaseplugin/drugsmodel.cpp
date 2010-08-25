@@ -328,7 +328,7 @@ DrugsModel::DrugsModel(QObject * parent)
     ++handler;
     setObjectName("DrugsModel_" + QString::number(handler));
     if (!drugsBase()->isInitialized())
-        Utils::Log::addError(this,"Drugs database not intialized");
+        Utils::Log::addError(this,"Drugs database not intialized", __FILE__, __LINE__);
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
     d->m_InteractionsManager = new InteractionsManager(this);

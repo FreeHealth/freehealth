@@ -141,7 +141,7 @@ void SimpleTextDialog::print()
 {
     Core::IDocumentPrinter *p = printer();
     if (!p) {
-        Utils::Log::addError(this, "No IDocumentPrinter found");
+        Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
         return;
     }
 

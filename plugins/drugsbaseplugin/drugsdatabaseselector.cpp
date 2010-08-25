@@ -260,7 +260,7 @@ QHash<QString, QString> DatabaseInfos::names() const
                                  .arg(l)
                                  .arg(lang.count()-1)
                                  .arg(fileName)
-                                 .arg(name));
+                                 .arg(name), __FILE__, __LINE__);
             continue;
         }
         langs.insert(lang.at(0).simplified(), lang.at(1).simplified());
@@ -302,7 +302,7 @@ void DrugsDatabaseSelector::getAllDatabaseInformations(const QStringList &paths)
             db.setDatabaseName(fi.absoluteFilePath());
             if (!db.open()) {
                 Utils::Log::addError("DrugsDatabaseSelector", QString("Error %1 when trying to open database %2")
-                                     .arg(db.lastError().text()).arg(fi.fileName()), true);
+                                     .arg(db.lastError().text()).arg(fi.fileName()), __FILE__, __LINE__, true);
                 continue;
             }
             DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->getDatabaseInformations(fi.fileName());

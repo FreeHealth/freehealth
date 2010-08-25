@@ -103,7 +103,8 @@ void ThemePrivate::setThemeRootPath( const QString &absPath )
         Utils::Log::addMessage(this, QString("Setting theme path to : %1").arg(m_AbsolutePath) );
     }
     else
-        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) );
+        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) ,
+                              __FILE__, __LINE__);
 }
 
 void ThemePrivate::setThemeRelativeRootPath( const QString & relPathFromAppBinary )
@@ -115,7 +116,8 @@ void ThemePrivate::setThemeRelativeRootPath( const QString & relPathFromAppBinar
         Utils::Log::addMessage(this, QString("INFO : theme path setted to : %1").arg(path) );
     }
     else
-        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary) );
+        Utils::Log::addError( this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary) ,
+                              __FILE__, __LINE__);
 }
 
 void ThemePrivate::refreshCache()
@@ -135,7 +137,8 @@ void ThemePrivate::setSmallIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_SmallIconPath = absPath;
     else
-        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath) ,
+                             __FILE__, __LINE__);
 }
 
 /** \brief Set the specific medium icon path - should not be used */
@@ -144,7 +147,8 @@ void ThemePrivate::setMediumIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_MediumIconPath = absPath;
     else
-        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath) ,
+                             __FILE__, __LINE__);
 }
 
 /** \brief Set the specific big icon path - should not be used */
@@ -153,7 +157,8 @@ void ThemePrivate::setBigIconPath( const QString &absPath )
     if (QDir(absPath).exists())
         m_BigIconPath = absPath;
     else
-        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath) );
+        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath),
+                             __FILE__, __LINE__ );
 }
 
 /** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
@@ -178,7 +183,8 @@ QIcon ThemePrivate::icon( const QString & fileName, IconSize size )
             m_IconCache.insert( transformedFileName, i );
             return QIcon(*i);
         } else {
-            Utils::Log::addError( "ThemePrivate", QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName) );
+            Utils::Log::addError( "ThemePrivate", QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName) ,
+                                  __FILE__, __LINE__);
         }
     }
     return QIcon();
@@ -251,6 +257,7 @@ QPixmap ThemePrivate::splashScreen( const QString &fileName )
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists() )
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file );
     else
-        Utils::Log::addError( "ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName) );
+        Utils::Log::addError( "ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName),
+                              __FILE__, __LINE__);
     return QPixmap();
 }

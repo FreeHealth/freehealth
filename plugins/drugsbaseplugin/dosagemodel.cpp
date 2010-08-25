@@ -243,8 +243,8 @@ bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int
 //        }
 
         if (!QSqlTableModel::setData(index, value, role)) {
-            Utils::Log::addError(this, "Can not set data to QSqlTableModel");
-            Utils::Log::addQueryError(this, query());
+            Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
+            Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
             return false;
         }
 
@@ -311,7 +311,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     for (i=0; i < count; ++i) {
         createdRow = row+i;
         if (!QSqlTableModel::insertRows(createdRow, 1, parent)) {
-            Utils::Log::addError(this, tr("Model Error : unable to insert a row"));
+            Utils::Log::addError(this, tr("Model Error : unable to insert a row"),__FILE__, __LINE__);
             toReturn = false;
         } else {
             setData(index(createdRow, Dosages::Constants::Uuid) , QUuid::createUuid().toString());

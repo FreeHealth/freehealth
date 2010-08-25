@@ -145,9 +145,11 @@ QString uname()
     QProcess uname;
     uname.start("uname", QStringList() << "-a");
     if (!uname.waitForStarted())
-        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) ,
+                             __FILE__, __LINE__);
     if (!uname.waitForFinished())
-        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) );
+        Utils::Log::addError("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system) ,
+                             __FILE__, __LINE__);
     return uname.readAll();
 }
 QString osName()
@@ -231,7 +233,8 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
                                .arg( logDirName, absPath ) );
             if ( ! QDir().mkpath( absPath ) ) {
                 Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Unable to create the %1 : %2.")
-                                 .arg( logDirName, absPath ) );
+                                 .arg( logDirName, absPath ) ,
+                                 __FILE__, __LINE__);
                 return false;
             }
         } else {
@@ -247,7 +250,8 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent )
 {
     if (toFile.isEmpty()) {
-        Utils::Log::addError( "Utils", "saveStringToFile() : fileName is empty");
+        Utils::Log::addError( "Utils", "saveStringToFile() : fileName is empty",
+                              __FILE__, __LINE__);
         return false;
     }
     QWidget *wgt = parent;
@@ -271,12 +275,14 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomo
                                    QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
             if (iomode == Overwrite) {
                 if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
+                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()),
+                                         __FILE__, __LINE__);
                     return false;
                 }
             } else if (iomode == AppendToFile) {
                 if (!file.open(QFile::Append | QIODevice::Text)) {
-                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
+                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()),
+                                         __FILE__, __LINE__);
                     return false;
                 }
             } else {
@@ -291,7 +297,8 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomo
     } else {
         // Create file
         if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg(file.fileName(), file.errorString() ) );
+            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg(file.fileName(),file.errorString()),
+                                  __FILE__, __LINE__);
             return false;
         }
         file.write(toSave.toAscii());
@@ -339,7 +346,8 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
         QFile file(correctFileName);
         if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
             Utils::Log::addError("Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
-                             .arg(correctFileName, file.errorString()));
+                             .arg(correctFileName, file.errorString()),
+                             __FILE__, __LINE__);
             return QString::null;
         }
         QByteArray data = file.readAll();
@@ -859,7 +867,8 @@ QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, 
 bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64)
 {
     if (!xmlContent.contains(generalTag)) {
-        Utils::Log::addError("Utils::readXml",QString("Error while reading Xml : tag %1 not found").arg(generalTag));
+        Utils::Log::addError("Utils::readXml",QString("Error while reading Xml : tag %1 not found").arg(generalTag),
+                             __FILE__, __LINE__);
         return false;
     }
     readDatas.clear();
@@ -1006,7 +1015,8 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
         afterEnd = textToAnalyse.indexOf( Constants::TOKEN_CLOSE, end );
         if ((beforeBegin==-1) || (afterEnd==-1)) {
             Utils::Log::addError("Utils", QApplication::translate("Utils", "Token replacement error (%1). Wrong number of parentheses.")
-                                                                .arg(token + QString::number(beforeBegin)));
+                                                                .arg(token + QString::number(beforeBegin)),
+                                                                __FILE__, __LINE__);
             begin = end;
             continue;
         }

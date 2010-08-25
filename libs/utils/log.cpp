@@ -78,99 +78,96 @@ bool Log::m_MuteConsole = false;
 bool Log::warnPluginsCreation() { return false; }
 
 
-    void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)
-    {
-        m_Messages << LogData(o,m,d,t) ;
-        if ((t == LogData::Error) || (t==LogData::CriticalError) || (t==LogData::Warning))
-            m_HasError=true;
+void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)
+{
+    m_Messages << LogData(o,m,d,t) ;
+    if ((t == LogData::Error) || (t==LogData::CriticalError) || (t==LogData::Warning))
+        m_HasError=true;
+}
+
+void Log::muteConsoleWarnings()
+{ m_MuteConsole=true; }
+
+void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
+{
+    if (!m_MuteConsole || forceWarning) {
+        qWarning() << object << msg;
     }
+    addData(object, msg, QDateTime::currentDateTime(), LogData::Message);
+}
 
-    void Log::muteConsoleWarnings()
-    { m_MuteConsole=true; }
+void Log::addMessages(const QString &o, const QStringList &msg, bool forceWarning)
+{
+    foreach(const QString &m, msg)
+        addMessage(o, m, forceWarning);
+}
 
-    void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
-    {
-        if (!m_MuteConsole || forceWarning) {
-            qWarning() << object << msg;
-        }
-        addData(object, msg, QDateTime::currentDateTime(), LogData::Message);
+void Log::addError(const QString &object, const QString &err, const QString &file, const int line, bool forceWarning)
+{
+    if (!m_MuteConsole || forceWarning) {
+        qWarning() << QString("** ERROR(%1:%2)").arg(QFileInfo(file).fileName()).arg(line) << object << err ;
     }
+    addData(object, err, QDateTime::currentDateTime(), LogData::Error);
+}
 
-    void Log::addMessages(const QString &o, const QStringList &msg, bool forceWarning)
-    {
-        foreach(const QString &m, msg)
-            addMessage(o, m, forceWarning);
+void Log::addErrors(const QString &o, const QStringList &err, const QString &file, const int line,  bool forceWarning)
+{
+    foreach(const QString &m, err)
+        addError(o, m, file, line, forceWarning);
+}
+
+void Log::addQueryError(const QObject *o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
+{
+    if (!m_MuteConsole || forceWarning) {
+        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
     }
+    addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
+             .arg(o->objectName(), QDateTime::currentDateTime().toString())
+             .arg(q.lastError().driverText())
+             .arg(q.lastError().databaseText())
+             .arg(q.lastQuery()), file, line, forceWarning);
+}
 
-    void Log::addError(const QString &object, const QString &err, bool forceWarning)
-    {
-        if (!m_MuteConsole || forceWarning) {
-            qWarning() << object << err;
-        }
-        addData(object, err, QDateTime::currentDateTime(), LogData::Error);
+void Log::addQueryError(const QString &o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
+{
+    if (!m_MuteConsole || forceWarning) {
+        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
     }
+    addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
+             .arg(o)
+             .arg(QDateTime::currentDateTime().toString())
+             .arg(q.lastError().driverText())
+             .arg(q.lastError().databaseText())
+             .arg(q.lastQuery()), file, line, forceWarning);
+}
 
-    void Log::addErrors(const QString &o, const QStringList &err, bool forceWarning)
-    {
-        foreach(const QString &m, err)
-            addError(o, m, forceWarning);
-    }
+/** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
+void Log::logTimeElapsed(QTime &t, const QString &object, const QString &forDoingThis)
+{
+    addMessage("Chrono - " + object, QCoreApplication::translate("Log", "%1 ms : %2")
+               .arg(t.elapsed()).arg(forDoingThis));
+    t.restart();
+}
 
+bool Log::hasError()        { return  m_HasError; }
 
-    void Log::addQueryError(const QObject *o, const QSqlQuery &q, bool forceWarning)
-    {
-        if (!m_MuteConsole || forceWarning) {
-            qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
-        }
-        addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
-                 .arg(o->objectName(), QDateTime::currentDateTime().toString())
-                 .arg(q.lastError().driverText())
-                 .arg(q.lastError().databaseText())
-                 .arg(q.lastQuery()), forceWarning);
-    }
+QStringList Log::messages()
+{
+    QStringList r;
+    foreach(const LogData &v, m_Messages)
+        if (v.type == LogData::Message)
+            r << v.toString();
+    return r;
+}
 
-    void Log::addQueryError(const QString &o, const QSqlQuery &q, bool forceWarning)
-    {
-        if (!m_MuteConsole || forceWarning) {
-            qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
-        }
-        addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
-                .arg(o)
-                .arg(QDateTime::currentDateTime().toString())
-                .arg(q.lastError().driverText())
-                .arg(q.lastError().databaseText())
-                .arg(q.lastQuery()), forceWarning);
-    }
-
-    /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
-    void Log::logTimeElapsed(QTime &t, const QString &object, const QString &forDoingThis)
-    {
-        addMessage("Chrono - " + object, QCoreApplication::translate("Log", "%1 ms : %2")
-                    .arg(t.elapsed()).arg(forDoingThis));
-        t.restart();
-    }
-
-    bool Log::hasError()        { return  m_HasError; }
-
-    QStringList Log::messages()
-    {
-        QStringList r;
-        foreach(const LogData &v, m_Messages)
-            if (v.type == LogData::Message)
-                r << v.toString();
-        return r;
-    }
-
-    QStringList Log::errors()
-    {
-        QStringList r;
-        foreach(const LogData &v, m_Messages)
-            if (v.isError())
-                r << v.toString();
-        return r;
-    }
-
-
+QStringList Log::errors()
+{
+    QStringList r;
+    foreach(const LogData &v, m_Messages)
+        if (v.isError())
+            r << v.toString();
+    return r;
+}
 
 void Log::addMessage(const QObject *o, const QString &msg, bool forceWarning)
 {
@@ -191,22 +188,22 @@ void Log::addMessages(const QObject *o, const QStringList &msg, bool forceWarnin
     }
 }
 
-void Log::addError(const QObject *o, const QString &err, bool forceWarning)
+void Log::addError(const QObject *o, const QString &err, const QString &file, const int line, bool forceWarning)
 {
     if (o)
-        addError(o->objectName(), err, forceWarning);
+        addError(o->objectName(), err, file, line, forceWarning);
     else
-        addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), err, forceWarning);
+        addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), err, file, line,  forceWarning);
 }
 
-void Log::addErrors(const QObject *o, const QStringList &err, bool forceWarning)
+void Log::addErrors(const QObject *o, const QStringList &err, const QString &file, const int line, bool forceWarning)
 {
     if (o) {
         foreach(const QString &m, err)
-            addError(o, m, forceWarning);
+            addError(o, m, file, line,  forceWarning);
     } else {
         foreach(const QString &m, err)
-            addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m, forceWarning);
+            addError(Trans::ConstantTranslations::tkTr(Trans::Constants::UNKNOWN), m, file, line, forceWarning);
     }
 }
 

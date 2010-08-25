@@ -175,7 +175,8 @@ public:
         QSqlDatabase db = QSqlDatabase::database(m_Name);
         if (!db.open()) {
             Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(m_Name, db.lastError().text()),"","","");
-            Utils::Log::addError("DatabaseUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(m_Name, db.lastError().text()));
+            Utils::Log::addError("DatabaseUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(m_Name, db.lastError().text()),
+                                 __FILE__, __LINE__);
             return false;
         }
         QString req = "SELECT `POSO_ID`, `DAILYSCHEME` FROM `DOSAGE` WHERE (`DAILYSCHEME`>0) ORDER BY `POSO_ID` ASC;";
@@ -503,7 +504,8 @@ bool VersionUpdater::isDosageDatabaseUpToDate() const
     QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!db.open()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME, db.lastError().text()),"","","");
-        Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME, db.lastError().text()));
+        Utils::Log::addError("VersionUpdater",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME, db.lastError().text()),
+                             __FILE__, __LINE__);
         return true;
     }
     QString req = "﻿SELECT `ACTUAL` FROM `VERSION` ORDER BY `ACTUAL` LIMIT 1;";
@@ -531,17 +533,20 @@ bool VersionUpdater::updateDosageDatabase()
         step->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
         if (!step->retreiveValuesToUpdate()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()),
+                                 __FILE__, __LINE__);
             return false;
         }
         if (!step->updateDatabaseScheme()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()),
+                                 __FILE__, __LINE__);
             return false;
         }
         if (!step->saveUpdatedValuesToDatabase()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
-                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()));
+                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()),
+                                 __FILE__, __LINE__);
             return false;
         }
         version = step->toVersion();
@@ -584,7 +589,8 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
         if (step->updateFromXml()) {
             if (step->fromVersion() == version) {
                 if (!step->executeXmlUpdate(xml))
-                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
+                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()),
+                                         __FILE__, __LINE__);
                 else
                     version = step->toVersion();
             }
@@ -607,7 +613,8 @@ bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::Drugs
         if (step->updateFromModel()) {
             if (step->fromVersion() == version) {
                 if (!step->executeUpdate(model, rowsToUpdate))
-                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
+                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()),
+                                         __FILE__, __LINE__);
                 else
                     version = step->toVersion();
             }

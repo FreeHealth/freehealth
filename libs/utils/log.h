@@ -112,14 +112,14 @@ public:
     static void addMessages( const QObject * o, const QStringList & msg, bool forceWarning = false );
     static void addMessages( const QString &o, const QStringList & msg, bool forceWarning = false );
 
-    static void addError( const QObject * o, const QString & err, bool forceWarning = false );
-    static void addError( const QString & object, const QString & err, bool forceWarning = false );
+    static void addError( const QObject * o, const QString & err, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
+    static void addError( const QString & object, const QString & err, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
 
-    static void addErrors( const QObject * o, const QStringList & err, bool forceWarning = false );
-    static void addErrors( const QString &o, const QStringList & err, bool forceWarning = false );
+    static void addErrors( const QObject * o, const QStringList & err, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
+    static void addErrors( const QString &o, const QStringList & err, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
 
-    static void addQueryError( const QObject * o, const QSqlQuery & q, bool forceWarning = false );
-    static void addQueryError( const QString & o, const QSqlQuery & q, bool forceWarning = false );
+    static void addQueryError( const QObject * o, const QSqlQuery & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
+    static void addQueryError( const QString & o, const QSqlQuery & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
 
     /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
     static void logTimeElapsed( QTime &t, const QString &object, const QString &forDoingThis );

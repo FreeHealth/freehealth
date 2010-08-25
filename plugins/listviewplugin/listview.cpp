@@ -464,7 +464,8 @@ void ListView::addItem()
             row = 0;
     }
     if (!d->m_ListView->model()->insertRows(row, 1))
-        Utils::Log::addError(this, QString("ListView can not add a row to the model %1").arg(model()->objectName()));
+        Utils::Log::addError(this, QString("ListView can not add a row to the model %1").arg(model()->objectName()),
+                             __FILE__, __LINE__);
 
     // select inserted row and edit it
     QModelIndex index = d->m_ListView->model()->index(row, d->m_ListView->modelColumn());
@@ -487,7 +488,8 @@ void ListView::removeItem()
         if (!d->m_ListView->model()->removeRows(row, 1))
             Utils::Log::addError(this, QString("ListView can not remove row %1 to the model %2")
                              .arg(row)
-                             .arg(model()->objectName()));
+                             .arg(model()->objectName()),
+                             __FILE__, __LINE__);
     }
     Q_EMIT removeRequested();
 }

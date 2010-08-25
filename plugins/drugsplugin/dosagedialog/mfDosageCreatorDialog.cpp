@@ -203,7 +203,7 @@ public:
                 Utils::Log::addMessage(q, QCoreApplication::translate("DosageCreatorDialog", "Dosage correctly saved to base"));
             else
                 Utils::Log::addError(q, QCoreApplication::translate("DosageCreatorDialog", "SQL Error : Dosage can not be added to database : %1")
-                                .arg(m_DosageModel->lastError().text()));
+                                     .arg(m_DosageModel->lastError().text()), __FILE__, __LINE__);
         } else {
             m_DosageModel->database().rollback();
             QMessageBox::warning(q, QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"),

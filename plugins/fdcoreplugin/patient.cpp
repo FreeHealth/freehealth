@@ -315,7 +315,8 @@ bool Patient::fromXml(const QString &xml)
 {
     QHash<QString,QString> datas;
     if (!Utils::readXml(xml, MAIN_PATIENT_TAG, datas, true)) {
-        Utils::Log::addError("Patient", "Error while reading XML patient's datas (Patient::fromXml())");
+        Utils::Log::addError("Patient", "Error while reading XML patient's datas (Patient::fromXml())",
+                             __FILE__, __LINE__);
         return false;
     }
     foreach(const QString &k, datas.keys()) {

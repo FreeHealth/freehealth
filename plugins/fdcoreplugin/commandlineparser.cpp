@@ -61,7 +61,8 @@ inline static void warnXmlReadError(const QString &file, const QString &msg, con
     Utils::Log::addError("CommandLine",
                          Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
                          Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                         .arg(msg).arg(line).arg(col));
+                         .arg(msg).arg(line).arg(col),
+                         __FILE__, __LINE__);
 }
 
 class CommandLinePrivate
@@ -157,7 +158,8 @@ public:
             if (QFile::exists(file)) {
                 readInFileXml(file);
             } else {
-                Utils::Log::addError("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
+                Utils::Log::addError("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file),
+                                     __FILE__, __LINE__);
             }
         }
     }
@@ -169,7 +171,8 @@ public:
         QString contents;
         contents = Utils::readTextFile(file, Utils::DontWarnUser);
         if (contents.isEmpty()) {
-            Utils::Log::addError("CommandLine", QCoreApplication::translate("CommandLine", "In File %1 is empty.").arg(file));
+            Utils::Log::addError("CommandLine", QCoreApplication::translate("CommandLine", "In File %1 is empty.").arg(file),
+                                 __FILE__, __LINE__);
             return false;
         }
 

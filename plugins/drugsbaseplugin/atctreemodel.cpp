@@ -165,7 +165,7 @@ public:
                 list.append(item);
             }
         } else {
-            Utils::Log::addError(q, query.lastError().text());
+            Utils::Log::addError(q, query.lastError().text(),__FILE__, __LINE__);
         }
         query.finish();
 

@@ -266,7 +266,7 @@ void DrugsIO::dosageTransmissionDone()
         Utils::Log::addMessage(this, tr("Dosages transmitted."));
 	Internal::DrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
     } else
-        Utils::Log::addError(this, tr("Dosage not correctly transmitted"));
+        Utils::Log::addError(this, tr("Dosage not correctly transmitted"), __FILE__, __LINE__);
     d->m_Datas.clear();
     Q_EMIT transmissionDone();
 }
@@ -303,14 +303,16 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         finish = QString("</%1").arg(XML_DRUGS_DATABASE_NAME);
         int end = xml.indexOf(finish, begin);
         if (begin==-1 || end==-1) {
-            Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_DRUGS_DATABASE_NAME));
+            Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_DRUGS_DATABASE_NAME),
+                                 __FILE__, __LINE__);
             return false;
         }
         xmlDbName = xml.mid( begin, end - begin);
     }
     if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
         Utils::Log::addError("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
-                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
+                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName),
+                             __FILE__, __LINE__);
         Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
                                  tr("You are trying to load prescription that uses a different drugs database than the "
                                     "actual one. You can not read this prescription unless you change the current "
@@ -328,7 +330,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     begin = xml.indexOf("\">", begin) + 2;
     int end = xml.indexOf(finish, begin);
     if (begin==-1 || end==-1) {
-        Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
+        Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG),
+                             __FILE__, __LINE__);
         return false;
     }
     QString x = xml.mid( begin, end - begin);
@@ -349,7 +352,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     foreach(const QString &s, drugs) {
         // Some verifications
         if (!Utils::readXml(s+QString("</%1>").arg(XML_PRESCRIPTION_MAINTAG), XML_PRESCRIPTION_MAINTAG,hash,false)) {
-            Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"));
+            Utils::Log::addError("DrugsIO",tr("Unable to read xml prescription"),
+                                 __FILE__, __LINE__);
             continue;
         }
         if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_CIS)))
@@ -414,7 +418,8 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
 {
     Q_ASSERT(m);
     if (fileName.isEmpty()) {
-        Utils::Log::addError("DrugsIO", tr("No file name passed to load prescription"));
+        Utils::Log::addError("DrugsIO", tr("No file name passed to load prescription"),
+                             __FILE__, __LINE__);
         return false;
     }
     QFileInfo info(fileName);
@@ -422,11 +427,13 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         info.setFile(qApp->applicationDirPath() + QDir::separator() + fileName);
 
     if (!info.exists()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(info.absoluteFilePath()));
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(info.absoluteFilePath()),
+                             __FILE__, __LINE__);
         return false;
     }
     if (!info.isReadable()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()));
+        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()),
+                             __FILE__, __LINE__);
         return false;
     }
     xmlExtraDatas.clear();

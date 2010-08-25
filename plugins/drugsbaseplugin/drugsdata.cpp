@@ -165,7 +165,8 @@ void DrugsData::setValue(const int tableref, const int fieldref, const QVariant 
                 d->m_COMPOValues.insertMulti(fieldref, value);
             break;
         }
-    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::setValue()."); break;
+    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::setValue().",
+                                  __FILE__, __LINE__); break;
     }
 }
 
@@ -235,7 +236,8 @@ QVariant DrugsData::value(const int tableref, const int fieldref) const
             }
             return QVariant();
         }
-    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::value()."); break;
+    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::value().",
+                                  __FILE__, __LINE__); break;
     }
     return QVariant();
 }

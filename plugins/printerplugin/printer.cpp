@@ -660,7 +660,8 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
 bool PrinterPrivate::simpleDraw()
 {
     if (!m_Content) {
-        Utils::Log::addError("tkPrinter", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw)."));
+        Utils::Log::addError("Printer", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw)."),
+                             __FILE__, __LINE__);
         return false;
     }
     m_PrintingDuplicata = false;

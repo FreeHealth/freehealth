@@ -112,7 +112,8 @@ bool Translators::setPathToTranslations( const QString & path )
     } else {
         if (WarnTranslatorsErrors) {
             Utils::Log::addError("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                                 .arg(QDir::cleanPath(path)));
+                                 .arg(QDir::cleanPath(path)),
+                                 __FILE__, __LINE__);
         }
         return false;
     }
@@ -149,7 +150,8 @@ void Translators::changeLanguage( const QString & lang )
 
             if (!m_Translators[fileMask]->load( f.fileName() + "_" + lang, path)) {
                 if (WarnTranslatorsErrors)
-                    Utils::Log::addError(this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path));
+                    Utils::Log::addError(this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path),
+                                         __FILE__, __LINE__);
             } else {
                 if (WarnTranslatorsErrors) {
                     Utils::Log::addMessage(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg(f.fileName() + "_" + lang));

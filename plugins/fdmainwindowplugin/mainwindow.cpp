@@ -192,8 +192,8 @@ public:
         // Create the view
         if (!treeview) {
             treeview = new QTreeView(q);
-            q->m_ui->drugsPrecautions->setModel(model);
-            q->m_ui->drugsPrecautions->setView(treeview);
+            combo->setModel(model);
+            combo->setView(treeview);
             treeview->header()->hide();
             treeview->expandAll();
             treeview->resizeColumnToContents(0);

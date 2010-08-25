@@ -389,7 +389,8 @@ public:
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()));
+                                 .arg(DB.lastError().text()),
+                                 __FILE__, __LINE__);
             return;
         }
 
@@ -473,7 +474,8 @@ public:
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()));
+                                 .arg(DB.lastError().text()),
+                                 __FILE__, __LINE__);
             return;
         }
 
@@ -603,7 +605,8 @@ public:
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()));
+                                 .arg(DB.lastError().text()),
+                                 __FILE__, __LINE__);
             return toReturn;
         }
         QHash<int, QString> where;
@@ -631,7 +634,8 @@ public:
         if (!DB.open()) {
             Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()));
+                                 .arg(DB.lastError().text()),
+                                 __FILE__, __LINE__);
             return;
         }
         QString req;

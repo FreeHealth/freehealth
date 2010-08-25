@@ -455,7 +455,8 @@ bool Configuration::addUserMenu( const QString &shortTitle, const QString &title
     // test drtux' users' menu path
     if (!binDir.exists(DRTUX_USERMENU_PATH)) {
         if (!binDir.mkdir(DRTUX_USERMENU_PATH) ) {
-            Utils::Log::addError( this, tr( "Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path() ) );
+            Utils::Log::addError( this, tr( "Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path()),
+                                  __FILE__, __LINE__);
             toReturn = false;
         } else {
             Utils::Log::addMessage( this, tr( "MedinTux Configuration : resources user menus path correctly created  %1.")
@@ -468,7 +469,8 @@ bool Configuration::addUserMenu( const QString &shortTitle, const QString &title
     if (!binDir.cd(shortTitle)) {
         if (!binDir.mkdir(shortTitle)) {
             Utils::Log::addError( this, tr( "Unable to configure MedinTux : %1 menu does not exists and can not be created. Path to DrTux binary : %2")
-                             .arg(shortTitle).arg(binDir.path() ) );
+                             .arg(shortTitle).arg(binDir.path() ),
+                             __FILE__, __LINE__ );
             toReturn = false;
         } else
             Utils::Log::addMessage( this, tr( "MedinTux Configuration : users' menu path correctly created %1.")
@@ -494,10 +496,12 @@ bool Configuration::addUserMenu( const QString &shortTitle, const QString &title
                                .arg(iconAbsPath) );
         else
             Utils::Log::addError( this, tr( "Unable to configure MedinTux : icon %1 can not be copied to %2.")
-                             .arg(iconAbsPath,to) );
+                             .arg(iconAbsPath,to),
+                             __FILE__, __LINE__ );
     } else {
         Utils::Log::addError( this, tr( "Unable to configure MedinTux : icon %1 does not exists.")
-                         .arg(iconAbsPath) );
+                         .arg(iconAbsPath),
+                         __FILE__, __LINE__ );
         toReturn = false;
     }
 

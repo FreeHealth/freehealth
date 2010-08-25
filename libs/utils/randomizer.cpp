@@ -77,7 +77,8 @@ public:
             return;
         QString c = Utils::readTextFile(m_Path + "/boys_surnames.csv");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy surnames.");
+            Utils::Log::addError("Randomizer", "Can not read boy surnames.",
+                                 __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
             boysSurnames.append(s);
         }
@@ -89,7 +90,8 @@ public:
             return;
         QString c = Utils::readTextFile(m_Path + "/girls_surnames.csv");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy surnames.");
+            Utils::Log::addError("Randomizer", "Can not read boy surnames.",
+                                 __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
             girlsSurnames.append(s);
         }
@@ -101,7 +103,8 @@ public:
             return;
         QString c = Utils::readTextFile(m_Path + "/zipcodes.csv");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read zip codes.");
+            Utils::Log::addError("Randomizer", "Can not read zip codes.",
+                                 __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
             QStringList z = s.split("\t");
             if (z.count() != 2)
@@ -116,7 +119,8 @@ public:
             return;
         QString c = Utils::readTextFile(m_Path + "/listemotsfr.txt");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read french words.");
+            Utils::Log::addError("Randomizer", "Can not read french words.",
+                                 __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
             words.append(s.toUpper());
         }

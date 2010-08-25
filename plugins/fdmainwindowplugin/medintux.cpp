@@ -134,11 +134,13 @@ namespace Internal {
         QDir binDir(conf->drtuxBinaryPath());
         // Create DrTux User's Menu for freediams
         if (!binDir.cd("Ressources")) {
-            Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : Resources path does not exists. Path to DrTux binary : %1").arg(binDir.path() ) );
+            Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : Resources path does not exists. Path to DrTux binary : %1").arg(binDir.path() ) ,
+                                  __FILE__, __LINE__);
             error = true;
         } else if (!binDir.cd("Menus")) {
             if (!binDir.mkdir( "Menus" ) ) {
-                Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path() ) );
+                Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path() ) ,
+                                      __FILE__, __LINE__);
                 error = true;
             }
             binDir.cd("Menus");
@@ -149,13 +151,15 @@ namespace Internal {
         if (binDir.exists("DrugsInteractions")) {
             QString error;
             if (!Utils::removeDir(binDir.absolutePath() + "/DrugsInteractions", &error))
-                Utils::Log::addError("diCore",QCoreApplication::translate("diMedinTux", "Can not deleted old DrugsInteractions menu entry %1").arg(error));
+                Utils::Log::addError("diCore",QCoreApplication::translate("diMedinTux", "Can not deleted old DrugsInteractions menu entry %1").arg(error),
+                                     __FILE__, __LINE__);
         }
         /** end todo */
 
         if (!binDir.cd("FreeDiams")) {
             if (!binDir.mkdir("FreeDiams")) {
-                Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : DrugsInteractions menu does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path() ) );
+                Utils::Log::addError( "diCore", QCoreApplication::translate( "diMedinTux", "Unable to configure MedinTux : DrugsInteractions menu does not exists and can not be created. Path to DrTux binary : %1").arg(binDir.path() ) ,
+                                      __FILE__, __LINE__);
                 error = true;
             }
             binDir.cd("FreeDiams");

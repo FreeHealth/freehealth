@@ -431,7 +431,8 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(ReadWriteDatabasesPath, resourcesPath);
             if (!QDir(resourcesPath).exists())
                 if (!QDir().mkpath(resourcesPath))
-                    Utils::Log::addError("Settings", Trans::ConstantTranslations::tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath));
+                    Utils::Log::addError("Settings", Trans::ConstantTranslations::tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath),
+                                         __FILE__, __LINE__);
             break;
         }
         case BundleResourcesPath :
@@ -604,7 +605,8 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                 return iniFileName;
             }
             else
-                Utils::Log::addError("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(iniFileName)) ;
+                Utils::Log::addError("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(iniFileName),
+                                     __FILE__, __LINE__);
         } else {
             // can we create and access to ini file ?
             QFile file(iniFileName);
@@ -633,7 +635,8 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                     return content;
                 }
                 else
-                    Utils::Log::addError("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(content)) ;
+                    Utils::Log::addError("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(content),
+                                         __FILE__, __LINE__);
             } else {
                 // can we create and access to ini file ?
                 QFile file(content);
@@ -676,7 +679,8 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     if (!dir.exists()) {
         dir.cdUp();
         if (!dir.mkdir(tmpAppName)) {
-            Utils::Log::addError("Settings" , tr("Unable to create dir : %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
+            Utils::Log::addError("Settings" , tr("Unable to create dir : %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName),
+                                 __FILE__, __LINE__);
             return QString::null;
         }
     }

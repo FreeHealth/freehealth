@@ -575,7 +575,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     /** \todo Change the UID */
     drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByUID("-1");
     if (!drug) {
-        Utils::Log::addError(this, "Unable to retreive a drug from the database");
+        Utils::Log::addError(this, "Unable to retreive a drug from the database", __FILE__, __LINE__);
     } else {
         drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
         drug->setPrescriptionValue(Prescription::IntakesTo, 3);
