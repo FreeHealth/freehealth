@@ -665,12 +665,19 @@ Le tatouage d'impression est un texte simple ou composé, ou une image qui sera 
 
 Dans l'entête vous pouvez utiliser les étiquettes suivantes (cf \ref tokensmanager) :
 - <em>[[PATIENTNAME]]</em> : nom du patient
+- <em>[[PATIENTSECONDNAME]]</em> : deuxième nom du patient
+- <em>[[PATIENTSURNAME]]</em> : prénom du patient
+- <em>[[PATIENTFULLNAME]]</em> : nom complet du patient (incluant nom de naissance, de mariage et prénoms)
 - <em>[[DATE]]</em> : la date de l'impression
-- <em>[[AGE]]</em> : l'âge du patient
-- <em>[[DATEOFBIRTH]]</em> : la date de naissance du patient
+- <em>[[PATIENTAGE]]</em> : l'âge du patient
+- <em>[[PATIENTYEARSOLD]]</em> : l'âge en années du patient
+- <em>[[PATIENTDATEOFBIRTH]]</em> : la date de naissance du patient
 - <em>[[WEIGHT]]</em> : le poids du patient
+- <em>[[WEIGHT_UNIT]]</em> : le poids du patient
 - <em>[[HEIGHT]]</em> : la taille du patient
+- <em>[[HEIGHT_UNIT]]</em> : la taille du patient
 - <em>[[CLCR]]</em> : la clairance de la créatinine du patient
+- <em>[[CLCR_UNIT]]</em> : la clairance de la créatinine du patient
 
 Dans le pied de page, vous pouvez utiliser les étiquettes suivantes (cf \ref tokensmanager) :
 - <em>[[NBDRUGS]]</em> : le nombre total de thérapeutiques prescrites
@@ -683,13 +690,20 @@ prescriptions. It is preferable to define for printing the following parameters:
 The tattoo print is a simple or compound, or an image to be printed in the background.
 
 In the header you can use the following labels (see \ref tokensmanager):
-- <em> [[PATIENTNAME]] </em>: patient name
+- <em> [[PATIENTNAME]] </em>: patient birth name
+- <em>[[PATIENTSECONDNAME]]</em> : patient second name
+- <em>[[PATIENTSURNAME]]</em> : patient surname
+- <em>[[PATIENTFULLNAME]]</em> : full name (including birth name, marital name and surnames)
 - <em> [[DATE]] </em>: the date of printing
-- <em> [[AGE]] </em>: the patient's age
-- <em> [[DATEOFBIRTH]] </em>: the date of birth of patient
+- <em> [[PATIENTAGE]] </em>: the patient's age
+- <em>[[PATIENTYEARSOLD]]</em> : patient age in years
+- <em> [[PATIENTDATEOFBIRTH]] </em>: the date of birth of patient
 - <em> [[WEIGHT]] </em>: the patient's weight
+- <em>[[WEIGHT_UNIT]]</em> : the patient's weight
 - <em> [[HEIGHT]] </em>: The height of the patient
+- <em>[[HEIGHT_UNIT]]</em> : The height of the patient
 - <em> [[CLCR]] </em>: The clearance of creatinine of the patient
+- <em>[[CLCR_UNIT]]</em> : The clearance of creatinine of the patient
 
 In the footer, you can use the following labels (see \ref tokensmanager):
 - <em> [[NBDRUGS]] </em>: the total number of prescribed treatment
