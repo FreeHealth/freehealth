@@ -83,6 +83,7 @@ public:
 
 public Q_SLOTS:
     void updateCachedAvailableDosage();
+    void onDrugsDatabaseChanged();
 
 private Q_SLOTS:
     void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright);

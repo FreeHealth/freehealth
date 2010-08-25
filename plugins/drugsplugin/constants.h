@@ -54,34 +54,35 @@ namespace Constants {
 
     // Menu and action for ActionManager
     const char * const  DRUGCONSTANTS_TR_CONTEXT = "mfDrugsConstants";
-    const char * const  M_PLUGINS_DRUGS         =  "DrugsPlugins.menuDrugs";
-    const char * const  M_PLUGINS_SEARCH        =  "DrugsPlugins.menuSearch";
-    const char * const  M_PLUGINS_MODES         =  "DrugsPlugins.menuModes";
+    const char * const  M_PLUGINS_DRUGS         =  "DrugsPlugins.mDrugs";
+    const char * const  M_PLUGINS_SEARCH        =  "DrugsPlugins.mSearch";
+    const char * const  M_PLUGINS_MODES         =  "DrugsPlugins.mModes";
 
-    const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.groupDrugs";
-    const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.groupSearch";
-    const char * const  G_PLUGINS_MODES         =  "DrugsPlugins.groupModes";
-    const char * const  G_PLUGINS_INTERACTIONS  =  "DrugsPlugins.groupInteractions";
+    const char * const  G_PLUGINS_VIEWS         =  "DrugsPlugins.grViews";
+    const char * const  G_PLUGINS_DRUGS         =  "DrugsPlugins.grDrugs";
+    const char * const  G_PLUGINS_SEARCH        =  "DrugsPlugins.grSearch";
+    const char * const  G_PLUGINS_MODES         =  "DrugsPlugins.grModes";
+    const char * const  G_PLUGINS_INTERACTIONS  =  "DrugsPlugins.grInteractions";
 
-    const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.ContextDrugs";
-    const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.ContextSearch";
+    const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.cDrugs";
+    const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.cSearch";
 
-    const char* const   A_TOGGLE_DRUGSELECTOR   = "a.DrugsPlug.ToggleDrugSelector";
-    const char* const   A_VIEW_INTERACTIONS     = "a.DrugsPlug.ViewInteractions";
-    const char* const   A_CHANGE_DURATION       = "a.DrugsPlug.ChangeDuration";
-    const char* const   A_SEARCH_COMMERCIAL     = "a.DrugsPlug.SearchCom";
-    const char* const   A_SEARCH_MOLECULES      = "a.DrugsPlug.SearchMol";
-    const char* const   A_SEARCH_INN            = "a.DrugsPlug.SearchINN";
-    const char* const   A_PRINT_PRESCRIPTION    = "a.DrugsPlug.PrintPrescr";
-    const char* const   A_TOGGLE_TESTINGDRUGS   = "a.DrugsPlug.ToggleTestings";
-    const char* const   A_DRUGSDATABASE_INFORMATIONS = "a.DrugsPlug.DrugsDbInfos";
-    const char* const   A_DOSAGESDATABASE_INFORMATIONS = "a.DrugsPlug.ProtocolDbInfos";
-    const char* const   A_IAMDATABASE_INFORMATIONS = "a.DrugsPlug.IAMDbInfos";
-    const char* const   A_PRESCRIBERMODE        = "a.DrugsPlug.PrescriberMode";
-    const char* const   A_SELECTONLYMODE        = "a.DrugsPlug.SelectOnlyMode";
-    const char* const   A_OPENDOSAGEDIALOG      = "a.DrugsPlug.OpenDosage";
-    const char* const   A_OPENDOSAGEPREFERENCES = "a.DrugsPlug.OpenDosagePreferences";
-    const char* const   A_RESETPRESCRIPTIONSENTENCE_TODEFAULT = "a.DrugsPlug.ResetPrescriptionSentenceToDefault";
+    const char* const   A_TOGGLE_DRUGSELECTOR   = "a.Drugs.ToggleDrugSelector";
+    const char* const   A_VIEW_INTERACTIONS     = "a.Drugs.ViewInteractions";
+    const char* const   A_CHANGE_DURATION       = "a.Drugs.ChangeDuration";
+    const char* const   A_SEARCH_COMMERCIAL     = "a.Drugs.SearchCom";
+    const char* const   A_SEARCH_MOLECULES      = "a.Drugs.SearchMol";
+    const char* const   A_SEARCH_INN            = "a.Drugs.SearchINN";
+    const char* const   A_PRINT_PRESCRIPTION    = "a.Drugs.PrintPrescr";
+    const char* const   A_TOGGLE_TESTINGDRUGS   = "a.Drugs.ToggleTestings";
+    const char* const   A_DRUGSDATABASE_INFORMATIONS = "a.Drugs.DrugsDbInfos";
+    const char* const   A_DOSAGESDATABASE_INFORMATIONS = "a.Drugs.ProtocolDbInfos";
+    const char* const   A_IAMDATABASE_INFORMATIONS = "a.Drugs.IAMDbInfos";
+    const char* const   A_PRESCRIBERMODE        = "a.Drugs.PrescriberMode";
+    const char* const   A_SELECTONLYMODE        = "a.Drugs.SelectOnlyMode";
+    const char* const   A_OPENDOSAGEDIALOG      = "a.Drugs.OpenDosage";
+    const char* const   A_OPENDOSAGEPREFERENCES = "a.Drugs.OpenDosagePreferences";
+    const char* const   A_RESETPRESCRIPTIONSENTENCE_TODEFAULT = "a.Drugs.ResetPrescriptionSentenceToDefault";
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");

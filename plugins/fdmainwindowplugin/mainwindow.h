@@ -52,7 +52,6 @@
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
-class QTextEdit;
 QT_END_NAMESPACE
 
 /**
@@ -85,7 +84,6 @@ public:
     void extensionsInitialized();
 
     void createDockWindows();
-    void refreshPatient();
     void readSettings();
     void writeSettings();
     void createStatusBar();
@@ -95,6 +93,7 @@ public:
 
 public Q_SLOTS:
     void postCoreInitialization();
+    void refreshPatient();
 
     // Interface of MainWidowActionHandler
     bool newFile();
@@ -114,6 +113,7 @@ public Q_SLOTS:
     void openRecentFile();
 
     void clearPatientInfos();
+    void togglePrecautions();
 
 protected:
     void closeEvent( QCloseEvent *event );
@@ -122,7 +122,6 @@ protected:
 public:
     QAction *aClearPatient;
     Internal::Ui::MainWindow *m_ui;
-    QDockWidget *m_TemplatesDock;
     Internal::MainWinPrivate *d;
 };
 

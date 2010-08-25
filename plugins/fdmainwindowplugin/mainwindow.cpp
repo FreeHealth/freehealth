@@ -120,7 +120,10 @@ namespace Internal {
 
 class MainWinPrivate {
 public:
-    MainWinPrivate(MainWindow *parent) : m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), q(parent)  {}
+    MainWinPrivate(MainWindow *parent) :
+            m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0), q(parent)
+    {}
+
     ~MainWinPrivate()
     {
         if (m_Mapper)
@@ -207,6 +210,7 @@ public:
     QDataWidgetMapper *m_Mapper;
     QStandardItemModel *m_AllergiesModel;
     QTreeView *m_AllergiesView;
+    QTreeView *m_PrecautionView;
 
 private:
     MainWindow *q;
@@ -232,7 +236,6 @@ static const char* const  SETTINGS_COUNTDOWN = "transmissionCountDown";
 MainWindow::MainWindow( QWidget * parent ) :
         Core::IMainWindow(parent),
         aClearPatient(0),
-        m_TemplatesDock(0),
         d(new Internal::MainWinPrivate(this))
 {
     setObjectName("MainWindow");
@@ -246,14 +249,26 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
-    createEditMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
-    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-    pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+
+    createEditMenu();
+
+    // Create prescription menu
+    Core::ActionContainer *pmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+    if (!pmenu) {
+        pmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_VIEWS);
+        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
+        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
+        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
+        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
+        pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+    }
+    Q_ASSERT(pmenu);
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(pmenu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+
+
     createTemplatesMenu();
     createConfigurationMenu();
     createHelpMenu();
@@ -291,7 +306,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     aClearPatient->setObjectName("aClearPatient");
     aClearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     Core::Command *cmd = actionManager()->registerAction(aClearPatient, "aClearPatient", QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(QString("%1 %2").arg(Trans::Constants::CLEAR).arg(Trans::Constants::PATIENT));
+    cmd->setTranslations(tkTr(Trans::Constants::CLEAR_PATIENT_INFOS));
     cmd->setDefaultKeySequence(QKeySequence(Qt::Key_C + Qt::CTRL + Qt::SHIFT));
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
     menu->addAction(cmd, Core::Constants::G_FILE_NEW);
@@ -391,6 +406,8 @@ void MainWindow::extensionsInitialized()
         m_ui->patientClCr->setEnabled(false);
         m_ui->patientCreatinin->setEnabled(false);
         m_ui->patientClCr->setEnabled(false);
+        aClearPatient->setEnabled(false);
+        m_ui->clearPatient->setEnabled(false);
     }
 
     createDockWindows();
@@ -401,13 +418,11 @@ void MainWindow::extensionsInitialized()
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(refreshPatient()));
 }
 
 MainWindow::~MainWindow()
 {
-    // avoid a bug with contextManager updateContext
-    delete m_TemplatesDock;
-    m_TemplatesDock = 0;
 }
 
 void MainWindow::postCoreInitialization()
@@ -428,6 +443,8 @@ void MainWindow::refreshPatient()
     else
         d->createMapper();
     d->createPrecautionsModelAndView(d->m_AllergiesView, m_ui->drugsPrecautions);
+    if (d->m_PrecautionView)
+        d->m_PrecautionView->expandAll();
 }
 
 /**
@@ -577,6 +594,10 @@ void MainWindow::clearPatientInfos()
         return;
     patient()->clear();
     refreshPatient();
+}
+
+void MainWindow::togglePrecautions()
+{
 }
 
 void MainWindow::updateCheckerEnd()
@@ -744,12 +765,31 @@ void MainWindow::readFile(const QString &file)
 
 void MainWindow::createDockWindows()
 {
-    QDockWidget *dock = m_TemplatesDock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
-    dock->setObjectName("templatesDock");
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    dock->setWidget(new Templates::TemplatesView(dock));
-    addDockWidget(Qt::RightDockWidgetArea, dock);
+    // Create template dock
+    QDockWidget *tdock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
+    tdock->setObjectName("templatesDock");
+    tdock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    tdock->setWidget(new Templates::TemplatesView(tdock));
+    addDockWidget(Qt::RightDockWidgetArea, tdock);
     QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
-    menu->addAction(dock->toggleViewAction());
+    menu->addAction(tdock->toggleViewAction());
+
+    // Create patient's precautions dock
+    QDockWidget *precautionsdock = new QDockWidget(tkTr(Trans::Constants::PATIENT_INFORMATION), this);
+    precautionsdock->setObjectName("precautionsDock");
+    precautionsdock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, precautionsdock);
+    d->m_PrecautionView = new QTreeView(precautionsdock);
+    d->m_PrecautionView->header()->hide();
+    d->m_PrecautionView->expandAll();
+    d->m_PrecautionView->setModel(DrugsDB::GlobalDrugsModel::drugsPrecautionsModel());
+    precautionsdock->setWidget(d->m_PrecautionView);
+    // aShowPrecautionsDock
+    QAction *a = precautionsdock->toggleViewAction();
+    a->setObjectName("aShowPrecautionsDock");
+    Core::Command *cmd = actionManager()->registerAction(a, "aShowPrecautionsDock", QList<int>() << Core::Constants::C_GLOBAL_ID);
+    cmd->setTranslations(tr("Toggle patient's precautions"));
+    Core::ActionContainer *plugmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+    plugmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
 }
 

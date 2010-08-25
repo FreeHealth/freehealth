@@ -177,6 +177,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
         menu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_VIEWS);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
@@ -195,8 +196,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setObjectName("aToggleDrugSelector");
     a->setIcon(th->icon(Constants::I_TOGGLEDRUGSELECTOR));
     cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_DRUGSELECTOR, ctx);
-    cmd->setTranslations(Constants::TOGGLEDRUGSELECTOR_TEXT);
-    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    cmd->setTranslations(Constants::TOGGLEDRUGSELECTOR_TEXT, Constants::TOGGLEDRUGSELECTOR_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
     connect(a, SIGNAL(triggered()), this, SLOT(toggleDrugSelector()));
 
     a = aClear = new QAction(this);
@@ -254,8 +255,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(true);
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS, ctx);
-    cmd->setTranslations(DrugsWidget::Constants::TOGGLETESTINGDRUGS_TEXT);
-    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
+    cmd->setTranslations(DrugsWidget::Constants::TOGGLETESTINGDRUGS_TEXT, Constants::TOGGLETESTINGDRUGS_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
     connect(a, SIGNAL(triggered()), this, SLOT(toggleTestingDrugs()));
 
     // Search method menu

@@ -217,9 +217,11 @@ void DrugSelector::createToolButtons()
 /** \brief Update the views if user selected another drugs database */
 void DrugSelector::onDrugsBaseChanged()
 {
-    delete m_DrugsModel;
-    m_DrugsModel = 0;
+    QSqlTableModel *old = m_DrugsModel;
+    m_DrugsModel = new DrugsDB::GlobalDrugsModel(this);
     createDrugModelView();
+    delete old;
+    old = 0;
 }
 
 void DrugSelector::createDrugModelView()
