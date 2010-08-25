@@ -34,11 +34,6 @@
  ***************************************************************************/
 #include "mainwindow.h"
 
-#include <translationutils/constanttranslations.h>
-#include <utils/log.h>
-#include <utils/global.h>
-#include <utils/updatechecker.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
@@ -62,9 +57,11 @@
 #include <fdmainwindowplugin/medintux.h>
 
 #include <drugsplugin/constants.h>
+#include <drugsbaseplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
 #include <drugsbaseplugin/drugsio.h>
+#include <drugsbaseplugin/drugsbase.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -73,6 +70,11 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include "ui_mainwindow.h"
+
+#include <translationutils/constanttranslations.h>
+#include <utils/log.h>
+#include <utils/global.h>
+#include <utils/updatechecker.h>
 
 #include <QSettings>
 #include <QTextEdit>
@@ -87,6 +89,8 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QDockWidget>
+#include <QDataWidgetMapper>
+#include <QStandardItemModel>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -103,7 +107,7 @@ static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::insta
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
@@ -115,8 +119,19 @@ namespace Internal {
 
 class MainWinPrivate {
 public:
-    MainWinPrivate(MainWindow *parent) : q(parent)  {}
-    ~MainWinPrivate() {}
+    MainWinPrivate(MainWindow *parent) : m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), q(parent)  {}
+    ~MainWinPrivate()
+    {
+        if (m_Mapper)
+            delete m_Mapper;
+        m_Mapper = 0;
+        if (m_AllergiesModel)
+            delete m_AllergiesModel;
+        m_AllergiesModel = 0;
+        if (m_AllergiesView)
+            delete m_AllergiesView;
+        m_AllergiesView = 0;
+    }
 
     bool readExchangeFile()
     {
@@ -149,14 +164,140 @@ public:
         }
         return true;
     }
+
+    void createMapper()
+    {
+        if (!m_Mapper)
+            m_Mapper = new QDataWidgetMapper(q);
+        m_Mapper->setModel(patient());
+        m_Mapper->addMapping(q->m_ui->patientName, Core::IPatient::BirthName);
+        m_Mapper->addMapping(q->m_ui->patientSurname, Core::IPatient::Surname);
+        m_Mapper->addMapping(q->m_ui->patientSize, Core::IPatient::Height);
+        m_Mapper->addMapping(q->m_ui->sizeUnit, Core::IPatient::HeightUnit);
+        m_Mapper->addMapping(q->m_ui->patientWeight, Core::IPatient::Weight);
+        m_Mapper->addMapping(q->m_ui->weightUnit, Core::IPatient::WeightUnit);
+        m_Mapper->addMapping(q->m_ui->sexCombo, Core::IPatient::GenderIndex);
+        m_Mapper->addMapping(q->m_ui->patientCreatinin, Core::IPatient::Creatinine);
+        m_Mapper->addMapping(q->m_ui->creatinineUnit, Core::IPatient::CreatinineUnit);
+        m_Mapper->addMapping(q->m_ui->patientClCr, Core::IPatient::CreatinClearance);
+        m_Mapper->addMapping(q->m_ui->crClUnit, Core::IPatient::CreatinClearanceUnit);
+        m_Mapper->addMapping(q->m_ui->dobDateEdit, Core::IPatient::DateOfBirth);
+        m_Mapper->toFirst();
+    }
+
+    static void addBranch(QStandardItem *rootAllergies, QStandardItem *rootIntolerances, const QString &name,
+                          const QStringList &allergies, const QStringList &intolerances, bool atc, bool uids,
+                          const QBrush &allergiesBrush, const QBrush &intolerancesBrush)
+    {
+        QStandardItem *allergiesItem = new QStandardItem(name);
+        QStandardItem *intolerancesItem = new QStandardItem(name);
+        allergiesItem->setForeground(allergiesBrush);
+        intolerancesItem->setForeground(intolerancesBrush);
+        rootAllergies->appendRow(allergiesItem);
+        rootIntolerances->appendRow(intolerancesItem);
+        //    allergies
+        QStringList sorted = allergies;
+        qSort(sorted);
+        foreach(const QString &item, sorted) {
+            QString lbl;
+            if (atc)
+                 lbl = drugsBase()->getAtcLabel(item);
+            else if (uids)
+                 lbl = drugsBase()->getDrugName(item);
+            else lbl = item;
+            if (!lbl.isEmpty()) {
+                QStandardItem *i = new QStandardItem(lbl);
+                i->setForeground(allergiesBrush);
+                i->setToolTip(tkTr(Trans::Constants::ALLERGY_TO_1).arg(lbl));
+                allergiesItem->appendRow(i);
+            }
+        }
+        //    intol
+        sorted.clear();
+        sorted = intolerances;
+        qSort(sorted);
+        foreach(const QString &item, sorted) {
+            QString lbl;
+            if (atc)
+                 lbl = drugsBase()->getAtcLabel(item);
+            else if (uids)
+                 lbl = drugsBase()->getDrugName(item);
+            else lbl = item;
+            if (!lbl.isEmpty()) {
+                QStandardItem *i = new QStandardItem(lbl);
+                i->setToolTip(tkTr(Trans::Constants::INTOLERANCE_TO_1).arg(lbl));
+                i->setForeground(intolerancesBrush);
+                intolerancesItem->appendRow(i);
+            }
+        }
+    }
+
+    void createPrecautionsModelAndView(const QStringList &atcAllergies, const QStringList &uidsAllergies, const QStringList &innsAllergies,
+                                       const QStringList &atcIntolerances, const QStringList &uidsIntolerances, const QStringList &innsIntolerances,
+                                       QStandardItemModel *model, QTreeView *treeview, QComboBox *combo)
+    {
+        // Create the model
+        if (!model)
+            model = new QStandardItemModel(q);
+        QFont bold;
+        bold.setBold(true);
+        QStandardItem *rootItem = model->invisibleRootItem();
+        if (atcAllergies.isEmpty() &&
+            uidsAllergies.isEmpty() &&
+            innsAllergies.isEmpty() &&
+            atcIntolerances.isEmpty() &&
+            uidsIntolerances.isEmpty() &&
+            innsIntolerances.isEmpty()) {
+            QStandardItem *uniqueItem = new QStandardItem(q->tr("No known allergies / intolerances"));
+            uniqueItem->setFont(bold);
+            rootItem->appendRow(uniqueItem);
+        } else {
+            QStandardItem *allergiesItem = new QStandardItem(q->tr("Known allergies"));
+            QStandardItem *intolerancesItem = new QStandardItem(q->tr("Known intolerances"));
+            allergiesItem->setFont(bold);
+            intolerancesItem->setFont(bold);
+            QBrush allergiesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString()).darker(300));
+            QBrush intolerancesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString()).darker(300));
+            allergiesItem->setForeground(allergiesBrush);
+            intolerancesItem->setForeground(intolerancesBrush);
+
+            rootItem->appendRow(allergiesItem);
+            rootItem->appendRow(intolerancesItem);
+
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::ATC), atcAllergies, atcIntolerances, true, false, allergiesBrush, intolerancesBrush);
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::DRUGS), uidsAllergies, uidsIntolerances, false, true, allergiesBrush, intolerancesBrush);
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::INN), innsAllergies, innsIntolerances, false, false, allergiesBrush, intolerancesBrush);
+        }
+
+        // Create the view
+        if (!treeview) {
+            treeview = new QTreeView(q);
+            q->m_ui->drugsPrecautions->setModel(model);
+            q->m_ui->drugsPrecautions->setView(treeview);
+            treeview->header()->hide();
+            treeview->expandAll();
+            treeview->resizeColumnToContents(0);
+            treeview->setIndentation(10);
+            treeview->setFrameStyle(QFrame::NoFrame);
+            treeview->setAlternatingRowColors(true);
+        }
+    }
+
+public:
+    QDataWidgetMapper *m_Mapper;
+    QStandardItemModel *m_AllergiesModel;
+    QTreeView *m_AllergiesView;
+
 private:
     MainWindow *q;
 };
 
 static bool transmitDosage()
 {
-    Utils::Log::addMessage("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
-    DrugsDB::DrugsIO::instance()->startsDosageTransmission();
+    if (!Utils::isDebugCompilation()) {
+        Utils::Log::addMessage("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
+        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
+    }
     return true;
 }
 
@@ -264,6 +405,8 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
+    m_ui->sexCombo->addItems(genders());
+
     if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid())
         setWindowTitle(QString("%1 - %2 [%3 %4]")
                        .arg(qApp->applicationName())
@@ -328,7 +471,6 @@ void MainWindow::extensionsInitialized()
         m_ui->patientCreatinin->setEnabled(false);
         m_ui->patientClCr->setEnabled(false);
     }
-    m_ui->listOfAllergies->setEnabled(false);
 
     createDockWindows();
     finishSplash(this);
@@ -354,111 +496,25 @@ void MainWindow::postCoreInitialization()
     refreshPatient();
 }
 
-
 /**
   \brief Refresh the ui data refering to the patient
   \sa Core::Internal::CoreImpl::instance()->patient(), diPatient
 */
 void MainWindow::refreshPatient()
 {
-    bool state = true;
-    m_ui->centralwidget->blockSignals(state);
-    m_ui->crClUnit->blockSignals(state);
-    m_ui->creatinineUnit->blockSignals(state);
-    m_ui->dobDateEdit->blockSignals(state);
-    m_ui->listOfAllergies->blockSignals(state);
-    m_ui->m_CentralWidget->blockSignals(state);
-    m_ui->patientClCr->blockSignals(state);
-    m_ui->patientCreatinin->blockSignals(state);
-    m_ui->patientInformations->blockSignals(state);
-    m_ui->patientName->blockSignals(state);
-    m_ui->patientSize->blockSignals(state);
-    m_ui->patientSurname->blockSignals(state);
-    m_ui->patientWeight->blockSignals(state);
-    m_ui->sexCombo->blockSignals(state);
-    m_ui->sizeUnit->blockSignals(state);
-    m_ui->weightUnit->blockSignals(state);
-
-    m_ui->patientName->setText(patient()->value(Core::IPatient::BirthName).toString());
-    m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
-                                     "Taille : %5<br />Clearance : %6")
-                             .arg( patient()->value(Core::IPatient::BirthName).toString(),
-                                   patient()->value(Core::IPatient::Surname).toString(),
-                                   patient()->value(Core::IPatient::DateOfBirth).toString(),
-                                   patient()->value(Core::IPatient::Weight).toString() )
-                             .arg( patient()->value(Core::IPatient::Height).toString(),
-                                   patient()->value(Core::IPatient::CreatinClearance).toString() ));
-    m_ui->patientSurname->setText(patient()->value(Core::IPatient::Surname).toString());
-    m_ui->dobDateEdit->setDate(patient()->value(Core::IPatient::DateOfBirth).toDate());
-    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::IPatient::Gender).toString(), Qt::MatchFixedString));
-
-    m_ui->weightUnit->setCurrentIndex(m_ui->weightUnit->findText(patient()->value(Core::IPatient::WeightUnit).toString(), Qt::MatchFixedString));
-    m_ui->sizeUnit->setCurrentIndex(m_ui->sizeUnit->findText(patient()->value(Core::IPatient::HeightUnit).toString(), Qt::MatchFixedString));
-    m_ui->creatinineUnit->setCurrentIndex(m_ui->creatinineUnit->findText(patient()->value(Core::IPatient::CreatinineUnit).toString(), Qt::MatchFixedString));
-    m_ui->crClUnit->setCurrentIndex(m_ui->crClUnit->findText(patient()->value(Core::IPatient::CreatinClearanceUnit).toString(), Qt::MatchFixedString));
-
-    m_ui->patientWeight->setValue(patient()->value(Core::IPatient::Weight).toInt());
-    m_ui->patientSize->setValue(patient()->value(Core::IPatient::Height).toInt());
-    m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
-    m_ui->patientCreatinin->setValue(patient()->value(Core::IPatient::Creatinine).toDouble());
-    m_ui->patientClCr->setValue(patient()->value(Core::IPatient::CreatinClearance).toDouble());
-
-    QString allergies;
-    {
-        const QStringList &drug = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
-        if (!drug.isEmpty())
-            allergies += tr("Drugs(%1), ").arg(drug.join(";"));
-        const QStringList &inns = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
-        if (!inns.isEmpty())
-            allergies += tr("INN(%1), ").arg(inns.join(";"));
-        const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList();
-        if (!atc.isEmpty())
-            allergies += tr("ATC(%1), ").arg(atc.join(";"));
-        allergies.chop(2);
-        if (!allergies.isEmpty()) {
-            allergies.prepend(tr("Allergies to: "));
-        }
-    }
-
-    QString intolerances;
-    {
-        const QStringList &drug = patient()->value(Core::IPatient::DrugsUidIntolerances).toStringList();
-        if (!drug.isEmpty())
-            intolerances += tr("Drugs(%1), ").arg(drug.join(";"));
-        const QStringList &inns = patient()->value(Core::IPatient::DrugsInnIntolerances).toStringList();
-        if (!inns.isEmpty())
-            intolerances += tr("INN(%1), ").arg(inns.join(";"));
-        const QStringList &atc = patient()->value(Core::IPatient::DrugsAtcIntolerances).toStringList();
-        if (!atc.isEmpty())
-            intolerances += tr("ATC(%1), ").arg(atc.join(";"));
-        intolerances.chop(4);
-        if (!intolerances.isEmpty()) {
-            intolerances.prepend(tr("Intolerances to: "));
-            if (!allergies.isEmpty())
-                intolerances.prepend(" // ");
-        }
-    }
-
-    m_ui->listOfAllergies->setText(allergies + intolerances);
-    m_ui->listOfAllergies->setToolTip(m_ui->listOfAllergies->text().replace(" // ", "\n"));
-
-    state = false;
-    m_ui->centralwidget->blockSignals(state);
-    m_ui->crClUnit->blockSignals(state);
-    m_ui->creatinineUnit->blockSignals(state);
-    m_ui->dobDateEdit->blockSignals(state);
-    m_ui->listOfAllergies->blockSignals(state);
-    m_ui->m_CentralWidget->blockSignals(state);
-    m_ui->patientClCr->blockSignals(state);
-    m_ui->patientCreatinin->blockSignals(state);
-    m_ui->patientInformations->blockSignals(state);
-    m_ui->patientName->blockSignals(state);
-    m_ui->patientSize->blockSignals(state);
-    m_ui->patientSurname->blockSignals(state);
-    m_ui->patientWeight->blockSignals(state);
-    m_ui->sexCombo->blockSignals(state);
-    m_ui->sizeUnit->blockSignals(state);
-    m_ui->weightUnit->blockSignals(state);
+    if (d->m_Mapper)
+        d->m_Mapper->setCurrentIndex(0);
+    else
+        d->createMapper();
+    d->createPrecautionsModelAndView(patient()->data(Core::IPatient::DrugsAtcAllergies).toStringList(),
+                                     patient()->data(Core::IPatient::DrugsUidAllergies).toStringList(),
+                                     patient()->data(Core::IPatient::DrugsInnAllergies).toStringList(),
+                                     patient()->data(Core::IPatient::DrugsAtcIntolerances).toStringList(),
+                                     patient()->data(Core::IPatient::DrugsUidIntolerances).toStringList(),
+                                     patient()->data(Core::IPatient::DrugsInnIntolerances).toStringList(),
+                                     d->m_AllergiesModel,
+                                     d->m_AllergiesView,
+                                     m_ui->drugsPrecautions);
 }
 
 /**
@@ -531,13 +587,12 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        QVariant sex = patient()->value(Core::IPatient::Gender);
+        QVariant sex = patient()->data(Core::IPatient::Gender);
         bool state = true;
         m_ui->centralwidget->blockSignals(state);
         m_ui->crClUnit->blockSignals(state);
         m_ui->creatinineUnit->blockSignals(state);
         m_ui->dobDateEdit->blockSignals(state);
-        m_ui->listOfAllergies->blockSignals(state);
         m_ui->m_CentralWidget->blockSignals(state);
         m_ui->patientClCr->blockSignals(state);
         m_ui->patientCreatinin->blockSignals(state);
@@ -557,7 +612,6 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->crClUnit->blockSignals(state);
         m_ui->creatinineUnit->blockSignals(state);
         m_ui->dobDateEdit->blockSignals(state);
-        m_ui->listOfAllergies->blockSignals(state);
         m_ui->m_CentralWidget->blockSignals(state);
         m_ui->patientClCr->blockSignals(state);
         m_ui->patientCreatinin->blockSignals(state);
@@ -571,7 +625,7 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->weightUnit->blockSignals(state);
 
         actionManager()->retranslateMenusAndActions();
-        patient()->setValue(Core::IPatient::Gender, sex);
+        patient()->setData(patient()->index(0, Core::IPatient::Gender), sex);
         refreshPatient();
     }
 }
@@ -673,7 +727,6 @@ void MainWindow::changeFontTo( const QFont &font )
     m_ui->m_CentralWidget->changeFontTo(font);
     m_ui->patientName->setFont(font);
 }
-
 
 /**
   \brief Prints the prescription using the header, footer and watermark.
@@ -787,58 +840,3 @@ void MainWindow::createDockWindows()
     menu->addAction(dock->toggleViewAction());
 }
 
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientName_textChanged(const QString &text)
-{
-    patient()->setValue(Core::IPatient::BirthName, text);
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientSurname_textChanged(const QString &text)
-{
-    patient()->setValue(Core::IPatient::Surname, text);
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_sexCombo_currentIndexChanged(const QString &text)
-{
-    patient()->setValue(Core::IPatient::Gender, text);
-    refreshPatient();
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientWeight_valueChanged(const QString &text)
-{
-    patient()->setValue(Core::IPatient::Weight, text);
-    refreshPatient();
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientSize_valueChanged(const QString & text)
-{
-    patient()->setValue(Core::IPatient::Height, text);
-    refreshPatient();
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientClCr_valueChanged(const QString & text)
-{
-    patient()->setValue(Core::IPatient::CreatinClearance, text);
-    refreshPatient();
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
-{
-    patient()->setValue(Core::IPatient::Creatinine, text);
-    refreshPatient();
-}
-
-/** \brief Always keep uptodate patient's datas */
-void MainWindow::on_listOfAllergies_textChanged(const QString &text)
-{
-    /** \todo manage allergies */
-    patient()->setValue(Core::IPatient::DrugsAtcAllergies, text);
-    refreshPatient();
-}

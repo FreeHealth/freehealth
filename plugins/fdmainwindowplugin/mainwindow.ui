@@ -36,18 +36,69 @@
       </item>
      </layout>
     </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="morePatientInfoButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>22</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>22</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="4">
+     <widget class="DrugsWidget::DrugsCentralWidget" name="m_CentralWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="clearPatient">
+      <property name="minimumSize">
+       <size>
+        <width>22</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>22</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0" colspan="4">
      <widget class="QGroupBox" name="patientInformations">
       <property name="title">
        <string>Patient information</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
-        <number>10</number>
-       </property>
-       <property name="spacing">
-        <number>10</number>
-       </property>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -151,28 +202,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="sexCombo">
-           <item>
-            <property name="text">
-             <string/>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>M</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>F</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>H</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="sexCombo"/>
          </item>
         </layout>
        </item>
@@ -263,73 +293,23 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>List of medication allergies</string>
+            <string>Drugs precautions</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="listOfAllergies"/>
+          <widget class="QComboBox" name="drugsPrecautions">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="0" column="3">
-     <widget class="QPushButton" name="morePatientInfoButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>22</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>22</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="4">
-     <widget class="DrugsWidget::DrugsCentralWidget" name="m_CentralWidget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="clearPatient">
-      <property name="minimumSize">
-       <size>
-        <width>22</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>22</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
      </widget>
     </item>
    </layout>
@@ -352,8 +332,8 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>787</x>
-     <y>48</y>
+     <x>793</x>
+     <y>36</y>
     </hint>
     <hint type="destinationlabel">
      <x>786</x>

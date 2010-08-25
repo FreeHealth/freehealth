@@ -247,7 +247,6 @@ ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     view = new QTreeView(this);
     view->viewport()->setAttribute(Qt::WA_Hover);
     view->header()->hide();
-    view->header()->hide();
     view->setFrameStyle(QFrame::NoFrame);
     view->setAttribute(Qt::WA_MacShowFocusRect, false);
     view->setSelectionMode(QAbstractItemView::SingleSelection);

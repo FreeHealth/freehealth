@@ -44,8 +44,10 @@
 #include <fdmainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
 
-// include Qt headers
+#include <utils/global.h>
+
 #include <QCloseEvent>
+#include <QComboBox>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -56,8 +58,8 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.2
- * \date 11 July 2010
+ * \version 0.5.0
+ * \date 23 Aug 2010
 */
 
 namespace MainWin {
@@ -112,17 +114,6 @@ public Q_SLOTS:
     void openRecentFile();
 
     void clearPatientInfos();
-
-
-    // slots for patient's datas
-    void on_patientName_textChanged(const QString &text);
-    void on_patientSurname_textChanged(const QString &text);
-    void on_patientWeight_valueChanged(const QString &text);
-    void on_patientSize_valueChanged(const QString &text);
-    void on_sexCombo_currentIndexChanged(const QString &text);
-    void on_patientClCr_valueChanged(const QString &text);
-    void on_patientCreatinin_valueChanged(const QString &text);
-    void on_listOfAllergies_textChanged(const QString &text);
 
 protected:
     void closeEvent( QCloseEvent *event );

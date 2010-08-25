@@ -51,10 +51,10 @@ QT_END_NAMESPACE
 #include "ui_mfDosageCreatorDialog.h"
 
 /**
- * \file mfDosageDialog.h
+ * \file mfDosageCreatorDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.5.0
+ * \date 23 Aug 2010
 */
 
 namespace DrugsDB {

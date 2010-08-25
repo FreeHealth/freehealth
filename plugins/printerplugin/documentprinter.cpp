@@ -142,7 +142,7 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
 
 void DocumentPrinter::setDocumentName(Print::Printer *p) const
 {
-    QString tmp = patient()->value(Core::IPatient::FullName).toString().replace(" ", "_");
+    QString tmp = patient()->data(Core::IPatient::FullName).toString().replace(" ", "_");
     p->printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
 }
 

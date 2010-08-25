@@ -906,6 +906,23 @@ int DrugsBase::getUIDFromCIP(int CIP)
     return -1;
 }
 
+QString DrugsBase::getDrugName(const QString &uid) const
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    if (!DB.isOpen())
+        DB.open();
+    // prepare where clause
+    QHash<int, QString> where;
+    where.insert(DRUGS_UID, "=" + uid);
+    // prepare query
+    QString req = this->select(Table_DRUGS, DRUGS_NAME, where);
+    QSqlQuery q(req , DB);
+    if (q.isActive())
+        if (q.next())
+            return q.value(0).toString();
+    return QString();
+}
+
 /** \brief Retrieve and return the drug designed by the CIP code \e CIP_id. This function is not used. */
 DrugsData *DrugsBase::getDrugByCIP(const QVariant & CIP_id)
 {

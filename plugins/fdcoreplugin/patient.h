@@ -44,13 +44,11 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/ipatient.h>
 
-#include <QVariant>
-
 /**
  * \file patient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 13 June 2010
+ * \version 0.5.0
+ * \date 23 Aug 2010
 */
 namespace Core {
 namespace Internal {
@@ -67,8 +65,8 @@ public:
     void clear();
     bool has(const int ref) const;
 
-    QVariant value(const int ref) const;
-    bool setValue(const int ref, const QVariant &value);
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     QString toXml() const;
     bool fromXml(const QString &xml);

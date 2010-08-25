@@ -53,8 +53,8 @@
 /**
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 01 Mar 2010
+ * \version 0.5.0
+ * \date 23 Aug 2010
 */
 
 /** \todo Some parts should not be Internals */
@@ -96,6 +96,7 @@ public:
     bool refreshDosageBase();
 
     // Manage drugs
+    QString getDrugName(const QString &uid) const;
     DrugsData *getDrugByCIP(const QVariant & CIP_id);
     DrugsData *getDrugByUID(const QVariant &UID);
     int        getUIDFromCIP(int CIP);

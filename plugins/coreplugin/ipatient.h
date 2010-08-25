@@ -43,24 +43,25 @@
 
 #include <coreplugin/core_exporter.h>
 
-#include <QVariant>
-#include <QObject>
+#include <QAbstractListModel>
+
+#include <QDebug>
 
 /**
  * \file ipatient.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 18 June 2010
+ * \version 0.5.0
+ * \date 23 Aug 2010
 */
 
 
 namespace Core {
 
 /**
-  \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to patients datas.
+  \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to the \e current \e patient datas.
 */
 
-class CORE_EXPORT IPatient : public QObject
+class CORE_EXPORT IPatient : public QAbstractListModel
 {
         Q_OBJECT
 public:
@@ -119,6 +120,7 @@ public:
         DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
         DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
         // Intolerances
+        DrugsIntolerancesWithoutPrecision,
         DrugsUidIntolerances,     //  see tkSerializer --> string<->stringlist
         DrugsAtcIntolerances,     //  see tkSerializer --> string<->stringlist
         DrugsInnIntolerances,     //  see tkSerializer --> string<->stringlist
@@ -132,14 +134,17 @@ public:
         NumberOfColumns
     };
 
-    IPatient(QObject * parent = 0) : QObject(parent) {}
+    IPatient(QObject * parent = 0) : QAbstractListModel(parent) {}
     virtual ~IPatient() {}
 
     virtual void clear() = 0;
     virtual bool has(const int ref) const = 0;
 
-    virtual QVariant value(const int ref) const = 0;
-    virtual bool setValue(const int ref, const QVariant &value) = 0;
+    int	columnCount(const QModelIndex & = QModelIndex()) const {return NumberOfColumns;}
+    int	rowCount(const QModelIndex & = QModelIndex()) const {return 1;}
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const = 0;
+    virtual QVariant data(int column) const {return data(index(0, column));}
 
     virtual QString toXml() const = 0;
     virtual bool fromXml(const QString &xml) = 0;
@@ -148,7 +153,6 @@ public:
 
 Q_SIGNALS:
     void currentPatientChanged();
-    void dataChanged(const int ref);
 };
 
 }  // End Core

@@ -59,17 +59,20 @@ const char * const  TOKEN_DOCUMENTTITLE     = "DOCUMENTTITLE";
 
 
 // For Patients
-const char * const  TOKEN_PATIENTAGE        = "AGE";
-const char * const  TOKEN_PATIENTYEARSOLD   = "YEARSOLD";
+const char * const  TOKEN_PATIENTAGE        = "PATIENTAGE";
+const char * const  TOKEN_PATIENTYEARSOLD   = "PATIENTYEARSOLD";
 const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";
 const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";
 const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";
 const char * const  TOKEN_PATIENTSURNAME    = "PATIENTSURNAME";
 const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";
-const char * const  TOKEN_PATIENTDATEOFBIRTH= "DATEOFBIRTH";
+const char * const  TOKEN_PATIENTDATEOFBIRTH= "PATIENTDATEOFBIRTH";
 const char * const  TOKEN_WEIGHT            = "WEIGHT";
+const char * const  TOKEN_WEIGHT_UNIT       = "WEIGHT_UNIT";
 const char * const  TOKEN_HEIGHT            = "HEIGHT";
+const char * const  TOKEN_HEIGHT_UNIT       = "HEIGHT_UNIT";
 const char * const  TOKEN_CLCR              = "CLCR";
+const char * const  TOKEN_CLCR_UNIT         = "CLCR_UNIT";
 const char * const  TOKEN_DATE              = "DATE";
 const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 

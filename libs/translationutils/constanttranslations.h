@@ -277,6 +277,7 @@ enum TitleInterpret {
         const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
         const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
         const char* const INN                           = QT_TRANSLATE_NOOP("tkConstants", "INN");
+        const char* const ATC                           = QT_TRANSLATE_NOOP("tkConstants", "ATC");
         const char* const INTAKES                       = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
         const char* const VIEWINTERACTIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
         const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
@@ -284,13 +285,15 @@ enum TitleInterpret {
         const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants", "during");
         const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
         const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
+        const char* const ALLERGY_TO_1                  = QT_TRANSLATE_NOOP("tkConstants", "Allergy to %1");
+        const char* const INTOLERANCE_TO_1              = QT_TRANSLATE_NOOP("tkConstants", "Intolerance to %1");
         // Drugs Interactions
-        const char* const INTERACTION  = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
-        const char* const TAKE_INTO_ACCOUNT  = QT_TRANSLATE_NOOP("tkConstants", "Take into account");
-        const char* const DISCOURAGED  = QT_TRANSLATE_NOOP("tkConstants", "Discouraged");
-        const char* const CONTRAINDICATION  = QT_TRANSLATE_NOOP("tkConstants", "Contraindication");
-        const char* const PRECAUTION_FOR_USE  = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
-        const char* const INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Information");
+        const char* const INTERACTION                   = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
+        const char* const TAKE_INTO_ACCOUNT             = QT_TRANSLATE_NOOP("tkConstants", "Take into account");
+        const char* const DISCOURAGED                   = QT_TRANSLATE_NOOP("tkConstants", "Discouraged");
+        const char* const CONTRAINDICATION              = QT_TRANSLATE_NOOP("tkConstants", "Contraindication");
+        const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
+        const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
 
         // Account
         const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");

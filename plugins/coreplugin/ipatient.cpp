@@ -53,16 +53,19 @@ using namespace Core;
 
 void IPatient::replaceTokens(QString &stringWillBeModified)
 {
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME, value(IPatient::BirthName).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSURNAME, value(IPatient::Surname).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSECONDNAME, value(IPatient::SecondName).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFULLNAME, value(IPatient::FullName).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD, value(IPatient::YearsOld).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,  value(IPatient::Age).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,      value(IPatient::Weight).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,        value(IPatient::Height).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFBIRTH, value(IPatient::DateOfBirth).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,        value(IPatient::CreatinClearance).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,  value(IPatient::Title).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME,       data(IPatient::BirthName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSURNAME,    data(IPatient::Surname).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSECONDNAME, data(IPatient::SecondName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFULLNAME,   data(IPatient::FullName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD,   data(IPatient::YearsOld).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,        data(IPatient::Age).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,            data(IPatient::Weight).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT_UNIT,       data(IPatient::WeightUnit).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,            data(IPatient::Height).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT_UNIT,       data(IPatient::HeightUnit).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFBIRTH,data(IPatient::DateOfBirth).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,              data(IPatient::CreatinClearance).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR_UNIT,         data(IPatient::CreatinClearanceUnit).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,      data(IPatient::Title).toString() );
 }
 

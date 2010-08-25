@@ -46,15 +46,18 @@
 
 #include <medicalutils/global.h>
 
-#include <coreplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
-// include Qt headers
 #include <QHash>
 #include <QString>
 
 using namespace Trans::ConstantTranslations;
 using namespace Core;
 using namespace Core::Internal;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static const char* const MAIN_PATIENT_TAG  = "PatientDatas";
 
@@ -107,8 +110,8 @@ public:
         return m_XmlTags.key(tag);
     }
 
-    QHash<int,QVariant> m_Values;
-    QHash<int,QString>  m_XmlTags;
+    QHash<int, QVariant> m_Values;
+    QHash<int, QString>  m_XmlTags;
 };
 
 }  // End Internal
@@ -143,73 +146,144 @@ bool Patient::has(const int ref) const
 
 
 /** \brief Get the value of the patient according to the enumerator Patient::Reference. */
-QVariant Patient::value(const int ref) const
+QVariant Patient::data(const QModelIndex &index, int role) const
 {
-    switch (ref)
-    {
-    case YearsOld :
-        {
-            if (has(DateOfBirth)) {
-                return MedicalUtils::ageYears(d->m_Values.value(DateOfBirth).toDate());
-            }
-            break;
-        }
-    case Age :
-        {
-            if (d->m_Values.contains(ref))
-                return d->m_Values.value(ref);
-            if (has(DateOfBirth)) {
-                QString tmp;
-                tmp = MedicalUtils::readableAge(d->m_Values.value(IPatient::DateOfBirth).toDate());
-                d->m_Values.insert(Age,tmp);
-                return tmp;
-            }
-            break;
-        }
-    case CreatinClearance :
-        {
-            if (has(ref) && (!d->m_Values.value(ref).isNull()))
-                return d->m_Values.value(ref);
-            // If we can not retreive it from command line --> calculate it
-            if (value(YearsOld).toInt()>0) {
-                if (has(Creatinine) && has(Gender) && has(Weight)) {
-                    bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
-                    return MedicalUtils::clearanceCreatinin(value(YearsOld).toInt(),
-                                                            d->m_Values.value(Weight).toDouble(),
-                                                            d->m_Values.value(Creatinine).toDouble(),
-                                                            isMale);
-                }
-            }
-            break;
-        }
-    case FullName:
-        {
-            QString r;
-            if (has(SecondName))
-                r = QString("%1 - %2 %3")
-                .arg(d->m_Values.value(BirthName).toString())
-                .arg(d->m_Values.value(SecondName).toString())
-                .arg(d->m_Values.value(Surname).toString());
-            else
-                r = QString("%1 %3")
-                .arg(d->m_Values.value(BirthName).toString())
-                .arg(d->m_Values.value(Surname).toString());
-            return r;
-        }
+    if (!index.isValid())
+        return QVariant();
 
-        default :
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        int ref = index.column();
+        switch (ref)
         {
-            if (d->m_Values.contains(ref))
-                return d->m_Values.value(ref);
+        case GenderIndex:
+            {
+                const QString &g = d->m_Values.value(Core::IPatient::Gender).toString();
+                qWarning() << g;
+                if (g=="M")
+                    return 0;
+                if (g=="F")
+                    return 1;
+                if (g=="H")
+                    return 2;
+                return -1;
+            }
+        case YearsOld :
+            {
+                if (has(DateOfBirth)) {
+                    return MedicalUtils::ageYears(d->m_Values.value(DateOfBirth).toDate());
+                }
+                break;
+            }
+        case Age :
+            {
+                if (d->m_Values.contains(ref))
+                    return d->m_Values.value(ref);
+                if (has(DateOfBirth)) {
+                    QString tmp;
+                    tmp = MedicalUtils::readableAge(d->m_Values.value(IPatient::DateOfBirth).toDate());
+                    d->m_Values.insert(Age,tmp);
+                    return tmp;
+                }
+                break;
+            }
+        case CreatinClearance :
+            {
+                if (has(ref) && (!d->m_Values.value(ref).isNull()))
+                    return d->m_Values.value(ref);
+                // If we can not retreive it from command line --> calculate it
+                if (IPatient::data(YearsOld).toInt()>0) {
+                    if (has(Creatinine) && has(Gender) && has(Weight)) {
+                        bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
+                        return MedicalUtils::clearanceCreatinin(IPatient::data(YearsOld).toInt(),
+                                                                d->m_Values.value(Weight).toDouble(),
+                                                                d->m_Values.value(Creatinine).toDouble(),
+                                                                isMale);
+                    }
+                }
+                break;
+            }
+        case FullName:
+            {
+                QString r;
+                if (has(SecondName))
+                    r = QString("%1 - %2 %3")
+                    .arg(d->m_Values.value(BirthName).toString())
+                    .arg(d->m_Values.value(SecondName).toString())
+                    .arg(d->m_Values.value(Surname).toString());
+                else
+                    r = QString("%1 %3")
+                        .arg(d->m_Values.value(BirthName).toString())
+                        .arg(d->m_Values.value(Surname).toString());
+                return r;
+            }
+        case DrugsAllergiesWithoutPrecision:
+            {
+                QString allergies;
+                const QStringList &drug = d->m_Values.value(Core::IPatient::DrugsUidAllergies).toStringList();
+                if (!drug.isEmpty())
+                    allergies += tr("Drugs(%1), ").arg(drug.join(";"));
+                const QStringList &inns = d->m_Values.value(Core::IPatient::DrugsInnAllergies).toStringList();
+                if (!inns.isEmpty())
+                    allergies += tr("INN(%1), ").arg(inns.join(";"));
+                const QStringList &atc = d->m_Values.value(Core::IPatient::DrugsAtcAllergies).toStringList();
+                if (!atc.isEmpty())
+                    allergies += tr("ATC(%1), ").arg(atc.join(";"));
+                allergies.chop(2);
+                return allergies;
+            }
+        case DrugsIntolerancesWithoutPrecision:
+            {
+                QString intolerances;
+                const QStringList &drug = d->m_Values.value(Core::IPatient::DrugsUidIntolerances).toStringList();
+                if (!drug.isEmpty())
+                    intolerances += tr("Drugs(%1), ").arg(drug.join(";"));
+                const QStringList &inns = d->m_Values.value(Core::IPatient::DrugsInnIntolerances).toStringList();
+                if (!inns.isEmpty())
+                    intolerances += tr("INN(%1), ").arg(inns.join(";"));
+                const QStringList &atc = d->m_Values.value(Core::IPatient::DrugsAtcIntolerances).toStringList();
+                if (!atc.isEmpty())
+                    intolerances += tr("ATC(%1), ").arg(atc.join(";"));
+                intolerances.chop(2);
+                return intolerances;
+            }
+        default:
+            {
+                return d->m_Values.value(ref, QVariant());
+            }
+        }
+    } else if (role == Qt::DecorationRole) {
+        if (index.column()==Gender || index.column()==GenderIndex) {
+            const QString &g = d->m_Values.value(Core::IPatient::Gender).toString();
+            if (g=="M") {
+                return theme()->icon(Core::Constants::ICONMALE);
+            } else if (g=="F") {
+                return theme()->icon(Core::Constants::ICONFEMALE);
+            } else if (g=="H") {
+                return theme()->icon(Core::Constants::ICONHERMAPHRODISM);
+            }
+            return QIcon();
         }
     }
     return QVariant();
 }
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
-bool Patient::setValue(const int ref, const QVariant &value)
+bool Patient::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    d->m_Values.insert(ref, value);
+    if (!index.isValid())
+        return false;
+
+    if (role != Qt::EditRole)
+        return false;
+
+    // Read only values
+    switch (index.column()) {
+    case DrugsAllergiesWithoutPrecision:
+    case DrugsIntolerancesWithoutPrecision:
+        return false;
+    }
+
+    d->m_Values.insert(index.column(), value);
     return true;
 }
 
@@ -253,4 +327,3 @@ bool Patient::fromXml(const QString &xml)
 //    qWarning() << d->m_Values;
     return true;
 }
-

@@ -89,7 +89,7 @@ namespace Internal {
     const char * const SEPARATOR = "|||";
 
     struct AtcLabel {
-        QString lang, label;
+        QString lang, label, code;
         int id;
     };
 
@@ -558,20 +558,66 @@ QString InteractionsBase::getAtcLabel(const int inncode) const
         field = ATC_EN;
     }
     QString toReturn;
+    QString code;
     QHash<int, QString> where;
     where.insert(Constants::ATC_ID, QString("=%1").arg(inncode));
     QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
-    if (!query.exec(di->m_DB->select(Constants::Table_ATC, field, where))) {
+    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_CODE, where))) {
         Utils::Log::addQueryError("InteractionBase", query);
     } else {
-        if (query.next())
+        if (query.next()) {
             toReturn = query.value(0).toString();
+            code = query.value(1).toString();
+        }
     }
     AtcLabel *lbl = new AtcLabel;
     lbl->id = inncode;
     lbl->label = toReturn;
     lbl->lang = lang;
+    lbl->code = code;
     di->m_AtcLabelCache.insert(inncode, lbl);
+    return toReturn;
+}
+
+QString InteractionsBase::getAtcLabel(const QString &code) const
+{
+    const QString &lang = QLocale().name().left(2);
+    foreach(int k, di->m_AtcLabelCache.keys()) {
+        AtcLabel *lbl = di->m_AtcLabelCache[k];
+        if (lbl->code.toLower() == code.toLower()) {
+            if (lbl->lang==lang) {
+                return lbl->label;
+            }
+        }
+    }
+
+    int field;
+    if (lang=="fr") {
+        field = ATC_FR;
+    } else if (lang=="de") {
+        field = ATC_DE;
+    } else {
+        field = ATC_EN;
+    }
+    QString toReturn;
+    int id;
+    QHash<int, QString> where;
+    where.insert(Constants::ATC_CODE, QString("='%1'").arg(code));
+    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
+    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_ID, where))) {
+        Utils::Log::addQueryError("InteractionBase", query);
+    } else {
+        if (query.next()) {
+            toReturn = query.value(0).toString();
+            id = query.value(1).toInt();
+        }
+    }
+    AtcLabel *lbl = new AtcLabel;
+    lbl->id = id;
+    lbl->label = toReturn;
+    lbl->lang = lang;
+    lbl->code = code;
+    di->m_AtcLabelCache.insert(id, lbl);
     return toReturn;
 }
 

@@ -87,6 +87,7 @@ public:
     // link to DrugsBase
     int getInnCodeForCodeMolecule(const int molecule_code) const;
     QString getAtcLabel(const int inncode) const;
+    QString getAtcLabel(const QString &code) const;
     QString getAtcCode(const int atc_id) const;
     QString getInnDenominationFromSubstanceCode(const int molecule_code) const;
 

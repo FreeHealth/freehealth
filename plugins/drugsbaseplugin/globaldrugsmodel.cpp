@@ -91,7 +91,7 @@ public:
         if (numberOfInstances==0) {
             m_CachedAvailableDosageForUID.clear();
             drugAllergyCache.clear();
-            delete m_Timer;
+//            delete m_Timer;
         }
     }
 
@@ -420,9 +420,9 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     d = new Internal::GlobalDrugsModelPrivate(this);
     d->updateCachedAvailableDosage();
 
-    d->m_Timer = new QTimer;
-    d->m_Timer->setSingleShot(true);
-    connect(d->m_Timer, SIGNAL(timeout()), this, SLOT(processPhysiology()));
+//    d->m_Timer = new QTimer;
+//    d->m_Timer->setSingleShot(true);
+//    connect(d->m_Timer, SIGNAL(timeout()), this, SLOT(processPhysiology()));
 
     setTable(drugsBase()->table(Constants::Table_DRUGS));
     setEditStrategy( QSqlTableModel::OnManualSubmit );
@@ -456,19 +456,19 @@ GlobalDrugsModel::~GlobalDrugsModel()
 void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
 {
     if (ref & Core::IPatient::DrugsUidAllergies) {
-        d->uidAllergies = patient()->value(Core::IPatient::DrugsUidAllergies).toStringList();
+        d->uidAllergies = patient()->data(Core::IPatient::DrugsUidAllergies).toStringList();
         d->uidAllergies.removeAll("");
         d->m_testUidAllergies = !d->uidAllergies.isEmpty();
         d->clearDrugAllergyCache();
     }
     if (ref & Core::IPatient::DrugsInnAllergies) {
-        d->innAllergies = patient()->value(Core::IPatient::DrugsInnAllergies).toStringList();
+        d->innAllergies = patient()->data(Core::IPatient::DrugsInnAllergies).toStringList();
         d->innAllergies.removeAll("");
         d->m_testInnAllergies = !d->innAllergies.isEmpty();
         d->clearDrugAllergyCache();
     }
     if (ref & Core::IPatient::DrugsAtcAllergies) {
-        foreach(const QString &atc, patient()->value(Core::IPatient::DrugsAtcAllergies).toStringList()) {
+        foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcAllergies).toStringList()) {
             if (atc.length()==7)
                 d->fullAtcAllergies.append(atc);
             else
@@ -480,7 +480,7 @@ void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
         d->clearDrugAllergyCache();
     }
     if (ref & Core::IPatient::DrugsAtcIntolerances) {
-        foreach(const QString &atc, patient()->value(Core::IPatient::DrugsAtcIntolerances).toStringList()) {
+        foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcIntolerances).toStringList()) {
             if (atc.length()==7)
                 d->fullAtcIntolerances.append(atc);
             else
@@ -492,13 +492,13 @@ void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
         d->clearDrugIntoleranceCache();
     }
     if (ref & Core::IPatient::DrugsInnIntolerances) {
-        d->innIntolerances = patient()->value(Core::IPatient::DrugsInnIntolerances).toStringList();
+        d->innIntolerances = patient()->data(Core::IPatient::DrugsInnIntolerances).toStringList();
         d->innIntolerances.removeAll("");
         d->m_testInnIntolerances = !d->innIntolerances.isEmpty();
         d->clearDrugIntoleranceCache();
     }
     if (ref & Core::IPatient::DrugsUidIntolerances) {
-        d->uidIntolerances = patient()->value(Core::IPatient::DrugsUidIntolerances).toStringList();
+        d->uidIntolerances = patient()->data(Core::IPatient::DrugsUidIntolerances).toStringList();
         d->uidIntolerances.removeAll("");
         d->m_testUidIntolerances = !d->uidIntolerances.isEmpty();
         d->clearDrugIntoleranceCache();

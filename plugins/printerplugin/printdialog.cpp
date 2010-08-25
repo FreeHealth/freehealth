@@ -123,7 +123,7 @@ void PrintDialog::accept()
     // Duplicate to a pdf file
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
         QString docName = QString("%1_%2_%3.pdf")
-                          .arg(patient()->value(Core::IPatient::FullName).toString().replace(" ", "_"))
+                          .arg(patient()->data(Core::IPatient::FullName).toString().replace(" ", "_"))
                           .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
                           .arg(qApp->applicationName());
 

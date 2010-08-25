@@ -105,9 +105,9 @@ public:
             q(parent)
     {}
 
-    void createHelpMenu()
+    void createHelpMenu(const QString &menuName, const QString &drugDBLabel)
     {
-        m_HelpMenu = new QMenu(q->tr("Help and Infos"), q);
+        m_HelpMenu = new QMenu(menuName, q);
         q->helpButton->setMenu(m_HelpMenu);
         q->helpButton->setText(m_HelpMenu->title());
         q->helpButton->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGSINFOS, Core::ITheme::MediumIcon));
@@ -121,7 +121,7 @@ public:
         if (drugsBase()->actualDatabaseInformations()) {
             const QString &url = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
             if (!url.isEmpty()) {
-                QAction *drugsDbWeb = new QAction(q->tr("Drugs database website"), m_HelpMenu);
+                QAction *drugsDbWeb = new QAction(drugsDBLabel, m_HelpMenu);
                 drugsDbWeb->setData(url);
                 m_HelpMenu->addAction(drugsDbWeb);
                 q->connect(drugsDbWeb, SIGNAL(triggered()), q, SLOT(drugsInformationsRequested()));
@@ -142,24 +142,27 @@ public:
         }
     }
 
-    void createValidateMenu()
+    void createValidateMenu(const QString &prescribeOnly,
+                            const QString &savePrescribe,
+                            const QString &save,
+                            const QString &test)
     {
-        prescribe = new QAction(q->tr("Prescribe only"), q->validateButton);
+        prescribe = new QAction(prescribeOnly, q->validateButton);
         prescribe->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_PRESCRIBE, Core::ITheme::MediumIcon));
         prescribe->setIconVisibleInMenu(true);
         q->connect(prescribe, SIGNAL(triggered()), q, SLOT(prescribeRequested()));
 
-        prescribeAndSave = new QAction(q->tr("Save protocol and prescribe"), q->validateButton);
+        prescribeAndSave = new QAction(savePrescribe, q->validateButton);
         prescribeAndSave->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_PRESCRIBEANDSAVE, Core::ITheme::MediumIcon));
         prescribeAndSave->setIconVisibleInMenu(true);
         q->connect(prescribeAndSave, SIGNAL(triggered()), q, SLOT(saveAndPrescribeRequested()));
 
-        save = new QAction(q->tr("Save protocol only"), q->validateButton);
+        save = new QAction(save, q->validateButton);
         save->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_SAVE, Core::ITheme::MediumIcon));
         save->setIconVisibleInMenu(true);
         q->connect(save, SIGNAL(triggered()), q, SLOT(saveRequested()));
 
-        test = new QAction(q->tr("Test interactions only"), q->validateButton);
+        test = new QAction(test, q->validateButton);
         test->setIcon(theme()->icon(DrugsDB::Constants::I_PROTOCOL_TESTONLY, Core::ITheme::MediumIcon));
         test->setIconVisibleInMenu(true);
         q->connect(test, SIGNAL(triggered()), q, SLOT(addTestOnlyRequested()));
@@ -242,7 +245,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 {
     using namespace DrugsDB::Constants;
     // some initializations
-    setObjectName( "DosageCreatorDialog" );
+    setObjectName("DosageCreatorDialog");
     d = new DosageCreatorDialogPrivate(this);
     d->m_DosageModel = dosageModel;
 
@@ -266,8 +269,8 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     availableDosagesListView->setModelColumn(Dosages::Constants::Label);
     availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
 
-    d->createHelpMenu();
-    d->createValidateMenu();
+    d->createHelpMenu(tr("Help and Infos"), tr("Drugs database website"));
+    d->createValidateMenu(tr("Prescribe only"), tr("Save protocol and prescribe"), tr("Save protocol only"), tr("Test interactions only"));
 
     // Create connections
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
