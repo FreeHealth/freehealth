@@ -45,12 +45,13 @@
 
 #include <QSqlTableModel>
 #include <QObject>
+class QStandardItemModel;
 
 /**
  * \file globaldrugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.2
- * \date 11 July 2010
+ * \version 0.5.0
+ * \date 24 Aug 2010
 */
 
 namespace DrugsDB {
@@ -74,6 +75,8 @@ public:
     static bool hasAllergy(const DrugsDB::Internal::DrugsData *drug);
     static bool hasIntolerance(const DrugsDB::Internal::DrugsData *drug);
 
+    static QStandardItemModel *drugsPrecautionsModel();
+
     bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -82,7 +85,7 @@ public Q_SLOTS:
     void updateCachedAvailableDosage();
 
 private Q_SLOTS:
-    void refreshDrugsAllergies(const int ref);
+    void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright);
 //    void physiologyProcessed();
 //    void processPhysiology();
 

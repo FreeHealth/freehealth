@@ -62,6 +62,7 @@
 
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/globaldrugsmodel.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -185,90 +186,9 @@ public:
         m_Mapper->toFirst();
     }
 
-    static void addBranch(QStandardItem *rootAllergies, QStandardItem *rootIntolerances, const QString &name,
-                          const QStringList &allergies, const QStringList &intolerances, bool atc, bool uids,
-                          const QBrush &allergiesBrush, const QBrush &intolerancesBrush)
+    void createPrecautionsModelAndView(QTreeView *treeview, QComboBox *combo)
     {
-        QStandardItem *allergiesItem = new QStandardItem(name);
-        QStandardItem *intolerancesItem = new QStandardItem(name);
-        allergiesItem->setForeground(allergiesBrush);
-        intolerancesItem->setForeground(intolerancesBrush);
-        rootAllergies->appendRow(allergiesItem);
-        rootIntolerances->appendRow(intolerancesItem);
-        //    allergies
-        QStringList sorted = allergies;
-        qSort(sorted);
-        foreach(const QString &item, sorted) {
-            QString lbl;
-            if (atc)
-                 lbl = drugsBase()->getAtcLabel(item);
-            else if (uids)
-                 lbl = drugsBase()->getDrugName(item);
-            else lbl = item;
-            if (!lbl.isEmpty()) {
-                QStandardItem *i = new QStandardItem(lbl);
-                i->setForeground(allergiesBrush);
-                i->setToolTip(tkTr(Trans::Constants::ALLERGY_TO_1).arg(lbl));
-                allergiesItem->appendRow(i);
-            }
-        }
-        //    intol
-        sorted.clear();
-        sorted = intolerances;
-        qSort(sorted);
-        foreach(const QString &item, sorted) {
-            QString lbl;
-            if (atc)
-                 lbl = drugsBase()->getAtcLabel(item);
-            else if (uids)
-                 lbl = drugsBase()->getDrugName(item);
-            else lbl = item;
-            if (!lbl.isEmpty()) {
-                QStandardItem *i = new QStandardItem(lbl);
-                i->setToolTip(tkTr(Trans::Constants::INTOLERANCE_TO_1).arg(lbl));
-                i->setForeground(intolerancesBrush);
-                intolerancesItem->appendRow(i);
-            }
-        }
-    }
-
-    void createPrecautionsModelAndView(const QStringList &atcAllergies, const QStringList &uidsAllergies, const QStringList &innsAllergies,
-                                       const QStringList &atcIntolerances, const QStringList &uidsIntolerances, const QStringList &innsIntolerances,
-                                       QStandardItemModel *model, QTreeView *treeview, QComboBox *combo)
-    {
-        // Create the model
-        if (!model)
-            model = new QStandardItemModel(q);
-        QFont bold;
-        bold.setBold(true);
-        QStandardItem *rootItem = model->invisibleRootItem();
-        if (atcAllergies.isEmpty() &&
-            uidsAllergies.isEmpty() &&
-            innsAllergies.isEmpty() &&
-            atcIntolerances.isEmpty() &&
-            uidsIntolerances.isEmpty() &&
-            innsIntolerances.isEmpty()) {
-            QStandardItem *uniqueItem = new QStandardItem(tkTr(Trans::Constants::NO_ALLERGIES_INTOLERANCES));
-            uniqueItem->setFont(bold);
-            rootItem->appendRow(uniqueItem);
-        } else {
-            QStandardItem *allergiesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_ALLERGIES));
-            QStandardItem *intolerancesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_INTOLERANCES));
-            allergiesItem->setFont(bold);
-            intolerancesItem->setFont(bold);
-            QBrush allergiesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString()).darker(300));
-            QBrush intolerancesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString()).darker(300));
-            allergiesItem->setForeground(allergiesBrush);
-            intolerancesItem->setForeground(intolerancesBrush);
-
-            rootItem->appendRow(allergiesItem);
-            rootItem->appendRow(intolerancesItem);
-
-            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::ATC), atcAllergies, atcIntolerances, true, false, allergiesBrush, intolerancesBrush);
-            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::DRUGS), uidsAllergies, uidsIntolerances, false, true, allergiesBrush, intolerancesBrush);
-            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::INN), innsAllergies, innsIntolerances, false, false, allergiesBrush, intolerancesBrush);
-        }
-
+        QStandardItemModel *model = DrugsDB::GlobalDrugsModel::drugsPrecautionsModel();
         // Create the view
         if (!treeview) {
             treeview = new QTreeView(q);
@@ -440,7 +360,8 @@ void MainWindow::extensionsInitialized()
 
     // If needed read exchange file
     if (!d->readExchangeFile(tr("Reading exchange file..."))) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString()));
+        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString()),
+                             __FILE__, __LINE__);
     }
 
     // Start the update checker
@@ -506,15 +427,7 @@ void MainWindow::refreshPatient()
         d->m_Mapper->setCurrentIndex(0);
     else
         d->createMapper();
-    d->createPrecautionsModelAndView(patient()->data(Core::IPatient::DrugsAtcAllergies).toStringList(),
-                                     patient()->data(Core::IPatient::DrugsUidAllergies).toStringList(),
-                                     patient()->data(Core::IPatient::DrugsInnAllergies).toStringList(),
-                                     patient()->data(Core::IPatient::DrugsAtcIntolerances).toStringList(),
-                                     patient()->data(Core::IPatient::DrugsUidIntolerances).toStringList(),
-                                     patient()->data(Core::IPatient::DrugsInnIntolerances).toStringList(),
-                                     d->m_AllergiesModel,
-                                     d->m_AllergiesView,
-                                     m_ui->drugsPrecautions);
+    d->createPrecautionsModelAndView(d->m_AllergiesView, m_ui->drugsPrecautions);
 }
 
 /**

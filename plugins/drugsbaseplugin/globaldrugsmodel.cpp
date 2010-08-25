@@ -38,6 +38,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class DrugsDB::GlobalDrugsModel
+  This class provides the drugs model from the entire currently in use drugs database.
+  The static members allow you to check drugs precautions (allergies and intolerances).
+  The Drugs Precaution Model is always up to date.
+*/
+
 #include "globaldrugsmodel.h"
 
 #include <drugsbaseplugin/drugsbase.h>
@@ -52,6 +59,7 @@
 #include <coreplugin/ipatient.h>
 
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QList>
 #include <QColor>
@@ -60,12 +68,17 @@
 #include <QSqlError>
 #include <QPersistentModelIndex>
 #include <QTimer>
+#include <QStandardItemModel>
 
 #include <qtconcurrentrun.h>
 #include <QFuture>
 #include <QFutureWatcher>
 
 #include <QDebug>
+
+using namespace Trans::ConstantTranslations;
+using namespace DrugsDB;
+using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -88,9 +101,11 @@ public:
     ~GlobalDrugsModelPrivate()
     {
         --numberOfInstances;
-        if (numberOfInstances==0) {
+        if (numberOfInstances == 0) {
             m_CachedAvailableDosageForUID.clear();
             drugAllergyCache.clear();
+            delete m_DrugsPrecautionsModel;
+            m_DrugsPrecautionsModel = 0;
 //            delete m_Timer;
         }
     }
@@ -98,11 +113,13 @@ public:
     void clearDrugAllergyCache()
     {
         drugAllergyCache.clear();
+        updateDrugsPrecautionsModel();
     }
 
     void clearDrugIntoleranceCache()
     {
         drugIntoleranceCache.clear();
+        updateDrugsPrecautionsModel();
     }
 
     static void updateCachedAvailableDosage()
@@ -341,6 +358,92 @@ public:
         return item;
     }
 
+    static void addBranch(QStandardItem *rootAllergies, QStandardItem *rootIntolerances, const QString &name,
+                          const QStringList &allergies, const QStringList &intolerances, bool atc, bool uids,
+                          const QBrush &allergiesBrush, const QBrush &intolerancesBrush)
+    {
+        QStandardItem *allergiesItem = new QStandardItem(name);
+        QStandardItem *intolerancesItem = new QStandardItem(name);
+        allergiesItem->setForeground(allergiesBrush);
+        intolerancesItem->setForeground(intolerancesBrush);
+        rootAllergies->appendRow(allergiesItem);
+        rootIntolerances->appendRow(intolerancesItem);
+        //    allergies
+        QStringList sorted = allergies;
+        qSort(sorted);
+        foreach(const QString &item, sorted) {
+            QString lbl;
+            if (atc)
+                 lbl = drugsBase()->getAtcLabel(item);
+            else if (uids)
+                 lbl = drugsBase()->getDrugName(item);
+            else lbl = item;
+            if (!lbl.isEmpty()) {
+                QStandardItem *i = new QStandardItem(lbl);
+                i->setForeground(allergiesBrush);
+                i->setToolTip(tkTr(Trans::Constants::ALLERGY_TO_1).arg(lbl));
+                allergiesItem->appendRow(i);
+            }
+        }
+        //    intol
+        sorted.clear();
+        sorted = intolerances;
+        qSort(sorted);
+        foreach(const QString &item, sorted) {
+            QString lbl;
+            if (atc)
+                 lbl = drugsBase()->getAtcLabel(item);
+            else if (uids)
+                 lbl = drugsBase()->getDrugName(item);
+            else lbl = item;
+            if (!lbl.isEmpty()) {
+                QStandardItem *i = new QStandardItem(lbl);
+                i->setToolTip(tkTr(Trans::Constants::INTOLERANCE_TO_1).arg(lbl));
+                i->setForeground(intolerancesBrush);
+                intolerancesItem->appendRow(i);
+            }
+        }
+    }
+
+    static void updateDrugsPrecautionsModel()
+    {
+        if (!GlobalDrugsModelPrivate::m_DrugsPrecautionsModel)
+            GlobalDrugsModelPrivate::m_DrugsPrecautionsModel = new QStandardItemModel();
+        GlobalDrugsModelPrivate::m_DrugsPrecautionsModel->clear();
+        QFont bold;
+        bold.setBold(true);
+        QStandardItem *rootItem = GlobalDrugsModelPrivate::m_DrugsPrecautionsModel->invisibleRootItem();
+        if (GlobalDrugsModelPrivate::fullAtcAllergies.isEmpty() &&
+            GlobalDrugsModelPrivate::classAtcAllergies.isEmpty() &&
+            GlobalDrugsModelPrivate::uidAllergies.isEmpty() &&
+            GlobalDrugsModelPrivate::innAllergies.isEmpty() &&
+            GlobalDrugsModelPrivate::fullAtcIntolerances.isEmpty() &&
+            GlobalDrugsModelPrivate::classAtcIntolerances.isEmpty() &&
+            GlobalDrugsModelPrivate::uidIntolerances.isEmpty() &&
+            GlobalDrugsModelPrivate::innIntolerances.isEmpty()) {
+            QStandardItem *uniqueItem = new QStandardItem(tkTr(Trans::Constants::NO_ALLERGIES_INTOLERANCES));
+            uniqueItem->setFont(bold);
+            rootItem->appendRow(uniqueItem);
+        } else {
+            QStandardItem *allergiesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_ALLERGIES));
+            QStandardItem *intolerancesItem = new QStandardItem(tkTr(Trans::Constants::KNOWN_INTOLERANCES));
+            allergiesItem->setFont(bold);
+            intolerancesItem->setFont(bold);
+            QBrush allergiesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString()).darker(300));
+            QBrush intolerancesBrush = QBrush(QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString()).darker(300));
+            allergiesItem->setForeground(allergiesBrush);
+            intolerancesItem->setForeground(intolerancesBrush);
+
+            rootItem->appendRow(allergiesItem);
+            rootItem->appendRow(intolerancesItem);
+
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::ATC), QStringList() << GlobalDrugsModelPrivate::fullAtcAllergies << GlobalDrugsModelPrivate::classAtcAllergies, QStringList() << GlobalDrugsModelPrivate::fullAtcIntolerances << GlobalDrugsModelPrivate::classAtcIntolerances, true, false, allergiesBrush, intolerancesBrush);
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::DRUGS), GlobalDrugsModelPrivate::uidAllergies, GlobalDrugsModelPrivate::uidIntolerances, false, true, allergiesBrush, intolerancesBrush);
+            addBranch(allergiesItem, intolerancesItem, tkTr(Trans::Constants::INN), GlobalDrugsModelPrivate::innAllergies, GlobalDrugsModelPrivate::innIntolerances, false, false, allergiesBrush, intolerancesBrush);
+        }
+    }
+
+
     // For QFuture use
 public:
     QVector< QFutureWatcher<QPersistentModelIndex> * > m_Watchers;
@@ -353,6 +456,7 @@ public:
     static bool m_testAtcIntolerances, m_testUidIntolerances, m_testInnIntolerances;
     static QVector<int> m_ProcessedUid;
     static QVector<QPersistentModelIndex> m_UidToProcess;
+    static QStandardItemModel *m_DrugsPrecautionsModel;
     QTimer *m_Timer;
 
 private:
@@ -384,6 +488,9 @@ bool GlobalDrugsModelPrivate::m_testInnIntolerances = false;
 
 QVector<int> GlobalDrugsModelPrivate::m_ProcessedUid;
 QVector<QPersistentModelIndex> GlobalDrugsModelPrivate::m_UidToProcess;
+
+QStandardItemModel *GlobalDrugsModelPrivate::m_DrugsPrecautionsModel = 0;
+
 }  // End Internal
 }  // End DrugsDB
 
@@ -413,6 +520,12 @@ bool GlobalDrugsModel::hasIntolerance(const DrugsDB::Internal::DrugsData *drug) 
     return Internal::GlobalDrugsModelPrivate::hasIntolerance(drug->UID(), drug->listOfInn(), atcs);
 }
 
+QStandardItemModel *GlobalDrugsModel::drugsPrecautionsModel()
+{
+    return GlobalDrugsModelPrivate::m_DrugsPrecautionsModel;
+}
+
+
 GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
         QSqlTableModel(parent, QSqlDatabase::database(Constants::DB_DRUGS_NAME)),
         d(0)
@@ -431,12 +544,12 @@ GlobalDrugsModel::GlobalDrugsModel(QObject *parent) :
     setFilter(drugsBase()->getWhereClause(Constants::Table_DRUGS, where));
     select();
 
-    refreshDrugsAllergies(Core::IPatient::DrugsAllergiesWithoutPrecision);
+    refreshDrugsPrecautions(patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision), patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision));
 
     drugsBase()->database().transaction();
 
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
-    connect(patient(), SIGNAL(dataChanged(int)), this, SLOT(refreshDrugsAllergies(int)));
+    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex, QModelIndex)));
 }
 
 GlobalDrugsModel::~GlobalDrugsModel()
@@ -453,8 +566,13 @@ GlobalDrugsModel::~GlobalDrugsModel()
     }
 }
 
-void GlobalDrugsModel::refreshDrugsAllergies(const int ref)
+/**
+  \brief slot to keep global model datas up to date
+  \sa Core::IPatient
+*/
+void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright)
 {
+    int ref = topleft.column();
     if (ref & Core::IPatient::DrugsUidAllergies) {
         d->uidAllergies = patient()->data(Core::IPatient::DrugsUidAllergies).toStringList();
         d->uidAllergies.removeAll("");
