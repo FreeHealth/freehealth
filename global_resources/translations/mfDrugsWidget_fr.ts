@@ -22,23 +22,23 @@
 <context>
     <name>DosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="100"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="185"/>
         <source>Dosage is not valid.</source>
         <translation>Dosage non valide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="102"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="124"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="187"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="209"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="118"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="203"/>
         <source>Dosage correctly saved to base</source>
         <translation>Posologie correctement sauvegardée dans la base</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="120"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="205"/>
         <source>SQL Error : Dosage can not be added to database : %1</source>
         <translation>Erreur SQL : le dosage ne peut pas être ajouté à la base de données : %1</translation>
     </message>
@@ -73,7 +73,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="333"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="348"/>
         <source>Extras</source>
         <translation></translation>
     </message>
@@ -81,9 +81,14 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="206"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="208"/>
         <source>Printing</source>
         <translation>Impression</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="243"/>
+        <source>Updating posologic sentence.</source>
+        <translation>Mise à jour de la phrase posologique.</translation>
     </message>
 </context>
 <context>
@@ -97,7 +102,7 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="276"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="291"/>
         <source>User&apos;s documents</source>
         <translation>Documents de l&apos;utilisateur</translation>
     </message>
@@ -189,74 +194,44 @@ Drug %1 is already in your prescription</source>
         <translation>Protocoles disponibles</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="125"/>
-        <source>Help</source>
-        <translation>Aide</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="151"/>
-        <source>For test only</source>
-        <translation>Pour tests uniquement</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="65"/>
         <source>DrugName</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="148"/>
-        <source>The drug will be added in your prescription only for interactions testing.</source>
-        <translation>Le médicament va être ajouté à votre prescription pour les tests d&apos;interactions uniquement.</translation>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="254"/>
+        <source>Drug Dosage Creator</source>
+        <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="161"/>
-        <source>The current protocol will be used for your actual prescription,
- but will not be saved in your personnal database.</source>
-        <translation>Le protocole courant va être utilisé pour la prescription,
-mais ne sera pas sauvegardé dans votre base de donnnées personnelle.</translation>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="272"/>
+        <source>Help and Infos</source>
+        <translation>Aide et informations</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="165"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="272"/>
+        <source>Drugs database website</source>
+        <translation>Site internet de la base de données thérapeutique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="273"/>
         <source>Prescribe only</source>
         <translation>Prescrire uniquement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="182"/>
-        <source>The current protocol will be saved in your personal database, but not included in this prescription.</source>
-        <translation>Le protocole courant va être sauvegardé dans votre base de données personnelle,
-mais ne serait inclus dans la prescription.</translation>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="273"/>
+        <source>Save protocol and prescribe</source>
+        <translation>Sauvegarder et prescrire le protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="185"/>
-        <source>Save changes</source>
-        <translation>Sauvegarder les modifications</translation>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="273"/>
+        <source>Save protocol only</source>
+        <translation>Sauvegarder le protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="195"/>
-        <source>The current protocol will be used for your actual prescription,
-and saved in your personal database.</source>
-        <translation>Le protocole courant va être utilisé dans votre prescription,
-et sauvegardé dans votre base de données personnelle.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="199"/>
-        <source>Save and prescribe</source>
-        <translation>Sauvegarder et prescrire</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="209"/>
-        <source>Cancel this window, all changes will be lost.</source>
-        <translation>Annuler, toutes les modifications seront perdues.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="212"/>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="166"/>
-        <source>Drug Dosage Creator</source>
-        <translation>Créateur de posologie</translation>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="273"/>
+        <source>Test interactions only</source>
+        <translation>Tester les interactions uniquement</translation>
     </message>
 </context>
 <context>
@@ -343,7 +318,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="449"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="469"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="17"/>
@@ -354,16 +329,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="28"/>
         <source>Protocol name</source>
         <translation>Nom du protocole</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="38"/>
-        <source>View the summary of product characteristics</source>
-        <translation>Voir le résumé des caractériques du produit</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="41"/>
-        <source>View SPC</source>
-        <translation>Voir RCP</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="134"/>
@@ -377,166 +342,176 @@ p, li { white-space: pre-wrap; }
         <translation>Prendre</translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="38"/>
+        <source>External link to the product monograph</source>
+        <translation>Lien vers la monographie</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="41"/>
+        <source>Product Monograph</source>
+        <translation>Monographie</translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="302"/>
-        <source>During</source>
-        <translation>Durant</translation>
+        <source>For</source>
+        <translation>Pour</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="454"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="474"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="459"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="479"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="464"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="484"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="489"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="494"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="499"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="504"/>
         <source>00</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="509"/>
         <source>01</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="514"/>
         <source>02</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="519"/>
         <source>03</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="524"/>
         <source>04</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="529"/>
         <source>05</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="534"/>
         <source>06</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="539"/>
         <source>07</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="544"/>
         <source>08</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="549"/>
         <source>09</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="554"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="559"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="564"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="569"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="574"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="579"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="584"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="589"/>
         <source>17</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="594"/>
         <source>18</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="599"/>
         <source>19</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="604"/>
         <source>20</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="609"/>
         <source>21</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="614"/>
         <source>22</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="619"/>
         <source>23</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="694"/>
@@ -684,18 +659,18 @@ p, li { white-space: pre-wrap; }
         <translation>Alterner avec</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="420"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="429"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="586"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="598"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="625"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="637"/>
         <source>Linking to : </source>
         <translation>Lier avec : </translation>
     </message>
@@ -861,13 +836,15 @@ Voulez-vous les envoyer ?</translation>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="218"/>
         <source>CAT Text is correct.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>CAT Texte correct.
+</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="220"/>
         <source>*** CAT Text is incorrect.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>*** CAT Texte erroné.
+</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="223"/>
@@ -883,7 +860,8 @@ Voulez-vous les envoyer ?</translation>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="255"/>
         <source>ERROR : %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>ERREUR : %1
+</translation>
     </message>
 </context>
 <context>
@@ -894,7 +872,7 @@ Voulez-vous les envoyer ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="152"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugSelector.cpp" line="209"/>
         <source>Selected drugs historic.</source>
         <translation>Historique des médicaments sélectionnés.</translation>
     </message>
@@ -902,12 +880,12 @@ Voulez-vous les envoyer ?</translation>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="634"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="650"/>
         <source>Prescription is not empty. Clear it ?</source>
         <translation>La prescription n&apos;est pas vide. Voulez-vous l&apos;effacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="635"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="651"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode ?</source>
         <translation>Vous avez sélectionné un autre mode d&apos;édition que le mode actuel. Changer de mode d&apos;édition va causer la perte de la prescription.
@@ -1003,7 +981,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Imprimer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="572"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="593"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation>Ceci est une note à prendre en compte&lt;br /&gt;écrite sur deux lignes...</translation>
     </message>
@@ -1052,12 +1030,17 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Couleur de fond pour les médicaments possédant des protocoles</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="115"/>
-        <source>Allergies</source>
-        <translation></translation>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="102"/>
+        <source>Allergies / Intolerances</source>
+        <translation>Allergies / Intolérances</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="121"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="134"/>
+        <source>Drugs intolerances background color</source>
+        <translation>Couleur de fond des intolérances médicamenteuses</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="108"/>
         <source>Drugs allergies background color</source>
         <translation>Couleur de fond des médicaments avec allergie</translation>
     </message>
@@ -1154,41 +1137,6 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
 </context>
 <context>
-    <name>DrugsWidget::Internal::InteractionDialog</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="32"/>
-        <source>Help</source>
-        <translation>Aide</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="52"/>
-        <source>Print</source>
-        <translation>Imprimer</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="59"/>
-        <source>Close</source>
-        <translation>Fermer</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.ui" line="82"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="87"/>
-        <source>Synthetic interactions</source>
-        <translation>Synthèse des interactions</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="121"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfInteractionDialog.cpp" line="124"/>
-        <source>Made with %1.</source>
-        <translation>Réalisé avec %1.</translation>
-    </message>
-</context>
-<context>
     <name>DrugsWidget::Internal::PrescriptionViewer</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/mfPrescriptionViewer.ui" line="14"/>
@@ -1232,6 +1180,14 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="76"/>
         <source>other word:</source>
         <translation>un autre mot :</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsWidget::PrescriptionViewer</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfPrescriptionViewer.cpp" line="294"/>
+        <source>Synthetic interactions</source>
+        <translation>Synthèse des interactions</translation>
     </message>
 </context>
 <context>

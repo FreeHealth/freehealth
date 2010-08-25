@@ -197,7 +197,7 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1030"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1031"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
@@ -205,17 +205,17 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="623"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
         <source>About to delete %1.</source>
         <translation>Sur le point de supprimer %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="624"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="626"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation>Voulez-vous réellement supprimer %1 de votre liste de modèles ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="627"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation>Cette action est définitive. Toutes les informations de ces modèles seront perdues. Toutes les sous-catégories, s&apos;il en existe, seront effacées aussi.</translation>
     </message>
