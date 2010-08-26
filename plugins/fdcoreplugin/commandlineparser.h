@@ -66,7 +66,7 @@ public:
         CL_ExchangeFileFormat,
         CL_ExchangeInFile,
         CL_PatientName,
-        CL_PatientSurname,
+        CL_PatientFirstname,
         CL_PatientUid,
         CL_PatientGender,
         CL_DateOfBirth,

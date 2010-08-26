@@ -53,7 +53,7 @@ QVariant User::value(const int ref) const
 //    case LastLogin:
 //    case Name:
 //    case SecondName:
-//    case Surname:
+//    case Firstname:
 //    case Mail:
 //    case Language:
 //    case Locker:

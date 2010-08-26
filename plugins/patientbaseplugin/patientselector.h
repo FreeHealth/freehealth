@@ -61,8 +61,8 @@ class PATIENT_EXPORT PatientSelector : public QWidget
 public:
     enum SearchMethod {
         SearchByName = 0,
-        SearchBySurname,
-        SearchByNameSurname,
+        SearchByFirstname,
+        SearchByNameFirstname,
         SearchByDOB
     };
 
@@ -70,7 +70,7 @@ public:
         None        = 0x0000,
         BirthName   = 0x0001,
         SecondName  = 0x0002,
-        SurName     = 0x0004,
+        FirstName   = 0x0004,
         FullName    = 0x0008,
         Gender      = 0x0010,
         FullAdress  = 0x0020,

@@ -120,7 +120,7 @@ public:
             m_Mapper->setModel(m_PatientModel);
             m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
             m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
-            m_Mapper->addMapping(editUi->surname, Core::IPatient::Surname, "text");
+            m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
             m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
             m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
             m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth);
@@ -206,10 +206,10 @@ bool IdentityWidget::isIdentityValid() const
                                  "", tr("No birthname"));
         return false;
     }
-    if (d->editUi->surname->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a surname."),
-                                 tr("You can not create a patient without a surname"),
-                                 "", tr("No surname"));
+    if (d->editUi->firstname->text().isEmpty()) {
+        Utils::warningMessageBox(tr("You must specify a firstname."),
+                                 tr("You can not create a patient without a firstname"),
+                                 "", tr("No firstname"));
         return false;
     }
     if (d->editUi->dob->date().isNull()) {
@@ -233,7 +233,7 @@ bool IdentityWidget::isIdentityAlreadyInDatabase() const
     QString where = QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME), d->editUi->birthName->text());
     if (!d->editUi->secondName->text().isEmpty())
         where += QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
-    where += QString("`%1`='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SURNAME), d->editUi->surname->text());
+    where += QString("`%1`='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME), d->editUi->firstname->text());
     return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, where)>0);
 }
 

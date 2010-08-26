@@ -562,10 +562,10 @@ public:
         if (formIsModified) {
             // ask user what to do
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
-                bool yes = Utils::yesNoMessageBox(q->tr("Save episode ?"),
-                                                  q->tr("The actual episode has been modified. Do you want to save changes in your database ?\n"
+                bool yes = Utils::yesNoMessageBox(QApplication::tr("EpisodeModel", "Save episode ?"),
+                                                  QApplication::tr("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
                                                      "Answering 'No' will cause definitve data lose."),
-                                                  "", q->tr("Save episode"));
+                                                  "", QApplication::tr("EpisodeModel", "Save episode"));
                 if (!yes) {
                     saveEpisodeHeaders(form, item);
                     return true;

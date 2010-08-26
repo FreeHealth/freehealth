@@ -88,7 +88,7 @@ private:
     int          m_SearchBy;
     QMainWindow *m_Parent;
     QToolButton *m_SearchToolBut;
-    QAction     *searchByNameAct, *searchBySurnameAct, *searchByNameAndSurnameAct, *searchByCityAct;
+    QAction     *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
     QLabel      *m_PermanentUserName;
     QWidget     *m_PermanentWidget;
 

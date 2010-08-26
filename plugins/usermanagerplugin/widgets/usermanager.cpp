@@ -116,7 +116,7 @@ private:
   User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
-  \todo Search user by city, search by name & surname,
+  \todo Search user by city, search by name & firstname,
   \ingroup widget_usertoolkit usertoolkit usermanager
 */
 UserManager::UserManager(QWidget * parent)
@@ -183,7 +183,7 @@ UserManagerPrivate::UserManagerPrivate(QMainWindow * parent) :
         QObject(parent),
         m_Parent(parent),
         m_SearchToolBut(0),
-        searchByNameAct(0), searchBySurnameAct(0), searchByNameAndSurnameAct(0), searchByCityAct(0),
+        searchByNameAct(0), searchByFirstnameAct(0), searchByNameAndFirstnameAct(0), searchByCityAct(0),
         m_PermanentUserName(0),
         m_PermanentWidget(0),
         m_Context(0)
@@ -224,12 +224,12 @@ bool UserManagerPrivate::initialize()
     m_SearchToolBut = new QToolButton(searchLineEdit);
     searchLineEdit->setLeftButton(m_SearchToolBut);
     searchByNameAct = new QAction(m_SearchToolBut);
-    searchBySurnameAct = new QAction(m_SearchToolBut);
-    searchByNameAndSurnameAct = new QAction(m_SearchToolBut);
+    searchByFirstnameAct = new QAction(m_SearchToolBut);
+    searchByNameAndFirstnameAct = new QAction(m_SearchToolBut);
     searchByCityAct = new QAction(m_SearchToolBut);
     m_SearchToolBut->addAction(searchByNameAct);
-    m_SearchToolBut->addAction(searchBySurnameAct);
-    //    m_SearchToolBut->addAction(searchByNameAndSurnameAct);
+    m_SearchToolBut->addAction(searchByFirstnameAct);
+    //    m_SearchToolBut->addAction(searchByNameAndFirstnameAct);
     //    m_SearchToolBut->addAction(searchByCityAct);
     m_SearchToolBut->setPopupMode(QToolButton::InstantPopup);
     retranslate();
@@ -271,8 +271,8 @@ bool UserManagerPrivate::initialize()
     quitUserManagerAct->setIcon(th->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
     m_SearchToolBut->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByNameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    searchBySurnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    searchByNameAndSurnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+    searchByFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+    searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByCityAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
 
     // TODO active userTableView on currentUser
@@ -330,9 +330,9 @@ void UserManagerPrivate::on_m_SearchToolButton_triggered(QAction * act)
 {
     if (act == searchByNameAct)
         m_SearchBy= Core::IUser::Name;
-    else if (act == searchBySurnameAct)
-        m_SearchBy= Core::IUser::Surname;
-    else if (act == searchByNameAndSurnameAct)
+    else if (act == searchByFirstnameAct)
+        m_SearchBy= Core::IUser::Firstname;
+    else if (act == searchByNameAndFirstnameAct)
         m_SearchBy= -1;
     else if (act == searchByCityAct)
         m_SearchBy= Core::IUser::City;
@@ -428,12 +428,12 @@ void UserManagerPrivate::changeEvent(QEvent *e)
 void UserManagerPrivate::retranslate()
 {
     searchByNameAct->setText(tr("Search user by name"));
-    searchBySurnameAct->setText(tr("Search user by surname"));
-    searchByNameAndSurnameAct->setText(tr("Search user by name and surname"));
+    searchByFirstnameAct->setText(tr("Search user by firstname"));
+    searchByNameAndFirstnameAct->setText(tr("Search user by name and firstname"));
     searchByCityAct->setText(tr("Search user by city"));
     searchByNameAct->setToolTip(tr("Search user by name"));
-    searchBySurnameAct->setToolTip(tr("Search user by surname"));
-    searchByNameAndSurnameAct->setToolTip(tr("Search user by name and surname"));
+    searchByFirstnameAct->setToolTip(tr("Search user by firstname"));
+    searchByNameAndFirstnameAct->setToolTip(tr("Search user by name and firstname"));
     searchByCityAct->setToolTip(tr("Search user by city"));
     m_SearchToolBut->setToolTip(tr("Search a user"));
     m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());

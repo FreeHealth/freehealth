@@ -60,7 +60,7 @@ public:
     // inalterable datas --> use a model
     QString uuid() const;
     QString name() const;
-    QString surname() const;
+    QString firstname() const;
     QString secondName() const;
     QDate dateOfBirth() const;
 
@@ -80,7 +80,7 @@ class PatientRecord
 public:
     enum PatientReferences {
         P_Name = 0,
-        P_Surname,
+        P_Firstname,
         P_SecondName,
         P_DateOfBirth
     };

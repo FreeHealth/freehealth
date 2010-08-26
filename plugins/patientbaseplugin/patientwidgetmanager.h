@@ -95,8 +95,8 @@ private:
 
 protected:
     QAction *aSearchName;
-    QAction *aSearchSurname;
-    QAction *aSearchNameSurname;
+    QAction *aSearchFirstname;
+    QAction *aSearchNameFirstname;
     QAction *aSearchDob;
     QAction *aViewPatientInformations;
     QAction *aPrintPatientInformations;

@@ -63,7 +63,7 @@ public:
     QString getRandomString(int length);
 
     QString getRandomName();
-    QString getRandomSurname(bool male);
+    QString getRandomFirstname(bool male);
 
     QPair<int, QString> getRandomFrenchCity();
 

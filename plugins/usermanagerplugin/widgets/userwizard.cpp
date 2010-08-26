@@ -162,8 +162,8 @@ void UserWizard::done(int r)
         userModel()->setData(idx, field("Name"));
         idx = userModel()->index(m_Row, Core::IUser::SecondName);
         userModel()->setData(idx, field("SecondName"));
-        idx = userModel()->index(m_Row, Core::IUser::Surname);
-        userModel()->setData(idx, field("Surname"));
+        idx = userModel()->index(m_Row, Core::IUser::Firstname);
+        userModel()->setData(idx, field("Firstname"));
         idx = userModel()->index(m_Row, Core::IUser::Title);
         userModel()->setData(idx, field("Title"));
         idx = userModel()->index(m_Row, Core::IUser::Gender);
@@ -287,18 +287,18 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
     setTitle(tr("Please enter your identity."));
     QLabel * lblTitle = new QLabel(tr("Title"), this);
     QLabel * lblName = new QLabel(tr("Name"), this);
-    QLabel * lblSurName = new QLabel(tr("Surname"), this);
+    QLabel * lblFirstName = new QLabel(tr("Firstname"), this);
     QLabel * lblSecondName = new QLabel(tr("Second Name"), this);
     QLabel * lblGender = new QLabel(tr("Gender"), this);
 
     QLineEdit * leName = new QLineEdit(this);
-    QLineEdit * leSurName = new QLineEdit(this);
+    QLineEdit * leFirstName = new QLineEdit(this);
     QLineEdit * leSecondName = new QLineEdit(this);
     QComboBox * cbTitle = new QComboBox(this);
     QComboBox * cbGender = new QComboBox(this);
 
     registerField("Name", leName, "text");
-    registerField("Surname", leSurName, "text");
+    registerField("Firstname", leFirstName, "text");
     registerField("SecondName", leSecondName, "text");
     registerField("Title", cbTitle, "currentIndex");
     registerField("Gender", cbGender, "currentIndex");
@@ -311,8 +311,8 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
     layout->addWidget(cbTitle, 0, 1);
     layout->addWidget(lblName, 1, 0);
     layout->addWidget(leName, 1, 1);
-    layout->addWidget(lblSurName, 2, 0);
-    layout->addWidget(leSurName, 2, 1);
+    layout->addWidget(lblFirstName, 2, 0);
+    layout->addWidget(leFirstName, 2, 1);
     layout->addWidget(lblSecondName, 3, 0);
     layout->addWidget(leSecondName, 3, 1);
     layout->addWidget(lblGender, 4, 0);
@@ -322,9 +322,9 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
 
 bool UserIdentityPage::validatePage()
 {
-    if (field("Name").toString().isEmpty() || field("Surname").toString().isEmpty()) {
+    if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
         Utils::warningMessageBox(tr("Forbidden anonymous user."),
-                                 tr("All users must have at least a name and a surname.\n"
+                                 tr("All users must have at least a name and a firstname.\n"
                                     "You can not poursue with an anonymous user."), "",
                                  tr("Forbidden anonymous user."));
         return false;

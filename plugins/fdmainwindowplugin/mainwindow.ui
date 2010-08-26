@@ -17,7 +17,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Patient Firstname</string>
+         <string>Patient Name</string>
         </property>
        </widget>
       </item>
@@ -32,7 +32,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="patientSurname"/>
+       <widget class="QLineEdit" name="patientFirstname"/>
       </item>
      </layout>
     </item>

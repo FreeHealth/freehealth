@@ -166,7 +166,7 @@ public:
     void  setGender(const QVariant & val)              { setDynamicDataValue(USER_DATAS_GENDER, val); }
     void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
     void  setSecondName(const QVariant & val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
-    void  setSurname(const QVariant & val)             { setValue(Table_USERS, USER_SURNAME, val); }
+    void  setFirstname(const QVariant & val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
     void  setLanguage(const QVariant & val)            { setValue(Table_USERS, USER_LANGUAGE, val); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
@@ -205,7 +205,7 @@ public:
     int     genderIndex() const          { return dynamicDataValue(USER_DATAS_GENDER).toInt(); }
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
     QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
-    QString surname() const              { return value(Table_USERS, USER_SURNAME).toString(); }
+    QString firstname() const            { return value(Table_USERS, USER_FIRSTNAME).toString(); }
     QString language() const             { return value(Table_USERS, USER_LANGUAGE).toString(); }
     QString mail() const                 { return value(Table_USERS, USER_MAIL).toString(); }
 

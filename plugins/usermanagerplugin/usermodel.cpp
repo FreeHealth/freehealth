@@ -514,7 +514,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         case Core::IUser::TitleIndex : user->setTitle(value); break;
         case Core::IUser::Name :  user->setName(value); break;
         case Core::IUser::SecondName :  user->setSecondName(value); break;
-        case Core::IUser::Surname :  user->setSurname(value); break;
+        case Core::IUser::Firstname :  user->setFirstname(value); break;
         case Core::IUser::Mail :  user->setMail(value); break;
         case Core::IUser::Language :  user->setLanguage(value); break;
         case Core::IUser::LanguageIndex :
@@ -655,7 +655,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case Core::IUser::Title : toReturn = titles().at(user->title()); break;
             case Core::IUser::Name : toReturn = user->name(); break;
             case Core::IUser::SecondName : toReturn = user->secondName(); break;
-            case Core::IUser::Surname : toReturn = user->surname(); break;
+            case Core::IUser::Firstname : toReturn = user->firstname(); break;
             case Core::IUser::FullName :
                 {
                     QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->surname();
@@ -890,7 +890,7 @@ void UserModel::revertRow(int row)
 */
 void UserModel::setFilter (const QHash<int,QString> &conditions)
 {
-    /** \todo filter by name AND surname at the same time */
+    /** \todo filter by name AND Firstname at the same time */
     QString filter = "";
     const Internal::UserBase *b = Internal::UserBase::instance();
     foreach(const int r, conditions.keys()) {
@@ -898,7 +898,7 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
         switch (r)
         {
         case Core::IUser::Name : baseField = b->field(Table_USERS, USER_NAME); break;
-        case Core::IUser::Surname : baseField = b->field(Table_USERS, USER_SURNAME); break;
+        case Core::IUser::Firstname : baseField = b->field(Table_USERS, USER_FIRSTNAME); break;
         default: break;
         }
         if (baseField.isEmpty()) continue;

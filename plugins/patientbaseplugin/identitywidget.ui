@@ -90,12 +90,12 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Surname</string>
+         <string>Firstname</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="surname"/>
+       <widget class="QLineEdit" name="firstname"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_5">

@@ -95,7 +95,7 @@ namespace Constants {
     const char * const DEFAULT_USER_LOGIN     = "YWRtaW4=";                      // admin
     const char * const DEFAULT_USER_PASSWORD  = "0DPiKuNIrrVmD8IUCuw1hQxNqZc=";  // admin
     const char * const DEFAULT_USER_NAME      = "ADMINISTRATOR";
-    const char * const DEFAULT_USER_SURNAME   = "Admin";
+    const char * const DEFAULT_USER_FIRSTNAME = "Admin";
     const char * const DEFAULT_USER_ADRESS    = "You should change the login/password of this user.";
 
     const char * const DEFAULT_USER_ROLE      = USER_ROLE_USERMANAGER;
@@ -153,7 +153,7 @@ namespace Constants {
         USER_ID = 0,
         USER_UUID, USER_VALIDITY,
         USER_LOGIN, USER_PASSWORD, USER_LASTLOG,
-        USER_NAME, USER_SECONDNAME, USER_SURNAME,
+        USER_NAME, USER_SECONDNAME, USER_FIRSTNAME,
         USER_MAIL, USER_LANGUAGE, USER_LOCKER,
         USER_MaxParam
     };

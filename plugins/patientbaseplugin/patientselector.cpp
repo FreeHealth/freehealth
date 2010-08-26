@@ -95,8 +95,8 @@ public:
         QStringList actions;
         actions
                 << Constants::A_SEARCH_PATIENTS_BY_NAME
-                << Constants::A_SEARCH_PATIENTS_BY_SURNAME
-                << Constants::A_SEARCH_PATIENTS_BY_NAMESURNAME
+                << Constants::A_SEARCH_PATIENTS_BY_FIRSTNAME
+                << Constants::A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME
                 << Constants::A_SEARCH_PATIENTS_BY_DOB;
 
         QList<QAction *> l;
@@ -202,8 +202,8 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     if (fields & PatientSelector::SecondName) {
         d->ui->tableView->showColumn(Core::IPatient::SecondName);
     }
-    if (fields & PatientSelector::SurName) {
-        d->ui->tableView->showColumn(Core::IPatient::Surname);
+    if (fields & PatientSelector::FirstName) {
+        d->ui->tableView->showColumn(Core::IPatient::Firstname);
     }
     if (fields & PatientSelector::FullName) {
         d->ui->tableView->showColumn(Core::IPatient::FullName);
@@ -243,16 +243,16 @@ void PatientSelector::refreshFilter(const QString &)
     QString text = d->ui->searchLine->searchText();
     if (text.length() < 3)
         return;
-    QString name, surname;
+    QString name, firstname;
     switch (d->m_SearchMethod) {
     case SearchByName: name = text; break;
-    case SearchByNameSurname: name = text.mid(0,text.indexOf(";")).trimmed(); surname = text.right(text.indexOf(";")); break;
-    case SearchBySurname: surname = text; break;
+    case SearchByNameFirstname: name = text.mid(0,text.indexOf(";")).trimmed(); firstname = text.right(text.indexOf(";")); break;
+    case SearchByFirstname: firstname = text; break;
     case SearchByDOB: break;
     }
 
-    if (name.length() >= 3 || surname.length() >= 3)
-        d->m_Model->setFilter(name, surname);
+    if (name.length() >= 3 || firstname.length() >= 3)
+        d->m_Model->setFilter(name, firstname);
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 

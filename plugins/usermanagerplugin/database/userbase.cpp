@@ -130,7 +130,7 @@ UserBase::UserBase(QObject *parent)
     addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsDate);
     addField(Table_USERS, USER_NAME,         "NAME",            FieldIsShortText);
     addField(Table_USERS, USER_SECONDNAME,   "SECONDNAME",      FieldIsShortText);
-    addField(Table_USERS, USER_SURNAME,      "SURNAME",         FieldIsShortText);
+    addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
     addField(Table_USERS, USER_MAIL,         "MAIL",            FieldIsShortText);
     addField(Table_USERS, USER_LANGUAGE,     "LANGUAGE",        FieldIsLanguageText);
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
@@ -533,7 +533,7 @@ bool UserBase::createDatabase(const QString & connectionName , const QString & d
     user->setCryptedPassword(DEFAULT_USER_PASSWORD);
     user->setValidity(true);
     user->setName(DEFAULT_USER_NAME);
-    user->setSurname(DEFAULT_USER_SURNAME);
+    user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLanguage(QLocale().name().left(2));
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAdress(DEFAULT_USER_ADRESS);
@@ -674,7 +674,7 @@ bool UserBase::saveUser(UserData *user)
 	    q.bindValue(USER_LASTLOG, user->lastLogin());
 	    q.bindValue(USER_NAME, user->name());
 	    q.bindValue(USER_SECONDNAME, user->secondName());
-	    q.bindValue(USER_SURNAME, user->surname());
+            q.bindValue(USER_FIRSTNAME, user->firstname());
 	    q.bindValue(USER_MAIL, user->mail());
 	    q.bindValue(USER_LANGUAGE, user->language());
 	    q.bindValue(USER_LOCKER, user->locker());
@@ -728,7 +728,7 @@ bool UserBase::saveUser(UserData *user)
 	    q.bindValue(USER_LOGIN ,       user->login());
 	    q.bindValue(USER_PASSWORD ,    user->cryptedPassword());
 	    q.bindValue(USER_NAME ,        user->name());
-	    q.bindValue(USER_SURNAME ,     user->surname());
+            q.bindValue(USER_FIRSTNAME ,   user->firstname());
 	    q.bindValue(USER_SECONDNAME ,  user->secondName());
 	    q.bindValue(USER_MAIL ,        user->mail());
 	    q.bindValue(USER_LASTLOG ,     user->lastLogin());

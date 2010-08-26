@@ -64,7 +64,7 @@ namespace Constants {
         IDENTITY_ISACTIVE,
         IDENTITY_ISVIRTUAL,
         IDENTITY_NAME,
-        IDENTITY_SURNAME,
+        IDENTITY_FIRSTNAME,
         IDENTITY_SECONDNAME,
         IDENTITY_GENDER,
         IDENTITY_TITLE,    // Encoded like = 1=Mister, 2=Miss, 3=Madam , 4=Doctor, 5=Professor, 6=Captain

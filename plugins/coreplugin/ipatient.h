@@ -80,7 +80,7 @@ public:
         FullName,
         BirthName,
         SecondName,
-        Surname,
+        Firstname,
         Gender,
         GenderIndex,
         DateOfBirth,

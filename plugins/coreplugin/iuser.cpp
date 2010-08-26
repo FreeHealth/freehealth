@@ -48,7 +48,7 @@ using namespace Core;
 void IUser::replaceTokens(QString &stringWillBeModified)
 {
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERNAME,       value(IUser::Name).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSURNAME,    value(IUser::Surname).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFIRSTNAME,  value(IUser::Firstname).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSECONDNAME, value(IUser::SecondName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLNAME,   value(IUser::FullName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTITLE,      value(IUser::Title).toString() );

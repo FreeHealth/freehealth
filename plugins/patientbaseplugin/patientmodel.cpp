@@ -327,7 +327,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
         case IPatient::BirthName:     col = Constants::IDENTITY_NAME;       break;
         case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
-        case IPatient::Surname:       col = Constants::IDENTITY_SURNAME;           break;
+        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;           break;
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
         case IPatient::GenderIndex:
             {
@@ -372,7 +372,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             {
                 const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_NAME)).toString();
                 const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
-                const QString &sur = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SURNAME)).toString();
+                const QString &sur = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
                 if (!sec.isEmpty()) {
                     return QString("%1 - %2 %3").arg(name, sec, sur);
                 } else {
@@ -439,7 +439,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
         case IPatient::BirthName:     col = Constants::IDENTITY_NAME;             break;
         case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
-        case IPatient::Surname:       col = Constants::IDENTITY_SURNAME;          break;
+        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;          break;
         case IPatient::GenderIndex:
             {
                 col = Constants::IDENTITY_GENDER;
@@ -522,7 +522,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
     return true;
 }
 
-void PatientModel::setFilter(const QString &name, const QString &surname, const QString &uuid, const FilterOn on)
+void PatientModel::setFilter(const QString &name, const QString &firstname, const QString &uuid, const FilterOn on)
 {
     // Calculate new filter
     switch (on) {
@@ -531,15 +531,15 @@ void PatientModel::setFilter(const QString &name, const QString &surname, const 
             // WHERE (NAME || SECONDNAME || SURNAME LIKE '%') OR (NAME LIKE '%')
             const QString &nameField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME);
             const QString &secondField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME);
-            const QString &surField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SURNAME);
+            const QString &surField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
             d->m_ExtraFilter.clear();
 //            d->m_ExtraFilter =  name + " || ";
 //            d->m_ExtraFilter += second + " || ";
 //            d->m_ExtraFilter += sur + " ";
             d->m_ExtraFilter += QString("((%1 LIKE '%2%' ").arg(nameField, name);
             d->m_ExtraFilter += QString("OR %1 LIKE '%2%') ").arg(secondField, name);
-            if (!surname.isEmpty())
-                d->m_ExtraFilter += QString("AND %1 LIKE '%2%')").arg(surField, surname);
+            if (!firstname.isEmpty())
+                d->m_ExtraFilter += QString("AND %1 LIKE '%2%')").arg(surField, firstname);
             else
                 d->m_ExtraFilter += ")";
 
@@ -679,7 +679,7 @@ QList<QString> PatientModel::patientName(const QList<QString> &uuids)
         QSqlQuery query(patientBase()->database());
         QHash<int, QString> where;
         where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(u));
-        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_SURNAME, where);
+        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
         if (query.exec(req)) {
             if (query.next()) {
                 if (!query.value(1).toString().isEmpty())

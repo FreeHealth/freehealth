@@ -51,13 +51,13 @@ namespace Constants {
     const char* const   TRANS_CONTEXT             = "Patients";
 
     const char* const   SEARCHBYNAME_TEXT         = QT_TRANSLATE_NOOP("Patients", "Search by Name");
-    const char* const   SEARCHBYSURNAME_TEXT      = QT_TRANSLATE_NOOP("Patients", "Search by Surname");
-    const char* const   SEARCHBYNAMESURNAME_TEXT  = QT_TRANSLATE_NOOP("Patients", "Search by Name and Surname");
+    const char* const   SEARCHBYFIRSTNAME_TEXT      = QT_TRANSLATE_NOOP("Patients", "Search by Firstname");
+    const char* const   SEARCHBYNAMEFIRSTNAME_TEXT  = QT_TRANSLATE_NOOP("Patients", "Search by Name and Firstname");
     const char* const   SEARCHBYDOB_TEXT          = QT_TRANSLATE_NOOP("Patients", "Search by Date Of Birth");
 
     const char* const   SEARCHBYNAME_TOOLTIP         = QT_TRANSLATE_NOOP("Patients", "Type the name or second name of the patient");
-    const char* const   SEARCHBYSURNAME_TOOLTIP      = QT_TRANSLATE_NOOP("Patients", "Type the surname of the patient");
-    const char* const   SEARCHBYNAMESURNAME_TOOLTIP  = QT_TRANSLATE_NOOP("Patients", "Type the name or second name followed by ; and the surname");
+    const char* const   SEARCHBYFIRSTNAME_TOOLTIP      = QT_TRANSLATE_NOOP("Patients", "Type the firstname of the patient");
+    const char* const   SEARCHBYNAMEFIRSTNAME_TOOLTIP  = QT_TRANSLATE_NOOP("Patients", "Type the name or second name followed by ; and the firstname");
     const char* const   SEARCHBYDOB_TOOLTIP          = QT_TRANSLATE_NOOP("Patients", "Type the date of birth (yyyy/MM/dd)");
 
 }  // End namespace Patients::Constants

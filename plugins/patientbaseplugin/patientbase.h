@@ -85,7 +85,7 @@ public:
 //    PatientData *getPatientByUuid(const QString &uuid) const;
 //
 //    // datas retrievers
-//    QString getUuid(const QString &name, const QString &surname);
+//    QString getUuid(const QString &name, const QString &firstname);
 //    QString createNewPatient();
 //
 //    // savers

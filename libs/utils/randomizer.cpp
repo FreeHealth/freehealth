@@ -39,7 +39,7 @@
  ***************************************************************************/
 /**
   \class Utils::Randomizer
-  Randomizer can be used for populating database with random: names, surnames, zipcodes and cities, strings, numbers, dates...
+  Randomizer can be used for populating database with random: names, firstnames, zipcodes and cities, strings, numbers, dates...
 */
 
 #include "randomizer.h"
@@ -67,33 +67,33 @@ public:
 
     ~RandomizerPrivate()
     {
-        boysSurnames.clear();
-        girlsSurnames.clear();
+        boysFirstnames.clear();
+        girlsFirstnames.clear();
     }
 
-    void readBoysSurnames()
+    void readBoysFirstnames()
     {
-        if (!boysSurnames.isEmpty())
+        if (!boysFirstnames.isEmpty())
             return;
-        QString c = Utils::readTextFile(m_Path + "/boys_surnames.csv");
+        QString c = Utils::readTextFile(m_Path + "/boys_firstnames.csv");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy surnames.",
+            Utils::Log::addError("Randomizer", "Can not read boy firstnames.",
                                  __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            boysSurnames.append(s);
+            boysFirstnames.append(s);
         }
     }
 
-    void readGirlsSurnames()
+    void readGirlsFirstnames()
     {
-        if (!girlsSurnames.isEmpty())
+        if (!girlsFirstnames.isEmpty())
             return;
-        QString c = Utils::readTextFile(m_Path + "/girls_surnames.csv");
+        QString c = Utils::readTextFile(m_Path + "/girls_firstnames.csv");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy surnames.",
+            Utils::Log::addError("Randomizer", "Can not read boy firtsnames.",
                                  __FILE__, __LINE__);
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            girlsSurnames.append(s);
+            girlsFirstnames.append(s);
         }
     }
 
@@ -128,8 +128,8 @@ public:
 
 
 public:
-    QVector<QString> boysSurnames;
-    QVector<QString> girlsSurnames;
+    QVector<QString> boysFirstnames;
+    QVector<QString> girlsFirstnames;
     QVector<QString> words;
     QMap<int, QString> zipCodes;
     QString m_Path;
@@ -158,15 +158,15 @@ void Randomizer::setPathToFiles(const QString &p)
     d->m_Path = p;
 }
 
-QString Randomizer::getRandomSurname(bool male)
+QString Randomizer::getRandomFirstname(bool male)
 {
-    if (d->boysSurnames.isEmpty())
-        d->readBoysSurnames();
-    if (d->girlsSurnames.isEmpty())
-        d->readGirlsSurnames();
+    if (d->boysFirstnames.isEmpty())
+        d->readBoysFirstnames();
+    if (d->girlsFirstnames.isEmpty())
+        d->readGirlsFirstnames();
     if (male)
-        return d->boysSurnames.at(makeRand(d->boysSurnames.size() - 1));
-    return d->girlsSurnames.at(makeRand(d->girlsSurnames.size() - 1));
+        return d->boysFirstnames.at(makeRand(d->boysFirstnames.size() - 1));
+    return d->girlsFirstnames.at(makeRand(d->girlsFirstnames.size() - 1));
 }
 
 QString Randomizer::getRandomString(int length)

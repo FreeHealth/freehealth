@@ -75,7 +75,7 @@ using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
 
-static inline void createPatient(const QString &name, const QString &secondname, const QString &surname,
+static inline void createPatient(const QString &name, const QString &secondname, const QString &firstname,
                                  const QString &gender, const int title, const QDate &dob,
                                  const QString &country, const QString &note,
                                  const QString &street, const QString &zip, const QString &city,
@@ -91,7 +91,7 @@ static inline void createPatient(const QString &name, const QString &secondname,
     query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
     query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
     query.bindValue(Constants::IDENTITY_NAME, name);
-    query.bindValue(Constants::IDENTITY_SURNAME, surname);
+    query.bindValue(Constants::IDENTITY_FIRSTNAME, firstname);
     if (secondname.isEmpty())
         query.bindValue(Constants::IDENTITY_SECONDNAME, QVariant());
     else
@@ -120,7 +120,7 @@ static inline void createPatient(const QString &name, const QString &secondname,
 
     if (!query.exec()) {
         Utils::Log::addQueryError("VirtualBasePage", query);
-        qWarning() << name << secondname << surname << gender << title<< dob<<country<<note<<street<<zip<<city<<uuid<<lkid<<photoFile<<death;
+        qWarning() << name << secondname << firstname << gender << title<< dob<<country<<note<<street<<zip<<city<<uuid<<lkid<<photoFile<<death;
     }
     query.finish();
 
@@ -213,12 +213,12 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
 
         if (r.randomInt(2) == 1) {
             g = "F";
-            sur= r.getRandomSurname(false);
+            sur= r.getRandomFirstname(false);
             sec = r.getRandomName();
             title = 2;
         } else {
             g = "M";
-            sur= r.getRandomSurname(true);
+            sur= r.getRandomFirstname(true);
             sec = r.getRandomName();
             title = 1;
         }
@@ -362,7 +362,7 @@ void VirtualDatabasePreferences::on_populateUsers_clicked()
         userModel()->insertRow(0);
         int genderIndex = r.randomInt(1);
         userModel()->setData(userModel()->index(0, Core::IUser::Name), r.getRandomName());
-        userModel()->setData(userModel()->index(0, Core::IUser::Surname), r.getRandomSurname(genderIndex==1));
+        userModel()->setData(userModel()->index(0, Core::IUser::Firstname), r.getRandomFirstname(genderIndex==1));
         userModel()->setData(userModel()->index(0, Core::IUser::TitleIndex), 4);
         userModel()->setData(userModel()->index(0, Core::IUser::GenderIndex), genderIndex);
         userModel()->submitUser(userModel()->index(0, Core::IUser::Uuid).data().toString());

@@ -135,7 +135,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Name, Secondname - surname</string>
+        <string>Name, Secondname - firstname</string>
        </property>
       </widget>
      </item>

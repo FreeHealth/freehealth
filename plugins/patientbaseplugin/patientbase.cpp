@@ -120,7 +120,7 @@ PatientBase::PatientBase(QObject *parent) :
 
     // Identity
     addField(Table_IDENT, IDENTITY_NAME, "NAME", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_SURNAME, "SURNAME", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_FIRSTNAME, "SURNAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_SECONDNAME, "SECONDNAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_GENDER, "GENDER", FieldIsOneChar);
     addField(Table_IDENT, IDENTITY_TITLE, "TITLE", FieldIsInteger);

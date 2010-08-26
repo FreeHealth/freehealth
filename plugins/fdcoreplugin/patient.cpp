@@ -75,7 +75,7 @@ public:
     {
         m_XmlTags.insert(IPatient::Uid ,        "UID");
         m_XmlTags.insert(IPatient::BirthName ,  "Name" );
-        m_XmlTags.insert(IPatient::Surname ,    "Surname" );
+        m_XmlTags.insert(IPatient::Firstname ,  "Firstname" );
         m_XmlTags.insert(IPatient::SecondName , "SecondName" );
         m_XmlTags.insert(IPatient::Gender ,     "Gender" );
         m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");
@@ -209,11 +209,11 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                     r = QString("%1 - %2 %3")
                     .arg(d->m_Values.value(BirthName).toString())
                     .arg(d->m_Values.value(SecondName).toString())
-                    .arg(d->m_Values.value(Surname).toString());
+                    .arg(d->m_Values.value(Firstname).toString());
                 else
                     r = QString("%1 %3")
                         .arg(d->m_Values.value(BirthName).toString())
-                        .arg(d->m_Values.value(Surname).toString());
+                        .arg(d->m_Values.value(Firstname).toString());
                 return r;
             }
         case DrugsAllergiesWithoutPrecision:

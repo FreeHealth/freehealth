@@ -73,7 +73,7 @@ public:
         LastLogin,      /*!< \brief Date of the last correct login */
         Name,           /*!< \brief Name */
         SecondName,     /*!< \brief Second name */
-        Surname,        /*!< \brief surname */
+        Firstname,      /*!< \brief Firstname */
         Mail,           /*!< \brief Mail address */
         Language,       /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */

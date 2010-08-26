@@ -49,7 +49,7 @@ namespace Constants {
     const char *const XML_ATTRIB_UNIT             = "unit";
     const char *const XML_ATTRIB_UID              = "uid";
     const char *const XML_ATTRIB_NAME             = "name";
-    const char *const XML_ATTRIB_SURNAME          = "surname";
+    const char *const XML_ATTRIB_FIRSTNAME        = "firstname";
     const char *const XML_ATTRIB_VERSION          = "version";
     const char *const XML_ATTRIB_GENDER           = "gender";
     const char *const XML_ATTRIB_DATEOFBIRTH      = "dob";
@@ -80,7 +80,7 @@ public:
         params.insert(CommandLine::CL_ExchangeInFile,    "--exchange-in");
         params.insert(CommandLine::CL_PatientUid,        "--patientuid");
         params.insert(CommandLine::CL_PatientName,       "--patientname");
-        params.insert(CommandLine::CL_PatientSurname,    "--patientsurname");
+        params.insert(CommandLine::CL_PatientFirstname,  "--patientfirstname");
         params.insert(CommandLine::CL_PatientGender,     "--gender");
         params.insert(CommandLine::CL_DateOfBirth,       "--dateofbirth");
         params.insert(CommandLine::CL_Weight,            "--weight");
@@ -125,7 +125,7 @@ public:
             case CommandLine::CL_ExchangeInFile :    value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientUid :        value.insert(CommandLine::CL_PatientUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientName :       value.insert(CommandLine::CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_PatientSurname :    value.insert(CommandLine::CL_PatientSurname, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_PatientFirstname :  value.insert(CommandLine::CL_PatientFirstname, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientGender :     value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_DateOfBirth :       value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_Weight :            value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
@@ -239,7 +239,7 @@ public:
     void readPatientDatas(const QDomElement &rootElement)
     {
 //        <Patient>
-//            <Identity name="Name Of Patient" surname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
+//            <Identity name="Name Of Patient" firstname="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
 //            <Creatinin value="12" unit="mg/l or mmol/l"/>
 //            <Weight value="70" unit="kg or pd" />
 //            <Height value="170" unit="cm or "/>
@@ -255,7 +255,7 @@ public:
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_PATIENT_IDENTITY) {
                 value.insert(CommandLine::CL_PatientName, element.attribute(Internal::Constants::XML_ATTRIB_NAME));
-                value.insert(CommandLine::CL_PatientSurname, element.attribute(Internal::Constants::XML_ATTRIB_SURNAME));
+                value.insert(CommandLine::CL_PatientFirstname, element.attribute(Internal::Constants::XML_ATTRIB_FIRSTNAME));
                 value.insert(CommandLine::CL_PatientUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
                 value.insert(CommandLine::CL_PatientGender, element.attribute(Internal::Constants::XML_ATTRIB_GENDER));
                 value.insert(CommandLine::CL_DateOfBirth, QDate::fromString(element.attribute(Internal::Constants::XML_ATTRIB_DATEOFBIRTH),"yyyy/MM/dd"));
@@ -300,7 +300,7 @@ public:
         patient->setData(patient->index(0, IPatient::Creatinine),     value.value(CommandLine::CL_Creatinine));
         patient->setData(patient->index(0, IPatient::CreatinineUnit), value.value(CommandLine::CL_Creatinine_Unit));
         patient->setData(patient->index(0, IPatient::BirthName),      value.value(CommandLine::CL_PatientName));
-        patient->setData(patient->index(0, IPatient::Surname),        value.value(CommandLine::CL_PatientSurname));
+        patient->setData(patient->index(0, IPatient::Firstname),      value.value(CommandLine::CL_PatientFirstname));
         patient->setData(patient->index(0, IPatient::Gender),         value.value(CommandLine::CL_PatientGender));
 
         QStringList tmp;

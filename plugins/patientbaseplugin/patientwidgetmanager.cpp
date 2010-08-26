@@ -137,8 +137,8 @@ PatientSelector *PatientWidgetManager::selector() const
 PatientActionHandler::PatientActionHandler(QObject *parent) :
         QObject(parent),
         aSearchName(0),
-        aSearchSurname(0),
-        aSearchNameSurname(0),
+        aSearchFirstname(0),
+        aSearchNameFirstname(0),
         aSearchDob(0),
         aViewPatientInformations(0),
         aPrintPatientInformations(0),
@@ -196,23 +196,23 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
     gSearchMethod->addAction(a);
 
-    a = aSearchSurname = new QAction(this);
-    a->setObjectName("aSearchSurname");
+    a = aSearchFirstname = new QAction(this);
+    a->setObjectName("aSearchFirstname");
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_SURNAME, searchcontext);
-    cmd->setTranslations(Constants::SEARCHBYSURNAME_TEXT, Constants::SEARCHBYNAMESURNAME_TOOLTIP, Constants::TRANS_CONTEXT);
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_FIRSTNAME, searchcontext);
+    cmd->setTranslations(Constants::SEARCHBYFIRSTNAME_TEXT, Constants::SEARCHBYFIRSTNAME_TOOLTIP, Constants::TRANS_CONTEXT);
     searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
     gSearchMethod->addAction(a);
 
-    a = aSearchNameSurname = new QAction(this);
-    a->setObjectName("aSearchNameSurname");
+    a = aSearchNameFirstname = new QAction(this);
+    a->setObjectName("aSearchNameFirstname");
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_NAMESURNAME, searchcontext);
-    cmd->setTranslations(Constants::SEARCHBYNAMESURNAME_TEXT, Constants::SEARCHBYNAMESURNAME_TOOLTIP, Constants::TRANS_CONTEXT);
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME, searchcontext);
+    cmd->setTranslations(Constants::SEARCHBYNAMEFIRSTNAME_TEXT, Constants::SEARCHBYNAMEFIRSTNAME_TOOLTIP, Constants::TRANS_CONTEXT);
     searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
     gSearchMethod->addAction(a);
 
@@ -270,13 +270,13 @@ void PatientActionHandler::searchActionChanged(QAction *action)
         if (m_CurrentView)
             m_CurrentView->setSearchMode(PatientSelector::SearchByName);
     }
-    if (action==aSearchSurname) {
+    if (action==aSearchFirstname) {
         if (m_CurrentView)
-            m_CurrentView->setSearchMode(PatientSelector::SearchBySurname);
+            m_CurrentView->setSearchMode(PatientSelector::SearchByFirstname);
     }
-    if (action==aSearchNameSurname) {
+    if (action==aSearchNameFirstname) {
         if (m_CurrentView)
-            m_CurrentView->setSearchMode(PatientSelector::SearchByNameSurname);
+            m_CurrentView->setSearchMode(PatientSelector::SearchByNameFirstname);
     }
     if (action==aSearchDob) {
         if (m_CurrentView)

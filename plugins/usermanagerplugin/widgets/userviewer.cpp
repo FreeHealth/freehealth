@@ -180,7 +180,7 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(nameLineEdit, Core::IUser::Name);
     m_Mapper->addMapping(loginLineEdit, Core::IUser::DecryptedLogin);
     m_Mapper->addMapping(secNameLineEdit, Core::IUser::SecondName);
-    m_Mapper->addMapping(surnameLineEdit, Core::IUser::Surname);
+    m_Mapper->addMapping(firstnameLineEdit, Core::IUser::Firstname);
     m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
     m_Mapper->addMapping(languageCombo, Core::IUser::LanguageIndex, "currentIndex");
     m_Mapper->addMapping(adressTextEdit, Core::IUser::Adress, "plainText");

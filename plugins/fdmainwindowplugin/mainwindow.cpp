@@ -175,7 +175,7 @@ public:
             m_Mapper = new QDataWidgetMapper(q);
         m_Mapper->setModel(patient());
         m_Mapper->addMapping(q->m_ui->patientName, Core::IPatient::BirthName);
-        m_Mapper->addMapping(q->m_ui->patientSurname, Core::IPatient::Surname);
+        m_Mapper->addMapping(q->m_ui->patientFirstname, Core::IPatient::Firstname);
         m_Mapper->addMapping(q->m_ui->patientSize, Core::IPatient::Height);
         m_Mapper->addMapping(q->m_ui->sizeUnit, Core::IPatient::HeightUnit);
         m_Mapper->addMapping(q->m_ui->patientWeight, Core::IPatient::Weight);
@@ -394,7 +394,7 @@ void MainWindow::extensionsInitialized()
     // Block patient datas
     if (commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool()) {
         m_ui->patientName->setEnabled(false);
-        m_ui->patientSurname->setEnabled(false);
+        m_ui->patientFirstname->setEnabled(false);
         m_ui->dobDateEdit->setEnabled(false);
         m_ui->sexCombo->setEnabled(false);
         m_ui->creatinineUnit->setEnabled(false);
@@ -529,7 +529,7 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->patientInformations->blockSignals(state);
         m_ui->patientName->blockSignals(state);
         m_ui->patientSize->blockSignals(state);
-        m_ui->patientSurname->blockSignals(state);
+        m_ui->patientFirstname->blockSignals(state);
         m_ui->patientWeight->blockSignals(state);
         m_ui->sexCombo->blockSignals(state);
         m_ui->sizeUnit->blockSignals(state);
@@ -548,7 +548,7 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->patientInformations->blockSignals(state);
         m_ui->patientName->blockSignals(state);
         m_ui->patientSize->blockSignals(state);
-        m_ui->patientSurname->blockSignals(state);
+        m_ui->patientFirstname->blockSignals(state);
         m_ui->patientWeight->blockSignals(state);
         m_ui->sexCombo->blockSignals(state);
         m_ui->sizeUnit->blockSignals(state);
