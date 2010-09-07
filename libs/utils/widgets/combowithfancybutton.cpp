@@ -149,6 +149,7 @@ public:
             m_List.removeAt(row);
         }
         endRemoveRows();
+        return true;
     }
 
     bool moveUp(const QModelIndex &item)
