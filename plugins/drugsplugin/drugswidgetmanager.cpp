@@ -577,7 +577,7 @@ void DrugsActionHandler::viewInteractions()
 void DrugsActionHandler::searchTriggered()
 {
     if (m_CurrentView) {
-        m_CurrentView->drugSelector()->setFocus();
+        m_CurrentView->drugSelector()->onSearchShortCutTriggered();
     }
 }
 

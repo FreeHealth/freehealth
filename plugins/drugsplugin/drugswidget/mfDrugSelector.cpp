@@ -190,6 +190,12 @@ void DrugSelector::setFont(const QFont &font)
     searchLine->setFont(font);
 }
 
+void DrugSelector::onSearchShortCutTriggered()
+{
+    searchLine->setFocus();
+    searchLine->selectAll();
+}
+
 void DrugSelector::createToolButtons()
 {
     m_SearchToolButton = new QToolButton(searchLine);   // parent object will be redefined
@@ -245,8 +251,8 @@ void DrugSelector::createDrugModelView()
 
 void DrugSelector::updateDrugsViewColumns()
 {
-    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_ROUTE, !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
-    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_FORM , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
+    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_ROUTE, !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
+    drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_FORM , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
     drugsView->setColumnHidden(DrugsDB::Constants::DRUGS_STRENGTH , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH).toBool());
     // managing model fields
     drugsView->hideColumn(DrugsDB::Constants::DRUGS_LINK_SPC);

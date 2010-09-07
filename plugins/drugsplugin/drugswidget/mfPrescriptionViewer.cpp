@@ -362,12 +362,12 @@ void PrescriptionViewer::changeDurationTo()
         nb = drugModel()->rowCount();
     }
 
-    for(i ; i<nb ; ++i) {
-        QModelIndex idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationScheme);
+    for(int j = i ; j<nb ; ++j) {
+        QModelIndex idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationScheme);
         drugModel()->setData(idx, scheme);
-        idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationFrom);
+        idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationFrom);
         drugModel()->setData(idx, duration);
-        idx = drugModel()->index(i, DrugsDB::Constants::Prescription::DurationUsesFromTo);
+        idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationUsesFromTo);
         drugModel()->setData(idx, false);
     }
 }

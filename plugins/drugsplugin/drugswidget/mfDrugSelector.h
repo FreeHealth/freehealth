@@ -81,8 +81,8 @@ public:
     void updateDrugsViewColumns();
 
     void setFont(const QFont &font);
-    void setFocus(Qt::FocusReason r) { searchLine->setFocus(r); }
-    void setFocus() { searchLine->setFocus(); }
+    void setFocus(Qt::FocusReason r = Qt::TabFocusReason) { searchLine->setFocus(r); }
+    void onSearchShortCutTriggered();
 
     void setSearchMethod(int method);
 
