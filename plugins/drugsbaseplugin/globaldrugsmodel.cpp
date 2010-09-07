@@ -790,7 +790,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         tmp += "</body></html>";
 
         return tmp;
-    } else if (role == Qt::DecorationRole) {
+    } else if (role == Qt::DecorationRole && item.column()==Constants::DRUGS_NAME) {
         if (d->hasAllergy(item, this))
             return theme()->icon(Core::Constants::ICONFORBIDDEN);
         else if (d->hasIntolerance(item, this))

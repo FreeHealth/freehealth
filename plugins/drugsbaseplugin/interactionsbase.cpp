@@ -149,25 +149,8 @@ public:
          if ((!m_AtcToMol.isEmpty()) && (!m_ClassToAtcs.isEmpty()))
              return;
 
-         if (m_Parent->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT) {
-             /** \todo retrieve this from database instead of resource file */
-             QString tmp;
-             {
-                 QFile file(":/inns_molecules_link.csv");
-                 if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-                     return;
-                 tmp = file.readAll();
-                 QStringList lines = tmp.split("\n");
-                 int i = 0;
-                 foreach(QString l, lines) {
-                     if (!l.contains(SEPARATOR)) continue;
-                     QStringList val = l.split(SEPARATOR);
-                     m_AtcToMol.insertMulti(val[0].toInt(), val[1].toInt());
-                     i++;
-                 }
-             }
-         } else {
-             /** \todo WARNING FULL SQL COMMAND */
+         /** \todo WARNING FULL SQL COMMAND */
+         {
              QSqlDatabase drugs = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
              if (!drugs.open())
                  Utils::Log::addError("InteractionBase", "Drugs database not opened", __FILE__, __LINE__);
@@ -179,6 +162,7 @@ public:
              } else {
                  Utils::Log::addQueryError("InteractionBase", query);
              }
+             query.finish();
          }
 
          // Retreive Interacting classes (1) ---> (n) ATC tree
@@ -187,12 +171,14 @@ public:
               DB.open();
          QString req = m_DB->select(Table_IAM_TREE);
 
-         QSqlQuery query(req , DB);
-         if (query.isActive()) {
-             while (query.next())
-                 m_ClassToAtcs.insertMulti(query.value(0).toInt(), query.value(1).toInt());
-         } else {
-             Utils::Log::addQueryError("DrugsBase", query);
+         {
+             QSqlQuery query(req , DB);
+             if (query.isActive()) {
+                 while (query.next())
+                     m_ClassToAtcs.insertMulti(query.value(0).toInt(), query.value(1).toInt());
+             } else {
+                 Utils::Log::addQueryError("DrugsBase", query);
+             }
          }
 
          InteractionsBase::m_InteractionsDatabaseAvailable = m_ClassToAtcs.count() && m_AtcToMol.count();
