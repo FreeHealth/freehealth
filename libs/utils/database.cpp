@@ -243,7 +243,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                                                                       "ERROR : %1 driver is not available")
-                              .arg("SQLite"));
+                              .arg("SQLite"), __FILE__, __LINE__);
                 return false;
             }
             break;
@@ -256,7 +256,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                                                                       "ERROR : %1 driver is not available")
-                              .arg("MySQL"));
+                              .arg("MySQL"), __FILE__, __LINE__);
                 return false;
             }
             break;
@@ -269,7 +269,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             if (!QSqlDatabase::isDriverAvailable("QPSQL")) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                                                                       "ERROR : %1 driver is not available")
-                              .arg("PostGreSQL"));
+                              .arg("PostGreSQL"), __FILE__, __LINE__);
                 return false;
             }
         }
@@ -323,7 +323,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
-                                                                              "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                                                                              "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName), __FILE__, __LINE__);
                         return false;
                     }
                 } else { // Warn Only
@@ -347,7 +347,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                     if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         Log::addError("Database", QCoreApplication::translate("Database",
                                       "ERROR : %1 database does not exist and can not be created. Path = %2")
-                                      .arg(dbName, pathOrHostName));
+                                      .arg(dbName, pathOrHostName), __FILE__, __LINE__);
                         return false;
                     }
                 } else { // Warn Only
@@ -373,7 +373,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         {
             if (!QFileInfo(fileName).isReadable()) {
                 Log::addError("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
+                              .arg(dbName, pathOrHostName), __FILE__, __LINE__);
                 toReturn = false;
             }
             break;
@@ -383,14 +383,14 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             if (!DB.open()) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                               "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
+                              .arg(dbName, pathOrHostName), __FILE__, __LINE__);
                 return false;
             }
             QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
             if (!query.isActive()) {
                 Log::addError("Database", QCoreApplication::translate("Database",
                               "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
+                              .arg(dbName, pathOrHostName), __FILE__, __LINE__);
                 Log::addQueryError("Database", query);
                 return false;
             } else {
@@ -418,7 +418,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 if (!QFileInfo(fileName).isWritable()) {
                     Log::addError("Database", QCoreApplication::translate("Database",
                                   "ERROR : Database %1 is not writable. Path : %2.")
-                                  .arg(dbName, pathOrHostName));
+                                  .arg(dbName, pathOrHostName), __FILE__, __LINE__);
                     toReturn = false;
                 }
                 break;
@@ -462,7 +462,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     if (!DB.isOpen()) {
         Log::addError("Database", QCoreApplication::translate("Database",
                                                                     "WARNING : can not open database %1 : %2 \n %3 ")
-                         .arg(connectionName, DB.lastError().driverText(), DB.lastError().databaseText()));
+                         .arg(connectionName, DB.lastError().driverText(), DB.lastError().databaseText()), __FILE__, __LINE__);
         toReturn = false;
     }
     else {
@@ -536,7 +536,7 @@ bool Database::checkDatabaseScheme()
         QSqlRecord rec = DB.record(d->m_Tables.value(i));
         if (rec.count() != d->m_Tables_Fields.values(i).count()) {
             Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : wrong number of fields for table %1")
-                                   .arg(d->m_Tables.value(i)));
+                                   .arg(d->m_Tables.value(i)), __FILE__, __LINE__);
             return false;
         }
         QList<int> fields = d->m_Tables_Fields.values(i);
@@ -546,7 +546,7 @@ bool Database::checkDatabaseScheme()
             if (d->m_Fields.value(f)!= rec.field(id).name())
             {
                 Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3")
-                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name()));
+                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name()), __FILE__, __LINE__);
                 return false;
             }
             id++;

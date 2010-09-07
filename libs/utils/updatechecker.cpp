@@ -121,7 +121,7 @@ void UpdateCheckerPrivate::httpDone(bool error)
     if (error) {
         Log::addError( this, tr( "Error %1 while retreiving update file %2" )
                          .arg(m_Http->errorString())
-                         .arg(m_Url.toString()) );
+                         .arg(m_Url.toString()), __FILE__, __LINE__);
         return;
     }
 
