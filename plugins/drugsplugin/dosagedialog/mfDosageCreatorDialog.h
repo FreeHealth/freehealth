@@ -41,7 +41,6 @@
 #ifndef DOSAGECREATORDIALOG_H
 #define DOSAGECREATORDIALOG_H
 
-// include Qt headers
 #include <QtGlobal>
 QT_BEGIN_NAMESPACE
 class QDataWidgetMapper;
@@ -54,7 +53,7 @@ QT_END_NAMESPACE
  * \file mfDosageCreatorDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 23 Aug 2010
+ * \date 07 Sept 2010
 */
 
 namespace DrugsDB {

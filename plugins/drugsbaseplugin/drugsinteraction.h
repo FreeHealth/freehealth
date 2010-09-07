@@ -80,7 +80,7 @@ public:
         DI_Risk,
         DI_Management,
 
-        // only used for set
+        // only used for test
         DI_RiskFr,
         DI_RiskEn,
         DI_ManagementFr,

@@ -43,6 +43,7 @@
 // include drugs widgets headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 
@@ -79,7 +80,6 @@ static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniq
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
@@ -178,8 +178,7 @@ void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
 */
 void DrugsCentralWidget::selector_drugSelected(const int uid)
 {
-    // if exists dosage for that drug show the dosageSelector widget
-    // else show the dosage creator widget
+    // If drug already in prescription --> Stop
     if (m_CurrentDrugModel->containsDrug(uid)) {
         Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
                                     tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
@@ -189,7 +188,28 @@ void DrugsCentralWidget::selector_drugSelected(const int uid)
         return;
     }
 //    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
+
+    // Add drug to the model
     m_CurrentDrugModel->addDrug(uid);
+
+    // Test for interaction and alert user as setted in settings
+    if (settings()->value(Constants::S_DYNAMICALERTS, true).toBool()) {
+        // Check the desired level of warning
+        DrugsDB::Constants::Interaction::TypesOfIAM flag = DrugsDB::Constants::Interaction::TypesOfIAM(m_CurrentDrugModel->drugData(uid, DrugsDB::Constants::Drug::MaximumLevelOfInteraction).toInt());
+        if (flag != DrugsDB::Constants::Interaction::noIAM) {
+            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille).toInt());
+            if (flag >= minLevel) {
+                bool yes = Utils::yesNoMessageBox(tr("Interaction found. Do you to continue anyway ?"),
+                                            m_CurrentDrugModel->drugData(uid, DrugsDB::Constants::Drug::OwnInteractionsSynthesis).toString(),
+                                            m_CurrentDrugModel->drugData(uid, DrugsDB::Constants::Interaction::FullSynthesis).toString());
+                if (!yes) {
+                    m_CurrentDrugModel->removeLastInsertedDrug();
+                    return;
+                }
+            }
+        }
+    }
+
 //    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
     if (!m_CurrentDrugModel->isSelectionOnlyMode()) {
         Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(uid));

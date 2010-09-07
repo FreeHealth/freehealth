@@ -344,6 +344,7 @@ namespace Drug
         MainInnDosage,
         Administration,
         Interacts,
+        OwnInteractionsSynthesis,
         MaximumLevelOfInteraction,
         CompositionString,
         InnCompositionString,    // inn dose form ; inn dose form...

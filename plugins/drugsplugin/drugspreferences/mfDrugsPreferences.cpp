@@ -115,6 +115,8 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+    defaultvalues.insert(S_DYNAMICALERTS, true);
+    defaultvalues.insert(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::ContreIndication);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -416,6 +418,15 @@ void DrugsViewWidget::setDatasToUi()
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
     showIconsCheck->setChecked(s->value(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION).toBool());
+
+    dynamicAlerts->setChecked(s->value(S_DYNAMICALERTS).toBool());
+    int level = s->value(S_DYNAMICALERTS_LEVEL).toInt();
+    switch (level)
+    {
+    case DrugsDB::Constants::Interaction::ContreIndication: dynamicAlertsLevel->setCurrentIndex(2); break;
+    case DrugsDB::Constants::Interaction::Deconseille: dynamicAlertsLevel->setCurrentIndex(1); break;
+    case 0: dynamicAlertsLevel->setCurrentIndex(0); break;
+    }
 }
 
 void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
@@ -448,6 +459,15 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
         DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
 
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
+
+    s->setValue(S_DYNAMICALERTS, dynamicAlerts->isChecked());
+    int level = s->value(S_DYNAMICALERTS_LEVEL).toInt();
+    switch (dynamicAlertsLevel->currentIndex())
+    {
+    case 2: s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::ContreIndication); break;
+    case 1: s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille); break;
+    case 0: s->setValue(S_DYNAMICALERTS_LEVEL, 0); break;
+    }
 }
 
 void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
@@ -461,6 +481,8 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(S_DRUGHISTORY, QVariant());
     s->setValue(DrugsDB::Constants::S_LEVELOFWARNING , 0);
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION , true);
+    s->setValue(S_DYNAMICALERTS, true);
+    s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::ContreIndication);
 
     s->setValue(S_DRUGFONT , QFont().toString());
     s->setValue(S_PRESCRIPTIONFONT , QFont().toString());

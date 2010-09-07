@@ -279,10 +279,43 @@ public:
                 return display;
                 break;
             }
+        case Drug::OwnInteractionsSynthesis:
+            {
+                QString display;
+                const QList<DrugsInteraction *> &list = m_InteractionsManager->getAllInteractionsFound();
+                QList<DrugsInteraction *> concernedInteractions;
+                QList<DrugsData *> concernedDrugs;
+                int i = 0;
+                display.append("<p>");
+                foreach(DrugsInteraction *interaction, list) {
+                    if (interaction->drugs().contains((DrugsData*)drug)) {
+                        concernedInteractions.append(interaction);
+                        foreach(DrugsData *drg, interaction->drugs()) {
+                            if (!concernedDrugs.contains(drg))
+                                concernedDrugs.append(drg);
+                        }
+                    }
+                }
+                foreach(DrugsData *drg, concernedDrugs) {
+                    ++i;
+                    display.append(QString("%1&nbsp;.&nbsp;%2<br />")
+                                   .arg(i)
+                                   .arg(drg->denomination()));
+                }
+                display.append("</p><p>");
+                if (concernedDrugs.count() > 0) {
+                    display.append(m_InteractionsManager->synthesisToHtml(concernedInteractions, false));
+                } else {
+                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
+                }
+                display.append("</p>");
+                return display;
+                break;
+            }
         case Interaction::FullSynthesis :
             {
                 QString display;
-                const QList<DrugsInteraction *> & list = m_InteractionsManager->getAllInteractionsFound();
+                const QList<DrugsInteraction *> &list = m_InteractionsManager->getAllInteractionsFound();
                 int i = 0;
                 display.append("<p>");
                 foreach(DrugsData *drg, m_DrugsList) {
