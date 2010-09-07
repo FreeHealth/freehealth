@@ -129,6 +129,14 @@ namespace Constants {
     const char * const  S_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
 
     const char * const  S_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
+    const char * const  S_PROTOCOLCREATOR_DEFAULTBUTTON = "DrugsWidget/protocolCreator/sefautButton";            /*!< \brief Key for settings. */
+    const char * const  S_PROTOCOLCREATOR_AUTOCHANGE = "DrugsWidget/protocolCreator/autoChange";            /*!< \brief Key for settings. */
+    const char * const  S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON = "DrugsWidget/protocolCreator/autoChangeButton";            /*!< \brief Key for settings. */
+
+    const char * const  S_VALUE_PRESCRIBEONLY      = "PrescribeOnly";            /*!< \brief Key for settings. */
+    const char * const  S_VALUE_SAVEONLY           = "SaveOnly";            /*!< \brief Key for settings. */
+    const char * const  S_VALUE_TESTONLY           = "TestOnly";            /*!< \brief Key for settings. */
+    const char * const  S_VALUE_SAVEPRESCRIBE      = "SavePrescribe";            /*!< \brief Key for settings. */
 
     const char * const  S_STATEPREFIX            = "DrugsWidget/";
 

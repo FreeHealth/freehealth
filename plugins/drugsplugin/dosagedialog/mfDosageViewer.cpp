@@ -473,6 +473,9 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
     } else {
         changeCurrentRow(0);
     }
+
+    // Connect Widgets datas modifications to datasChanged signal
+    connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataschanged()));
 }
 
 /** \brief Destructor */

@@ -39,6 +39,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "protocolpreferencespage.h"
+#include "constants.h"
 #include "ui_protocolpreferencespage.h"
 
 #include <drugsbaseplugin/constants.h>
@@ -89,6 +90,9 @@ void ProtocolPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA, QVariant());
+    defaultvalues.insert(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON, Constants::S_VALUE_PRESCRIBEONLY);
+    defaultvalues.insert(Constants::S_PROTOCOLCREATOR_AUTOCHANGE, true);
+    defaultvalues.insert(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON, Constants::S_VALUE_SAVEPRESCRIBE);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k).isNull())
@@ -135,6 +139,18 @@ void ProtocolPreferencesWidget::setDatasToUi()
         ui->otherRadio->setChecked(true);
         ui->lineEdit->setText(s);
     }
+
+    m_ButtonChoices.insert(Constants::S_VALUE_SAVEPRESCRIBE, tr("Save protocol and prescribe"));
+    m_ButtonChoices.insert(Constants::S_VALUE_PRESCRIBEONLY, tr("Prescribe only"));
+    m_ButtonChoices.insert(Constants::S_VALUE_SAVEONLY, tr("Save protocol only"));
+    m_ButtonChoices.insert(Constants::S_VALUE_TESTONLY, tr("Test interactions only"));
+
+    ui->saveToggleCombo->addItems(m_ButtonChoices.values());
+    ui->defaultButtonCombo->addItems(m_ButtonChoices.values());
+
+    ui->saveToggleCombo->setCurrentIndex(m_ButtonChoices.keys().indexOf(settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON).toString()));
+    ui->defaultButtonCombo->setCurrentIndex(m_ButtonChoices.keys().indexOf(settings()->value(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON).toString()));
+    ui->toggleCheckbox->setChecked(settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool());
 }
 
 
@@ -146,6 +162,9 @@ void ProtocolPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     }
     Utils::Log::addMessage("ProtocolPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("ProtocolPreferencesWidget"));
     set->setValue(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA, QString());
+    set->setValue(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON, Constants::S_VALUE_PRESCRIBEONLY);
+    set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE, true);
+    set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON, Constants::S_VALUE_SAVEPRESCRIBE);
     set->sync();
 }
 
@@ -162,6 +181,9 @@ void ProtocolPreferencesWidget::saveToSettings(Core::ISettings *s)
     } else if (ui->otherRadio->isChecked()) {
         set->setValue(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA, ui->lineEdit->text());
     }
+    set->setValue(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON, m_ButtonChoices.keys().at(ui->defaultButtonCombo->currentIndex()));
+    set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE, true);
+    set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON, m_ButtonChoices.keys().at(ui->saveToggleCombo->currentIndex()));
 }
 
 void ProtocolPreferencesWidget::changeEvent(QEvent *e)

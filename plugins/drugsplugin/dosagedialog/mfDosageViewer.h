@@ -86,6 +86,9 @@ public Q_SLOTS:
     void changeCurrentRow(const int dosageRow);
     void changeCurrentRow(const QModelIndex &current, const QModelIndex &previous); 
 
+Q_SIGNALS:
+    void protocolDataschanged();
+
 private:
     void resizeEvent(QResizeEvent * event);
 

@@ -246,7 +246,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Each</string>
+               <string>Every</string>
               </property>
              </widget>
             </item>

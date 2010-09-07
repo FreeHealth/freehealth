@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>417</height>
+    <width>642</width>
+    <height>315</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
@@ -36,14 +36,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="0" colspan="2">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Default intake schema</string>
@@ -87,7 +87,36 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Validation buttons</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Default validation button</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="defaultButtonCombo"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="saveToggleCombo"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="toggleCheckbox">
+        <property name="text">
+         <string>When protocol has changed, toggle the validation button to</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

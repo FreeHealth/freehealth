@@ -219,13 +219,15 @@ bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int
     Q_ASSERT_X(m_UID != -1, "DosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
     if (! index.isValid())
         return false;
-    if (role == Qt::EditRole) {        
+    if (role == Qt::EditRole || role == Qt::DisplayRole) {
 
         QVariant q = data(index);
-
         // verify the value is different as model
         if (q==value) {
             return true;
+        } else if (q.isNull()) {
+            if (value.toString().isEmpty())
+                return true;
         }
 
         // set only once modification date (infinite loop prevention)

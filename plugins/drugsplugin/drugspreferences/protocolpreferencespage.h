@@ -86,6 +86,7 @@ protected:
 
 private:
     Ui::ProtocolPreferencesWidget *ui;
+    QHash<QString, QString> m_ButtonChoices;
 };
 
 }  // End namespace Internal

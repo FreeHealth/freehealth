@@ -88,6 +88,7 @@ inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidget
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 namespace DrugsWidget {
 namespace Internal {
@@ -171,7 +172,6 @@ public:
         q->validateButton->addAction(prescribe);
         q->validateButton->addAction(save);
         q->validateButton->addAction(test);
-        q->validateButton->setDefaultAction(prescribeAndSave);
 
         q->cancelButton->setText(tkTr(Trans::Constants::CANCEL));
         q->cancelButton->setIcon(theme()->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
@@ -274,13 +274,18 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 
     // Create connections
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
 //    connect(availableDosagesListView, SIGNAL());
 //    connect(availableDosagesListView->listView(), SIGNAL(activated(QModelIndex)),
 //            dosageViewer, SLOT(changeCurrentRow(QModelIndex)));
+
     connect(availableDosagesListView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             dosageViewer, SLOT(changeCurrentRow(QModelIndex, QModelIndex)));
+
     QModelIndex idx = dosageModel->index(0,Dosages::Constants::Label);
     availableDosagesListView->setCurrentIndex(idx);
+
+    updateSettings();
 }
 
 /** \brief Destructor */
@@ -311,6 +316,47 @@ void DosageCreatorDialog::done(int r)
 //        DrugsDB::GlobalDrugsModel::updateAvailableDosages();
 //    }
     QDialog::done(r);
+}
+
+void DosageCreatorDialog::updateSettings()
+{
+    if (settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool())
+        connect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDatasChanged()));
+    else
+        disconnect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDatasChanged()));
+
+    const QString &defButton = settings()->value(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON).toString();
+    validateButton->setDefaultAction(d->prescribe);
+    if (defButton==Constants::S_VALUE_PRESCRIBEONLY)
+        validateButton->setDefaultAction(d->prescribe);
+    else if (defButton==Constants::S_VALUE_SAVEPRESCRIBE)
+        validateButton->setDefaultAction(d->prescribeAndSave);
+    else if (defButton==Constants::S_VALUE_SAVEONLY)
+        validateButton->setDefaultAction(d->save);
+    else if (defButton==Constants::S_VALUE_TESTONLY)
+        validateButton->setDefaultAction(d->test);
+}
+
+void DosageCreatorDialog::protocolDatasChanged()
+{
+    // Set window modified
+    const QString &winTitle = windowTitle();
+    if (!winTitle.endsWith(" [*]")) {
+        setWindowTitle(winTitle + " [*]");
+        setWindowModified(true);
+    }
+
+    // Manage the validate button
+    const QString &defButton = settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON).toString();
+    validateButton->setDefaultAction(d->prescribe);
+    if (defButton==Constants::S_VALUE_PRESCRIBEONLY)
+        validateButton->setDefaultAction(d->prescribe);
+    else if (defButton==Constants::S_VALUE_SAVEPRESCRIBE)
+        validateButton->setDefaultAction(d->prescribeAndSave);
+    else if (defButton==Constants::S_VALUE_SAVEONLY)
+        validateButton->setDefaultAction(d->save);
+    else if (defButton==Constants::S_VALUE_TESTONLY)
+        validateButton->setDefaultAction(d->test);
 }
 
 /** \brief Save the "reference dosage" to the database and reject the dialog (no prescription's done) */
