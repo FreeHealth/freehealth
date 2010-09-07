@@ -60,7 +60,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QAbstractButton>
-
+#include <QTextDocument>
 
 /**
   \namespace Utils
@@ -391,8 +391,15 @@ void informativeMessageBox( const QString &text, const QString &infoText, const 
         mb.setWindowTitle(title);
     mb.setText( text );
     mb.setInformativeText(infoText);
-    if (!detail.isEmpty())
-        mb.setDetailedText(detail);
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     mb.setStandardButtons(QMessageBox::Ok);
     mb.setDefaultButton(QMessageBox::Ok);
     mb.exec();
@@ -413,8 +420,15 @@ void warningMessageBox( const QString &text, const QString &infoText, const QStr
         mb.setWindowTitle( title );
     mb.setText( text );
     mb.setInformativeText( infoText );
-    if (!detail.isEmpty())
-        mb.setDetailedText( detail );
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     mb.setStandardButtons(QMessageBox::Ok);
     mb.setDefaultButton(QMessageBox::Ok);
     mb.exec();
@@ -434,8 +448,15 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
         mb.setWindowTitle( title );
     mb.setText( text );
     mb.setInformativeText( infoText );
-    if (!detail.isEmpty())
-        mb.setDetailedText( detail );
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     mb.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     mb.setDefaultButton(QMessageBox::Yes);
     int r = mb.exec();
@@ -461,8 +482,15 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
         mb.setWindowTitle(title);
     mb.setText(text);
     mb.setInformativeText(infoText);
-    if (!detail.isEmpty())
-        mb.setDetailedText(detail);
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     QList<QPushButton *> buttons;
     foreach(const QString &s, buttonsText) {
         buttons << mb.addButton(s, QMessageBox::YesRole);
@@ -494,8 +522,15 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
         mb.setWindowTitle( title );
     mb.setText( text );
     mb.setInformativeText( infoText );
-    if (!detail.isEmpty())
-        mb.setDetailedText( detail );
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     mb.setStandardButtons( buts );
     mb.setDefaultButton(defaultButton);
     int r = mb.exec();
@@ -516,7 +551,15 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
         mb.setWindowTitle( title );
     mb.setText( text );
     mb.setInformativeText( infoText );
-    mb.setDetailedText( detail );
+    if (!detail.isEmpty()) {
+        if (Qt::mightBeRichText(detail)) {
+            QTextDocument doc;
+            doc.setHtml(detail);
+            mb.setDetailedText(doc.toPlainText());
+        } else {
+            mb.setDetailedText(detail);
+        }
+    }
     mb.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     mb.setDefaultButton(QMessageBox::Ok);
     int r = mb.exec();
