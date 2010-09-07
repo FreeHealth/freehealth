@@ -323,13 +323,13 @@ enum TitleInterpret {
         // Day
         const char* const WAKEUPTIME           = QT_TRANSLATE_NOOP("tkConstants", "wake up");
         const char* const BREAKFAST            = QT_TRANSLATE_NOOP("tkConstants", "breakfast");
-        const char* const TENOCLOCKBRUNCH      = QT_TRANSLATE_NOOP("tkConstants", "ten o'clock brunch");
+        const char* const TENOCLOCKBRUNCH      = QT_TRANSLATE_NOOP("tkConstants", "mid-morning");
         const char* const MORNING              = QT_TRANSLATE_NOOP("tkConstants", "morning");
         const char* const MIDDAY               = QT_TRANSLATE_NOOP("tkConstants", "midday");
         const char* const LUNCH                = QT_TRANSLATE_NOOP("tkConstants", "lunch");
         const char* const AFTERNOON            = QT_TRANSLATE_NOOP("tkConstants", "afternoon");
-        const char* const TEATIME              = QT_TRANSLATE_NOOP("tkConstants", "tea time");
-        const char* const DINER                = QT_TRANSLATE_NOOP("tkConstants", "diner");
+        const char* const TEATIME              = QT_TRANSLATE_NOOP("tkConstants", "mid-afternoon");
+        const char* const DINER                = QT_TRANSLATE_NOOP("tkConstants", "dinner");
         const char* const EVENING              = QT_TRANSLATE_NOOP("tkConstants", "evening");
         const char* const BEDTIME              = QT_TRANSLATE_NOOP("tkConstants", "bedtime");
 
