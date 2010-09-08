@@ -43,19 +43,22 @@ HEADERS += $${PWD}/drugswidget/druginfo.h \
     $${PWD}/drugswidget/mfPrescriptionViewer.h \
     $${PWD}/drugswidget/mfDrugsCentralWidget.h \
     $${PWD}/drugswidget/textualprescriptiondialog.h \
-    $${PWD}/drugswidget/dailyschemeviewer.h
+    $${PWD}/drugswidget/dailyschemeviewer.h \
+    $${PWD}/drugswidget/interactionsynthesisdialog.h
 SOURCES += $${PWD}/drugswidget/druginfo.cpp \
     $${PWD}/drugswidget/mfDrugSelector.cpp \
     $${PWD}/drugswidget/mfPrescriptionViewer.cpp \
     $${PWD}/drugswidget/mfDrugsCentralWidget.cpp \
     $${PWD}/drugswidget/textualprescriptiondialog.cpp \
-    $${PWD}/drugswidget/dailyschemeviewer.cpp
+    $${PWD}/drugswidget/dailyschemeviewer.cpp \
+    $${PWD}/drugswidget/interactionsynthesisdialog.cpp
 FORMS += $${PWD}/drugswidget/druginfo.ui \
     $${PWD}/drugswidget/mfDrugSelector.ui \
     $${PWD}/drugswidget/mfPrescriptionViewer.ui \
     $${PWD}/drugswidget/mfDrugsCentralWidget.ui \
     $${PWD}/drugswidget/textualprescriptiondialog.ui \
-    $${PWD}/drugswidget/dailyschemeviewer.ui
+    $${PWD}/drugswidget/dailyschemeviewer.ui \
+    $${PWD}/drugswidget/interactionsynthesisdialog.ui
 
 # translations
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/mfDrugsWidget_fr.ts \

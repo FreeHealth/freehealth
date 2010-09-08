@@ -74,6 +74,9 @@
 #include <QMultiMap>
 #include <QList>
 #include <QSet>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QLabel>
 
 namespace DrugInteractionConstants {
     const char* const  LIST_BASIC_INFO =
@@ -278,6 +281,25 @@ QList<Internal::DrugsInteraction *> InteractionsManager::getAllInteractionsFound
     return d->m_DrugInteractionList;
 }
 
+QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWarning)  // static
+{
+    using namespace DrugsDB::Constants;
+    Core::ITheme *th = Core::ICore::instance()->theme();
+    if ( level & Interaction::ContreIndication )
+        return th->icon( INTERACTION_ICONCRITICAL );
+    else if ( level & Interaction::Deconseille )
+        return th->icon( INTERACTION_ICONDECONSEILLEE );
+    else if ( ( level & Interaction::APrendreEnCompte ) && ( levelOfWarning <= 1 ) )
+        return th->icon( INTERACTION_ICONTAKEINTOACCOUNT );
+    else if ( ( level & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
+        return th->icon( INTERACTION_ICONPRECAUTION );
+    else if ( ( level & Interaction::Information ) && ( levelOfWarning == 0 ) )
+        return th->icon( INTERACTION_ICONINFORMATION );
+    else if ( level & Interaction::noIAM )
+        return th->icon( INTERACTION_ICONOK );
+    else
+        return th->icon( INTERACTION_ICONUNKONW );
+}
 
 /** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
 QIcon InteractionsManager::iamIcon(const Internal::DrugsData * drug, const int &levelOfWarning) const
@@ -286,20 +308,7 @@ QIcon InteractionsManager::iamIcon(const Internal::DrugsData * drug, const int &
     Core::ITheme *th = Core::ICore::instance()->theme();
     if ( drugHaveInteraction(drug) ) {
         Interaction::TypesOfIAM r = getMaximumTypeOfIAM( drug );
-        if ( r & Interaction::ContreIndication )
-            return th->icon( INTERACTION_ICONCRITICAL );
-        else if ( r & Interaction::Deconseille )
-            return th->icon( INTERACTION_ICONDECONSEILLEE );
-        else if ( ( r & Interaction::APrendreEnCompte ) && ( levelOfWarning <= 1 ) )
-            return th->icon( INTERACTION_ICONTAKEINTOACCOUNT );
-        else if ( ( r & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
-            return th->icon( INTERACTION_ICONPRECAUTION );
-        else if ( ( r & Interaction::Information ) && ( levelOfWarning == 0 ) )
-            return th->icon( INTERACTION_ICONINFORMATION );
-        else if ( r & Interaction::noIAM )
-            return th->icon( INTERACTION_ICONOK );
-        else
-            return th->icon( INTERACTION_ICONUNKONW );
+        return interactionIcon(r, levelOfWarning);
     } else if ( levelOfWarning <= 1 ) {
 	if ( ! Internal::DrugsBase::instance()->drugsINNIsKnown( drug ) )
             return th->icon( INTERACTION_ICONUNKONW );
@@ -363,7 +372,7 @@ QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugsInterac
                          .replace( "<br>", " " )
                          .replace( "<", "&lt;" )
                          .replace( ">", "&gt;" ) )
-                   .arg( tr( "What to do: " ) )
+                   .arg( tr( "Management: " ) )
                    .arg( di->value( Internal::DrugsInteraction::DI_Management ).toString()
                          .replace( "<br>", "__" )
                          .replace( "<", "&lt;" )
@@ -375,3 +384,56 @@ QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugsInterac
                      .arg(tr("Interaction(s) Found : ") , tmp));
     return toReturn;
 }
+
+void InteractionsManager::synthesisToTreeWidget(const QList<Internal::DrugsInteraction *> &list, QTreeWidget *tree) // static
+{
+    /** \todo code this */
+    Q_ASSERT(tree);
+    using namespace DrugsDB::Constants;
+    QString tmp, toReturn;
+    QList<int> id_di;
+    QHash<QString, QTreeWidgetItem *> categories;
+    QFont bold;
+    bold.setBold(true);
+
+    foreach(Internal::DrugsInteraction *di, list) {
+
+        // No double
+        if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
+            continue;
+        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
+
+        // Get the category
+        QTreeWidgetItem *category;
+        const QString &catName = di->value(Internal::DrugsInteraction::DI_Type).toString();
+        if (!categories.value(catName)) {
+            category = new QTreeWidgetItem(tree, QStringList() << catName);
+            category->setExpanded(true);
+            category->setFont(0, bold);
+            category->setForeground(0, QBrush(Qt::red));
+            categories.insert(catName, category);
+        }
+
+        // Include the interaction's datas
+        QTreeWidgetItem *interactors = new QTreeWidgetItem(category, QStringList()
+                                                           << QString("%1 <-> %2").arg(di->value( Internal::DrugsInteraction::DI_ATC1_Label ).toString()).arg(di->value(Internal::DrugsInteraction::DI_ATC2_Label).toString()));
+        interactors->setFont(0, bold);
+        QTreeWidgetItem *risk = new QTreeWidgetItem(interactors);
+        QLabel *riskLabel = new QLabel(QString("%1: %2")
+                                   .arg(tr("Nature of the risk"))
+                                   .arg(di->value(Internal::DrugsInteraction::DI_Risk).toString()));
+        riskLabel->setWordWrap(true);
+        tree->setItemWidget(risk, 0, riskLabel);
+
+        QTreeWidgetItem *management = new QTreeWidgetItem(interactors);
+        QLabel *managementLabel = new QLabel(QString("%1: %2")
+                                       .arg(tr("Management: "))
+                                       .arg(di->value(Internal::DrugsInteraction::DI_Management).toString()));
+        managementLabel->setWordWrap(true);
+        managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        tree->setItemWidget(management, 0, managementLabel);
+        managementLabel->setMargin(0);
+        qWarning() << managementLabel << managementLabel->contentsMargins();
+    }
+}
+

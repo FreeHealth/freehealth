@@ -994,6 +994,11 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     return tmp;
 }
 
+DrugsDB::InteractionsManager *DrugsModel::interactionsManager() const
+{
+    return d->m_InteractionsManager;
+}
+
 Qt::DropActions DrugsModel::supportedDropActions() const
 {
 #if QT_VERSION >= 0x040600

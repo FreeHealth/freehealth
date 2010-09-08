@@ -92,10 +92,6 @@ public:
     DrugsInteraction() {}
     ~DrugsInteraction() {}
 
-    // static getters and viewers
-    static QIcon iamIcon( const DrugsData *drug, const int & levelOfWarning = 0 );  // mfDrugsBase::interactions should be called first
-    static QString listToHtml( const QList<DrugsInteraction *> & list, bool fullInfos );
-    static QString synthesisToHtml( const QList<DrugsInteraction *> & list, bool fullInfos );
     static QString typeToString( const int t );
 
     // getters

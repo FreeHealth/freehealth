@@ -143,6 +143,8 @@ public:
     // FOR PRESCRIPTION FORMATTING
     static QString getFullPrescription(const Internal::DrugsData *drug, bool toHtml = false, const QString &mask = QString::null);
 
+    DrugsDB::InteractionsManager *interactionsManager() const;
+
     void warn();
 
 Q_SIGNALS:

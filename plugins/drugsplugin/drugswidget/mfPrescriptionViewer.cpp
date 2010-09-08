@@ -46,9 +46,12 @@
 #include <drugsplugin/dosagedialog/mfDosageDialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/textualprescriptiondialog.h>
+#include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionsbase.h>
 
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
@@ -65,6 +68,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
+#include <QTreeWidget>
 
 using namespace DrugsWidget;
 using namespace DrugsWidget::Constants;
@@ -291,14 +295,19 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 /** \brief Opens the InteractionDialog. */
 void PrescriptionViewer::viewInteractions()
 {
-    Core::SimpleTextDialog dlg(tr("Synthetic interactions") + " - " + qApp->applicationName(),
-                               Constants::S_INTERACTIONVIEW_ZOOM,
-                               Core::ICore::instance()->mainWindow());
-    dlg.setHtml(drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString());
-    dlg.setPrintDuplicata(true);
-    dlg.setUserPaper(Core::IDocumentPrinter::Papers_Prescription_User);
-    dlg.setHelpPageUrl("iamtesteur.html#synthetiseur_iam");
+    InteractionSynthesisDialog dlg(this);
+    dlg.show();
+    Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
     dlg.exec();
+
+//    Core::SimpleTextDialog dlg(tr("Synthetic interactions") + " - " + qApp->applicationName(),
+//                               Constants::S_INTERACTIONVIEW_ZOOM,
+//                               Core::ICore::instance()->mainWindow());
+//    dlg.setHtml(drugModel()->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString());
+//    dlg.setPrintDuplicata(true);
+//    dlg.setUserPaper(Core::IDocumentPrinter::Papers_Prescription_User);
+//    dlg.setHelpPageUrl("iamtesteur.html#synthetiseur_iam");
+//    dlg.exec();
 }
 
 /** \brief Presents a QMenu to the user, and change duration of all drugs in the prescription */
