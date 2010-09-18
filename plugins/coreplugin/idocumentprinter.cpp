@@ -46,6 +46,26 @@
   Get it, and use it for your printing. But remember to never delete it.
   If in user settings, PDF cached is enabled, you can retrieve all printed docs in the QList<Doc>.
 
+  \code
+  // Get the IDocumentPrinter object from objects pool
+  inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+
+  // Your print function
+  void print(const QString &html)
+  {
+      Core::IDocumentPrinter *p = printer();
+      if (!p) {
+          Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
+          return;
+      }
+
+      p->clearTokens();
+      QHash<QString, QVariant> tokens;
+      tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+      p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+      p->print(html, m_Papers, m_Duplicata);
+  }
+  \endcode
   \todo create a queue that manages printing jobs
 */
 
