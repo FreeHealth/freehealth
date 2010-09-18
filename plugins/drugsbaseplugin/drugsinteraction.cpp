@@ -77,30 +77,23 @@ static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Interna
 /** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
 void DrugsInteraction::setValue( const int fieldref, const QVariant & value )
 {
-    if (fieldref == DI_Type)
-    {
-        if ( value.toInt() == Constants::Interaction::Information ) {
-            m_Infos.insert( fieldref, Constants::Interaction::Information );
-        } else {
-            int t = value.toInt();
-            Constants::Interaction::TypesOfIAM r = Constants::Interaction::noIAM;
-            if (( t % 2 ) == 1 )
-                r |= Constants::Interaction::Precaution;
-
-            if ( t / 1000 == 1 )
-                r |= Constants::Interaction::ContreIndication;
-
-            if ( t / 100 == 1 )
-                r |= Constants::Interaction::Deconseille;
-
-            if ( t / 10 == 1 )
-                r |= Constants::Interaction::APrendreEnCompte;
-
-            m_Infos.insert( fieldref, int( r ) );
-        }
-    }
-    else
+    if (fieldref == DI_Type) {
+        QString t = value.toString();
+        Constants::Interaction::TypesOfIAM r = Constants::Interaction::noIAM;
+        if (t.contains("P"))
+            r |= Constants::Interaction::Precaution;
+        if (t.contains("C"))
+            r |= Constants::Interaction::ContreIndication;
+        if (t.contains("D"))
+            r |= Constants::Interaction::Deconseille;
+        if (t.contains("T"))
+            r |= Constants::Interaction::APrendreEnCompte;
+        if (t.contains("I"))
+            r |= Constants::Interaction::Information;
+        m_Infos.insert(fieldref, int(r));
+    } else {
         m_Infos.insert(fieldref, value);
+    }
 }
 
 /** \brief Get values of the interaction class. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
@@ -136,21 +129,20 @@ QVariant DrugsInteraction::value(const int fieldref) const
 }
 
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
-QString DrugsInteraction::typeToString( const int t )
+QString DrugsInteraction::typeToString(const int t)
 {
      QStringList tmp;
-     Constants::Interaction::TypesOfIAM r = Constants::Interaction::TypesOfIAM( t );
-     if ( r & Constants::Interaction::APrendreEnCompte )
+     Constants::Interaction::TypesOfIAM r = Constants::Interaction::TypesOfIAM(t);
+     if (r & Constants::Interaction::APrendreEnCompte)
           tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
-     if ( r & Constants::Interaction::Deconseille )
+     if (r & Constants::Interaction::Deconseille)
           tmp << tkTr(Trans::Constants::DISCOURAGED);
-     if ( r & Constants::Interaction::ContreIndication )
+     if (r & Constants::Interaction::ContreIndication)
           tmp << tkTr(Trans::Constants::CONTRAINDICATION);
-     if ( r & Constants::Interaction::Precaution )
+     if (r & Constants::Interaction::Precaution)
           tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
-     if ( r & Constants::Interaction::Information )
+     if (r & Constants::Interaction::Information)
           tmp << tkTr(Trans::Constants::INFORMATION);
-
      return tmp.join( ", " );
 }
 
@@ -163,10 +155,7 @@ QString DrugsInteraction::typeOfIAM( const int & t ) const
 /** \brief Returns the type of interactions. Type refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
 Constants::Interaction::TypesOfIAM DrugsInteraction::type() const
 {
-     if ( m_Infos.uniqueKeys().contains(DI_Type) )
-          return Constants::Interaction::TypesOfIAM( m_Infos.value(DI_Type).toInt() );
-     else
-          return Constants::Interaction::TypesOfIAM( 0 );
+    return Constants::Interaction::TypesOfIAM(m_Infos.value(DI_Type, 0).toInt());
 }
 
 QList<DrugsData *> DrugsInteraction::drugs() const
@@ -201,3 +190,8 @@ QString DrugsInteraction::whatToDo() const
     return value(DI_Management).toString();
 }
 
+/** \brief Function used to sort interactions list */
+bool DrugsInteraction::lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2)
+{
+    return int1->type() < int2->type();
+}

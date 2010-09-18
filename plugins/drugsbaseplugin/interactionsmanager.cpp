@@ -240,11 +240,11 @@ QList<Internal::DrugsInteraction*> InteractionsManager::getInteractions( const I
 */
 DrugsDB::Constants::Interaction::TypesOfIAM InteractionsManager::getMaximumTypeOfIAM(const Internal::DrugsData *drug) const
 {
-    if ( d->m_DrugInteractionList.isEmpty() )
+    if (d->m_DrugInteractionList.isEmpty())
         return DrugsDB::Constants::Interaction::noIAM;
-    const QList<Internal::DrugsInteraction*> & list = d->getDrugSpecificInteractions(drug);
+    const QList<Internal::DrugsInteraction*> &list = d->getDrugSpecificInteractions(drug);
     DrugsDB::Constants::Interaction::TypesOfIAM r;
-    foreach( Internal::DrugsInteraction* di, list )
+    foreach( Internal::DrugsInteraction *di, list )
         r |= di->type();
     return r;
 }
@@ -302,17 +302,17 @@ QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWar
 }
 
 /** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
-QIcon InteractionsManager::iamIcon(const Internal::DrugsData * drug, const int &levelOfWarning) const
+QIcon InteractionsManager::iamIcon(const Internal::DrugsData *drug, const int &levelOfWarning) const
 {
     using namespace DrugsDB::Constants;
     Core::ITheme *th = Core::ICore::instance()->theme();
-    if ( drugHaveInteraction(drug) ) {
-        Interaction::TypesOfIAM r = getMaximumTypeOfIAM( drug );
+    if (drugHaveInteraction(drug)) {
+        Interaction::TypesOfIAM r = getMaximumTypeOfIAM(drug);
         return interactionIcon(r, levelOfWarning);
-    } else if ( levelOfWarning <= 1 ) {
-	if ( ! Internal::DrugsBase::instance()->drugsINNIsKnown( drug ) )
-            return th->icon( INTERACTION_ICONUNKONW );
-        else return th->icon( INTERACTION_ICONOK );
+    } else if (levelOfWarning <= 1) {
+        if (!Internal::DrugsBase::instance()->drugsINNIsKnown(drug))
+            return th->icon(INTERACTION_ICONUNKONW);
+        else return th->icon(INTERACTION_ICONOK);
     }
     return QIcon();
 }
@@ -352,12 +352,12 @@ QString InteractionsManager::listToHtml(const QList<Internal::DrugsInteraction*>
 }
 
 /** \brief Transform a list of interactions to a human readable synthesis Html */
-QString InteractionsManager::synthesisToHtml( const QList<Internal::DrugsInteraction *> &list, bool fullInfos ) // static
+QString InteractionsManager::synthesisToHtml(const QList<Internal::DrugsInteraction *> &list, bool fullInfos) // static
 {
     using namespace DrugsDB::Constants;
     QString tmp, toReturn;
     QList<int> id_di;
-    foreach( Internal::DrugsInteraction * di, list ) {
+    foreach(Internal::DrugsInteraction *di, list) {
         if ( id_di.contains( di->value( Internal::DrugsInteraction::DI_Id ).toInt() ) )
             continue;
         id_di << di->value( Internal::DrugsInteraction::DI_Id ).toInt();

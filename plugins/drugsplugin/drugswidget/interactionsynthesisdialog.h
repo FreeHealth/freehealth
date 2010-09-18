@@ -2,7 +2,10 @@
 #define INTERACTIONSYNTHESISDIALOG_H
 
 #include <QDialog>
+QT_BEGIN_NAMESPACE
 class QTableWidgetItem;
+class QModelIndex;
+QT_END_NAMESPACE
 
 namespace DrugsWidget {
 namespace Internal {
@@ -23,7 +26,9 @@ public:
 
 protected Q_SLOTS:
     void levelActivated(QAction *a);
+    void interactorsActivated(const QModelIndex &current, const QModelIndex &previous);
     void interactorsActivated(QTableWidgetItem *item);
+    void print();
 
 protected:
     void changeEvent(QEvent *e);

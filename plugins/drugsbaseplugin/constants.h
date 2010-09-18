@@ -128,7 +128,7 @@ namespace Constants {
     const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONTAKEINTOACCOUNT =  "warning.png";       /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONPRECAUTION =       "info.png";          /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONINFORMATION =      "info.png";          /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONINFORMATION =      "information.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
@@ -418,13 +418,13 @@ namespace Interaction
 
     enum TypeOfIAM
     {
-        noIAM            = 0x00000000,
-        Precaution       = 0x00000001,
-        APrendreEnCompte = 0x00000010,
-        Deconseille      = 0x00000100,
-        ContreIndication = 0x00001000,
-        Information      = 0x00010000,
-        Unknown          = 0x00100000
+        noIAM            = 0x0000,
+        Unknown          = 0x0001,
+        Information      = 0x0002,
+        Precaution       = 0x0010,
+        APrendreEnCompte = 0x0020,
+        Deconseille      = 0x0040,
+        ContreIndication = 0x8000
     };
     Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );
 

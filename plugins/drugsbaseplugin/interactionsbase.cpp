@@ -319,7 +319,7 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
     // first test if IAM is an alert (value == -1)
     if (id2 == -1) {
         dint = new DrugsInteraction();
-        dint->setValue(DrugsInteraction::DI_Type , Interaction::Information );
+        dint->setValue(DrugsInteraction::DI_Type , "I" );
         dint->setValue(DrugsInteraction::DI_ATC1, _id1 );
         dint->setValue(DrugsInteraction::DI_ATC2, _id1 );
         dint->setValue(DrugsInteraction::DI_RiskFr, QCoreApplication::translate("DrugsBase", "This INN is present more than one time in this prescrition."));
@@ -391,6 +391,7 @@ QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
           toReturn << getInteractionFromDatabase(i.key(), i.value());
           ++i;
      }
+     qSort(toReturn.begin(), toReturn.end(), DrugsInteraction::lessThan);
      return toReturn;
 }
 

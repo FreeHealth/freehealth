@@ -4,12 +4,18 @@
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/interactionsmanager.h>
 #include <drugsbaseplugin/drugsinteraction.h>
+#include <drugsbaseplugin/drugsdata.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include "ui_interactionsynthesisdialog.h"
 
@@ -22,6 +28,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 namespace DrugsWidget {
@@ -30,6 +37,7 @@ class InteractionSynthesisDialogPrivate
 {
 public:
     QList<DrugsDB::Internal::DrugsInteraction *> m_Interactions;
+    QAction *aPrint;
 };
 }
 }
@@ -47,7 +55,12 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(QWidget *parent) :
     setWindowTitle(tr("Synthetic interactions") + " - " + qApp->applicationName());
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
 
+    connect(ui->interactors, SIGNAL(itemActivated(QTableWidgetItem*)), this, SLOT(interactorsActivated(QTableWidgetItem*)));
+    connect(ui->interactors->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorsActivated(QModelIndex,QModelIndex)));
+
     ui->interactors->setAlternatingRowColors(true);
+    ui->firstClassInfos->hide();
+    ui->secondClassInfos->hide();
 
     QToolBar *bar = new QToolBar(this);
     bar->setIconSize(QSize(32,32));
@@ -92,8 +105,15 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(QWidget *parent) :
     a->setData(5);
     bar->addAction(a);
 
+    d->aPrint = new QAction(this);
+    d->aPrint->setText(tkTr(Trans::Constants::FILEPRINT_TEXT));
+    d->aPrint->setShortcut(QKeySequence::Print);
+    d->aPrint->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrint->setData(-1);
+    bar->addAction(d->aPrint);
+
     connect(bar, SIGNAL(actionTriggered(QAction*)), this, SLOT(levelActivated(QAction*)));
-    connect(ui->interactors, SIGNAL(itemActivated(QTableWidgetItem*)), this, SLOT(interactorsActivated(QTableWidgetItem*)));
+    connect(d->aPrint, SIGNAL(triggered()), this, SLOT(print()));
 }
 
 InteractionSynthesisDialog::~InteractionSynthesisDialog()
@@ -105,7 +125,11 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
 {
     if (!a)
         return;
+
     int level = a->data().toInt();
+    if (level==-1)
+        return;
+
     switch (level) {
     case 0: level = 0; break;
     case 1: level = DrugsDB::Constants::Interaction::ContreIndication; break;
@@ -138,8 +162,10 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
             ui->interactors->setItem(row,2, atc2);
         }
     }
+    ui->interactors->selectRow(0);
 }
 
+/** \todo add class informations */
 void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
 {
     ui->riskBrowser->clear();
@@ -148,8 +174,56 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     if (id >= d->m_Interactions.count())
         return;
     DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
-    ui->riskBrowser->setHtml(interaction->information());
-    ui->managementBrowser->setHtml(interaction->whatToDo());
+    ui->riskBrowser->setPlainText(interaction->information().replace("<br>","\n"));
+    ui->managementBrowser->setPlainText(interaction->whatToDo().replace("<br>","\n"));
+}
+
+/** \todo add class informations */
+void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current, const QModelIndex &previous)
+{
+    ui->riskBrowser->clear();
+    ui->managementBrowser->clear();
+    QTableWidgetItem *item = ui->interactors->currentItem();
+    int id = item->data(Qt::UserRole).toInt();
+    if (id >= d->m_Interactions.count())
+        return;
+    DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
+    ui->riskBrowser->setPlainText(interaction->information().replace("<br>","\n"));
+    ui->managementBrowser->setPlainText(interaction->whatToDo().replace("<br>","\n"));
+}
+
+void InteractionSynthesisDialog::print()
+{
+    // Prepare text to print
+    QString display;
+    int i = 0;
+    display.append("<p>");
+    foreach(DrugsDB::Internal::DrugsData *drg, DrugsDB::DrugsModel::activeModel()->drugsList()) {
+        ++i;
+        display.append(QString("%1&nbsp;.&nbsp;%2<br />")
+                       .arg(i)
+                       .arg(drg->denomination()));
+    }
+    display.append("</p><p>");
+    if (d->m_Interactions.count() > 0) {
+        display.append(DrugsDB::InteractionsManager::synthesisToHtml(d->m_Interactions, true));
+    } else {
+        display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
+    }
+    display.append("</p>");
+
+    // Get IDocPrinter and print text
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
+        return;
+    }
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+    tokens.insert(Core::Constants::TOKEN_DATE, QDate::currentDate().toString("dd MMMM yyyy"));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    p->print(display, Core::IDocumentPrinter::Papers_Prescription_User, true);
 }
 
 void InteractionSynthesisDialog::changeEvent(QEvent *e)

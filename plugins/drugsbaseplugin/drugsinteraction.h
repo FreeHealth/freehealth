@@ -103,6 +103,8 @@ public:
     QString information() const;
     QString whatToDo() const;
 
+    static bool lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
+
     // viewers
     void warn() const;
 
