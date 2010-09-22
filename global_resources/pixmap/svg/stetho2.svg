@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="100"
+   id="svg1"
+   inkscape:version="0.46"
+   sodipodi:docbase="/home/eric/Bureau/icones"
+   sodipodi:docname="stetho2.svg"
+   sodipodi:version="0.32"
+   width="100"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0">
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     id="base"
+     inkscape:current-layer="layer1"
+     inkscape:cx="45.698925"
+     inkscape:cy="40.45132"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="720"
+     inkscape:window-width="1024"
+     inkscape:window-x="15"
+     inkscape:window-y="58"
+     inkscape:zoom="9.3"
+     pagecolor="#ffffff"
+     width="100px"
+     height="100px"
+     showgrid="false" />
+  <metadata
+     id="metadata3">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>pill-button-blue</dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>hash</rdf:li>
+            <rdf:li />
+            <rdf:li>webpage</rdf:li>
+            <rdf:li>shape</rdf:li>
+            <rdf:li>button</rdf:li>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>buttons</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Benji Park</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Benji Park</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Benji Park</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 50 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="100 : 50 : 1"
+       inkscape:persp3d-origin="50 : 33.333333 : 1"
+       id="perspective52" />
+    <linearGradient
+       id="linearGradient3196">
+      <stop
+         id="stop3198"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.0962963;"
+         offset="0.46153846"
+         id="stop3200" />
+      <stop
+         id="stop3202"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0.62962961;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3176">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3178" />
+      <stop
+         id="stop3184"
+         offset="0.53846157"
+         style="stop-color:#ffffff;stop-opacity:0.60740739;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop3180" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1759">
+      <stop
+         offset="0.0000000"
+         style="stop-color:#ffffff;stop-opacity:0.0000000;"
+         id="stop1760" />
+      <stop
+         offset="1.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;"
+         id="stop1761" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1755">
+      <stop
+         offset="0"
+         style="stop-color:#0d56db;stop-opacity:0;"
+         id="stop1756" />
+      <stop
+         offset="1"
+         style="stop-color:#061176;stop-opacity:1;"
+         id="stop1757" />
+    </linearGradient>
+    <linearGradient
+       x1="94.421501"
+       gradientTransform="scale(2.045893,0.488784)"
+       y1="159.20374"
+       inkscape:collect="always"
+       gradientUnits="userSpaceOnUse"
+       y2="3.6385469"
+       xlink:href="#linearGradient1759"
+       id="linearGradient3159"
+       x2="91.269775" />
+    <linearGradient
+       x1="175.19505"
+       gradientTransform="matrix(1.78473,0,0,0.5603089,-116.605,-231.0506)"
+       y1="627.57422"
+       inkscape:collect="always"
+       gradientUnits="userSpaceOnUse"
+       y2="426.25912"
+       xlink:href="#linearGradient1755"
+       id="linearGradient3162"
+       x2="175.19505" />
+    <linearGradient
+       x1="172.99106"
+       gradientTransform="matrix(1.800141,0,0,0.5555121,-116.605,-231.0506)"
+       y1="432.17224"
+       inkscape:collect="always"
+       gradientUnits="userSpaceOnUse"
+       y2="633.0423"
+       xlink:href="#linearGradient1755"
+       id="linearGradient3164"
+       x2="172.99106" />
+    <filter
+       inkscape:collect="always"
+       id="filter3236">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.35212375"
+         id="feGaussianBlur3238" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3240">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.35212375"
+         id="feGaussianBlur3242" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3244">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.35212375"
+         id="feGaussianBlur3246" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3272">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.84996752"
+         id="feGaussianBlur3274" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3276">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.61830309"
+         id="feGaussianBlur3278" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3280">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.61830309"
+         id="feGaussianBlur3282" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3196"
+       id="radialGradient3182"
+       cx="88.669159"
+       cy="78.891891"
+       fx="88.669159"
+       fy="78.891891"
+       r="27.934568"
+       gradientTransform="matrix(1,0,0,0.8792612,0,9.5253089)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3176"
+       id="radialGradient3192"
+       cx="59.90049"
+       cy="44.366489"
+       fx="59.90049"
+       fy="44.366489"
+       r="8.2738647"
+       gradientTransform="matrix(1,0,0,2.0287034,0,-45.639959)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3176"
+       id="radialGradient3194"
+       cx="76.223038"
+       cy="48.15464"
+       fx="76.223038"
+       fy="48.15464"
+       r="12.011208"
+       gradientTransform="matrix(1,0,0,1.1795054,0,-8.6440159)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     id="layer1"
+     inkscape:groupmode="layer"
+     transform="translate(-32.325066,-8.7120827)">
+    <path
+       d="M 64.37674,56.855329 C 56.289504,97.77723 78.705588,100.52113 92.373166,98.50284 C 105.9459,96.498553 109.62152,89.395247 111.53213,73.30731"
+       sodipodi:nodetypes="czs"
+       id="path4403"
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.80409354;filter:url(#filter3236)"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:ry="33.397953"
+       id="path4405"
+       sodipodi:rx="32.2463"
+       d="M 46.066142,105.81528 A 32.2463,33.397953 0 1 1 46.063159,105.36102"
+       sodipodi:end="6.2695834"
+       sodipodi:start="0"
+       style="opacity:1;fill:#000000;fill-opacity:0.80116957;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732;filter:url(#filter3272)"
+       transform="matrix(0.3486045,0,0,0.3721414,108.14106,25.40077)"
+       sodipodi:open="true"
+       sodipodi:cy="105.81528"
+       sodipodi:cx="13.819842"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:type="arc"
+       sodipodi:cx="-169.8689"
+       sodipodi:cy="-30.655663"
+       sodipodi:open="true"
+       transform="matrix(0.4321095,0.2608239,-0.2510036,0.41584,130.56446,82.5476)"
+       style="opacity:1;fill:#000000;fill-opacity:0.80116957;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732;filter:url(#filter3280)"
+       sodipodi:start="0"
+       sodipodi:end="6.2695834"
+       d="M -158.92819,-30.655663 A 10.940708,12.092361 0 1 1 -158.9292,-30.820137"
+       sodipodi:rx="10.940708"
+       id="path4411"
+       sodipodi:ry="12.092361"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.80409354;filter:url(#filter3240)"
+       d="M 82.521672,36.51258 C 82.521672,36.51258 88.134726,60.851451 66.140232,57.536924"
+       sodipodi:nodetypes="cs"
+       id="path4415"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:type="arc"
+       sodipodi:cx="-169.8689"
+       sodipodi:cy="-30.655663"
+       sodipodi:open="true"
+       transform="matrix(0.4321095,0.2608239,-0.2510036,0.41584,148.25334,87.479623)"
+       style="opacity:1;fill:#000000;fill-opacity:0.80116957;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732;filter:url(#filter3276)"
+       sodipodi:start="0"
+       sodipodi:end="6.2695834"
+       d="M -158.92819,-30.655663 A 10.940708,12.092361 0 1 1 -158.9292,-30.820137"
+       sodipodi:rx="10.940708"
+       id="path3175"
+       sodipodi:ry="12.092361"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.80409354;filter:url(#filter3244)"
+       d="M 61.008346,30.10649 C 61.008346,30.10649 42.918963,47.330347 63.102752,56.676926"
+       sodipodi:nodetypes="cs"
+       id="path3179"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       d="M 65.948343,57.830108 C 57.861103,98.752018 80.277193,101.49592 93.944763,99.477633 C 107.5175,97.473338 111.19312,90.370028 113.10373,74.282098"
+       sodipodi:nodetypes="czs"
+       id="path3197"
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:url(#radialGradient3182);stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:ry="33.397953"
+       id="path3199"
+       sodipodi:rx="32.2463"
+       d="M 46.066142,105.81528 A 32.2463,33.397953 0 1 1 46.063159,105.36102"
+       sodipodi:end="6.2695834"
+       sodipodi:start="0"
+       style="opacity:1;fill:#e3e3e3;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732"
+       transform="matrix(0.3486045,0,0,0.3721414,109.71266,26.375552)"
+       sodipodi:open="true"
+       sodipodi:cy="105.81528"
+       sodipodi:cx="13.819842"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:ry="9.2132282"
+       id="path3201"
+       sodipodi:rx="8.0615749"
+       d="M -257.97038,-87.662514 A 8.0615749,9.2132282 0 1 1 -257.97112,-87.787827"
+       sodipodi:end="6.2695834"
+       sodipodi:start="0"
+       style="opacity:1;fill:#5c5c5c;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732"
+       transform="matrix(0.5131897,0,0,0.4793589,250.6272,107.31873)"
+       sodipodi:open="true"
+       sodipodi:cy="-87.662514"
+       sodipodi:cx="-266.03195"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:url(#radialGradient3194);stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 84.093273,37.487358 C 84.093273,37.487358 89.706323,61.826238 67.711833,58.511708"
+       sodipodi:nodetypes="cs"
+       id="path3205"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:type="arc"
+       sodipodi:cx="-169.8689"
+       sodipodi:cy="-30.655663"
+       sodipodi:open="true"
+       transform="matrix(0.4321095,0.2608239,-0.2510036,0.41584,149.82493,88.454408)"
+       style="opacity:1;fill:#5c5c5c;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732"
+       sodipodi:start="0"
+       sodipodi:end="6.2695834"
+       d="M -158.92819,-30.655663 A 10.940708,12.092361 0 1 1 -158.9292,-30.820137"
+       sodipodi:rx="10.940708"
+       id="path3207"
+       sodipodi:ry="12.092361"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:url(#radialGradient3192);stroke-width:7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 62.579943,31.081272 C 62.579943,31.081272 44.490563,48.305128 64.674353,57.651708"
+       sodipodi:nodetypes="cs"
+       id="path3209"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+    <path
+       sodipodi:type="arc"
+       sodipodi:cx="-169.8689"
+       sodipodi:cy="-30.655663"
+       sodipodi:open="true"
+       transform="matrix(0.4321095,0.2608239,-0.2510036,0.41584,132.13606,83.522388)"
+       style="opacity:1;fill:#5c5c5c;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.68842732"
+       sodipodi:start="0"
+       sodipodi:end="6.2695834"
+       d="M -158.92819,-30.655663 A 10.940708,12.092361 0 1 1 -158.9292,-30.820137"
+       sodipodi:rx="10.940708"
+       id="path3203"
+       sodipodi:ry="12.092361"
+       inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
+       inkscape:export-xdpi="23.644081"
+       inkscape:export-ydpi="23.644081" />
+  </g>
+</svg>
