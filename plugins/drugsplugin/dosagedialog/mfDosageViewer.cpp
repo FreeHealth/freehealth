@@ -400,8 +400,8 @@ public:
 public:
     QDataWidgetMapper  *m_Mapper;
     DrugsDB::Internal::DosageModel *m_DosageModel;
-    QString             m_ActualDosageUuid;
-    int                 m_CIS;
+    QString m_ActualDosageUuid;
+    QVariant m_CIS;
     Utils::SpinBoxDelegate *m_SpinDelegate;
 
 private:
@@ -495,7 +495,7 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
     d->m_Mapper->setCurrentIndex(dosageRow);
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->recalculateDailySchemeMaximum();
-    qWarning() << dosageRow << QString("%1 = %2,").arg(drugModel()->drugData(d->m_CIS,DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS);
+    qWarning() << dosageRow << QString("MAIN INN %1 = UID %2").arg(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS.toString())<<__FILE__<<__LINE__;
 }
 
 /** \brief Only provided because of focus bug */

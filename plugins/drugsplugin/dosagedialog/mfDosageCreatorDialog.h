@@ -53,7 +53,7 @@ QT_END_NAMESPACE
  * \file mfDosageCreatorDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 07 Sept 2010
+ * \date 19 Sept 2010
 */
 
 namespace DrugsDB {
@@ -73,8 +73,11 @@ class DosageCreatorDialog : public QDialog, public Ui::DosageCreatorDialog
     Q_DISABLE_COPY(DosageCreatorDialog);
 
 public:
-    explicit DosageCreatorDialog( QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel );
+    explicit DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel);
     ~DosageCreatorDialog();
+
+private:
+    void keyPressEvent(QKeyEvent *e);
 
 private Q_SLOTS:
     void done(int r);

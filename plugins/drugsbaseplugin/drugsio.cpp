@@ -363,7 +363,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         if (hash.value(XML_PRESCRIPTION_ISTEXTUAL).compare("true",Qt::CaseInsensitive) == 0) {
             row = m->addTextualPrescription(hash.value(XML_PRESCRIPTION_TEXTUALDRUGNAME), "");
         } else {
-            row = m->addDrug(hash.value(XML_PRESCRIPTION_CIS).toInt(), false);
+            row = m->addDrug(hash.value(XML_PRESCRIPTION_CIS), false);
         }
         hash.remove(XML_PRESCRIPTION_CIS);
         foreach(const QString &k, hash.keys()) {

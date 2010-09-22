@@ -286,7 +286,7 @@ void DrugSelector::createDrugsHistoryActions()
 
     m_HistoryAct = new QActionGroup(this);
     foreach(QString s, settings()->value(Constants::S_DRUGHISTORY).toStringList()) {
-        QAction * a = new QAction(s.left(s.lastIndexOf(",")).left(70) + "..." , m_HistoryAct);
+        QAction *a = new QAction(s.left(s.lastIndexOf(",")).left(70) + "..." , m_HistoryAct);
         a->setToolTip(s);
         m_HistoryAct->addAction(a);
     }
@@ -472,7 +472,7 @@ void DrugSelector::on_drugsView_doubleClicked(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    int selectedCIS = m_DrugsModel->index(index.row(), DrugsDB::Constants::DRUGS_UID).data().toInt();
+    const QVariant &selectedCIS = m_DrugsModel->index(index.row(), DrugsDB::Constants::DRUGS_UID).data();
 
     // store drug into history
     QStringList hist = settings()->value(Constants::S_DRUGHISTORY).toStringList();
@@ -485,8 +485,8 @@ void DrugSelector::on_drugsView_doubleClicked(const QModelIndex &index)
     // refresh drug history
     createDrugsHistoryActions();
 
-    emit drugSelected(selectedCIS);
-    emit drugSelected(index);
+    Q_EMIT drugSelected(selectedCIS);
+    Q_EMIT drugSelected(index);
 }
 
 /** \brief User asked to add a textual prescription. This member creates a dialog and send the text to the model. */

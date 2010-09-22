@@ -52,8 +52,8 @@
 /**
  * \file dosagemodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 23 Fev 2010
+ * \version 0.5.0
+ * \date 23 Sept 2010
 */
 
 namespace DrugsDB {
@@ -98,10 +98,10 @@ public:
     virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
     virtual void revertRow(int row);
 
-    void setTable (const QString &) {}
+    void setTable(const QString &) {}
 
-    virtual bool setDrugUID(const int uid);
-    int drugUID();
+    virtual bool setDrugUID(const QVariant &uid);
+    QVariant drugUID();
 
     QStringList isDosageValid(const int row);
     bool isDirty(const int row) const;
@@ -149,7 +149,7 @@ private:
     static QStringList   m_ScoredTabletScheme;
     static QStringList   m_PreDeterminedForms;
     static QString       m_ActualLangage;
-    int m_UID;
+    QVariant m_UID;
     QSet<int> m_DirtyRows;
     QSet<int> m_DirtyInnLkRows;
 };

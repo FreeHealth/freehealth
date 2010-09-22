@@ -640,7 +640,7 @@ void DrugsData::smallDrugWarn() const
     if (!Utils::isDebugCompilation())
         return;
     Utils::Log::addMessage("DrugsData", QString("get drug: %1 \t %2 \t %3 \t %4")
-                      .arg(this->UID())
+                      .arg(this->UID().toString())
                       .arg(this->denomination().leftJustified(60, ' '), this->form(), this->dosageOfMolecules().join(";")));
 }
 

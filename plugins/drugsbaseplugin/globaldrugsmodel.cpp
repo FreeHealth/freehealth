@@ -125,10 +125,11 @@ public:
     static void updateCachedAvailableDosage()
     {
         m_CachedAvailableDosageForUID.clear();
-        m_CachedAvailableDosageForUID = drugsBase()->getAllUIDThatHaveRecordedDosages();
+        foreach(const QVariant &uid, drugsBase()->getAllUIDThatHaveRecordedDosages())
+            m_CachedAvailableDosageForUID.append(uid.toString());
     }
 
-    static bool UIDHasRecordedDosage(const int uid)
+    static bool UIDHasRecordedDosage(const QString &uid)
     {
         return m_CachedAvailableDosageForUID.contains(uid);
     }
@@ -155,7 +156,7 @@ public:
         return drugName;
     }
 
-    static bool testAtcAllergies(const QStringList &atc, const int uid)
+    static bool testAtcAllergies(const QStringList &atc, const QString &uid)
     {
         foreach(const QString &code, atc) {
             if (fullAtcAllergies.contains(code)) {
@@ -172,7 +173,7 @@ public:
         return false;
     }
 
-    static bool hasAllergy(const int uid, const QStringList &inns, const QStringList &atc)
+    static bool hasAllergy(const QString &uid, const QStringList &inns, const QStringList &atc)
     {
         if (drugAllergyCache.contains(uid)) {
             return drugAllergyCache.value(uid);
@@ -191,7 +192,7 @@ public:
                 return true;
         }
         if (m_testUidAllergies) {
-            if (uidAllergies.contains(QString::number(uid))) {
+            if (uidAllergies.contains(uid)) {
                 drugAllergyCache.insert(uid, true);
                 return true;
             }
@@ -207,7 +208,7 @@ public:
 
     static bool hasAllergy(const QPersistentModelIndex &item, const GlobalDrugsModel *model)
     {
-        int uid = model->index(item.row(), Constants::DRUGS_UID).data().toInt();
+        const QString &uid = model->index(item.row(), Constants::DRUGS_UID).data().toString();
         if (drugAllergyCache.contains(uid)) {
             return drugAllergyCache.value(uid);
         }
@@ -216,7 +217,7 @@ public:
 
     static void checkAllergy(const QPersistentModelIndex &item, const GlobalDrugsModel *model)
     {
-        int uid = model->index(item.row(), Constants::DRUGS_UID).data().toInt();
+        const QString &uid = model->index(item.row(), Constants::DRUGS_UID).data().toString();
         if (drugAllergyCache.contains(uid)) {
             return;
         }
@@ -225,7 +226,7 @@ public:
 
         if (m_testInnAllergies) {
             // get all drugs inns
-            const QStringList &inns = drugsBase()->getDrugInns(QString::number(uid));
+            const QStringList &inns = drugsBase()->getDrugInns(uid);
             foreach(const QString &druginn, inns) {
                 if (innAllergies.contains(druginn)) {
                     drugAllergyCache.insert(uid, true);
@@ -243,7 +244,7 @@ public:
 //            atcs.clear();
         }
         if (m_testUidAllergies) {
-            if (uidAllergies.contains(QString::number(uid))) {
+            if (uidAllergies.contains(uid)) {
                 drugAllergyCache.insert(uid, true);
             }
         }
@@ -252,7 +253,7 @@ public:
         }
     }
 
-    static bool testAtcIntolerances(const QStringList &atc, const int uid)
+    static bool testAtcIntolerances(const QStringList &atc, const QString &uid)
     {
         foreach(const QString &code, atc) {
             if (fullAtcIntolerances.contains(code)) {
@@ -269,7 +270,7 @@ public:
         return false;
     }
 
-    static bool hasIntolerance(const int uid, const QStringList &inns, const QStringList &atc)
+    static bool hasIntolerance(const QString &uid, const QStringList &inns, const QStringList &atc)
     {
         if (drugIntoleranceCache.contains(uid)) {
             return drugIntoleranceCache.value(uid);
@@ -288,7 +289,7 @@ public:
                 return true;
         }
         if (m_testUidIntolerances) {
-            if (uidIntolerances.contains(QString::number(uid))) {
+            if (uidIntolerances.contains(uid)) {
                 drugIntoleranceCache.insert(uid, true);
                 return true;
             }
@@ -304,7 +305,7 @@ public:
 
     static bool hasIntolerance(const QPersistentModelIndex &item, const GlobalDrugsModel *model)
     {
-        int uid = model->index(item.row(), Constants::DRUGS_UID).data().toInt();
+        const QString &uid = model->index(item.row(), Constants::DRUGS_UID).data().toString();
         if (drugIntoleranceCache.contains(uid)) {
             return drugIntoleranceCache.value(uid);
         }
@@ -313,7 +314,7 @@ public:
 
     static void checkIntolerance(const QPersistentModelIndex &item, const GlobalDrugsModel *model)
     {
-        int uid = model->index(item.row(), Constants::DRUGS_UID).data().toInt();
+        const QString &uid = model->index(item.row(), Constants::DRUGS_UID).data().toString();
         if (drugIntoleranceCache.contains(uid)) {
             return;
         }
@@ -322,7 +323,7 @@ public:
 
         if (m_testInnIntolerances) {
             // get all drugs inns
-            const QStringList &inns = DrugsDB::Internal::DrugsBase::instance()->getDrugInns(QString::number(uid));
+            const QStringList &inns = DrugsDB::Internal::DrugsBase::instance()->getDrugInns(uid);
             foreach(const QString &druginn, inns) {
                 if (innIntolerances.contains(druginn)) {
                     drugIntoleranceCache.insert(uid, true);
@@ -341,7 +342,7 @@ public:
         }
 
         if (m_testUidIntolerances) {
-            if (uidIntolerances.contains(QString::number(uid))) {
+            if (uidIntolerances.contains(uid)) {
                 drugIntoleranceCache.insert(uid, true);
             }
         }
@@ -454,22 +455,22 @@ public:
     static QStringList fullAtcIntolerances, classAtcIntolerances, uidIntolerances, innIntolerances;
     static bool m_testAtcAllergies, m_testUidAllergies, m_testInnAllergies;
     static bool m_testAtcIntolerances, m_testUidIntolerances, m_testInnIntolerances;
-    static QVector<int> m_ProcessedUid;
+    static QVector<QString> m_ProcessedUid;
     static QVector<QPersistentModelIndex> m_UidToProcess;
     static QStandardItemModel *m_DrugsPrecautionsModel;
     QTimer *m_Timer;
     static int numberOfInstances;
 
 private:
-    static QHash<int, bool> drugAllergyCache;
-    static QHash<int, bool> drugIntoleranceCache;
-    static QList<int> m_CachedAvailableDosageForUID;
+    static QHash<QString, bool> drugAllergyCache;
+    static QHash<QString, bool> drugIntoleranceCache;
+    static QList<QString> m_CachedAvailableDosageForUID;
     GlobalDrugsModel *q;
 };
 
-QList<int> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
-QHash<int, bool> GlobalDrugsModelPrivate::drugAllergyCache;
-QHash<int, bool> GlobalDrugsModelPrivate::drugIntoleranceCache;
+QList<QString> GlobalDrugsModelPrivate::m_CachedAvailableDosageForUID;
+QHash<QString, bool> GlobalDrugsModelPrivate::drugAllergyCache;
+QHash<QString, bool> GlobalDrugsModelPrivate::drugIntoleranceCache;
 int GlobalDrugsModelPrivate::numberOfInstances;
 
 QStringList GlobalDrugsModelPrivate::fullAtcAllergies, GlobalDrugsModelPrivate::classAtcAllergies;
@@ -486,7 +487,7 @@ bool GlobalDrugsModelPrivate::m_testAtcIntolerances = false;
 bool GlobalDrugsModelPrivate::m_testUidIntolerances = false;
 bool GlobalDrugsModelPrivate::m_testInnIntolerances = false;
 
-QVector<int> GlobalDrugsModelPrivate::m_ProcessedUid;
+QVector<QString> GlobalDrugsModelPrivate::m_ProcessedUid;
 QVector<QPersistentModelIndex> GlobalDrugsModelPrivate::m_UidToProcess;
 
 QStandardItemModel *GlobalDrugsModelPrivate::m_DrugsPrecautionsModel = 0;
@@ -508,7 +509,7 @@ bool GlobalDrugsModel::hasAllergy(const DrugsDB::Internal::DrugsData *drug)  // 
     foreach(int code, drugsBase()->getLinkedAtcIds(drug->listOfCodeMolecules()))
         atcs << drugsBase()->getAtcCode(code);
     atcs << drug->ATC();
-    return Internal::GlobalDrugsModelPrivate::hasAllergy(drug->UID(), drug->listOfInn(), atcs);
+    return Internal::GlobalDrugsModelPrivate::hasAllergy(drug->UID().toString(), drug->listOfInn(), atcs);
 }
 
 bool GlobalDrugsModel::hasIntolerance(const DrugsDB::Internal::DrugsData *drug)  // static
@@ -517,7 +518,7 @@ bool GlobalDrugsModel::hasIntolerance(const DrugsDB::Internal::DrugsData *drug) 
     foreach(int code, drugsBase()->getLinkedAtcIds(drug->listOfCodeMolecules()))
         atcs << drugsBase()->getAtcCode(code);
     atcs << drug->ATC();
-    return Internal::GlobalDrugsModelPrivate::hasIntolerance(drug->UID(), drug->listOfInn(), atcs);
+    return Internal::GlobalDrugsModelPrivate::hasIntolerance(drug->UID().toString(), drug->listOfInn(), atcs);
 }
 
 QStandardItemModel *GlobalDrugsModel::drugsPrecautionsModel()
@@ -712,7 +713,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
     // Cache processed UIDs for allergies and intolerances
     // If cached  --> start the process in a QFuture ; connect QFuture to Model::dataChanged()
     // If !cached --> ok to return the values
-    int uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toInt();
+    const QString &uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toString();
 
     if (!d->m_ProcessedUid.contains(uid)) {
 //        d->m_UidToProcess.append(item);
@@ -740,7 +741,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
         if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
             QModelIndex uid = index(item.row(), Constants::DRUGS_UID);
-            if (d->UIDHasRecordedDosage(uid.data().toInt())) {
+            if (d->UIDHasRecordedDosage(uid.data().toString())) {
                 QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
                 c.setAlpha(125);
                 return c;

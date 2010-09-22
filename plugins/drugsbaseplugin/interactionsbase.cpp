@@ -132,7 +132,7 @@ public:
             while (query.next())
                 m_IamDenominations.insert(query.value(0).toInt(), query.value(1).toString());
         } else {
-            Utils::Log::addQueryError("DrugsBase", query);
+            Utils::Log::addQueryError("DrugsBase", query, __FILE__, __LINE__);
         }
     }
     // END UNUSED
@@ -160,7 +160,7 @@ public:
                      m_AtcToMol.insertMulti(query.value(1).toInt(), query.value(0).toInt());
                  }
              } else {
-                 Utils::Log::addQueryError("InteractionBase", query);
+                 Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
              }
              query.finish();
          }
@@ -177,7 +177,7 @@ public:
                  while (query.next())
                      m_ClassToAtcs.insertMulti(query.value(0).toInt(), query.value(1).toInt());
              } else {
-                 Utils::Log::addQueryError("DrugsBase", query);
+                 Utils::Log::addQueryError("DrugsBase", query, __FILE__, __LINE__);
              }
          }
 
@@ -278,8 +278,8 @@ QList<DrugsInteraction*> InteractionsBase::calculateInteractions(const QList<Dru
      di->m_IamFound.clear();
 
      // check interactions drug by drug --> stored into di->m_IamFound
-     foreach( DrugsData *drug, drugs )
-          di->checkDrugInteraction( drug, drugs );
+     foreach(DrugsData *drug, drugs)
+          di->checkDrugInteraction(drug, drugs);
 
      // prepare cached datas
      toReturn = di->getAllInteractionsFound();
@@ -323,6 +323,7 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
         dint->setValue(DrugsInteraction::DI_ATC1, _id1 );
         dint->setValue(DrugsInteraction::DI_ATC2, _id1 );
         dint->setValue(DrugsInteraction::DI_RiskFr, QCoreApplication::translate("DrugsBase", "This INN is present more than one time in this prescrition."));
+        dint->setValue(DrugsInteraction::DI_RiskEn, "This INN is present more than one time in this prescrition.");
         id2 = _id1;
     } else {
         // else retreive INTERACTION from database
@@ -343,7 +344,7 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
                 dint->setValue(DrugsInteraction::DI_LinkId, query.value(IA_IAK_ID));
             }
         } else {
-            Utils::Log::addQueryError("InteractionsBase", query);
+            Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
         }
         query.finish();
 
@@ -359,7 +360,7 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
                 dint->setValue(DrugsInteraction::DI_ManagementEn, query.value(Constants::IAK_MANAGEMENT_EN));
             }
         } else {
-            Utils::Log::addQueryError("InteractionBase", query);
+            Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
         }
         query.finish();
     }
@@ -550,11 +551,13 @@ QString InteractionsBase::getAtcLabel(const int inncode) const
     where.insert(Constants::ATC_ID, QString("=%1").arg(inncode));
     QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
     if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_CODE, where))) {
-        Utils::Log::addQueryError("InteractionBase", query);
+        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
     } else {
         if (query.next()) {
             toReturn = query.value(0).toString();
             code = query.value(1).toString();
+        } else {
+            Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
         }
     }
     AtcLabel *lbl = new AtcLabel;
@@ -592,7 +595,7 @@ QString InteractionsBase::getAtcLabel(const QString &code) const
     where.insert(Constants::ATC_CODE, QString("='%1'").arg(code));
     QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
     if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_ID, where))) {
-        Utils::Log::addQueryError("InteractionBase", query);
+        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
     } else {
         if (query.next()) {
             toReturn = query.value(0).toString();
@@ -610,22 +613,26 @@ QString InteractionsBase::getAtcLabel(const QString &code) const
 
 QString InteractionsBase::getAtcCode(const int atc_id) const
 {
+    if (atc_id==-1)
+        return QString();
+
     if (di->m_AtcCodeCache.contains(atc_id)) {
         return *di->m_AtcCodeCache[atc_id];
     }
 
-    QString *toReturn = 0;
+    QString toReturn;
     QHash<int, QString> where;
     where.insert(Constants::ATC_ID, QString("=%1").arg(atc_id));
     QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
     if (!query.exec(di->m_DB->select(Constants::Table_ATC, Constants::ATC_CODE, where))) {
-        Utils::Log::addQueryError("InteractionBase", query);
+        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
+        return QString();
     } else {
         if (query.next())
-            toReturn = new QString(query.value(0).toString());
+            toReturn = query.value(0).toString();
     }
-    di->m_AtcCodeCache.insert(atc_id, toReturn);
-    return *toReturn;
+    di->m_AtcCodeCache.insert(atc_id, new QString(toReturn));
+    return toReturn;
 }
 
 /** \brief Returns the name of the INN for the substance code \e code_subst. */
@@ -665,8 +672,8 @@ QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
 {
     QSet<int> toReturn;
 
-    if (di->m_AtcToMol.keys(molecule_code).count()>1)
-        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
+//    if (di->m_AtcToMol.keys(molecule_code).count()>1)
+//        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
 
     toReturn = di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code)).toSet();
     if (di->m_AtcToMol.values().contains(molecule_code))

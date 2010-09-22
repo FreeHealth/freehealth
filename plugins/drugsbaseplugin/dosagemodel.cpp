@@ -214,9 +214,9 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
 }
 
 /** \brief Defines datas for the dosage. Database is only updated when calling submitAll(). */
-bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::setData", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::setData", "before using the dosagemodel, you must specify the UID of the related drug");
     if (! index.isValid())
         return false;
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
@@ -259,7 +259,7 @@ bool DosageModel::setData(const QModelIndex & index, const QVariant & value, int
 /** \brief Retreive dosage's datas. */
 QVariant DosageModel::data(const QModelIndex & item, int role) const
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::data", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::data", "before using the dosagemodel, you must specify the UID of the related drug");
     if (!item.isValid())
         return QVariant();
 
@@ -303,7 +303,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
 /** \brief Create new dosages. Defaults values of the dosages are stted here. */
 bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
     if (WarnDebuggingDatas)
         qWarning() << "DosageModel::insertRows (row:" << row << ";count" << count << ")" << parent;
     QString userUuid = user()->value(Core::IUser::Uuid).toString();
@@ -360,7 +360,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 */
 bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::removeRows", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::removeRows", "before using the dosagemodel, you must specify the UID of the related drug");
     if (WarnDebuggingDatas)
         qWarning() << "DosageModel::removeRows (row:" << row << ";count" << count << ")" << parent;
 
@@ -384,7 +384,7 @@ bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
 /** \brief Revert a row */
 void DosageModel::revertRow(int row)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::revertRow", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::revertRow", "before using the dosagemodel, you must specify the UID of the related drug");
     QSqlTableModel::revertRow(row);
     if (m_DirtyRows.contains(row))
         m_DirtyRows.remove(row);
@@ -393,7 +393,7 @@ void DosageModel::revertRow(int row)
 /** \brief Submit model changes to database */
 bool DosageModel::submitAll()
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::submitAll", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::submitAll", "before using the dosagemodel, you must specify the UID of the related drug");
 //    warn();
 //    qWarning() << m_DirtyInnLkRows << m_DirtyRows;
 //    foreach(const int i, m_DirtyInnLkRows) {
@@ -415,16 +415,16 @@ bool DosageModel::submitAll()
 /**
   \brief Filter the model from the drug CIS and if possible for the inn prescriptions.
 */
-bool DosageModel::setDrugUID(const int uid)
+bool DosageModel::setDrugUID(const QVariant &drugUid)
 {
-    if (uid == m_UID)
+    if (drugUid == m_UID)
         return true;
-    m_UID = uid;
-    QString filter = QString("%1=%2").arg(record().fieldName(Dosages::Constants::CIS_LK)).arg(m_UID);
+    m_UID = drugUid;
+    QString filter = QString("%1='%2'").arg(record().fieldName(Dosages::Constants::CIS_LK)).arg(m_UID.toString());
 
     int inn = -1;
     if (m_DrugsModel)
-        inn = m_DrugsModel->drugData(uid, Constants::Drug::MainInnCode).toInt();
+        inn = m_DrugsModel->drugData(drugUid, Constants::Drug::MainInnCode).toInt();
 
     if (inn!=-1) {
         // add INN_LK
@@ -434,12 +434,12 @@ bool DosageModel::setDrugUID(const int uid)
         innFilter = QString("(%1) AND (%2='%3')")
                     .arg(innFilter)
                     .arg(record().fieldName(Dosages::Constants::InnLinkedDosage))
-                    .arg(m_DrugsModel->drugData(uid, Constants::Drug::MainInnDosage).toString());
+                    .arg(m_DrugsModel->drugData(drugUid, Constants::Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }        
 
     if (WarnDebuggingDatas)
-        qWarning() << "DosageModel filter" << filter;
+        qWarning() << "DosageModel filter" << filter << __FILE__ << __LINE__;
 
     setFilter(filter);
     select();
@@ -447,7 +447,7 @@ bool DosageModel::setDrugUID(const int uid)
 }
 
 /** \brief Return the actual drug's CIS */
-int DosageModel::drugUID()
+QVariant DosageModel::drugUID()
 {
     return m_UID;
 }
@@ -466,7 +466,7 @@ bool DosageModel::isDirty(const int row) const
 /** \brief Check the validity of the dosage. */
 QStringList DosageModel::isDosageValid(const int row)
 {
-    Q_ASSERT_X(m_UID != -1, "DosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");
+    Q_ASSERT_X(!m_UID.isNull(), "DosageModel::isDosageValid", "before using the dosagemodel, you must specify the UID of the related drug");
     QStringList errors;
     // Label
     if (index(row, Dosages::Constants::Label).data().toString().isEmpty()) {

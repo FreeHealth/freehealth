@@ -79,6 +79,7 @@
 #include <QMenu>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QKeyEvent>
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
@@ -130,7 +131,7 @@ public:
         }
 
         // Show drugs database search engine actions
-        int UID = m_DosageModel->drugUID();
+        const QVariant &UID = m_DosageModel->drugUID();
         searchEngine()->setDrug(drugModel()->getDrug(UID));
         foreach(const QString &label, searchEngine()->processedLabels()) {
             foreach(const QString &url, searchEngine()->processedUrls(label)) {
@@ -256,7 +257,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 
     d->m_InitialNumberOfRow = dosageModel->rowCount();
     // Drug informations
-    int UID = dosageModel->drugUID();
+    const QVariant &UID = dosageModel->drugUID();
     drugNameLabel->setText(drugModel()->drugData(UID, Drug::Denomination).toString());
     QString toolTip = drugModel()->drugData(UID, Interaction::ToolTip).toString();
     interactionIconLabel->setPixmap(drugModel()->drugData(UID, Interaction::Icon).value<QIcon>().pixmap(16,16));
@@ -316,6 +317,16 @@ void DosageCreatorDialog::done(int r)
 //        DrugsDB::GlobalDrugsModel::updateAvailableDosages();
 //    }
     QDialog::done(r);
+}
+
+void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key()==Qt::Key_Enter || e->key() == Qt::Key_Return) {
+//        qWarning() << "void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)" << validateButton->defaultAction()->text();
+        validateButton->defaultAction()->trigger();
+        return;
+    }
+    QDialog::keyPressEvent(e);
 }
 
 void DosageCreatorDialog::updateSettings()

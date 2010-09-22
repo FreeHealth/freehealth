@@ -141,7 +141,7 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
     tokens.insert("ATC_CODES", codes.join("%20"));
     tokens.insert("ATC_LABELS", labels.join("%20"));
     tokens.insert("DRUG_NAME", d->m_Drug->denomination());
-    tokens.insert("DRUG_UID", QString(d->m_Drug->UID()));
+    tokens.insert("DRUG_UID", d->m_Drug->UID().toString());
     tokens.insert("DRUG_LINK_SPC", d->m_Drug->linkToSCP());
 //    tokens.insert("CONSTRUCTED_DRUG_NAME", d->m_Drug->);
 

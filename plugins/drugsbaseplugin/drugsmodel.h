@@ -87,38 +87,38 @@ public:
     static inline DrugsModel *activeModel() {return m_ActiveModel;}
 
     // MODEL FUNCTIONS
-    QModelIndex index( int row, int column, const QModelIndex &drugParent = QModelIndex() ) const;
+    QModelIndex index(int row, int column, const QModelIndex &drugParent = QModelIndex()) const;
 
     // GETTING DATAS
-    int rowCount( const QModelIndex & = QModelIndex() ) const;
-    int columnCount( const QModelIndex & = QModelIndex() ) const { return DrugsDB::Constants::Drug::MaxParam; }
-    bool removeRows( int row, int count, const QModelIndex &parent = QModelIndex() );
-    bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
-    QVariant data( const QModelIndex &index, int role ) const;
-    QVariant drugData( const int CIS, const int column );
-    bool setDrugData( const int CIS, const int column, const QVariant &value);
+    int rowCount(const QModelIndex & = QModelIndex()) const;
+    int columnCount(const QModelIndex & = QModelIndex()) const { return DrugsDB::Constants::Drug::MaxParam; }
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant drugData(const QVariant &drugUid, const int column);
+    bool setDrugData(const QVariant &drugUid, const int column, const QVariant &value);
     void resetModel();
-    Qt::ItemFlags flags( const QModelIndex &index ) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool prescriptionHasInteractions();
     bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS
-    void setDrugsList( QDrugsList &list );
+    void setDrugsList(QDrugsList &list);
     const QDrugsList & drugsList() const;
     void clearDrugsList();
     int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
-    int addDrug( Internal::DrugsData *drug, bool automaticInteractionChecking = true );
-    int addDrug( const int uid, bool automaticInteractionChecking = true );
-    int removeDrug(const int uid);
+    int addDrug(Internal::DrugsData *drug, bool automaticInteractionChecking = true);
+    int addDrug(const QVariant &drugUid, bool automaticInteractionChecking = true);
+    int removeDrug(const QVariant &drugUid);
     int removeLastInsertedDrug();
-    bool containsDrug(const int uid) const;
-    Internal::DrugsData *getDrug(const int uid) const;
+    bool containsDrug(const QVariant &drugUid) const;
+    Internal::DrugsData *getDrug(const QVariant &drugUid) const;
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
-    void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
-    bool moveUp( const QModelIndex &item );
-    bool moveDown( const QModelIndex &item );
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+    bool moveUp(const QModelIndex &item);
+    bool moveDown(const QModelIndex &item);
 
     // FILTERS, MODES AND MODIFICATION STATE
     void showTestingDrugs(bool state);
@@ -136,8 +136,8 @@ public:
 
 
     // FOR DOSAGE MANAGEMENT
-    Internal::DosageModel *dosageModel( const int _CIS );
-    Internal::DosageModel *dosageModel( const QModelIndex & drugIndex );
+    Internal::DosageModel *dosageModel(const QVariant &drugUid);
+    Internal::DosageModel *dosageModel(const QModelIndex & drugIndex);
     InteractionsManager *currentInteractionManger() const;
 
     // FOR PRESCRIPTION FORMATTING
@@ -148,12 +148,12 @@ public:
     void warn();
 
 Q_SIGNALS:
-    void prescriptionResultChanged( const QString & html );
+    void prescriptionResultChanged(const QString & html);
     void numberOfRowsChanged();
 
 protected:
-    QModelIndex createIndex( int row, int column, void * ptr = 0 ) const;
-    QModelIndex createIndex( int row, int column, quint32 id ) const;
+    QModelIndex createIndex(int row, int column, void * ptr = 0) const;
+    QModelIndex createIndex(int row, int column, quint32 id) const;
     virtual void checkInteractions() const;
 
 private Q_SLOTS:

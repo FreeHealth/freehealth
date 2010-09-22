@@ -55,8 +55,8 @@
 /**
  * \file drugdata.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 02 Mar 2010
+ * \version 0.5.0
+ * \date 23 Sept 2010
 */
 
 /** \todo Some parts should not be Internals */
@@ -212,7 +212,7 @@ public:
      void setPrescriptionValue( const int fieldref, const QVariant &value );
 
      // getters
-     int               UID() const                { return value( Table_DRUGS, DRUGS_UID ).toInt();  }
+     QVariant          UID() const                { return value(Table_DRUGS, DRUGS_UID);  }
      QList<QVariant>   CIPs() const;
      QStringList       CIPsDenominations() const;
      QString           denomination() const;

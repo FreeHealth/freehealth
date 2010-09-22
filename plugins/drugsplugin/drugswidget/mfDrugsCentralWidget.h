@@ -50,8 +50,8 @@
 /**
  * \file mfDrugsCentralWidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 18 Apr 2010
+ * \version 0.5.0
+ * \date 23 Sept 2010
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
    \ingroup freediams
 */
@@ -105,7 +105,7 @@ protected:
 
 private Q_SLOTS:
     // drugs slots
-    void selector_drugSelected( const int CIS );
+    void selector_drugSelected(const QVariant &drugUid);
 
 private:
     void focusInEvent(QFocusEvent *event);

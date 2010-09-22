@@ -54,7 +54,7 @@
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 23 Aug 2010
+ * \date 23 Sept 2010
 */
 
 /** \todo Some parts should not be Internals */
@@ -99,8 +99,8 @@ public:
     QString getDrugName(const QString &uid) const;
     DrugsData *getDrugByCIP(const QVariant & CIP_id);
     DrugsData *getDrugByUID(const QVariant &UID);
-    int        getUIDFromCIP(int CIP);
-    QStringList getDrugCompositionAtcCodes(const int uid);
+    QVariant getUIDFromCIP(int CIP);
+    QStringList getDrugCompositionAtcCodes(const QVariant &uid);
     QStringList getDrugInns(const QVariant &uid);
 
     // Manage Dosages
@@ -108,7 +108,7 @@ public:
     static QString dosageCreateTableSqlQuery();
     QHash<QString, QString> getDosageToTransmit();
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
-    QList<int> getAllUIDThatHaveRecordedDosages() const;
+    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
     QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
 //protected:

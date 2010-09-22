@@ -123,7 +123,7 @@ public:
     }
 
     /** \brief Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
-    DrugsData *getDrug(const int uid)
+    DrugsData *getDrug(const QVariant &uid)
     {
         if (m_LastDrugRequiered) {
             if (m_LastDrugRequiered->UID() == uid) {
@@ -444,9 +444,9 @@ bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int ro
   Drug must be setted into the model otherwise, this function returns false.\n
   If you want the model to be refreshed call resetModel() after all datas were setted.
 */
-bool DrugsModel::setDrugData(const int CIS, const int column, const QVariant &value)
+bool DrugsModel::setDrugData(const QVariant &drugUid, const int column, const QVariant &value)
 {
-    Internal::DrugsData *drug = d->getDrug(CIS);
+    Internal::DrugsData *drug = d->getDrug(drugUid);
     if (!drug)
         return false;
     if (d->setDrugData(drug, column, value)) {
@@ -524,9 +524,11 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         // Drugs only for testings
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_BACKGROUND_COLOR);
-        // Allergy
+        // Allergy / Intolerances
         if (GlobalDrugsModel::hasAllergy(drug))
-            return QColor(Qt::red);
+            return QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+        if (GlobalDrugsModel::hasIntolerance(drug))
+            return QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
     }
     else if (role == Qt::ForegroundRole) {
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
@@ -539,9 +541,9 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
   \brief At anytime, you can get all values of drugs inside the prescription model using the CIS as row index.
   \sa data()
 */
-QVariant DrugsModel::drugData(const int CIS, const int column)
+QVariant DrugsModel::drugData(const QVariant &drugUid, const int column)
 {
-    Internal::DrugsData *drug = d->getDrug(CIS);
+    Internal::DrugsData *drug = d->getDrug(drugUid);
     if (!drug)
         return QVariant();
     return d->getDrugValue(drug, column);
@@ -632,9 +634,9 @@ int DrugsModel::addDrug(Internal::DrugsData *drug, bool automaticInteractionChec
    Return the index of the inserted drug into the list or -1 if no drug was inserted.
    \sa addDrug()
 */
-int DrugsModel::addDrug(const int uid, bool automaticInteractionChecking)
+int DrugsModel::addDrug(const QVariant &drugUid, bool automaticInteractionChecking)
 {
-    return addDrug(drugsBase()->getDrugByUID(uid), automaticInteractionChecking);
+    return addDrug(drugsBase()->getDrugByUID(drugUid), automaticInteractionChecking);
 }
 
 /**
@@ -672,18 +674,17 @@ void DrugsModel::setDrugsList(QDrugsList &list)
 }
 
 /** \brief Returns true if the drug is already in the prescription */
-bool DrugsModel::containsDrug(const int uid) const
+bool DrugsModel::containsDrug(const QVariant &drugUid) const
 {
-    if (d->getDrug(uid))
+    if (d->getDrug(drugUid))
         return true;
     return false;
 }
 
 /** \brief direct access to the DrugsData pointer. The pointer MUST BE DELETED. */
-Internal::DrugsData *DrugsModel::getDrug(const int uid) const
+Internal::DrugsData *DrugsModel::getDrug(const QVariant &drugUid) const
 {
-    return d->getDrug(uid);
-//    return new Internal::DrugsData(*d->getDrug(uid));
+    return d->getDrug(drugUid);
 }
 
 /** \brief Returns true if the actual prescription has interaction(s). */
@@ -801,7 +802,7 @@ bool DrugsModel::isModified() const
 
 
 /** \brief Returns the dosage model for the selected drug */
-Internal::DosageModel * DrugsModel::dosageModel(const int uid)
+Internal::DosageModel * DrugsModel::dosageModel(const QVariant &drugUid)
 {
 //    if (! d->m_DosageModelList.keys().contains(uid)) {
 //        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
@@ -812,7 +813,7 @@ Internal::DosageModel * DrugsModel::dosageModel(const int uid)
 //    }
 //    return d->m_DosageModelList.value(uid);
     Internal::DosageModel *m = new Internal::DosageModel(this);
-    m->setDrugUID(uid);
+    m->setDrugUID(drugUid);
     return m;
 }
 
@@ -823,7 +824,7 @@ Internal::DosageModel *DrugsModel::dosageModel(const QModelIndex &drugIndex)
         return 0;
     if (drugIndex.column() != Constants::Drug::UID)
         return 0;
-    return dosageModel(drugIndex.data().toInt());
+    return dosageModel(drugIndex.data());
 }
 
 InteractionsManager *DrugsModel::currentInteractionManger() const
@@ -832,14 +833,14 @@ InteractionsManager *DrugsModel::currentInteractionManger() const
 }
 
 /** \brief Removes a drug from the prescription */
-int DrugsModel::removeDrug(const int uid)
+int DrugsModel::removeDrug(const QVariant &drugUid)
 {
     // Take care that this function removes all occurence of the referenced drug
     d->m_LastDrugRequiered = 0;
     d->m_InteractionsManager->clearDrugsList();
     int i = 0;
     foreach(Internal::DrugsData * drug, d->m_DrugsList) {
-        if (drug->UID() == uid) {
+        if (drug->UID() == drugUid) {
             d->m_DrugsList.removeAt(d->m_DrugsList.indexOf(drug));
             delete drug;
             ++i;
