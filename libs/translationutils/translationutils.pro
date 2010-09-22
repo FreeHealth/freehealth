@@ -8,14 +8,16 @@ DEFINES *= TRANSLATIONUTILS_LIBRARY
 # include config file
 include( ../libsworkbench.pri )
 
-#CONFIG *= dll
+QT *= network
 
 HEADERS += \
     translationutils_exporter.h \
     constanttranslations.h \
-    multilingualclasstemplate.h
+    multilingualclasstemplate.h \
+    googletranslator.h
 
-SOURCES += constanttranslations.cpp
+SOURCES += constanttranslations.cpp \
+    googletranslator.cpp
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/translationutils_fr.ts \
