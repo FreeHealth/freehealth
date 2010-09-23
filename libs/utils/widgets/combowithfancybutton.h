@@ -40,6 +40,7 @@
 #ifndef COMBOWITHFANCYBUTTON_H
 #define COMBOWITHFANCYBUTTON_H
 
+#include <utils/global_exporter.h>
 #include <QComboBox>
 
 QT_BEGIN_NAMESPACE
@@ -63,7 +64,7 @@ class ItemDelegate;
 class StringModel;
 }
 
-class ComboWithFancyButton : public QComboBox
+class UTILS_EXPORT ComboWithFancyButton : public QComboBox
 {
     Q_OBJECT
 public:

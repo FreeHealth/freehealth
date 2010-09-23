@@ -235,6 +235,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_INFORMATION, INFO_PACK_MAIN_CODE_NAME, "PACK_MAIN_CODE_NAME");
     addField(Table_INFORMATION, INFO_ATC,               "ATC");
     addField(Table_INFORMATION, INFO_INTERACTIONS,      "INTERACTIONS");
+    addField(Table_INFORMATION, INFO_MOLLINKCOMPLETION,      "MOL_LINK_COMPLETION");
     addField(Table_INFORMATION, INFO_AUTHOR_COMMENTS,   "AUTHOR_COMMENTS");
     addField(Table_INFORMATION, INFO_LANGUAGE_COUNTRY,  "LANGUAGE_COUNTRY");
     addField(Table_INFORMATION, INFO_DRUGS_NAME_CONSTRUCTOR, "DRUGS_NAME_CONSTRUCTOR");
@@ -473,6 +474,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
             info->lang_country = q.value(Constants::INFO_LANGUAGE_COUNTRY).toString();
             info->setDrugsNameConstructor(q.value(Constants::INFO_DRUGS_NAME_CONSTRUCTOR).toString());
             info->complementaryWebsite = q.value(Constants::INFO_COMPLEMENTARY_WWW).toString();
+            info->moleculeLinkCompletion = q.value(Constants::INFO_MOLLINKCOMPLETION).toInt();
             info->connectionName = db.connectionName();
             if (db.driverName() == "QSQLITE") {
                 info->fileName = db.databaseName();

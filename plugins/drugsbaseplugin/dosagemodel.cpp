@@ -319,7 +319,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             setData(index(createdRow, Dosages::Constants::Uuid) , QUuid::createUuid().toString());
             if (drugsBase()->actualDatabaseInformations())
                 setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant) , drugsBase()->actualDatabaseInformations()->identifiant);
-            setData(index(createdRow, Dosages::Constants::CIS_LK) , m_UID);
+            setData(index(createdRow, Dosages::Constants::DrugUid_LK) , m_UID);
             setData(index(createdRow, Dosages::Constants::INN_LK) , -1);
             setData(index(createdRow, Dosages::Constants::InnLinkedDosage) , "");
             setData(index(createdRow, Dosages::Constants::IntakesTo) , 1);
@@ -420,7 +420,7 @@ bool DosageModel::setDrugUID(const QVariant &drugUid)
     if (drugUid == m_UID)
         return true;
     m_UID = drugUid;
-    QString filter = QString("%1='%2'").arg(record().fieldName(Dosages::Constants::CIS_LK)).arg(m_UID.toString());
+    QString filter = QString("%1='%2'").arg(record().fieldName(Dosages::Constants::DrugUid_LK)).arg(m_UID.toString());
 
     int inn = -1;
     if (m_DrugsModel)

@@ -195,9 +195,10 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     else
         new QTreeWidgetItem(validItem, QStringList() << "ATC validity" << tkTr(Trans::Constants::UNAVAILABLE));
     if (iamCompatible)
-        new QTreeWidgetItem(validItem, QStringList() << "IAM validity" << tkTr(Trans::Constants::AVAILABLE));
+        new QTreeWidgetItem(validItem, QStringList() << "Interaction engine validity" << tkTr(Trans::Constants::AVAILABLE));
     else
-        new QTreeWidgetItem(validItem, QStringList() << "IAM validity" <<tkTr(Trans::Constants::UNAVAILABLE));
+        new QTreeWidgetItem(validItem, QStringList() << "Interaction engine validity" <<tkTr(Trans::Constants::UNAVAILABLE));
+    new QTreeWidgetItem(validItem, QStringList() << "Interaction engine completion" << QString("%1 %").arg(moleculeLinkCompletion));
     new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR" << drugsNameConstructor);
     new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR (filter)" << drugsNameConstructorSearchFilter);
 

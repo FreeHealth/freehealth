@@ -623,7 +623,7 @@ void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
         int row = d->m_Mapper->currentIndex();
             if ((dosageForAllInnCheck->isEnabled()) && (state==Qt::Checked)) {
 //                qWarning() << "INN" << drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnCode);
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIS_LK), d->m_CIS);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_CIS);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK),
                                            drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnCode));
@@ -631,7 +631,7 @@ void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
                                            drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnDosage));
             } else {
 //                qWarning() << "not INN";
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIS_LK), d->m_CIS);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_CIS);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage), "");

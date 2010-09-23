@@ -280,7 +280,7 @@ namespace Constants {
     { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK,
       INFO_COMPLEMENTARY_WWW,
       INFO_AUTHOR, INFO_LICENSE, INFO_LICENSE_TERMS, INFO_DATE, INFO_DRUG_UID_NAME, INFO_PACK_MAIN_CODE_NAME,
-      INFO_ATC, INFO_INTERACTIONS, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY, INFO_DRUGS_NAME_CONSTRUCTOR,
+      INFO_ATC, INFO_INTERACTIONS, INFO_MOLLINKCOMPLETION, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY, INFO_DRUGS_NAME_CONSTRUCTOR,
       INFO_MaxParam
     };
 
@@ -459,7 +459,7 @@ namespace Constants {
         DrugsDatabaseIdentifiant,    /*!< \brief Unique FreeDiams identifiant */
         INN_LK,                 /*!< \brief Si la prescription est la même pour toutes les DCI alors le champs est renseigné, sinon laissé à -1. integer */
         InnLinkedDosage,        /*!< \brief Linked dosage of the Inn. */
-        CIS_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */
+        DrugUid_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */
         CIP_LK,                 /*!< \brief Code CIP           --> int */
         Label,                  /*!< \brief Libellé            --> varchar( 300 ) */
 

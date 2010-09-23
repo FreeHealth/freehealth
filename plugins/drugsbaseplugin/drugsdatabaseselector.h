@@ -73,6 +73,7 @@ public:
     QString weblink, complementaryWebsite, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;
     QDate date;
+    int moleculeLinkCompletion;
 };
 
 

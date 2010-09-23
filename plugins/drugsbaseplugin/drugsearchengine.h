@@ -42,7 +42,7 @@
 #define DRUGSEARCHENGINE_H
 
 #include <translationutils/constanttranslations.h>
-
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <QString>
 
 namespace DrugsDB {
@@ -50,7 +50,7 @@ namespace Internal {
 class DrugsData;
 class DrugSearchEnginePrivate;
 
-class DrugSearchEngine
+class DRUGSBASE_EXPORT DrugSearchEngine
 {
     DrugSearchEngine();
 public:
