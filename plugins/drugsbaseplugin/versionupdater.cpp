@@ -1,3 +1,23 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
 /**
   \class DrugsDB::DatabaseUpdater
   \brief This class manages drugs and dosages databases updates from versions to versions
@@ -44,10 +64,113 @@ using namespace DrugsDB;
 ///////////////////////////////////////////////////////////////////////
 namespace {
 
+//    class Dosage_040_To_050 : public DrugsDB::DosageDatabaseUpdateStep
+//    {
+//    public:
+//        // From v 0.4.0 To v 0.5.0
+//        // - Adding DRUGS_DATABASE_FILENAME
+//        Dosage_030_To_040() : DrugsDB::DosageDatabaseUpdateStep() {}
+//        ~Dosage_030_To_040() {}
+
+//        QString userMessage() const
+//        {
+//            return QApplication::translate("DatabaseUpdater", "Your dosage database needs to be "
+//                                           "updated from version 0.4.0 to version 0.5.0.\n"
+//                                           "This will be automatically done.");
+//        }
+
+//        QString fromVersion() const { return "0.4.0"; }
+//        QString toVersion() const { return "0.5.0"; }
+
+//        void setConnectionName(const QString &name) { m_Name = name; }
+
+//        bool retreiveValuesToUpdate() const  {return true;}
+
+//        bool updateDatabaseScheme() const
+//        {
+//            // these versions only use SQLite
+//            QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+//            if (!db.open()) {
+//                return false;
+//            }
+//            QStringList req;
+//            req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
+//            req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+//            req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
+//                          .arg("`POSO_ID`,"
+//                               "`POSO_UUID`,"
+//                               // "`DRUGS_DATABASE_IDENTIFIANT`,"
+//                               "`INN_LK`,"
+//                               "`INN_DOSAGE`,"
+//                               "`CIS_LK`,"
+//                               "`CIP_LK`,"
+//                               "`LABEL`,"
+//                               "`INTAKEFROM`,"
+//                               "`INTAKETO`,"
+//                               "`INTAKEFROMTO`,"
+//                               "`INTAKESCHEME`,"
+//                               "`INTAKESINTERVALOFTIME`,"
+//                               "`INTAKESINTERVALSCHEME`,"
+//                               "`DURATIONFROM`,"
+//                               "`DURATIONTO`,"
+//                               "`DURATIONFROMTO`,"
+//                               "`DURATIONSCHEME`,"
+//                               "`PERIOD`,"
+//                               "`PERIODSCHEME`,"
+//                               "`ADMINCHEME`,"
+//                               "`DAILYSCHEME`,"
+//                               "`MEALSCHEME`,"
+//                               "`ISALD`,"
+//                               "`TYPEOFTREATEMENT`,"
+//                               "`MINAGE`,"
+//                               "`MAXAGE`,"
+//                               "`MINAGEREFERENCE`,"
+//                               "`MAXAGEREFERENCE`,"
+//                               "`MINWEIGHT`,"
+//                               "`SEXLIMIT`,"
+//                               "`MINCLEARANCE`,"
+//                               "`MAXCLEARANCE`,"
+//                               "`PREGNANCYLIMITS`,"
+//                               "`BREASTFEEDINGLIMITS`,"
+//                               "`PHYSIOLOGICALLIMITS`,"
+//                               "`NOTE`,"
+//                               "`CIM10_LK`,"
+//                               "`CIM10_LIMITS_LK`,"
+//                               "`EDRC_LK`,"
+//                               "`EXTRAS`,"
+//                               "`USERVALIDATOR`,"
+//                               "`CREATIONDATE`,"
+//                               "`MODIFICATIONDATE`,"
+//                               "`TRANSMITTED`,"
+//                               "`ORDER`");
+//            req << QString("UPDATE `DOSAGE` SET `DRUGS_DATABASE_IDENTIFIANT`=\"%1\";").arg(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
+//            req << "DROP TABLE `OLD_DOSAGE`;";
+//            req << "﻿DELETE FROM `VERSION`;";
+//            req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.4.0');";
+//            foreach(const QString &r, req) {
+//                QSqlQuery q(r,db);
+//                if (q.isActive()) {
+//                    q.finish();
+//                } else {
+//                    Utils::Log::addQueryError("VersionUpdater", q);
+//                }
+//            }
+//            Utils::Log::addMessage("VersionUpdater",QString("Dosage Database SQL update done from %1 to %2").arg("0.2.0", "0.4.0"));
+//            return true;
+//        }
+
+//        bool saveUpdatedValuesToDatabase() const {return true;}
+
+//    private:
+//        QString m_Name;
+//        mutable QMap<int, int> m_Id_DailySchemes;
+//        mutable QMap<int, int> m_Id_MealSchemes;
+//    };
+
     class Dosage_030_To_040 : public DrugsDB::DosageDatabaseUpdateStep
     {
     public:
-        // From v 0.0.8 To v 0.2.0
+        // From v 0.3.0 To v 0.4.0
         // - Adding DRUGS_DATABASE_FILENAME
         Dosage_030_To_040() : DrugsDB::DosageDatabaseUpdateStep() {}
         ~Dosage_030_To_040() {}
