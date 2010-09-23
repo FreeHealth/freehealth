@@ -50,6 +50,10 @@
 --  *
 --  * \warning SQL commands MUST end with \e ;
 --  *
+--  * Sept 22, 2010 : recreate the drug's UID using forms and routes ID.
+--  *   Preparation of the future surrogate key.
+--  *   Drugs are created by the FreeToolBox code.
+--  *
 --  * July 14, 2010 initial release
 --  *
 --  * NOTE: INSERT INTO "INFORMATIONS" (needs manual updating as to
@@ -67,59 +71,59 @@
 -- the drugs must be distinct on {drug or combination} plus strength
 -- note FreeDiam's DRUGS table needs its records pre-ordered ASC on NAME
 
-INSERT INTO DRUGS ("UID", "NAME", "FORM", "ROUTE", "ATC")
-SELECT DISTINCT
-   A1.DRUG_CODE,
-   A1.BRAND_NAME,
-   A2.PHARMACEUTICAL_FORM,
-   A3.ROUTE_OF_ADMINISTRATION,
-   A4.TC_ATC_NUMBER
-FROM drug A1, form A2, route A3, ther A4
-WHERE
-   (A2.DRUG_CODE = A1.DRUG_CODE) AND
-   (A3.DRUG_CODE = A1.DRUG_CODE) AND
-   (A4.DRUG_CODE = A1.DRUG_CODE)
-ORDER BY A1.BRAND_NAME;
+-- INSERT INTO DRUGS ("UID", "NAME", "FORM", "ROUTE", "ATC")
+-- SELECT DISTINCT
+--    A1.DRUG_CODE,
+--    A1.BRAND_NAME,
+--    A2.PHARMACEUTICAL_FORM,
+--    A3.ROUTE_OF_ADMINISTRATION,
+--    A4.TC_ATC_NUMBER
+-- FROM drug A1, form A2, route A3, ther A4
+-- WHERE
+--    (A2.DRUG_CODE = A1.DRUG_CODE) AND
+--    (A3.DRUG_CODE = A1.DRUG_CODE) AND
+--    (A4.DRUG_CODE = A1.DRUG_CODE)
+-- ORDER BY A1.BRAND_NAME;
 
 -- to adjust for the lack of strengths in some brand names
-UPDATE DRUGS
-SET GLOBAL_STRENGTH =
-  (
-    SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
-    FROM ingred
-    WHERE DRUG_CODE=DRUGS.UID
-    GROUP BY DRUG_CODE
-    LIMIT 10
-  );
+-- UPDATE DRUGS
+-- SET GLOBAL_STRENGTH =
+--   (
+--     SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
+--     FROM ingred
+--     WHERE DRUG_CODE=DRUGS.UID
+--     GROUP BY DRUG_CODE
+--     LIMIT 10
+--   );
 
 
 -- feed table COMPOSITION (molecular ingredients)
-INSERT INTO `COMPOSITION`
-   (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
-  SELECT
-    A1.DRUG_CODE,
-    A2.PHARMACEUTICAL_FORM,
-    A1.ACTIVE_INGREDIENT_CODE,
-    A1.INGREDIENT,
-    A1.STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT
-  FROM ingred A1, form A2
-  WHERE
-    (A1.DRUG_CODE = A2.DRUG_CODE) AND
-    (A1.DOSAGE_VALUE != "");
+-- INSERT INTO `COMPOSITION`
+--    (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
+--   SELECT
+--     A1.DRUG_CODE,
+--     A2.PHARMACEUTICAL_FORM,
+--     A1.ACTIVE_INGREDIENT_CODE,
+--     A1.INGREDIENT,
+--     A1.STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT
+--   FROM ingred A1, form A2
+--   WHERE
+--     (A1.DRUG_CODE = A2.DRUG_CODE) AND
+--     (A1.DOSAGE_VALUE != "");
 
 
-INSERT INTO `COMPOSITION`
-   (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
-  SELECT
-    A1.DRUG_CODE,
-    A2.PHARMACEUTICAL_FORM,
-    A1.ACTIVE_INGREDIENT_CODE,
-    A1.INGREDIENT,
-    A1.STRENGTH || A1.STRENGTH_UNIT
-  FROM ingred A1, form A2
-  WHERE
-    (A1.DRUG_CODE = A2.DRUG_CODE) AND
-    (A1.DOSAGE_VALUE = "");
+-- INSERT INTO `COMPOSITION`
+--    (`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`)
+--   SELECT
+--     A1.DRUG_CODE,
+--     A2.PHARMACEUTICAL_FORM,
+--     A1.ACTIVE_INGREDIENT_CODE,
+--     A1.INGREDIENT,
+--     A1.STRENGTH || A1.STRENGTH_UNIT
+--   FROM ingred A1, form A2
+--   WHERE
+--     (A1.DRUG_CODE = A2.DRUG_CODE) AND
+--     (A1.DOSAGE_VALUE = "");
 
 -- TO DO -- need suitable insert from CSV or other source
 -- INSERT INTO "LK_MOL_ATC" (
@@ -149,12 +153,12 @@ INSERT INTO "INFORMATIONS" (
     "LANGUAGE_COUNTRY",
     "DRUGS_NAME_CONSTRUCTOR")
 VALUES (
-    "0.4.5",
+    "0.5.0",
     "xx=Canadian Drug Product Database
     fr=Base de données thérapeutique Canadienne
     ",
     "CA_HCDPD",
-    "0.4.4",
+    "0.5.0",
     "HC: Health Canada Drug Product Database",
     "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
     "http://code.google.com/p/freemedforms/wiki/Database_ca",
