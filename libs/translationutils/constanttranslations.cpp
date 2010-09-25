@@ -35,6 +35,7 @@
 #include "constanttranslations.h"
 
 #include <QLocale>
+#include <QDebug>
 
 using namespace Trans;
 using namespace Trans::ConstantTranslations;
@@ -80,33 +81,77 @@ QString tkTr(const char* toTr, const int plurials)
 QStringList periods()
 {
     return  QStringList()
-            << tkTr(Constants::SECONDS)
-            << tkTr(Constants::MINUTES)
-            << tkTr(Constants::HOURS)
-            << tkTr(Constants::DAYS)
-            << tkTr(Constants::WEEKS)
-            << tkTr(Constants::MONTHS)
-            << tkTr(Constants::QUARTERS)
-            << tkTr(Constants::YEARS);
+            << tkTr(Constants::SECOND_S)
+            << tkTr(Constants::MINUTE_S)
+            << tkTr(Constants::HOUR_S)
+            << tkTr(Constants::DAY_S)
+            << tkTr(Constants::WEEK_S)
+            << tkTr(Constants::MONTH_S)
+            << tkTr(Constants::QUARTER_S)
+            << tkTr(Constants::YEAR_S);
 }
 
 /** \brief Returns the period corresponding to the enumerator Constants::Time::Period */
-QString period( int id )
+QString period(int id)
 {
     switch (id)
     {
-        case Constants::Time::Seconds : return tkTr(Constants::SECONDS);
-        case Constants::Time::Minutes : return tkTr(Constants::MINUTES);
-        case Constants::Time::Hours :   return tkTr(Constants::HOURS);
-        case Constants::Time::Days :    return tkTr(Constants::DAYS);
-        case Constants::Time::Weeks :   return tkTr(Constants::WEEKS);
-        case Constants::Time::Months :  return tkTr(Constants::MONTHS);
-        case Constants::Time::Quarter : return tkTr(Constants::QUARTERS);
-        case Constants::Time::Year :    return tkTr(Constants::YEARS);
-        case Constants::Time::Decade :  return tkTr(Constants::DECADES);
+        case Constants::Time::Seconds : return tkTr(Constants::SECOND_S);
+        case Constants::Time::Minutes : return tkTr(Constants::MINUTE_S);
+        case Constants::Time::Hours :   return tkTr(Constants::HOUR_S);
+        case Constants::Time::Days :    return tkTr(Constants::DAY_S);
+        case Constants::Time::Weeks :   return tkTr(Constants::WEEK_S);
+        case Constants::Time::Months :  return tkTr(Constants::MONTH_S);
+        case Constants::Time::Quarter : return tkTr(Constants::QUARTER_S);
+        case Constants::Time::Year :    return tkTr(Constants::YEAR_S);
+        case Constants::Time::Decade :  return tkTr(Constants::DECADE_S);
     }
     return QString();
 }
+
+QString periodPlurialForm(int id, int nb, const QString &defaultValue)
+{
+    switch (id)
+    {
+        case Constants::Time::Seconds : if (nb > 1) return tkTr(Constants::SECONDS); else return tkTr(Constants::SECOND);
+        case Constants::Time::Minutes : if (nb > 1) return tkTr(Constants::MINUTES); else return tkTr(Constants::MINUTE);
+        case Constants::Time::Hours :   if (nb > 1) return tkTr(Constants::HOURS); else return tkTr(Constants::HOUR);
+        case Constants::Time::Days :    if (nb > 1) return tkTr(Constants::DAYS); else return tkTr(Constants::DAY);
+        case Constants::Time::Weeks :   if (nb > 1) return tkTr(Constants::WEEKS); else return tkTr(Constants::WEEK);
+        case Constants::Time::Months :  if (nb > 1) return tkTr(Constants::MONTHS); else return tkTr(Constants::MONTH);
+        case Constants::Time::Quarter : if (nb > 1) return tkTr(Constants::QUARTERS); else return tkTr(Constants::QUARTER);
+        case Constants::Time::Year :    if (nb > 1) return tkTr(Constants::YEARS); else return tkTr(Constants::YEAR);
+        case Constants::Time::Decade :  if (nb > 1) return tkTr(Constants::DECADES); else return tkTr(Constants::DECADE);
+    }
+    return defaultValue;
+}
+
+//int periodId(const QString &period)
+//{
+//    if (period.compare(tkTr(Constants::SECOND)==0) ||
+//        period.compare(tkTr(Constants::SECONDS)==0) ||
+//        period.compare(tkTr(Constants::SECOND_S)==0)) {
+//        return Constants::Time::Seconds;
+//    }
+
+//    if (period.compare(tkTr(Constants::MINUTE)==0) ||
+//        period.compare(tkTr(Constants::MINUTES)==0) ||
+//        period.compare(tkTr(Constants::MINUTE_S)==0)) {
+//        return Constants::Time::Minutes;
+//    }
+
+//    if (period.compare(tkTr(Constants::HOUR)==0) ||
+//        period.compare(tkTr(Constants::HOURS)==0) ||
+//        period.compare(tkTr(Constants::HOUR_S)==0)) {
+//        return Constants::Time::Hours;
+//    }
+
+//    if (period.compare(tkTr(Constants::DAY)==0) ||
+//        period.compare(tkTr(Constants::DAYS)==0) ||
+//        period.compare(tkTr(Constants::DAY_S)==0)) {
+//        return Constants::Time::Seconds;
+//    }
+//}
 
 /** \brief Daily scheme predetermined list */
 QStringList dailySchemeList()

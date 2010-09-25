@@ -490,8 +490,8 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     else if (role == Qt::ToolTipRole) {
         QString display;
         if (GlobalDrugsModel::hasAllergy(drug)) {
-            display += QString("<span style=\"align:center;vertical-align:middle\"><img src=\"%1\"><span style=\"color:red;font-weight:600\">%2</span><img src=\"%1\"></span><br />")
-                   .arg(settings()->path(Core::ISettings::MediumPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
+            display += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
                    .arg(tr("KNOWN ALLERGY"));
         }
         display += drug->toHtml();
@@ -894,14 +894,15 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     tokens_value.insert("DAILY_SCHEME", "");
     tokens_value.insert("REPEATED_DAILY_SCHEME", "");
     tokens_value.insert("DISTRIBUTED_DAILY_SCHEME", "");
+    tokens_value.insert("PERIOD", "");
     tokens_value.insert("PERIOD_SCHEME", "");
     tokens_value.insert("D_FROM", "");
     tokens_value.insert("D_TO", "");
     tokens_value.insert("D_SCHEME", "");
     tokens_value.insert("MEAL", "");
-    tokens_value.insert("PERIOD", "");
     tokens_value.insert("NOTE", "");
     tokens_value.insert("MIN_INTERVAL", "");
+    tokens_value.insert("MIN_INTERVAL_SCHEME", "");
 
     // Manage Textual drugs only
     if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
@@ -959,8 +960,12 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
 
     tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
-    if (tmp2 == "1")
+
+    /** \todo provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()*/
+    // Period management of 'EACH DAY__S'
+    if (tmp2 == "1") {
         tmp2.clear();
+    }
     tokens_value["PERIOD"] = tmp2;
 
     if (toHtml) {
@@ -974,7 +979,7 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalScheme);
     if ((!interval.isNull() && !intervalScheme.isNull()) &&
         interval.toInt() > 0) {
-        tokens_value["MIN_INTERVAL"] = interval.toString() + " " + period(intervalScheme.toInt());
+        tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());
     }
 
     Utils::replaceTokens(tmp, tokens_value);

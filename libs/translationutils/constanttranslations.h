@@ -296,15 +296,35 @@ enum TitleInterpret {
 
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
-        const char* const SECONDS    = QT_TRANSLATE_NOOP("tkConstants", "second(s)");
-        const char* const MINUTES    = QT_TRANSLATE_NOOP("tkConstants", "minute(s)");
-        const char* const HOURS      = QT_TRANSLATE_NOOP("tkConstants", "hour(s)");
-        const char* const DAYS       = QT_TRANSLATE_NOOP("tkConstants", "day(s)");
-        const char* const WEEKS      = QT_TRANSLATE_NOOP("tkConstants", "week(s)");
-        const char* const MONTHS     = QT_TRANSLATE_NOOP("tkConstants", "month(s)");
-        const char* const QUARTERS   = QT_TRANSLATE_NOOP("tkConstants", "quarter(s)");
-        const char* const YEARS      = QT_TRANSLATE_NOOP("tkConstants", "year(s)");
-        const char* const DECADES    = QT_TRANSLATE_NOOP("tkConstants", "decade(s)");
+        const char* const SECOND_S    = QT_TRANSLATE_NOOP("tkConstants", "second(s)");
+        const char* const MINUTE_S    = QT_TRANSLATE_NOOP("tkConstants", "minute(s)");
+        const char* const HOUR_S      = QT_TRANSLATE_NOOP("tkConstants", "hour(s)");
+        const char* const DAY_S       = QT_TRANSLATE_NOOP("tkConstants", "day(s)");
+        const char* const WEEK_S      = QT_TRANSLATE_NOOP("tkConstants", "week(s)");
+        const char* const MONTH_S     = QT_TRANSLATE_NOOP("tkConstants", "month(s)");
+        const char* const QUARTER_S   = QT_TRANSLATE_NOOP("tkConstants", "quarter(s)");
+        const char* const YEAR_S      = QT_TRANSLATE_NOOP("tkConstants", "year(s)");
+        const char* const DECADE_S    = QT_TRANSLATE_NOOP("tkConstants", "decade(s)");
+
+        const char* const SECOND    = QT_TRANSLATE_NOOP("tkConstants", "second");
+        const char* const MINUTE    = QT_TRANSLATE_NOOP("tkConstants", "minute");
+        const char* const HOUR      = QT_TRANSLATE_NOOP("tkConstants", "hour");
+        const char* const DAY       = QT_TRANSLATE_NOOP("tkConstants", "day");
+        const char* const WEEK      = QT_TRANSLATE_NOOP("tkConstants", "week");
+        const char* const MONTH     = QT_TRANSLATE_NOOP("tkConstants", "month");
+        const char* const QUARTER   = QT_TRANSLATE_NOOP("tkConstants", "quarter");
+        const char* const YEAR      = QT_TRANSLATE_NOOP("tkConstants", "year");
+        const char* const DECADE    = QT_TRANSLATE_NOOP("tkConstants", "decade");
+
+        const char* const SECONDS    = QT_TRANSLATE_NOOP("tkConstants", "seconds");
+        const char* const MINUTES    = QT_TRANSLATE_NOOP("tkConstants", "minutes");
+        const char* const HOURS      = QT_TRANSLATE_NOOP("tkConstants", "hours");
+        const char* const DAYS       = QT_TRANSLATE_NOOP("tkConstants", "days");
+        const char* const WEEKS      = QT_TRANSLATE_NOOP("tkConstants", "weeks");
+        const char* const MONTHS     = QT_TRANSLATE_NOOP("tkConstants", "months");
+        const char* const QUARTERS   = QT_TRANSLATE_NOOP("tkConstants", "quarters");
+        const char* const YEARS      = QT_TRANSLATE_NOOP("tkConstants", "years");
+        const char* const DECADES    = QT_TRANSLATE_NOOP("tkConstants", "decades");
 
         // Day
         const char* const WAKEUPTIME           = QT_TRANSLATE_NOOP("tkConstants", "wake up");
@@ -546,6 +566,7 @@ namespace ConstantTranslations {
 TRUTILS_EXPORT QString tkTr(const char* toTr, const int plurials=1);
 TRUTILS_EXPORT QStringList periods();
 TRUTILS_EXPORT QString period(int id);
+TRUTILS_EXPORT QString periodPlurialForm(int id, int nb = 1, const QString &defaultValue = QString::null);
 TRUTILS_EXPORT QStringList dailySchemeList();
 TRUTILS_EXPORT QStringList dailySchemeXmlTagList();
 TRUTILS_EXPORT QString dailyScheme(const int dailySchemeFlag);

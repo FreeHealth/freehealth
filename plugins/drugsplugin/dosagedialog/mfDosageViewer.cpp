@@ -352,19 +352,6 @@ public:
             q->dosageForAllInnCheck->setVisible(dosageCanLinkWithInn());
     }
 
-//    void setDailyMaximum(double max)
-//    {
-//        DrugsDB::DailySchemeModel *daily = static_cast<DrugsDB::DailySchemeModel*>(q->dailySchemeView->model());
-//        DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
-//        Q_ASSERT(daily);
-//        if (daily) {
-//            daily->setMaximumDay(max);
-//        }
-//        if (m_SpinDelegate) {
-//            m_SpinDelegate->setMaximum(max-daily->sum());
-//        }
-//    }
-
     void recalculateDailySchemeMaximum()
     {
         if (!q->fromToIntakesCheck->isChecked()) {

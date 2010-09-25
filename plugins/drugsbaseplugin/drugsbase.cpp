@@ -482,7 +482,7 @@ QString DrugsBase::dosageCreateTableSqlQuery()
            "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
            "`INN_LK`                int(11)        DEFAULT -1,"
            "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-           "`CIS_LK`                int(11)        DEFAULT -1,"
+           "`DRUG_UID_LK`           varchar(20)    NULL,"
            "`CIP_LK`                int(11)        DEFAULT -1,"
            "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
@@ -728,10 +728,10 @@ QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 
     QString req;
     if (m_IsDefaultDB) {
-        req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+        req = QString("SELECT DISTINCT `DRUG_UID_LK` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
               .arg(Constants::DB_DEFAULT_IDENTIFIANT);
     } else {
-        req = QString("SELECT DISTINCT CIS_LK FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+        req = QString("SELECT DISTINCT `DRUG_UID_LK` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
               .arg(actualDatabaseInformations()->identifiant);
     }
     {

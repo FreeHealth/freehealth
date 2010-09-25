@@ -315,10 +315,10 @@ void PrescriptionViewer::changeDuration()
     // create the pop menu
     QMenu *root = new QMenu(this);
     QStringList subs = QStringList()
-                       << Trans::Constants::DAYS
-                       << Trans::Constants::WEEKS
-                       << Trans::Constants::MONTHS
-                       << Trans::Constants::QUARTERS;
+                       << Trans::Constants::DAY_S
+                       << Trans::Constants::WEEK_S
+                       << Trans::Constants::MONTH_S
+                       << Trans::Constants::QUARTER_S;
     QList<int> quantity = QList<int>() << 31 << 15 << 12 << 4;
     int i = 0;
     foreach(const QString &s, subs) {

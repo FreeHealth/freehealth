@@ -320,11 +320,11 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
                 setData(index(createdRow, Dosages::Constants::IntakesScheme) , s);
             }
             setData(index(createdRow, Dosages::Constants::Period), 1);
-            setData(index(createdRow, Dosages::Constants::PeriodScheme) , tkTr(Trans::Constants::DAYS));
+            setData(index(createdRow, Dosages::Constants::PeriodScheme) , tkTr(Trans::Constants::DAY_S));
             setData(index(createdRow, Dosages::Constants::DurationTo) , 1);
             setData(index(createdRow, Dosages::Constants::DurationFrom) , 1);
             setData(index(createdRow, Dosages::Constants::DurationUsesFromTo) , false);
-            setData(index(createdRow, Dosages::Constants::DurationScheme) , tkTr(Trans::Constants::MONTHS));
+            setData(index(createdRow, Dosages::Constants::DurationScheme) , tkTr(Trans::Constants::MONTH_S));
             setData(index(createdRow, Dosages::Constants::IntakesIntervalOfTime) , 0);
             setData(index(createdRow, Dosages::Constants::MinAge) , 0);
             setData(index(createdRow, Dosages::Constants::MaxAge) , 0);
@@ -502,10 +502,14 @@ void DosageModel::toPrescription(const int row)
     foreach(const int i, prescr_dosage.keys()) {
         m_DrugsModel->setDrugData(m_UID, i, data(index(row, prescr_dosage.value(i))));
     }
+
+    // Manage INN Prescriptions
     if (index(row,Dosages::Constants::INN_LK).data().toInt() > 999) // this is an INN prescription
         m_DrugsModel->setDrugData(m_UID, Constants::Prescription::IsINNPrescription, true);
     else
         m_DrugsModel->setDrugData(m_UID, Constants::Prescription::IsINNPrescription, false);
+
+    // Reset model
     m_DrugsModel->resetModel();
 }
 

@@ -49,7 +49,7 @@ QString readableAge(const QDate &DOB)
     int years = (int)age;
     if (years>0) {
         QString tmp = QString::number(years) + " ";
-        tmp.append(tkTr(YEARS, years));
+        tmp.append(tkTr(YEAR_S, years));
         readableAge << tmp;
         age -= years;
     }
@@ -58,7 +58,7 @@ QString readableAge(const QDate &DOB)
     if (months > 0) {
         QString tmp = QString::number(months) + " ";
         age -= months / 12.0;
-        tmp.append(tkTr(MONTHS, months));
+        tmp.append(tkTr(MONTH_S, months));
         readableAge << tmp;
     }
     int days = daysTo - (years*365.25) - (months*12);

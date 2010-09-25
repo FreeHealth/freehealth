@@ -589,12 +589,12 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
         drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
         drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
         drug->setPrescriptionValue(Prescription::Period, 2);
-        drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAYS));
+        drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAY_S));
         drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
-        drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAYS));
+        drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAY_S));
         drug->setPrescriptionValue(Prescription::DurationFrom, 1);
         drug->setPrescriptionValue(Prescription::DurationTo, 3);
-        drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEKS));
+        drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEK_S));
         drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
         drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
         drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
