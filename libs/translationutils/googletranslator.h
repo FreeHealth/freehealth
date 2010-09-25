@@ -27,14 +27,14 @@
 #ifndef GOOGLETRANSLATOR_H
 #define GOOGLETRANSLATOR_H
 
-#include <utils/global_exporter.h>
+#include <translationutils/translationutils_exporter.h>
 #include <QObject>
 class QNetworkReply;
 class QNetworkAccessManager;
 
 namespace Utils {
 
-class UTILS_EXPORT GoogleTranslator : public QObject
+class TRUTILS_EXPORT GoogleTranslator : public QObject
 {
     Q_OBJECT
 public:
