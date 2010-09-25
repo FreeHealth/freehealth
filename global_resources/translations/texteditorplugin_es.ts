@@ -151,57 +151,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="50"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="36"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="51"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="37"/>
         <source>Dotted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="52"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="38"/>
         <source>Dashed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="53"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="39"/>
         <source>Solid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="54"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="40"/>
         <source>Double</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="55"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="41"/>
         <source>Dot dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="56"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="42"/>
         <source>Dot dot dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="57"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="43"/>
         <source>Groove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="58"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="44"/>
         <source>Rigde</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="59"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="45"/>
         <source>Inset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="60"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="46"/>
         <source>Outset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,18 +209,18 @@
 <context>
     <name>Editor::TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="417"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="424"/>
         <source>HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="437"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="444"/>
         <source>HTML-Files (*.htm *.html);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="455"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="457"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="462"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="464"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>

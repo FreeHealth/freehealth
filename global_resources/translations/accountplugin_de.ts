@@ -146,29 +146,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="153"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="154"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="154"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="155"/>
         <source>You make changes into the bank account details.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="158"/>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="159"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="188"/>
         <source>bank account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="188"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="189"/>
         <source>Can not submit bank account details to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="189"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="190"/>
         <source>An error occured during bank account details saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,29 +236,29 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="156"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="157"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="157"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="158"/>
         <source>You make changes into the bank account details.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="161"/>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="190"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="162"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="191"/>
         <source>bank account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="191"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="192"/>
         <source>Can not submit bank account details to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="193"/>
         <source>An error occured during bank account details saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,29 +311,29 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="153"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="154"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="154"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="155"/>
         <source>You make changes into the bank account details.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="158"/>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="159"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="188"/>
         <source>bank account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="188"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="189"/>
         <source>Can not submit bank account details to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="189"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="190"/>
         <source>An error occured during bank account details saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>

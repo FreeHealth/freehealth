@@ -301,7 +301,7 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
         <translation>Duplicatas seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="834"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="835"/>
         <source>Print Document</source>
         <translation>Impression de document</translation>
     </message>

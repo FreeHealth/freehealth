@@ -4,8 +4,111 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="127"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="132"/>
         <source>Made with %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Print::Internal::PrintDialog</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="23"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="106"/>
+        <source>First page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="134"/>
+        <source>Previous page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="156"/>
+        <source># of ##</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="178"/>
+        <source>Next page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="206"/>
+        <source>Last page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="228"/>
+        <source>Printer :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="248"/>
+        <source>Presets :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="268"/>
+        <source>Copies :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="284"/>
+        <source>Sorted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="294"/>
+        <source>Recto Verso</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="301"/>
+        <source>Pages :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="311"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="320"/>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="340"/>
+        <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="356"/>
+        <source>Print with duplicatas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="363"/>
+        <source>Two pages per paper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="370"/>
+        <source>Create a PDF copy in the cache directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="260"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="262"/>
+        <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -58,17 +161,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="126"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="120"/>
+        <source>Always print two pages per paper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="133"/>
         <source>Automated copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="132"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="142"/>
         <source>Always keep a PDF copy in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="139"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="159"/>
         <source>Select a folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,7 +184,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="133"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="136"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -85,13 +193,18 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="161"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="164"/>
         <source>Always use system&apos;s default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="165"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="168"/>
         <source>Always ask user for the printer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="239"/>
+        <source>Select a directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -142,7 +255,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="823"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="835"/>
         <source>Print Document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -190,17 +303,17 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::PrinterPlugin</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="103"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="108"/>
         <source>No printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="104"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="109"/>
         <source>No printer is configured in your system. The print preview and printing will not work.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="105"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="110"/>
         <source>You must configure at least on printer. Please refer to your system documentation. 
 </source>
         <translation type="unfinished"></translation>
@@ -209,7 +322,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="651"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="663"/>
         <source>No content to preview (simpleDraw).</source>
         <translation type="unfinished"></translation>
     </message>

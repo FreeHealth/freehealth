@@ -4,55 +4,50 @@
 <context>
     <name>MedinTux::Configuration</name>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="419"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="444"/>
         <source>Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="422"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="448"/>
         <source>MedinTux Configuration : resources user menus path correctly created  %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="431"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="457"/>
         <source>Unable to configure MedinTux : %1 menu does not exists and can not be created. Path to DrTux binary : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="435"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="462"/>
         <source>MedinTux Configuration : users&apos; menu path correctly created %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="454"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="481"/>
         <source>MedinTux Configuration : user&apos;s menu icon correctly installed %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="457"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="484"/>
         <source>Unable to configure MedinTux : icon %1 can not be copied to %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="460"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="488"/>
         <source>Unable to configure MedinTux : icon %1 does not exists.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/medintuxutils/configuration.cpp" line="56"/>
-        <source>Medintux Configurator</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>diMedinTux</name>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="227"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="252"/>
         <source>MedinTux Detected : Starting as a MedinTux Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../_protected/medintuxtoolkit/configuration_pro.cpp" line="229"/>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="254"/>
         <source>MedinTux Detected : Using ini file %1</source>
         <translation type="unfinished"></translation>
     </message>

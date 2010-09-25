@@ -260,13 +260,13 @@ Memory usage : %2</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="431"/>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="435"/>
-        <source>Search user by surname</source>
+        <source>Search user by firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="432"/>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="436"/>
-        <source>Search user by name and surname</source>
+        <source>Search user by name and firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -421,7 +421,7 @@ Memory usage : %2</source>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="150"/>
-        <source>Surname</source>
+        <source>Firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -652,7 +652,13 @@ Last connection : %2</source>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="290"/>
-        <source>Surname</source>
+        <source>Firstname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="327"/>
+        <source>All users must have at least a name and a firstname.
+You can not poursue with an anonymous user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -669,12 +675,6 @@ Last connection : %2</source>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="326"/>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="329"/>
         <source>Forbidden anonymous user.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="327"/>
-        <source>All users must have at least a name and a surname.
-You can not poursue with an anonymous user.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

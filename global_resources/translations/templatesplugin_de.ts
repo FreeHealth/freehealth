@@ -171,24 +171,24 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="362"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
         <source>Unable to connect the Templates host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="362"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="368"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="372"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="368"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
         <source>Unable to create the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="372"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
         <source>Unable to connect the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,7 +196,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1030"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1035"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,17 +204,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="623"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="624"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="626"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="627"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>
