@@ -119,7 +119,7 @@ QWidget *LicenseAboutPage::widget()
     layout->addWidget(browser);
     browser->clear();
     // add a generic message
-    browser->setHtml(Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::BSDModified));
+    browser->setHtml(Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::GPLv3));
     return w;
 }
 
@@ -226,6 +226,13 @@ static const QList<Team> m_Team = QList<Team>()
                  "Karsten Hilbert, MD (GNUmed)",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_GERMANY),
                  "Karsten.Hilbert@gmx.net",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
+                 "Jim Busser, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_CANADA),
+                 "jbusser@interchange.ubc.ca",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
                 )
 
