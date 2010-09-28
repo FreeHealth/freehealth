@@ -1,5 +1,7 @@
 macx{
-   CONFIG *= x86 ppc
+   # Qt 4.7 does not support ppc by default
+   CONFIG *= x86 x86-64
+   CONFIG  -= ppc
 
    # define rpath
    CONFIG( debug, debug|release ) {

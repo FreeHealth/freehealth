@@ -20,6 +20,7 @@ else {
 
  LIB_EXTENSION           = $${QMAKE_EXTENSION_SHLIB}
 
+
 }  #end if release mode
 
 

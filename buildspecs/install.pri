@@ -84,6 +84,16 @@ target.path = $${INSTALL_BINARY_PATH}
 INSTALLS += target
 }
 
+macx {
+ # Qt 4.7 / MacOS 10.6 patch when not usong the Qt macdeploy app
+ #$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
+ # /Library/Frameworks/QtGui.framework/Resources/qt_menu.nib
+ mac10_6.path=$${INSTALL_RESOURCES_PATH}
+ mac10_6.files=$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
+ INSTALLS+=mac10_6
+}
+
+
 # manage binary wrapper
 !isEmpty(INSTALL_BINARY_WRAPPER_NAME){
 bw.path = $${INSTALL_BINARY_PATH}
