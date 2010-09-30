@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="124"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="110"/>
         <source>Save templates .</source>
         <translation>Sauvegarder les modèles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="111"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation>Certaines données ne sont pas encore sauvegardées dans la base de données. Voulez-vous les sauvegarder ?
@@ -153,7 +153,7 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="89"/>
         <source>Lock category view at startup</source>
-        <translation>Vérouiller la vue au démarrage</translation>
+        <translation>Verrouiller la vue au démarrage</translation>
     </message>
 </context>
 <context>
@@ -166,30 +166,30 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
     <message>
         <location filename="../../plugins/templatesplugin/templatesview.ui" line="28"/>
         <source>Categories tree</source>
-        <translation></translation>
+        <translation>Arborescence des catégories</translation>
     </message>
 </context>
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
         <source>Unable to connect the Templates host.</source>
         <translation>Impossible de se connecter à l&apos;hôte.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
         <source>Unable to create the Templates database.</source>
         <translation>Impossible de créer la base de données Modèles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
         <source>Unable to connect the Templates database.</source>
         <translation>Impossible de se connecter à la base de données Modèles.</translation>
     </message>
@@ -197,7 +197,7 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1035"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1021"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
@@ -205,17 +205,17 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="611"/>
         <source>About to delete %1.</source>
         <translation>Sur le point de supprimer %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="626"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation>Voulez-vous réellement supprimer %1 de votre liste de modèles ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="627"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="613"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation>Cette action est définitive. Toutes les informations de ces modèles seront perdues. Toutes les sous-catégories, s&apos;il en existe, seront effacées aussi.</translation>
     </message>

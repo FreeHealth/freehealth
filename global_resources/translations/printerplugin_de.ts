@@ -4,7 +4,7 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="132"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="118"/>
         <source>Made with %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -102,12 +102,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="260"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="246"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="262"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="248"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,7 +184,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="136"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="122"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -193,17 +193,17 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="164"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="150"/>
         <source>Always use system&apos;s default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="168"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="154"/>
         <source>Always ask user for the printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="239"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="225"/>
         <source>Select a directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -256,47 +256,47 @@ Dies kann eine starke CPU Belastung sein.</translation>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="95"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="81"/>
         <source>Each Pages</source>
         <translation>Jede Seite</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="96"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="82"/>
         <source>First page only</source>
         <translation>Nur die erste Seite</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="97"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
         <source>Second page only</source>
         <translation>Nur die zweite Seite</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="98"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
         <source>Last page only</source>
         <translation>Nur die letzte Seite</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="99"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
         <source>All pages but first</source>
         <translation>Alle Seiten aber zuerst</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="100"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
         <source>Odd pages</source>
         <translation>Ungerade Seiten</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="101"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="87"/>
         <source>Even pages</source>
         <translation>Gerade Seiten</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="102"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="88"/>
         <source>Duplicatas only</source>
         <translation>Nur die Duplikate</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="835"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print Document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -304,17 +304,17 @@ Dies kann eine starke CPU Belastung sein.</translation>
 <context>
     <name>Print::PrinterPlugin</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="108"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="94"/>
         <source>No printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="109"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="95"/>
         <source>No printer is configured in your system. The print preview and printing will not work.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="110"/>
+        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="96"/>
         <source>You must configure at least on printer. Please refer to your system documentation. 
 </source>
         <translation type="unfinished"></translation>
@@ -323,7 +323,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="663"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="649"/>
         <source>No content to preview (simpleDraw).</source>
         <translation>Kein Inhalt zum vorschauen (simpleDraw)</translation>
     </message>

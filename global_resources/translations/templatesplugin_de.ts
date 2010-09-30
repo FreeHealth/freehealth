@@ -13,12 +13,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="124"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="110"/>
         <source>Save templates .</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="125"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="111"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
@@ -171,24 +171,24 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
         <source>Unable to connect the Templates host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="367"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="373"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
         <source>Unable to create the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="377"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
         <source>Unable to connect the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,7 +196,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1035"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1021"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,17 +204,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="625"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="611"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="626"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="627"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="613"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>
