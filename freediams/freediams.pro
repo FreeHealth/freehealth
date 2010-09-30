@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freediams
 mac:TARGET       = $$quote(FreeDiams)
-PACKAGE_VERSION  = 0.4.3
+PACKAGE_VERSION  = 0.4.9
 
 # include general configuration
 INSTALL_DRUGS = 1
@@ -15,8 +15,8 @@ include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 # include Doc
 # !CONFIG(crosscompil) {
-include( ../doc/manual-di.pri)
-PRE_TARGETDEPS += en_html_docs fr_html_docs
+#include( ../doc/manual-di.pri)
+#PRE_TARGETDEPS += en_html_docs fr_html_docs
 # }
 
 QT *= sql \
