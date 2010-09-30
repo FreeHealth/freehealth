@@ -95,8 +95,8 @@ public:
         params.insert(CommandLine::CL_EMR_Uid,           "--emr-uid");
         params.insert(CommandLine::CL_SelectionOnly,     "--selection-only");
         params.insert(CommandLine::CL_DrugsDatabaseUid,  "--drugsdb-uid");
-        params.insert(CommandLine::CL_ExchangeFile,      "--exchange-out");
-        params.insert(CommandLine::CL_ExchangeFileFormat,"--exchange-format");
+        params.insert(CommandLine::CL_ExchangeOutFile,      "--exchange-out");
+        params.insert(CommandLine::CL_ExchangeOutFileFormat,"--exchange-format");
         params.insert(CommandLine::CL_ExchangeInFile,    "--exchange-in");
         params.insert(CommandLine::CL_PatientUid,        "--patientuid");
         params.insert(CommandLine::CL_PatientName,       "--patientname");
@@ -112,17 +112,20 @@ public:
         params.insert(CommandLine::CL_Chrono,            "--chrono");
         params.insert(CommandLine::CL_Creatinine,        "--creatinine");
         params.insert(CommandLine::CL_Creatinine_Unit,   "--creatinine-unit");
-        params.insert(CommandLine::CL_DrugsAllergies,    "--notdrugs");
-        params.insert(CommandLine::CL_InnAllergies,      "--drugs-uid-allergies");
+        params.insert(CommandLine::CL_DrugsAllergies,    "--drugs-uid-allergies");
+        params.insert(CommandLine::CL_InnAllergies,      "--inn-allergies");
+        params.insert(CommandLine::CL_InnIntolerances,   "--inn-intolerances");
+        params.insert(CommandLine::CL_DrugsIntolerances, "--drugs-uid-intolerances");
         params.insert(CommandLine::CL_AtcAllergies,      "--atc-allergies");
-        params.insert(CommandLine::CL_ICD10Diseases,     "--inn-allergies");
+        params.insert(CommandLine::CL_AtcIntolerances,   "--atc-intolerances");
+        params.insert(CommandLine::CL_ICD10Diseases,     "--icd10diseases");
         params.insert(CommandLine::CL_TransmitDosage,    "--transmit-dosage");
         params.insert(CommandLine::CL_ConfigFile,        "--config");
         params.insert(CommandLine::CL_RunningUnderWine,  "--wine");
         params.insert(CommandLine::CL_BlockPatientDatas, "--blockpatientdatas");
 
         // insert default values
-        value.insert(CommandLine::CL_ExchangeFileFormat, "html_xml");
+        value.insert(CommandLine::CL_ExchangeOutFile, "html_xml");
     }
 
     void parseCommandLine()
@@ -140,8 +143,9 @@ public:
             case CommandLine::CL_EMR_Name :          value.insert(CommandLine::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_EMR_Uid :           value.insert(CommandLine::CL_EMR_Uid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_SelectionOnly :     value.insert(CommandLine::CL_SelectionOnly, true); break;
-            case CommandLine::CL_ExchangeFile :      value.insert(CommandLine::CL_ExchangeFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_ExchangeFileFormat: value.insert(CommandLine::CL_ExchangeFileFormat, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_DrugsDatabaseUid :  value.insert(CommandLine::CL_DrugsDatabaseUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_ExchangeOutFile :      value.insert(CommandLine::CL_ExchangeOutFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_ExchangeOutFileFormat: value.insert(CommandLine::CL_ExchangeOutFileFormat, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_ExchangeInFile :    value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientUid :        value.insert(CommandLine::CL_PatientUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientName :       value.insert(CommandLine::CL_PatientName, a.mid(a.indexOf("=")+1).remove("\"")); break;
@@ -161,9 +165,17 @@ public:
             case CommandLine::CL_ConfigFile :        value.insert(CommandLine::CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_RunningUnderWine:   value.insert(CommandLine::CL_RunningUnderWine, true); break;
             case CommandLine::CL_BlockPatientDatas:  value.insert(CommandLine::CL_BlockPatientDatas, true); break;
-                /** \todo icd10 and drugs allergies */
-                //                case CL_DrugsAllergies : value.insert(CL_DrugsAllergies, true); break;
-                //                case CL_ICD10Diseases : value.insert(CL_ICD10Diseases, true); break;
+
+            case CommandLine::CL_DrugsAllergies: value.insert(CommandLine::CL_DrugsAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_InnAllergies : value.insert(CommandLine::CL_InnAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_AtcAllergies: value.insert(CommandLine::CL_AtcAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
+
+            case CommandLine::CL_DrugsIntolerances: value.insert(CommandLine::CL_DrugsIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_InnIntolerances : value.insert(CommandLine::CL_InnIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_AtcIntolerances: value.insert(CommandLine::CL_AtcIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
+
+            case CommandLine::CL_ICD10Diseases : value.insert(CommandLine::CL_ICD10Diseases, a.mid(a.indexOf("=")+1).remove("\"")); break;
+
             default : break;
         }
         }
@@ -235,8 +247,8 @@ public:
             if (element.tagName() == Internal::Constants::XML_CONFIG_FILE) {
                 value.insert(CommandLine::CL_ConfigFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_OUT_FILE) {
-                value.insert(CommandLine::CL_ExchangeFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_ExchangeFileFormat, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
+                value.insert(CommandLine::CL_ExchangeOutFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+                value.insert(CommandLine::CL_ExchangeOutFile, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
             } else if (element.tagName() == Internal::Constants::XML_DRUGS_DATABASE) {
                 value.insert(CommandLine::CL_DrugsDatabaseUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
             } else if (element.tagName() == Internal::Constants::XML_EMR) {
