@@ -16,11 +16,12 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/globaldrugsmodel.h \
     $${PWD}/dailyschememodel.h \
     $${PWD}/versionupdater.h \
-    $${PWD}/drugsdatabaseaboutpage.h \
     $${PWD}/drugstemplateprinter.h \
     $${PWD}/drugsdatabaseselector.h \
     $${PWD}/atctreemodel.h \
     $${PWD}/drugsearchengine.h
+
+#    $${PWD}/drugsdatabaseaboutpage.h \
 
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
@@ -35,11 +36,13 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/globaldrugsmodel.cpp \
     $${PWD}/dailyschememodel.cpp \
     $${PWD}/versionupdater.cpp \
-    $${PWD}/drugsdatabaseaboutpage.cpp \
     $${PWD}/drugstemplateprinter.cpp \
     $${PWD}/drugsdatabaseselector.cpp \
     $${PWD}/atctreemodel.cpp \
     $${PWD}/drugsearchengine.cpp
+
+#    $${PWD}/drugsdatabaseaboutpage.cpp \
+
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \

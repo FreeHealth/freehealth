@@ -19,7 +19,6 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 #include "drugsbaseplugin.h"
-#include "drugsdatabaseaboutpage.h"
 #include "drugstemplateprinter.h"
 #include "drugsbase.h"
 #include "drugsdatabaseselector.h"
@@ -74,7 +73,6 @@ void DrugsBasePlugin::extensionsInitialized()
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new DrugsDB::Internal::DrugsDatabaseAboutPage(this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
 }
 
