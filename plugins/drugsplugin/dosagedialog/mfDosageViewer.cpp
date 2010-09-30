@@ -468,7 +468,7 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
     d->m_Mapper->setCurrentIndex(dosageRow);
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->recalculateDailySchemeMaximum();
-    qWarning() << dosageRow << QString("MAIN INN %1 = UID %2").arg(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS.toString())<<__FILE__<<__LINE__;
+    qWarning() << QString("MAIN INN %1 = UID %2").arg(drugModel()->drugData(d->m_CIS, DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_CIS.toString())<<__FILE__<<__LINE__;
 }
 
 /** \brief Only provided because of focus bug */

@@ -125,7 +125,7 @@ public:
 
     bool readExchangeFile(const QString &msg)
     {
-        QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
+        QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
         if (!exfile.isEmpty()) {
             messageSplash(msg);
             if (QFileInfo(exfile).isRelative())
@@ -361,7 +361,7 @@ void MainWindow::extensionsInitialized()
 
     // If needed read exchange file
     if (!d->readExchangeFile(tr("Reading exchange file..."))) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString()),
+        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()),
                              __FILE__, __LINE__);
     }
 
@@ -452,12 +452,12 @@ void MainWindow::closeEvent( QCloseEvent *event )
     //    }
 
     // Save exchange file
-    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
+    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
     if (!exfile.isEmpty()) {
         Utils::Log::addMessage(this, QString("Exchange File : %1 - %2")
                                .arg(exfile)
                                .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-        QString format = commandLine()->value(Core::CommandLine::CL_ExchangeFileFormat).toString();
+        QString format = commandLine()->value(Core::CommandLine::CL_ExchangeOutFileFormat).toString();
         QString tmp;
 
         // create PDF cache printed docs XML lines
