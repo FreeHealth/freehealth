@@ -788,7 +788,8 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("Resources"), path(ResourcesPath));
     paths.insert(tr("Read only Databases"), path(ReadOnlyDatabasesPath));
     paths.insert(tr("Writable databases"), path(ReadWriteDatabasesPath));
-    paths.insert(tr("Bundle root path"), path(BundleResourcesPath));
+    paths.insert(tr("Bundle root path"), path(BundleRootPath));
+    paths.insert(tr("Bundle resources path"), path(BundleResourcesPath));
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
@@ -901,7 +902,8 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("Resources"), path(ResourcesPath));
     paths.insert(tr("Read only Databases"), path(ReadOnlyDatabasesPath));
     paths.insert(tr("Writable databases"), path(ReadWriteDatabasesPath));
-    paths.insert(tr("Bundle root path"), path(BundleResourcesPath));
+    paths.insert(tr("Bundle root path"), path(BundleRootPath));
+    paths.insert(tr("Bundle resources path"), path(BundleResourcesPath));
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
