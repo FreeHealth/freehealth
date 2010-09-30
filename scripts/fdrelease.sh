@@ -102,7 +102,7 @@ if [ $ARCH_TO_BUILD = "mac" ] ; then
    # clean old dmg and create new one
    echo "*** Creating DMG archive for MacOsX..."
    rm *.dmg
-   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a FreeDiams -p ./ -s 150
+   "$MAC_SCRIPTS_PATH"/release_dmg.sh -a FreeDiams -p ./ -s 150 -f $MAC_SCRIPTS_PATH"/../"
    # move archive to right place
    mv FreeDiams.dmg "$PACKAGES_PATH"
 
