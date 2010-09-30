@@ -1363,7 +1363,7 @@ bool Printer::pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp, 
         }
         paint->scale(0.95, 0.95); // here is the pseudo margins management
         if (pixmapPreview)
-            paint->translate((paperSize.width() - pageSize.width()), (paperSize.height()-pageSize.height()));
+            paint->translate((paperSize.width() - pageSize.width())/2.0, (paperSize.height()-pageSize.height())/2.0);
         page->play(paint);
     } else {
         QPicture *page1 = d->m_Pages.at(pageNumber-1);
@@ -1371,6 +1371,7 @@ bool Printer::pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp, 
         // landscape printing
         QSizeF pageS = pageSize;
         QSizeF paperS = paperSize;
+        // correctly manages portrait/landscape printing
         if (pageSize.width() > pageSize.height()) {
             pageS = QSizeF(pageSize.height(), pageSize.width());
         }
@@ -1383,13 +1384,13 @@ bool Printer::pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp, 
             return false;
         }
         QPicture *page2 = 0;
-        if (pageNumber<d->m_Pages.count())
+        if (pageNumber < d->m_Pages.count())
             page2 = d->m_Pages.at(pageNumber);
 
         // First page
         paint->scale(0.7, 0.68);
         if (pixmapPreview)
-            paint->translate((paperS.height() - pageS.height()), (paperS.width()-pageS.width()));  // here is the pseudo margins management
+            paint->translate((paperS.height() - pageS.height())/2.0, (paperS.width()-pageS.width())/2.0);  // here is the pseudo margins management
 //        paint->translate((paperSize.height() - pageSize.height()), (paperSize.width()-pageSize.width()));  // here is the pseudo margins management
         page1->play(paint);
 
@@ -1398,7 +1399,7 @@ bool Printer::pageToPainter(QPainter *paint, const int pageNumber, bool twoNUp, 
             if (pixmapPreview)
                 paint->translate(pageSize.width()+(paperSize.width() - pageSize.width())/2.0, 0);  // here is the pseudo margins management
             else
-                paint->translate(pageS.width(), 0);
+                paint->translate(pageS.width() + ((paperS.height() - pageS.height())/2.0), 0);
 //            paint->translate(pageSize.height(), 0);  // landscape printing
             page2->play(paint);
         }
