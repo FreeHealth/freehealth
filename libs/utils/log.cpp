@@ -322,7 +322,7 @@ void Log::errorsToTreeWidget(QTreeWidget *parent, bool expandedByClass)
             if (!class_item.keys().contains(v.object))
                 class_item.insert(v.object, new QTreeWidgetItem(parent, QStringList() << v.object));
             // add message to the class root item
-            new QTreeWidgetItem(class_item.value(v.object), QStringList() << v.message << v.date.toString());
+            new QTreeWidgetItem(class_item.value(v.object), QStringList() << QStringList() << v.date.toString("HH:mm:ss:ms") << v.message);
         }
     } else {
         foreach(const LogData &v , m_Messages) {
@@ -331,4 +331,8 @@ void Log::errorsToTreeWidget(QTreeWidget *parent, bool expandedByClass)
             new QTreeWidgetItem(parent, QStringList() << v.object << v.message << v.date.toString());
         }
     }
+    parent->header()->hide();
+    parent->expandAll();
+    parent->resizeColumnToContents(0);
+    parent->resizeColumnToContents(1);
 }
