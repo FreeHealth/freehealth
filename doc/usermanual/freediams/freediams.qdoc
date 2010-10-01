@@ -8,47 +8,50 @@
 L'objectif de \freediams est de fournir un outil libre (open source), gratuit,
 indépendant (sans conflit d'intérêt) et multi-plateformes pour les professionnels de santé.
 Les base de données thérapeutiques sont multiples et recouvrent l'utilisation
-pour les pays suivant : France, Canada et États-Unis d'Amérique.
-Les interactions sont calculées sur la base du thésaurus
-des interactions de l'AFSSAPS.\n
+pour les pays suivant : France, Canada, États-Unis d'Amérique et Afrique du Sud.
+Les interactions sont calculées sur la base du thésaurus des interactions de l'AFSSAPS.\n
 \freediams vous permet de créer des prescriptions
 totalement paramétrables avec alertes d'interaction en temps réel. Vous pouvez
-imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage.\n
-\freediams peut être utilisé avec d'autres logiciels,
-les paramètres sont alors transmis par la ligne de commande.\n
+imprimer vos ordonnances avec vos propres entêtes, pied de pages et tatouage (texte ou
+image d'arrière-plan lors de l'impression).\n
+\freediams peut être utilisé avec d'autres logiciels, les paramètres sont alors transmis par
+la ligne de commande.\n
 
 \freediams est disponible pour :
 \li Linux (compilé sous Ubuntu, Debian, paquet Debian-Med)
-\li MacOs (universal, à partir de OS 10.5)
+\li MacOs (x86 32 et 64 bits, à partir de OS 10.5)
 \li FreeBSD (nécessite la recompilation des sources)
 \li Windows
 \li les utilisateurs "nomades" travaillant sur plusieurs systèmes d'exploitation en même temps ont la
-possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement compatibles
-d'un système à un autre.
+possibilité d'installer sur une clé USB toutes les versions du logiciel. Les données sont totalement
+compatibles d'un système à un autre.
 \li quelquesoit votre plateforme informatique, il est possible de travailler avec \freediams
 sans qu'aucune installation annexe ne soit requise. Pour les version spécifiques aux distributions
 Linux, les dépendances seront automatiquement installées avec le paquet.
 
-L'interface de \freediams est disponible en différents langages : Anglais, Français, Allemand, Espagnol.
+L'interface de \freediams est disponible en différents langages :
+Anglais, Français, Allemand, Espagnol (en cours).
 
 
 \~english
-The objective of FreeDiams is to provide a free tool (open source), no cost, independent (no conflict of interest)
-and multi-platform support for health professionals. The database is multi-therapeutic use and cover for the
-following countries: France, Canada and United States of America. Interactions are calculated on the basis
-of the thesaurus interactions AFSSAPS. FreeDiams allows you to create prescriptions fully configurable with
-real time interaction alerts. You can print your prescriptions with your own headers, footers and watermarks.
+The objective of FreeDiams is to provide a free tool (open source), no cost,
+independent (no conflict of interest) and multi-platform support for health professionals.
+The drugs database are multiple and available for the following countries:
+France, Canada, United States of America and South Africa.\n
+Interactions are calculated on the basis of the french thesaurus interactions from AFSSAPS.\n
+FreeDiams allows you to create prescriptions fully configurable with real time interaction alerts.
+You can print your prescriptions with your own headers, footers and watermarks.
 FreeDiams can be used with other software parameters are then transmitted by the command line.\n
 
 \freediams is available for:
 \li Linux (compiled under Ubuntu, Debian package Debian-Med)
-\li Mac OS (Universal, from OS 10.5)
+\li Mac OS (x86 32 and 64 bits, from OS 10.5)
 \li FreeBSD (need recompilation of the sources)
 \li Windows
 \li "Nomadic" user mode, in which all OS versions of the software, with single saved preferences,
 can be run from a single USB key. Saved prescription data are also fully compatible between operating
 systems. Version-specific distributions for Linux will, on installation, take care of dependencies
-automatically. The FreeDiams user interface can be toggled between: English, French, German, Spanish.
+automatically.
 \li fact whatever your platform, it is possible to work with \freediams without any requirements.
 For version-specific distributions Linux, dependencies are automatically installed with the package.
 
@@ -82,19 +85,18 @@ The interface of \freediams is available in different languages: English, French
 \~english \section derniere_version Last version
 
 \~french
-\note \freediams est encore au stade embryonnaire de son développement.
-Vous pourrez rencontrer des imperfections, voire des erreurs. Merci de les signaler aux
+\note \freediams est stable et utilisable en pratique courante. Toutefois, il est possible
+que vous rencontriez des imperfections, voire des erreurs. Merci de les signaler aux
 développeurs sur la mailing liste publique : freemedforms@googlegroups.com.
 \li \ref versionning
-\li La version actuellement documentée est la <b>version 0.4.0 (Avril 2010)</b>.
-\li Version de la base de données thérapeutiques : <b>28 Jan 2010</b>.
+\li La version actuellement documentée est la <b>version 0.5.0 (Sept 2010)</b>.
 \li Version de la base de données des interactions : <b>30 Juin 2009</b>.
 
 \~english
-\freediams is still at an early stage. You can find flaws or errors. Thank you for
-any reports to developers on the public mailing list: freemedforms@googlegroups.com.
+\freediams is stable and can be used in current practice. You can still find bugs or errors.
+Thank you for any reports to developers on the public mailing list: freemedforms@googlegroups.com.
 \li Read also : \ref versionning
-\li The current documented version is <b> version 0.4.0 (April 2010) </b>.
+\li The current documented version is <b> version 0.5.0 (Sept 2010) </b>.
 \li version of the interactions database: <b>June 30, 2009 </b>.
 
 
@@ -102,13 +104,13 @@ any reports to developers on the public mailing list: freemedforms@googlegroups.
 \~english \section licence License of release and usage
 
 \~french
-\freediams est distribué sous licence BSD révisée. Vous pouvez lire les termes
+\freediams est distribué sous licence GPLv3. Vous pouvez lire les termes
 de la licence en suivant le menu <b>À propos</b>.
 
 \image html about.png Dialogue : à propos
 
 \~english
-\freediams is available under BSD revised license. You can read terms of the license
+\freediams is available under GPLv3 license. You can read terms of the license
 from the <b>About</b> menu.
 
 \image html about.png About dialog
@@ -181,7 +183,7 @@ When an update is available, the menu <b>Update Available</b> appears.
 \~
 \section prerequired Prerequired
 
-<b>The USB Key feature is only available with \freediams >= 0.4.4.</b>
+<b>The USB Key feature is only available with \freediams >= 0.5.0.</b>
 
 Of course, you need to download all OS version needed of \freediams.
 Let's assume that you need all the OS version running from a unique USB
@@ -284,7 +286,7 @@ Les paramètres suivants sont disponibles :
 \li \e --exchange-out="xxx" : définit le fichier que FreeDiams va écrire, selon de propre droits de chemin d'accès.
 \li \e --exchange-format="xml html html_xml" : format du fichier d'échange de sortie
 \li \e --patientname="xx xx xx" : définit le nom du patient.
-\li \e --patientsurname="xx xx" : définti le prénom du patient.
+\li \e --patientfirstname="xx xx" : définit le prénom du patient.
 \li \e --gender=M : définit le sexe (peut-être égal à 'M' pour Masculin, 'F' Feminin, 'H' Hermaphrodisme)
 \li \e --dateofbirth="yyyy/MM/dd" : définit la data de naissance du patient
 \li \e --weight="dd" : définit le poids du patient (en kg)
@@ -303,7 +305,7 @@ The following settings are available:
 \li \e --exchange-out="xxx" : "xxx" is the file that FreeDiams will write, given PATH write permission.
 \li \e --exchange-format="xml html html_xml" : format of the exchange out file (default html_xml)
 \li \e --patientname="xx xx xx" defines the name of the patient.
-\li \e --patientsurname="xx xx" define the surname of the patient.
+\li \e --patientfirstname="xx xx" define the firstname of the patient.
 \li \e --gender=M: defines the sex (can be equal to 'M' for Male, 'F' Female, 'H' hermaphroditism)
 \li \e --dateofbirth="yyyy/MM/dd" defines the data of birth of patient
 \li \e --weight="dd" defines the patient's weight (kg)
@@ -320,7 +322,7 @@ Not yet documented :
 \li \e --drugsdb-uid : Drugs database Unique identifier to use at startup
 \li \e --patientuid : Patient UID (will be returned without any modification in the "out" exchange file)
 \li \e --weight-unit : value can be : Kg/lbs
-\li \e --height-unit : value can be : cm/
+\li \e --height-unit : value can be : cm/inches
 \li \e --crcl-unit
 \li \e --creatinine-unit
 \li \e --blockpatientdatas : value can be : 0 or 1. User can/can't modify patient's datas
@@ -376,7 +378,7 @@ The structure of this file must meet the following requirements.
   <Patient>
     <Identity name="Name Of Patient"
               secondname=""
-              surname="James"
+              firstname="James"
               uid="EMR Patient's UID"
               dob="yyyy/MM/dd"
               gender="M or F or H"/>

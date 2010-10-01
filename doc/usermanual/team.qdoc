@@ -23,11 +23,11 @@
     - Sébastien Belin, MD : conseiller médical
     - Jim Busser, MD : medical advisor
     - Karsten Hilbert, MD (GNUmed) : medical advisor
-    - Pierre-Marie Desombre, MD (FreeAccount) : medical advisor, tester
+    - Pierre-Marie Desombre, MD (FreeAccount) : medical advisor, tester, developper
     - Vincent Perez, MD : medical advisor
 
-\~french - <b>Gestionnaires des bases de données thérapeutiques :</b>
-\~english - <b>Drugs database managers:</b>
+\~french - <b>Gestionnaires des bases de données thérapeutiques et d'interactions :</b>
+\~english - <b>Drugs and interactions database managers:</b>
 \~    -  Éric Maeker, MD : french database, FDA database
     - Jim Busser, MD : canadian database, FDA database
 
@@ -50,6 +50,7 @@
 \~french - <b>Maître toile : </b>
 \~english - <b>WebMaster : </b>
 \~    - Vincent Perez, MD
+    - Eric Maeker, MD
 
 - <b>Mailing list :</b>
     -  freemedforms@googlegroups.com

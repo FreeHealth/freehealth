@@ -305,11 +305,12 @@ Is mainly a link table.
 This table contains the content of the interaction.
 
 - ID : unique identifier
-- TYPE : type of interaction (encoded integer)
-    - 0001 = Precaution
-    - 0010 = Take in account
-    - 0100 = Inadvisable
-    - 1000 = Contraindication
+- TYPE : type of interaction (encoded string)
+    - I : Information
+    - P = Precaution
+    - T = Take in account
+    - D = Inadvisable
+    - C = Contraindication
 - RISK_FR : risk content in french
 - MANAGEMENT_FR : management of the interaction in french
 - RISK_EN : risk content in english

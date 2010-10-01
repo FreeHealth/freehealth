@@ -252,7 +252,7 @@ Exemple de prescription :
      <RefDosage>{22164613-c1eb-4736-99f5-9abecf4a9fb2}</RefDosage> Identifiant de la posologie standard utilisée pour réaliser la prescription
    </Prescription>
    <Prescription>                                Médicament 2 - Juste pour les tests
-     <CIS>61348441</CIS>
+     <Drug_UID>61348441</Drug_UID>
      <OnlyForTest>true</OnlyForTest>             Juste pour les tests
    </Prescription>
    <Prescription>                                Médicament 3
@@ -266,7 +266,7 @@ Exemple de prescription :
     <PatientDatas>
       <UID>data</UID>
       <Name>data</Name>
-      <Surname>data</Surname>
+      <Firstname>data</Firstname>
       <Gender>data</Gender>
       <Weight>data</Weight>
       <WeightUnit>data</WeightUnit>
@@ -321,7 +321,7 @@ Sample prescription:
       <RefDosage>xxxxxx</RefDosage>                 identifier of the standard dose used to achieve the prescription
     </Prescription>
     <Prescription>                                  Drug 2 - Just for testing
-      <CIS> 61348441 </CIS>
+      <Drug_UID> 61348441 </Drug_UID>
       <OnlyForTest> True </OnlyForTest>             Just for testing
     </Prescription>
     <Prescription>                                  Drug 3
@@ -335,7 +335,7 @@ Sample prescription:
     <PatientDatas>
       <UID>data</UID>
       <Name>data</Name>
-      <Surname>data</Surname>
+      <Firstname>data</Firstname>
       <Gender>data</Gender>
       <Weight>data</Weight>
       <WeightUnit>data</WeightUnit>
@@ -666,7 +666,7 @@ Le tatouage d'impression est un texte simple ou composé, ou une image qui sera 
 Dans l'entête vous pouvez utiliser les étiquettes suivantes (cf \ref tokensmanager) :
 - <em>[[PATIENTNAME]]</em> : nom du patient
 - <em>[[PATIENTSECONDNAME]]</em> : deuxième nom du patient
-- <em>[[PATIENTSURNAME]]</em> : prénom du patient
+- <em>[[PATIENTFIRSTNAME]]</em> : prénom du patient
 - <em>[[PATIENTFULLNAME]]</em> : nom complet du patient (incluant nom de naissance, de mariage et prénoms)
 - <em>[[DATE]]</em> : la date de l'impression
 - <em>[[PATIENTAGE]]</em> : l'âge du patient
@@ -692,8 +692,8 @@ The tattoo print is a simple or compound, or an image to be printed in the backg
 In the header you can use the following labels (see \ref tokensmanager):
 - <em> [[PATIENTNAME]] </em>: patient birth name
 - <em>[[PATIENTSECONDNAME]]</em> : patient second name
-- <em>[[PATIENTSURNAME]]</em> : patient surname
-- <em>[[PATIENTFULLNAME]]</em> : full name (including birth name, marital name and surnames)
+- <em>[[PATIENTFIRSTNAME]]</em> : patient firstname
+- <em>[[PATIENTFULLNAME]]</em> : full name (including birth name, marital name and firstnames)
 - <em> [[DATE]] </em>: the date of printing
 - <em> [[PATIENTAGE]] </em>: the patient's age
 - <em>[[PATIENTYEARSOLD]]</em> : patient age in years

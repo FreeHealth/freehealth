@@ -156,7 +156,7 @@ public:
 private:
     int m_Handler;
     DrugsData *m_Drug;
-    QMap<QString, QString> m_MapNameSurname;
+    QMap<QString, QString> m_MapNameFirstname;
 };
 \endcode
 
