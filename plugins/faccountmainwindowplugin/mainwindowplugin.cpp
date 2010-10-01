@@ -52,6 +52,8 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating MainWinPlugin";
+    m_MainWindow = new MainWindow();
+    Core::ICore::instance()->setMainWindow(m_MainWindow);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -70,8 +72,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->initialize(QStringList(),0);
     return true;
 }

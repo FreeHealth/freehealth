@@ -103,11 +103,11 @@ public:
 
 
     // Patient's datas wrapper
-    virtual IPatient *patient() const {}
-    virtual void setPatient(IPatient *patient) {}
+    virtual IPatient *patient() const {return 0;}
+    virtual void setPatient(IPatient *) {}
 
-    virtual IUser *user() const {}
-    virtual void setUser(IUser *user) {}
+    virtual IUser *user() const {return 0;}
+    virtual void setUser(IUser *) {}
 
 private:
     QSplashScreen *m_Splash;

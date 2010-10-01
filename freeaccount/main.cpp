@@ -47,7 +47,7 @@
 
 #include <iostream>
 
-enum {WarnAllPluginSpecs=0};
+enum { WarnAllPluginSpecs = true };
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 

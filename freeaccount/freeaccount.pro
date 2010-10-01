@@ -3,6 +3,8 @@ TARGET           = freeaccount
 mac:TARGET       = $$quote(FreeAccount)
 PACKAGE_VERSION  = 0.1.0
 
+BUILD_PATH_POSTFIXE = FreeAccount
+
 # include general configuration
 INSTALL_DRUGS = 0
 include( ../config.pri )

@@ -184,17 +184,17 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Internal::SETTINGS_COUNTDOWN,count);
 //    }
 
+        // Creating MainWindow interface
+        m_ui = new Internal::Ui::MainWindow();
+        m_ui->setupUi(this);
+        setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+
     // Disable some actions when starting as medintux plugin
     if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
 //        this->aNew->setEnabled(false);
 //        this->aSave->setEnabled(false);
 //        this->aMedinTux->setEnabled(false);
     }
-
-    // Creating MainWindow interface
-    m_ui = new Internal::Ui::MainWindow();
-    m_ui->setupUi(this);
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // If needed read exchange file
     const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
@@ -252,9 +252,6 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    // avoid a bug with contextManager updateContext
-//    delete m_TemplatesDock;
-//    m_TemplatesDock = 0;
 }
 
 /**
@@ -263,27 +260,6 @@ MainWindow::~MainWindow()
 */
 void MainWindow::refreshPatient()
 {
-//    m_ui->patientName->setText(patient()->value(Core::Patient::Name).toString());
-//    m_ui->patientName->setToolTip( QString("Nom : %1 Prénom : %2<br />Date de naissance : %3<br />Poids : %4<br />"
-//                                     "Taille : %5<br />Clearance : %6")
-//                             .arg( patient()->value(Core::Patient::Name).toString(),
-//                                   patient()->value(Core::Patient::Surname).toString(),
-//                                   patient()->value(Core::Patient::DateOfBirth).toString(),
-//                                   patient()->value(Core::Patient::Weight).toString() )
-//                             .arg( patient()->value(Core::Patient::Height).toString(),
-//                                   patient()->value(Core::Patient::CreatinClearance).toString() ));
-//    m_ui->patientSurname->setText(patient()->value(Core::Patient::Surname).toString());
-//    m_ui->dobDateEdit->setDate(patient()->value(Core::Patient::DateOfBirth).toDate());
-//    m_ui->sexCombo->setCurrentIndex(m_ui->sexCombo->findText(patient()->value(Core::Patient::Gender).toString(), Qt::MatchFixedString));
-//    m_ui->creatinineUnit->setCurrentIndex(m_ui->creatinineUnit->findText(patient()->value(Core::Patient::CreatinineUnit).toString(), Qt::MatchFixedString));
-//    m_ui->crClUnit->setCurrentIndex(m_ui->crClUnit->findText(patient()->value(Core::Patient::CreatinClearanceUnit).toString(), Qt::MatchFixedString));
-//    m_ui->patientWeight->setValue(patient()->value(Core::Patient::Weight).toInt());
-//    m_ui->patientSize->setValue(patient()->value(Core::Patient::Height).toInt());
-//    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
-//    m_ui->patientCreatinin->setValue(patient()->value(Core::Patient::Creatinine).toDouble());
-//    m_ui->patientClCr->setValue(patient()->value(Core::Patient::CreatinClearance).toDouble());
-//    /** \todo manage allergies */
-//    m_ui->listOfAllergies->setText(patient()->value(Core::Patient::DrugsAtcAllergies).toString());
 }
 
 /**
@@ -330,10 +306,8 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-//        QVariant sex = patient()->value(Core::Patient::Gender);
-	m_ui->retranslateUi(this);
+//        m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
-//        patient()->setValue(Core::Patient::Gender, sex);
         refreshPatient();
     }
 }

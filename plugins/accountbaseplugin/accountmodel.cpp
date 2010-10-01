@@ -64,7 +64,7 @@ public:
             m_UserUid(Constants::DEFAULT_ACCOUNTANCY_USER),
             q(parent)
     {
-        qWarning() << QSqlDatabase::connectionNames();
+        qWarning() << __FILE__ << __LINE__ << QSqlDatabase::connectionNames();
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
         refreshFilter();
@@ -85,7 +85,7 @@ public:
         where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Account, where));
         if (WarnFilter)
-            qWarning() << m_SqlTable->filter();
+            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
         q->reset();
     }
 
