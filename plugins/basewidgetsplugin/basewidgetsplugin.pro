@@ -2,6 +2,9 @@ TEMPLATE = lib
 TARGET = BaseWidgets
 PACKAGE_VERSION = 0.0.2
 DEFINES += BASEFORMWIDGETS_LIBRARY
+
+BUILD_PATH_POSTFIXE = FreeMedForms
+
 include(../fmf_plugins.pri)
 include( basewidgetsplugin_dependencies.pri )
 HEADERS += basewidgetsplugin.h \

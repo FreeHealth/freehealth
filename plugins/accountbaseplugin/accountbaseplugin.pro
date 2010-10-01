@@ -3,6 +3,8 @@ TARGET = AccountBase
 PACKAGE_VERSION = 0.0.2
 DEFINES += ACCOUNTBASE_LIBRARY
 
+BUILD_PATH_POSTFIXE = FreeAccount
+
 include(../fmf_plugins.pri)
 include( accountbaseplugin_dependencies.pri )
 

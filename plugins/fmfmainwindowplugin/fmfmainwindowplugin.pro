@@ -2,6 +2,9 @@ TEMPLATE = lib
 TARGET = MainWindow
 PACKAGE_VERSION = 0.0.2
 DEFINES += FMF_MAINWIN_LIBRARY
+
+BUILD_PATH_POSTFIXE = FreeMedForms
+
 include(../fmf_plugins.pri)
 include( fmfmainwindowplugin_dependencies.pri )
 HEADERS = mainwindowplugin.h \

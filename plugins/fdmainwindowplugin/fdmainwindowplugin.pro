@@ -5,6 +5,8 @@ PACKAGE_VERSION = 0.0.2
 DEFINES += FD_MAINWIN_LIBRARY
 FREEDIAMS = 1
 
+BUILD_PATH_POSTFIXE = FreeDiams
+
 include(../fmf_plugins.pri)
 include( fdmainwindowplugin_dependencies.pri )
 

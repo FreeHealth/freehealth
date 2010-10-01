@@ -2,6 +2,10 @@ TEMPLATE = lib
 TARGET = Account
 PACKAGE_VERSION = 0.0.2
 DEFINES += ACCOUNT_LIBRARY
+
+BUILD_PATH_POSTFIXE = FreeAccount
+
+
 include(../fmf_plugins.pri)
 include( accountplugin_dependencies.pri )
 HEADERS = accountplugin.h \

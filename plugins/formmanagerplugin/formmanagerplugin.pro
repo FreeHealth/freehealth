@@ -2,6 +2,9 @@ TEMPLATE = lib
 TARGET = FormManager
 PACKAGE_VERSION = 0.0.2
 DEFINES += FORMMANAGER_LIBRARY
+
+BUILD_PATH_POSTFIXE = FreeMedForms
+
 include(../fmf_plugins.pri)
 include( formmanagerplugin_dependencies.pri )
 HEADERS = formmanagerplugin.h \

@@ -4,6 +4,8 @@ PACKAGE_VERSION = 0.0.2
 DEFINES += FREEDIAMS
 FREEDIAMS = 1
 
+BUILD_PATH_POSTFIXE = FreeDiams
+
 # include shared files for the coreplugin.
 # FreeMedForms and derivatives share the same Core basic structure that is
 # found in an unique pri file. The files may be included from <coreplugin/...> instead of
@@ -29,4 +31,5 @@ SOURCES += coreplugin.cpp \
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdcoreplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/fdcoreplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/fdcoreplugin_es.ts
+
 OTHER_FILES += $${PWD}/Core.pluginspec

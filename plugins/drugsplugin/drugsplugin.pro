@@ -4,6 +4,7 @@ PACKAGE_VERSION = 0.0.9
 
 DEFINES += DRUGS_LIBRARY
 DEFINES += FREEMEDFORMS
+BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include(drugsplugin_dependencies.pri)

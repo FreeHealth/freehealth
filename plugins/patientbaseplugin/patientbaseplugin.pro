@@ -2,6 +2,9 @@ TEMPLATE = lib
 TARGET = PatientBase
 PACKAGE_VERSION = 0.0.2
 DEFINES += PATIENTBASE_LIBRARY
+
+BUILD_PATH_POSTFIXE = FreeMedForms
+
 include(../fmf_plugins.pri)
 include(patientbaseplugin_dependencies.pri)
 HEADERS = patientbaseplugin.h \

@@ -6,6 +6,8 @@ DEFINES += DRUGS_LIBRARY
 DEFINES += FREEDIAMS
 FREEDIAMS = 1
 
+BUILD_PATH_POSTFIXE = FreeDiams
+
 include(../../../plugins/fmf_plugins.pri)
 include(../../../plugins/drugsplugin/drugsplugin_dependencies.pri )
 
