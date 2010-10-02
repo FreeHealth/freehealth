@@ -48,6 +48,8 @@ class AccountModel : public QAbstractTableModel
     friend class Internal::AccountModelPrivate;
 
 public:
+    // Data representation is the same as the SQL table ACCOUNT
+
     AccountModel(QObject *parent);
     ~AccountModel();
 
@@ -81,6 +83,9 @@ public:
 public Q_SLOTS:
     bool submit();
     void revert();
+
+private Q_SLOTS:
+    void userChanged();
 
 private:
     Internal::AccountModelPrivate *d;

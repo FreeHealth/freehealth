@@ -246,6 +246,13 @@ namespace Constants {
     const char* const   REVENUES_TEXT           = QT_TRANSLATE_NOOP("Account", "Revenues");
     const char* const   EXPENSES_TEXT           = QT_TRANSLATE_NOOP("Account", "Expenses");
 
+    const char* const   CASH                    = QT_TRANSLATE_NOOP("Account", "Cash");
+    const char* const   CHEQUES                 = QT_TRANSLATE_NOOP("Account", "Cheques");
+    const char* const   VISA                    = QT_TRANSLATE_NOOP("Account", "VISA");
+    const char* const   MONEY                   = QT_TRANSLATE_NOOP("Account", "Money");
+    const char* const   DUE                     = QT_TRANSLATE_NOOP("Account", "Due");
+    const char* const   INSURANCE               = QT_TRANSLATE_NOOP("Account", "Insurance");
+    const char* const   OTHER                   = QT_TRANSLATE_NOOP("Account", "Other");
 
 //    approche par les dépenses   n f spending-based approach
 //    calendrier des dépenses   n m spending schedule

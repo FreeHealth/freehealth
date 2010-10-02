@@ -57,7 +57,7 @@ QT_END_NAMESPACE
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.1.0
- * \date 18 Mar 2010
+ * \date 03 Oct 2010
 */
 
 namespace MainWin {
@@ -106,16 +106,7 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     void aboutToShowRecentFiles();
     void openRecentFile();
 
-
-    // slots for patient's datas
-//    void on_patientName_textChanged(const QString &text);
-//    void on_patientSurname_textChanged(const QString &text);
-//    void on_patientWeight_valueChanged(const QString &text);
-//    void on_patientSize_valueChanged(const QString &text);
-//    void on_sexCombo_currentIndexChanged(const QString &text);
-//    void on_patientClCr_valueChanged(const QString &text);
-//    void on_patientCreatinin_valueChanged(const QString &text);
-//    void on_listOfAllergies_textChanged(const QString &text);
+    void userChanged();
 
 protected:
     void closeEvent( QCloseEvent *event );

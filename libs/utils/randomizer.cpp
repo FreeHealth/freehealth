@@ -61,7 +61,7 @@ public:
     {
         if (!boysFirstnames.isEmpty())
             return;
-        QString c = Utils::readTextFile(m_Path + "/boys_firstnames.csv");
+        QString c = Utils::readTextFile(m_Path + "/boys_surnames.csv");
         if (c.isEmpty())
             Utils::Log::addError("Randomizer", "Can not read boy firstnames.",
                                  __FILE__, __LINE__);
@@ -74,7 +74,7 @@ public:
     {
         if (!girlsFirstnames.isEmpty())
             return;
-        QString c = Utils::readTextFile(m_Path + "/girls_firstnames.csv");
+        QString c = Utils::readTextFile(m_Path + "/girls_surnames.csv");
         if (c.isEmpty())
             Utils::Log::addError("Randomizer", "Can not read boy firtsnames.",
                                  __FILE__, __LINE__);

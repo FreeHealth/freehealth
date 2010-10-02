@@ -42,6 +42,7 @@
 #include <coreplugin/iuser.h>
 
 #include <QProgressDialog>
+#include <QUuid>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -52,20 +53,20 @@ static inline AccountDB::AccountBase *accountBase() { return AccountDB::AccountB
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 
-static inline void createBankAccount(const QString &userUid)
+static inline void createBankAccount(const QString &userUid, Utils::Randomizer *random)
 {
     QSqlQuery query(accountBase()->database());
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_BankDetails));
-    query.bindValue(AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCE, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCEDATE, QVariant());
+    query.bindValue(AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, random->getRandomString(15));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCE, random->randomInt(-100000, 1239834));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCEDATE, random->randomDateTime(QDateTime::currentDateTime().addDays(-50)).toString(Qt::ISODate));
     query.bindValue(AccountDB::Constants::BANKDETAILS_COMMENT, QVariant());
     query.bindValue(AccountDB::Constants::BANKDETAILS_DEFAULT, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, QVariant());
+    query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, random->getRandomString(15));
     query.bindValue(AccountDB::Constants::BANKDETAILS_ID, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, QVariant());
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, random->getRandomName() + " " + random->getRandomFirstname(1));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, random->getRandomFrenchCity().second);
+    query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->getRandomString(50));
     query.bindValue(AccountDB::Constants::BANKDETAILS_USER_UID, userUid);
     if (!query.exec()) {
         Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
@@ -73,18 +74,22 @@ static inline void createBankAccount(const QString &userUid)
     query.finish();
 }
 
-static inline void createMedicalProcedure(const QString &userUid)
+static inline void createMedicalProcedure(const QString &userUid, Utils::Randomizer *random)
 {
     QSqlQuery query(accountBase()->database());
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_MedicalProcedure));
-    query.bindValue(AccountDB::Constants::MP_ABSTRACT, QVariant());
-    query.bindValue(AccountDB::Constants::MP_AMOUNT, QVariant());
-    query.bindValue(AccountDB::Constants::MP_DATE, QVariant());
+    QStringList abstract;
+    for(int i = 0 ; i < random->randomInt(4,20); ++i) {
+        abstract << random->getRandomName();
+    }
+    query.bindValue(AccountDB::Constants::MP_ABSTRACT, abstract.join(" "));
+    query.bindValue(AccountDB::Constants::MP_AMOUNT, random->randomInt(10, 30));
+    query.bindValue(AccountDB::Constants::MP_DATE, random->randomDate(2010, 9, 1));
     query.bindValue(AccountDB::Constants::MP_ID, QVariant());
     query.bindValue(AccountDB::Constants::MP_NAME, QVariant());
     query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
     query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
-    query.bindValue(AccountDB::Constants::MP_UID, QVariant());
+    query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
     query.bindValue(AccountDB::Constants::MP_USER_UID, userUid);
     if (!query.exec()) {
         Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
@@ -92,17 +97,18 @@ static inline void createMedicalProcedure(const QString &userUid)
     query.finish();
 }
 
-static inline void createMovement(const QString &userUid)
+static inline void createMovement(const QString &userUid, Utils::Randomizer *random)
 {
     QSqlQuery query(accountBase()->database());
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_Movement));
     query.bindValue(AccountDB::Constants::MOV_ACCOUNT_ID, QVariant());
-    query.bindValue(AccountDB::Constants::MOV_AMOUNT, QVariant());
+    query.bindValue(AccountDB::Constants::MOV_AMOUNT, random->randomInt(10,250));
     query.bindValue(AccountDB::Constants::MOV_AV_MOVEMENT_ID, QVariant());
-    query.bindValue(AccountDB::Constants::MOV_COMMENT, QVariant());
-    query.bindValue(AccountDB::Constants::MOV_DATE, QVariant());
-    query.bindValue(AccountDB::Constants::MOV_DATEOFVALUE, QVariant());
-    query.bindValue(AccountDB::Constants::MOV_DETAILS, QVariant());
+    query.bindValue(AccountDB::Constants::MOV_COMMENT, "Comment");
+    QDate date = random->randomDate(2010, 9, 1);
+    query.bindValue(AccountDB::Constants::MOV_DATE, date);
+    query.bindValue(AccountDB::Constants::MOV_DATEOFVALUE, random->randomDate(date.year(), date.month(), date.day()));
+    query.bindValue(AccountDB::Constants::MOV_DETAILS, "Details");
     query.bindValue(AccountDB::Constants::MOV_ID, QVariant());
     query.bindValue(AccountDB::Constants::MOV_ISVALID, QVariant());
     query.bindValue(AccountDB::Constants::MOV_LABEL, QVariant());
@@ -116,30 +122,31 @@ static inline void createMovement(const QString &userUid)
     query.finish();
 }
 
-static inline void createAccount(const QString &userUid)
+static inline void createAccount(const QString &userUid, Utils::Randomizer *random)
 {
     QSqlQuery query(accountBase()->database());
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_Account));
-    query.bindValue(AccountDB::Constants::ACCOUNT_CASHAMOUNT, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_COMMENT, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_DATE, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_DUEAMOUNT, QVariant());
+    query.bindValue(AccountDB::Constants::ACCOUNT_CASHAMOUNT, random->randomInt(100));
+    query.bindValue(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT, random->randomInt(100));
+    query.bindValue(AccountDB::Constants::ACCOUNT_COMMENT, "Comment");
+    QDate now = QDate::currentDate();
+    query.bindValue(AccountDB::Constants::ACCOUNT_DATE, random->randomDate(now.year(), 1, 1));
+    query.bindValue(AccountDB::Constants::ACCOUNT_DUEAMOUNT, random->randomInt(100));
     query.bindValue(AccountDB::Constants::ACCOUNT_DUEBY, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_ID, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT, QVariant());
+    query.bindValue(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT, random->randomInt(100));
     query.bindValue(AccountDB::Constants::ACCOUNT_INSURANCE_ID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_ISVALID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_TEXT, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_OTHERAMOUNT, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_NAME, QVariant());
+    query.bindValue(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,random->randomInt(100));
+    query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_NAME, random->getRandomName());
     query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_UID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_SITE_ID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_TRACE, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_UID, QVariant());
+    query.bindValue(AccountDB::Constants::ACCOUNT_UID, QUuid::createUuid().toString());
     query.bindValue(AccountDB::Constants::ACCOUNT_USER_UID, userUid);
-    query.bindValue(AccountDB::Constants::ACCOUNT_VISAAMOUNT, QVariant());
+    query.bindValue(AccountDB::Constants::ACCOUNT_VISAAMOUNT, random->randomInt(100));
     if (!query.exec()) {
         Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
     }
@@ -233,13 +240,13 @@ void VirtualDatabaseCreator::on_populate_clicked()
     dlg.setWindowModality(Qt::WindowModal);
 
     Utils::Randomizer r;
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles");
 
     // create bank accounts
     accountBase()->database().transaction();
     for(int i = 0; i < ui->bankAccounts->value(); ++i) {
         dlg.setValue(++stepsDone);
-//        createBankAccount();
+        createBankAccount(userUid, &r);
     }
     accountBase()->database().commit();
 
@@ -247,6 +254,7 @@ void VirtualDatabaseCreator::on_populate_clicked()
     accountBase()->database().transaction();
     for(int i = 0; i < ui->medicalProcedures->value(); ++i) {
         dlg.setValue(++stepsDone);
+        createMedicalProcedure(userUid, &r);
     }
     accountBase()->database().commit();
 
@@ -261,6 +269,7 @@ void VirtualDatabaseCreator::on_populate_clicked()
     accountBase()->database().transaction();
     for(int i = 0; i < ui->accounts->value(); ++i) {
         dlg.setValue(++stepsDone);
+        createAccount(userUid, &r);
     }
     accountBase()->database().commit();
 

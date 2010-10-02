@@ -38,33 +38,37 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QSqlTableModel>
 
 using namespace AccountDB;
+using namespace Trans::ConstantTranslations;
 
-enum {WarnFilter=false};
+enum {WarnFilter=true};
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 
 namespace AccountDB {
 namespace Internal {
 
+/** \todo Manage user change */
 class AccountModelPrivate
 {
 public:
     AccountModelPrivate(AccountModel *parent) :
             m_SqlTable(0), m_IsDirty(false),
             m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
-            m_UserUid(Constants::DEFAULT_ACCOUNTANCY_USER),
+            m_UserUid(user()->value(Core::IUser::Uuid).toString()),
             q(parent)
     {
-        qWarning() << __FILE__ << __LINE__ << QSqlDatabase::connectionNames();
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
         refreshFilter();
@@ -109,6 +113,10 @@ AccountModel::AccountModel(QObject *parent) :
 {
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
+
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
+    userChanged();
+
     d->m_SqlTable->select();
 }
 
@@ -163,6 +171,31 @@ bool AccountModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 QVariant AccountModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    if (orientation==Qt::Horizontal) {
+        switch (section) {
+        /** \todo remove tr translations use tkTr*/
+        case Constants::ACCOUNT_CASHAMOUNT : return tr(Constants::CASH, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        case Constants::ACCOUNT_CHEQUEAMOUNT : return tr(Constants::CHEQUES, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        case Constants::ACCOUNT_COMMENT : return tr("Comments");
+        case Constants::ACCOUNT_DATE : return tr("Date");
+        case Constants::ACCOUNT_DUEAMOUNT : return tr( Constants::DUE, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        case Constants::ACCOUNT_DUEBY : return tr("Due by");
+        case Constants::ACCOUNT_ID : return "ID";
+        case Constants::ACCOUNT_INSURANCEAMOUNT : return tr(Constants::INSURANCE, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        case Constants::ACCOUNT_INSURANCE_ID : return "Assurance Id";
+        case Constants::ACCOUNT_ISVALID : return "is valid";
+        case Constants::ACCOUNT_OTHERAMOUNT : return tr(Constants::OTHER, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        case Constants::ACCOUNT_MEDICALPROCEDURE_TEXT : return "MP";
+        case Constants::ACCOUNT_MEDICALPROCEDURE_XML : return "MP";
+        case Constants::ACCOUNT_PATIENT_NAME : return tr(Trans::Constants::PATIENT);
+        case Constants::ACCOUNT_PATIENT_UID : return "Patient uuid";
+        case Constants::ACCOUNT_SITE_ID : return "Site Id";
+//        case Constants::ACCOUNT_TRACE : return "trace";
+        case Constants::ACCOUNT_USER_UID : return tkTr(Trans::Constants::USER);
+        case Constants::ACCOUNT_VISAAMOUNT : return tr(Constants::VISA, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
+        }
+    }
+
     return QVariant();
 }
 
@@ -224,4 +257,10 @@ double AccountModel::sum(const int &fieldRef)
         Utils::Log::addQueryError(this, query);
     }
     return 0.0;
+}
+
+void AccountModel::userChanged()
+{
+    d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
+    d->refreshFilter();
 }

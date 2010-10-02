@@ -45,6 +45,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/filemanager.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
@@ -94,6 +95,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::instance()->patient(); }
+static inline Core::IUser *user() { return Core::Internal::CoreImpl::instance()->user(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 
 // SplashScreen Messagers
@@ -245,6 +247,8 @@ void MainWindow::extensionsInitialized()
     setCentralWidget(v);
     // END TEST
 
+    connect(Core::ICore::instance()->user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
+    userChanged();
 
     createDockWindows();
     finishSplash(this);
@@ -341,6 +345,11 @@ void MainWindow::openRecentFile()
     if (!fileName.isEmpty()) {
         readFile(fileName);
     }
+}
+
+void MainWindow::userChanged()
+{
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " // " + user()->value(Core::IUser::Uuid).toString());
 }
 
 void MainWindow::updateCheckerEnd()
