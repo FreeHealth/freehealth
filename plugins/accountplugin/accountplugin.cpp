@@ -38,6 +38,7 @@
 #include "preferences/bankdetailspage.h"
 #include "preferences/availablemovementpage.h"
 #include "preferences/medicalprocedurepage.h"
+#include "preferences/virtualdatabasecreator.h"
 
 #include <utils/log.h>
 
@@ -81,6 +82,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new BankDetailsPage(this));
     addAutoReleasedObject(new AvailableMovementPage(this));
     addAutoReleasedObject(new MedicalProcedurePage(this));
+    addAutoReleasedObject(new VirtualDatabaseCreatorPage(this));
 }
 
 
