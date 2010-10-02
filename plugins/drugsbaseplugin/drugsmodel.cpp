@@ -173,7 +173,7 @@ public:
         case Drug::Molecules :          return drug->listOfMolecules();
         case Drug::AllInnsKnown :       return drugsBase()->drugsINNIsKnown(drug);
         case Drug::Inns :               return drug->listOfInn();
-        case Drug::InnsATCcodes :  /** \todo code here */            return QVariant();
+        case Drug::InnsATCcodes :       return drug->allAtcCodes();
         case Drug::MainInnCode :        return drug->mainInnCode();
         case Drug::MainInnDosage :      return drug->mainInnDosage();
         case Drug::MainInnName :        return drug->mainInnName();

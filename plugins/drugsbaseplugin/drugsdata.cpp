@@ -329,7 +329,7 @@ QStringList DrugsData::listOfInn() const
             tmp = compo->innName();
         }
     }
-//    qWarning() << toReturn;
+//    qWarning() << toReturn << __FILE__ << __LINE__;
     return toReturn;
 }
 
@@ -352,6 +352,20 @@ QSet<int> DrugsData::allSevenCharsAtcIds() const
     return list;
 }
 
+QStringList DrugsData::allSevenCharsAtcCodes() const
+{
+    QStringList list;
+    foreach(int i, d->m_IamCodes) {
+        if (i < 99999) {
+            const QString &code = drugsBase()->getAtcCode(i);
+            if (code.length()==7) {
+                list << code;
+            }
+        }
+    }
+    return list;
+}
+
 QSet<int> DrugsData::allAtcIds() const
 {
     QSet<int> list;
@@ -362,6 +376,18 @@ QSet<int> DrugsData::allAtcIds() const
     }
     return list;
 }
+
+QStringList DrugsData::allAtcCodes() const
+{
+    QStringList list;
+    foreach(int i, d->m_IamCodes) {
+        if (i < 99999) {
+            list <<  drugsBase()->getAtcCode(i);
+        }
+    }
+    return list;
+}
+
 
 /** \brief Returns all Inn and IamClasses codes knwon for this drug. */
 int DrugsData::mainInnCode() const

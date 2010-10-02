@@ -217,7 +217,9 @@ public:
      QStringList       listOfInnClasses() const;
      QSet<int>         allInnAndIamClasses() const;
      QSet<int>         allSevenCharsAtcIds() const;
+     QStringList       allSevenCharsAtcCodes() const;
      QSet<int>         allAtcIds() const;
+     QStringList       allAtcCodes() const;
      int               mainInnCode() const;
      QString           mainInnName() const;
      QString           mainInnDosage() const;

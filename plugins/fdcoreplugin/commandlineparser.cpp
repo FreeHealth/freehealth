@@ -125,7 +125,7 @@ public:
         params.insert(CommandLine::CL_BlockPatientDatas, "--blockpatientdatas");
 
         // insert default values
-        value.insert(CommandLine::CL_ExchangeOutFile, "html_xml");
+        value.insert(CommandLine::CL_ExchangeOutFileFormat, "html_xml");
     }
 
     void parseCommandLine()
@@ -248,7 +248,7 @@ public:
                 value.insert(CommandLine::CL_ConfigFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_OUT_FILE) {
                 value.insert(CommandLine::CL_ExchangeOutFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_ExchangeOutFile, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
+                value.insert(CommandLine::CL_ExchangeOutFileFormat, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
             } else if (element.tagName() == Internal::Constants::XML_DRUGS_DATABASE) {
                 value.insert(CommandLine::CL_DrugsDatabaseUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
             } else if (element.tagName() == Internal::Constants::XML_EMR) {
