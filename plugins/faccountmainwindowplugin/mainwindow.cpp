@@ -123,8 +123,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     // create menus
+//    createGeneralMenu();
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+//    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
 //    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
 //    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);

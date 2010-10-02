@@ -101,13 +101,11 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
-
-    // Patient's datas wrapper
     virtual IPatient *patient() const {return 0;}
     virtual void setPatient(IPatient *) {}
 
-    virtual IUser *user() const {return 0;}
-    virtual void setUser(IUser *) {}
+    virtual IUser *user() const {return m_User;}
+    virtual void setUser(IUser *user) {m_User=user;}
 
 private:
     QSplashScreen *m_Splash;
@@ -121,6 +119,7 @@ private:
     CommandLine *m_CommandLine;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
+    Core::IUser *m_User;
 };
 
 } // namespace Internal

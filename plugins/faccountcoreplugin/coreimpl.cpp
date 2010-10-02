@@ -91,7 +91,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_UID(new UniqueIDManager)
+        m_UID(new UniqueIDManager),
+        m_User(0)
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);

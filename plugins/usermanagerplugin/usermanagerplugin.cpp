@@ -144,11 +144,24 @@ void UserManagerPlugin::extensionsInitialized()
         qWarning() << "UserManagerPlugin::extensionsInitialized";
 
     // add UserManager toogler action to plugin menu
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
+
+#ifdef FREEACCOUNT
+    const char * const menuId = Core::Constants::M_FILE;
+    const char * const menuNewId = Core::Constants::M_FILE;
+    const char * const groupUsers = Core::Constants::G_FILE_OTHER;
+    const char * const groupNew =  Core::Constants::G_FILE_NEW;
+#else
+    const char * const menuId = Core::Constants::M_GENERAL;
+    const char * const menuNewId = Core::Constants::M_GENERAL_NEW;
+    const char * const groupUsers = Core::Constants::G_GENERAL_USERS;
+    const char * const groupNew = Core::Constants::G_GENERAL_NEW;
+#endif
+
+    Core::ActionContainer *menu = actionManager()->actionContainer(menuId);
     Q_ASSERT(menu);
     if (!menu)
         return;
-    Core::ActionContainer *newmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
+    Core::ActionContainer *newmenu = actionManager()->actionContainer(menuNewId);
     Q_ASSERT(newmenu);
     if (!newmenu)
         return;
@@ -176,7 +189,7 @@ void UserManagerPlugin::extensionsInitialized()
     Q_ASSERT(cmd);
     cmd->setDefaultKeySequence(QKeySequence(Qt::CTRL + Qt::Key_N, Qt::CTRL + Qt::Key_U));
     cmd->setTranslations(Trans::Constants::USER);
-    newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
+    newmenu->addAction(cmd, groupNew);
     cmd->retranslate();
     connect(aCreateUser, SIGNAL(triggered()), this, SLOT(createUser()));
 
@@ -187,7 +200,7 @@ void UserManagerPlugin::extensionsInitialized()
     cmd = actionManager()->registerAction(aChangeUser, "aChangeCurrentUser", ctx);
     Q_ASSERT(cmd);
     cmd->setTranslations(tr("Change current user"));
-    menu->addAction(cmd, Core::Constants::G_GENERAL_USERS);
+    menu->addAction(cmd, groupNew);
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 

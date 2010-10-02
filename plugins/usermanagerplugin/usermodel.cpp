@@ -658,7 +658,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             case Core::IUser::Firstname : toReturn = user->firstname(); break;
             case Core::IUser::FullName :
                 {
-                    QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->surname();
+                    QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->firstname();
                     r.replace("  ", " ");
                     toReturn = r;
                     break;
