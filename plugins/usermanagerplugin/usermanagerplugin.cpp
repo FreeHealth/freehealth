@@ -157,6 +157,8 @@ void UserManagerPlugin::extensionsInitialized()
     const char * const groupNew = Core::Constants::G_GENERAL_NEW;
 #endif
 
+    qWarning() << actionManager();
+
     Core::ActionContainer *menu = actionManager()->actionContainer(menuId);
     Q_ASSERT(menu);
     if (!menu)

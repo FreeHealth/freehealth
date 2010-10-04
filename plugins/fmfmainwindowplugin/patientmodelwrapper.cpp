@@ -59,16 +59,25 @@ PatientModelWrapper::~PatientModelWrapper()
 {
 }
 
-QVariant PatientModelWrapper::value(const int ref) const
+QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
+    if (role != Qt::DisplayRole && role != Qt::EditRole)
+        return QVariant();
+
     // get datas from the model
-    QVariant result = m_Model->data(m_Model->index(m_Model->currentPatient().row(), ref));
+    QModelIndex idx = m_Model->index(index.row(), index.column());
+    QVariant result = m_Model->data(idx);
     if (!result.isNull())
         return result;
+
+    // or in the forms widgets
     foreach(Form::FormMain *f, formManager()->forms()) {
         foreach(Form::FormItem *item, f->formItemChildren()) {
             if (item->itemDatas()) {
-                if (item->patientDataRepresentation() == ref)
+                if (item->patientDataRepresentation() == index.column())
                     return item->itemDatas()->data(item->patientDataRepresentation(), Form::IFormItemData::ID_ForPatientModel);
             }
         }
@@ -76,13 +85,13 @@ QVariant PatientModelWrapper::value(const int ref) const
     return QVariant();
 }
 
-bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
+//bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
+bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value, int role)
 {
-    qWarning() << " PatientModelWrapper::setValue" << ref << value;
-    if (!has(ref))
-        return false;
-    if (m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value)) {
-        Q_EMIT dataChanged(ref);
+    qWarning() << " PatientModelWrapper::setValue" << item.column() << value;
+    QModelIndex idx = m_Model->index(item.row(), item.column());
+    if (m_Model->setData(idx, value, role)) {
+        Q_EMIT dataChanged(idx, idx);
         return true;
     }
     return false;
@@ -91,5 +100,5 @@ bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
 void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {
     if (m_Model->currentPatient().row() == index.row())
-        Q_EMIT this->dataChanged(index.column());
+        Q_EMIT this->dataChanged(index, index);
 }

@@ -132,6 +132,9 @@ public:
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const = 0;
     virtual QVariant data(int column) const {return data(index(0, column));}
 
+    /** \todo remove this and use setData instead **/
+    virtual bool setValue(int ref, const QVariant &value) {return setData(index(0,ref), value);}
+
     virtual QString toXml() const = 0;
     virtual bool fromXml(const QString &xml) = 0;
 

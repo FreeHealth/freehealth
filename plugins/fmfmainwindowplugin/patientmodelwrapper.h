@@ -73,8 +73,9 @@ public:
     void clear() {}
     bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
 
-    QVariant value(const int ref) const;
-    bool setValue(const int ref, const QVariant &value);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
 
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
