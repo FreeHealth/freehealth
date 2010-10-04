@@ -18,9 +18,9 @@
    version="1.0"
    sodipodi:docname="freemedforms.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/freemedforms-24.png"
-   inkscape:export-xdpi="45.119999"
-   inkscape:export-ydpi="45.119999">
+   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/freemedforms-512.png"
+   inkscape:export-xdpi="960"
+   inkscape:export-ydpi="960">
   <defs
      id="defs2460">
     <linearGradient
@@ -607,9 +607,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="3.3938131"
-     inkscape:cy="60.778859"
+     inkscape:zoom="11.2"
+     inkscape:cx="28.522379"
+     inkscape:cy="38.666718"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -617,7 +617,7 @@
      inkscape:window-height="752"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata2463">
     <rdf:RDF>
@@ -849,54 +849,34 @@
        inkscape:export-filename="/home/eric/Bureau/icones/stetho2.png"
        inkscape:export-xdpi="23.644081"
        inkscape:export-ydpi="23.644081" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.76773047;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3461"
+       width="11.883408"
+       height="31.883036"
+       x="-2.4378955"
+       y="-48.452103"
+       ry="7.039113"
+       rx="5.1048422"
+       transform="matrix(-0.27568108,0.96124916,-0.96124916,-0.27568108,0,0)" />
     <g
-       id="g4802"
-       transform="matrix(0.53465133,0.84507274,-0.84507274,0.53465133,26.811965,-18.170262)">
+       id="g3419"
+       transform="matrix(-0.09173287,0.31985565,-0.31985565,-0.09173287,73.065901,-55.530729)">
       <rect
-         transform="matrix(0.6649322,0.7469037,-0.7469037,0.6649322,0,0)"
-         rx="5.1048422"
-         ry="7.039113"
-         y="-27.688322"
-         x="22.419806"
-         height="31.883036"
-         width="11.883408"
-         id="rect3461"
-         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.76773047;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-      <g
-         transform="matrix(0.2212562,0.2485322,-0.2485322,0.2212562,-6.8425839,-59.062765)"
-         id="g3419">
-        <rect
-           style="fill:url(#linearGradient4811);fill-opacity:1;stroke:url(#linearGradient4813);stroke-width:2.30722904;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-           id="rect2540"
-           width="35.712719"
-           height="95.816788"
-           x="213.72112"
-           y="19.555059"
-           ry="21.15436"
-           rx="15.341374" />
-        <path
-           style="fill:url(#linearGradient4815);fill-opacity:1;stroke:url(#linearGradient4817);stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-           d="m 229.30462,19.98628 5.05078,0 c 8.53427,0 15.40482,7.65898 15.40482,17.1726 l 0,31.31472 c -17.17259,-5.1336 -22.22336,-4.62852 -35.86042,0 l 0,-31.31472 c 0,-9.51362 6.87055,-17.1726 15.40482,-17.1726 z"
-           id="path2563"
-           sodipodi:nodetypes="ccccccc"
-           inkscape:connector-curvature="0" />
-      </g>
-      <g
-         id="g4798">
-        <text
-           xml:space="preserve"
-           style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:0.41884819;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"
-           x="-3.5514758"
-           y="30.676418"
-           id="text3487"
-           sodipodi:linespacing="100%"
-           transform="matrix(0.7167847,-0.6972946,0.6972946,0.7167847,0,0)"><tspan
-             sodipodi:role="line"
-             id="tspan3489"
-             x="-3.5514758"
-             y="30.676418"
-             style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Georgia;-inkscape-font-specification:Georgia">FreeDiams</tspan></text>
-      </g>
+         rx="15.341374"
+         ry="21.15436"
+         y="19.555059"
+         x="213.72112"
+         height="95.816788"
+         width="35.712719"
+         id="rect2540"
+         style="fill:url(#linearGradient4811);fill-opacity:1;stroke:url(#linearGradient4813);stroke-width:2.30722904;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <path
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccc"
+         id="path2563"
+         d="m 229.30462,19.98628 5.05078,0 c 8.53427,0 15.40482,7.65898 15.40482,17.1726 l 0,31.31472 c -17.17259,-5.1336 -22.22336,-4.62852 -35.86042,0 l 0,-31.31472 c 0,-9.51362 6.87055,-17.1726 15.40482,-17.1726 z"
+         style="fill:url(#linearGradient4815);fill-opacity:1;stroke:url(#linearGradient4817);stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
     </g>
     <path
        style="opacity:0.2;fill:url(#radialGradient4757)"

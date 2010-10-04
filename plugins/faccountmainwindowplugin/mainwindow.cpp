@@ -47,7 +47,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/filemanager.h>
-
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -253,6 +253,8 @@ void MainWindow::extensionsInitialized()
     createDockWindows();
     finishSplash(this);
     readSettings();
+
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEACCOUNT));
     show();
 }
 

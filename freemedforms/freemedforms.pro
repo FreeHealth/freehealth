@@ -29,5 +29,11 @@ QT *= xml \
     script \
     sql
 
+macx {
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freemedforms.icns
+  QMAKE_INFO_PLIST=Info.plist
+}
+#win32:RC_FILE=freemedforms_win32_icon.rc
+
 # Compile project
 SOURCES += main.cpp

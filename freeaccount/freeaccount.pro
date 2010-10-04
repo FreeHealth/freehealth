@@ -27,8 +27,11 @@ QT *= sql \
 
 DEFINES *= FREEACCOUNT
 
-#macx:ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freecount.icns
-#win32:RC_FILE=$${SOURCES_GLOBAL_RESOURCES}/textfiles/freecount_win32_icon.rc
+macx {
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freeaccount.icns
+  #QMAKE_INFO_PLIST=Info.plist
+}
+#win32:RC_FILE=freeaccount_win32_icon.rc
 
 # sources
 SOURCES += \

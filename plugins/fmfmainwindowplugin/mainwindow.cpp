@@ -47,18 +47,10 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/translators.h>
-#include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/modemanager/modemanager.h>
-
-#include <formmanagerplugin/iformio.h>
-#include <formmanagerplugin/iformitem.h>
-#include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/formmanager.h>
-#include <formmanagerplugin/formplaceholder.h>
-#include <formmanagerplugin/episodemodel.h>
-
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -66,6 +58,14 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/theme.h>
+
+#include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/formplaceholder.h>
+#include <formmanagerplugin/episodemodel.h>
 
 #include <fmfcoreplugin/coreimpl.h>
 #include <fmfcoreplugin/commandlineparser.h>
@@ -104,6 +104,7 @@ static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instan
 
 static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
@@ -237,8 +238,10 @@ void MainWindow::extensionsInitialized()
         settings()->noMoreFirstTimeRunning();
     }
 
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
     raise();
     show();
+
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
@@ -308,6 +311,7 @@ void MainWindow::on_currentUser_Changed()
     // Change window title
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
                    userModel()->currentUserData(Core::IUser::FullName).toString());
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
 }
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)
