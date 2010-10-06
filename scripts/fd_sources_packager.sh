@@ -13,8 +13,10 @@ else
 fi
 
 cd $SCRIPT_PATH"/.."
-# rm -R global_resources/doc/fr/*
-# rm -R global_resources/doc/en/*
+
+echo "**** REMOVING DOCUMENTATIONS ****"
+rm -R global_resources/doc/freediams/fr/html/*
+rm -R global_resources/doc/freediams/en/html/*
 
 
 # remove executable flags to files
@@ -25,7 +27,8 @@ cd $SCRIPT_PATH"/.."
 
 export COPYFILE_DISABLE=true
 
-tar -czvf freediams_sources.tgz \
+echo "**** CREATING SOURCES PACKAGE ****"
+tar -czf freediams_sources.tgz \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
 --exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
