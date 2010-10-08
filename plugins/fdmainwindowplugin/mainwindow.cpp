@@ -227,6 +227,9 @@ MainWindow::MainWindow( QWidget * parent ) :
     setObjectName("MainWindow");
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEDIAMS));
     messageSplash(tr("Creating Main Window"));
+
+    // Install the event filter
+    qApp->installEventFilter(this);
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
@@ -437,7 +440,7 @@ void MainWindow::refreshPatient()
   \brief Close the main window and the application
   \todo Add  ICoreListener
 */
-void MainWindow::closeEvent( QCloseEvent *event )
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     Utils::Log::addMessage(this, "Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
@@ -544,6 +547,18 @@ void MainWindow::changeEvent(QEvent *event)
         patient()->setData(patient()->index(0, Core::IPatient::Gender), sex);
         refreshPatient();
     }
+}
+
+/** \brief Event filter created to catch the FileOpenEvent from MacOS X */
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if(event->type() == QEvent::FileOpen) {
+        QFileOpenEvent *fe = static_cast<QFileOpenEvent *>(event);
+        if (fe)
+            readFile(fe->file());
+        return true;
+    }
+    return QObject::eventFilter(obj, event);
 }
 
 /** \brief Populate recent files menu */
