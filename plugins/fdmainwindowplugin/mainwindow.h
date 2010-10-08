@@ -43,8 +43,8 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 23 Aug 2010
+ * \version 0.5.1
+ * \date 08 Oct 2010
 */
 
 namespace MainWin {
@@ -104,6 +104,7 @@ public Q_SLOTS:
 protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 public:
     QAction *aClearPatient;
