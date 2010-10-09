@@ -9,6 +9,7 @@ echo "****  ****"
 PACKDIR=`pwd`"/package"
 RELATIVEPACKDIR="package"
 VERSION="0.5.0~beta"
+# get version of changelog with : dpkg-parsechangelog | awk '/^Version/ { print $2 }'
 
 # Mount MacOS system
 if [ -e `ls ~/Programmation`]; then
