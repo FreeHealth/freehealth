@@ -15,8 +15,8 @@ include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 # include Doc
 # !CONFIG(crosscompil) {
-#include( ../doc/manual-di.pri)
-#PRE_TARGETDEPS += en_html_docs fr_html_docs
+include( ../doc/manual-di.pri)
+PRE_TARGETDEPS += en_html_docs fr_html_docs
 # }
 
 QT *= sql \
@@ -27,6 +27,8 @@ DEFINES *= FREEDIAMS
 
 macx {
   ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freediams.icns
+  TYPEINFO="Crotte de caca boudin"
+  SHORT_VERSION="Short version"
   QMAKE_INFO_PLIST=Info.plist
 }
 win32:RC_FILE=freediams_win32_icon.rc

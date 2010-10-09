@@ -268,5 +268,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
+    Q_EMIT coreOpened();
 }
 

@@ -43,12 +43,14 @@
 #include <fdmainwindowplugin/medintux.h>
 
 #include <drugsplugin/constants.h>
-#include <drugsbaseplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
+#include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
+#include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/interactionsmanager.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -56,12 +58,13 @@
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
 
-#include "ui_mainwindow.h"
-
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
+#include <utils/iconbadgealert.h>
+
+#include "ui_mainwindow.h"
 
 #include <QSettings>
 #include <QTextEdit>
@@ -232,6 +235,7 @@ MainWindow::MainWindow( QWidget * parent ) :
     qApp->installEventFilter(this);
 }
 
+/** \brief Create the menubar and the MainWindow actions. */
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments);
@@ -304,6 +308,18 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     return true;
 }
 
+/** \brief Before MainWindow is shown.
+  * Update the setting app countdown to transmition
+  * Disable Non-MedinTux actions
+  * Create Ui
+  * Initialize DrugsWidgetManager as centralView
+  * Change Edition mode
+  * Read exchange file
+  * Start the update checker
+  * Create docks
+  * Finish splashscreen
+  * Connect to signals
+*/
 void MainWindow::extensionsInitialized()
 {
     // Update countdown to dosage transmission
@@ -408,10 +424,12 @@ void MainWindow::extensionsInitialized()
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(refreshPatient()));
+    connect(drugModel(), SIGNAL(numberOfRowsChanged()), this, SLOT(updateIconBadgeOnMacOs()));
 }
 
 MainWindow::~MainWindow()
 {
+    delete m_ui;
 }
 
 void MainWindow::postCoreInitialization()
@@ -419,6 +437,7 @@ void MainWindow::postCoreInitialization()
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     refreshPatient();
+    updateIconBadgeOnMacOs();
 }
 
 /**
@@ -434,6 +453,18 @@ void MainWindow::refreshPatient()
     d->createPrecautionsModelAndView(d->m_AllergiesView, m_ui->drugsPrecautions);
     if (d->m_PrecautionView)
         d->m_PrecautionView->expandAll();
+}
+
+/** \brief Slot specific to MacOs -> update the application icon badge to number of founded interactions. */
+void MainWindow::updateIconBadgeOnMacOs()
+{
+#ifdef Q_OS_MAC
+    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << n;
+    if (n > 0) {
+        Utils::MacOs::setIconBadgeLabel(QString::number(n));
+    }
+#endif
 }
 
 /**
@@ -554,8 +585,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::FileOpen) {
         QFileOpenEvent *fe = static_cast<QFileOpenEvent *>(event);
-        if (fe)
+        if (fe) {
             readFile(fe->file());
+        }
         return true;
     }
     return QObject::eventFilter(obj, event);

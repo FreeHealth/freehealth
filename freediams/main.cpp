@@ -48,7 +48,7 @@
 
 #include <iostream>
 
-enum {WarnAllPluginSpecs=1};
+enum { WarnAllPluginSpecs = false};
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 
@@ -147,6 +147,9 @@ int main( int argc, char *argv[] )
         std::cout << qPrintable(VERSION_MESSAGE);
         return 0;
     }
+
+    Utils::Log::addMessage("Main", qApp->arguments().join(";"));
+
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 

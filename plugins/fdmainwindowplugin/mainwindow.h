@@ -80,6 +80,7 @@ public:
 public Q_SLOTS:
     void postCoreInitialization();
     void refreshPatient();
+    void updateIconBadgeOnMacOs();
 
     // Interface of MainWidowActionHandler
     bool newFile();

@@ -30,7 +30,8 @@ HEADERS += global_exporter.h \
     widgets/fancytabwidget.h \
     widgets/minisplitter.h \
     httpdownloader.h \
-    widgets/combowithfancybutton.h
+    widgets/combowithfancybutton.h \
+    iconbadgealert.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -53,6 +54,12 @@ SOURCES += global.cpp \
     httpdownloader.cpp \
     widgets/combowithfancybutton.cpp
 
+macx {
+    OBJECTIVE_SOURCES += iconbadgealert.mm
+    LIBS += -framework Carbon -framework AppKit
+} else {
+    SOURCES += iconbadgealert.cpp
+}
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/utils_fr.ts \
