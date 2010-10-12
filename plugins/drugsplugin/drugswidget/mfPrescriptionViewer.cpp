@@ -256,11 +256,11 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
     if (row < 0)
         return;
 
-    int UID = drugModel()->index(row, DrugsDB::Constants::Drug::UID).data().toInt();
+    const QVariant &drugUid = drugModel()->index(row, DrugsDB::Constants::Drug::UID).data();
     bool isTextual = drugModel()->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
-    if (UID!=-1) {
+    if (drugUid.toInt()!=-1) {
         Internal::DosageDialog dlg(this);
-        dlg.changeRow(UID, row);
+        dlg.changeRow(drugUid, row);
         dlg.exec();
     } else if (isTextual) {
         TextualPrescriptionDialog dlg(this);

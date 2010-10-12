@@ -59,11 +59,12 @@ namespace Internal {
 class DosageDialogPrivate
 {
 public:
-    DosageDialogPrivate() : m_DosageModel(0), m_CIS(-1), m_UserFormButtonPopup(0) {}
+    DosageDialogPrivate() : m_DosageModel(0), m_UserFormButtonPopup(0) {}
 
     DosageModel*m_DosageModel;
-    QString     m_ActualDosageUuid;
-    int m_CIS, m_DrugRow;
+    QString m_ActualDosageUuid;
+    QVariant m_DrugUid;
+    int m_DrugRow;
     QMenu *m_UserFormButtonPopup;
 };
 
@@ -73,27 +74,26 @@ public:
 
 /**
  \todo when showing dosage, make verification of limits +++  ==> for FMF only
+ \todo check compatibility between patient parameters and dosage (weight, age, clearance...)
 */
-// **************************************************************************************************************
-// TODO : with FreeMedForms check compatibility between patient parameters and dosage (weight, age, clearance...)
-// **************************************************************************************************************
+
 
 /**
   \brief Constructor
   \param parent : parent QWidget
 */
 DosageDialog::DosageDialog(QWidget *parent)
-    : QDialog( parent ),
+    : QDialog(parent),
     d(0)
 {
     setObjectName("DosageDialog");
     d = new DosageDialogPrivate();
     setupUi(this);
     innButton->setIcon(Core::ICore::instance()->theme()->icon(DrugsDB::Constants::I_SEARCHINN));
-    setWindowTitle(tr("Drug Dosage") + " - " + qApp->applicationName() );
+    setWindowTitle(tr("Drug Dosage") + " - " + qApp->applicationName());
 
     // make connections
-    connect( drugModel(), SIGNAL(prescriptionResultChanged(const QString &)),
+    connect(drugModel(), SIGNAL(prescriptionResultChanged(const QString &)),
              resultTextBrowser, SLOT(setPlainText(const QString &)));
 }
 
@@ -107,27 +107,27 @@ DosageDialog::~DosageDialog()
   \brief Change the current row of the drug model
   \todo Manage dosagemodel
 */
-void DosageDialog::changeRow( const int CIS, const int drugRow )
+void DosageDialog::changeRow(const QVariant &drugUid, const int drugRow)
 {
     using namespace DrugsDB::Constants;
-    Q_ASSERT(drugModel()->containsDrug(CIS));
-    d->m_CIS = CIS;
+    Q_ASSERT(drugModel()->containsDrug(drugUid));
+    d->m_DrugUid = drugUid;
     d->m_DrugRow = drugRow;
-    dosageViewer->useDrugsModel(CIS, drugRow);
-    innButton->setChecked(drugModel()->drugData( d->m_CIS, Prescription::IsINNPrescription).toBool() );
+    dosageViewer->useDrugsModel(d->m_DrugUid, drugRow);
+    innButton->setChecked(drugModel()->drugData(d->m_DrugUid, Prescription::IsINNPrescription).toBool());
 
     // retreive drug informations before drugmodel changes
-    QString name = drugModel()->drugData(CIS, Drug::Denomination).toString();
-    if (drugModel()->drugData(CIS, Prescription::IsINNPrescription).toBool())
-        drugNameButton->setText(drugModel()->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+    QString name = drugModel()->drugData(d->m_DrugUid, Drug::Denomination).toString();
+    if (drugModel()->drugData(d->m_DrugUid, Prescription::IsINNPrescription).toBool())
+        drugNameButton->setText(drugModel()->drugData(d->m_DrugUid, Drug::InnCompositionString).toString());
     else
-        drugNameButton->setText(name.left( name.lastIndexOf(",")));
-    QString toolTip = drugModel()->drugData(CIS, Interaction::ToolTip ).toString();
-    iconInteractionLabel->setToolTip( toolTip );
-    iconInteractionLabel->setPixmap( drugModel()->drugData(CIS, Interaction::Icon ).value<QIcon>().pixmap(16,16) );
-    toolTip = drugModel()->drugData(CIS, Drug::CompositionString ).toString();
-    drugNameButton->setToolTip( toolTip );
-    innButton->setEnabled( drugModel()->drugData(CIS, Drug::AllInnsKnown ).toBool() );
+        drugNameButton->setText(name);
+    QString toolTip = drugModel()->drugData(d->m_DrugUid, Interaction::ToolTip).toString();
+    iconInteractionLabel->setToolTip(toolTip);
+    iconInteractionLabel->setPixmap(drugModel()->drugData(d->m_DrugUid, Interaction::Icon).value<QIcon>().pixmap(16,16));
+    toolTip = drugModel()->drugData(d->m_DrugUid, Drug::CompositionString).toString();
+    drugNameButton->setToolTip(toolTip);
+    innButton->setEnabled(drugModel()->drugData(d->m_DrugUid, Drug::AllInnsKnown).toBool());
 }
 
 /**
@@ -141,7 +141,7 @@ void DosageDialog::done(int r)
     drugNameButton->setFocus();
     dosageViewer->commitToModel();
 
-    if ( r == QDialog::Accepted ) {
+    if (r == QDialog::Accepted) {
         dosageViewer->done(r);
     }
     QDialog::done(r);
@@ -150,19 +150,19 @@ void DosageDialog::done(int r)
 /** \brief Show the information dialog for the drug */
 void DosageDialog::on_drugNameButton_clicked()
 {
-    DrugInfo dialog(d->m_CIS, this );
+    DrugInfo dialog(d->m_DrugUid, this);
     dialog.exec();
 }
 
 void DosageDialog::on_innButton_clicked()
 {
     using namespace DrugsDB::Constants;
-    drugModel()->setDrugData(d->m_CIS, Prescription::IsINNPrescription, innButton->isChecked() );
+    drugModel()->setDrugData(d->m_DrugUid, Prescription::IsINNPrescription, innButton->isChecked());
     if (innButton->isChecked())
-        drugNameButton->setText(drugModel()->drugData(d->m_CIS, Drug::InnCompositionString).toString());
+        drugNameButton->setText(drugModel()->drugData(d->m_DrugUid, Drug::InnCompositionString).toString());
     else {
-        QString name = drugModel()->drugData(d->m_CIS, Drug::Denomination).toString();
-        drugNameButton->setText(name.left( name.lastIndexOf(",")));
+        QString name = drugModel()->drugData(d->m_DrugUid, Drug::Denomination).toString();
+        drugNameButton->setText(name);
     }
 }
 

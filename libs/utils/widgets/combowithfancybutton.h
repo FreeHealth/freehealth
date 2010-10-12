@@ -37,6 +37,8 @@ class QString;
 class QStringListModel;
 QT_END_NAMESPACE
 
+#include <QDebug>
+
 /**
  * \file combowithfancybutton.h
  * \author Eric MAEKER <eric.maeker@free.fr>
@@ -53,15 +55,16 @@ class StringModel;
 class UTILS_EXPORT ComboWithFancyButton : public QComboBox
 {
     Q_OBJECT
+
 public:
-    explicit ComboWithFancyButton(QWidget *parent = 0);
+    ComboWithFancyButton(QWidget *parent = 0);
 
     void setRemoveItems(bool state);
     void setMoveItems(bool state);
 
-    void addItems(const QStringList &list, const QVariant &userData = QVariant());
-    void addItem(const QString & text, const QVariant &userData = QVariant());
-    QStringList items(const QVariant &userData = QVariant()) const;
+    void fancyAddItems(const QStringList &list, const QVariant &userData = QVariant());
+    void fancyAddItem(const QString &text, const QVariant &userData = QVariant());
+    QStringList fancyItems(const QVariant &userData = QVariant()) const;
 
 
     //    void setSettings(QSettings *settings) {m_Settings = settings;}
@@ -75,22 +78,35 @@ public:
 
 public Q_SLOTS:
     void fancyClear();
+    // This code is due to QComboBox strange behavior when hiding/showing --> losing content
+    // Eg: combo is inside a tabwidget
+    void clearEditText() {m_Text.clear(); QComboBox::clearEditText();}
+    void setEditText(const QString &text) {m_Text=text; QComboBox::setEditText(text);}
+    void setCurrentIndex(int index) {m_Index=index; QComboBox::setCurrentIndex(index);}
+
 
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
 
 protected:
+    // From virtual members of QComboBox
     void showPopup();
     void hidePopup();
 
+    // This code is due to QComboBox strange behavior when hiding/showing --> losing content
+    // Eg: combo is inside a tabwidget
+    void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *e);
 
 private:
     Internal::ItemDelegate *delegate;
     QTreeView *view;
     QSettings *m_Settings;
-    Internal::StringModel *model;
+    Internal::StringModel *stringModel;
     QString m_Key;
     bool m_ignoreHide, m_editableState;
+    int m_Index;
+    QString m_Text;
 };
 
 }  // End namespace Utils

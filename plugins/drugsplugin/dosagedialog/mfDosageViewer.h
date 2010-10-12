@@ -64,7 +64,7 @@ public:
     ~DosageViewer();
 
     void setDosageModel(DrugsDB::Internal::DosageModel *model);
-    void useDrugsModel(const int CIS, const int drugRow);
+    void useDrugsModel(const QVariant &drugUid, const int drugRow);
 
 public Q_SLOTS:
     void done(int r);

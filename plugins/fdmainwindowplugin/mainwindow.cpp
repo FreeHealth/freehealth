@@ -460,7 +460,6 @@ void MainWindow::updateIconBadgeOnMacOs()
 {
 #ifdef Q_OS_MAC
     int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << n;
     if (n > 0) {
         Utils::MacOs::setIconBadgeLabel(QString::number(n));
     }

@@ -36,8 +36,8 @@
 /**
  * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.5.0
+ * \date 12 Oct 2010
 */
 namespace DrugsWidget {
 namespace Internal {
@@ -47,10 +47,10 @@ class DrugInfo : public QDialog
 {
     Q_OBJECT
 public:
-    DrugInfo( const int CIS, QWidget * parent = 0 );
+    DrugInfo(const QVariant &drugUid, QWidget * parent = 0 );
     ~DrugInfo() {}
 
-    void setDrug( const int CIS );
+    void setDrug(const QVariant &drugUid);
 
 protected Q_SLOTS:
     void accept();

@@ -229,7 +229,7 @@ public:
 
 
 ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
-    QComboBox(parent), delegate(0), view(0), m_Settings(0), m_ignoreHide(false)
+    QComboBox(parent), delegate(0), view(0), m_Settings(0), m_ignoreHide(false), m_Index(-1)
 {
     view = new QTreeView(this);
     view->viewport()->setAttribute(Qt::WA_Hover);
@@ -242,9 +242,9 @@ ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     view->setAlternatingRowColors(true);
 
     delegate = new Internal::ItemDelegate(view);
-    model = new Internal::StringModel(this);
+    stringModel = new Internal::StringModel(this);
 
-    setModel(model);
+    setModel(stringModel);
     setView(view);
 
     view->header()->setStretchLastSection(false);
@@ -278,20 +278,20 @@ void ComboWithFancyButton::setMoveItems(bool state)
     view->setColumnHidden(1, !state);
 }
 
-void ComboWithFancyButton::addItems(const QStringList &list, const QVariant &userData)
+void ComboWithFancyButton::fancyAddItems(const QStringList &list, const QVariant &userData)
 {
-    model->addStringList(list, userData);
+    stringModel->addStringList(list, userData);
 }
 
-void ComboWithFancyButton::addItem(const QString &text, const QVariant &userData)
+void ComboWithFancyButton::fancyAddItem(const QString &text, const QVariant &userData)
 {
-    model->addStringList(QStringList() << text, userData);
+    stringModel->addStringList(QStringList() << text, userData);
 }
 
-QStringList ComboWithFancyButton::items(const QVariant &userData) const
+QStringList ComboWithFancyButton::fancyItems(const QVariant &userData) const
 {
-    if (model)
-        return model->stringList(userData);
+    if (stringModel)
+        return stringModel->stringList(userData);
     return QStringList();
 }
 
@@ -299,7 +299,7 @@ void ComboWithFancyButton::saveItemsToSettings()
 {
     if (!m_Settings)
         return;
-    m_Settings->setValue(m_Key, items());
+    m_Settings->setValue(m_Key, fancyItems());
     m_Settings->sync();
 }
 
@@ -326,8 +326,8 @@ void ComboWithFancyButton::setMoveDownLightIcon(const QIcon &icon)
 
 void ComboWithFancyButton::fancyClear()
 {
-    if (model)
-        model->clear();
+    if (stringModel)
+        stringModel->clear();
 }
 
 void ComboWithFancyButton::handlePressed(const QModelIndex &index)
@@ -336,7 +336,7 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
     case Internal::ColumnRemove:
         {
             delegate->pressedIndex = index;
-            model->removeRow(index.row());
+            stringModel->removeRow(index.row());
             m_ignoreHide = true;
             QComboBox::showPopup();
             break;
@@ -344,7 +344,7 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
     case Internal::ColumnMoveUp:
         {
             delegate->pressedIndex = index;
-            model->moveUp(index);
+            stringModel->moveUp(index);
             m_ignoreHide = true;
             view->setCurrentIndex(index);
 //            QComboBox::showPopup();
@@ -353,7 +353,7 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
     case Internal::ColumnMoveDown:
         {
             delegate->pressedIndex = index;
-            model->moveDown(index);
+            stringModel->moveDown(index);
             m_ignoreHide = true;
             view->setCurrentIndex(index);
 //            QComboBox::showPopup();
@@ -361,6 +361,7 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
         }
     default:
         {
+            qWarning()<<"xxxxxxxxxxxxxx";
             setCurrentIndex(index.row());
         }
     }
@@ -389,4 +390,27 @@ void ComboWithFancyButton::hidePopup()
         setEditable(m_editableState);
 #endif
     }
+}
+
+void ComboWithFancyButton::showEvent(QShowEvent *e)
+{
+    qWarning() <<"show" << m_Index << m_Text;
+    QComboBox::showEvent(e);
+    if (m_Index==-1) {
+        setEditText(m_Text);
+    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
+        setCurrentIndex(m_Index);
+    } else {
+        m_Index=-1;
+        setCurrentIndex(-1);
+        setEditText(m_Text);
+    }
+};
+
+void ComboWithFancyButton::hideEvent(QHideEvent *e)
+{
+    qWarning() <<"hide";
+    m_Index = currentIndex();
+    m_Text=currentText();
+    QComboBox::hideEvent(e);
 }

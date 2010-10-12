@@ -439,7 +439,7 @@ void DrugSelector::on_InnView_clicked(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    QString inn = m_InnModel->index(index.row(), DrugsDB::AtcTreeModel::ATC_Code, index.parent()).data().toString();
+    QString inn = m_AtcProxyModel->index(index.row(), DrugsDB::AtcTreeModel::ATC_Code, index.parent()).data().toString();
     // retreive molecule_codes associated with searched text
     QString tmp = m_filterModel;
     QList<int> codes = drugsBase()->getAllMoleculeCodeWithAtcStartingWith(inn);

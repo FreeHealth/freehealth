@@ -33,8 +33,8 @@
 /**
  * \file mfDosageDialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.5.0
+ * \date 12 Oct 2010
 */
 
 namespace DrugsWidget {
@@ -59,11 +59,11 @@ public:
     explicit DosageDialog(QWidget *parent);
     ~DosageDialog();
 
-    void changeRow( const int drugRow , const int dosageRow );
+    void changeRow(const QVariant &drugUid, const int dosageRow);
 
 
 private Q_SLOTS:
-    void done( int r );
+    void done(int r);
     void on_drugNameButton_clicked();
     void on_innButton_clicked();
 

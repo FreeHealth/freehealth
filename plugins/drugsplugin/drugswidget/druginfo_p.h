@@ -40,8 +40,8 @@
 /**
  * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.5.0
+ * \date 12 Oct 2010
 */
 
 namespace DrugsDB {
@@ -72,10 +72,10 @@ public Q_SLOTS:
 
 public:
      QDialog *m_Parent;
-     int m_CIS;
-     Utils::MessageSender      m_Sender;
-     QList<DrugsDB::Internal::DrugsInteraction *>  m_InteractionsList;         // should not be deleted
-     bool                      m_INNSent, m_InteractSent;
+     QVariant m_DrugUid;
+     Utils::MessageSender m_Sender;
+     QList<DrugsDB::Internal::DrugsInteraction *> m_InteractionsList;         // should not be deleted
+     bool m_INNSent, m_InteractSent;
 };
 
 }  // End Internal

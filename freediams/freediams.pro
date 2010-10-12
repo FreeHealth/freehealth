@@ -27,8 +27,6 @@ DEFINES *= FREEDIAMS
 
 macx {
   ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freediams.icns
-  TYPEINFO="Crotte de caca boudin"
-  SHORT_VERSION="Short version"
   QMAKE_INFO_PLIST=Info.plist
 }
 win32:RC_FILE=freediams_win32_icon.rc

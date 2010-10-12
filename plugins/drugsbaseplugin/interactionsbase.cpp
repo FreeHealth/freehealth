@@ -69,6 +69,8 @@
 using namespace DrugsDB::Constants;
 using namespace DrugsDB::Internal;
 
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 namespace DrugsDB {
 namespace Internal {
 
@@ -442,9 +444,9 @@ bool InteractionsBase::init(bool refreshCache)
     QString pathToDb = "";
 
     if (Utils::isRunningOnMac())
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
+        pathToDb = settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
     else
-        pathToDb = Core::ICore::instance()->settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
+        pathToDb = settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
 
     di->m_DB->createConnection(DB_IAM_NAME, DB_IAM_FILENAME, pathToDb,
                                Utils::Database::ReadOnly, Utils::Database::SQLite);
@@ -515,6 +517,9 @@ int InteractionsBase::getInnCodeForCodeMolecule(const int molecule_code) const
 
 QString InteractionsBase::getAtcLabel(const int inncode) const
 {
+    if (inncode==-1)
+        return QString();
+
     const QString &lang = QLocale().name().left(2);
     if (di->m_AtcLabelCache.contains(inncode)) {
         const AtcLabel *lbl = di->m_AtcLabelCache[inncode];
