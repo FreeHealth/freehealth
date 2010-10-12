@@ -27,8 +27,17 @@ rm -R global_resources/doc/freediams/en/html/*
 
 export COPYFILE_DISABLE=true
 
-echo "**** CREATING SOURCES PACKAGE ****"
-tar -czf freediams_sources.tgz \
+# get version number of FreeDiams from the project file
+VERSION=`cat ./freediams/freediams.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
+# create sources tmp path
+PACKPATH=$SCRIPT_PATH"/freediams-"$VERSION
+if [ -e $PACKPATH ]; then
+    rm -R $PACKPATH
+fi
+mkdir $PACKPATH
+
+echo "**** PREPARE SOURCES PACKAGE ****"
+tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
 --exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
@@ -39,6 +48,7 @@ tar -czf freediams_sources.tgz \
 --exclude 'global_resources/databases/patients' \
 --exclude 'global_resources/databases/templates' \
 --exclude 'global_resources/databases/users' \
+--exclude 'sources.tar' \
 freediams.pro config.pri checkqtversion.pri \
 README COPYING INSTALL \
 updatetranslations.sh \
@@ -67,9 +77,14 @@ plugins/saverestoreplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
 scripts \
-tests \
+tests
 
+echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
+tar xf $PACKPATH/sources.tar -C $PACKPATH
+rm $PACKPATH/sources.tar
 
+echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
+tar czf "../freediamsfullsources-"$VERSION".tgz"  "./freediams-"$VERSION
 
 exit 0
