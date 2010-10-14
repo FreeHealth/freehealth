@@ -11,7 +11,7 @@ else:linux*:include(buildspecs/config_linux.pri)
 else:freebsd*:include(buildspecs/config_freebsd.pri)
 else:win32:include(buildspecs/config_win.pri)
 
-INCLUDEPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib
+INCLUDEPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib $${PWD}/contrib/quazip
 DEPENDPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib
 
 LIBS *= -L$${BUILD_PLUGIN_PATH} -L$${BUILD_LIB_PATH}

@@ -22,11 +22,13 @@ HEADERS += crypt.h \
            quazipnewinfo.h \
            unzip.h \
            zip.h \
-           exporter.h
+           exporter.h \
+           global.h
 
 SOURCES += ioapi.c \
            quazip.cpp \
            quazipfile.cpp \
            quazipnewinfo.cpp \
            unzip.c \
-           zip.c
+           zip.c \
+           global.cpp
