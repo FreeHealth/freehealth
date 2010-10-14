@@ -33,6 +33,8 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "icdplugin.h"
+#include "icdwidgetmanager.h"
+#include "icddatabase.h"
 
 #include <utils/log.h>
 
@@ -65,6 +67,9 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("icdplugin");
 
+    // Create the database instance
+    IcdDatabase::instance();
+
     return true;
 }
 
@@ -74,6 +79,10 @@ void IcdPlugin::extensionsInitialized()
         qWarning() << "IcdPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
+    IcdWidgetManager::instance();
+
 }
 
 

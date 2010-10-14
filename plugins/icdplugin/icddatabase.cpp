@@ -154,7 +154,7 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addField(Table_Glossaire,  GLOSSAIRE_SID, "SID");
     addField(Table_Glossaire,  GLOSSAIRE_MID, "MID");
 
-    addField(Table_Html,  HTML_SID, "SID");
+    addField(Table_Html,  HTML_REF, "ref");
     addField(Table_Html,  HTML_FR, "FR");
     addField(Table_Html,  HTML_EN, "EN");
     addField(Table_Html,  HTML_DE, "GE");
@@ -177,6 +177,7 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addField(Table_Libelle,  LIBELLE_FRCHRONOS, "FR_CHRONOS");
     addField(Table_Libelle,  LIBELLE_DATE, "date");
     addField(Table_Libelle,  LIBELLE_AUTHOR, "author");
+    addField(Table_Libelle,  LIBELLE_COMMENT, "comment");
 
     addField(Table_Master,  MASTER_SID, "SID");
     addField(Table_Master,  MASTER_CODE, "code");
@@ -244,7 +245,7 @@ bool IcdDatabase::init()
       }
 
      // log the path of the database
-     QString pathToDb = settings()->path(Core::ISettings::ReadOnlyDatabasesPath);
+     QString pathToDb = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
      Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
      // Connect normal Account Database

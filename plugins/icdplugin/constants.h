@@ -77,7 +77,7 @@ namespace Constants {
     };
 
     enum TableHtml_Fields {
-        HTML_SID = 0,
+        HTML_REF = 0,
         HTML_FR,
         HTML_EN,
         HTML_DE
@@ -105,7 +105,8 @@ namespace Constants {
         LIBELLE_DE_AUTO,
         LIBELLE_FRCHRONOS,
         LIBELLE_DATE,
-        LIBELLE_AUTHOR
+        LIBELLE_AUTHOR,
+        LIBELLE_COMMENT
     };
 
     enum TableMaster_Fields {
