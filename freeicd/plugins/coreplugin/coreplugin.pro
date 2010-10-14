@@ -1,0 +1,24 @@
+TEMPLATE = lib
+TARGET = Core
+PACKAGE_VERSION = 0.0.2
+
+DEFINES += FREEICD
+FREEICD = 1
+
+BUILD_PATH_POSTFIXE = FreeIcd
+
+include(../../../plugins/coreplugin/common_core.pri)
+
+
+INCLUDEPATH += ../
+DEPENDPATH += ../
+
+HEADERS += coreimpl.h \
+    appaboutpage.h \
+    coreplugin.h
+
+SOURCES += coreimpl.cpp \
+    appaboutpage.cpp \
+    coreplugin.cpp
+
+OTHER_FILES += Core.pluginspec
