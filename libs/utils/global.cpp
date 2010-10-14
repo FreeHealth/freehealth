@@ -339,7 +339,7 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
         QByteArray data = file.readAll();
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QString str = codec->toUnicode(data);
-        Utils::Log::addMessage( "Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
+        Utils::Log::addMessage("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
     }
     return QString::null;

@@ -38,13 +38,17 @@ namespace Core {
 namespace Constants {
 
 const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
-const char * const  FREEDIAMS_SPLASHSCREEN = "freediams2.png";
-const char * const  FREEACCOUNT_SPLASHSCREEN = "freeaccount.png";
+const char * const  FREEDIAMS_SPLASHSCREEN    = "freediams2.png";
+const char * const  FREEACCOUNT_SPLASHSCREEN  = "freeaccount.png";
+const char * const  FREEICD_SPLASHSCREEN      = "freeicd.png";
+const char * const  FREEGIR_SPLASHSCREEN      = "freegir.png";
 
 // application icons
-const char * const  ICONFREEDIAMS      = "freediams.png";
 const char * const  ICONFREEMEDFORMS   = "freemedforms.png";
+const char * const  ICONFREEDIAMS      = "freediams.png";
 const char * const  ICONFREEACCOUNT    = "freeaccount.png";
+const char * const  ICONFREEICD        = "freeicd.png";
+const char * const  ICONFREEGIR        = "freegir.png";
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";

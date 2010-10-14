@@ -42,6 +42,8 @@ namespace Constants {
     const char* const  FREEMEDFORMS_UPDATE_URL  = "http://www.ericmaeker.fr/FreeMedForms/update-fmf.txt";
     const char* const  FREEDIAMS_UPDATE_URL     = "http://www.ericmaeker.fr/FreeMedForms/update-di.txt";
     const char* const  FREEACCOUNT_UPDATE_URL   = "http://www.ericmaeker.fr/FreeMedForms/update-freeaccount.txt";
+    const char* const  FREEICD_UPDATE_URL       = "http://www.ericmaeker.fr/FreeMedForms/update-freeicd.txt";
+    const char* const  FREEGIR_UPDATE_URL       = "http://www.ericmaeker.fr/FreeMedForms/update-freegir.txt";
 
     const char* const  S_CHECKUPDATE       = "CheckUpdate";
     const char* const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";
