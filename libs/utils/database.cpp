@@ -61,6 +61,7 @@
 
 #include "database.h"
 #include "log.h"
+#include "global.h"
 
 #include <translationutils/constanttranslations.h>
 
@@ -73,6 +74,7 @@
 #include <QMap>
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
+#include <QProgressDialog>
 
 enum {WarnSqlCommands=false};
 
@@ -840,7 +842,7 @@ QString Database::prepareUpdateQuery(const int & tableref)
     return toReturn;
 }
 
-bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB) const
+bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)
 {
     if (!DB.isOpen())
         return false;
@@ -860,13 +862,159 @@ bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB) con
     return true;
 }
 
-bool Database::executeSQL(const QString &req, const QSqlDatabase & DB) const
+bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
 {
     if (req.isEmpty())
         return false;
     /** \todo manage ; inside "" or '' */
     QStringList list = req.split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);
+}
+
+bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
+{
+    if (!QFile::exists(fileName)) {
+        Utils::Log::addError("Database", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName),
+                             __FILE__, __LINE__);
+        return false;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        Utils::Log::addError("Database", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName), __FILE__, __LINE__);
+        return false;
+    }
+
+    // execute all sql queries
+    QString req = QString::fromUtf8(file.readAll());
+    req.replace("\n\n", "\n");
+    req.replace("\n\n", "\n");
+    req.replace("\n\n", "\n");
+    req.replace("\n\n", "\n");
+    req.replace("\n\n", "\n");
+
+    QStringList list = req.split("\n");
+    QSqlDatabase DB = QSqlDatabase::database(connectionName);
+    if (!DB.open())
+        return false;
+//    if (!DB.transaction()) {
+//        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
+//        return false;
+//    }
+
+    req.clear();
+    QStringList queries;
+    // Reconstruct req : removes comments
+    foreach(const QString &s, list) {
+        if (s.startsWith("--")) {
+            continue;
+        }
+        req += s + " \n";
+        if (s.endsWith(";")) {
+            queries.append(req);
+            req.clear();
+        }
+    }
+
+    // Execute queries
+    if (dlg)
+        dlg->setRange(0, queries.count());
+
+    foreach(const QString &sql, queries) {
+        QString q = sql.simplified();
+        // Do not processed empty strings
+        if (q.isEmpty())
+            continue;
+
+        // No SQLite extra commands
+        if (q.startsWith("."))
+            continue;
+
+        // No BEGIN, No COMMIT
+        if (q.startsWith("BEGIN", Qt::CaseInsensitive) || q.startsWith("COMMIT", Qt::CaseInsensitive))
+            continue;
+
+        QSqlQuery query(sql, DB);
+        if (!query.isActive()) {
+            Utils::Log::addQueryError("Database", query, __FILE__, __LINE__);
+//            DB.rollback();
+            return false;
+        }
+
+        if (dlg)
+            dlg->setValue(dlg->value()+1);
+    }
+//    DB.commit();
+    return true;
+}
+
+bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
+{
+    QString content = Utils::readTextFile(fileName);
+    if (content.isEmpty())
+        return false;
+    QStringList lines = content.split("\n", QString::SkipEmptyParts);
+    content.clear();
+    int start = 0;
+    if (ignoreFirstLine)
+        start = 1;
+
+    // get database
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(db.connectionName(), db.lastError().text()));
+            return false;
+        }
+    }
+
+    // get table field's name
+    if (!db.tables().contains(table)) {
+        Utils::Log::addError("Database", "No table found");
+        return false;
+    }
+    // prepare the sql query
+    QSqlRecord record = db.record(table);
+    QString req = "INSERT INTO " + table + " (\n";
+    for(int i = 0; i < record.count(); ++i) {
+        req += record.fieldName(i) + ", \n";
+    }
+    req.chop(3);
+    req += "\n) VALUES (";
+
+    db.transaction();
+
+    for(int i = start; i < lines.count(); ++i) {
+        QStringList values = lines.at(i).split(separator, QString::KeepEmptyParts);
+//        qWarning() << lines.at(i) << separator << values;
+        QString reqValues;
+        foreach(const QString &val, values) {
+            if (val.isEmpty()) {
+                reqValues += "NULL, ";
+            } else {
+                if (val.startsWith("'") && val.endsWith("'")) {
+                    reqValues += val + ", ";
+                } else if (val.contains(QRegExp("\\D", Qt::CaseInsensitive))) {
+                    QString tmp = val;
+                    reqValues += "\"" + tmp.replace("\"", "“") + "\", ";
+                } else {
+                    reqValues += val + ", ";
+                }
+            }
+        }
+        reqValues.chop(2);
+        reqValues += ");\n";
+        QSqlQuery query(req + reqValues, db);
+        if (!query.isActive()) {
+            Utils::Log::addQueryError("Database", query, __FILE__, __LINE__);
+        }
+//        qWarning() << lines.at(i) << req + reqValues << values;
+    }
+
+    db.commit();
+
+    return true;
 }
 
 bool Database::createTable(const int & tableref) const

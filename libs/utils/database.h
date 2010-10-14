@@ -37,13 +37,14 @@
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
+class QProgressDialog;
 QT_END_NAMESPACE
 
 /**
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 23 Fev 2010
+ * \version 0.5.0
+ * \date 13 Oct 2010
 */
 namespace Utils {
 
@@ -202,13 +203,15 @@ public:
     virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
     virtual QString total(const int tableRef, const int fieldRef) const;
 
-    virtual bool executeSQL( const QStringList & list, const QSqlDatabase & DB ) const;
-    virtual bool executeSQL( const QString & req, const QSqlDatabase & DB ) const;
+    static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
+    static bool executeSQL(const QString &req, const QSqlDatabase &DB);
+    static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
+    static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
 
     virtual void warn() const;
     virtual void toTreeWidget(QTreeWidget *tree);
 
-    virtual void setConnectionName( const QString & c );
+    virtual void setConnectionName(const QString &c);
 
 protected:
     virtual void setDriver(const AvailableDrivers &d);
