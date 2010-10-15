@@ -531,10 +531,9 @@ bool Database::checkDatabaseScheme()
         qSort(fields);
         int id = 0;
         foreach(int f, fields) {
-            if (d->m_Fields.value(f)!= rec.field(id).name())
-            {
-                Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3")
-                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name()), __FILE__, __LINE__);
+            if (d->m_Fields.value(f)!= rec.field(id).name()) {
+                Log::addError("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4")
+                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name(), d->m_Tables.value(i)), __FILE__, __LINE__);
                 return false;
             }
             id++;
