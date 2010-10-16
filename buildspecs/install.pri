@@ -84,8 +84,16 @@ target.path = $${INSTALL_BINARY_PATH}
 INSTALLS += target
 }
 
+# Install descriptive files
+!isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
+descrfiles.path = $${INSTALL_BINARY_PATH}
+descrfiles.files =  $${BUILD_BINARY_PATH}/README
+descrfiles.files += $${BUILD_BINARY_PATH}/COPYING
+INSTALLS += descrfiles
+}
+
 macx {
- # Qt 4.7 / MacOS 10.6 patch when not usong the Qt macdeploy app
+ # Qt 4.7 / MacOS 10.6 patch when not using the Qt macdeploy app
  #$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
  # /Library/Frameworks/QtGui.framework/Resources/qt_menu.nib
  mac10_6.path=$${INSTALL_RESOURCES_PATH}
