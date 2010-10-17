@@ -161,7 +161,7 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("VersionUpdater", q);
+                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
             }
         }
         Utils::Log::addMessage("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
@@ -264,7 +264,7 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("VersionUpdater", q);
+                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
             }
         }
         Utils::Log::addMessage("VersionUpdater",QString("Dosage Database SQL update done from %1 to %2").arg("0.2.0", "0.4.0"));
@@ -318,7 +318,7 @@ public:
                 m_Id_DailySchemes.insert(q.value(0).toInt(), q.value(1).toInt());
             }
         } else {
-            Utils::Log::addQueryError("DatabaseUpdater", q);
+            Utils::Log::addQueryError("DatabaseUpdater", q, __FILE__, __LINE__);
             return false;
         }
         q.finish();
@@ -329,7 +329,7 @@ public:
                 m_Id_MealSchemes.insert(q.value(0).toInt(), q.value(1).toInt());
             }
         } else {
-            Utils::Log::addQueryError("DatabaseUpdater", q);
+            Utils::Log::addQueryError("DatabaseUpdater", q, __FILE__, __LINE__);
             return false;
         }
         return true;
@@ -399,7 +399,7 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("VersionUpdater", q);
+                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
             }
         }
         Utils::Log::addMessage("VersionUpdater",QString("Dosage Database SQL update done from %1 to %2").arg("0.0.8", "0.2.0"));
@@ -445,7 +445,7 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("DatabaseUpdater", q);
+                Utils::Log::addQueryError("DatabaseUpdater", q, __FILE__, __LINE__);
             }
             req.clear();
         }
@@ -456,7 +456,7 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("DatabaseUpdater", q);
+                Utils::Log::addQueryError("DatabaseUpdater", q, __FILE__, __LINE__);
             }
             req.clear();
         }
@@ -648,7 +648,7 @@ bool VersionUpdater::isDosageDatabaseUpToDate() const
             d->m_DosageDatabaseVersion = q.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError("VersionUpdater", q);
+        Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
         return true;
     }
     q.finish();

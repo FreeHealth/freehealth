@@ -983,6 +983,11 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
             } else {
                 Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
             }
+
+            // drug not found --> break
+            if (!toReturn)
+                return toReturn;
+
             // manage drugs denomination according to the database informations
             if (d->m_ActualDBInfos) {
                 QString tmp = d->m_ActualDBInfos->drugsNameConstructor;

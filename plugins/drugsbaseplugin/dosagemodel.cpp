@@ -392,7 +392,7 @@ bool DosageModel::submitAll()
         return true;
     } else {
         m_DirtyRows = safe;
-        Utils::Log::addQueryError(this, QSqlTableModel::query());
+        Utils::Log::addQueryError(this, QSqlTableModel::query(), __FILE__, __LINE__);
     }
     //    reset();
     return false;

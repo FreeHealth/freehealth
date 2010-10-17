@@ -399,7 +399,7 @@ public:
                 datas.clear();
             }
         } else {
-            Utils::Log::addQueryError(q, query);
+            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
         }
         query.finish();
         foreach(TreeItem *item, m_IdToCategory.values()) {
@@ -435,7 +435,7 @@ public:
                 datas.clear();
             }
         } else {
-            Utils::Log::addQueryError(q, query);
+            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
         }
         query.finish();
         // add templates to categories
@@ -491,7 +491,7 @@ public:
                     query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
                     query.exec();
                     if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
                     } else {
                         t->setNewlyCreated(false);
                         t->setModified(false);
@@ -513,7 +513,7 @@ public:
                     // save category
                     query.exec();
                     if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
                     } else {
                         t->setNewlyCreated(false);
                         t->setModified(false);
@@ -546,7 +546,7 @@ public:
                     query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
                     query.exec();
                     if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
                     }
                     req.clear();
                     query.finish();
@@ -568,7 +568,7 @@ public:
                     query.bindValue(Constants::CATEGORIES_TRANSMISSIONDATE, QVariant());
                     query.exec();
                     if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query);
+                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
                     }
                     req.clear();
                     query.finish();
@@ -600,7 +600,7 @@ public:
         req = templateBase()->select(Constants::Table_Categories, Constants::CATEGORIES_ID, where);
         QSqlQuery query(req, DB);
         if (!query.isActive()) {
-            Utils::Log::addQueryError(q, query);
+            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
         } else {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
@@ -647,7 +647,7 @@ public:
 
             QSqlQuery query(req, DB);
             if (!query.isActive())
-                Utils::Log::addQueryError(q, query);
+                Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
             else
                 m_CategoriesToDelete.clear();
         }
@@ -664,7 +664,7 @@ public:
             req = templateBase()->prepareDeleteQuery(Constants::Table_Templates, where);
             QSqlQuery query(req, DB);
             if (!query.isActive())
-                Utils::Log::addQueryError(q, query);
+                Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
             else
                 m_TemplatesToDelete.clear();
         }

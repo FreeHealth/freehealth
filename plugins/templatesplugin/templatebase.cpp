@@ -74,7 +74,7 @@ public:
             if (query.next())
                 version = query.value(0).toString();
         } else {
-            Utils::Log::addQueryError(q, query);
+            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
         }
         query.finish();
         bool updateVersionNumber = false;
@@ -147,7 +147,7 @@ public:
             query.bindValue(0, Constants::DB_ACTUAL_VERSION);
             query.exec();
             if (!query.isActive()) {
-                Utils::Log::addQueryError(q, query);
+                Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
             }
             query.finish();
         }
@@ -355,7 +355,7 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                Utils::Log::addQueryError("Database", q);
+                Utils::Log::addQueryError("TemplateBase", q, __FILE__, __LINE__);
                 Utils::warningMessageBox(tr("Unable to create the Templates database."),tr("Please contact dev team."));
                 return false;
             }
