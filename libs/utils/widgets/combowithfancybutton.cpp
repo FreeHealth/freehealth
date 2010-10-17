@@ -411,6 +411,11 @@ void ComboWithFancyButton::hideEvent(QHideEvent *e)
 {
     qWarning() <<"hide";
     m_Index = currentIndex();
-    m_Text=currentText();
+    m_Text = currentText();
     QComboBox::hideEvent(e);
+    if (m_Index==-1) {
+        setEditText(m_Text);
+    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
+        setCurrentIndex(m_Index);
+    }
 }
