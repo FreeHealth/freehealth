@@ -393,6 +393,7 @@ public:
 //        connect(m_Model,SIGNAL(modelAboutToBeReset()), this, SLOT(on_ModelAboutToReset()));
         connect(m_Model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(model_rowInserted(const QModelIndex &, int, int)));
     }
+
     ~TemplatesViewPrivate()
     {
         contextManager()->removeContextObject(m_Context);
@@ -492,8 +493,6 @@ TemplatesView::TemplatesView(QWidget *parent, int viewContent, EditModes editMod
 
 TemplatesView::~TemplatesView()
 {
-    delete d->m_ui;
-    d->m_ui = 0;
     if (d) {
         delete d;
         d = 0;

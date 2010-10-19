@@ -110,7 +110,8 @@ namespace Internal {
 class MainWinPrivate {
 public:
     MainWinPrivate(MainWindow *parent) :
-            m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0), q(parent)
+            m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0),
+            m_TemplatesDock(0), m_PrecautionsDock(0), q(parent)
     {}
 
     ~MainWinPrivate()
@@ -200,6 +201,7 @@ public:
     QStandardItemModel *m_AllergiesModel;
     QTreeView *m_AllergiesView;
     QTreeView *m_PrecautionView;
+    QDockWidget *m_TemplatesDock, *m_PrecautionsDock;
 
 private:
     MainWindow *q;
@@ -429,6 +431,18 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    // delete all dockwigdet by hand
+    if (d->m_TemplatesDock) {
+        delete d->m_TemplatesDock;
+        d->m_TemplatesDock = 0;
+    }
+    if (d->m_PrecautionsDock) {
+        delete d->m_PrecautionsDock;
+        d->m_PrecautionsDock = 0;
+    }
+    if (d)
+        delete d;
+    d = 0;
     delete m_ui;
 }
 
@@ -798,26 +812,26 @@ void MainWindow::readFile(const QString &file)
 void MainWindow::createDockWindows()
 {
     // Create template dock
-    QDockWidget *tdock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
-    tdock->setObjectName("templatesDock");
-    tdock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    tdock->setWidget(new Templates::TemplatesView(tdock));
-    addDockWidget(Qt::RightDockWidgetArea, tdock);
+    QDockWidget *dock = d->m_TemplatesDock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
+    dock->setObjectName("templatesDock");
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    dock->setWidget(new Templates::TemplatesView(dock));
+    addDockWidget(Qt::RightDockWidgetArea, dock);
     QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
-    menu->addAction(tdock->toggleViewAction());
+    menu->addAction(dock->toggleViewAction());
 
     // Create patient's precautions dock
-    QDockWidget *precautionsdock = new QDockWidget(tkTr(Trans::Constants::PATIENT_INFORMATION), this);
-    precautionsdock->setObjectName("precautionsDock");
-    precautionsdock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, precautionsdock);
-    d->m_PrecautionView = new QTreeView(precautionsdock);
+    dock = d->m_PrecautionsDock = new QDockWidget(tkTr(Trans::Constants::PATIENT_INFORMATION), this);
+    dock->setObjectName("precautionsDock");
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, dock);
+    d->m_PrecautionView = new QTreeView(dock);
     d->m_PrecautionView->header()->hide();
     d->m_PrecautionView->expandAll();
     d->m_PrecautionView->setModel(DrugsDB::GlobalDrugsModel::drugsPrecautionsModel());
-    precautionsdock->setWidget(d->m_PrecautionView);
+    dock->setWidget(d->m_PrecautionView);
     // aShowPrecautionsDock
-    QAction *a = precautionsdock->toggleViewAction();
+    QAction *a = dock->toggleViewAction();
     a->setObjectName("aShowPrecautionsDock");
     Core::Command *cmd = actionManager()->registerAction(a, "aShowPrecautionsDock", QList<int>() << Core::Constants::C_GLOBAL_ID);
     cmd->setTranslations(tr("Toggle patient's precautions"));

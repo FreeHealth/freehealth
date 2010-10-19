@@ -43,8 +43,10 @@ MainWinPlugin::~MainWinPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
-    if (m_MainWindow)
+    if (m_MainWindow) {
         delete m_MainWindow;
+        m_MainWindow = 0;
+    }
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
