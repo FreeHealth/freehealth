@@ -60,9 +60,8 @@ public:
     PatientPrivate()
     {
         m_XmlTags.insert(IPatient::Uid ,        "UID");
-        m_XmlTags.insert(IPatient::BirthName ,  "Name" );
-        m_XmlTags.insert(IPatient::Firstname ,  "Firstname" );
-        m_XmlTags.insert(IPatient::SecondName , "SecondName" );
+        m_XmlTags.insert(IPatient::BirthName ,  "Surnames" );
+        m_XmlTags.insert(IPatient::Firstname ,  "Firstnames" );
         m_XmlTags.insert(IPatient::Gender ,     "Gender" );
         m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");
         m_XmlTags.insert(IPatient::Weight ,     "Weight");
@@ -80,8 +79,6 @@ public:
         m_XmlTags.insert(IPatient::DrugsAtcIntolerances ,   "DrugsAtcIntolerances" );
         m_XmlTags.insert(IPatient::DrugsUidIntolerances ,   "DrugsUidIntolerances" );
         m_XmlTags.insert(IPatient::DrugsInnIntolerances ,   "DrugsInnIntolerances" );
-//        m_XmlTags.insert(IPatient::ATCAllergies ,   "ATCAllergies" );
-//        m_XmlTags.insert(IPatient::INNAllergies ,   "INNAllergies" );
     }
 
     QString getXmlTag(const int key) const
