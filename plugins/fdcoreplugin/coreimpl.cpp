@@ -39,6 +39,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <fdcoreplugin/commandlineparser.h>
 #include <fdcoreplugin/patient.h>
@@ -163,6 +164,9 @@ CoreImpl::CoreImpl(QObject *parent) :
 
 CoreImpl::~CoreImpl()
 {
+    // Save last used language
+    settings()->setValue(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2));
+
     delete m_UID;
     delete m_CommandLine;
     delete m_MedinTux;
@@ -268,6 +272,10 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
+    // change language to the last selected or the system language
+    QString lang = settings()->value(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2)).toString();
+    m_Translators->changeLanguage(lang);
+
     Q_EMIT coreOpened();
 }
 

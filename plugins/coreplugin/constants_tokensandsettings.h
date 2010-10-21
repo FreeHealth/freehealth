@@ -91,6 +91,7 @@ const char * const  S_SHOWHELPTEXT      = "Core/ShowFormHelpText";
 const char * const  S_LASTLOGIN         = "Login/userLogin";
 const char * const  S_LASTPASSWORD      = "Login/userPassword";
 const char * const  S_DATEFORMAT        = "Dates/Format";
+const char * const  S_PREFEREDLANGUAGE  = "Core/PreferedLanguage";
 
 const char * const  S_PATIENTFORMS_FILENAME  = "Core/PatientFormsFile";
 
