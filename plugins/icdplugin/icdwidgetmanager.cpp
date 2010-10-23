@@ -162,32 +162,33 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     connect(aShowDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDatabaseInformations()));
 
     // Search method menu
-//    Core::ActionContainer *searchmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
-//    if (!searchmenu) {
-//        searchmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_SEARCH);
-//        searchmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//        searchmenu->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
-//        menu->addMenu(searchmenu, DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//    }
-//    Q_ASSERT(searchmenu);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
+    Core::ActionContainer *searchmenu = actionManager()->actionContainer(Constants::M_ICD_SEARCH);
+    if (!searchmenu) {
+        searchmenu = actionManager()->createMenu(Constants::M_ICD_SEARCH);
+        searchmenu->appendGroup(Constants::G_ICD_SEARCH);
+        searchmenu->setTranslations(Constants::SEARCHMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+        menu->addMenu(searchmenu, Core::Constants::G_EDIT_FIND);
+    }
+    Q_ASSERT(searchmenu);
 
     gSearchMethod = new QActionGroup(this);
     a = aSearchByLabel = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Constants::I_SEARCH_LABEL));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_LABEL, globalcontext);
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_LABEL, ctx);
     cmd->setTranslations(Constants::SEARCHLABEL_TEXT, Constants::SEARCHLABEL_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-//    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
+    searchmenu->addAction(cmd, Constants::M_ICD_SEARCH);
     gSearchMethod->addAction(a);
 
     a = aSearchByCode = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Constants::I_SEARCH_CODE));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_CODE, globalcontext);
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_CODE, ctx);
     cmd->setTranslations(Constants::SEARCHCODE_TEXT, Constants::SEARCHCODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-//    searchmenu->addAction(cmd, Constants::G_PLUGINS_SEARCH);
+    searchmenu->addAction(cmd, Constants::M_ICD_SEARCH);
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 

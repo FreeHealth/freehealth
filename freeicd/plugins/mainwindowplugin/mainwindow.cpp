@@ -257,6 +257,7 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    delete m_ui->widget; m_ui->widget=0;
     delete m_ui;
 }
 

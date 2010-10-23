@@ -45,7 +45,7 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 
 
 IcdCodeSelector::IcdCodeSelector(QWidget *parent) :
-    QWidget(parent),
+    IcdContextualWidget(parent),
     ui(new Ui::IcdCodeSelector),
     m_SearchToolButton(0)
 {

@@ -188,9 +188,11 @@ namespace Constants {
     // Contexts
     const char * const  C_ICD_PLUGINS = "ICD.cGlobal";
     const char * const  G_ICD_DATABASES = "grICD.Db";
+    const char * const  G_ICD_SEARCH = "grICDSearch";
 
     // Menu and action for ActionManager
     const char * const  M_PLUGIN_ICD       = "mICDPlugin";
+    const char * const  M_ICD_SEARCH       = "mICDSearch";
     const char * const  A_RECREATE_ICD_DB  = "aRecreateICDDatabase";
     const char * const  A_DATABASE_INFOS   = "aICDDbInformations";
     const char * const  A_SEARCH_LABEL     = "aICDSearchLabel";
@@ -204,6 +206,7 @@ namespace Constants {
     const char * const  ICDCONSTANTS_TR_CONTEXT = "ICD";
     const char* const   RECREATE_DATABASE_TEXT  = QT_TRANSLATE_NOOP("ICD", "Recreate ICD10 database");
     const char* const   DATABASE_INFOS_TEXT     = QT_TRANSLATE_NOOP("ICD", "ICD10 database informations");
+    const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("ICD", "ICD10 search method");
     const char* const   SEARCHLABEL_TEXT        = QT_TRANSLATE_NOOP("ICD", "Search by label");
     const char* const   SEARCHCODE_TEXT         = QT_TRANSLATE_NOOP("ICD", "Search by code");
     //    const char* const   ACCOUNTBOOK_TEXT        = QT_TRANSLATE_NOOP("ICD", "Account book");

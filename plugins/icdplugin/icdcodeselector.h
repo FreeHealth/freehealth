@@ -26,7 +26,7 @@
 #ifndef ICDCODESELECTOR_H
 #define ICDCODESELECTOR_H
 
-#include <QWidget>
+#include <icdplugin/icdcontextualwidget.h>
 QT_BEGIN_NAMESPACE
 class QToolButton;
 QT_END_NAMESPACE
@@ -39,7 +39,7 @@ namespace Ui {
     class IcdCodeSelector;
 }
 
-class IcdCodeSelector : public QWidget
+class IcdCodeSelector : public IcdContextualWidget
 {
     Q_OBJECT
 
