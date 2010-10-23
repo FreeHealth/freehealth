@@ -1,3 +1,28 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef ICDCONSTANTS_H
 #define ICDCONSTANTS_H
 
@@ -168,12 +193,19 @@ namespace Constants {
     const char * const  M_PLUGIN_ICD       = "mICDPlugin";
     const char * const  A_RECREATE_ICD_DB  = "aRecreateICDDatabase";
     const char * const  A_DATABASE_INFOS   = "aICDDbInformations";
+    const char * const  A_SEARCH_LABEL     = "aICDSearchLabel";
+    const char * const  A_SEARCH_CODE      = "aICDSearchCode";
 
+    // Icons
+    const char * const  I_SEARCH_LABEL     = "search.png";
+    const char * const  I_SEARCH_CODE      = "search.png";
 
     // Translations
     const char * const  ICDCONSTANTS_TR_CONTEXT = "ICD";
     const char* const   RECREATE_DATABASE_TEXT  = QT_TRANSLATE_NOOP("ICD", "Recreate ICD10 database");
     const char* const   DATABASE_INFOS_TEXT     = QT_TRANSLATE_NOOP("ICD", "ICD10 database informations");
+    const char* const   SEARCHLABEL_TEXT        = QT_TRANSLATE_NOOP("ICD", "Search by label");
+    const char* const   SEARCHCODE_TEXT         = QT_TRANSLATE_NOOP("ICD", "Search by code");
     //    const char* const   ACCOUNTBOOK_TEXT        = QT_TRANSLATE_NOOP("ICD", "Account book");
 
     // Settings and tokens

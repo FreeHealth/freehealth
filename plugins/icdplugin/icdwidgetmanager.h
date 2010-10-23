@@ -66,6 +66,7 @@ public:
 private Q_SLOTS:
     void recreateDatabase();
     void showDatabaseInformations();
+    void searchActionChanged(QAction*);
 
 private:
     void updateActions();
@@ -73,6 +74,8 @@ private:
 protected:
     QAction *aRecreateDatabase;
     QAction *aShowDatabaseInformations;
+    QAction *aSearchByLabel, *aSearchByCode;
+    QActionGroup *gSearchMethod;
 
     QPointer<IcdContextualWidget> m_CurrentView;
     QPointer<IcdDownloader> m_Downloader;

@@ -56,6 +56,12 @@ public:
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
 
+    QVariant getIcdCode(const QVariant &SID);
+    QString getHumanReadableIcdDaget(const QVariant &SID);
+    QVariant getIcdCodeWithDagStar(const QVariant &SID);
+    QString getLabel(const QVariant &LID);
+
+
 private:
     bool init();
 

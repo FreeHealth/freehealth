@@ -23,34 +23,65 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICD_PLUGIN_H
-#define ICD_PLUGIN_H
+#ifndef ICDMODEL_H
+#define ICDMODEL_H
 
-#include <extensionsystem/iplugin.h>
+#include <QAbstractTableModel>
 
-#include <QtCore/QObject>
-
-/**
- * \file icdplugin.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 09 Oct 2010
-*/
 
 namespace ICD {
+namespace Internal {
+class IcdModelPrivate;
+}
 
-class IcdPlugin : public ExtensionSystem::IPlugin
+class IcdModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    IcdPlugin();
-    ~IcdPlugin();
+    enum DataRepresentation {
+        SID_Code = 0,
+        ICD_Code,
+        ICD_CodeWithDagetAndStar,
+        Label,
+        Daget,
+        Type,
+        ColumnCount
+    };
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+    enum SearchModes {
+        SearchByLabel,
+        SearchByCode
+    };
+
+    explicit IcdModel(QObject *parent = 0);
+    ~IcdModel();
+
+    void setSearchMethod(SearchModes mode);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+    void fetchMore(const QModelIndex &parent);
+    bool canFetchMore(const QModelIndex &parent) const;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+public Q_SLOTS:
+    void setFilter(const QString &searchLabel);
+
+private:
+    Internal::IcdModelPrivate *d;
+
 };
 
 
-}  // End namespace ICD
+}  //  End namespace ICD
 
-#endif  // End ICD_PLUGIN_H
+#endif // ICDMODEL_H

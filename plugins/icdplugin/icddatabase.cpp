@@ -42,11 +42,8 @@
 #include <QSqlField>
 #include <QFile>
 #include <QDir>
-#include <QMultiHash>
-#include <QMap>
-#include <QMultiMap>
-#include <QList>
-#include <QSet>
+#include <QCache>
+#include <QVariant>
 
 using namespace ICD;
 using namespace ICD::Internal;
@@ -65,7 +62,12 @@ namespace Internal {
 class IcdDatabasePrivate
 {
 public:
-    IcdDatabasePrivate(IcdDatabase *base) : q(base) {}
+    IcdDatabasePrivate(IcdDatabase *base) : q(base)
+    {
+        m_CachedCodes.setMaxCost(1000);
+        m_CachedDaget.setMaxCost(1000);
+    }
+
     ~IcdDatabasePrivate()
     {
     }
@@ -73,6 +75,8 @@ public:
 public:
     IcdDatabase *q;
     bool m_LogChrono;
+    QCache<int, QVariant> m_CachedCodes;
+    QCache<int, QString> m_CachedDaget;
 };
 }  // End Internal
 }  // End ICD
@@ -269,5 +273,107 @@ bool IcdDatabase::init()
 void IcdDatabase::logChronos(bool state)
 {
     Q_UNUSED(state);
+}
+
+QVariant IcdDatabase::getIcdCode(const QVariant &SID)
+{
+    if (d->m_CachedCodes.keys().contains(SID.toInt())) {
+        return *d->m_CachedCodes[SID.toInt()];
+    }
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::MASTER_SID, QString("=%1").arg(SID.toString()));
+    QString req = select(Constants::Table_Master, Constants::MASTER_CODE, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            QVariant *qvar = new QVariant(query.value(0));
+            d->m_CachedCodes.insert(SID.toInt(), qvar);
+            return *qvar;
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return QVariant();
+}
+
+QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
+{
+    if (d->m_CachedDaget.keys().contains(SID.toInt())) {
+        QString *s = d->m_CachedDaget[SID.toInt()];
+        if (*s=="F" || *s=="G" || *s=="H") {
+            return "*";
+        } else if (*s=="S" || *s=="T" || *s=="U") {
+            return "†";
+        } else {
+            return QString();
+        }
+    }
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::DAG_SID, QString("=%1").arg(SID.toString()));
+    QString req = select(Constants::Table_Dagstar, Constants::DAG_DAGET, where);
+    if (query.exec(req)) {
+        QString *s = new QString();
+        if (query.next()) {
+            *s = query.value(0).toString();
+        }
+        d->m_CachedDaget.insert(SID.toInt(), s);
+        if (*s=="F" || *s=="G" || *s=="H") {
+            return "*";
+        } else if (*s=="S" || *s=="T" || *s=="U") {
+            return "†";
+        } else {
+            return QString();
+        }
+
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return QChar();
+}
+
+QVariant IcdDatabase::getIcdCodeWithDagStar(const QVariant &SID)
+{
+    return getIcdCode(SID).toString() + getHumanReadableIcdDaget(SID);
+}
+
+QString IcdDatabase::getLabel(const QVariant &LID)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::LIBELLE_LID, QString("=%1").arg(LID.toString()));
+    int labelField;
+    const QString &lang = QLocale().name().left(2);
+    if (lang=="en") {
+        labelField = Constants::LIBELLE_EN;
+    } else if (lang=="fr") {
+        labelField = Constants::LIBELLE_FR;
+    } else if (lang=="de") {
+        labelField = Constants::LIBELLE_DE_DIMDI;
+    }
+    QString req = select(Constants::Table_Libelle, labelField, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return QString();
 }
 

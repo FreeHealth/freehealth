@@ -44,6 +44,10 @@
 //#include <coreplugin/idocumentprinter.h>
 
 #include <icdplugin/icddownloader.h>
+// TEST
+#include <icdplugin/icdcodeselector.h>
+#include <icdplugin/icdmodel.h>
+// TEST
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -263,11 +267,10 @@ void MainWindow::postCoreInitialization()
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 
-
-//    ICD::IcdDownloader *dl = new ICD::IcdDownloader(this);
-//    dl->createDatabase();
-//    dl->downloadFinished();
-
+    // TEST
+     m_ui->widget->initialize();
+    m_ui->widget->setModel(new ICD::IcdModel(this));
+    // TEST
 }
 
 /** \brief Slot specific to MacOs -> update the application icon badge to number of founded interactions. */

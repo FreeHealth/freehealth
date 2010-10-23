@@ -114,6 +114,8 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         QObject(parent),
         aRecreateDatabase(0),
         aShowDatabaseInformations(0),
+        aSearchByLabel(0),
+        aSearchByCode(0),
         m_CurrentView(0)
 {
     setObjectName("IcdActionHandler");
@@ -159,6 +161,35 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     connect(aShowDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDatabaseInformations()));
 
+    // Search method menu
+//    Core::ActionContainer *searchmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
+//    if (!searchmenu) {
+//        searchmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_SEARCH);
+//        searchmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
+//        searchmenu->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
+//        menu->addMenu(searchmenu, DrugsWidget::Constants::G_PLUGINS_SEARCH);
+//    }
+//    Q_ASSERT(searchmenu);
+
+    gSearchMethod = new QActionGroup(this);
+    a = aSearchByLabel = new QAction(this);
+    a->setCheckable(true);
+    a->setChecked(false);
+    a->setIcon(th->icon(Constants::I_SEARCH_LABEL));
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_LABEL, globalcontext);
+    cmd->setTranslations(Constants::SEARCHLABEL_TEXT, Constants::SEARCHLABEL_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+//    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
+    gSearchMethod->addAction(a);
+
+    a = aSearchByCode = new QAction(this);
+    a->setCheckable(true);
+    a->setChecked(false);
+    a->setIcon(th->icon(Constants::I_SEARCH_CODE));
+    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_CODE, globalcontext);
+    cmd->setTranslations(Constants::SEARCHCODE_TEXT, Constants::SEARCHCODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+//    searchmenu->addAction(cmd, Constants::G_PLUGINS_SEARCH);
+    gSearchMethod->addAction(a);
+    connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -221,3 +252,6 @@ void IcdActionHandler::showDatabaseInformations()
     dlg.exec();
 }
 
+void IcdActionHandler::searchActionChanged(QAction *a)
+{
+}
