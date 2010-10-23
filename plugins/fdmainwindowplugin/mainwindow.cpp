@@ -111,7 +111,7 @@ class MainWinPrivate {
 public:
     MainWinPrivate(MainWindow *parent) :
             m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0),
-            m_TemplatesDock(0), m_PrecautionsDock(0), q(parent)
+            m_TemplatesDock(0), m_PrecautionsDock(0), m_NameOrder(-1), q(parent)
     {}
 
     ~MainWinPrivate()
@@ -202,6 +202,7 @@ public:
     QTreeView *m_AllergiesView;
     QTreeView *m_PrecautionView;
     QDockWidget *m_TemplatesDock, *m_PrecautionsDock;
+    int m_NameOrder;
 
 private:
     MainWindow *q;
@@ -480,6 +481,39 @@ void MainWindow::updateIconBadgeOnMacOs()
 #endif
 }
 
+/** \brief Change the order of the patient's names in the view */
+void MainWindow::changePatientNameLabelOrder(const int first)
+{
+    if (first == -1)
+        return;
+    if (d->m_NameOrder==-1 && first==PatientSurnameLabel)
+        return;
+    if (first == d->m_NameOrder)
+        return;
+    if (first >= PatientNameMax)
+        return;
+    Q_ASSERT(m_ui);
+    if (!m_ui)
+        return;
+    d->m_NameOrder = first;
+    QHBoxLayout *lay = m_ui->patientNamesLayout;
+    lay->removeWidget(m_ui->surnamesLabel);
+    lay->removeWidget(m_ui->patientName);
+    lay->removeWidget(m_ui->firstNamesLabel);
+    lay->removeWidget(m_ui->patientFirstname);
+    if (first==PatientSurnameLabel) {
+        lay->addWidget(m_ui->surnamesLabel);
+        lay->addWidget(m_ui->patientName);
+        lay->addWidget(m_ui->firstNamesLabel);
+        lay->addWidget(m_ui->patientFirstname);
+    } else {
+        lay->addWidget(m_ui->firstNamesLabel);
+        lay->addWidget(m_ui->patientFirstname);
+        lay->addWidget(m_ui->surnamesLabel);
+        lay->addWidget(m_ui->patientName);
+    }
+}
+
 /**
   \brief Close the main window and the application
   \todo Add  ICoreListener
@@ -658,6 +692,7 @@ void MainWindow::readSettings()
 {
     settings()->restoreState(this, DrugsWidget::Constants::S_STATEPREFIX);
     fileManager()->getRecentFilesFromSettings();
+    changePatientNameLabelOrder(settings()->value(DrugsWidget::Constants::S_PATIENTNAMESORDER, -1).toInt());
 }
 
 /** \brief Writes main window's settings */

@@ -68,7 +68,7 @@ namespace Constants {
     const char *const XML_ATTRIB_VALUE            = "value";
     const char *const XML_ATTRIB_UNIT             = "unit";
     const char *const XML_ATTRIB_UID              = "uid";
-    const char *const XML_ATTRIB_SURNAMES         = "surnames";
+    const char *const XML_ATTRIB_LASTNAMES        = "lastnames";
     const char *const XML_ATTRIB_NAME             = "name";
     const char *const XML_ATTRIB_FIRSTNAME        = "firstnames";
     const char *const XML_ATTRIB_VERSION          = "version";
@@ -272,7 +272,7 @@ public:
     void readPatientDatas(const QDomElement &rootElement)
     {
 //        <Patient>
-//            <Identity surnames="Name Of Patient" firstnames="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
+//            <Identity lastnames="Name Of Patient" firstnames="James" uid="EMR Patient's UID" dob="yyyy/MM/dd" gender="M or F or H"/>
 //            <Creatinin value="12" unit="mg/l or mmol/l"/>
 //            <Weight value="70" unit="kg or pd" />
 //            <Height value="170" unit="cm or "/>
@@ -287,7 +287,7 @@ public:
         QDomElement element = rootElement.firstChildElement();
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_PATIENT_IDENTITY) {
-                value.insert(CommandLine::CL_PatientName, element.attribute(Internal::Constants::XML_ATTRIB_SURNAMES));
+                value.insert(CommandLine::CL_PatientName, element.attribute(Internal::Constants::XML_ATTRIB_LASTNAMES));
                 value.insert(CommandLine::CL_PatientFirstname, element.attribute(Internal::Constants::XML_ATTRIB_FIRSTNAME));
                 value.insert(CommandLine::CL_PatientUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
                 value.insert(CommandLine::CL_PatientGender, element.attribute(Internal::Constants::XML_ATTRIB_GENDER));

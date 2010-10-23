@@ -60,7 +60,7 @@ public:
     PatientPrivate()
     {
         m_XmlTags.insert(IPatient::Uid ,        "UID");
-        m_XmlTags.insert(IPatient::BirthName ,  "Surnames" );
+        m_XmlTags.insert(IPatient::BirthName ,  "Lastnames" );
         m_XmlTags.insert(IPatient::Firstname ,  "Firstnames" );
         m_XmlTags.insert(IPatient::Gender ,     "Gender" );
         m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");

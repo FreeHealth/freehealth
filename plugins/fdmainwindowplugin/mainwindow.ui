@@ -13,26 +13,34 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0" colspan="2">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <layout class="QHBoxLayout" name="patientNamesLayout">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="surnamesLabel">
         <property name="text">
          <string>Patient Name</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="patientName"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Surname</string>
+       <widget class="QLineEdit" name="patientName">
+        <property name="toolTip">
+         <string>Family or occidental last names</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="patientFirstname"/>
+       <widget class="QLabel" name="firstNamesLabel">
+        <property name="text">
+         <string>Firstname</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="patientFirstname">
+        <property name="toolTip">
+         <string>Given names</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

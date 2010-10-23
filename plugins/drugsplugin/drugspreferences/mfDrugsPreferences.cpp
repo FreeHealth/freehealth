@@ -103,6 +103,7 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
     defaultvalues.insert(S_DYNAMICALERTS, true);
     defaultvalues.insert(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::ContreIndication);
+    defaultvalues.insert(S_PATIENTNAMESORDER, 0);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -403,6 +404,7 @@ void DrugsViewWidget::setDatasToUi()
 
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
+    patientNameOrder->setCurrentIndex(s->value(S_PATIENTNAMESORDER, 0).toInt());
     showIconsCheck->setChecked(s->value(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION).toBool());
 
     dynamicAlerts->setChecked(s->value(S_DYNAMICALERTS).toBool());
@@ -444,6 +446,7 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     if (DrugsWidget::DrugsWidgetManager::instance()->currentView())
         DrugsWidget::DrugsWidgetManager::instance()->currentView()->changeFontTo(font);
 
+    s->setValue(S_PATIENTNAMESORDER, patientNameOrder->currentIndex());
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 
     s->setValue(S_DYNAMICALERTS, dynamicAlerts->isChecked());
@@ -468,6 +471,7 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION , true);
     s->setValue(S_DYNAMICALERTS, true);
     s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::ContreIndication);
+    s->setValue(S_PATIENTNAMESORDER, 0);
 
     s->setValue(S_DRUGFONT , QFont().toString());
     s->setValue(S_PRESCRIPTIONFONT , QFont().toString());

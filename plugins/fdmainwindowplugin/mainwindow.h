@@ -44,7 +44,7 @@ QT_END_NAMESPACE
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.1
- * \date 08 Oct 2010
+ * \date 21 Oct 2010
 */
 
 namespace MainWin {
@@ -62,6 +62,12 @@ class FDMAINWIN_EXPORT MainWindow: public Core::IMainWindow
     enum { MaxRecentFiles = 10 };
 
 public:
+    enum PatientLabels {
+        PatientSurnameLabel = 0,
+        PatientFirstnameLabel,
+        PatientNameMax
+    };
+
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -81,6 +87,8 @@ public Q_SLOTS:
     void postCoreInitialization();
     void refreshPatient();
     void updateIconBadgeOnMacOs();
+
+    void changePatientNameLabelOrder(const int first);
 
     // Interface of MainWidowActionHandler
     bool newFile();
