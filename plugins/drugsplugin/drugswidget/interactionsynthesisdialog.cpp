@@ -43,7 +43,6 @@
 #include <QToolBar>
 
 using namespace DrugsWidget;
-//using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
@@ -159,6 +158,8 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
     case 5: level = DrugsDB::Constants::Interaction::Information; break;
     default: level = 0;
     }
+    ui->interactors->blockSignals(true);
+    ui->interactors->selectionModel()->blockSignals(true);
     ui->interactors->clear();
     ui->interactors->setRowCount(0);
     ui->interactors->setColumnCount(3);
@@ -169,7 +170,7 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
     ui->interactors->setColumnWidth(0, 24);
     int row = 0;
     foreach(DrugsDB::Internal::DrugsInteraction *interaction, d->m_Interactions) {
-        if (interaction->type() == level || level == 0) {
+        if ((interaction->type() & level) || (level == 0)) {
             ui->interactors->insertRow(row);
             QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionsManager::interactionIcon(interaction->type()), "");
             icon->setData(Qt::UserRole, d->m_Interactions.indexOf(interaction));
@@ -182,6 +183,8 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
             ui->interactors->setItem(row,2, atc2);
         }
     }
+    ui->interactors->blockSignals(false);
+    ui->interactors->selectionModel()->blockSignals(false);
     ui->interactors->selectRow(0);
 }
 
@@ -203,9 +206,11 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
 {
     Q_UNUSED(current);
     Q_UNUSED(previous);
+    QTableWidgetItem *item = ui->interactors->currentItem();
+    if (!item)
+        return;
     ui->riskBrowser->clear();
     ui->managementBrowser->clear();
-    QTableWidgetItem *item = ui->interactors->currentItem();
     int id = item->data(Qt::UserRole).toInt();
     if (id >= d->m_Interactions.count())
         return;
