@@ -204,17 +204,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="611"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="610"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="611"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="613"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
         <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>

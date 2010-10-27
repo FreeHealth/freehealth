@@ -27,12 +27,12 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     <name>DrugsBase</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="975"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1020"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1025"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="311"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="313"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,12 +378,12 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="498"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="524"/>
         <source>No INN found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="503"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="529"/>
         <source>No interaction class found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -415,11 +415,6 @@ Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each
 Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][
 Minimum interval between intakes: [MIN_INTERVAL]][
 [NOTE] ]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="122"/>
-        <source>[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

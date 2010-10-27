@@ -64,12 +64,12 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="118"/>
+        <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="120"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="202"/>
+        <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="206"/>
         <source>Reading exchange file...</source>
         <translation type="unfinished"></translation>
     </message>

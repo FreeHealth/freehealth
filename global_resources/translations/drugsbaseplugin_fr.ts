@@ -31,12 +31,12 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <name>DrugsBase</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="975"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1020"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1025"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="311"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="313"/>
         <source>This INN is present more than one time in this prescrition.</source>
         <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
     </message>
@@ -386,12 +386,12 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="498"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="524"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="503"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="529"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
@@ -428,11 +428,6 @@ Prendre [Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ t
 Distribution journalière : [DISTRIBUTED_DAILY_SCHEME]][
 Intervalle minimum entre chaque prises : [MIN_INTERVAL]][
 [NOTE] ]</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="122"/>
-        <source>[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]</source>
-        <translation>[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]</translation>
     </message>
 </context>
 </TS>

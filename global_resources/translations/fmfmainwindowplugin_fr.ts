@@ -175,12 +175,12 @@ The default administrator&apos;s password must be redefined here.</source>
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="136"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="137"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="383"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="387"/>
         <source>Choose a file</source>
         <translation type="unfinished"></translation>
     </message>

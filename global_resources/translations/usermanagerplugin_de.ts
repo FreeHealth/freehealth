@@ -799,7 +799,7 @@ You must specify a different login/password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="189"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="202"/>
         <source>Change current user</source>
         <translation type="unfinished"></translation>
     </message>

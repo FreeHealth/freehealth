@@ -338,4 +338,71 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>Account::Internal::VirtualDatabaseCreator</name>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="32"/>
+        <source>Virtual database creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="95"/>
+        <source>This widget will create a fake database and populate it with virtual datas.
+This feature is usefull for testers and should not be used by current users.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="108"/>
+        <source>Delete actual database (datas will be definitively lost)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="115"/>
+        <source>Number of bank accounts to create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="125"/>
+        <source>Number of movements to create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="135"/>
+        <source>Number of medical procedures to create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="145"/>
+        <source>Number of accounts to create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="211"/>
+        <source>Create virtual database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="239"/>
+        <source>Creating virtual database (%1 items to create)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="239"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Account::VirtualDatabaseCreatorPage</name>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="173"/>
+        <source>Virtual database creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
