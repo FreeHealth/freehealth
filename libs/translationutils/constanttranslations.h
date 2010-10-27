@@ -499,7 +499,7 @@ enum TitleInterpret {
         const char* const PATIENTS     = QT_TRANSLATE_NOOP("tkConstants", "Patients");
         const char* const PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Patient informations");
         const char* const PATIENT_DATABASE  = QT_TRANSLATE_NOOP("tkConstants", "Patient database");
-        const char* const CLEAR_PATIENT_INFOS = QT_TRANSLATE_NOOP("tkConstants", "Clear patient's informations");
+        const char* const CLEAR_PATIENT_INFOS = QT_TRANSLATE_NOOP("tkConstants", "Clear patient's information");
         // Genders
         const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
         const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");

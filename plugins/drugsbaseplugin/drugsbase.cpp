@@ -1052,8 +1052,8 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
     }
 
-//    if (toReturn)
-//        toReturn->warn();
+    if (toReturn)
+        toReturn->warn();
 
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugsBase", "getDrugByUID");

@@ -66,12 +66,14 @@ public:
     QString searchText() const;
 
 private:
+    QString emptyTextWithExtraText() const;
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent( QResizeEvent * );
     void focusInEvent ( QFocusEvent * event );
     void focusOutEvent ( QFocusEvent * event );
     void setSpecificStyleSheet( const QString & css );
     void prepareConnections();
+    void changeEvent(QEvent *e);
 
 private Q_SLOTS:
     void emitTextChangedSignal();

@@ -119,7 +119,7 @@ namespace Constants {
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // MASKS
-    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =  QT_TRANSLATE_NOOP("mfDrugsConstants", "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]");
+    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =  "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]";
     const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
             "<html>\n"
             "<head>\n"

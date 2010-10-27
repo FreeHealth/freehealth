@@ -98,7 +98,7 @@ public:
     }
 
     /** \brief Test link relation with the \e link */
-    bool isLinkedWith( DrugComposition *link ) const
+    bool isLinkedWith(DrugComposition *link) const
     {
         Q_ASSERT(link);
         return (link==m_Link);
@@ -120,7 +120,7 @@ public:
         if (this->isTheActiveSubstance())
             return m_InnName;
         else if (m_Link)
-                return m_Link->m_InnName; // avoid infinite loop by retreiving value directly not with the function of m_Link
+            return m_Link->m_InnName; // avoid infinite loop by retreiving value directly not with the function of m_Link
         return QString();
     }
 

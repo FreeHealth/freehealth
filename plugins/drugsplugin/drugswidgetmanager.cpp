@@ -262,6 +262,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    cmd->setAttribute(Core::Command::CA_UpdateText);
     searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
 
@@ -271,6 +272,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHMOLS));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_MOLECULES, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    cmd->setAttribute(Core::Command::CA_UpdateText);
     searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
 
@@ -280,6 +282,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHINN));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_INN, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
+    cmd->setAttribute(Core::Command::CA_UpdateText);
     searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));

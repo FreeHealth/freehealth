@@ -141,7 +141,7 @@ QVariant Patient::data(const QModelIndex &index, int role) const
         case GenderIndex:
             {
                 const QString &g = d->m_Values.value(Core::IPatient::Gender).toString();
-                qWarning() << g;
+//                qWarning() << g;
                 if (g=="M")
                     return 0;
                 if (g=="F")

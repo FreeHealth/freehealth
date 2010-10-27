@@ -41,20 +41,20 @@ static inline QString cleanString(const QString &s)
 {
     QString ret = s;
     if (Qt::mightBeRichText(ret)) {
-        ret.replace( QRegExp("<[^>]*>"), "" );
+        ret.replace(QRegExp("<[^>]*>"), "");
         ret = ret.trimmed();
     }
     return ret;
 }
 
 
-QButtonLineEdit::QButtonLineEdit(QWidget *parent)
-                : QLineEdit(parent), m_leftButton(0), m_rightButton(0), m_Delayed(false)
+QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
+        QLineEdit(parent), m_leftButton(0), m_rightButton(0), m_Delayed(false)
 {
     static int handle = 0;
     handle++;
-    if ( objectName().isNull() )
-        setObjectName( "QButtonLineEdit_" + QString::number(handle));
+    if (objectName().isNull())
+        setObjectName("QButtonLineEdit_" + QString::number(handle));
     m_Timer = new QTimer(this);
     m_Timer->setSingleShot(true);
 }
@@ -82,24 +82,24 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  Text of selected action is show in gray inside the line edit when nothing lies in. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
-void QButtonLineEdit::setLeftButton( QToolButton * button )
+void QButtonLineEdit::setLeftButton(QToolButton * button)
 {
-    button->setParent( this );
+    button->setParent(this);
     m_leftButton = button;
-    m_leftButton->setStyleSheet( "QToolButton { border: none; padding: 0px; }" );
+    m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
 
-    int frameWidth = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
-    m_CSS.append( QString( "padding-left: %1px;" ).arg( button->sizeHint().width() + frameWidth ) );
-//    setStyleSheet( QString( "QLineEdit { %1 }" ).arg( m_CSS ) );
+    int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    m_CSS.append(QString("padding-left: %1px;").arg(button->sizeHint().width() + frameWidth));
+//    setStyleSheet(QString("QLineEdit { %1 }").arg(m_CSS));
 
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
 
     // set text to button toolTip
-    setText( m_leftButton->toolTip() );
+//    setText(m_leftButton->toolTip());
     m_emptyString = cleanString(m_leftButton->toolTip());
-    setSpecificStyleSheet( "color:gray;" );
+    setSpecificStyleSheet("color:gray;");
     prepareConnections();
     clearFocus();
 }
@@ -109,43 +109,43 @@ void QButtonLineEdit::setLeftButton( QToolButton * button )
  QButtonLineEdit takes ownership of the button. \n
  For now pixmaps of QAction must be sized (16x16). \n
 */
-void QButtonLineEdit::setRightButton( QToolButton * button )
+void QButtonLineEdit::setRightButton(QToolButton * button)
 {
-    button->setParent( this );
+    button->setParent(this);
     m_rightButton = button;
-    m_rightButton->setStyleSheet( "QToolButton { border: none; padding: 0px; }" );
-    int frameWidth = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
-    m_CSS.append( QString( "padding-right: %1px;" ).arg( button->sizeHint().width() + frameWidth + 1 ) );
-    setSpecificStyleSheet( "" );
+    m_rightButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
+    int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    m_CSS.append(QString("padding-right: %1px;").arg(button->sizeHint().width() + frameWidth + 1));
+    setSpecificStyleSheet("");
     QSize msz = minimumSizeHint();
-    setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2 ),
-                   qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2 ));
+    setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
+                   qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
     prepareConnections();
     clearFocus();
 }
 
-void QButtonLineEdit::resizeEvent( QResizeEvent * )
+void QButtonLineEdit::resizeEvent(QResizeEvent *)
 {
-    if ( m_leftButton )
+    if (m_leftButton)
     {
         QSize sz = m_leftButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
         m_leftButton->move(rect().left() + frameWidth ,
-                          (rect().bottom() + 1 - sz.height() ) / 2 );
+                          (rect().bottom() + 1 - sz.height()) / 2);
     }
-    if ( m_rightButton )
+    if (m_rightButton)
     {
         QSize sz = m_rightButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        m_rightButton->move( rect().right() - frameWidth - sz.width(),
-                           ( rect().bottom() + 1 - sz.height() ) / 2);
+        m_rightButton->move(rect().right() - frameWidth - sz.width(),
+                           (rect().bottom() + 1 - sz.height()) / 2);
     }
 }
 
 void QButtonLineEdit::prepareConnections()
 {
     // Manage QToolButton Actions
-    connect( m_leftButton, SIGNAL( triggered( QAction* ) ), this, SLOT( leftTrig( QAction* ) ) );
+    connect(m_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(leftTrig(QAction*)));
 }
 
 void QButtonLineEdit::emitTextChangedSignal()
@@ -162,18 +162,23 @@ void QButtonLineEdit::emitTextChangedSignal()
 
 void QButtonLineEdit::leftTrig(QAction *action)
 {
-    m_leftButton->setDefaultAction( action );
+    m_leftButton->setDefaultAction(action);
     if (text().isEmpty() || (text() == m_emptyString)) {
-        m_emptyString = cleanString(action->toolTip());
-        setText(cleanString(action->toolTip()));
-        setSpecificStyleSheet( "color:gray;" );
+        m_emptyString = cleanString(action->text());
+        setText(emptyTextWithExtraText());
+        setSpecificStyleSheet("color:gray;");
     }
 //    QString t = ;
 //    t.replace(" ", "&nbsp;");
 //    t.append("<p style='white-space:pre'>");
 //    t.prepend("</p>");
-    setToolTip(action->toolTip());
+    setToolTip(emptyTextWithExtraText());
     clearFocus();
+}
+
+QString QButtonLineEdit::emptyTextWithExtraText() const
+{
+    return m_emptyString + " " + tr("(press Alt up/down cursor to cycle)");
 }
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
@@ -232,9 +237,9 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 
 void QButtonLineEdit::focusInEvent(QFocusEvent *event)
 {
-     if (text()==m_emptyString) {
+     if (text()==emptyTextWithExtraText()) {
          clear();
-         setSpecificStyleSheet( "color:black;" );
+         setSpecificStyleSheet("color:black;");
      }
      QLineEdit::focusInEvent(event);
 }
@@ -243,8 +248,8 @@ void QButtonLineEdit::focusOutEvent(QFocusEvent *event)
 {
     if (text().isEmpty()) {
         bool block = blockSignals(true);
-        setText(m_emptyString);
-        setSpecificStyleSheet( "color:gray;" );
+        setText(emptyTextWithExtraText());
+        setSpecificStyleSheet("color:gray;");
         blockSignals(block);
     }
     QLineEdit::focusOutEvent(event);
@@ -256,7 +261,7 @@ an empty QString is returned.
 */
 QString QButtonLineEdit::searchText() const
 {
-    if (text()==m_emptyString) //styleSheet().contains( "color:gray" ) )
+    if (text()==emptyTextWithExtraText()) //styleSheet().contains("color:gray"))
         return QString::null;
     return text();
 }
@@ -267,11 +272,11 @@ QString QButtonLineEdit::searchText() const
 */
 void QButtonLineEdit::setRoundedCorners()
 {
-    qApp->setStyleSheet( QString( "QLineEdit#%1, QFrame#%1 {"
+    qApp->setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"
                                   "border-style: groove;"
                                   "border-width: 1px;"
                                   "border-radius: 6px;"
-                                  "}" ).arg( objectName() ) );
+                                  "}").arg(objectName()));
 }
 
 void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
@@ -279,3 +284,22 @@ void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
     setStyleSheet(QString("QLineEdit#%1 { %2; %3 }").arg(objectName(), m_CSS, css));
 }
 
+//void QButtonLineEdit::retranslateUi()
+//{
+//}
+
+void QButtonLineEdit::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        if (styleSheet().contains("color:gray")) {
+            m_emptyString = m_leftButton->defaultAction()->text();
+            setText(emptyTextWithExtraText());
+            setToolTip(emptyTextWithExtraText());
+        }
+        break;
+    default:
+        break;
+    }
+}
