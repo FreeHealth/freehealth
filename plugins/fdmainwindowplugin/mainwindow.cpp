@@ -363,8 +363,10 @@ void MainWindow::extensionsInitialized()
 
     // Manage patient datas
     m_ui->morePatientInfoButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+    m_ui->morePatientInfoButton->setToolTip(tkTr(Trans::Constants::TOGGLE_PATIENT_INFORMATIONS));
     m_ui->patientInformations->hide();
     m_ui->clearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
+    m_ui->clearPatient->setToolTip(tkTr(Trans::Constants::CLEAR_PATIENT_INFOS));
     connect(m_ui->clearPatient, SIGNAL(clicked()), this, SLOT(clearPatientInfos()));
 
     messageSplash(tr("Initializing drugs database"));
@@ -673,6 +675,7 @@ void MainWindow::clearPatientInfos()
     if (commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool())
         return;
     patient()->clear();
+    drugModel()->clearDrugsList();
     refreshPatient();
 }
 

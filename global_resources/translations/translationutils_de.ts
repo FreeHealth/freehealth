@@ -1514,53 +1514,58 @@ Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="504"/>
-        <source>Male</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="505"/>
-        <source>Female</source>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="503"/>
+        <source>Toggle patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="506"/>
+        <source>Male</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="507"/>
+        <source>Female</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="508"/>
         <source>Hermaphrodism</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="509"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="511"/>
         <source>Mister</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="510"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="512"/>
         <source>Miss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="511"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="513"/>
         <source>Madam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="512"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="514"/>
         <source>Doctor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="513"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="515"/>
         <source>Professor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="514"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="516"/>
         <source>Captain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="518"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="530"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="520"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="532"/>
         <source>Ctrl+L</source>
         <extracomment>Text Align Left shortcut key
 ----------
@@ -1568,8 +1573,8 @@ Text Align Left shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="521"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="533"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="523"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="535"/>
         <source>Ctrl+R</source>
         <extracomment>Text Align Right shortcut key
 ----------
@@ -1577,8 +1582,8 @@ Text Align Right shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="524"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="536"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="526"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="538"/>
         <source>Ctrl+E</source>
         <extracomment>Text Align Center shortcut key
 ----------
@@ -1586,8 +1591,8 @@ Text Align Center shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="527"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="539"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="529"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="541"/>
         <source>Ctrl+J</source>
         <extracomment>Text Align Justify shortcut key
 ----------
@@ -1595,33 +1600,33 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="542"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="544"/>
         <source>Ctrl+Shift+T</source>
         <extracomment>Add table Editor shortcut key</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="547"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="549"/>
         <source>Toggle toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="548"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="550"/>
         <source>Open in editor</source>
         <translation>Öffnen in einem Editor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="549"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="551"/>
         <source>Save editor</source>
         <translation>Speichern in einem Editor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="550"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="552"/>
         <source>Rich Text Editor</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="555"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="557"/>
         <source>Ctrl+Shift+P</source>
         <extracomment>ShortCut for &quot;Print prescription&quot;</extracomment>
         <translation></translation>
