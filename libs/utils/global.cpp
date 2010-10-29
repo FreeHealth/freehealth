@@ -160,13 +160,13 @@ bool removeDir(const QString &name, QString *error)
     error->clear();
     QDir dir(name);
     if (!dir.exists()) {
-        error->append( Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(name) );
+        error->append(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(name));
         return false;
     }
     // is there is directory inside ? --> return false
     QStringList list = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     if (list.count()) {
-        error->append( Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_CONTAINS_DIRS).arg(name));
+        error->append(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_CONTAINS_DIRS).arg(name));
         return false;
     }
     // delete files
@@ -185,24 +185,24 @@ bool removeDir(const QString &name, QString *error)
     return true;
 }
 
-QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive )
+QFileInfoList getFiles(QDir fromDir, const QStringList& filters, bool recursive)
 {
     QFileInfoList files;
-    foreach ( const QFileInfo & file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) ) {
-        if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
+    foreach (const QFileInfo & file, fromDir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name)) {
+        if (file.isFile() && (filters.isEmpty() || QDir::match(filters, file.fileName())))
             files << file;
-        else if ( file.isDir() && recursive ) {
-            fromDir.cd( file.filePath() );
-            files << getFiles( fromDir, filters );
+        else if (file.isDir() && recursive) {
+            fromDir.cd(file.filePath());
+            files << getFiles(fromDir, filters);
             fromDir.cdUp();
         }
     }
     return files;
 }
 
-QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursive )
+QFileInfoList getFiles(QDir fromDir, const QString& filter, bool recursive)
 {
-    return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive );
+    return getFiles(fromDir, filter.isEmpty() ? QStringList() : QStringList(filter), recursive);
 }
 
 /**
@@ -211,21 +211,21 @@ QFileInfoList getFiles( QDir fromDir, const QString& filter, bool recursive )
    \param createIfNotExist : try to create the dir if true
    \param logDirName : logical name to use for warning (eg : "Application path")
 **/
-bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName )
+bool checkDir(const QString & absPath, bool createIfNotExist, const QString & logDirName)
 {
-    if ( ! QFile::exists( absPath ) ) {
-        if ( createIfNotExist ) {
-            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 : %2 does not exist. Trying to create it." )
-                               .arg( logDirName, absPath ) );
-            if ( ! QDir().mkpath( absPath ) ) {
-                Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Unable to create the %1 : %2.")
-                                 .arg( logDirName, absPath ) ,
+    if (! QFile::exists(absPath)) {
+        if (createIfNotExist) {
+            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist. Trying to create it.")
+                               .arg(logDirName, absPath));
+            if (! QDir().mkpath(absPath)) {
+                Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Unable to create the %1 : %2.")
+                                 .arg(logDirName, absPath) ,
                                  __FILE__, __LINE__);
                 return false;
             }
         } else {
-            Utils::Log::addMessage( "Utils", QCoreApplication::translate( "Utils", "%1 : %2 does not exist." )
-                               .arg( logDirName, absPath ) );
+            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist.")
+                               .arg(logDirName, absPath));
             return false;
         }
     }
@@ -233,10 +233,10 @@ bool checkDir( const QString & absPath, bool createIfNotExist, const QString & l
 }
 
 /** \brief Save the string to a text file. You can choose to warn the user or not is an error is encountered. Return true if all gone good. **/
-bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent )
+bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent)
 {
     if (toFile.isEmpty()) {
-        Utils::Log::addError( "Utils", "saveStringToFile() : fileName is empty",
+        Utils::Log::addError("Utils", "saveStringToFile() : fileName is empty",
                               __FILE__, __LINE__);
         return false;
     }
@@ -255,10 +255,10 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomo
     // Save file (overwrite)
     QFile file(info.absoluteFilePath());
     if (info.exists() && (info.isWritable() && warnUser == WarnUser)) {
-        if (QMessageBox::warning( wgt, qApp->applicationName(),
-                                   QCoreApplication::translate( "Utils" ,
-                                                                "File %1 already exists. Do you want de replace it ?" ).arg(info.fileName()),
-                                   QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok ) {
+        if (QMessageBox::warning(wgt, qApp->applicationName(),
+                                   QCoreApplication::translate("Utils" ,
+                                                                "File %1 already exists. Do you want de replace it ?").arg(info.fileName()),
+                                   QMessageBox::Cancel | QMessageBox::Ok) == QMessageBox::Ok) {
             if (iomode == Overwrite) {
                 if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
                     Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()),
@@ -283,7 +283,7 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomo
     } else {
         // Create file
         if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError( "Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to save file %2" ).arg(file.fileName(),file.errorString()),
+            Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(),file.errorString()),
                                   __FILE__, __LINE__);
             return false;
         }
@@ -294,7 +294,7 @@ bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode iomo
 }
 
 /** \brief Save the string to a text file. Ask user for the name of the file to save. \sa  saveStringToFile() **/
-bool saveStringToFile( const QString &toSave, const QString &dirPath, const QString &filters, QWidget *parent )
+bool saveStringToFile(const QString &toSave, const QString &dirPath, const QString &filters, QWidget *parent)
 {
     QWidget *wgt = parent;
     if (!parent) {
@@ -309,7 +309,7 @@ bool saveStringToFile( const QString &toSave, const QString &dirPath, const QStr
 }
 
 /** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
-QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *parent )
+QString readTextFile(const QString &toRead, const Warn warnUser, QWidget *parent)
 {
     if (toRead.isEmpty())
         return QString();
@@ -324,14 +324,14 @@ QString readTextFile( const QString &toRead, const Warn warnUser, QWidget *paren
         correctFileName = qApp->applicationDirPath() + QDir::separator() + toRead;
     info.setFile(correctFileName);
 
-    if (((!info.exists()) || (!info.isReadable()) ) && (warnUser == WarnUser)) {
-        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable." ).arg(correctFileName),
+    if (((!info.exists()) || (!info.isReadable())) && (warnUser == WarnUser)) {
+        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable.").arg(correctFileName),
                                  "","", qApp->applicationName());
         return QString::null;
     } else {
         QFile file(correctFileName);
-        if (!file.open( QFile::ReadOnly | QIODevice::Text ) ) {
-            Utils::Log::addError("Utils", QCoreApplication::translate( "Utils", "Error %1 while trying to open file %2" )
+        if (!file.open(QFile::ReadOnly | QIODevice::Text)) {
+            Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to open file %2")
                              .arg(correctFileName, file.errorString()),
                              __FILE__, __LINE__);
             return QString::null;
@@ -365,17 +365,17 @@ QString isFileExists(const QString &absPath)
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Creates an informative messagebox. **/
-void informativeMessageBox( const QString &text, const QString &infoText, const QString &detail, const QString &title)
+void informativeMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Information );
+    mb.setIcon(QMessageBox::Information);
     if (title.isEmpty())
         mb.setWindowTitle(qApp->applicationName());
     else
         mb.setWindowTitle(title);
-    mb.setText( text );
+    mb.setText(text);
     mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
         if (Qt::mightBeRichText(detail)) {
@@ -393,19 +393,19 @@ void informativeMessageBox( const QString &text, const QString &infoText, const 
 }
 
 /** \brief Creates a warning messagebox. **/
-void warningMessageBox( const QString &text, const QString &infoText, const QString &detail, const QString &title)
+void warningMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     Utils::Log::addMessage("Warning Dialog", infoText);
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Warning );
+    mb.setIcon(QMessageBox::Warning);
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
-        mb.setWindowTitle( title );
-    mb.setText( text );
-    mb.setInformativeText( infoText );
+        mb.setWindowTitle(title);
+    mb.setText(text);
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
         if (Qt::mightBeRichText(detail)) {
             QTextDocument doc;
@@ -425,15 +425,15 @@ void warningMessageBox( const QString &text, const QString &infoText, const QStr
 bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Question );
+    mb.setIcon(QMessageBox::Question);
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
-        mb.setWindowTitle( title );
-    mb.setText( text );
-    mb.setInformativeText( infoText );
+        mb.setWindowTitle(title);
+    mb.setText(text);
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
         if (Qt::mightBeRichText(detail)) {
             QTextDocument doc;
@@ -456,14 +456,14 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
   \brief Creates a messagebox with many buttons.
   Return -1 if dialog was cancelled, or the index of the button into the stringlist.
 **/
-int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title, bool withCancelButton )
+int withButtonsMessageBox(const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title, bool withCancelButton)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Question );
+    mb.setIcon(QMessageBox::Question);
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
         mb.setWindowTitle(title);
     mb.setText(text);
@@ -496,18 +496,18 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
   \brief Creates a messagebox with many standard buttons.
   Return the standard button selected.
 **/
-int withButtonsMessageBox( const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title )
+int withButtonsMessageBox(const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Question );
+    mb.setIcon(QMessageBox::Question);
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
-        mb.setWindowTitle( title );
-    mb.setText( text );
-    mb.setInformativeText( infoText );
+        mb.setWindowTitle(title);
+    mb.setText(text);
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
         if (Qt::mightBeRichText(detail)) {
             QTextDocument doc;
@@ -517,7 +517,7 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
             mb.setDetailedText(detail);
         }
     }
-    mb.setStandardButtons( buts );
+    mb.setStandardButtons(buts);
     mb.setDefaultButton(defaultButton);
     int r = mb.exec();
     qApp->setActiveWindow(parent);
@@ -528,15 +528,15 @@ int withButtonsMessageBox( const QString &text, const QString&infoText, const QS
 bool okCancelMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
-    QMessageBox mb( parent );
+    QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon( QMessageBox::Question );
+    mb.setIcon(QMessageBox::Question);
     if (title.isEmpty())
-        mb.setWindowTitle( qApp->applicationName() );
+        mb.setWindowTitle(qApp->applicationName());
     else
-        mb.setWindowTitle( title );
-    mb.setText( text );
-    mb.setInformativeText( infoText );
+        mb.setWindowTitle(title);
+    mb.setText(text);
+    mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
         if (Qt::mightBeRichText(detail)) {
             QTextDocument doc;
@@ -554,25 +554,25 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 }
 
 /** \brief Creates a messagebox for non available function.  **/
-bool functionNotAvailableMessageBox( const QString &functionText )
+bool functionNotAvailableMessageBox(const QString &functionText)
 {
-    informativeMessageBox( functionText,
-			   QCoreApplication::translate( "Utils","This function is not available in this version."),
-			   QCoreApplication::translate( "Utils","You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.")
-			 );
+    informativeMessageBox(functionText,
+                           QCoreApplication::translate("Utils","This function is not available in this version."),
+                           QCoreApplication::translate("Utils","You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.")
+                        );
 //                           .arg(qApp->organizationDomain()));
-//                         .arg( tkSettings::instance()->path( tkSettings::WebSiteUrl ) ) );
+//                         .arg(tkSettings::instance()->path(tkSettings::WebSiteUrl)));
     return true;
 }
 
 /** \brief Shows a full screen quick debug dialog that shows each string of the list inside a textbrowser */
-void quickDebugDialog( const QStringList &texts)
+void quickDebugDialog(const QStringList &texts)
 {
     QDialog *dlg = new QDialog();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     QGridLayout *grid = new QGridLayout(dlg);
 
-    foreach( const QString &s, texts) {
+    foreach(const QString &s, texts) {
         QTextBrowser *f = new QTextBrowser(dlg);
         if (Qt::mightBeRichText(s))
             f->setHtml(s);
@@ -617,7 +617,7 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
     bold.setBold(true);
     centered.setFont(bold);
     centered.setAlignment(Qt::AlignCenter);
-    tbrowse.setText( Utils::LicenseTerms::getTranslatedLicenseTerms(license) );
+    tbrowse.setText(Utils::LicenseTerms::getTranslatedLicenseTerms(license));
     // Question yes/no
     QLabel question(QCoreApplication::translate("Utils", "Do you agree these terms ?"));
     layout.addWidget(&appname);
@@ -638,7 +638,7 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
 
 
 /** \brief Creates a Dialog for simple user's input.  **/
-QString askUser( const QString &title, const QString &question )
+QString askUser(const QString &title, const QString &question)
 {
     bool ok;
     QString text = QInputDialog::getText(qApp->activeWindow(), title, question, QLineEdit::Normal, "", &ok);
@@ -666,19 +666,19 @@ void centerWidget(QWidget *win, QWidget *reference)
 }
 
 /** \brief Switch widget to fullscreen/non fullscreen. **/
-void setFullScreen( QWidget* win, bool on )
+void setFullScreen(QWidget* win, bool on)
 {
-    if ( bool( win->windowState() & Qt::WindowFullScreen ) == on)
+    if (bool(win->windowState() & Qt::WindowFullScreen) == on)
         return;
 
-    if ( on ) {
-        win->setWindowState( win->windowState() | Qt::WindowFullScreen);
-        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "Utils", "%1 is now in fullScreen Mode." ).arg( win->objectName() ) );
+    if (on) {
+        win->setWindowState(win->windowState() | Qt::WindowFullScreen);
+        Utils::Log::addMessage("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in fullScreen Mode.").arg(win->objectName()));
         //statusBar()->hide();
         //menuBar()->hide();
     } else {
-        win->setWindowState( win->windowState() & ~Qt::WindowFullScreen);
-        Utils::Log::addMessage( "mfGlobal", QCoreApplication::translate( "Utils", "%1 is now in non fullScreen Mode." ).arg( win->objectName() ) );
+        win->setWindowState(win->windowState() & ~Qt::WindowFullScreen);
+        Utils::Log::addMessage("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in non fullScreen Mode.").arg(win->objectName()));
         //menuBar()->show();
         //statusBar()->show();
     }
@@ -698,19 +698,19 @@ void resizeAndCenter(QWidget *widget, QWidget *reference)
 }
 
 /** \brief Switch echo mode af a lineEdit. **/
-void switchEchoMode( QLineEdit * l )
+void switchEchoMode(QLineEdit * l)
 {
-    if ( l->echoMode() == QLineEdit::Normal )
-        l->setEchoMode( QLineEdit::Password );
+    if (l->echoMode() == QLineEdit::Normal)
+        l->setEchoMode(QLineEdit::Password);
     else
-        l->setEchoMode( QLineEdit::Normal );
+        l->setEchoMode(QLineEdit::Normal);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   HTML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** \brief Return the CSS style for a font. **/
-QString fontToHtml( const QFont &font, const QColor &color )
+QString fontToHtml(const QFont &font, const QColor &color)
 {
     QString style;
     style = QString("font-family:%1;").arg(font.family());
@@ -728,20 +728,20 @@ QString fontToHtml( const QFont &font, const QColor &color )
     else
         style += "text-decoration:none;";
     if (color.isValid()) {
-        style += QString("color:%1;").arg( color.name() );
+        style += QString("color:%1;").arg(color.name());
     }
     return style;
 }
 
 /** \brief Transform a Qt::Alignment to html equivalent. return things like : align="center" */
-QString textAlignmentToHtml( const Qt::Alignment &align )
+QString textAlignmentToHtml(const Qt::Alignment &align)
 {
     QString toReturn;
-    if (align & Qt::AlignCenter )
+    if (align & Qt::AlignCenter)
         toReturn = "center";
-    else if (align & Qt::AlignJustify )
+    else if (align & Qt::AlignJustify)
         toReturn = "justify";
-    else if (align & Qt::AlignRight )
+    else if (align & Qt::AlignRight)
         toReturn = "right";
     else
         toReturn = "left";
@@ -752,90 +752,90 @@ QString textAlignmentToHtml( const Qt::Alignment &align )
     return toReturn;
 }
 /** \brief Assumes a better encoding of HTML files by replacing special characters with the html code (é==&eacute;) **/
-QString toHtmlAccent( const QString &html )
+QString toHtmlAccent(const QString &html)
 {
     if (html.isEmpty())
         return html;
     QString toReturn = html;
     QHash< QString, QString > accents;
-    //    accents.insert( QString::fromUtf8("\""), "&quot;" );
-    accents.insert( QString::fromUtf8("é"), "&eacute;" );
-    accents.insert( QString(QChar(QChar::Nbsp)), "&nbsp;" );
+    //    accents.insert(QString::fromUtf8("\""), "&quot;");
+    accents.insert(QString::fromUtf8("é"), "&eacute;");
+    accents.insert(QString(QChar(QChar::Nbsp)), "&nbsp;");
 
-    accents.insert( QString::fromUtf8("è"), "&egrave;" );
-    accents.insert( QString::fromUtf8("à"), "&agrave;" );
-    accents.insert( QString::fromUtf8("ù"), "&ugrave;" );
+    accents.insert(QString::fromUtf8("è"), "&egrave;");
+    accents.insert(QString::fromUtf8("à"), "&agrave;");
+    accents.insert(QString::fromUtf8("ù"), "&ugrave;");
 
-    accents.insert( QString::fromUtf8("ê"), "&ecirc;" );
-    accents.insert( QString::fromUtf8("â"), "&acirc;" );
-    accents.insert( QString::fromUtf8("î"), "&icirc;" );
-    accents.insert( QString::fromUtf8("ô"), "&ocirc;" );
-    accents.insert( QString::fromUtf8("û"), "&ucirc;" );
+    accents.insert(QString::fromUtf8("ê"), "&ecirc;");
+    accents.insert(QString::fromUtf8("â"), "&acirc;");
+    accents.insert(QString::fromUtf8("î"), "&icirc;");
+    accents.insert(QString::fromUtf8("ô"), "&ocirc;");
+    accents.insert(QString::fromUtf8("û"), "&ucirc;");
 
-    accents.insert( QString::fromUtf8("ë"), "&euml;");
-    accents.insert( QString::fromUtf8("ï"), "&iuml;");
-    accents.insert( QString::fromUtf8("ö"), "&ouml;");
-    accents.insert( QString::fromUtf8("ü"), "&uuml;");
+    accents.insert(QString::fromUtf8("ë"), "&euml;");
+    accents.insert(QString::fromUtf8("ï"), "&iuml;");
+    accents.insert(QString::fromUtf8("ö"), "&ouml;");
+    accents.insert(QString::fromUtf8("ü"), "&uuml;");
 
-    accents.insert( QString::fromUtf8("œ"), "&oelig;" );
-    accents.insert( QString::fromUtf8("æ"), "&aelig;" );
-    accents.insert( QString::fromUtf8("ç"), "&ccedil;" );
+    accents.insert(QString::fromUtf8("œ"), "&oelig;");
+    accents.insert(QString::fromUtf8("æ"), "&aelig;");
+    accents.insert(QString::fromUtf8("ç"), "&ccedil;");
 
-    accents.insert( QString::fromUtf8("ø"), "&oslash;" );
-    accents.insert( QString::fromUtf8("Ø"), "&Oslash;" );
+    accents.insert(QString::fromUtf8("ø"), "&oslash;");
+    accents.insert(QString::fromUtf8("Ø"), "&Oslash;");
 
-    accents.insert( QString::fromUtf8("É"), "&Eacute;" );
+    accents.insert(QString::fromUtf8("É"), "&Eacute;");
 
-    accents.insert( QString::fromUtf8("È"), "&Egrave;" );
-    accents.insert( QString::fromUtf8("À"), "&Agrave;" );
-    accents.insert( QString::fromUtf8("Ù"), "&Ugrave;" );
+    accents.insert(QString::fromUtf8("È"), "&Egrave;");
+    accents.insert(QString::fromUtf8("À"), "&Agrave;");
+    accents.insert(QString::fromUtf8("Ù"), "&Ugrave;");
 
-    accents.insert( QString::fromUtf8("Ê"), "&Ecirc;" );
-    accents.insert( QString::fromUtf8("Â"), "&Acirc;" );
-    accents.insert( QString::fromUtf8("Î"), "&Icirc;" );
-    accents.insert( QString::fromUtf8("Ô"), "&Ocirc;" );
-    accents.insert( QString::fromUtf8("Û"), "&Ucirc;" );
+    accents.insert(QString::fromUtf8("Ê"), "&Ecirc;");
+    accents.insert(QString::fromUtf8("Â"), "&Acirc;");
+    accents.insert(QString::fromUtf8("Î"), "&Icirc;");
+    accents.insert(QString::fromUtf8("Ô"), "&Ocirc;");
+    accents.insert(QString::fromUtf8("Û"), "&Ucirc;");
 
-    accents.insert( QString::fromUtf8("Ë"), "&Euml;");
-    accents.insert( QString::fromUtf8("Ï"), "&Iuml;");
-    accents.insert( QString::fromUtf8("Ö"), "&Ouml;");
-    accents.insert( QString::fromUtf8("Ü"), "&Uuml;");
+    accents.insert(QString::fromUtf8("Ë"), "&Euml;");
+    accents.insert(QString::fromUtf8("Ï"), "&Iuml;");
+    accents.insert(QString::fromUtf8("Ö"), "&Ouml;");
+    accents.insert(QString::fromUtf8("Ü"), "&Uuml;");
 
-    accents.insert( QString::fromUtf8("Œ"), "&OElig;" );
-    accents.insert( QString::fromUtf8("Æ"), "&AElig;" );
-    accents.insert( QString::fromUtf8("Ç"), "&Ccedil;" );
+    accents.insert(QString::fromUtf8("Œ"), "&OElig;");
+    accents.insert(QString::fromUtf8("Æ"), "&AElig;");
+    accents.insert(QString::fromUtf8("Ç"), "&Ccedil;");
 
-    accents.insert( QString::fromUtf8("ø"), "&oslash;" );
-    accents.insert( QString::fromUtf8("Ø"), "&Oslash;" );
-    accents.insert( QString::fromUtf8("€"), "&#128;" );
-    accents.insert( QString::fromUtf8("¡"), "&iexcl;" );
+    accents.insert(QString::fromUtf8("ø"), "&oslash;");
+    accents.insert(QString::fromUtf8("Ø"), "&Oslash;");
+    accents.insert(QString::fromUtf8("€"), "&#128;");
+    accents.insert(QString::fromUtf8("¡"), "&iexcl;");
 
-    accents.insert( QString::fromUtf8("¢"), "&cent;" );
-    accents.insert( QString::fromUtf8("£"), "&pound;" );
-    accents.insert( QString::fromUtf8("¤"), "&curren;" );
-    accents.insert( QString::fromUtf8("¥"), "&yen;" );
-    accents.insert( QString::fromUtf8("¦"), "&brvbar;" );
-    accents.insert( QString::fromUtf8("Ã"), "&Atilde;" );
-    accents.insert( QString::fromUtf8("µ"), "&micro;" );
-    accents.insert( QString::fromUtf8("·"), "&middot;" );
-    accents.insert( QString::fromUtf8("»"), "&raquo;" );
-    accents.insert( QString::fromUtf8("«"), "&laquo;" );
-    accents.insert( QString::fromUtf8("¼"), "&frac14;" );
-    accents.insert( QString::fromUtf8("½"), "&frac12;" );
-    accents.insert( QString::fromUtf8("¾"), "&frac34;" );
-    accents.insert( QString::fromUtf8("¿"), "&iquest;" );
-    accents.insert( QString::fromUtf8("÷"), "&divide;" );
-    accents.insert( QString::fromUtf8("•"), "&#149;" );
-    accents.insert( QString::fromUtf8("©"), "&copy;" );
-    accents.insert( QString::fromUtf8("®"), "&reg;" );
-    accents.insert( QString::fromUtf8("™"), "&#153;" );
-    accents.insert( QString::fromUtf8("§"), "&sect;" );
-    accents.insert( QString::fromUtf8("…"), "&#133;" );
-    accents.insert( QString::fromUtf8("ˆ"), "&#136;");
-    accents.insert( QString::fromUtf8("—"), "&mdash;");
+    accents.insert(QString::fromUtf8("¢"), "&cent;");
+    accents.insert(QString::fromUtf8("£"), "&pound;");
+    accents.insert(QString::fromUtf8("¤"), "&curren;");
+    accents.insert(QString::fromUtf8("¥"), "&yen;");
+    accents.insert(QString::fromUtf8("¦"), "&brvbar;");
+    accents.insert(QString::fromUtf8("Ã"), "&Atilde;");
+    accents.insert(QString::fromUtf8("µ"), "&micro;");
+    accents.insert(QString::fromUtf8("·"), "&middot;");
+    accents.insert(QString::fromUtf8("»"), "&raquo;");
+    accents.insert(QString::fromUtf8("«"), "&laquo;");
+    accents.insert(QString::fromUtf8("¼"), "&frac14;");
+    accents.insert(QString::fromUtf8("½"), "&frac12;");
+    accents.insert(QString::fromUtf8("¾"), "&frac34;");
+    accents.insert(QString::fromUtf8("¿"), "&iquest;");
+    accents.insert(QString::fromUtf8("÷"), "&divide;");
+    accents.insert(QString::fromUtf8("•"), "&#149;");
+    accents.insert(QString::fromUtf8("©"), "&copy;");
+    accents.insert(QString::fromUtf8("®"), "&reg;");
+    accents.insert(QString::fromUtf8("™"), "&#153;");
+    accents.insert(QString::fromUtf8("§"), "&sect;");
+    accents.insert(QString::fromUtf8("…"), "&#133;");
+    accents.insert(QString::fromUtf8("ˆ"), "&#136;");
+    accents.insert(QString::fromUtf8("—"), "&mdash;");
 
-    foreach( const QString &k, accents.keys() ) {
-        toReturn.replace( k, accents.value(k) );
+    foreach(const QString &k, accents.keys()) {
+        toReturn.replace(k, accents.value(k));
     }
     return toReturn;
 }
@@ -862,7 +862,7 @@ QString toHtmlAccent( const QString &html )
       // </MyXmlFirstTag>
   \endcode
 */
-QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64  )
+QString createXml(const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64 )
 {
     QDomDocument doc;
     QDomElement main = doc.createElement(mainTag);
@@ -908,8 +908,8 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
     QDomElement paramElem = root.firstChildElement();
 
     if (valueFromBase64) {
-        while (!paramElem.isNull() ) {
-            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive)) {
+        while (!paramElem.isNull()) {
+            if (!paramElem.tagName().compare(generalTag, Qt::CaseInsensitive)) {
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
@@ -917,8 +917,8 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
             paramElem = paramElem.nextSiblingElement();
         }
     } else {
-        while (!paramElem.isNull() ) {
-            if (!paramElem.tagName().compare( generalTag, Qt::CaseInsensitive)) {
+        while (!paramElem.isNull()) {
+            if (!paramElem.tagName().compare(generalTag, Qt::CaseInsensitive)) {
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
@@ -1018,7 +1018,7 @@ void xmlWrite(QDomElement &father, const QString &name, bool value)
 }
 
 /** \brief Replace a token into a string. */
-int replaceToken( QString &textToAnalyse, const QString &token, const QString &value )
+int replaceToken(QString &textToAnalyse, const QString &token, const QString &value)
 {
     if (!textToAnalyse.contains(token))
         return 0;
@@ -1039,9 +1039,9 @@ int replaceToken( QString &textToAnalyse, const QString &token, const QString &v
             break;
         end = begin + tokenLength;
         // Find text before '[ BEFORE [TOKEN]]'
-        beforeBegin = textToAnalyse.lastIndexOf( Constants::TOKEN_OPEN, begin - 1);
+        beforeBegin = textToAnalyse.lastIndexOf(Constants::TOKEN_OPEN, begin - 1);
         // Find text after '[[TOKEN] AFTER ]'
-        afterEnd = textToAnalyse.indexOf( Constants::TOKEN_CLOSE, end );
+        afterEnd = textToAnalyse.indexOf(Constants::TOKEN_CLOSE, end);
         if ((beforeBegin==-1) || (afterEnd==-1)) {
             Utils::Log::addError("Utils", QApplication::translate("Utils", "Token replacement error (%1). Wrong number of parentheses.")
                                                                 .arg(token + QString::number(beforeBegin)),
