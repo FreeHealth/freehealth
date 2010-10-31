@@ -237,6 +237,34 @@
     </message>
 </context>
 <context>
+    <name>Utils::FileNameValidatingLineEdit</name>
+    <message>
+        <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="95"/>
+        <source>Name is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="104"/>
+        <source>Name contains white space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="106"/>
+        <source>Invalid character &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="117"/>
+        <source>Invalid characters &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="127"/>
+        <source>Name matches MS Windows device. (%1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Utils::HttpDownloader</name>
     <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="94"/>
@@ -293,6 +321,54 @@ To %2</source>
         <location filename="../../libs/utils/updatechecker.cpp" line="131"/>
         <source>* Updates of version : %1</source>
         <translation>* Updates auf version %1</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::PathChooser</name>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="49"/>
+        <source>Choose...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="51"/>
+        <source>Browse...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="174"/>
+        <source>Choose Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="180"/>
+        <source>Choose File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="213"/>
+        <source>The path must not be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="225"/>
+        <source>The path &apos;%1&apos; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="240"/>
+        <source>The path &apos;%1&apos; is not a directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="248"/>
+        <source>The path &apos;%1&apos; is not a file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/pathchooser.cpp" line="267"/>
+        <source>Path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
