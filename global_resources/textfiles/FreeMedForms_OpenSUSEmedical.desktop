@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Categories=Education;Science;MedicalSoftware;
+Name=FreeMedForms
+Comment=Electronic Medical Records Manager
+Comment[de]=Open Source EMR
+GenericName= Open Source EMR
+GenericName[de]=Open Source EMR
+TryExec=freemedforms
+Exec=freemedforms
+Icon=freemedforms
