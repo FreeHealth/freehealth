@@ -382,6 +382,7 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
 {
     setupUi(this);
     setDatasToUi();
+    testerBox->hide();
 }
 
 void DrugsViewWidget::setDatasToUi()
