@@ -7,6 +7,7 @@ TARGET = accountreceiptsplugin
 DEPENDPATH += .
 INCLUDEPATH += .
 
+QT -= app_bundle
 UI_DIR	 = $$PWD/ui
 MOC_DIR	 = $$PWD/moc
 OBJECTS_DIR = $$PWD/o
