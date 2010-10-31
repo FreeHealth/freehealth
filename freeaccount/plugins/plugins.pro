@@ -8,7 +8,8 @@ SUBDIRS = \
     printer \
     texteditor \
     listview \
-    usermanager
+    usermanager \
+    receipts
 
 core.subdir = coreplugin
 
@@ -26,6 +27,10 @@ account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
 #account.depends += listview
+
+receipts.subdir   = ../../plugins/accountreceiptsplugins
+receipts.depends += core
+receipts.depends += accountbase
 
 printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
