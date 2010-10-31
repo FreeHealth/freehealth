@@ -99,7 +99,6 @@ public Q_SLOTS:
     bool print();
     bool printPreview();
 
-    bool applicationPreferences();
     bool configureMedintux();
 
     void updateCheckerEnd();

@@ -32,7 +32,6 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
-#include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/idocumentprinter.h>
@@ -725,17 +724,6 @@ bool MainWindow::newFile()
     patient()->clear();
     refreshPatient();
     drugModel()->clearDrugsList();
-    return true;
-}
-
-/**
-  \brief Open the preferences dialog
-  \sa mfDrugsPreferences
-*/
-bool MainWindow::applicationPreferences()
-{
-    Core::SettingsDialog dlg(this);
-    dlg.exec();
     return true;
 }
 
