@@ -2,6 +2,6 @@
     <vendor>FreeICD</vendor>
     <copyright>(C) 2008-2010 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
-    <description>The printer plugin for FreeMedForms.</description>
+    <description>The Core plugin of FreeICD.</description>
     <url>http://www.freemedforms.com/</url>
 </plugin>
