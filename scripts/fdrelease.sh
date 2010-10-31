@@ -39,6 +39,7 @@ showHelp()
   echo "          -l  build linux binary"
   echo "          -h  show this help"
   echo "Win32 port can be build under Linux using crosscompilation"
+  exit 0
 }
 
 
@@ -82,7 +83,7 @@ echo "*** Cleaning build path..."
 #cd "$SCRIPT_PATH"
 
 #####################################
-# 2. build mac drugsinteractions    #
+# 2. build FreeDiams for MacOS X    #
 #####################################
 QMAKE_SPEC=""
 
@@ -110,9 +111,9 @@ if [ $ARCH_TO_BUILD = "mac" ] ; then
    exit
 fi
 
-#####################################
-# 3. build win drugsinteractions    #
-#####################################
+####################################################
+# 3. build FreeDiams for win32 (cross compilation) #
+####################################################
 if [ $ARCH_TO_BUILD = "win32" ] ; then
    # build app
    echo "*** Cross-compiling DrugsInteractions for Win32 platform..."
