@@ -3,9 +3,13 @@
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
 
-receiptsBaseManager::receiptsBaseManager():m_rbmReq(0){}
+receiptsBaseManager::receiptsBaseManager()
+{
+}
 
-receiptsBaseManager::~receiptsBaseManager(){}
+receiptsBaseManager::~receiptsBaseManager()
+{
+}
 
 QList<QMultiHash<int,QString> > receiptsBaseManager::getPercentages(){
   QList<QMultiHash<int,QString> > rList;
