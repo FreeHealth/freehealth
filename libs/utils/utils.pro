@@ -17,21 +17,25 @@ HEADERS += global_exporter.h \
     messagesender.h \
     serializer.h \
     licenseterms.h \
+    randomizer.h \
+    stylehelper.h \
+    httpdownloader.h \
+    iconbadgealert.h \
+    qtcassert.h \
     widgets/scrollingwidget.h \
     widgets/lineeditechoswitcher.h \
     widgets/QButtonLineEdit.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
     widgets/spinboxdelegate.h \
-    randomizer.h \
-    stylehelper.h \
     widgets/styledbar.h \
     widgets/fancyactionbar.h \
     widgets/fancytabwidget.h \
     widgets/minisplitter.h \
-    httpdownloader.h \
     widgets/combowithfancybutton.h \
-    iconbadgealert.h
+    widgets/basevalidatinglineedit.h \
+    widgets/filenamevalidatinglineedit.h \
+    widgets/pathchooser.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -40,19 +44,22 @@ SOURCES += global.cpp \
     messagesender.cpp \
     licenseterms.cpp \
     serializer.cpp \
+    randomizer.cpp \
+    stylehelper.cpp \
+    httpdownloader.cpp \
     widgets/scrollingwidget.cpp \
     widgets/lineeditechoswitcher.cpp \
     widgets/QButtonLineEdit.cpp \
     widgets/colorbuttonchooser.cpp \
     widgets/spinboxdelegate.cpp \
-    randomizer.cpp \
-    stylehelper.cpp \
     widgets/styledbar.cpp \
     widgets/fancyactionbar.cpp \
     widgets/fancytabwidget.cpp \
     widgets/minisplitter.cpp \
-    httpdownloader.cpp \
-    widgets/combowithfancybutton.cpp
+    widgets/combowithfancybutton.cpp \
+    widgets/basevalidatinglineedit.cpp \
+    widgets/filenamevalidatinglineedit.cpp \
+    widgets/pathchooser.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
