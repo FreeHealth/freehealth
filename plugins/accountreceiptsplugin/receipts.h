@@ -49,14 +49,15 @@ class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog{
             }
         }*/
     void initialize();
-    void getPatientDatas(QString&,QString&,QString&,QString&);
+    void getPatientDatas(const QString&/*name*/,const QString&/*firstname*/,
+                         const QString&/*uid*/,const QString&/*birthday*/);
   private :
     ReceiptsGUI();
     ~ReceiptsGUI();
   protected :
     void mousePressEvent(QMouseEvent *);
     void percentages();
-    void fillComboBoxes(QComboBox *, QStringList &  , QString & );
+    void fillComboBoxes(const QComboBox */*comboBox*/,const QStringList &/*withList*/  ,const QString &/*withTable*/ );
     QStringList fillWithCategoriesList();
     receiptsBaseManager * m_rbm;
     receiptsEngine * m_recEng;
@@ -75,7 +76,7 @@ class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog{
   
   private slots :
     void save();
-    void comboBoxCategories_changed(const QString &);
+    void comboBoxCategories_changed(const QString &/*comboBoxItem*/);
     void plusFunction();
     void lessFunction();
     void clearAll();
