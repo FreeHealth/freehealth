@@ -1,5 +1,0 @@
-include( ../coreplugin/coreplugin.pri )
-include( ../faccountcoreplugin/faccountcoreplugin.pri )
-include( ../accountplugin/accountplugin.pri )
-include( ../printerplugin/printerplugin.pri )
-#include( $${SOURCES_LIBS_PATH}/medintuxutils.pri )
