@@ -45,6 +45,7 @@ class UpdateChecker;
 
 namespace Core {
     class MainWindowActions;
+    class ActionContainer;
 
 namespace Internal {
 
@@ -57,6 +58,8 @@ public:
 
     void createGeneralMenu();
     void connectGeneralActions();
+
+    Core::ActionContainer *menubarContainer(bool createIfNotExist = false);
 
     void createFileMenu();
     void connectFileActions();
@@ -109,7 +112,7 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool viewPatientIdentity() {return false;}
     virtual bool removePatient() {return false;}
 
-    virtual bool applicationPreferences() {return false;}
+    virtual bool applicationPreferences();
     virtual bool applicationConfiguratorWizard() {return false;}
     virtual bool configureMedintux()      {return false;}
 

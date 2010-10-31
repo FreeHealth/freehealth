@@ -52,6 +52,7 @@
 #include <coreplugin/dialogs/aboutdialog.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/dialogs/settingsdialog.h>
 
 #include <QAction>
 #include <QToolBar>
@@ -495,17 +496,24 @@ void MainWindowActionHandler::connectGeneralActions()
         connect(aGeneralCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
-void MainWindowActionHandler::createFileMenu()
+Core::ActionContainer *MainWindowActionHandler::menubarContainer(bool createIfNotExist)
 {
     // creates menu bar
     ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
-    if (!menubar) {
+    if (createIfNotExist && !menubar) {
         menubar = actionManager()->createMenuBar(Constants::MENUBAR);
 #ifndef Q_WS_MAC
         setMenuBar(menubar->menuBar());
 #endif
     }
+    return menubar;
+}
+
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
+void MainWindowActionHandler::createFileMenu()
+{
+    // creates menu bar
+    ActionContainer *menubar = menubarContainer(true);
     menubar->appendGroup(Constants::G_FILE);
 
     // Create menu
@@ -528,7 +536,7 @@ void MainWindowActionHandler::createFileMenu()
 
 void MainWindowActionHandler::createTemplatesMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_TEMPLATES);
 
@@ -546,7 +554,7 @@ void MainWindowActionHandler::createTemplatesMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createEditMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_EDIT);
 
@@ -568,7 +576,7 @@ void MainWindowActionHandler::createEditMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createPatientMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_PATIENTS);
 
@@ -588,7 +596,7 @@ void MainWindowActionHandler::createPatientMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createFormatMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_FORMAT);
     ActionContainer *formatmenu = actionManager()->createMenu(Constants::M_FORMAT);
@@ -603,7 +611,7 @@ void MainWindowActionHandler::createFormatMenu()
 
 void MainWindowActionHandler::createPluginsMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_PLUGINS);
 
@@ -620,7 +628,7 @@ void MainWindowActionHandler::createPluginsMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createConfigurationMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_CONFIGURATION);
 
@@ -637,7 +645,7 @@ void MainWindowActionHandler::createConfigurationMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createHelpMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_HELP);
 
@@ -660,7 +668,7 @@ void MainWindowActionHandler::createHelpMenu()
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
 void MainWindowActionHandler::createUpdateMenu()
 {
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
+    ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
     menubar->appendGroup(Constants::G_UPDATE);
 
@@ -1178,6 +1186,15 @@ bool MainWindowActionHandler::debugDialog()
     dlg.showDialog();
     return true;
 }
+
+/** \brief Shows the standard Preferences dialog. \sa Core::SettingsDialog */
+bool MainWindowActionHandler::applicationPreferences()
+{
+    Core::SettingsDialog dlg(this);
+    dlg.exec();
+    return true;
+}
+
 /** \brief Shows the standard About dialog. \sa Core::AboutDialog */
 bool MainWindowActionHandler::aboutApplication()
 {
