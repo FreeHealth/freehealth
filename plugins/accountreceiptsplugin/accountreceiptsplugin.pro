@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app                # Not compatible with FreeMedForms --> shoud be TEMPLATE = lib
-TARGET = accountreceiptsplugin # Not compatible with FreeMedForms --> should be AccountReceipts
+TARGET = AccountReceipts # Not compatible with FreeMedForms --> should be AccountReceipts
 
 QT *= sql \
     network \

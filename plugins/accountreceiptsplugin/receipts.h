@@ -29,30 +29,30 @@
 #include <QtGui>
 #include <QtSql>
 
-class receipts : public QWidget , public Ui::ReceiptsDialog{
+class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog{
   Q_OBJECT
   public :
-    static receipts * getInstance(){
+    static ReceiptsGUI * getInstance(){
         if(NULL == d){
-            d = new receipts;
-            qDebug() << __FILE__ << QString::number(__LINE__) << " creating singleton receipts.";
+            d = new ReceiptsGUI;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " creating singleton ReceiptsGUI.";
             }
         else{
-            qWarning() << __FILE__ << QString::number(__LINE__) << " singleton receipts already created";
+            qWarning() << __FILE__ << QString::number(__LINE__) << " singleton ReceiptsGUI already created";
             }
         return d;
         }
-    static void kill(){
+    /*static void kill(){
         if(NULL != d){
             delete d;
             d = NULL;
             }
-        }
+        }*/
     void initialize();
     void getPatientDatas(QString&,QString&,QString&,QString&);
   private :
-    receipts();
-    ~receipts();
+    ReceiptsGUI();
+    ~ReceiptsGUI();
   protected :
     void mousePressEvent(QMouseEvent *);
     void percentages();
@@ -71,7 +71,7 @@ class receipts : public QWidget , public Ui::ReceiptsDialog{
     QString m_firstname;
     QString m_uid;
     QString m_birthday;
-    static receipts * d;
+    static ReceiptsGUI * d;
   
   private slots :
     void save();

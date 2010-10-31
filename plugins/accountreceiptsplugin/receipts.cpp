@@ -24,13 +24,13 @@
 
 //static inline  AccountDB::AccountBase * DBInstance(){return AccountDB::AccountBase::instance();}
 
-receipts * receipts::d = NULL ;
+ReceiptsGUI * ReceiptsGUI::d = NULL ;
 
-receipts::receipts():m_receiptsIsOn(false){
+ReceiptsGUI::ReceiptsGUI():m_receiptsIsOn(false){
     
 }
 
-receipts::~receipts(){
+ReceiptsGUI::~ReceiptsGUI(){
     m_hashPercents.clear();
     m_countMoreOrLess = m_hashPercents.count();
     m_name = "";
@@ -41,7 +41,7 @@ receipts::~receipts(){
     delete m_recEng;
 }
 
-void receipts::initialize(){
+void ReceiptsGUI::initialize(){
   if(m_receiptsIsOn == true) return;
   //initialize pointers
   m_rbm = new receiptsBaseManager;
@@ -133,19 +133,19 @@ void receipts::initialize(){
    
 }
 
-void receipts::clearAll(){
+void ReceiptsGUI::clearAll(){
   percentBar->setValue(m_hashPercents.count());
   registerLabel->setText("");
   cashRadioButton->setChecked(true);
 }
 
-void receipts::save(){
+void ReceiptsGUI::save(){
   QMessageBox::information(0,"try","save",QMessageBox::Ok);
   /*QMultiHash<QString,QString> hash,
   m_recEng->insertInAccountDatabase(hash,);*/
 }
 
-void receipts::plusFunction(){
+void ReceiptsGUI::plusFunction(){
   QList<int> listOfKeys = m_hashPercents.keys();
   qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) +" plus = "+QString::number(m_countMoreOrLess);
   QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
@@ -166,7 +166,7 @@ void receipts::plusFunction(){
  	    }
 }
 
-void receipts::lessFunction(){
+void ReceiptsGUI::lessFunction(){
 
         QList<int> listOfKeys = m_hashPercents.keys();
    	qDebug() << " in less " << __FILE__ << QString::number(__LINE__) +" less = "+QString::number(m_countMoreOrLess);
@@ -189,7 +189,7 @@ void receipts::lessFunction(){
             }
 }
 
-void receipts::mousePressEvent(QMouseEvent * event){
+void ReceiptsGUI::mousePressEvent(QMouseEvent * event){
   if(event->button() == Qt::RightButton){
       qDebug() << " clic droit " << __FILE__ << QString::number(__LINE__);
       m_menu         = new QMenu;
@@ -198,14 +198,14 @@ void receipts::mousePressEvent(QMouseEvent * event){
   }
 }
 
-void receipts::percentages(){
+void ReceiptsGUI::percentages(){
   receiptsBaseManager rb;
   QList<QMultiHash<int,QString> > listMultiHash = rb.getPercentages();
   m_hashPercentType = listMultiHash[0];
   m_hashPercents    = listMultiHash[1];
 }
 
-void receipts::fillComboBoxes(QComboBox * comboBox , QStringList & list , QString & table){
+void ReceiptsGUI::fillComboBoxes(QComboBox * comboBox , QStringList & list , QString & table){
     QString values = list.join(",");
     comboBox ->setEditable(true);
     comboBox ->setInsertPolicy(QComboBox::NoInsert);
@@ -218,7 +218,7 @@ void receipts::fillComboBoxes(QComboBox * comboBox , QStringList & list , QStrin
         }
 }
 
-void receipts::showFreeWidgets(bool checkBoxchecked){
+void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked){
     if(checkBoxchecked){
         labelName->hide();
         labelFirstname->hide();
@@ -247,7 +247,7 @@ void receipts::showFreeWidgets(bool checkBoxchecked){
         }
 }
 
-QStringList receipts::fillWithCategoriesList(){
+QStringList ReceiptsGUI::fillWithCategoriesList(){
     QList<QHash<QString,QString> > hashList;
     xmlCategoriesParser xml;
     hashList = xml.readXmlFile();  
@@ -256,14 +256,14 @@ QStringList receipts::fillWithCategoriesList(){
     return list;
 }
 
-void receipts::comboBoxCategories_changed(const QString & comboItem){
+void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem){
     comboBoxChoice->clear();
     QString item = comboItem;
     QStringList choiceList = m_rbm->getChoiceFromCategories(item);
     comboBoxChoice->addItems(choiceList);
 }
 
-void receipts::getPatientDatas(QString & name,QString & firstname,QString & uid,QString & birthday){
+void ReceiptsGUI::getPatientDatas(QString & name,QString & firstname,QString & uid,QString & birthday){
     m_name = name;
     m_firstname = firstname;
     m_uid = uid;

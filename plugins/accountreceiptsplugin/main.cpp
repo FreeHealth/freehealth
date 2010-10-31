@@ -7,7 +7,7 @@ int main(int argc,char * argv[]){
     QString firstname = "pierre-marie";
     QString uid = "12345";
     QString birthday = "1961-02-06";
-  receipts * r = receipts::getInstance();
+  ReceiptsGUI * r = ReceiptsGUI::getInstance();
   r -> getPatientDatas(name,firstname,uid,birthday);
   r->initialize();
   return a.exec();
