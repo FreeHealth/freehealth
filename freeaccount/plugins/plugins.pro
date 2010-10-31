@@ -10,9 +10,9 @@ SUBDIRS = \
     listview \
     usermanager
 
-core.subdir = ../../plugins/faccountcoreplugin
+core.subdir = coreplugin
 
-mainwindow.subdir   = ../../plugins/faccountmainwindowplugin
+mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += printer
 mainwindow.depends += account
@@ -37,7 +37,7 @@ listview.depends += core
 texteditor.subdir   = ../../plugins/texteditorplugin
 texteditor.depends += core
 
-usermanager.subdir   = ./faccountusermanagerplugin
+usermanager.subdir   = usermanagerplugin
 usermanager.depends += core
 usermanager.depends += printer
 usermanager.depends += texteditor
