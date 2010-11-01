@@ -20,16 +20,18 @@ HEADERS += accountreceipts_exporter.h \
     receiptsbasemanager.h \   # Not compatible with FreeMedForms
     receiptsengine.h \
     xmlcategoriesparser.h \
-    connexion.h               # Not compatible with FreeMedForms
+    receiptviewer.h
 
 FORMS += ReceiptsMainDialog.ui \
-    ReceiptsWidget.ui
+    ReceiptsWidget.ui \
+    receiptviewer.ui
 
 SOURCES += accountreceiptsplugin.cpp \
     receipts.cpp \
     receiptsbasemanager.cpp \ # Not compatible with FreeMedForms
     receiptsengine.cpp \
-    xmlcategoriesparser.cpp   # redondant with Utils::readXml in <utils/global.h>
+    xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
+    receiptviewer.cpp
 
 
 OTHER_FILES += AccountReceipts.pluginspec

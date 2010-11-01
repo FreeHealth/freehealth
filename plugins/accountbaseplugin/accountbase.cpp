@@ -42,7 +42,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 
-#include <faccountcoreplugin/commandlineparser.h>
+#include <coreplugin/commandlineparser.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>

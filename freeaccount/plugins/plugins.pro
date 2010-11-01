@@ -19,7 +19,7 @@ mainwindow.depends += printer
 mainwindow.depends += account
 mainwindow.depends += receipts
 
-accountbase.subdir   = ../../plugins/accountbaseplugin
+accountbase.subdir   = accountbaseplugin
 accountbase.depends += core
 
 account.subdir   = ../../plugins/accountplugin

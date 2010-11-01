@@ -53,6 +53,7 @@
 #include <accountplugin/accountview.h>
 
 #include <accountreceiptsplugin/receipts.h>
+#include <accountreceiptsplugin/receiptviewer.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -234,7 +235,8 @@ void MainWindow::extensionsInitialized()
 
     // Here we set the UI according to the commandline parser
     if (commandLine()->value(Core::CommandLine::CL_ReceiptsCreator).toBool()) {
-        setCentralWidget(new ReceiptsGUI());
+//        setCentralWidget(new ReceiptsGUI());
+        setCentralWidget(new ReceiptViewer(this));
     } else {
         setCentralWidget(new Account::AccountView(this));
     }
