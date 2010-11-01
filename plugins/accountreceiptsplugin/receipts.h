@@ -58,7 +58,8 @@ private slots:
     void plusFunction();
     void lessFunction();
     void clearAll();
-    void showFreeWidgets(bool);
+    void showFreeWidgetsEntry(bool checkBoxchecked);
+    void showFreeWidgetsEntryalue(bool checkBoxchecked);
 
 private:
     Ui::ReceiptsDialog *ui;

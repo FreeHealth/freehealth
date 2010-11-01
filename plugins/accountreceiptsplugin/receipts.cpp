@@ -98,7 +98,7 @@ void ReceiptsGUI::initialize()
     ui->lineEditFirstname->setText(m_firstname);
 
     // hide widgets
-    showFreeWidgets(ui->checkBox->isChecked());
+    showFreeWidgetsEntry(ui->checkBox->isChecked());
 
     // shortcuts
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -157,7 +157,8 @@ void ReceiptsGUI::initialize()
     connect(ui->comboBoxCategories,SIGNAL(activated(const QString &)),this,SLOT(comboBoxCategories_changed(const QString &)));
     connect(ui->plusButton, SIGNAL(pressed()),      this,SLOT(plusFunction()));
     connect(ui->lessButton, SIGNAL(pressed()),      this,SLOT(lessFunction()));
-    connect(ui->checkBox,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgets(bool)));
+    connect(ui->checkBoxFreeEntry,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgetsEntry(bool)));
+    connect(ui->checkBoxFreeValue,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgetsValue(bool)));
     connect(m_rightClic,SIGNAL(triggered()),    this,SLOT(clearAll()));// right clic
 
 }
@@ -256,7 +257,7 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
     }
 }
 
-void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked)
+void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
 {
     if (checkBoxchecked) {
         ui->labelName->hide();
@@ -284,6 +285,8 @@ void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked)
         ui->lineEditFirstname->show();
     }
 }
+
+void ReceiptsGUI::showFreeWidgetsEntryalue(bool checkBoxchecked){}
 
 QStringList ReceiptsGUI::fillWithCategoriesList()
 {
