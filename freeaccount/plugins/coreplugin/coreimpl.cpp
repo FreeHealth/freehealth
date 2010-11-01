@@ -37,8 +37,7 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
-
-#include <faccountcoreplugin/commandlineparser.h>
+#include <coreplugin/commandlineparser.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>

@@ -28,7 +28,7 @@ account.depends += printer
 account.depends += accountbase
 #account.depends += listview
 
-receipts.subdir   = ../../plugins/accountreceiptsplugins
+receipts.subdir   = ../../plugins/accountreceiptsplugin
 receipts.depends += core
 receipts.depends += accountbase
 

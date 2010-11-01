@@ -7,6 +7,9 @@ BUILD_PATH_POSTFIXE = FreeAccount
 include(../../../plugins/coreplugin/common_core.pri)
 include(coreplugin_dependencies.pri)
 
+INCLUDEPATH += ../
+DEPENDPATH += ../
+
 # specific derivative files
 HEADERS += coreplugin.h \
     coreimpl.h \

@@ -9,6 +9,8 @@ BUILD_PATH_POSTFIXE = FreeAccount
 include(../../../plugins/fmf_plugins.pri)
 include(mainwindowplugin_dependencies.pri)
 
+INCLUDEPATH += ../
+DEPENDPATH += ../
 
 HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
