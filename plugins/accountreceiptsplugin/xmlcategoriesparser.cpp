@@ -18,12 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "xmlcategoriesparser.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <QMessageBox>
-#include <QtCore>
+#include <QFile>
 #include <QtXml>
 
-
-static inline QString absoluteXmlPath() {return qApp->applicationDirPath();}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 
 xmlCategoriesParser::xmlCategoriesParser(){}
@@ -31,10 +34,11 @@ xmlCategoriesParser::xmlCategoriesParser(){}
 xmlCategoriesParser::~xmlCategoriesParser(){}
 
 
-QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile(){
+QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
+{
   QList<QHash<QString,QString> > xmlHashList;
   QDomDocument doc;
-  QString xmlFilePath = absoluteXmlPath()+"/xmlFiles/frenchCategories.xml";
+  QString xmlFilePath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/frenchcategories.xml";
 
   QFile xmlFile(xmlFilePath);
   if(xmlFile.exists() == false){

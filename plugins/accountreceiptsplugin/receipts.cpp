@@ -51,6 +51,7 @@ ReceiptsGUI::ReceiptsGUI(QWidget *parent) :
 {
     ui = new Ui::ReceiptsDialog;
     ui->setupUi(this);
+    initialize();
 }
 
 ReceiptsGUI::~ReceiptsGUI()
