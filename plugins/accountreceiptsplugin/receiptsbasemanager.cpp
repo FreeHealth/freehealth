@@ -30,7 +30,7 @@ QList<QMultiHash<int,QString> > receiptsBaseManager::getPercentages(){
   return rList;
 }
 
-QStringList receiptsBaseManager::getComboBoxesDatas(QString & values,QString & table){
+QStringList receiptsBaseManager::getComboBoxesDatas(const QString &values,const QString &table){
   QStringList list;
   QSqlDatabase db = QSqlDatabase::database(freeaccount);
   QSqlQuery query(db);

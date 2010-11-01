@@ -29,36 +29,35 @@
 #include <QtGui>
 #include <QtSql>
 
-class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog{
-  Q_OBJECT
-  public :
-    static ReceiptsGUI * getInstance(){
-        if(NULL == d){
-            d = new ReceiptsGUI;
-            qDebug() << __FILE__ << QString::number(__LINE__) << " creating singleton ReceiptsGUI.";
-            }
-        else{
-            qWarning() << __FILE__ << QString::number(__LINE__) << " singleton ReceiptsGUI already created";
-            }
-        return d;
-        }
-    /*static void kill(){
-        if(NULL != d){
-            delete d;
-            d = NULL;
-            }
-        }*/
+class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog
+{
+    Q_OBJECT
+
+public:
+    static ReceiptsGUI *getInstance();
+
     void initialize();
-    void getPatientDatas(const QString&/*name*/,const QString&/*firstname*/,
-                         const QString&/*uid*/,const QString&/*birthday*/);
-  private :
+    void getPatientDatas(const QString &name,const QString &firstname,
+                         const QString &uid,const QString &birthday);
+private:
     ReceiptsGUI();
     ~ReceiptsGUI();
-  protected :
+
+protected:
     void mousePressEvent(QMouseEvent *);
     void percentages();
-    void fillComboBoxes(const QComboBox */*comboBox*/,const QStringList &/*withList*/  ,const QString &/*withTable*/ );
+    void fillComboBoxes(QComboBox *comboBox,const QStringList &withList, const QString &withTable);
     QStringList fillWithCategoriesList();
+
+private slots:
+    void save();
+    void comboBoxCategories_changed(const QString &comboBoxItem);
+    void plusFunction();
+    void lessFunction();
+    void clearAll();
+    void showFreeWidgets(bool);
+
+private:
     receiptsBaseManager * m_rbm;
     receiptsEngine * m_recEng;
     QMenu * m_menu;
@@ -66,21 +65,13 @@ class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog{
     QMultiHash <int,QString> m_hashPercentType,m_hashPercents ;
     int m_countMoreOrLess;
     double m_percentFactor;
-  private :
     bool m_receiptsIsOn;
     QString m_name;
     QString m_firstname;
     QString m_uid;
     QString m_birthday;
     static ReceiptsGUI * d;
-  
-  private slots :
-    void save();
-    void comboBoxCategories_changed(const QString &/*comboBoxItem*/);
-    void plusFunction();
-    void lessFunction();
-    void clearAll();
-    void showFreeWidgets(bool);
+
 };
 
 
