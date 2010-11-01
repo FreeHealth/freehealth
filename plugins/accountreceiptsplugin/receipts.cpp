@@ -265,20 +265,20 @@ void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
         ui->lineEditName->hide();
         ui->lineEditFirstname->hide();
         ui->labelFreeName->show();
-        ui->labelFreeValue->show();
+        
         ui->labelFreeName->setWordWrap(true);
-        ui->labelFreeValue->setWordWrap(true);
+        
         ui->labelFreeName->setText(trUtf8("Free entry"));
-        ui->labelFreeValue->setText(trUtf8("Free value"));
+       
         ui->labelFreeName->show();
-        ui->labelFreeValue->show();
+      
         ui->lineEditFreeName->show();
-        ui->lineEditFreeValue->show();
+        
     } else {
         ui->labelFreeName->hide();
-        ui->labelFreeValue->hide();
+        
         ui->lineEditFreeName->hide();
-        ui->lineEditFreeValue->hide();
+        
         ui->labelName->show();
         ui->labelFirstname->show();
         ui->lineEditName->show();
@@ -286,7 +286,32 @@ void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
     }
 }
 
-void ReceiptsGUI::showFreeWidgetsEntryalue(bool checkBoxchecked){}
+void ReceiptsGUI::showFreeWidgetsEntryalue(bool checkBoxchecked){
+            if(checkBoxchecked && !ui->checkBoxFreeEntry->isChecked()){
+            ui->labelFreeValue->setText(trUtf8("Free value"));
+            ui->lineEditFreeValue->show();
+            }
+        else if(checkBoxchecked && ui->checkBoxFreeEntry->isChecked()){
+             ui->labelName->hide();
+             ui->labelFirstname->hide();
+             ui->lineEditName->hide();
+             ui->lineEditFirstname->hide();
+             ui->labelFreeName->show();
+             ui->labelFreeValue->show();
+             ui->labelFreeName->setWordWrap(true);
+             ui->labelFreeValue->setWordWrap(true);
+             ui->labelFreeName->setText(trUtf8("Free entry"));
+             ui->labelFreeValue->setText(trUtf8("Free value"));
+             ui->labelFreeName->show();
+             ui->labelFreeValue->show();
+             ui->lineEditFreeName->show();
+             ui->lineEditFreeValue->show();
+            }
+        else{
+            ui->labelFreeValue->setText(trUtf8(""));
+            ui->lineEditFreeValue->hide();
+            }
+}
 
 QStringList ReceiptsGUI::fillWithCategoriesList()
 {
