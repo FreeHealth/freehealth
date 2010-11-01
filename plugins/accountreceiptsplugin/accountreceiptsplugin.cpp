@@ -23,84 +23,46 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEACCOUNT_MAINWINDOW_H
-#define FREEACCOUNT_MAINWINDOW_H
+#include "accountreceiptsplugin.h"
 
-#include <mainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
+#include <utils/log.h>
 
-// include Qt headers
-#include <QCloseEvent>
+#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-QT_END_NAMESPACE
+#include <QtCore/QtPlugin>
+#include <QDebug>
 
-/**
- * \file mainwindow.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.1.0
- * \date 03 Oct 2010
-*/
+using namespace Account;
 
-namespace MainWin {
-namespace Internal {
-namespace Ui {
-class MainWindow;
-}  // End Ui
-}  // End Internal
-
-class FACCOUNTMAINWIN_EXPORT MainWindow: public Core::IMainWindow
+AccountReceiptsPlugin::AccountReceiptsPlugin()
 {
-    Q_OBJECT
-    enum { MaxRecentFiles = 10 };
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "creating AccountReceiptsPlugin";
+}
 
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+AccountReceiptsPlugin::~AccountReceiptsPlugin()
+{
+}
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+bool AccountReceiptsPlugin::initialize(const QStringList &arguments, QString *errorString)
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "AccountReceiptsPlugin::initialize";
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
+    return true;
+}
 
-    void createDockWindows();
-    void refreshPatient();
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    bool savePrescription(const QString &fileName = QString::null);
-    void changeFontTo(const QFont &font);
+void AccountReceiptsPlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "AccountReceiptsPlugin::extensionsInitialized";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("AccountReceiptsPlugin");
+}
 
 
-public Q_SLOTS: // Interface of MainWidowActionHandler
-    bool newFile();
-    bool openFile();
-    void readFile(const QString &file);
-    bool saveFile();
-    bool saveAsFile();
-    bool print();
-    bool printPreview();
-
-    bool applicationPreferences();
-    bool configureMedintux();
-
-    void updateCheckerEnd();
-
-    void aboutToShowRecentFiles();
-    void openRecentFile();
-
-    void userChanged();
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-
-public:
-    Internal::Ui::MainWindow *m_ui;
-};
-
-} // End Core
-
-#endif  // FREEACCOUNT_MAINWINDOW_H
+Q_EXPORT_PLUGIN(AccountReceiptsPlugin)

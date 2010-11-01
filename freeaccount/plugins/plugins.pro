@@ -17,6 +17,7 @@ mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += printer
 mainwindow.depends += account
+mainwindow.depends += receipts
 
 accountbase.subdir   = ../../plugins/accountbaseplugin
 accountbase.depends += core

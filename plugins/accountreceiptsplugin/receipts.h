@@ -21,31 +21,30 @@
 #ifndef RECEIPTS_H
 #define RECEIPTS_H
 
+#include <accountreceiptsplugin/accountreceipts_exporter.h>
+
 #include "receiptsbasemanager.h"
 #include "receiptsengine.h"
-//#include <accountbaseplugin/accountbase.h>
-#include <QtCore>
-#include <QtGui>
-#include <QtSql>
+
+#include <QWidget>
 
 
 namespace Ui {
 class ReceiptsDialog;
 }
 
-class ReceiptsGUI : public QWidget
+class ACCOUNTRECEIPTS_EXPORT ReceiptsGUI : public QWidget
 {
     Q_OBJECT
 
 public:
-    static ReceiptsGUI *getInstance();
+    ReceiptsGUI(QWidget *parent = 0);
+    ~ReceiptsGUI();
 
     void initialize();
     void getPatientDatas(const QString &name,const QString &firstname,
                          const QString &uid,const QString &birthday);
 private:
-    ReceiptsGUI();
-    ~ReceiptsGUI();
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -63,10 +62,10 @@ private slots:
 
 private:
     Ui::ReceiptsDialog *ui;
-    receiptsBaseManager * m_rbm;
-    receiptsEngine * m_recEng;
-    QMenu * m_menu;
-    QAction * m_rightClic;
+    receiptsBaseManager *m_rbm;
+    receiptsEngine *m_recEng;
+    QMenu *m_menu;
+    QAction *m_rightClic;
     QMultiHash <int,QString> m_hashPercentType,m_hashPercents ;
     int m_countMoreOrLess;
     double m_percentFactor;
@@ -75,7 +74,7 @@ private:
     QString m_firstname;
     QString m_uid;
     QString m_birthday;
-    static ReceiptsGUI * d;
+    static ReceiptsGUI *d;
 
 };
 

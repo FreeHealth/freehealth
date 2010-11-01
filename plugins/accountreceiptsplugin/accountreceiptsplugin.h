@@ -23,84 +23,34 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEACCOUNT_MAINWINDOW_H
-#define FREEACCOUNT_MAINWINDOW_H
+#ifndef ACCOUNTRECEIPTS_PLUGIN_H
+#define ACCOUNTRECEIPTS_PLUGIN_H
 
-#include <mainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
+#include <extensionsystem/iplugin.h>
 
-// include Qt headers
-#include <QCloseEvent>
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTextEdit;
-QT_END_NAMESPACE
+#include <QtCore/QObject>
 
 /**
- * \file mainwindow.h
+ * \file accountreceiptsplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.1.0
- * \date 03 Oct 2010
+ * \date 18 Mar 2010
 */
 
-namespace MainWin {
-namespace Internal {
-namespace Ui {
-class MainWindow;
-}  // End Ui
-}  // End Internal
+namespace Account {
 
-class FACCOUNTMAINWIN_EXPORT MainWindow: public Core::IMainWindow
+class AccountReceiptsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
-
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    AccountReceiptsPlugin();
+    ~AccountReceiptsPlugin();
 
-    // IMainWindow Interface
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-
-    void createDockWindows();
-    void refreshPatient();
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    bool savePrescription(const QString &fileName = QString::null);
-    void changeFontTo(const QFont &font);
-
-
-public Q_SLOTS: // Interface of MainWidowActionHandler
-    bool newFile();
-    bool openFile();
-    void readFile(const QString &file);
-    bool saveFile();
-    bool saveAsFile();
-    bool print();
-    bool printPreview();
-
-    bool applicationPreferences();
-    bool configureMedintux();
-
-    void updateCheckerEnd();
-
-    void aboutToShowRecentFiles();
-    void openRecentFile();
-
-    void userChanged();
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-
-public:
-    Internal::Ui::MainWindow *m_ui;
 };
 
-} // End Core
 
-#endif  // FREEACCOUNT_MAINWINDOW_H
+}  // End namespace Account
+
+#endif    // End ACCOUNTRECEIPTS_PLUGIN_H

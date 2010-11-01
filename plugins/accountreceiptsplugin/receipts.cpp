@@ -24,22 +24,29 @@
 
 #include "ui_ReceiptsWidget.h"
 
+#include <QMessageBox>
+#include <QFile>
+#include <QMouseEvent>
+#include <QMenu>
+
 //static inline  AccountDB::AccountBase * DBInstance(){return AccountDB::AccountBase::instance();}
 
 ReceiptsGUI * ReceiptsGUI::d = NULL ;
 
-ReceiptsGUI *ReceiptsGUI::getInstance()
-{
-    if (!d) {
-        d = new ReceiptsGUI;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " creating singleton ReceiptsGUI.";
-    } else {
-        qWarning() << __FILE__ << QString::number(__LINE__) << " singleton ReceiptsGUI already created";
-    }
-    return d;
-}
+//ReceiptsGUI *ReceiptsGUI::getInstance()
+//{
+//    if (!d) {
+//        d = new ReceiptsGUI;
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " creating singleton ReceiptsGUI.";
+//    } else {
+//        qWarning() << __FILE__ << QString::number(__LINE__) << " singleton ReceiptsGUI already created";
+//    }
+//    return d;
+//}
 
-ReceiptsGUI::ReceiptsGUI() :
+ReceiptsGUI::ReceiptsGUI(QWidget *parent) :
+        QWidget(parent),
+        m_rbm(0), m_recEng(0),
         m_receiptsIsOn(false)
 {
     ui = new Ui::ReceiptsDialog;
@@ -49,8 +56,12 @@ ReceiptsGUI::ReceiptsGUI() :
 ReceiptsGUI::~ReceiptsGUI()
 {
     delete ui;
-    delete m_rbm;
-    delete m_recEng;
+    if (m_rbm)
+        delete m_rbm;
+    m_rbm = 0;
+    if (m_recEng)
+        delete m_recEng;
+    m_recEng = 0;
 }
 
 void ReceiptsGUI::initialize()
@@ -59,7 +70,8 @@ void ReceiptsGUI::initialize()
     //initialize pointers
     m_rbm = new receiptsBaseManager;
     m_recEng = new receiptsEngine;
-    //----connexion and complete database
+
+    // connexion and complete database
     if(!connexion()) {
         qWarning() <<  __FILE__ << QString::number(__LINE__) << " no connexion !" ;
     }
@@ -80,20 +92,20 @@ void ReceiptsGUI::initialize()
     ui->cashRadioButton->setChecked(true);
     m_rightClic = new QAction(trUtf8("Clear all"),this);
 
-    //name,firstname,uid,birthday
+    // name,firstname,uid,birthday
     ui->lineEditName->setText(m_name);
     ui->lineEditFirstname->setText(m_firstname);
 
-    //hide widgets
+    // hide widgets
     showFreeWidgets(ui->checkBox->isChecked());
 
-    //shortcuts
+    // shortcuts
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->closeButton->setShortcut(QKeySequence("Ctrl+Q"));
     ui->plusButton->setShortcut(QKeySequence("Ctrl++"));
     ui->lessButton->setShortcut(QKeySequence("Ctrl+-"));
 
-    //fill widgets with datas of database
+    // fill widgets with datas of database
     percentages();
     QStringList listDebtor;
     listDebtor << "NAME";
@@ -120,7 +132,7 @@ void ReceiptsGUI::initialize()
     QString strDistanceRule = "distance_rules";
     fillComboBoxes(ui->comboBoxDistance, listDistanceRule,strDistanceRule);
 
-    //comboBoxes of categories
+    // comboBoxes of categories
     ui->comboBoxCategories->setEditable(true);
     ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
     QStringList categoriesList;
@@ -131,7 +143,7 @@ void ReceiptsGUI::initialize()
         ui->comboBoxCategories->addItem(strCategories);
     }
 
-    //progressBar for percentages
+    // progressBar for percentages
     int countPercentBar = m_hashPercents.count()-1;
     ui->percentBar->setRange(0,countPercentBar);
     ui->percentBar->setValue(countPercentBar);
@@ -192,9 +204,10 @@ void ReceiptsGUI::lessFunction()
     QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
     QHash <int,QString> ::iterator iTypeMoreOrLess = m_hashPercentType.find(listOfKeys[m_countMoreOrLess]);
     //qDebug() << " in less " << __FILE__ << __LINE__ +" count = "+QString::number(m_hashPercents.count());
-    if(m_countMoreOrLess == 0)
+    if(m_countMoreOrLess == 0) {
         return;
-    else{qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
+    } else {
+        qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
         iMoreOrLess--;
         iTypeMoreOrLess--;
         qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
@@ -244,7 +257,7 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
 
 void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked)
 {
-    if(checkBoxchecked){
+    if (checkBoxchecked) {
         ui->labelName->hide();
         ui->labelFirstname->hide();
         ui->lineEditName->hide();
@@ -259,8 +272,7 @@ void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked)
         ui->labelFreeValue->show();
         ui->lineEditFreeName->show();
         ui->lineEditFreeValue->show();
-    }
-    else{
+    } else {
         ui->labelFreeName->hide();
         ui->labelFreeValue->hide();
         ui->lineEditFreeName->hide();
