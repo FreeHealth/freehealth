@@ -21,7 +21,6 @@
 #ifndef RECEIPTS_H
 #define RECEIPTS_H
 
-#include "ui_ReceiptsWidget.h"
 #include "receiptsbasemanager.h"
 #include "receiptsengine.h"
 //#include <accountbaseplugin/accountbase.h>
@@ -29,7 +28,12 @@
 #include <QtGui>
 #include <QtSql>
 
-class ReceiptsGUI : public QWidget , public Ui::ReceiptsDialog
+
+namespace Ui {
+class ReceiptsDialog;
+}
+
+class ReceiptsGUI : public QWidget
 {
     Q_OBJECT
 
@@ -58,6 +62,7 @@ private slots:
     void showFreeWidgets(bool);
 
 private:
+    Ui::ReceiptsDialog *ui;
     receiptsBaseManager * m_rbm;
     receiptsEngine * m_recEng;
     QMenu * m_menu;

@@ -22,6 +22,8 @@
 #include "xmlcategoriesparser.h"
 #include "connexion.h"
 
+#include "ui_ReceiptsWidget.h"
+
 //static inline  AccountDB::AccountBase * DBInstance(){return AccountDB::AccountBase::instance();}
 
 ReceiptsGUI * ReceiptsGUI::d = NULL ;
@@ -40,20 +42,19 @@ ReceiptsGUI *ReceiptsGUI::getInstance()
 ReceiptsGUI::ReceiptsGUI() :
         m_receiptsIsOn(false)
 {
+    ui = new Ui::ReceiptsDialog;
+    ui->setupUi(this);
 }
 
-ReceiptsGUI::~ReceiptsGUI(){
-    m_hashPercents.clear();
-    m_countMoreOrLess = m_hashPercents.count();
-    m_name = "";
-    m_firstname = "";
-    m_uid = "";
-    m_birthday = "";
+ReceiptsGUI::~ReceiptsGUI()
+{
+    delete ui;
     delete m_rbm;
     delete m_recEng;
 }
 
-void ReceiptsGUI::initialize(){
+void ReceiptsGUI::initialize()
+{
     if(m_receiptsIsOn == true) return;
     //initialize pointers
     m_rbm = new receiptsBaseManager;
@@ -72,92 +73,98 @@ void ReceiptsGUI::initialize(){
                 << " createTablesAndFields= "<< createTablesAndFields;
         qDebug() << __FILE__ << QString::number(__LINE__) << "requetes = "+m_rbm->m_rbmReq;
     }
-    //------------------------------------------------------------------
+
     m_receiptsIsOn = true;
-    setupUi(this);
     qDebug() <<  __FILE__ << QString::number(__LINE__) ;
-    registerLabel->setText("");
-    cashRadioButton->setChecked(true);
+    ui->registerLabel->setText("");
+    ui->cashRadioButton->setChecked(true);
     m_rightClic = new QAction(trUtf8("Clear all"),this);
+
     //name,firstname,uid,birthday
-    lineEditName     ->setText(m_name);
-    lineEditFirstname->setText(m_firstname);
-    //hide widgets-------------------------------------------
-    showFreeWidgets(checkBox->isChecked());
-    //shortcuts----------------------------------------
-    saveButton-> setShortcut(QKeySequence::InsertParagraphSeparator);
-    closeButton-> setShortcut(QKeySequence("Ctrl+Q"));
-    plusButton-> setShortcut(QKeySequence("Ctrl++"));
-    lessButton-> setShortcut(QKeySequence("Ctrl+-"));
-    //-------------------------------------------------------
+    ui->lineEditName->setText(m_name);
+    ui->lineEditFirstname->setText(m_firstname);
+
+    //hide widgets
+    showFreeWidgets(ui->checkBox->isChecked());
+
+    //shortcuts
+    ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->closeButton->setShortcut(QKeySequence("Ctrl+Q"));
+    ui->plusButton->setShortcut(QKeySequence("Ctrl++"));
+    ui->lessButton->setShortcut(QKeySequence("Ctrl+-"));
+
     //fill widgets with datas of database
     percentages();
     QStringList listDebtor;
     listDebtor << "NAME";
     QString strDebtor = "insurance";
-    fillComboBoxes(comboBoxDebtor,listDebtor,strDebtor);
+    fillComboBoxes(ui->comboBoxDebtor,listDebtor,strDebtor);
     QStringList listWhere;
     listWhere << "NAME";
     QString tableWhere = "sites";
-    fillComboBoxes(comboBoxWhere,listWhere,tableWhere);
+    fillComboBoxes(ui->comboBoxWhere,listWhere,tableWhere);
     QStringList listWho;
     listWho << "EMR_USER_UID";
     QString tableWho = "users";
-    fillComboBoxes(comboBoxWho,listWho,tableWho);
+    fillComboBoxes(ui->comboBoxWho,listWho,tableWho);
     QStringList listBankAccount;
     listBankAccount << "BD_LABEL";
     QString tableBankAccount = "bank_details";
-    fillComboBoxes(comboBoxBankAccount,listBankAccount,tableBankAccount);
+    fillComboBoxes(ui->comboBoxBankAccount,listBankAccount,tableBankAccount);
     QStringList listRules;
     listRules << "NAME_OF_RULE";
     QString strRules = "rules";
-    fillComboBoxes(comboBoxRules,listRules,strRules);
+    fillComboBoxes(ui->comboBoxRules,listRules,strRules);
     QStringList listDistanceRule;
     listDistanceRule << "NAME_DIST_RULE";
     QString strDistanceRule = "distance_rules";
-    fillComboBoxes(comboBoxDistance, listDistanceRule,strDistanceRule);
-    //-------------------------------------------------
+    fillComboBoxes(ui->comboBoxDistance, listDistanceRule,strDistanceRule);
+
     //comboBoxes of categories
-    comboBoxCategories->setEditable(true);
-    comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
+    ui->comboBoxCategories->setEditable(true);
+    ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
     QStringList categoriesList;
     categoriesList << "thesaurus"
             << fillWithCategoriesList();
     QString strCategories;
     foreach(strCategories,categoriesList){
-        comboBoxCategories->addItem(strCategories);
+        ui->comboBoxCategories->addItem(strCategories);
     }
+
     //progressBar for percentages
     int countPercentBar = m_hashPercents.count()-1;
-    percentBar->setRange(0,countPercentBar);
-    percentBar->setValue(countPercentBar);
-    percentLabel->setText(m_hashPercentType.values().last()+" : "+m_hashPercents.values().last());
+    ui->percentBar->setRange(0,countPercentBar);
+    ui->percentBar->setValue(countPercentBar);
+    ui->percentLabel->setText(m_hashPercentType.values().last()+" : "+m_hashPercents.values().last());
     m_countMoreOrLess = countPercentBar;
-    //----------------------------------------------
+
     show();
-    connect(closeButton,SIGNAL(pressed()),      this,SLOT(close()));
-    connect(saveButton, SIGNAL(pressed()),      this,SLOT(save()));
-    connect(comboBoxCategories,SIGNAL(activated(const QString &)),this,SLOT(comboBoxCategories_changed(const QString &)));
-    connect(plusButton, SIGNAL(pressed()),      this,SLOT(plusFunction()));
-    connect(lessButton, SIGNAL(pressed()),      this,SLOT(lessFunction()));
-    connect(checkBox,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgets(bool)));
+    connect(ui->closeButton,SIGNAL(pressed()),      this,SLOT(close()));
+    connect(ui->saveButton, SIGNAL(pressed()),      this,SLOT(save()));
+    connect(ui->comboBoxCategories,SIGNAL(activated(const QString &)),this,SLOT(comboBoxCategories_changed(const QString &)));
+    connect(ui->plusButton, SIGNAL(pressed()),      this,SLOT(plusFunction()));
+    connect(ui->lessButton, SIGNAL(pressed()),      this,SLOT(lessFunction()));
+    connect(ui->checkBox,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgets(bool)));
     connect(m_rightClic,SIGNAL(triggered()),    this,SLOT(clearAll()));// right clic
 
 }
 
-void ReceiptsGUI::clearAll(){
-    percentBar->setValue(m_hashPercents.count());
-    registerLabel->setText("");
-    cashRadioButton->setChecked(true);
+void ReceiptsGUI::clearAll()
+{
+    ui->percentBar->setValue(m_hashPercents.count());
+    ui->registerLabel->setText("");
+    ui->cashRadioButton->setChecked(true);
 }
 
-void ReceiptsGUI::save(){
+void ReceiptsGUI::save()
+{
     QMessageBox::information(0,"try","save",QMessageBox::Ok);
     /*QMultiHash<QString,QString> hash,
   m_recEng->insertInAccountDatabase(hash,);*/
 }
 
-void ReceiptsGUI::plusFunction(){
+void ReceiptsGUI::plusFunction()
+{
     QList<int> listOfKeys = m_hashPercents.keys();
     qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) +" plus = "+QString::number(m_countMoreOrLess);
     QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
@@ -170,16 +177,16 @@ void ReceiptsGUI::plusFunction(){
         qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) ;
         QString choice	= iTypeMoreOrLess.value();
         qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) << choice;
-        percentLabel	->setText(choice);
+        ui->percentLabel	->setText(choice);
         m_percentFactor	= iMoreOrLess.value().toDouble();
-        percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
+        ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
         m_countMoreOrLess++;
-        percentBar	->setValue(m_countMoreOrLess);
+        ui->percentBar	->setValue(m_countMoreOrLess);
     }
 }
 
-void ReceiptsGUI::lessFunction(){
-
+void ReceiptsGUI::lessFunction()
+{
     QList<int> listOfKeys = m_hashPercents.keys();
     qDebug() << " in less " << __FILE__ << QString::number(__LINE__) +" less = "+QString::number(m_countMoreOrLess);
     QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
@@ -193,31 +200,35 @@ void ReceiptsGUI::lessFunction(){
         qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
         QString choice	= iTypeMoreOrLess.value();
         qDebug() << " in less " << __FILE__ << QString::number(__LINE__) << choice;
-        percentLabel	->setText(choice);
+        ui->percentLabel	->setText(choice);
         m_percentFactor	= iMoreOrLess.value().toDouble();
-        percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
+        ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
         m_countMoreOrLess--;
-        percentBar	->setValue(m_countMoreOrLess);
+        ui->percentBar	->setValue(m_countMoreOrLess);
     }
 }
 
-void ReceiptsGUI::mousePressEvent(QMouseEvent * event){
-    if(event->button() == Qt::RightButton){
+void ReceiptsGUI::mousePressEvent(QMouseEvent * event)
+{
+    if (event->button() == Qt::RightButton) {
         qDebug() << " clic droit " << __FILE__ << QString::number(__LINE__);
-        m_menu         = new QMenu;
-        m_menu        -> addAction(m_rightClic);
-        m_menu        -> exec(QCursor::pos());
+        m_menu = new QMenu;
+        m_menu->addAction(m_rightClic);
+        m_menu->exec(QCursor::pos());
+        /** \todo MEMORY LEAK ? */
     }
 }
 
-void ReceiptsGUI::percentages(){
+void ReceiptsGUI::percentages()
+{
     receiptsBaseManager rb;
     QList<QMultiHash<int,QString> > listMultiHash = rb.getPercentages();
     m_hashPercentType = listMultiHash[0];
     m_hashPercents    = listMultiHash[1];
 }
 
-void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, const QString &table){
+void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, const QString &table)
+{
     // Combo will change so it can't be const...
     QString values = list.join(",");
     comboBox ->setEditable(true);
@@ -231,36 +242,38 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
     }
 }
 
-void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked){
+void ReceiptsGUI::showFreeWidgets(bool checkBoxchecked)
+{
     if(checkBoxchecked){
-        labelName->hide();
-        labelFirstname->hide();
-        lineEditName->hide();
-        lineEditFirstname->hide();
-        labelFreeName->show();
-        labelFreeValue->show();
-        labelFreeName->setWordWrap(true);
-        labelFreeValue->setWordWrap(true);
-        labelFreeName->setText(trUtf8("Free entry"));
-        labelFreeValue->setText(trUtf8("Free value"));
-        labelFreeName->show();
-        labelFreeValue->show();
-        lineEditFreeName->show();
-        lineEditFreeValue->show();
+        ui->labelName->hide();
+        ui->labelFirstname->hide();
+        ui->lineEditName->hide();
+        ui->lineEditFirstname->hide();
+        ui->labelFreeName->show();
+        ui->labelFreeValue->show();
+        ui->labelFreeName->setWordWrap(true);
+        ui->labelFreeValue->setWordWrap(true);
+        ui->labelFreeName->setText(trUtf8("Free entry"));
+        ui->labelFreeValue->setText(trUtf8("Free value"));
+        ui->labelFreeName->show();
+        ui->labelFreeValue->show();
+        ui->lineEditFreeName->show();
+        ui->lineEditFreeValue->show();
     }
     else{
-        labelFreeName->hide();
-        labelFreeValue->hide();
-        lineEditFreeName->hide();
-        lineEditFreeValue->hide();
-        labelName->show();
-        labelFirstname->show();
-        lineEditName->show();
-        lineEditFirstname->show();
+        ui->labelFreeName->hide();
+        ui->labelFreeValue->hide();
+        ui->lineEditFreeName->hide();
+        ui->lineEditFreeValue->hide();
+        ui->labelName->show();
+        ui->labelFirstname->show();
+        ui->lineEditName->show();
+        ui->lineEditFirstname->show();
     }
 }
 
-QStringList ReceiptsGUI::fillWithCategoriesList(){
+QStringList ReceiptsGUI::fillWithCategoriesList()
+{
     QList<QHash<QString,QString> > hashList;
     xmlCategoriesParser xml;
     hashList = xml.readXmlFile();  
@@ -269,19 +282,20 @@ QStringList ReceiptsGUI::fillWithCategoriesList(){
     return list;
 }
 
-void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem){
-    comboBoxChoice->clear();
+void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem)
+{
+    ui->comboBoxChoice->clear();
     QString item = comboItem;
     QStringList choiceList = m_rbm->getChoiceFromCategories(item);
-    comboBoxChoice->addItems(choiceList);
+    ui->comboBoxChoice->addItems(choiceList);
 }
 
-void ReceiptsGUI::getPatientDatas(const QString & name,const QString & firstname,const QString & uid,const QString & birthday){
+void ReceiptsGUI::getPatientDatas(const QString & name,const QString & firstname,const QString & uid,const QString & birthday)
+{
     m_name = name;
     m_firstname = firstname;
     m_uid = uid;
     m_birthday = birthday;
-
 }
 
 
