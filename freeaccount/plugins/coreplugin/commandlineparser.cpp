@@ -76,6 +76,7 @@ public:
     CommandLinePrivate() 
     {
         params.insert(CommandLine::CL_Test,              "--test");
+        params.insert(CommandLine::CL_ReceiptsCreator,   "--receipts-creator");
         params.insert(CommandLine::CL_MedinTux,          "--medintux");
         params.insert(CommandLine::CL_EMR_Name,          "--emr-name");
         params.insert(CommandLine::CL_EMR_Uid,           "--emr-uid");
@@ -94,6 +95,11 @@ public:
 
     void parseCommandLine()
     {
+        // Add default values
+        value.insert(CommandLine::CL_Test, false);
+        value.insert(CommandLine::CL_ReceiptsCreator, false);
+        value.insert(CommandLine::CL_MedinTux, false);
+
         const QStringList &args = qApp->arguments();
         foreach(const QString &a, args) {
             QString k = a;
@@ -104,6 +110,7 @@ public:
             switch (params.key(k,-1))
             {
             case CommandLine::CL_Test :            value.insert(CommandLine::CL_Test, true); break;
+            case CommandLine::CL_ReceiptsCreator : value.insert(CommandLine::CL_ReceiptsCreator, true); break;
             case CommandLine::CL_MedinTux :        value.insert(CommandLine::CL_MedinTux, true); break;
             case CommandLine::CL_EMR_Name :        value.insert(CommandLine::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_EMR_Uid :         value.insert(CommandLine::CL_EMR_Uid, a.mid(a.indexOf("=")+1).remove("\"")); break;

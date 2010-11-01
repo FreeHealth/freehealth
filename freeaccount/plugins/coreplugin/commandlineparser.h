@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef COMMANDLINEPARSER_H
-#define COMMANDLINEPARSER_H
+#ifndef FREEACCOUNT_COMMANDLINEPARSER_H
+#define FREEACCOUNT_COMMANDLINEPARSER_H
 
 #include <coreplugin/icommandline.h>
 
@@ -44,6 +44,7 @@ class CommandLine  : public Core::ICommandLine
 public:
     enum Param {
         CL_Test = 0,
+        CL_ReceiptsCreator,
         CL_MedinTux,
         CL_EMR_Name,
         CL_EMR_Uid,
@@ -63,7 +64,7 @@ public:
     };
 
     CommandLine();
-    ~ CommandLine();
+    ~CommandLine();
 
     QVariant value(int param, const QVariant &def = QVariant()) const;
     QString paramName(int param) const;
@@ -76,4 +77,4 @@ private:
 
 }
 
-#endif // COMMANDLINEPARSER_H
+#endif // FREEACCOUNT_COMMANDLINEPARSER_H
