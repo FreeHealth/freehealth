@@ -98,7 +98,8 @@ void ReceiptsGUI::initialize()
     ui->lineEditFirstname->setText(m_firstname);
 
     // hide widgets
-    showFreeWidgetsEntry(ui->checkBox->isChecked());
+    showFreeWidgetsEntry(ui->checkBoxFreeEntry->isChecked());
+    showFreeWidgetsValue(ui->checkBoxFreeValue->isChecked());
 
     // shortcuts
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -286,7 +287,7 @@ void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
     }
 }
 
-void ReceiptsGUI::showFreeWidgetsEntryalue(bool checkBoxchecked){
+void ReceiptsGUI::showFreeWidgetsValue(bool checkBoxchecked){
             if(checkBoxchecked && !ui->checkBoxFreeEntry->isChecked()){
             ui->labelFreeValue->setText(trUtf8("Free value"));
             ui->lineEditFreeValue->show();
@@ -307,10 +308,11 @@ void ReceiptsGUI::showFreeWidgetsEntryalue(bool checkBoxchecked){
              ui->lineEditFreeName->show();
              ui->lineEditFreeValue->show();
             }
-        else{
+       else if(!checkBoxchecked){
             ui->labelFreeValue->setText(trUtf8(""));
             ui->lineEditFreeValue->hide();
             }
+       else{}
 }
 
 QStringList ReceiptsGUI::fillWithCategoriesList()
