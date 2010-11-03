@@ -124,7 +124,6 @@ public:
         return QString();
     }
 
-
     /** \brief Returns the iam classes names */
     QStringList iamClasses() const
     {
@@ -155,6 +154,11 @@ public:
         return m_Dosage;
     }
 
+    QString form() const {return m_Form;}
+    QString moleculeName() const {return m_MoleculeName;}
+    QString nature() const {return m_Nature;}
+    int lkNature() const {return m_LinkId;}
+
     QString warnText() const
     {
         QString tmp;
@@ -174,7 +178,7 @@ public:
     QStringList m_IamClass;
     int m_CodeMolecule;
     int m_InnCode;
-    QString m_Form;       // NOM
+    QString m_Form;
     mutable QString m_Dosage;
     QString m_RefDosage;
     QString m_Nature;     // SA / FT
@@ -232,6 +236,8 @@ public:
      bool              isScoredTablet() const;
 
      QVariant          prescriptionValue(const int filedref) const;
+
+     QString           compositionToXml();
 
      // this need to be rewritten because there is N CIP for 1 drug
      //const int CIP()                    { return value( mfDrugsTables::PACK_CIP ).toInt(); }

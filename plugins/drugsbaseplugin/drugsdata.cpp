@@ -268,6 +268,36 @@ QVariant DrugsData::prescriptionValue(const int fieldref) const
     return d->m_PrescriptionValues.value(fieldref);
 }
 
+namespace {
+    const char *const XML_COMPOSITION                  = "Composition";
+    const char *const XML_COMPOSITION_INN              = "inn";
+    const char *const XML_COMPOSITION_ATC              = "atc";
+    const char *const XML_COMPOSITION_FORM             = "form";
+    const char *const XML_COMPOSITION_ROUTE            = "route";
+    const char *const XML_COMPOSITION_STRENGTH         = "strenght";
+    const char *const XML_COMPOSITION_MOLECULAR        = "molecularName";
+    const char *const XML_COMPOSITION_NATURE           = "nature";
+    const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";
+}
+QString DrugsData::compositionToXml()
+{
+    QString tmp;
+    /** \todo add ATC to drug composition */
+    foreach(DrugComposition *compo, d->m_Compositions) {
+        tmp += QString("<%1").arg(::XML_COMPOSITION);
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_INN).arg(compo->innName());
+//        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ATC).arg(compo);
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_FORM).arg(compo->form());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ROUTE).arg(route());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_STRENGTH).arg(compo->innDosage());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_MOLECULAR).arg(compo->moleculeName());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_NATURE).arg(compo->nature());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_NATURE_LK).arg(compo->lkNature());
+        tmp += QString("/>\n");
+    }
+    return tmp;
+}
+
 /**
   \brief Return the drug denomination with or without pharmaceutical firms name
   \sa DrugsDB::Constants::S_HIDELABORATORY

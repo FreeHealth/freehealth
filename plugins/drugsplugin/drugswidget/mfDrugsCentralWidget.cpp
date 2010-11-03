@@ -228,7 +228,7 @@ bool DrugsCentralWidget::createTemplate()
     if (m_CurrentDrugModel->rowCount() == 0)
         return false;
     // get the template content
-    QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel);
+    QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel, "");
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);

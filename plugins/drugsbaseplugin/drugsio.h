@@ -75,7 +75,7 @@ public:
     static bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
     static bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
 
-    static QString prescriptionToXml(DrugsDB::DrugsModel *model);
+    static QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString xmlExtraData);
     static QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
 
     static bool printPrescription(DrugsDB::DrugsModel *model); //,

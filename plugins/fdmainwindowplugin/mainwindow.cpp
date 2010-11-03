@@ -546,7 +546,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
         QString extraDatas = patient()->toXml();
         foreach(const Core::PrintedDocumentTracer &t, pdfs) {
-            extraDatas += QString("  <Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
+            extraDatas += QString("<Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
                            .arg(t.fileName())
                            .arg(t.documentName())
                            .arg(t.dateTime().toString(Qt::ISODate))
@@ -554,7 +554,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         // Add date of creation
-        extraDatas.prepend(QString("  <DateOfCreation>%1</DateOfCreation>").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+        extraDatas.prepend(QString("<DateOfCreation>%1</DateOfCreation>").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 
         // Manage specific MedinTux output exchange file format
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
