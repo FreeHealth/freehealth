@@ -160,6 +160,8 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
     }
     ui->interactors->blockSignals(true);
     ui->interactors->selectionModel()->blockSignals(true);
+    ui->riskBrowser->clear();
+    ui->managementBrowser->clear();
     ui->interactors->clear();
     ui->interactors->setRowCount(0);
     ui->interactors->setColumnCount(3);
