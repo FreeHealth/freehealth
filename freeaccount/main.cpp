@@ -53,6 +53,7 @@ typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 
 
 static const char * COREPLUGINSNAME = "Core";
+static const char * USERMANAGERPLUGINSNAME = "UserManager";
 
 static const QString HELP_MESSAGE =
         QString("");
@@ -190,6 +191,7 @@ int main( int argc, char *argv[] )
 
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
+    ExtensionSystem::PluginSpec *usermanagerplugin = 0;
 
     if (WarnAllPluginSpecs) {
         foreach (ExtensionSystem::PluginSpec *spec, plugins) {
@@ -200,7 +202,8 @@ int main( int argc, char *argv[] )
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
-            break;
+        } else if (spec->name() == QString(USERMANAGERPLUGINSNAME)) {
+            usermanagerplugin = spec;
         }
     }
     if (!coreplugin) {
@@ -212,8 +215,23 @@ int main( int argc, char *argv[] )
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
 //        displayError(msgCoreLoadFailure(coreplugin->errorString()));
-        return 1;
+        return 12;
     }
+
+    if (!usermanagerplugin) {
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'UserManager.pluginspec' in %1").arg(pluginPaths);
+        qWarning() << reason;
+//        displayError(msgCoreLoadFailure(reason));
+        return 122;
+    }
+    if (usermanagerplugin->hasError()) {
+        qWarning() << usermanagerplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
+        return 123;
+    }
+
+
+
 //    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
 //        printVersion(coreplugin, pluginManager);
 //        return 0;
