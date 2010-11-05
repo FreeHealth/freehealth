@@ -21,7 +21,6 @@
 #include "receipts.h"
 #include "xmlcategoriesparser.h"
 #include "connexion.h"
-
 #include "ui_ReceiptsWidget.h"
 
 #include <QMessageBox>
@@ -71,7 +70,7 @@ void ReceiptsGUI::initialize()
     //initialize pointers
     m_rbm = new receiptsBaseManager;
     m_recEng = new receiptsEngine;
-
+    m_receiptsValues = new findReceiptsValues(this);
     // connexion and complete database
     if(!connexion()) {
         qWarning() <<  __FILE__ << QString::number(__LINE__) << " no connexion !" ;
@@ -325,12 +324,15 @@ QStringList ReceiptsGUI::fillWithCategoriesList()
     return list;
 }
 
-void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem)
-{
-    ui->comboBoxChoice->clear();
+void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem){
+    /*comboBoxChoice->clear();
     QString item = comboItem;
     QStringList choiceList = m_rbm->getChoiceFromCategories(item);
-    ui->comboBoxChoice->addItems(choiceList);
+    comboBoxChoice->addItems(choiceList);*/
+    if(comboItem == "thesaurus"){QMessageBox::information(0,"Info","item = "+comboItem,QMessageBox::Ok);}
+    else{
+        m_receiptsValues->exec();
+        }
 }
 
 void ReceiptsGUI::getPatientDatas(const QString & name,const QString & firstname,const QString & uid,const QString & birthday)

@@ -22,7 +22,7 @@
 #define RECEIPTS_H
 
 #include <accountreceiptsplugin/accountreceipts_exporter.h>
-
+#include "findReceiptsValues.h"
 #include "receiptsbasemanager.h"
 #include "receiptsengine.h"
 
@@ -65,6 +65,7 @@ private:
     Ui::ReceiptsDialog *ui;
     receiptsBaseManager *m_rbm;
     receiptsEngine *m_recEng;
+    findReceiptsValues * m_receiptsValues;
     QMenu *m_menu;
     QAction *m_rightClic;
     QMultiHash <int,QString> m_hashPercentType,m_hashPercents ;

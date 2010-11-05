@@ -19,17 +19,20 @@ HEADERS += accountreceipts_exporter.h \
     receipts.h \       # should be renamed to receiptviewer.h
     receiptsbasemanager.h \   # Not compatible with FreeMedForms
     receiptsengine.h \
+    findReceiptsValues.h \
     xmlcategoriesparser.h \
     receiptviewer.h
 
 FORMS += ReceiptsMainDialog.ui \
     ReceiptsWidget.ui \
+    findValuesGUI.ui \
     receiptviewer.ui
 
 SOURCES += accountreceiptsplugin.cpp \
     receipts.cpp \
     receiptsbasemanager.cpp \ # Not compatible with FreeMedForms
     receiptsengine.cpp \
+    findReceiptsValues.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
     receiptviewer.cpp
 
