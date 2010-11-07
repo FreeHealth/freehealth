@@ -129,10 +129,14 @@ Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Component
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
 Source: "Resources/doc/freediams/en/*"; DestDir: "{app}/Resources/doc/freediams/en"; Components: helpEn; Flags: recursesubdirs
 Source: "Resources/doc/freediams/fr/*"; DestDir: "{app}/Resources/doc/freediams/fr"; Components: helpFr; Flags: recursesubdirs
-;Source: "README"; DestDir: "{app}"; Components: program  ; Flags: isreadme
+Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
+Source: "README"; DestDir: "{app}\README.TXT"; Components: program  ; Flags: isreadme
+Source: "COPYING"; DestDir: "{app}\COPYING.TXT"; Components: program
 
 [Icons]
 Name: "{group}\FreeDiams"; Filename: "{app}\FreeDiams.exe"
 Name: "{group}\{cm:UninstallProgram,FreeDiams}"; Filename: "{uninstallexe}"
-
+Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
+Name: "{group}\README.TXT"; FileName: "{app}\README.TXT"
+Name: "{group}\COPYING.TXT"; FileName: "{app}\COPYING.TXT"
 
