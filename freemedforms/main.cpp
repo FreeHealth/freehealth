@@ -150,7 +150,6 @@ int main( int argc, char *argv[] )
 
     // Add some debugging informations
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
-    Utils::Log::addMessage("Main","looking for plugins in path : " + pluginPaths);
 #ifdef DEBUG
     Utils::Log::addMessage("Main", "Running debug version");
 #else
@@ -161,6 +160,7 @@ int main( int argc, char *argv[] )
 #endif
 
     defineLibraryPaths();
+    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
