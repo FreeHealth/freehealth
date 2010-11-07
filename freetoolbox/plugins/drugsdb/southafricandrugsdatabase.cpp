@@ -267,6 +267,17 @@ bool SouthAfricanDrugsDatabase::prepareDatas()
             drug.replace("&#153;", "™");
             drug.replace("&#145;", "");
             drug.replace("&#146;", "");
+            drug.replace("&#150;", "–");
+            drug.replace("&quot;","‘");
+            drug.replace("&amp;","&");
+            drug.replace("&#147;","“");
+            drug.replace("&#148;","”");
+            drug.replace("&#181;","µ");
+            drug.replace("&Eacute;","É");
+            drug.replace("&Egrave;","È");
+            drug.replace("&#196;","Ä");
+            drug.replace("&Iuml;","Ï");
+
             m_Drug_Link.insert(drug, link);
         }
     }
@@ -496,36 +507,40 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
     int lastUid = 20100001;
     drugs_uids.insert("UIDS STARTS FROM", lastUid);
     {
-        QFile uids(uidFile());
-        if (uids.open(QFile::ReadOnly | QFile::Text)) {
-            QString content = uids.readAll();
+        QString content = Utils::readTextFile(uidFile());
+//        QFile uids(uidFile());
+//        if (uids.open(QFile::ReadOnly | QFile::Text)) {
+//            QString content = uids.readAll();
             foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
                 if (line.startsWith("//"))
                     continue;
-                QStringList vals = line.split(";", QString::SkipEmptyParts);
-                if (vals.count()==2) {
-                    if (lastUid < vals.at(1).toInt())
-                        lastUid = vals.at(1).toInt();
-                    drugs_uids.insert(vals.at(0), vals.at(1).toInt());
+                int separator = line.lastIndexOf(";");
+                QString drugname = line.left(separator);
+                int uid = line.right(8).toInt();
+                if (!drugname.isEmpty() && uid>0) {
+                    if (lastUid < uid)
+                        lastUid = uid;
+                    drugs_uids.insert(drugname, uid);
+                } else {
+                    Utils::Log::addError(this, QString("Line : %1 , does not contains 2 values").arg(line));
                 }
             }
-        }
+//        }
     }
 
     foreach(const QString &drug, m_Drug_Link.keys()) {
         // Get the FreeDiams uid of the drug
-        if (drugs_uids.value(drug, -1) == -1) {
+        if (!drugs_uids.keys().contains(drug)) {
             ++lastUid;
             drugs_uids.insert(drug, lastUid);
+            qWarning() << "CREATING UID FOR" << drug << lastUid;
         }
 
         // get the drugs file
-//        Utils::Log::addMessage(this, drug + QString::number(drugs_uids.value(drug)));
         QString fileName = m_WorkingPath + "/home.intekom.com/" + m_Drug_Link.value(drug);
         QFile f(fileName);
         if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, "Unable to read " + f.fileName() + " " + f.errorString());
-            // +++ add drugName to the database ? problem is that we do not have a drug's UID +++
             continue;
         }
 
@@ -566,49 +581,19 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
         if (uids.open(QFile::WriteOnly | QFile::Text)) {
             QString content;
             content += "// /***************************************************************************\n"
-                       "// *   FreeMedicalForms                                                      *\n"
-                       "// *   (C) 2008-2010 by Eric MAEKER, MD                                      *\n"
-                       "// *   eric.maeker@free.fr                                                   *\n"
-                       "// *   All rights reserved.                                                  *\n"
-                       "// *                                                                         *\n"
-                       "// *   This program is a free and open source software.                      *\n"
-                       "// *   It is released under the terms of the new BSD License.                *\n"
-                       "// *                                                                         *\n"
-                       "// *   Redistribution and use in source and binary forms, with or without    *\n"
-                       "// *   modification, are permitted provided that the following conditions    *\n"
-                       "// *   are met:                                                              *\n"
-                       "// *   - Redistributions of source code must retain the above copyright      *\n"
-                       "// *   notice, this list of conditions and the following disclaimer.         *\n"
-                       "// *   - Redistributions in binary form must reproduce the above copyright   *\n"
-                       "// *   notice, this list of conditions and the following disclaimer in the   *\n"
-                       "// *   documentation and/or other materials provided with the distribution.  *\n"
-                       "// *   - Neither the name of the FreeMedForms' organization nor the names of *\n"
-                       "// *   its contributors may be used to endorse or promote products derived   *\n"
-                       "// *   from this software without specific prior written permission.         *\n"
-                       "// *                                                                         *\n"
-                       "// *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *\n"
-                       "// *   \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *\n"
-                       "// *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *\n"
-                       "// *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *\n"
-                       "// *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *\n"
-                       "// *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *\n"
-                       "// *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *\n"
-                       "// *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *\n"
-                       "// *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *\n"
-                       "// *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *\n"
-                       "// *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *\n"
-                       "// *   POSSIBILITY OF SUCH DAMAGE.                                           *\n"
-                       "// ***************************************************************************/\n"
-                       "// /***************************************************************************\n"
-                       "//  *   Main Developper :  Eric MAEKER, MD <eric.maeker@gmail.com>            *\n"
-                       "//  *   Contributors :                                                        *\n"
-                       "//  *       NAME <MAIL@ADRESS>                                                *\n"
+                       "//  *   FreeMedicalForms                                                      *\n"
+                       "//  *   (C) 2008-2010 by Eric MAEKER, MD                                      *\n"
+                       "//  *   eric.maeker@free.fr                                                   *\n"
+                       "//  *   All rights reserved.                                                  *\n"
                        "//  ***************************************************************************/\n"
-                       "//\n"
+                       "// /***************************************************************************\n"
+                       "//  *   Owner :  Eric MAEKER, MD <eric.maeker@gmail.com>                      *\n"
+                       "//  ***************************************************************************/\n"
                        "// /***************************************************************************\n"
                        "//  * - Autogenerated file for the South African drugs database               *\n"
-                       "//  *    This file presents all known drugs and their UID                     *\n"
-                       "//  *    The content MUST NOT be changed by hand                              *\n"
+                       "//  *    This file presents all known drugs and their                         *\n"
+                       "//  *    FreeDiams autogenerated UID                                          *\n"
+                       "//  *    !!!! The content MUST NOT be changed by hand !!!!                    *\n"
                        "//  ***************************************************************************/\n"
                        "// \n";
             QStringList names = drugs_uids.keys();
