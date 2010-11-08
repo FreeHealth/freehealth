@@ -16,10 +16,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>-39</x>
      <y>0</y>
-     <width>62</width>
-     <height>16</height>
+     <width>451</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -38,10 +38,10 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>-3</x>
      <y>30</y>
-     <width>118</width>
-     <height>3</height>
+     <width>421</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="orientation">
@@ -51,14 +51,27 @@
   <widget class="QPushButton" name="download">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>50</y>
-     <width>114</width>
+     <width>381</width>
      <height>32</height>
     </rect>
    </property>
    <property name="text">
     <string>Start download</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="process">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>114</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process downloaded files</string>
    </property>
   </widget>
  </widget>

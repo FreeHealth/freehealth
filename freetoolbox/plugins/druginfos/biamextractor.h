@@ -37,6 +37,9 @@ class QNetworkReply;
 class QProgressDialog;
 
 namespace DrugInfos {
+namespace Internal {
+class BiamExtractorPrivate;
+}
 
 namespace Ui {
     class BiamExtractor;
@@ -69,6 +72,7 @@ protected Q_SLOTS:
     bool on_download_clicked();
     void indexPageDownloaded(QNetworkReply *reply);
     void substancePageDownloaded(QNetworkReply *reply);
+    void on_process_clicked();
 
 protected:
     void changeEvent(QEvent *e);
@@ -77,10 +81,7 @@ Q_SIGNALS:
     void downloadFinished();
 
 private:
-    Ui::BiamExtractor *ui;
-    QString m_WorkingPath;
-    QNetworkAccessManager *manager;
-    QProgressDialog *m_Progress;
+    Internal::BiamExtractorPrivate *d;
 };
 
 }  // End namespace DrugInfos

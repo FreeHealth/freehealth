@@ -54,6 +54,12 @@
 
 #include <QDebug>
 
+
+#define TESTS_LIMIT_NUMBER_OF_PROCESSED_FILES_TO  10
+
+enum { TestOnly = true };
+
+
 const char* const  BIAM_URL               = "http://www.biam2.org/www/I_sub.html";
 const char* const  BIAM_PATH_URL          = "http://www.biam2.org/www/";
 
@@ -73,15 +79,68 @@ static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Cor
 
 using namespace DrugInfos;
 
-namespace {
+namespace DrugInfos {
+namespace Internal {
 
     struct Info {
-        QString complement, note;
+        QString label, complement, note;
     };
 
-    struct SubstanceInfos {
+    class SubstanceInfos {
+    public:
+        SubstanceInfos() {}
+        ~SubstanceInfos()
+        {
+            qDeleteAll(m_Properties);
+            qDeleteAll(m_Effects);
+            qDeleteAll(m_Indications);
+            qDeleteAll(m_Adverses);
+            qDeleteAll(m_Pregnancy);
+            qDeleteAll(m_Contraindications);
+            qDeleteAll(m_Dependency);
+            m_Properties.clear();
+            m_Effects.clear();
+            m_Indications.clear();
+            m_Adverses.clear();
+            m_Pregnancy.clear();
+            m_Precautions.clear();
+            m_Contraindications.clear();
+            m_Dependency.clear();
+        }
+
+    private:
+        QString warnText(const QSet<Info *> &set, const QString &chapter)
+        {
+            QString w = chapter + "\n";
+            foreach(Info *info, set) {
+                if (info->note.isEmpty())
+                    w += QString("    {%1 (%2)}\n").arg(info->label).arg(info->complement);
+                else
+                    w += QString("    {%1 (%2) [%3]}\n").arg(info->label).arg(info->complement).arg(info->note);
+            }
+            return w;
+        }
+
+    public:
+        void warn()
+        {
+            QString w = QString("%1: (LastModif:%2)\n").arg(m_Substance).arg(m_LastModif.toString());
+            w += warnText(m_Properties, "m_Properties");
+            w += warnText(m_Effects, "m_Effects");
+            w += warnText(m_Indications, "m_Indications");
+            w += warnText(m_Adverses, "m_Adverses");
+            w += warnText(m_Pregnancy, "m_Pregnancy");
+            w += warnText(m_Precautions, "m_Precautions");
+            w += warnText(m_Contraindications, "m_Contraindications");
+            w += warnText(m_Dependency, "m_Dependency");
+            qWarning() << w;
+        }
+
+    public:
         QString m_Substance;
-        QSet<Info>
+        QString m_File;
+        QDate m_LastModif;
+        QSet<Info *>
                 m_Properties,
                 m_Effects,
                 m_Indications,
@@ -92,34 +151,45 @@ namespace {
                 m_Dependency;
     };
 
-class ExtractorPrivate {
+class BiamExtractorPrivate {
 public:
-    ExtractorPrivate() {}
-    ~ExtractorPrivate() {}
-
-    QString getChapter(const QString &label, const QString pageContent)
+    BiamExtractorPrivate() : ui(0), manager(0), m_Progress(0)
     {
+    }
 
+    ~BiamExtractorPrivate()
+    {
+        qDeleteAll(m_Substances);
+        m_Substances.clear();
+        if (ui)
+            delete ui;
+        ui = 0;
+        if (m_Progress)
+            delete m_Progress;
+        m_Progress = 0;
+        if (manager)
+            delete manager;
+        manager = 0;
     }
 
     /** \todo move this in Utils::Global */
-    QString extractString(const QString &content, const QString startDelim, const QString &endDelim, int *startIndex = 0)
+    QString extractString(const QString &fromContent, const QString startDelim, const QString &endDelim, int *startIndex = 0)
     {
         int begin = 0;
         if (startIndex)
             begin = *startIndex;
-        begin = content.indexOf(startDelim, begin);
+        begin = fromContent.indexOf(startDelim, begin);
         if (begin==-1) {
             return QString();
         }
         begin += startDelim.length();
-        int end = content.indexOf(endDelim, begin);
+        int end = fromContent.indexOf(endDelim, begin);
         if (end==-1) {
             return QString();
         }
         if (startIndex)
             *startIndex = end + endDelim.length();
-        return content.mid(begin, end-begin);
+        return fromContent.mid(begin, end-begin);
     }
 
     void readSubstancePage(const QString &absPath)
@@ -139,32 +209,201 @@ public:
         QString subst = extractString(content, "<h1 align=center>", "</h1>", &begin);
         if (subst.isEmpty())
             return;
+        Internal::SubstanceInfos *substance = new Internal::SubstanceInfos;
+        substance->m_Substance = subst;
+        substance->m_File = ;
+        m_Substances.insert(subst, substance);
 
         // Get date of last modification
         // <i>Derni&egrave;re mise &agrave; jour   : </i>21/3/2000<br>
-        QString lastModif = extractString(content, "<i>Derni&egrave;re mise &agrave; jour   : </i>", "<br>");
+        substance->m_LastModif = QDate::fromString(extractString(content, "<i>Derni&egrave;re mise &agrave; jour   : </i>", "<br>"), "dd/MM/yyyy");
 
         // Get Chapters
         // <a name="SubPharma"> </a> [...] <a name=   Propriétés pharmacologiques
+        QString tmp = extractString(content, "<a name=\"SubPharma\">", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Properties.insert(info);
+        }
+
         // <a name="SubEffet"> </a> [...] <a name=    Effets recherchés
+        tmp = extractString(content, "<a name=\"SubEffet\">", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Effects.insert(info);
+        }
+
+
         // <a name="SubIndic"> </a> [...] <a name=    Indications thérapeutiques
+        tmp = extractString(content, "<a name=\"SubIndic\"> </a>", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Indications.insert(info);
+        }
+        tmp.clear();
+
         // <a name="SubEII"> </a> [...] <a name=      Effets secondaires
+        tmp = extractString(content, "<a name=\"SubEII\">", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Adverses.insert(info);
+        }
+
         // <a name="SubDesc"> </a> [...] <a name=     Effets sur descendance
         // <a name="SubDepen"> </a> [...] <a name=    Pharmaco-dépendance
         // <a name="SubPE"> </a> [...] <a name=       Précautions d'emploi
+        tmp = extractString(content, "<a name=\"SubPE\">", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Precautions.insert(info);
+        }
+
         // <a name="SubCI"> </a> [...] <a name=       Contre-indications
+        tmp = extractString(content, "<a name=\"SubCI\">", "<a name=");
+        tmp = tmp.mid(tmp.indexOf("<ol>"));
+        tmp.remove("<em>");
+        tmp.remove("</em>");
+
+        foreach(const QString &paragraph, tmp.split("<p>", QString::SkipEmptyParts)) {
+
+            // label and complement <a ...>LABEL</a> (complement)
+            QRegExp reg("html\">([^<]+)</a");
+            reg.indexIn(paragraph);
+            QString label = reg.cap(1);
+            if (label.isEmpty())
+                continue;
+            reg.indexIn(paragraph);
+            QRegExp reg2("\\(([^)]+)\\)");
+            reg2.indexIn(paragraph);
+
+            Internal::Info *info = new Internal::Info;
+            info->label = label;
+            info->complement = reg2.cap(1);
+            substance->m_Contraindications.insert(info);
+        }
+
         // <a name="Poso"> </a> [...] <a name=        Posologies
         // <a name="Pharmaco"> </a> [...] <a name=    Pharmacocinétique
         // <a name="Biblio"> </a> [...] <a name=      Bibliographie
 
+//        substance->warn();
+    }
+
+    bool createDatabase()
+    {
+        if (!Core::Tools::connectDatabase(DATABASE_NAME, databaseAbsPath()))
+            return false;
+
+        // create database structure
+        if (!Core::Tools::executeSqlFile(DATABASE_NAME, drugInfosDatabaseSqlSchema())) {
+            Utils::Log::addError(this, "Can not create BIAM DB.", __FILE__, __LINE__);
+            return false;
+        }
+
+        Utils::Log::addMessage(this, QString("Database schema created"));
+        return true;
+    }
+
+    void populateDatabase()
+    {
     }
 
 public:
-    QHash<QString, SubstanceInfos> m_Substances;
+    QHash<QString, SubstanceInfos *> m_Substances;
+    Ui::BiamExtractor *ui;
+    QString m_WorkingPath;
+    QNetworkAccessManager *manager;
+    QProgressDialog *m_Progress;
 };
 
 
-}
+}  // End namespace Internal
+}  // End namespace DrugInfos
 
 
 
@@ -177,13 +416,14 @@ QWidget *BiamPage::createPage(QWidget *parent)
 
 BiamExtractor::BiamExtractor(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::BiamExtractor)
+    d(new Internal::BiamExtractorPrivate)
 {
     setObjectName("BiamExtractor");
-    ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create BIAM Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+    d->ui = new Ui::BiamExtractor;
+    d->ui->setupUi(this);
+    d->m_WorkingPath = workingPath();
+    if (!QDir().mkpath(d->m_WorkingPath))
+        Utils::Log::addError(this, "Unable to create BIAM Working Path :" + d->m_WorkingPath, __FILE__, __LINE__);
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
@@ -195,27 +435,32 @@ BiamExtractor::BiamExtractor(QWidget *parent) :
             Utils::Log::addMessage(this, "BIAM database output dir created");
     }
 
+    // Connect ui
+    connect(d->ui->download, SIGNAL(clicked()), this, SLOT(on_download_clicked()));
+    connect(d->ui->process, SIGNAL(clicked()), this, SLOT(on_process_clicked()));
 }
 
 BiamExtractor::~BiamExtractor()
 {
-    delete ui;
+    if (d)
+        delete d;
+    d = 0;
 }
 
 bool BiamExtractor::on_download_clicked()
 {
-    ui->download->setEnabled(false);
+    d->ui->download->setEnabled(false);
     /** \todo First : download A..Z files; then download drugs files */
     // get all tradename html pages from the site
-    manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
-    m_Progress = new QProgressDialog(this);
-    m_Progress->setLabelText(tr("Downloading BIAM substance index"));
-    m_Progress->setCancelButtonText(tr("Cancel"));
-    m_Progress->setRange(0, 1);
-    m_Progress->setWindowModality(Qt::WindowModal);
-    m_Progress->setValue(0);
-    manager->get(QNetworkRequest(QUrl(QString(BIAM_URL))));
+    d->manager = new QNetworkAccessManager(this);
+    connect(d->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
+    d->m_Progress = new QProgressDialog(this);
+    d->m_Progress->setLabelText(tr("Downloading BIAM substance index"));
+    d->m_Progress->setCancelButtonText(tr("Cancel"));
+    d->m_Progress->setRange(0, 1);
+    d->m_Progress->setWindowModality(Qt::WindowModal);
+    d->m_Progress->setValue(0);
+    d->manager->get(QNetworkRequest(QUrl(QString(BIAM_URL))));
     return true;
 }
 
@@ -240,15 +485,15 @@ void BiamExtractor::indexPageDownloaded(QNetworkReply *reply)
         end = content.indexOf(endDelimiter, begin);
         links.append(content.mid(begin, end-begin));
     }
-    m_Progress->setRange(0, links.count());
-    m_Progress->setLabelText(tr("Downloading %1 files").arg(links.count()));
-    disconnect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(substancePageDownloaded(QNetworkReply*)));
+    d->m_Progress->setRange(0, links.count());
+    d->m_Progress->setLabelText(tr("Downloading %1 files").arg(links.count()));
+    disconnect(d->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
+    connect(d->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(substancePageDownloaded(QNetworkReply*)));
     foreach(const QString &link, links) {
-        if (!QFile(m_WorkingPath + link).exists()) {
-            manager->get(QNetworkRequest(QUrl(QString(BIAM_PATH_URL) + link)));
+        if (!QFile(d->m_WorkingPath + link).exists()) {
+            d->manager->get(QNetworkRequest(QUrl(QString(BIAM_PATH_URL) + link)));
         } else {
-            m_Progress->setValue(m_Progress->value() + 1);
+            d->m_Progress->setValue(d->m_Progress->value() + 1);
         }
     }
 }
@@ -260,11 +505,11 @@ void BiamExtractor::substancePageDownloaded(QNetworkReply *reply)
     QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
     fileName = fileName.right(fileName.length() - fileName.lastIndexOf("/"));
-    m_Progress->setValue(m_Progress->value() + 1);
+    d->m_Progress->setValue(d->m_Progress->value() + 1);
     // save file
-    QFile file(m_WorkingPath + fileName);
-    if (!QDir(m_WorkingPath + fileName).exists()) {
-        QDir().mkpath(QFileInfo(m_WorkingPath + fileName).absolutePath());
+    QFile file(d->m_WorkingPath + fileName);
+    if (!QDir(d->m_WorkingPath + fileName).exists()) {
+        QDir().mkpath(QFileInfo(d->m_WorkingPath + fileName).absolutePath());
     }
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -274,12 +519,28 @@ void BiamExtractor::substancePageDownloaded(QNetworkReply *reply)
     file.write(content.toAscii());
 }
 
+void BiamExtractor::on_process_clicked()
+{
+    // process all files in working path
+    QDir workingPlace(d->m_WorkingPath);
+    int nb = 0;
+    foreach(const QString &file, workingPlace.entryList(QStringList() << "*.html", QDir::Files, QDir::Name)) {
+        if (TestOnly) {
+            if (nb==TESTS_LIMIT_NUMBER_OF_PROCESSED_FILES_TO) {
+                break;
+            }
+        }
+        d->readSubstancePage(workingPlace.absolutePath() + QDir::separator() + file);
+        ++nb;
+    }
+}
+
 void BiamExtractor::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
         break;
     default:
         break;

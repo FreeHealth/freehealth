@@ -55,7 +55,7 @@ namespace Constants {
 
     const char * const  CATEGORY_DRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs databases");
     const char * const  CATEGORY_INTERACTIONSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Interactions databases");
-
+    const char * const  CATEGORY_DRUGINFOSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs infos databases");
     const char * const  CATEGORY_ATC_HELPERS = QT_TRANSLATE_NOOP("FreeTools", "ATC Helpers");
 
     const char * const  IAM_DATABASE_FILENAME   =  "drugs/iam.db";
@@ -64,7 +64,8 @@ namespace Constants {
     const char * const  SEPARATOR         = "|||";
 
     const char * const  FILE_DRUGS_DATABASE_SCHEME        = "drugs_schema.sql";
-    const char * const  FILE_IAM_DATABASE_SCHEME        = "iam_schema.sql";
+    const char * const  FILE_IAM_DATABASE_SCHEME          = "iam_schema.sql";
+    const char * const  FILE_DRUGINFOS_DATABASE_SCHEME    = "druginfos_schema.sql";
 
     const char * const  MOL_LINK_FILENAME = "moleculetoatclinker.xml";
     const char * const  ATC_FILENAME = "atc_utf8.csv";
