@@ -17,8 +17,8 @@ include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 # include Doc
 # !CONFIG(crosscompil) {
-include( ../doc/manual-di.pri)
-PRE_TARGETDEPS += en_html_docs fr_html_docs
+#include( ../doc/manual-di.pri)
+#PRE_TARGETDEPS += en_html_docs fr_html_docs
 # }
 
 QT *= sql \
