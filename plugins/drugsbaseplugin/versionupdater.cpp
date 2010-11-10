@@ -561,8 +561,9 @@ public:
 
     QString xmlVersion(const QString &xml)
     {
+        /** \todo read with QDomDoc */
         QString v;
-        if (xml.startsWith("<?xml version=\"1.0\"")) {
+        if (xml.startsWith("<?xml version=")) {
             int begin = xml.indexOf("<FullPrescription version=\"") + 27;
             int end = xml.indexOf("\">", begin);
             v = xml.mid(begin,end-begin).simplified();

@@ -311,6 +311,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     }
 
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
+    /** \todo extract this with QDomDocument */
     start = QString("<%1").arg(XML_FULLPRESCRIPTION_TAG);
     finish = QString("</%1>").arg(XML_FULLPRESCRIPTION_TAG);
     int begin = xml.indexOf(start) + start.length();
@@ -575,7 +576,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 /**
   \brief Transforms the DrugsModel's prescription into a XML encoded string.
 */
-QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString xmlExtraData)
+QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExtraData)
 {
     Q_ASSERT(m);
     if (!m->testingDrugsAreVisible()) {

@@ -85,6 +85,9 @@
 #include <QList>
 #include <QSet>
 
+
+enum { WarnExtractedDrugs=false };
+
 using namespace DrugsDB;
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
@@ -1052,7 +1055,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
     }
 
-    if (toReturn)
+    if (WarnExtractedDrugs && toReturn)
         toReturn->warn();
 
     if (d->m_LogChrono)
