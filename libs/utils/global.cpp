@@ -308,8 +308,11 @@ bool saveStringToFile(const QString &toSave, const QString &dirPath, const QStri
     return Utils::saveStringToFile(toSave, fileName, Overwrite, WarnUser, wgt);
 }
 
-/** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
 QString readTextFile(const QString &toRead, const Warn warnUser, QWidget *parent)
+{return readTextFile(toRead, QString("UTF-8"), warnUser, parent);}
+
+/** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
+QString readTextFile(const QString &toRead, const QString &encoder, const Warn warnUser, QWidget *parent)
 {
     if (toRead.isEmpty())
         return QString();
@@ -337,7 +340,7 @@ QString readTextFile(const QString &toRead, const Warn warnUser, QWidget *parent
             return QString::null;
         }
         QByteArray data = file.readAll();
-        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+        QTextCodec *codec = QTextCodec::codecForName(encoder.toUtf8());
         QString str = codec->toUnicode(data);
         Utils::Log::addMessage("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;

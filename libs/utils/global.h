@@ -114,6 +114,7 @@ UTILS_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QStr
 UTILS_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
 UTILS_EXPORT bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode mode = Overwrite, const Warn warnUser = WarnUser, QWidget *parent=0 );
 UTILS_EXPORT bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
+UTILS_EXPORT QString readTextFile( const QString &toRead, const QString &encoder, const Warn warnUser = WarnUser, QWidget *parent = 0 );
 UTILS_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
 UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
