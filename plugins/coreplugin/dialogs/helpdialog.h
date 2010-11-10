@@ -31,13 +31,14 @@
 #include <QDialog>
 QT_BEGIN_NAMESPACE
 class QTreeWidgetItem;
+class QUrl;
 QT_END_NAMESPACE
 
 /**
  * \file helpdialog.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.4
- * \date 14 Sept 2009
+ * \version 0.5.0
+ * \date 17 Oct 2010
 */
 
 namespace Core {
@@ -60,6 +61,7 @@ private Q_SLOTS:
     void updateWindowTitle();
     void fullScreen();
     void treeActivated(QTreeWidgetItem *item);
+//    void changePage(const QUrl &url);
 
 private:
     Internal::HelpDialogPrivate *d;

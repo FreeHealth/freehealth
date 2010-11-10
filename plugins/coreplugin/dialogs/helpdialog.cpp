@@ -67,16 +67,21 @@ using namespace Trans::ConstantTranslations;
 namespace Core {
 namespace Internal {
 
+    const char * const TOC_FILENAME = "toc.html";
+    const char * const INDEX_FILENAME = "toc.html";
+
 
 class HelpDialogPrivate
 {
 public:
     HelpDialogPrivate(QDialog *dlg) :
-            m_Browser(0), m_Parent(dlg)
+            m_Browser(0), m_TocBrowser(0), q(dlg)
     {
         Core::ITheme *theme = Core::ICore::instance()->theme();
         m_Browser = new QTextBrowser(dlg);
         m_Browser->setOpenExternalLinks(true);
+//        m_TocBrowser = new QTextBrowser(dlg);
+//        m_TocBrowser->setOpenExternalLinks(true);
         m_Tree = new QTreeWidget(dlg);
 //        m_Combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_ToolBar = new QToolBar(tkTr(Trans::Constants::NAVIGATION), dlg);
@@ -97,6 +102,8 @@ public:
         aZoomIn->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTBIGGER) );
         aZoomOut->setIcon( Core::ICore::instance()->theme()->icon(Core::Constants::ICONFONTSMALLER) );
         aClose->setIcon(theme->icon(Constants::ICONEXIT));
+        m_ToolBar->addAction(aHome);
+        m_ToolBar->addSeparator();
         m_ToolBar->addAction(aPrevious);
         m_ToolBar->addAction(aNext);
         m_ToolBar->addSeparator();
@@ -123,17 +130,19 @@ public:
 
     void createConnections()
     {
-        Q_ASSERT(m_Parent);
-        m_Parent->connect(aNext, SIGNAL(triggered()), m_Browser, SLOT(forward()));
-        m_Parent->connect(aPrevious, SIGNAL(triggered()), m_Browser, SLOT(backward()));
-        m_Parent->connect(aHome, SIGNAL(triggered()), m_Browser, SLOT(home()));
-        m_Parent->connect(aClose, SIGNAL(triggered()), m_Parent, SLOT(close()));
-        m_Parent->connect(m_Browser, SIGNAL(sourceChanged(QUrl)), m_Parent, SLOT(updateWindowTitle()));
-        m_Parent->connect(aFullScreen, SIGNAL(triggered()), m_Parent, SLOT(fullScreen()));
-        m_Parent->connect(aZoomIn, SIGNAL(triggered()), m_Browser, SLOT(zoomIn()));
-        m_Parent->connect(aZoomOut, SIGNAL(triggered()), m_Browser, SLOT(zoomOut()));
-        m_Parent->connect(aFullScreen, SIGNAL(triggered()), m_Parent, SLOT(fullScreen()));
-        m_Parent->connect(m_Tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)),m_Parent, SLOT(treeActivated(QTreeWidgetItem*)));
+        Q_ASSERT(q);
+        q->connect(aHome, SIGNAL(triggered()), m_Browser, SLOT(home()));
+        q->connect(aNext, SIGNAL(triggered()), m_Browser, SLOT(forward()));
+        q->connect(aPrevious, SIGNAL(triggered()), m_Browser, SLOT(backward()));
+        q->connect(aHome, SIGNAL(triggered()), m_Browser, SLOT(home()));
+        q->connect(aClose, SIGNAL(triggered()), q, SLOT(close()));
+        q->connect(m_Browser, SIGNAL(sourceChanged(QUrl)), q, SLOT(updateWindowTitle()));
+//        q->connect(m_TocBrowser, SIGNAL(anchorClicked(QUrl)), q, SLOT(changePage(QUrl)));
+        q->connect(aFullScreen, SIGNAL(triggered()), q, SLOT(fullScreen()));
+        q->connect(aZoomIn, SIGNAL(triggered()), m_Browser, SLOT(zoomIn()));
+        q->connect(aZoomOut, SIGNAL(triggered()), m_Browser, SLOT(zoomOut()));
+        q->connect(aFullScreen, SIGNAL(triggered()), q, SLOT(fullScreen()));
+        q->connect(m_Tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)),q, SLOT(treeActivated(QTreeWidgetItem*)));
     }
 
     void populateTree()
@@ -157,9 +166,10 @@ public:
     }
 
     QTextBrowser *m_Browser;
+    QTextBrowser *m_TocBrowser;
 //    QComboBox *m_Combo;
     QTreeWidget *m_Tree;
-    QDialog *m_Parent;
+    QDialog *q;
     QHash<QString,QString> m_Title_Page;
     QToolBar *m_ToolBar;
     QAction *aNext, *aPrevious, *aHome, *aClose, *aFullScreen, *aZoomIn, *aZoomOut;
@@ -176,30 +186,38 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     setObjectName("HelpDialog");
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_GroupLeader);
+
+    // Create dialog
     d = new HelpDialogPrivate(this);
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     Q_ASSERT(d);
     d->retranslate();
     d->createConnections();
+
+    // Load pages to browsers
     d->m_Browser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
-    if (page.isEmpty())
-        d->m_Browser->setSource(QString("index.html"));
-    else
+//    d->m_TocBrowser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
+    d->m_Browser->setSource(QString(INDEX_FILENAME));
+    if (page!="index.html" && page!="index.htm" && (!page.isEmpty()))
         d->m_Browser->setSource(page);
+//    d->m_TocBrowser->setSource(QString(TOC_FILENAME));
+
     // create the layout
     QGridLayout *layout = new QGridLayout(this);
     layout->setMargin(0);
     layout->setSpacing(0);
     layout->addWidget(d->m_ToolBar);//,0,0,1,2);
     Utils::MiniSplitter *split = new Utils::MiniSplitter(this);
-    split->addWidget(d->m_Tree);
+//    split->addWidget(d->m_Tree);
+//    split->addWidget(d->m_TocBrowser);
     split->addWidget(d->m_Browser);
     layout->addWidget(split);
 //    layout->addWidget(d->m_Tree,1,0);
 
+    // set icons
     Core::ITheme *theme = Core::ICore::instance()->theme();
     setWindowIcon(theme->icon(Constants::ICONHELP));
-    d->populateTree();
+//    d->populateTree();
     updateWindowTitle();
 
     // resize and center windows
@@ -233,6 +251,11 @@ void HelpDialog::treeActivated(QTreeWidgetItem *item)
 {
     d->m_Browser->setSource(d->m_Title_Page.value(item->text(0)));
 }
+
+//void HelpDialog::changePage(const QUrl &url)
+//{
+//    d->m_Browser->setSource(url);
+//}
 
 /** \brief Protected slot that assumes translations according to the QEvent::LangageChange. */
 void HelpDialog::changeEvent(QEvent *event)
