@@ -131,7 +131,6 @@
 --     ATC_ID
 --     )
 
-
 -- feed table INFORMATIONS (info about the drug data source)
 INSERT INTO "INFORMATIONS" (
     "VERSION",

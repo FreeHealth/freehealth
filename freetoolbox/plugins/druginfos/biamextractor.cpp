@@ -195,7 +195,7 @@ public:
     void readSubstancePage(const QString &absPath)
     {
         // read content
-        QString content = Utils::readTextFile(absPath);
+        QString content = Utils::readTextFile(absPath, "ISO 8859-1");
         if (content.isEmpty()) {
             Utils::Log::addError("BIAM", "Unable to read file: "+absPath);
             return;
@@ -211,7 +211,7 @@ public:
             return;
         Internal::SubstanceInfos *substance = new Internal::SubstanceInfos;
         substance->m_Substance = subst;
-        substance->m_File = ;
+        substance->m_File = QFileInfo(absPath).fileName();
         m_Substances.insert(subst, substance);
 
         // Get date of last modification
@@ -381,11 +381,11 @@ public:
 
         // create database structure
         if (!Core::Tools::executeSqlFile(DATABASE_NAME, drugInfosDatabaseSqlSchema())) {
-            Utils::Log::addError(this, "Can not create BIAM DB.", __FILE__, __LINE__);
+            Utils::Log::addError("BIAM", "Can not create BIAM DB.", __FILE__, __LINE__);
             return false;
         }
 
-        Utils::Log::addMessage(this, QString("Database schema created"));
+        Utils::Log::addMessage("BIAM", QString("Database schema created"));
         return true;
     }
 
@@ -436,8 +436,8 @@ BiamExtractor::BiamExtractor(QWidget *parent) :
     }
 
     // Connect ui
-    connect(d->ui->download, SIGNAL(clicked()), this, SLOT(on_download_clicked()));
-    connect(d->ui->process, SIGNAL(clicked()), this, SLOT(on_process_clicked()));
+//    connect(d->ui->download, SIGNAL(clicked()), this, SLOT(on_download_clicked()));
+//    connect(d->ui->process, SIGNAL(clicked()), this, SLOT(on_process_clicked()));
 }
 
 BiamExtractor::~BiamExtractor()
@@ -451,22 +451,22 @@ bool BiamExtractor::on_download_clicked()
 {
     d->ui->download->setEnabled(false);
     /** \todo First : download A..Z files; then download drugs files */
-    // get all tradename html pages from the site
-    d->manager = new QNetworkAccessManager(this);
-    connect(d->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
     d->m_Progress = new QProgressDialog(this);
     d->m_Progress->setLabelText(tr("Downloading BIAM substance index"));
     d->m_Progress->setCancelButtonText(tr("Cancel"));
     d->m_Progress->setRange(0, 1);
     d->m_Progress->setWindowModality(Qt::WindowModal);
     d->m_Progress->setValue(0);
+    d->manager = new QNetworkAccessManager(this);
+    // get all tradename html pages from the site
+    connect(d->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(indexPageDownloaded(QNetworkReply*)));
     d->manager->get(QNetworkRequest(QUrl(QString(BIAM_URL))));
     return true;
 }
 
 void BiamExtractor::indexPageDownloaded(QNetworkReply *reply)
 {
-    qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
+    qWarning() << "get index" << reply->errorString()
             << reply->url();
     QString content = reply->readAll();
     // Parse content for links
@@ -483,7 +483,9 @@ void BiamExtractor::indexPageDownloaded(QNetworkReply *reply)
             break;
         begin += startDelimiterLength;
         end = content.indexOf(endDelimiter, begin);
-        links.append(content.mid(begin, end-begin));
+        const QString &l = content.mid(begin, end-begin);
+        if (!links.contains(l))
+            links.append(l);
     }
     d->m_Progress->setRange(0, links.count());
     d->m_Progress->setLabelText(tr("Downloading %1 files").arg(links.count()));
@@ -496,13 +498,14 @@ void BiamExtractor::indexPageDownloaded(QNetworkReply *reply)
             d->m_Progress->setValue(d->m_Progress->value() + 1);
         }
     }
+    d->m_Progress->close();
 }
 
 void BiamExtractor::substancePageDownloaded(QNetworkReply *reply)
 {
-    qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
+    qWarning() << "get subst" << reply->errorString()
             << reply->url();
-    QString content = reply->readAll();
+//    QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
     fileName = fileName.right(fileName.length() - fileName.lastIndexOf("/"));
     d->m_Progress->setValue(d->m_Progress->value() + 1);
@@ -513,10 +516,10 @@ void BiamExtractor::substancePageDownloaded(QNetworkReply *reply)
     }
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        Utils::Log::addError(this, QString("ERROR : Enable to save %1").arg(file.fileName()));
+        Utils::Log::addError(this, QString("ERROR : Unable to save %1").arg(file.fileName()));
         return;
     }
-    file.write(content.toAscii());
+    file.write(reply->readAll());
 }
 
 void BiamExtractor::on_process_clicked()
