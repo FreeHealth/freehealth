@@ -200,8 +200,10 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     d->m_Browser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
 //    d->m_TocBrowser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
     d->m_Browser->setSource(QString(INDEX_FILENAME));
-    if (page!="index.html" && page!="index.htm" && (!page.isEmpty()))
-        d->m_Browser->setSource(page);
+    if (QFileInfo(Core::ICore::instance()->settings()->path(ISettings::DocumentationPath) + QDir::separator() + page).exists()) {
+        if (page!="index.html" && page!="index.htm" && (!page.isEmpty()))
+            d->m_Browser->setSource(page);
+    }
 //    d->m_TocBrowser->setSource(QString(TOC_FILENAME));
 
     // create the layout
