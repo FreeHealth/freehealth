@@ -103,7 +103,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "multiple_drugs_databases.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DatabaseSelectorWidget::writeDefaultSettings(s);}
 

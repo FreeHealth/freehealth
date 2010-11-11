@@ -133,6 +133,24 @@ namespace Constants {
 
     const char * const  USERRECORDEDFORMS_COLOR  = "#FFE4E0";
 
+    // Help files
+    const char * const H_PROTOCOL_DIALOG = "prescribe.html";
+    const char * const H_PREFERENCES_VIEW_FR = "preferences.html#parametres_du_prescripteur";
+    const char * const H_PREFERENCES_VIEW_EN = "preferences.html";
+    const char * const H_PREFERENCES_SELECTOR_FR = "preferences.html";
+    const char * const H_PREFERENCES_SELECTOR_EN = "preferences.html";
+    const char * const H_PREFERENCES_PRINT_FR = "preferences.html#le_masque_de_creation_de_la_phrase_posologie";
+    const char * const H_PREFERENCES_PRINT_EN = "preferences.html";
+    const char * const H_PREFERENCES_USER_FR = "preferences.html#parametrage_des_entete_pied_de_page_et_tatouage_d_impression";
+    const char * const H_PREFERENCES_USER_EN = "preferences.html";
+    const char * const H_PREFERENCES_EXTRA_FR = "preferences.html#texte_pour_les_medicaments_rembourses_a_100_et_autres_extras";
+    const char * const H_PREFERENCES_EXTRA_EN = "preferences.html";
+    const char * const H_PREFERENCES_DBSELECTOR_FR = "multidrugsdatabase.html";
+    const char * const H_PREFERENCES_DBSELECTOR_EN = "multidrugsdatabase.html";
+    const char * const H_PREFERENCES_PROTOCOL_FR = "preferences.html#parametres_pour_les_protocoles";
+    const char * const H_PREFERENCES_PROTOCOL_EN = "preferences.html";
+
+
 
 }  // End namespace DrugsWidget::Constants
 }  // End namespace DrugsWidget

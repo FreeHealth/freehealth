@@ -88,6 +88,14 @@ void DrugsViewOptionsPage::applyChanges()
 
 void DrugsViewOptionsPage::finish() { delete m_Widget; }
 
+QString DrugsViewOptionsPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_VIEW_FR;
+    return Constants::H_PREFERENCES_VIEW_EN;
+}
+
 void DrugsViewOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
@@ -151,6 +159,13 @@ void DrugsSelectorOptionsPage::applyChanges()
 }
 
 void DrugsSelectorOptionsPage::finish() { delete m_Widget; }
+QString DrugsSelectorOptionsPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_SELECTOR_FR;
+    return Constants::H_PREFERENCES_SELECTOR_EN;
+}
 
 void DrugsSelectorOptionsPage::checkSettingsValidity()
 {
@@ -254,6 +269,13 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
 }
 
 void DrugsPrintOptionsPage::finish() { delete m_Widget; }
+QString DrugsPrintOptionsPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_PRINT_FR;
+    return Constants::H_PREFERENCES_PRINT_EN;
+}
 
 QWidget *DrugsPrintOptionsPage::createPage(QWidget *parent)
 {
@@ -311,6 +333,13 @@ void DrugsUserOptionsPage::checkSettingsValidity()
 }
 
 void DrugsUserOptionsPage::finish() { delete m_Widget; }
+QString DrugsUserOptionsPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_USER_FR;
+    return Constants::H_PREFERENCES_USER_EN;
+}
 
 QWidget *DrugsUserOptionsPage::createPage(QWidget *parent)
 {
@@ -365,6 +394,13 @@ void DrugsExtraOptionsPage::checkSettingsValidity()
 }
 
 void DrugsExtraOptionsPage::finish() { delete m_Widget; }
+QString DrugsExtraOptionsPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_EXTRA_FR;
+    return Constants::H_PREFERENCES_EXTRA_EN;
+}
 
 QWidget *DrugsExtraOptionsPage::createPage(QWidget *parent)
 {

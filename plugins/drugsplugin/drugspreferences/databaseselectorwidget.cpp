@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "databaseselectorwidget.h"
 #include "ui_databaseselectorwidget.h"
+#include "constants.h"
 
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/constants.h>
@@ -48,7 +49,7 @@
 #include <QFileDialog>
 
 using namespace DrugsWidget;
-using namespace DrugsWidget::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -101,6 +102,13 @@ void DrugsDatabaseSelectorPage::checkSettingsValidity()
 }
 
 void DrugsDatabaseSelectorPage::finish() { delete m_Widget; }
+QString DrugsDatabaseSelectorPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_DBSELECTOR_FR;
+    return Constants::H_PREFERENCES_DBSELECTOR_EN;
+}
 
 QWidget *DrugsDatabaseSelectorPage::createPage(QWidget *parent)
 {

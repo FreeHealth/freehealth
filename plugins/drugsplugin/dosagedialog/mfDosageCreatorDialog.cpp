@@ -395,7 +395,7 @@ void DosageCreatorDialog::saveAndPrescribeRequested()
 /** \brief Opens a help dialog */
 void DosageCreatorDialog::helpRequested()
 {
-    Core::HelpDialog::showPage("prescrire.html");
+    Core::HelpDialog::showPage(Constants::H_PROTOCOL_DIALOG);
 }
 
 void DosageCreatorDialog::drugsInformationsRequested()

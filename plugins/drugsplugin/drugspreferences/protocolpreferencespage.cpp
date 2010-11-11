@@ -88,6 +88,13 @@ void ProtocolPreferencesPage::checkSettingsValidity()
 }
 
 void ProtocolPreferencesPage::finish() { delete m_Widget; }
+QString ProtocolPreferencesPage::helpPage()
+{
+    QString l = QLocale().name().left(2);
+    if (l=="fr")
+        return Constants::H_PREFERENCES_PROTOCOL_FR;
+    return Constants::H_PREFERENCES_PROTOCOL_EN;
+}
 
 QWidget *ProtocolPreferencesPage::createPage(QWidget *parent)
 {

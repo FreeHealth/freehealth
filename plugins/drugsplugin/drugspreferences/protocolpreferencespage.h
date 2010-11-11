@@ -36,8 +36,8 @@
 /**
  * \file protocolpreferencespage.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 25 Mar 2010
+ * \version 0.5.0
+ * \date 11 Nov 2010
 */
 
 
@@ -94,7 +94,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::ProtocolPreferencesWidget::writeDefaultSettings(s);}
 

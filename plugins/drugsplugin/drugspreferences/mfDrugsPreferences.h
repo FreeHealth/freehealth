@@ -40,8 +40,8 @@
 /**
  * \file mfDrugsPreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 5 Mar 2010
+ * \version 0.5.0
+ * \date 11 Nov 2010
 */
 
 namespace Core {
@@ -182,7 +182,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
 
@@ -208,7 +208,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
 
@@ -236,7 +236,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html#params_poso_mask";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsPrintWidget::writeDefaultSettings(s);}
 
@@ -261,7 +261,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsUserWidget::writeDefaultSettings(s);}
     QWidget *createPage(QWidget *parent = 0);
@@ -285,7 +285,7 @@ public:
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s)  {Internal::DrugsExtraWidget::writeDefaultSettings(s);}
     QWidget *createPage(QWidget *parent = 0);
