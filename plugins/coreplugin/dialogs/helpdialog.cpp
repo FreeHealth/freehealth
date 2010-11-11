@@ -185,11 +185,13 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
 {
     setObjectName("HelpDialog");
     setAttribute(Qt::WA_DeleteOnClose);
-    setAttribute(Qt::WA_GroupLeader);
+ #if QT_VERSION < 0x040700
+//    setAttribute(Qt::WA_GroupLeader);
+#endif
 
     // Create dialog
     d = new HelpDialogPrivate(this);
-    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+//    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     Q_ASSERT(d);
     d->retranslate();
     d->createConnections();
@@ -230,6 +232,9 @@ void HelpDialog::showPage(const QString &page)
     HelpDialog *hb = new HelpDialog(page, qApp->activeWindow());
     hb->show();
 }
+
+/** \brief Creates a new help browser starting on the documentation index file */
+void HelpDialog::showIndex() { showPage(QString(::INDEX_FILENAME)); }
 
 /** \brief Slot called when text browser source changes --> update the window title. */
 void HelpDialog::updateWindowTitle()

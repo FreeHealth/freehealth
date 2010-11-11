@@ -51,7 +51,7 @@ class CORE_EXPORT HelpDialog : public QDialog
     Q_OBJECT
 public:
     static void showPage(const QString &page);
-    static void showIndex() { showPage("index.html"); }
+    static void showIndex();
 
 protected:
     explicit HelpDialog( const QString &page = QString::null, QWidget *parent = 0 );
