@@ -45,6 +45,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFileDialog>
+#include <QUuid>
 
 #include <QDebug>
 
@@ -103,15 +104,18 @@ void PrintDialog::accept()
         m_Printer->printer()->setFromTo(ui->pageFrom->value(), ui->pageTo->value());
     }
 
+    // Print to printer
     if (!m_Printer->reprint(m_Printer->printer()))
         return;
 
     // Duplicate to a pdf file
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
-        QString docName = QString("%1_%2_%3.pdf")
-                          .arg(patient()->data(Core::IPatient::FullName).toString().replace(" ", "_"))
-                          .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
-                          .arg(qApp->applicationName());
+        QString uid = QUuid::createUuid().toString();
+        uid = uid.remove("{").remove("}");
+        QString docName = QString("%1_%2.pdf")
+                          .arg(qApp->applicationName())
+                          .arg(uid)
+                          ;
 
         QString fileName = settings()->value(Constants::S_PDF_FOLDER).toString();
         if (fileName.isEmpty())

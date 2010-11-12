@@ -1002,7 +1002,9 @@ bool Printer::reprint(QPrinter *printer)
         from = 1;
         to = d->m_Pages.count();
     }
+
 //    qWarning() << from << to << d->m_TwoNUp;
+
     while (from <= to) {
         pageToPainter(&print, from, d->m_TwoNUp, false);
         d->m_TwoNUp ? from += 2 : ++from;
@@ -1421,22 +1423,15 @@ bool Printer::toPdf(const QString &fileName, const QString &docName)
     QString tmp = fileName;
     if (QFileInfo(tmp).suffix().isEmpty())
         tmp.append(".pdf");
-    QPrinter pdfPrinter(QPrinter::ScreenResolution);
-    pdfPrinter.setOutputFormat(QPrinter::PdfFormat);
-    pdfPrinter.setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
-    pdfPrinter.setOutputFileName(tmp);
-    pdfPrinter.setDocName(docName);
-    if (d->m_Printer) {
-        pdfPrinter.setPrintRange(d->m_Printer->printRange());
-        pdfPrinter.setFromTo(d->m_Printer->fromPage(), d->m_Printer->toPage());
-//        pdfPrinter.setCollateCopies(d->m_Printer->collateCopies());
-//        pdfPrinter.setColorMode(d->m_Printer->colorMode());
-//        pdfPrinter.setDoubleSidedPrinting(d->m_Printer->doubleSidedPrinting());
-//        pdfPrinter.setDuplex(d->m_Printer->duplex());
-//        pdfPrinter.setPageOrder(d->m_Printer->pageOrder());
-    }
-    reprint(&pdfPrinter);
-    return true;
+
+    QPrinter::OutputFormat format = d->m_Printer->outputFormat();
+    d->m_Printer->setOutputFormat(QPrinter::PdfFormat);
+    d->m_Printer->setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
+    d->m_Printer->setOutputFileName(tmp);
+    d->m_Printer->setDocName(docName);
+    bool ok = reprint(d->m_Printer);
+    d->m_Printer->setOutputFormat(format);
+    return ok;
 }
 
 /**
