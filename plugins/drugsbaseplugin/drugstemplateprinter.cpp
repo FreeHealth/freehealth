@@ -90,7 +90,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
                     dlg.setHtml(model->index(0, DrugsDB::Constants::Interaction::FullSynthesis).data().toString());
                     dlg.setPrintDuplicata(true);
                     dlg.setUserPaper(Core::IDocumentPrinter::Papers_Prescription_User);
-                    dlg.setHelpPageUrl("iamtesteur.html#synthetiseur_iam");
+                    dlg.setHelpPageUrl(Constants::H_INTERACTION_SYNTHETISOR);
                     dlg.exec();
                 }
             }
