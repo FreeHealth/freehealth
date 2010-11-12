@@ -118,6 +118,9 @@ namespace Constants {
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
 
+    // HELP PAGES
+    const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";
+
     // MASKS
     const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =  "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]";
     const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
