@@ -215,14 +215,14 @@
       <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="autoSave">
         <property name="text">
-         <string>Automatically save datas without prompting users</string>
+         <string>Automatically save data without prompting users</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="useExternalDB">
         <property name="text">
-         <string>Use external server for my personnal databases</string>
+         <string>Use external server for my personal databases</string>
         </property>
        </widget>
       </item>
