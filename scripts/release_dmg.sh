@@ -30,7 +30,7 @@ createDmg()
 
   #  echo "    *** DMG Release : Copying icons to $TMP..."
   cp $FILES_PATH"/global_resources/pixmap/svg/"$APP_NAME".icns" $TMP"/.VolumeIcon.icns"
-  LOWERED_APPNAME=`echo FreeDiams | tr '[A-Z]' '[a-z]'`
+  LOWERED_APPNAME=`echo $APP_NAME | tr '[A-Z]' '[a-z]'`
   cp $FILES_PATH"/global_resources/pixmap/svg/"$LOWERED_APPNAME".icns" $TMP"/.VolumeIcon.icns"
 
   #  echo "    *** DMG Release : Copying folder params to $TMP..."
