@@ -830,8 +830,10 @@ void MainWindow::readFile(const QString &file)
     } else {
         DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
-//    qWarning() << datas;
-    patient()->fromXml(datas);
+    // Process patient's data only if not blockDatas and not using exchange-in file
+    if ((!commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool()) &&
+        (commandLine()->value(Core::CommandLine::CL_ExchangeInFile).toString().isEmpty()))
+        patient()->fromXml(datas);
     refreshPatient();
 }
 
