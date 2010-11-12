@@ -4,6 +4,7 @@ mac:TARGET       = $$quote(FreeICD)
 PACKAGE_VERSION  = 0.4.0
 
 # include general configuration
+INSTALL_DRUGS = 0
 include( ../config.pri )
 !CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 

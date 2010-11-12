@@ -13,19 +13,19 @@ include( mainwindowplugin_dependencies.pri )
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
-HEADERS = mainwindowplugin.h \
+HEADERS += mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h
 
-SOURCES = mainwindowplugin.cpp \
+SOURCES += mainwindowplugin.cpp \
     mainwindow.cpp
 
-FORMS = mainwindow.ui
+FORMS += mainwindow.ui
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/freeicd_mainwindow_fr.ts \
                 $${SOURCES_TRANSLATIONS}/freeicd_mainwindow_de.ts \
                 $${SOURCES_TRANSLATIONS}/freeicd_mainwindow_es.ts
 
-OTHER_FILES = MainWindow.pluginspec
+OTHER_FILES += MainWindow.pluginspec
 
