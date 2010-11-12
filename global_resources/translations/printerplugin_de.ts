@@ -102,12 +102,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="246"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="250"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="248"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>

@@ -128,72 +128,72 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="235"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="234"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="332"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="331"/>
         <source>Transmitting posologies...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="357"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="356"/>
         <source>Connected to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="370"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="371"/>
         <source>Initializing drugs database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="376"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="377"/>
         <source>Entering selection mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="385"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="386"/>
         <source>Reading exchange file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="716"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="718"/>
         <source>Save actual prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="717"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="719"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="830"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="821"/>
         <source>Opening a prescription : merge or replace ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="831"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="822"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="832"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="823"/>
         <source>Replace prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="832"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="823"/>
         <source>Add to prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="833"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="824"/>
         <source>Open a prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="872"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="865"/>
         <source>Toggle patient&apos;s precautions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +201,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="214"/>
+        <location filename="../../plugins/fdmainwindowplugin/mainwindow.cpp" line="213"/>
         <source>Preparing dosage transmission</source>
         <translation>Bereite Dosis Transmission vor</translation>
     </message>

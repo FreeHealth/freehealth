@@ -30,8 +30,8 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="975"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1025"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="978"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1028"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
@@ -57,28 +57,28 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::DrugsIO</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="252"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="253"/>
         <source>Dosages transmitted.</source>
         <translation>Posologies transmises.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="255"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="256"/>
         <source>Dosage not correctly transmitted</source>
         <translation>Posologies incorrectement transmises</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="292"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="319"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="293"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="321"/>
         <source>Unable to load XML prescription : tag %1 is missing</source>
         <translation>Impossible d&apos;ouvrir la prescription XML : le tag %1 est manquant</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="302"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="303"/>
         <source>Prescription specifies a different drugs database than the actual one.</source>
         <translation>La prescription spécifie une base de données thérapeutique différente que celle en cours.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="303"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="304"/>
         <source>You are trying to load prescription that uses a different drugs database than the actual one. You can not read this prescription unless you change the current database in the Preferences.
 Actual: %1
 Prescription: %2.</source>
@@ -87,40 +87,40 @@ Actuelle : %1
 Prescription : %2.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="341"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="343"/>
         <source>Unable to read xml prescription</source>
         <translation>Impossible de lire la prescription XML</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="374"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="376"/>
         <source>Xml prescription correctly read.</source>
         <translation>Prescription XML correctement ouverte.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="407"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="409"/>
         <source>No file name passed to load prescription</source>
         <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="588"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="583"/>
         <source>Save test only drugs too ?</source>
         <translation>Sauvegarder les médicaments tests aussi ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="589"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="584"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file ?</source>
         <translation>Les médicaments tests sont actuellement cachés dans la prescription.
 Voulez-vous les ajouter au fichier ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="591"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="586"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="744"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="758"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="759"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="773"/>
         <source>Drugs Prescription</source>
         <translation>Prescription Medicamenteuse</translation>
     </message>
@@ -303,33 +303,33 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="293"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="296"/>
         <source>Searching databases into dir %1</source>
         <translation>Recherche des bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="340"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="343"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>ATTENTION : impossible d&apos;ouvrir la base de données %1 : %2 
 %3</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="575"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="581"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="586"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="578"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="584"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="589"/>
         <source>Unable to create the Protocol database.</source>
         <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="575"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="581"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="586"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="578"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="584"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="589"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="698"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="701"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>
@@ -386,12 +386,12 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="524"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="554"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="529"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="559"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>

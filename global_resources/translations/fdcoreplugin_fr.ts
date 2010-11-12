@@ -186,13 +186,13 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="218"/>
-        <source>Automatically save datas without prompting users</source>
-        <translation>Sauvegarder automatiquement les données sans demander à l&apos;utilisateur</translation>
+        <source>Automatically save data without prompting users</source>
+        <translation>Toujours sauvegarder automatiquement les données</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="225"/>
-        <source>Use external server for my personnal databases</source>
-        <translation>Utilise une base de données externe pour mes données personnelles</translation>
+        <source>Use external server for my personal databases</source>
+        <translation>Utiliser un serveur de données externe</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.cpp" line="121"/>

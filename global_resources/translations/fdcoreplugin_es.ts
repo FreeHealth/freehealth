@@ -186,12 +186,12 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="218"/>
-        <source>Automatically save datas without prompting users</source>
+        <source>Automatically save data without prompting users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="225"/>
-        <source>Use external server for my personnal databases</source>
+        <source>Use external server for my personal databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
