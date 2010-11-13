@@ -22,15 +22,7 @@ cd $SCRIPT_PATH"/.."
 #echo "Updating files rights : step 2"
 #sudo find . -type f -name "*.sh" -exec chmod -R 777 {} \; 
 
-OS=`uname`
-#DOC_ZIP=siteexport.zip
-#WGET=wget --max-redirect=10 --output-document=$DOC_ZIP --post-data="ens=fr%3Amanuals%3Afreediams%3Atoc&template=typo&renderer=&depthType=1&do=siteexport&diPlu[]=acl&diPlu[]=layeranimation" http://www.freemedforms.com/fr/manuals/freediams/toc --http-user=USER --http-passwd=PASSWD
-#CURL=curl -o $DOC_ZIP --max-redirs 10
-
-
-if [ "{$OS}" == "Darwin] ; then
-  export COPYFILE_DISABLE=true
-if
+export COPYFILE_DISABLE=true
 
 # get version number of FreeDiams from the project file
 VERSION=`cat ./freediams/freediams.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
@@ -65,6 +57,7 @@ global_resources/databases/drugs/iam*.db \
 global_resources/doc/freediams \
 global_resources/textfiles/freediams.desktop \
 global_resources/pixmap \
+global_resources/package_helpers \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
 libs \
