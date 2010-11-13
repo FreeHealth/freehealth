@@ -17,7 +17,7 @@ QT *= sql \
 HEADERS += accountreceipts_exporter.h \
     accountreceiptsplugin.h \
     receipts.h \       # should be renamed to receiptviewer.h
-    receiptsbasemanager.h \   # Not compatible with FreeMedForms
+    receiptsmanager.h \   # Not compatible with FreeMedForms
     receiptsengine.h \
     findReceiptsValues.h \
     xmlcategoriesparser.h \
@@ -30,7 +30,7 @@ FORMS += ReceiptsMainDialog.ui \
 
 SOURCES += accountreceiptsplugin.cpp \
     receipts.cpp \
-    receiptsbasemanager.cpp \ # Not compatible with FreeMedForms
+    receiptsmanager.cpp \ # Not compatible with FreeMedForms
     receiptsengine.cpp \
     findReceiptsValues.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>

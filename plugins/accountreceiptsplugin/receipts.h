@@ -23,7 +23,7 @@
 
 #include <accountreceiptsplugin/accountreceipts_exporter.h>
 #include "findReceiptsValues.h"
-#include "receiptsbasemanager.h"
+#include "receiptsmanager.h"
 #include "receiptsengine.h"
 
 #include <QWidget>
@@ -50,11 +50,12 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void percentages();
     void fillComboBoxes(QComboBox *comboBox,const QStringList &withList, const QString &withTable);
-    QStringList fillWithCategoriesList();
+    QStringList fillWithThesaurusList();
 
 private slots:
     void save();
-    void comboBoxCategories_changed(const QString &comboBoxItem);
+    void comboBoxThesaurus_changed(const QString &/*comboBoxItem*/);
+    void getReceiptsLists();
     void plusFunction();
     void lessFunction();
     void clearAll();
@@ -63,7 +64,7 @@ private slots:
 
 private:
     Ui::ReceiptsDialog *ui;
-    receiptsBaseManager *m_rbm;
+    receiptsManager *m_rbm;
     receiptsEngine *m_recEng;
     findReceiptsValues * m_receiptsValues;
     QMenu *m_menu;
@@ -76,7 +77,15 @@ private:
     QString m_firstname;
     QString m_uid;
     QString m_birthday;
-    static ReceiptsGUI *d;
+    QString m_account_uid;
+    QString m_patient_uid;
+    QString m_user_uid;
+    QString m_site_id;
+    QString m_insurance_id;
+    QHash<QString,QString> m_hashValuesChoosenFromFindValues;
+    QHash<int,QString> paramsSelected();
+    static ReceiptsGUI * d;
+    void writeOnRegisterLabel();
 
 };
 

@@ -20,7 +20,7 @@
 
 #include "receipts.h"
 #include "xmlcategoriesparser.h"
-#include "connexion.h"
+
 #include "ui_ReceiptsWidget.h"
 
 #include <QMessageBox>
@@ -62,32 +62,25 @@ ReceiptsGUI::~ReceiptsGUI()
     if (m_recEng)
         delete m_recEng;
     m_recEng = 0;
+    
+    m_hashPercents.clear();
+    m_countMoreOrLess = m_hashPercents.count();
+    m_name = "";
+    m_firstname = "";
+    m_uid = "";
+    m_birthday = "";
 }
 
 void ReceiptsGUI::initialize()
 {
     if(m_receiptsIsOn == true) return;
     //initialize pointers
-    m_rbm = new receiptsBaseManager;
+    m_rbm = new receiptsManager;
     m_recEng = new receiptsEngine;
     m_receiptsValues = new findReceiptsValues(this);
-    // connexion and complete database
-    if(!connexion()) {
-        qWarning() <<  __FILE__ << QString::number(__LINE__) << " no connexion !" ;
-    }
-    if(QFile(qApp->applicationDirPath ()+"/account.db").size()<1){
-        QString createTablesAndFields = m_rbm->createTablesAndFields();
-        if(m_rbm->writeAllDefaultsValues()){
-            qWarning() <<  __FILE__ << QString::number(__LINE__) << "write default values not failed";
-        }
-
-        qDebug() <<  __FILE__ << QString::number(__LINE__)
-                << " createTablesAndFields= "<< createTablesAndFields;
-        qDebug() << __FILE__ << QString::number(__LINE__) << "requetes = "+m_rbm->m_rbmReq;
-    }
 
     m_receiptsIsOn = true;
-    qDebug() <<  __FILE__ << QString::number(__LINE__) ;
+    ui->registerLabel->setWordWrap(true);
     ui->registerLabel->setText("");
     ui->cashRadioButton->setChecked(true);
     m_rightClic = new QAction(trUtf8("Clear all"),this);
@@ -133,16 +126,15 @@ void ReceiptsGUI::initialize()
     QString strDistanceRule = "distance_rules";
     fillComboBoxes(ui->comboBoxDistance, listDistanceRule,strDistanceRule);
 
-    // comboBoxes of categories
-    ui->comboBoxCategories->setEditable(true);
-    ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
-    QStringList categoriesList;
-    categoriesList << "thesaurus"
-            << fillWithCategoriesList();
-    QString strCategories;
-    foreach(strCategories,categoriesList){
-        ui->comboBoxCategories->addItem(strCategories);
-    }
+  //comboBoxes of thesaurus
+    ui->comboBoxThesaurus->setEditable(true);
+    ui->comboBoxThesaurus->setInsertPolicy(QComboBox::NoInsert);
+    QStringList thesaurusList;
+              thesaurusList << fillWithThesaurusList();
+    QString strThesaurus;
+    foreach(strThesaurus,thesaurusList){
+        ui->comboBoxThesaurus->addItem(strThesaurus);
+        }
 
     // progressBar for percentages
     int countPercentBar = m_hashPercents.count()-1;
@@ -150,11 +142,15 @@ void ReceiptsGUI::initialize()
     ui->percentBar->setValue(countPercentBar);
     ui->percentLabel->setText(m_hashPercentType.values().last()+" : "+m_hashPercents.values().last());
     m_countMoreOrLess = countPercentBar;
+      //default values--------------------------------
+    m_site_id = ui->comboBoxWhere->currentText();
+    m_insurance_id = ui->comboBoxDebtor->currentText();
 
     show();
     connect(ui->closeButton,SIGNAL(pressed()),      this,SLOT(close()));
+    connect(ui->receiptsFindButton,SIGNAL(pressed()),this,SLOT(getReceiptsLists()));
     connect(ui->saveButton, SIGNAL(pressed()),      this,SLOT(save()));
-    connect(ui->comboBoxCategories,SIGNAL(activated(const QString &)),this,SLOT(comboBoxCategories_changed(const QString &)));
+    connect(ui->comboBoxThesaurus,SIGNAL(activated(const QString &)),this,SLOT(comboBoxThesaurus_changed(const QString &)));
     connect(ui->plusButton, SIGNAL(pressed()),      this,SLOT(plusFunction()));
     connect(ui->lessButton, SIGNAL(pressed()),      this,SLOT(lessFunction()));
     connect(ui->checkBoxFreeEntry,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgetsEntry(bool)));
@@ -172,9 +168,9 @@ void ReceiptsGUI::clearAll()
 
 void ReceiptsGUI::save()
 {
-    QMessageBox::information(0,"try","save",QMessageBox::Ok);
-    /*QMultiHash<QString,QString> hash,
-  m_recEng->insertInAccountDatabase(hash,);*/
+  //QHash<QString,QString> m_hashValuesChoosenFromFindValues
+  QHash<int,QString> hashParams = paramsSelected();
+  m_recEng->insertIntoAccount(m_hashValuesChoosenFromFindValues,hashParams);
 }
 
 void ReceiptsGUI::plusFunction()
@@ -248,11 +244,11 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
     QString values = list.join(",");
     comboBox ->setEditable(true);
     comboBox ->setInsertPolicy(QComboBox::NoInsert);
-    receiptsBaseManager rbm;
-    QStringList listReceiptsBaseManager;
-    listReceiptsBaseManager = rbm.getComboBoxesDatas(values,table);
+    receiptsManager rbm;
+    QStringList listReceiptsManager;
+    listReceiptsManager = rbm.getComboBoxesDatas(values,table);
     QString str;
-    foreach(str,listReceiptsBaseManager){
+    foreach(str,listReceiptsManager){
         comboBox->addItem(str);
     }
 }
@@ -314,25 +310,35 @@ void ReceiptsGUI::showFreeWidgetsValue(bool checkBoxchecked){
        else{}
 }
 
-QStringList ReceiptsGUI::fillWithCategoriesList()
-{
-    QList<QHash<QString,QString> > hashList;
-    xmlCategoriesParser xml;
-    hashList = xml.readXmlFile();  
+QStringList ReceiptsGUI::fillWithThesaurusList(){
     QStringList list;
-    list = hashList[0].value("typesOfReceipts").trimmed().split(",");
+    list << "thesaurusItem1" << "thesaurusItem2" ;// todo : fill with datas of table Thesaurus
     return list;
 }
 
-void ReceiptsGUI::comboBoxCategories_changed(const QString & comboItem){
+void ReceiptsGUI::comboBoxThesaurus_changed(const QString & comboItem){
     /*comboBoxChoice->clear();
     QString item = comboItem;
     QStringList choiceList = m_rbm->getChoiceFromCategories(item);
     comboBoxChoice->addItems(choiceList);*/
     if(comboItem == "thesaurus"){QMessageBox::information(0,"Info","item = "+comboItem,QMessageBox::Ok);}
     else{
-        m_receiptsValues->exec();
+        
         }
+}
+
+void ReceiptsGUI::getReceiptsLists(){
+    ui->registerLabel->setText("");
+    if(m_hashValuesChoosenFromFindValues.size()>0){
+        m_hashValuesChoosenFromFindValues.clear();
+        }
+    if(m_receiptsValues->exec()== QDialog::Accepted){
+        m_hashValuesChoosenFromFindValues = m_receiptsValues->getChoosenValues();
+        m_receiptsValues->clear();
+        
+        writeOnRegisterLabel();
+    }
+
 }
 
 void ReceiptsGUI::getPatientDatas(const QString & name,const QString & firstname,const QString & uid,const QString & birthday)
@@ -343,4 +349,46 @@ void ReceiptsGUI::getPatientDatas(const QString & name,const QString & firstname
     m_birthday = birthday;
 }
 
+void ReceiptsGUI::writeOnRegisterLabel(){
+    QString textOnLabel = trUtf8("The selected values are : \n");
+    QHashIterator<QString,QString> it(m_hashValuesChoosenFromFindValues);
+    while(it.hasNext()){
+        it.next();
+        QString dataChoosen = it.key()+" "+it.value()+ " euros ";
+        textOnLabel += dataChoosen+"\n";
+    }
+    ui->registerLabel->setText(textOnLabel);
+    textOnLabel = "";
+}
 
+QHash<int,QString> ReceiptsGUI::paramsSelected(){
+  QString cash = "0",cheque = "0",visa = "0",insurance= "0",other= "0",due = "0";
+  if(ui->cashRadioButton->isChecked()) cash = "1";
+  if(ui->checkRadioButton->isChecked()) cheque = "1";
+  if(ui->cardRadioButton->isChecked()) visa ="1";
+  if(ui->bankRadioButton->isChecked()) insurance ="1";
+  if(ui->dueRadioButton->isChecked()) due ="1";
+ 
+  
+  QHash<int,QString> hash;
+              hash.insert(receiptsEngine::ACCOUNT_UID,m_account_uid); // ??????
+              hash.insert(receiptsEngine::USER_UID,m_user_uid);
+              hash.insert(receiptsEngine::PATIENT_UID,m_patient_uid);
+              hash.insert(receiptsEngine::PATIENT_NAME,m_name+","+m_firstname);
+              hash.insert(receiptsEngine::SITE_ID,m_site_id);
+              hash.insert(receiptsEngine::INSURANCE_ID,m_insurance_id);
+              hash.insert(receiptsEngine::DATE,dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
+              hash.insert(receiptsEngine::MP_XML,"");
+              hash.insert(receiptsEngine::MP_TXT,"");
+              hash.insert(receiptsEngine::COMMENT,"");
+              hash.insert(receiptsEngine::CASH,cash);
+              hash.insert(receiptsEngine::CHEQUE,cheque);
+              hash.insert(receiptsEngine::VISA,visa);
+              hash.insert(receiptsEngine::INSURANCE,insurance);
+              hash.insert(receiptsEngine::OTHER,other);
+              hash.insert(receiptsEngine::DUE,due);
+              hash.insert(receiptsEngine::DUE_BY,"");
+              hash.insert(receiptsEngine::ISVALID,"0");
+              hash.insert(receiptsEngine::TRACE,"0");
+  return hash;
+}
