@@ -65,6 +65,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-fr_FR.db");}
+static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/create-fr.sql");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/create-fr2.sql");}
@@ -390,6 +391,15 @@ bool FrenchDrugsDatabaseWidget::populateDatabase()
 
 bool FrenchDrugsDatabaseWidget::linkMolecules()
 {
+    // 13 Nov 2010
+    //    NUMBER OF MOLECULES 5113
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 2258
+    //    LINKERMODEL 230
+    //    LINKERNATURE 299
+    //    LEFT 2557
+
     // 20 Sept 2010
     //    FOUNDED 1825
     //    LINKERMODEL 279
@@ -441,7 +451,7 @@ bool FrenchDrugsDatabaseWidget::linkMolecules()
 
 
     // Connect to databases
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, Core::Constants::IAM_DATABASE_FILENAME))
+    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
         return false;
 
     if (!Core::Tools::connectDatabase(FR_DRUGS_DATABASE_NAME, databaseAbsPath()))

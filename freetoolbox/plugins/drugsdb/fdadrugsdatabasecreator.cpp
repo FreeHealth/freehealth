@@ -68,6 +68,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_US.db");}
+static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/usa_db_creator.sql");}
 //static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/usa_db_creator.sql");}
@@ -486,8 +487,15 @@ bool FdaDrugsDatabaseWidget::populateDatabase()
 
 bool FdaDrugsDatabaseWidget::linkMolecules()
 {
-    // 01 August 2010
-    //
+    // 13 Nov 2010
+    //    NUMBER OF MOLECULES 1983
+    //    CORRECTED BY NAME 11
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1337
+    //    LINKERMODEL 0
+    //    LINKERNATURE 0
+    //    LEFT 646
+
 
     // 28 July 2010
     // 1960 distinct mols
@@ -495,7 +503,7 @@ bool FdaDrugsDatabaseWidget::linkMolecules()
     // Found : 1349, Left: 612
 
     // Connect to databases
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, Core::Constants::IAM_DATABASE_FILENAME))
+    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
         return false;
 
     if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))

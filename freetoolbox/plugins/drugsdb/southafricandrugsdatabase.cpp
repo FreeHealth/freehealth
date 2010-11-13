@@ -77,6 +77,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_ZA.db");}
+static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_preparation.sql");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_finalize.sql");}
@@ -664,6 +665,15 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
 
 bool SouthAfricanDrugsDatabase::linkMolecules()
 {
+    // 13 Nov 2010
+    //    NUMBER OF MOLECULES 1148
+    //    CORRECTED BY NAME 23
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 657
+    //    LINKERMODEL 140
+    //    LINKERNATURE 0
+    //    LEFT 491
+
     // 23 Sept 2010
     //    Number of distinct molecules 1159
     //    Hand made association: 3
@@ -678,7 +688,7 @@ bool SouthAfricanDrugsDatabase::linkMolecules()
     // Hand association: 27
     // Found: 568, Left: 631
 
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, Core::Constants::IAM_DATABASE_FILENAME))
+    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
         return false;
 
     // get all drugs and ATC codes

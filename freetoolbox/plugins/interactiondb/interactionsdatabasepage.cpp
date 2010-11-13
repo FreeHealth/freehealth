@@ -56,9 +56,9 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
+static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Interactions/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
-static inline QString iamDatabaseSqlScema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
+static inline QString iamDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
 
 static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
 static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
@@ -285,6 +285,18 @@ InteractionDatabaseCreator::InteractionDatabaseCreator(QWidget *parent) :
         QWidget(parent), ui(new Ui::InteractionDatabaseCreator), d(new InteractionDatabaseCreatorPrivate)
 {
     ui->setupUi(this);
+    if (!QDir().mkpath(workingPath()))
+        Utils::Log::addError(this, "Unable to create Canadian Working Path :" + workingPath(), __FILE__, __LINE__);
+    else
+        Utils::Log::addMessage(this, "Tmp dir created");
+    // Create database output dir
+    const QString &dbpath = QFileInfo(iamDatabaseAbsPath()).absolutePath();
+    if (!QDir().exists(dbpath)) {
+        if (!QDir().mkpath(dbpath))
+            Utils::Log::addError(this, "Unable to create interactions database output path :" + dbpath, __FILE__, __LINE__);
+        else
+            Utils::Log::addMessage(this, "Drugs database output dir created");
+    }
 }
 
 InteractionDatabaseCreator::~InteractionDatabaseCreator()
@@ -295,6 +307,13 @@ InteractionDatabaseCreator::~InteractionDatabaseCreator()
 
 void InteractionDatabaseCreator::on_createAndSave_clicked()
 {
+    // create db
+    if (!QFile(iamDatabaseAbsPath()).exists()) {
+        QSqlDatabase iam = QSqlDatabase::addDatabase("QSQLITE", Core::Constants::IAM_DATABASE_NAME);
+        iam.setDatabaseName(iamDatabaseAbsPath());
+    }
+
+    // connect db
     if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
         return;
 
@@ -305,7 +324,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
     progress.setValue(0);
 
     // Create database schema
-    if (!Core::Tools::executeSqlFile(Core::Constants::IAM_DATABASE_NAME, iamDatabaseSqlScema())) {
+    if (!Core::Tools::executeSqlFile(Core::Constants::IAM_DATABASE_NAME, iamDatabaseSqlSchema())) {
         Utils::Log::addError(this, "Can not create IAM database.", __FILE__, __LINE__);
         return;
     }
@@ -459,7 +478,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
                         req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
                                       "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH`=\"%2\"));")
                                 .arg(afssapsClass.indexOf(iclass)+200000)
-                                .arg(tmp.replace("Ï","I"));
+                                .arg(tmp);
                     } else {
                         req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
                                       "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")

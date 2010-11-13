@@ -59,6 +59,7 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
     addAutoReleasedObject(new AfssapsIntegratorPage(this));
     addAutoReleasedObject(new AfssapsClassTreePage(this));
     addAutoReleasedObject(new InteractionsDatabasePage(this));
+    addAutoReleasedObject(new InteractionsDatabaseCreatorPage(this));
 
     return true;
 }
