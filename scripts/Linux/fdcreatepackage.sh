@@ -36,7 +36,7 @@ cp ~/Programmation/freemedforms/freediams_sources.tgz $SOURCESPACK
 echo "**** UNPACK SOURCES ****"
 rm -Rf $SOURCESDIR
 mkdir $SOURCESDIR
-tar zxf $SOURCESPACK -C $SOURCESDIR
+tar zxf $SOURCESPACK -C $PACKDIR
 cd $SOURCESDIR
 
 # Get debian med files
@@ -52,17 +52,6 @@ sudo pbuilder build *.dsc > log.txt
 DEBFILES="/var/cache/pbuilder/result/freediams*"$VERSION"*.deb"
 cp $DEBFILES $PACKDIR
 sudo dpkg -r freediams
-
-# Create a tar.gz file for Debian-Med Team
-echo "**** CREATING THE SOURCES UPLOAD STREAM ****"
-#mv $SOURCESPACK $PACKDIR"/"$DEBIANMED_SOURCESPACK
-rm -R $SOURCESDIR"/debian"
-tar czvf $PACKDIR"/freediamsfullsources_"$VERSION".tgz" \
---exclude ".svn" --exclude "*.deb" \
-freediams*.dsc \
-freediams*.build \
-freediams*.changes \
-freediams-$VERSION
 
 # Send file to server
 
