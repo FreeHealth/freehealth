@@ -30,7 +30,7 @@
 #include "pathchooser.h"
 
 #include "basevalidatinglineedit.h"
-#include "qtcassert.h"
+#include <utils/qtcassert.h>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

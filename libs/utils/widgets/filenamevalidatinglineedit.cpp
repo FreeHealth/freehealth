@@ -28,7 +28,7 @@
 **************************************************************************/
 
 #include "filenamevalidatinglineedit.h"
-#include "qtcassert.h"
+#include <utils/qtcassert.h>
 
 #include <QtCore/QRegExp>
 #include <QtCore/QDebug>
