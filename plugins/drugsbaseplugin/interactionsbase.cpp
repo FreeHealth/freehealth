@@ -51,6 +51,8 @@
 #include <utils/global.h>
 #include <utils/database.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -66,8 +68,10 @@
 #include <QCache>
 
 
-using namespace DrugsDB::Constants;
-using namespace DrugsDB::Internal;
+using namespace DrugsDB;
+using namespace Constants;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
@@ -174,8 +178,8 @@ public:
 
 
     bool checkDrugInteraction( DrugsData *drug, const QList<DrugsData *> & drugs );
-    DrugsInteraction * getInteractionFromDatabase( const int & _id1, const int & _id2 );
-    QList<DrugsInteraction*> getAllInteractionsFound();
+    QList<DrugsInteraction *> getInteractionsFromDatabase( const int & _id1, const int & _id2 );
+    QList<DrugsInteraction *> getAllInteractionsFound();
 
 public:
     InteractionsBase *m_Parent;
@@ -295,17 +299,22 @@ QList<DrugsInteraction*> InteractionsBase::calculateInteractions(const QList<Dru
  \brief Retrieve from the database the interaction for ids : \e _id1 and \e _id2
  \sa interactions()
 */
-DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int & _id1, const int & _id2)
+QList<DrugsInteraction *> InteractionsBasePrivate::getInteractionsFromDatabase(const int & _id1, const int & _id2)
 {
     int id2 = _id2;
     QSqlDatabase DB = m_DB->database();
-    if (!DB.isOpen())
-        DB.open();
+    QList<DrugsInteraction *> toReturn;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("InteractionBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return toReturn;
+        }
+    }
 
-    DrugsInteraction *dint = 0;
-
-    // first test if IAM is an alert (value == -1)
+    // first test : is duplication interaction ?
     if (id2 == -1) {
+        DrugsInteraction *dint = 0;
         dint = new DrugsInteraction();
         dint->setValue(DrugsInteraction::DI_Type , "I" );
         dint->setValue(DrugsInteraction::DI_ATC1, _id1 );
@@ -313,29 +322,36 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
         dint->setValue(DrugsInteraction::DI_RiskFr, QCoreApplication::translate("DrugsBase", "This INN is present more than one time in this prescrition."));
         dint->setValue(DrugsInteraction::DI_RiskEn, "This INN is present more than one time in this prescrition.");
         id2 = _id1;
-    } else {
-        // else retreive INTERACTION from database
-        // construct where clause
-        QHashWhere where;
-        where.insert(IA_ATC1, QString("=%1").arg(_id1));
-        where.insert(IA_ATC2, QString("=%1").arg(_id2));
+        toReturn << dint;
+        return toReturn;
+    }
 
-        // get INTERACTIONS table
-        QString req = m_DB->select(Table_INTERACTIONS, where);
-        QSqlQuery query(req, DB);
-        if (query.isActive()) {
-            if (query.next()) {
-                dint = new DrugsInteraction();
-                dint->setValue(DrugsInteraction::DI_Id, query.value(IA_ID));
-                dint->setValue(DrugsInteraction::DI_ATC1, query.value(IA_ATC1));
-                dint->setValue(DrugsInteraction::DI_ATC2, query.value(IA_ATC2));
-                dint->setValue(DrugsInteraction::DI_LinkId, query.value(IA_IAK_ID));
-            }
-        } else {
-            Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
+    // else retreive INTERACTION from database
+    // construct where clause
+    QHashWhere where;
+    where.insert(IA_ATC1, QString("=%1").arg(_id1));
+    where.insert(IA_ATC2, QString("=%1").arg(_id2));
+
+    // get interaction links
+    QString req = m_DB->select(Table_INTERACTIONS, where);
+    QSqlQuery query(req, DB);
+    if (query.isActive()) {
+        while (query.next()) {
+            DrugsInteraction *dint = 0;
+            dint = new DrugsInteraction();
+            dint->setValue(DrugsInteraction::DI_Id, query.value(IA_ID));
+            dint->setValue(DrugsInteraction::DI_ATC1, query.value(IA_ATC1));
+            dint->setValue(DrugsInteraction::DI_ATC2, query.value(IA_ATC2));
+            dint->setValue(DrugsInteraction::DI_LinkId, query.value(IA_IAK_ID));
+            toReturn << dint;
         }
-        query.finish();
+    } else {
+        Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
+    }
+    query.finish();
 
+    // get interaction knowledge
+    foreach(DrugsInteraction *dint, toReturn) {
         where.clear();
         where.insert(Constants::IAK_ID, QString("=%1").arg(dint->value(DrugsInteraction::DI_LinkId).toInt()));
         req = m_DB->select(Table_INTERACTION_KNOWLEDGE, where);
@@ -354,17 +370,17 @@ DrugsInteraction *InteractionsBasePrivate::getInteractionFromDatabase(const int 
     }
 
     // get denomination from iam_denomination where ID1 ID2
-//    dint->setValue(IAM_MAIN, m_Parent->getInnDenomination(_id1));
-//    dint->setValue(IAM_INTERACTOR, m_Parent->getInnDenomination(id2));
+    //    dint->setValue(IAM_MAIN, m_Parent->getInnDenomination(_id1));
+    //    dint->setValue(IAM_INTERACTOR, m_Parent->getInnDenomination(id2));
 
-    return dint;
+    return toReturn;
 }
 
 /**
  \brief Returns the list of all interactions founded by interactions()
  \sa interactions()
 */
-QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
+QList<DrugsInteraction *> InteractionsBasePrivate::getAllInteractionsFound()
 {
      // if no interactions were found : return empty list
      QList<DrugsInteraction*> toReturn;
@@ -377,7 +393,7 @@ QList<DrugsInteraction*> InteractionsBasePrivate::getAllInteractionsFound()
 
      QMap<int, int>::const_iterator i = m_IamFound.constBegin();
      while (i != m_IamFound.constEnd()) {
-          toReturn << getInteractionFromDatabase(i.key(), i.value());
+          toReturn << getInteractionsFromDatabase(i.key(), i.value());
           ++i;
      }
      qSort(toReturn.begin(), toReturn.end(), DrugsInteraction::lessThan);
