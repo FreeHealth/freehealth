@@ -48,10 +48,10 @@ else:SOURCES_BUILD_PATH = $${SOURCES_ROOT_PATH}/build
 
 message(Building into path $${SOURCES_BUILD_PATH})
 
-exists( $${SOURCES_PROTECTED_PATH} ){
-    message( *** BUILDING FULL APPLICATION *** )
+#exists( $${SOURCES_PROTECTED_PATH} ){
+#    message( *** BUILDING FULL APPLICATION *** )
     DEFINES *= FULLAPPLICATION_BUILD
-}
+#}
 
 # define some paths related to application sources
 BUILD_BINARY_PATH          = $${SOURCES_ROOT_PATH}/bin

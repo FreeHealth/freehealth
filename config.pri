@@ -19,10 +19,10 @@ LIBS *= -L$${BUILD_PLUGIN_PATH} -L$${BUILD_LIB_PATH}
 # build mode
 CONFIG *= qt warn_on thread x11 windows
 CONFIG( debug, debug|release ) {
-  message( Building $${BINARY_TARGET} in DEBUG )
+#  message( Building $${BINARY_TARGET} in DEBUG )
   DEFINES  *= DEBUG
 } else {
-  message( Building $${BINARY_TARGET} in RELEASE )
+#  message( Building $${BINARY_TARGET} in RELEASE )
   DEFINES  *= RELEASE
   # no warning from application
 #  DEFINES  *= QT_NO_DEBUG_OUTPUT \
