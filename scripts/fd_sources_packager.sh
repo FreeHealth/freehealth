@@ -16,7 +16,7 @@ fi
 
 cd $SCRIPT_PATH"/.."
 
-# remove executable flags to files
+# remove executable flags to doc files
 #echo "Updating files rights : step 1"
 #sudo find . -type f -exec chmod -R 666 {} \;
 #echo "Updating files rights : step 2"
@@ -40,6 +40,7 @@ tar -cf $PACKPATH/sources.tar \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '.*' --exclude '._*' \
 --exclude '*.tgz' --exclude '*.app' --exclude '*.zip' \
+--exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
 --exclude 'global_resources/forms' \
 --exclude 'global_resources/databases/episodes' \
 --exclude 'global_resources/databases/patients' \
@@ -80,6 +81,7 @@ tests
 echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
 tar xf $PACKPATH/sources.tar -C $PACKPATH
 rm $PACKPATH/sources.tar
+find $PACKPATH -type f -exec chmod -R 666 {} \;
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
