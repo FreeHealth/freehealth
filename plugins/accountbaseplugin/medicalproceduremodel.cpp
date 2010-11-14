@@ -136,6 +136,11 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
     return d->m_SqlTable->removeRows(row, count, parent);
 }
 
+void MedicalProcedureModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+}
+
 bool MedicalProcedureModel::submit()
 {
     if (d->m_SqlTable->submitAll()) {
