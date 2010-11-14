@@ -25,6 +25,7 @@
 #include "findReceiptsValues.h"
 #include "receiptsmanager.h"
 #include "receiptsengine.h"
+#include "receiptviewer.h"
 
 #include <QWidget>
 
@@ -61,6 +62,7 @@ private slots:
     void clearAll();
     void showFreeWidgetsEntry(bool checkBoxchecked);
     void showFreeWidgetsValue(bool checkBoxchecked);
+    void showReceiptsViewer();//to see account
 
 private:
     Ui::ReceiptsDialog *ui;

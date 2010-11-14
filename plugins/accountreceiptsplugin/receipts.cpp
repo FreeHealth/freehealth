@@ -156,6 +156,7 @@ void ReceiptsGUI::initialize()
     connect(ui->checkBoxFreeEntry,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgetsEntry(bool)));
     connect(ui->checkBoxFreeValue,   SIGNAL(toggled(bool)),  this,SLOT(showFreeWidgetsValue(bool)));
     connect(m_rightClic,SIGNAL(triggered()),    this,SLOT(clearAll()));// right clic
+    connect(ui->showButton,SIGNAL(pressed()),   this,SLOT(showReceiptsViewer()));
 
 }
 
@@ -232,7 +233,7 @@ void ReceiptsGUI::mousePressEvent(QMouseEvent * event)
 
 void ReceiptsGUI::percentages()
 {
-    receiptsBaseManager rb;
+    receiptsManager rb;
     QList<QMultiHash<int,QString> > listMultiHash = rb.getPercentages();
     m_hashPercentType = listMultiHash[0];
     m_hashPercents    = listMultiHash[1];
@@ -377,7 +378,7 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
               hash.insert(receiptsEngine::PATIENT_NAME,m_name+","+m_firstname);
               hash.insert(receiptsEngine::SITE_ID,m_site_id);
               hash.insert(receiptsEngine::INSURANCE_ID,m_insurance_id);
-              hash.insert(receiptsEngine::DATE,dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
+              hash.insert(receiptsEngine::DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
               hash.insert(receiptsEngine::MP_XML,"");
               hash.insert(receiptsEngine::MP_TXT,"");
               hash.insert(receiptsEngine::COMMENT,"");
@@ -391,4 +392,10 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
               hash.insert(receiptsEngine::ISVALID,"0");
               hash.insert(receiptsEngine::TRACE,"0");
   return hash;
+}
+
+void ReceiptsGUI::showReceiptsViewer(){
+  ReceiptViewer r(this);
+  r.show();
+
 }

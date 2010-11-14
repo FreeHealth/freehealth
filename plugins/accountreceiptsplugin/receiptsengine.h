@@ -1,10 +1,11 @@
 #ifndef RECEIPTSENGINE_H
 #define RECEIPTSENGINE_H
-#include "medicalproceduremodel.h"
+#include <accountbaseplugin/accountmodel.h>
 #include <QtCore>
 #include <QSqlError>
 #include <QMessageBox>
-
+#include <QtSql>
+using namespace AccountDB;
 class receiptsEngine : public QObject {
 
   Q_OBJECT
@@ -36,7 +37,8 @@ class receiptsEngine : public QObject {
     ~receiptsEngine();
     bool insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams);
   private :
-    QSqlTableModel * m_model;
+    AccountModel * m_mpmodel;
+    //QSqlTableModel * m_model;
     QSqlDatabase  m_db;
 };
 #endif

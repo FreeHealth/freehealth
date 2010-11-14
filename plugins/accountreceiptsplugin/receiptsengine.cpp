@@ -1,11 +1,11 @@
 #include "receiptsengine.h"
 
 receiptsEngine::receiptsEngine(){
-    //m_mpmodel = new MedicalProcedureModel(this);
-    m_db = QSqlDatabase::database("freeaccount");
-    m_model = new QSqlTableModel(this,m_db);
-    m_model->setTable("account");
-    m_model->select();
+    m_mpmodel = new AccountModel(this);
+    //m_db = QSqlDatabase::database("Account");
+    //m_model = new QSqlTableModel(this,m_db);
+    //m_model->setTable("account");
+    //m_model->select();
     
 }
             /*  hash.insert(receiptsEngine::MP_TXT,"");
@@ -19,7 +19,7 @@ receiptsEngine::receiptsEngine(){
 receiptsEngine::~receiptsEngine(){}
 
 bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams){
-    int rowBefore = m_model->rowCount(QModelIndex());
+    int rowBefore = m_mpmodel->rowCount(QModelIndex());
     bool ret = true;
     QString data;
     QHashIterator<QString,QString> it (hashOfValues);
@@ -27,8 +27,8 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
     listValuesNumbers << MP_TXT << COMMENT << CASH << CHEQUE << VISA << INSURANCE << DUE;
     while(it.hasNext()){
         it.next();
-        int row = m_model->rowCount(QModelIndex());
-        m_model->insertRow(row,QModelIndex());
+        int row = m_mpmodel->rowCount(QModelIndex());
+        m_mpmodel->insertRow(row,QModelIndex());
         for(int i = 0 ; i < LAST_ENUM_HEADERS ; i++){
             if (i == 0)
             {
@@ -90,15 +90,15 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
             else{
                 data = hashOfParams.value(i);
                 }
-            QModelIndex index = m_model->index(row,i,QModelIndex());
-            m_model-> setData(index, data ,Qt::EditRole);
-            qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
-                       <<m_model->lastError().text();
+            QModelIndex index = m_mpmodel->index(row,i,QModelIndex());
+            m_mpmodel-> setData(index, data ,Qt::EditRole);
+            qWarning() << __FILE__ << QString::number(__LINE__) /*<< " model account error = " 
+                       <<m_mpmodel->lastError().text()*/;
             }
-        m_model->submitAll();
+        m_mpmodel->submit();
         }
-    if(m_model->rowCount(QModelIndex()) == rowBefore){
-        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error = ")+m_model->lastError().text(),QMessageBox::Ok);
+    if(m_mpmodel->rowCount(QModelIndex()) == rowBefore){
+        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error = ")/*+m_mpmodel->lastError().text()*/,QMessageBox::Ok);
         ret = false;
         }
     return ret;

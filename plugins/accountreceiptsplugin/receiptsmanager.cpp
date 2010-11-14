@@ -2,7 +2,7 @@
 #include "xmlcategoriesparser.h"
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
-//des fonctions disparaitront au profit de classe de models 
+ 
 receiptsManager::receiptsManager()
 {
 }
@@ -45,7 +45,7 @@ QStringList receiptsManager::getComboBoxesDatas(const QString & values,const QSt
   return list;
 }
 
-QString receiptsManager::createTablesAndFields(){
+/*QString receiptsManager::createTablesAndFields(){
     QString result = "Ok";
     qDebug() <<  __FILE__ << QString::number(__LINE__) ;
     QSqlDatabase db = QSqlDatabase::database("freeaccount");
@@ -159,9 +159,9 @@ QString receiptsManager::createTablesAndFields(){
          }                                              
         qDebug() <<  __FILE__ << QString::number(__LINE__) ;
         return result;
-}
+}*/
 
-bool receiptsManager::writeAllDefaultsValues(){
+/*bool receiptsManager::writeAllDefaultsValues(){
   bool ret = true;
   QSqlDatabase db = QSqlDatabase::database(freeaccount);
   xmlCategoriesParser xml;
@@ -211,7 +211,7 @@ bool receiptsManager::writeAllDefaultsValues(){
            }
        }
    return ret;
-}
+}*/
 
 QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QStringList listOfItems;

@@ -7,7 +7,8 @@ DEFINES += ACCOUNTRECEIPTS_LIBRARY
 BUILD_PATH_POSTFIXE = FreeAccount
 
 include(../fmf_plugins.pri)
-include(accountreceiptsplugin_dependencies.pri)
+#include(accountreceiptsplugin_dependencies.pri)
+include(accountreceiptsplugin.pri)
 
 QT *= sql \
     network \

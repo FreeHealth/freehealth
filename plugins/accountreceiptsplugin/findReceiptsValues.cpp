@@ -3,12 +3,13 @@
 
 
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
-  QSqlDatabase db = QSqlDatabase::database("freeaccount");
+  //QSqlDatabase db = QSqlDatabase::database("freeaccount");
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   fillComboCategories();
   initialize();
-  m_model = new QSqlTableModel(this,db);
+  //m_model = new QSqlTableModel(this,db);
+  m_mpmodel = new MedicalProcedureModel(this);
   QString comboValue = ui->comboBoxCategories->currentText();
   emit fillListViewValues(comboValue);
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
@@ -19,7 +20,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
 findReceiptsValues::~findReceiptsValues(){
   delete m_xmlParser;
   delete m_rbm;
-  delete m_model;
+  delete m_mpmodel;
   ui->listChoosenWidget->clear();
 }
 
@@ -49,12 +50,12 @@ void findReceiptsValues::fillComboCategories(){
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
     QString filter = QString("TYPE = '%1'").arg(comboItem);
-    m_model->setTable("medical_procedure");
-    m_model->setFilter(filter);
-    m_model->select();
-    qDebug() << __FILE__ << QString::number(__LINE__) << m_model->lastError().text();
+    //m_model->setTable("medical_procedure");
+    m_mpmodel->setFilter(filter);
+    //m_mpmodel->select();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << m_model->lastError().text();
     //ui->tableViewOfValues->setModel(m_mpmodel);
-    ui->tableViewOfValues->setModel(m_model);
+    ui->tableViewOfValues->setModel(m_mpmodel);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->setColumnHidden(0,true);//setColumnHidden()
@@ -74,9 +75,13 @@ void findReceiptsValues::chooseValue(const QModelIndex& index){
     QModelIndex inIndex(index);
     //get datas
     int row = inIndex.row();
-    QSqlRecord record = m_model->record(row);
-    QString data = record.value(3).toString();//NAME
-    QString amount = record.value(6).toString();//AMOUNT
+    QModelIndex indexData = m_mpmodel->index(row,3,QModelIndex());
+    QModelIndex indexAmount = m_mpmodel->index(row,6,QModelIndex());
+    /*QSqlRecord record = m_mpmodel->record(row);
+    QString data = record.value(3).toString();
+    QString amount = record.value(6).toString();*/
+    QString data = m_mpmodel->data(indexData,Qt::DisplayRole).toString();//NAME
+    QString amount = m_mpmodel->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
     qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     ui->listChoosenWidget->addItem(data);
     m_hashValuesChoosen.insert(data,amount);

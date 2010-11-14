@@ -9,8 +9,8 @@ class receiptsManager : public QObject {
   ~receiptsManager();
   QList<QMultiHash<int,QString> > getPercentages();
   QStringList getComboBoxesDatas(const QString &,const QString&);
-  QString createTablesAndFields();
-  bool writeAllDefaultsValues();
+  //QString createTablesAndFields();
+  //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);
   QString m_rbmReq;
 

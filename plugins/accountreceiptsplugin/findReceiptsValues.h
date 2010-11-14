@@ -3,8 +3,8 @@
 #include "ui_findValuesGUI.h"
 #include "xmlcategoriesparser.h"
 #include "receiptsmanager.h"
-#include "medicalproceduremodel.h"
-#include "connexion.h"
+#include <accountbaseplugin/medicalproceduremodel.h>
+
 #include <QtGui>
 #include <QtCore>
 
@@ -21,7 +21,7 @@ class findReceiptsValues:public QDialog{
     QHash<QString,QString> getChoosenValues();
     void clear();
   private :
-    QSqlTableModel * m_model; //  à modifier par m_mpmodel
+    //QSqlTableModel * m_model; //  à modifier par m_mpmodel
     Ui::findValueDialog * ui;
     receiptsManager * m_rbm;
     xmlCategoriesParser * m_xmlParser;
