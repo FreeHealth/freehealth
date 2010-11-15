@@ -395,10 +395,10 @@ bool FrenchDrugsDatabaseWidget::linkMolecules()
     //    NUMBER OF MOLECULES 5113
     //    CORRECTED BY NAME 0
     //    CORRECTED BY ATC 0
-    //    FOUNDED 2258
-    //    LINKERMODEL 230
-    //    LINKERNATURE 299
-    //    LEFT 2557
+    //    FOUNDED 2304
+    //    LINKERMODEL 283
+    //    LINKERNATURE 302
+    //    LEFT 2511
 
     // 20 Sept 2010
     //    FOUNDED 1825
