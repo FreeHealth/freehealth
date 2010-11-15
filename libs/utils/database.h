@@ -185,6 +185,8 @@ public:
     virtual QString selectDistinct( const int & tableref, const int & fieldref, const QHash<int, QString> &conditions ) const;
     virtual QString selectDistinct( const int & tableref, const int & fieldref ) const;
 
+    QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
+
     virtual int count( const int & tableref, const int & fieldref, const QString &filter = QString()) const;
     virtual double max( const int & tableref, const int & fieldref, const int &groupBy, const QString &filter = QString()) const;
 

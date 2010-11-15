@@ -602,10 +602,10 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
     return where;
 }
 
-QString Database::select(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
+QString Database::select(const int & tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
     QString toReturn;
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+    toReturn = QString("SELECT `%1` FROM `%2` WHERE %3")
             .arg(field(tableref, fieldref))
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
@@ -617,7 +617,7 @@ QString Database::select(const int & tableref, const int & fieldref, const QHash
 QString Database::select(const int & tableref, const int & fieldref) const
 {
     QString toReturn;
-    toReturn = QString("SELECT %1 FROM `%2`")
+    toReturn = QString("SELECT `%1` FROM `%2`")
             .arg(field(tableref, fieldref))
             .arg(table(tableref));
     if (WarnSqlCommands)
@@ -635,9 +635,16 @@ QString Database::selectDistinct(const int & tableref, const int & fieldref) con
     return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
 }
 
+QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const
+{
+    return QString("`%1`.`%2`=`%3`.`%4`")
+            .arg(table(tableRef1), field(tableRef1, fieldRef1))
+            .arg(table(tableRef2), field(tableRef2, fieldRef2));
+}
+
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
-    QString req = QString("SELECT count(%1) FROM %2").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
+    QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
