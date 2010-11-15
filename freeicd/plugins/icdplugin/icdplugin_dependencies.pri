@@ -1,1 +1,1 @@
-include( $${SOURCES_PLUGINS_PATH}/icdplugin/incdplugin_dependencies.pri )
+include( $${SOURCES_PLUGINS_PATH}/icdplugin/icdplugin_dependencies.pri )

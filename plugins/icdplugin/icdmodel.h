@@ -28,13 +28,18 @@
 
 #include <QAbstractTableModel>
 
+QT_BEGIN_NAMESPACE
+class QStringListModel;
+QT_END_NAMESPACE
 
 namespace ICD {
 namespace Internal {
-class IcdModelPrivate;
+class IcdSearchModelPrivate;
+class SimpleIcdModelPrivate;
+class FullIcdCodeModelPrivate;
 }
 
-class IcdModel : public QAbstractTableModel
+class IcdSearchModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
@@ -53,8 +58,8 @@ public:
         SearchByCode
     };
 
-    explicit IcdModel(QObject *parent = 0);
-    ~IcdModel();
+    explicit IcdSearchModel(QObject *parent = 0);
+    ~IcdSearchModel();
 
     void setSearchMethod(SearchModes mode);
 
@@ -77,9 +82,48 @@ public Q_SLOTS:
     void setFilter(const QString &searchLabel);
 
 private:
-    Internal::IcdModelPrivate *d;
+    Internal::IcdSearchModelPrivate *d;
 
 };
+
+class SimpleIcdModel :public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    enum DataRepresentation {
+        SID_Code = 0,
+        ICD_Code,
+        ICD_CodeWithDagetAndStar,
+        Label,
+        Daget,
+        Type,
+        ColumnCount
+    };
+
+    explicit SimpleIcdModel(QObject *parent = 0);
+    ~SimpleIcdModel();
+
+    void addCodes(const QVector<int> &codes, bool getAllLabels = false);
+    void setUseDagDependencyWithSid(const QVariant &SID);
+    void setCheckable(bool state);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    QStringListModel *labelsModel(const QModelIndex &index);
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+
+private:
+    Internal::SimpleIcdModelPrivate *d;
+
+};
+
 
 
 }  //  End namespace ICD

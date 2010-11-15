@@ -29,11 +29,12 @@
 #include <icdplugin/icdcontextualwidget.h>
 QT_BEGIN_NAMESPACE
 class QToolButton;
+class QModelIndex;
 QT_END_NAMESPACE
 
 
 namespace ICD {
-class IcdModel;
+class IcdSearchModel;
 
 namespace Ui {
     class IcdCodeSelector;
@@ -48,8 +49,12 @@ public:
     ~IcdCodeSelector();
 
     void initialize();
-    void setModel(IcdModel *model);
-    IcdModel *model() const;
+    void setModel(IcdSearchModel *model);
+    IcdSearchModel *model() const;
+
+Q_SIGNALS:
+    void entered(const QVariant &SID);
+    void activated(const QVariant &SID);
 
 protected:
     void changeEvent(QEvent *e);
@@ -58,6 +63,8 @@ private:
     void populateToolButtons();
 
 private Q_SLOTS:
+    void onEntered(const QModelIndex &);
+    void onActivated(const QModelIndex &);
     void setSearchByLabel();
     void setSearchByCode();
     void setFilter(const QString &search);

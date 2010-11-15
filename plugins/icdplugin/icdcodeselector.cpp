@@ -67,19 +67,21 @@ void IcdCodeSelector::initialize()
     populateToolButtons();
 }
 
-void IcdCodeSelector::setModel(IcdModel *model)
+void IcdCodeSelector::setModel(IcdSearchModel *model)
 {
     ui->tableView->setModel(model);
-    ui->tableView->setColumnHidden(IcdModel::SID_Code, true);
-    ui->tableView->setColumnHidden(IcdModel::ICD_Code, true);
-    ui->tableView->setColumnHidden(IcdModel::Daget, true);
-    ui->tableView->setColumnHidden(IcdModel::Type, true);
+    ui->tableView->setColumnHidden(IcdSearchModel::SID_Code, true);
+    ui->tableView->setColumnHidden(IcdSearchModel::ICD_Code, true);
+    ui->tableView->setColumnHidden(IcdSearchModel::Daget, true);
+    ui->tableView->setColumnHidden(IcdSearchModel::Type, true);
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
+    connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onActivated(QModelIndex)));
+    connect(ui->tableView, SIGNAL(entered(QModelIndex)), this, SLOT(onEntered(QModelIndex)));
 }
 
-IcdModel *IcdCodeSelector::model() const
+IcdSearchModel *IcdCodeSelector::model() const
 {
-    return qobject_cast<IcdModel *>(ui->tableView->model());
+    return qobject_cast<IcdSearchModel *>(ui->tableView->model());
 }
 
 void IcdCodeSelector::populateToolButtons()
@@ -93,16 +95,26 @@ void IcdCodeSelector::populateToolButtons()
     m_SearchToolButton->addAction(cmd->action());
 }
 
+void IcdCodeSelector::onEntered(const QModelIndex &index)
+{
+    Q_EMIT entered(model()->index(index.row(), IcdSearchModel::SID_Code).data());
+}
+
+void IcdCodeSelector::onActivated(const QModelIndex &index)
+{
+    Q_EMIT activated(model()->index(index.row(), IcdSearchModel::SID_Code).data());
+}
+
 void IcdCodeSelector::setSearchByLabel()
 {
     if (model())
-        model()->setSearchMethod(IcdModel::SearchByLabel);
+        model()->setSearchMethod(IcdSearchModel::SearchByLabel);
 }
 
 void IcdCodeSelector::setSearchByCode()
 {
     if (model())
-        model()->setSearchMethod(IcdModel::SearchByCode);
+        model()->setSearchMethod(IcdSearchModel::SearchByCode);
 }
 
 void IcdCodeSelector::setFilter(const QString &search)

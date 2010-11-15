@@ -23,66 +23,38 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#ifndef ICDVIEWER_H
+#define ICDVIEWER_H
 
-#include <utils/database.h>
-
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
+#include <QWidget>
 
 
 namespace ICD {
 
-namespace Internal {
-class IcdDatabasePrivate;
+namespace Ui {
+    class IcdViewer;
 }
 
-class IcdDatabase : public QObject, public Utils::Database
+class IcdViewer : public QWidget
 {
     Q_OBJECT
 
-    IcdDatabase(QObject *parent = 0);
-
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
+    explicit IcdViewer(QWidget *parent = 0);
+    ~IcdViewer();
 
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
+public Q_SLOTS:
+    void setCodeSid(const QVariant &sid);
 
-    QVariant getIcdCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
-
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    QString getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID);
-
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
-
-    QVector<int> getExclusions(const QVariant &SID);
-
-    QString getMemo(const QVariant &SID);
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    bool init();
-
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
+    Ui::IcdViewer *ui;
 };
 
-} // End namespace ICD
+
+}  // End namespace ICD
 
 
-#endif // ICDDATABASE_H
+#endif // ICDVIEWER_H

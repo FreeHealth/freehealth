@@ -34,6 +34,8 @@
 #include <QSqlQueryModel>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QStringListModel>
+#include <QPointer>
 
 #include <QDebug>
 
@@ -51,10 +53,11 @@ namespace Internal {
         Query_LID
     };
 
-class IcdModelPrivate
+class IcdSearchModelPrivate
 {
 public:
-    IcdModelPrivate(IcdModel *parent) : m_IcdMaster(0), m_SearchMode(IcdModel::SearchByLabel), q(parent)
+    IcdSearchModelPrivate(IcdSearchModel *parent) :
+            m_IcdMaster(0), m_SearchMode(IcdSearchModel::SearchByLabel), q(parent)
     {
         m_IcdMaster = new QSqlQueryModel(q);
         // Master -> valid=1, level=4, code like '%search%'
@@ -66,7 +69,7 @@ public:
     {
         QString req;
         QString fields;
-        if (m_SearchMode == IcdModel::SearchByLabel) {
+        if (m_SearchMode == IcdSearchModel::SearchByLabel) {
             fields = QString("`%1`.`%2`, `%3`.`%4` ")
                      .arg(icdBase()->table(Constants::Table_System))
                      .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_SID))
@@ -104,21 +107,56 @@ public:
         return req;
     }
 
-    ~IcdModelPrivate () {}
+    ~IcdSearchModelPrivate() {}
 
 public:
     QSqlQueryModel *m_IcdMaster;
-    IcdModel::SearchModes m_SearchMode;
+    IcdSearchModel::SearchModes m_SearchMode;
     QString m_LastFilterRequiered;
 
 private:
-    IcdModel *q;
+    IcdSearchModel *q;
 };
-}
-}
 
-IcdModel::IcdModel(QObject *parent) :
-        QAbstractTableModel(parent), d(new Internal::IcdModelPrivate(this))
+struct SimpleCode {
+    int sid;
+    QString code;
+    QString dag;
+    QString systemLabel;
+    int check;
+    QMultiHash<int,QString> labels;  // key=lang  value=label
+};
+
+class SimpleIcdModelPrivate
+{
+public:
+    SimpleIcdModelPrivate(SimpleIcdModel *parent) :
+            m_UseDagDepend(false), m_Checkable(false), q(parent)
+    {
+    }
+
+    ~SimpleIcdModelPrivate()
+    {
+        qDeleteAll(m_Codes);
+        m_Codes.clear();
+    }
+
+public:
+    QList<SimpleCode *> m_Codes;
+    QHash<int, QPointer<QStringListModel> > m_LabelModels;
+    bool m_UseDagDepend,m_Checkable;
+    QVariant m_DagDependOnSid;
+
+private:
+    SimpleIcdModel *q;
+};
+
+
+}  // End namespace Internal
+}  // End namespace ICD
+
+IcdSearchModel::IcdSearchModel(QObject *parent) :
+        QAbstractTableModel(parent), d(new Internal::IcdSearchModelPrivate(this))
 {
     // connect lanquage change
     d->m_IcdMaster->setQuery(d->searchQuery(), icdBase()->database());
@@ -133,7 +171,7 @@ IcdModel::IcdModel(QObject *parent) :
     connect(d->m_IcdMaster,SIGNAL(modelReset()), this, SIGNAL(modelReset()));
 }
 
-IcdModel::~IcdModel()
+IcdSearchModel::~IcdSearchModel()
 {
     if (d) {
         delete d;
@@ -141,7 +179,7 @@ IcdModel::~IcdModel()
     }
 }
 
-void IcdModel::setSearchMethod(SearchModes mode)
+void IcdSearchModel::setSearchMethod(SearchModes mode)
 {
     if (mode==d->m_SearchMode)
         return;
@@ -150,27 +188,27 @@ void IcdModel::setSearchMethod(SearchModes mode)
     // update model ?
 }
 
-int IcdModel::rowCount(const QModelIndex &parent) const
+int IcdSearchModel::rowCount(const QModelIndex &parent) const
 {
     return d->m_IcdMaster->rowCount();
 }
 
-int IcdModel::columnCount(const QModelIndex &parent) const
+int IcdSearchModel::columnCount(const QModelIndex &parent) const
 {
     return ColumnCount;
 }
 
-void IcdModel::fetchMore(const QModelIndex &parent)
+void IcdSearchModel::fetchMore(const QModelIndex &parent)
 {
     d->m_IcdMaster->fetchMore(parent);
 }
 
-bool IcdModel::canFetchMore(const QModelIndex &parent) const
+bool IcdSearchModel::canFetchMore(const QModelIndex &parent) const
 {
     return d->m_IcdMaster->canFetchMore(parent);
 }
 
-QVariant IcdModel::data(const QModelIndex &index, int role) const
+QVariant IcdSearchModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -181,34 +219,34 @@ QVariant IcdModel::data(const QModelIndex &index, int role) const
         case ICD_Code: return icdBase()->getIcdCode(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
         case ICD_CodeWithDagetAndStar: return icdBase()->getIcdCodeWithDagStar(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
         case Daget: return icdBase()->getHumanReadableIcdDaget(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
-        case Label: return icdBase()->getLabel(d->m_IcdMaster->index(index.row(), Internal::Query_LID).data());
+        case Label: return icdBase()->getSystemLabel(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
         }
     }
     return QVariant();
 }
 
-bool IcdModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool IcdSearchModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     return false;
 }
 
 
-QVariant IcdModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant IcdSearchModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return QVariant();
 }
 
-bool IcdModel::insertRows(int row, int count, const QModelIndex &parent)
+bool IcdSearchModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     return false;
 }
 
-bool IcdModel::removeRows(int row, int count, const QModelIndex &parent)
+bool IcdSearchModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     return false;
 }
 
-void IcdModel::setFilter(const QString &searchLabel)
+void IcdSearchModel::setFilter(const QString &searchLabel)
 {
     d->m_LastFilterRequiered = searchLabel;
     QHash<int, QString> where;
@@ -227,3 +265,182 @@ void IcdModel::setFilter(const QString &searchLabel)
     qWarning()<<d->m_IcdMaster->query().lastError().text();
     reset();
 }
+
+
+
+
+
+SimpleIcdModel::SimpleIcdModel(QObject *parent) :
+        QAbstractTableModel(parent), d(0)
+{
+    d = new Internal::SimpleIcdModelPrivate(this);
+}
+
+SimpleIcdModel::~SimpleIcdModel()
+{
+    if (d)
+        delete d;
+    d=0;
+}
+
+void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
+{
+    if (codes.isEmpty())
+        return;
+    QVector<int> langs;
+    langs << Constants::LIBELLE_EN << Constants::LIBELLE_FR << Constants::LIBELLE_FRCHRONOS << Constants::LIBELLE_DE_DIMDI << Constants::LIBELLE_DE_AUTO;
+    // Construct SimpleCodes
+    foreach(const int sid, codes) {
+        Internal::SimpleCode *code = new Internal::SimpleCode;
+        code->sid = sid;
+        code->code = icdBase()->getIcdCode(sid).toString();
+        code->dag = icdBase()->getHumanReadableIcdDaget(sid);
+        code->systemLabel = icdBase()->getSystemLabel(sid);
+        // get all language labels
+        if (getAllLabels) {
+            foreach(const int lang, langs) {
+                foreach(const QString &label, icdBase()->getAllLabels(sid, lang)) {
+                    if (!label.isEmpty())
+                        code->labels.insert(lang, label);
+                }
+            }
+        }
+        d->m_Codes.append(code);
+    }
+    reset();
+}
+
+void SimpleIcdModel::setUseDagDependencyWithSid(const QVariant &SID)
+{
+    if (!SID.isNull())
+        d->m_UseDagDepend = true;
+    else
+        d->m_UseDagDepend = false;
+    d->m_DagDependOnSid = SID;
+}
+
+void SimpleIcdModel::setCheckable(bool state)
+{
+    d->m_Checkable = state;
+    reset();
+}
+
+int SimpleIcdModel::rowCount(const QModelIndex &parent) const
+{
+    return d->m_Codes.count();
+}
+
+int SimpleIcdModel::columnCount(const QModelIndex &parent) const
+{
+    return ColumnCount;
+}
+
+QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() < 0 || index.row() >= d->m_Codes.count()) {
+        return QVariant();
+    }
+
+    if (role==Qt::DisplayRole || role==Qt::EditRole) {
+        Internal::SimpleCode *code = d->m_Codes.at(index.row());
+        switch (index.column()) {
+        case SID_Code: return code->sid;
+        case ICD_Code: return code->code;
+        case ICD_CodeWithDagetAndStar:
+            if (d->m_UseDagDepend)
+                return code->code + icdBase()->getHumanReadableIcdDagetWithDependency(code->sid, d->m_DagDependOnSid);
+            else
+                return code->code + code->dag;
+        case Daget: return code->dag;
+        case Label: return code->systemLabel;
+        }
+    } else if (role==Qt::CheckStateRole && d->m_Checkable &&
+               (index.column()==ICD_Code || index.column()==ICD_CodeWithDagetAndStar)) {
+        Internal::SimpleCode *code = d->m_Codes.at(index.row());
+        return code->check;
+    }
+
+    return QVariant();
+}
+
+bool SimpleIcdModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!d->m_Checkable)
+        return false;
+    if (!index.isValid())
+        return false;
+    if (index.row() < 0 || index.row() >= d->m_Codes.count())
+        return false;
+    if (role!=Qt::CheckStateRole)
+        return false;
+
+    Internal::SimpleCode *code = d->m_Codes.at(index.row());
+    if (value.toInt()==Qt::Checked) {
+        for(int i=0;i<d->m_Codes.count();++i) {
+            Internal::SimpleCode *code = d->m_Codes.at(i);
+            code->check=Qt::Unchecked;
+            Q_EMIT dataChanged(this->index(i,0), this->index(i,columnCount()));
+        }
+        code->check = value.toInt();
+        return true;
+    } else if (value.toInt()==Qt::Unchecked) {
+        code->check = value.toInt();
+        return true;
+    }
+    return false;
+}
+
+Qt::ItemFlags SimpleIcdModel::flags(const QModelIndex &index) const
+{
+    if (d->m_Checkable &&
+        (index.column()==ICD_CodeWithDagetAndStar ||
+         index.column()==ICD_Code)) {
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
+    }
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+QStringListModel *SimpleIcdModel::labelsModel(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return 0;
+
+    if (index.row() < 0 || index.row() >= d->m_Codes.count()) {
+        return 0;
+    }
+
+    QStringListModel *model = d->m_LabelModels[index.row()];
+    if (!model) {
+        model = new QStringListModel(this);
+    }
+    Internal::SimpleCode * code = d->m_Codes.at(index.row());
+    QHash<int, QString> prefixes;
+    prefixes.insert(Constants::LIBELLE_FR, "[FR] ");
+    prefixes.insert(Constants::LIBELLE_FRCHRONOS, "[FRChronos] ");
+    prefixes.insert(Constants::LIBELLE_DE_AUTO, "[DE] ");
+    prefixes.insert(Constants::LIBELLE_DE_DIMDI, "[DE_DIMDI] ");
+    prefixes.insert(Constants::LIBELLE_EN, "[EN] ");
+    // Get system label
+    QStringList list;
+    list << code->systemLabel;
+    foreach(const int lang, code->labels.uniqueKeys()) {
+        foreach(const QString &label, code->labels.values(lang)) {
+            if (label==code->systemLabel)
+                continue;
+            list << prefixes.value(lang) + label;
+        }
+    }
+    model->setStringList(list);
+
+    return model;
+}
+
+QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
+                            int role) const
+{
+    return QVariant();
+}
+

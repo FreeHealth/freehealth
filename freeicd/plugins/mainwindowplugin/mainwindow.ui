@@ -39,6 +39,9 @@
     <item row="1" column="0" colspan="2">
      <widget class="ICD::IcdCodeSelector" name="widget" native="true"/>
     </item>
+    <item row="2" column="0">
+     <widget class="ICD::IcdViewer" name="viewer" native="true"/>
+    </item>
    </layout>
   </widget>
  </widget>
@@ -47,6 +50,12 @@
    <class>ICD::IcdCodeSelector</class>
    <extends>QWidget</extends>
    <header location="global">icdplugin/icdcodeselector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ICD::IcdViewer</class>
+   <extends>QWidget</extends>
+   <header location="global">icdplugin/icdviewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

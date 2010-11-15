@@ -5,7 +5,7 @@ PACKAGE_VERSION = 0.0.2
 DEFINES += FREEICD
 FREEICD = 1
 
-BUILD_PATH_POSTFIXE = FreeIcd
+BUILD_PATH_POSTFIXE = FreeICD
 
 include(../../../plugins/coreplugin/common_core.pri)
 

@@ -23,66 +23,59 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#ifndef FULLICDCODEMODEL_H
+#define FULLICDCODEMODEL_H
 
-#include <utils/database.h>
+#include <QAbstractTableModel>
 
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
-
+QT_BEGIN_NAMESPACE
+class QStringListModel;
+QT_END_NAMESPACE
 
 namespace ICD {
-
 namespace Internal {
-class IcdDatabasePrivate;
+class FullIcdCodeModelPrivate;
 }
 
-class IcdDatabase : public QObject, public Utils::Database
+class FullIcdCodeModel :public QAbstractTableModel
 {
     Q_OBJECT
-
-    IcdDatabase(QObject *parent = 0);
-
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
+    enum DataRepresentation {
+        SID_Code = 0,
+        ICD_Code,
+        ICD_CodeWithDagetAndStar,
+        Label,
+        Daget,
+        Type,
+        Memo,
+        ColumnCount
+    };
 
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
+    explicit FullIcdCodeModel(QObject *parent = 0);
+    ~FullIcdCodeModel();
 
-    QVariant getIcdCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
+    void setCode(const int SID);
 
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    QString getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    QVector<int> getExclusions(const QVariant &SID);
+    QStringListModel *labelsModel();
+    QStringListModel *includedLabelsModel();
+    QAbstractItemModel *excludedModel();
+    QAbstractItemModel *dagStarModel();
 
-    QString getMemo(const QVariant &SID);
+    QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
 
 private:
-    bool init();
+    Internal::FullIcdCodeModelPrivate *d;
 
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
 };
 
-} // End namespace ICD
+}  // End namespace ICD
 
 
-#endif // ICDDATABASE_H
+#endif // FULLICDCODEMODEL_H

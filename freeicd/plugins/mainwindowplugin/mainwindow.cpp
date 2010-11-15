@@ -270,7 +270,8 @@ void MainWindow::postCoreInitialization()
 
     // TEST
      m_ui->widget->initialize();
-    m_ui->widget->setModel(new ICD::IcdModel(this));
+    m_ui->widget->setModel(new ICD::IcdSearchModel(this));
+    connect(m_ui->widget, SIGNAL(activated(QVariant)), m_ui->viewer, SLOT(setCodeSid(QVariant)));
     // TEST
 }
 
