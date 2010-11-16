@@ -395,7 +395,7 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
 }
 
 void ReceiptsGUI::showReceiptsViewer(){
-  ReceiptViewer r(this);
-  r.show();
-
+  qDebug() << __FILE__ << QString::number(__LINE__) << " show ReceiptViewer";
+  receiptsViewer = new ReceiptViewer(0);
+  receiptsViewer->show();
 }

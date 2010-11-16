@@ -6,6 +6,7 @@
 #include <QAbstractItemModel>
 
 #include <QDebug>
+#include <QMessageBox>
 
 namespace Internal {
 
@@ -119,6 +120,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->setModel(new Internal::AmountModel(this));
     ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->deleteLineButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
+        
 
 }
 
@@ -137,4 +141,8 @@ void ReceiptViewer::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void ReceiptViewer::deleteLine(){
+    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
 }

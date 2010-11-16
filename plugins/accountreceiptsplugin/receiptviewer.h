@@ -20,6 +20,9 @@ protected:
 
 private:
     Ui::ReceiptViewer *ui;
+
+private slots :
+    void deleteLine();
 };
 
 #endif // RECEIPTVIEWER_H
