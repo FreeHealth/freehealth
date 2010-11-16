@@ -124,7 +124,7 @@ struct SimpleCode {
     QString dag;
     QString systemLabel;
     int check;
-    QMultiHash<int,QString> labels;  // key=lang  value=label
+    QStringList labels;
 };
 
 class SimpleIcdModelPrivate
@@ -287,22 +287,29 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
 {
     if (codes.isEmpty())
         return;
-    QVector<int> langs;
-    langs << Constants::LIBELLE_EN << Constants::LIBELLE_FR << Constants::LIBELLE_FRCHRONOS << Constants::LIBELLE_DE_DIMDI << Constants::LIBELLE_DE_AUTO;
+
     // Construct SimpleCodes
     foreach(const int sid, codes) {
+        if (sid==0)
+            continue;
         Internal::SimpleCode *code = new Internal::SimpleCode;
         code->sid = sid;
         code->code = icdBase()->getIcdCode(sid).toString();
         code->dag = icdBase()->getHumanReadableIcdDaget(sid);
         code->systemLabel = icdBase()->getSystemLabel(sid);
+        if (d->m_UseDagDepend) {
+            const QString &dagCode = icdBase()->getDagStarCodeWithDependency(sid, d->m_DagDependOnSid);
+            qWarning() << "xxxxxx" << code->code << code->sid << code->dag << dagCode;
+            if (dagCode == "T" || dagCode == "G")
+                code->check = Qt::Checked;
+            else
+                code->check = Qt::Unchecked;
+        }
         // get all language labels
         if (getAllLabels) {
-            foreach(const int lang, langs) {
-                foreach(const QString &label, icdBase()->getAllLabels(sid, lang)) {
-                    if (!label.isEmpty())
-                        code->labels.insert(lang, label);
-                }
+            foreach(const QString &label, icdBase()->getAllLabels(sid)) {
+                if (!label.isEmpty())
+                    code->labels << label;
             }
         }
         d->m_Codes.append(code);
@@ -417,21 +424,13 @@ QStringListModel *SimpleIcdModel::labelsModel(const QModelIndex &index)
         model = new QStringListModel(this);
     }
     Internal::SimpleCode * code = d->m_Codes.at(index.row());
-    QHash<int, QString> prefixes;
-    prefixes.insert(Constants::LIBELLE_FR, "[FR] ");
-    prefixes.insert(Constants::LIBELLE_FRCHRONOS, "[FRChronos] ");
-    prefixes.insert(Constants::LIBELLE_DE_AUTO, "[DE] ");
-    prefixes.insert(Constants::LIBELLE_DE_DIMDI, "[DE_DIMDI] ");
-    prefixes.insert(Constants::LIBELLE_EN, "[EN] ");
     // Get system label
     QStringList list;
     list << code->systemLabel;
-    foreach(const int lang, code->labels.uniqueKeys()) {
-        foreach(const QString &label, code->labels.values(lang)) {
-            if (label==code->systemLabel)
-                continue;
-            list << prefixes.value(lang) + label;
-        }
+    foreach(const QString &label, code->labels) {
+        if (label==code->systemLabel)
+            continue;
+        list << label;
     }
     model->setStringList(list);
 

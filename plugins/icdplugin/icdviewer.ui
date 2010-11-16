@@ -40,7 +40,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="note">
      <property name="font">
       <font>
@@ -55,7 +55,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="dependenciesGr">
      <property name="title">
       <string>Dependencies</string>
@@ -74,7 +74,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="includeGr">
      <property name="title">
       <string>Includes</string>
@@ -86,7 +86,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="5" column="0" colspan="2">
     <widget class="QGroupBox" name="excludeGr">
      <property name="title">
       <string>Excludes</string>
@@ -97,6 +97,9 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QTreeView" name="codeTreeView"/>
    </item>
   </layout>
  </widget>

@@ -281,32 +281,6 @@ void IcdDatabase::logChronos(bool state)
     Q_UNUSED(state);
 }
 
-QVariant IcdDatabase::getIcdCode(const QVariant &SID)
-{
-    if (d->m_CachedCodes.keys().contains(SID.toInt())) {
-        return *d->m_CachedCodes[SID.toInt()];
-    }
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
-        }
-    }
-    QSqlQuery query(database());
-    QHash<int, QString> where;
-    where.insert(Constants::MASTER_SID, QString("=%1").arg(SID.toString()));
-    QString req = select(Constants::Table_Master, Constants::MASTER_CODE, where);
-    if (query.exec(req)) {
-        if (query.next()) {
-            QVariant *qvar = new QVariant(query.value(0));
-            d->m_CachedCodes.insert(SID.toInt(), qvar);
-            return *qvar;
-        }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-    }
-    return QVariant();
-}
-
 static QString reversedDagStar(const QString &s)
 {
     if (s=="F" || s=="G" || s=="H") {
@@ -333,15 +307,93 @@ static QString humanReadableDagStar(const QString &s)
     }
 }
 
-QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
+static int getLibelleLanguageField()
 {
-    if (d->m_CachedDaget.keys().contains(SID.toInt())) {
-        QString *s = d->m_CachedDaget[SID.toInt()];
-        return humanReadableDagStar(*s);
+    const QString &lang = QLocale().name().left(2);
+    int langField = Constants::LIBELLE_EN;
+    if (lang=="fr") {
+        langField = Constants::LIBELLE_FR;
+    } else if (lang=="de") {
+        langField = Constants::LIBELLE_DE_DIMDI;
+    }
+    return langField;
+}
+
+QList<int> IcdDatabase::getHeadersSID(const QVariant &SID)
+{
+    QList<int> toReturn;
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return toReturn;
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::MASTER_SID, QString("=%1").arg(SID.toString()));
+    QString req = select(Constants::Table_Master, QList<int>()
+                         << Constants::MASTER_ID1
+                         << Constants::MASTER_ID2
+                         << Constants::MASTER_ID3
+                         << Constants::MASTER_ID4
+                         << Constants::MASTER_ID5
+                         << Constants::MASTER_ID6
+                         << Constants::MASTER_ID7
+                         , where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn
+                    << query.value(0).toInt()
+                    << query.value(1).toInt()
+                    << query.value(2).toInt()
+                    << query.value(3).toInt()
+                    << query.value(4).toInt()
+                    << query.value(5).toInt()
+                    << query.value(6).toInt();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return toReturn;
+}
+
+QVariant IcdDatabase::getIcdCode(const QVariant &SID)
+{
+    if (d->m_CachedCodes.keys().contains(SID.toInt())) {
+        return *d->m_CachedCodes[SID.toInt()];
     }
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QVariant();
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::MASTER_SID, QString("=%1").arg(SID.toString()));
+    QString req = select(Constants::Table_Master, Constants::MASTER_CODE, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            QVariant *qvar = new QVariant(query.value(0));
+            d->m_CachedCodes.insert(SID.toInt(), qvar);
+            return *qvar;
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return QVariant();
+}
+
+QString IcdDatabase::getDagStarCode(const QVariant &SID)
+{
+    if (d->m_CachedDaget.keys().contains(SID.toInt())) {
+        QString *s = d->m_CachedDaget[SID.toInt()];
+        return *s;
+    }
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
         }
     }
     QSqlQuery query(database());
@@ -357,12 +409,17 @@ QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
             }
         }
         d->m_CachedDaget.insert(SID.toInt(), s);
-        return humanReadableDagStar(*s);
+        return *s;
 
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
     return QChar();
+}
+
+QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
+{
+    return humanReadableDagStar(getDagStarCode(SID));
 }
 
 QVariant IcdDatabase::getIcdCodeWithDagStar(const QVariant &SID)
@@ -375,6 +432,7 @@ QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QVector<int>();
         }
     }
     QSqlQuery query(database());
@@ -392,7 +450,7 @@ QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)
     return sids;
 }
 
-QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID)
+QString IcdDatabase::getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID)
 {
     if (d->m_CachedDependentDaget.keys().contains(SID.toInt())) {
         foreach(Daget *dag, d->m_CachedDependentDaget.values(SID.toInt())) {
@@ -403,6 +461,7 @@ QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID,
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
         }
     }
     QSqlQuery query(database());
@@ -417,7 +476,7 @@ QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID,
             dag->dag = query.value(0).toString();
         }
         d->m_CachedDependentDaget.insert(SID.toInt(), dag);
-        return reversedDagStar(dag->dag);
+        return dag->dag;
 
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
@@ -425,26 +484,23 @@ QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID,
     return QChar();
 }
 
+QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID)
+{
+    return reversedDagStar(getDagStarCodeWithDependency(SID, dependOnSID));
+}
+
 QString IcdDatabase::getLabelFromLid(const QVariant &LID)
 {
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
         }
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
     where.insert(Constants::LIBELLE_LID, QString("=%1").arg(LID.toString()));
-    int labelField;
-    const QString &lang = QLocale().name().left(2);
-    if (lang=="en") {
-        labelField = Constants::LIBELLE_EN;
-    } else if (lang=="fr") {
-        labelField = Constants::LIBELLE_FR;
-    } else if (lang=="de") {
-        labelField = Constants::LIBELLE_DE_DIMDI;
-    }
-    QString req = select(Constants::Table_Libelle, labelField, where);
+    QString req = select(Constants::Table_Libelle, getLibelleLanguageField(), where);
     if (query.exec(req)) {
         if (query.next()) {
             return query.value(0).toString();
@@ -460,22 +516,14 @@ QString IcdDatabase::getSystemLabel(const QVariant &SID)
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
         }
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
     where.insert(Constants::SYSTEM_SID, QString("=%1").arg(SID.toString()));
-    int labelField;
-    const QString &lang = QLocale().name().left(2);
-    if (lang=="en") {
-        labelField = Constants::LIBELLE_EN;
-    } else if (lang=="fr") {
-        labelField = Constants::LIBELLE_FR;
-    } else if (lang=="de") {
-        labelField = Constants::LIBELLE_DE_DIMDI;
-    }
     // "SELECT FR_OMS FROM `libelle`, `system` WHERE  (`system`.`SID`=193) AND `libelle`.`SID`=`system`.`SID`"
-    QString req = select(Constants::Table_Libelle, labelField) + ", `" +
+    QString req = select(Constants::Table_Libelle, getLibelleLanguageField()) + ", `" +
                   table(Constants::Table_System) +
                   "` WHERE " + getWhereClause(Constants::Table_System, where) +
                   " AND " + fieldEquality(Constants::Table_Libelle, Constants::LIBELLE_SID,
@@ -496,6 +544,7 @@ QStringList IcdDatabase::getAllLabels(const QVariant &SID, const int libelleFiel
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QStringList();
         }
     }
     QSqlQuery query(database());
@@ -504,14 +553,7 @@ QStringList IcdDatabase::getAllLabels(const QVariant &SID, const int libelleFiel
 
     int field = libelleFieldLang;
     if (libelleFieldLang==-1) {
-        const QString &lang = QLocale().name().left(2);
-        if (lang=="en") {
-            field = Constants::LIBELLE_EN;
-        } else if (lang=="fr") {
-            field = Constants::LIBELLE_FR;
-        } else if (lang=="de") {
-            field = Constants::LIBELLE_DE_DIMDI;
-        }
+        field = getLibelleLanguageField();
     }
 
     // get all labels
@@ -533,20 +575,25 @@ QStringList IcdDatabase::getIncludedLabels(const QVariant &SID)
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QStringList();
         }
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
     QString req;
-    where.insert(Constants::INCLUDE_SID, QString("=%1").arg(SID.toInt()));
-    req = select(Constants::Table_Include, Constants::INCLUDE_LID, where);
     QVector<int> lids;
-    if (query.exec(req)) {
-        while (query.next()) {
-            lids << query.value(0).toInt();
+    QList<int> fullTreeCode = getHeadersSID(SID);
+    foreach(int sid, fullTreeCode) {
+        where.clear();
+        where.insert(Constants::INCLUDE_SID, QString("=%1").arg(sid));
+        req = select(Constants::Table_Include, Constants::INCLUDE_LID, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                lids << query.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
         }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
     QStringList toReturn;
     foreach(const int lid, lids) {
@@ -560,20 +607,25 @@ QVector<int> IcdDatabase::getExclusions(const QVariant &SID)
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QVector<int>();
         }
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
     QString req;
-    where.insert(Constants::EXCLUDE_SID, QString("=%1").arg(SID.toInt()));
-    req = select(Constants::Table_Exclude, Constants::EXCLUDE_EXCL, where);
     QVector<int> toReturn;
-    if (query.exec(req)) {
-        while (query.next()) {
-            toReturn << query.value(0).toInt();
+    QList<int> fullTreeCode = getHeadersSID(SID);
+    foreach(int sid, fullTreeCode) {
+        where.clear();
+        where.insert(Constants::EXCLUDE_SID, QString("=%1").arg(sid));
+        req = select(Constants::Table_Exclude, Constants::EXCLUDE_EXCL, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                toReturn << query.value(0).toInt();
+            }
+        } else {
+            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
         }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
     return toReturn;
 }
@@ -585,6 +637,7 @@ QString IcdDatabase::getMemo(const QVariant &SID)
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
         }
     }
     QSqlQuery query(database());

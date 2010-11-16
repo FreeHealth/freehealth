@@ -56,11 +56,15 @@ public:
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
 
+    QList<int> getHeadersSID(const QVariant &SID);
+
     QVariant getIcdCode(const QVariant &SID);
+    QString getDagStarCode(const QVariant &SID);
     QString getHumanReadableIcdDaget(const QVariant &SID);
     QVariant getIcdCodeWithDagStar(const QVariant &SID);
 
     QVector<int> getDagStarDependencies(const QVariant &SID);
+    QString getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID);
     QString getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID);
 
     QString getLabelFromLid(const QVariant &LID);

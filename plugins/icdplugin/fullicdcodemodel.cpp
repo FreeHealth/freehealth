@@ -37,6 +37,7 @@
 #include <QSqlError>
 #include <QStringListModel>
 #include <QPointer>
+#include <QStandardItemModel>
 
 #include <QDebug>
 
@@ -53,7 +54,7 @@ class FullIcdCodeModelPrivate
 {
 public:
     FullIcdCodeModelPrivate(FullIcdCodeModel *parent) :
-            q(parent), m_LabelModel(0), m_ExcludeModel(0), m_DagStarModel(0)
+            m_CodeTreeModel(0), m_LabelModel(0), m_ExcludeModel(0), m_DagStarModel(0), q(parent)
     {
     }
 
@@ -61,7 +62,47 @@ public:
     {
     }
 
+    void createCodeTreeModel(const QVariant &SID)
+    {
+        if (!m_CodeTreeModel) {
+            m_CodeTreeModel = new QStandardItemModel(0, 1, q);
+        }
+        // Get all ids of the code
+        QList<int> ids = icdBase()->getHeadersSID(SID); // get all ids from 1 to 7
+        QStandardItem *parentItem = m_CodeTreeModel->invisibleRootItem();
+        QFont bold;
+        bold.setBold(true);
+        QString systemLabel;
+        foreach(int id, ids) {
+            if (id == 0)
+                break;
+            systemLabel = icdBase()->getSystemLabel(id);
+            QString title = QString("%1 - %2")
+                            .arg(icdBase()->getIcdCode(id).toString())
+                            .arg(systemLabel);
+            QStandardItem *item = new QStandardItem(title);
+            item->setToolTip(title);
+            parentItem->appendRow(item);
+            item->setFont(bold);
+            parentItem = item;
+        }
+        // Append all other labels
+        foreach(const QString &label, icdBase()->getAllLabels(SID)) {
+            if (label.isEmpty())
+                continue;
+            if (label==systemLabel)
+                continue;
+            QString title = QString("%1 - %2")
+                            .arg(icdBase()->getIcdCode(SID).toString())
+                            .arg(label);
+            QStandardItem *item = new QStandardItem(label);
+            item->setToolTip(title);
+            parentItem->appendRow(item);
+        }
+    }
+
 public:
+    QStandardItemModel *m_CodeTreeModel;
     SimpleIcdModel *m_LabelModel;
     SimpleIcdModel *m_ExcludeModel;
     SimpleIcdModel *m_DagStarModel;
@@ -94,9 +135,12 @@ void FullIcdCodeModel::setCode(const int SID)
     if (SID < 0)
         return;
 
-    // Create the Label model
+    // Create code tree model
+    d->createCodeTreeModel(SID);
+
+    // Create the labels model
     d->m_LabelModel = new SimpleIcdModel(this);
-    d->m_LabelModel->addCodes(QVector<int>() << SID, true);
+    d->m_LabelModel->addCodes(QVector<int>() << SID);
 
     // Create the Include model
     d->m_Include = icdBase()->getIncludedLabels(SID);
@@ -137,6 +181,11 @@ QVariant FullIcdCodeModel::data(const QModelIndex &index, int role) const
 QStringListModel *FullIcdCodeModel::labelsModel()
 {
     return d->m_LabelModel->labelsModel(d->m_LabelModel->index(0,0));
+}
+
+QAbstractItemModel *FullIcdCodeModel::codeTreeModel()
+{
+    return d->m_CodeTreeModel;
 }
 
 QStringListModel *FullIcdCodeModel::includedLabelsModel()
