@@ -27,6 +27,9 @@
 #include "icddatabase.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <translationutils/constanttranslations.h>
 
 #include <QString>
@@ -131,7 +134,7 @@ class SimpleIcdModelPrivate
 {
 public:
     SimpleIcdModelPrivate(SimpleIcdModel *parent) :
-            m_UseDagDepend(false), m_Checkable(false), q(parent)
+            m_UseDagDepend(false), m_Checkable(false), m_GetAllLabels(false), q(parent)
     {
     }
 
@@ -144,7 +147,7 @@ public:
 public:
     QList<SimpleCode *> m_Codes;
     QHash<int, QPointer<QStringListModel> > m_LabelModels;
-    bool m_UseDagDepend,m_Checkable;
+    bool m_UseDagDepend, m_Checkable, m_GetAllLabels;
     QVariant m_DagDependOnSid;
 
 private:
@@ -274,6 +277,7 @@ SimpleIcdModel::SimpleIcdModel(QObject *parent) :
         QAbstractTableModel(parent), d(0)
 {
     d = new Internal::SimpleIcdModelPrivate(this);
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(updateTranslations()));
 }
 
 SimpleIcdModel::~SimpleIcdModel()
@@ -288,7 +292,9 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
     if (codes.isEmpty())
         return;
 
-    // Construct SimpleCodes
+    d->m_GetAllLabels = getAllLabels;
+
+    // Construct SimpleCodes without labels
     foreach(const int sid, codes) {
         if (sid==0)
             continue;
@@ -296,7 +302,6 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
         code->sid = sid;
         code->code = icdBase()->getIcdCode(sid).toString();
         code->dag = icdBase()->getHumanReadableIcdDaget(sid);
-        code->systemLabel = icdBase()->getSystemLabel(sid);
         if (d->m_UseDagDepend) {
             const QString &dagCode = icdBase()->getDagStarCodeWithDependency(sid, d->m_DagDependOnSid);
             qWarning() << "xxxxxx" << code->code << code->sid << code->dag << dagCode;
@@ -305,16 +310,11 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
             else
                 code->check = Qt::Unchecked;
         }
-        // get all language labels
-        if (getAllLabels) {
-            foreach(const QString &label, icdBase()->getAllLabels(sid)) {
-                if (!label.isEmpty())
-                    code->labels << label;
-            }
-        }
         d->m_Codes.append(code);
     }
-    reset();
+
+    // Get labels and reset model
+    updateTranslations();
 }
 
 void SimpleIcdModel::setUseDagDependencyWithSid(const QVariant &SID)
@@ -422,8 +422,9 @@ QStringListModel *SimpleIcdModel::labelsModel(const QModelIndex &index)
     QStringListModel *model = d->m_LabelModels[index.row()];
     if (!model) {
         model = new QStringListModel(this);
+        d->m_LabelModels.insert(index.row(), model);
     }
-    Internal::SimpleCode * code = d->m_Codes.at(index.row());
+    Internal::SimpleCode *code = d->m_Codes.at(index.row());
     // Get system label
     QStringList list;
     list << code->systemLabel;
@@ -443,3 +444,39 @@ QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
+ void SimpleIcdModel::updateTranslations()
+ {
+     // Translate codes labels
+     foreach(Internal::SimpleCode *code, d->m_Codes) {
+         code->systemLabel = icdBase()->getSystemLabel(code->sid);
+         // get all language labels
+         if (d->m_GetAllLabels) {
+             code->labels.clear();
+             foreach(const QString &label, icdBase()->getAllLabels(code->sid)) {
+                 if (!label.isEmpty())
+                     code->labels << label;
+             }
+         }
+     }
+
+     // Update labelsModels foreach row
+     foreach(const int id, d->m_LabelModels.keys()) {
+         QStringListModel *model = d->m_LabelModels[id];
+//         Q_ASSERT(model);
+         if (!model) {
+             continue;
+         }
+         Internal::SimpleCode *code = d->m_Codes.at(id);
+         // Get system label
+         QStringList list;
+         list << code->systemLabel;
+         foreach(const QString &label, code->labels) {
+             if (label==code->systemLabel)
+                 continue;
+             list << label;
+         }
+         model->setStringList(list);
+     }
+
+     reset();
+ }

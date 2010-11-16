@@ -70,6 +70,8 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
+private Q_SLOTS:
+    void updateTranslations();
 
 private:
     Internal::FullIcdCodeModelPrivate *d;

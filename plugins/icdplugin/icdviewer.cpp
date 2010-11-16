@@ -34,77 +34,96 @@
 using namespace ICD;
 
 
+namespace ICD {
+namespace Internal {
+
+class IcdViewerPrivate
+{
+public:
+    IcdViewerPrivate() : ui(0), m_Model(0) {}
+
+public:
+    Ui::IcdViewer *ui;
+    FullIcdCodeModel *m_Model;
+};
+
+}  // End Internal
+}  // End ICD
+
 IcdViewer::IcdViewer(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::IcdViewer)
+    d(new Internal::IcdViewerPrivate)
 {
-    ui->setupUi(this);
-    ui->note->hide();
+    d->ui = new Ui::IcdViewer;
+    d->ui->setupUi(this);
+    d->ui->note->hide();
 }
 
 IcdViewer::~IcdViewer()
 {
-    delete ui;
+    if (d)
+        delete d;
+    d = 0;
 }
 
 void IcdViewer::setCodeSid(const QVariant &sid)
 {
-    FullIcdCodeModel *model = new FullIcdCodeModel(this);
-    model->setCode(sid.toInt());
+    d->m_Model = new FullIcdCodeModel(this);
+    d->m_Model->setCode(sid.toInt());
 
-    ui->codeLabel->setText(model->index(0, FullIcdCodeModel::ICD_CodeWithDagetAndStar).data().toString());
+    d->ui->codeLabel->setText(d->m_Model->index(0, FullIcdCodeModel::ICD_CodeWithDagetAndStar).data().toString());
 
-    ui->labelsCombo->setModel(model->labelsModel());
-    ui->labelsCombo->setModelColumn(0);
+    d->ui->labelsCombo->setModel(d->m_Model->labelsModel());
+    d->ui->labelsCombo->setModelColumn(0);
 
-    ui->codeTreeView->setModel(model->codeTreeModel());
-    ui->codeTreeView->expandAll();
-    ui->codeTreeView->header()->hide();
+    d->ui->codeTreeView->setModel(d->m_Model->codeTreeModel());
+    d->ui->codeTreeView->expandAll();
+    d->ui->codeTreeView->header()->hide();
 
-    if (model->includedLabelsModel()->rowCount() > 0) {
-        ui->includes->setModel(model->includedLabelsModel());
-        ui->includes->horizontalHeader()->setStretchLastSection(true);
-        ui->includes->horizontalHeader()->hide();
-        ui->includes->verticalHeader()->hide();
-        ui->includeGr->show();
+    if (d->m_Model->includedLabelsModel()->rowCount() > 0) {
+        d->ui->includes->setModel(d->m_Model->includedLabelsModel());
+        d->ui->includes->horizontalHeader()->setStretchLastSection(true);
+        d->ui->includes->horizontalHeader()->hide();
+        d->ui->includes->verticalHeader()->hide();
+        d->ui->includeGr->show();
     } else {
-        ui->includeGr->hide();
+        d->ui->includeGr->hide();
     }
 
-    if (model->excludedModel()->rowCount() > 0) {
-        ui->excludes->setModel(model->excludedModel());
-        ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::ICD_Code);
-        ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::SID_Code);
-        ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::Daget);
-        ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::Type);
-        ui->excludes->horizontalHeader()->setStretchLastSection(true);
-        ui->excludes->horizontalHeader()->hide();
-        ui->excludes->verticalHeader()->hide();
-        ui->excludeGr->show();
+    if (d->m_Model->excludedModel()->rowCount() > 0) {
+        d->ui->excludes->setModel(d->m_Model->excludedModel());
+        d->ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::ICD_Code);
+        d->ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::SID_Code);
+        d->ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::Daget);
+        d->ui->excludes->horizontalHeader()->hideSection(FullIcdCodeModel::Type);
+        d->ui->excludes->horizontalHeader()->setStretchLastSection(true);
+        d->ui->excludes->horizontalHeader()->hide();
+        d->ui->excludes->verticalHeader()->hide();
+        d->ui->excludeGr->show();
     } else {
-        ui->excludeGr->hide();
+        d->ui->excludeGr->hide();
     }
 
-    if (model->dagStarModel()->rowCount() > 0) {
-        ui->dependencies->setModel(model->dagStarModel());
-        ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::ICD_Code);
-        ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::SID_Code);
-        ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::Daget);
-        ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::Type);
-        ui->dependencies->horizontalHeader()->setStretchLastSection(true);
-        ui->dependencies->horizontalHeader()->hide();
-        ui->dependencies->verticalHeader()->hide();
-        ui->dependenciesGr->show();
+    if (d->m_Model->dagStarModel()->rowCount() > 0) {
+        d->ui->dependencies->setModel(d->m_Model->dagStarModel());
+        d->ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::ICD_Code);
+        d->ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::SID_Code);
+        d->ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::Daget);
+        d->ui->dependencies->horizontalHeader()->hideSection(FullIcdCodeModel::Type);
+        d->ui->dependencies->horizontalHeader()->setStretchLastSection(true);
+        d->ui->dependencies->horizontalHeader()->hide();
+        d->ui->dependencies->verticalHeader()->hide();
+        d->ui->dependenciesGr->show();
     } else {
-        ui->dependenciesGr->hide();
+        d->ui->dependenciesGr->hide();
     }
 
-    const QString &note = model->index(0, FullIcdCodeModel::Memo).data().toString();
+    const QString &note = d->m_Model->index(0, FullIcdCodeModel::Memo).data().toString();
     if (note.isEmpty()) {
-        ui->note->hide();
+        d->ui->note->hide();
     } else {
-        ui->note->show();
-        ui->note->setText(note);
+        d->ui->note->show();
+        d->ui->note->setText(note);
     }
 }
 
@@ -113,7 +132,10 @@ void IcdViewer::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
+        d->ui->codeLabel->setText(d->m_Model->index(0, FullIcdCodeModel::ICD_CodeWithDagetAndStar).data().toString());
+        d->ui->codeTreeView->expandAll();
+        d->ui->labelsCombo->setCurrentIndex(0);
         break;
     default:
         break;

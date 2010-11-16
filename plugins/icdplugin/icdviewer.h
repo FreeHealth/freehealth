@@ -30,6 +30,9 @@
 
 
 namespace ICD {
+namespace Internal {
+class IcdViewerPrivate;
+}  // End namespace Internal
 
 namespace Ui {
     class IcdViewer;
@@ -50,7 +53,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::IcdViewer *ui;
+    Internal::IcdViewerPrivate *d;
 };
 
 

@@ -28,6 +28,9 @@
 #include "icddatabase.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <translationutils/constanttranslations.h>
 
 #include <QString>
@@ -54,7 +57,8 @@ class FullIcdCodeModelPrivate
 {
 public:
     FullIcdCodeModelPrivate(FullIcdCodeModel *parent) :
-            m_CodeTreeModel(0), m_LabelModel(0), m_ExcludeModel(0), m_DagStarModel(0), q(parent)
+            m_CodeTreeModel(0), m_LabelModel(0), m_ExcludeModel(0), m_DagStarModel(0), m_Include(0),
+            q(parent)
     {
     }
 
@@ -66,6 +70,8 @@ public:
     {
         if (!m_CodeTreeModel) {
             m_CodeTreeModel = new QStandardItemModel(0, 1, q);
+        } else {
+            m_CodeTreeModel->clear();
         }
         // Get all ids of the code
         QList<int> ids = icdBase()->getHeadersSID(SID); // get all ids from 1 to 7
@@ -106,7 +112,8 @@ public:
     SimpleIcdModel *m_LabelModel;
     SimpleIcdModel *m_ExcludeModel;
     SimpleIcdModel *m_DagStarModel;
-    QStringList m_Include;
+    QStringListModel *m_Include;
+    QVariant m_SID;
 
 private:
     FullIcdCodeModel *q;
@@ -121,6 +128,7 @@ FullIcdCodeModel::FullIcdCodeModel(QObject *parent) :
         QAbstractTableModel(parent), d(0)
 {
     d = new Internal::FullIcdCodeModelPrivate(this);
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(updateTranslations()));
 }
 
 FullIcdCodeModel::~FullIcdCodeModel()
@@ -135,28 +143,29 @@ void FullIcdCodeModel::setCode(const int SID)
     if (SID < 0)
         return;
 
-    // Create code tree model
-    d->createCodeTreeModel(SID);
+    d->m_SID = SID;
 
     // Create the labels model
-    d->m_LabelModel = new SimpleIcdModel(this);
+    d->m_LabelModel = new SimpleIcdModel(this);  // auto-translations
     d->m_LabelModel->addCodes(QVector<int>() << SID);
 
     // Create the Include model
-    d->m_Include = icdBase()->getIncludedLabels(SID);
+    d->m_Include = new QStringListModel(this);
 
     // Create the Exclude model
-    d->m_ExcludeModel = new SimpleIcdModel(this);
+    d->m_ExcludeModel = new SimpleIcdModel(this);  // auto-translations
     d->m_ExcludeModel->addCodes(icdBase()->getExclusions(SID));
 
     // Get dagstar
-    d->m_DagStarModel = new SimpleIcdModel(this);
+    d->m_DagStarModel = new SimpleIcdModel(this);  // auto-translations
     d->m_DagStarModel->setUseDagDependencyWithSid(SID);
     d->m_DagStarModel->setCheckable(true);
     d->m_DagStarModel->addCodes(icdBase()->getDagStarDependencies(SID));
 
-    // Get note/memo --> sa data()
-    reset();
+    // Get note/memo --> \sa data()
+
+    // Update labels/translations and reset the model
+    updateTranslations();
 }
 
 int FullIcdCodeModel::rowCount(const QModelIndex &parent) const
@@ -190,12 +199,7 @@ QAbstractItemModel *FullIcdCodeModel::codeTreeModel()
 
 QStringListModel *FullIcdCodeModel::includedLabelsModel()
 {
-    static QPointer<QStringListModel> model = 0;
-    if (!model) {
-        model = new QStringListModel(this);
-    }
-    model->setStringList(d->m_Include);
-    return model;
+    return d->m_Include;
 }
 
 QAbstractItemModel *FullIcdCodeModel::excludedModel()
@@ -212,4 +216,14 @@ QVariant FullIcdCodeModel::headerData(int section, Qt::Orientation orientation,
                             int role) const
 {
     return QVariant();
+}
+
+void FullIcdCodeModel::updateTranslations()
+{
+    // Create code tree model according to the language
+    d->createCodeTreeModel(d->m_SID);
+
+    // Add stringlists to model according to the language
+    d->m_Include->setStringList(icdBase()->getIncludedLabels(d->m_SID));
+    reset();
 }
