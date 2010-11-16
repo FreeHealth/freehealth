@@ -1,0 +1,79 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#include "icdassociation.h"
+#include "icddatabase.h"
+
+
+using namespace ICD;
+using namespace Internal;
+
+static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
+
+IcdAssociation::IcdAssociation(const QVariant &mainSID, const QVariant &associatedSID, const QString &dagCodeOfAssociation) :
+        m_MainSID(mainSID), m_AssociatedSID(associatedSID), m_DagCode(dagCodeOfAssociation)
+{}
+
+bool IcdAssociation::isValid() const
+{
+    return (!m_MainSID.isNull()) && (!m_AssociatedSID.isNull()) && (!m_DagCode.isEmpty());
+}
+
+QString IcdAssociation::mainCode() const
+{
+    return icdBase()->getIcdCode(m_MainSID).toString();
+}
+
+QString IcdAssociation::associatedCode() const
+{
+    return icdBase()->getIcdCode(m_AssociatedSID).toString();
+}
+
+QString IcdAssociation::mainCodeWithDagStar() const
+{
+    return icdBase()->getIcdCode(m_MainSID).toString() + m_MainDaget;
+}
+
+QString IcdAssociation::associatedCodeWithDagStar() const
+{
+    return icdBase()->getIcdCode(m_AssociatedSID).toString() + m_AssoDaget;
+}
+
+bool IcdAssociation::mainIsDag() const
+{
+    return m_AssoDaget.contains("*");
+}
+
+bool IcdAssociation::associatedIsDag() const
+{
+    return m_MainDaget.contains("*");
+}
+
+bool IcdAssociation::associationIsMandatory() const
+{
+    if (m_DagCode == "T" || m_DagCode == "G")
+        return true;
+    return false;
+}
