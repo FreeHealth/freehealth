@@ -40,6 +40,7 @@ namespace ICD {
 
 namespace Internal {
 class IcdDatabasePrivate;
+class IcdAssociation;
 }
 
 class IcdDatabase : public QObject, public Utils::Database
@@ -64,8 +65,7 @@ public:
     QVariant getIcdCodeWithDagStar(const QVariant &SID);
 
     QVector<int> getDagStarDependencies(const QVariant &SID);
-    QString getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID);
-    QString getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID);
+    Internal::IcdAssociation getAssociation(const QVariant &mainSID, const QVariant &associatedSID);
 
     QString getLabelFromLid(const QVariant &LID);
     QString getSystemLabel(const QVariant &SID);

@@ -12,7 +12,9 @@ HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icdmodel.h \
     $${PWD}/constants.h \
     $${PWD}/icdviewer.h \
-    $${PWD}/fullicdcodemodel.h
+    $${PWD}/fullicdcodemodel.h \
+    $${PWD}/icdcollectionmodel.h \
+    $${PWD}/icdassociation.h
 
 SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icddatabase.cpp \
@@ -22,7 +24,9 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icdcodeselector.cpp \
     $${PWD}/icdmodel.cpp \
     $${PWD}/icdviewer.cpp \
-    $${PWD}/fullicdcodemodel.cpp
+    $${PWD}/fullicdcodemodel.cpp \
+    $${PWD}/icdcollectionmodel.cpp \
+    $${PWD}/icdassociation.cpp
 
 FORMS += $${PWD}/icdviewer.ui \
     $${PWD}/icdcodeselector.ui

@@ -104,6 +104,7 @@ public:
     ~SimpleIcdModel();
 
     void addCodes(const QVector<int> &codes, bool getAllLabels = false);
+
     void setUseDagDependencyWithSid(const QVariant &SID);
     void setCheckable(bool state);
 

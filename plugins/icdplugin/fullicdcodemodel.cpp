@@ -147,7 +147,7 @@ void FullIcdCodeModel::setCode(const int SID)
 
     // Create the labels model
     d->m_LabelModel = new SimpleIcdModel(this);  // auto-translations
-    d->m_LabelModel->addCodes(QVector<int>() << SID);
+    d->m_LabelModel->addCodes(QVector<int>() << SID);  // add true if you want the combolabel to show all available labels
 
     // Create the Include model
     d->m_Include = new QStringListModel(this);

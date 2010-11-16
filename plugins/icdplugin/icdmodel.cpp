@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "icdmodel.h"
 #include "icddatabase.h"
+#include "icdassociation.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>
@@ -126,7 +127,6 @@ struct SimpleCode {
     QString code;
     QString dag;
     QString systemLabel;
-    int check;
     QStringList labels;
 };
 
@@ -146,9 +146,11 @@ public:
 
 public:
     QList<SimpleCode *> m_Codes;
+    QList<Internal::IcdAssociation> m_Associations;
     QHash<int, QPointer<QStringListModel> > m_LabelModels;
     bool m_UseDagDepend, m_Checkable, m_GetAllLabels;
     QVariant m_DagDependOnSid;
+    QList<int> m_CheckStates;
 
 private:
     SimpleIcdModel *q;
@@ -298,19 +300,24 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
     foreach(const int sid, codes) {
         if (sid==0)
             continue;
-        Internal::SimpleCode *code = new Internal::SimpleCode;
-        code->sid = sid;
-        code->code = icdBase()->getIcdCode(sid).toString();
-        code->dag = icdBase()->getHumanReadableIcdDaget(sid);
         if (d->m_UseDagDepend) {
-            const QString &dagCode = icdBase()->getDagStarCodeWithDependency(sid, d->m_DagDependOnSid);
-            qWarning() << "xxxxxx" << code->code << code->sid << code->dag << dagCode;
-            if (dagCode == "T" || dagCode == "G")
-                code->check = Qt::Checked;
+            d->m_Associations << icdBase()->getAssociation(d->m_DagDependOnSid, sid);
+            const Internal::IcdAssociation &asso = d->m_Associations.last();
+            if (asso.associationIsMandatory())
+                d->m_CheckStates << Qt::Checked;
             else
-                code->check = Qt::Unchecked;
+                d->m_CheckStates << Qt::Unchecked;
+            qWarning() << "xxxxxx" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar() << asso.dagCode();
+            Internal::SimpleCode *code = new Internal::SimpleCode;
+            d->m_Codes.append(code);
+            code->sid = sid;
+        } else {
+            Internal::SimpleCode *code = new Internal::SimpleCode;
+            code->sid = sid;
+            code->code = icdBase()->getIcdCode(sid).toString();
+            code->dag = icdBase()->getHumanReadableIcdDaget(sid);
+            d->m_Codes.append(code);
         }
-        d->m_Codes.append(code);
     }
 
     // Get labels and reset model
@@ -352,22 +359,28 @@ QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
     }
 
     if (role==Qt::DisplayRole || role==Qt::EditRole) {
-        Internal::SimpleCode *code = d->m_Codes.at(index.row());
-        switch (index.column()) {
-        case SID_Code: return code->sid;
-        case ICD_Code: return code->code;
-        case ICD_CodeWithDagetAndStar:
-            if (d->m_UseDagDepend)
-                return code->code + icdBase()->getHumanReadableIcdDagetWithDependency(code->sid, d->m_DagDependOnSid);
-            else
-                return code->code + code->dag;
-        case Daget: return code->dag;
-        case Label: return code->systemLabel;
+        if (d->m_UseDagDepend) {
+            const Internal::IcdAssociation &asso = d->m_Associations.at(index.row());
+            switch (index.column()) {
+            case SID_Code: return asso.associatedSid();
+            case ICD_Code: return asso.associatedCode();
+            case ICD_CodeWithDagetAndStar: return asso.associatedCodeWithDagStar();
+            case Daget: if (asso.associatedIsDag()) return "†"; else return "*";
+            case Label: return icdBase()->getSystemLabel(asso.associatedSid());
+            }
+        } else {
+            Internal::SimpleCode *code = d->m_Codes.at(index.row());
+            switch (index.column()) {
+            case SID_Code: return code->sid;
+            case ICD_Code: return code->code;
+            case ICD_CodeWithDagetAndStar: return code->code + code->dag;
+            case Daget: return code->dag;
+            case Label: return code->systemLabel;
+            }
         }
     } else if (role==Qt::CheckStateRole && d->m_Checkable &&
                (index.column()==ICD_Code || index.column()==ICD_CodeWithDagetAndStar)) {
-        Internal::SimpleCode *code = d->m_Codes.at(index.row());
-        return code->check;
+        return d->m_CheckStates.at(index.row());
     }
 
     return QVariant();
@@ -384,20 +397,9 @@ bool SimpleIcdModel::setData(const QModelIndex &index, const QVariant &value, in
     if (role!=Qt::CheckStateRole)
         return false;
 
-    Internal::SimpleCode *code = d->m_Codes.at(index.row());
-    if (value.toInt()==Qt::Checked) {
-        for(int i=0;i<d->m_Codes.count();++i) {
-            Internal::SimpleCode *code = d->m_Codes.at(i);
-            code->check=Qt::Unchecked;
-            Q_EMIT dataChanged(this->index(i,0), this->index(i,columnCount()));
-        }
-        code->check = value.toInt();
-        return true;
-    } else if (value.toInt()==Qt::Unchecked) {
-        code->check = value.toInt();
-        return true;
-    }
-    return false;
+    d->m_CheckStates[index.row()] = value.toInt();
+    Q_EMIT dataChanged(index, index);
+    return true;
 }
 
 Qt::ItemFlags SimpleIcdModel::flags(const QModelIndex &index) const
@@ -462,7 +464,6 @@ QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
      // Update labelsModels foreach row
      foreach(const int id, d->m_LabelModels.keys()) {
          QStringListModel *model = d->m_LabelModels[id];
-//         Q_ASSERT(model);
          if (!model) {
              continue;
          }

@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "icddatabase.h"
+#include "icdassociation.h"
 #include "constants.h"
 
 #include <utils/global.h>
@@ -450,44 +451,85 @@ QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)
     return sids;
 }
 
-QString IcdDatabase::getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID)
+Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, const QVariant &associatedSID)
 {
-    if (d->m_CachedDependentDaget.keys().contains(SID.toInt())) {
-        foreach(Daget *dag, d->m_CachedDependentDaget.values(SID.toInt())) {
-            if (dag->dependOnSid == dependOnSID)
-                return reversedDagStar(dag->dag);
+    if (d->m_CachedDependentDaget.keys().contains(mainSID.toInt())) {
+        foreach(Daget *dag, d->m_CachedDependentDaget.values(mainSID.toInt())) {
+            if (dag->dependOnSid == associatedSID) {
+                Internal::IcdAssociation asso(mainSID, associatedSID, dag->dag);
+                asso.setMainHumanReadableDaget(reversedDagStar(dag->dag));
+                asso.setAssociatedHumanReadableDaget(humanReadableDagStar(dag->dag));
+                return asso;
+            }
         }
     }
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
-            return QString();
+            return Internal::IcdAssociation();
         }
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
-    where.insert(Constants::DAG_SID, QString("=%1").arg(dependOnSID.toString()));
-    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(SID.toString()));
+    where.insert(Constants::DAG_SID, QString("=%1").arg(associatedSID.toString()));
+    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(mainSID.toString()));
     QString req = select(Constants::Table_Dagstar, Constants::DAG_DAGET, where);
     if (query.exec(req)) {
         Daget *dag = new Daget;
-        dag->dependOnSid = dependOnSID.toInt();
+        dag->dependOnSid = associatedSID.toInt();
         if (query.next()) {
             dag->dag = query.value(0).toString();
         }
-        d->m_CachedDependentDaget.insert(SID.toInt(), dag);
-        return dag->dag;
+        d->m_CachedDependentDaget.insert(mainSID.toInt(), dag);
+        Internal::IcdAssociation asso(mainSID, associatedSID, dag->dag);
+        asso.setMainHumanReadableDaget(reversedDagStar(dag->dag));
+        asso.setAssociatedHumanReadableDaget(humanReadableDagStar(dag->dag));
+        return asso;
 
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
-    return QChar();
+    return Internal::IcdAssociation();
 }
 
-QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID)
-{
-    return reversedDagStar(getDagStarCodeWithDependency(SID, dependOnSID));
-}
+//QString IcdDatabase::getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID)
+//{
+//    if (d->m_CachedDependentDaget.keys().contains(SID.toInt())) {
+//        foreach(Daget *dag, d->m_CachedDependentDaget.values(SID.toInt())) {
+//            if (dag->dependOnSid == dependOnSID)
+//                return reversedDagStar(dag->dag);
+//        }
+//    }
+//    if (!database().isOpen()) {
+//        if (!database().open()) {
+//            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+//            return QString();
+//        }
+//    }
+//    QSqlQuery query(database());
+//    QHash<int, QString> where;
+//    where.insert(Constants::DAG_SID, QString("=%1").arg(dependOnSID.toString()));
+//    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(SID.toString()));
+//    QString req = select(Constants::Table_Dagstar, Constants::DAG_DAGET, where);
+//    if (query.exec(req)) {
+//        Daget *dag = new Daget;
+//        dag->dependOnSid = dependOnSID.toInt();
+//        if (query.next()) {
+//            dag->dag = query.value(0).toString();
+//        }
+//        d->m_CachedDependentDaget.insert(SID.toInt(), dag);
+//        return dag->dag;
+
+//    } else {
+//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+//    }
+//    return QChar();
+//}
+
+//QString IcdDatabase::getHumanReadableIcdDagetWithDependency(const QVariant &SID, const QVariant &dependOnSID)
+//{
+//    return reversedDagStar(getDagStarCodeWithDependency(SID, dependOnSID));
+//}
 
 QString IcdDatabase::getLabelFromLid(const QVariant &LID)
 {
