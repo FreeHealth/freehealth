@@ -47,6 +47,7 @@
 // TEST
 #include <icdplugin/icdcodeselector.h>
 #include <icdplugin/icdmodel.h>
+#include <icdplugin/icddialog.h>
 // TEST
 
 #include <extensionsystem/pluginerrorview.h>
@@ -271,7 +272,7 @@ void MainWindow::postCoreInitialization()
     // TEST
      m_ui->widget->initialize();
     m_ui->widget->setModel(new ICD::IcdSearchModel(this));
-    connect(m_ui->widget, SIGNAL(activated(QVariant)), m_ui->viewer, SLOT(setCodeSid(QVariant)));
+    connect(m_ui->widget, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
     // TEST
 }
 
@@ -358,6 +359,15 @@ void MainWindow::openRecentFile()
     if (!fileName.isEmpty()) {
         readFile(fileName);
     }
+}
+
+void MainWindow::TEST_icdDialog(const QVariant &SID)
+{
+    ICD::IcdDialog dlg(SID, this);
+    if (dlg.exec()==QDialog::Accepted) {
+
+    }
+
 }
 
 void MainWindow::updateCheckerEnd()

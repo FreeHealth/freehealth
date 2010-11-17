@@ -23,6 +23,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class ICD::IcdDatabase
+  \brief Provides all read access to the ICD10 database.
+*/
+
 #include "icddatabase.h"
 #include "icdassociation.h"
 #include "constants.h"
@@ -490,6 +495,15 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
     return Internal::IcdAssociation();
+}
+
+bool IcdDatabase::codeCanBeUsedAlone(const QVariant &SID)
+{
+    const QString &s = this->getDagStarCode(SID);
+    if (s=="F" || s =="S") {
+        return true;
+    }
+    return false;
 }
 
 //QString IcdDatabase::getDagStarCodeWithDependency(const QVariant &SID, const QVariant &dependOnSID)

@@ -23,72 +23,47 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#ifndef ICDCOLLECTIONMODEL_H
+#define ICDCOLLECTIONMODEL_H
 
-#include <utils/database.h>
-
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
+#include <QAbstractTableModel>
 
 
 namespace ICD {
-
 namespace Internal {
-class IcdDatabasePrivate;
+class IcdCollectionModelPrivate;
 class IcdAssociation;
-}
+}  // End namespace Internal
 
-class IcdDatabase : public QObject, public Utils::Database
+class IcdCollectionModel : public QAbstractTableModel
 {
     Q_OBJECT
-
-    IcdDatabase(QObject *parent = 0);
-
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
+    explicit IcdCollectionModel(QObject *parent = 0);
 
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
+    // Checking
+    bool canAddThisCode(const QVariant &SID) const;
+    bool canAddThisAssociation(const Internal::IcdAssociation &pair) const;
+    bool addCode(const QVariant &SID);
+    bool addAssociation(const Internal::IcdAssociation &pair) const;
 
-    QList<int> getHeadersSID(const QVariant &SID);
+    // Model
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QVariant getIcdCode(const QVariant &SID);
-    QString getDagStarCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    Internal::IcdAssociation getAssociation(const QVariant &mainSID, const QVariant &associatedSID);
-
-    bool codeCanBeUsedAlone(const QVariant &SID);
-
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
-
-    QVector<int> getExclusions(const QVariant &SID);
-
-    QString getMemo(const QVariant &SID);
+    // XML import/export
+    QString toXml() const;
+    bool fromXml(const QString &xml);
 
 private:
-    bool init();
-
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
+    Internal::IcdCollectionModelPrivate *d;
 };
 
-} // End namespace ICD
+}  // End namespace ICD
 
 
-#endif // ICDDATABASE_H
+#endif // ICDCOLLECTIONMODEL_H

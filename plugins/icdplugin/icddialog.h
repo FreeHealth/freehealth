@@ -23,72 +23,26 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#ifndef ICDDIALOG_H
+#define ICDDIALOG_H
 
-#include <utils/database.h>
-
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
-
+#include <QDialog>
 
 namespace ICD {
 
-namespace Internal {
-class IcdDatabasePrivate;
-class IcdAssociation;
-}
 
-class IcdDatabase : public QObject, public Utils::Database
+class IcdDialog : public QDialog
 {
     Q_OBJECT
-
-    IcdDatabase(QObject *parent = 0);
-
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
+    explicit IcdDialog(const QVariant &SID, QWidget *parent = 0);
 
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
+public Q_SLOTS:
+    void done(int result);
 
-    QList<int> getHeadersSID(const QVariant &SID);
-
-    QVariant getIcdCode(const QVariant &SID);
-    QString getDagStarCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
-
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    Internal::IcdAssociation getAssociation(const QVariant &mainSID, const QVariant &associatedSID);
-
-    bool codeCanBeUsedAlone(const QVariant &SID);
-
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
-
-    QVector<int> getExclusions(const QVariant &SID);
-
-    QString getMemo(const QVariant &SID);
-
-private:
-    bool init();
-
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
 };
 
-} // End namespace ICD
 
+}  // End namespace ICD
 
-#endif // ICDDATABASE_H
+#endif // ICDDIALOG_H

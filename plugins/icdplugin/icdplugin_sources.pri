@@ -14,7 +14,9 @@ HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icdviewer.h \
     $${PWD}/fullicdcodemodel.h \
     $${PWD}/icdcollectionmodel.h \
-    $${PWD}/icdassociation.h
+    $${PWD}/icdassociation.h \
+    ../../../plugins/icdplugin/icddialog.h \
+    ../../../plugins/icdplugin/icdcentralwidget.h
 
 SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icddatabase.cpp \
@@ -26,10 +28,13 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icdviewer.cpp \
     $${PWD}/fullicdcodemodel.cpp \
     $${PWD}/icdcollectionmodel.cpp \
-    $${PWD}/icdassociation.cpp
+    $${PWD}/icdassociation.cpp \
+    ../../../plugins/icdplugin/icddialog.cpp \
+    ../../../plugins/icdplugin/icdcentralwidget.cpp
 
 FORMS += $${PWD}/icdviewer.ui \
-    $${PWD}/icdcodeselector.ui
+    $${PWD}/icdcodeselector.ui \
+    ../../../plugins/icdplugin/icdcentralwidget.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/icdplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/icdplugin_de.ts \

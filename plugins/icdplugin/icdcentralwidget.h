@@ -23,72 +23,36 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#ifndef ICDCENTRALWIDGET_H
+#define ICDCENTRALWIDGET_H
 
-#include <utils/database.h>
-
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
-
+#include <QWidget>
 
 namespace ICD {
-
 namespace Internal {
-class IcdDatabasePrivate;
-class IcdAssociation;
+class IcdCentralWidgetPrivate;
+}  // End namespace Internal
+
+namespace Ui {
+    class IcdCentralWidget;
 }
 
-class IcdDatabase : public QObject, public Utils::Database
+class IcdCentralWidget : public QWidget
 {
     Q_OBJECT
 
-    IcdDatabase(QObject *parent = 0);
-
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
+    explicit IcdCentralWidget(QWidget *parent = 0);
+    ~IcdCentralWidget();
 
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
-
-    QList<int> getHeadersSID(const QVariant &SID);
-
-    QVariant getIcdCode(const QVariant &SID);
-    QString getDagStarCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
-
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    Internal::IcdAssociation getAssociation(const QVariant &mainSID, const QVariant &associatedSID);
-
-    bool codeCanBeUsedAlone(const QVariant &SID);
-
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
-
-    QVector<int> getExclusions(const QVariant &SID);
-
-    QString getMemo(const QVariant &SID);
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    bool init();
-
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
+    Ui::IcdCentralWidget *ui;
+    Internal::IcdCentralWidgetPrivate *d;
 };
 
-} // End namespace ICD
+}  // End namespace ICD
 
-
-#endif // ICDDATABASE_H
+#endif // ICDCENTRALWIDGET_H

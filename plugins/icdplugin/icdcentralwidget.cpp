@@ -23,72 +23,60 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDDATABASE_H
-#define ICDDATABASE_H
+#include "icdcentralwidget.h"
+#include "icdmodel.h"
 
-#include <utils/database.h>
+#include "ui_icdcentralwidget.h"
 
-/**
- * \file icddatabase.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
-*/
-
+using namespace ICD;
 
 namespace ICD {
-
 namespace Internal {
-class IcdDatabasePrivate;
-class IcdAssociation;
-}
 
-class IcdDatabase : public QObject, public Utils::Database
+class IcdCentralWidgetPrivate
 {
-    Q_OBJECT
-
-    IcdDatabase(QObject *parent = 0);
+public:
+    IcdCentralWidgetPrivate(IcdCentralWidget *parent) : q(parent) {}
 
 public:
-    static IcdDatabase *instance();
-    ~IcdDatabase();
-
-    // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
-
-    QList<int> getHeadersSID(const QVariant &SID);
-
-    QVariant getIcdCode(const QVariant &SID);
-    QString getDagStarCode(const QVariant &SID);
-    QString getHumanReadableIcdDaget(const QVariant &SID);
-    QVariant getIcdCodeWithDagStar(const QVariant &SID);
-
-    QVector<int> getDagStarDependencies(const QVariant &SID);
-    Internal::IcdAssociation getAssociation(const QVariant &mainSID, const QVariant &associatedSID);
-
-    bool codeCanBeUsedAlone(const QVariant &SID);
-
-    QString getLabelFromLid(const QVariant &LID);
-    QString getSystemLabel(const QVariant &SID);
-    QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
-    QStringList getIncludedLabels(const QVariant &SID);
-
-    QVector<int> getExclusions(const QVariant &SID);
-
-    QString getMemo(const QVariant &SID);
+    IcdSearchModel *m_IcdSearchModel;
 
 private:
-    bool init();
-
-private:
-    // intialization state
-    static IcdDatabase *m_Instance;
-    static bool m_initialized;
-    Internal::IcdDatabasePrivate *d;
+    IcdCentralWidget *q;
 };
+}  // End namespace Internal
+}  // End namespace ICD
 
-} // End namespace ICD
 
 
-#endif // ICDDATABASE_H
+IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::IcdCentralWidget),
+    d(new Internal::IcdCentralWidgetPrivate(this))
+{
+    d->m_IcdSearchModel = new ICD::IcdSearchModel(this);
+    ui->setupUi(this);
+    ui->widget->initialize();
+    ui->widget->setModel();
+    connect(ui->widget, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
+}
+
+IcdCentralWidget::~IcdCentralWidget()
+{
+    delete ui;
+    if (d)
+        delete d;
+    d = 0;
+}
+
+void IcdCentralWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
