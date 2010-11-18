@@ -33,6 +33,7 @@ namespace ICD {
 namespace Internal {
 class IcdViewerPrivate;
 }  // End namespace Internal
+class FullIcdCodeModel;
 
 namespace Ui {
     class IcdViewer;
@@ -45,6 +46,8 @@ class IcdViewer : public QWidget
 public:
     explicit IcdViewer(QWidget *parent = 0);
     ~IcdViewer();
+
+    FullIcdCodeModel *icdModel() const;
 
 public Q_SLOTS:
     void setCodeSid(const QVariant &sid);

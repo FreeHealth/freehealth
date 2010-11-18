@@ -33,6 +33,7 @@ class QStringListModel;
 QT_END_NAMESPACE
 
 namespace ICD {
+class SimpleIcdModel;
 namespace Internal {
 class FullIcdCodeModelPrivate;
 }
@@ -52,10 +53,22 @@ public:
         ColumnCount
     };
 
+
+    enum DataRepresentation_ForValidation {
+        CanBeUsedAlone = 1000,
+        MustBeAssociated,
+        SelectionIsValid
+    };
+
     explicit FullIcdCodeModel(QObject *parent = 0);
     ~FullIcdCodeModel();
 
     void setCode(const int SID);
+    QVariant getCodeSid() const;
+
+    bool codeCanBeUsedAlone() const;
+    bool codeMustBeAssociated() const;
+    bool isSelectionValid() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -66,10 +79,12 @@ public:
     QAbstractItemModel *codeTreeModel();
     QStringListModel *includedLabelsModel();
     QAbstractItemModel *excludedModel();
-    QAbstractItemModel *dagStarModel();
+    SimpleIcdModel *dagStarModel();
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
+
+
 private Q_SLOTS:
     void updateTranslations();
 

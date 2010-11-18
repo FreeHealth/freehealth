@@ -25,21 +25,27 @@
  ***************************************************************************/
 #include "icddialog.h"
 #include "icdviewer.h"
+#include "icdmodel.h"
+#include "fullicdcodemodel.h"
+#include "icdassociation.h"
 
 #include <QGridLayout>
 #include <QDialogButtonBox>
+
+#include <QDebug>
 
 
 using namespace ICD;
 
 IcdDialog::IcdDialog(const QVariant &SID, QWidget *parent) :
-    QDialog(parent)
+        QDialog(parent),
+        m_View(0)
 {
     QGridLayout *lay = new QGridLayout(this);
     setLayout(lay);
-    IcdViewer *view = new IcdViewer(this);
-    lay->addWidget(view, 0, 0);
-    view->setCodeSid(SID);
+    m_View = new IcdViewer(this);
+    lay->addWidget(m_View, 0, 0);
+    m_View->setCodeSid(SID);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     lay->addWidget(buttonBox, 10, 0);
@@ -51,3 +57,49 @@ void IcdDialog::done(int result)
 {
     QDialog::done(result);
 }
+
+bool IcdDialog::isSelectionValid() const
+{
+    return m_View->icdModel()->isSelectionValid();
+}
+
+bool IcdDialog::isUniqueCode() const
+{
+    // Ask FullIcdModel about the selected code
+    if (!m_View)
+        return false;
+    if (!m_View->icdModel())
+        return false;
+
+    qWarning() << m_View->icdModel()->codeCanBeUsedAlone() <<
+                  m_View->icdModel()->dagStarModel()->numberOfCheckedItems();
+
+    return (m_View->icdModel()->codeCanBeUsedAlone() &&
+            (m_View->icdModel()->dagStarModel()->numberOfCheckedItems()==0));
+}
+
+bool IcdDialog::isAssociation() const
+{
+    if (!m_View)
+        return false;
+    if (!m_View->icdModel())
+        return false;
+
+    return (m_View->icdModel()->isSelectionValid() &&
+            (m_View->icdModel()->dagStarModel()->numberOfCheckedItems()>0));
+}
+
+QVariant IcdDialog::getSidCode() const
+{
+    if (isAssociation())
+        return QVariant();
+    return m_View->icdModel()->getCodeSid();
+}
+
+QVector<Internal::IcdAssociation> IcdDialog::getAssocation() const
+{
+    if (!isAssociation())
+        return QVector<Internal::IcdAssociation>();
+    return m_View->icdModel()->dagStarModel()->getCheckedAssociations();
+}
+

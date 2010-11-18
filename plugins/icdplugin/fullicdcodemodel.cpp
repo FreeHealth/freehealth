@@ -168,6 +168,33 @@ void FullIcdCodeModel::setCode(const int SID)
     updateTranslations();
 }
 
+QVariant FullIcdCodeModel::getCodeSid() const
+{
+    return d->m_SID;
+}
+
+bool FullIcdCodeModel::codeCanBeUsedAlone() const
+{
+    return icdBase()->codeCanBeUsedAlone(d->m_SID);
+}
+
+bool FullIcdCodeModel::codeMustBeAssociated() const
+{
+    return (!icdBase()->codeCanBeUsedAlone(d->m_SID));
+}
+
+bool FullIcdCodeModel::isSelectionValid() const
+{
+    // Usable alone ?
+    if (icdBase()->codeCanBeUsedAlone(d->m_SID))
+        return true;
+    // Must be associated -> got associated codes ?
+    if (d->m_DagStarModel->numberOfCheckedItems()>=1)
+        return true;
+
+    return false;
+}
+
 int FullIcdCodeModel::rowCount(const QModelIndex &parent) const
 {
     return 1;
@@ -181,8 +208,7 @@ int FullIcdCodeModel::columnCount(const QModelIndex &parent) const
 QVariant FullIcdCodeModel::data(const QModelIndex &index, int role) const
 {
     if (index.column()==Memo && (role == Qt::DisplayRole || Qt::EditRole)) {
-        QModelIndex sid_idx = d->m_LabelModel->index(0, SimpleIcdModel::SID_Code);
-        return icdBase()->getMemo(d->m_LabelModel->data(sid_idx));
+        return icdBase()->getMemo(d->m_SID);
     }
     return d->m_LabelModel->data(index, role);
 }
@@ -207,7 +233,7 @@ QAbstractItemModel *FullIcdCodeModel::excludedModel()
     return d->m_ExcludeModel;
 }
 
-QAbstractItemModel *FullIcdCodeModel::dagStarModel()
+SimpleIcdModel *FullIcdCodeModel::dagStarModel()
 {
     return d->m_DagStarModel;
 }

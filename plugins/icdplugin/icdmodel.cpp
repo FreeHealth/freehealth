@@ -440,6 +440,50 @@ QStringListModel *SimpleIcdModel::labelsModel(const QModelIndex &index)
     return model;
 }
 
+QVector<QVariant> SimpleIcdModel::getCheckedSids() const
+{
+    if (!d->m_Checkable)
+        return QVector<QVariant>();
+
+    QVector<QVariant> toReturn;
+    for(int i=0; i < d->m_CheckStates.count(); ++i) {
+        if (d->m_CheckStates.at(i)==Qt::Checked) {
+            const Internal::SimpleCode *code = d->m_Codes.at(i);
+            toReturn << code->sid;
+        }
+    }
+    return toReturn;
+}
+
+QVector<Internal::IcdAssociation> SimpleIcdModel::getCheckedAssociations() const
+{
+    QVector<Internal::IcdAssociation> toReturn;
+    if (!d->m_Checkable)
+        return toReturn;
+    if (!d->m_UseDagDepend)
+        return toReturn;
+
+    for(int i = 0; i < d->m_CheckStates.count(); ++i) {
+        if (d->m_CheckStates.at(i)==Qt::Checked) {
+            toReturn << d->m_Associations.at(i);
+        }
+    }
+    return toReturn;
+}
+
+int SimpleIcdModel::numberOfCheckedItems() const
+{
+    if (!d->m_Checkable)
+        return 0;
+    int toReturn = 0;
+    for(int i=0; i < d->m_CheckStates.count(); ++i) {
+        if (d->m_CheckStates.at(i)==Qt::Checked) {
+            ++toReturn;
+        }
+    }
+    return toReturn;
+}
+
 QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
                             int role) const
 {

@@ -32,7 +32,7 @@
  * \file icddatabase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 13 Oct 2010
+ * \date 18 Nov 2010
 */
 
 

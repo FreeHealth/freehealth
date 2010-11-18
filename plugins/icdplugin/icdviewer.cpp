@@ -127,6 +127,11 @@ void IcdViewer::setCodeSid(const QVariant &sid)
     }
 }
 
+FullIcdCodeModel *IcdViewer::icdModel() const
+{
+    return d->m_Model;
+}
+
 void IcdViewer::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);

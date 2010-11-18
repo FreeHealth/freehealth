@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IcdCentralWidget</class>
- <widget class="QWidget" name="IcdCentralWidget">
+ <class>ICD::IcdCentralWidget</class>
+ <widget class="QWidget" name="ICD::IcdCentralWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,8 +19,8 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="ICD::IcdCodeSelector" name="widget" native="true"/>
-     <widget class="QTableView" name="tableView">
+     <widget class="ICD::IcdCodeSelector" name="selector" native="true"/>
+     <widget class="QTableView" name="collectionView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>

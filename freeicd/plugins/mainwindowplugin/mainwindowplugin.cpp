@@ -37,7 +37,7 @@ MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating FREEDIAMS::MainWinPlugin";
+        qWarning() << "creating FREEICD::MainWinPlugin";
 }
 
 MainWinPlugin::~MainWinPlugin()

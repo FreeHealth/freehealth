@@ -269,11 +269,6 @@ void MainWindow::postCoreInitialization()
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 
-    // TEST
-     m_ui->widget->initialize();
-    m_ui->widget->setModel(new ICD::IcdSearchModel(this));
-    connect(m_ui->widget, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
-    // TEST
 }
 
 /** \brief Slot specific to MacOs -> update the application icon badge to number of founded interactions. */
@@ -359,15 +354,6 @@ void MainWindow::openRecentFile()
     if (!fileName.isEmpty()) {
         readFile(fileName);
     }
-}
-
-void MainWindow::TEST_icdDialog(const QVariant &SID)
-{
-    ICD::IcdDialog dlg(SID, this);
-    if (dlg.exec()==QDialog::Accepted) {
-
-    }
-
 }
 
 void MainWindow::updateCheckerEnd()

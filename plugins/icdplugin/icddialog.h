@@ -29,7 +29,11 @@
 #include <QDialog>
 
 namespace ICD {
+namespace Internal {
+class IcdAssociation;
+}
 
+class IcdViewer;
 
 class IcdDialog : public QDialog
 {
@@ -37,8 +41,18 @@ class IcdDialog : public QDialog
 public:
     explicit IcdDialog(const QVariant &SID, QWidget *parent = 0);
 
+    bool isSelectionValid() const;
+    bool isUniqueCode() const;
+    bool isAssociation() const;
+
+    QVariant getSidCode() const;
+    QVector<Internal::IcdAssociation> getAssocation() const;
+
 public Q_SLOTS:
     void done(int result);
+
+private:
+    IcdViewer *m_View;
 
 };
 

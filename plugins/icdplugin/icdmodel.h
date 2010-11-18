@@ -37,6 +37,7 @@ namespace Internal {
 class IcdSearchModelPrivate;
 class SimpleIcdModelPrivate;
 class FullIcdCodeModelPrivate;
+class IcdAssociation;
 }
 
 class IcdSearchModel : public QAbstractTableModel
@@ -116,6 +117,10 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     QStringListModel *labelsModel(const QModelIndex &index);
+
+    QVector<QVariant> getCheckedSids() const;
+    QVector<Internal::IcdAssociation> getCheckedAssociations() const;
+    int numberOfCheckedItems() const;
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;

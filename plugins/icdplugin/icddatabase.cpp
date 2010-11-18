@@ -500,7 +500,7 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
 bool IcdDatabase::codeCanBeUsedAlone(const QVariant &SID)
 {
     const QString &s = this->getDagStarCode(SID);
-    if (s=="F" || s =="S") {
+    if (s=="F" || s =="S" || s.isEmpty()) {
         return true;
     }
     return false;

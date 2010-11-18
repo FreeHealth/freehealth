@@ -48,6 +48,9 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private Q_SLOTS:
+    void TEST_icdDialog(const QVariant &SID);
+
 private:
     Ui::IcdCentralWidget *ui;
     Internal::IcdCentralWidgetPrivate *d;

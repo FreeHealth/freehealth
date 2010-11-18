@@ -97,8 +97,6 @@ public Q_SLOTS:
     void aboutToShowRecentFiles();
     void openRecentFile();
 
-    void TEST_icdDialog(const QVariant &SID);
-
 protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);

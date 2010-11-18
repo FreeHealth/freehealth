@@ -25,8 +25,14 @@
  ***************************************************************************/
 #include "icdcentralwidget.h"
 #include "icdmodel.h"
+#include "icdcollectionmodel.h"
+#include "icddialog.h"
+#include "icdassociation.h"
+#include "icdwidgetmanager.h"
 
 #include "ui_icdcentralwidget.h"
+
+#include <QDebug>
 
 using namespace ICD;
 
@@ -36,10 +42,12 @@ namespace Internal {
 class IcdCentralWidgetPrivate
 {
 public:
-    IcdCentralWidgetPrivate(IcdCentralWidget *parent) : q(parent) {}
+    IcdCentralWidgetPrivate(IcdCentralWidget *parent) :
+            m_IcdSearchModel(0), m_CollectionModel(0), q(parent) {}
 
 public:
     IcdSearchModel *m_IcdSearchModel;
+    IcdCollectionModel *m_CollectionModel;
 
 private:
     IcdCentralWidget *q;
@@ -54,11 +62,16 @@ IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
     ui(new Ui::IcdCentralWidget),
     d(new Internal::IcdCentralWidgetPrivate(this))
 {
+    // Ensure that manager is instanciated
+    IcdWidgetManager::instance();
+
     d->m_IcdSearchModel = new ICD::IcdSearchModel(this);
     ui->setupUi(this);
-    ui->widget->initialize();
-    ui->widget->setModel();
-    connect(ui->widget, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
+    ui->selector->setModel(d->m_IcdSearchModel);
+    ui->selector->initialize();
+    d->m_CollectionModel = new IcdCollectionModel(this);
+    ui->collectionView->setModel(d->m_CollectionModel);
+    connect(ui->selector, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
 }
 
 IcdCentralWidget::~IcdCentralWidget()
@@ -67,6 +80,23 @@ IcdCentralWidget::~IcdCentralWidget()
     if (d)
         delete d;
     d = 0;
+}
+
+void IcdCentralWidget::TEST_icdDialog(const QVariant &SID)
+{
+    ICD::IcdDialog dlg(SID, this);
+    if (dlg.exec()==QDialog::Accepted) {
+        qWarning()
+                << "isValid" << dlg.isSelectionValid()
+                << "\nisUnique" << dlg.isUniqueCode()
+                << "\nisAssociation" << dlg.isAssociation()
+                << "\ngetSidCode" << dlg.getSidCode();
+        foreach(const Internal::IcdAssociation &asso, dlg.getAssocation()) {
+            qWarning() << "asso" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar()
+                    << asso.isValid();
+        }
+    }
+
 }
 
 void IcdCentralWidget::changeEvent(QEvent *e)
