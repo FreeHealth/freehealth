@@ -48,6 +48,7 @@ ReceiptsGUI::ReceiptsGUI(QWidget *parent) :
         m_rbm(0), m_recEng(0),
         m_receiptsIsOn(false)
 {
+    m_parent = parent;
     ui = new Ui::ReceiptsDialog;
     ui->setupUi(this);
     initialize();
@@ -395,7 +396,9 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
 }
 
 void ReceiptsGUI::showReceiptsViewer(){
-  qDebug() << __FILE__ << QString::number(__LINE__) << " show ReceiptViewer";
-  receiptsViewer = new ReceiptViewer(0);
-  receiptsViewer->show();
+  m_receiptsViewer = new ReceiptViewer(0);
+  m_receiptsViewer->show();
+  m_receiptsViewer->setPosition(m_parent);
 }
+
+

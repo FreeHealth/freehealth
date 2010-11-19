@@ -14,6 +14,7 @@ class ReceiptViewer : public QWidget
 public:
     explicit ReceiptViewer(QWidget *parent = 0);
     ~ReceiptViewer();
+    void setPosition(QWidget *parent);
 
 protected:
     void changeEvent(QEvent *e);

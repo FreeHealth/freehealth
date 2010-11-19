@@ -68,7 +68,8 @@ private:
     Ui::ReceiptsDialog *ui;
     receiptsManager *m_rbm;
     receiptsEngine *m_recEng;
-    ReceiptViewer * receiptsViewer;
+    ReceiptViewer * m_receiptsViewer;
+    QWidget * m_parent;
     findReceiptsValues * m_receiptsValues;
     QMenu *m_menu;
     QAction *m_rightClic;
