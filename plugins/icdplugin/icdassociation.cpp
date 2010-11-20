@@ -61,14 +61,24 @@ QString IcdAssociation::associatedCodeWithDagStar() const
     return icdBase()->getIcdCode(m_AssociatedSID).toString() + m_AssoDaget;
 }
 
+QString IcdAssociation::mainLabel() const
+{
+    return icdBase()->getSystemLabel(m_MainSID);
+}
+
+QString IcdAssociation::associatedLabel() const
+{
+    return icdBase()->getAssociatedLabel(m_MainSID, m_AssociatedSID);
+}
+
 bool IcdAssociation::mainIsDag() const
 {
-    return m_AssoDaget.contains("*");
+    return icdBase()->isDagetADag(m_DagCode);
 }
 
 bool IcdAssociation::associatedIsDag() const
 {
-    return m_MainDaget.contains("*");
+    return (!icdBase()->isDagetADag(m_DagCode));
 }
 
 bool IcdAssociation::associationIsMandatory() const

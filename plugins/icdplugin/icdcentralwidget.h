@@ -49,7 +49,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
-    void TEST_icdDialog(const QVariant &SID);
+    void onSelectorActivated(const QVariant &SID);
 
 private:
     Ui::IcdCentralWidget *ui;

@@ -366,7 +366,7 @@ QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
             case ICD_Code: return asso.associatedCode();
             case ICD_CodeWithDagetAndStar: return asso.associatedCodeWithDagStar();
             case Daget: if (asso.associatedIsDag()) return "†"; else return "*";
-            case Label: return icdBase()->getSystemLabel(asso.associatedSid());
+            case Label: return asso.associatedLabel();
             }
         } else {
             Internal::SimpleCode *code = d->m_Codes.at(index.row());

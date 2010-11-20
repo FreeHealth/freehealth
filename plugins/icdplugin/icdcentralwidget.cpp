@@ -30,6 +30,8 @@
 #include "icdassociation.h"
 #include "icdwidgetmanager.h"
 
+#include <utils/log.h>
+
 #include "ui_icdcentralwidget.h"
 
 #include <QDebug>
@@ -71,7 +73,9 @@ IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
     ui->selector->initialize();
     d->m_CollectionModel = new IcdCollectionModel(this);
     ui->collectionView->setModel(d->m_CollectionModel);
-    connect(ui->selector, SIGNAL(activated(QVariant)), this, SLOT(TEST_icdDialog(QVariant)));
+    ui->collectionView->header()->setStretchLastSection(true);
+    ui->collectionView->header()->hide();
+    connect(ui->selector, SIGNAL(activated(QVariant)), this, SLOT(onSelectorActivated(QVariant)));
 }
 
 IcdCentralWidget::~IcdCentralWidget()
@@ -82,21 +86,22 @@ IcdCentralWidget::~IcdCentralWidget()
     d = 0;
 }
 
-void IcdCentralWidget::TEST_icdDialog(const QVariant &SID)
+void IcdCentralWidget::onSelectorActivated(const QVariant &SID)
 {
     ICD::IcdDialog dlg(SID, this);
     if (dlg.exec()==QDialog::Accepted) {
-        qWarning()
-                << "isValid" << dlg.isSelectionValid()
-                << "\nisUnique" << dlg.isUniqueCode()
-                << "\nisAssociation" << dlg.isAssociation()
-                << "\ngetSidCode" << dlg.getSidCode();
-        foreach(const Internal::IcdAssociation &asso, dlg.getAssocation()) {
-            qWarning() << "asso" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar()
-                    << asso.isValid();
+        if (!dlg.isSelectionValid())
+            return;
+        if (dlg.isUniqueCode())
+            d->m_CollectionModel->addCode(dlg.getSidCode());
+        else if (dlg.isAssociation()) {
+            foreach(const Internal::IcdAssociation &asso, dlg.getAssocation())
+                d->m_CollectionModel->addAssociation(asso);
         }
+        ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
+        ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
+        ui->collectionView->expandAll();
     }
-
 }
 
 void IcdCentralWidget::changeEvent(QEvent *e)

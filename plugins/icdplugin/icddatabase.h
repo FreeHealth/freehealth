@@ -61,6 +61,8 @@ public:
 
     QVariant getIcdCode(const QVariant &SID);
     QString getDagStarCode(const QVariant &SID);
+    QString invertDagCode(const QString &dagCode) const;
+    bool isDagetADag(const QString &dagCode) const;
     QString getHumanReadableIcdDaget(const QVariant &SID);
     QVariant getIcdCodeWithDagStar(const QVariant &SID);
 
@@ -72,6 +74,7 @@ public:
     QString getLabelFromLid(const QVariant &LID);
     QString getSystemLabel(const QVariant &SID);
     QStringList getAllLabels(const QVariant &SID, const int libelleFieldLang = -1);
+    QString getAssociatedLabel(const QVariant &mainSID, const QVariant &associatedSID);
     QStringList getIncludedLabels(const QVariant &SID);
 
     QVector<int> getExclusions(const QVariant &SID);

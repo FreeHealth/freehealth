@@ -26,7 +26,7 @@
 #ifndef ICDCOLLECTIONMODEL_H
 #define ICDCOLLECTIONMODEL_H
 
-#include <QAbstractTableModel>
+#include <QStandardItemModel>
 
 
 namespace ICD {
@@ -35,24 +35,30 @@ class IcdCollectionModelPrivate;
 class IcdAssociation;
 }  // End namespace Internal
 
-class IcdCollectionModel : public QAbstractTableModel
+class IcdCollectionModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
+    enum DataRepresentation {
+        CodeWithDaget = 0,
+        Label,
+        DagCode,
+        SID,
+        ColumnCount
+    };
+
     explicit IcdCollectionModel(QObject *parent = 0);
 
     // Checking
     bool canAddThisCode(const QVariant &SID) const;
     bool canAddThisAssociation(const Internal::IcdAssociation &pair) const;
     bool addCode(const QVariant &SID);
-    bool addAssociation(const Internal::IcdAssociation &pair) const;
+    bool addAssociation(const Internal::IcdAssociation &pair);
 
-    // Model
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+//    int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     // XML import/export

@@ -20,19 +20,13 @@
       <enum>Qt::Vertical</enum>
      </property>
      <widget class="ICD::IcdCodeSelector" name="selector" native="true"/>
-     <widget class="QTableView" name="collectionView">
+     <widget class="QTreeView" name="collectionView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
      </widget>
     </widget>
    </item>

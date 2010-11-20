@@ -40,7 +40,6 @@ namespace Internal {
 
 struct ModelItem {
     ModelItem() : sid(-1) {}
-
     int sid;
     QString code, label;
     Internal::IcdAssociation association;
@@ -72,7 +71,7 @@ private:
 }  // End namespace ICD
 
 IcdCollectionModel::IcdCollectionModel(QObject *parent) :
-    QAbstractTableModel(parent),
+    QStandardItemModel(parent),
     d(new Internal::IcdCollectionModelPrivate(this))
 {
     setObjectName("IcdCollectionModel");
@@ -88,6 +87,12 @@ bool IcdCollectionModel::canAddThisCode(const QVariant &SID) const
     // in exclusions ?
     if (d->m_ExcludedSIDs.contains(SID.toInt()))
         return false;
+    foreach(const int sid, icdBase()->getHeadersSID(SID)) {
+        if (d->m_ExcludedSIDs.contains(sid)) {
+            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
+            return false;
+        }
+    }
 
     // code daget ?
     if (!icdBase()->codeCanBeUsedAlone(SID))
@@ -99,24 +104,39 @@ bool IcdCollectionModel::canAddThisCode(const QVariant &SID) const
 bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &asso) const
 {
     // Association valid ?
-    if (!asso.isValid())
+    if (!asso.isValid()) {
+        qWarning() << "not valid";
         return false;
-
-    // already included ?
-    if (d->m_SIDs.contains(asso.mainSid().toInt()))
-        return false;
+    }
 
     // in exclusions ?
-    if (d->m_ExcludedSIDs.contains(asso.mainSid().toInt()))
+    if (d->m_ExcludedSIDs.contains(asso.mainSid().toInt())) {
+        qWarning() << "main excluded" << d->m_ExcludedSIDs << asso.mainSid().toInt();
         return false;
+    }
+    foreach(const int sid, icdBase()->getHeadersSID(asso.mainSid().toInt())) {
+        if (d->m_ExcludedSIDs.contains(sid)) {
+            qWarning() << "main header excluded" << d->m_ExcludedSIDs << sid;
+            return false;
+        }
+    }
 
     // already included ?
-    if (d->m_SIDs.contains(asso.associatedSid().toInt()))
+    if (d->m_SIDs.contains(asso.associatedSid().toInt())) {
+        qWarning() << "asso already";
         return false;
-
+    }
     // in exclusions ?
-    if (d->m_ExcludedSIDs.contains(asso.associatedSid().toInt()))
+    if (d->m_ExcludedSIDs.contains(asso.associatedSid().toInt())) {
+        qWarning() << "asso excluded" << d->m_ExcludedSIDs << asso.associatedSid().toInt();
         return false;
+    }
+    foreach(const int sid, icdBase()->getHeadersSID(asso.associatedSid().toInt())) {
+        if (d->m_ExcludedSIDs.contains(sid)) {
+            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
+            return false;
+        }
+    }
 
     return true;
 }
@@ -132,8 +152,15 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
     // add Code to model
     d->m_SIDs.append(SID.toInt());
     Internal::ModelItem *item = new Internal::ModelItem;
+    item->sid = SID.toInt();
     item->code = icdBase()->getIcdCode(SID).toString();
     item->label = icdBase()->getSystemLabel(SID);
+
+    QStandardItem *parentItem = invisibleRootItem();
+    QList<QStandardItem *> list;
+    list << new QStandardItem(item->code) << new QStandardItem(item->label) << new QStandardItem(item->sid);
+    parentItem->appendRow(list);
+
     d->m_Rows.append(item);
 
     // get all exclusions
@@ -141,7 +168,7 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
     return true;
 }
 
-bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso) const
+bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
 {
     // Can add this association ?
     if (!canAddThisAssociation(asso)) {
@@ -156,54 +183,61 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso) co
     d->m_SIDs.append(asso.associatedSid().toInt());
     Internal::ModelItem *item = new Internal::ModelItem;
     item->association = asso;
+
+    // Find root item (mainItem) based on the SID
+    QStandardItem *parentItem = 0;
+    QStandardItem *main = 0;
+    QList<QStandardItem *> list;
+    if (asso.mainIsDag()) {
+        list = findItems(asso.mainCodeWithDagStar(), Qt::MatchExactly, 0);
+    } else {
+        list = findItems(asso.associatedCodeWithDagStar(), Qt::MatchExactly, 0);
+    }
+    if (list.count()==0) {
+        parentItem = invisibleRootItem();
+        if (asso.mainIsDag()) {
+            main = new QStandardItem(asso.mainCodeWithDagStar());
+            list << main << new QStandardItem(asso.mainLabel()) << new QStandardItem(asso.mainSid().toString()) << new QStandardItem(asso.dagCode());
+        } else {
+            main = new QStandardItem(asso.associatedCodeWithDagStar());
+            list << main << new QStandardItem(asso.associatedLabel()) << new QStandardItem(asso.associatedSid().toString()) << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()));
+        }
+        parentItem->appendRow(list);
+        parentItem = main;
+    } else {
+        parentItem = list.at(0);
+    }
+    list.clear();
+    if (asso.mainIsDag()) {
+        list << new QStandardItem(asso.associatedCodeWithDagStar()) << new QStandardItem(asso.associatedLabel()) << new QStandardItem(asso.associatedSid().toString()) << new QStandardItem(asso.dagCode());
+    } else {
+        list << new QStandardItem(asso.mainCodeWithDagStar()) << new QStandardItem(asso.mainLabel()) << new QStandardItem(asso.mainSid().toString()) << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()));
+    }
+    parentItem->appendRow(list);
+
     d->m_Rows.append(item);
 
     // get all exclusions
     d->m_ExcludedSIDs << icdBase()->getExclusions(asso.mainSid()) << icdBase()->getExclusions(asso.associatedSid());
+
+    qWarning() << icdBase()->getExclusions(asso.mainSid()) << icdBase()->getExclusions(asso.associatedSid());
     return true;
 }
 
-int IcdCollectionModel::rowCount(const QModelIndex &parent) const
-{
-    return d->m_Rows.count();
-}
 
-int IcdCollectionModel::columnCount(const QModelIndex &parent) const
-{
-    return 2;
-}
+//QVariant IcdCollectionModel::data(const QModelIndex &index, int role) const
+//{
+//    if (!index.isValid())
+//        return QVariant();
 
+//    QStandardItemModel::data(index, role);
 
-QVariant IcdCollectionModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
+//    return QVariant();
+//}
 
-    if (index.row() > d->m_Rows.count())
-        return QVariant();
-
-    if (role==Qt::DisplayRole) {
-        Internal::ModelItem *item = d->m_Rows.at(index.row());
-        if (item->sid > 0) {
-            switch (index.column()) {
-            case 0: return item->code;
-            case 1: return item->label;
-            }
-        } else {
-            switch (index.column()) {
-            case 0: return item->association.mainCodeWithDagStar() + " / " + item->association.associatedCodeWithDagStar();
-            case 1: return icdBase()->getSystemLabel(item->association.mainSid()) + " / " +
-                           icdBase()->getSystemLabel(item->association.associatedSid());
-            }
-        }
-    }
-
-    return QVariant();
-}
-
-bool IcdCollectionModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-}
+//bool IcdCollectionModel::setData(const QModelIndex &index, const QVariant &value, int role)
+//{
+//}
 
 Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
 {
@@ -211,7 +245,6 @@ Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
 }
 
 
-// XML import/export
 QString IcdCollectionModel::toXml() const
 {
 }

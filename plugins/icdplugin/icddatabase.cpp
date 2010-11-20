@@ -423,6 +423,28 @@ QString IcdDatabase::getDagStarCode(const QVariant &SID)
     return QChar();
 }
 
+QString IcdDatabase::invertDagCode(const QString &s) const
+{
+    if (s=="F")
+        return "S";
+    else if (s=="G")
+        return "T";
+    else if (s=="H")
+        return "U";
+    else if (s=="S")
+        return "F";
+    else if (s=="T")
+        return "G";
+    else if (s=="U")
+        return "H";
+    return s;
+}
+
+bool IcdDatabase::isDagetADag(const QString &dagCode) const
+{
+    return (dagCode=="F" || dagCode=="G" || dagCode=="H");
+}
+
 QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
 {
     return humanReadableDagStar(getDagStarCode(SID));
@@ -485,10 +507,10 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
         if (query.next()) {
             dag->dag = query.value(0).toString();
         }
-        d->m_CachedDependentDaget.insert(mainSID.toInt(), dag);
         Internal::IcdAssociation asso(mainSID, associatedSID, dag->dag);
         asso.setMainHumanReadableDaget(reversedDagStar(dag->dag));
         asso.setAssociatedHumanReadableDaget(humanReadableDagStar(dag->dag));
+        d->m_CachedDependentDaget.insert(mainSID.toInt(), dag);
         return asso;
 
     } else {
@@ -626,6 +648,34 @@ QStringList IcdDatabase::getAllLabels(const QVariant &SID, const int libelleFiel
     return toReturn;
 }
 
+QString IcdDatabase::getAssociatedLabel(const QVariant &mainSID, const QVariant &associatedSID)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return QString();
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::DAG_SID, QString("=%1").arg(mainSID.toString()));
+    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(associatedSID.toString()));
+    QString req = select(Constants::Table_Libelle, getLibelleLanguageField()) + ", `" +
+                  table(Constants::Table_Dagstar) +
+                  "` WHERE " + getWhereClause(Constants::Table_Dagstar, where) +
+                  " AND " + fieldEquality(Constants::Table_Libelle, Constants::LIBELLE_LID,
+                                          Constants::Table_Dagstar, Constants::DAG_LID);
+
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return QString();
+}
+
 QStringList IcdDatabase::getIncludedLabels(const QVariant &SID)
 {
     if (!database().isOpen()) {
@@ -671,10 +721,14 @@ QVector<int> IcdDatabase::getExclusions(const QVariant &SID)
     QString req;
     QVector<int> toReturn;
     QList<int> fullTreeCode = getHeadersSID(SID);
+    fullTreeCode << SID.toInt();
     foreach(int sid, fullTreeCode) {
+        if (sid==0)
+            continue;
         where.clear();
         where.insert(Constants::EXCLUDE_SID, QString("=%1").arg(sid));
         req = select(Constants::Table_Exclude, Constants::EXCLUDE_EXCL, where);
+        qWarning() << req;
         if (query.exec(req)) {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
