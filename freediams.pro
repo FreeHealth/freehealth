@@ -14,4 +14,5 @@ OTHER_FILES += update-di.txt \
                global_resources/textfiles/freediams.desktop \
                #global_resources/textfiles/freediams_win32_icon.rc \
                global_resources/textfiles/dataintest.xml \
+               global_resources/testexchangeout.xml \
                freediams/Info.plist

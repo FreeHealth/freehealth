@@ -34,20 +34,8 @@ fi
 mkdir $PACKPATH
 
 echo "**** PREPARE SOURCES PACKAGE ****"
-tar -cf $PACKPATH/sources.tar \
---exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
---exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
---exclude 'Makefile*' --exclude '*.pro.user*' \
---exclude 'dosages.db' --exclude 'users.db' --exclude '.*' --exclude '._*' \
---exclude '*.tgz' --exclude '*.app' --exclude '*.zip' \
---exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
---exclude 'global_resources/forms' \
---exclude 'global_resources/databases/episodes' \
---exclude 'global_resources/databases/patients' \
---exclude 'global_resources/databases/templates' \
---exclude 'global_resources/databases/users' \
---exclude 'sources.tar' \
-freediams.pro config.pri checkqtversion.pri \
+
+FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
 README COPYING INSTALL \
 updatetranslations.sh \
 buildspecs \
@@ -76,7 +64,55 @@ plugins/saverestoreplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
 scripts \
-tests
+tests"
+
+FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
+README COPYING INSTALL \
+updatetranslations.sh \
+buildspecs \
+doc \
+freemedforms \
+global_resources/databases/drugs/drugs*.db \
+global_resources/databases/drugs/iam*.db \
+global_resources/doc/freemedforms \
+global_resources/textfiles/freemedforms.desktop \
+global_resources/pixmap \
+global_resources/package_helpers \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+libs \
+contrib \
+plugins/fmf_plugins.pri \
+plugins/coreplugin \
+plugins/drugsbaseplugin \
+plugins/drugsplugin \
+plugins/emptyplugin \
+plugins/fdcoreplugin \
+plugins/fdmainwindowplugin \
+plugins/listviewplugin \
+plugins/printerplugin \
+plugins/saverestoreplugin \
+plugins/templatesplugin \
+plugins/texteditorplugin \
+scripts \
+tests"
+
+
+tar -cf $PACKPATH/sources.tar \
+--exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
+--exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
+--exclude 'Makefile*' --exclude '*.pro.user*' \
+--exclude 'dosages.db' --exclude 'users.db' --exclude '.*' --exclude '._*' \
+--exclude '*.tgz' --exclude '*.app' --exclude '*.zip' \
+--exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
+--exclude 'global_resources/forms' \
+--exclude 'global_resources/databases/episodes' \
+--exclude 'global_resources/databases/patients' \
+--exclude 'global_resources/databases/templates' \
+--exclude 'global_resources/databases/users' \
+--exclude 'sources.tar' \
+$FREEDIAMS_SOURCES
+
 
 echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
 tar xf $PACKPATH/sources.tar -C $PACKPATH

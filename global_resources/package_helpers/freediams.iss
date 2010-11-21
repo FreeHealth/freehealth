@@ -5,11 +5,11 @@
 [Setup]
 AppName=FreeDiams
 AppId=FreeDiams
-AppVerName=FreeDiams,0.5.0~beta
+AppVerName=FreeDiams,0.5.0
 DefaultDirName={pf}\FreeDiams
 DefaultGroupName=FreeDiams
 UninstallDisplayIcon={app}\freediams.exe
-VersionInfoDescription=FreeDiams 0.5.0~betas
+VersionInfoDescription=FreeDiams 0.5.0
 VersionInfoProductName=FreeDiams
 OutputDir=FreeDiams
 ;ShowLanguageDialog=no
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freemedforms\packages\win\freediams
-SetupIconFile=e:\freemedforms\freediams\freediams.ico
-WizardSmallImageFile=e:\freemedforms\global_resources\pixmap\svg\freediams-128.bmp
-WizardImageFile=e:\freemedforms\global_resources\pixmap\svg\freediams-128.bmp
+SourceDir=e:\freediams-0.5.0\packages\win\freediams
+SetupIconFile=e:\freediams-0.5.0\freediams\freediams.ico
+WizardSmallImageFile=e:\freediams-0.5.0\global_resources\pixmap\svg\freediams-128.bmp
+WizardImageFile=e:\freediams-0.5.0\global_resources\pixmap\svg\freediams-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
@@ -130,13 +130,13 @@ Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Com
 Source: "Resources/doc/freediams/en/*"; DestDir: "{app}/Resources/doc/freediams/en"; Components: helpEn; Flags: recursesubdirs
 Source: "Resources/doc/freediams/fr/*"; DestDir: "{app}/Resources/doc/freediams/fr"; Components: helpFr; Flags: recursesubdirs
 Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
-Source: "README"; DestDir: "{app}\README.TXT"; Components: program  ; Flags: isreadme
-Source: "COPYING"; DestDir: "{app}\COPYING.TXT"; Components: program
+Source: "README"; DestDir: "{app}"; Components: program  ; Flags: isreadme
+Source: "COPYING"; DestDir: "{app}"; Components: program
 
 [Icons]
 Name: "{group}\FreeDiams"; Filename: "{app}\FreeDiams.exe"
 Name: "{group}\{cm:UninstallProgram,FreeDiams}"; Filename: "{uninstallexe}"
 Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
-Name: "{group}\README.TXT"; FileName: "{app}\README.TXT"
-Name: "{group}\COPYING.TXT"; FileName: "{app}\COPYING.TXT"
+Name: "{group}\README"; FileName: "{app}\README"
+Name: "{group}\COPYING"; FileName: "{app}\COPYING"
 
