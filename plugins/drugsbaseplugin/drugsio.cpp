@@ -122,6 +122,8 @@ using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
 
 
+/** \todo memory leak potential when using static functions -> who is deleting the instance singleton ? */
+
 namespace DrugsDB {
 namespace Internal {
 /** \brief Private part of DrugsIO \internal */
