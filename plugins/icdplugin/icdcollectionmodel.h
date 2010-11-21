@@ -42,6 +42,8 @@ public:
     enum DataRepresentation {
         CodeWithDaget = 0,
         Label,
+        CodeWithoutDaget,
+        HumanReadableDaget,
         DagCode,
         SID,
         ColumnCount

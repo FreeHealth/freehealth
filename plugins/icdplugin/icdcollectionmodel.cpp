@@ -36,6 +36,7 @@ static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 
 
 namespace ICD {
+
 namespace Internal {
 
 struct ModelItem {
@@ -151,17 +152,17 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
 
     // add Code to model
     d->m_SIDs.append(SID.toInt());
-    Internal::ModelItem *item = new Internal::ModelItem;
-    item->sid = SID.toInt();
-    item->code = icdBase()->getIcdCode(SID).toString();
-    item->label = icdBase()->getSystemLabel(SID);
 
     QStandardItem *parentItem = invisibleRootItem();
     QList<QStandardItem *> list;
-    list << new QStandardItem(item->code) << new QStandardItem(item->label) << new QStandardItem(item->sid);
+    list
+            << new QStandardItem(icdBase()->getIcdCode(SID).toString())
+            << new QStandardItem(icdBase()->getSystemLabel(SID))
+            << new QStandardItem(icdBase()->getIcdCode(SID).toString())  // Code without daget
+            << new QStandardItem(QString())            // Human readable daget
+            << new QStandardItem(QString())            // DagCode
+            << new QStandardItem(SID.toString());  // SID
     parentItem->appendRow(list);
-
-    d->m_Rows.append(item);
 
     // get all exclusions
     d->m_ExcludedSIDs << icdBase()->getExclusions(SID);
@@ -181,8 +182,6 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
     // add Code to model
     d->m_SIDs.append(asso.mainSid().toInt());
     d->m_SIDs.append(asso.associatedSid().toInt());
-    Internal::ModelItem *item = new Internal::ModelItem;
-    item->association = asso;
 
     // Find root item (mainItem) based on the SID
     QStandardItem *parentItem = 0;
@@ -197,10 +196,24 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
         parentItem = invisibleRootItem();
         if (asso.mainIsDag()) {
             main = new QStandardItem(asso.mainCodeWithDagStar());
-            list << main << new QStandardItem(asso.mainLabel()) << new QStandardItem(asso.mainSid().toString()) << new QStandardItem(asso.dagCode());
+            list
+                    << main
+                    << new QStandardItem(asso.mainLabel())
+                    << new QStandardItem(asso.mainCode())     // Code without daget
+                    << new QStandardItem(asso.mainDaget())    // Human readable daget
+                    << new QStandardItem(asso.dagCode())      // DagCode
+                    << new QStandardItem(asso.mainSid().toString())
+                    ;
         } else {
             main = new QStandardItem(asso.associatedCodeWithDagStar());
-            list << main << new QStandardItem(asso.associatedLabel()) << new QStandardItem(asso.associatedSid().toString()) << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()));
+            list
+                    << main
+                    << new QStandardItem(asso.associatedLabel())
+                    << new QStandardItem(asso.associatedCode())     // Code without daget
+                    << new QStandardItem(asso.associatedDaget())    // Human readable daget
+                    << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()))
+                    << new QStandardItem(asso.associatedSid().toString())
+                    ;
         }
         parentItem->appendRow(list);
         parentItem = main;
@@ -209,18 +222,33 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
     }
     list.clear();
     if (asso.mainIsDag()) {
-        list << new QStandardItem(asso.associatedCodeWithDagStar()) << new QStandardItem(asso.associatedLabel()) << new QStandardItem(asso.associatedSid().toString()) << new QStandardItem(asso.dagCode());
+        list
+                << new QStandardItem(asso.associatedCodeWithDagStar())
+                << new QStandardItem(asso.associatedLabel())
+                << new QStandardItem(asso.associatedCode())     // Code without daget
+                << new QStandardItem(asso.associatedDaget())    // Human readable daget
+                << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()))
+                << new QStandardItem(asso.associatedSid().toString())
+                ;
     } else {
-        list << new QStandardItem(asso.mainCodeWithDagStar()) << new QStandardItem(asso.mainLabel()) << new QStandardItem(asso.mainSid().toString()) << new QStandardItem(icdBase()->invertDagCode(asso.dagCode()));
+        list
+                << new QStandardItem(asso.mainCodeWithDagStar())
+                << new QStandardItem(asso.mainLabel())
+                << new QStandardItem(asso.mainCode())     // Code without daget
+                << new QStandardItem(asso.mainDaget())    // Human readable daget
+                << new QStandardItem(asso.dagCode())      // DagCode
+                << new QStandardItem(asso.mainSid().toString())
+                ;
     }
     parentItem->appendRow(list);
 
-    d->m_Rows.append(item);
-
     // get all exclusions
-    d->m_ExcludedSIDs << icdBase()->getExclusions(asso.mainSid()) << icdBase()->getExclusions(asso.associatedSid());
+    if (asso.mainIsDag()) {
+        d->m_ExcludedSIDs << icdBase()->getExclusions(asso.mainSid());
+    } else {
+        d->m_ExcludedSIDs << icdBase()->getExclusions(asso.associatedSid());
+    }
 
-    qWarning() << icdBase()->getExclusions(asso.mainSid()) << icdBase()->getExclusions(asso.associatedSid());
     return true;
 }
 

@@ -26,6 +26,7 @@
 #ifndef ICDCENTRALWIDGET_H
 #define ICDCENTRALWIDGET_H
 
+#include <icdplugin/icdcontextualwidget.h>
 #include <QWidget>
 
 namespace ICD {
@@ -37,7 +38,7 @@ namespace Ui {
     class IcdCentralWidget;
 }
 
-class IcdCentralWidget : public QWidget
+class IcdCentralWidget : public IcdContextualWidget
 {
     Q_OBJECT
 

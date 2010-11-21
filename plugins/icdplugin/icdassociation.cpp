@@ -26,6 +26,8 @@
 #include "icdassociation.h"
 #include "icddatabase.h"
 
+#include <QDebug>
+
 
 using namespace ICD;
 using namespace Internal;
@@ -34,7 +36,9 @@ static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 
 IcdAssociation::IcdAssociation(const QVariant &mainSID, const QVariant &associatedSID, const QString &dagCodeOfAssociation) :
         m_MainSID(mainSID), m_AssociatedSID(associatedSID), m_DagCode(dagCodeOfAssociation)
-{}
+{
+    qWarning() << "Asso dagCode" << m_DagCode;
+}
 
 bool IcdAssociation::isValid() const
 {
@@ -59,6 +63,16 @@ QString IcdAssociation::mainCodeWithDagStar() const
 QString IcdAssociation::associatedCodeWithDagStar() const
 {
     return icdBase()->getIcdCode(m_AssociatedSID).toString() + m_AssoDaget;
+}
+
+QString IcdAssociation::mainDaget() const
+{
+    return m_MainDaget;
+}
+
+QString IcdAssociation::associatedDaget() const
+{
+    return m_AssoDaget;
 }
 
 QString IcdAssociation::mainLabel() const

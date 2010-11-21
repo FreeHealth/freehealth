@@ -40,6 +40,7 @@
 
 #include <QDir>
 #include <QTextCodec>
+#include <QProgressDialog>
 
 using namespace ICD;
 using namespace Trans::ConstantTranslations;
@@ -63,6 +64,10 @@ namespace {
 IcdDownloader::IcdDownloader(QObject *parent) :
         QObject(parent), m_Downloader(0)
 {
+}
+IcdDownloader::~IcdDownloader()
+{
+    qWarning() << "IcdDownloader::~IcdDownloader()";
 }
 
 bool IcdDownloader::createDatabase()
@@ -125,7 +130,8 @@ bool IcdDownloader::downloadRawSources()
 
 bool IcdDownloader::downloadFinished()
 {
-    qWarning() << "Download finished";
+    m_Progress = new QProgressDialog(tr("Starting ICD10 database creation"), tkTr(Trans::Constants::CANCEL), 0, 20);
+    m_Progress->setValue(0);
     // Unzip file ?
     QString path = ::tmpPath();
     if (QString(::RAWSOURCES_URL).endsWith(".zip", Qt::CaseInsensitive)) {
@@ -135,11 +141,13 @@ bool IcdDownloader::downloadFinished()
         }
     }
 
+    m_Progress->setValue(1);
     return populateDatabaseWithRawSources();
 }
 
 bool IcdDownloader::populateDatabaseWithRawSources()
 {
+    qWarning() <<"populate";
     QStringList files;
     files
             << "CHAPTER"
@@ -162,6 +170,10 @@ bool IcdDownloader::populateDatabaseWithRawSources()
 //            << "TABLE"
 //            << "VERSION"
             ;
+    m_Progress->setRange(0, files.count() +1);
+    m_Progress->setValue(1);
+
+
     QSqlDatabase DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_ICD10);
     QString dbName = QString(Constants::DB_ICD10) + ".db";
     QString pathOrHostName = settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + Constants::DB_ICD10;
@@ -209,9 +221,13 @@ bool IcdDownloader::populateDatabaseWithRawSources()
         // remove file
         tmpDir.remove(file + "-utf8.txt");
         tmpDir.remove(file + ".txt");
+        m_Progress->setValue(m_Progress->value() + 1);
     }
 
     // remove temp dir
+    foreach(const QString &file, tmpDir.entryList(QStringList() << "*")) {
+        tmpDir.remove(file);
+    }
     tmpDir.cdUp();
     tmpDir.rmdir("Exp_text");
     tmpDir.remove(::RAWSOURCES_FILENAME);

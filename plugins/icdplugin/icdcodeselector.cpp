@@ -74,6 +74,8 @@ void IcdCodeSelector::setModel(IcdSearchModel *model)
     ui->tableView->setColumnHidden(IcdSearchModel::ICD_Code, true);
     ui->tableView->setColumnHidden(IcdSearchModel::Daget, true);
     ui->tableView->setColumnHidden(IcdSearchModel::Type, true);
+    ui->tableView->horizontalHeader()->hide();
+    ui->tableView->verticalHeader()->hide();
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
     connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onActivated(QModelIndex)));
     connect(ui->tableView, SIGNAL(entered(QModelIndex)), this, SLOT(onEntered(QModelIndex)));

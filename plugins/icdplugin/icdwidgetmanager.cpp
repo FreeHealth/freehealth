@@ -107,6 +107,7 @@ IcdContextualWidget *IcdWidgetManager::currentView() const
     return IcdActionHandler::m_CurrentView;
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +117,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         aShowDatabaseInformations(0),
         aSearchByLabel(0),
         aSearchByCode(0),
+        aToggleSelector(0), aClear(0), aRemoveRow(0), aPrint(0), aPrintPreview(0),
         m_CurrentView(0)
 {
     setObjectName("IcdActionHandler");
@@ -142,7 +144,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_DRUGS);
 //#endif
 
-    // Create local actions
+    // Create ICD10 database
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     a = aRecreateDatabase = new QAction(this);
     a->setObjectName("aRecreateDatabase");
@@ -151,8 +153,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     connect(a, SIGNAL(triggered()), this, SLOT(recreateDatabase()));
 
-
-    // Databases informations
+    // Show Databases informations
     a = aShowDatabaseInformations = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_DATABASE_INFOS, QList<int>() << Core::Constants::C_GLOBAL_ID);
@@ -191,6 +192,60 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     searchmenu->addAction(cmd, Constants::M_ICD_SEARCH);
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
+
+    // File Open/Save/Print/printPreview
+    a = aToggleSelector = new QAction(this);
+    a->setObjectName("aToggleSelector");
+    a->setIcon(th->icon(Constants::I_TOGGLEICDSELECTOR));
+    cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_ICDSELECTOR, ctx);
+    cmd->setTranslations(Constants::TOGGLEICDSELECTOR_TEXT, Constants::TOGGLEICDSELECTOR_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+//    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
+    connect(a, SIGNAL(triggered()), this, SLOT(toggleSelector()));
+
+    a = aClear = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
+    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
+    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
+//    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+
+    a = aRemoveRow = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONREMOVE));
+    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_REMOVE, ctx);
+    cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
+//    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
+
+    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    Q_ASSERT(fmenu);
+    if (!fmenu)
+        return;
+    a = aPrint = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+    cmd = actionManager()->registerAction(a, Constants::A_PRINT_COLLECTION, ctx);
+    cmd->setTranslations(Constants::PRINTCOLLECTION_TEXT, "", Constants::ICDCONSTANTS_TR_CONTEXT);
+#ifdef FREEDIAMS
+    cmd->setKeySequence(QKeySequence::Print);
+#else
+    cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+#endif
+    cmd->retranslate();
+    if (fmenu) {
+        fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
+    }
+    connect(aPrint,SIGNAL(triggered()), this, SLOT(print()));
+
+    a = aPrintPreview = new QAction(this);
+    a->setIcon(th->icon(Core::Constants::ICONPRINTPREVIEW));
+    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
+    cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
+    cmd->retranslate();
+    if (fmenu) {
+        fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
+    }
+    connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
+
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();

@@ -43,6 +43,8 @@
 
 #include <QDebug>
 
+enum { WarnFilter=false };
+
 using namespace ICD;
 
 using namespace Trans::ConstantTranslations;
@@ -149,7 +151,7 @@ public:
     QList<Internal::IcdAssociation> m_Associations;
     QHash<int, QPointer<QStringListModel> > m_LabelModels;
     bool m_UseDagDepend, m_Checkable, m_GetAllLabels;
-    QVariant m_DagDependOnSid;
+    QVariant m_DagMainSid;
     QList<int> m_CheckStates;
 
 private:
@@ -263,11 +265,11 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
         where.insert(Constants::MASTER_CODE, QString("like '%1%'").arg(searchLabel));
         req = d->searchQuery() + " AND " + icdBase()->getWhereClause(Constants::Table_Master, where);
     }
-    qWarning() << req;
+    if (WarnFilter)
+        qWarning() << req;
 
     d->m_IcdMaster->setQuery(req, icdBase()->database());
 
-    qWarning()<<d->m_IcdMaster->query().lastError().text();
     reset();
 }
 
@@ -301,13 +303,26 @@ void SimpleIcdModel::addCodes(const QVector<int> &codes, bool getAllLabels)
         if (sid==0)
             continue;
         if (d->m_UseDagDepend) {
-            d->m_Associations << icdBase()->getAssociation(d->m_DagDependOnSid, sid);
-            const Internal::IcdAssociation &asso = d->m_Associations.last();
+            // Get association
+            const Internal::IcdAssociation &asso = icdBase()->getAssociation(d->m_DagMainSid, sid);
+
+            // If association already exists ? --> continue;
+            bool alreadyIncluded = false;
+            foreach(const Internal::IcdAssociation &recAsso, d->m_Associations) {
+                if (recAsso.associatedSid().toInt()==sid) {
+                    alreadyIncluded = true;
+                    continue;
+                }
+            }
+            if (alreadyIncluded)
+                continue;
+
+            // Include association, manage checkstate
+            d->m_Associations << asso;
             if (asso.associationIsMandatory())
                 d->m_CheckStates << Qt::Checked;
             else
                 d->m_CheckStates << Qt::Unchecked;
-            qWarning() << "xxxxxx" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar() << asso.dagCode();
             Internal::SimpleCode *code = new Internal::SimpleCode;
             d->m_Codes.append(code);
             code->sid = sid;
@@ -330,7 +345,7 @@ void SimpleIcdModel::setUseDagDependencyWithSid(const QVariant &SID)
         d->m_UseDagDepend = true;
     else
         d->m_UseDagDepend = false;
-    d->m_DagDependOnSid = SID;
+    d->m_DagMainSid = SID;
 }
 
 void SimpleIcdModel::setCheckable(bool state)
@@ -381,6 +396,14 @@ QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
     } else if (role==Qt::CheckStateRole && d->m_Checkable &&
                (index.column()==ICD_Code || index.column()==ICD_CodeWithDagetAndStar)) {
         return d->m_CheckStates.at(index.row());
+    } else if (role==Qt::ToolTipRole) {
+        if (d->m_UseDagDepend) {
+            const Internal::IcdAssociation &asso = d->m_Associations.at(index.row());
+            return asso.associatedCodeWithDagStar() + " - " + asso.associatedLabel();
+        } else {
+            Internal::SimpleCode *code = d->m_Codes.at(index.row());
+            return code->code + code->dag + " - " + code->systemLabel;
+        }
     }
 
     return QVariant();

@@ -76,7 +76,7 @@ protected:
     QAction *aShowDatabaseInformations;
     QAction *aSearchByLabel, *aSearchByCode;
     QActionGroup *gSearchMethod;
-
+    QAction *aToggleSelector, *aClear, *aRemoveRow, *aPrint, *aPrintPreview;
     QPointer<IcdContextualWidget> m_CurrentView;
     QPointer<IcdDownloader> m_Downloader;
 };
@@ -86,15 +86,22 @@ protected:
 
 
 namespace ICD {
+class IcdPlugin;
 
 class ICD_EXPORT IcdWidgetManager : public Internal::IcdActionHandler
 {
     Q_OBJECT
+    friend class ICD::IcdPlugin;
+
 public:
     static IcdWidgetManager *instance();
     ~IcdWidgetManager() {}
 
     IcdContextualWidget *currentView() const;
+
+protected:
+    void refreshViews();
+
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);

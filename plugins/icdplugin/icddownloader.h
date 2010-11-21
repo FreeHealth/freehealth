@@ -27,6 +27,9 @@
 #define ICDDOWNLOADER_H
 
 #include <QObject>
+QT_BEGIN_NAMESPACE
+class QProgressDialog;
+QT_END_NAMESPACE
 
 /**
  * \file icddownloader.h
@@ -48,6 +51,7 @@ class IcdDownloader : public QObject
 
 public:
     IcdDownloader(QObject *parent = 0);
+    ~IcdDownloader();
 
 public Q_SLOTS:
     bool createDatabase();
@@ -62,6 +66,7 @@ Q_SIGNALS:
 
 private:
     Utils::HttpDownloader *m_Downloader;
+    QProgressDialog *m_Progress;
 };
 
 }  // End namespace ICD

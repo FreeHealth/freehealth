@@ -55,7 +55,8 @@ namespace Constants {
         Table_Memo,
         Table_Note,
         Table_Ref,
-        Table_System
+        Table_System,
+        Table_Version
     };
 
 
@@ -184,6 +185,14 @@ namespace Constants {
         SYSTEM_LID
     };
 
+    enum TableVersion_Fields {
+        VERSION_NAME = 0,
+        VERSION_VERSION,
+        VERSION_BUILD,
+        VERSION_VALID,
+        VERSION_DATE,
+        VERSION_COMMENT
+    };
 
     // Contexts
     const char * const  C_ICD_PLUGINS = "ICD.cGlobal";
@@ -198,9 +207,14 @@ namespace Constants {
     const char * const  A_SEARCH_LABEL     = "aICDSearchLabel";
     const char * const  A_SEARCH_CODE      = "aICDSearchCode";
 
+    const char * const  A_TOGGLE_ICDSELECTOR = "aICDToggleSelector";
+    const char * const  A_PRINT_COLLECTION   = "aICDPrintCollection";
+
+
     // Icons
     const char * const  I_SEARCH_LABEL     = "search.png";
     const char * const  I_SEARCH_CODE      = "search.png";
+    const char * const  I_TOGGLEICDSELECTOR = "";
 
     // Translations
     const char * const  ICDCONSTANTS_TR_CONTEXT = "ICD";
@@ -209,7 +223,8 @@ namespace Constants {
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("ICD", "ICD10 search method");
     const char* const   SEARCHLABEL_TEXT        = QT_TRANSLATE_NOOP("ICD", "Search by label");
     const char* const   SEARCHCODE_TEXT         = QT_TRANSLATE_NOOP("ICD", "Search by code");
-    //    const char* const   ACCOUNTBOOK_TEXT        = QT_TRANSLATE_NOOP("ICD", "Account book");
+    const char* const   TOGGLEICDSELECTOR_TEXT  = QT_TRANSLATE_NOOP("ICD", "Toggle code selector");
+    const char* const   PRINTCOLLECTION_TEXT    = QT_TRANSLATE_NOOP("ICD", "Print ICD10 code collection");
 
     // Settings and tokens
     const char * const  S_STATEPREFIX            = "ICD/";

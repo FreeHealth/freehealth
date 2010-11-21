@@ -26,6 +26,7 @@
 #include "icdplugin.h"
 #include "icdwidgetmanager.h"
 #include "icddatabase.h"
+#include "icddownloader.h"
 
 #include <utils/log.h>
 
@@ -71,10 +72,22 @@ void IcdPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
+    if (IcdDatabase::instance()->isDownloadAndPopulatingNeeded()) {
+        // Ask user for download the datas
+        IcdDownloader *m_Downloader = new IcdDownloader(this);
+        m_Downloader->createDatabase();
+        connect(m_Downloader, SIGNAL(processEnded()), IcdDatabase::instance(), SLOT(init()));
+        connect(m_Downloader, SIGNAL(processEnded()), m_Downloader, SLOT(deleteLater()));
+    }
+
     // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
     IcdWidgetManager::instance();
 
 }
 
+void IcdPlugin::postDatabaseCreation()
+{
+    IcdDatabase::instance()->init();
+}
 
 Q_EXPORT_PLUGIN(IcdPlugin)

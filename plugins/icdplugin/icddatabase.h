@@ -37,6 +37,7 @@
 
 
 namespace ICD {
+class IcdPlugin;
 
 namespace Internal {
 class IcdDatabasePrivate;
@@ -46,7 +47,7 @@ class IcdAssociation;
 class IcdDatabase : public QObject, public Utils::Database
 {
     Q_OBJECT
-
+    friend class ICD::IcdPlugin;
     IcdDatabase(QObject *parent = 0);
 
 public:
@@ -56,6 +57,7 @@ public:
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
+    bool isDownloadAndPopulatingNeeded() const;
 
     QList<int> getHeadersSID(const QVariant &SID);
 
@@ -81,7 +83,7 @@ public:
 
     QString getMemo(const QVariant &SID);
 
-private:
+protected:
     bool init();
 
 private:

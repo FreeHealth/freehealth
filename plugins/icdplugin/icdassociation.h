@@ -50,6 +50,8 @@ public:
     QString associatedCode() const;
     QString mainCodeWithDagStar() const;
     QString associatedCodeWithDagStar() const;
+    QString mainDaget() const;
+    QString associatedDaget() const;
 
     QString mainLabel() const;
     QString associatedLabel() const;

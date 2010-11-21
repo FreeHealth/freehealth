@@ -192,6 +192,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileOpen |
             Core::MainWindowActions::A_FileSave |
             Core::MainWindowActions::A_FileSaveAs |
+            Core::MainWindowActions::A_FilePrint |
             Core::MainWindowActions::A_FilePrintPreview |
             Core::MainWindowActions::A_FileQuit
             );

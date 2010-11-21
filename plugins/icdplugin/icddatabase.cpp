@@ -64,14 +64,15 @@ namespace Internal {
 
 
 struct Daget {
-    int dependOnSid;
+    int associatedSid;
     QString dag;
 };
 
 class IcdDatabasePrivate
 {
 public:
-    IcdDatabasePrivate(IcdDatabase *base) : q(base)
+    IcdDatabasePrivate(IcdDatabase *base) :
+            m_LogChrono(false), m_DownloadAndPopulate(false), q(base)
     {
         m_CachedCodes.setMaxCost(1000);
         m_CachedDaget.setMaxCost(1000);
@@ -84,11 +85,13 @@ public:
     }
 
 public:
-    IcdDatabase *q;
-    bool m_LogChrono;
+    bool m_LogChrono, m_DownloadAndPopulate;
     QCache<int, QVariant> m_CachedCodes;
     QCache<int, QString> m_CachedDaget;
     QMultiHash<int, Daget *> m_CachedDependentDaget;
+
+private:
+    IcdDatabase *q;
 };
 }  // End Internal
 }  // End ICD
@@ -235,6 +238,13 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addField(Table_System,  SYSTEM_SID, "SID");
     addField(Table_System,  SYSTEM_LID, "LID");
 
+    addField(Table_Version,  VERSION_NAME, "name");
+    addField(Table_Version,  VERSION_VERSION, "version");
+    addField(Table_Version,  VERSION_BUILD, "build");
+    addField(Table_Version,  VERSION_VALID, "valid");
+    addField(Table_Version,  VERSION_DATE, "date");
+    addField(Table_Version,  VERSION_COMMENT, "expl");
+
     init();
 }
 
@@ -264,9 +274,16 @@ bool IcdDatabase::init()
      QString pathToDb = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
      Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
 
+     // Removing existing old connections
+     if (QSqlDatabase::contains(Constants::DB_ICD10)) {
+         QSqlDatabase::removeDatabase(Constants::DB_ICD10);
+     }
+
      // Connect normal Account Database
-     createConnection(ICD::Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", pathToDb,
-                      Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", CreateDatabase);
+     if (!createConnection(ICD::Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", pathToDb,
+                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", CreateDatabase)) {
+         d->m_DownloadAndPopulate = true;
+     }
 
      if (!checkDatabaseScheme()) {
          Utils::Log::addError(this, tr("ICD10 database corrupted, please contact your administrator."));
@@ -278,7 +295,8 @@ bool IcdDatabase::init()
          }
      }
 
-     m_initialized = true;
+     if (!d->m_DownloadAndPopulate)
+         m_initialized = true;
      return true;
 }
 
@@ -323,6 +341,11 @@ static int getLibelleLanguageField()
         langField = Constants::LIBELLE_DE_DIMDI;
     }
     return langField;
+}
+
+bool IcdDatabase::isDownloadAndPopulatingNeeded() const
+{
+    return (d->m_DownloadAndPopulate);
 }
 
 QList<int> IcdDatabase::getHeadersSID(const QVariant &SID)
@@ -442,7 +465,7 @@ QString IcdDatabase::invertDagCode(const QString &s) const
 
 bool IcdDatabase::isDagetADag(const QString &dagCode) const
 {
-    return (dagCode=="F" || dagCode=="G" || dagCode=="H");
+    return (dagCode=="S" || dagCode=="T" || dagCode=="U");
 }
 
 QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
@@ -482,10 +505,10 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
 {
     if (d->m_CachedDependentDaget.keys().contains(mainSID.toInt())) {
         foreach(Daget *dag, d->m_CachedDependentDaget.values(mainSID.toInt())) {
-            if (dag->dependOnSid == associatedSID) {
+            if (dag->associatedSid == associatedSID) {
                 Internal::IcdAssociation asso(mainSID, associatedSID, dag->dag);
-                asso.setMainHumanReadableDaget(reversedDagStar(dag->dag));
-                asso.setAssociatedHumanReadableDaget(humanReadableDagStar(dag->dag));
+                asso.setMainHumanReadableDaget(humanReadableDagStar(dag->dag));
+                asso.setAssociatedHumanReadableDaget(reversedDagStar(dag->dag));
                 return asso;
             }
         }
@@ -498,21 +521,23 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
     }
     QSqlQuery query(database());
     QHash<int, QString> where;
-    where.insert(Constants::DAG_SID, QString("=%1").arg(associatedSID.toString()));
-    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(mainSID.toString()));
+    where.insert(Constants::DAG_SID, QString("=%1").arg(mainSID.toString()));
+    where.insert(Constants::DAG_ASSOC, QString("=%1").arg(associatedSID.toString()));
     QString req = select(Constants::Table_Dagstar, Constants::DAG_DAGET, where);
     if (query.exec(req)) {
         Daget *dag = new Daget;
-        dag->dependOnSid = associatedSID.toInt();
+        dag->associatedSid = associatedSID.toInt();
         if (query.next()) {
             dag->dag = query.value(0).toString();
         }
         Internal::IcdAssociation asso(mainSID, associatedSID, dag->dag);
-        asso.setMainHumanReadableDaget(reversedDagStar(dag->dag));
-        asso.setAssociatedHumanReadableDaget(humanReadableDagStar(dag->dag));
+        asso.setMainHumanReadableDaget(humanReadableDagStar(dag->dag));
+        asso.setAssociatedHumanReadableDaget(reversedDagStar(dag->dag));
         d->m_CachedDependentDaget.insert(mainSID.toInt(), dag);
-        return asso;
 
+        qWarning() << "Base" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar() << asso.dagCode();
+
+        return asso;
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
@@ -728,7 +753,6 @@ QVector<int> IcdDatabase::getExclusions(const QVariant &SID)
         where.clear();
         where.insert(Constants::EXCLUDE_SID, QString("=%1").arg(sid));
         req = select(Constants::Table_Exclude, Constants::EXCLUDE_EXCL, where);
-        qWarning() << req;
         if (query.exec(req)) {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
