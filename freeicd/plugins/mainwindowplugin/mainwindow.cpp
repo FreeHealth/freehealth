@@ -267,6 +267,8 @@ void MainWindow::postCoreInitialization()
 {
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 
