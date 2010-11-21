@@ -85,10 +85,10 @@ INSTALLS += target
 }
 
 # Install descriptive files
-!isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
+!isEmpty(INSTALL_BINARY_PATH){
 descrfiles.path = $${INSTALL_BINARY_PATH}
-descrfiles.files =  $${BUILD_BINARY_PATH}/README
-descrfiles.files += $${BUILD_BINARY_PATH}/COPYING
+descrfiles.files =  $${SOURCES_ROOT_PATH}/README
+descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING
 INSTALLS += descrfiles
 }
 
@@ -199,6 +199,13 @@ docs.path=$${INSTALL_DOCS_PATH}
 docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${TARGET}/*
 docs.CONFIG += no_check_exist
 INSTALLS+=docs
+}
+
+# Package Helpers
+!isEmpty(INSTALL_RESOURCES_PATH){
+packageHelpers.path=$${INSTALL_RESOURCES_PATH}/package_helpers
+packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
+INSTALLS+=packageHelpers
 }
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
