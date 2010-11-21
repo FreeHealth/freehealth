@@ -282,7 +282,6 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 void PrescriptionViewer::viewInteractions()
 {
     InteractionSynthesisDialog dlg(this);
-    dlg.show();
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
     dlg.exec();
 
