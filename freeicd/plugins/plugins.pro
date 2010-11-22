@@ -3,8 +3,9 @@ TEMPLATE = subdirs
 SUBDIRS = \
     core \
     mainwindow \
-    icd
-
+    icd \
+    printer \
+    texteditor
 
 core.subdir = coreplugin
 
@@ -14,3 +15,10 @@ mainwindow.depends += icd
 
 icd.subdir = icdplugin
 icd.depends += core
+
+printer.subdir   = printerplugin
+printer.depends += core
+printer.depends += texteditor
+
+texteditor.subdir   = texteditorplugin
+texteditor.depends += core
