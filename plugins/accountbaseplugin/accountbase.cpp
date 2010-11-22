@@ -475,7 +475,7 @@ bool AccountBase::init()
 
     // test driver
      if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-         Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
+         Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE), __FILE__, __LINE__);
          Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
                                   tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
                                   "", qApp->applicationName());
@@ -492,7 +492,7 @@ bool AccountBase::init()
 
          // Connect normal Account Database
          createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + "-test.db", pathToDb,
-                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", CreateDatabase);
+                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
          if (feed) {
              // send defaults datas to DB
              Utils::Log::addMessage(this, "feeding test database with datas");
@@ -503,7 +503,7 @@ bool AccountBase::init()
      } else {
          // Connect normal Account Database
          createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
-                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", CreateDatabase);
+                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
      }
 
 
@@ -527,7 +527,8 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                     CreationOption /*createOption*/
                    )
 {
-    if (connectionName != "account")
+    qWarning() << "CREATE";
+    if (connectionName != Constants::DB_ACCOUNTANCY)
         return false;
     Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
                            .arg(dbName).arg(pathOrHostName));
