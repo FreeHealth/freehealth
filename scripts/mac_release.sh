@@ -161,7 +161,7 @@ rm -R bin/plugins
    fi
 
    # move archive to right place
-   mv $BUNDLE_NAME.dmg $PACKAGES_PATH/$BUNDLE_NAME-$VERSION
+   mv $BUNDLE_NAME.dmg $PACKAGES_PATH/$BUNDLE_NAME-$VERSION.dmg
 
    # nothing to do next so exit
    exit
