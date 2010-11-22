@@ -92,12 +92,18 @@ static void replaceTokens(QString &doc, const QHash<QString, QVariant> &tokens)
 
 void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
 {
-    QString header = user()->value(Core::IUser::PrescriptionHeader).toString();
-    // replace user's tokens
-    user()->replaceTokens(header);
+    QString header;
+    if (user()) {
+        /** \todo wrong papers */
+        header = user()->value(Core::IUser::PrescriptionHeader).toString();
+        // replace user's tokens
+        user()->replaceTokens(header);
+    }
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
     // replace patient's tokens
-    patient()->replaceTokens(header);
+    if (patient()) {
+        patient()->replaceTokens(header);
+    }
     // replace defined tokens
     replaceTokens(header, globalTokens);
     replaceTokens(header, headerTokens);
@@ -106,11 +112,15 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
 
 void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 {
-    QString footer = user()->value(Core::IUser::PrescriptionFooter).toString();
-    // replace user's tokens
-    user()->replaceTokens(footer);
+    QString footer;
+    if (user()) {
+        footer = user()->value(Core::IUser::PrescriptionFooter).toString();
+        // replace user's tokens
+        user()->replaceTokens(footer);
+    }
     // replace patient's tokens
-    patient()->replaceTokens(footer);
+    if (patient())
+        patient()->replaceTokens(footer);
     // replace defined tokens
     replaceTokens(footer, globalTokens);
     replaceTokens(footer, footerTokens);
@@ -121,14 +131,24 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 
 void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) const
 {
-    p->addHtmlWatermark(user()->value(Core::IUser::PrescriptionWatermark).toString(),
-                       Print::Printer::Presence(user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt()),
-                       Qt::AlignmentFlag(user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt()));
+    int align = Qt::AlignCenter;
+    int presence = Printer::DuplicataOnly;
+    QString html;
+    if (user()) {
+        align = user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt();
+        presence = user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt();
+        html = user()->value(Core::IUser::PrescriptionWatermark).toString();
+    }
+    p->addHtmlWatermark(html,
+                       Print::Printer::Presence(presence),
+                       Qt::AlignmentFlag(align));
 }
 
 void DocumentPrinter::setDocumentName(Print::Printer *p) const
 {
-    QString tmp = patient()->data(Core::IPatient::FullName).toString().replace(" ", "_");
+    QString tmp;
+    if (patient())
+        tmp = patient()->data(Core::IPatient::FullName).toString().replace(" ", "_");
     p->printer()->setDocName(QString("%1-%2").arg(qApp->applicationName(), tmp.leftJustified(50,'_')));
 }
 
