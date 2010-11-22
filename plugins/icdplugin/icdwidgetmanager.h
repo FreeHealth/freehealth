@@ -27,7 +27,6 @@
 #define ICDWIDGETMANAGER_H
 
 #include <icdplugin/icd_exporter.h>
-#include <icdplugin/icdcontextualwidget.h>
 
 #include <coreplugin/contextmanager/icontext.h>
 
@@ -47,6 +46,8 @@
 namespace ICD {
 class IcdWidgetManager;
 class IcdDownloader;
+class IcdCentralWidget;
+
 namespace Internal {
 
 class ICD_EXPORT IcdActionHandler : public QObject
@@ -61,12 +62,16 @@ public:
     IcdActionHandler(QObject *parent = 0);
     virtual ~IcdActionHandler() {}
 
-    void setCurrentView(IcdContextualWidget *view);
+    void setCurrentView(IcdCentralWidget *view);
 
 private Q_SLOTS:
     void recreateDatabase();
     void showDatabaseInformations();
     void searchActionChanged(QAction*);
+    void toggleSelector();
+    void clear();
+    void removeItem();
+    void print();
 
 private:
     void updateActions();
@@ -77,7 +82,7 @@ protected:
     QAction *aSearchByLabel, *aSearchByCode;
     QActionGroup *gSearchMethod;
     QAction *aToggleSelector, *aClear, *aRemoveRow, *aPrint, *aPrintPreview;
-    QPointer<IcdContextualWidget> m_CurrentView;
+    QPointer<IcdCentralWidget> m_CurrentView;
     QPointer<IcdDownloader> m_Downloader;
 };
 
@@ -97,7 +102,7 @@ public:
     static IcdWidgetManager *instance();
     ~IcdWidgetManager() {}
 
-    IcdContextualWidget *currentView() const;
+    IcdCentralWidget *currentView() const;
 
 protected:
     void refreshViews();

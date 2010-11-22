@@ -56,6 +56,8 @@ public:
     QString icdCollectionToXml(const IcdCollectionModel *model);
     bool icdCollectionFromXml(IcdCollectionModel *model);
 
+    QString icdCollectionToHtml(const IcdCollectionModel *model);
+
 private:
     Internal::IcdIOPrivate *d;
 };

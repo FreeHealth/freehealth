@@ -226,6 +226,8 @@ namespace Constants {
     const char* const   TOGGLEICDSELECTOR_TEXT  = QT_TRANSLATE_NOOP("ICD", "Toggle code selector");
     const char* const   PRINTCOLLECTION_TEXT    = QT_TRANSLATE_NOOP("ICD", "Print ICD10 code collection");
 
+    const char* const   ICD_CODECOLLECTION_TEXT = QT_TRANSLATE_NOOP("ICD", "ICD10 code collection");
+
     // Settings and tokens
     const char * const  S_STATEPREFIX            = "ICD/";
 

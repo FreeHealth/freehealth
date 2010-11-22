@@ -59,6 +59,10 @@ namespace ICD {
         const char * const XML_VALUE_ASSO_ISMAIN = "main";
         const char * const XML_VALUE_ASSO_ISASSOCIATED = "associated";
 
+
+        const char * const HTML_HEADER = "<ol>";
+        const char * const HTML_FOOTER = "</ol>";
+
     }  // End namespace Constants
 
 
@@ -84,8 +88,13 @@ public:
         bool hasChild = false;
         bool hasParent = false;
         if (parent==QModelIndex()) {
-            if (model->hasChildren(model->index(row,0))) {
-                xmlChild = modelRowToXml(model, 0, model->index(row, 0));
+            const QModelIndex &current = model->index(row, 0);
+            if (model->hasChildren(current)) {
+                int i = 0;
+                while (model->hasIndex(i, 0, current)) {
+                    xmlChild += modelRowToXml(model, i, current);
+                    ++i;
+                }
                 hasChild = true;
             }
         } else {
@@ -124,6 +133,33 @@ public:
         }
 
         return xmlRow;
+    }
+
+    QString modelRowToHtml(const IcdCollectionModel *model, int row, const QModelIndex &parent)
+    {
+        QString htmlRow, htmlChild;
+        bool hasChild = false;
+        bool hasParent = false;
+        if (parent==QModelIndex()) {
+            const QModelIndex &current = model->index(row, 0);
+            if (model->hasChildren(current)) {
+                int i = 0;
+                while (model->hasIndex(i, 0, current)) {
+                    htmlChild += modelRowToHtml(model, i, current);
+                    ++i;
+                }
+                htmlChild = QString("<ol type=i>%1</ol>").arg(htmlChild);
+                hasChild = true;
+            }
+        } else {
+            hasParent = true;
+        }
+
+        const QString &code = model->index(row, IcdCollectionModel::CodeWithDaget, parent).data().toString();
+        const QString &label = model->index(row, IcdCollectionModel::Label, parent).data().toString();
+        htmlRow = QString("<li>%1 - %2").arg(code, label);
+        htmlRow += htmlChild;
+        return htmlRow;
     }
 
     static QHash<int, QString> m_XmlAttribs;
@@ -178,4 +214,25 @@ QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
 
 bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model)
 {
+}
+
+QString IcdIO::icdCollectionToHtml(const IcdCollectionModel *model)
+{
+    Q_ASSERT(model);
+    if (!model) {
+        Utils::Log::addError("IcdIO", "toHtml: No model", __FILE__, __LINE__);
+        return QString();
+    }
+    QString html;
+    for(int i=0; i < model->rowCount(); ++i) {
+        html += d->modelRowToHtml(model, i, QModelIndex());
+    }
+
+    // Adding maintag + dbversion + date
+    html = QString("%1 %2 %3")
+           .arg(Constants::HTML_HEADER)
+           .arg(html)
+           .arg(Constants::HTML_FOOTER);
+
+    return html;
 }

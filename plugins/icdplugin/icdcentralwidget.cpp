@@ -37,10 +37,15 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include "ui_icdcentralwidget.h"
 
@@ -48,8 +53,10 @@
 #include <QDebug>
 
 using namespace ICD;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 namespace ICD {
@@ -167,12 +174,43 @@ void IcdCentralWidget::onSelectorActivated(const QVariant &SID)
         ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
         ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
         ui->collectionView->expandAll();
-
-        // TEST
-//        IcdIO io;
-//        qWarning() << io.icdCollectionToXml(d->m_CollectionModel);
-        // END TEST
     }
+}
+
+void IcdCentralWidget::toggleSelector()
+{
+    ui->selector->setVisible(!ui->selector->isVisible());
+}
+
+void IcdCentralWidget::clear()
+{
+    if (d->m_CollectionModel) {
+        d->m_CollectionModel->clear();
+    }
+}
+
+void IcdCentralWidget::removeItem()
+{
+    const QModelIndex &index = ui->collectionView->currentIndex();
+    d->m_CollectionModel->removeRow(index.row(), index.parent());
+}
+
+void IcdCentralWidget::print()
+{
+    IcdIO io;
+    QString toPrint = io.icdCollectionToHtml(d->m_CollectionModel);
+
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
+        return;
+    }
+
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, QCoreApplication::translate(Constants::ICDCONSTANTS_TR_CONTEXT, Constants::ICD_CODECOLLECTION_TEXT));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    p->print(toPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
 }
 
 void IcdCentralWidget::changeEvent(QEvent *e)

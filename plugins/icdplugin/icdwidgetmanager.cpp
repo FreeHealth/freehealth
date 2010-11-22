@@ -26,6 +26,7 @@
 #include "icdwidgetmanager.h"
 #include "constants.h"
 #include "icddownloader.h"
+#include "icdcentralwidget.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -74,7 +75,7 @@ IcdWidgetManager::IcdWidgetManager(QObject *parent) : IcdActionHandler(parent)
 
 void IcdWidgetManager::updateContext(Core::IContext *object)
 {
-    IcdContextualWidget *view = 0;
+    IcdCentralWidget *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
@@ -83,7 +84,7 @@ void IcdWidgetManager::updateContext(Core::IContext *object)
             //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
-        view = qobject_cast<IcdContextualWidget *>(object->widget());
+        view = qobject_cast<IcdCentralWidget *>(object->widget());
         if (!view) {
             if (!m_CurrentView)
                 return;
@@ -102,7 +103,7 @@ void IcdWidgetManager::updateContext(Core::IContext *object)
     }
 }
 
-IcdContextualWidget *IcdWidgetManager::currentView() const
+IcdCentralWidget *IcdWidgetManager::currentView() const
 {
     return IcdActionHandler::m_CurrentView;
 }
@@ -251,7 +252,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     actionManager()->retranslateMenusAndActions();
 }
 
-void IcdActionHandler::setCurrentView(IcdContextualWidget *view)
+void IcdActionHandler::setCurrentView(IcdCentralWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
@@ -310,4 +311,28 @@ void IcdActionHandler::showDatabaseInformations()
 
 void IcdActionHandler::searchActionChanged(QAction *a)
 {
+}
+
+void IcdActionHandler::toggleSelector()
+{
+    if (m_CurrentView)
+        m_CurrentView->toggleSelector();
+}
+
+void IcdActionHandler::clear()
+{
+    if (m_CurrentView)
+        m_CurrentView->clear();
+}
+
+void IcdActionHandler::removeItem()
+{
+    if (m_CurrentView)
+        m_CurrentView->removeItem();
+}
+
+void IcdActionHandler::print()
+{
+    if (m_CurrentView)
+        m_CurrentView->print();
 }

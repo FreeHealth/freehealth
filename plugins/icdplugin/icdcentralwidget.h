@@ -30,8 +30,11 @@
 #include <QWidget>
 
 namespace ICD {
+class IcdWidgetManager;
+
 namespace Internal {
 class IcdCentralWidgetPrivate;
+class IcdActionHandler;
 }  // End namespace Internal
 
 namespace Ui {
@@ -41,12 +44,19 @@ namespace Ui {
 class IcdCentralWidget : public IcdContextualWidget
 {
     Q_OBJECT
+    friend class ICD::IcdWidgetManager;
+    friend class ICD::Internal::IcdActionHandler;
 
 public:
     explicit IcdCentralWidget(QWidget *parent = 0);
     ~IcdCentralWidget();
 
 protected:
+    void toggleSelector();
+    void clear();
+    void removeItem();
+    void print();
+
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
