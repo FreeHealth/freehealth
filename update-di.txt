@@ -1,23 +1,12 @@
-version=0.4.4
+version=0.5.0
 {
-    * 2010
+    * November 2010
+    * Lots of new features
+    * New printer engine, new interaction engine, reviewed ergonomic of application
 
-    * New features:
-      * New field in drugs database INFORMATIONS table (COMPLEMENTARY_WEBSITE)
-      * ATC Classes allergies are now integrated (allergy to ATC code < 7 char is a class ATC allergy)
-      * Prescription View now show allergy too
-      * when printing templates allergies and interactions are tested before the print process, user is informed
-      * PDF print cache is enable, see apps preferences
-      * Drugs interactions are calculated from drug's component ATC codes
-      * Interactions are translated from french to english
-      * Making the interaction engine available for the Canadian database
-      * INN are based on the 7 char length ATC code
-      * ATC code are available for French, English and Deutsch language
-      * Adding the [[MIN_INTERVAL]] token to the posologic sentence
-
-    * Bug correction:
-      * Drugs allergies wasn't taken into account at startup
-      * command line patient surname was not correctly processed
+    * Full changelog at:
+        * http://www.freemedforms.com/
+        * Follow --> news
 }
 version=0.4.2
 {
