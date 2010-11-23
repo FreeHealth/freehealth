@@ -25,6 +25,8 @@
  ***************************************************************************/
 #include "icdio.h"
 #include "icdcollectionmodel.h"
+#include "icddatabase.h"
+#include "icdassociation.h"
 
 #include <utils/log.h>
 
@@ -32,6 +34,7 @@
 #include <QString>
 #include <QDomDocument>
 
+static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 
 using namespace ICD;
 
@@ -40,6 +43,7 @@ namespace ICD {
     namespace Constants {
 
         const char * const XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        const char * const XML_GLOBALTAG = "FreeMedForms";
         const char * const XML_MAINTAG = "IcdCollection";
         const char * const XML_TAG_CODE = "IcdCode";
         const char * const XML_TAG_CODEASSOCIATION = "IcdAssociation";
@@ -199,8 +203,7 @@ QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
                   "%6"
                   "</%1>")
             .arg(Constants::XML_MAINTAG)
-            /** \todo Add database version */
-            .arg(Constants::XML_ATTRIB_DATABASEVERSION).arg("VERSION")
+            .arg(Constants::XML_ATTRIB_DATABASEVERSION).arg(icdBase()->getDatabaseVersion())
             .arg(Constants::XML_ATTRIB_DATE).arg(QDateTime::currentDateTime().toString(Qt::ISODate))
             .arg(xml);
     xml.prepend(Constants::XML_HEADER);
@@ -212,8 +215,64 @@ QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
     return root.toString(2);
 }
 
-bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model)
+bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml)
 {
+    Q_ASSERT(model);
+    if (!model) {
+        Utils::Log::addError("IcdIO", "fromXml: No model", __FILE__, __LINE__);
+        return false;
+    }
+
+    qWarning() << "FromXML";
+
+    QDomDocument root;
+    root.setContent(xml);
+    QDomElement element = root.firstChildElement(Constants::XML_MAINTAG);
+    if (element.isNull()) {
+        Utils::Log::addError("IcdIO", "No XML main tag", __FILE__, __LINE__);
+        return false;
+    }
+
+    // Get XML db version
+    QString dbVersion = element.attribute(Constants::XML_ATTRIB_DATABASEVERSION);
+
+    qWarning() << dbVersion;
+
+    // Check XML db version with actual db version
+    if (dbVersion!=icdBase()->getDatabaseVersion()) {
+        /** \todo Update XML if needed */
+        Utils::Log::addMessage("IcdIO", QString("XML version (%1) different from db version (%2).")
+                               .arg(dbVersion).arg(icdBase()->getDatabaseVersion()));
+    }
+
+    // Read the document
+    element = element.firstChildElement();
+    for (; !element.isNull(); element = element.nextSiblingElement()) {
+        // Tag == IcdCode --> add code
+        if (element.tagName().compare(Constants::XML_TAG_CODE)==0) {
+            model->addCode(element.attribute(Constants::XML_ATTRIB_DATABASECODESID).toInt());
+        } else if (element.tagName().compare(Constants::XML_TAG_CODEASSOCIATION)==0) {
+            // Tag == IcdAssociation --> add children
+            int mainSid = 0;
+            QVector<int> allSids;
+            for (QDomElement child = element.firstChildElement(Constants::XML_TAG_CODE); !child.isNull(); child = child.nextSiblingElement()) {
+                if (child.attribute(Constants::XML_ATTRIB_TYPEINASSOCIATION).compare(Constants::XML_VALUE_ASSO_ISMAIN)==0) {
+                    mainSid = child.attribute(Constants::XML_ATTRIB_DATABASECODESID).toInt();
+                } else {
+                    allSids << child.attribute(Constants::XML_ATTRIB_DATABASECODESID).toInt();
+                }
+            }
+            if (mainSid==0) {
+                Utils::Log::addError("IcdIO", "Wrong association, no main code", __FILE__, __LINE__);
+                continue;
+            }
+            for(int i=0; i<allSids.count();++i) {
+                model->addAssociation(icdBase()->getAssociation(mainSid, allSids.at(i)));
+            }
+        }
+    }
+
+    return true;
 }
 
 QString IcdIO::icdCollectionToHtml(const IcdCollectionModel *model)

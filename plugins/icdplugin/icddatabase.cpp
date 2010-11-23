@@ -142,6 +142,7 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addTable(Table_Note,       "note");
     addTable(Table_Ref,        "refer");
     addTable(Table_System,     "system");
+    addTable(Table_Version,    "version");
 
     addField(Table_Chapter,  CHAPTER_CHAPTER, "chap");
     addField(Table_Chapter,  CHAPTER_SID,     "SID");
@@ -281,12 +282,12 @@ bool IcdDatabase::init()
 
      // Connect normal Account Database
      if (!createConnection(ICD::Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", pathToDb,
-                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", CreateDatabase)) {
+                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "",0, CreateDatabase)) {
          d->m_DownloadAndPopulate = true;
      }
 
      if (!checkDatabaseScheme()) {
-         Utils::Log::addError(this, tr("ICD10 database corrupted, please contact your administrator."));
+         Utils::Log::addError(this, tr("ICD10 database corrupted, please contact your administrator."), __FILE__, __LINE__);
      }
 
      if (!database().isOpen()) {
@@ -303,6 +304,31 @@ bool IcdDatabase::init()
 void IcdDatabase::logChronos(bool state)
 {
     Q_UNUSED(state);
+}
+
+QString IcdDatabase::getDatabaseVersion()
+{
+    QString toReturn;
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+            return toReturn;
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::VERSION_VALID, QString("=1"));
+    QString req = select(Constants::Table_Version, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(Constants::VERSION_NAME).toString() +
+                       query.value(Constants::VERSION_VERSION).toString() +
+                       query.value(Constants::VERSION_BUILD).toString();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return toReturn;
 }
 
 static QString reversedDagStar(const QString &s)

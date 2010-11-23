@@ -57,6 +57,7 @@ public:
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
+    QString getDatabaseVersion();
     bool isDownloadAndPopulatingNeeded() const;
 
     QList<int> getHeadersSID(const QVariant &SID);

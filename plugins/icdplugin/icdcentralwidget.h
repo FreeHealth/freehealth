@@ -51,6 +51,9 @@ public:
     explicit IcdCentralWidget(QWidget *parent = 0);
     ~IcdCentralWidget();
 
+    void openFile(const QString &file);
+    QString collectionToXml() const;
+
 protected:
     void toggleSelector();
     void clear();

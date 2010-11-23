@@ -43,6 +43,8 @@
 #include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
+
 #include <translationutils/constanttranslations.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -174,7 +176,49 @@ void IcdCentralWidget::onSelectorActivated(const QVariant &SID)
         ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
         ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
         ui->collectionView->expandAll();
+
+//        // TEST
+//        IcdIO io;
+//        QString xml = io.icdCollectionToXml(d->m_CollectionModel);
+//        qWarning() << xml;
+//        io.icdCollectionFromXml(d->m_CollectionModel, xml);
+//        // END TEST
     }
+}
+
+void IcdCentralWidget::openFile(const QString &file)
+{
+    QString datas;
+    if (d->m_CollectionModel->rowCount() > 0) {
+        int r = Utils::withButtonsMessageBox(
+                tr("Opening an ICD Collection : merge or replace ?"),
+                tr("There is an ICD Collection inside the editor, "
+                   "do you to replace it or to add the opened collection ?"),
+                QString(), QStringList() << tr("Replace collection") << tr("Add to collection"),
+                tr("Open a collection") + " - " + qApp->applicationName());
+//        if (r == 0) {
+//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
+//        } else if (r==1) {
+//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
+//        }
+        IcdIO io;
+        io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser));
+    } else {
+        IcdIO io;
+        io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser));
+//        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
+    }
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::CodeWithoutDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::HumanReadableDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
+    ui->collectionView->expandAll();
+}
+
+QString IcdCentralWidget::collectionToXml() const
+{
+    IcdIO io;
+    return io.icdCollectionToXml(d->m_CollectionModel);
 }
 
 void IcdCentralWidget::toggleSelector()
@@ -185,7 +229,7 @@ void IcdCentralWidget::toggleSelector()
 void IcdCentralWidget::clear()
 {
     if (d->m_CollectionModel) {
-        d->m_CollectionModel->clear();
+        d->m_CollectionModel->clearCollection();
     }
 }
 

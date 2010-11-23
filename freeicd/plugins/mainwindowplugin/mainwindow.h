@@ -72,7 +72,7 @@ public:
     void readSettings();
     void writeSettings();
     void createStatusBar();
-    bool saveIcdCoding(const QString &fileName = QString::null);
+    bool saveIcdCollection(const QString &fileName = QString::null);
     void changeFontTo(const QFont &font);
 
 

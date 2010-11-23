@@ -44,6 +44,8 @@
 //#include <coreplugin/idocumentprinter.h>
 
 #include <icdplugin/icddownloader.h>
+#include <icdplugin/constants.h>
+
 // TEST
 #include <icdplugin/icdcodeselector.h>
 #include <icdplugin/icdmodel.h>
@@ -435,12 +437,13 @@ bool MainWindow::printPreview()
 
 bool MainWindow::saveAsFile()
 {
-    return saveIcdCoding();
+    /** \todo save filename */
+    return saveIcdCollection();
 }
 
 bool MainWindow::saveFile()
 {
-    return saveIcdCoding();
+    return saveIcdCollection();
 }
 
 /**
@@ -448,7 +451,7 @@ bool MainWindow::saveFile()
   \sa openPrescription()
   \sa DrugsIO
 */
-bool MainWindow::saveIcdCoding(const QString &fileName)
+bool MainWindow::saveIcdCollection(const QString &fileName)
 {
 //    const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
 //    QString extraDatas = patient()->toXml();
@@ -466,7 +469,9 @@ bool MainWindow::saveIcdCoding(const QString &fileName)
 //        }
 //        extraDatas.append("/>");
 //    }
-//    return DrugsDB::DrugsIO::savePrescription(drugModel(), extraDatas, fileName);
+    QString xml = m_ui->widget->collectionToXml();
+
+    return Utils::saveStringToFile(xml, QDir::homePath(), QCoreApplication::translate(ICD::Constants::ICDCONSTANTS_TR_CONTEXT, ICD::Constants::FREEICD_FILEFILTER));
 }
 
 /**
@@ -479,8 +484,7 @@ bool MainWindow::openFile()
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(Trans::Constants::OPEN_FILE),
                                              QDir::homePath(),
-                                             "*.xml");
-                                             //tkTr(Core::Constants::FREEICD_FILEFILTER) );
+                                             QCoreApplication::translate(ICD::Constants::ICDCONSTANTS_TR_CONTEXT, ICD::Constants::FREEICD_FILEFILTER) );
     if (f.isEmpty())
         return false;
     //    QString f = "/Users/eric/prescription.di";
@@ -492,21 +496,7 @@ bool MainWindow::openFile()
 
 void MainWindow::readFile(const QString &file)
 {
-//    QString datas;
-//    if (drugModel()->rowCount() > 0) {
-//        int r = Utils::withButtonsMessageBox(
-//                tr("Opening a prescription : merge or replace ?"),
-//                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
-//                QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
-//                tr("Open a prescription") + " - " + qApp->applicationName());
-//        if (r == 0) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
-//        } else if (r==1) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
-//        }
-//    } else {
-//        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
-//    }
+    m_ui->widget->openFile(file);
 //    patient()->fromXml(datas);
 //    refreshPatient();
 }

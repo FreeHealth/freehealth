@@ -194,6 +194,9 @@ namespace Constants {
         VERSION_COMMENT
     };
 
+    // File association
+    const char * const  FREEICD_FILEFILTER = QT_TRANSLATE_NOOP("ICD", "ICD Collection file (*.icd)");
+
     // Contexts
     const char * const  C_ICD_PLUGINS = "ICD.cGlobal";
     const char * const  G_ICD_DATABASES = "grICD.Db";

@@ -156,3 +156,13 @@ CREATE TABLE `system` (
   PRIMARY KEY  (`SID`,`LID`)
 );
 
+-- TYPE=MyISAM COMMENT='Database version and comment'
+CREATE TABLE `version`(
+  `name`  varchar(50) NOT NULL,
+  `version` varchar(3) NOT NULL,
+  `build` integer,
+  `valid` bool,
+  `date` varchar(18),
+  `expl`varchar(500)
+);
+

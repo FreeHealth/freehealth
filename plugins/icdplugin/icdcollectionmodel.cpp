@@ -267,6 +267,13 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
 //{
 //}
 
+void IcdCollectionModel::clearCollection()
+{
+    d->m_SIDs.clear();
+    d->m_ExcludedSIDs.clear();
+    QStandardItemModel::clear();
+}
+
 Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;

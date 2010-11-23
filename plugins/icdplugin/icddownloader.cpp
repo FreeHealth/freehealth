@@ -168,7 +168,7 @@ bool IcdDownloader::populateDatabaseWithRawSources()
             << "REFER"
             << "SYSTEM"
 //            << "TABLE"
-//            << "VERSION"
+            << "VERSION"
             ;
     m_Progress->setRange(0, files.count() +1);
     m_Progress->setValue(1);

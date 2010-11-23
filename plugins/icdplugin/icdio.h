@@ -50,11 +50,16 @@ class IcdIOPrivate;
 class IcdIO
 {
 public:
+    enum ModelManagement {
+        ReplaceModelContent = 0,
+        AddToModel
+    };
+
     IcdIO();
     ~IcdIO();
 
     QString icdCollectionToXml(const IcdCollectionModel *model);
-    bool icdCollectionFromXml(IcdCollectionModel *model);
+    bool icdCollectionFromXml(IcdCollectionModel *model, const QString &xml);
 
     QString icdCollectionToHtml(const IcdCollectionModel *model);
 
