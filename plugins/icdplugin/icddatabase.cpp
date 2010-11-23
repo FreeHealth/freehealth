@@ -39,6 +39,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/translators.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -302,7 +303,15 @@ bool IcdDatabase::init()
 
      if (!d->m_DownloadAndPopulate)
          m_initialized = true;
+
+     connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(refreshLanguageDependCache()));
      return true;
+}
+
+void IcdDatabase::refreshLanguageDependCache()
+{
+    d->m_CachedSystemLabelsFromLid.clear();
+    d->m_CachedSystemLabelsFromSid.clear();
 }
 
 void IcdDatabase::logChronos(bool state)

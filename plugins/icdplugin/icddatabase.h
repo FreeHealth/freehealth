@@ -87,6 +87,9 @@ public:
 protected:
     bool init();
 
+private Q_SLOTS:
+    void refreshLanguageDependCache();
+
 private:
     // intialization state
     static IcdDatabase *m_Instance;
