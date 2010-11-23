@@ -12,6 +12,7 @@ core.subdir = coreplugin
 mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += icd
+mainwindow.depends += printer
 
 icd.subdir = icdplugin
 icd.depends += core

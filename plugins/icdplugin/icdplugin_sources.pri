@@ -34,9 +34,11 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icdcentralwidget.cpp \
     $${PWD}/icdio.cpp
 
+
 FORMS += $${PWD}/icdviewer.ui \
     $${PWD}/icdcodeselector.ui \
     $${PWD}/icdcentralwidget.ui
+
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/icdplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/icdplugin_de.ts \

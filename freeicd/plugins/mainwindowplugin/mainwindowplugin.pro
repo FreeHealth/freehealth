@@ -15,12 +15,17 @@ DEPENDPATH += ../
 
 HEADERS += mainwindowplugin.h \
     mainwindow_exporter.h \
-    mainwindow.h
+    mainwindow.h \
+    preferences/userpreferences.h \
+
 
 SOURCES += mainwindowplugin.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    preferences/userpreferences.cpp \
 
-FORMS += mainwindow.ui
+
+FORMS += mainwindow.ui \
+    preferences/useroptionspage.ui
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/freeicd_mainwindow_fr.ts \

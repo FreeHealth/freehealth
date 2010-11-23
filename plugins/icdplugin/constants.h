@@ -233,6 +233,9 @@ namespace Constants {
 
     // Settings and tokens
     const char * const  S_STATEPREFIX            = "ICD/";
+    const char * const  S_USER_HEADER            = "UserHeader";
+    const char * const  S_USER_FOOTER            = "UserFooter";
+    const char * const  S_USER_WATERMARK         = "UserWatermark";
 
 
 }  // End namespace Constants
