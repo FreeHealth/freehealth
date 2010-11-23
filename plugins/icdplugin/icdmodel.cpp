@@ -43,7 +43,7 @@
 
 #include <QDebug>
 
-enum { WarnFilter=false };
+enum { WarnFilter=true };
 
 using namespace ICD;
 
@@ -226,7 +226,7 @@ QVariant IcdSearchModel::data(const QModelIndex &index, int role) const
         case ICD_Code: return icdBase()->getIcdCode(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
         case ICD_CodeWithDagetAndStar: return icdBase()->getIcdCodeWithDagStar(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
         case Daget: return icdBase()->getHumanReadableIcdDaget(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
-        case Label: return icdBase()->getSystemLabel(d->m_IcdMaster->index(index.row(), Internal::Query_SID).data());
+        case Label: return icdBase()->getLabelFromLid(d->m_IcdMaster->index(index.row(), Internal::Query_LID).data());
         }
     }
     return QVariant();

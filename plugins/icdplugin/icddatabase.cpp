@@ -76,6 +76,8 @@ public:
     {
         m_CachedCodes.setMaxCost(1000);
         m_CachedDaget.setMaxCost(1000);
+        m_CachedSystemLabelsFromSid.setMaxCost(2000);
+        m_CachedSystemLabelsFromLid.setMaxCost(2000);
     }
 
     ~IcdDatabasePrivate()
@@ -88,6 +90,8 @@ public:
     bool m_LogChrono, m_DownloadAndPopulate;
     QCache<int, QVariant> m_CachedCodes;
     QCache<int, QString> m_CachedDaget;
+    QCache<int, QString> m_CachedSystemLabelsFromSid;
+    QCache<int, QString> m_CachedSystemLabelsFromLid;
     QMultiHash<int, Daget *> m_CachedDependentDaget;
 
 private:
@@ -620,6 +624,10 @@ bool IcdDatabase::codeCanBeUsedAlone(const QVariant &SID)
 
 QString IcdDatabase::getLabelFromLid(const QVariant &LID)
 {
+    int lid = LID.toInt();
+    if (d->m_CachedSystemLabelsFromLid.keys().contains(lid)) {
+        return *d->m_CachedSystemLabelsFromLid[lid];
+    }
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
@@ -632,7 +640,9 @@ QString IcdDatabase::getLabelFromLid(const QVariant &LID)
     QString req = select(Constants::Table_Libelle, getLibelleLanguageField(), where);
     if (query.exec(req)) {
         if (query.next()) {
-            return query.value(0).toString();
+            QString *s = new QString(query.value(0).toString());
+            d->m_CachedSystemLabelsFromLid.insert(lid, s);
+            return *s;
         }
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
@@ -642,6 +652,10 @@ QString IcdDatabase::getLabelFromLid(const QVariant &LID)
 
 QString IcdDatabase::getSystemLabel(const QVariant &SID)
 {
+    int sid = SID.toInt();
+    if (d->m_CachedSystemLabelsFromSid.keys().contains(sid)) {
+        return *d->m_CachedSystemLabelsFromSid[sid];
+    }
     if (!database().isOpen()) {
         if (!database().open()) {
             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
@@ -660,7 +674,9 @@ QString IcdDatabase::getSystemLabel(const QVariant &SID)
 
     if (query.exec(req)) {
         if (query.next()) {
-            return query.value(0).toString();
+            QString *s = new QString(query.value(0).toString());
+            d->m_CachedSystemLabelsFromSid.insert(sid, s);
+            return *s;
         }
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
