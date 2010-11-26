@@ -7,6 +7,7 @@ DEFINES += ACCOUNTRECEIPTS_LIBRARY
 BUILD_PATH_POSTFIXE = FreeAccount
 
 include(../fmf_plugins.pri)
+
 include(accountreceiptsplugin_dependencies.pri)
 
 QT *= sql \
@@ -16,8 +17,8 @@ QT *= sql \
 # Input
 HEADERS += accountreceipts_exporter.h \
     accountreceiptsplugin.h \
-    receipts.h \       # should be renamed to receiptviewer.h
-    receiptsmanager.h \   # Not compatible with FreeMedForms
+    receipts.h \       
+    receiptsmanager.h \   
     receiptsengine.h \
     findReceiptsValues.h \
     xmlcategoriesparser.h \
@@ -30,7 +31,7 @@ FORMS += ReceiptsMainDialog.ui \
 
 SOURCES += accountreceiptsplugin.cpp \
     receipts.cpp \
-    receiptsmanager.cpp \ # Not compatible with FreeMedForms
+    receiptsmanager.cpp \ 
     receiptsengine.cpp \
     findReceiptsValues.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
