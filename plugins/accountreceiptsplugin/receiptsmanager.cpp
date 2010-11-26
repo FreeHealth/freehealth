@@ -1,5 +1,7 @@
 #include "receiptsmanager.h"
 #include "xmlcategoriesparser.h"
+#include "../accountbaseplugin/insurancemodel.h"
+
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
  
@@ -30,19 +32,14 @@ QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
   return rList;
 }
 
-QStringList receiptsManager::getComboBoxesDatas(const QString & values,const QString & table){
-  QStringList list;
-  QSqlDatabase db = QSqlDatabase::database(freeaccount);
-  QSqlQuery query(db);
-    QString req = QString("SELECT %1 FROM %2").arg(values,table);
-    if(!query.exec(req)){
-        qWarning()  << __FILE__ << QString::number(__LINE__) << query.lastError().text();
-        }
-    while(query.next()){
-        QString str = query.value(0).toString();
-        list << str;    
-        }
-  return list;
+QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString & table){
+   QStringList listForReturn;
+   if (table == "insurance")
+   {
+   	  InsuranceModel model(this);
+   	  
+       }
+   return listForReturn;
 }
 
 /*QString receiptsManager::createTablesAndFields(){
