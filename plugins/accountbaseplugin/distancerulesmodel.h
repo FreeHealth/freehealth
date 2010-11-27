@@ -32,8 +32,8 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef DistanceRulesMODEL_H
-#define DistanceRulesMODEL_H
+#ifndef DISTANCERULESMODEL_H
+#define DISTANCERULESMODEL_H
 
 #include <QAbstractTableModel>
 

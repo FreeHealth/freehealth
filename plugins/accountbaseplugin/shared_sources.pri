@@ -15,6 +15,9 @@ HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/assetmodel.h \
     $${PWD}/depositmodel.h \
     $${PWD}/movementmodel.h \
+    $${PWD}/percentmodel.h \
+    $${PWD}/rulesmodel.h \
+    $${PWD}/distancerulesmodel.h \
     $${PWD}/medicalproceduremodel.h
 
 SOURCES += $${PWD}/accountbaseplugin.cpp \
@@ -27,6 +30,9 @@ SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/assetmodel.cpp \
     $${PWD}/depositmodel.cpp \
     $${PWD}/movementmodel.cpp \
+    $${PWD}/percentmodel.cpp \
+    $${PWD}/rulesmodel.cpp \
+    $${PWD}/distancerulesmodel.cpp \
     $${PWD}/medicalproceduremodel.cpp
 
 
