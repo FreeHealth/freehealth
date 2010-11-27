@@ -1,10 +1,13 @@
 #include "receiptsmanager.h"
 #include "xmlcategoriesparser.h"
-#include "../accountbaseplugin/insurancemodel.h"
+#include <accountbaseplugin/insurancemodel.h>
+#include <accountbaseplugin/constants.h>
 
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
- 
+using namespace AccountDB;
+using namespace Constants;
+
 receiptsManager::receiptsManager()
 {
 }
@@ -34,10 +37,16 @@ QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
 
 QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString & table){
    QStringList listForReturn;
+   qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
    if (table == "insurance")
    {
-   	  InsuranceModel model(this);
-   	  
+   	  InsuranceModel  model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
        }
    return listForReturn;
 }

@@ -242,7 +242,6 @@ void ReceiptsGUI::percentages()
 
 void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, const QString &table)
 {
-    // Combo will change so it can't be const...
     QString values = list.join(",");
     comboBox ->setEditable(true);
     comboBox ->setInsertPolicy(QComboBox::NoInsert);
@@ -251,6 +250,7 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
     listReceiptsManager = rbm.getComboBoxesDatas(values,table);
     QString str;
     foreach(str,listReceiptsManager){
+        qDebug() << __FILE__ << QString::number(__LINE__) << " strcombo = " << str;
         comboBox->addItem(str);
     }
 }

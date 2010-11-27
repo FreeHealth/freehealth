@@ -6,6 +6,8 @@ DEFINES += ACCOUNTRECEIPTS_LIBRARY
 
 BUILD_PATH_POSTFIXE = FreeAccount
 
+INCLUDEPATH += ../accountbaseplugin
+
 include(../fmf_plugins.pri)
 
 include(accountreceiptsplugin_dependencies.pri)
@@ -22,7 +24,8 @@ HEADERS += accountreceipts_exporter.h \
     receiptsengine.h \
     findReceiptsValues.h \
     xmlcategoriesparser.h \
-    receiptviewer.h
+    receiptviewer.h 
+
 
 FORMS += ReceiptsMainDialog.ui \
     ReceiptsWidget.ui \
@@ -35,7 +38,7 @@ SOURCES += accountreceiptsplugin.cpp \
     receiptsengine.cpp \
     findReceiptsValues.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
-    receiptviewer.cpp
+    receiptviewer.cpp 
 
 
 OTHER_FILES += AccountReceipts.pluginspec
