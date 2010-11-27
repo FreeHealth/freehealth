@@ -98,7 +98,7 @@ QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString
    	      }
    	  
        }
-        if (table == "distance_rules")
+    if (table == "distance_rules")
     {
    	  DistanceRulesModel model(this);
    	  for (int row = 0; row < model.rowCount(); row += 1)
