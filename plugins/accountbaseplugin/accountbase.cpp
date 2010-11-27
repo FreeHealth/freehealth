@@ -556,6 +556,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
         Utils::Log::addMessage(this, tr("Database %1 %2 correctly created").arg(connectionName, dbName));
         return true;
     } else {
+        qDebug() << __FILE__ << QString::number(__LINE__) << " database can not be created " ;
         Utils::Log::addError(this, tr("ERROR : database can not be created %1 %2 %3")
                              .arg(connectionName, dbName, DB.lastError().text()));
     }
