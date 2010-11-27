@@ -20,6 +20,9 @@ HEADERS = accountbaseplugin.h \
     assetmodel.h \
     depositmodel.h \
     movementmodel.h \
+    percentmodel.h \
+    rulesmodel.h \
+    distancerulesmodel.h \
     medicalproceduremodel.h
 
 SOURCES = accountbaseplugin.cpp \
@@ -32,6 +35,9 @@ SOURCES = accountbaseplugin.cpp \
     assetmodel.cpp \
     depositmodel.cpp \
     movementmodel.cpp \
+    percentmodel.cpp \
+    rulesmodel.cpp \
+    distancerulesmodel.cpp \
     medicalproceduremodel.cpp
 
 OTHER_FILES = AccountBase.pluginspec

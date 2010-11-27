@@ -129,7 +129,9 @@ AccountBase::AccountBase(QObject *parent)
     addTable(Table_Insurance,         "insurance");
     addTable(Table_Sites,             "sites");
     addTable(Table_Users,             "users");
-    addTable(Table_Pourcent,          "pourcentages");
+    addTable(Table_Percent,           "percentages");
+    addTable(Table_Rules,             "rules");
+    addTable(Table_DistanceRules,     "distance_rules");
 //    addTable(Table_Session,           "session");
 //    addTable(Table_Banking,           "banking");
 //    addTable(Table_NameIndex,         "nameindex");
@@ -396,15 +398,25 @@ AccountBase::AccountBase(QObject *parent)
 //                    "id_drtux_usr 	int(11) 			 			NULL 				,"
 //                    "PRIMARY KEY(id_usr));";
 
-    addField(Table_Pourcent,  POURCENT_ID,      "PCT_ID",      FieldIsUniquePrimaryKey);
-    addField(Table_Pourcent,  POURCENT_UID,     "PCT_UID",     FieldIsUUID);
-    addField(Table_Pourcent,  POURCENT_TYPE,    "TYPE",        FieldIsShortText);
-    addField(Table_Pourcent,  POURCENT_VALUE,   "VALUE",       FieldIsReal);
+    addField(Table_Percent,  PERCENT_ID,      "PCT_ID",      FieldIsUniquePrimaryKey);
+    addField(Table_Percent,  PERCENT_UID,     "PCT_UID",     FieldIsUUID);
+    addField(Table_Percent,  PERCENT_TYPE,    "TYPE",        FieldIsShortText);
+    addField(Table_Percent,  PERCENT_VALUE,   "VALUE",       FieldIsReal);
 //    "CREATE TABLE	pourcentages ("  --> pourcentages
 //                            "id_pourcent	int(10)		UNSIGNED			NOT NULL	auto_increment ,"
 //                            "type		varchar(100)	COLLATE utf8_unicode_ci		NULL				,"
 //                            "pourcentage	varchar(6)	COLLATE utf8_unicode_ci		NOT NULL			,"
 //                            "PRIMARY KEY(id_pourcent));";
+
+    addField(Table_Rules,  RULES_ID,      "RULES_ID",      FieldIsUniquePrimaryKey);
+    addField(Table_Rules,  RULES_UID,     "RULES_UID",     FieldIsUUID);
+    addField(Table_Rules,  RULES_TYPE,    "TYPE",          FieldIsShortText);
+    addField(Table_Rules,  RULES_VALUES,  "VALUES",        FieldIsShortText);
+    
+    addField(Table_DistanceRules,  DISTRULES_ID,      "DISTRULES_ID",      FieldIsUniquePrimaryKey);
+    addField(Table_DistanceRules,  DISTRULES_UID,     "DISTRULES_UID",     FieldIsUUID);
+    addField(Table_DistanceRules,  DISTRULES_TYPE,    "TYPE",              FieldIsShortText);
+    addField(Table_DistanceRules,  DISTRULES_VALUES,  "VALUES",            FieldIsShortText);
 
 //    addTable(Table_Session, "session");
 //    addField(Table_Session,  PAIE_ID,          "BANKING_ID",      FieldIsUniquePrimaryKey);

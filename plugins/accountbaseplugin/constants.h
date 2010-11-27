@@ -60,6 +60,7 @@ namespace Constants {
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
 
     // Database abstraction
+    
     enum Tables {
         Table_MedicalProcedure = 0,
         Table_BankDetails,
@@ -71,10 +72,12 @@ namespace Constants {
         Table_Insurance,
         Table_Sites,
         Table_Users,
-        Table_Pourcent,
+        Table_Percent,
         Table_Session,
         Table_Banking,
-        Table_NameIndex
+        Table_NameIndex,
+        Table_Rules,
+        Table_DistanceRules
     };
 
     enum TableMP_Fields {
@@ -217,12 +220,26 @@ namespace Constants {
         USER_EMR_UID,
         USER_MaxParam
     };
-    enum TablePourcent_Fields {
-        POURCENT_ID = 0,
-        POURCENT_UID,
-        POURCENT_TYPE,
-        POURCENT_VALUE,
-        POURCENT_MaxParam
+    enum TablePercent_Fields {
+        PERCENT_ID = 0,
+        PERCENT_UID,
+        PERCENT_TYPE,
+        PERCENT_VALUE,
+        PERCENT_MaxParam
+    };
+    enum TableRules_Fields {
+        RULES_ID = 0,
+        RULES_UID,
+        RULES_TYPE,
+        RULES_VALUES,
+        RULES_MaxParam
+    };
+    enum TableDistanceRules_Fields {
+        DISTRULES_ID = 0,
+        DISTRULES_UID,
+        DISTRULES_TYPE,
+        DISTRULES_VALUES,
+        DISTRULES_MaxParam
     };
 
     // Menu and action for ActionManager
