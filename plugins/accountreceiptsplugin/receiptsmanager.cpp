@@ -1,7 +1,12 @@
 #include "receiptsmanager.h"
 #include "xmlcategoriesparser.h"
-#include <accountbaseplugin/insurancemodel.h>
 #include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/insurancemodel.h>
+#include <accountbaseplugin/workingplacesmodel.h>
+#include <accountbaseplugin/bankaccountmodel.h>
+#include <accountbaseplugin/percentmodel.h>
+#include <accountbaseplugin/rulesmodel.h>
+#include <accountbaseplugin/distancerulesmodel.h>
 
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
@@ -47,6 +52,65 @@ QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString
    	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
    	  	listForReturn << str;
    	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "patient";
+   	      }
+       }
+   if (table == "sites")
+   {
+   	  WorkingPlacesModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "cabinet";
+   	      }
+   	  
+       }
+    if (table == "bank_details")
+    {
+   	  BankAccountModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "bank";
+   	      }
+   	  
+       }
+    if (table == "rules")
+    {
+   	  RulesModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,RULES_TYPE),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "rule";
+   	      }
+   	  
+       }
+        if (table == "distance_rules")
+    {
+   	  DistanceRulesModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "distance rule";
+   	      }
+   	  
        }
    return listForReturn;
 }

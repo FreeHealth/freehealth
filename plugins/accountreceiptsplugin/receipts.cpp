@@ -119,11 +119,11 @@ void ReceiptsGUI::initialize()
     QString tableBankAccount = "bank_details";
     fillComboBoxes(ui->comboBoxBankAccount,listBankAccount,tableBankAccount);
     QStringList listRules;
-    listRules << "NAME_OF_RULE";
+    listRules << "TYPE";
     QString strRules = "rules";
     fillComboBoxes(ui->comboBoxRules,listRules,strRules);
     QStringList listDistanceRule;
-    listDistanceRule << "NAME_DIST_RULE";
+    listDistanceRule << "TYPE";
     QString strDistanceRule = "distance_rules";
     fillComboBoxes(ui->comboBoxDistance, listDistanceRule,strDistanceRule);
 
