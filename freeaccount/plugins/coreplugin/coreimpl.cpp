@@ -93,6 +93,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
+    m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEACCOUNT_SPLASHSCREEN);
     createSplashScreen(m_Theme->splashScreen(Constants::FREEACCOUNT_SPLASHSCREEN));
 
     // add translators

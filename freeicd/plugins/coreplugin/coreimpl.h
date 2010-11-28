@@ -93,8 +93,8 @@ public:
     IPatient *patient() const {return 0;}
     void setPatient(IPatient *) {}
 
-    IUser *user() const {return 0;}
-    void setUser(IUser *user) {Q_UNUSED(user);}
+    IUser *user() const {return m_User;}
+    void setUser(IUser *user) {m_User = user;}
 
 
 private:

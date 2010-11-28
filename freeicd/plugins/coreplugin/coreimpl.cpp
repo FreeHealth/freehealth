@@ -79,7 +79,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_UID(new UniqueIDManager)
 {
     m_Settings = new SettingsPrivate(this);
-    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);
+    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEICD_UPDATE_URL);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
@@ -93,6 +93,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
+    m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEICD_SPLASHSCREEN);
     createSplashScreen(m_Theme->splashScreen(Constants::FREEICD_SPLASHSCREEN));
 
     // add translators
@@ -220,11 +221,11 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     QString msg;
     bool first = false;
     if (m_Settings->firstTimeRunning()) {
-        msg = QCoreApplication::translate("Core", "You are running FreeDiams for the first time. You need to approve the licence terms.");
+        msg = QCoreApplication::translate("Core", "You are running FreeICD for the first time. You need to approve the licence terms.");
         first = true;
 
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        msg = QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement.");
+        msg = QCoreApplication::translate("Core", "You are running a new version of FreeICD, you need to renew the licence agreement.");
     }
 
     if (!msg.isEmpty()) {
@@ -235,7 +236,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
         // update some preferences ?
         bool yes = Utils::yesNoMessageBox(
                 QCoreApplication::translate("Core", "You are updating FreeICD, do you want to update your personnal preferences ?"),
-                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences."));
+                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeICD to update your personnal preferences."));
         if (yes) {
             m_UpdatePreferences = true;
         }

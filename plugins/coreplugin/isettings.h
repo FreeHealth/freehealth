@@ -73,7 +73,8 @@ public:
         SampleFormsPath,
         DocumentationPath,
         WebSiteUrl,
-        UpdateUrl
+        UpdateUrl,
+        Splashscreen
     };
 
     virtual ~ISettings() {}

@@ -81,6 +81,7 @@ using namespace UserPlugin;
 using namespace UserPlugin::Internal;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent) :
     QDialog(parent)
@@ -93,7 +94,11 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
     m_ui->setupUi(this);
     m_ui->login->setIcon(theme()->icon(Core::Constants::ICONEYES));
     m_ui->password->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    m_ui->lblAppName->setPixmap(Core::ICore::instance()->theme()->splashScreen(Core::Constants::FREEMEDFORMS_SPLASHSCREEN).scaled(QSize(400,200),Qt::KeepAspectRatio));
+    QPixmap splash = theme()->splashScreen(settings()->path(Core::ISettings::Splashscreen));
+    if (splash.size().width() > 400 || splash.size().height() >200) {
+        splash = splash.scaled(QSize(400,200),Qt::KeepAspectRatio);
+    }
+    m_ui->lblAppName->setPixmap(splash);
     m_NumberOfTries = 0;
     setWindowTitle(qApp->applicationName());
     if (!parent)
