@@ -2,9 +2,9 @@ TEMPLATE = subdirs
 
 CONFIG *= ordered
 
-SUBDIRS += \
+SUBDIRS  = \
            ../../libs/aggregation \
            ../../libs/extensionsystem \
            ../../libs/translationutils \
            ../../libs/utils \
-           ../../contrib/quazip/quazip
+           ../../contrib/quazip
