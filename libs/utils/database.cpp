@@ -217,7 +217,15 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                                    const int port,
                                    CreationOption createOption
                                    )
-{
+{   
+    qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
+    << dbName
+    <<pathOrHostName
+    << access
+    << driver
+    << login
+    << password
+    << QString::number(port) ;
     bool toReturn = true;
     d->m_ConnectionName = "";
 
