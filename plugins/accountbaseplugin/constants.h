@@ -80,7 +80,7 @@ namespace Constants {
         Table_DistanceRules
     };
 
-    enum TableMP_Fields {
+    enum TableMedicalProcedure_Fields {
         MP_ID = 0,
         MP_UID,
         MP_USER_UID,
@@ -92,7 +92,7 @@ namespace Constants {
         MP_DATE,
         MP_MaxParam
     };
-    enum TableBD_Fields {
+    enum TableBankDetails_Fields {
         BANKDETAILS_ID = 0,
         BANKDETAILS_USER_UID,
         BANKDETAILS_LABEL,
