@@ -30,10 +30,10 @@
 #include "icdassociation.h"
 #include "icdwidgetmanager.h"
 #include "constants.h"
-
-// TEST
+#include "icddatabase.h"
 #include "icdio.h"
-// END TEST
+#include "icdplugin.h"
+
 
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
@@ -61,6 +61,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 
 
 namespace ICD {
@@ -287,10 +288,11 @@ void IcdCentralWidget::print()
         Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
         return;
     }
-
     p->clearTokens();
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, QCoreApplication::translate(Constants::ICDCONSTANTS_TR_CONTEXT, Constants::ICD_CODECOLLECTION_TEXT));
+    tokens.insert(Constants::T_ICD_DATABASE_VERSION, icdBase()->getDatabaseVersion());
+    tokens.insert(Constants::T_ICD_PLUGIN_VERSION, IcdPlugin::pluginVersion());
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     p->print(toPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
 }

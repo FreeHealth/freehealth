@@ -49,9 +49,13 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+    static QString pluginVersion() {return m_PlugVersion;}
+
 private Q_SLOTS:
     void postDatabaseCreation();
 
+private:
+    static QString m_PlugVersion;
 };
 
 

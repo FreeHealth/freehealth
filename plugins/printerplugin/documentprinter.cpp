@@ -95,7 +95,13 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
     QString header;
     if (user()) {
         /** \todo wrong papers */
+#ifdef FREEDIAMS
         header = user()->value(Core::IUser::PrescriptionHeader).toString();
+#else
+#ifdef FREEICD
+        header = user()->value(Core::IUser::GenericHeader).toString();
+#endif
+#endif
         // replace user's tokens
         user()->replaceTokens(header);
     }
@@ -114,7 +120,14 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 {
     QString footer;
     if (user()) {
+        /** \todo wrong papers */
+#ifdef FREEDIAMS
         footer = user()->value(Core::IUser::PrescriptionFooter).toString();
+#else
+#ifdef FREEICD
+        footer = user()->value(Core::IUser::GenericFooter).toString();
+#endif
+#endif
         // replace user's tokens
         user()->replaceTokens(footer);
     }
@@ -135,9 +148,18 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
     int presence = Printer::DuplicataOnly;
     QString html;
     if (user()) {
+        /** \todo wrong papers */
+#ifdef FREEDIAMS
         align = user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt();
         presence = user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt();
         html = user()->value(Core::IUser::PrescriptionWatermark).toString();
+#else
+#ifdef FREEICD
+        align = user()->value(Core::IUser::GenericWatermarkAlignement).toInt();
+        presence = user()->value(Core::IUser::GenericWatermarkPresence).toInt();
+        html = user()->value(Core::IUser::GenericWatermark).toString();
+#endif
+#endif
     }
     p->addHtmlWatermark(html,
                        Print::Printer::Presence(presence),

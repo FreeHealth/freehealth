@@ -39,6 +39,8 @@
 
 using namespace ICD;
 
+QString ICD::IcdPlugin::m_PlugVersion = "";
+
 IcdPlugin::IcdPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
@@ -55,6 +57,8 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
         qWarning() << "IcdPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    m_PlugVersion = pluginSpec()->version();
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("icdplugin");

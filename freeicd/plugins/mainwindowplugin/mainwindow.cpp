@@ -216,6 +216,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
+    // Creating MainWindow interface
+    m_ui = new Internal::Ui::MainWindow();
+    m_ui->setupUi(this);
+
     return true;
 }
 
@@ -223,10 +227,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 */
 void MainWindow::extensionsInitialized()
 {
-    // Creating MainWindow interface
-    m_ui = new Internal::Ui::MainWindow();
-    m_ui->setupUi(this);
-
     messageSplash(tr("Initializing ICD10 database"));
 //    m_ui->m_CentralWidget->initialize();
 
@@ -314,7 +314,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-	m_ui->retranslateUi(this);
+        if (m_ui)
+            m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
 //        refreshPatient();
     }

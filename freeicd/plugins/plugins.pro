@@ -5,7 +5,9 @@ SUBDIRS = \
     mainwindow \
     icd \
     printer \
-    texteditor
+    texteditor \
+    user \
+    views
 
 core.subdir = coreplugin
 
@@ -23,3 +25,12 @@ printer.depends += texteditor
 
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
+
+user.subdir   = usermanagerplugin
+user.depends += core
+user.depends += views
+user.depends += printer
+user.depends += texteditor
+
+views.subdir   = listviewplugin
+views.depends += core

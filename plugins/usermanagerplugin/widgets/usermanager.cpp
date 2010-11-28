@@ -220,6 +220,7 @@ bool UserManagerPrivate::initialize()
     userTableView->resizeColumnsToContents();
     userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
     userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    userTableView->horizontalHeader()->setStretchLastSection(true);
     // prepare Search Line Edit
     m_SearchToolBut = new QToolButton(searchLineEdit);
     searchLineEdit->setLeftButton(m_SearchToolBut);
