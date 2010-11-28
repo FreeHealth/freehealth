@@ -163,8 +163,8 @@ void QButtonLineEdit::emitTextChangedSignal()
 void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction(action);
+    m_emptyString = cleanString(action->text());
     if (text().isEmpty() || (text() == m_emptyString)) {
-        m_emptyString = cleanString(action->text());
         setText(emptyTextWithExtraText());
         setSpecificStyleSheet("color:gray;");
     }
@@ -185,6 +185,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 {
     if (m_Delayed)
         m_Timer->stop();
+
     if (event->modifiers() & Qt::AltModifier) {
         const QList<QAction *> &list = m_leftButton->actions();
 
