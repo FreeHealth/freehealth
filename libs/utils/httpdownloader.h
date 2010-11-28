@@ -26,6 +26,7 @@
 #ifndef HTTPDOWNLOADER_H
 #define HTTPDOWNLOADER_H
 
+#include <utils/global_exporter.h>
 #include <QObject>
 
 #include <QNetworkAccessManager>
@@ -38,7 +39,7 @@ class QMainWindow;
 
 namespace Utils {
 
-class HttpDownloader : public QObject
+class UTILS_EXPORT HttpDownloader : public QObject
 {
     Q_OBJECT
 public:
