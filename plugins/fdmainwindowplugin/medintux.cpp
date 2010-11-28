@@ -32,6 +32,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <drugsbaseplugin/constants.h>
 
@@ -55,7 +56,7 @@ namespace Internal {
               "{{::delete_file (../../tmp/DIexch.txt)}}\\\n"
               "{{::exe_process (WaitEnd,%1,"
               "--medintux,"
-              "--exchange=\"$ToAbsPath../../tmp/DIexch.txt\","
+              "--exchange-out=\"$ToAbsPath../../tmp/DIexch.txt\","
               "--patientname=\"{{NOM PATIENT}}\","
               "--patientfirstname=\"{{PRENOM PATIENT}}\","
               "--gender={{SEXE PATIENT}},"
@@ -70,7 +71,7 @@ namespace Internal {
             "{{SAVE CURRENT DOC=../../tmp/DIexch.txt}}"
             "{{::exe_process (WaitEnd ,%1,"
             "--medintux,"
-            "--exchange=\"$ToAbsPath../../tmp/DIexch.txt\","
+            "--exchange-out=\"$ToAbsPath../../tmp/DIexch.txt\","
             "--patientname=\"{{NOM PATIENT}}\","
             "--patientfirstname=\"{{PRENOM PATIENT}}\","
             "--gender={{SEXE PATIENT}},"
@@ -169,7 +170,7 @@ namespace Internal {
         if (!conf->addUserMenu( MEDINTUX_ACTION_SHORTITLE,
                                 QCoreApplication::translate( "diMedinTux", MEDINTUX_ACTION_TITLE),
                                 script,
-                                Core::ICore::instance()->theme()->iconFullPath(DrugsDB::Constants::I_SEARCHMOLS),
+                                Core::ICore::instance()->theme()->iconFullPath(Core::Constants::ICONFREEDIAMS),
                                 MEDINTUX_ACTION_KEYSEQUENCE ) ) {
             Utils::Log::addMessage( "diMedinTux", QString("Unable to add user menu.") );
             finalMsg += "*** User Menu = WRONG\n";
