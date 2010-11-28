@@ -20,14 +20,15 @@
 
 #include "receipts.h"
 #include "xmlcategoriesparser.h"
-
 #include "ui_ReceiptsWidget.h"
+#include <accountbaseplugin/constants.h>
 
 #include <QMessageBox>
 #include <QFile>
 #include <QMouseEvent>
 #include <QMenu>
-
+using namespace AccountDB;
+using namespace Constants;
 //static inline  AccountDB::AccountBase * DBInstance(){return AccountDB::AccountBase::instance();}
 
 ReceiptsGUI * ReceiptsGUI::d = NULL ;
@@ -371,27 +372,45 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
   if(ui->bankRadioButton->isChecked()) insurance ="1";
   if(ui->dueRadioButton->isChecked()) due ="1";
  
-  
+  /*        ACCOUNT_UID,
+        ACCOUNT_USER_UID,
+        ACCOUNT_PATIENT_UID,
+        ACCOUNT_PATIENT_NAME,
+        ACCOUNT_SITE_ID,
+        ACCOUNT_INSURANCE_ID,
+        ACCOUNT_DATE,
+        ACCOUNT_MEDICALPROCEDURE_XML,
+        ACCOUNT_MEDICALPROCEDURE_TEXT,
+        ACCOUNT_COMMENT,
+        ACCOUNT_CASHAMOUNT,
+        ACCOUNT_CHEQUEAMOUNT,
+        ACCOUNT_VISAAMOUNT,
+        ACCOUNT_INSURANCEAMOUNT,
+        ACCOUNT_OTHERAMOUNT,
+        ACCOUNT_DUEAMOUNT,
+        ACCOUNT_DUEBY,
+        ACCOUNT_ISVALID,
+        ACCOUNT_TRACE,*/
   QHash<int,QString> hash;
-              hash.insert(receiptsEngine::ACCOUNT_UID,m_account_uid); // ??????
-              hash.insert(receiptsEngine::USER_UID,m_user_uid);
-              hash.insert(receiptsEngine::PATIENT_UID,m_patient_uid);
-              hash.insert(receiptsEngine::PATIENT_NAME,m_name+","+m_firstname);
-              hash.insert(receiptsEngine::SITE_ID,m_site_id);
-              hash.insert(receiptsEngine::INSURANCE_ID,m_insurance_id);
-              hash.insert(receiptsEngine::DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
-              hash.insert(receiptsEngine::MP_XML,"");
-              hash.insert(receiptsEngine::MP_TXT,"");
-              hash.insert(receiptsEngine::COMMENT,"");
-              hash.insert(receiptsEngine::CASH,cash);
-              hash.insert(receiptsEngine::CHEQUE,cheque);
-              hash.insert(receiptsEngine::VISA,visa);
-              hash.insert(receiptsEngine::INSURANCE,insurance);
-              hash.insert(receiptsEngine::OTHER,other);
-              hash.insert(receiptsEngine::DUE,due);
-              hash.insert(receiptsEngine::DUE_BY,"");
-              hash.insert(receiptsEngine::ISVALID,"0");
-              hash.insert(receiptsEngine::TRACE,"0");
+              hash.insert(ACCOUNT_UID,m_account_uid); // ??????
+              hash.insert(ACCOUNT_USER_UID,m_user_uid);
+              hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
+              hash.insert(ACCOUNT_PATIENT_NAME,m_name+","+m_firstname);
+              hash.insert(ACCOUNT_SITE_ID,m_site_id);
+              hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
+              hash.insert(ACCOUNT_DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
+              hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"");
+              hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
+              hash.insert(ACCOUNT_COMMENT,"");
+              hash.insert(ACCOUNT_CASHAMOUNT,cash);
+              hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
+              hash.insert(ACCOUNT_VISAAMOUNT,visa);
+              hash.insert(ACCOUNT_INSURANCEAMOUNT,insurance);
+              hash.insert(ACCOUNT_OTHERAMOUNT,other);
+              hash.insert(ACCOUNT_DUEAMOUNT,due);
+              hash.insert(ACCOUNT_DUEBY,"");
+              hash.insert(ACCOUNT_ISVALID,"0");
+              hash.insert(ACCOUNT_TRACE,"0");
   return hash;
 }
 

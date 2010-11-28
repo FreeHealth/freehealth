@@ -1,4 +1,8 @@
 #include "receiptsengine.h"
+#include <accountbaseplugin/constants.h>
+
+using namespace AccountDB;
+using namespace Constants;
 
 receiptsEngine::receiptsEngine(){
     m_mpmodel = new AccountModel(this);
@@ -8,14 +12,14 @@ receiptsEngine::receiptsEngine(){
     //m_model->select();
     
 }
-            /*  hash.insert(receiptsEngine::MP_TXT,"");
-              hash.insert(receiptsEngine::COMMENT,"");
-              hash.insert(receiptsEngine::CASH,cash);
+            /*  hash.insert(receiptsEngine::ACCOUNT_MEDICALPROCEDURE_TEXT,"");
+              hash.insert(receiptsEngine::ACCOUNT_COMMENT,"");
+              hash.insert(receiptsEngine::ACCOUNT_CASHAMOUNT,ACCOUNT_CASHAMOUNT);
               hash.insert(receiptsEngine::CHEQUE,cheque);
               hash.insert(receiptsEngine::VISA,visa);
-              hash.insert(receiptsEngine::INSURANCE,insurance);
+              hash.insert(receiptsEngine::ACCOUNT_INSURANCEAMOUNT,ACCOUNT_INSURANCEAMOUNT);
               hash.insert(receiptsEngine::OTHER,other);
-              hash.insert(receiptsEngine::DUE,due);*/
+              hash.insert(receiptsEngine::ACCOUNT_DUEAMOUNT,ACCOUNT_DUEAMOUNT);*/
 receiptsEngine::~receiptsEngine(){}
 
 bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams){
@@ -24,58 +28,64 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
     QString data;
     QHashIterator<QString,QString> it (hashOfValues);
     QList<int> listValuesNumbers;
-    listValuesNumbers << MP_TXT << COMMENT << CASH << CHEQUE << VISA << INSURANCE << DUE;
+    listValuesNumbers << ACCOUNT_MEDICALPROCEDURE_TEXT // exemple C, V, MNO, ...
+                      << ACCOUNT_COMMENT // exemple consultation, ...
+                      << ACCOUNT_CASHAMOUNT
+                      << ACCOUNT_CHEQUEAMOUNT
+                      << ACCOUNT_VISAAMOUNT
+                      << ACCOUNT_INSURANCEAMOUNT // <-> virement
+                      << ACCOUNT_DUEAMOUNT;
     while(it.hasNext()){
         it.next();
         int row = m_mpmodel->rowCount(QModelIndex());
         m_mpmodel->insertRow(row,QModelIndex());
-        for(int i = 0 ; i < LAST_ENUM_HEADERS ; i++){
+        for(int i = 0 ; i < ACCOUNT_MaxParam ; i++){
             if (i == 0)
             {
             	data = QString::number(row+1);
             }
             else if( listValuesNumbers.contains(i) ){
                 switch(i){
-                    case MP_TXT :
+                    case ACCOUNT_MEDICALPROCEDURE_TEXT :
                         data = it.key();
                         break;
-                    case COMMENT :
-                    	data = hashOfParams.value(COMMENT);
+                    case ACCOUNT_COMMENT :
+                    	data = hashOfParams.value(ACCOUNT_COMMENT);
                     	break;
-                    case CASH :
-                        if(hashOfParams.value(CASH) == QString("0")) {
+                    case ACCOUNT_CASHAMOUNT :
+                        if(hashOfParams.value(ACCOUNT_CASHAMOUNT) == QString("0")) {
                             data = "0";
                             }
                         else{
                             data = it.value();
                             }
                         break;
-                    case CHEQUE :
-                        if(hashOfParams.value(CHEQUE) == QString("0")) {
+                    case ACCOUNT_CHEQUEAMOUNT:
+                        if(hashOfParams.value(ACCOUNT_CHEQUEAMOUNT) == QString("0")) {
                             data = "0";
                             }
                         else{
                             data = it.value();
                             }
                         break;
-                    case VISA :
-                        if(hashOfParams.value(VISA) == QString("0")) {
+                    case ACCOUNT_VISAAMOUNT:
+                        if(hashOfParams.value(ACCOUNT_VISAAMOUNT) == QString("0")) {
                             data = "0";
                             }
                         else{
                             data = it.value();
                             }
                         break;
-                    case INSURANCE :
-                        if(hashOfParams.value(INSURANCE) == QString("0")) {
+                    case ACCOUNT_INSURANCEAMOUNT :
+                        if(hashOfParams.value(ACCOUNT_INSURANCEAMOUNT) == QString("0")) {
                             data = "0";
                             }
                         else{
                             data = it.value();
                             }
                         break;
-                    case DUE :
-                        if(hashOfParams.value(DUE) == QString("0")) {
+                    case ACCOUNT_DUEAMOUNT :
+                        if(hashOfParams.value(ACCOUNT_DUEAMOUNT) == QString("0")) {
                             data = "0";
                             }
                         else{
