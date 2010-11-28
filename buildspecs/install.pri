@@ -208,6 +208,13 @@ packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
 INSTALLS+=packageHelpers
 }
 
+# Install some specific files
+!isEmpty(FREEICD){
+freeicd_files.path=$${INSTALL_RESOURCES_PATH}/sql
+freeicd_files.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10.sql
+INSTALLS+=freeicd_files
+}
+
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){
    #macx:error(For MacOS use scripts instead of the installer for the Qt libs)

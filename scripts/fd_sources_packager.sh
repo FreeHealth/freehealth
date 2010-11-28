@@ -25,9 +25,9 @@ cd $SCRIPT_PATH"/.."
 export COPYFILE_DISABLE=true
 
 # get version number of FreeDiams from the project file
-VERSION=`cat ./freediams/freediams.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
+VERSION=`cat ./$1/$1.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 # create sources tmp path
-PACKPATH=$SCRIPT_PATH"/freediams-"$VERSION
+PACKPATH=$SCRIPT_PATH/$1-$VERSION
 if [ -e $PACKPATH ]; then
     rm -R $PACKPATH
 fi
@@ -66,6 +66,49 @@ plugins/texteditorplugin \
 scripts \
 tests"
 
+FREEICD_SOURCES="freeicd.pro config.pri checkqtversion.pri \
+README COPYING INSTALL \
+updatetranslations.sh \
+buildspecs \
+doc \
+freeicd \
+global_resources/doc/freeicd \
+global_resources/textfiles/freeicd.desktop \
+global_resources/pixmap \
+global_resources/package_helpers \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+global_resources/sql/icd10.sql \
+libs \
+contrib \
+plugins/fmf_plugins.pri \
+plugins/coreplugin \
+plugins/icdplugin \
+plugins/printerplugin \
+plugins/texteditorplugin \
+scripts"
+
+FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
+README COPYING INSTALL \
+updatetranslations.sh \
+buildspecs \
+doc \
+freeaccount \
+global_resources/doc/freeaccount \
+global_resources/textfiles/freeaccount.desktop \
+global_resources/pixmap \
+global_resources/package_helpers \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+libs \
+contrib \
+plugins/fmf_plugins.pri \
+plugins/coreplugin \
+plugins/accountbaseplugin \
+plugins/printerplugin \
+plugins/texteditorplugin \
+scripts"
+
 FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
 README COPYING INSTALL \
 updatetranslations.sh \
@@ -80,6 +123,7 @@ global_resources/pixmap \
 global_resources/package_helpers \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
+global_resources/sql/icd10.sql \
 libs \
 contrib \
 plugins/fmf_plugins.pri \
@@ -97,6 +141,23 @@ plugins/texteditorplugin \
 scripts \
 tests"
 
+SELECTED_SOURCES="";
+EXCLUSIONS="";
+if [ $1 == "freediams" ] ; then
+    SELECTED_SOURCES=$FREEDIAMS_SOURCES
+    EXCLUSIONS="--exclude 'global_resources/forms' "
+fi
+if [ $1 == "freeicd" ] ; then
+    SELECTED_SOURCES=$FREEICD_SOURCES
+    EXCLUSIONS="--exclude 'global_resources/forms' "
+fi
+if [ $1 == "freemedforms" ] ; then
+    SELECTED_SOURCES=$FREEMEDFORMS_SOURCES
+fi
+if [ $1 == "freeaccount" ] ; then
+    SELECTED_SOURCES=$FREEACCOUNT_SOURCES
+fi
+
 
 tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
@@ -105,13 +166,14 @@ tar -cf $PACKPATH/sources.tar \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '.*' --exclude '._*' \
 --exclude '*.tgz' --exclude '*.app' --exclude '*.zip' \
 --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
---exclude 'global_resources/forms' \
 --exclude 'global_resources/databases/episodes' \
 --exclude 'global_resources/databases/patients' \
 --exclude 'global_resources/databases/templates' \
 --exclude 'global_resources/databases/users' \
+--exclude 'global_resources/databases/icd10' \
 --exclude 'sources.tar' \
-$FREEDIAMS_SOURCES
+$EXCLUSIONS \
+$SELECTED_SOURCES
 
 
 echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
@@ -121,6 +183,9 @@ find $PACKPATH -type f -exec chmod -R 666 {} \;
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
-tar czf "../freediamsfullsources-"$VERSION".tgz"  "./freediams-"$VERSION
+tar czf ../$1fullsources-$VERSION.tgz  ./$1-$VERSION
+
+echo "**** CLEANING TMP SOURCES PATH ****"
+rm -R $PACKPATH
 
 exit 0
