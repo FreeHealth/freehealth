@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "icdviewer.h"
-#include "icdmodel.h"
+#include "simpleicdmodel.h"
 #include "fullicdcodemodel.h"
 
 #include "ui_icdviewer.h"

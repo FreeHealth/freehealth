@@ -84,7 +84,9 @@ void IcdUserOptionsPage::finish() { delete m_Widget; }
 void IcdUserOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+    defaultvalues.insert(ICD::Constants::S_USER_HEADER, QVariant());
+    defaultvalues.insert(ICD::Constants::S_USER_FOOTER, QVariant());
+    defaultvalues.insert(ICD::Constants::S_USER_WATERMARK, QVariant());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())

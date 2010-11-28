@@ -26,6 +26,7 @@
 #ifndef ICDDOWNLOADER_H
 #define ICDDOWNLOADER_H
 
+#include <icdplugin/icd_exporter.h>
 #include <QObject>
 QT_BEGIN_NAMESPACE
 class QProgressDialog;
@@ -45,7 +46,7 @@ class HttpDownloader;
 
 namespace ICD {
 
-class IcdDownloader : public QObject
+class ICD_EXPORT IcdDownloader : public QObject
 {
     Q_OBJECT
 

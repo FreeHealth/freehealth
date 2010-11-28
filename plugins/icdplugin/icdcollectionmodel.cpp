@@ -23,6 +23,23 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class ICD::IcdCollectionModel
+  \brief Tree model for ICD codes collections (a collection is a set of ICD10 codes and/or association of codes).
+
+  Collection model can manage two modes:
+  - full collection: where ICD10 coding rules are analyzed when you ask for code addition ;
+  - simple list collection mode: where ICD10 coding rules are simply ignored.
+
+  You can add simple ICD10 codes with addCode() or add association of ICD10 codes (dag and star associated)
+  with addAssociation. Before the addition is done, the codes and associations are tested using canAddThisCode()
+  or canAddThisAssociation(). These functions, according to the mode, manage the coding rules (exclusions from
+  already included codes, dag/star verification...).
+
+  The model avoid duplication of codes.
+
+*/
+
 #include "icdcollectionmodel.h"
 #include "icdassociation.h"
 #include "icddatabase.h"
@@ -49,6 +66,7 @@ struct ModelItem {
 class IcdCollectionModelPrivate {
 public:
     IcdCollectionModelPrivate(IcdCollectionModel *parent) :
+            m_IsSimpleList(false),
             q(parent)
     {
     }
@@ -62,6 +80,7 @@ public:
     QVector<int> m_ExcludedSIDs;
     QVector<int> m_SIDs;
     QList<ModelItem *> m_Rows;
+    bool m_IsSimpleList;
 
 private:
     IcdCollectionModel *q;
@@ -78,12 +97,33 @@ IcdCollectionModel::IcdCollectionModel(QObject *parent) :
     setObjectName("IcdCollectionModel");
 }
 
+IcdCollectionModel::~IcdCollectionModel()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
 
-bool IcdCollectionModel::canAddThisCode(const QVariant &SID) const
+/** \brief Set the collection model as a simple list of ICD10 codes. No coding rules will be used (daget, exclusions, inclusions...). */
+void IcdCollectionModel::setCollectionIsSimpleList(bool state)
+{
+    d->m_IsSimpleList = state;
+}
+
+/** \sa setCollectionIsSimpleList() */
+bool IcdCollectionModel::isCollectionSimpleList() const
+{
+    return d->m_IsSimpleList;
+}
+
+bool IcdCollectionModel::canAddThisCode(const QVariant &SID, bool checkDaget) const
 {
     // already included ?
     if (d->m_SIDs.contains(SID.toInt()))
         return false;
+
+    if (d->m_IsSimpleList)
+        return true;
 
     // in exclusions ?
     if (d->m_ExcludedSIDs.contains(SID.toInt()))
@@ -96,8 +136,10 @@ bool IcdCollectionModel::canAddThisCode(const QVariant &SID) const
     }
 
     // code daget ?
-    if (!icdBase()->codeCanBeUsedAlone(SID))
-        return false;
+    if (checkDaget) {
+        if (!icdBase()->codeCanBeUsedAlone(SID))
+            return false;
+    }
 
     return true;
 }
@@ -109,6 +151,9 @@ bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &a
         qWarning() << "not valid";
         return false;
     }
+
+    if (d->m_IsSimpleList)
+        return true;
 
     // in exclusions ?
     if (d->m_ExcludedSIDs.contains(asso.mainSid().toInt())) {
@@ -267,6 +312,11 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
 //{
 //}
 
+/**
+  \brief Clear the model. Please do not use the QAbstractItemModel::clear(). Use this instead.
+  Using the QAbstractItemModel::clear() member will not properly clean the model. ICD10 rules
+  will be wrong.
+*/
 void IcdCollectionModel::clearCollection()
 {
     d->m_SIDs.clear();
@@ -277,13 +327,4 @@ void IcdCollectionModel::clearCollection()
 Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-}
-
-
-QString IcdCollectionModel::toXml() const
-{
-}
-
-bool IcdCollectionModel::fromXml(const QString &xml)
-{
 }

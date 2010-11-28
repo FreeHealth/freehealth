@@ -87,8 +87,6 @@ public Q_SLOTS:
     void readFile(const QString &file);
     bool saveFile();
     bool saveAsFile();
-    bool print();
-    bool printPreview();
 
     bool applicationPreferences();
 

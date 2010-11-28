@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "icdcentralwidget.h"
-#include "icdmodel.h"
+#include "icdsearchmodel.h"
 #include "icdcollectionmodel.h"
 #include "icddialog.h"
 #include "icdassociation.h"
@@ -52,6 +52,8 @@
 #include "ui_icdcentralwidget.h"
 
 #include <QToolBar>
+#include <QLabel>
+
 #include <QDebug>
 
 using namespace ICD;
@@ -68,8 +70,10 @@ class IcdCentralWidgetPrivate
 {
 public:
     IcdCentralWidgetPrivate(IcdCentralWidget *parent) :
-            m_IcdSearchModel(0), m_CollectionModel(0), m_ToolBar(0), q(parent)
-    {}
+            m_IcdSearchModel(0), m_CollectionModel(0), m_ToolBar(0), m_ModeLabel(0),
+            q(parent)
+    {
+    }
 
     void createActionsAndToolBar()
     {
@@ -81,9 +85,7 @@ public:
     #endif
         QStringList actionsToAdd;
         actionsToAdd
-    #ifdef FREEMEDFORMS
                 << Constants::A_TOGGLE_ICDSELECTOR
-    #endif
                 << Core::Constants::A_FILE_OPEN
                 << Core::Constants::A_FILE_SAVE
                 << Core::Constants::A_FILE_SAVEAS
@@ -111,6 +113,13 @@ public:
         }
         m_ToolBar->addSeparator();
 
+        m_ModeLabel = new QLabel(q);
+        QWidget *w = new QWidget(q);
+        w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_ToolBar->addWidget(w);
+        m_ToolBar->addSeparator();
+        m_ToolBar->addWidget(m_ModeLabel);
+
         m_ToolBar->setFocusPolicy(Qt::ClickFocus);
     }
 
@@ -118,6 +127,8 @@ public:
     IcdSearchModel *m_IcdSearchModel;
     IcdCollectionModel *m_CollectionModel;
     QToolBar *m_ToolBar;
+    int m_SelectorMode, m_CollectionMode;
+    QLabel *m_ModeLabel;
 
 private:
     IcdCentralWidget *q;
@@ -132,6 +143,9 @@ IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
     ui(new Ui::IcdCentralWidget),
     d(new Internal::IcdCentralWidgetPrivate(this))
 {
+    d->m_SelectorMode = SelectorFullMode;
+    d->m_CollectionMode = CollectionFullMode;
+
     // Ensure that manager is instanciated
     IcdWidgetManager::instance();
 
@@ -148,6 +162,7 @@ IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
 
     // ToolBar
     d->createActionsAndToolBar();
+    d->m_ModeLabel->setText(tr("Collection"));
     ui->collectionLayout->insertWidget(0, d->m_ToolBar);
 }
 
@@ -161,34 +176,57 @@ IcdCentralWidget::~IcdCentralWidget()
 
 void IcdCentralWidget::onSelectorActivated(const QVariant &SID)
 {
-    ICD::IcdDialog dlg(SID, this);
-    if (dlg.exec()==QDialog::Accepted) {
-        if (!dlg.isSelectionValid())
+    if (d->m_SelectorMode == SelectorSimpleMode) {
+        d->m_CollectionModel->addCode(SID);
+    } else {
+        if (!d->m_CollectionModel->canAddThisCode(SID, false)) {
+            Utils::informativeMessageBox(tr("Can not add this code to your collection."),
+                                         tr("This code is already included or is excluded by the "
+                                            "current collection code."));
             return;
-        if (dlg.isUniqueCode())
-            d->m_CollectionModel->addCode(dlg.getSidCode());
-        else if (dlg.isAssociation()) {
-            foreach(const Internal::IcdAssociation &asso, dlg.getAssocation())
-                d->m_CollectionModel->addAssociation(asso);
         }
-        ui->collectionView->hideColumn(ICD::IcdCollectionModel::CodeWithoutDaget);
-        ui->collectionView->hideColumn(ICD::IcdCollectionModel::HumanReadableDaget);
-        ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
-        ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
-        ui->collectionView->expandAll();
+        ICD::IcdDialog dlg(SID, this);
+        if (dlg.exec()==QDialog::Accepted) {
+            if (!dlg.isSelectionValid())
+                return;
+            if (dlg.isUniqueCode())
+                d->m_CollectionModel->addCode(dlg.getSidCode());
+            else if (dlg.isAssociation()) {
+                foreach(const Internal::IcdAssociation &asso, dlg.getAssocation())
+                    d->m_CollectionModel->addAssociation(asso);
+            }
+            ui->collectionView->expandAll();
+        }
+    }
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::CodeWithoutDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::HumanReadableDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
+}
 
-//        // TEST
-//        IcdIO io;
-//        QString xml = io.icdCollectionToXml(d->m_CollectionModel);
-//        qWarning() << xml;
-//        io.icdCollectionFromXml(d->m_CollectionModel, xml);
-//        // END TEST
+void IcdCentralWidget::setSelectorMode(const SelectorModes mode)
+{d->m_SelectorMode = mode;}
+
+IcdCentralWidget::SelectorModes IcdCentralWidget::selectorMode() const
+{return SelectorModes(d->m_SelectorMode);}
+
+void IcdCentralWidget::setCollectionMode(const CollectionModes mode)
+{
+    d->m_CollectionMode = mode;
+    if (d->m_CollectionModel) {
+        if (mode==CollectionSimpleMode) {
+            d->m_CollectionModel->setCollectionIsSimpleList(true);
+        } else {
+            d->m_CollectionModel->setCollectionIsSimpleList(false);
+        }
     }
 }
 
+IcdCentralWidget::CollectionModes IcdCentralWidget::collectionMode() const
+{return CollectionModes(d->m_CollectionMode);}
+
 void IcdCentralWidget::openFile(const QString &file)
 {
-    QString datas;
     if (d->m_CollectionModel->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
                 tr("Opening an ICD Collection : merge or replace ?"),

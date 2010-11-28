@@ -37,7 +37,6 @@ static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 IcdAssociation::IcdAssociation(const QVariant &mainSID, const QVariant &associatedSID, const QString &dagCodeOfAssociation) :
         m_MainSID(mainSID), m_AssociatedSID(associatedSID), m_DagCode(dagCodeOfAssociation)
 {
-    qWarning() << "Asso dagCode" << m_DagCode;
 }
 
 bool IcdAssociation::isValid() const

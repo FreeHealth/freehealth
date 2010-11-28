@@ -27,7 +27,6 @@
 #define ICDWIDGETMANAGER_H
 
 #include <icdplugin/icd_exporter.h>
-
 #include <coreplugin/contextmanager/icontext.h>
 
 #include <QWidget>
@@ -68,6 +67,7 @@ private Q_SLOTS:
     void recreateDatabase();
     void showDatabaseInformations();
     void searchActionChanged(QAction*);
+    void modeActionChanged(QAction*);
     void toggleSelector();
     void clear();
     void removeItem();
@@ -80,7 +80,9 @@ protected:
     QAction *aRecreateDatabase;
     QAction *aShowDatabaseInformations;
     QAction *aSearchByLabel, *aSearchByCode;
-    QActionGroup *gSearchMethod;
+    QActionGroup *gSearchMethod, *gModes;
+    QAction *aSelectorSimpleMode, *aSelectorFullMode;
+    QAction *aCollectionModelFullMode, *aCollectionModelSimpleMode;
     QAction *aToggleSelector, *aClear, *aRemoveRow, *aPrint, *aPrintPreview;
     QPointer<IcdCentralWidget> m_CurrentView;
     QPointer<IcdDownloader> m_Downloader;

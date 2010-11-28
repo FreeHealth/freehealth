@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "icddialog.h"
 #include "icdviewer.h"
-#include "icdmodel.h"
+#include "simpleicdmodel.h"
 #include "fullicdcodemodel.h"
 #include "icdassociation.h"
 

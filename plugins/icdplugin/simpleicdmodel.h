@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDMODEL_H
-#define ICDMODEL_H
+#ifndef ICDMODELS_H
+#define ICDMODELS_H
 
 #include <QAbstractTableModel>
 
@@ -34,58 +34,9 @@ QT_END_NAMESPACE
 
 namespace ICD {
 namespace Internal {
-class IcdSearchModelPrivate;
 class SimpleIcdModelPrivate;
-class FullIcdCodeModelPrivate;
 class IcdAssociation;
 }
-
-class IcdSearchModel : public QAbstractTableModel
-{
-    Q_OBJECT
-public:
-    enum DataRepresentation {
-        SID_Code = 0,
-        ICD_Code,
-        ICD_CodeWithDagetAndStar,
-        Label,
-        Daget,
-        Type,
-        ColumnCount
-    };
-
-    enum SearchModes {
-        SearchByLabel,
-        SearchByCode
-    };
-
-    explicit IcdSearchModel(QObject *parent = 0);
-    ~IcdSearchModel();
-
-    void setSearchMethod(SearchModes mode);
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
-    void fetchMore(const QModelIndex &parent);
-    bool canFetchMore(const QModelIndex &parent) const;
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    QVariant headerData(int section, Qt::Orientation orientation,
-                                int role = Qt::DisplayRole) const;
-
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-public Q_SLOTS:
-    void setFilter(const QString &searchLabel);
-
-private:
-    Internal::IcdSearchModelPrivate *d;
-
-};
 
 class SimpleIcdModel :public QAbstractTableModel
 {
@@ -137,4 +88,4 @@ private:
 
 }  //  End namespace ICD
 
-#endif // ICDMODEL_H
+#endif // ICDMODELS_H

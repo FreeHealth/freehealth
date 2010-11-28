@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freeicd
 mac:TARGET       = $$quote(FreeICD)
-PACKAGE_VERSION  = 0.4.0
+PACKAGE_VERSION  = 0.1.0~beta
 
 # include general configuration
 INSTALL_DRUGS = 0
@@ -25,14 +25,14 @@ QT *= sql \
 
 DEFINES *= FREEICD
 
-#macx {
-#  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freeicd.icns
-#  QMAKE_INFO_PLIST=Info.plist
-#}
-#win32:RC_FILE=freeicd_win32_icon.rc
+macx {
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freeicd.icns
+  QMAKE_INFO_PLIST=Info.plist
+}
+win32:RC_FILE=freeicd_win32_icon.rc
 
 # sources
 SOURCES += \
     main.cpp
 
-OTHER_FILES += freeicd_win32_icon.rc
+OTHER_FILES += freeicd_win32_icon.rc Info.plist

@@ -26,6 +26,7 @@
 #ifndef ICDCOLLECTIONMODEL_H
 #define ICDCOLLECTIONMODEL_H
 
+#include <icdplugin/icd_exporter.h>
 #include <QStandardItemModel>
 
 
@@ -35,7 +36,7 @@ class IcdCollectionModelPrivate;
 class IcdAssociation;
 }  // End namespace Internal
 
-class IcdCollectionModel : public QStandardItemModel
+class ICD_EXPORT IcdCollectionModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
@@ -50,9 +51,14 @@ public:
     };
 
     explicit IcdCollectionModel(QObject *parent = 0);
+    ~IcdCollectionModel();
+
+    void setCollectionIsSimpleList(bool state);
+    bool isCollectionSimpleList() const;
+
 
     // Checking
-    bool canAddThisCode(const QVariant &SID) const;
+    bool canAddThisCode(const QVariant &SID, bool checkDaget = true) const;
     bool canAddThisAssociation(const Internal::IcdAssociation &pair) const;
     bool addCode(const QVariant &SID);
     bool addAssociation(const Internal::IcdAssociation &pair);
@@ -64,10 +70,6 @@ public:
     void clearCollection();
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    // XML import/export
-    QString toXml() const;
-    bool fromXml(const QString &xml);
 
 private:
     Internal::IcdCollectionModelPrivate *d;

@@ -27,7 +27,6 @@
 #define COREIMPL_H
 
 #include <coreplugin/icore.h>
-#include <fdcoreplugin/patient.h>
 #include <coreplugin/ipatient.h>
 
 /**

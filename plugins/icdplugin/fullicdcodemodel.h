@@ -26,6 +26,7 @@
 #ifndef FULLICDCODEMODEL_H
 #define FULLICDCODEMODEL_H
 
+#include <icdplugin/icd_exporter.h>
 #include <QAbstractTableModel>
 
 QT_BEGIN_NAMESPACE
@@ -38,7 +39,7 @@ namespace Internal {
 class FullIcdCodeModelPrivate;
 }
 
-class FullIcdCodeModel :public QAbstractTableModel
+class ICD_EXPORT FullIcdCodeModel :public QAbstractTableModel
 {
     Q_OBJECT
 public:

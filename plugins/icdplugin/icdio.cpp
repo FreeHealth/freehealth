@@ -236,8 +236,6 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml)
     // Get XML db version
     QString dbVersion = element.attribute(Constants::XML_ATTRIB_DATABASEVERSION);
 
-    qWarning() << dbVersion;
-
     // Check XML db version with actual db version
     if (dbVersion!=icdBase()->getDatabaseVersion()) {
         /** \todo Update XML if needed */
@@ -283,6 +281,11 @@ QString IcdIO::icdCollectionToHtml(const IcdCollectionModel *model)
         return QString();
     }
     QString html;
+    if (model->isCollectionSimpleList()) {
+        html += "<p style=\"font-weigt:bold\">Simple ICD10 code list.</p>";
+    } else {
+        html += "<p style=\"font-weigt:bold\">Full ICD10 code collection.</p>";
+    }
     for(int i=0; i < model->rowCount(); ++i) {
         html += d->modelRowToHtml(model, i, QModelIndex());
     }

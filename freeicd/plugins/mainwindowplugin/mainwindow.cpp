@@ -48,7 +48,7 @@
 
 // TEST
 #include <icdplugin/icdcodeselector.h>
-#include <icdplugin/icdmodel.h>
+#include <icdplugin/simpleicdmodel.h>
 #include <icdplugin/icddialog.h>
 // TEST
 
@@ -152,7 +152,6 @@ MainWindow::MainWindow( QWidget * parent ) :
         d(new Internal::MainWinPrivate(this))
 {
     setObjectName("MainWindow");
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEICD));
     messageSplash(tr("Creating Main Window"));
 
     // Install the event filter
@@ -271,6 +270,7 @@ void MainWindow::postCoreInitialization()
     actionManager()->retranslateMenusAndActions();
 
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEICD));
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 
@@ -419,20 +419,6 @@ bool MainWindow::applicationPreferences()
 /** \brief Change the font of the viewing widget */
 void MainWindow::changeFontTo( const QFont &font )
 {
-}
-
-/**
-  \brief Prints the prescription using the header, footer and watermark.
-  \sa tkPrinter
-*/
-bool MainWindow::print()
-{
-    return true;
-}
-
-bool MainWindow::printPreview()
-{
-    return true;
 }
 
 bool MainWindow::saveAsFile()

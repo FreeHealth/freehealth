@@ -118,6 +118,9 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         aShowDatabaseInformations(0),
         aSearchByLabel(0),
         aSearchByCode(0),
+        gSearchMethod(0), gModes(0),
+        aSelectorSimpleMode(0), aSelectorFullMode(0),
+        aCollectionModelFullMode(0), aCollectionModelSimpleMode(0),
         aToggleSelector(0), aClear(0), aRemoveRow(0), aPrint(0), aPrintPreview(0),
         m_CurrentView(0)
 {
@@ -194,6 +197,55 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
+    // Modes
+    Core::ActionContainer *modesmenu = actionManager()->actionContainer(Constants::M_ICD_MODES);
+    if (!modesmenu) {
+        modesmenu = actionManager()->createMenu(Constants::M_ICD_MODES);
+        modesmenu->appendGroup(Constants::G_ICD_SELECTORMODE);
+        modesmenu->appendGroup(Constants::G_ICD_COLLECTIONMODE);
+        modesmenu->setTranslations(Constants::MODESMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+        menu->addMenu(modesmenu, Core::Constants::G_EDIT_OTHER);
+    }
+    Q_ASSERT(modesmenu);
+
+    gModes = new QActionGroup(this);
+    a = aSelectorSimpleMode = new QAction(this);
+    a->setObjectName("aSelectorSimpleMode");
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_SIMPLEMODE, ctx);
+    cmd->setTranslations(Constants::SELECTORSIMPLEMODE_TEXT, Constants::SELECTORSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    gModes->addAction(a);
+
+    a = aSelectorFullMode = new QAction(this);
+    a->setObjectName("aSelectorFullMode");
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_FULLMODE, ctx);
+    cmd->setTranslations(Constants::SELECTORFULLMODE_TEXT, Constants::SELECTORFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    gModes->addAction(a);
+
+    a = aCollectionModelSimpleMode = new QAction(this);
+    a->setObjectName("aCollectionModelSimpleMode");
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_SIMPLEMODE, ctx);
+    cmd->setTranslations(Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    gModes->addAction(a);
+
+    a = aCollectionModelFullMode = new QAction(this);
+    a->setObjectName("aCollectionModelFullMode");
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_FULLMODE, ctx);
+    cmd->setTranslations(Constants::COLLECTIONFULLMODE_TEXT, Constants::COLLECTIONFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    gModes->addAction(a);
+    connect(gModes, SIGNAL(triggered(QAction*)), this, SLOT(modeActionChanged(QAction*)));
+
     // File Open/Save/Print/printPreview
     a = aToggleSelector = new QAction(this);
     a->setObjectName("aToggleSelector");
@@ -225,7 +277,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
     cmd = actionManager()->registerAction(a, Constants::A_PRINT_COLLECTION, ctx);
     cmd->setTranslations(Constants::PRINTCOLLECTION_TEXT, "", Constants::ICDCONSTANTS_TR_CONTEXT);
-#ifdef FREEDIAMS
+#ifdef FREEICD
     cmd->setKeySequence(QKeySequence::Print);
 #else
     cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
@@ -246,7 +298,6 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
     }
     connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
-
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -286,6 +337,24 @@ void IcdActionHandler::setCurrentView(IcdCentralWidget *view)
 
 void IcdActionHandler::updateActions()
 {
+    if (!m_CurrentView)
+        return;
+
+    if (m_CurrentView->selectorMode() == IcdCentralWidget::SelectorSimpleMode) {
+        aSelectorSimpleMode->setChecked(true);
+        aSelectorFullMode->setChecked(false);
+    } else {
+        aSelectorSimpleMode->setChecked(false);
+        aSelectorFullMode->setChecked(true);
+    }
+
+    if (m_CurrentView->collectionMode() == IcdCentralWidget::CollectionSimpleMode) {
+        aCollectionModelSimpleMode->setChecked(true);
+        aCollectionModelFullMode->setChecked(false);
+    } else {
+        aCollectionModelSimpleMode->setChecked(false);
+        aCollectionModelFullMode->setChecked(true);
+    }
 }
 
 void IcdActionHandler::recreateDatabase()
@@ -311,6 +380,21 @@ void IcdActionHandler::showDatabaseInformations()
 
 void IcdActionHandler::searchActionChanged(QAction *a)
 {
+}
+
+void IcdActionHandler::modeActionChanged(QAction *a)
+{
+    if (!m_CurrentView)
+        return;
+    if (a == aSelectorSimpleMode) {
+        m_CurrentView->setSelectorMode(IcdCentralWidget::SelectorSimpleMode);
+    } else if (a == aSelectorFullMode) {
+        m_CurrentView->setSelectorMode(IcdCentralWidget::SelectorSimpleMode);
+    } else if (a == aCollectionModelSimpleMode) {
+        m_CurrentView->setCollectionMode(IcdCentralWidget::CollectionSimpleMode);
+    } else if (a == aCollectionModelFullMode) {
+        m_CurrentView->setCollectionMode(IcdCentralWidget::CollectionFullMode);
+    }
 }
 
 void IcdActionHandler::toggleSelector()

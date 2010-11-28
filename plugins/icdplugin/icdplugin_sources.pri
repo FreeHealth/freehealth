@@ -9,7 +9,7 @@ HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icdwidgetmanager.h \
     $${PWD}/icdcontextualwidget.h \
     $${PWD}/icdcodeselector.h \
-    $${PWD}/icdmodel.h \
+    $${PWD}/simpleicdmodel.h \
     $${PWD}/constants.h \
     $${PWD}/icdviewer.h \
     $${PWD}/fullicdcodemodel.h \
@@ -17,7 +17,8 @@ HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icdassociation.h \
     $${PWD}/icddialog.h \
     $${PWD}/icdcentralwidget.h \
-    $${PWD}/icdio.h
+    $${PWD}/icdio.h \
+    $${PWD}/icdsearchmodel.h
 
 SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icddatabase.cpp \
@@ -25,14 +26,15 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icdwidgetmanager.cpp \
     $${PWD}/icdcontextualwidget.cpp \
     $${PWD}/icdcodeselector.cpp \
-    $${PWD}/icdmodel.cpp \
+    $${PWD}/simpleicdmodel.cpp \
     $${PWD}/icdviewer.cpp \
     $${PWD}/fullicdcodemodel.cpp \
     $${PWD}/icdcollectionmodel.cpp \
     $${PWD}/icdassociation.cpp \
     $${PWD}/icddialog.cpp \
     $${PWD}/icdcentralwidget.cpp \
-    $${PWD}/icdio.cpp
+    $${PWD}/icdio.cpp \
+    $${PWD}/icdsearchmodel.cpp
 
 
 FORMS += $${PWD}/icdviewer.ui \

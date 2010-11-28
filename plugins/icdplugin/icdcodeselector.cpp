@@ -23,8 +23,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+   \class ICD::IcdCodeSelector
+   \brief View for the code selection. Contains a serach line and a view with all available code filtered according to the search line.
+*/
 #include "icdcodeselector.h"
-#include "icdmodel.h"
+#include "icdsearchmodel.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>
@@ -54,6 +58,12 @@ IcdCodeSelector::IcdCodeSelector(QWidget *parent) :
     m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
     m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
     ui->lineEdit->setLeftButton(m_SearchToolButton);
+
+    QToolButton *icd = new QToolButton;   // parent object will be redefined
+    icd->setPopupMode(QToolButton::InstantPopup);
+    icd->setIcon(theme()->icon(Core::Constants::ICONFREEICD));
+    ui->lineEdit->setRightButton(icd);
+
     ui->lineEdit->setDelayedSignals(true);
 }
 

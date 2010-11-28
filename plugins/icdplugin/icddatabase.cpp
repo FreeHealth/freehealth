@@ -361,9 +361,9 @@ static QString humanReadableDagStar(const QString &s)
         return "(*)";
     } else if (s=="G" || s=="H") {
         return "*";
-    } else if (s=="S") {
+    } else if (s=="S" || s=="U") {
           return "(†)";
-    } else if (s=="T" || s=="U") {
+    } else if (s=="T") {
         return "†";
     } else {
         return QString();

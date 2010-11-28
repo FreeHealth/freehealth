@@ -26,6 +26,7 @@
 #ifndef ICDIO_H
 #define ICDIO_H
 
+#include <icdplugin/icd_exporter.h>
 #include <QtGlobal>
 
 QT_BEGIN_NAMESPACE
@@ -47,7 +48,7 @@ class IcdIOPrivate;
 }  // End namespace Internal
 
 
-class IcdIO
+class ICD_EXPORT IcdIO
 {
 public:
     enum ModelManagement {

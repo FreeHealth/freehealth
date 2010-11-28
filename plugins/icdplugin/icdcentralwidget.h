@@ -26,6 +26,7 @@
 #ifndef ICDCENTRALWIDGET_H
 #define ICDCENTRALWIDGET_H
 
+#include <icdplugin/icd_exporter.h>
 #include <icdplugin/icdcontextualwidget.h>
 #include <QWidget>
 
@@ -41,15 +42,30 @@ namespace Ui {
     class IcdCentralWidget;
 }
 
-class IcdCentralWidget : public IcdContextualWidget
+class ICD_EXPORT IcdCentralWidget : public IcdContextualWidget
 {
     Q_OBJECT
     friend class ICD::IcdWidgetManager;
     friend class ICD::Internal::IcdActionHandler;
 
 public:
+    enum SelectorModes {
+        SelectorSimpleMode = 0,
+        SelectorFullMode
+    };
+    enum CollectionModes {
+        CollectionSimpleMode = 10,
+        CollectionFullMode
+    };
+
     explicit IcdCentralWidget(QWidget *parent = 0);
     ~IcdCentralWidget();
+
+    void setSelectorMode(const SelectorModes mode);
+    SelectorModes selectorMode() const;
+
+    void setCollectionMode(const CollectionModes mode);
+    CollectionModes collectionMode() const;
 
     void openFile(const QString &file);
     QString collectionToXml() const;

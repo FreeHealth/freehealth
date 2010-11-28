@@ -120,14 +120,14 @@ CoreImpl::CoreImpl(QObject *parent) :
     messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
-#ifdef Q_OS_WIN
-    // For WINE testings
-    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
-        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
-        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
-        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
-    }
-#endif
+//#ifdef Q_OS_WIN
+//    // For WINE testings
+//    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
+//        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
+//        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
+//        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
+//    }
+//#endif
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
         Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));

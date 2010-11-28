@@ -201,14 +201,23 @@ namespace Constants {
     const char * const  C_ICD_PLUGINS = "ICD.cGlobal";
     const char * const  G_ICD_DATABASES = "grICD.Db";
     const char * const  G_ICD_SEARCH = "grICDSearch";
+    const char * const  G_ICD_SELECTORMODE = "grICDSelectorMode";
+    const char * const  G_ICD_COLLECTIONMODE = "grICDCollMode";
 
     // Menu and action for ActionManager
     const char * const  M_PLUGIN_ICD       = "mICDPlugin";
     const char * const  M_ICD_SEARCH       = "mICDSearch";
+    const char * const  M_ICD_MODES        = "mICDModes";
     const char * const  A_RECREATE_ICD_DB  = "aRecreateICDDatabase";
     const char * const  A_DATABASE_INFOS   = "aICDDbInformations";
     const char * const  A_SEARCH_LABEL     = "aICDSearchLabel";
     const char * const  A_SEARCH_CODE      = "aICDSearchCode";
+
+    // Modes
+    const char * const  A_SELECTOR_SIMPLEMODE   = "aICDSelSimple";
+    const char * const  A_SELECTOR_FULLMODE     = "aICDSelFull";
+    const char * const  A_COLLECTION_SIMPLEMODE = "aICDCollSimple";
+    const char * const  A_COLLECTION_FULLMODE   = "aICDCollFull";
 
     const char * const  A_TOGGLE_ICDSELECTOR = "aICDToggleSelector";
     const char * const  A_PRINT_COLLECTION   = "aICDPrintCollection";
@@ -217,7 +226,7 @@ namespace Constants {
     // Icons
     const char * const  I_SEARCH_LABEL     = "search.png";
     const char * const  I_SEARCH_CODE      = "search.png";
-    const char * const  I_TOGGLEICDSELECTOR = "";
+    const char * const  I_TOGGLEICDSELECTOR = "icd.png";
 
     // Translations
     const char * const  ICDCONSTANTS_TR_CONTEXT = "ICD";
@@ -225,10 +234,14 @@ namespace Constants {
     const char* const   DATABASE_INFOS_TEXT     = QT_TRANSLATE_NOOP("ICD", "ICD10 database informations");
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("ICD", "ICD10 search method");
     const char* const   SEARCHLABEL_TEXT        = QT_TRANSLATE_NOOP("ICD", "Search by label");
+    const char* const   MODESMENU_TEXT          = QT_TRANSLATE_NOOP("ICD", "ICD models modes");
     const char* const   SEARCHCODE_TEXT         = QT_TRANSLATE_NOOP("ICD", "Search by code");
     const char* const   TOGGLEICDSELECTOR_TEXT  = QT_TRANSLATE_NOOP("ICD", "Toggle code selector");
     const char* const   PRINTCOLLECTION_TEXT    = QT_TRANSLATE_NOOP("ICD", "Print ICD10 code collection");
-
+    const char* const   SELECTORSIMPLEMODE_TEXT = QT_TRANSLATE_NOOP("ICD", "Selector: simple list mode");
+    const char* const   SELECTORFULLMODE_TEXT   = QT_TRANSLATE_NOOP("ICD", "Selector: full mode");
+    const char* const   COLLECTIONSIMPLEMODE_TEXT= QT_TRANSLATE_NOOP("ICD", "Collection: simple list mode");
+    const char* const   COLLECTIONFULLMODE_TEXT = QT_TRANSLATE_NOOP("ICD", "Collection: full mode");
     const char* const   ICD_CODECOLLECTION_TEXT = QT_TRANSLATE_NOOP("ICD", "ICD10 code collection");
 
     // Settings and tokens
