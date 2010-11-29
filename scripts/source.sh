@@ -86,6 +86,8 @@ plugins/coreplugin \
 plugins/icdplugin \
 plugins/printerplugin \
 plugins/texteditorplugin \
+plugins/listviewplugin \
+plugins/usermanagerplugin \
 scripts"
 
 FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
@@ -107,6 +109,8 @@ plugins/coreplugin \
 plugins/accountbaseplugin \
 plugins/printerplugin \
 plugins/texteditorplugin \
+plugins/listviewplugin \
+plugins/usermanagerplugin \
 scripts"
 
 FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \

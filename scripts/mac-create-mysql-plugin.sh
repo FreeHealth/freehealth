@@ -9,13 +9,13 @@
 # - installs the plugins
 # - clean the Qt sources
 
-QT_VERSION=4.6.2
+QT_VERSION=4.7.0
 ACTUAL_PATH=`pwd`
 
 # This script assumes that MySQL is installed with header files
 # Get it from : http://dev.mysql.com/downloads/mysql/
-MYSQL_SOURCES=/usr/local/mysql/include
-MYSQL_LIB=/usr/local/mysql/lib
+MYSQL_SOURCES=/usr/local/mysql-5.0.67-osx10.5-x86/include
+MYSQL_LIB=/usr/local/mysql-5.0.67-osx10.5-x86/lib
 
 # Download Qt sources
 # curl http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.2.tar.gz -o ~/Downloads/qt-everywhere-opensource-src-4.6.2.tar.gz -s
