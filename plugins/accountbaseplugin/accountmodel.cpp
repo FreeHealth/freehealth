@@ -264,3 +264,7 @@ void AccountModel::userChanged()
     d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
     d->refreshFilter();
 }
+
+QSqlError AccountModel::lastError(){
+    return d->m_SqlTable->lastError();
+}

@@ -36,6 +36,10 @@
 #define ACCOUNTMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
+
+
+
 
 namespace AccountDB {
 namespace Internal {
@@ -71,6 +75,8 @@ public:
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
     bool isDirty() const;
+    
+    QSqlError lastError();
 
     // Filter fucntions
     void setUserUuid(const QString &uuid);

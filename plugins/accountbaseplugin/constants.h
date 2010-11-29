@@ -73,11 +73,11 @@ namespace Constants {
         Table_Sites,
         Table_Users,
         Table_Percent,
+        Table_Rules,
+        Table_DistanceRules,
         Table_Session,
         Table_Banking,
-        Table_NameIndex,
-        Table_Rules,
-        Table_DistanceRules
+        Table_NameIndex
     };
 
     enum TableMedicalProcedure_Fields {
@@ -224,7 +224,7 @@ namespace Constants {
         PERCENT_ID = 0,
         PERCENT_UID,
         PERCENT_TYPE,
-        PERCENT_VALUE,
+        PERCENT_VALUES,
         PERCENT_MaxParam
     };
     enum TableRules_Fields {

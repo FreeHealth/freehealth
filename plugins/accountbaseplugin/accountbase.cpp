@@ -401,7 +401,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Percent,  PERCENT_ID,      "PCT_ID",      FieldIsUniquePrimaryKey);
     addField(Table_Percent,  PERCENT_UID,     "PCT_UID",     FieldIsUUID);
     addField(Table_Percent,  PERCENT_TYPE,    "TYPE",        FieldIsShortText);
-    addField(Table_Percent,  PERCENT_VALUE,   "VALUE",       FieldIsReal);
+    addField(Table_Percent,  PERCENT_VALUES,   "VALUE",       FieldIsReal);
 //    "CREATE TABLE	pourcentages ("  --> pourcentages
 //                            "id_pourcent	int(10)		UNSIGNED			NOT NULL	auto_increment ,"
 //                            "type		varchar(100)	COLLATE utf8_unicode_ci		NULL				,"
