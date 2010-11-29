@@ -58,9 +58,7 @@ StringListView::~StringListView()
 QVariant StringListView::getStringList() const
 {
     QStringListModel *model = static_cast<QStringListModel*>(this->model());
-    qWarning() << "getStrings" << model;
     if (model) {
-        qWarning() << model->stringList();
         return model->stringList();
     }
     return QVariant();
