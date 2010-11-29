@@ -66,7 +66,7 @@ class USER_EXPORT UserViewer : public QWidget
 
 public:
     explicit UserViewer(QWidget *parent = 0); // work with model
-    void changeUserTo( const int modelRow );
+    void changeUserTo(const int modelRow);
 
 private:
     Internal::UserViewerPrivate *d;

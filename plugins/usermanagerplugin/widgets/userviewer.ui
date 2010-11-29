@@ -33,7 +33,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabIdentity">
        <attribute name="title">
@@ -381,16 +381,6 @@
           <item row="2" column="0">
            <widget class="Views::StringListView" name="specialtyListView"/>
           </item>
-          <item row="2" column="1" rowspan="3">
-           <widget class="Views::StringListView" name="qualificationsListView">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
@@ -403,6 +393,16 @@
           </item>
           <item row="4" column="0">
            <widget class="Views::StringListView" name="practIdsListView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" rowspan="3">
+           <widget class="Views::StringListView" name="qualificationsListView">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>

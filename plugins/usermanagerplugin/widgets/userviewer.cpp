@@ -35,9 +35,9 @@
 /**
   \class UserViewer
   \brief This class is a data wrapper for users.
-  When you instanciate this widget, it retreive and show the tkUserModel::currentUserIndex().\n
-  Rights are managed via the tkUserModel.\n
-  Changes are automaticaly saved into the tkUserModel.
+  When you instanciate this widget, it retreive and show the UserPlugin::UserModel::currentUserIndex().\n
+  Rights are managed via the UserPlugin::UserModel.\n
+  Changes are automaticaly saved into the UserPlugin::UserModel.
   \todo limit memory usage.
   \ingroup usertoolkit widget_usertoolkit usermanager
 */
@@ -146,12 +146,12 @@ void UserViewerPrivate::initialize()
     genderCombo->addItems(genders());
     languageCombo->addItems(Core::Translators::availableLocales());
     // QListView need to be managed by hand
-    QStringListModel * modelspe = new QStringListModel(this);
+    QStringListModel *modelspe = new QStringListModel(this);
     specialtyListView->setModel(modelspe);
     specialtyListView->setActions(Views::ListView::AllActions);
-    QStringListModel * modelqual = new QStringListModel(this);
+    QStringListModel *modelqual = new QStringListModel(this);
     qualificationsListView->setModel(modelqual);
-    QStringListModel * modelids = new QStringListModel(this);
+    QStringListModel *modelids = new QStringListModel(this);
     practIdsListView->setModel(modelids);
 
     checkUserRights();
