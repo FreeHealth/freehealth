@@ -59,6 +59,7 @@
 #include <QListView>
 #include <QStringListModel>
 #include <QToolButton>
+#include <QToolBar>
 
 using namespace Views;
 using namespace Views::Internal;
@@ -201,7 +202,7 @@ void ListViewActionHandler::setCurrentView(ListView *view)
 //        qWarning() << "current view " << view;
     // disconnect old view
     if (m_CurrentView) {
-        disconnect(m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+        disconnect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                    this, SLOT(listViewItemChanged()));
     }
     m_CurrentView = view;
@@ -209,7 +210,7 @@ void ListViewActionHandler::setCurrentView(ListView *view)
         return;
     }
     // reconnect some actions
-    connect(m_CurrentView->listView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+    connect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(listViewItemChanged()));
     updateActions();
 }
@@ -229,7 +230,7 @@ bool ListViewActionHandler::canMoveUp()
 {
     if (!m_CurrentView)
         return false;
-    QModelIndex idx = m_CurrentView->listView()->currentIndex();
+    QModelIndex idx = m_CurrentView->currentIndex();
     if (!idx.isValid())
         return false;
     if (idx.row() >= 1)
@@ -241,10 +242,10 @@ bool ListViewActionHandler::canMoveDown()
 {
     if (!m_CurrentView)
         return false;
-    QModelIndex idx = m_CurrentView->listView()->currentIndex();
+    QModelIndex idx = m_CurrentView->currentIndex();
     if (!idx.isValid())
         return false;
-    if (idx.row() < (m_CurrentView->listView()->model()->rowCount()-1))
+    if (idx.row() < (m_CurrentView->model()->rowCount()-1))
         return true;
     return false;
 }
@@ -268,7 +269,6 @@ class ListViewPrivate
 public:
     ListViewPrivate(QWidget * parent, ListView::AvailableActions actions) :
             m_Parent(parent),
-            m_ListView(0),
             m_Actions(actions),
             m_Context(0)
     {
@@ -308,7 +308,6 @@ public:
 
 public:
     QWidget *m_Parent;
-    QListView *m_ListView;
     ListView::AvailableActions m_Actions;
     ListViewContext *m_Context;
     QToolBar *m_ToolBar;
@@ -321,7 +320,7 @@ public:
 
 /** \brief Constructor */
 ListView::ListView(QWidget *parent, AvailableActions actions)
-    : QWidget(parent),
+    : QListView(parent),
     d(0)
 {
     static int handler = 0;
@@ -335,24 +334,19 @@ ListView::ListView(QWidget *parent, AvailableActions actions)
     d->calculateContext();
     contextManager()->addContextObject(d->m_Context);
 
-    // Create widget
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setSpacing(3);
-    layout->setMargin(0);
-    d->m_ListView = new QListView(this);
-    d->m_ListView->setContextMenuPolicy(Qt::CustomContextMenu);
+    // Add toolbar to the horizontal scroolbar
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->m_ToolBar = new QToolBar(this);
     d->m_ToolBar->setIconSize(QSize(16,16));
     d->m_ToolBar->setFocusPolicy(Qt::ClickFocus);
-    layout->addWidget(d->m_ListView, 0, 0 , 1, 2);
-    layout->addWidget(d->m_ToolBar, 1, 0);
-
-    connect(d->m_ListView, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(contextMenu(const QPoint &)));
-
-    d->m_ListView->setFocusProxy(this);
-
+    d->m_ToolBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->populateToolbar();
+    addScrollBarWidget(d->m_ToolBar, Qt::AlignLeft);
+
+    // Manage context menu
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(contextMenu(const QPoint &)));
 }
 
 ListView::~ListView()
@@ -363,45 +357,8 @@ ListView::~ListView()
 /** \brief Defines the objectName */
 void ListView::setObjectName(const QString &name)
 {
-    d->m_ListView->setObjectName(name+"ListView");
-    QWidget::setObjectName(name);
-}
-
-
-/** \brief Returns the list view. */
-QListView *ListView::listView() const
-{
-    return d->m_ListView;
-}
-
-QAbstractItemModel * ListView::model() const
-{
-    return d->m_ListView->model();
-}
-
-void ListView::setModel(QAbstractItemModel * model)
-{
-    d->m_ListView->setModel(model);
-}
-
-void ListView::setModelColumn(int column)
-{
-    d->m_ListView->setModelColumn(column);
-}
-
-int ListView::modelColumn() const
-{
-    return d->m_ListView->modelColumn();
-}
-
-void ListView::setCurrentIndex(const QModelIndex & item)
-{
-    d->m_ListView->setCurrentIndex(item);
-}
-
-void ListView::setEditTriggers(QAbstractItemView::EditTriggers triggers)
-{
-    d->m_ListView->setEditTriggers(triggers);
+//    setObjectName(name+"ListView");
+//    QListView::setObjectName(name);
 }
 
 void ListView::setActions(AvailableActions actions)
@@ -423,12 +380,12 @@ void ListView::showButtons()
 void ListView::useContextMenu(bool state)
 {
     if (state)
-        d->m_ListView->setContextMenuPolicy(Qt::CustomContextMenu);
+        setContextMenuPolicy(Qt::CustomContextMenu);
     else
-        d->m_ListView->setContextMenuPolicy(Qt::NoContextMenu);
+        setContextMenuPolicy(Qt::NoContextMenu);
 }
 
-QMenu * ListView::getContextMenu()
+QMenu *ListView::getContextMenu()
 {
     QMenu *pop = new QMenu(d->m_Parent);
     pop->addActions(d->m_ToolBar->actions());
@@ -437,45 +394,48 @@ QMenu * ListView::getContextMenu()
 
 void ListView::addItem()
 {
-    if (!d->m_ListView->model())
+    if (!model())
         return;
     
     // insert a row into model
     int row = 0;
-    if (d->m_ListView->currentIndex().isValid()) {
-        row = d->m_ListView->currentIndex().row() + 1;
+    if (currentIndex().isValid()) {
+        row = currentIndex().row() + 1;
     } else {
-        row = d->m_ListView->model()->rowCount();
+        row = model()->rowCount();
         if (row<0)
             row = 0;
     }
-    if (!d->m_ListView->model()->insertRows(row, 1))
+    if (!model()->insertRows(row, 1))
         Utils::Log::addError(this, QString("ListView can not add a row to the model %1").arg(model()->objectName()),
                              __FILE__, __LINE__);
 
     // select inserted row and edit it
-    QModelIndex index = d->m_ListView->model()->index(row, d->m_ListView->modelColumn());
-    d->m_ListView->setCurrentIndex(index);
-    if (d->m_ListView->editTriggers() != QAbstractItemView::NoEditTriggers) {
-        d->m_ListView->edit(index);
+    QModelIndex index = model()->index(row, modelColumn());
+    setCurrentIndex(index);
+    if (editTriggers() != QAbstractItemView::NoEditTriggers) {
+        edit(index);
     }
     Q_EMIT addRequested();
 }
 
 void ListView::removeItem()
 {
-    if (!d->m_ListView->model())
+    if (!model())
         return;
-    QModelIndex idx = d->m_ListView->currentIndex();
+    const QModelIndex &idx = currentIndex();
     if (idx.isValid()) {
-        d->m_ListView->closePersistentEditor(idx);
+        // Do this to keep QDataWidgetMapper informed of the modification
+        edit(idx);
+        closePersistentEditor(idx);
+        // Now delete row
         int row = idx.row();
-//        qWarning() << idx.data() << idx.row();
-        if (!d->m_ListView->model()->removeRows(row, 1))
+        if (!model()->removeRow(row)) {
             Utils::Log::addError(this, QString("ListView can not remove row %1 to the model %2")
                              .arg(row)
                              .arg(model()->objectName()),
                              __FILE__, __LINE__);
+        }
     }
     Q_EMIT removeRequested();
 }
@@ -485,7 +445,7 @@ void ListView::moveDown()
 //    if (!d->canMoveDown())
 //        return;
 
-    QModelIndex idx = d->m_ListView->currentIndex();
+    QModelIndex idx = currentIndex();
     bool moved = false;
 
     StringListModel *m = qobject_cast<StringListModel*>(model());
@@ -504,14 +464,14 @@ void ListView::moveDown()
     // TODO : else swap the two rows.
 
     if (moved)
-        d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()+1,0));
+        setCurrentIndex(model()->index(idx.row()+1,0));
     Q_EMIT moveDownRequested();
 }
 
 void ListView::moveUp()
 {
-    QModelIndex idx = d->m_ListView->currentIndex();
-//    d->m_ListView->closePersistentEditor(idx);
+    QModelIndex idx = currentIndex();
+//    closePersistentEditor(idx);
     bool moved = false;
 
     StringListModel *m = qobject_cast<StringListModel*>(model());
@@ -530,7 +490,7 @@ void ListView::moveUp()
     // TODO : else swap the two rows.
 
     if (moved)
-        d->m_ListView->setCurrentIndex(d->m_ListView->model()->index(idx.row()-1,0));
+        setCurrentIndex(model()->index(idx.row()-1,0));
     Q_EMIT moveUpRequested();
 }
 

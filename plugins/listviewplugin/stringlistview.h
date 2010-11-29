@@ -46,22 +46,22 @@ namespace Views {
 class LISTVIEW_EXPORT StringListView : public ListView //QListView
 {
     Q_OBJECT
-    Q_PROPERTY( QVariant stringList         READ getStringList         WRITE setStringList        USER true )
-    Q_PROPERTY( QVariant checkedStringList  READ getCheckedStringList  WRITE setCheckedStringList USER true )
+    Q_PROPERTY(QVariant stringList         READ getStringList         WRITE setStringList        USER true)
+    Q_PROPERTY(QVariant checkedStringList  READ getCheckedStringList  WRITE setCheckedStringList USER true)
 
 public:
-    StringListView( QWidget * parent = 0 );
+    StringListView(QWidget * parent = 0);
     ~StringListView();
 
-    QVariant getStringList() const              { return static_cast<QStringListModel*>(this->model())->stringList(); }
-    void setStringList( const QVariant & list ) { static_cast<QStringListModel*>(this->model())->setStringList(list.toStringList()); }
+    QVariant getStringList() const;
+    void setStringList(const QVariant &list);
 
-    void setItemsCheckable( bool state );
+    void setItemsCheckable(bool state);
     QVariant getCheckedStringList() const;
-    void setCheckedStringList( const QVariant & list );
+    void setCheckedStringList(const QVariant &list);
 
 Q_SIGNALS:
-    void stringListChanged(const QStringList &newList);
+    void stringListChanged();
 
 };
 

@@ -46,7 +46,7 @@ namespace Internal {
 class ListViewPrivate;
 }
 
-class LISTVIEW_EXPORT ListView : public QWidget
+class LISTVIEW_EXPORT ListView : public QListView
 {
     Q_OBJECT
     friend class ListViewPrivate;
@@ -65,18 +65,8 @@ public:
     ListView(QWidget *parent = 0, AvailableActions actions = DefaultActions);
     virtual ~ListView();
 
-    void setObjectName( const QString &name );
+    void setObjectName(const QString &name);
 
-    virtual QListView *listView() const;
-    virtual QAbstractItemModel *model() const;
-    virtual void setModel( QAbstractItemModel * model );
-    void setModelColumn( int column );
-    int modelColumn () const;
-    void setCurrentIndex( const QModelIndex & item );
-
-    void setEditTriggers( QAbstractItemView::EditTriggers triggers );
-
-//    void setButtons( AvailableButtons buttons );
     void setActions( AvailableActions actions );
 
     void hideButtons() const;

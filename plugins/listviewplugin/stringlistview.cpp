@@ -42,6 +42,8 @@
 #include <QAction>
 #include <QMenu>
 
+#include <QDebug>
+
 using namespace Views;
 
 StringListView::StringListView( QWidget * parent )
@@ -53,29 +55,47 @@ StringListView::~StringListView()
 {
 }
 
+QVariant StringListView::getStringList() const
+{
+    QStringListModel *model = static_cast<QStringListModel*>(this->model());
+    qWarning() << "getStrings" << model;
+    if (model) {
+        qWarning() << model->stringList();
+        return model->stringList();
+    }
+    return QVariant();
+}
+
+void StringListView::setStringList(const QVariant &list)
+{
+    QStringListModel *model = static_cast<QStringListModel*>(this->model());
+    if (model)
+        model->setStringList(list.toStringList());
+}
+
 QVariant StringListView::getCheckedStringList() const
 {
     Q_ASSERT_X( static_cast<StringListModel*>(this->model()), "StringListView::getCheckedStringList()",
                 "This member can only be used if the model is a tkStringListModel.");
-    StringListModel * m = static_cast<StringListModel*>(this->model());
+    StringListModel *m = static_cast<StringListModel*>(this->model());
     if (!m)
         return QVariant();
     return m->getCheckedItems();
 }
 
-void StringListView::setCheckedStringList( const QVariant & list )
+void StringListView::setCheckedStringList(const QVariant &list)
 {
     Q_ASSERT_X( static_cast<StringListModel*>(this->model()), "StringListView::setCheckedStringList()",
                 "This member can only be used if the model is a tkStringListModel.");
     StringListModel * m = static_cast<StringListModel*>(this->model());
     if (!m)
         return ;
-    m->setCheckedItems( list.toStringList() );
+    m->setCheckedItems(list.toStringList());
 }
 
-void StringListView::setItemsCheckable( bool state )
+void StringListView::setItemsCheckable(bool state)
 {
-    StringListModel * m = static_cast<StringListModel*>(this->model());
+    StringListModel *m = static_cast<StringListModel*>(this->model());
     if (m)
         m->setCheckable(state);
 }
