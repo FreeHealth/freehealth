@@ -173,6 +173,12 @@ void ReceiptsGUI::save()
 {
   //QHash<QString,QString> m_hashValuesChoosenFromFindValues
   QHash<int,QString> hashParams = paramsSelected();
+  if (ui->checkBoxFreeEntry->isChecked()&& ui->checkBoxFreeValue->isChecked())	
+  {
+          QString entry = ui->lineEditFreeName->text();
+          QString value = ui->lineEditFreeValue->text();
+  	  m_hashValuesChoosenFromFindValues.insert(entry,value);
+      }
   m_recEng->insertIntoAccount(m_hashValuesChoosenFromFindValues,hashParams);
 }
 
@@ -335,11 +341,15 @@ void ReceiptsGUI::getReceiptsLists(){
     if(m_hashValuesChoosenFromFindValues.size()>0){
         m_hashValuesChoosenFromFindValues.clear();
         }
-    if(m_receiptsValues->exec()== QDialog::Accepted){
-        m_hashValuesChoosenFromFindValues = m_receiptsValues->getChoosenValues();
-        m_receiptsValues->clear();
-        
-        writeOnRegisterLabel();
+    if(ui->lineEditFreeName->text().isEmpty()&& ui->lineEditFreeValue->text().isEmpty()){
+        if(m_receiptsValues->exec()== QDialog::Accepted){
+            m_hashValuesChoosenFromFindValues = m_receiptsValues->getChoosenValues();
+            m_receiptsValues->clear();
+            writeOnRegisterLabel();
+        }
+    }
+    else{
+        m_hashValuesChoosenFromFindValues.insert(ui->lineEditFreeName->text(),ui->lineEditFreeValue->text());
     }
 
 }
@@ -371,27 +381,28 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
   if(ui->cardRadioButton->isChecked()) visa ="1";
   if(ui->bankRadioButton->isChecked()) insurance ="1";
   if(ui->dueRadioButton->isChecked()) due ="1";
- 
-  /*        ACCOUNT_UID,
-        ACCOUNT_USER_UID,
-        ACCOUNT_PATIENT_UID,
-        ACCOUNT_PATIENT_NAME,
-        ACCOUNT_SITE_ID,
-        ACCOUNT_INSURANCE_ID,
-        ACCOUNT_DATE,
-        ACCOUNT_MEDICALPROCEDURE_XML,
-        ACCOUNT_MEDICALPROCEDURE_TEXT,
-        ACCOUNT_COMMENT,
-        ACCOUNT_CASHAMOUNT,
-        ACCOUNT_CHEQUEAMOUNT,
-        ACCOUNT_VISAAMOUNT,
-        ACCOUNT_INSURANCEAMOUNT,
-        ACCOUNT_OTHERAMOUNT,
-        ACCOUNT_DUEAMOUNT,
-        ACCOUNT_DUEBY,
-        ACCOUNT_ISVALID,
-        ACCOUNT_TRACE,*/
+  if(m_account_uid.isEmpty()){
+      m_account_uid = "0";
+      }
+  if (m_user_uid.isEmpty())
+  {
+  	  m_user_uid = "O";	
+      }
+  if (m_patient_uid.isEmpty())
+  {
+  	  m_patient_uid = "0";
+      }
+  if (m_name.isEmpty())
+  {
+  	  m_name="name";
+      }
+  if (m_firstname.isEmpty())
+  {
+  	  m_firstname="firstname";
+      }
+
   QHash<int,QString> hash;
+             // hash.insert(ACCOUNT_ID,"1");
               hash.insert(ACCOUNT_UID,m_account_uid); // ??????
               hash.insert(ACCOUNT_USER_UID,m_user_uid);
               hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
@@ -399,16 +410,16 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
               hash.insert(ACCOUNT_SITE_ID,m_site_id);
               hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
               hash.insert(ACCOUNT_DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
-              hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"");
-              hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
-              hash.insert(ACCOUNT_COMMENT,"");
+              hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"0");
+            //  hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
+              hash.insert(ACCOUNT_COMMENT,"0");
               hash.insert(ACCOUNT_CASHAMOUNT,cash);
               hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
               hash.insert(ACCOUNT_VISAAMOUNT,visa);
               hash.insert(ACCOUNT_INSURANCEAMOUNT,insurance);
               hash.insert(ACCOUNT_OTHERAMOUNT,other);
               hash.insert(ACCOUNT_DUEAMOUNT,due);
-              hash.insert(ACCOUNT_DUEBY,"");
+              hash.insert(ACCOUNT_DUEBY,"0");
               hash.insert(ACCOUNT_ISVALID,"0");
               hash.insert(ACCOUNT_TRACE,"0");
   return hash;

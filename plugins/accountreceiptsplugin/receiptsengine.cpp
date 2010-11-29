@@ -23,6 +23,7 @@ receiptsEngine::receiptsEngine(){
 receiptsEngine::~receiptsEngine(){}
 
 bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams){
+    qDebug() << __FILE__ << QString::number(__LINE__) ;
     int rowBefore = m_mpmodel->rowCount(QModelIndex());
     bool ret = true;
     QString data;
@@ -35,14 +36,18 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
                       << ACCOUNT_VISAAMOUNT
                       << ACCOUNT_INSURANCEAMOUNT // <-> virement
                       << ACCOUNT_DUEAMOUNT;
-    while(it.hasNext()){
+    while(it.hasNext()){//on prend chaque valeur
+        qDebug() << __FILE__ << QString::number(__LINE__) << " it hasNext";
         it.next();
         int row = m_mpmodel->rowCount(QModelIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " row = " << QString::number(row);
         m_mpmodel->insertRow(row,QModelIndex());
         for(int i = 0 ; i < ACCOUNT_MaxParam ; i++){
-            if (i == 0)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " for " << QString::number(i) ;
+            if (i == 0) //ACCOUNT_ID
             {
-            	data = QString::number(row+1);
+            	int idBefore = m_mpmodel->data(m_mpmodel->index(row+1,ACCOUNT_ID),Qt::DisplayRole).toInt();
+            	data = QString::number(idBefore+1);
             }
             else if( listValuesNumbers.contains(i) ){
                 switch(i){
@@ -100,15 +105,18 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
             else{
                 data = hashOfParams.value(i);
                 }
+            qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
             QModelIndex index = m_mpmodel->index(row,i,QModelIndex());
             m_mpmodel-> setData(index, data ,Qt::EditRole);
-            qWarning() << __FILE__ << QString::number(__LINE__) /*<< " model account error = " 
-                       <<m_mpmodel->lastError().text()*/;
+            qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
+                       <<m_mpmodel->lastError().text();
             }
         m_mpmodel->submit();
+                    qWarning() << __FILE__ << QString::number(__LINE__) << " model account submit error = " 
+                       << m_mpmodel->lastError().text();
         }
     if(m_mpmodel->rowCount(QModelIndex()) == rowBefore){
-        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error = ")/*+m_mpmodel->lastError().text()*/,QMessageBox::Ok);
+        QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : "),trUtf8("Error = ")+m_mpmodel->lastError().text(),QMessageBox::Ok);
         ret = false;
         }
     return ret;

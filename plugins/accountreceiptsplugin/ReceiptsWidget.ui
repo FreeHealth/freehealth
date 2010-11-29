@@ -595,6 +595,37 @@
    <layout class="QGridLayout" name="gridLayout_10"/>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>checkBoxFreeEntry</tabstop>
+  <tabstop>lineEditName</tabstop>
+  <tabstop>lineEditFirstname</tabstop>
+  <tabstop>checkBoxFreeValue</tabstop>
+  <tabstop>lineEditFreeName</tabstop>
+  <tabstop>lineEditFreeValue</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>dateTimeEdit</tabstop>
+  <tabstop>dateTimeEdit_2</tabstop>
+  <tabstop>comboBoxDebtor</tabstop>
+  <tabstop>comboBoxThesaurus</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>receiptsFindButton</tabstop>
+  <tabstop>comboBoxWhere</tabstop>
+  <tabstop>comboBoxWho</tabstop>
+  <tabstop>comboBoxBankAccount</tabstop>
+  <tabstop>comboBoxRules</tabstop>
+  <tabstop>comboBoxDistance</tabstop>
+  <tabstop>lessButton</tabstop>
+  <tabstop>plusButton</tabstop>
+  <tabstop>cashRadioButton</tabstop>
+  <tabstop>checkRadioButton</tabstop>
+  <tabstop>cardRadioButton</tabstop>
+  <tabstop>bankRadioButton</tabstop>
+  <tabstop>dueRadioButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>closeButton</tabstop>
+  <tabstop>showButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
