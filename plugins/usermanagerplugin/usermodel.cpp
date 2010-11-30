@@ -405,7 +405,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
     endRemoveRows();
     QSqlTableModel::select();
     reset(); // needed
-    emit memoryUsageChanged();
+    Q_EMIT memoryUsageChanged();
     return noError;
 }
 
@@ -452,7 +452,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         userBase()->updateMaxLinkId(maxLkId + 1);
         user->setLkIds(QList<int>() << maxLkId+1);
     }
-    emit memoryUsageChanged();
+    Q_EMIT memoryUsageChanged();
     return i;
 }
 
@@ -478,7 +478,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     QString uuid = QSqlTableModel::data(QSqlTableModel::index(item.row(), USER_UUID), Qt::DisplayRole).toString();
     if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
-        emit memoryUsageChanged();
+        Q_EMIT memoryUsageChanged();
     }
 
     Internal::UserData *user = d->m_Uuid_UserList[uuid];
@@ -620,7 +620,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     // Here we must get values from complete user, so retreive it from database if necessary
     if (! d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
-        emit memoryUsageChanged();
+        Q_EMIT memoryUsageChanged();
     }
     const Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
     // check user write rights
@@ -819,12 +819,12 @@ bool UserModel::submitAll()
     bool toReturn = true;
     int i = 0;
     foreach(const QString &s, d->m_Uuid_UserList.keys()) {
-        if (! submitUser(s))
+        if (!submitUser(s))
             toReturn = false;
         else
             i++;
     }
-    emit memoryUsageChanged();
+    Q_EMIT memoryUsageChanged();
     return toReturn;
 }
 
@@ -832,7 +832,7 @@ bool UserModel::submitAll()
 bool UserModel::submitUser(const QString &uuid)
 {
     bool toReturn = true;
-    QModelIndexList list = match(createIndex(0, Core::IUser::Uuid), Qt::DisplayRole, uuid, 1);
+    QModelIndexList list = match(index(0, Core::IUser::Uuid), Qt::DisplayRole, uuid, 1);
     if (list.count() != 1)
         return false;
     // act only on modified users
@@ -840,15 +840,16 @@ bool UserModel::submitUser(const QString &uuid)
         Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
         // check user write rights
         if ((user->isCurrent()) &&
-             (!d->m_CurrentUserRights & Core::IUser::WriteOwn))
+            (!d->m_CurrentUserRights & Core::IUser::WriteOwn)) {
             toReturn = false;
-        else if ((!user->isCurrent()) &&
-                  (!d->m_CurrentUserRights & Core::IUser::WriteAll))
+        } else if ((!user->isCurrent()) &&
+                   (!d->m_CurrentUserRights & Core::IUser::WriteAll)) {
             toReturn = false;
-        else if (!Internal::UserBase::instance()->saveUser(user))
+        } else if (!Internal::UserBase::instance()->saveUser(user)) {
             toReturn = false;
+        }
     }
-    emit dataChanged(index(list.at(0).row(),0) , index(list.at(0).row(), Core::IUser::NumberOfColumns));
+    Q_EMIT dataChanged(index(list.at(0).row(),0) , index(list.at(0).row(), Core::IUser::NumberOfColumns));
     return toReturn;
 }
 
@@ -881,7 +882,7 @@ void UserModel::revertRow(int row)
     }
 //    select();
     reset();
-    emit memoryUsageChanged();
+    Q_EMIT memoryUsageChanged();
 }
 
 /**

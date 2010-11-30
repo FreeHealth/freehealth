@@ -4,11 +4,15 @@
 include( $${PWD}/../fmf_plugins.pri)
 include( $${PWD}/usermanagerplugin_dependencies.pri )
 
+DEFINES += USERS_LIBRARY
+
 HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanager_exporter.h \
-    $${PWD}/iuserlistener.h
+    $${PWD}/iuserlistener.h \
+    $${PWD}/currentuserpreferencespage.h
 
-SOURCES += $${PWD}/usermanagerplugin.cpp
+SOURCES += $${PWD}/usermanagerplugin.cpp \
+    $${PWD}/currentuserpreferencespage.cpp
 
 # Compile
 HEADERS += $${PWD}/global.h \
@@ -40,7 +44,8 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/useridentifier.ui \
     $${PWD}/widgets/usermanager.ui \
     $${PWD}/widgets/headersfootersviewerprivate.ui \
-    $${PWD}/widgets/userpassworddialog.ui
+    $${PWD}/widgets/userpassworddialog.ui \
+    $${PWD}/currentuserpreferenceswidget.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/usermanagerplugin_fr.ts \

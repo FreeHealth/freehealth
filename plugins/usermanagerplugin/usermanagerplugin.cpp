@@ -37,6 +37,7 @@
 #include "widgets/usermanager.h"
 #include "widgets/useridentifier.h"
 #include "widgets/userwizard.h"
+#include "currentuserpreferencespage.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -143,8 +144,10 @@ void UserManagerPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "UserManagerPlugin::extensionsInitialized";
 
-    // add UserManager toogler action to plugin menu
+    // add UserPreferences page
+    addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
 
+    // add UserManager toogler action to plugin menu
 #ifdef FREEACCOUNT
     const char * const menuId = Core::Constants::M_FILE;
     const char * const menuNewId = Core::Constants::M_FILE;

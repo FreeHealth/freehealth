@@ -123,7 +123,7 @@ UserManager::UserManager(QWidget * parent)
     : QMainWindow(parent)
 {
     Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
-    if (! UserModel::instance()->hasCurrentUser() == QVariant())
+    if (!UserModel::instance()->hasCurrentUser())
         return;
     setAttribute(Qt::WA_DeleteOnClose);
     d = new UserManagerPrivate(this);
