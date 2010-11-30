@@ -2,7 +2,7 @@ TEMPLATE = lib
 TARGET = Printer
 PACKAGE_VERSION = 0.0.2
 DEFINES += PRINTER_LIBRARY
-include(../fmf_plugins.pri)
+include($${PWD}/../fmf_plugins.pri)
 include( $${PWD}/printerplugin_dependencies.pri )
 HEADERS = $${PWD}/printerplugin.h \
     $${PWD}/printer_exporter.h \

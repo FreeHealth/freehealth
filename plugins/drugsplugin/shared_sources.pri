@@ -2,6 +2,11 @@
 # DrugsWidget plugins and freediams
 INCLUDEPATH *= $${PWD}
 
+DEFINES += DRUGS_LIBRARY
+
+include($${PWD}/../fmf_plugins.pri)
+include($${PWD}/drugsplugin_dependencies.pri )
+
 # General
 HEADERS += $${PWD}/drugs_exporter.h \
     $${PWD}/constants.h \

@@ -1,3 +1,8 @@
+DEFINES += EDITOR_LIBRARY
+
+include($${PWD}/../fmf_plugins.pri)
+include($${PWD}/texteditorplugin_dependencies.pri )
+
 HEADERS +=  \
     $${PWD}/texteditor_exporter.h \
     $${PWD}/editoractionhandler.h \

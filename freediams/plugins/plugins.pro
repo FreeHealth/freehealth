@@ -12,39 +12,39 @@ SUBDIRS = \
     saverestore
 
 
-core.subdir = ../../plugins/fdcoreplugin
+core.subdir = coreplugin
 
-drugsbase.subdir   = fddrugsbaseplugin
+drugsbase.subdir   = drugsbaseplugin
 drugsbase.depends += core
 drugsbase.depends += templates
 drugsbase.depends += printer
 
-mainwindow.subdir   = ../../plugins/fdmainwindowplugin
-mainwindow.depends += core
-mainwindow.depends += drugs
-mainwindow.depends += printer
-mainwindow.depends += templates
-
-printer.subdir   = fdprinterplugin
-printer.depends += core
-printer.depends += texteditor
-
-listview.subdir   = ../../plugins/listviewplugin
-listview.depends += core
-
-texteditor.subdir   = fdtexteditorplugin
-texteditor.depends += core
-
-drugs.subdir   = fddrugsplugin
+drugs.subdir   = drugsplugin
 drugs.depends += drugsbase
 drugs.depends += core
 drugs.depends += listview
 drugs.depends += texteditor
 drugs.depends += templates
 
-templates.subdir = ../../plugins/templatesplugin
+mainwindow.subdir   = mainwindowplugin
+mainwindow.depends += core
+mainwindow.depends += drugs
+mainwindow.depends += printer
+mainwindow.depends += templates
+
+listview.subdir   = listviewplugin
+listview.depends += core
+
+printer.subdir   = printerplugin
+printer.depends += core
+printer.depends += texteditor
+
+saverestore.subdir = saverestoreplugin
+saverestore.depends = core
+
+texteditor.subdir   = texteditorplugin
+texteditor.depends += core
+
+templates.subdir = templatesplugin
 templates.depends += core
 #templates.depends += mainwindow
-
-saverestore.subdir = ../../plugins/saverestoreplugin
-saverestore.depends = core
