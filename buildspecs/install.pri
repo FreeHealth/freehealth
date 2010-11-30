@@ -84,14 +84,6 @@ target.path = $${INSTALL_BINARY_PATH}
 INSTALLS += target
 }
 
-# Install descriptive files
-!isEmpty(INSTALL_BINARY_PATH){
-descrfiles.path = $${INSTALL_BINARY_PATH}
-descrfiles.files =  $${SOURCES_ROOT_PATH}/README
-descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING
-INSTALLS += descrfiles
-}
-
 macx {
  # Qt 4.7 / MacOS 10.6 patch when not using the Qt macdeploy app
  #$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib

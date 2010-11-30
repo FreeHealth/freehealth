@@ -20,6 +20,13 @@ else {
 
  LIB_EXTENSION           = $${QMAKE_EXTENSION_SHLIB}
 
+ # Install descriptive files
+ !isEmpty(INSTALL_BINARY_PATH){
+ descrfiles.path = $${INSTALL_BINARY_PATH}
+ descrfiles.files =  $${SOURCES_ROOT_PATH}/README.txt
+ descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING.txt
+ INSTALLS += descrfiles
+ }
 
 }  #end if release mode
 

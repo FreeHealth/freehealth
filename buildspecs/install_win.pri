@@ -1,4 +1,4 @@
-CONFIG( debug, debug|release ) {
+CONFIG(debug, debug|release) {
   message( No installation available in Debug mode )
 } else {
  !win32:error(install_win.pri should only be used when building win32 configuration)
@@ -36,6 +36,15 @@ CONFIG( debug, debug|release ) {
     message( Win32 Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
     message( Win32 Bundle : Binary Wrapper will be : $${INSTALL_BINARY_WRAPPER_NAME})
  }
+
+ # Install descriptive files
+ !isEmpty(INSTALL_BINARY_PATH){
+ descrfiles.path = $${INSTALL_BINARY_PATH}
+ descrfiles.files =  $${SOURCES_ROOT_PATH}/README.txt
+ descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING.txt
+ INSTALLS += descrfiles
+ }
+
 
 }  #end if release mode
 

@@ -94,13 +94,13 @@ Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; 
 Source: "Resources/doc/FreeICD/en/*"; DestDir: "{app}/Resources/doc/FreeICD/en"; Components: helpEn; Flags: recursesubdirs
 Source: "Resources/doc/FreeICD/fr/*"; DestDir: "{app}/Resources/doc/FreeICD/fr"; Components: helpFr; Flags: recursesubdirs
 Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
-Source: "README"; DestDir: "{app}"; Components: program  ; Flags: isreadme
-Source: "COPYING"; DestDir: "{app}"; Components: program
+Source: "README.txt"; DestDir: "{app}"; Components: program  ; Flags: isreadme
+Source: "COPYING.txt"; DestDir: "{app}"; Components: program
 
 [Icons]
 Name: "{group}\FreeICD"; Filename: "{app}\FreeICD.exe"
 Name: "{group}\{cm:UninstallProgram,FreeICD}"; Filename: "{uninstallexe}"
 Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
-Name: "{group}\README"; FileName: "{app}\README"
-Name: "{group}\COPYING"; FileName: "{app}\COPYING"
+Name: "{group}\READM.txtE"; FileName: "{app}\README.txt"
+Name: "{group}\COPYING.txt"; FileName: "{app}\COPYING.txt"
 

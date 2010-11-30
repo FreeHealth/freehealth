@@ -130,13 +130,13 @@ Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Com
 Source: "Resources/doc/freediams/en/*"; DestDir: "{app}/Resources/doc/freediams/en"; Components: helpEn; Flags: recursesubdirs
 Source: "Resources/doc/freediams/fr/*"; DestDir: "{app}/Resources/doc/freediams/fr"; Components: helpFr; Flags: recursesubdirs
 Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
-Source: "README"; DestDir: "{app}"; Components: program  ; Flags: isreadme
-Source: "COPYING"; DestDir: "{app}"; Components: program
+Source: "README.txt"; DestDir: "{app}"; Components: program  ; Flags: isreadme
+Source: "COPYING.txt"; DestDir: "{app}"; Components: program
 
 [Icons]
 Name: "{group}\FreeDiams"; Filename: "{app}\FreeDiams.exe"
 Name: "{group}\{cm:UninstallProgram,FreeDiams}"; Filename: "{uninstallexe}"
 Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
-Name: "{group}\README"; FileName: "{app}\README"
-Name: "{group}\COPYING"; FileName: "{app}\COPYING"
+Name: "{group}\README.txt"; FileName: "{app}\README.txt"
+Name: "{group}\COPYING.txt"; FileName: "{app}\COPYING.txt"
 

@@ -36,7 +36,7 @@ mkdir $PACKPATH
 echo "**** PREPARE SOURCES PACKAGE ****"
 
 FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
-README COPYING INSTALL \
+README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs \
 doc \
@@ -68,7 +68,7 @@ scripts \
 tests"
 
 FREEICD_SOURCES="freeicd.pro config.pri checkqtversion.pri \
-README COPYING INSTALL \
+README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs \
 doc \
@@ -96,7 +96,7 @@ plugins/usermanagerplugin \
 scripts"
 
 FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
-README COPYING INSTALL \
+README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs \
 doc \
@@ -120,7 +120,7 @@ plugins/usermanagerplugin \
 scripts"
 
 FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
-README COPYING INSTALL \
+README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs \
 doc \
