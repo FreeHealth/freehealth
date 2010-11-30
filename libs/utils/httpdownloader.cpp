@@ -91,7 +91,11 @@ void HttpDownloader::startRequest(const QUrl &url)
 {
     if (!url.isValid())
         return;
-    Utils::Log::addMessage(this, tr("Start downloading: %1 to %2").arg(m_Url.toString()).arg(m_Path));
+    if (m_LabelText.isEmpty()) {
+        Utils::Log::addMessage(this, tr("Start downloading: %1 to %2").arg(m_Url.toString()).arg(m_Path));
+    } else {
+        Utils::Log::addMessage(this, m_LabelText);
+    }
     reply = qnam.get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
@@ -122,7 +126,10 @@ void HttpDownloader::downloadFile()
     }
 
     progressDialog->setWindowTitle(tr("HTTP"));
-    progressDialog->setLabelText(tr("Downloading %1\nTo %2").arg(m_Url.toString()).arg(m_Path));
+    if (m_LabelText.isEmpty())
+        progressDialog->setLabelText(tr("Downloading %1\nTo %2").arg(m_Url.toString()).arg(m_Path));
+    else
+        progressDialog->setLabelText(m_LabelText);
 
     // schedule the request
     httpRequestAborted = false;

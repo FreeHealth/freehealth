@@ -48,6 +48,7 @@ public:
     void setMainWindow(QMainWindow *win);
     void setUrl(const QUrl &url);
     void setOutputPath(const QString &absolutePath);
+    void setLabelText(const QString &text) {m_LabelText = text;}
 
     void startDownload();
 
@@ -67,7 +68,7 @@ private Q_SLOTS:
 //#endif
 
 private:
-    QString m_Path;
+    QString m_Path, m_LabelText;
     QUrl m_Url;
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
