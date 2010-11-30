@@ -100,6 +100,10 @@ public:
                     .arg(icdBase()->field(Constants::Table_Master, Constants::MASTER_SID))
                     .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_SID));
         }
+
+        if (WarnFilter) {
+            qWarning() << req;
+        }
         return req;
     }
 
@@ -132,6 +136,9 @@ IcdSearchModel::IcdSearchModel(QObject *parent) :
     connect(d->m_IcdMaster,SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SIGNAL(rowsRemoved(QModelIndex, int, int)));
     connect(d->m_IcdMaster,SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
     connect(d->m_IcdMaster,SIGNAL(modelReset()), this, SIGNAL(modelReset()));
+
+    // Refresh when IcdDatabase intialized
+    connect(icdBase(), SIGNAL(databaseInitialized()), this, SLOT(databaseInitialized()));
 }
 
 IcdSearchModel::~IcdSearchModel()
@@ -229,3 +236,9 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
     reset();
 }
 
+void IcdSearchModel::databaseInitialized()
+{
+    qWarning() << Q_FUNC_INFO;
+    d->m_IcdMaster->setQuery(d->searchQuery(), icdBase()->database());
+    reset();
+}

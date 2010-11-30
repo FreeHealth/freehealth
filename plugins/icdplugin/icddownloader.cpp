@@ -28,6 +28,7 @@
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -65,6 +66,7 @@ IcdDownloader::IcdDownloader(QObject *parent) :
         QObject(parent), m_Downloader(0)
 {
 }
+
 IcdDownloader::~IcdDownloader()
 {
     qWarning() << "IcdDownloader::~IcdDownloader()";
@@ -123,6 +125,8 @@ bool IcdDownloader::downloadRawSources()
     m_Downloader = new Utils::HttpDownloader(this);
     m_Downloader->setOutputPath(::tmpPath());
     m_Downloader->setUrl(QUrl(::RAWSOURCES_URL));
+    m_Downloader->setLabelText(tr("Downloading ICD10 raw sources..."));
+    m_Downloader->setMainWindow(Core::ICore::instance()->mainWindow());
     m_Downloader->startDownload();
     connect(m_Downloader, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
     return true;
@@ -176,7 +180,7 @@ bool IcdDownloader::populateDatabaseWithRawSources()
 
     QSqlDatabase DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_ICD10);
     QString dbName = QString(Constants::DB_ICD10) + ".db";
-    QString pathOrHostName = settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + Constants::DB_ICD10;
+    QString pathOrHostName = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + Constants::DB_ICD10;
     QString absFileName = QDir::cleanPath(pathOrHostName + QDir::separator() + dbName);
     DB.setDatabaseName(absFileName);
 

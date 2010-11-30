@@ -291,6 +291,7 @@ void IcdCentralWidget::print()
     p->clearTokens();
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, QCoreApplication::translate(Constants::ICDCONSTANTS_TR_CONTEXT, Constants::ICD_CODECOLLECTION_TEXT));
+    tokens.insert(Constants::T_IS_PRINTING_ICDCOLLECTION, " ");
     tokens.insert(Constants::T_ICD_DATABASE_VERSION, icdBase()->getDatabaseVersion());
     tokens.insert(Constants::T_ICD_PLUGIN_VERSION, IcdPlugin::pluginVersion());
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);

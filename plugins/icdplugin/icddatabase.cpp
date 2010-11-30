@@ -305,6 +305,11 @@ bool IcdDatabase::init()
          m_initialized = true;
 
      connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(refreshLanguageDependCache()));
+
+     if (m_initialized) {
+         Q_EMIT databaseInitialized();
+     }
+
      return true;
 }
 

@@ -51,9 +51,6 @@ public:
 
     static QString pluginVersion() {return m_PlugVersion;}
 
-private Q_SLOTS:
-    void postDatabaseCreation();
-
 private:
     static QString m_PlugVersion;
 };

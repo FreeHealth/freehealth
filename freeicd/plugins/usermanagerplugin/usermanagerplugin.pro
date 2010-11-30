@@ -1,10 +1,10 @@
 TEMPLATE        = lib
 TARGET          = UserManager
 
-DEFINES += FREEACCOUNT
-FREEACCOUNT = 1
+DEFINES += FREEICD
+FREEICD = 1
 
-BUILD_PATH_POSTFIXE = FreeAccount
+BUILD_PATH_POSTFIXE = FreeICD
 
 include(../../../plugins/usermanagerplugin/shared_sources.pri)
 

@@ -4,7 +4,8 @@ mac:TARGET       = $$quote(FreeICD)
 PACKAGE_VERSION  = 0.1.0~beta
 
 # include general configuration
-INSTALL_DRUGS = 0
+FREEICD = 1
+
 include( ../config.pri )
 !CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
@@ -12,12 +13,6 @@ include( ../config.pri )
 include($${SOURCES_LIBS_PATH}/extensionsystem.pri)
 include($${SOURCES_LIBS_PATH}/utils.pri)
 include($${SOURCES_LIBS_PATH}/rpath.pri)
-
-# include Doc
-# !CONFIG(crosscompil) {
-#include( ../doc/manual-di.pri)
-#PRE_TARGETDEPS += en_html_docs fr_html_docs
-# }
 
 QT *= sql \
     network \

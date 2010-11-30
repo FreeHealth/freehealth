@@ -229,6 +229,7 @@ namespace Constants {
     const char * const  I_TOGGLEICDSELECTOR = "icd.png";
 
     // Tokens
+    const char * const  T_IS_PRINTING_ICDCOLLECTION = "IS_ICD";
     const char * const  T_ICD_DATABASE_VERSION = "ICD_DATABASEVERSION";
     const char * const  T_ICD_PLUGIN_VERSION = "ICD_PLUGINVERSION";
 

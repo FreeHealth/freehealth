@@ -84,7 +84,10 @@ public:
 
     QString getMemo(const QVariant &SID);
 
-protected:
+Q_SIGNALS:
+    void databaseInitialized();
+
+protected Q_SLOTS:
     bool init();
 
 private Q_SLOTS:
