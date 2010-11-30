@@ -46,7 +46,8 @@ global_resources/databases/drugs/iam*.db \
 global_resources/doc/freediams \
 global_resources/textfiles/freediams.desktop \
 global_resources/pixmap \
-global_resources/package_helpers \
+global_resources/package_helpers/freediams* \
+global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
 libs \
@@ -74,10 +75,14 @@ doc \
 freeicd \
 global_resources/doc/freeicd \
 global_resources/textfiles/freeicd.desktop \
+global_resources/textfiles/default_user_header.htm \
+global_resources/textfiles/default_user_footer.htm \
 global_resources/pixmap \
-global_resources/package_helpers \
+global_resources/package_helpers/freeicd* \
+global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
+global_resources/databases/icd10/icd10.db \
 global_resources/sql/icd10.sql \
 libs \
 contrib \
@@ -99,7 +104,8 @@ freeaccount \
 global_resources/doc/freeaccount \
 global_resources/textfiles/freeaccount.desktop \
 global_resources/pixmap \
-global_resources/package_helpers \
+global_resources/package_helpers/freeaccount* \
+global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
 libs \
