@@ -42,12 +42,12 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/simpletextdialog.h>
 
-#include <fdmainwindowplugin/mainwindow.h>
-
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QFileDialog>

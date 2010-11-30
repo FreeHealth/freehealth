@@ -251,6 +251,7 @@ public:
         case Interaction::Id :     return QVariant();
         case Interaction::Icon :   return m_InteractionsManager->iamIcon(drug, m_levelOfWarning);
         case Interaction::Pixmap : return m_InteractionsManager->iamIcon(drug, m_levelOfWarning).pixmap(16,16);
+        case Interaction::MediumPixmap : return m_InteractionsManager->iamIcon(drug, m_levelOfWarning, true).pixmap(64,64);
         case Interaction::ToolTip :
             {
                 QString display;

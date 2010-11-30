@@ -267,38 +267,44 @@ QList<Internal::DrugsInteraction *> InteractionsManager::getAllInteractionsFound
     return d->m_DrugInteractionList;
 }
 
-QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWarning)  // static
+QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWarning, bool medium)  // static
 {
     using namespace DrugsDB::Constants;
     Core::ITheme *th = Core::ICore::instance()->theme();
+    Core::ITheme::IconSize size = Core::ITheme::SmallIcon;
+    if (medium)
+        size = Core::ITheme::MediumIcon;
     if ( level & Interaction::ContreIndication )
-        return th->icon( INTERACTION_ICONCRITICAL );
+        return th->icon(INTERACTION_ICONCRITICAL, size);
     else if ( level & Interaction::Deconseille )
-        return th->icon( INTERACTION_ICONDECONSEILLEE );
+        return th->icon(INTERACTION_ICONDECONSEILLEE, size);
     else if ( ( level & Interaction::APrendreEnCompte ) && ( levelOfWarning <= 1 ) )
-        return th->icon( INTERACTION_ICONTAKEINTOACCOUNT );
+        return th->icon(INTERACTION_ICONTAKEINTOACCOUNT, size);
     else if ( ( level & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
-        return th->icon( INTERACTION_ICONPRECAUTION );
+        return th->icon(INTERACTION_ICONPRECAUTION, size);
     else if ( ( level & Interaction::Information ) && ( levelOfWarning == 0 ) )
-        return th->icon( INTERACTION_ICONINFORMATION );
+        return th->icon(INTERACTION_ICONINFORMATION, size);
     else if ( level & Interaction::noIAM )
-        return th->icon( INTERACTION_ICONOK );
+        return th->icon(INTERACTION_ICONOK, size);
     else
-        return th->icon( INTERACTION_ICONUNKONW );
+        return th->icon(INTERACTION_ICONUNKONW, size);
 }
 
 /** \brief Returns the icon of the interaction regarding the \e levelOfWarning for a selected \e drug. */
-QIcon InteractionsManager::iamIcon(const Internal::DrugsData *drug, const int &levelOfWarning) const
+QIcon InteractionsManager::iamIcon(const Internal::DrugsData *drug, const int &levelOfWarning, bool medium) const
 {
     using namespace DrugsDB::Constants;
+    Core::ITheme::IconSize size = Core::ITheme::SmallIcon;
+    if (medium)
+        size = Core::ITheme::MediumIcon;
     Core::ITheme *th = Core::ICore::instance()->theme();
     if (drugHaveInteraction(drug)) {
         Interaction::TypesOfIAM r = getMaximumTypeOfIAM(drug);
         return interactionIcon(r, levelOfWarning);
     } else if (levelOfWarning <= 1) {
         if (!Internal::DrugsBase::instance()->drugsINNIsKnown(drug))
-            return th->icon(INTERACTION_ICONUNKONW);
-        else return th->icon(INTERACTION_ICONOK);
+            return th->icon(INTERACTION_ICONUNKONW,size);
+        else return th->icon(INTERACTION_ICONOK,size);
     }
     return QIcon();
 }

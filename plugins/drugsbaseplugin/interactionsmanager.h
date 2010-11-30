@@ -77,8 +77,8 @@ public:
     Internal::DrugsInteraction *getLastInteractionFound() const;                      // must call first interactions()
     QList<Internal::DrugsInteraction*> getAllInteractionsFound() const;                      // must call first interactions()
 
-    static QIcon interactionIcon(const int level, const int levelOfWarning = 0);
-    QIcon iamIcon( const Internal::DrugsData *drug, const int &levelOfWarning = 0 ) const;
+    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
+    QIcon iamIcon(const Internal::DrugsData *drug, const int &levelOfWarning = 0, bool medium = false) const;
     static QString listToHtml( const QList<Internal::DrugsInteraction *> & list, bool fullInfos );
     static QString synthesisToHtml( const QList<Internal::DrugsInteraction *> & list, bool fullInfos );
     static void synthesisToTreeWidget(const QList<Internal::DrugsInteraction *> &list, QTreeWidget *tree);

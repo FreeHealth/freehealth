@@ -400,6 +400,7 @@ namespace Interaction
         Id = 2000,
         Icon,
         Pixmap,
+        MediumPixmap,
         ToolTip,
         FullSynthesis,
         MaxParam
