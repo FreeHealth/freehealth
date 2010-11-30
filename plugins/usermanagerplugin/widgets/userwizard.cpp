@@ -116,9 +116,9 @@ UserWizard::UserWizard(QWidget *parent)
     setPage(ProfilPage, new UserProfilPage(this));
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
     setPage(RightsPage, new UserRightsPage(this));
-    setPage(PaperGenericPage, new UserPaperPage("Generic", this));
-    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", this));
-    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", this));
+    setPage(PaperGenericPage, new UserPaperPage("Generic", PaperAdministrativePage, this));
+    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", PaperPrescriptionsPage, this));
+    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", -1, this));
 
     setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
@@ -394,8 +394,8 @@ UserAdressPage::UserAdressPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Please enter your complete adress."));
-    setSubTitle(tr("This represents your professionnal adress."));
-    QLabel * lblAdress = new QLabel(tr("Adress"), this);
+    setSubTitle(tr("This represents your professional address."));
+    QLabel * lblAdress = new QLabel(tr("Address"), this);
     QLabel * lblCity = new QLabel(tr("City"), this);
     QLabel * lblZipcode = new QLabel(tr("Zipcode"), this);
     QLabel * lblCountry = new QLabel(tr("Country"), this);
@@ -606,8 +606,8 @@ static inline QString defaultFooter()
     return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
 }
 
-UserPaperPage::UserPaperPage(const QString &paperName, QWidget *parent) :
-        QWizardPage(parent), type(paperName)
+UserPaperPage::UserPaperPage(const QString &paperName, int nextPage, QWidget *parent) :
+        QWizardPage(parent), type(paperName), m_Next(nextPage)
 {
     QString title;
     if (type=="Generic")
@@ -667,12 +667,4 @@ bool UserPaperPage::validatePage()
     UserWizard::setUserPaper(wmk, tmp->toXml());
 
     return true;
-}
-
-
-int UserPaperPage::nextId() const
-{
-//    if (field("isMedical").toBool() && wizard()->page(UserWizard::PaperPrescriptionsPage)!=this)
-        return UserWizard::PaperPrescriptionsPage;
-//    return -1;
 }

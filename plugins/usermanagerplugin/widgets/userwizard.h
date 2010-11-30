@@ -205,15 +205,16 @@ class UserPaperPage: public QWizardPage
 {
     Q_OBJECT
 public:
-    UserPaperPage(const QString &paperName, QWidget *parent = 0);
+    UserPaperPage(const QString &paperName, int nextPage = -1, QWidget *parent = 0);
     bool validatePage();
 
-    int nextId() const;
+    int nextId() const {return m_Next;}
 
 private:
     Print::TextDocumentExtra *header, *footer, *wm;
     Print::PrinterPreviewer *previewer;
     QString type;
+    int m_Next;
 };
 
 //class UserPrescriptionsPage: public QWizardPage
