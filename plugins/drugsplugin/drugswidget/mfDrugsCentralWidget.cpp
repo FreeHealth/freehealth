@@ -29,6 +29,7 @@
 // include drugs widgets headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/interactionsmanager.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
@@ -185,12 +186,14 @@ void DrugsCentralWidget::selector_drugSelected(const QVariant &drugUid)
         if (flag != DrugsDB::Constants::Interaction::noIAM) {
             DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille).toInt());
             if (flag >= minLevel) {
-                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
-                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
+//                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                QPixmap icon = m_CurrentDrugModel->interactionsManager()->interactionIcon(flag, 0, true).pixmap(64,64);
                 bool yes = Utils::yesNoMessageBox(tr("Interaction found. Do you to continue anyway ?"),
                                             m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::OwnInteractionsSynthesis).toString(),
                                             m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::FullSynthesis).toString(),
-                                            tr("Dynamic interactions alert"), icon);
+                                            tr("Dynamic interactions alert"),
+                                            icon);
                 if (!yes) {
                     m_CurrentDrugModel->removeLastInsertedDrug();
                     return;
