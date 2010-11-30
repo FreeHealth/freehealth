@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include "mainwindowplugin.h"
 #include "mainwindow.h"
-#include "preferences/userpreferences.h"
+//#include "preferences/userpreferences.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -70,7 +70,7 @@ void MainWinPlugin::extensionsInitialized()
     Core::ICore::instance()->translators()->addNewTranslator("freeicd-mainwindow");
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));
+//    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));
 
     m_MainWindow->extensionsInitialized();
 }
