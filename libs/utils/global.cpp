@@ -425,12 +425,16 @@ void warningMessageBox(const QString &text, const QString &infoText, const QStri
 }
 
 /** \brief Creates a messagebox with yes / no. Return true if user clicked yes. **/
-bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title)
+bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title, const QPixmap &icon)
 {
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
-    mb.setIcon(QMessageBox::Question);
+    if (icon.isNull()) {
+        mb.setIcon(QMessageBox::Question);
+    } else {
+        mb.setIconPixmap(icon);
+    }
     if (title.isEmpty())
         mb.setWindowTitle(qApp->applicationName());
     else
