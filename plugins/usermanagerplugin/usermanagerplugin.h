@@ -71,6 +71,7 @@ private Q_SLOTS:
     void showUserManager();
     void createUser();
     void changeCurrentUser();
+    void updateActions();
 
 private:
     QAction *aUserManager;

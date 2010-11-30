@@ -64,6 +64,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 static inline bool identifyUser()
 {
@@ -148,7 +149,7 @@ void UserManagerPlugin::extensionsInitialized()
     addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
 
     // add UserManager toogler action to plugin menu
-#ifdef FREEACCOUNT
+#ifndef FREEMEDFORMS
     const char * const menuId = Core::Constants::M_FILE;
     const char * const menuNewId = Core::Constants::M_FILE;
     const char * const groupUsers = Core::Constants::G_FILE_OTHER;
@@ -185,6 +186,7 @@ void UserManagerPlugin::extensionsInitialized()
     connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
 
     // Create user
+    /** \todo manage user's right to enable/unable these actions */
     a = aCreateUser = new QAction(this);
     a->setObjectName("aCreateUser");
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));
@@ -207,7 +209,7 @@ void UserManagerPlugin::extensionsInitialized()
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 
-
+    updateActions();
     // Update context is necessary
 //    contextManager()->updateContext();
 
@@ -236,12 +238,32 @@ void UserManagerPlugin::changeCurrentUser()
     Internal::UserIdentifier ident;
     if (ident.exec() == QDialog::Rejected)
         return;
+    updateActions();
     QString log = ident.login();
     QString pass = ident.cryptedPassword();
     settings()->setValue(Core::Constants::S_LASTLOGIN, log);
     settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                  .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),"","","");
+}
+
+void UserManagerPlugin::updateActions()
+{
+    if (user()) {
+        Core::IUser::UserRights umRights(user()->value(Core::IUser::ManagerRights).toInt());
+//        Core::IUser::UserRights adminRights(user()->value(Core::IUser::AdministrativeRights));
+        if ((umRights & Core::IUser::AllRights) ||
+            (umRights & Core::IUser::ReadAll)) {
+            aUserManager->setEnabled(true);
+            aCreateUser->setEnabled(true);
+        } else {
+            aUserManager->setEnabled(false);
+            if (umRights & Core::IUser::Create)
+                aCreateUser->setEnabled(true);
+            else
+                aCreateUser->setEnabled(false);
+        }
+    }
 }
 
 Q_EXPORT_PLUGIN(UserManagerPlugin)
