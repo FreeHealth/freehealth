@@ -151,14 +151,17 @@ forms.files = $${SOURCES_FORMS}
 INSTALLS += forms
 }
 
-# Install databases
-!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
+# Install drugs databases
+!isEmpty(INSTALL_DRUGS):!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
 drugsdb.path = $${INSTALL_DATABASES_PATH}/drugs
 drugsdb.files = $${SOURCES_DATABASES}/drugs/drugs*.db
 INSTALLS += drugsdb
 iamdb.path = $${INSTALL_DATABASES_PATH}/drugs
 iamdb.files = $${SOURCES_DATABASES}/drugs/iam*.db
 INSTALLS += iamdb
+}
+
+!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
 usersdb.path = $${INSTALL_DATABASES_PATH}/users
 usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt
 INSTALLS += usersdb
@@ -210,9 +213,11 @@ INSTALLS+=packageHelpers
 
 # Install some specific files
 !isEmpty(FREEICD){
-freeicd_files.path=$${INSTALL_RESOURCES_PATH}/sql
-freeicd_files.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10.sql
-INSTALLS+=freeicd_files
+freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql
+freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10.sql
+freeicd_db.path=$${INSTALL_DATABASES_PATH}/icd10
+freeicd_db.files=$${SOURCES_DATABASES}/icd10/icd10.db
+INSTALLS+=freeicd_sqlfile freeicd_db
 }
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
