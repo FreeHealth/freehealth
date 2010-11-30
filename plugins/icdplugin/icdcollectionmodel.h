@@ -71,6 +71,9 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+private Q_SLOTS:
+    void languageChanged();
+
 private:
     Internal::IcdCollectionModelPrivate *d;
 };

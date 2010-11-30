@@ -44,6 +44,9 @@
 #include "icdassociation.h"
 #include "icddatabase.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <utils/log.h>
 
 
@@ -76,6 +79,22 @@ public:
         m_Rows.clear();
     }
 
+    void translateRow(const int row)
+    {
+        // translate row
+        QVariant mainsid = q->index(row, IcdCollectionModel::SID).data();
+        q->setData(q->index(row, IcdCollectionModel::Label), icdBase()->getSystemLabel(mainsid));
+
+        // translate all its children
+        const QModelIndex &p = q->index(row, 0);
+        if (q->hasChildren(p)) {
+            for(int i = 0; i < q->rowCount(p); ++i) {
+                QVariant sid = q->index(i, IcdCollectionModel::SID, p).data();
+                q->setData(q->index(i, IcdCollectionModel::Label, p), icdBase()->getAssociatedLabel(mainsid, sid));
+            }
+        }
+    }
+
 public:
     QVector<int> m_ExcludedSIDs;
     QVector<int> m_SIDs;
@@ -95,6 +114,7 @@ IcdCollectionModel::IcdCollectionModel(QObject *parent) :
     d(new Internal::IcdCollectionModelPrivate(this))
 {
     setObjectName("IcdCollectionModel");
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
 }
 
 IcdCollectionModel::~IcdCollectionModel()
@@ -297,21 +317,6 @@ bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
     return true;
 }
 
-
-//QVariant IcdCollectionModel::data(const QModelIndex &index, int role) const
-//{
-//    if (!index.isValid())
-//        return QVariant();
-
-//    QStandardItemModel::data(index, role);
-
-//    return QVariant();
-//}
-
-//bool IcdCollectionModel::setData(const QModelIndex &index, const QVariant &value, int role)
-//{
-//}
-
 /**
   \brief Clear the model. Please do not use the QAbstractItemModel::clear(). Use this instead.
   Using the QAbstractItemModel::clear() member will not properly clean the model. ICD10 rules
@@ -327,4 +332,12 @@ void IcdCollectionModel::clearCollection()
 Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+void IcdCollectionModel::languageChanged()
+{
+    // Update labels
+    for(int i=0; i<rowCount();++i) {
+        d->translateRow(i);
+    }
 }
