@@ -27,6 +27,9 @@
 #include "icddatabase.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <QString>
 #include <QLocale>
 #include <QSqlQueryModel>
@@ -113,6 +116,7 @@ public:
     QSqlQueryModel *m_IcdMaster;
     IcdSearchModel::SearchModes m_SearchMode;
     QString m_LastFilterRequiered;
+    int m_LangField;
 
 private:
     IcdSearchModel *q;
@@ -125,7 +129,7 @@ private:
 IcdSearchModel::IcdSearchModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::IcdSearchModelPrivate(this))
 {
-    // connect lanquage change
+    languageChanged();
     d->m_IcdMaster->setQuery(d->searchQuery(), icdBase()->database());
 
     connect(d->m_IcdMaster,SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
@@ -137,8 +141,7 @@ IcdSearchModel::IcdSearchModel(QObject *parent) :
     connect(d->m_IcdMaster,SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
     connect(d->m_IcdMaster,SIGNAL(modelReset()), this, SIGNAL(modelReset()));
 
-    // Refresh when IcdDatabase intialized
-    connect(icdBase(), SIGNAL(databaseInitialized()), this, SLOT(databaseInitialized()));
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
 }
 
 IcdSearchModel::~IcdSearchModel()
@@ -222,7 +225,7 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
     QHash<int, QString> where;
     QString req;
     if (d->m_SearchMode==SearchByLabel) {
-        where.insert(Constants::LIBELLE_FR, QString("like '%1%'").arg(searchLabel));
+        where.insert(d->m_LangField, QString("like '%1%'").arg(searchLabel));
         req = d->searchQuery() + " WHERE " + icdBase()->getWhereClause(Constants::Table_Libelle, where);
     } else {
         where.insert(Constants::MASTER_CODE, QString("like '%1%'").arg(searchLabel));
@@ -236,9 +239,13 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
     reset();
 }
 
-void IcdSearchModel::databaseInitialized()
+void IcdSearchModel::languageChanged()
 {
-    qWarning() << Q_FUNC_INFO;
-    d->m_IcdMaster->setQuery(d->searchQuery(), icdBase()->database());
-    reset();
+    const QString &lang = QLocale().name().left(2);
+    d->m_LangField = Constants::LIBELLE_EN;
+    if (lang=="fr") {
+        d->m_LangField = Constants::LIBELLE_FR;
+    } else if (lang=="de") {
+        d->m_LangField = Constants::LIBELLE_DE_DIMDI;
+    }
 }
