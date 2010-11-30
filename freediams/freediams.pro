@@ -7,6 +7,7 @@ PACKAGE_VERSION  = 0.5.0
 
 # include general configuration
 INSTALL_DRUGS = 1
+FREEDIAMS = 1
 include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 
@@ -14,12 +15,6 @@ include( ../config.pri )
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri )
 include( $${SOURCES_LIBS_PATH}/rpath.pri )
-
-# include Doc
-# !CONFIG(crosscompil) {
-#include( ../doc/manual-di.pri)
-#PRE_TARGETDEPS += en_html_docs fr_html_docs
-# }
 
 QT *= sql \
     network \
