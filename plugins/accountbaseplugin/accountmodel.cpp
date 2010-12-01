@@ -131,7 +131,11 @@ AccountModel::~AccountModel()
 
 int AccountModel::rowCount(const QModelIndex &parent) const
 {
-    return d->m_SqlTable->rowCount(parent);
+    int rows = 0;
+    	rows = d->m_SqlTable->QSqlTableModel::rowCount(parent);
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
+        
+    return rows;
 }
 
 int AccountModel::columnCount(const QModelIndex &parent) const
@@ -267,4 +271,12 @@ void AccountModel::userChanged()
 
 QSqlError AccountModel::lastError(){
     return d->m_SqlTable->lastError();
+}
+
+bool AccountModel::canFetchMore ( const QModelIndex & parent  ) const  {
+    return d->m_SqlTable->canFetchMore ( parent  );
+}
+    
+void AccountModel::fetchMore ( const QModelIndex & parent ) {
+    d->m_SqlTable->canFetchMore ( parent  );
 }

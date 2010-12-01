@@ -6,6 +6,7 @@ using namespace Constants;
 
 receiptsEngine::receiptsEngine(){
     m_mpmodel = new AccountModel(this);
+    
     //m_db = QSqlDatabase::database("Account");
     //m_model = new QSqlTableModel(this,m_db);
     //m_model->setTable("account");
@@ -24,7 +25,18 @@ receiptsEngine::~receiptsEngine(){}
 
 bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams){
     qDebug() << __FILE__ << QString::number(__LINE__) ;
-    int rowBefore = m_mpmodel->rowCount(QModelIndex());
+        while (m_mpmodel->canFetchMore(QModelIndex())){
+            qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
+            m_mpmodel->QAbstractItemModel::fetchMore(QModelIndex());
+        }
+        QSqlDatabase db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+        QSqlDriver *driver = db.driver();
+    if (driver->hasFeature(QSqlDriver::QuerySize))
+    {
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
+        }
+    int rowBefore = m_mpmodel->AccountModel::rowCount(QModelIndex());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     bool ret = true;
     QString data;
     QHashIterator<QString,QString> it (hashOfValues);
@@ -39,15 +51,16 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
     while(it.hasNext()){//on prend chaque valeur
         qDebug() << __FILE__ << QString::number(__LINE__) << " it hasNext";
         it.next();
-        int row = m_mpmodel->rowCount(QModelIndex());
+        int row = m_mpmodel->rowCount();
         qDebug() << __FILE__ << QString::number(__LINE__) << " row = " << QString::number(row);
         m_mpmodel->insertRow(row,QModelIndex());
         for(int i = 0 ; i < ACCOUNT_MaxParam ; i++){
             qDebug() << __FILE__ << QString::number(__LINE__) << " for " << QString::number(i) ;
             if (i == 0) //ACCOUNT_ID
             {
-            	int idBefore = m_mpmodel->data(m_mpmodel->index(row+1,ACCOUNT_ID),Qt::DisplayRole).toInt();
+            	int idBefore = m_mpmodel->data(m_mpmodel->index(row,ACCOUNT_ID),Qt::DisplayRole).toInt();
             	data = QString::number(idBefore+1);
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " data ACCOUNT_ID = " << data;
             }
             else if( listValuesNumbers.contains(i) ){
                 switch(i){
@@ -111,7 +124,7 @@ bool receiptsEngine::insertIntoAccount(QHash<QString,QString> & hashOfValues,QHa
             qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
                        <<m_mpmodel->lastError().text();
             }
-        m_mpmodel->submit();
+        //m_mpmodel->submit();
                     qWarning() << __FILE__ << QString::number(__LINE__) << " model account submit error = " 
                        << m_mpmodel->lastError().text();
         }

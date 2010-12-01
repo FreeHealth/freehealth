@@ -36,8 +36,9 @@ class receiptsEngine : public QObject {
     receiptsEngine();
     ~receiptsEngine();
     bool insertIntoAccount(QHash<QString,QString> & hashOfValues,QHash<int,QString> & hashOfParams);
-  private :
     AccountModel * m_mpmodel;
+  private :
+    
     QSqlDatabase  m_db;
 };
 #endif
