@@ -1,0 +1,6 @@
+include( $${SOURCES_PLUGINS_PATH}/coreplugin/coreplugin.pri )
+include( $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugsbaseplugin.pri )
+include( $${SOURCES_PLUGINS_PATH}/drugsplugin/drugsplugin.pri )
+include( $${SOURCES_PLUGINS_PATH}/templatesplugin/templatesplugin.pri )
+include( $${SOURCES_PLUGINS_PATH}/printerplugin/printerplugin.pri )
+include( $${SOURCES_LIBS_PATH}/medintuxutils.pri )
