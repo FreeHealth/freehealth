@@ -62,13 +62,15 @@ bool receiptsEngine::insertIntoAccount(const QHash<QString,QString> &hashOfValue
     while(it.hasNext()){//on prend chaque valeur
         qDebug() << __FILE__ << QString::number(__LINE__) << " it hasNext";
         it.next();
-        int row = m_mpmodel->rowCount();
+        int row =  m_mpmodel->rowCount();
         qDebug() << __FILE__ << QString::number(__LINE__) << " row = " << QString::number(row);
-        m_mpmodel->insertRow(row,QModelIndex());
+        m_mpmodel->insertRows(row,1);
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowAfter = " << QString::number(m_mpmodel->rowCount());
         for(int i = 0 ; i < ACCOUNT_MaxParam ; i++){
             qDebug() << __FILE__ << QString::number(__LINE__) << " for " << QString::number(i) ;
             if (i == 0) { //ACCOUNT_ID
-            	int idBefore = m_mpmodel->data(m_mpmodel->index(row,ACCOUNT_ID),Qt::DisplayRole).toInt();
+            	int idBefore = m_mpmodel->data(m_mpmodel->index(row-1,ACCOUNT_ID),Qt::DisplayRole).toInt();
+            	qDebug() << __FILE__ << QString::number(__LINE__) << "idBefore = "<< QString::number(idBefore) ;
             	data = QString::number(idBefore+1);
             	qDebug() << __FILE__ << QString::number(__LINE__) << " data ACCOUNT_ID = " << data;
             }
@@ -128,11 +130,19 @@ bool receiptsEngine::insertIntoAccount(const QHash<QString,QString> &hashOfValue
             }
             qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
             QModelIndex index = m_mpmodel->index(row,i,QModelIndex());
-            m_mpmodel-> setData(index, data ,Qt::EditRole);
-            qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
-                    <<m_mpmodel->lastError().text();
+            if (!index.isValid())
+            {
+            	  qWarning() << __FILE__ << QString::number(__LINE__) << " index is not valid " ;
+                }
+            if (!m_mpmodel-> setData(index, data ,Qt::EditRole))
+            {
+            	              qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
+                    <<m_mpmodel->lastError().text() ;
+                }
+
+            qDebug() << __FILE__ << QString::number(__LINE__) << " inserted data "<< m_mpmodel->data(index,Qt::DisplayRole).toString();
         }
-        //m_mpmodel->submit();
+        m_mpmodel->submit();
         qWarning() << __FILE__ << QString::number(__LINE__) << " model account submit error = "
                 << m_mpmodel->lastError().text();
     }

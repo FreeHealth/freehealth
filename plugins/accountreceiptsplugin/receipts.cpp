@@ -147,6 +147,9 @@ void ReceiptsGUI::initialize()
     //default values--------------------------------
     m_site_id = ui->comboBoxWhere->currentText();
     m_insurance_id = ui->comboBoxDebtor->currentText();
+    ui->dateTimeEditOfDay->setDate(QDate::currentDate());
+    ui->dateTimeEditOfAct->setDate(QDate::currentDate());
+    m_hashValuesChoosenFromFindValues.insert("C","22");
 
     show();
     connect(ui->closeButton,SIGNAL(pressed()),      this,SLOT(close()));
@@ -401,12 +404,12 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
     hash.insert(ACCOUNT_UID,m_account_uid); // ??????
     hash.insert(ACCOUNT_USER_UID,m_user_uid);
     hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
-    hash.insert(ACCOUNT_PATIENT_NAME,m_name+","+m_firstname);
+    hash.insert(ACCOUNT_PATIENT_NAME,m_name+" "+m_firstname);
     hash.insert(ACCOUNT_SITE_ID,m_site_id);
     hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
-    hash.insert(ACCOUNT_DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
+    hash.insert(ACCOUNT_DATE,ui->dateTimeEditOfDay->dateTime().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"0");
-    //  hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"text");
     hash.insert(ACCOUNT_COMMENT,"0");
     hash.insert(ACCOUNT_CASHAMOUNT,cash);
     hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
