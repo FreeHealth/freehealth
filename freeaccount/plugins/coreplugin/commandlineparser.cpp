@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include "commandlineparser.h"
 
-#include <fdcoreplugin/patient.h>
+//#include <coreplugin/patient.h>
 
 #include <utils/global.h>
 #include <utils/log.h>

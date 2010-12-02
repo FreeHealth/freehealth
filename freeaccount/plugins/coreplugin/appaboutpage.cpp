@@ -28,8 +28,8 @@
 #include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
-#include <fdcoreplugin/coreimpl.h>
-#include <fdcoreplugin/commandlineparser.h>
+#include <coreplugin/coreimpl.h>
+#include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
 #include <QVBoxLayout>
