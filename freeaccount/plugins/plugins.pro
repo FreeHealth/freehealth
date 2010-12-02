@@ -33,14 +33,14 @@ receipts.subdir   = ../../plugins/accountreceiptsplugin
 receipts.depends += core
 receipts.depends += accountbase
 
-printer.subdir   = ../../plugins/printerplugin
+printer.subdir   = printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-listview.subdir   = ../../plugins/listviewplugin
+listview.subdir   = listviewplugin
 listview.depends += core
 
-texteditor.subdir   = ../../plugins/texteditorplugin
+texteditor.subdir   = texteditorplugin
 texteditor.depends += core
 
 usermanager.subdir   = usermanagerplugin
