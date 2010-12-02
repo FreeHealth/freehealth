@@ -79,8 +79,8 @@ public:
     bool isDirty() const;
     
     QSqlError lastError();
-    bool canFetchMore ( const QModelIndex & parent = QModelIndex() ) const  ;
-    void fetchMore ( const QModelIndex & parent = QModelIndex() ) ;
+    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+    void fetchMore(const QModelIndex &parent = QModelIndex());
 
     // Filter fucntions
     void setUserUuid(const QString &uuid);

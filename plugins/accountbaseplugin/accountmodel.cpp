@@ -128,13 +128,12 @@ AccountModel::~AccountModel()
     }
 }
 
-
 int AccountModel::rowCount(const QModelIndex &parent) const
 {
     int rows = 0;
-    	rows = d->m_SqlTable->QSqlTableModel::rowCount(parent);
-        qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
-        
+    rows = d->m_SqlTable->QSqlTableModel::rowCount(parent);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
+
     return rows;
 }
 

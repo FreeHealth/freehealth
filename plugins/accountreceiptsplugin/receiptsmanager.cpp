@@ -42,7 +42,7 @@ QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
 
 QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString & table){
    QStringList listForReturn;
-   qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
+//   qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
    if (table == "insurance")
    {
    	  InsuranceModel  model(this);

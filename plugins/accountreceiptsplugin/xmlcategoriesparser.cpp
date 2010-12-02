@@ -36,48 +36,47 @@ xmlCategoriesParser::~xmlCategoriesParser(){}
 
 QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
 {
-  QList<QHash<QString,QString> > xmlHashList;
-  QDomDocument doc;
-  QString xmlFilePath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/frenchcategories.xml";
+    QList<QHash<QString,QString> > xmlHashList;
+    QDomDocument doc;
+    QString xmlFilePath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/frenchcategories.xml";
 
-  QFile xmlFile(xmlFilePath);
-  if(xmlFile.exists() == false){
-      QMessageBox::warning(0,trUtf8("Error"),xmlFilePath+trUtf8(" does not exist."),QMessageBox::Ok);
-      }
-  else{  
-     if(!xmlFile.open(QIODevice::ReadOnly)){
-         QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml not found."),QMessageBox::Ok);
-         }
-     if(!doc.setContent(&xmlFile)){
+    QFile xmlFile(xmlFilePath);
+    if(xmlFile.exists() == false) {
+        QMessageBox::warning(0,trUtf8("Error"),xmlFilePath+trUtf8(" does not exist."),QMessageBox::Ok);
+    } else {
+        if(!xmlFile.open(QIODevice::ReadOnly)) {
+            QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml not found."),QMessageBox::Ok);
+        }
+        if(!doc.setContent(&xmlFile)) {
+            xmlFile.close();
+            QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml cannot be parsed."),QMessageBox::Ok);
+            QHash<QString,QString> xmlHashZero;
+            xmlHashZero.insert("error","error");
+            xmlHashList << xmlHashZero;
+        }
         xmlFile.close();
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml cannot be parsed."),QMessageBox::Ok);
-        QHash<QString,QString> xmlHashZero;
-        xmlHashZero.insert("error","error");
-        xmlHashList << xmlHashZero;
-        }
-     xmlFile.close();
-     QDomElement rootElement = doc.documentElement();
-     for(QDomNode n = rootElement.firstChild() ; !n.isNull() ;  n = n.nextSibling()){
-        QHash<QString,QString> xmlHash;
-        QDomElement childElement = n.toElement();
-        qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+childElement.tagName();
-        if(n.isElement()){
-        for(QDomNode nc = childElement.firstChild() ; !nc.isNull() ;  nc = nc.nextSibling()){
-            QString str;
-            QString tagName;
-            if(nc.isElement()){
-               QDomElement e = nc.toElement();
-               str = e.text().replace("\n","").replace(" ","");
-               tagName = e.tagName();
-               qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+tagName+" str ="+str;
-               xmlHash.insert(tagName,str);
-               
-               }
+        QDomElement rootElement = doc.documentElement();
+        for(QDomNode n = rootElement.firstChild() ; !n.isNull() ;  n = n.nextSibling()) {
+            QHash<QString,QString> xmlHash;
+            QDomElement childElement = n.toElement();
+//            qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+childElement.tagName();
+            if(n.isElement()){
+                for(QDomNode nc = childElement.firstChild() ; !nc.isNull() ;  nc = nc.nextSibling()){
+                    QString str;
+                    QString tagName;
+                    if(nc.isElement()){
+                        QDomElement e = nc.toElement();
+                        str = e.text().replace("\n","").replace(" ","");
+                        tagName = e.tagName();
+//                        qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+tagName+" str ="+str;
+                        xmlHash.insert(tagName,str);
+
+                    }
+                }
+                xmlHashList << xmlHash;
             }
-            xmlHashList << xmlHash;
         }
-      }
-  }
-  return xmlHashList;
-  
+    }
+    return xmlHashList;
+
 }

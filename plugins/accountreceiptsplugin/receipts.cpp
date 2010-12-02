@@ -128,15 +128,15 @@ void ReceiptsGUI::initialize()
     QString strDistanceRule = "distance_rules";
     fillComboBoxes(ui->comboBoxDistance, listDistanceRule,strDistanceRule);
 
-  //comboBoxes of thesaurus
+    //comboBoxes of thesaurus
     ui->comboBoxThesaurus->setEditable(true);
     ui->comboBoxThesaurus->setInsertPolicy(QComboBox::NoInsert);
     QStringList thesaurusList;
-              thesaurusList << fillWithThesaurusList();
+    thesaurusList << fillWithThesaurusList();
     QString strThesaurus;
     foreach(strThesaurus,thesaurusList){
         ui->comboBoxThesaurus->addItem(strThesaurus);
-        }
+    }
 
     // progressBar for percentages
     int countPercentBar = m_hashPercents.count()-1;
@@ -144,7 +144,7 @@ void ReceiptsGUI::initialize()
     ui->percentBar->setValue(countPercentBar);
     ui->percentLabel->setText(m_hashPercentType.values().last()+" : "+m_hashPercents.values().last());
     m_countMoreOrLess = countPercentBar;
-      //default values--------------------------------
+    //default values--------------------------------
     m_site_id = ui->comboBoxWhere->currentText();
     m_insurance_id = ui->comboBoxDebtor->currentText();
 
@@ -171,15 +171,14 @@ void ReceiptsGUI::clearAll()
 
 void ReceiptsGUI::save()
 {
-  //QHash<QString,QString> m_hashValuesChoosenFromFindValues
-  QHash<int,QString> hashParams = paramsSelected();
-  if (ui->checkBoxFreeEntry->isChecked()&& ui->checkBoxFreeValue->isChecked())	
-  {
-          QString entry = ui->lineEditFreeName->text();
-          QString value = ui->lineEditFreeValue->text();
-  	  m_hashValuesChoosenFromFindValues.insert(entry,value);
-      }
-  m_recEng->insertIntoAccount(m_hashValuesChoosenFromFindValues,hashParams);
+    //QHash<QString,QString> m_hashValuesChoosenFromFindValues
+    QHash<int,QString> hashParams = paramsSelected();
+    if (ui->checkBoxFreeEntry->isChecked() && ui->checkBoxFreeValue->isChecked()) {
+        QString entry = ui->lineEditFreeName->text();
+        QString value = ui->lineEditFreeValue->text();
+        m_hashValuesChoosenFromFindValues.insert(entry,value);
+    }
+    m_recEng->insertIntoAccount(m_hashValuesChoosenFromFindValues,hashParams);
 }
 
 void ReceiptsGUI::plusFunction()
@@ -188,20 +187,21 @@ void ReceiptsGUI::plusFunction()
     qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) +" plus = "+QString::number(m_countMoreOrLess);
     QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
     QHash <int,QString> ::iterator iTypeMoreOrLess = m_hashPercentType.find(listOfKeys[m_countMoreOrLess]);
-    if(m_countMoreOrLess == m_hashPercents.count() -1)
+
+    if (m_countMoreOrLess == m_hashPercents.count())
         return;
-    else{qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) ;
-        iMoreOrLess++;
-        iTypeMoreOrLess++;
-        qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) ;
-        QString choice	= iTypeMoreOrLess.value();
-        qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) << choice;
-        ui->percentLabel	->setText(choice);
-        m_percentFactor	= iMoreOrLess.value().toDouble();
-        ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
-        m_countMoreOrLess++;
-        ui->percentBar	->setValue(m_countMoreOrLess);
-    }
+
+    qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) ;
+    iMoreOrLess++;
+    iTypeMoreOrLess++;
+    qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) ;
+    QString choice	= iTypeMoreOrLess.value();
+    qDebug() << " in plus " << __FILE__ << QString::number(__LINE__) << choice;
+    ui->percentLabel	->setText(choice);
+    m_percentFactor	= iMoreOrLess.value().toDouble();
+    ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
+    m_countMoreOrLess++;
+    ui->percentBar	->setValue(m_countMoreOrLess);
 }
 
 void ReceiptsGUI::lessFunction()
@@ -211,21 +211,20 @@ void ReceiptsGUI::lessFunction()
     QHash <int,QString> ::iterator iMoreOrLess = m_hashPercents.find(listOfKeys[m_countMoreOrLess]);
     QHash <int,QString> ::iterator iTypeMoreOrLess = m_hashPercentType.find(listOfKeys[m_countMoreOrLess]);
     //qDebug() << " in less " << __FILE__ << __LINE__ +" count = "+QString::number(m_hashPercents.count());
-    if(m_countMoreOrLess == 0) {
+    if(m_countMoreOrLess == 0)
         return;
-    } else {
-        qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
-        iMoreOrLess--;
-        iTypeMoreOrLess--;
-        qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
-        QString choice	= iTypeMoreOrLess.value();
-        qDebug() << " in less " << __FILE__ << QString::number(__LINE__) << choice;
-        ui->percentLabel	->setText(choice);
-        m_percentFactor	= iMoreOrLess.value().toDouble();
-        ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
-        m_countMoreOrLess--;
-        ui->percentBar	->setValue(m_countMoreOrLess);
-    }
+
+    qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
+    iMoreOrLess--;
+    iTypeMoreOrLess--;
+    qDebug() << " in less " << __FILE__ << QString::number(__LINE__) ;
+    QString choice	= iTypeMoreOrLess.value();
+    qDebug() << " in less " << __FILE__ << QString::number(__LINE__) << choice;
+    ui->percentLabel	->setText(choice);
+    m_percentFactor	= iMoreOrLess.value().toDouble();
+    ui->percentLabel	->setText(choice+" : "+QString::number(m_percentFactor));
+    m_countMoreOrLess--;
+    ui->percentBar	->setValue(m_countMoreOrLess);
 }
 
 void ReceiptsGUI::mousePressEvent(QMouseEvent * event)
@@ -257,7 +256,7 @@ void ReceiptsGUI::fillComboBoxes(QComboBox *comboBox, const QStringList &list, c
     listReceiptsManager = rbm.getComboBoxesDatas(values,table);
     QString str;
     foreach(str,listReceiptsManager){
-        qDebug() << __FILE__ << QString::number(__LINE__) << " strcombo = " << str;
+        //        qDebug() << __FILE__ << QString::number(__LINE__) << " strcombo = " << str;
         comboBox->addItem(str);
     }
 }
@@ -274,9 +273,9 @@ void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
         ui->labelFreeName->setWordWrap(true);
         
         ui->labelFreeName->setText(trUtf8("Free entry"));
-       
+
         ui->labelFreeName->show();
-      
+
         ui->lineEditFreeName->show();
         
     } else {
@@ -291,32 +290,30 @@ void ReceiptsGUI::showFreeWidgetsEntry(bool checkBoxchecked)
     }
 }
 
-void ReceiptsGUI::showFreeWidgetsValue(bool checkBoxchecked){
-            if(checkBoxchecked && !ui->checkBoxFreeEntry->isChecked()){
-            ui->labelFreeValue->setText(trUtf8("Free value"));
-            ui->lineEditFreeValue->show();
-            }
-        else if(checkBoxchecked && ui->checkBoxFreeEntry->isChecked()){
-             ui->labelName->hide();
-             ui->labelFirstname->hide();
-             ui->lineEditName->hide();
-             ui->lineEditFirstname->hide();
-             ui->labelFreeName->show();
-             ui->labelFreeValue->show();
-             ui->labelFreeName->setWordWrap(true);
-             ui->labelFreeValue->setWordWrap(true);
-             ui->labelFreeName->setText(trUtf8("Free entry"));
-             ui->labelFreeValue->setText(trUtf8("Free value"));
-             ui->labelFreeName->show();
-             ui->labelFreeValue->show();
-             ui->lineEditFreeName->show();
-             ui->lineEditFreeValue->show();
-            }
-       else if(!checkBoxchecked){
-            ui->labelFreeValue->setText(trUtf8(""));
-            ui->lineEditFreeValue->hide();
-            }
-       else{}
+void ReceiptsGUI::showFreeWidgetsValue(bool checkBoxchecked)
+{
+    if (checkBoxchecked && !ui->checkBoxFreeEntry->isChecked()) {
+        ui->labelFreeValue->setText(trUtf8("Free value"));
+        ui->lineEditFreeValue->show();
+    } else if (checkBoxchecked && ui->checkBoxFreeEntry->isChecked()) {
+        ui->labelName->hide();
+        ui->labelFirstname->hide();
+        ui->lineEditName->hide();
+        ui->lineEditFirstname->hide();
+        ui->labelFreeName->show();
+        ui->labelFreeValue->show();
+        ui->labelFreeName->setWordWrap(true);
+        ui->labelFreeValue->setWordWrap(true);
+        ui->labelFreeName->setText(trUtf8("Free entry"));
+        ui->labelFreeValue->setText(trUtf8("Free value"));
+        ui->labelFreeName->show();
+        ui->labelFreeValue->show();
+        ui->lineEditFreeName->show();
+        ui->lineEditFreeValue->show();
+    } else if(!checkBoxchecked) {
+        ui->labelFreeValue->setText(trUtf8(""));
+        ui->lineEditFreeValue->hide();
+    }
 }
 
 QStringList ReceiptsGUI::fillWithThesaurusList(){
@@ -330,25 +327,23 @@ void ReceiptsGUI::comboBoxThesaurus_changed(const QString & comboItem){
     QString item = comboItem;
     QStringList choiceList = m_rbm->getChoiceFromCategories(item);
     comboBoxChoice->addItems(choiceList);*/
-    if(comboItem == "thesaurus"){QMessageBox::information(0,"Info","item = "+comboItem,QMessageBox::Ok);}
-    else{
-        
-        }
+    if (comboItem == "thesaurus") {
+        QMessageBox::information(0,"Info","item = "+comboItem,QMessageBox::Ok);
+    }
 }
 
 void ReceiptsGUI::getReceiptsLists(){
     ui->registerLabel->setText("");
-    if(m_hashValuesChoosenFromFindValues.size()>0){
+    if (m_hashValuesChoosenFromFindValues.size()>0) {
         m_hashValuesChoosenFromFindValues.clear();
-        }
-    if(ui->lineEditFreeName->text().isEmpty()&& ui->lineEditFreeValue->text().isEmpty()){
-        if(m_receiptsValues->exec()== QDialog::Accepted){
+    }
+    if (ui->lineEditFreeName->text().isEmpty()&& ui->lineEditFreeValue->text().isEmpty()) {
+        if (m_receiptsValues->exec()== QDialog::Accepted) {
             m_hashValuesChoosenFromFindValues = m_receiptsValues->getChoosenValues();
             m_receiptsValues->clear();
             writeOnRegisterLabel();
         }
-    }
-    else{
+    } else {
         m_hashValuesChoosenFromFindValues.insert(ui->lineEditFreeName->text(),ui->lineEditFreeValue->text());
     }
 
@@ -375,60 +370,60 @@ void ReceiptsGUI::writeOnRegisterLabel(){
 }
 
 QHash<int,QString> ReceiptsGUI::paramsSelected(){
-  QString cash = "0",cheque = "0",visa = "0",insurance= "0",other= "0",due = "0";
-  if(ui->cashRadioButton->isChecked()) cash = "1";
-  if(ui->checkRadioButton->isChecked()) cheque = "1";
-  if(ui->cardRadioButton->isChecked()) visa ="1";
-  if(ui->bankRadioButton->isChecked()) insurance ="1";
-  if(ui->dueRadioButton->isChecked()) due ="1";
-  if(m_account_uid.isEmpty()){
-      m_account_uid = "0";
-      }
-  if (m_user_uid.isEmpty())
-  {
-  	  m_user_uid = "O";	
-      }
-  if (m_patient_uid.isEmpty())
-  {
-  	  m_patient_uid = "0";
-      }
-  if (m_name.isEmpty())
-  {
-  	  m_name="name";
-      }
-  if (m_firstname.isEmpty())
-  {
-  	  m_firstname="firstname";
-      }
+    QString cash = "0",cheque = "0",visa = "0",insurance= "0",other= "0",due = "0";
+    if(ui->cashRadioButton->isChecked()) cash = "1";
+    if(ui->checkRadioButton->isChecked()) cheque = "1";
+    if(ui->cardRadioButton->isChecked()) visa ="1";
+    if(ui->bankRadioButton->isChecked()) insurance ="1";
+    if(ui->dueRadioButton->isChecked()) due ="1";
+    if(m_account_uid.isEmpty()){
+        m_account_uid = "0";
+    }
+    if (m_user_uid.isEmpty())
+    {
+        m_user_uid = "O";
+    }
+    if (m_patient_uid.isEmpty())
+    {
+        m_patient_uid = "0";
+    }
+    if (m_name.isEmpty())
+    {
+        m_name="name";
+    }
+    if (m_firstname.isEmpty())
+    {
+        m_firstname="firstname";
+    }
 
-  QHash<int,QString> hash;
-             // hash.insert(ACCOUNT_ID,"1");
-              hash.insert(ACCOUNT_UID,m_account_uid); // ??????
-              hash.insert(ACCOUNT_USER_UID,m_user_uid);
-              hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
-              hash.insert(ACCOUNT_PATIENT_NAME,m_name+","+m_firstname);
-              hash.insert(ACCOUNT_SITE_ID,m_site_id);
-              hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
-              hash.insert(ACCOUNT_DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
-              hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"0");
-            //  hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
-              hash.insert(ACCOUNT_COMMENT,"0");
-              hash.insert(ACCOUNT_CASHAMOUNT,cash);
-              hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
-              hash.insert(ACCOUNT_VISAAMOUNT,visa);
-              hash.insert(ACCOUNT_INSURANCEAMOUNT,insurance);
-              hash.insert(ACCOUNT_OTHERAMOUNT,other);
-              hash.insert(ACCOUNT_DUEAMOUNT,due);
-              hash.insert(ACCOUNT_DUEBY,"0");
-              hash.insert(ACCOUNT_ISVALID,"0");
-              hash.insert(ACCOUNT_TRACE,"0");
-  return hash;
+    QHash<int,QString> hash;
+    // hash.insert(ACCOUNT_ID,"1");
+    hash.insert(ACCOUNT_UID,m_account_uid); // ??????
+    hash.insert(ACCOUNT_USER_UID,m_user_uid);
+    hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
+    hash.insert(ACCOUNT_PATIENT_NAME,m_name+","+m_firstname);
+    hash.insert(ACCOUNT_SITE_ID,m_site_id);
+    hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
+    hash.insert(ACCOUNT_DATE,ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd"));
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,"0");
+    //  hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"");
+    hash.insert(ACCOUNT_COMMENT,"0");
+    hash.insert(ACCOUNT_CASHAMOUNT,cash);
+    hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
+    hash.insert(ACCOUNT_VISAAMOUNT,visa);
+    hash.insert(ACCOUNT_INSURANCEAMOUNT,insurance);
+    hash.insert(ACCOUNT_OTHERAMOUNT,other);
+    hash.insert(ACCOUNT_DUEAMOUNT,due);
+    hash.insert(ACCOUNT_DUEBY,"0");
+    hash.insert(ACCOUNT_ISVALID,"0");
+    hash.insert(ACCOUNT_TRACE,"0");
+    return hash;
 }
 
 void ReceiptsGUI::showReceiptsViewer(){
-  m_receiptsViewer = new ReceiptViewer(0);
-  m_receiptsViewer->show();
-  m_receiptsViewer->setPosition(m_parent);
+    m_receiptsViewer = new ReceiptViewer(0);
+    m_receiptsViewer->show();
+    m_receiptsViewer->setPosition(m_parent);
 }
 
 
