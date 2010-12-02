@@ -1,7 +1,0 @@
-include( ../coreplugin/coreplugin.pri )
-include( ../fdcoreplugin/fdcoreplugin.pri )
-include( ../drugsbaseplugin/drugsbaseplugin.pri )
-include( ../drugsplugin/drugsplugin.pri )
-include( ../templatesplugin/templatesplugin.pri )
-include( ../printerplugin/printerplugin.pri )
-include( $${SOURCES_LIBS_PATH}/medintuxutils.pri )
