@@ -68,7 +68,7 @@ public:
             m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
             m_UserUid(user()->value(Core::IUser::Uuid).toString()),
             q(parent)
-    {
+    {qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
         refreshFilter();
@@ -131,7 +131,9 @@ AccountModel::~AccountModel()
 int AccountModel::rowCount(const QModelIndex &parent) const
 {
     int rows = 0;
-    rows = d->m_SqlTable->QSqlTableModel::rowCount(parent);
+    d->m_SqlTable->setFilter("");
+    d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount(parent);
     qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
 
     return rows;
