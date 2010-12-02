@@ -27,7 +27,6 @@
 #define COREIMPL_H
 
 #include <coreplugin/icore.h>
-#include <fdcoreplugin/patient.h>
 #include <coreplugin/ipatient.h>
 
 /**
@@ -108,7 +107,7 @@ private:
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
 //    CommandLine *m_CommandLine;
-    Patient *m_Patient;
+//    Patient *m_Patient;
     IUser *m_User;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;

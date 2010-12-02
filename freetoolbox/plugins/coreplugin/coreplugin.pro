@@ -7,12 +7,12 @@ FREEICD = 1
 
 BUILD_PATH_POSTFIXE = FreeIcd
 
+INCLUDEPATH += ../
+DEPENDPATH += ../
+
 include(../../../plugins/coreplugin/common_core.pri)
 
 QT *= sql network xml
-
-INCLUDEPATH += ../
-DEPENDPATH += ../
 
 HEADERS += coreimpl.h \
     appaboutpage.h \

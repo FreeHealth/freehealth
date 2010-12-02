@@ -666,8 +666,7 @@ QStringList InteractionsBase::getIamClassDenomination(const int &molecule_code)
      QStringList toReturn;
      foreach(int i, list)
          toReturn << getAtcLabel(i);
-//         toReturn << di->m_IamDenominations.value(i);
-
+     qWarning() << Q_FUNC_INFO << toReturn;
      return toReturn;
 }
 
@@ -682,12 +681,13 @@ QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
 //    if (di->m_AtcToMol.keys(molecule_code).count()>1)
 //        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
 
-    toReturn = di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code)).toSet();
+    foreach(int id, di->m_AtcToMol.keys(molecule_code)) {
+        toReturn = di->m_ClassToAtcs.keys(id).toSet();
+    }
     if (di->m_AtcToMol.values().contains(molecule_code))
         toReturn << di->m_AtcToMol.key(molecule_code);
 
-//    qWarning() << di->m_AtcToMol.keys(molecule_code) << di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code));
-
+    qWarning() << Q_FUNC_INFO << molecule_code << toReturn;
     return toReturn;
 }
 

@@ -367,7 +367,6 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
     QStringList afssapsClass;
     QMultiHash<QString, QString> molsToAtc;
     QMultiHash<QString, QString> class_mols;
-    const QStringList &associatedInns = molsToAtc.uniqueKeys();
     QString req;
 
     {
@@ -385,8 +384,8 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
             } else if (links.isEmpty()) {
                 molsWithoutAtc << mol.toUpper();
             } else {
-                foreach(const QString &atc, links.split(",", QString::SkipEmptyParts))
-                    molsToAtc.insertMulti(mol.toUpper(), atc.toUpper());
+                foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts))
+                    molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
             }
         }
         progress.setValue(3);
@@ -459,9 +458,15 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
 
         // Computation
         int classId = 0;
+        // Foreach classes
+        const QStringList &associatedInns = molsToAtc.uniqueKeys();
+//        qWarning() << molsToAtc.values("IBUPROFENE");
+//        qWarning() << associatedInns.contains("IBUPROFENE") << associatedInns;
+
         foreach(const QString &iclass, afssapsClass) {
             const QStringList &vals = class_mols.values(iclass);
 
+            // Take all included inns
             foreach(const QString &inn, vals) {
                 if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
                     foreach(const QString &atc, molsToAtc.values(inn)) {
@@ -485,6 +490,9 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
                                 .arg(afssapsClass.indexOf(iclass)+200000)
                                 .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn)+1).rightJustified(2, '0'));
                     }
+                    if (inn.startsWith("IBUPRO"))
+                        qWarning() << req;
+
                     Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
                 }
             }
