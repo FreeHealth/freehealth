@@ -100,9 +100,15 @@ void ReceiptsGUI::initialize()
     qDebug() << __FILE__ << QString::number(__LINE__) << "userUid =" << m_user_uid;
     
     // name,firstname,uid,birthday
-    m_name = patient()->data(patient()->DataRepresentation BirthName).toString();
-    m_firstname = patient()->data(Firstname).toString();
-    m_nameAndFirstname = patient()->data(FullName).toString();
+        if (patient())
+        {
+            m_patient_uid = patient()->data(Core::IPatient::Uid).toString();
+            m_name = patient()->data(Core::IPatient::BirthName).toString();
+            m_firstname = patient()->data(Core::IPatient::Firstname).toString();
+            m_nameAndFirstname = patient()->data(Core::IPatient::FullName).toString();
+            qDebug() << __FILE__ << QString::number(__LINE__) << " m_nameAndFirstname = " << m_nameAndFirstname;
+            }
+       
         if (m_nameAndFirstname.isEmpty())
         {
             m_nameAndFirstname="Noname NoFirstname";
