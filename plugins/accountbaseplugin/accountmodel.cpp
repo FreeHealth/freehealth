@@ -150,6 +150,11 @@ void AccountModel::setUserUuid(const QString &uuid)
     d->refreshFilter();
 }
 
+QString AccountModel::userUid() const {
+    QString user_uid = d->m_UserUid;
+    return user_uid;
+}
+
 QVariant AccountModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
