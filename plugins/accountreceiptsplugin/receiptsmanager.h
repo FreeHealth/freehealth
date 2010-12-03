@@ -9,8 +9,6 @@ class receiptsManager : public QObject {
   ~receiptsManager();
   QList<QMultiHash<int,QString> > getPercentages();
   QStringList getComboBoxesDatas(QString & values , const QString & table);
-  QString getUserUid() ;
-  QString getPatientNameAndFirstname();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);

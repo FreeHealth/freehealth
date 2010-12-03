@@ -22,6 +22,9 @@
 #include "xmlcategoriesparser.h"
 #include "ui_ReceiptsWidget.h"
 #include <accountbaseplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 
 #include <QMessageBox>
 #include <QFile>
@@ -29,8 +32,10 @@
 #include <QMenu>
 using namespace AccountDB;
 using namespace Constants;
+using namespace Core;
 //static inline  AccountDB::AccountBase * DBInstance(){return AccountDB::AccountBase::instance();}
-
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 ReceiptsGUI * ReceiptsGUI::d = NULL ;
 
 //ReceiptsGUI *ReceiptsGUI::getInstance()
@@ -87,7 +92,7 @@ void ReceiptsGUI::initialize()
     ui->cashRadioButton->setChecked(true);
     m_rightClic = new QAction(trUtf8("Clear all"),this);
     // userUid
-    m_user_uid = m_rbm->getUserUid();
+    m_user_uid = user()->value(Core::IUser::Uuid).toString();
         if (m_user_uid.isEmpty())
         {
             m_user_uid = "O";
@@ -95,7 +100,9 @@ void ReceiptsGUI::initialize()
     qDebug() << __FILE__ << QString::number(__LINE__) << "userUid =" << m_user_uid;
     
     // name,firstname,uid,birthday
-    m_nameAndFirstname = m_rbm->getPatientNameAndFirstname();
+    m_name = patient()->data(patient()->DataRepresentation BirthName).toString();
+    m_firstname = patient()->data(Firstname).toString();
+    m_nameAndFirstname = patient()->data(FullName).toString();
         if (m_nameAndFirstname.isEmpty())
         {
             m_nameAndFirstname="Noname NoFirstname";

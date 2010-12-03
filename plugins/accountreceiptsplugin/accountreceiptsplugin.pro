@@ -21,7 +21,7 @@ HEADERS += accountreceipts_exporter.h \
     accountreceiptsplugin.h \
     receipts.h \       
     receiptsmanager.h \   
-    receiptsengine.h \
+    receiptsIO.h \
     findReceiptsValues.h \
     xmlcategoriesparser.h \
     receiptviewer.h 
@@ -35,7 +35,7 @@ FORMS += ReceiptsMainDialog.ui \
 SOURCES += accountreceiptsplugin.cpp \
     receipts.cpp \
     receiptsmanager.cpp \ 
-    receiptsengine.cpp \
+    receiptsIO.cpp \
     findReceiptsValues.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
     receiptviewer.cpp 

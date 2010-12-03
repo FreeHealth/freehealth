@@ -307,14 +307,5 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     return listOfItems;
 }
 
-QString receiptsManager::getUserUid() {
-     QString useruid = QString();
-     AccountModel model(this);
-     useruid = model.userUid();
-     return useruid;
-}
 
-QString receiptsManager::getPatientNameAndFirstname(){
-    QString patient = QString();
-    return patient;
-}
+

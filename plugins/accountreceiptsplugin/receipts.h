@@ -24,7 +24,7 @@
 #include <accountreceiptsplugin/accountreceipts_exporter.h>
 #include "findReceiptsValues.h"
 #include "receiptsmanager.h"
-#include "receiptsengine.h"
+#include "receiptsIO.h"
 #include "receiptviewer.h"
 
 #include <QWidget>
