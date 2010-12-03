@@ -143,17 +143,7 @@ void ReceiptViewer::changeEvent(QEvent *e)
 }
 
 void ReceiptViewer::setPosition(QWidget *parent){
-    //QPoint pos = parent->pos();
     QRect rect = parent->rect();
-    qDebug() << __FILE__ << QString::number(__LINE__) 
-             << " setPosition "
-             << rect.width()
-             << rect.height()
-             << parent->x()
-             << parent->y()
-             << " "
-             << parent->objectName();
-
     setGeometry(parent->x(),parent->y(),rect.width()-10,rect.height()-10);
 }
 

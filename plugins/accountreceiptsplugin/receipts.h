@@ -79,6 +79,7 @@ private:
     bool m_receiptsIsOn;
     QString m_name;
     QString m_firstname;
+    QString m_nameAndFirstname;
     QString m_uid;
     QString m_birthday;
     QString m_account_uid;
@@ -86,8 +87,8 @@ private:
     QString m_user_uid;
     QString m_site_id;
     QString m_insurance_id;
-    QHash<QString,QString> m_hashValuesChoosenFromFindValues;
-    QHash<int,QString> paramsSelected();
+    QHash<QString,QString> m_hashValuesChoosenFromFindValues;// hash of couple " type of values : values ", ex. CS = 23
+    QHash<int,QString> paramsSelected(); // hash of parameters : user, site, debtor, type of receipts, ... choosen from receipts
     static ReceiptsGUI * d;
     void writeOnRegisterLabel();
 

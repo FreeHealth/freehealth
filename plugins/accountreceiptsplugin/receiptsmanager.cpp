@@ -1,6 +1,7 @@
 #include "receiptsmanager.h"
 #include "xmlcategoriesparser.h"
 #include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/insurancemodel.h>
 #include <accountbaseplugin/workingplacesmodel.h>
 #include <accountbaseplugin/bankaccountmodel.h>
@@ -306,4 +307,14 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     return listOfItems;
 }
 
+QString receiptsManager::getUserUid() {
+     QString useruid = QString();
+     AccountModel model(this);
+     useruid = model.userUid();
+     return useruid;
+}
 
+QString receiptsManager::getPatientNameAndFirstname(){
+    QString patient = QString();
+    return patient;
+}

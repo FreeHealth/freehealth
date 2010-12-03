@@ -86,8 +86,26 @@ void ReceiptsGUI::initialize()
     ui->registerLabel->setText("");
     ui->cashRadioButton->setChecked(true);
     m_rightClic = new QAction(trUtf8("Clear all"),this);
-
+    // userUid
+    m_user_uid = m_rbm->getUserUid();
+        if (m_user_uid.isEmpty())
+        {
+            m_user_uid = "O";
+        }
+    qDebug() << __FILE__ << QString::number(__LINE__) << "userUid =" << m_user_uid;
+    
     // name,firstname,uid,birthday
+    m_nameAndFirstname = m_rbm->getPatientNameAndFirstname();
+        if (m_nameAndFirstname.isEmpty())
+        {
+            m_nameAndFirstname="Noname NoFirstname";
+            m_name = "Noname";
+            m_firstname = "NoFirstname";
+        }
+        if (m_patient_uid.isEmpty())
+        {
+            m_patient_uid = "0";
+        }
     ui->lineEditName->setText(m_name);
     ui->lineEditFirstname->setText(m_firstname);
 
@@ -149,7 +167,9 @@ void ReceiptsGUI::initialize()
     m_insurance_id = ui->comboBoxDebtor->currentText();
     ui->dateTimeEditOfDay->setDate(QDate::currentDate());
     ui->dateTimeEditOfAct->setDate(QDate::currentDate());
-    m_hashValuesChoosenFromFindValues.insert("C","22");
+    QString preferedType = "C";
+    QString preferedValue = "22";
+    m_hashValuesChoosenFromFindValues.insert(preferedType,preferedValue);
 
     show();
     connect(ui->closeButton,SIGNAL(pressed()),      this,SLOT(close()));
@@ -382,29 +402,13 @@ QHash<int,QString> ReceiptsGUI::paramsSelected(){
     if(m_account_uid.isEmpty()){
         m_account_uid = "0";
     }
-    if (m_user_uid.isEmpty())
-    {
-        m_user_uid = "O";
-    }
-    if (m_patient_uid.isEmpty())
-    {
-        m_patient_uid = "0";
-    }
-    if (m_name.isEmpty())
-    {
-        m_name="name";
-    }
-    if (m_firstname.isEmpty())
-    {
-        m_firstname="firstname";
-    }
 
     QHash<int,QString> hash;
     // hash.insert(ACCOUNT_ID,"1");
     hash.insert(ACCOUNT_UID,m_account_uid); // ??????
     hash.insert(ACCOUNT_USER_UID,m_user_uid);
     hash.insert(ACCOUNT_PATIENT_UID,m_patient_uid);
-    hash.insert(ACCOUNT_PATIENT_NAME,m_name+" "+m_firstname);
+    hash.insert(ACCOUNT_PATIENT_NAME,m_nameAndFirstname);
     hash.insert(ACCOUNT_SITE_ID,m_site_id);
     hash.insert(ACCOUNT_INSURANCE_ID,m_insurance_id);
     hash.insert(ACCOUNT_DATE,ui->dateTimeEditOfDay->dateTime().toString("yyyy-MM-dd"));
