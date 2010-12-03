@@ -89,8 +89,6 @@ public:
 
     // Sums
     double sum(const int &fieldRef);
-    // uid
-    QString userUid() const;
 
 public Q_SLOTS:
     bool submit();
