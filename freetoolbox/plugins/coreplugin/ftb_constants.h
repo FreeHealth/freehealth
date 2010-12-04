@@ -57,6 +57,7 @@ namespace Constants {
     const char * const  CATEGORY_INTERACTIONSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Interactions databases");
     const char * const  CATEGORY_DRUGINFOSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs infos databases");
     const char * const  CATEGORY_ATC_HELPERS = QT_TRANSLATE_NOOP("FreeTools", "ATC Helpers");
+    const char * const  CATEGORY_ICD10DATABASE = QT_TRANSLATE_NOOP("FreeTools", "ICD 10");
 
     const char * const  IAM_DATABASE_FILENAME   =  "/drugs/iam.db";
     const char * const  IAM_DATABASE_NAME   =  "iam";
