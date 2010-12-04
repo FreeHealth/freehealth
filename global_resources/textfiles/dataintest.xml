@@ -4,18 +4,21 @@
   <EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <ExchangeOut value="../../../../global_resources/testexchangeout.xml" format="xml"/>
   <Patient>
-    <Identity name="KIRK" surname="James" uid="EMR Patient's UID" dob="1960/12/01" gender="M"/>
+    <Identity lastnames="KIRK" firstnames="James Tiberius" uid="EMR Patient's UID" dob="1960/12/01" gender="M"/>
     <Creatinine value="12" unit="mg/l"/>
     <CreatinineClearance value="100" unit="ml/min"/>
     <Weight value="70" unit="kg" />
     <Height value="170" unit="cm"/>
+
     <InnAllergies value=""/>
-    <ATCAllergies value="D10AD02;V03A"/>
+    <ATCAllergies value="D10AD02;V03A;B01B;A02BX;H01AA"/>
     <DrugsUidAllergies value="68586203;62869109"/>
+
     <InnIntolerances value=""/>
-    <ATCIntolerances value="B05B"/>
+    <ATCIntolerances value="B05B;J06BB;L01AA;M01AA01;M01AB;M02AA15;N02BA;N05AE"/>
     <DrugsUidIntolerances value="68586203;62869109"/>
+
     <ICD10 value="J11.0;A22;Z23"/>
   </Patient>
-  <Ui editmode="select-only" blockPatientDatas="1"/>
+  <Ui editmode="prescriptor" blockPatientDatas="0"/>
 </FreeDiams_In>
