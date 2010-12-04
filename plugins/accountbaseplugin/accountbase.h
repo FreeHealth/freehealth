@@ -46,6 +46,8 @@
 
 
 namespace AccountDB {
+    class AccountData;
+
 namespace Internal {
 class AccountBasePrivate;
 } // End namespace Internal
@@ -74,6 +76,9 @@ private:
                         const int port,
                         CreationOption /*createOption*/
                        );
+
+
+    AccountData *getAccountByUid(const QString &uid);
 
 private:
     // intialization state

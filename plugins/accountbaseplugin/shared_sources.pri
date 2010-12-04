@@ -18,7 +18,9 @@ HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/percentmodel.h \
     $${PWD}/rulesmodel.h \
     $${PWD}/distancerulesmodel.h \
-    $${PWD}/medicalproceduremodel.h
+    $${PWD}/medicalproceduremodel.h \
+    $${PWD}/accountdata.h \
+    $${PWD}/amountmodel.h
 
 SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/accountbase.cpp \
@@ -33,7 +35,9 @@ SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/percentmodel.cpp \
     $${PWD}/rulesmodel.cpp \
     $${PWD}/distancerulesmodel.cpp \
-    $${PWD}/medicalproceduremodel.cpp
+    $${PWD}/medicalproceduremodel.cpp \
+    $${PWD}/accountdata.cpp \
+    $${PWD}/amountmodel.cpp
 
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountbaseplugin_fr.ts \

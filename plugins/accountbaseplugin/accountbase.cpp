@@ -34,6 +34,7 @@
  ***************************************************************************/
 #include "accountbase.h"
 #include "constants.h"
+#include "accountdata.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -65,6 +66,19 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::CommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+
+static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("DrugsBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 file, line);
+            return false;
+        }
+    }
+    return true;
+}
 
 
 namespace AccountDB {
@@ -575,3 +589,36 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
     qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     return false;
 }
+
+AccountData *AccountBase::getAccountByUid(const QString &uid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return 0;
+    if (uid.isEmpty())
+        return 0;
+
+    // construct the where clause
+    QHash<int, QString> where;
+    where.insert(Constants::ACCOUNT_UID, QString("=%1").arg(uid));
+    QString req = select(Constants::Table_Account, where);
+    QSqlQuery q(req,DB);
+    if (q.isActive()) {
+        if (q.next()) {
+            AccountData *data = new AccountData();
+            for(int i = 0 ; i < Constants::ACCOUNT_MaxParam; ++i) {
+                data->setDatasFromDb(i, q.value(i));
+            }
+            return data;
+        } else {
+            Utils::Log::addError(this, "No account with an UID like " + uid, __FILE__, __LINE__);
+            return 0;
+        }
+    } else {
+        Utils::Log::addError(this, "No account with an UID like " + uid, __FILE__, __LINE__);
+        Utils::Log::addQueryError("DrugsBase", q, __FILE__, __LINE__);
+        return 0;
+    }
+    return 0;
+}
+

@@ -175,7 +175,8 @@ void ReceiptsGUI::initialize()
     ui->percentBar->setValue(countPercentBar);
     ui->percentLabel->setText(m_hashPercentType.values().last()+" : "+m_hashPercents.values().last());
     m_countMoreOrLess = countPercentBar;
-    //default values--------------------------------
+
+    //default values
     m_site_id = ui->comboBoxWhere->currentText();
     m_insurance_id = ui->comboBoxDebtor->currentText();
     ui->dateTimeEditOfDay->setDate(QDate::currentDate());
