@@ -90,7 +90,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     m_CommandLine = new CommandLine();
     m_CommandLine->feedPatientDatas(m_Patient);
-    qWarning() << m_Patient->toXml();
 
     QTime chrono;
     chrono.start();
