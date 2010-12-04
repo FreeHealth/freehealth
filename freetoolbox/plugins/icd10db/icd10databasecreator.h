@@ -24,14 +24,18 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FDADRUGSDATABASECREATOR_H
-#define FDADRUGSDATABASECREATOR_H
+#ifndef ICD10DATABASECREATOR_H
+#define ICD10DATABASECREATOR_H
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
 
 #include <QWidget>
+#include <QProgressDialog>
 
+namespace Utils{
+class HttpDownloader;
+}
 
 namespace Icd10 {
 
@@ -63,17 +67,10 @@ public:
     ~Icd10DatabaseWidget();
 
 protected Q_SLOTS:
-    void on_startJobs_clicked();
-    bool on_download_clicked();
-    void downloadFinished();
-
-private:
-    bool unzipFiles();
-    bool prepareDatas();
-    bool createDatabase();
-    bool populateDatabase();
-    bool linkMolecules();
-
+    bool on_startCreation_clicked();
+    bool downloadRawSources();
+    bool downloadFinished();
+    bool populateDatabaseWithRawSources();
 
 protected:
     void changeEvent(QEvent *e);
@@ -81,9 +78,11 @@ protected:
 private:
     Ui::Icd10DatabaseWidget *ui;
     QString m_WorkingPath;
+    Utils::HttpDownloader *m_Downloader;
+    QProgressDialog *m_Progress;
 };
 
 }  //  End namespace Icd10
 
 
-#endif // FDADRUGSDATABASECREATOR_H
+#endif // ICD10DATABASECREATOR_H

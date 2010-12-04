@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "icd10dbplugin.h"
+#include "icd10databasecreator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -53,7 +54,7 @@ bool Icd10DbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-Icd10DbPlugin");
 
-//    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
+    addAutoReleasedObject(new Icd10DatabasePage(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

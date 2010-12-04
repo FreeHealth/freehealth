@@ -69,7 +69,7 @@ void InteractionPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "InteractionPlugin::extensionsInitialized";
 
-//    Core::ICore::instance()->translators()->addNewTranslator("freeicd-interactionplugin");
+//    Core::ICore::instance()->translators()->addNewTranslator("freetoolbox-interactionplugin");
 }
 
 Q_EXPORT_PLUGIN(InteractionPlugin)

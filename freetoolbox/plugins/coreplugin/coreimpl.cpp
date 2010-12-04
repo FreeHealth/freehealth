@@ -247,6 +247,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
+    finishSplashScreen(m_MainWindow);
     Q_EMIT coreOpened();
 }
 

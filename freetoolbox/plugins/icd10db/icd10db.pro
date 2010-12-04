@@ -8,7 +8,7 @@ FREETOOLBOX = 1
 BUILD_PATH_POSTFIXE = FreeToolBox
 
 include(../../../plugins/fmf_plugins.pri)
-include(drugsdb_dependencies.pri)
+include(icd10db_dependencies.pri)
 
 QT *= sql network xml
 
@@ -18,12 +18,10 @@ DEPENDPATH += ../
 SOURCES += \
     icd10databasecreator.cpp \
     icd10dbplugin.cpp \
-    $${SOURCES_PLUGINS_PATH}/icdplugin/icddownloader.cpp
 
 HEADERS  += \
     icd10databasecreator.h \
     icd10dbplugin.h \
-    $${SOURCES_PLUGINS_PATH}/icdplugin/icddownloader.h
 
 
 FORMS += \
