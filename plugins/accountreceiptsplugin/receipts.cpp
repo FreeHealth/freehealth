@@ -115,6 +115,19 @@ void ReceiptsGUI::initialize()
             m_name = "Noname";
             m_firstname = "NoFirstname";
         }
+        //semantics
+        if (m_name.contains("'"){
+            m_name.replace("'","''");
+            }
+        if (m_firstname.contains("'"))
+        {
+            m_firstname.replace("'","''");
+            }
+        if (m_nameAndFirstname.contains("'"))
+        {
+            m_nameAndFirstname.replace("'","''");
+            }
+        //end semantics
         if (m_patient_uid.isEmpty())
         {
             m_patient_uid = "0";
