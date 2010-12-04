@@ -1,24 +1,8 @@
 <FreeAccount_In version="0.1.0">
-  <ConfigFile value="../../../global_resources/config.ini"/>
-  <DrugsDatabase uid="FR-AFSSAPS"/>
   <EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
   <ExchangeOut value="../../../../global_resources/freeaccount_testexchangeout.xml" format="xml"/>
   <Patient>
     <Identity lastnames="KIRK" firstnames="James Tiberius" uid="EMR Patient's UID" dob="1960/12/01" gender="M"/>
-    <Creatinine value="12" unit="mg/l"/>
-    <CreatinineClearance value="100" unit="ml/min"/>
-    <Weight value="70" unit="kg" />
-    <Height value="170" unit="cm"/>
-
-    <InnAllergies value=""/>
-    <ATCAllergies value="D10AD02;V03A;B01B;A02BX;H01AA"/>
-    <DrugsUidAllergies value="68586203;62869109"/>
-
-    <InnIntolerances value=""/>
-    <ATCIntolerances value="B05B;J06BB;L01AA;M01AA01;M01AB;M02AA15;N02BA;N05AE"/>
-    <DrugsUidIntolerances value="68586203;62869109"/>
-
-    <ICD10 value="J11.0;A22;Z23"/>
   </Patient>
   <Ui editmode="prescriptor" blockPatientDatas="0"/>
 </FreeAccount_In>
