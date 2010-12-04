@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.0 r9654"
    sodipodi:docname="spashs.svg"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freeicd.png"
+   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freetoolbox.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -2570,12 +2570,12 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="148.68002"
+     inkscape:cx="79.232033"
      inkscape:cy="88.995469"
      inkscape:document-units="px"
-     inkscape:current-layer="g7099"
+     inkscape:current-layer="g8293"
      showgrid="true"
-     inkscape:window-width="1283"
+     inkscape:window-width="1280"
      inkscape:window-height="712"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -2657,13 +2657,7 @@
        y="1017.3622"
        x="78"
        id="image8786"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAAARCAYAAACy2RLWAAAABHNCSVQICAgIfAhkiAAAANxJREFU
-aIHt2j1qAlEUhuHv3kzhjAvwB8UUcQ1WugWb7ENwH4KSzaTRxihZg6RT/E8jIV5QZ1yFHHDeZwVf
-88Ipjpt+HbLBaKH1JgjAY9Vrifq95p/rvs+y7S6omERy3noW8Lxu10z/55teG8VLtNkGJfGLxp8d
-613A02u1J9rtg/eS5Lyz3gPkCsclYIDwAAOEBxggPMAA4QEGCA8wQHiAAcIDDBAeYIDwAANekq6X
-1HoHkCtRvRZruTqr1Z5YbwFyoVqJUzf/Pp6GHz+F/SHwKQ08WLkUp/3e2+8dFKIzX+jOB/4AAAAA
-SUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAAARCAYAAACy2RLWAAAABHNCSVQICAgIfAhkiAAAANxJREFU aIHt2j1qAlEUhuHv3kzhjAvwB8UUcQ1WugWb7ENwH4KSzaTRxihZg6RT/E8jIV5QZ1yFHHDeZwVf 88Ipjpt+HbLBaKH1JgjAY9Vrifq95p/rvs+y7S6omERy3noW8Lxu10z/55teG8VLtNkGJfGLxp8d 613A02u1J9rtg/eS5Lyz3gPkCsclYIDwAAOEBxggPMAA4QEGCA8wQHiAAcIDDBAeYIDwAANekq6X 1HoHkCtRvRZruTqr1Z5YbwFyoVqJUzf/Pp6GHz+F/SHwKQ08WLkUp/3e2+8dFKIzX+jOB/4AAAAA SUVORK5CYII= "
        height="17"
        width="222" />
     <rect
@@ -4079,7 +4073,7 @@ SUVORK5CYII=
      id="g6701"
      inkscape:groupmode="layer"
      inkscape:label="FreeIcd"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <text
        sodipodi:linespacing="125%"
@@ -4169,45 +4163,44 @@ SUVORK5CYII=
     </g>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="FreeToolBox"
      inkscape:groupmode="layer"
      id="g8293"
-     transform="translate(0,-972.36218)"
-     sodipodi:insensitive="true">
+     transform="translate(0,-972.36218)">
     <text
        xml:space="preserve"
        style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3554);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
-       x="99.993591"
+       x="109.99359"
        y="993.46124"
        id="text8343"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8345"
-         x="99.993591"
+         x="109.99359"
          y="993.46124">FreeToolBox</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3214);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
-       x="103.9184"
+       x="113.9184"
        y="1008.0184"
        id="text8347"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8349"
-         x="103.9184"
+         x="113.9184"
          y="1008.0184">Participate to FreeMedForms</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3200);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
-       x="108.48871"
-       y="1022.0184"
+       x="118.48871"
+       y="1020.0184"
        id="text8351"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8353"
-         x="108.48871"
-         y="1022.0184">Participer à FreeMedForms</tspan></text>
+         x="118.48871"
+         y="1020.0184">Participer à FreeMedForms</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3174);font-family:Georgia;-inkscape-font-specification:Georgia"
