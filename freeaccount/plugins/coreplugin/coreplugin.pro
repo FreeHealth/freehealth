@@ -14,12 +14,14 @@ DEPENDPATH += ../
 HEADERS += coreplugin.h \
     coreimpl.h \
     appaboutpage.h \
-    commandlineparser.h
+    commandlineparser.h \
+    patient.h
 
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
     appaboutpage.cpp \
-    commandlineparser.cpp
+    commandlineparser.cpp \
+    patient.cpp
 
 # Translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/faccountcoreplugin_fr.ts \

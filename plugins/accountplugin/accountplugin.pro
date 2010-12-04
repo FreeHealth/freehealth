@@ -5,9 +5,13 @@ DEFINES += ACCOUNT_LIBRARY
 
 BUILD_PATH_POSTFIXE = FreeAccount
 
-
 include(../fmf_plugins.pri)
 include( accountplugin_dependencies.pri )
+
+# this patch must be removed with the future new plugins wrapper in FreeAccount
+DEPENDPATH += $${SOURCES_ROOT_PATH}/freeaccount/plugins
+
+
 HEADERS = accountplugin.h \
     account_exporter.h \
     preferences/accountpreferences.h \

@@ -34,6 +34,8 @@
 
 
 namespace Core {
+    class IPatient;
+
 namespace Internal {
 class CommandLinePrivate;
 }
@@ -43,20 +45,38 @@ class CommandLine  : public Core::ICommandLine
 {
 public:
     enum Param {
-        CL_Test = 0,
+        CL_MedinTux = 0,
+        CL_Test,
         CL_ReceiptsCreator,
-        CL_MedinTux,
         CL_EMR_Name,
         CL_EMR_Uid,
         CL_SelectionOnly,
         CL_DrugsDatabaseUid,
-        CL_ExchangeFile,
+        CL_ExchangeOutFile,
+        CL_ExchangeOutFileFormat,
         CL_ExchangeInFile,
         CL_PatientName,
-        CL_PatientSurname,
+        CL_PatientFirstname,
         CL_PatientUid,
+        CL_PatientGender,
         CL_DateOfBirth,
+        CL_Weight,
+        CL_Weight_Unit,
+        CL_Height,
+        CL_Height_Unit,
+        CL_CrCl,
+        CL_CrCl_Unit,
+        CL_Creatinine,
+        CL_Creatinine_Unit,
+        CL_DrugsAllergies,
+        CL_InnAllergies,
+        CL_AtcAllergies,
+        CL_DrugsIntolerances,
+        CL_InnIntolerances,
+        CL_AtcIntolerances,
+        CL_ICD10Diseases,
         CL_Chrono,
+        CL_TransmitDosage,
         CL_ConfigFile,
         CL_RunningUnderWine,
         CL_BlockPatientDatas,
@@ -69,7 +89,7 @@ public:
     QVariant value(int param, const QVariant &def = QVariant()) const;
     QString paramName(int param) const;
 
-    void feedPatientDatas(Core::Patient *patient);
+    void feedPatientDatas(Core::IPatient *patient);
 
 private:
     Internal::CommandLinePrivate *d;

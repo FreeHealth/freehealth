@@ -86,8 +86,8 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
-    virtual IPatient *patient() const {return 0;}
-    virtual void setPatient(IPatient *) {}
+    virtual IPatient *patient() const {return m_Patient;}
+    virtual void setPatient(IPatient *) {}  // Created and managed by CoreImpl
 
     virtual IUser *user() const {return m_User;}
     virtual void setUser(IUser *user) {m_User=user;}
@@ -105,6 +105,7 @@ private:
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
     Core::IUser *m_User;
+    Core::IPatient *m_Patient;
 };
 
 } // namespace Internal

@@ -38,6 +38,7 @@
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/commandlineparser.h>
+#include <coreplugin/patient.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -85,8 +86,11 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
 
+    m_Patient = new Patient(this);
+
     m_CommandLine = new CommandLine();
-//    m_CommandLine->feedPatientDatas(m_Patient);
+    m_CommandLine->feedPatientDatas(m_Patient);
+    qWarning() << m_Patient->toXml();
 
     QTime chrono;
     chrono.start();

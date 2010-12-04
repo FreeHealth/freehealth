@@ -191,8 +191,8 @@ void MainWindow::extensionsInitialized()
 //        this->aMedinTux->setEnabled(false);
     }
 
-    // If needed read exchange file
-    const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
+    // If needed read exchange out file
+    const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
     if (!exfile.isEmpty()) {
         messageSplash(tr("Reading exchange file..."));
 //        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
@@ -284,7 +284,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
     //    }
 
     // Save exchange file
-//    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFile).toString();
+//    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFileOut).toString();
 //    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
 //        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
 //    } else if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {

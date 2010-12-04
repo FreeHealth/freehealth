@@ -10,6 +10,9 @@ INCLUDEPATH += ../accountbaseplugin
 
 include(../fmf_plugins.pri)
 
+# this patch must be removed with the future new plugins wrapper in FreeAccount
+DEPENDPATH += $${SOURCES_ROOT_PATH}/freeaccount/plugins
+
 include(accountreceiptsplugin_dependencies.pri)
 
 QT *= sql \

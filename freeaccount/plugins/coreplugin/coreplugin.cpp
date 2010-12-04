@@ -65,7 +65,7 @@ void CorePlugin::extensionsInitialized()
     addAutoReleasedObject(new TeamAboutPage(this));
     addAutoReleasedObject(new LicenseAboutPage(this));
     addAutoReleasedObject(new BuildAboutPage(this));
-//    addAutoReleasedObject(new CommandLineAboutPage(this));
+    addAutoReleasedObject(new CommandLineAboutPage(this));
     // add debugging pages
     addAutoReleasedObject(new LogErrorDebugPage(this));
     addAutoReleasedObject(new LogMessageDebugPage(this));

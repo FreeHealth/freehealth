@@ -147,6 +147,7 @@ void ReceiptViewer::setPosition(QWidget *parent){
     setGeometry(parent->x(),parent->y(),rect.width()-10,rect.height()-10);
 }
 
-void ReceiptViewer::deleteLine(){
+void ReceiptViewer::deleteLine()
+{
     QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
 }
