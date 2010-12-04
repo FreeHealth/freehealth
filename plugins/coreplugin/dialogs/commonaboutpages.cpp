@@ -146,6 +146,13 @@ static const QList<Team> m_Team = QList<Team>()
                 )
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+                 "Pierre-Marie Desombre, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+                 "pm.desombre@gmail.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPER_AND_DEBUGGER)
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
                  "Guillaume Denry",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "guillaume.denry@gmail.com",
@@ -185,6 +192,13 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_CANADA),
                  "jbusser@interchange.ubc.ca",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER)
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
+                 "Pierre-Marie Desombre, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+                 "pm.desombre@gmail.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
                 )
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
