@@ -99,8 +99,8 @@ static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginM
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 // SplashScreen Messagers
-static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
-static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finishSplashScreen(w); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
+static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
 
 namespace MainWin {

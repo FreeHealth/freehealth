@@ -30,12 +30,13 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QSplashScreen>
 
 /**
  * \file itheme.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.10
- * \date 09 Aug 2009
+ * \version 0.5.0
+ * \date 03 Dec 2010
 */
 
 namespace Core {
@@ -46,8 +47,8 @@ class CORE_EXPORT ITheme : public QObject
 public:
     enum IconSize {
         SmallIcon = 0, // 16x16 is the default
-        MediumIcon,    // 32x32
-        BigIcon        // 64x64
+        MediumIcon,    // 32x32   // Splash == 300x75
+        BigIcon        // 64x64   // Splash == 600x150
     };
 
     ITheme(QObject *parent=0) : QObject(parent) {}
@@ -55,7 +56,12 @@ public:
 
     virtual QIcon icon( const QString & fileName, IconSize size = SmallIcon ) = 0;
     virtual QString iconFullPath( const QString &fileName, IconSize size = SmallIcon ) = 0;
-    virtual QPixmap splashScreen( const QString &fileName ) = 0;
+    virtual QPixmap splashScreenPixmap( const QString &fileName, const IconSize size = MediumIcon ) = 0;
+
+    virtual void createSplashScreen(const QString &fileName) = 0;
+    virtual void messageSplashScreen(const QString &msg) = 0;
+    virtual void finishSplashScreen(QWidget *widget) = 0;
+    virtual QSplashScreen *splashScreen() const = 0;
 };
 
 } // end Core

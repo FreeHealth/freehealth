@@ -60,7 +60,12 @@ public:
 
     QIcon icon( const QString & fileName, IconSize size = SmallIcon );
     QString iconFullPath( const QString &fileName, IconSize size = SmallIcon );
-    QPixmap splashScreen( const QString &fileName );
+    QPixmap splashScreenPixmap( const QString &fileName, const IconSize size = MediumIcon );
+
+    void createSplashScreen(const QString &fileName);
+    void messageSplashScreen(const QString &msg);
+    void finishSplashScreen(QWidget *widget);
+    virtual QSplashScreen *splashScreen() const {return m_Splash;}
 
 protected:
     void setSmallIconPath( const QString &absPath );
@@ -71,6 +76,7 @@ private:
     QCache<QString, QIcon> m_IconCache;
     QString m_AbsolutePath;
     QString m_SmallIconPath, m_MediumIconPath, m_BigIconPath;
+    QSplashScreen *m_Splash;
 };
 
 } // end Internal

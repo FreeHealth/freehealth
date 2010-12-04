@@ -74,12 +74,6 @@ public:
 
     static ICore *instance();
 
-    // Splash screen functions
-    virtual void createSplashScreen(const QPixmap &pix) = 0;
-    virtual void finishSplashScreen(QWidget *w) = 0;
-    virtual void messageSplashScreen(const QString &msg) = 0;
-    virtual QSplashScreen *splashScreen() = 0;
-
     // Some informations
     virtual bool updatePreferences() const {return m_UpdatePreferences;}
 

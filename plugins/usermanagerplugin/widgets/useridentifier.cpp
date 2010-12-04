@@ -88,13 +88,13 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
 {
     // initialization
     setObjectName("UserIdentifier");
-    if (Core::ICore::instance()->splashScreen())
-        Core::ICore::instance()->splashScreen()->hide();
+    if (theme()->splashScreen())
+        theme()->splashScreen()->hide();
     m_ui = new Ui::UserIdentifier();
     m_ui->setupUi(this);
     m_ui->login->setIcon(theme()->icon(Core::Constants::ICONEYES));
     m_ui->password->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    QPixmap splash = theme()->splashScreen(settings()->path(Core::ISettings::Splashscreen));
+    QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::Splashscreen));
     if (splash.size().width() > 400 || splash.size().height() >200) {
         splash = splash.scaled(QSize(400,200),Qt::KeepAspectRatio);
     }
@@ -137,8 +137,8 @@ void UserIdentifier::done(int result)
         } else {
             Utils::Log::addMessage(this, tr("User is identified."));
 	    m->setCurrentUser(login(), cryptedPassword());
-            if (Core::ICore::instance()->splashScreen())
-                Core::ICore::instance()->splashScreen()->show();
+            if (theme()->splashScreen())
+                theme()->splashScreen()->show();
             QDialog::done(QDialog::Accepted);
         }
     }

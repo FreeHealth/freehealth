@@ -31,8 +31,8 @@
 /**
  * \file coreimpl.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 12 Mar 2010
+ * \version 0.1.0
+ * \date 04 Dev 2010
 */
 
 
@@ -57,12 +57,6 @@ public:
     ~CoreImpl();
 
     static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
-
-    // Splash screen functions
-    void createSplashScreen(const QPixmap &pix);
-    void finishSplashScreen(QWidget *w);
-    void messageSplashScreen(const QString &msg);
-    QSplashScreen *splashScreen();
 
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
@@ -93,7 +87,6 @@ public:
     virtual void setUser(IUser *user) {m_User=user;}
 
 private:
-    QSplashScreen *m_Splash;
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;

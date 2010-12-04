@@ -72,7 +72,6 @@ ICore* ICore::instance()
 // instance is created by Core::CorePlugin()
 CoreImpl::CoreImpl(QObject *parent) :
         ICore(parent),
-        m_Splash(0),
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
@@ -94,10 +93,10 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
     m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEICD_SPLASHSCREEN);
-    createSplashScreen(m_Theme->splashScreen(Constants::FREEICD_SPLASHSCREEN));
+    m_Theme->createSplashScreen(Constants::FREEICD_SPLASHSCREEN);
 
     // add translators
-    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
     m_Translators = new Translators(this);
     m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
     // Qt
@@ -110,7 +109,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");
 
-    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
 
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
@@ -118,7 +117,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
 
     // initialize the settings
-    messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 //#ifdef Q_OS_WIN
@@ -143,7 +142,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
     // ready
-    messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
+    m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
     Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
@@ -158,36 +157,6 @@ CoreImpl::~CoreImpl()
 //    delete m_CommandLine;
 }
 
-void CoreImpl::createSplashScreen(const QPixmap &pix)
-{
-    if (!m_Splash) {
-        m_Splash = new QSplashScreen(pix);
-        QFont ft( m_Splash->font() );
-        ft.setPointSize( ft.pointSize() - 2 );
-        ft.setBold( true );
-        m_Splash->setFont( ft );
-        m_Splash->show();
-    }
-}
-
-void CoreImpl::finishSplashScreen(QWidget *w)
-{
-    Q_ASSERT(m_Splash);
-    if (m_Splash) {
-        m_Splash->finish(w);
-        delete m_Splash;
-        m_Splash = 0;
-    }
-}
-
-void CoreImpl::messageSplashScreen(const QString &msg)
-{
-    Q_ASSERT(m_Splash);
-    if (m_Splash)
-        m_Splash->showMessage( msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black );
-}
-
-QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
 UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }

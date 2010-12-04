@@ -61,12 +61,6 @@ public:
 
     static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
 
-    // Splash screen functions
-    void createSplashScreen(const QPixmap &pix);
-    void finishSplashScreen(QWidget *w);
-    void messageSplashScreen(const QString &msg);
-    QSplashScreen *splashScreen();
-
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
     UniqueIDManager *uniqueIDManager() const;
@@ -98,7 +92,6 @@ public:
 
 
 private:
-    QSplashScreen *m_Splash;
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;

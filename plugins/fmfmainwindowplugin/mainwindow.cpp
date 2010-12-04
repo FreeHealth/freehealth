@@ -120,8 +120,8 @@ static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::ins
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
 // SplashScreen Messagers
-static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
-static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finishSplashScreen(w); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
+static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
@@ -228,7 +228,7 @@ void MainWindow::extensionsInitialized()
         return;
     }
 
-    finishSplash(this);
+//    finishSplash(this);
 
     if (settings()->firstTimeRunning()) {
         if (!applicationConfiguratorWizard()) {

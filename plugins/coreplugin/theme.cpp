@@ -43,6 +43,7 @@
 #include <QString>
 #include <QApplication>
 #include <QDir>
+#include <QDesktopWidget>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -68,7 +69,7 @@ static QString transformFileName( const QString & fileName, ThemePrivate::IconSi
 
 
 ThemePrivate::ThemePrivate( QObject *parent, const int cacheSize )
-    : ITheme(parent)
+    : ITheme(parent), m_Splash(0)
 {
     if (!parent)
         setParent(qApp);
@@ -79,6 +80,9 @@ ThemePrivate::ThemePrivate( QObject *parent, const int cacheSize )
 
 ThemePrivate::~ThemePrivate()
 {
+    if (m_Splash)
+        delete m_Splash;
+    m_Splash = 0;
 }
 
 void ThemePrivate::setThemeRootPath( const QString &absPath )
@@ -203,41 +207,32 @@ QString ThemePrivate::iconFullPath( const QString &fileName, IconSize size )
 }
 
 /** \brief Returns the themed splashscreen \e fileName. */
-QPixmap ThemePrivate::splashScreen( const QString &fileName )
+QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize size)
 {
     QString file = fileName;
     QString extra;
-    switch (QDate::currentDate().month())
-    {
-        case 1:
-        {
-            extra = "birthday";
-            break;
-        }
-        case 7:
-        case 8:
-        {
-            extra = "summer";
-            break;
-        }
-        case 10 :
-        {
-            extra = "halloween";
-            break;
-        }
-        case 12 :
-        {
-            extra = "christmas";
-            break;
+    switch (QDate::currentDate().month()) {
+    case 1: extra = "-birthday"; break;
+    case 7:
+    case 8: extra = "-summer"; break;
+    case 10 : extra = "-halloween"; break;
+    case 12 : extra = "-christmas"; break;
+    }
+    // Append size
+    QFileInfo fi(file);
+    if (size==BigIcon) {
+        QString tmp = fi.baseName() + extra + "-600." + fi.completeSuffix();
+        if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + tmp).exists()) {
+            file = tmp;
+        } else {
+            tmp = fi.baseName() + "-600." + fi.completeSuffix();
+            if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + tmp).exists()) {
+                file = tmp;
+            } else {
+                file = fileName;
+            }
         }
     }
-    // does extra theme exists ?
-    if (!extra.isEmpty()) {
-        QFileInfo fi(file);
-        file = fi.baseName() + "-" + extra + "." + fi.completeSuffix();
-    }
-    if (!QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
-        file = fileName;
 
     // return themed splashscreen
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists() )
@@ -246,4 +241,37 @@ QPixmap ThemePrivate::splashScreen( const QString &fileName )
         Utils::Log::addError( "ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName),
                               __FILE__, __LINE__);
     return QPixmap();
+}
+
+void ThemePrivate::createSplashScreen(const QString &fileName)
+{
+    if (!m_Splash) {
+        if (qApp->desktop()->screenGeometry().width() > 1024) {
+            m_Splash = new QSplashScreen(splashScreenPixmap(fileName, BigIcon));
+        } else {
+            m_Splash = new QSplashScreen(splashScreenPixmap(fileName));
+        }
+        QFont ft(m_Splash->font());
+        ft.setPointSize(ft.pointSize() - 2);
+        ft.setBold(true);
+        m_Splash->setFont(ft);
+        m_Splash->show();
+    }
+}
+
+void ThemePrivate::messageSplashScreen(const QString &msg)
+{
+    Q_ASSERT(m_Splash);
+    if (m_Splash)
+        m_Splash->showMessage(msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black);
+}
+
+void ThemePrivate::finishSplashScreen(QWidget *widget)
+{
+    Q_ASSERT(m_Splash);
+    if (m_Splash) {
+        m_Splash->finish(widget);
+        delete m_Splash;
+        m_Splash = 0;
+    }
 }

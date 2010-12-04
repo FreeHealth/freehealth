@@ -75,8 +75,8 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
 
 // SplashScreen Messagers
-static inline void messageSplash(const QString &s) {Core::ICore::instance()->messageSplashScreen(s); }
-static inline void finishSplash(QMainWindow *w) {Core::ICore::instance()->finishSplashScreen(w); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
+static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
 
 namespace {

@@ -61,7 +61,6 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
-#include <QSplashScreen>
 
 namespace Core {
 namespace Internal {
@@ -83,7 +82,6 @@ ICore* ICore::instance()
 // instance is created by Core::CorePlugin()
 CoreImpl::CoreImpl(QObject *parent) :
         ICore(parent),
-        m_Splash(0),
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
@@ -105,10 +103,10 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
-    createSplashScreen(m_Theme->splashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN));
+    m_Theme->createSplashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN);
 
     // add translators
-    messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
     m_Translators = new Translators(this);
     m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
     // Qt
@@ -122,7 +120,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");
 
-    messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
@@ -130,7 +128,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     }
 
     // initialize the settings
-    messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
+    m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 #ifdef Q_OS_WIN
@@ -155,7 +153,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
     // ready
-    messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
+    m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
     Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
@@ -177,35 +175,6 @@ CoreImpl::~CoreImpl()
         delete m_MainWindow;
 }
 
-void CoreImpl::createSplashScreen(const QPixmap &pix)
-{
-    if (!m_Splash) {
-        m_Splash = new QSplashScreen(pix);
-        QFont ft(m_Splash->font());
-        ft.setPointSize(ft.pointSize() - 2);
-        ft.setBold(true);
-        m_Splash->setFont(ft);
-        m_Splash->show();
-    }
-}
-
-void CoreImpl::finishSplashScreen(QWidget *w)
-{
-    Q_ASSERT(m_Splash);
-    if (m_Splash) {
-        m_Splash->finish(w);
-        delete m_Splash;
-        m_Splash = 0;
-    }
-}
-
-void CoreImpl::messageSplashScreen(const QString &msg)
-{
-    Q_ASSERT(m_Splash);
-    if (m_Splash)
-        m_Splash->showMessage( msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black );
-}
-
 IMainWindow *CoreImpl::mainWindow() const  { return m_MainWindow; }
 void CoreImpl::setMainWindow(IMainWindow *win)
 {
@@ -220,7 +189,6 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
 }
 
-QSplashScreen *CoreImpl::splashScreen()  { return m_Splash;}
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
 UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
@@ -261,8 +229,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
-    if (m_Splash)
-        finishSplashScreen(0);
+    m_Theme->finishSplashScreen(m_MainWindow);
     Utils::Log::addMessage(this, "Core Opened");
     Q_EMIT coreOpened();
 }
