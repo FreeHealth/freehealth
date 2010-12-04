@@ -116,7 +116,7 @@ void ReceiptsGUI::initialize()
             m_firstname = "NoFirstname";
         }
         //semantics
-        if (m_name.contains("'"){
+        if (m_name.contains("'")){
             m_name.replace("'","''");
             }
         if (m_firstname.contains("'"))
