@@ -26,6 +26,7 @@
 #include "interactionplugin.h"
 #include "afssapsintegrator.h"
 #include "interactionsdatabasepage.h"
+#include "cytochromep450interactionspage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -60,6 +61,7 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
     addAutoReleasedObject(new AfssapsClassTreePage(this));
     addAutoReleasedObject(new InteractionsDatabasePage(this));
     addAutoReleasedObject(new InteractionsDatabaseCreatorPage(this));
+    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 
     return true;
 }

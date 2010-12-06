@@ -15,9 +15,11 @@ QT *= sql network xml
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
-HEADERS += interactionplugin.h
+HEADERS += interactionplugin.h \
+    cytochromep450interactionspage.h
 
-SOURCES += interactionplugin.cpp
+SOURCES += interactionplugin.cpp \
+    cytochromep450interactionspage.cpp
 
 SOURCES += \
     afssapsintegrator.cpp \
@@ -33,7 +35,8 @@ FORMS    += afssapslinkerwidget.ui \
     afssapstreewidget.ui \
     interactiondatabasebuilder.ui \
     interactiondatabasecreator.ui \
-    interactiondatabasechecker.ui
+    interactiondatabasechecker.ui \
+    cytochromep450interactionspage.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \
