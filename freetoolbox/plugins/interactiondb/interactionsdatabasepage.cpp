@@ -350,7 +350,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
             int i = 0;
             const QStringList &list = content.split("\n", QString::SkipEmptyParts);
             foreach(const QString &s, list) {
-                req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUSTCH`) "
+                req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUTSCH`) "
                               "VALUES (%1, %2) ").arg(i).arg(s);
                 Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
                 ++i;
