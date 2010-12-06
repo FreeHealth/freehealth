@@ -16,9 +16,10 @@
    version="1.1"
    inkscape:version="0.48.0 r9654"
    sodipodi:docname="spashs.svg"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freetoolbox.png"
+   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freemedforms.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   style="display:inline">
   <defs
      id="defs4">
     <filter
@@ -2570,10 +2571,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="79.232033"
+     inkscape:cx="267.65981"
      inkscape:cy="88.995469"
      inkscape:document-units="px"
-     inkscape:current-layer="g8293"
+     inkscape:current-layer="svg2"
      showgrid="true"
      inkscape:window-width="1280"
      inkscape:window-height="712"
@@ -2672,11 +2673,12 @@
        ry="1" />
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      transform="translate(0,-972.36218)"
      id="g7099"
      inkscape:groupmode="layer"
-     inkscape:label="FreeMedForms">
+     inkscape:label="FreeMedForms"
+     sodipodi:insensitive="true">
     <text
        sodipodi:linespacing="125%"
        id="text7101"
@@ -2698,7 +2700,7 @@
          y="1007.6041"
          x="92.57193"
          id="tspan7119"
-         sodipodi:role="line">Electronic Medcial Record Manager</tspan></text>
+         sodipodi:role="line">Electronic Medical Record Manager</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7121"
@@ -2732,7 +2734,7 @@
          y="1043.6041"
          x="130.85315"
          id="tspan7167"
-         sodipodi:role="line">(c) FreeMedForms projet, Eric Maeker ,MD</tspan></text>
+         sodipodi:role="line">(c) FreeMedForms project, Eric Maeker ,MD</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7185"
@@ -4163,11 +4165,12 @@
     </g>
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="FreeToolBox"
      inkscape:groupmode="layer"
      id="g8293"
-     transform="translate(0,-972.36218)">
+     transform="translate(0,-972.36218)"
+     sodipodi:insensitive="true">
     <text
        xml:space="preserve"
        style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3554);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
