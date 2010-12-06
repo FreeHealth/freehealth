@@ -551,10 +551,10 @@ struct MolLink {
 };
 
 QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
-        (const QString &drugsDbUid,
-         const QString &lang,
-         QStringList *unfoundOutput,
-         const QHash<QString, QString> &correctedByName,
+        (const QString &drugsDbUid,        // Drugs database to use
+         const QString &lang,              // Lang
+         QStringList *unfoundOutput,       // Returned unfounded molecules
+         const QHash<QString, QString> &correctedByName,        // Precorrected molecules
          const QMultiHash<QString, QString> &correctedByAtcCode // Key=mol, Val=ATC
          )
 {
@@ -586,7 +586,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
             }
         }
         query.finish();
-        qWarning() << "ATC" << atc_id.count();
+        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("MILLEPERTUIS");
     }
 
     Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
