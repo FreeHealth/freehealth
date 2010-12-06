@@ -1,9 +1,11 @@
 TEMPLATE = lib
 TARGET = Printer
-PACKAGE_VERSION = 0.0.2
+
 DEFINES += PRINTER_LIBRARY
+
 include($${PWD}/../fmf_plugins.pri)
 include( $${PWD}/printerplugin_dependencies.pri )
+
 HEADERS = $${PWD}/printerplugin.h \
     $${PWD}/printer_exporter.h \
     $${PWD}/printer.h \
@@ -27,4 +29,5 @@ FORMS = $${PWD}/printerpreviewer_p.ui \
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/printerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/printerplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/printerplugin_es.ts
+
 OTHER_FILES = Printer.pluginspec
