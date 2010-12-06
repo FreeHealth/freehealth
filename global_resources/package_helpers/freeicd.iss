@@ -101,6 +101,6 @@ Source: "COPYING.txt"; DestDir: "{app}"; Components: program
 Name: "{group}\FreeICD"; Filename: "{app}\FreeICD.exe"
 Name: "{group}\{cm:UninstallProgram,FreeICD}"; Filename: "{uninstallexe}"
 Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
-Name: "{group}\READM.txtE"; FileName: "{app}\README.txt"
+Name: "{group}\README.txt"; FileName: "{app}\README.txt"
 Name: "{group}\COPYING.txt"; FileName: "{app}\COPYING.txt"
 
