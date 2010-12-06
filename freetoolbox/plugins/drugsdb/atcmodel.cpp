@@ -382,7 +382,7 @@ bool AtcModel::insertAtcCodeToDatabase(const QString &connectionName)
         QProgressDialog progress("Adding ATC Codes to database", "Abort", 0, list.count(), qApp->activeWindow());
         progress.setWindowModality(Qt::WindowModal);
         foreach(const QString &s, list) {
-            req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUSTCH`) "
+            req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUTSCH`) "
                           "VALUES (%1, %2) ").arg(i).arg(s);
             Core::Tools::executeSqlQuery(req, connectionName, __FILE__, __LINE__);
             ++i;
