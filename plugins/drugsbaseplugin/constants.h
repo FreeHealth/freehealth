@@ -117,6 +117,7 @@ namespace Constants {
     const char * const  INTERACTION_ICONINFORMATION =      "information.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONP450 =             "p450iam.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // HELP PAGES
     const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";
@@ -413,7 +414,8 @@ namespace Interaction
         Information      = 0x0002,
         Precaution       = 0x0010,
         APrendreEnCompte = 0x0020,
-        Deconseille      = 0x0040,
+        P450             = 0x0040,
+        Deconseille      = 0x0080,
         ContreIndication = 0x8000
     };
     Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );

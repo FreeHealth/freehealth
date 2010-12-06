@@ -74,6 +74,8 @@ void DrugsInteraction::setValue( const int fieldref, const QVariant & value )
             r |= Constants::Interaction::Deconseille;
         if (t.contains("T"))
             r |= Constants::Interaction::APrendreEnCompte;
+        if (t.contains("450"))
+            r |= Constants::Interaction::P450;
         if (t.contains("I"))
             r |= Constants::Interaction::Information;
         m_Infos.insert(fieldref, int(r));
@@ -127,6 +129,8 @@ QString DrugsInteraction::typeToString(const int t)
           tmp << tkTr(Trans::Constants::CONTRAINDICATION);
      if (r & Constants::Interaction::Precaution)
           tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+     if (r & Constants::Interaction::P450)
+          tmp << tkTr(Trans::Constants::P450_IAM);
      if (r & Constants::Interaction::Information)
           tmp << tkTr(Trans::Constants::INFORMATION);
      return tmp.join( ", " );

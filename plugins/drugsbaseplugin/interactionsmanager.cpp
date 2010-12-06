@@ -280,6 +280,8 @@ QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWar
         return th->icon(INTERACTION_ICONDECONSEILLEE, size);
     else if ( ( level & Interaction::APrendreEnCompte ) && ( levelOfWarning <= 1 ) )
         return th->icon(INTERACTION_ICONTAKEINTOACCOUNT, size);
+    else if ( ( level & Interaction::P450 ) && ( levelOfWarning <= 1 ) )
+        return th->icon(INTERACTION_ICONP450, size);
     else if ( ( level & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
         return th->icon(INTERACTION_ICONPRECAUTION, size);
     else if ( ( level & Interaction::Information ) && ( levelOfWarning == 0 ) )
@@ -425,7 +427,7 @@ void InteractionsManager::synthesisToTreeWidget(const QList<Internal::DrugsInter
         managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         tree->setItemWidget(management, 0, managementLabel);
         managementLabel->setMargin(0);
-        qWarning() << managementLabel << managementLabel->contentsMargins();
+//        qWarning() << managementLabel << managementLabel->contentsMargins();
     }
 }
 

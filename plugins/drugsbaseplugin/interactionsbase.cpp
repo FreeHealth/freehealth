@@ -423,7 +423,7 @@ InteractionsBase::InteractionsBase()
     di->m_DB->addField(Table_ATC, ATC_CODE,  "CODE");
     di->m_DB->addField(Table_ATC, ATC_EN,    "ENGLISH");
     di->m_DB->addField(Table_ATC, ATC_FR,    "FRENCH");
-    di->m_DB->addField(Table_ATC, ATC_DE,    "DEUSTCH");
+    di->m_DB->addField(Table_ATC, ATC_DE,    "DEUTSCH");
 
     di->m_DB->addField(Table_INTERACTIONS, IA_ID,     "ID");
     di->m_DB->addField(Table_INTERACTIONS, IA_ATC1,   "ATC_ID1");
@@ -687,7 +687,7 @@ QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
     if (di->m_AtcToMol.values().contains(molecule_code))
         toReturn << di->m_AtcToMol.key(molecule_code);
 
-    qWarning() << Q_FUNC_INFO << molecule_code << toReturn;
+//    qWarning() << Q_FUNC_INFO << molecule_code << toReturn;
     return toReturn;
 }
 
