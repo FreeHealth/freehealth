@@ -143,8 +143,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->setupUi(this);
     setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
 
-    setWindowTitle(qApp->applicationName() + " " + qApp->applicationVersion());
-
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->setVisible(false);
 
@@ -174,6 +172,15 @@ void MainWindow::postCoreInitialization()
     raise();
     show();
     preparePages();
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    setWindowIcon(theme()->icon(Constants::ICONFREETOOLBOX));
+
+    const QString &path = settings()->value(Constants::S_SVNFILES_PATH).toString();
+    if (path.isEmpty() || !QDir(settings()->value(Constants::S_SVNFILES_PATH).toString()).exists()) {
+        Utils::warningMessageBox(tr("Wrong path settings."), tr("You will be redirected to the preferences pages. "
+                                                                "Please set the correct path, then restart the application."));
+        applicationPreferences();
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

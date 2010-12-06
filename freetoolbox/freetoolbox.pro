@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freetoolbox
 mac:TARGET       = $$quote(FreeToolBox)
-PACKAGE_VERSION  = 0.1.0
+PACKAGE_VERSION  = 0.1.0~beta
 
 # Get the version number from command line in bash :
 # cat this.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '
@@ -29,8 +29,8 @@ QT *= sql \
 DEFINES *= FREETOOLBOX
 
 macx {
-#  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freetoolbox.icns
-#  QMAKE_INFO_PLIST=Info.plist
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freetoolbox.icns
+  QMAKE_INFO_PLIST=Info.plist
 }
 win32:RC_FILE=freetoolbox_win32_icon.rc
 

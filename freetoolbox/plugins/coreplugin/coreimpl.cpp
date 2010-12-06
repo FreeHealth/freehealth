@@ -184,11 +184,11 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     QString msg;
     bool first = false;
     if (m_Settings->firstTimeRunning()) {
-        msg = QCoreApplication::translate("Core", "You are running FreeDiams for the first time. You need to approve the licence terms.");
+        msg = QCoreApplication::translate("Core", "You are running FreeToolBox for the first time. You need to approve the licence terms.");
         first = true;
 
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        msg = QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement.");
+        msg = QCoreApplication::translate("Core", "You are running a new version of FreeToolBox, you need to renew the licence agreement.");
     }
 
     if (!msg.isEmpty()) {
@@ -198,8 +198,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 #endif
         // update some preferences ?
         bool yes = Utils::yesNoMessageBox(
-                QCoreApplication::translate("Core", "You are updating FreeICD, do you want to update your personnal preferences ?"),
-                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences."));
+                QCoreApplication::translate("Core", "You are updating FreeToolBox, do you want to update your personnal preferences ?"),
+                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeToolBox to update your personnal preferences."));
         if (yes) {
             m_UpdatePreferences = true;
         }

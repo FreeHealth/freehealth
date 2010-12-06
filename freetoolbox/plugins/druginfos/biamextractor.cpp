@@ -34,6 +34,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QApplication>
 #include <QFile>
@@ -78,6 +79,7 @@ static inline QString databaseFinalizationScript() {return QDir::cleanPath(setti
 static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + QString(Core::Constants::FILE_DRUGINFOS_DATABASE_SCHEME);}
 
 using namespace DrugInfos;
+using namespace Trans::ConstantTranslations;
 
 namespace DrugInfos {
 namespace Internal {
@@ -453,7 +455,7 @@ bool BiamExtractor::on_download_clicked()
     /** \todo First : download A..Z files; then download drugs files */
     d->m_Progress = new QProgressDialog(this);
     d->m_Progress->setLabelText(tr("Downloading BIAM substance index"));
-    d->m_Progress->setCancelButtonText(tr("Cancel"));
+    d->m_Progress->setCancelButtonText(tkTr(Trans::Constants::CANCEL));
     d->m_Progress->setRange(0, 1);
     d->m_Progress->setWindowModality(Qt::WindowModal);
     d->m_Progress->setValue(0);

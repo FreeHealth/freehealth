@@ -60,25 +60,28 @@ MoleculeLinkerWidget::MoleculeLinkerWidget(QWidget *parent) :
     ui->setupUi(this);
     model = ExtraMoleculeLinkerModel::instance(qApp);
     ui->availableDrugsDb->addItems(model->availableDrugsDatabases());
-    model->selectDatabase(model->availableDrugsDatabases().at(0));
+    if (model->availableDrugsDatabases().count())
+        model->selectDatabase(model->availableDrugsDatabases().at(0));
 
-    proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(model);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setFilterKeyColumn(ExtraMoleculeLinkerModel::MoleculeName);
+    if (model->rowCount()) {
+        proxyModel = new QSortFilterProxyModel(this);
+        proxyModel->setSourceModel(model);
+        proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        proxyModel->setFilterKeyColumn(ExtraMoleculeLinkerModel::MoleculeName);
 
-    ui->tableView->setModel(proxyModel);
-    ui->tableView->verticalHeader()->hide();
-    ui->tableView->horizontalHeader()->setStretchLastSection(false);
-    ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
-    ui->tableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-    ui->tableView->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-    ui->tableView->horizontalHeader()->setResizeMode(3, QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(4, QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(5, QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(6, QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(7, QHeaderView::Interactive);
-    ui->tableView->setColumnWidth(0,24);
+        ui->tableView->setModel(proxyModel);
+        ui->tableView->verticalHeader()->hide();
+        ui->tableView->horizontalHeader()->setStretchLastSection(false);
+        ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
+        ui->tableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(3, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(4, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(5, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(6, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(7, QHeaderView::Interactive);
+        ui->tableView->setColumnWidth(0,24);
+    }
 
     connect(ui->availableDrugsDb, SIGNAL(activated(int)), this, SLOT(changeDatabase(int)));
     connect(ui->saveButton, SIGNAL(clicked()), model, SLOT(saveModel()));

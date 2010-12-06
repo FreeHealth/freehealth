@@ -56,7 +56,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CytP450/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/iam-cytp450.db");}
-static inline QString unlinkeAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/textfiles/cytochrome_unlinked.csv");}
+static inline QString unlinkeAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/textfiles/cytochrome_unlinked.csv");}
 
 static inline QString databaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/cytp450.sql";}
 static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
@@ -811,6 +811,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
     }
     treeReqs.clear();
 
+    Utils::informativeMessageBox(tr("Process done."), tr("Thank you."));
 }
 
 void CytochromeP450InteractionsWidget::changeEvent(QEvent *e)

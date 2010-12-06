@@ -66,9 +66,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
-static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
-static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
+static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
+static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
 
 
 
@@ -155,7 +155,7 @@ class AfssapsLinkerModelPrivate
 {
 public:
     AfssapsLinkerModelPrivate(AfssapsLinkerModel *parent) :
-            m_RootItem(0), q(parent)
+            m_RootItem(0), m_FetchedRows(0), q(parent)
     {
         QFile file(afssapsMolLinkFile());
         if (file.open(QIODevice::ReadOnly)) {
@@ -168,13 +168,12 @@ public:
                 Utils::Log::addMessage(q, QApplication::translate("AfssapsLinkerModel","Reading file: %1").arg(file.fileName()));
             }
             file.close();
+            m_RootNode = domDocument.firstChildElement("AfssapsLinkerModel");
+            m_RootItem = new DomItem(m_RootNode, 0);
         } else {
             Utils::Log::addError(q, QApplication::translate("AfssapsLinkerModel","Can not open XML file %1").arg(file.fileName()), __FILE__, __LINE__);
         }
 
-        m_RootNode = domDocument.firstChildElement("AfssapsLinkerModel");
-
-        m_RootItem = new DomItem(m_RootNode, 0);
     }
 
 public:
@@ -231,9 +230,6 @@ void AfssapsLinkerModel::selectModel(const int type)
     case Model_Tree: tag = "Tree"; break;
     default: return;
     }
-
-    qWarning() << "selectModel" << tag;
-
     QDomElement el = d->m_RootNode.firstChildElement(tag);
     if (!el.isNull()) {
         qWarning() << "FOUND";
@@ -299,6 +295,9 @@ QModelIndex AfssapsLinkerModel::index(int row, int column, const QModelIndex &pa
         parentItem = d->m_RootItem;
     else
         parentItem = static_cast<DomItem*>(parent.internalPointer());
+
+    if (!parentItem)
+        return QModelIndex();
 
     DomItem *childItem = parentItem->child(row);
     if (childItem)
@@ -990,12 +989,14 @@ AfssapsLinkerWidget::AfssapsLinkerWidget(QWidget *parent) :
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterKeyColumn(AfssapsLinkerModel::AfssapsName);
 
-    ui->tableView->setModel(proxyModel);
-    ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
-    ui->tableView->setColumnWidth(0, 24);
-    ui->tableView->verticalHeader()->hide();
-    ui->tableView->setSortingEnabled(true);
-    ui->tableView->setDragEnabled(true);
+    if (model->rowCount()) {
+        ui->tableView->setModel(proxyModel);
+        ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
+        ui->tableView->setColumnWidth(0, 24);
+        ui->tableView->verticalHeader()->hide();
+        ui->tableView->setSortingEnabled(true);
+        ui->tableView->setDragEnabled(true);
+    }
 
     connect(ui->reviewer, SIGNAL(activated(QString)), model, SLOT(setActualReviewer(QString)));
     connect(ui->tableView, SIGNAL(pressed(QModelIndex)), this, SLOT(pressed(QModelIndex)));

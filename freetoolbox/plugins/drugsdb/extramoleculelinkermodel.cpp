@@ -66,7 +66,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
-static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
+static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
 
 
 namespace DrugsDbCreator {
@@ -130,7 +130,7 @@ class ExtraMoleculeLinkerModelPrivate
 {
 public:
     ExtraMoleculeLinkerModelPrivate(ExtraMoleculeLinkerModel *parent) :
-            m_RootItem(0), q(parent)
+            m_RootItem(0), m_FetchedRows(0), q(parent)
     {
         QFile file(linkerXmlFile());
         if (file.open(QIODevice::ReadOnly)) {
@@ -143,13 +143,14 @@ public:
                 Utils::Log::addMessage(q, q->tr("Reading Molecule to ATC linker XML file: %1").arg(file.fileName()));
             }
             file.close();
+
+            m_RootNode = domDocument.firstChildElement("MoleculeLinkerModel");
+            m_RootItem = new DomItem(m_RootNode, 0);
+
         } else {
             Utils::Log::addError(q, q->tr("Can not open XML file %1").arg(file.fileName()), __FILE__, __LINE__);
         }
 
-        m_RootNode = domDocument.firstChildElement("MoleculeLinkerModel");
-
-        m_RootItem = new DomItem(m_RootNode, 0);
     }
 
 public:

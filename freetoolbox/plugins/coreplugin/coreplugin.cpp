@@ -67,10 +67,6 @@ void CorePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
 
-    // All pages must be included in the plugin manager here
-    // So that mainwindow can construct the full tree page
-    m_CoreImpl->extensionsInitialized();
-
     // add about pages
     addAutoReleasedObject(new AppAboutPage(this));
     addAutoReleasedObject(new TeamAboutPage(this));
@@ -96,6 +92,10 @@ void CorePlugin::extensionsInitialized()
     Core::ICore::instance()->translators()->addNewTranslator("utils");
     Core::ICore::instance()->translators()->addNewTranslator("translationutils");
 //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-coreplugin");
+
+    // All pages must be included in the plugin manager here
+    // So that mainwindow can construct the full tree page
+    m_CoreImpl->extensionsInitialized();
 }
 
 void CorePlugin::remoteArgument(const QString &arg)

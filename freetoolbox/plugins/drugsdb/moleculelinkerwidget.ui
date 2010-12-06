@@ -36,6 +36,11 @@
          <string>Jim Busser, MD (CA)</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Graham Chui, MD (NZ)</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -47,6 +52,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Load file</string>
        </property>

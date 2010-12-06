@@ -802,7 +802,7 @@ class InteractionModelPrivate
 {
 public:
     InteractionModelPrivate(InteractionModel *parent) :
-            m_RootItem(0), m_NumberOfTranslationsNeeded(0), q(parent)
+            m_RootItem(0), m_FetchedRows(0), m_NumberOfTranslationsNeeded(0), q(parent)
     {
         QFile file(afssapsIamXmlFile());
         if (file.open(QIODevice::ReadOnly)) {

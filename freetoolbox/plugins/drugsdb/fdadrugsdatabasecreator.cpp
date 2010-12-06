@@ -487,6 +487,15 @@ bool FdaDrugsDatabaseWidget::populateDatabase()
 
 bool FdaDrugsDatabaseWidget::linkMolecules()
 {
+    // 04 Dec 2010
+    //    NUMBER OF MOLECULES 1983
+    //    CORRECTED BY NAME 11
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1343
+    //    LINKERMODEL 6
+    //    LINKERNATURE 0
+    //    LEFT 640
+
     // 13 Nov 2010
     //    NUMBER OF MOLECULES 1983
     //    CORRECTED BY NAME 11

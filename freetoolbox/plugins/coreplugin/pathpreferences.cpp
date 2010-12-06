@@ -85,6 +85,7 @@ void PathPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
+    defaultvalues.insert(Constants::S_SVNFILES_PATH, QString());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k).isNull())
@@ -131,12 +132,7 @@ PathPreferencesWidget::~PathPreferencesWidget()
 
 void PathPreferencesWidget::setDatasToUi()
 {
-    QString s = settings()->value(Constants::S_SQL_IN_PATH).toString();
-    ui->sqlinlabel->setText(tr("Select the SQL-in files path"));
-    ui->sqlinpath->setPromptDialogTitle(tr("Select the SQL-in files path"));
-    ui->sqlinpath->setInitialBrowsePathBackup(s);
-    ui->sqlinpath->setPath(s);
-
+    QString s;
     s = settings()->value(Constants::S_DBOUTPUT_PATH).toString();
     ui->dblabel->setText(tr("Select the databases output path"));
     ui->dbpath->setPromptDialogTitle(tr("Select the databases output path"));
@@ -154,6 +150,12 @@ void PathPreferencesWidget::setDatasToUi()
     ui->tmppath->setPromptDialogTitle(tr("Select the temporary path"));
     ui->tmppath->setInitialBrowsePathBackup(s);
     ui->tmppath->setPath(s);
+
+    s = settings()->value(Constants::S_SVNFILES_PATH).toString();
+    ui->svnlabel->setText(tr("Select the SVN checkout path"));
+    ui->svnpath->setPromptDialogTitle(tr("Select the SVN checkout path"));
+    ui->svnpath->setInitialBrowsePathBackup(s);
+    ui->svnpath->setPath(s);
 }
 
 
@@ -173,6 +175,7 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
+    set->setValue(Constants::S_SVNFILES_PATH, QString());
     set->sync();
 }
 
@@ -183,10 +186,10 @@ void PathPreferencesWidget::saveToSettings(Core::ISettings *s)
         set = settings();
     }
 
-    set->setValue(Constants::S_SQL_IN_PATH, ui->sqlinpath->path());
     set->setValue(Constants::S_FILEOUTPUT_PATH, ui->filepath->path());
     set->setValue(Constants::S_DBOUTPUT_PATH, ui->dbpath->path());
     set->setValue(Constants::S_TMP_PATH, ui->tmppath->path());
+    set->setValue(Constants::S_SVNFILES_PATH, ui->svnpath->path());
 
     set->sync();
 }
