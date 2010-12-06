@@ -16,10 +16,6 @@ include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri )
 include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
-# include Doc
-include( ../doc/manual-fmf.pri)
-#PRE_TARGETDEPS += html_docs
-
 # define CORE BUILD for fmf exporter
 DEFINES *= FMF_CORE_BUILD
 
