@@ -38,8 +38,8 @@
   \li set the values of the interactions with setValue() (only used by mfDrugsBase).
   \li get the values with value()
   \li get the type of interaction with typeOfIAM() and type()
-  \li get information's text of the interaction with information()
-  \li get the recommandation's text with whatToDo()
+  \li get information's text of the interaction with risk()
+  \li get the recommandation's text with management()
   \ingroup freediams drugswidget
 */
 
@@ -169,13 +169,13 @@ QString DrugsInteraction::header() const
 }
 
 /** \brief Returns the information's text of the interaction */
-QString DrugsInteraction::information() const
+QString DrugsInteraction::risk() const
 {
     return value(DI_Risk).toString();
 }
 
 /** \brief Returns the recommandation's text of the interaction */
-QString DrugsInteraction::whatToDo() const
+QString DrugsInteraction::management() const
 {
     return value(DI_Management).toString();
 }

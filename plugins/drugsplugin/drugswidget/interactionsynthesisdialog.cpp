@@ -199,8 +199,8 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     if (id >= d->m_Interactions.count())
         return;
     DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
-    ui->riskBrowser->setPlainText(interaction->information().replace("<br>","\n"));
-    ui->managementBrowser->setPlainText(interaction->whatToDo().replace("<br>","\n"));
+    ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
+    ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
 }
 
 /** \todo add class informations */
@@ -217,8 +217,8 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
     if (id >= d->m_Interactions.count())
         return;
     DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
-    ui->riskBrowser->setPlainText(interaction->information().replace("<br>","\n"));
-    ui->managementBrowser->setPlainText(interaction->whatToDo().replace("<br>","\n"));
+    ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
+    ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
 }
 
 void InteractionSynthesisDialog::print()

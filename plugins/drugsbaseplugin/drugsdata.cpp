@@ -560,25 +560,35 @@ QString DrugsData::toHtml() const
     else
         textClass = iamClass.join("<br>");
 
+    QString uidName = "UID";
+    if (drugsBase()->actualDatabaseInformations()) {
+        if (!drugsBase()->actualDatabaseInformations()->drugsUidName.isEmpty())
+            uidName = drugsBase()->actualDatabaseInformations()->drugsUidName;
+    }
+    QString atc;
+    if (!value(Table_DRUGS, DRUGS_ATC).toString().isEmpty()) {
+        atc = "<br>ATC = " + value(Table_DRUGS, DRUGS_ATC).toString();
+    }
     msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
-                    "       <br>UID = %2\n"
-                    "       <br>ATC = %3\n"
+                    "       <br>%2 = %3\n"
+                    "       %4\n"
                     "   </td>\n"
                     " </tr>\n"
                     " <tr>\n"
-                    "   <td>%4</td>\n"
                     "   <td>%5</td>\n"
+                    "   <td>%6</td>\n"
                     " </tr>\n"
                     " <tr>\n"
-                    "   <td colspan=2 rowspan=1>%6</td>\n"
+                    "   <td colspan=2 rowspan=1>%7</td>\n"
                     " </tr>\n"
                     "</table>\n\n")
             .arg(denomination())
+            .arg(uidName)
             .arg(value(Table_DRUGS, DRUGS_UID).toString())
-            .arg(value(Table_DRUGS, DRUGS_ATC).toString())
+            .arg(atc)
             .arg(mols.join("<br>"))
             .arg(textIams)
             .arg(textClass);

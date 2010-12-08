@@ -86,8 +86,8 @@ public:
     QString typeOfIAM( const int & t ) const;
     Constants::Interaction::TypesOfIAM type() const;
     QString header() const;
-    QString information() const;
-    QString whatToDo() const;
+    QString risk() const;
+    QString management() const;
 
     static bool lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
 

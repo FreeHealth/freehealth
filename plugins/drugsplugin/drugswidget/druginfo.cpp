@@ -166,8 +166,8 @@ void DrugInfoPrivate::on_listWidgetInteractions_itemSelectionChanged()
 {
     int id = listWidgetInteractions->currentRow();
     if (id >= m_InteractionsList.count()) return;
-    Info_textBrowser->setHtml(m_InteractionsList[id]->information());
-    CAT_textBrower->setHtml(m_InteractionsList[id]->whatToDo());
+    Info_textBrowser->setHtml(m_InteractionsList[id]->risk());
+    CAT_textBrower->setHtml(m_InteractionsList[id]->management());
 }
 
 void DrugInfoPrivate::on_butIAMSend_clicked()

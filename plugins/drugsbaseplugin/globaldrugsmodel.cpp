@@ -736,6 +736,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
     } else if (role == Qt::ToolTipRole) {
         QString tmp = "<html><body>";
+        // Allergy Intolerance ?
         if (d->hasAllergy(item, this)) {
             tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
                    .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
