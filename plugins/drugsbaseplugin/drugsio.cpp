@@ -683,13 +683,26 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
     // Close Full prescription
     xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
 
-    // Add drugsBase identifiant
+    // Add drugsBase informations
     QString dbName;
-    if (drugsBase()->actualDatabaseInformations())
+    QString dbInfoAttribs;
+    if (drugsBase()->actualDatabaseInformations()) {
         dbName = drugsBase()->actualDatabaseInformations()->identifiant;
-    else
+        dbInfoAttribs += QString("version=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->version.replace("\"","'"));
+        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->compatVersion.replace("\"","'"));
+        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->complementaryWebsite.replace("\"","'"));
+        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date);
+        dbInfoAttribs += QString("provider=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->provider.replace("\"","'"));
+        dbInfoAttribs += QString("webLink=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->weblink.replace("\"","'"));
+        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->packUidName.replace("\"","'"));
+        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->drugsUidName.replace("\"","'"));
+    } else {
         dbName = Constants::DB_DEFAULT_IDENTIFIANT;
-    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DRUGS_DATABASE_NAME).arg(dbName));
+    }
+    xmldPrescription.prepend(QString("<%1 %2>%3</%1>\n")
+                             .arg(XML_DRUGS_DATABASE_NAME)
+                             .arg(dbInfoAttribs)
+                             .arg(dbName));
 
     // Add the date of generation
     xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
