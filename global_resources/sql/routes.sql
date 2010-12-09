@@ -1,12 +1,20 @@
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (1, "auriculaire","auricular","vorhofflimmern");
 -- Abbreviations
 INSERT INTO ROUTE_ABBREV (`ROUTE_ID`,`LANG`,`ABBREV`) VALUES (1,'fr','AUR');
+-- Synonyms
+-- OTIC
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (2, "buccale","buccal","mündliche");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (3, "cutanée","dermal","dermal");
 -- Abbreviations
 INSERT INTO ROUTE_ABBREV (`ROUTE_ID`,`LANG`,`ABBREV`) VALUES (3,'fr','CUT');
+-- Synonyms
+-- TOPICAL
+-- TOPICAL (HOSPITAL/HC FACILITIES)
+-- TOPICAL (HOUSEHOLD)
+-- INTRACUTANEOUS
+
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (4, "dentaire","dental","spur zahnärztlichen");
 
@@ -17,6 +25,9 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (6, "endocervicale","endocervica
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (7, "endosinusale","endosinusale","endosinusale");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (8, "endotrachéobronchique","endotracheobronchial","endotracheobronchial");
+-- Synonyms
+-- intratracheal ??
+-- INTRAPULMONARY
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (9, "gastrique","gastric","magen");
 
@@ -25,20 +36,30 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (10, "gastro-entérale","gastro-
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (11, "gingivale","gingival","gingivalen");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (12, "hémodialyse","hemodialysis","hämodialyse");
+-- Synonyms
+-- DIALYSIS
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (13, "hémofiltration","hemofiltration","hämofiltration");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (14, "implantation","implantation","implantation");
+-- Synonyms
+-- IMPLANT
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (15, "infiltration","infiltration","infiltration");
+-- Synonyms
+-- BLOCK/INFILTRATION
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (16, "inhalée","inhaled","einatmen");
+-- Synonyms
+-- INHALATION
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (17, "intestinale","intestinal","");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (18, "intra-articulaire","intra-articular","intraartikuläre");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (19, "intra-artérielle","intra-arterial","intraarterielle");
+-- Syonyms
+-- INTRAVASCULAR
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (20, "intra-gingivale","intra-gingival","intra-gingivalen");
 
@@ -48,11 +69,13 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (22, "intra-oculaire","intraocul
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (23, "intra-utérine","intrauterine","intrauterine");
 
-INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (24, "intrabursale","","");
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (24, "intrabursale","intrabursal","");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (25, "intracardiaque","intracardiac","intrakardialen");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (26, "intracaverneuse","intracavernous","intrakavernose");
+-- Synonyms
+-- INTRACAVERNOSAL
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (27, "intracervicale","intracervical","intrazervikale");
 
@@ -67,6 +90,8 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (31, "intradiscale","intradiscal
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (32, "intradurale","intradural","intraduralen");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (33, "intralymphatique","intralymphatic","intralymphatische");
+-- Synonyms
+-- INTRAGANGLIONAL ??
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (34, "intralésionnelle","intralesional","intraläsionale");
 
@@ -98,7 +123,7 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (45, "intravésicale","intravesi
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (46, "nasale","nasal","nasal");
 
-INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (47, "ophtalmique","ophtalmic","");
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (47, "ophtalmique","ophthalmic","");
 -- Abbreviations
 INSERT INTO ROUTE_ABBREV (`ROUTE_ID`,`LANG`,`ABBREV`) VALUES (47,'fr','OPHT');
 
@@ -137,6 +162,46 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (60, "vaginale","vaginal","vagin
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (61, "voie extra corporelle autre","other extra-corporal","");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (62, "voie parentérale autre","other parenteral","");
+-- Synonyms
+-- PARENTERAL (UNSPECIFIED)
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (63, "épilésionnelle","","");
 
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (64, "percutanée","percutaneous","");
+
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (65, "intratendineuse","intratendinous","");
+
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (1000, "Non assigné","0-unassigned","0-freien");
+
+
+
+-- Missings for Ca db
+-- DISINFECTANT (Barn)
+-- DISINFECTANT (Contact Lens)
+-- DISINFECTANT (Domestic)
+-- DISINFECTANT (Food Premises)
+-- DISINFECTANT (Hospital/HC Facilities)
+-- DISINFECTANT (Institutional/Industrial)
+-- DISINFECTANT (Medical Instruments)
+-- INTRAMAMMARY
+-- IRRIGATION
+-- INSTILLATION
+-- INTRA-AMNIOTIC
+-- INTRABRACHIAL
+-- INTRACAUDAL
+-- INTRACAVITARY
+-- INTRACRANIAL
+-- INTRAINTESTINAL (UPPER)
+-- INTRASPINAL
+-- INTRASYNOVIAL
+-- INTRAVESICULAR
+-- LABORATORY TEST
+-- MISCELLANEOUS
+-- Nasogastric
+-- RETROBULBAR
+-- SUBARACHNOIDAL
+-- SUBGINGIVAL
+-- TEAT-DIP
+-- UDDER WASH
+-- REFER (SEE DOSAGE FORM)
+-- SOFT TISSUE INJECTION
