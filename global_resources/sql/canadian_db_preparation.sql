@@ -56,11 +56,12 @@
 
 
 -- Create the temporary database schema for importation of the Canadian files
+-- for convenience the column name DRUG_IDENTIFICATION_NUMBER is shortened to DIN
 CREATE TABLE IF NOT EXISTS "drug" (
     "DRUG_CODE" INTEGER(8) NOT NULL ,
     "PRODUCT_CATEGORIZATION" VARCHAR2(80),
     "CLASS" VARCHAR2(40),
-    "DRUG_IDENTIFICATION_NUMBER" VARCHAR2(8),
+    "DIN" VARCHAR2(8),
     "BRAND_NAME" VARCHAR2(200),
     "DESCRIPTOR" VARCHAR2(150),
     "PEDIATRIC_FLAG" VARCHAR2(1),

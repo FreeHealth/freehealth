@@ -110,4 +110,5 @@ echo "Check line(s) above for errors. If none, we maybe succeeded."
 
 echo "Cleaning up..."
 echo "Please look inside user directory ~/tmp for 'drugs-en_CA.db'!"
+echo "Please also bear in mind that more values may be needed for LK_MOL_ATC."
 open ~/tmp
