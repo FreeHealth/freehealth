@@ -23,10 +23,10 @@ SOURCES += \
     moleculelinkerwidget.cpp \
     atcmodel.cpp \
     atcpage.cpp \
-    ../global_resources/class_templates/modeltest.cpp \
     southafricandrugsdatabase.cpp \
     belgishdrugsdatabase.cpp \
     drugsdbplugin.cpp
+
 
 HEADERS  += \
     canadiandrugsdatabase.h \
@@ -36,7 +36,6 @@ HEADERS  += \
     moleculelinkerwidget.h \
     atcmodel.h \
     atcpage.h \
-    ../global_resources/class_templates/modeltest.h \
     southafricandrugsdatabase.h \
     belgishdrugsdatabase.h \
     drugsdbplugin.h
@@ -62,6 +61,8 @@ OTHER_FILES += \
     ../global_resources/sql/usa_db_creator.sql \
     ../global_resources/sql/usa_db_finalize.sql \
     ../global_resources/sql/atc_utf8.csv \
+    ../global_resources/sql/create-fr.sql \
+    ../global_resources/sql/create-fr2.sql
 
 
 OTHER_FILES += DrugsDB.pluginspec

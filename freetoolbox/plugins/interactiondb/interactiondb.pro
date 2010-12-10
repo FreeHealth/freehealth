@@ -36,7 +36,8 @@ FORMS    += afssapslinkerwidget.ui \
     interactiondatabasebuilder.ui \
     interactiondatabasecreator.ui \
     interactiondatabasechecker.ui \
-    cytochromep450interactionspage.ui
+    cytochromep450interactionspage.ui \
+    afssapsintegratorwidget.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \

@@ -27,6 +27,8 @@
 #ifndef GLOBALTOOLS_H
 #define GLOBALTOOLS_H
 
+#include <coreplugin/core_exporter.h>
+
 #include <QString>
 #include <QHash>
 #include <QMultiHash>
@@ -45,19 +47,19 @@ namespace Core {
 namespace Tools
 {
 
-const void unzipAllFilesIntoDirs( const QStringList & paths );
-const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFiles );
+CORE_EXPORT const void unzipAllFilesIntoDirs( const QStringList & paths );
+CORE_EXPORT const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFiles );
 
-QString noAccent(const QString & s);
+CORE_EXPORT QString noAccent(const QString & s);
 
-QString getBlock(const QString &content, const int posStart, int &posEnd, const QRegExp &delimiter);
-QString getBlock(const QString &content, const int posStart, int &posEnd, const QString &delimiter);
+CORE_EXPORT QString getBlock(const QString &content, const int posStart, int &posEnd, const QRegExp &delimiter);
+CORE_EXPORT QString getBlock(const QString &content, const int posStart, int &posEnd, const QString &delimiter);
 
-bool executeProcess(const QString &proc);
-bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
-bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file = QString::null, int line = -1);
+CORE_EXPORT bool executeProcess(const QString &proc);
+CORE_EXPORT bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
+CORE_EXPORT bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file = QString::null, int line = -1);
 
-bool connectDatabase(const QString &connection, const QString &fileName);
+CORE_EXPORT bool connectDatabase(const QString &connection, const QString &fileName);
 
 
 }  // End namespace Tools

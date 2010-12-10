@@ -74,6 +74,7 @@ private:
     bool prepareDatas();
     bool createDatabase();
     bool populateDatabase();
+    bool linkDrugsRoutes();
     bool linkMolecules();
 
 protected:

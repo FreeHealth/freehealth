@@ -29,6 +29,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
@@ -55,14 +57,15 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Interactions/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
-static inline QString iamDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
+static inline QString iamDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
 
-static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
-static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
-static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + Core::Constants::ATC_FILENAME);}
+static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
+static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::ATC_FILENAME);}
 
 
 static QString typeToString(const QString &type)
@@ -136,15 +139,15 @@ static void levelToListWidget(QListWidget *listWidget, const QString &type)
 static QIcon typeToIcon(const QString &type)
 {
     if (type.contains("C"))
-        return QIcon(qApp->applicationDirPath()+Core::Constants::MACBUNDLE+"/../global_resources/pixmap/16x16/critical.png");
+        return theme()->icon("critical.png");
     if (type.contains("D"))
-        return QIcon(qApp->applicationDirPath()+Core::Constants::MACBUNDLE+"/../global_resources/pixmap/16x16/deconseille.png");
+        return theme()->icon("deconseille.png");
     if (type.contains("T"))
-        return QIcon(qApp->applicationDirPath()+Core::Constants::MACBUNDLE+"/../global_resources/pixmap/16x16/warning.png");
+        return theme()->icon("warning.png");
     if (type.contains("P"))
-        return QIcon(qApp->applicationDirPath()+Core::Constants::MACBUNDLE+"/../global_resources/pixmap/16x16/info.png");
+        return theme()->icon("info.png");
     if (type.contains("I"))
-        return QIcon(qApp->applicationDirPath()+Core::Constants::MACBUNDLE+"/../global_resources/pixmap/16x16/info.png");
+        return theme()->icon("info.png");
     return QIcon();
 }
 
@@ -210,13 +213,13 @@ void InteractionsDatabaseBuilder::interactionActivated(const QModelIndex &index)
     /** \todo Save only if suficient rights */
     if (false) {
         if (ui->risk->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br>"));
+            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br />"));
         if (ui->management->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br>"));
+            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br />"));
         if (ui->risk_en->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br>"));
+            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br />"));
         if (ui->management_en->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br>"));
+            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br />"));
         //    if (ui->levelCombo->isModified())
         //        model->setLevel(d->m_EditingIndex, "fr", ui->level->text());
     }
@@ -230,10 +233,10 @@ void InteractionsDatabaseBuilder::interactionActivated(const QModelIndex &index)
         return;
 
     // set datas
-    ui->risk->setPlainText(model->getRisk(index, "fr").replace("<br>", "\n"));
-    ui->management->setPlainText(model->getManagement(index, "fr").replace("<br>", "\n"));
-    ui->risk_en->setPlainText(model->getRisk(index, "en").replace("<br>", "\n"));
-    ui->management_en->setPlainText(model->getManagement(index, "en").replace("<br>", "\n"));
+    ui->risk->setPlainText(model->getRisk(index, "fr").replace("<br />", "\n"));
+    ui->management->setPlainText(model->getManagement(index, "fr").replace("<br />", "\n"));
+    ui->risk_en->setPlainText(model->getRisk(index, "en").replace("<br />", "\n"));
+    ui->management_en->setPlainText(model->getManagement(index, "en").replace("<br />", "\n"));
     levelToListWidget(ui->listWidget, model->getLevel(index, "fr"));
     d->m_EditingIndex = index;
 }
@@ -243,13 +246,13 @@ void InteractionsDatabaseBuilder::on_save_clicked()
     InteractionModel *model = InteractionModel::instance();
     if (d->m_EditingIndex.isValid()) {
         if (ui->risk->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br>"));
+            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br />"));
         if (ui->management->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br>"));
+            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br />"));
         if (ui->risk_en->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br>"));
+            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br />"));
         if (ui->management_en->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br>"));
+            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br />"));
 //        if (ui->level->isModified())
 //            model->setLevel(d->m_EditingIndex, "fr", ui->level->text());
     }

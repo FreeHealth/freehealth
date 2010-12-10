@@ -27,6 +27,7 @@
 #ifndef ITOOLPAGE_H
 #define ITOOLPAGE_H
 
+#include <coreplugin/core_exporter.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -35,7 +36,7 @@
 
 namespace Core {
 
-class  IToolPage : public QObject
+class CORE_EXPORT IToolPage : public QObject
 {
     Q_OBJECT
 public:

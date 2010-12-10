@@ -35,6 +35,7 @@
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/log.h>
+#include <utils/database.h>
 #include <utils/httpdownloader.h>
 
 #include <QFile>
@@ -70,11 +71,12 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_US.db");}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/usa_db_creator.sql");}
-//static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/usa_db_creator.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/usa_db_finalize.sql");}
+static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_creator.sql");}
+//static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_creator.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_finalize.sql");}
 
-static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
+static inline QString drugsDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME));}
+static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
@@ -113,7 +115,6 @@ FdaDrugsDatabaseWidget::~FdaDrugsDatabaseWidget()
 {
     delete ui;
 }
-
 
 void FdaDrugsDatabaseWidget::on_startJobs_clicked()
 {
@@ -177,14 +178,17 @@ bool FdaDrugsDatabaseWidget::unzipFiles()
 struct drug {
     drug(const QString &line)
     {
+        // Process line
         QStringList vals = line.split(SEPARATOR);
         if (vals.count() != 9) {
             qWarning() << "Error with line" << line;
         }
 
+        // Get uid
         uid1 = vals.at(0);
         uid2 = vals.at(1);
 
+        // Get form
         QString forms = vals.at(2);
         if (forms.contains(";")) {
             int begin = forms.lastIndexOf(";") + 2;
@@ -194,15 +198,16 @@ struct drug {
             form = vals.at(2);
         }
 
+        // Get strength
         globalStrength = vals.at(3);
 
-        // retreive mols and strength
+        // Get composition
         if (globalStrength.contains(";")) {
             QStringList strengths;
             if (globalStrength.contains("(")) {
                 QString t = globalStrength;
                 int b = globalStrength.indexOf("(");
-                int e = globalStrength.indexOf(")");
+                int e = globalStrength.indexOf(")", b);
                 t.remove(b, e-b);
                 strengths = t.split(";");
             } else {
@@ -210,24 +215,32 @@ struct drug {
             }
             QStringList mols = vals.at(8).split(";");
             if (strengths.count() != mols.count()) {
-                if (mols.count() == 1) {
-                    mols_strength.insert(mols.at(0).simplified(), strengths.join(";"));
-                    mols.clear();
-                    strengths.clear();
-                } else {
-                    for(int i =0; i < mols.count(); ++i) {
+
+                qWarning() << line;
+                // NPLATE
+
+//                if (mols.count() == 1) {
+//                    mols_strength.insert(mols.at(0).simplified(), strengths.join(";"));
+//                    mols.clear();
+//                    strengths.clear();
+//                } else {
+                    for(int i = 0; i < mols.count(); ++i) {
                         mols_strength.insert(mols.at(i).simplified(), "");
                     }
                     mols.clear();
                     strengths.clear();
-                }
+//                }
             }
-            for(int i =0; i < mols.count(); ++i) {
+            for(int i = 0; i < mols.count(); ++i) {
                 mols_strength.insert(mols.at(i).simplified(), strengths.at(i));
             }
         } else {
             mols_strength.insert(vals.at(8).simplified(), vals.at(3));
         }
+
+
+
+        // Get drug brand name
         name = vals.at(7);
     }
 
@@ -463,22 +476,29 @@ bool FdaDrugsDatabaseWidget::populateDatabase()
                         << "FDA_COMPOSITION.CSV"
                         ;
 
-    foreach(const QString &f, files) {
-        if (!Core::Tools::executeProcess(QString("sqlite3 -separator \"%1\" \"%2\" \".import \"%3\" %4\"")
-            .arg(SEPARATOR, databaseAbsPath(), m_WorkingPath + f , QFileInfo(f).baseName().remove("FDA_")))) {
-            return false;
-        }
-    }
-
-    // Run SQL commands one by one
     QProgressDialog progressDialog(mainwindow());
+    progressDialog.setLabelText(tr("Feeding database"));
+    progressDialog.setRange(0, 3);
     progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setLabelText(tr("Processing SQL script (about 10 minutes)"));
+    progressDialog.setValue(0);
     progressDialog.show();
+
+    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, m_WorkingPath + "FDA_DRUGS.CSV", "DRUGS", SEPARATOR)) {
+        return false;
+    }
+    progressDialog.setValue(1);
+    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, m_WorkingPath + "FDA_COMPOSITION.CSV", "COMPOSITION", SEPARATOR)) {
+        return false;
+    }
+    progressDialog.setValue(2);
+
+    progressDialog.setLabelText(tr("Processing SQL script (about 10 minutes)"));
+    // Run SQL commands one by one
     if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, databaseFinalizationScript(), &progressDialog)) {
         Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
         return false;
     }
+    progressDialog.setValue(3);
 
     Utils::Log::addMessage(this, QString("Database processed"));
 

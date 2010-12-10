@@ -79,11 +79,12 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_ZA.db");}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_preparation.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_finalize.sql");}
-static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/south_african_uids.csv");}
+static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/za_db_preparation.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/za_db_finalize.sql");}
+static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/south_african_uids.csv");}
 
-static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
+static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
+static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 
 QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
@@ -665,6 +666,16 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
 
 bool SouthAfricanDrugsDatabase::linkMolecules()
 {
+    // 10 Dec 2010
+    //    NUMBER OF MOLECULES 1148
+    //    CORRECTED BY NAME 23
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 657 "
+    //    LINKERMODEL (WithATC:140;WithoutATC:2) 142"
+    //    LINKERNATURE 0
+    //    LEFT 489
+    //    CONFIDENCE INDICE 57
+
     // 13 Nov 2010
     //    NUMBER OF MOLECULES 1148
     //    CORRECTED BY NAME 23

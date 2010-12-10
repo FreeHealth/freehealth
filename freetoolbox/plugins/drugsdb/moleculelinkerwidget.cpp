@@ -63,7 +63,7 @@ MoleculeLinkerWidget::MoleculeLinkerWidget(QWidget *parent) :
     if (model->availableDrugsDatabases().count())
         model->selectDatabase(model->availableDrugsDatabases().at(0));
 
-    if (model->rowCount()) {
+    if (model->rowCount() || model->canFetchMore()) {
         proxyModel = new QSortFilterProxyModel(this);
         proxyModel->setSourceModel(model);
         proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);

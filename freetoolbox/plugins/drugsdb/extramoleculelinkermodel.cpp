@@ -42,6 +42,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
@@ -63,6 +65,7 @@ using namespace DrugsDbCreator;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
@@ -376,9 +379,9 @@ QVariant ExtraMoleculeLinkerModel::data(const QModelIndex &index, int role) cons
     } else if (role == Qt::DecorationRole) {
         if (index.column()==FancyButton) {
             if (attributeMap.namedItem("review").nodeValue() == "true")
-                return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/ok.png");
+                return theme()->icon(Core::Constants::ICONOK);
             else
-                return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/help.png");
+                return theme()->icon(Core::Constants::ICONHELP);
         }
     }
     return QVariant();
@@ -587,7 +590,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
             }
         }
         query.finish();
-        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("MILLEPERTUIS");
+//        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("MILLEPERTUIS");
     }
 
     Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
@@ -596,7 +599,6 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     QSqlQuery queryMols(QSqlDatabase::database(drugsDbUid));
     if (queryMols.exec(req)) {
         while (queryMols.next()) {
-            /** \todo should be insertMulti */
             mols.insertMulti(queryMols.value(1).toString(), queryMols.value(0).toInt());
         }
     }
@@ -719,6 +721,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Try to find molecules in the ExtraMoleculeLinkerModel
     QHash<QString, QString> model_mol_atc;
     int modelFound = 0;
+    int reviewedWithoutAtcLink = 0;
     ExtraMoleculeLinkerModel *model = ExtraMoleculeLinkerModel::instance();
     {
         model->selectDatabase(drugsDbUid);
@@ -732,10 +735,15 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
             }
         }
         qWarning() << "ExtraMoleculeLinkerModel::AvailableLinks" << model_mol_atc.count();
+
         foreach(const QString &mol, *unfoundOutput) {
             if (model_mol_atc.keys().contains(mol)) {
                 int codeMol = mols.value(mol);
                 if (!mol_atc.keys().contains(codeMol)) {
+                    if (model_mol_atc.value(mol).trimmed().isEmpty()) {
+                        ++reviewedWithoutAtcLink;
+                        continue;
+                    }
                     QStringList atcCodes = model_mol_atc.value(mol).split(",");
                     foreach(const QString &atcCode, atcCodes) {
                         QString atcName = atcName_id.key(atc_id.value(atcCode));
@@ -852,7 +860,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     }
 
     // Save completion percent in drugs database INFORMATION table
-    int completion = ((double)(mols.count() - unfoundOutput->count()) / (double)mols.count()) * 100.00;
+    int completion = ((double)((mol_atc.uniqueKeys().count()+reviewedWithoutAtcLink)) / (double)knownMoleculeNames.count()) * 100.00;
     Utils::Log::addMessage(this, QString("Molecule links completion: %1").arg(completion));
     Core::Tools::executeSqlQuery(QString("UPDATE `INFORMATIONS` SET `MOL_LINK_COMPLETION`=%1").arg(completion), drugsDbUid, __FILE__, __LINE__);
 
@@ -865,9 +873,11 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
             << "\nCORRECTED BY NAME" << correctedByName.keys().count()
             << "\nCORRECTED BY ATC" << correctedByAtcCode.uniqueKeys().count()
             << "\nFOUNDED" << mol_atc.uniqueKeys().count()
-            << "\nLINKERMODEL" << modelFound
+            << QString("\nLINKERMODEL (WithATC:%1;WithoutATC:%2) %3").arg(modelFound).arg(reviewedWithoutAtcLink).arg(modelFound + reviewedWithoutAtcLink)
             << "\nLINKERNATURE" << natureLinkerNb
-            << "\nLEFT" << unfoundOutput->count() << "\n\n";
+            << "\nLEFT" << (unfoundOutput->count() - reviewedWithoutAtcLink)
+            << "\nCONFIDENCE INDICE" << completion
+            << "\n\n";
 
     return mol_atc;
 }

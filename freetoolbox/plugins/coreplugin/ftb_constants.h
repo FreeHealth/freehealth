@@ -64,23 +64,23 @@ namespace Constants {
 
     const char * const  SEPARATOR         = "|||";
 
-    const char * const  FILE_DRUGS_DATABASE_SCHEME        = "drugs_schema.sql";
-    const char * const  FILE_IAM_DATABASE_SCHEME          = "iam_schema.sql";
-    const char * const  FILE_DRUGINFOS_DATABASE_SCHEME    = "druginfos_schema.sql";
+    const char * const  FILE_DRUGS_DATABASE_SCHEME        = "/global_resources/sql/drugs_schema.sql";
+    const char * const  FILE_IAM_DATABASE_SCHEME          = "/global_resources/sql/iam_schema.sql";
+    const char * const  FILE_DRUGINFOS_DATABASE_SCHEME    = "/global_resources/sql/druginfos_schema.sql";
+    const char * const  FILE_DRUGS_ROUTES                 = "/global_resources/sql/routes.sql";
 
-    const char * const  MOL_LINK_FILENAME = "moleculetoatclinker.xml";
-    const char * const  ATC_FILENAME = "global_resources/sql/atc_utf8.csv";
+    const char * const  MOL_LINK_FILENAME = "/global_resources/sql/moleculetoatclinker.xml";
+    const char * const  ATC_FILENAME = "/global_resources/sql/atc_utf8.csv";
 
-    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME = "global_resources/sql/afssaps_links.xml";
-    const char * const  AFSSAPS_CLASSTREE_FILENAME = "global_resources/sql/afssaps_classtree.xml";
-    const char * const  AFSSAPS_INTERACTIONS_FILENAME = "global_resources/sql/thesaurus_interactions.xml";
-    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "global_resources/sql/interaction_text_english_translation_corrections.csv";
+    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME = "/global_resources/sql/afssaps_links.xml";
+    const char * const  AFSSAPS_CLASSTREE_FILENAME = "/global_resources/sql/afssaps_classtree.xml";
+    const char * const  AFSSAPS_INTERACTIONS_FILENAME = "/global_resources/sql/thesaurus_interactions.xml";
+    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/sql/interaction_text_english_translation_corrections.csv";
 
     const char* const S_WINGEOMETRY      = "MainWin/Geometry";
     const char* const S_WINSTATE         = "MainWin/State";
     const char* const S_WINSPLITTER      = "MainWin/Splitter";
 
-    const char* const S_SQL_IN_PATH      = "Path/SqlIn";
     const char* const S_FILEOUTPUT_PATH  = "Path/FileOutput";
     const char* const S_DBOUTPUT_PATH    = "Path/DatabaseOutput";
     const char* const S_TMP_PATH         = "Path/Temporary";

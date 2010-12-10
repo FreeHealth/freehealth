@@ -99,8 +99,8 @@ public:
 
     void selectModel(const int type);
 
-    bool canFetchMore(const QModelIndex &parent) const;
-    void fetchMore(const QModelIndex &parent);
+    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+    void fetchMore(const QModelIndex &parent = QModelIndex());
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &child) const;
@@ -176,6 +176,21 @@ private:
     AfssapsClassTreeModelPrivate *d;
 
 };
+
+namespace Ui {
+class AfssapsIntegratorWidget;
+}
+
+class AfssapsIntegratorWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    AfssapsIntegratorWidget(QWidget *parent = 0);
+
+private:
+    Ui::AfssapsIntegratorWidget *ui;
+};
+
 
 namespace Ui {
 class AfssapsLinkerWidget;

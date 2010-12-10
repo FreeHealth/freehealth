@@ -29,6 +29,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
@@ -36,7 +38,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
-#include "../global_resources/class_templates/modeltest.h"
+//#include "../global_resources/class_templates/modeltest.h"
 
 #include <QDomNode>
 #include <QDomElement>
@@ -54,6 +56,7 @@
 
 #include "ui_afssapslinkerwidget.h"
 #include "ui_afssapstreewidget.h"
+#include "ui_afssapsintegratorwidget.h"
 
 #define MODEL_PREFETCH 100
 const char * const MIMETYPE = "application/freemedforms.molecule.name";
@@ -62,6 +65,7 @@ using namespace IAMDb;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
@@ -75,11 +79,7 @@ static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->v
 
 QWidget *AfssapsIntegratorPage::createPage(QWidget *parent)
 {
-    QWidget *w = new QWidget(parent);
-    QGridLayout *l = new QGridLayout(w);
-    l->addWidget(new AfssapsLinkerWidget(parent), 0, 0);
-    l->addWidget(new AfssapsTreeWidget(parent), 0, 1);
-    return w;
+    return new AfssapsIntegratorWidget(parent);
 }
 
 QWidget *AfssapsClassTreePage::createPage(QWidget *parent)
@@ -257,7 +257,7 @@ bool AfssapsLinkerModel::canFetchMore(const QModelIndex &parent) const
     if (parentItem)
         nbItemRows = parentItem->node().childNodes().count();
 
-    //    qWarning() << "canFetchMore" << (d->m_FetchedRows < nbItemRows) << parent << nbItemRows << d->m_FetchedRows;
+//        qWarning() << Q_FUNC_INFO << (d->m_FetchedRows < nbItemRows) << parent << nbItemRows << d->m_FetchedRows;
 
     return (d->m_FetchedRows < nbItemRows);
 }
@@ -277,7 +277,7 @@ void AfssapsLinkerModel::fetchMore(const QModelIndex &parent)
     int remainder = nbItemRows - d->m_FetchedRows;
     int itemsToFetch = qMin(MODEL_PREFETCH, remainder);
 
-    //    qWarning() << "AfssapsLinkerModel::fetchMore" << parent << d->m_FetchedRows << itemsToFetch;
+//    qWarning() << Q_FUNC_INFO << parent << d->m_FetchedRows << itemsToFetch;
 
     beginInsertRows(parent, d->m_FetchedRows, d->m_FetchedRows + itemsToFetch);
     d->m_FetchedRows += itemsToFetch;
@@ -388,12 +388,22 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
                 return Qt::Unchecked;
         }
     } else if (role == Qt::ToolTipRole) {
-        QString tmp;
+        if (index.column() == En_Label || index.column() == De_Label || index.column() == Es_Label) {
+            // If (molecule or class) molecule --> Unable language editing
+            DomItem *item = static_cast<DomItem*>(index.internalPointer());
+            QDomNode node = item->node();
+            QDomNamedNodeMap attributeMap = node.attributes();
+            if (attributeMap.namedItem("afssapsCat").nodeValue()!="class") {
+                return tr("Language can only be setted to CLASS, not to molecules");
+            }
+        }
+        //        QString tmp;
         //        tmp += attributeMap.namedItem("name").nodeValue();
         //        QStringList codes = attributeMap.namedItem("AtcCode").nodeValue().split(",");
         //        tmp += "\n  " + codes.join("\n  ");
         //        tmp += "\n  " + AtcModel::instance()->getAtcLabel(codes).join("\n  ");
-        return tmp;
+        //        return tmp;
+        return QVariant();
     } else if (role==Qt::ForegroundRole) {
         if (attributeMap.namedItem("afssapsCat").nodeValue()=="class") {
             return QColor("darkblue");
@@ -403,9 +413,9 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::DecorationRole) {
         if (index.column()==FancyButton) {
             if (attributeMap.namedItem("review").nodeValue() == "true")
-                return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/ok.png");
+                return theme()->icon(Core::Constants::ICONOK);
             else
-                return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/help.png");
+                return theme()->icon(Core::Constants::ICONHELP);
         }
     }
     return QVariant();
@@ -483,10 +493,20 @@ Qt::ItemFlags AfssapsLinkerModel::flags(const QModelIndex &index) const
     if (index.column() == AfssapsName || index.column() == AffapsCategory || index.column() == Date || index.column() == FancyButton)
         return f;
 
-    if (index.column() == Review)
-        f |= Qt::ItemIsUserCheckable;
+    if (index.column() == Review) {
+        f |= Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
+        return f;
+    }
 
-    f |= Qt::ItemIsEditable;
+    if (index.column() == En_Label || index.column() == De_Label || index.column() == Es_Label) {
+        // If (molecule or class) molecule --> Unable language editing
+        DomItem *item = static_cast<DomItem*>(index.internalPointer());
+        QDomNode node = item->node();
+        QDomNamedNodeMap attributeMap = node.attributes();
+        if (attributeMap.namedItem("afssapsCat").nodeValue()=="class") {
+            f |= Qt::ItemIsEditable;
+        }
+    }
 
     return f;
 }
@@ -631,14 +651,14 @@ public:
             QString error;
             int line, col;
             if (!domDocument.setContent(&file, &error,&line,&col)) {
-                Utils::Log::addError(q, QApplication::translate("AfssapsLinkerModel","Can not read XML file content %1").arg(file.fileName()), __FILE__, __LINE__);
+                Utils::Log::addError(q, QApplication::translate("AfssapsClassTreeModelPrivate","Can not read XML file content %1").arg(file.fileName()), __FILE__, __LINE__);
                 Utils::Log::addError(q, QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error), __FILE__, __LINE__);
             } else {
-                Utils::Log::addMessage(q, QApplication::translate("AfssapsLinkerModel","Reading file: %1").arg(file.fileName()));
+                Utils::Log::addMessage(q, QApplication::translate("AfssapsClassTreeModelPrivate","Reading file: %1").arg(file.fileName()));
             }
             file.close();
         } else {
-            Utils::Log::addError(q, QApplication::translate("AfssapsLinkerModel","Can not open XML file %1").arg(file.fileName()), __FILE__, __LINE__);
+            Utils::Log::addError(q, QApplication::translate("AfssapsClassTreeModelPrivate","Can not open XML file %1").arg(file.fileName()), __FILE__, __LINE__);
         }
 
         m_RootNode = domDocument.firstChildElement("AfssapsTree");
@@ -973,6 +993,17 @@ bool AfssapsClassTreeModel::insertRows(int row, int count, const QModelIndex &pa
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////    INTEGRATOR WIDGET    //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+AfssapsIntegratorWidget::AfssapsIntegratorWidget(QWidget *parent) :
+        QWidget(parent), ui(new Ui::AfssapsIntegratorWidget)
+{
+    ui->setupUi(this);
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////    LINK WIDGET    ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 AfssapsLinkerWidget::AfssapsLinkerWidget(QWidget *parent) :
@@ -989,7 +1020,7 @@ AfssapsLinkerWidget::AfssapsLinkerWidget(QWidget *parent) :
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterKeyColumn(AfssapsLinkerModel::AfssapsName);
 
-    if (model->rowCount()) {
+    if (model->rowCount() || model->canFetchMore()) {
         ui->tableView->setModel(proxyModel);
         ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
         ui->tableView->setColumnWidth(0, 24);

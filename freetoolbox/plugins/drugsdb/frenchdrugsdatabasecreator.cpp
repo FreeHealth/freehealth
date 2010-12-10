@@ -35,6 +35,8 @@
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/database.h>
 #include <utils/httpdownloader.h>
 
 #include <QFile>
@@ -67,10 +69,11 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-fr_FR.db");}
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/create-fr.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/create-fr2.sql");}
+static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/create-fr.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/create-fr2.sql");}
 
-static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
+static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
+static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 
 FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
@@ -334,6 +337,11 @@ bool FrenchDrugsDatabaseWidget::createDatabase()
         return false;
     }
 
+    if (!Core::Tools::executeSqlFile(FR_DRUGS_DATABASE_NAME, drugsRouteSqlFileName())) {
+        Utils::Log::addError(this, "Can not create French DB.", __FILE__, __LINE__);
+        return false;
+    }
+
     // Run SQL commands one by one
     if (!Core::Tools::executeSqlFile(FR_DRUGS_DATABASE_NAME, databasePreparationScript())) {
         Utils::Log::addError(this, "Can not create French DB.", __FILE__, __LINE__);
@@ -365,32 +373,93 @@ bool FrenchDrugsDatabaseWidget::populateDatabase()
         return false;
     }
 
-    // import to sqlite3 (should work on mac and linux) --> sqlite3 -separator "||" ./drugs.db ".import CIS_processed.txt CIS"
-    if (!Core::Tools::executeProcess(QString("sqlite3 -separator \"%1\" \"%2\" \".import \"%3\" %4\"")
-        .arg(Core::Constants::SEPARATOR, databaseAbsPath(), m_WorkingPath + "CIS_processed.txt" , "DRUGS")))
-        return false;
+    QProgressDialog progressDialog(mainwindow());
+    progressDialog.setLabelText(tr("Feeding database"));
+    progressDialog.setRange(0, 4);
+    progressDialog.setWindowModality(Qt::WindowModal);
+    progressDialog.setValue(0);
+    progressDialog.show();
 
-    // import to sqlite3
-    if (!Core::Tools::executeProcess(QString("sqlite3 -separator \"%1\" \"%2\" \".import \"%3\" %4\"")
-        .arg(Core::Constants::SEPARATOR, databaseAbsPath(), m_WorkingPath + "CIS_CIP_processed.txt" , "PACKAGING")))
+    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "CIS_processed.txt", "DRUGS", Core::Constants::SEPARATOR)) {
         return false;
+    }
+    progressDialog.setValue(progressDialog.value() + 1);
 
-    // import to sqlite3
-   if (!Core::Tools::executeProcess(QString("sqlite3 -separator \"%1\" \"%2\" \".import \"%3\" %4\"")
-       .arg(Core::Constants::SEPARATOR, databaseAbsPath(), m_WorkingPath + "COMPO_processed.txt" , "TMP_COMPOSITION")))
+    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "CIS_CIP_processed.txt", "PACKAGING", Core::Constants::SEPARATOR)) {
         return false;
+    }
+    progressDialog.setValue(progressDialog.value() + 1);
+
+    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "COMPO_processed.txt", "TMP_COMPOSITION", Core::Constants::SEPARATOR)) {
+        return false;
+    }
+    progressDialog.setValue(progressDialog.value() + 1);
 
    // Run SQL commands one by one
    if (!Core::Tools::executeSqlFile(FR_DRUGS_DATABASE_NAME, databaseFinalizationScript())) {
        Utils::Log::addError(this, "Can create French DB.", __FILE__, __LINE__);
        return false;
    }
+   progressDialog.setValue(progressDialog.value() + 1);
+
+   linkDrugsRoutes();
+
+   return true;
+}
+
+bool FrenchDrugsDatabaseWidget::linkDrugsRoutes()
+{
+    if (!Core::Tools::connectDatabase(FR_DRUGS_DATABASE_NAME, databaseAbsPath()))
+        return false;
+
+    // Link drugs and routes
+    QString req;
+    QSqlDatabase fr = QSqlDatabase::database(FR_DRUGS_DATABASE_NAME);
+    QSqlQuery query(fr);
+    QHash<int, QString> routes;
+
+    // Get all routes
+    req = "SELECT ID, FR FROM ROUTES;";
+    if (query.exec(req)) {
+        while (query.next()) {
+            routes.insert(query.value(0).toInt(), query.value(1).toString());
+        }
+    }
+    query.finish();
+
+    // Associate drugs routes with routes
+    req = "SELECT UID, ROUTE FROM DRUGS;";
+    QStringList commands;
+    if (query.exec(req)) {
+        while (query.next()) {
+            foreach(const QString &r, query.value(1).toString().split(";", QString::SkipEmptyParts)) {
+                commands << QString("INSERT INTO `DRUG_ROUTES` VALUES (%1, %2);").arg(query.value(0).toString()).arg(routes.key(r));
+                if (routes.key(r)==0)
+                    qWarning() << r << query.value(1).toString();
+            }
+        }
+    }
+
+    foreach(const QString &command, commands)
+        Core::Tools::executeSqlQuery(command, FR_DRUGS_DATABASE_NAME, __FILE__, __LINE__);
+
+    query.finish();
 
     return true;
 }
 
 bool FrenchDrugsDatabaseWidget::linkMolecules()
 {
+    // 10 Dec 2010
+    //    NUMBER OF MOLECULES 5112
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 2375 "
+    //    LINKERMODEL (WithATC:366;WithoutATC:790) 1156"
+    //    LINKERNATURE 301
+    //    LEFT 1648
+    //    CONFIDENCE INDICE 61
+
     // 13 Nov 2010
     //    NUMBER OF MOLECULES 5113
     //    CORRECTED BY NAME 0

@@ -58,7 +58,6 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/iam-cytp450.db");}
 static inline QString unlinkeAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/textfiles/cytochrome_unlinked.csv");}
 
-static inline QString databaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/cytp450.sql";}
 static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 namespace IAMDb {
@@ -420,9 +419,9 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         req = QString("INSERT INTO ATC (`CODE`, `FRENCH`, `ENGLISH`, `DEUTSCH`) VALUES "
                       "('%1', '%2', '%3', '%4');")
                 .arg("ZP450"+n)
-                .arg(QString("Substrats du cytochrome P450 %1").arg(cyt))
-                .arg(QString("Cytochrome P450 %1 substrats").arg(cyt))
-                .arg(QString("Cytochrom-P450 %1 substraten").arg(cyt));
+                .arg(QString("Substrats du cytochrome P450 %1").arg(cyt).toUpper())
+                .arg(QString("Cytochrome P450 %1 substrats").arg(cyt).toUpper())
+                .arg(QString("Cytochrom-P450 %1 substraten").arg(cyt).toUpper());
         // Add values to db
         if (query.exec(req)) {
             id = query.lastInsertId().toInt();
@@ -464,9 +463,9 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         req = QString("INSERT INTO ATC (`CODE`, `FRENCH`, `ENGLISH`, `DEUTSCH`) VALUES "
                       "('%1', '%2', '%3', '%4');")
                 .arg("ZP450"+n)
-                .arg(QString("Inducteurs du cytochrome P450 %1").arg(cyt))
-                .arg(QString("Cytochrome P450 %1 inducers").arg(cyt))
-                .arg(QString("Cytochrom-P450 %1 induktoren").arg(cyt));
+                .arg(QString("Inducteurs du cytochrome P450 %1").arg(cyt).toUpper())
+                .arg(QString("Cytochrome P450 %1 inducers").arg(cyt).toUpper())
+                .arg(QString("Cytochrom-P450 %1 induktoren").arg(cyt).toUpper());
         // Add values to db
         id = -1;
         if (query.exec(req)) {

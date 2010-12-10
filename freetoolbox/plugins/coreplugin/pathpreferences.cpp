@@ -81,7 +81,6 @@ void PathPreferencesPage::checkSettingsValidity()
         appName = appName.left(appName.indexOf(" "));
 
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Constants::S_SQL_IN_PATH, settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/");
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
@@ -171,7 +170,6 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     if (appName.contains(" "))
         appName = appName.left(appName.indexOf(" "));
 
-    set->setValue(Constants::S_SQL_IN_PATH, settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/");
     set->setValue(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");

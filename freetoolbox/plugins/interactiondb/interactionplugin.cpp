@@ -58,7 +58,7 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     addAutoReleasedObject(new AfssapsIntegratorPage(this));
-    addAutoReleasedObject(new AfssapsClassTreePage(this));
+//    addAutoReleasedObject(new AfssapsClassTreePage(this));
     addAutoReleasedObject(new InteractionsDatabasePage(this));
     addAutoReleasedObject(new InteractionsDatabaseCreatorPage(this));
     addAutoReleasedObject(new CytochromeP450InteractionsPage(this));

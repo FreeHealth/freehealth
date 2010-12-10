@@ -60,8 +60,8 @@ public:
     QStringList availableDrugsDatabases() const;
     bool selectDatabase(const QString &dbUid);
 
-    bool canFetchMore(const QModelIndex &parent) const;
-    void fetchMore(const QModelIndex &parent);
+    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+    void fetchMore(const QModelIndex &parent = QModelIndex());
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &child) const;
