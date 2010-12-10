@@ -71,7 +71,7 @@ public:
         DI_RiskEn,
         DI_ManagementFr,
         DI_ManagementEn,
-        DI_Xml
+        DI_ReferencesLink
     };
 
 
@@ -88,6 +88,7 @@ public:
     QString header() const;
     QString risk() const;
     QString management() const;
+    QString referencesLink() const;
 
     static bool lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
 

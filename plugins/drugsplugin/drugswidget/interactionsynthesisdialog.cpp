@@ -201,6 +201,7 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
+    ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
 }
 
 /** \todo add class informations */
@@ -219,6 +220,7 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
     DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
+    ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
 }
 
 void InteractionSynthesisDialog::print()

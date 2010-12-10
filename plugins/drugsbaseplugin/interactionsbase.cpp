@@ -321,6 +321,7 @@ QList<DrugsInteraction *> InteractionsBasePrivate::getInteractionsFromDatabase(c
         dint->setValue(DrugsInteraction::DI_ATC2, _id1 );
         dint->setValue(DrugsInteraction::DI_RiskFr, QCoreApplication::translate("DrugsBase", "This INN is present more than one time in this prescrition."));
         dint->setValue(DrugsInteraction::DI_RiskEn, "This INN is present more than one time in this prescrition.");
+        dint->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
         id2 = _id1;
         toReturn << dint;
         return toReturn;
@@ -362,6 +363,7 @@ QList<DrugsInteraction *> InteractionsBasePrivate::getInteractionsFromDatabase(c
                 dint->setValue(DrugsInteraction::DI_ManagementFr, query.value(Constants::IAK_MANAGEMENT_FR));
                 dint->setValue(DrugsInteraction::DI_RiskEn, query.value(Constants::IAK_RISK_EN));
                 dint->setValue(DrugsInteraction::DI_ManagementEn, query.value(Constants::IAK_MANAGEMENT_EN));
+                dint->setValue(DrugsInteraction::DI_ReferencesLink, query.value(Constants::IAK_REFERENCES_LINK));
             }
         } else {
             Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
@@ -436,6 +438,8 @@ InteractionsBase::InteractionsBase()
     di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_FR,    "MANAGEMENT_FR");
     di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_RISK_EN,    "RISK_EN");
     di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_MANAGEMENT_EN,    "MANAGEMENT_EN");
+    di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_REFERENCES_LINK,    "REFERENCES_LINK");
+
 
     di->m_DB->addField(Table_IAM_TREE, TREE_ID_CLASS,    "ID_CLASS");
     di->m_DB->addField(Table_IAM_TREE, TREE_ID_ATC,      "ID_ATC");
@@ -666,7 +670,6 @@ QStringList InteractionsBase::getIamClassDenomination(const int &molecule_code)
      QStringList toReturn;
      foreach(int i, list)
          toReturn << getAtcLabel(i);
-     qWarning() << Q_FUNC_INFO << toReturn;
      return toReturn;
 }
 

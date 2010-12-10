@@ -593,9 +593,9 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
                 done = false;
 
                 req = QString("INSERT INTO `INTERACTION_KNOWLEDGE`  "
-                              "(`ID`,`TYPE`,`RISK_FR`,`MANAGEMENT_FR`, `RISK_EN`, `MANAGEMENT_EN`) "
+                              "(`ID`,`TYPE`,`RISK_FR`,`MANAGEMENT_FR`, `RISK_EN`, `MANAGEMENT_EN`, `REFERENCES_LINK`) "
                               "VALUES \n"
-                              "(%1, \"%2\", \"%3\", \"%4\", \"%5\", \"%6\")")
+                              "(%1, \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"http://tinyurl.com/24kn96t\")")
                         .arg(interactionId)
                         .arg(interactionModel->getLevel(childItem, "fr"))
                         .arg(interactionModel->getRisk(childItem, "fr"))

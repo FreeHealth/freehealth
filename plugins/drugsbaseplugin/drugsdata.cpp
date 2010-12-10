@@ -547,7 +547,6 @@ QString DrugsData::toHtml() const
 {
     QString msg;
 
-    const QStringList &mols = this->listOfMolecules();
     const QStringList &iams = this->listOfInn();
     const QStringList &iamClass = this->listOfInnClasses();
     QString textIams, textClass;

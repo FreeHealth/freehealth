@@ -283,6 +283,7 @@ namespace Constants {
     /** \brief Represents the fields index of drugs database table IAM_IMPORT */
     enum INTERACTION_KNOWLEDGEfields
     { IAK_ID = 0, IAK_TYPE, IAK_RISK_FR, IAK_MANAGEMENT_FR, IAK_RISK_EN, IAK_MANAGEMENT_EN,
+      IAK_REFERENCES_LINK,
       IAK_MaxParam
     };
 

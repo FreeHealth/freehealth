@@ -390,7 +390,6 @@ void CytochromeP450InteractionsWidget::populateDatabase()
 
     // Read the csv link file
     QString links = Utils::readTextFile(unlinkeAbsPath());
-    qWarning() << links;
     QHash<QString, QString> correctedLinks;
     foreach(const QString &line, links.split("\n",QString::SkipEmptyParts)) {
         int split = line.lastIndexOf(";");
@@ -399,7 +398,6 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         else
             correctedLinks.insert(line.left(split), line.mid(split+1));
     }
-    qWarning() << correctedLinks;
 
     // Create the classes : ZP450..
     QStringList treeReqs;
@@ -715,8 +713,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         int knowId = 0;
 
         // Inducters
-        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`) VALUES "
-                      "('450', \"%1\", \"%2\")")
+        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
+                      "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
                 .arg(QString("Interaction substrat/inducteur du cytochrome P450 %1. Risque de sous-dosage du substrat.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/inducer. Risk of underdosing of the substrat").arg(cyt));
         if (query.exec(req)) {
@@ -733,8 +731,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         query.finish();
 
         // Strong Inhibitors
-        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`) VALUES "
-                      "('450', \"%1\", \"%2\")")
+        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
+                      "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
                 .arg(QString("Interaction substrat/inhibiteur de haut niveau du cytochrome P450 %1. Risque de surdosage du substrat important. Peut causer une augmentation > 5 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 80% de baisse de la clairance.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/strong inhibitor. High risk of substrate overdose. Can cause a > 5-fold increase in the plasma area under the curve values or more than 80% decrease in clearance.").arg(cyt));
         if (query.exec(req)) {
@@ -751,8 +749,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         query.finish();
 
         // Moderate Inhibitors
-        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`) VALUES "
-                      "('450', \"%1\", \"%2\")")
+        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
+                      "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
                 .arg(QString("Interaction substrat/inhibiteur de niveau modéré du cytochrome P450 %1. Risque de surdosage du substrat. Peut causer une augmentation > 2 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 50-80% de baisse de la clairance.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/moderate inhibitor. Risk of substrate overdose. Can cause a > 2-fold increase in the plasma area under the curve values or more than 50-80% decrease in clearance.").arg(cyt));
         if (query.exec(req)) {
@@ -769,8 +767,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         query.finish();
 
         // Weak Inhibitors
-        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`) VALUES "
-                      "('450', \"%1\", \"%2\")")
+        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
+                      "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
                 .arg(QString("Interaction substrat/inhibiteur de niveau faible du cytochrome P450 %1. Risque de surdosage du substrat. Peut causer une augmentation > 1,25 fois mais < à 2 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 20-50% de baisse de la clairance.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/weak inhibitor. Risk of substrate overdose. Can cause a > 1.25-fold but < 2-fold increase in the plasma area under the curve values or more than 20-50% decrease in clearance.").arg(cyt));
         if (query.exec(req)) {
@@ -787,8 +785,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         query.finish();
 
         // Other Inhibitors
-        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`) VALUES "
-                      "('450', \"%1\", \"%2\")")
+        req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
+                      "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
                 .arg(QString("Interaction substrat/inhibiteur du cytochrome P450 %1. Risque de surdosage du substrat.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/inhibitor. Risk of substrate overdose.").arg(cyt));
         if (query.exec(req)) {

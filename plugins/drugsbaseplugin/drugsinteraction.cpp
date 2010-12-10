@@ -180,6 +180,11 @@ QString DrugsInteraction::management() const
     return value(DI_Management).toString();
 }
 
+QString DrugsInteraction::referencesLink() const
+{
+    return value(DI_ReferencesLink).toString();
+}
+
 /** \brief Function used to sort interactions list */
 bool DrugsInteraction::lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2)
 {
