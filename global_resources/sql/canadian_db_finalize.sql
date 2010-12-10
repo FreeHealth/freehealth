@@ -73,121 +73,9 @@
 -- ther
 -- package
 
-DELETE FROM form
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  status A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM route
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  route A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM ingred
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  ingred A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM ther
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  ther A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM package
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  package A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
 DELETE FROM drug
 WHERE Class = "Veterinary"
 ;
-
-
--- ********************************
--- Add and populate column DIN to serve as an alternate key
--- ********************************
--- 
-ALTER TABLE "form" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "route" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "ingred" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "ther" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "package" ADD "DIN" VARCHAR2(8);
-
-UPDATE form
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=form.DRUG_CODE
-);
-
-UPDATE route
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=route.DRUG_CODE
-);
-
-UPDATE ingred
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=ingred.DRUG_CODE
-);
-
-UPDATE ther
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=ther.DRUG_CODE
-);
-
-UPDATE package
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=package.DRUG_CODE
-);
-
 
 
 -- ********************************
@@ -195,11 +83,11 @@ WHERE A1.DRUG_CODE=package.DRUG_CODE
 -- ********************************
 -- these are Branded products
 -- the drugs must be distinct on {drug or combination} plus strength)
--- note FD's DRUGS table needs its records pre-ordered ascending on column NAME
+-- note FreeDiam's DRUGS table needs its records pre-ordered ascending on column NAME
 
 INSERT INTO DRUGS ("UID", "NAME")
 SELECT DISTINCT
-   A1.DIN,
+   A1.DRUG_CODE,
    A1.BRAND_NAME
 FROM drug A1
 ORDER BY A1.BRAND_NAME;
@@ -210,16 +98,16 @@ UPDATE DRUGS
 SET FORM=
 (SELECT group_concat(PHARMACEUTICAL_FORM, ", ")
 FROM form A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 UPDATE DRUGS
 SET ROUTE=
 (SELECT group_concat(ROUTE_OF_ADMINISTRATION, ", ")
 FROM route A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 -- ensure that any Canadian drug NULL strengths are backfilled from related ingredients
@@ -228,8 +116,8 @@ UPDATE DRUGS
 SET GLOBAL_STRENGTH=
 (SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
 FROM ingred A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 -- set the ATC
@@ -239,7 +127,7 @@ UPDATE DRUGS
 SET ATC=
 (SELECT DISTINCT TC_ATC_NUMBER
 FROM ther A1
-WHERE A1.DIN=DRUGS.UID
+WHERE A1.DRUG_CODE=DRUGS.UID
 );
 
 
@@ -261,7 +149,7 @@ SELECT DISTINCT
    1
 FROM DRUGS, ingred A1
 WHERE
-   (DRUGS.UID = A1.DIN) AND
+   (DRUGS.UID = A1.DRUG_CODE) AND
    (A1.DOSAGE_VALUE != "")
    ;
 
@@ -278,10 +166,22 @@ SELECT DISTINCT
    1
 FROM DRUGS, ingred A1
 WHERE
-   (DRUGS.UID = A1.DIN) AND
+   (DRUGS.UID = A1.DRUG_CODE) AND
    (A1.DOSAGE_VALUE = "");
-   
-    
+
+
+-- Swith DRUG_CODE to DIN in DRUGS and COMPOSITION tables
+UPDATE DRUGS SET UID =
+(
+  SELECT DIN FROM drug WHERE drug.DRUG_CODE=DRUGS.UID
+);
+
+UPDATE COMPOSITION SET UID =
+(
+  SELECT DIN FROM drug WHERE drug.DRUG_CODE=COMPOSITION.UID
+);
+
+
 -- ********************************
 -- Feed INFORMATIONS (info about the drug data source)
 -- ********************************
@@ -315,8 +215,8 @@ VALUES (
     "HC: Health Canada Drug Product Database",
     "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
     "http://code.google.com/p/freemedforms/wiki/Database_ca",
-    "Jim Busser, MD & Eric Maeker, MD",
-    "© Her Majesty the Queen in Right of Canada",
+    "Jim Busser, MD (CA) & Eric Maeker, MD (FR)",
+    "(c) Her Majesty the Queen in Right of Canada",
     "Apply: http://publications.gc.ca/helpAndInfo/cc-dac/application-e.html on a no-charge, royalty-free, non-exclusive, annual renewable basis.",
     CURRENT_DATE,
     "DIN",
@@ -335,29 +235,29 @@ VALUES (
 -- Takes account of variability in
 -- empty/non-empty fields within the source data
 
-INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
-SELECT A7.DIN, A7.UPC, A7.PRODUCT_INFORMATION, " "
-FROM package A7
-WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION != "";
+-- INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
+-- SELECT A7.DIN, A7.UPC, A7.PRODUCT_INFORMATION, " "
+-- FROM package A7
+-- WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION != "";
 
-INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
-SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE, " "
-FROM package A7
-WHERE PACKAGE_SIZE != "" AND PRODUCT_INFORMATION = "";
+-- INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
+-- SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE, " "
+-- FROM package A7
+-- WHERE PACKAGE_SIZE != "" AND PRODUCT_INFORMATION = "";
 
-INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
-SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
-FROM package A7
-WHERE PACKAGE_SIZE != "" AND PRODUCT_INFORMATION != "";
+-- INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
+-- SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
+-- FROM package A7
+-- WHERE PACKAGE_SIZE != "" AND PRODUCT_INFORMATION != "";
 
-INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
-SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
-FROM package A7
-WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION = "";
+-- INSERT INTO PACKAGING (UID, PACKAGE_UID, LABEL, MARKETING)
+-- SELECT A7.DIN, A7.UPC, A7.PACKAGE_SIZE || " " || A7.PACKAGE_SIZE_UNIT || " " || A7.PACKAGE_TYPE || ", " || PRODUCT_INFORMATION, " "
+-- FROM package A7
+-- WHERE PACKAGE_SIZE = "" AND PRODUCT_INFORMATION = "";
 
 -- the Canadian products mostly lack any unique UPC
 -- a pseudo PACKAGE_UID is possible, but might be inconstant
-UPDATE package SET UPC = ROWID;
+-- UPDATE package SET UPC = ROWID;
 
 -- ********************************
 -- Drop the DPD staging tables
