@@ -55,7 +55,7 @@ message(Building into path $${SOURCES_BUILD_PATH})
 
 # define some paths related to application sources
 BUILD_BINARY_PATH          = $${SOURCES_ROOT_PATH}/bin
-BUILD_LIB_PATH            = $${SOURCES_ROOT_PATH}/bin/plugins
+BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/plugins
 BUILD_PLUGIN_PATH         = $${BUILD_LIB_PATH}
 
 RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
@@ -83,4 +83,4 @@ QMAKE_TARGET_COMPANY       = "Eric MAEKER and the FreeMedForms Team"
 QMAKE_TARGET_PRODUCT       = $${BINARY_TARGET}
 QMAKE_TARGET_DESCRIPTION   = "Crossplatform Medical Forms Generator"
 QMAKE_TARGET_COPYRIGHT     = "Copyright (C) 2008-2010 Eric MAEKER, MD"
-PACKAGE_DOMAIN             = "http://www.ericmaeker.fr/FreeMedForms"
+PACKAGE_DOMAIN             = "http://www.freemedforms.com"

@@ -30,8 +30,6 @@ CONFIG( debug, debug|release ) {
 #              QT_NO_DEBUG
 }
 
-DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
-           "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\""
 
 TARGET   = $${BINARY_TARGET}
 DESTDIR  = $${BUILD_BINARY_PATH}
