@@ -317,12 +317,11 @@ INSERT INTO "INFORMATIONS" (
     "PACK_MAIN_CODE_NAME",
     "ATC",
     "INTERACTIONS",
-    "MOL_LINK_COMPLETION",
     "AUTHOR_COMMENTS",
     "LANGUAGE_COUNTRY",
     "DRUGS_NAME_CONSTRUCTOR")
 VALUES (
-    "0.5.0",
+    "0.5.2",
     "en=Canadian Drug Product Database
     fr=Base de données thérapeutique Canadienne
     xx=Canadian Drug Product Database
@@ -340,7 +339,6 @@ VALUES (
     "UPC",
     1,
     1,
-    65,
     "While the download is technically open, the data is copyright. Please report any problem to the author.",
     "en_CA",
     "NAME (FORM, GLOBAL_STRENGTH)"
