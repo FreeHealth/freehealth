@@ -112,3 +112,4 @@ INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","COMPOSITION table 
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","Adding DB_SCHEMA_VERSION table");
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.5.0","2010-09-22","Replacing UID from int to varchar");
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.5.0","2010-09-23","Adding molecule links completion percent to INFORMATION table");
+INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.5.2","2010-09-23","Adding routes tables and link table");
