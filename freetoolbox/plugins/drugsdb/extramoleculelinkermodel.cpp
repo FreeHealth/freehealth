@@ -860,7 +860,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     }
 
     // Save completion percent in drugs database INFORMATION table
-    int completion = ((double)((mol_atc.uniqueKeys().count()+reviewedWithoutAtcLink)) / (double)knownMoleculeNames.count()) * 100.00;
+    int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
     Utils::Log::addMessage(this, QString("Molecule links completion: %1").arg(completion));
     Core::Tools::executeSqlQuery(QString("UPDATE `INFORMATIONS` SET `MOL_LINK_COMPLETION`=%1").arg(completion), drugsDbUid, __FILE__, __LINE__);
 

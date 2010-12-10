@@ -367,7 +367,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
     // add FreeDiams ATC specific codes
     iam.transaction();
     QStringList molsWithoutAtc;
-    QStringList afssapsClass;
+    QStringList afssapsClass, afssapsClassEn;
     QMultiHash<QString, QString> molsToAtc;
     QMultiHash<QString, QString> class_mols;
     QString req;
@@ -380,10 +380,12 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         int nb = molLinkModel->rowCount();
         for(int i = 0; i < nb; ++i) {
             const QString &mol = molLinkModel->index(i, AfssapsLinkerModel::AfssapsName).data().toString();
+            const QString &molEn = molLinkModel->index(i, AfssapsLinkerModel::En_Label).data().toString();
             const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
             const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
             if (type=="class") {
                 afssapsClass << Core::Tools::noAccent(mol).toUpper();
+                afssapsClassEn << molEn;
             } else if (links.isEmpty()) {
                 molsWithoutAtc << mol.toUpper();
             } else {
@@ -410,7 +412,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         }
         progress.setValue(4);
 
-        qSort(afssapsClass);
+//        qSort(afssapsClass);
         // Add classes
         // 200 000 < ID < 299 999  == Interactings classes
         for (int i=0; i < afssapsClass.count(); i++) {
@@ -421,7 +423,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
                     .arg(i+200000)
                     .arg("ZXX" + n)
                     .arg(afssapsClass.at(i))
-                    .arg(afssapsClass.at(i));
+                    .arg(afssapsClassEn.at(i));
             Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
         }
         progress.setValue(5);

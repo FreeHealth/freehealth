@@ -56,7 +56,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CytP450/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/iam-cytp450.db");}
-static inline QString unlinkeAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/textfiles/cytochrome_unlinked.csv");}
+static inline QString unlinkeAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/textfiles/cytochrome_unlinked.csv");}
 
 static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
@@ -347,7 +347,7 @@ void CytochromeP450InteractionsWidget::generateUnlinkedAtcCsvFile()
     QSqlQuery toAtc(iam);
     QString req;
     foreach(const QString &mol, d->substrates.values()) {
-        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE '%1';").arg(mol);
+        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE \"%1\";").arg(mol);
         if (toAtc.exec(req)) {
             if (!toAtc.next()) {
                 unfound << mol;
@@ -356,7 +356,7 @@ void CytochromeP450InteractionsWidget::generateUnlinkedAtcCsvFile()
         toAtc.finish();
     }
     foreach(const QString &mol, d->inducers.values()) {
-        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE '%1';").arg(mol);
+        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE \"%1\";").arg(mol);
         if (toAtc.exec(req)) {
             if (!toAtc.next()) {
                 unfound << mol;
@@ -365,7 +365,7 @@ void CytochromeP450InteractionsWidget::generateUnlinkedAtcCsvFile()
         toAtc.finish();
     }
     foreach(const QString &mol, d->inhibitors.values()) {
-        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE '%1';").arg(mol);
+        req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE \"%1\";").arg(mol);
         if (toAtc.exec(req)) {
             if (!toAtc.next()) {
                 unfound << mol;
@@ -390,6 +390,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
 
     // Read the csv link file
     QString links = Utils::readTextFile(unlinkeAbsPath());
+    qWarning() << links;
     QHash<QString, QString> correctedLinks;
     foreach(const QString &line, links.split("\n",QString::SkipEmptyParts)) {
         int split = line.lastIndexOf(";");
@@ -398,6 +399,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         else
             correctedLinks.insert(line.left(split), line.mid(split+1));
     }
+    qWarning() << correctedLinks;
 
     // Create the classes : ZP450..
     QStringList treeReqs;
@@ -478,6 +480,10 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         QMultiHash<int, int> inducersLinkID;
         int inducerId = 0;
         foreach(const QString &mol, d->inducers.values(cytId)) {
+            if (mol.contains("wort")) {
+                qWarning() << "xxxxxxxxxxxxxx" << mol << correctedLinks.value(mol);
+            }
+
             QSqlQuery toAtc(iam);
             if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
                 req = QString("SELECT ID FROM ATC WHERE ENGLISH LIKE '%1';").arg(correctedLinks.value(mol));
