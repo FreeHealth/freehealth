@@ -6,7 +6,7 @@
 AppName=FreeToolBox
 AppId=FreeToolBox
 AppVerName=FreeToolBox,0.1.0~beta
-DefaultDirName={pf}FreeToolBox
+DefaultDirName={pf}\FreeToolBox
 DefaultGroupName=FreeToolBox
 UninstallDisplayIcon={app}FreeToolBox.exe
 VersionInfoDescription=FreeToolBox 0.1.0~beta
@@ -21,7 +21,7 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:FreeToolBox-0.1.0~beta\packages\win\FreeToolBox
+SourceDir=e:\FreeToolBox-0.1.0~beta\packages\win\FreeToolBox
 SetupIconFile=e:\FreeToolBox-0.1.0~beta\FreeToolBox\freetoolbox.ico
 WizardSmallImageFile=e:\FreeToolBox-0.1.0~beta\global_resources\pixmap\svg\freetoolbox-128.bmp
 WizardImageFile=e:\FreeToolBox-0.1.0~beta\global_resources\pixmap\svg\freetoolbox-128.bmp
@@ -86,11 +86,9 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "FreeToolBox.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/databases/icd10/icd10.db"; DestDir: "{app}/Resources/databases/icd10"; Components: program
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
-Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; Flags: recursesubdirs
 Source: "Resources/doc/FreeToolBox/en/*"; DestDir: "{app}/Resources/doc/FreeToolBox/en"; Components: helpEn; Flags: recursesubdirs
 Source: "Resources/doc/FreeToolBox/fr/*"; DestDir: "{app}/Resources/doc/FreeToolBox/fr"; Components: helpFr; Flags: recursesubdirs
 Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
