@@ -256,7 +256,7 @@ namespace Constants {
     /** \brief Represents the fields index of drugs database table COMPO */
     enum COMPOSITIONfields
     { COMPO_UID = 0, COMPO_MOL_FORM, COMPO_MOL_CODE, COMPO_MOL_NAME,
-//      COMPO_MOL_ATC,
+      COMPO_MOL_ATC,
       COMPO_DOSAGE, COMPO_REF_DOSAGE,
       COMPO_NATURE, COMPO_LK_NATURE,
       COMPO_MaxParam, COMPO_IAM_DENOMINATION, COMPO_IAM_CLASS_DENOMINATION, COMPO_VeryMaxParam

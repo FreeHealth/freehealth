@@ -200,7 +200,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_COMPO, COMPO_MOL_FORM,     "MOLECULE_FORM");
     addField(Table_COMPO, COMPO_MOL_CODE,     "MOLECULE_CODE");
     addField(Table_COMPO, COMPO_MOL_NAME,     "MOLECULE_NAME");
-//    addField(Table_COMPO, COMPO_MOL_ATC,      "MOLECULE_ATC");
+    addField(Table_COMPO, COMPO_MOL_ATC,      "MOLECULE_ATC");
     addField(Table_COMPO, COMPO_DOSAGE,       "DOSAGE");
     addField(Table_COMPO, COMPO_REF_DOSAGE,   "DOSAGE_REF");
     addField(Table_COMPO, COMPO_NATURE,       "NATURE");

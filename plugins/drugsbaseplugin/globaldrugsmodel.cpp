@@ -726,8 +726,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
 
         if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
-            QModelIndex uid = index(item.row(), Constants::DRUGS_UID);
-            if (d->UIDHasRecordedDosage(uid.data().toString())) {
+            if (d->UIDHasRecordedDosage(uid)) {
                 QColor c = QColor(settings()->value(Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR).toString());
                 c.setAlpha(125);
                 return c;
@@ -746,36 +745,58 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                    .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
                    .arg(tr("KNOWN INTOLERANCE"));
         }
-        tmp += "<b>" + d->getConstructedDrugName(item.row()) + "</b><br>";
+        // Name, ATC and UID
         QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
-        // get form / route
-        tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString() + "<br />";
-        tmp += QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString() + "<br />";
         if (atc.isEmpty())
-            tmp += tr("No ATC found");
-        else
-            tmp += atc;
-        tmp += "<br>";
+            atc += tr("No ATC found");
+        QString uidName = "UID";
+        if (drugsBase()->actualDatabaseInformations()) {
+            if (!drugsBase()->actualDatabaseInformations()->drugsUidName.isEmpty())
+                uidName = drugsBase()->actualDatabaseInformations()->drugsUidName;
+        }
+        tmp += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>"
+                        " <tr>"
+                        "   <td colspan=2 rowspan=1 align=center>"
+                        "       <span style=\"font-weight: bold;\">%1</span>"
+                        "       <br>%2 = %3 ;"
+                        "       %4"
+                        "   </td>"
+                        " </tr>"
+                        " <tr>"
+                        "   <td colspan=2 rowspan=1>"
+                        "       %5"
+                        "       <br>%6"
+                        "   </td>"
+                        " </tr>")
+                .arg(d->getConstructedDrugName(item.row()))
+                .arg(uidName)
+                .arg(uid)
+                .arg(atc)
+                .arg(tr("Form(s): ") + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString())
+                .arg(tr("Route(s): ") +QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString());
+
         // get composition
         if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {
-            int uid = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_UID)).toInt();
+
             QSqlTableModel compo(0, database());
             compo.setTable(drugsBase()->table(Constants::Table_COMPO));
             QHash<int, QString> where;
             where.insert(Constants::COMPO_UID, QString("=%1").arg(uid));
             compo.setFilter(drugsBase()->getWhereClause(Constants::Table_COMPO, where));
             compo.select();
-            tmp += tr("Composition:<br>");
             for(int i=0; i< compo.rowCount(); ++i) {
-                tmp +=  "&nbsp;&nbsp;&nbsp;*&nbsp;" + compo.data(compo.index(i, Constants::COMPO_MOL_NAME)).toString() + "<br>";
+                tmp += QString("<tr><td>%1</td><td>%2</td></tr>")
+                       .arg(compo.index(i, Constants::COMPO_MOL_NAME).data().toString())
+                       .arg(compo.index(i, Constants::COMPO_DOSAGE).data().toString());
+                qWarning() << compo.index(i, Constants::COMPO_DOSAGE).data().toString();
             }
-            tmp += tr("ATC codes (for interaction engine):<br>");
-            if (!atc.isEmpty())
-                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
-            else
-                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + "<br>";
+//            tmp += tr("ATC codes (for interaction engine):<br>");
+//            if (!atc.isEmpty())
+//                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
+//            else
+//                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase()->getDrugCompositionAtcCodes(uid).join(";") + "<br>";
         }
-        tmp += "</body></html>";
+        tmp += "</table></body></html>";
 
         return tmp;
     } else if (role == Qt::DecorationRole && item.column()==Constants::DRUGS_NAME) {

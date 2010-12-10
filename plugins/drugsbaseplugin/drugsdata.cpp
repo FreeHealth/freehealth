@@ -335,6 +335,7 @@ QStringList DrugsData::listOfInnClasses() const
     foreach(int i, this->allInnAndIamClasses())
         if ((200000 < i) && (i < 299999))
             tmp << drugsBase()->getAtcLabel(i);
+    tmp.sort();
     return tmp;
 }
 
@@ -568,29 +569,41 @@ QString DrugsData::toHtml() const
     QString atc;
     if (!value(Table_DRUGS, DRUGS_ATC).toString().isEmpty()) {
         atc = "<br>ATC = " + value(Table_DRUGS, DRUGS_ATC).toString();
+    } else {
+        atc = QApplication::translate("DrugData", "No ATC found");
     }
     msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
-                    "       <br>%2 = %3\n"
+                    "       <br>%2 = %3 ; "
                     "       %4\n"
                     "   </td>\n"
-                    " </tr>\n"
-                    " <tr>\n"
-                    "   <td>%5</td>\n"
-                    "   <td>%6</td>\n"
-                    " </tr>\n"
-                    " <tr>\n"
-                    "   <td colspan=2 rowspan=1>%7</td>\n"
-                    " </tr>\n"
-                    "</table>\n\n")
+                    " </tr>\n")
             .arg(denomination())
             .arg(uidName)
             .arg(value(Table_DRUGS, DRUGS_UID).toString())
-            .arg(atc)
-            .arg(mols.join("<br>"))
-            .arg(textIams)
+            .arg(atc);
+
+    QString tmp = "";
+    QStringList inns;
+    foreach(DrugComposition *compo, d->m_Compositions) {
+        if (!compo->innName().isEmpty() && compo->m_InnCode < 200000) {
+            if (!inns.contains(compo->innName())) {
+                inns << compo->innName();
+                tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(compo->innName()).arg(compo->dosage());
+            }
+        } else {
+            tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(compo->moleculeName()).arg(compo->dosage());
+        }
+    }
+
+    msg += QString(" %1\n"
+                   " <tr>\n"
+                   "   <td colspan=2 rowspan=1>%2</td>\n"
+                   " </tr>\n"
+                   "</table>\n\n")
+            .arg(tmp)
             .arg(textClass);
     return msg;
 }
