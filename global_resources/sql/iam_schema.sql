@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS `INTERACTION_KNOWLEDGE` (
 `MANAGEMENT_FR` varchar(2000),
 `RISK_EN` varchar(2000) NOT NULL ,
 `MANAGEMENT_EN` varchar(2000),
-`XML` varchar(10000)
- );
+`REFERENCES_LINK` varchar(100)
+);
 
 -- Generic ATC table (more than 5000 ATC codes are known)
 -- Codes ID > 100 000 are interacting molecule names without ATC
@@ -46,3 +46,4 @@ INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","Adding INTERACTION
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","Removing IAM_DENOMINATION and IAM_IMPORT tables");
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","Adding DB_SCHEMA_VERSION table");
 INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.4.4","2010-07-22","First english translations of INTERACTION_KNOWLEDGE are available");
+INSERT INTO `DB_SCHEMA_VERSION` VALUES ("0.5.2","2010-12-10","Addind REFERENCES_LINK to knowledge");
