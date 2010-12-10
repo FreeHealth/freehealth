@@ -281,22 +281,6 @@ WHERE
    (DRUGS.UID = A1.DIN) AND
    (A1.DOSAGE_VALUE = "");
    
-
--- ********************************
--- Feed LK_MOL_ATC
--- ********************************
-
-INSERT INTO LK_MOL_ATC (
-    MOLECULE_CODE,
-    ATC_ID
-    )
-SELECT DISTINCT
-    A1.MOLECULE_CODE,
-    A2.ATC
-FROM COMPOSITION A1, DRUGS A2, drug A3
-WHERE A1.UID = A2.UID AND
-    (A1.UID = A3.DIN AND A3.NUMBER_OF_AIS = 1 AND
-    LENGTH(A2.ATC)=7);
     
 -- ********************************
 -- Feed INFORMATIONS (info about the drug data source)
