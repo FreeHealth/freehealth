@@ -296,7 +296,7 @@ struct MinDrug {
         return s;
     }
 
-    QString name, uid, atc;
+    QString name, uid, atc, din;
     QVector<int> forms;
     QVector<int> routes;
     QVector<MinCompo *> compo;
@@ -344,173 +344,196 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
     progressDialog.setValue(1);
     progressDialog.setRange(0, 3);
 
-//    // remove "Veterinary" preparations
-//    if (!Core::Tools::executeSqlQuery("DELETE FROM drug WHERE (CLASS = 'Veterinary');", CA_DRUGS_DATABASE_NAME, __FILE__, __LINE__))
-//        return false;
+    // remove "Veterinary" preparations
+    if (!Core::Tools::executeSqlQuery("DELETE FROM drug WHERE (CLASS = 'Veterinary');", CA_DRUGS_DATABASE_NAME, __FILE__, __LINE__))
+        return false;
 
-//    QList<MinDrug *> drugs;
-//    QString req;
-//    QSqlDatabase ca = QSqlDatabase::database(CA_DRUGS_DATABASE_NAME);
-//    ca.transaction();
-//    QSqlQuery query(ca);
-//    // get routes
-//    QHash<int, QString> routes;
-//    req = QString("SELECT DISTINCT ROUTE_OF_ADMINISTRATION_CODE, ROUTE_OF_ADMINISTRATION FROM route;");
-//    if (query.exec(req)) {
-//        while (query.next()) {
-//            routes.insert(query.value(0).toInt(), query.value(1).toString());
-//        }
-//    } else {
-//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-//        return false;
-//    }
-//    progressDialog.setValue(1);
+    QList<MinDrug *> drugs;
+    QString req;
+    QSqlDatabase ca = QSqlDatabase::database(CA_DRUGS_DATABASE_NAME);
+    ca.transaction();
+    QSqlQuery query(ca);
+    // get routes
+    QHash<int, QString> routes;
+    req = QString("SELECT DISTINCT ROUTE_OF_ADMINISTRATION_CODE, ROUTE_OF_ADMINISTRATION FROM route;");
+    if (query.exec(req)) {
+        while (query.next()) {
+            routes.insert(query.value(0).toInt(), query.value(1).toString());
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        return false;
+    }
+    progressDialog.setValue(1);
 
-//    // get forms
-//    QHash<int, QString> forms;
-//    req = QString("SELECT DISTINCT PHARM_FORM_CODE, PHARMACEUTICAL_FORM FROM form;");
-//    if (query.exec(req)) {
-//        while (query.next()) {
-//            forms.insert(query.value(0).toInt(), query.value(1).toString());
-//        }
-//    } else {
-//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-//        return false;
-//    }
-//    progressDialog.setValue(2);
-//    query.finish();
+    // get forms
+    QHash<int, QString> forms;
+    req = QString("SELECT DISTINCT PHARM_FORM_CODE, PHARMACEUTICAL_FORM FROM form;");
+    if (query.exec(req)) {
+        while (query.next()) {
+            forms.insert(query.value(0).toInt(), query.value(1).toString());
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        return false;
+    }
+    progressDialog.setValue(2);
+    query.finish();
 
-//    // get drugs
-//    progressDialog.setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 3"));
-//    progressDialog.setValue(1);
-//    req = "SELECT count(DISTINCT DRUG_CODE) FROM drug;";
-//    if (query.exec(req)) {
-//        if (query.next()) {
-//            progressDialog.setRange(0, query.value(0).toInt());
-//            count = query.value(0).toInt();
-//        }
-//    } else {
-//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-//        return false;
-//    }
-//    qWarning() << "Retreiving"<<count<<"drugs";
-//    query.finish();
+    // get drugs
+    progressDialog.setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 3"));
+    progressDialog.setValue(1);
+    req = "SELECT count(DISTINCT DRUG_CODE) FROM drug;";
+    if (query.exec(req)) {
+        if (query.next()) {
+            progressDialog.setRange(0, query.value(0).toInt());
+            count = query.value(0).toInt();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        return false;
+    }
+    qWarning() << "Retreiving"<<count<<"drugs";
+    query.finish();
 
-//    req = "SELECT DISTINCT DRUG_CODE, BRAND_NAME FROM drug ORDER BY BRAND_NAME;";
-//    count = 0;
-//    if (query.exec(req)) {
-//        while (query.next()) {
-//            MinDrug *dr = new MinDrug(query.value(1).toString(), query.value(0).toString());
-//            // get forms
-//            req = "SELECT PHARM_FORM_CODE FROM form WHERE DRUG_CODE="+dr->uid;
-//            QSqlQuery forms_routes(req, ca);
-//            if (forms_routes.isActive()) {
-//                while (forms_routes.next()) {
-//                    dr->forms.append(forms_routes.value(0).toInt());
+    progressDialog.setLabelText(tr("Retreiving (%1) drugs").arg(count));
+    progressDialog.setRange(0, count);
+    progressDialog.setValue(0);
+    req = "SELECT DISTINCT DRUG_CODE, BRAND_NAME, DIN FROM drug ORDER BY BRAND_NAME;";
+    count = 0;
+    if (query.exec(req)) {
+        while (query.next()) {
+            MinDrug *dr = new MinDrug(query.value(1).toString(), query.value(0).toString());
+            dr->din = query.value(2).toString().rightJustified(8, '0');
+            // get forms
+            req = "SELECT PHARM_FORM_CODE FROM form WHERE DRUG_CODE="+dr->uid;
+            QSqlQuery forms_routes(req, ca);
+            if (forms_routes.isActive()) {
+                while (forms_routes.next()) {
+                    dr->forms.append(forms_routes.value(0).toInt());
+                }
+            } else {
+                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
+                return false;
+            }
+            forms_routes.finish();
+            // get routes
+            req = "SELECT ROUTE_OF_ADMINISTRATION_CODE FROM route WHERE DRUG_CODE="+dr->uid;
+            if (forms_routes.exec(req)) {
+                while (forms_routes.next()) {
+                    dr->routes.append(forms_routes.value(0).toInt());
+                }
+            } else {
+                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
+                return false;
+            }
+            forms_routes.finish();
+            // get ATC
+            req = "SELECT TC_ATC_NUMBER FROM ther WHERE DRUG_CODE="+dr->uid;
+            if (forms_routes.exec(req)) {
+                while (forms_routes.next()) {
+                    dr->atc = forms_routes.value(0).toString();
+                }
+            } else {
+                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
+                return false;
+            }
+            forms_routes.finish();
+            // get Composition
+            req = "SELECT ACTIVE_INGREDIENT_CODE, INGREDIENT, STRENGTH, STRENGTH_UNIT, DOSAGE_VALUE, DOSAGE_UNIT FROM ingred WHERE DRUG_CODE="+dr->uid;
+            if (forms_routes.exec(req)) {
+                while (forms_routes.next()) {
+                    MinCompo *compo = new MinCompo(forms_routes.value(0).toInt(),
+                                                   forms_routes.value(1).toString(),
+                                                   forms_routes.value(2).toString(),
+                                                   forms_routes.value(3).toString(),
+                                                   forms_routes.value(4).toString(),
+                                                   forms_routes.value(5).toString());
+                    dr->compo.append(compo);
+                }
+            } else {
+                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
+                return false;
+            }
+            forms_routes.finish();
+
+            // add to drugs list
+            drugs.append(dr);
+            ++count;
+            if (count%10 == 0)
+                progressDialog.setValue(count);
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        return false;
+    }
+    progressDialog.setValue(progressDialog.maximum());
+    query.finish();
+
+
+    // recreate drugs
+    progressDialog.setLabelText(tr("Processing (%1) drugs").arg(count));
+    progressDialog.setRange(0, count);
+    progressDialog.setValue(0);
+    QStringList commands;
+    count = 0;
+    foreach(MinDrug *drug, drugs) {
+        commands.clear();
+        QStringList drugforms;
+        QStringList drugroutes;
+        for(int i = 0; i < drug->forms.count(); ++i) {
+            drugforms << forms.value(drug->forms.at(i));
+        }
+        for(int i = 0; i < drug->routes.count(); ++i) {
+            drugroutes << routes.value(drug->routes.at(i));
+        }
+                //  Old uid is a concat of drug_code;formid;routeid  QString newUid = drug->uid + ";" + QString::number(drug->forms.at(i)) + ";" + QString::number(drug->routes.at(j));
+                // insert this drug
+                req = "INSERT INTO `DRUGS` (`UID`, `NAME`, `FORM`, `ROUTE`, `GLOBAL_STRENGTH`, `ATC`) VALUES (\n"
+                      "  '" + drug->din + "', \n" +
+                      "  \"" + drug->name + "\", \n" +
+                      "  '" + drugforms.join(",") + "', \n" +
+                      "  '" + drugroutes.join(",") + "', \n" +
+                      "  '" + drug->globalStrength() + "', \n" +
+                      "  '" + drug->atc + "'\n" +
+                      ");\n";
+                commands << req;
+
+                // insert composition (remember that each molecule must have its own lknature value)
+                int lknature = 1;
+                foreach(MinCompo *compo, drug->compo) {
+                    req = QString("INSERT INTO `COMPOSITION` \n"
+                                  "(`UID`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`, `LK_NATURE`) \n"
+                                  "VALUES ('%1', %2, \"%3\", '%4', %5);")
+                            .arg(drug->din)
+                            .arg(compo->mol_id)
+                            .arg(compo->mol)
+                            .arg(compo->sqlDosage())
+                            .arg(lknature);
+                    commands << req;
+                    ++lknature;
 //                }
-//            } else {
-//                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
-//                return false;
 //            }
-//            forms_routes.finish();
-//            // get routes
-//            req = "SELECT ROUTE_OF_ADMINISTRATION_CODE FROM route WHERE DRUG_CODE="+dr->uid;
-//            if (forms_routes.exec(req)) {
-//                while (forms_routes.next()) {
-//                    dr->routes.append(forms_routes.value(0).toInt());
-//                }
-//            } else {
-//                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
-//                return false;
-//            }
-//            forms_routes.finish();
-//            // get ATC
-//            req = "SELECT TC_ATC_NUMBER FROM ther WHERE DRUG_CODE="+dr->uid;
-//            if (forms_routes.exec(req)) {
-//                while (forms_routes.next()) {
-//                    dr->atc = forms_routes.value(0).toString();
-//                }
-//            } else {
-//                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
-//                return false;
-//            }
-//            forms_routes.finish();
-//            // get Composition
-//            req = "SELECT ACTIVE_INGREDIENT_CODE, INGREDIENT, STRENGTH, STRENGTH_UNIT, DOSAGE_VALUE, DOSAGE_UNIT FROM ingred WHERE DRUG_CODE="+dr->uid;
-//            if (forms_routes.exec(req)) {
-//                while (forms_routes.next()) {
-//                    MinCompo *compo = new MinCompo(forms_routes.value(0).toInt(),
-//                                                   forms_routes.value(1).toString(),
-//                                                   forms_routes.value(2).toString(),
-//                                                   forms_routes.value(3).toString(),
-//                                                   forms_routes.value(4).toString(),
-//                                                   forms_routes.value(5).toString());
-//                    dr->compo.append(compo);
-//                }
-//            } else {
-//                Utils::Log::addQueryError(this, forms_routes, __FILE__, __LINE__);
-//                return false;
-//            }
-//            forms_routes.finish();
+        }
+        foreach(const QString &c, commands) {
+            if (!query.exec(c)) {
+                Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+                return false;
+            }
+            query.finish();
+        }
+        ++count;
+        if (count%10 == 0)
+            progressDialog.setValue(count);
+    }
+    progressDialog.setValue(progressDialog.maximum());
 
-//            // add to drugs list
-//            drugs.append(dr);
-//            ++count;
-//            if (count%10 == 0)
-//                progressDialog.setValue(count);
-//        }
-//    } else {
-//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-//        return false;
-//    }
-//    progressDialog.setValue(count);
-//    query.finish();
+    ca.commit();
 
+    qDeleteAll(drugs);
+    drugs.clear();
 
-//    // recreate drugs
-//    QStringList commands;
-//    foreach(MinDrug *drug, drugs) {
-//        commands.clear();
-//        for(int i = 0; i < drug->forms.count(); ++i) {
-//            for(int j = 0; j < drug->routes.count(); ++j) {
-//                QString newUid = drug->uid + ";" + QString::number(drug->forms.at(i)) + ";" + QString::number(drug->routes.at(j));
-//                const QString &form = forms.value(drug->forms.at(i));
-//                const QString &route = routes.value(drug->routes.at(j));
-//                // insert this drug
-//                req = "INSERT INTO `DRUGS` (`UID`, `NAME`, `FORM`, `ROUTE`, `GLOBAL_STRENGTH`, `ATC`) VALUES (\n"
-//                      "  '" + newUid + "', \n" +
-//                      "  \"" + drug->name + "\", \n" +
-//                      "  '" + form + "', \n" +
-//                      "  '" + route + "', \n" +
-//                      "  '" + drug->globalStrength() + "', \n" +
-//                      "  '" + drug->atc + "'\n" +
-//                      ");\n";
-//                commands << req;
-
-//                // insert composition (remember that each molecule must have its own lknature value)
-//                int lknature = 1;
-//                foreach(MinCompo *compo, drug->compo) {
-//                    req = QString("INSERT INTO `COMPOSITION` \n"
-//                                  "(`UID`, `MOLECULE_FORM`, `MOLECULE_CODE`, `MOLECULE_NAME`, `DOSAGE`, `LK_NATURE`) \n"
-//                                  "VALUES ('%1', '%2', %3, \"%4\", '%5', %6);")
-//                            .arg(newUid).arg(form).arg(compo->mol_id).arg(compo->mol).arg(compo->sqlDosage()).arg(lknature);
-//                    commands << req;
-//                    ++lknature;
-//                }
-//            }
-//        }
-//        foreach(const QString &c, commands) {
-//            if (!query.exec(c)) {
-//                Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-//                return false;
-//            }
-//            query.finish();
-//        }
-//    }
-
-//    ca.commit();
-
-    // Run SQL commands one by one
+    // Run SQL finalization
     if (!Core::Tools::executeSqlFile(CA_DRUGS_DATABASE_NAME, databaseFinalizationScript(), &progressDialog)) {
         Utils::Log::addError(this, "Can create Canadian DB.", __FILE__, __LINE__);
         return false;
@@ -537,6 +560,16 @@ struct drug {
 bool CanadianDrugsDatabaseWidget::linkMolecules()
 {
     {
+        // 11 Dec 2010
+        //        NUMBER OF MOLECULES 1825
+        //        CORRECTED BY NAME 23
+        //        CORRECTED BY ATC 0
+        //        FOUNDED 1106 "
+        //        LINKERMODEL (WithATC:77;WithoutATC:74) 151"
+        //        LINKERNATURE 0
+        //        LEFT 548
+        //        CONFIDENCE INDICE 69
+
         // 13 Nov 2010
         //        NUMBER OF MOLECULES 1819
         //        CORRECTED BY NAME 23
@@ -610,15 +643,15 @@ bool CanadianDrugsDatabaseWidget::linkMolecules()
 //         HAVING count(composition.molecule_name) = 1
 //         LIMIT 100;
 
-        QString req;
-        Utils::Log::addMessage(this, "Getting Drugs with ATC and one molecule - Can take some times");
+//        QString req;
+//        Utils::Log::addMessage(this, "Getting Drugs with ATC and one molecule - Can take some times");
         QMultiHash<QString, QString> correctedByAtcCode;
-        QSqlQuery drugs(ca);
-        req = "SELECT DISTINCT composition.molecule_name, drugs.atc "
-              "FROM composition, drugs "
-              "WHERE drugs.uid=composition.uid AND length(drugs.atc)=7 "
-              "GROUP BY composition.uid "
-              "HAVING count(composition.molecule_name) = 1;";
+//        QSqlQuery drugs(ca);
+//        req = "SELECT DISTINCT composition.molecule_name, drugs.atc "
+//              "FROM composition, drugs "
+//              "WHERE drugs.uid=composition.uid AND length(drugs.atc)=7 "
+//              "GROUP BY composition.uid "
+//              "HAVING count(composition.molecule_name) = 1;";
 //        if (drugs.exec(req)) {
 //            while (drugs.next()) {
 //                correctedByAtcCode.insertMulti(drugs.value(0).toString(), drugs.value(1).toString());
@@ -651,32 +684,6 @@ bool CanadianDrugsDatabaseWidget::linkMolecules()
         corrected.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
         corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
-        //    corrected.insert(,);
-        //    corrected.insert(,);
-        //    corrected.insert(,);
-        //    corrected.insert(,);
-        //    corrected.insert(,);
-        //    corrected.insert("INSULIN" ???);
-        //    corrected.insert("PSEUDOEPHEDRINE HYDROCHLORIDE", "PSEUDOEPHEDRINE");
-    //    corrected.insert("NEOMYCIN (NEOMYCIN SULFATE)", "NEOMYCIN");
-    //    corrected.insert("NEOMYCIN SULFATE", "NEOMYCIN");
-    //    corrected.insert("ANTITHROMBIN III (HUMAN)", "ANTITHROMBIN III");
-    //    corrected.insert("DOPAMINE HYDROCHLORIDE", "DOPAMINE");
-    //    corrected.insert("HEPARIN (HEPARIN SODIUM)", "HEPARIN");
-    //    corrected.insert("DIPHENOXYLATE HYDROCHLORIDE", "DIPHENOXYLATE");
-    //    corrected.insert("PROGUANIL HYDROCHLORIDE", "PROGUANIL");
-    //    corrected.insert("EPINEPHRINE BITARTRATE", "EPINEPHRINE");
-    //    corrected.insert("DEXAMETHASONE ACETATE", "DEXAMETHASONE");
-    //    corrected.insert("POLYMYXIN B (POLYMYXIN B SULFATE)", "POLYMYXIN B");
-    //    corrected.insert("ENALAPRIL SODIUM", "ENALAPRIL");
-    //    corrected.insert("NALOXONE (NALOXONE HYDROCHLORIDE DIHYDRATE)", "NALOXONE");
-    //    corrected.insert("BUPRENORPHINE (BUPRENORPHINE HYDROCHLORIDE)", "BUPRENORPHINE");
-    //    corrected.insert("TICARCILLIN (TICARCILLIN DISODIUM)", "TICARCILLIN");
-    //    corrected.insert("THROMBIN (HUMAN)", "THROMBIN");
-    //    corrected.insert("COAGULATION FACTOR VII (HUMAN)", "COAGULATION FACTOR VII");
-    //    corrected.insert("COAGULATION FACTOR IX (HUMAN)", "COAGULATION FACTOR IX");
-    //    corrected.insert("CAFFEINE CITRATE" ,"CAFFEINE" );
-    //    corrected.insert("TRIPROLIDINE HYDROCHLORIDE" ,"TRIPROLIDINE" );
 
         // Associate Mol <-> ATC for drugs with one molecule only
         QStringList unfound;

@@ -71,6 +71,9 @@
 .read drugs_schema.sql
 
 -- Compute the temporary database and create the final FreeDiams database
+.read canadian_db_processing.sql
+
+-- Compute the temporary database and create the final FreeDiams database
 .read canadian_db_finalize.sql
 
 .exit
