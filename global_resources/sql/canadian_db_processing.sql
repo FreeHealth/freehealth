@@ -39,14 +39,14 @@
 -- ***************************************************************************/
 
 -- /**
---  * \file canadian_db_finalize.sql
+--  * \file canadian_db_processing.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
 --  * \version 0.4.4
 --  * \date 14 July 2010
 --  */
 
 -- /**
---  * \brief This script creates the FreeDiams Canadian's drugs database itself.
+--  * \brief This script populates the FreeDiams Canadian's drugs database from source tables.
 --  *
 --  * \warning SQL commands MUST end with \e ;
 --  *
@@ -62,7 +62,6 @@
 --  *  iii) manual insertion into LK_MOL_ATC until scriptable
 --  */
 
-
 -- ********************************
 -- Remove Veterinary drugs
 -- ********************************
@@ -73,93 +72,21 @@
 -- ther
 -- package
 
-DELETE FROM ingred
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  ingred A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM ther
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  ther A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
-DELETE FROM package
-WHERE
-  DRUG_CODE
-IN
-(SELECT
-  A1.DRUG_CODE
-FROM
-  package A1, drug A2
-WHERE
-  A1.DRUG_CODE = A2.DRUG_CODE AND
-A2.Class = "Veterinary")
-;
-
 DELETE FROM drug
 WHERE Class = "Veterinary"
 ;
 
-ALTER TABLE "form" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "route" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "ingred" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "ther" ADD "DIN" VARCHAR2(8);
-ALTER TABLE "package" ADD "DIN" VARCHAR2(8);
 
-UPDATE form
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=form.DRUG_CODE
-);
-
-UPDATE route
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=route.DRUG_CODE
-);
-
-UPDATE ingred
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=ingred.DRUG_CODE
-);
-
-UPDATE ther
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=ther.DRUG_CODE
-);
-
-UPDATE package
-SET DIN =
-(SELECT DIN
-FROM drug A1
-WHERE A1.DRUG_CODE=package.DRUG_CODE
-);
+-- ********************************
+-- Feed FreeDiams table DRUGS
+-- ********************************
+-- these are Branded products
+-- the drugs must be distinct on {drug or combination} plus strength)
+-- note FreeDiam's DRUGS table needs its records pre-ordered ascending on column NAME
 
 INSERT INTO DRUGS ("UID", "NAME")
 SELECT DISTINCT
-   A1.DIN,
+   A1.DRUG_CODE,
    A1.BRAND_NAME
 FROM drug A1
 ORDER BY A1.BRAND_NAME;
@@ -170,16 +97,16 @@ UPDATE DRUGS
 SET FORM=
 (SELECT group_concat(PHARMACEUTICAL_FORM, ", ")
 FROM form A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 UPDATE DRUGS
 SET ROUTE=
 (SELECT group_concat(ROUTE_OF_ADMINISTRATION, ", ")
 FROM route A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 -- ensure that any Canadian drug NULL strengths are backfilled from related ingredients
@@ -188,8 +115,8 @@ UPDATE DRUGS
 SET GLOBAL_STRENGTH=
 (SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
 FROM ingred A1
-WHERE A1.DIN=DRUGS.UID
-GROUP BY DIN
+WHERE A1.DRUG_CODE=DRUGS.UID
+GROUP BY DRUG_CODE
 LIMIT 10);
 
 -- set the ATC
@@ -199,7 +126,7 @@ UPDATE DRUGS
 SET ATC=
 (SELECT DISTINCT TC_ATC_NUMBER
 FROM ther A1
-WHERE A1.DIN=DRUGS.UID
+WHERE A1.DRUG_CODE=DRUGS.UID
 );
 
 
@@ -207,41 +134,57 @@ WHERE A1.DIN=DRUGS.UID
 -- Feed FreeDiams table COMPOSITION (molecular ingredients)
 -- ********************************
 -- note: some have DOSAGE_VALUE, others do not
--- also omitting in this step "MOLECULE_FORM"
+-- also omitting in this step to populate "MOLECULE_FORM"
 
 INSERT INTO "COMPOSITION"
    ("UID", "MOLECULE_CODE", "MOLECULE_NAME", "DOSAGE", "DOSAGE_REF", "NATURE", "LK_NATURE")
-SELECT DISTINCT
-   DRUGS.UID,
+SELECT
+   A1.DRUG_CODE,
    A1.ACTIVE_INGREDIENT_CODE,
    A1.INGREDIENT,
    A1.STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT,
    "",
    "SA",
    1
-FROM DRUGS, ingred A1
+FROM ingred A1, drug A2
 WHERE
-   (DRUGS.UID = A1.DIN) AND
+   (A1.DRUG_CODE = A2.DRUG_CODE) AND
    (A1.DOSAGE_VALUE != "")
    ;
 
 
 INSERT INTO COMPOSITION
    ("UID", "MOLECULE_CODE", "MOLECULE_NAME", "DOSAGE", "DOSAGE_REF", "NATURE", "LK_NATURE")
-SELECT DISTINCT
-   DRUGS.UID,
+SELECT
+   A1.DRUG_CODE,
    A1.ACTIVE_INGREDIENT_CODE,
    A1.INGREDIENT,
    A1.STRENGTH || A1.STRENGTH_UNIT,
    "",
    "SA",
    1
-FROM DRUGS, ingred A1
+FROM ingred A1, drug A2
 WHERE
-   (DRUGS.UID = A1.DIN) AND
-   (A1.DOSAGE_VALUE = "");
+   (A1.DRUG_CODE = A2.DRUG_CODE) AND
+   (A1.DOSAGE_VALUE = "")
+   ;
+
+-- ********************************
+-- Switch DRUG_CODE to DIN in DRUGS and COMPOSITION tables
+-- ********************************
+
+UPDATE DRUGS SET UID =
+(
+  SELECT DIN FROM drug WHERE drug.DRUG_CODE=DRUGS.UID
+);
+
+UPDATE COMPOSITION SET UID =
+(
+  SELECT DIN FROM drug WHERE drug.DRUG_CODE=COMPOSITION.UID
+);
 
 
+-- commented-out until future use
 -- ********************************
 -- Feed PACKAGING (available shipping sizes / quantities)
 -- ********************************

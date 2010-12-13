@@ -8,11 +8,11 @@
 #   more easily parsed by sqlite3
 # - call sqlite to create a db suitable for use with FreeDiams
 
-echo "Creating temporary directory ~/tmp/drugsca..."
+#echo "Creating temporary directory ~/tmp/drugsca..."
 rm -R ~/tmp/drugsca
 mkdir ~/tmp/
 mkdir ~/tmp/drugsca
-cp ../../../global_resources/sql/*.* ~/tmp/drugsca
+ cp ../../../global_resources/sql/*.* ~/tmp/drugsca
 # files:
 # cp ../../../global_resources/sql/atc_utf8.csv
 # cp ../../../global_resources/sql/drugs_schema.sql

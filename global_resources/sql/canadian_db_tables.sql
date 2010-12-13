@@ -39,14 +39,14 @@
 -- ***************************************************************************/
 
 -- /**
---  * \file canadian_db_preparation.sql
+--  * \file canadian_db_tables.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
 --  * \version 0.4.4
---  * \date 14 July 2010
+--  * \date Dec 12, 2010
 --  */
 
 -- /**
---  * \brief This script imports the datas from the Canadian downloading
+--  * \brief This script creates the table structure to hold Canadian downloading
 --  *
 --  * \warning SQL commands MUST end with \e ; . There MUST BE nothing on the line after the ending \e ; .
 --  *

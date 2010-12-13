@@ -62,7 +62,7 @@
 --  */
 
 -- Prepare Canadian temporary database
-.read canadian_db_preparation.sql
+.read canadian_db_tables.sql
 
 -- Imports Canadian raw datas
 .read canadian_db_imports.sql
