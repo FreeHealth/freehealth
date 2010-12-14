@@ -139,6 +139,7 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
                 const QString &lbl = atcLabels.value(atcCodes.key(code));
                 url.replace("[[ONE_ATC_CODE]]", code);
                 e->processedLabel_Url.insert(QString("%1 (%2)").arg(e->label).arg(lbl), url);
+//                qWarning() << QString("%1 (%2)").arg(e->label).arg(lbl);
             }
             continue;
         }
@@ -151,6 +152,7 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
         if (proceed) {
             Utils::replaceTokens(url, tokens);
             e->processedLabel_Url.insert(e->label, url);
+//            qWarning() << e->label;
         }
     }
 }
