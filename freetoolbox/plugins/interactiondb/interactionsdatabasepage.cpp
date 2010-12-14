@@ -37,6 +37,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/httpdownloader.h>
 #include <translationutils/constanttranslations.h>
 #include <translationutils/googletranslator.h>
 
@@ -281,6 +282,12 @@ public:
     QPersistentModelIndex m_EditingIndex;
 };
 
+
+struct Source
+{
+    QString m_TreeClass, m_Inn, m_Link, m_TypeOfLink, m_Abstract, m_TextualReference, m_Explanation;
+};
+
 } // namespace IAMDb
 
 
@@ -306,6 +313,64 @@ InteractionDatabaseCreator::~InteractionDatabaseCreator()
 {
     delete ui; ui=0;
     delete d; d=0;
+}
+
+static void setClassTreeToDatabase(const QString &iclass,
+                                   const QMultiHash<QString, QString> &class_mols,
+                                   const QMultiHash<QString, QString> &molsToAtc,
+                                   const QStringList &afssapsClass,
+                                   const QStringList &molsWithoutAtc,
+                                   QMultiHash<QString, QString> *buggyIncludes,
+                                   int insertChildrenIntoClassId = -1)
+{
+    const QStringList &associatedInns = molsToAtc.uniqueKeys();
+
+    if (insertChildrenIntoClassId == -1) {
+        insertChildrenIntoClassId = afssapsClass.indexOf(iclass)+200000;
+    }
+
+    // Take all included inns
+    QString req;
+    foreach(const QString &inn, class_mols.values(iclass)) {
+        req.clear();
+        if (afssapsClass.contains(inn)) {
+            // Avoid inclusion of self class
+            if (iclass==inn) {
+                qWarning() << "error: CLASS==INN"<< iclass << inn;
+                continue;
+            }
+            qWarning() << "class within a class" << iclass << inn;
+            setClassTreeToDatabase(inn, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, buggyIncludes, insertChildrenIntoClassId);
+            qWarning() << "end class within a class";
+            continue;
+        }
+        if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
+            foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
+                        .arg(insertChildrenIntoClassId)
+                        .arg(atc);
+                Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+            }
+        } else {
+            int id = molsWithoutAtc.indexOf(inn.toUpper());
+            if (id==-1) {
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH` like \"%2\"));")
+                        .arg(insertChildrenIntoClassId)
+                        .arg(inn);
+            } else {
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
+                        .arg(insertChildrenIntoClassId)
+                        .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'));
+            }
+
+            if (!Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__)) {
+                buggyIncludes->insertMulti(iclass, inn);
+            }
+        }
+    }
 }
 
 void InteractionDatabaseCreator::on_createAndSave_clicked()
@@ -412,7 +477,6 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         }
         progress.setValue(4);
 
-//        qSort(afssapsClass);
         // Add classes
         // 200 000 < ID < 299 999  == Interactings classes
         for (int i=0; i < afssapsClass.count(); i++) {
@@ -439,6 +503,7 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         //        }
     }
 
+
     // Add interacting classes tree
     {
         // Prepare computation
@@ -452,7 +517,9 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         int nb = afssapsTreeModel->rowCount();
         for(int i = 0; i < nb; ++i) {
             int j = 0;
+            // Get class name
             QModelIndex parent = afssapsTreeModel->index(i, AfssapsClassTreeModel::Name);
+            // Get mols
             while (afssapsTreeModel->hasIndex(j, 0, parent)) {
                 const QString &mol = afssapsTreeModel->index(j, AfssapsClassTreeModel::Name, parent).data().toString();
                 class_mols.insertMulti(parent.data().toString(), mol);
@@ -462,49 +529,14 @@ void InteractionDatabaseCreator::on_createAndSave_clicked()
         progress.setValue(6);
 
         // Computation
-        int classId = 0;
-        // Foreach classes
-        const QStringList &associatedInns = molsToAtc.uniqueKeys();
-//        qWarning() << molsToAtc.values("IBUPROFENE");
-//        qWarning() << associatedInns.contains("IBUPROFENE") << associatedInns;
-
+        QMultiHash<QString, QString> buggyIncludes;
         foreach(const QString &iclass, afssapsClass) {
-            const QStringList &vals = class_mols.values(iclass);
-
-            // Take all included inns
-            foreach(const QString &inn, vals) {
-                if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
-                    foreach(const QString &atc, molsToAtc.values(inn)) {
-                        req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                                      "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
-                                .arg(afssapsClass.indexOf(iclass)+200000)
-                                .arg(atc);
-                        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-                    }
-                } else {
-                    int id = molsWithoutAtc.indexOf(inn);
-                    if (id==-1) {
-                        QString tmp = inn;
-                        req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                                      "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH`=\"%2\"));")
-                                .arg(afssapsClass.indexOf(iclass)+200000)
-                                .arg(tmp);
-                    } else {
-                        req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                                      "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
-                                .arg(afssapsClass.indexOf(iclass)+200000)
-                                .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn)+1).rightJustified(2, '0'));
-                    }
-                    if (inn.startsWith("IBUPRO"))
-                        qWarning() << req;
-
-                    Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-                }
-            }
-            ++classId;
+            setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, &buggyIncludes);
         }
         progress.setValue(7);
+        afssapsTreeModel->addBuggyInclusions(buggyIncludes);
     }
+
 
     // Add interaction knowledges
     {

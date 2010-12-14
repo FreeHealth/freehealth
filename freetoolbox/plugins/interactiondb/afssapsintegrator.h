@@ -167,6 +167,8 @@ public:
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
+    void addBuggyInclusions(const QMultiHash<QString, QString> &buggyIncludes);
+
 public Q_SLOTS:
     bool saveModel();
     void setActualReviewer(const QString &name);

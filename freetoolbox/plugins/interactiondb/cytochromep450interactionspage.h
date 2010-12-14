@@ -29,7 +29,9 @@ protected Q_SLOTS:
     void substancePageDownloaded(QNetworkReply *reply);
     void on_process_clicked();
     void generateUnlinkedAtcCsvFile();
+    void getLinkReferences(const int cytId, QHash<QString, QString> correctedLinks);
     void populateDatabase();
+    void createXML();
 
 protected:
     void changeEvent(QEvent *e);

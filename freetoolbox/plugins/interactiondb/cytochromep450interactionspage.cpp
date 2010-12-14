@@ -41,7 +41,8 @@ enum { TestOnly = true };
 enum InhibitorsLevel {
     IL_Strong = 0,
     IL_Moderate,
-    IL_Weak
+    IL_Weak,
+    IL_Other
 };
 
 const char* const  TABLE_URL     = "http://www.medicine.iupui.edu/clinpharm/ddis/table.asp";
@@ -62,6 +63,15 @@ static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->v
 
 namespace IAMDb {
 namespace Internal {
+
+struct MolInfo {
+    MolInfo() : typeOfInhibitor(-1), cytId(-1) {}
+
+    QString substrate, inducer, inhibitor;
+    int typeOfInhibitor, cytId;
+    QString link;
+};
+
 class CytochromeP450InteractionsPrivate
 {
 public:
@@ -71,6 +81,7 @@ public:
 
     QMultiHash<int, QString> substrates, inhibitors, inducers;  // int correspond to the cytochromes.indexOf(cyt)
     QMultiHash<int, QPair<QString, int> > inhibitorsLevel;
+    QList<MolInfo> molName_Link;  // int correspond to the cytochromes.indexOf(cyt)
 
 };
 }  // End namespace Internal
@@ -249,7 +260,10 @@ void CytochromeP450InteractionsWidget::on_process_clicked()
                 int b = line.indexOf("\">") + 2;
                 int e = line.indexOf("</a>", b);
                 QString tmp = line.mid(b, e-b);
-                d->inhibitors.insertMulti(col, tmp);
+                QPair<QString, int> p;
+                p.first = tmp;
+                p.second = IL_Other;
+                d->inhibitorsLevel.insert(col, p);
             } else if (line.startsWith("<img")) {
                 int b = line.indexOf("\">") + 2;
                 int e = line.indexOf("</a>", b);
@@ -271,10 +285,18 @@ void CytochromeP450InteractionsWidget::on_process_clicked()
                     p.first = tmp;
                     p.second = IL_Weak;
                     d->inhibitorsLevel.insert(col, p);
+                } else {
+                    QPair<QString, int> p;
+                    p.first = tmp;
+                    p.second = IL_Other;
+                    d->inhibitorsLevel.insert(col, p);
                 }
             } else {
                 QString tmp = line.left(line.indexOf("<br"));
-                d->inhibitors.insertMulti(col, tmp);
+                QPair<QString, int> p;
+                p.first = tmp;
+                p.second = IL_Other;
+                d->inhibitorsLevel.insert(col, p);
             }
         }
         ++col;
@@ -321,8 +343,9 @@ void CytochromeP450InteractionsWidget::on_process_clicked()
 //    foreach(const int k, inducers.uniqueKeys()) {
 //        qWarning() << k << inducers.values(k);
 //    }
-    generateUnlinkedAtcCsvFile();
-    populateDatabase();
+//    generateUnlinkedAtcCsvFile();
+//    populateDatabase();
+    createXML();
 }
 
 void CytochromeP450InteractionsWidget::generateUnlinkedAtcCsvFile()
@@ -377,6 +400,170 @@ void CytochromeP450InteractionsWidget::generateUnlinkedAtcCsvFile()
     Utils::saveStringToFile(req, unlinkeAbsPath());
 }
 
+void CytochromeP450InteractionsWidget::getLinkReferences(const int cytId, QHash<QString, QString> correctedLinks)
+{
+    if (cytId < 0 || cytId >= cytochromes.count()) {
+        return;
+    }
+    // Add some specific corrections
+    correctedLinks.insert("fluoroquinolones", "fluoro");
+    correctedLinks.insert("beta-naphthoflavone", "beta");
+    correctedLinks.insert("methylcholanthrene", "methyl");
+    correctedLinks.insert("S-warfarin", "warfarin");
+    correctedLinks.insert("phenytoin-4-OH2", "phenytoin-4");
+    correctedLinks.insert("losartan","lorsartan");
+    correctedLinks.insert("S-naproxen&rarr;Nor","S-naproxen");
+    correctedLinks.insert("R-mephobarbital", "mephobarbital");
+    correctedLinks.insert("N,N-dimethylformamide", "dimethylformamide");
+    correctedLinks.insert("acetaminophen&rarr;NAPQI", "acetaminophen");
+    correctedLinks.insert("diethyl-dithiocarbamate", "dithiocarbamate");
+    correctedLinks.insert("St. John's wort", "stjohnswort");
+
+    QString fileName = cytochromes.at(cytId);
+    fileName = workingPath() + fileName.remove(",") + "references.asp";
+    QString content = Utils::readTextFile(fileName);
+    if (content.isEmpty())
+        return;
+    int begin = content.indexOf("Peer-reviewed Literature References");
+    int end = 0;
+    QString proceed;
+    // get Substrates
+    proceed = Core::Tools::getBlock(content, begin, end, "<h2><font color=\"#FFFFFF\" style=\"background-color:#999999\">");
+//    qWarning() << "proceed" << proceed;
+
+    foreach(QString sub, d->substrates.values(cytId)) {
+        sub = sub.simplified();
+        // Find paragraph  "<b><a name="sub"Sub"...
+        int b = proceed.indexOf("<b><a name=\"" + sub + "Sub");
+        int e = proceed.indexOf("<b><a name=", b + 10);
+        if (b==-1) {
+            if (correctedLinks.contains(sub) && !correctedLinks.value(sub).isEmpty()) {
+                b = proceed.indexOf("<b><a name=\"" + correctedLinks.value(sub) + "Sub");
+                e = proceed.indexOf("<b><a name=", b + 10);
+            } else {
+                qWarning() << "SUBSTRATE NOT FOUND (no correctedLink)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+            if (b==-1) {
+                qWarning() << "SUBSTRATE NOT FOUND (correctedLink not found)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+        }
+        // Extract PIMD  "PMID "xxxx"</a>
+        int s = 0;
+        QString tmp = proceed.mid(b, e-b);
+        while (true) {
+            s = tmp.indexOf("PMID ", s);
+            if (s == -1)
+                break;
+            e = tmp.indexOf("</a>", s);
+            if (e==-1) {
+                qWarning() << "PMID can not be extracted (wrong end)" << e << tmp;
+            } else {
+                s += 5;
+                Internal::MolInfo info;
+                info.cytId = cytId;
+                info.substrate = sub;
+                info.link = "http://www.ncbi.nlm.nih.gov/pubmed/" + tmp.mid(s, e-s);
+                d->molName_Link.append(info);
+            }
+            s += 10;
+        }
+    }
+
+    // get Inhibitors
+    begin = end;
+    proceed = Core::Tools::getBlock(content, begin, end, "<h2><font color=\"#FFFFFF\" style=\"background-color:#999999\">");
+    QStringList inhibitors;
+    typedef QPair<QString, int> MyPair;
+    foreach(const MyPair &p, d->inhibitorsLevel.values(cytId)) {
+        inhibitors << p.first;
+    }
+
+    foreach(QString sub, inhibitors) {
+        sub = sub.simplified();
+        // Find paragraph  "<b><a name="sub"Inh"...
+        int b = proceed.indexOf("<b><a name=\"" + sub + "Inh");
+        int e = proceed.indexOf("<b><a name=", b + 10);
+        if (b==-1) {
+            if (correctedLinks.contains(sub) && !correctedLinks.value(sub).isEmpty()) {
+                b = proceed.indexOf("<b><a name=\"" + correctedLinks.value(sub).toLower() + "Inh");
+                e = proceed.indexOf("<b><a name=", b + 10);
+            } else {
+                qWarning() << "INHIBITOR NOT FOUND (no correctedLink)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+            if (b==-1) {
+                qWarning() << "INHIBITOR NOT FOUND (correctedLink not found)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+        }
+        // Extract PIMD  "PMID "xxxx"</a>
+        int s = 0;
+        QString tmp = proceed.mid(b, e-b);
+        while (true) {
+            s = tmp.indexOf("PMID ", s);
+            if (s == -1)
+                break;
+            e = tmp.indexOf("</a>", s);
+            if (e==-1) {
+                qWarning() << "INDUCER::PMID can not be extracted (wrong end)" << e << tmp;
+            } else {
+                s += 5;
+                Internal::MolInfo info;
+                info.cytId = cytId;
+                info.inhibitor = sub;
+                info.link = "http://www.ncbi.nlm.nih.gov/pubmed/" + tmp.mid(s, e-s);
+                d->molName_Link.append(info);
+            }
+            s += 10;
+        }
+    }
+
+    // get Inducers
+    begin = end;
+    proceed = Core::Tools::getBlock(content, begin, end, "<h2><font color=\"#FFFFFF\" style=\"background-color:#999999\">");
+    foreach(QString sub, d->inducers.values(cytId)) {
+        sub = sub.simplified();
+        // Find paragraph  "<b><a name="sub"Ind"...
+        int b = proceed.indexOf("<b><a name=\"" + sub.toLower() + "Ind");
+        int e = proceed.indexOf("<b><a name=", b + 10);
+        if (b==-1) {
+            if (correctedLinks.contains(sub) && !correctedLinks.value(sub).isEmpty()) {
+                b = proceed.indexOf("<b><a name=\"" + correctedLinks.value(sub).toLower() + "Ind");
+                e = proceed.indexOf("<b><a name=", b + 10);
+            } else {
+                qWarning() << "INDUCER NOT FOUND (no correctedLink)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+            if (b==-1) {
+                qWarning() << "INDUCER NOT FOUND (correctedLink not found)" << cytochromes.at(cytId) << sub;
+                continue;
+            }
+        }
+        // Extract PIMD  "PMID "xxxx"</a>
+        int s = 0;
+        QString tmp = proceed.mid(b, e-b);
+        while (true) {
+            s = tmp.indexOf("PMID ", s);
+            if (s == -1)
+                break;
+            e = tmp.indexOf("</a>", s);
+            if (e==-1) {
+                qWarning() << "INDUCER::PMID can not be extracted (wrong end)" << e << tmp;
+            } else {
+                s += 5;
+                Internal::MolInfo info;
+                info.cytId = cytId;
+                info.inducer = sub;
+                info.link = "http://www.ncbi.nlm.nih.gov/pubmed/" + tmp.mid(s, e-s);
+                d->molName_Link.append(info);
+            }
+            s += 10;
+        }
+    }
+}
+
 void CytochromeP450InteractionsWidget::populateDatabase()
 {
     // Send to IAM database
@@ -420,7 +607,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                       "('%1', '%2', '%3', '%4');")
                 .arg("ZP450"+n)
                 .arg(QString("Substrats du cytochrome P450 %1").arg(cyt).toUpper())
-                .arg(QString("Cytochrome P450 %1 substrats").arg(cyt).toUpper())
+                .arg(QString("Cytochrome P450 %1 substrates").arg(cyt).toUpper())
                 .arg(QString("Cytochrom-P450 %1 substraten").arg(cyt).toUpper());
         // Add values to db
         if (query.exec(req)) {
@@ -715,8 +902,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         // Inducters
         req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
                       "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
-                .arg(QString("Interaction substrat/inducteur du cytochrome P450 %1. Risque de sous-dosage du substrat.").arg(cyt))
-                .arg(QString("Cytochrome P450 %1 substrate/inducer. Risk of underdosing of the substrat").arg(cyt));
+                .arg(QString("Interaction d'induction du cytochrome P450 %1. Risque de sous-dosage du substrat.").arg(cyt))
+                .arg(QString("Cytochrome P450 %1 substrate/inducer. Risk of underdosing of the substrate.").arg(cyt));
         if (query.exec(req)) {
             knowId = query.lastInsertId().toInt();
         } else {
@@ -733,8 +920,8 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         // Strong Inhibitors
         req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
                       "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
-                .arg(QString("Interaction substrat/inhibiteur de haut niveau du cytochrome P450 %1. Risque de surdosage du substrat important. Peut causer une augmentation > 5 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 80% de baisse de la clairance.").arg(cyt))
-                .arg(QString("Cytochrome P450 %1 substrate/strong inhibitor. High risk of substrate overdose. Can cause a > 5-fold increase in the plasma area under the curve values or more than 80% decrease in clearance.").arg(cyt));
+                .arg(QString("Interaction d'inhibition de haut niveau du cytochrome P450 %1. Risque de surdosage du substrat important. Peut causer une augmentation > 5 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 80% de baisse de la clairance.").arg(cyt))
+                .arg(QString("Strong inhibition of the cytochrome P450 %1 . High risk of substrate overdose. Can cause a > 5-fold increase in the plasma area under the curve values or more than 80% decrease in clearance.").arg(cyt));
         if (query.exec(req)) {
             knowId = query.lastInsertId().toInt();
         } else {
@@ -751,7 +938,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         // Moderate Inhibitors
         req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
                       "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
-                .arg(QString("Interaction substrat/inhibiteur de niveau modéré du cytochrome P450 %1. Risque de surdosage du substrat. Peut causer une augmentation > 2 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 50-80% de baisse de la clairance.").arg(cyt))
+                .arg(QString("Interaction d'inhibition de niveau modéré du cytochrome P450 %1. Risque de surdosage du substrat. Peut causer une augmentation > 2 fois des valeurs d'air sous la courbe des concentrations plasmatiques ou plus de 50-80% de baisse de la clairance.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/moderate inhibitor. Risk of substrate overdose. Can cause a > 2-fold increase in the plasma area under the curve values or more than 50-80% decrease in clearance.").arg(cyt));
         if (query.exec(req)) {
             knowId = query.lastInsertId().toInt();
@@ -787,7 +974,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         // Other Inhibitors
         req = QString("INSERT INTO `INTERACTION_KNOWLEDGE` (`TYPE`,`RISK_FR`,`RISK_EN`, `REFERENCES_LINK`) VALUES "
                       "('450', \"%1\", \"%2\", \"http://tinyurl.com/23zrx7z\")")
-                .arg(QString("Interaction substrat/inhibiteur du cytochrome P450 %1. Risque de surdosage du substrat.").arg(cyt))
+                .arg(QString("Interaction d'inhibition du cytochrome P450 %1. Risque de surdosage du substrat.").arg(cyt))
                 .arg(QString("Cytochrome P450 %1 substrate/inhibitor. Risk of substrate overdose.").arg(cyt));
         if (query.exec(req)) {
             knowId = query.lastInsertId().toInt();
@@ -813,6 +1000,233 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         tree.finish();
     }
     treeReqs.clear();
+
+    Utils::informativeMessageBox(tr("Process done."), tr("Thank you."));
+}
+
+void CytochromeP450InteractionsWidget::createXML()
+{
+    // Read the csv link file
+    QString links = Utils::readTextFile(unlinkeAbsPath());
+    QHash<QString, QString> correctedLinks;
+    foreach(const QString &line, links.split("\n",QString::SkipEmptyParts)) {
+        int split = line.lastIndexOf(";");
+        if ((split+1) == line.length())
+            correctedLinks.insert(line.left(split), QString());
+        else
+            correctedLinks.insert(line.left(split), line.mid(split+1));
+    }
+
+    int i = 0;
+    int id = 0;
+    int cytId = 0;
+    QString xmlTree, xmlClass;
+    foreach(const QString &cyt, cytochromes) {
+        d->molName_Link.clear();
+        getLinkReferences(cytId, correctedLinks);
+
+        xmlTree += QString("    <Class sources=\"FreeMedForms\" review=\"\" reviewer=\"\" name=\"%1\" dateofreview=\"\">\n")
+                   .arg(QString("Substrats du cytochrome P450 %1").arg(cyt).toUpper());
+
+        xmlClass += QString("    <Label de=\"%3\" references=\"FreeMedForms\" atcCodes=\"\" comments=\"\" en=\"%2\" review=\"\" id=\"\" afssaps=\"%1\" reviewer=\"\" es=\"\" afssapsCat=\"class\" autoFound=\"\" dateofreview=\"\"/>\n")
+                    .arg(QString("Substrats du cytochrome P450 %1").arg(cyt).toUpper())
+                    .arg(QString("Cytochrome P450 %1 substrates").arg(cyt).toUpper())
+                    .arg(QString("Cytochrom-P450 %1 substraten").arg(cyt).toUpper());
+
+        foreach(const QString &mol, d->substrates.values(cytId)) {
+            if (mol.startsWith("NOT"))
+                continue;
+
+            // get links
+            QMultiHash<QString, QString> mol_links;
+            foreach(const Internal::MolInfo &info, d->molName_Link) {
+                if (!info.substrate.isEmpty()) {
+                    mol_links.insertMulti(info.substrate, info.link);
+                }
+            }
+
+            QString correctedMol = mol;
+            if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
+                // use corrected key --> correctedLinks.value(mol)
+                correctedMol = correctedLinks.value(mol);
+            }
+
+            xmlTree += QString("      <Molecule name=\"%1\">\n").arg(correctedMol);
+            foreach(const QString &link, mol_links.values(mol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            xmlTree += "      </Molecule>\n";
+        }
+        xmlTree += QString("    </Class>\n");
+
+
+        // INDUCERS
+        xmlTree += QString("    <Class sources=\"FreeMedForms\" review=\"\" reviewer=\"\" name=\"%1\" dateofreview=\"\">\n")
+                   .arg(QString("Inducteurs du cytochrome P450 %1").arg(cyt).toUpper());
+
+        xmlClass += QString("    <Label de=\"%3\" references=\"FreeMedForms\" atcCodes=\"\" comments=\"\" en=\"%2\" review=\"\" id=\"\" afssaps=\"%1\" reviewer=\"\" es=\"\" afssapsCat=\"class\" autoFound=\"\" dateofreview=\"\"/>\n")
+                    .arg(QString("Inducteurs du cytochrome P450 %1").arg(cyt).toUpper())
+                    .arg(QString("Cytochrome P450 %1 inducers").arg(cyt).toUpper())
+                    .arg(QString("Cytochrom-P450 %1 induktoren").arg(cyt).toUpper());
+        foreach(const QString &mol, d->inducers.values(cytId)) {
+            if (mol.startsWith("NOT"))
+                continue;
+
+            // get links
+            QMultiHash<QString, QString> mol_links;
+            foreach(const Internal::MolInfo &info, d->molName_Link) {
+                if (!info.inducer.isEmpty()) {
+                    mol_links.insertMulti(info.inducer, info.link);
+                }
+            }
+
+            QString correctedMol = mol;
+            if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
+                // use corrected key --> correctedLinks.value(mol)
+                correctedMol = correctedLinks.value(mol);
+            }
+
+            xmlTree += QString("      <Molecule name=\"%1\">\n").arg(correctedMol);
+            foreach(const QString &link, mol_links.values(mol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            foreach(const QString &link, mol_links.values(correctedMol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            xmlTree += "      </Molecule>\n";
+        }
+        xmlTree += QString("    </Class>\n");
+
+        xmlTree += QString("    <Class sources=\"FreeMedForms\" review=\"\" reviewer=\"\" name=\"%1\" dateofreview=\"\">\n")
+                   .arg(QString("Inhibiteurs de haut niveau du cytochrome P450 %1").arg(cyt).toUpper());
+
+        xmlClass += QString("    <Label de=\"%3\" references=\"FreeMedForms\" atcCodes=\"\" comments=\"\" en=\"%2\" review=\"\" id=\"\" afssaps=\"%1\" reviewer=\"\" es=\"\" afssapsCat=\"class\" autoFound=\"\" dateofreview=\"\"/>\n")
+                    .arg(QString("Inhibiteurs de haut niveau du cytochrome P450 %1").arg(cyt).toUpper())
+                    .arg(QString("Strong cytochrome P450 %1 inhibitors").arg(cyt).toUpper())
+                    .arg(QString("Starken cytochrom-P450 %1 inhibitoren").arg(cyt).toUpper());
+
+        QStringList inhibitorsToProcess;
+        typedef QPair<QString, int> MyPair;
+        foreach(const MyPair &p, d->inhibitorsLevel.values(cytId)) {
+            if (p.second==IL_Strong) {
+                inhibitorsToProcess << p.first;
+            }
+        }
+
+        foreach(const QString &mol, inhibitorsToProcess) {
+            if (mol.startsWith("NOT"))
+                continue;
+
+            // get links
+            QMultiHash<QString, QString> mol_links;
+            foreach(const Internal::MolInfo &info, d->molName_Link) {
+                if (!info.inhibitor.isEmpty()) {
+                    mol_links.insertMulti(info.inhibitor, info.link);
+                }
+            }
+
+            QString correctedMol = mol;
+            if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
+                // use corrected key --> correctedLinks.value(mol)
+                correctedMol = correctedLinks.value(mol);
+            }
+
+            xmlTree += QString("      <Molecule name=\"%1\">\n").arg(correctedMol);
+            foreach(const QString &link, mol_links.values(mol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            xmlTree += "      </Molecule>\n";
+        }
+        xmlTree += QString("    </Class>\n");
+
+
+        xmlTree += QString("    <Class sources=\"FreeMedForms\" review=\"\" reviewer=\"\" name=\"%1\" dateofreview=\"\">\n")
+                   .arg(QString("Inhibiteurs de niveau modéré du cytochrome P450 %1").arg(cyt).toUpper());
+
+        xmlClass += QString("    <Label de=\"%3\" references=\"FreeMedForms\" atcCodes=\"\" comments=\"\" en=\"%2\" review=\"\" id=\"\" afssaps=\"%1\" reviewer=\"\" es=\"\" afssapsCat=\"class\" autoFound=\"\" dateofreview=\"\"/>\n")
+                    .arg(QString("Inhibiteurs de niveau modéré du cytochrome P450 %1").arg(cyt).toUpper())
+                    .arg(QString("Moderate cytochrome P450 %1 inhibitors").arg(cyt).toUpper())
+                    .arg(QString("Moderate cytochrom-P450 %1 inhibitoren").arg(cyt).toUpper());
+
+        inhibitorsToProcess.clear();
+        foreach(const MyPair &p, d->inhibitorsLevel.values(cytId)) {
+            if (p.second==IL_Moderate) {
+                inhibitorsToProcess << p.first;
+            }
+        }
+
+        foreach(const QString &mol, inhibitorsToProcess) {
+            if (mol.startsWith("NOT"))
+                continue;
+
+            // get links
+            QMultiHash<QString, QString> mol_links;
+            foreach(const Internal::MolInfo &info, d->molName_Link) {
+                if (!info.inhibitor.isEmpty()) {
+                    mol_links.insertMulti(info.inhibitor, info.link);
+                }
+            }
+
+            QString correctedMol = mol;
+            if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
+                // use corrected key --> correctedLinks.value(mol)
+                correctedMol = correctedLinks.value(mol);
+            }
+
+            xmlTree += QString("      <Molecule name=\"%1\">\n").arg(correctedMol);
+            foreach(const QString &link, mol_links.values(mol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            xmlTree += "      </Molecule>\n";
+        }
+        xmlTree += QString("    </Class>\n");
+
+        xmlTree += QString("    <Class sources=\"FreeMedForms\" review=\"\" reviewer=\"\" name=\"%1\" dateofreview=\"\">\n")
+                   .arg(QString("Autres inhibiteurs du cytochrome P450 %1").arg(cyt).toUpper());
+
+        xmlClass += QString("    <Label de=\"%3\" references=\"FreeMedForms\" atcCodes=\"\" comments=\"\" en=\"%2\" review=\"\" id=\"\" afssaps=\"%1\" reviewer=\"\" es=\"\" afssapsCat=\"class\" autoFound=\"\" dateofreview=\"\"/>\n")
+                    .arg(QString("Autres inhibiteurs du cytochrome P450 %1").arg(cyt).toUpper())
+                    .arg(QString("Other cytochrome P450 %1 inhibitors").arg(cyt).toUpper())
+                    .arg(QString("anderen cytochrom-P450 %1 inhibitoren").arg(cyt).toUpper());
+
+        inhibitorsToProcess.clear();
+        foreach(const MyPair &p, d->inhibitorsLevel.values(cytId)) {
+            if (p.second==IL_Other) {
+                inhibitorsToProcess << p.first;
+            }
+        }
+
+        foreach(const QString &mol, inhibitorsToProcess) {
+            if (mol.startsWith("NOT"))
+                continue;
+
+            // get links
+            QMultiHash<QString, QString> mol_links;
+            foreach(const Internal::MolInfo &info, d->molName_Link) {
+                if (!info.inhibitor.isEmpty()) {
+                    mol_links.insertMulti(info.inhibitor, info.link);
+                }
+            }
+
+            QString correctedMol = mol;
+            if (correctedLinks.keys().contains(mol) && !correctedLinks.value(mol).isEmpty()) {
+                // use corrected key --> correctedLinks.value(mol)
+                correctedMol = correctedLinks.value(mol);
+            }
+
+            xmlTree += QString("      <Molecule name=\"%1\">\n").arg(correctedMol);
+            foreach(const QString &link, mol_links.values(mol)) {
+                xmlTree += QString("        <Source link=\"%2\"/>\n").arg(link);
+            }
+            xmlTree += "      </Molecule>\n";
+        }
+        xmlTree += QString("    </Class>\n");
+
+        ++cytId;
+    }
+
+    Utils::saveStringToFile(xmlTree, workingPath()+"cytp450_tree.xml");
+    Utils::saveStringToFile(xmlClass, workingPath()+"cytp450_class.xml");
 
     Utils::informativeMessageBox(tr("Process done."), tr("Thank you."));
 }

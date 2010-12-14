@@ -61,6 +61,13 @@
 #define MODEL_PREFETCH 100
 const char * const MIMETYPE = "application/freemedforms.molecule.name";
 
+
+//
+//  Get textual summary of publication (pubmed)
+//  http://www.ncbi.nlm.nih.gov/pubmed/8148870?dopt=docsum&format=text
+//
+
+
 using namespace IAMDb;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
@@ -498,6 +505,11 @@ Qt::ItemFlags AfssapsLinkerModel::flags(const QModelIndex &index) const
         return f;
     }
 
+    if (index.column()==AtcCodes) {
+        f |= Qt::ItemIsEditable;
+        return f;
+    }
+
     if (index.column() == En_Label || index.column() == De_Label || index.column() == Es_Label) {
         // If (molecule or class) molecule --> Unable language editing
         DomItem *item = static_cast<DomItem*>(index.internalPointer());
@@ -672,6 +684,7 @@ public:
     DomItem *m_RootItem;
     QString reviewer, actualDbUid;
     int m_FetchedRows;
+    QMultiHash<QString, QString> m_BuggyIncludes; // K= class; V= INNs
 
 private:
     AfssapsClassTreeModel *q;
@@ -774,7 +787,9 @@ int AfssapsClassTreeModel::columnCount(const QModelIndex &) const
 QVariant AfssapsClassTreeModel::data(const QModelIndex &index, int role) const
 {
     // <Class name="" review="" reviewer="" dateofreview="">
-    //   <Molecule name=""/>
+    //   <Molecule name="">
+    //    <Source link="" />
+    //  </Molecule>
     // </Class>
     if (!index.isValid())
         return QVariant();
@@ -786,6 +801,8 @@ QVariant AfssapsClassTreeModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.column()) {
         case Name:
+            if (node.toElement().tagName()=="Source")
+                return attributeMap.namedItem("link").nodeValue();
             return attributeMap.namedItem("name").nodeValue();
         case Review:
             return attributeMap.namedItem("review").nodeValue();
@@ -820,6 +837,22 @@ QVariant AfssapsClassTreeModel::data(const QModelIndex &index, int role) const
                 return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/ok.png");
             else
                 return QIcon(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/pixmap/16x16/help.png");
+        }
+    } else if (role==Qt::BackgroundRole) {
+        if (node.toElement().tagName()=="Class") {
+            if (d->m_BuggyIncludes.uniqueKeys().contains(node.attributes().namedItem("name").nodeValue())) {
+                QColor c("red");
+                c.setAlpha(125);
+                return c;
+            }
+        }
+        if (node.toElement().tagName()=="Molecule") {
+            const QString &cl = node.parentNode().attributes().namedItem("name").nodeValue();
+            if (d->m_BuggyIncludes.values(cl).contains(attributeMap.namedItem("name").nodeValue())) {
+                QColor c("red");
+                c.setAlpha(125);
+                return c;
+            }
         }
     }
     return QVariant();
@@ -878,16 +911,20 @@ Qt::ItemFlags AfssapsClassTreeModel::flags(const QModelIndex &index) const
     DomItem *item = static_cast<DomItem*>(index.internalPointer());
     QDomNode node = item->node();
 
+    if (node.isComment()) {
+        return f;
+    }
+
     if (node.toElement().tagName() == "Class")
         f |= Qt::ItemIsDropEnabled;
+
+    f |= Qt::ItemIsEditable;
 
     if (index.column() == Name || index.column() == Date)
         return f;
 
     if (index.column() == Review)
         f |= Qt::ItemIsUserCheckable;
-
-    f |= Qt::ItemIsEditable;
 
     return f;
 }
@@ -991,6 +1028,14 @@ bool AfssapsClassTreeModel::insertRows(int row, int count, const QModelIndex &pa
 
     return true;
 }
+
+void AfssapsClassTreeModel::addBuggyInclusions(const QMultiHash<QString, QString> &buggyIncludes)
+{
+    d->m_BuggyIncludes = buggyIncludes;
+    reset();
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////    INTEGRATOR WIDGET    //////////////////////////////////////////
