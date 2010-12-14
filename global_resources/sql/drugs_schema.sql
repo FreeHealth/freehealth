@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `DRUGS` (
   `TYPE_MP` varchar(1),
   `AUTHORIZATION` varchar(1),
   `MARKETED` bool NOT NULL DEFAULT 1,
-  `LINK_SPC` varchar(250)
+  `LINK_SPC` varchar(250),
+  UNIQUE(UID)
 );
 
 CREATE TABLE IF NOT EXISTS `COMPOSITION` (
@@ -93,6 +94,7 @@ CREATE TABLE IF NOT EXISTS `SEARCH_ENGINES` (
   `URL` varchar(1000)
 );
 
+DELETE FROM `SEARCH_ENGINES`;
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO ATC description", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Search drug name @ NIH", "http://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&query=[[DRUG_NAME]]&x=0&y=0");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Search INN name @ NIH", "http://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&query=[[ONE_ATC_CODE]]&x=0&y=0");
