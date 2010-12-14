@@ -12,14 +12,16 @@
 rm -R ~/tmp/drugsca
 mkdir ~/tmp/
 mkdir ~/tmp/drugsca
- cp ../../../global_resources/sql/*.* ~/tmp/drugsca
+cp -R ../../../global_resources/sql/ ~/tmp/drugsca
+cp ../../../global_resources/sql/drugs_schema.sql ~/tmp/drugsca/drugdb/ca/
 # files:
 # cp ../../../global_resources/sql/atc_utf8.csv
 # cp ../../../global_resources/sql/drugs_schema.sql
 # cp ../../../global_resources/sql/iam_schema.sql
 # cp ../../../global_resources/sql/canadian*.*
 
-cd ~/tmp/drugsca
+cd ~/tmp/drugsca/drugdb/ca/
+
 
 #obtain *licensed* data files from Health Canada
 echo "Obtaining data..."
