@@ -336,6 +336,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         m->clearDrugsList();
 
     // build model with serialized prescription
+    QString errorMsg;
     QHash<QString, QString> hash;
     QList<int> rowsToUpdate;
     int row;
@@ -346,18 +347,32 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
                                  __FILE__, __LINE__);
             continue;
         }
-        if ((hash.isEmpty()) || (!hash.keys().contains(XML_PRESCRIPTION_UID)))
+        if (hash.isEmpty())
             continue;
+        bool hasError = false;
+
+        if (!hash.keys().contains(XML_PRESCRIPTION_UID)) {
+            errorMsg += tr("  * %1 was added as a textual drug.\n").arg(hash.value(XML_DRUG_DENOMINATION));
+            row = m->addTextualPrescription(hash.value(XML_DRUG_DENOMINATION), "");
+            hasError = true;
+        }
 
         // Add infos to the model
         if (hash.value(XML_PRESCRIPTION_ISTEXTUAL).compare("true",Qt::CaseInsensitive) == 0) {
             row = m->addTextualPrescription(hash.value(XML_PRESCRIPTION_TEXTUALDRUGNAME), "");
         } else {
             row = m->addDrug(hash.value(XML_PRESCRIPTION_UID), false);
+            if (row==-1) {
+                errorMsg += tr("  * %1 (%2) was added as a textual drug.\n").arg(hash.value(XML_DRUG_DENOMINATION)).arg(hash.value(XML_PRESCRIPTION_UID));
+                row = m->addTextualPrescription(hash.value(XML_DRUG_DENOMINATION), "");
+                hasError = true;
+            }
         }
         hash.remove(XML_PRESCRIPTION_UID);
-        foreach(const QString &k, hash.keys()) {
-            m->setData( m->index(row, instance()->d->xmlTagToColumnIndex(k)), hash.value(k) );
+        if (!hasError) {
+            foreach(const QString &k, hash.keys()) {
+                m->setData(m->index(row, instance()->d->xmlTagToColumnIndex(k)), hash.value(k));
+            }
         }
         hash.clear();
 
@@ -368,6 +383,11 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     }
     if ((needUpdate) && (!version.isEmpty())){
         DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);
+    }
+
+    if (!errorMsg.isEmpty()) {
+        errorMsg.prepend(tr("Interaction checking will not take these drugs into account.\n"));
+        Utils::warningMessageBox(tr("FreeDiams encountered errors while reading the XML prescription."), errorMsg);
     }
 
     // check interaction, emit final signal from model for views to update
