@@ -46,12 +46,9 @@
 using namespace Utils;
 
 HttpDownloader::HttpDownloader(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), progressDialog(0)
 {
     setObjectName("HttpDownloader");
-    progressDialog = new QProgressDialog;
-    progressDialog->setWindowModality(Qt::WindowModal);
-    connect(progressDialog, SIGNAL(canceled()), this, SLOT(cancelDownload()));
 }
 
 void HttpDownloader::setMainWindow(QMainWindow *win)
@@ -110,26 +107,35 @@ void HttpDownloader::downloadFile()
         fileName = "index.html";
 
     if (QFile::exists(fileName)) {
-        if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
+        if (progressDialog) {
+            if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
                                      "the current directory. Overwrite?").arg(fileName), ""))
             return;
+        }
         QFile::remove(fileName);
     }
 
     file = new QFile(fileName);
     if (!file->open(QIODevice::WriteOnly)) {
-        Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
-                                 .arg(fileName).arg(file->errorString()), "");
-        delete file;
-        file = 0;
-        return;
+        if (progressDialog) {
+            Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
+                                     .arg(fileName).arg(file->errorString()), "");
+            delete file;
+            file = 0;
+            return;
+        } else {
+            Utils::Log::addError(this, tr("Unable to save the file %1: %2.")
+                                 .arg(fileName).arg(file->errorString()), __FILE__, __LINE__);
+        }
     }
 
-    progressDialog->setWindowTitle(tr("HTTP"));
-    if (m_LabelText.isEmpty())
-        progressDialog->setLabelText(tr("Downloading %1\nTo %2").arg(m_Url.toString()).arg(m_Path));
-    else
-        progressDialog->setLabelText(m_LabelText);
+    if (progressDialog) {
+        progressDialog->setWindowTitle(tr("HTTP"));
+        if (m_LabelText.isEmpty())
+            progressDialog->setLabelText(tr("Downloading %1\nTo %2").arg(m_Url.toString()).arg(m_Path));
+        else
+            progressDialog->setLabelText(m_LabelText);
+    }
 
     // schedule the request
     httpRequestAborted = false;
@@ -154,25 +160,42 @@ void HttpDownloader::httpFinished()
             file = 0;
         }
         reply->deleteLater();
-        progressDialog->hide();
+        if (progressDialog)
+            progressDialog->hide();
         return;
     }
 
-    progressDialog->hide();
+    if (progressDialog)
+        progressDialog->hide();
+
     file->flush();
     file->close();
 
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (reply->error()) {
         file->remove();
-        QMessageBox::information(0, tr("HTTP"),
+        if (progressDialog) {
+            QMessageBox::information(0, tr("HTTP"),
                                  tr("Download failed: %1.")
                                  .arg(reply->errorString()));
+        } else {
+            Utils::Log::addError(this, tr("Download failed: %1.")
+                                 .arg(reply->errorString()), __FILE__, __LINE__);
+        }
     } else if (!redirectionTarget.isNull()) {
         QUrl newUrl = m_Url.resolved(redirectionTarget.toUrl());
-        if (QMessageBox::question(0, tr("HTTP"),
-                                  tr("Redirect to %1 ?").arg(newUrl.toString()),
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+        if (progressDialog) {
+            if (QMessageBox::question(0, tr("HTTP"),
+                                      tr("Redirect to %1 ?").arg(newUrl.toString()),
+                                      QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                m_Url = newUrl;
+                reply->deleteLater();
+                file->open(QIODevice::WriteOnly);
+                file->resize(0);
+                startRequest(m_Url);
+                return;
+            }
+        } else {
             m_Url = newUrl;
             reply->deleteLater();
             file->open(QIODevice::WriteOnly);
@@ -181,7 +204,7 @@ void HttpDownloader::httpFinished()
             return;
         }
     } else {
-//        QString fileName = QFileInfo(QUrl(urlLineEdit->text()).path()).fileName();
+        //        QString fileName = QFileInfo(QUrl(urlLineEdit->text()).path()).fileName();
         Utils::Log::addMessage(this, tr("Downloaded %1 to current directory.").arg("file"));//.arg(fileName));
     }
 
@@ -208,8 +231,10 @@ void HttpDownloader::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
     if (httpRequestAborted)
         return;
 
-    progressDialog->setMaximum(totalBytes);
-    progressDialog->setValue(bytesRead);
+    if (progressDialog) {
+        progressDialog->setMaximum(totalBytes);
+        progressDialog->setValue(bytesRead);
+    }
 }
 
 //void HttpDownloader::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
