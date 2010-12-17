@@ -529,7 +529,7 @@ void InteractionStep::downloadNextSource()
     // If first call --> get all sources to download
     if (m_ActiveDownloadId == -1) {
         m_SourceToDownload.clear();
-        QString req = "SELECT DISTINCT `SOURCE_LINK` FROM `SOURCES` WHERE (`TEXTUAL_REFERENCE` IS NULL AND `ABSTRACT` IS NULL);";
+        QString req = "SELECT `ID` FROM `SOURCES` WHERE (`TEXTUAL_REFERENCE` IS NULL AND `ABSTRACT` IS NULL);";
         QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
         if (query.exec(req)) {
             while (query.next()) {
@@ -542,9 +542,9 @@ void InteractionStep::downloadNextSource()
         QString req = QString("UPDATE `SOURCES` SET "
                               "`TEXTUAL_REFERENCE`=\"%1\", "
                               "`ABSTRACT`=\"%2\" "
-                              "WHERE `SOURCE_LINK`=%3;")
-                .arg(downloader->reference())
-                .arg(downloader->abstract())
+                              "WHERE `ID`=%3;")
+                .arg(downloader->reference().replace("\"","'"))
+                .arg(downloader->abstract().replace("\"","'"))
                 .arg(m_ActiveDownloadId)
                 ;
         Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
@@ -558,6 +558,7 @@ void InteractionStep::downloadNextSource()
             Q_EMIT processFinished();
             return;
         }
+
         m_ActiveDownloadId = m_SourceToDownload.first();
     }
 
@@ -565,16 +566,16 @@ void InteractionStep::downloadNextSource()
         return;
 
     // Get link
-    QStringList link;
-    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE `SOURCE_LINK`=%1 LIMIT 1;").arg(m_ActiveDownloadId);
+    QString link;
+    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE `ID`=%1 LIMIT 1;").arg(m_ActiveDownloadId);
     QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
     if (query.exec(req)) {
-        while (query.next()) {
-            link << query.value(0).toString();
+        if (query.next()) {
+            link = query.value(0).toString();
         }
     }
 
-    if (link.count()==0) {
+    if (link.isEmpty()) {
         Q_EMIT processFinished();
         return;
     }
@@ -582,9 +583,9 @@ void InteractionStep::downloadNextSource()
     query.finish();
 
     // Start pubmed downloader
-    if (downloader->setFullLink(link.at(0))) {
+    if (downloader->setFullLink(link)) {
         downloader->startDownload();
     } else {
-        Utils::Log::addError(this, "Unable to download pubmed link " + link.at(0));
+        Utils::Log::addError(this, "Unable to download pubmed link " + link);
     }
 }

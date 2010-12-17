@@ -49,6 +49,9 @@ PubMedDownloader::PubMedDownloader(QObject *parent) :
 
 bool PubMedDownloader::setFullLink(const QString &link)
 {
+    m_Reference.clear();
+    m_Abstract.clear();
+    m_Pmid.clear();
     if (!link.startsWith("http://www.ncbi.nlm.nih.gov/pubmed/")) {
         Utils::Log::addError(this, tr("Wrong PubMed link %1").arg(link));
         return false;
@@ -68,8 +71,13 @@ bool PubMedDownloader::setFullLink(const QString &link)
 
 void PubMedDownloader::startDownload()
 {
-    if (m_Pmid.isEmpty())
+    if (m_Pmid.isEmpty()) {
+        Q_EMIT downloadFinished();
         return;
+    }
+    qWarning() << "PubMedDownloader start" << QString(REFERENCE_URL).arg(m_Pmid);
+    m_Reference.clear();
+    m_Abstract.clear();
     manager->disconnect();
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(referencesFinished(QNetworkReply*)));
     manager->get(QNetworkRequest(QUrl(QString(REFERENCE_URL).arg(m_Pmid))));
@@ -83,6 +91,8 @@ void PubMedDownloader::referencesFinished(QNetworkReply *reply)
     int b = m_Reference.indexOf("<pre>\n1: ") + 9;
     int e = m_Reference.indexOf("</pre>", b);
     m_Reference = m_Reference.mid(b, e-b);
+    m_Reference.replace("&lt;", "<");
+    m_Reference.replace("&gt;", ">");
     manager->disconnect();
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(abstractFinished(QNetworkReply*)));
     manager->get(QNetworkRequest(QUrl(QString(ABSTRACT_URL).arg(m_Pmid))));
@@ -95,6 +105,9 @@ void PubMedDownloader::abstractFinished(QNetworkReply *reply)
     m_Abstract = reply->readAll();
     int b = m_Abstract.indexOf("<pre>\n1. ") + 9;
     int e = m_Abstract.indexOf("</pre>", b);
+    m_Abstract.replace("&lt;", "<");
+    m_Abstract.replace("&gt;", ">");
     m_Abstract = m_Abstract.mid(b, e-b);
+    manager->disconnect();
     Q_EMIT downloadFinished();
 }
