@@ -235,7 +235,7 @@ namespace Constants {
     enum Tables
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
-        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_DOSAGE,
+        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_SOURCES, Table_DOSAGE,
         Table_SEARCHENGINES,
         Table_MaxParam
     };
@@ -298,8 +298,14 @@ namespace Constants {
 
     /** \brief Represents the fields index of drugs database table ATC */
     enum IAM_TREEfields
-    { TREE_ID_CLASS = 0, TREE_ID_ATC,
+    { TREE_ID_CLASS = 0, TREE_ID_ATC, TREE_SOURCE_LINK,
       TREE_MaxParam
+    };
+
+    enum SOURCESfields {
+        SOURCES_ID = 0, SOURCES_SOURCE_LINK, SOURCES_TYPE, SOURCES_LINK,
+        SOURCES_TEXTUAL_REFERENCE, SOURCES_ABSTRACT, SOURCES_EXPLANATION,
+        SOURCES_MaxParam
     };
 
     enum SEARCHENGINESfields {

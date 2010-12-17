@@ -25,6 +25,7 @@
 #include <drugsbaseplugin/interactionsmanager.h>
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/drugsdata.h>
+#include <drugsbaseplugin/drugsbase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -33,6 +34,7 @@
 #include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
+#include <medicalutils/ebmdata.h>
 #include <translationutils/constanttranslations.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -78,8 +80,8 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(QWidget *parent) :
     connect(ui->interactors->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorsActivated(QModelIndex,QModelIndex)));
 
     ui->interactors->setAlternatingRowColors(true);
-    ui->firstClassInfos->hide();
-    ui->secondClassInfos->hide();
+    ui->classgroup->hide();
+    ui->bibliogroup->hide();
 
     QToolBar *bar = new QToolBar(this);
     bar->setIconSize(QSize(32,32));
@@ -202,6 +204,16 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
+    bool show = false;
+    foreach(const DrugsDB::Internal::DrugsData *drug, interaction->drugs()) {
+        QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndIamClasses().toList());
+        foreach(const MedicalUtils::EbmData *data, v) {
+            show = true;
+            ui->biblio->append(data->references());
+            ui->biblio->append(data->link());
+        }
+    }
+    ui->bibliogroup->setVisible(show);
 }
 
 /** \todo add class informations */
@@ -221,6 +233,15 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
+    bool show = false;
+    foreach(const DrugsDB::Internal::DrugsData *drug, interaction->drugs()) {
+        QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndIamClasses().toList());
+        foreach(const MedicalUtils::EbmData *data, v) {
+            show = true;
+            ui->biblio->append(data->abstract());
+        }
+    }
+    ui->bibliogroup->setVisible(show);
 }
 
 void InteractionSynthesisDialog::print()

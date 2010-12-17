@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>343</height>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,27 +37,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QTextBrowser" name="firstClassInfos"/>
-   </item>
-   <item row="2" column="1">
-    <widget class="QTextBrowser" name="secondClassInfos"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QTextBrowser" name="riskBrowser">
-     <property name="toolTip">
-      <string>Risk</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QTextBrowser" name="managementBrowser">
-     <property name="toolTip">
-      <string>Management</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="link">
@@ -96,6 +76,63 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Risk and management</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QTextBrowser" name="riskBrowser">
+        <property name="toolTip">
+         <string>Risk</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QTextBrowser" name="managementBrowser">
+        <property name="toolTip">
+         <string>Management</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="classgroup">
+     <property name="title">
+      <string>Class information</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QTextBrowser" name="firstClassInfos"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QTextBrowser" name="secondClassInfos"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QGroupBox" name="bibliogroup">
+     <property name="title">
+      <string>Bibliography</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="0">
+       <widget class="QTextBrowser" name="biblio"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="getBiblio">
+        <property name="text">
+         <string>Get the bibliography</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
