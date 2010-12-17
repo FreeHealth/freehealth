@@ -12,6 +12,8 @@ include(../translationutils.pri)
 include(aggir/aggir.pri)
 
 HEADERS += global.h \
-           medical_exporter.h
+           medical_exporter.h \
+    ebmdata.h
 
-SOURCES += global.cpp
+SOURCES += global.cpp \
+    ebmdata.cpp
