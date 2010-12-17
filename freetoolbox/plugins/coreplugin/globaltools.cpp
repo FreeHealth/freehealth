@@ -28,6 +28,8 @@
 
 #include <coreplugin/ftb_constants.h>
 
+#include <utils/global.h>
+
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -388,6 +390,53 @@ bool connectDatabase(const QString &connection, const QString &fileName)
     return true;
 }
 
+bool signDatabase(const QString &connectionName)
+{
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return false;
+        }
+    }
+
+    QHash<QString, QString> tables;
+    foreach(const QString &table, db.tables()) {
+        QString req = QString("SELECT count(*) FROM %1;").arg(table);
+        QSqlQuery query(db);
+        if (query.exec(req)) {
+            if (query.next())
+                tables.insert(table, query.value(0).toString());
+        }
+    }
+    if (tables.count() != db.tables().count())
+        return false;
+
+    QFileInfo info(db.databaseName());
+    QString tag = info.fileName() + "(";
+    tag += QString::number(info.size()) + "," + info.created().toString(Qt::ISODate) + ")@";
+    foreach(const QString &table, tables.keys()) {
+        tag += table + ":" + tables.value(table) + "/";
+    }
+    tag.chop(1);
+    tag += "\n";
+
+    QString fileName = QFileInfo(db.databaseName()).absolutePath() + "/check.db";
+    QString content = QString(QByteArray::fromBase64(Utils::readTextFile(fileName, Utils::DontWarnUser).toUtf8()));
+    QStringList linesToKeep;
+    foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
+        if (line.startsWith(QFileInfo(db.databaseName()).fileName() + "@")) {
+            continue;
+        }
+        linesToKeep << line;
+    }
+    linesToKeep << tag;
+    content.clear();
+    content = linesToKeep.join("\n");
+
+    Utils::saveStringToFile(content.toUtf8().toBase64(), fileName, Utils::Overwrite, Utils::DontWarnUser);
+
+    return true;
+}
 
 
 } // end namespace Tools

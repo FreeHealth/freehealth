@@ -29,6 +29,7 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <QWidget>
 #include <QMap>
@@ -60,6 +61,42 @@ public:
 
 };
 
+class ZaDrugDatatabaseStep : public Core::IFullReleaseStep
+{
+    Q_OBJECT
+
+public:
+    ZaDrugDatatabaseStep(QObject *parent = 0);
+    ~ZaDrugDatatabaseStep();
+
+    QString id() const {return "ZaDrugDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+
+    bool createDir();
+    bool cleanFiles();
+    bool downloadFiles();
+    bool process();
+    QString processMessage() const {return tr("South African drugs database creation");}
+
+    bool prepareDatas();
+    bool createDatabase();
+    bool populateDatabase();
+    bool linkMolecules();
+
+    QStringList errors() const {return m_Errors;}
+
+private Q_SLOTS:
+    void replyFinished(QNetworkReply *reply);
+
+private:
+    QStringList m_Errors;
+    QNetworkAccessManager *manager;
+    QMap<QString, QString> m_Drug_Link;
+    int m_nbOfDowloads;
+    QProgressDialog *m_Progress;
+    bool m_WithProgress;
+};
+
 class SouthAfricanDrugsDatabase : public QWidget
 {
     Q_OBJECT
@@ -70,25 +107,14 @@ public:
 protected Q_SLOTS:
     void on_startJobs_clicked();
     bool on_download_clicked();
-    void replyFinished(QNetworkReply *reply);
 
 private:
     void changeEvent(QEvent *e);
-    bool prepareDatas();
-    bool createDatabase();
-    bool populateDatabase();
-    bool linkMolecules();
-
-Q_SIGNALS:
-    void downloadFinished();
 
 private:
     Ui::SouthAfricanDrugsDatabase *ui;
     QString m_WorkingPath;
-    QNetworkAccessManager *manager;
-    QMap<QString, QString> m_Drug_Link;
-    int m_nbOfDowloads;
-    QProgressDialog *m_Progress;
+    ZaDrugDatatabaseStep *m_Step;
 };
 
 

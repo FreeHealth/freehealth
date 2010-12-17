@@ -11,7 +11,7 @@ DEPENDPATH += ../
 
 include(../../../plugins/coreplugin/common_core.pri)
 
-QT *= sql network xml
+QT *= sql network xml concurrent
 
 HEADERS += coreimpl.h \
     appaboutpage.h \
@@ -20,16 +20,21 @@ HEADERS += coreimpl.h \
     itoolpage.h \
     ftb_constants.h \
     globaltools.h \
-    pathpreferences.h
+    pathpreferences.h \
+    ifullreleasestep.h \
+    fullreleasepage.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
     coreplugin.cpp \
     mainwindow.cpp \
     globaltools.cpp \
-    pathpreferences.cpp
+    pathpreferences.cpp \
+    ifullreleasestep.cpp \
+    fullreleasepage.cpp
 
 FORMS += mainwindow.ui \
-    pathpreferences.ui
+    pathpreferences.ui \
+    fullreleasepage.ui
 
 OTHER_FILES += Core.pluginspec

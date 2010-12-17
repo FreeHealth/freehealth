@@ -16,10 +16,12 @@ INCLUDEPATH += ../
 DEPENDPATH += ../
 
 HEADERS += interactionplugin.h \
-    cytochromep450interactionspage.h
+    interactionstep.h
+#    cytochromep450interactionspage.h \
 
 SOURCES += interactionplugin.cpp \
-    cytochromep450interactionspage.cpp
+    interactionstep.cpp
+#    cytochromep450interactionspage.cpp \
 
 SOURCES += \
     afssapsintegrator.cpp \
@@ -36,12 +38,15 @@ FORMS    += afssapslinkerwidget.ui \
     interactiondatabasebuilder.ui \
     interactiondatabasecreator.ui \
     interactiondatabasechecker.ui \
-    cytochromep450interactionspage.ui \
     afssapsintegratorwidget.ui
+#    cytochromep450interactionspage.ui \
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \
     ../global_resources/sql/iam_schema.sql \
-    ../global_resources/sql/atc_utf8.csv
+    ../global_resources/sql/atc_utf8.csv \
+    ../global_resources/sql/thesaurus_interactions.xml \
+    ../global_resources/sql/afssaps_links.xml \
+    ../global_resources/sql/afssaps_classtree.xml \
 
 OTHER_FILES += InteractionDB.pluginspec

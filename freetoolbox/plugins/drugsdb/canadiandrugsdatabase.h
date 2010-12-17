@@ -29,6 +29,7 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <QIcon>
 #include <QString>
@@ -48,6 +49,38 @@ public:
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
+};
+
+
+class CaDrugDatatabaseStep : public Core::IFullReleaseStep
+{
+    Q_OBJECT
+
+public:
+    CaDrugDatatabaseStep(QObject *parent = 0);
+    ~CaDrugDatatabaseStep();
+
+    QString id() const {return "CaDrugDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+
+    bool createDir();
+    bool cleanFiles();
+    bool downloadFiles();
+    bool process();
+    QString processMessage() const {return tr("Canadian drugs database creation");}
+
+    bool unzipFiles();
+    bool prepareDatas();
+    bool createDatabase();
+    bool populateDatabase();
+    bool linkDrugsRoutes();
+    bool linkMolecules();
+
+    QStringList errors() const {return m_Errors;}
+
+private:
+    QStringList m_Errors;
+    bool m_WithProgress;
 };
 
 
@@ -78,7 +111,7 @@ protected:
 
 private:
     Ui::CanadianDrugsDatabaseWidget *ui;
-    QString m_WorkingPath;
+    CaDrugDatatabaseStep *m_Step;
 };
 
 }  //  End namespace DrugsDbCreator

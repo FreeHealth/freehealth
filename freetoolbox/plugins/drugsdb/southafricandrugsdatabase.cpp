@@ -35,6 +35,8 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <extensionsystem/pluginmanager.h>
+
 
 #include <QApplication>
 #include <QFile>
@@ -45,7 +47,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDate>
-#include <QProgressDialog>
 #include <QHash>
 #include <QStringList>
 #include <QString>
@@ -74,6 +75,7 @@ const char* const  ZA_DRUGS_DATABASE_NAME     = "SAEPI_ZA";
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_ZA.db");}
@@ -94,67 +96,55 @@ QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
 
 static char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-
-SouthAfricanDrugsDatabase::SouthAfricanDrugsDatabase(QWidget *parent) :
-        QWidget(parent)
+ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
+        m_Progress(0), m_WithProgress(false)
 {
-    ui = new Ui::SouthAfricanDrugsDatabase;
-    ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create ZA Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+}
+
+ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
+{
+    if (m_Progress)
+        delete m_Progress;
+}
+
+bool ZaDrugDatatabaseStep::createDir()
+{
+    if (!QDir().mkpath(workingPath()))
+        Utils::Log::addError(this, "Unable to create ZA Working Path :" + workingPath(), __FILE__, __LINE__);
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath))
+        if (!QDir().mkpath(dbpath)) {
             Utils::Log::addError(this, "Unable to create Canadian database output path :" + dbpath, __FILE__, __LINE__);
-        else
+            m_Errors << tr("Unable to create Canadian database output path :") + dbpath;
+        } else {
             Utils::Log::addMessage(this, "Drugs database output dir created");
+        }
     }
+    return true;
 }
 
-SouthAfricanDrugsDatabase::~SouthAfricanDrugsDatabase()
+bool ZaDrugDatatabaseStep::cleanFiles()
 {
-    delete ui; ui=0;
+    QFile(databaseAbsPath()).remove();
+    return true;
 }
 
-void SouthAfricanDrugsDatabase::on_startJobs_clicked()
+bool ZaDrugDatatabaseStep::downloadFiles()
 {
-    if (ui->prepare->isChecked()) {
-        if (prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool SouthAfricanDrugsDatabase::on_download_clicked()
-{
-    ui->download->setEnabled(false);
-    /** \todo First : download A..Z files; then download drugs files */
     // get all tradename html pages from the site
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-    m_Progress = new QProgressDialog(this);
-    m_Progress->setLabelText(tr("Downloading South African drugs database"));
-    m_Progress->setCancelButtonText(tr("Cancel"));
-    m_Progress->setRange(0, 26);
-    m_Progress->setWindowModality(Qt::WindowModal);
-    m_Progress->setValue(0);
+    if (m_WithProgress) {
+        m_Progress = new QProgressDialog(qApp->activeWindow());
+        m_Progress->setLabelText(tr("Downloading South African drugs database"));
+        m_Progress->setCancelButtonText(tr("Cancel"));
+        m_Progress->setRange(0, 26);
+        m_Progress->setWindowModality(Qt::WindowModal);
+        m_Progress->setValue(0);
+    }
 
     m_nbOfDowloads = 26;
     for(int i = 0; i < m_nbOfDowloads; ++i) {
@@ -163,7 +153,7 @@ bool SouthAfricanDrugsDatabase::on_download_clicked()
     return true;
 }
 
-void SouthAfricanDrugsDatabase::replyFinished(QNetworkReply *reply)
+void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
 {
     static int nb = 0;
     qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
@@ -171,13 +161,13 @@ void SouthAfricanDrugsDatabase::replyFinished(QNetworkReply *reply)
     QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
     fileName.remove("//home.intekom.com/pharm/index/");
-//    delete reply;
+    //    delete reply;
 
     // save file
     {
-        QFile file(m_WorkingPath + fileName);
-        if (!QDir(m_WorkingPath + fileName).exists()) {
-            QDir().mkpath(QFileInfo(m_WorkingPath + fileName).absolutePath());
+        QFile file(workingPath() + fileName);
+        if (!QDir(workingPath() + fileName).exists()) {
+            QDir().mkpath(QFileInfo(workingPath() + fileName).absolutePath());
         }
 
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -208,7 +198,9 @@ void SouthAfricanDrugsDatabase::replyFinished(QNetworkReply *reply)
 
     // If the download list is completed
     ++nb;
-    m_Progress->setValue(nb);
+    if (m_WithProgress)
+        m_Progress->setValue(nb);
+
     if (nb==m_nbOfDowloads) {
         static bool done = false;
         if (!done) {
@@ -216,25 +208,40 @@ void SouthAfricanDrugsDatabase::replyFinished(QNetworkReply *reply)
             // download the link
             m_nbOfDowloads = m_Drug_Link.count();
             nb=0;
-            m_Progress->setRange(0, m_nbOfDowloads);
-            m_Progress->setValue(0);
+            if (m_WithProgress) {
+                m_Progress->setRange(0, m_nbOfDowloads);
+                m_Progress->setValue(0);
+            }
             qWarning() << "Downloading" << m_Drug_Link.count();
             foreach(const QString &link, m_Drug_Link.values())
                 manager->get(QNetworkRequest(QUrl(QString("http://home.intekom.com%1").arg(link))));
         } else {
+            if (m_Progress) {
+                delete m_Progress;
+                m_Progress = 0;
+            }
             Q_EMIT downloadFinished();
         }
     }
 }
 
-bool SouthAfricanDrugsDatabase::prepareDatas()
+bool ZaDrugDatatabaseStep::process()
+{
+    prepareDatas();
+    createDatabase();
+    populateDatabase();
+    linkMolecules();
+    return true;
+}
+
+bool ZaDrugDatatabaseStep::prepareDatas()
 {
     m_Drug_Link.clear();
     for(int i=0; i<26; ++i) {
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
-        if (!QFile::exists(m_WorkingPath + fileName)) {
-            Utils::Log::addError(this, QString("Missing " + m_WorkingPath + fileName + " file. ZADrugsDB::prepareDatas()"));
+        if (!QFile::exists(workingPath() + fileName)) {
+            Utils::Log::addError(this, QString("Missing " + workingPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
             continue;
         }
 
@@ -242,7 +249,7 @@ bool SouthAfricanDrugsDatabase::prepareDatas()
         Utils::Log::addMessage(this, "Processing file :" + fileName);
         QString content;
         {
-            QFile f(m_WorkingPath + fileName);
+            QFile f(workingPath() + fileName);
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. SouthAfricanDrugsDB::populateDatabase()").arg(f.fileName(), f.errorString()));
                 return false;
@@ -286,7 +293,7 @@ bool SouthAfricanDrugsDatabase::prepareDatas()
     return true;
 }
 
-bool SouthAfricanDrugsDatabase::createDatabase()
+bool ZaDrugDatatabaseStep::createDatabase()
 {
     if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -492,7 +499,7 @@ public:
     QString registrationNumberParagraph;
 };
 
-bool SouthAfricanDrugsDatabase::populateDatabase()
+bool ZaDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -539,7 +546,7 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
         }
 
         // get the drugs file
-        QString fileName = m_WorkingPath + "/home.intekom.com/" + m_Drug_Link.value(drug);
+        QString fileName = workingPath() + "/home.intekom.com/" + m_Drug_Link.value(drug);
         QFile f(fileName);
         if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, "Unable to read " + f.fileName() + " " + f.errorString());
@@ -608,7 +615,7 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
     }
 
     // save the error HTML output
-    QFile save(m_WorkingPath + "/incomplete.html");
+    QFile save(workingPath() + "/incomplete.html");
     if (!save.open(QFile::WriteOnly | QFile::Text)) {
         Utils::Log::addError(this, "Can open file " + save.fileName());
     } else {
@@ -664,7 +671,7 @@ bool SouthAfricanDrugsDatabase::populateDatabase()
     return true;
 }
 
-bool SouthAfricanDrugsDatabase::linkMolecules()
+bool ZaDrugDatatabaseStep::linkMolecules()
 {
     // 10 Dec 2010
     //    NUMBER OF MOLECULES 1148
@@ -765,10 +772,59 @@ bool SouthAfricanDrugsDatabase::linkMolecules()
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(ZA_DRUGS_DATABASE_NAME, unfound);
     ExtraMoleculeLinkerModel::instance()->saveModel();
 
+    if (!Core::Tools::signDatabase(ZA_DRUGS_DATABASE_NAME))
+        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
+
     Utils::Log::addMessage(this, QString("Database processed"));
 
     return true;
 }
+
+SouthAfricanDrugsDatabase::SouthAfricanDrugsDatabase(QWidget *parent) :
+        QWidget(parent)
+{
+    ui = new Ui::SouthAfricanDrugsDatabase;
+    ui->setupUi(this);
+    m_Step = new ZaDrugDatatabaseStep(this);
+    m_Step->createDir();
+    pluginManager()->addObject(m_Step);
+}
+
+SouthAfricanDrugsDatabase::~SouthAfricanDrugsDatabase()
+{
+    pluginManager()->removeObject(m_Step);
+    delete ui; ui=0;
+}
+
+void SouthAfricanDrugsDatabase::on_startJobs_clicked()
+{
+    if (ui->prepare->isChecked()) {
+        if (m_Step->prepareDatas())
+            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
+    }
+    if (ui->createDb->isChecked()) {
+        if (m_Step->createDatabase())
+            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
+    }
+    if (ui->populate->isChecked()) {
+        if (m_Step->populateDatabase())
+            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
+    }
+    if (ui->linkMols->isChecked()) {
+        if (m_Step->linkMolecules())
+            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
+    }
+    Utils::Log::messagesToTreeWidget(ui->messages);
+    Utils::Log::errorsToTreeWidget(ui->errors);
+}
+
+bool SouthAfricanDrugsDatabase::on_download_clicked()
+{
+    ui->download->setEnabled(false);
+    m_Step->downloadFiles();
+    return true;
+}
+
 
 void SouthAfricanDrugsDatabase::changeEvent(QEvent *e)
 {

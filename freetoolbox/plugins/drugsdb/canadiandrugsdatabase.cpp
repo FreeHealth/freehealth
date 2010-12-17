@@ -37,6 +37,7 @@
 #include <utils/log.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDir>
 #include <QProgressDialog>
@@ -52,6 +53,7 @@ using namespace DrugsDbCreator;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CanadianRawSources")  + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_CA.db");}
@@ -76,79 +78,66 @@ QWidget *CanadianDrugsDatabasePage::createPage(QWidget *parent)
 }
 
 
-CanadianDrugsDatabaseWidget::CanadianDrugsDatabaseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::CanadianDrugsDatabaseWidget)
+CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
+        m_WithProgress(false)
 {
-    setObjectName("CanadianDrugsDatabaseCreator");
-    ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create Canadian Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+}
+
+CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
+{
+}
+
+bool CaDrugDatatabaseStep::createDir()
+{
+    if (!QDir().mkpath(workingPath()))
+        Utils::Log::addError(this, "Unable to create Ca Working Path :" + workingPath(), __FILE__, __LINE__);
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create Canadian database output path :" + dbpath, __FILE__, __LINE__);
-        else
+        if (!QDir().mkpath(dbpath)) {
+            Utils::Log::addError(this, "Unable to create Ca database output path :" + dbpath, __FILE__, __LINE__);
+            m_Errors << tr("Unable to create Ca database output path :") + dbpath;
+        } else {
             Utils::Log::addMessage(this, "Drugs database output dir created");
+        }
     }
+    return true;
 }
 
-CanadianDrugsDatabaseWidget::~CanadianDrugsDatabaseWidget()
+bool CaDrugDatatabaseStep::cleanFiles()
 {
-    delete ui;
+    QFile(databaseAbsPath()).remove();
+    return true;
 }
 
-void CanadianDrugsDatabaseWidget::on_startJobs_clicked()
-{
-    if (ui->unzip->isChecked()) {
-        if (unzipFiles())
-            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->prepare->isChecked()) {
-        if (prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool CanadianDrugsDatabaseWidget::on_download_clicked()
+bool CaDrugDatatabaseStep::downloadFiles()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-    dld->setMainWindow(mainwindow());
-    dld->setOutputPath(m_WorkingPath);
+//    dld->setMainWindow(mainwindow());
+    dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(CANADIAN_URL));
     dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
 }
 
-void CanadianDrugsDatabaseWidget::downloadFinished()
+bool CaDrugDatatabaseStep::process()
 {
-    ui->download->setEnabled(true);
+    unzipFiles();
+    prepareDatas();
+    createDatabase();
+    populateDatabase();
+    linkMolecules();
+    return true;
 }
 
-bool CanadianDrugsDatabaseWidget::unzipFiles()
+bool CaDrugDatatabaseStep::unzipFiles()
 {
     // check file
-    QString fileName = m_WorkingPath + QDir::separator() + QFileInfo(CANADIAN_URL).fileName();
+    QString fileName = workingPath() + QDir::separator() + QFileInfo(CANADIAN_URL).fileName();
     if (!QFile(fileName).exists()) {
         Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
         Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
@@ -158,14 +147,14 @@ bool CanadianDrugsDatabaseWidget::unzipFiles()
     Utils::Log::addMessage(this, QString("Starting unzipping Canadian file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!Core::Tools::unzipFile(fileName, m_WorkingPath))
+    if (!Core::Tools::unzipFile(fileName, workingPath()))
         return false;
 
     // unzip all files in the working path
-    QFileInfoList list = QDir(m_WorkingPath).entryInfoList(QStringList()<<"*.zip");
+    QFileInfoList list = QDir(workingPath()).entryInfoList(QStringList()<<"*.zip");
     foreach(const QFileInfo &info, list) {
         if (info.fileName()!="allfiles.zip") {
-            if (!Core::Tools::unzipFile(info.absoluteFilePath(), m_WorkingPath)) {
+            if (!Core::Tools::unzipFile(info.absoluteFilePath(), workingPath())) {
                 Utils::Log::addError(this, "Unable to unzip " + info.absoluteFilePath(), __FILE__, __LINE__);
                 return false;
             }
@@ -174,7 +163,7 @@ bool CanadianDrugsDatabaseWidget::unzipFiles()
     return true;
 }
 
-bool CanadianDrugsDatabaseWidget::prepareDatas()
+bool CaDrugDatatabaseStep::prepareDatas()
 {
     QStringList files = QStringList()
                         << "drug.txt"
@@ -187,24 +176,26 @@ bool CanadianDrugsDatabaseWidget::prepareDatas()
 
     // check files
     foreach(const QString &file, files) {
-        if (!QFile::exists(m_WorkingPath + file)) {
-            Utils::Log::addError(this, QString("Missing " + m_WorkingPath + file + " file. prepareDatas()"), __FILE__, __LINE__);
+        if (!QFile::exists(workingPath() + file)) {
+            Utils::Log::addError(this, QString("Missing " + workingPath() + file + " file. prepareDatas()"), __FILE__, __LINE__);
             return false;
         }
     }
 
     // transform each files
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setLabelText(tr("Processing files"));
-    progressDialog.show();
-    progressDialog.setRange(0, files.count());
+    QProgressDialog *progress = 0;
+    if (m_WithProgress) {
+        progress = new QProgressDialog("Processing files", "Abort", 0, files.count(), qApp->activeWindow());
+        progress->setWindowModality(Qt::WindowModal);
+        progress->setValue(0);
+        progress->show();
+    }
 
     foreach(const QString &file, files) {
         Utils::Log::addMessage(this, "Processing file :" + file);
         QString tmp;
         {
-            QFile f(m_WorkingPath + file);
+            QFile f(workingPath() + file);
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
                 return false;
@@ -227,7 +218,7 @@ bool CanadianDrugsDatabaseWidget::prepareDatas()
 
         // save file
         {
-            QFile f(m_WorkingPath + QFileInfo(file).baseName() + ".csv");
+            QFile f(workingPath() + QFileInfo(file).baseName() + ".csv");
             if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
                 Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
                 return false;
@@ -235,12 +226,18 @@ bool CanadianDrugsDatabaseWidget::prepareDatas()
             Utils::Log::addMessage(this, "Saving file: " + f.fileName());
             f.write(out.toUtf8());
         }
-        progressDialog.setValue(progressDialog.value()+1);
+        if (m_WithProgress) {
+            progress->setValue(progress->value()+1);
+        }
+    }
+    if (m_WithProgress) {
+        delete progress;
+        progress=0;
     }
     return true;
 }
 
-bool CanadianDrugsDatabaseWidget::createDatabase()
+bool CaDrugDatatabaseStep::createDatabase()
 {
     if (!Core::Tools::connectDatabase(CA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -302,7 +299,7 @@ struct MinDrug {
     QVector<MinCompo *> compo;
 };
 
-bool CanadianDrugsDatabaseWidget::populateDatabase()
+bool CaDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(CA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -323,26 +320,32 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
                         << "ther.csv"
                         << "package.csv";
 
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 1"));
-    progressDialog.setRange(0, files.count() + 1);
-    progressDialog.setValue(1);
-    progressDialog.show();
+    QProgressDialog *progress = 0;
+    if (m_WithProgress) {
+        progress = new QProgressDialog("Processing SQL script (about 20 minutes) : STEP 1", "Abort", 0, files.count() + 1, qApp->activeWindow());
+        progress->setWindowModality(Qt::WindowModal);
+        progress->setValue(0);
+        progress->show();
+        progress->setValue(1);
+    }
     int count = 0;
 
     foreach(const QString &f, files) {
-        if (!Utils::Database::importCsvToDatabase(CA_DRUGS_DATABASE_NAME, m_WorkingPath + f, QFileInfo(f).baseName(), Core::Constants::SEPARATOR)) {
+        if (!Utils::Database::importCsvToDatabase(CA_DRUGS_DATABASE_NAME, workingPath() + f, QFileInfo(f).baseName(), Core::Constants::SEPARATOR)) {
             return false;
         }
-        progressDialog.setValue(++count);
-        qApp->processEvents();
+        if (m_WithProgress) {
+            progress->setValue(++count);
+            qApp->processEvents();
+        }
     }
 
     // recreate drugs (C++ way)
-    progressDialog.setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 2"));
-    progressDialog.setValue(1);
-    progressDialog.setRange(0, 3);
+    if (m_WithProgress) {
+        progress->setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 2"));
+        progress->setValue(1);
+        progress->setRange(0, 3);
+    }
 
     // remove "Veterinary" preparations
     if (!Core::Tools::executeSqlQuery("DELETE FROM drug WHERE (CLASS = 'Veterinary');", CA_DRUGS_DATABASE_NAME, __FILE__, __LINE__))
@@ -364,7 +367,9 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
         return false;
     }
-    progressDialog.setValue(1);
+    if (m_WithProgress) {
+        progress->setValue(1);
+    }
 
     // get forms
     QHash<int, QString> forms;
@@ -377,16 +382,21 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
         return false;
     }
-    progressDialog.setValue(2);
     query.finish();
 
+    if (m_WithProgress) {
+        progress->setValue(2);
+        progress->setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 3"));
+        progress->setValue(1);
+    }
+
     // get drugs
-    progressDialog.setLabelText(tr("Processing SQL script (about 20 minutes) : STEP 3"));
-    progressDialog.setValue(1);
     req = "SELECT count(DISTINCT DRUG_CODE) FROM drug;";
     if (query.exec(req)) {
         if (query.next()) {
-            progressDialog.setRange(0, query.value(0).toInt());
+            if (m_WithProgress) {
+                progress->setRange(0, query.value(0).toInt());
+            }
             count = query.value(0).toInt();
         }
     } else {
@@ -396,9 +406,11 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
     qWarning() << "Retreiving"<<count<<"drugs";
     query.finish();
 
-    progressDialog.setLabelText(tr("Retreiving (%1) drugs").arg(count));
-    progressDialog.setRange(0, count);
-    progressDialog.setValue(0);
+    if (m_WithProgress) {
+        progress->setLabelText(tr("Retreiving (%1) drugs").arg(count));
+        progress->setRange(0, count);
+        progress->setValue(0);
+    }
     req = "SELECT DISTINCT DRUG_CODE, BRAND_NAME, DIN FROM drug ORDER BY BRAND_NAME;";
     count = 0;
     if (query.exec(req)) {
@@ -460,21 +472,25 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
             // add to drugs list
             drugs.append(dr);
             ++count;
-            if (count%10 == 0)
-                progressDialog.setValue(count);
+            if (m_WithProgress) {
+                if (count%10 == 0)
+                    progress->setValue(count);
+            }
         }
     } else {
         Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
         return false;
     }
-    progressDialog.setValue(progressDialog.maximum());
     query.finish();
 
+    if (m_WithProgress) {
+        progress->setValue(progress->maximum());
+        progress->setLabelText(tr("Processing (%1) drugs").arg(count));
+        progress->setRange(0, count);
+        progress->setValue(0);
+    }
 
     // recreate drugs
-    progressDialog.setLabelText(tr("Processing (%1) drugs").arg(count));
-    progressDialog.setRange(0, count);
-    progressDialog.setValue(0);
     QStringList commands;
     count = 0;
     foreach(MinDrug *drug, drugs) {
@@ -523,18 +539,28 @@ bool CanadianDrugsDatabaseWidget::populateDatabase()
             query.finish();
         }
         ++count;
-        if (count%10 == 0)
-            progressDialog.setValue(count);
+        if (m_WithProgress) {
+            if (count%10 == 0)
+                progress->setValue(count);
+        }
     }
-    progressDialog.setValue(progressDialog.maximum());
+
+    if (m_WithProgress) {
+        progress->setValue(progress->maximum());
+    }
 
     ca.commit();
 
     qDeleteAll(drugs);
     drugs.clear();
 
+    if (m_WithProgress) {
+        delete progress;
+        progress = 0;
+    }
+
     // Run SQL finalization
-    if (!Core::Tools::executeSqlFile(CA_DRUGS_DATABASE_NAME, databaseFinalizationScript(), &progressDialog)) {
+    if (!Core::Tools::executeSqlFile(CA_DRUGS_DATABASE_NAME, databaseFinalizationScript())) {
         Utils::Log::addError(this, "Can create Canadian DB.", __FILE__, __LINE__);
         return false;
     }
@@ -557,7 +583,7 @@ struct drug {
     }
 };
 
-bool CanadianDrugsDatabaseWidget::linkMolecules()
+bool CaDrugDatatabaseStep::linkMolecules()
 {
     {
         // 11 Dec 2010
@@ -709,10 +735,73 @@ bool CanadianDrugsDatabaseWidget::linkMolecules()
         ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(CA_DRUGS_DATABASE_NAME, unfound);
         ExtraMoleculeLinkerModel::instance()->saveModel();
 
+        if (!Core::Tools::signDatabase(CA_DRUGS_DATABASE_NAME))
+            Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
+
         Utils::Log::addMessage(this, QString("Database processed"));
 
         return true;
     }
+}
+
+
+
+
+
+CanadianDrugsDatabaseWidget::CanadianDrugsDatabaseWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::CanadianDrugsDatabaseWidget),
+    m_Step(0)
+{
+    setObjectName("CanadianDrugsDatabaseCreator");
+    ui->setupUi(this);
+    m_Step = new CaDrugDatatabaseStep(this);
+    m_Step->createDir();
+    pluginManager()->addObject(m_Step);
+}
+
+CanadianDrugsDatabaseWidget::~CanadianDrugsDatabaseWidget()
+{
+    pluginManager()->removeObject(m_Step);
+    delete ui;
+}
+
+void CanadianDrugsDatabaseWidget::on_startJobs_clicked()
+{
+    if (ui->unzip->isChecked()) {
+        if (m_Step->unzipFiles())
+            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
+    }
+    if (ui->prepare->isChecked()) {
+        if (m_Step->prepareDatas())
+            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
+    }
+    if (ui->createDb->isChecked()) {
+        if (m_Step->createDatabase())
+            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
+    }
+    if (ui->populate->isChecked()) {
+        if (m_Step->populateDatabase())
+            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
+    }
+    if (ui->linkMols->isChecked()) {
+        if (m_Step->linkMolecules())
+            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
+    }
+    Utils::Log::messagesToTreeWidget(ui->messages);
+    Utils::Log::errorsToTreeWidget(ui->errors);
+}
+
+bool CanadianDrugsDatabaseWidget::on_download_clicked()
+{
+    m_Step->downloadFiles();
+    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    return true;
+}
+
+void CanadianDrugsDatabaseWidget::downloadFinished()
+{
+    ui->download->setEnabled(true);
 }
 
 void CanadianDrugsDatabaseWidget::changeEvent(QEvent *e)

@@ -25,7 +25,7 @@ SOURCES += \
     atcpage.cpp \
     southafricandrugsdatabase.cpp \
     belgishdrugsdatabase.cpp \
-    drugsdbplugin.cpp
+    drugsdbplugin.cpp \
 
 
 HEADERS  += \
@@ -38,7 +38,7 @@ HEADERS  += \
     atcpage.h \
     southafricandrugsdatabase.h \
     belgishdrugsdatabase.h \
-    drugsdbplugin.h
+    drugsdbplugin.h \
 
 
 FORMS += \

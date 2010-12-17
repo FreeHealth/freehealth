@@ -38,6 +38,8 @@
 #include <utils/global.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
+#include <extensionsystem/pluginmanager.h>
+
 
 #include <QFile>
 #include <QMap>
@@ -64,6 +66,7 @@ const char* const  FR_DRUGS_DATABASE_NAME      = "AFSSAPS_FR";
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-fr_FR.db");}
@@ -88,80 +91,68 @@ QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)
 }
 
 
-FrenchDrugsDatabaseWidget::FrenchDrugsDatabaseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FrenchDrugsDatabaseWidget)
+
+FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
+        m_WithProgress(false)
 {
-    setObjectName("FrenchDrugsDatabaseWidget");
-    ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create French Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+}
+
+FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
+{
+}
+
+bool FrDrugDatatabaseStep::createDir()
+{
+    if (!QDir().mkpath(workingPath()))
+        Utils::Log::addError(this, "Unable to create French Working Path :" + workingPath(), __FILE__, __LINE__);
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create Canadian database output path :" + dbpath, __FILE__, __LINE__);
-        else
+        if (!QDir().mkpath(dbpath)) {
+            Utils::Log::addError(this, "Unable to create French database output path :" + dbpath, __FILE__, __LINE__);
+            m_Errors << tr("Unable to create French database output path :") + dbpath;
+        } else {
             Utils::Log::addMessage(this, "Drugs database output dir created");
+        }
     }
+    return true;
 }
 
-FrenchDrugsDatabaseWidget::~FrenchDrugsDatabaseWidget()
+bool FrDrugDatatabaseStep::cleanFiles()
 {
-    delete ui;
+    QFile(databaseAbsPath()).remove();
+    return true;
 }
 
-void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
+bool FrDrugDatatabaseStep::downloadFiles()
 {
-    if (ui->unzip->isChecked()) {
-        if (unzipFiles())
-            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->prepare->isChecked()) {
-        if (prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool FrenchDrugsDatabaseWidget::on_download_clicked()
-{
-    ui->download->setEnabled(false);
-    Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-    dld->setMainWindow(mainwindow());
-    dld->setOutputPath(m_WorkingPath);
+    Utils::HttpDownloader *dld = new Utils::HttpDownloader;
+//    dld->setMainWindow(mainwindow());
+    dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FRENCH_URL));
     dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
 }
 
-void FrenchDrugsDatabaseWidget::downloadFinished()
+bool FrDrugDatatabaseStep::process()
 {
-    ui->download->setEnabled(true);
+    unzipFiles();
+    prepareDatas();
+    createDatabase();
+    populateDatabase();
+    linkDrugsRoutes();
+    linkMolecules();
+    return true;
 }
 
-bool FrenchDrugsDatabaseWidget::unzipFiles()
+bool FrDrugDatatabaseStep::unzipFiles()
 {
     // check file
-    QString fileName = m_WorkingPath + QDir::separator() + QFileInfo(FRENCH_URL).fileName();
+    QString fileName = workingPath() + QDir::separator() + QFileInfo(FRENCH_URL).fileName();
     if (!QFile(fileName).exists()) {
         Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
         Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
@@ -171,23 +162,23 @@ bool FrenchDrugsDatabaseWidget::unzipFiles()
     // unzip files using QProcess
     Utils::Log::addMessage(this, QString("Starting unzipping afssaps file %1").arg(fileName));
 
-    return Core::Tools::unzipFile(fileName, m_WorkingPath);
+    return Core::Tools::unzipFile(fileName, workingPath());
 }
 
-bool FrenchDrugsDatabaseWidget::prepareDatas()
+bool FrDrugDatatabaseStep::prepareDatas()
 {
     // check files
-    if (!QFile::exists(m_WorkingPath + "CIS.txt")) {
+    if (!QFile::exists(workingPath() + "CIS.txt")) {
         Utils::Log::addError(this, QString("Missing CIS.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
 
-    if (!QFile::exists(m_WorkingPath + "CIS_CIP.txt")) {
+    if (!QFile::exists(workingPath() + "CIS_CIP.txt")) {
         Utils::Log::addError(this, QString("Missing CIS_CIP.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
 
-    if (!QFile::exists(m_WorkingPath + "COMPO.txt")) {
+    if (!QFile::exists(workingPath() + "COMPO.txt")) {
         Utils::Log::addError(this, QString("Missing COMPO.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
@@ -199,7 +190,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
     // process CIS.txt          //
     //////////////////////////////
     {
-        QFile file(m_WorkingPath + "CIS.txt");
+        QFile file(workingPath() + "CIS.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
             return false;
@@ -236,7 +227,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
 
     // save file
     {
-        QFile file(m_WorkingPath + "CIS_processed.txt");
+        QFile file(workingPath() + "CIS_processed.txt");
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
             return false;
@@ -251,7 +242,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
     // process CIS_CIP.txt      //
     //////////////////////////////
     {
-        QFile file(m_WorkingPath + "CIS_CIP.txt");
+        QFile file(workingPath() + "CIS_CIP.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open CIS_CIP.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
             //refreshViews();
@@ -282,7 +273,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
 
     // save file
     {
-        QFile file(m_WorkingPath + "CIS_CIP_processed.txt");
+        QFile file(workingPath() + "CIS_CIP_processed.txt");
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open CIS_CIP_processed.txt : %1").arg(file.errorString()), __FILE__, __LINE__);
             //refreshViews();
@@ -296,7 +287,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
 
     // process COMPO.txt
     {
-        QFile file(m_WorkingPath + "COMPO.txt");
+        QFile file(workingPath() + "COMPO.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open COMPO.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
             //refreshViews();
@@ -311,7 +302,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
 
     // save file
     {
-        QFile file(m_WorkingPath + "COMPO_processed.txt");
+        QFile file(workingPath() + "COMPO_processed.txt");
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open COMPO_processed.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
             //refreshViews();
@@ -326,7 +317,7 @@ bool FrenchDrugsDatabaseWidget::prepareDatas()
 
 }
 
-bool FrenchDrugsDatabaseWidget::createDatabase()
+bool FrDrugDatatabaseStep::createDatabase()
 {
     if (!Core::Tools::connectDatabase(FR_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -352,62 +343,74 @@ bool FrenchDrugsDatabaseWidget::createDatabase()
     return true;
 }
 
-bool FrenchDrugsDatabaseWidget::populateDatabase()
+bool FrDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(FR_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // check files
-    if (!QFile::exists(m_WorkingPath + "CIS_processed.txt")) {
+    if (!QFile::exists(workingPath() + "CIS_processed.txt")) {
         Utils::Log::addError(this, QString("Missing CIS_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
 
-    if (!QFile::exists(m_WorkingPath + "CIS_CIP_processed.txt")) {
+    if (!QFile::exists(workingPath() + "CIS_CIP_processed.txt")) {
         Utils::Log::addError(this, QString("Missing CIS_CIP_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
 
-    if (!QFile::exists(m_WorkingPath + "COMPO_processed.txt")) {
+    if (!QFile::exists(workingPath() + "COMPO_processed.txt")) {
         Utils::Log::addError(this, QString("Missing COMPO_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
         return false;
     }
 
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Feeding database"));
-    progressDialog.setRange(0, 4);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
+    QProgressDialog *progressDialog = 0;
+    if (m_WithProgress) {
+        progressDialog = new QProgressDialog(mainwindow());
+        progressDialog->setLabelText(tr("Feeding database"));
+        progressDialog->setRange(0, 4);
+        progressDialog->setWindowModality(Qt::WindowModal);
+        progressDialog->setValue(0);
+        progressDialog->show();
+    }
 
-    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "CIS_processed.txt", "DRUGS", Core::Constants::SEPARATOR)) {
+    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, workingPath() + "CIS_processed.txt", "DRUGS", Core::Constants::SEPARATOR)) {
         return false;
     }
-    progressDialog.setValue(progressDialog.value() + 1);
+    if (m_WithProgress) {
+        progressDialog->setValue(progressDialog->value() + 1);
+    }
 
-    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "CIS_CIP_processed.txt", "PACKAGING", Core::Constants::SEPARATOR)) {
+//    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, workingPath() + "CIS_CIP_processed.txt", "PACKAGING", Core::Constants::SEPARATOR)) {
+//        return false;
+//    }
+    if (m_WithProgress) {
+        progressDialog->setValue(progressDialog->value() + 1);
+    }
+
+    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, workingPath() + "COMPO_processed.txt", "TMP_COMPOSITION", Core::Constants::SEPARATOR)) {
         return false;
     }
-    progressDialog.setValue(progressDialog.value() + 1);
-
-    if (!Utils::Database::importCsvToDatabase(FR_DRUGS_DATABASE_NAME, m_WorkingPath + "COMPO_processed.txt", "TMP_COMPOSITION", Core::Constants::SEPARATOR)) {
-        return false;
+    if (m_WithProgress) {
+        progressDialog->setValue(progressDialog->value() + 1);
     }
-    progressDialog.setValue(progressDialog.value() + 1);
 
    // Run SQL commands one by one
    if (!Core::Tools::executeSqlFile(FR_DRUGS_DATABASE_NAME, databaseFinalizationScript())) {
        Utils::Log::addError(this, "Can create French DB.", __FILE__, __LINE__);
        return false;
    }
-   progressDialog.setValue(progressDialog.value() + 1);
+   if (m_WithProgress) {
+       delete progressDialog;
+       progressDialog = 0;
+   }
 
    linkDrugsRoutes();
 
    return true;
 }
 
-bool FrenchDrugsDatabaseWidget::linkDrugsRoutes()
+bool FrDrugDatatabaseStep::linkDrugsRoutes()
 {
     if (!Core::Tools::connectDatabase(FR_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -448,7 +451,7 @@ bool FrenchDrugsDatabaseWidget::linkDrugsRoutes()
     return true;
 }
 
-bool FrenchDrugsDatabaseWidget::linkMolecules()
+bool FrDrugDatatabaseStep::linkMolecules()
 {
     // 10 Dec 2010
     //    NUMBER OF MOLECULES 5112
@@ -560,7 +563,70 @@ bool FrenchDrugsDatabaseWidget::linkMolecules()
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FR_DRUGS_DATABASE_NAME, unfound);
     ExtraMoleculeLinkerModel::instance()->saveModel();
 
+    if (!Core::Tools::signDatabase(FR_DRUGS_DATABASE_NAME))
+        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
+
     return true;
+}
+
+
+
+
+FrenchDrugsDatabaseWidget::FrenchDrugsDatabaseWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::FrenchDrugsDatabaseWidget),
+    m_Step(0)
+{
+    setObjectName("FrenchDrugsDatabaseWidget");
+    ui->setupUi(this);
+    m_Step = new FrDrugDatatabaseStep(this);
+    m_Step->createDir();
+    pluginManager()->addObject(m_Step);
+}
+
+FrenchDrugsDatabaseWidget::~FrenchDrugsDatabaseWidget()
+{
+    pluginManager()->removeObject(m_Step);
+    delete ui;
+}
+
+void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
+{
+    if (ui->unzip->isChecked()) {
+        if (m_Step->unzipFiles())
+            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
+    }
+    if (ui->prepare->isChecked()) {
+        if (m_Step->prepareDatas())
+            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
+    }
+    if (ui->createDb->isChecked()) {
+        if (m_Step->createDatabase())
+            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
+    }
+    if (ui->populate->isChecked()) {
+        if (m_Step->populateDatabase())
+            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
+    }
+    if (ui->linkMols->isChecked()) {
+        if (m_Step->linkMolecules())
+            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
+    }
+    Utils::Log::messagesToTreeWidget(ui->messages);
+    Utils::Log::errorsToTreeWidget(ui->errors);
+}
+
+bool FrenchDrugsDatabaseWidget::on_download_clicked()
+{
+    ui->download->setEnabled(false);
+    m_Step->downloadFiles();
+    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    return true;
+}
+
+void FrenchDrugsDatabaseWidget::downloadFinished()
+{
+    ui->download->setEnabled(true);
 }
 
 void FrenchDrugsDatabaseWidget::changeEvent(QEvent *e)

@@ -29,6 +29,7 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <QWidget>
 
@@ -49,6 +50,38 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 };
 
+class FdaDrugDatatabaseStep : public Core::IFullReleaseStep
+{
+    Q_OBJECT
+
+public:
+    FdaDrugDatatabaseStep(QObject *parent = 0);
+    ~FdaDrugDatatabaseStep();
+
+    QString id() const {return "FdaDrugDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+
+    bool createDir();
+    bool cleanFiles();
+    bool downloadFiles();
+    bool process();
+    QString processMessage() const {return tr("USA drugs database creation");}
+
+    bool unzipFiles();
+    bool prepareDatas();
+    bool createDatabase();
+    bool populateDatabase();
+    bool linkDrugsRoutes();
+    bool linkMolecules();
+
+    QStringList errors() const {return m_Errors;}
+
+private:
+    QStringList m_Errors;
+    bool m_WithProgress;
+
+};
+
 
 namespace Ui {
     class FdaDrugsDatabaseWidget;
@@ -67,20 +100,12 @@ protected Q_SLOTS:
     bool on_download_clicked();
     void downloadFinished();
 
-private:
-    bool unzipFiles();
-    bool prepareDatas();
-    bool createDatabase();
-    bool populateDatabase();
-    bool linkMolecules();
-
-
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::FdaDrugsDatabaseWidget *ui;
-    QString m_WorkingPath;
+    FdaDrugDatatabaseStep *m_Step;
 };
 
 }  //  End namespace DrugsDbCreator

@@ -37,6 +37,7 @@
 #include <utils/log.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QFile>
 #include <QMap>
@@ -66,6 +67,7 @@ const char* const  SEPARATOR                   = "|||";
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_US.db");}
@@ -90,79 +92,66 @@ QWidget *FdaDrugsDatabasePage::createPage(QWidget *parent)
 }
 
 
-FdaDrugsDatabaseWidget::FdaDrugsDatabaseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FdaDrugsDatabaseWidget)
+FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
+        m_WithProgress(false)
 {
-    setObjectName("FdaDrugsDatabaseWidget");
-    ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create FDA Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+}
+
+FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
+{
+}
+
+bool FdaDrugDatatabaseStep::createDir()
+{
+    if (!QDir().mkpath(workingPath()))
+        Utils::Log::addError(this, "Unable to create FDA Working Path :" + workingPath(), __FILE__, __LINE__);
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create Canadian database output path :" + dbpath, __FILE__, __LINE__);
-        else
+        if (!QDir().mkpath(dbpath)) {
+            Utils::Log::addError(this, "Unable to create FDA database output path :" + dbpath, __FILE__, __LINE__);
+            m_Errors << tr("Unable to create FDA database output path :") + dbpath;
+        } else {
             Utils::Log::addMessage(this, "Drugs database output dir created");
+        }
     }
+    return true;
 }
 
-FdaDrugsDatabaseWidget::~FdaDrugsDatabaseWidget()
+bool FdaDrugDatatabaseStep::cleanFiles()
 {
-    delete ui;
+    QFile(databaseAbsPath()).remove();
+    return true;
 }
 
-void FdaDrugsDatabaseWidget::on_startJobs_clicked()
-{
-    if (ui->unzip->isChecked()) {
-        if (unzipFiles())
-            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->prepare->isChecked()) {
-        if (prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool FdaDrugsDatabaseWidget::on_download_clicked()
+bool FdaDrugDatatabaseStep::downloadFiles()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-    dld->setMainWindow(mainwindow());
-    dld->setOutputPath(m_WorkingPath);
+//    dld->setMainWindow(mainwindow());
+    dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FDA_URL));
     dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
 }
 
-void FdaDrugsDatabaseWidget::downloadFinished()
+bool FdaDrugDatatabaseStep::process()
 {
-    ui->download->setEnabled(true);
+    unzipFiles();
+    prepareDatas();
+    createDatabase();
+    populateDatabase();
+    linkMolecules();
+    return true;
 }
 
-bool FdaDrugsDatabaseWidget::unzipFiles()
+bool FdaDrugDatatabaseStep::unzipFiles()
 {
     // check file
-    QString fileName = m_WorkingPath + QDir::separator() + QFileInfo(FDA_URL).fileName();
+    QString fileName = workingPath() + QDir::separator() + QFileInfo(FDA_URL).fileName();
     if (!QFile(fileName).exists()) {
         Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
         Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
@@ -172,7 +161,7 @@ bool FdaDrugsDatabaseWidget::unzipFiles()
     Utils::Log::addMessage(this, QString("Starting unzipping FDA file %1").arg(fileName));
 
     // unzip files using QProcess
-    return Core::Tools::unzipFile(fileName, m_WorkingPath);
+    return Core::Tools::unzipFile(fileName, workingPath());
 }
 
 struct drug {
@@ -260,7 +249,7 @@ struct drug {
     QHash<QString, QString> mols_strength;
 };
 
-bool FdaDrugsDatabaseWidget::prepareDatas()
+bool FdaDrugDatatabaseStep::prepareDatas()
 {
     QStringList files = QStringList()
                         << "Product.txt"
@@ -268,13 +257,16 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
                         ;
 
     {
-        QProgressDialog progress("Processing FDA files : preparing files", "Abort", 0, 2, qApp->activeWindow());
-        progress.setWindowModality(Qt::WindowModal);
+        QProgressDialog *progress = 0;
+        if (m_WithProgress) {
+            progress = new QProgressDialog("Processing FDA files : preparing files", "Abort", 0, 2, qApp->activeWindow());
+            progress->setWindowModality(Qt::WindowModal);
+        }
 
         // check files
         foreach(const QString &file, files) {
-            if (!QFile::exists(m_WorkingPath + file)) {
-                Utils::Log::addError(this, QString("Missing " + m_WorkingPath + file + " file. prepareDatas()"), __FILE__, __LINE__);
+            if (!QFile::exists(workingPath() + file)) {
+                Utils::Log::addError(this, QString("Missing " + workingPath() + file + " file. prepareDatas()"), __FILE__, __LINE__);
                 return false;
             }
         }
@@ -282,11 +274,13 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
         // transform each files
         int i = 0;
         foreach(const QString &file, files) {
-            progress.setValue(i++);
+            if (m_WithProgress) {
+                progress->setValue(i++);
+            }
             Utils::Log::addMessage(this, "Processing file :" + file);
             QString tmp;
             {
-                QFile f(m_WorkingPath + file);
+                QFile f(workingPath() + file);
                 if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
                     return false;
@@ -307,7 +301,7 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
 
             // save file
             {
-                QFile f(m_WorkingPath + file);
+                QFile f(workingPath() + file);
                 if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
                     Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
                     return false;
@@ -316,13 +310,17 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
                 f.write(tmp.toUtf8());
             }
         }
-        progress.close();
+        if (m_WithProgress) {
+            progress->close();
+            delete progress;
+            progress = 0;
+        }
     }
 
     // Now prepare the Products.txt file
     QString content;
     {
-        QFile f(m_WorkingPath + "/Product.txt");
+        QFile f(workingPath() + "/Product.txt");
         if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg("Product.txt", f.errorString()), __FILE__, __LINE__);
             return false;
@@ -335,14 +333,19 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
     // "004589","004","INJECTABLE; INJECTION","5ML/100ML;5GM/100ML",1,"AP",1,"ALCOHOL 5% AND DEXTROSE 5%","ALCOHOL; DEXTROSE"
     QStringList lines = content.split("\n");
 
-    QProgressDialog progress("Processing FDA files : reading files", "Abort", 0, lines.count(), qApp->activeWindow());
-    progress.setWindowModality(Qt::WindowModal);
+    QProgressDialog *progress = 0;
+    if (m_WithProgress) {
+        progress = new QProgressDialog("Processing FDA files : reading files", "Abort", 0, lines.count(), qApp->activeWindow());
+        progress->setWindowModality(Qt::WindowModal);
+    }
 
     int i = 0;
     foreach(const QString &line, lines) {
         ++i;
-        if (i % 10 == 0)
-            progress.setValue(i);
+        if (m_WithProgress) {
+            if (i % 10 == 0)
+                progress->setValue(i);
+        }
 
         if (line.isEmpty())
             continue;
@@ -378,7 +381,7 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
     }
     // save file
     {
-        QFile f(m_WorkingPath + "FDA_DRUGS.CSV");
+        QFile f(workingPath() + "FDA_DRUGS.CSV");
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(f.fileName(), f.errorString()), __FILE__, __LINE__);
             return false;
@@ -424,7 +427,7 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
     }
     // save file
     {
-        QFile f(m_WorkingPath + "FDA_COMPOSITION.CSV");
+        QFile f(workingPath() + "FDA_COMPOSITION.CSV");
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. FdaDrugsDatabaseWidget::populateDatabase()").arg(f.fileName(), f.errorString()), __FILE__, __LINE__);
             return false;
@@ -437,6 +440,11 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
 
     /** \todo PACKAGING */
 
+    if (m_WithProgress) {
+        delete progress;
+        progress = 0;
+    }
+
     qDeleteAll(drugs);
     drugs.clear();
 
@@ -444,7 +452,7 @@ bool FdaDrugsDatabaseWidget::prepareDatas()
 
 }
 
-bool FdaDrugsDatabaseWidget::createDatabase()
+bool FdaDrugDatatabaseStep::createDatabase()
 {
     if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -459,7 +467,7 @@ bool FdaDrugsDatabaseWidget::createDatabase()
     return true;
 }
 
-bool FdaDrugsDatabaseWidget::populateDatabase()
+bool FdaDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
@@ -476,36 +484,47 @@ bool FdaDrugsDatabaseWidget::populateDatabase()
                         << "FDA_COMPOSITION.CSV"
                         ;
 
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Feeding database"));
-    progressDialog.setRange(0, 3);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
+    QProgressDialog *progress = 0;
+    if (m_WithProgress) {
+        progress = new QProgressDialog("Feeding database", "Abort", 0, 3, qApp->activeWindow());
+        progress->setWindowModality(Qt::WindowModal);
+        progress->setValue(0);
+        progress->show();
+    }
 
-    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, m_WorkingPath + "FDA_DRUGS.CSV", "DRUGS", SEPARATOR)) {
+    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, workingPath() + "FDA_DRUGS.CSV", "DRUGS", SEPARATOR)) {
         return false;
     }
-    progressDialog.setValue(1);
-    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, m_WorkingPath + "FDA_COMPOSITION.CSV", "COMPOSITION", SEPARATOR)) {
+    if (m_WithProgress) {
+        progress->setValue(1);
+    }
+    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, workingPath() + "FDA_COMPOSITION.CSV", "COMPOSITION", SEPARATOR)) {
         return false;
     }
-    progressDialog.setValue(2);
+    if (m_WithProgress) {
+        progress->setValue(2);
+        progress->setLabelText(tr("Processing SQL script (about 10 minutes)"));
+    }
 
-    progressDialog.setLabelText(tr("Processing SQL script (about 10 minutes)"));
     // Run SQL commands one by one
-    if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, databaseFinalizationScript(), &progressDialog)) {
+    if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, databaseFinalizationScript())) {
         Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
         return false;
     }
-    progressDialog.setValue(3);
+    if (m_WithProgress) {
+        progress->setValue(3);
+    }
 
     Utils::Log::addMessage(this, QString("Database processed"));
 
+    if (m_WithProgress) {
+        delete progress;
+        progress = 0;
+    }
     return true;
 }
 
-bool FdaDrugsDatabaseWidget::linkMolecules()
+bool FdaDrugDatatabaseStep::linkMolecules()
 {
     // 04 Dec 2010
     //    NUMBER OF MOLECULES 1983
@@ -585,11 +604,70 @@ bool FdaDrugsDatabaseWidget::linkMolecules()
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FDA_DRUGS_DATABASE_NAME, unfound);
     ExtraMoleculeLinkerModel::instance()->saveModel();
 
+    if (!Core::Tools::signDatabase(FDA_DRUGS_DATABASE_NAME))
+        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
+
     Utils::Log::addMessage(this, QString("Database processed"));
 
     return true;
 }
 
+
+
+FdaDrugsDatabaseWidget::FdaDrugsDatabaseWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::FdaDrugsDatabaseWidget),
+    m_Step(0)
+{
+    setObjectName("FdaDrugsDatabaseWidget");
+    ui->setupUi(this);
+    m_Step = new FdaDrugDatatabaseStep(this);
+    pluginManager()->addObject(m_Step);
+}
+
+FdaDrugsDatabaseWidget::~FdaDrugsDatabaseWidget()
+{
+    pluginManager()->removeObject(m_Step);
+    delete ui;
+}
+
+void FdaDrugsDatabaseWidget::on_startJobs_clicked()
+{
+    if (ui->unzip->isChecked()) {
+        if (m_Step->unzipFiles())
+            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
+    }
+    if (ui->prepare->isChecked()) {
+        if (m_Step->prepareDatas())
+            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
+    }
+    if (ui->createDb->isChecked()) {
+        if (m_Step->createDatabase())
+            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
+    }
+    if (ui->populate->isChecked()) {
+        if (m_Step->populateDatabase())
+            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
+    }
+    if (ui->linkMols->isChecked()) {
+        if (m_Step->linkMolecules())
+            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
+    }
+    Utils::Log::messagesToTreeWidget(ui->messages);
+    Utils::Log::errorsToTreeWidget(ui->errors);
+}
+
+bool FdaDrugsDatabaseWidget::on_download_clicked()
+{
+    m_Step->downloadFiles();
+    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    return true;
+}
+
+void FdaDrugsDatabaseWidget::downloadFinished()
+{
+    ui->download->setEnabled(true);
+}
 
 void FdaDrugsDatabaseWidget::changeEvent(QEvent *e)
 {

@@ -60,7 +60,7 @@ CORE_EXPORT bool executeSqlFile(const QString &connectionName, const QString &fi
 CORE_EXPORT bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file = QString::null, int line = -1);
 
 CORE_EXPORT bool connectDatabase(const QString &connection, const QString &fileName);
-
+CORE_EXPORT bool signDatabase(const QString &connectionName);
 
 }  // End namespace Tools
 

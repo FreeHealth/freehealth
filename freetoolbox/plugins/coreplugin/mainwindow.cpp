@@ -27,15 +27,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ftb_constants.h"
+#include "fullreleasepage.h"
 
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/constants_menus.h>
 #include <coreplugin/translators.h>
-#include <coreplugin/itheme.h>
-//#include <coreplugin/filemanager.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -55,8 +60,6 @@
 #include <utils/updatechecker.h>
 //#include <utils/iconbadgealert.h>
 
-#include <extensionsystem/pluginmanager.h>
-
 #include <QTreeWidgetItem>
 #include <QMap>
 #include <QList>
@@ -64,15 +67,23 @@
 #include <QDockWidget>
 #include <QCloseEvent>
 #include <QLabel>
+#include <QtConcurrentRun>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
+
+#ifdef DEBUG
+enum FullRelease { FullReleaseDownload=false, FullReleaseRunProcess=true };
+#else
+enum FullRelease { FullReleaseDownload=true, FullReleaseRunProcess=true };
+#endif
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -91,7 +102,10 @@ Q_DECLARE_METATYPE(::PageData);
 
 MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
-    ui(0), m_applied(false)
+        ui(0),
+        m_ActiveStep(0),
+        m_Watcher(0),
+        m_applied(false)
 {
     setObjectName("MainWindow");
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -102,6 +116,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    if (m_Watcher) {
+        delete m_Watcher;
+        m_Watcher=0;
+    }
 }
 
 bool MainWindow::initialize(const QStringList &, QString *)
@@ -139,9 +157,28 @@ bool MainWindow::initialize(const QStringList &, QString *)
     connectConfigurationActions();
     connectHelpActions();
 
+    QAction *a = 0;
+    Core::Command *cmd = 0;
+    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
+
+    // Create local actions
+    a = new QAction(this);
+    a->setObjectName("FTB_CreateFullRelease");
+    a->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(a, "FTB_CreateFullRelease", globalcontext);
+    cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
+    menu->addAction(cmd, Core::Constants::G_FILE_NEW);
+    connect(a, SIGNAL(triggered()), this, SLOT(createFullRelease()));
+
+    // Create General pages
+    m_FullReleasePage = new FullReleasePage(this);
+
     ui = new Ui::MainWindow;
     ui->setupUi(this);
     setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
+    ui->mainToolBar->insertAction(0, a);
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->setVisible(false);
@@ -192,6 +229,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::preparePages()
 {
     QList<IToolPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IToolPage>();
+    pages.prepend(m_FullReleasePage);
 
     QMap<QString, QTreeWidgetItem *> categories;
     QFont bold;
@@ -282,6 +320,90 @@ void MainWindow::showHelp()
 //    const PageData &data = item->data(0, Qt::UserRole).value<PageData>();
 //    int index = data.index;
 //    Core::HelpDialog::showPage(m_pages.at(index)->helpPage());
+}
+
+void MainWindow::createFullRelease()
+{
+    // Activate m_FullReleasePage
+    ui->pageTree->setCurrentItem(ui->pageTree->topLevelItem(0));
+    pageSelected();
+    m_ActiveStep = 0;
+    startNextDownload();
+}
+
+void MainWindow::startNextDownload()
+{
+    // get all Core::IFullReleaseStep
+    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
+
+    // Actual process is m_ActiveStep if == 0 start first step
+    if (!m_ActiveStep) {
+        m_ActiveStep = steps.first();
+    } else {
+        // Stop running step process
+        m_FullReleasePage->endDownloadingProcess(m_ActiveStep->id());
+        int id = steps.indexOf(m_ActiveStep);
+        if (id==(steps.count()-1)) {
+            m_ActiveStep = 0;
+            // All downloads are done, start processes
+            startNextProcess();
+            return;
+        }
+        m_ActiveStep = steps.at(id+1);
+    }
+
+    if (!m_ActiveStep)
+        return;
+    m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
+    connect(m_ActiveStep, SIGNAL(downloadFinished()), this, SLOT(startNextDownload()));
+    m_ActiveStep->downloadFiles();
+}
+
+void MainWindow::startNextProcess()
+{
+    // get all Core::IFullReleaseStep
+    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
+
+    // Actual process is m_ActiveStep if == 0 start first step
+    if (!m_ActiveStep) {
+        m_ActiveStep = steps.first();
+    } else {
+        // Stop running step process
+        m_FullReleasePage->endLastAddedProcess();
+        int id = steps.indexOf(m_ActiveStep);
+        if (id==(steps.count()-1)) {
+            m_ActiveStep = 0;
+            return;
+        }
+        m_ActiveStep = steps.at(id+1);
+    }
+
+    if (!m_ActiveStep)
+        return;
+    m_FullReleasePage->addRunningProcess(m_ActiveStep->processMessage());
+    if (!m_Watcher) {
+        m_Watcher = new QFutureWatcher<void>;
+        connect(m_Watcher, SIGNAL(finished()), this, SLOT(startNextProcess()));
+    }
+    QFuture<void> future = QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
+    m_Watcher->setFuture(future);
+
+}
+
+void MainWindow::fullReleaseDownloadFinished()
+{
+//    --m_DownloadsInProgress;
+//    if (m_DownloadsInProgress==0) {
+//        QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+//        foreach(Core::IFullReleaseStep *step, steps) {
+//            m_FullReleasePage->endDownloadingProcess(step->id());
+//        }
+
+//        // start process
+//        startNextProcess();
+//    }
 }
 
 void MainWindow::saveSettings()

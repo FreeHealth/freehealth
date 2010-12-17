@@ -30,9 +30,11 @@
 #include <coreplugin/imainwindow.h>
 
 #include <QSettings>
+#include <QFutureWatcher>
 
 namespace Core {
-
+class FullReleasePage;
+class IFullReleaseStep;
 
 namespace Ui {
     class MainWindow;
@@ -58,6 +60,10 @@ public Q_SLOTS:
 private Q_SLOTS:
     void pageSelected();
     void showHelp();
+    void createFullRelease();
+    void startNextDownload();
+    void startNextProcess();
+    void fullReleaseDownloadFinished();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -67,7 +73,10 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    FullReleasePage *m_FullReleasePage;
     QList<IToolPage *> m_pages;
+    Core::IFullReleaseStep *m_ActiveStep;
+    QFutureWatcher<void> *m_Watcher;
     bool m_applied;
     QString m_currentCategory;
     QString m_currentPage;
