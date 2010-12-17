@@ -551,23 +551,23 @@ bool Database::checkDatabaseScheme()
 }
 
 
-QString Database::field(const int & tableref, const int & fieldref)const
+QString Database::field(const int &tableref, const int &fieldref)const
 {
-    if (! d->m_Tables.contains(tableref))
+    if (!d->m_Tables.contains(tableref))
         return QString::null;
-    if (! d->m_Tables_Fields.keys().contains(tableref))
+    if (!d->m_Tables_Fields.keys().contains(tableref))
         return QString::null;
-    if (! d->m_Fields.keys().contains(fieldref + (tableref * 1000)))
+    if (!d->m_Fields.keys().contains(fieldref + (tableref * 1000)))
         return QString::null;
 
     return d->m_Fields.value(fieldref + (tableref * 1000));
 }
 
-QStringList Database::fields(const int & tableref)const
+QStringList Database::fields(const int &tableref)const
 {
-    if (! d->m_Tables.contains(tableref))
+    if (!d->m_Tables.contains(tableref))
         return QStringList();
-    if (! d->m_Tables_Fields.keys().contains(tableref))
+    if (!d->m_Tables_Fields.keys().contains(tableref))
         return QStringList();
 
     QList<int> list = d->m_Tables_Fields.values(tableref);
@@ -610,10 +610,10 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
     return where;
 }
 
-QString Database::select(const int & tableref, const int &fieldref, const QHash<int, QString> &conditions) const
+QString Database::select(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
     QString toReturn;
-    toReturn = QString("SELECT `%1` FROM `%2` WHERE %3")
+    toReturn = QString("SELECT `%2`.`%1` FROM `%2` WHERE %3")
             .arg(field(tableref, fieldref))
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
@@ -625,7 +625,7 @@ QString Database::select(const int & tableref, const int &fieldref, const QHash<
 QString Database::select(const int & tableref, const int & fieldref) const
 {
     QString toReturn;
-    toReturn = QString("SELECT `%1` FROM `%2`")
+    toReturn = QString("SELECT `%2`.`%1` FROM `%2`")
             .arg(field(tableref, fieldref))
             .arg(table(tableref));
     if (WarnSqlCommands)
@@ -678,7 +678,7 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
                   .arg(d->m_Fields.value(1000 * tableref + groupBy));
     if (!filter.isEmpty())
         req += " WHERE " + filter;
-//    if (WarnSqlCommands)
+    if (WarnSqlCommands)
         qWarning() << req;
     QSqlQuery q(req, database());
     if (q.isActive()) {
@@ -693,12 +693,12 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
     return 0;
 }
 
-QString Database::select(const int & tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions)const
+QString Database::select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions)const
 {
     QString toReturn;
     QString tmp;
     foreach(const int & i, fieldsref)
-        tmp += "`" + field(tableref, i)+ "`, ";
+        tmp += "`" + table(tableref) + "`.`" + field(tableref, i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -715,8 +715,8 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
 {
     QString toReturn;
     QString tmp;
-    foreach(const int & i, fieldsref)
-        tmp += "`" + field(tableref, i)+ "`, ";
+    foreach(const int &i, fieldsref)
+        tmp += "`" + table(tableref) + "`.`" + field(tableref, i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -728,14 +728,15 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
     return toReturn;
 }
 
-QString Database::select(const int & tableref, const QHash<int, QString> & conditions)const
+QString Database::select(const int &tableref, const QHash<int, QString> &conditions)const
 {
     QString toReturn;
     QString tmp;
     QList<int> list = d->m_Tables_Fields.values(tableref);
     qSort(list);
-    foreach(const int & i, list)
-        tmp += "`" + d->m_Fields.value(i)+ "`, ";
+    foreach(const int &i, list)
+        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
+//        tmp += "`" + d->m_Fields.value(i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -748,14 +749,14 @@ QString Database::select(const int & tableref, const QHash<int, QString> & condi
     return toReturn;
 }
 
-QString Database::select(const int & tableref) const
+QString Database::select(const int &tableref) const
 {
     QString toReturn;
     QString tmp;
     QList<int> list = d->m_Tables_Fields.values(tableref);
     qSort(list);
     foreach(const int & i, list)
-        tmp += "`" + d->m_Fields.value(i)+ "`, ";
+        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
