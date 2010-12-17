@@ -35,7 +35,8 @@ HEADERS += global_exporter.h \
     widgets/combowithfancybutton.h \
     widgets/basevalidatinglineedit.h \
     widgets/filenamevalidatinglineedit.h \
-    widgets/pathchooser.h
+    widgets/pathchooser.h \
+    pubmeddownloader.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -59,7 +60,8 @@ SOURCES += global.cpp \
     widgets/combowithfancybutton.cpp \
     widgets/basevalidatinglineedit.cpp \
     widgets/filenamevalidatinglineedit.cpp \
-    widgets/pathchooser.cpp
+    widgets/pathchooser.cpp \
+    pubmeddownloader.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
