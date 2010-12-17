@@ -146,6 +146,7 @@ bool FrDrugDatatabaseStep::process()
     populateDatabase();
     linkDrugsRoutes();
     linkMolecules();
+    Q_EMIT processFinished();
     return true;
 }
 

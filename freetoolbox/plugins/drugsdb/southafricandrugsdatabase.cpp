@@ -134,22 +134,23 @@ bool ZaDrugDatatabaseStep::cleanFiles()
 
 bool ZaDrugDatatabaseStep::downloadFiles()
 {
+    Q_EMIT downloadFinished();
     // get all tradename html pages from the site
-    manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-    if (m_WithProgress) {
-        m_Progress = new QProgressDialog(qApp->activeWindow());
-        m_Progress->setLabelText(tr("Downloading South African drugs database"));
-        m_Progress->setCancelButtonText(tr("Cancel"));
-        m_Progress->setRange(0, 26);
-        m_Progress->setWindowModality(Qt::WindowModal);
-        m_Progress->setValue(0);
-    }
+//    manager = new QNetworkAccessManager(this);
+//    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+//    if (m_WithProgress) {
+//        m_Progress = new QProgressDialog(qApp->activeWindow());
+//        m_Progress->setLabelText(tr("Downloading South African drugs database"));
+//        m_Progress->setCancelButtonText(tr("Cancel"));
+//        m_Progress->setRange(0, 26);
+//        m_Progress->setWindowModality(Qt::WindowModal);
+//        m_Progress->setValue(0);
+//    }
 
-    m_nbOfDowloads = 26;
-    for(int i = 0; i < m_nbOfDowloads; ++i) {
-        manager->get(QNetworkRequest(QUrl(QString(ZA_URL).arg(letters[i]))));
-    }
+//    m_nbOfDowloads = 26;
+//    for(int i = 0; i < m_nbOfDowloads; ++i) {
+//        manager->get(QNetworkRequest(QUrl(QString(ZA_URL).arg(letters[i]))));
+//    }
     return true;
 }
 
@@ -231,6 +232,7 @@ bool ZaDrugDatatabaseStep::process()
     createDatabase();
     populateDatabase();
     linkMolecules();
+    Q_EMIT processFinished();
     return true;
 }
 

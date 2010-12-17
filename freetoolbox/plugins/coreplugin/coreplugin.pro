@@ -11,7 +11,7 @@ DEPENDPATH += ../
 
 include(../../../plugins/coreplugin/common_core.pri)
 
-QT *= sql network xml concurrent
+QT *= sql network xml
 
 HEADERS += coreimpl.h \
     appaboutpage.h \

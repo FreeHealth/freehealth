@@ -145,6 +145,7 @@ bool FdaDrugDatatabaseStep::process()
     createDatabase();
     populateDatabase();
     linkMolecules();
+    Q_EMIT processFinished();
     return true;
 }
 

@@ -61,13 +61,6 @@
 #define MODEL_PREFETCH 100
 const char * const MIMETYPE = "application/freemedforms.molecule.name";
 
-
-//
-//  Get textual summary of publication (pubmed)
-//  http://www.ncbi.nlm.nih.gov/pubmed/8148870?dopt=docsum&format=text
-//
-
-
 using namespace IAMDb;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}

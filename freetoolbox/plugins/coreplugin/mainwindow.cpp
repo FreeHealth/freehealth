@@ -383,12 +383,13 @@ void MainWindow::startNextProcess()
     if (!m_ActiveStep)
         return;
     m_FullReleasePage->addRunningProcess(m_ActiveStep->processMessage());
-    if (!m_Watcher) {
-        m_Watcher = new QFutureWatcher<void>;
-        connect(m_Watcher, SIGNAL(finished()), this, SLOT(startNextProcess()));
-    }
-    QFuture<void> future = QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
-    m_Watcher->setFuture(future);
+//    if (!m_Watcher) {
+//        m_Watcher = new QFutureWatcher<void>;
+//    }
+//    QFuture<void> future = QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
+    QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
+    connect(m_ActiveStep, SIGNAL(processFinished()), this, SLOT(startNextProcess()));
+//    m_Watcher->setFuture(future);
 
 }
 

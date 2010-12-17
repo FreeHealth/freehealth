@@ -287,11 +287,6 @@ public:
 };
 
 
-struct Source
-{
-    QString m_TreeClass, m_Inn, m_Link, m_TypeOfLink, m_Abstract, m_TextualReference, m_Explanation;
-};
-
 } // namespace IAMDb
 
 

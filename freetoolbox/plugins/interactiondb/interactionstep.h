@@ -3,12 +3,13 @@
 
 #include <coreplugin/ifullreleasestep.h>
 #include <QStringList>
-
+#include <QVector>
 
 namespace IAMDb {
 
 class InteractionStep : public Core::IFullReleaseStep
 {
+    Q_OBJECT
 public:
     InteractionStep(QObject *parent = 0);
 
@@ -23,9 +24,14 @@ public:
 
     QStringList errors() const {return m_Errors;}
 
+public Q_SLOTS:
+    void downloadNextSource();
+
 private:
     QStringList m_Errors;
     bool m_UseProgressDialog;
+    int m_ActiveDownloadId;
+    QVector<int> m_SourceToDownload;
 };
 
 }  //  End namespace IAMDb

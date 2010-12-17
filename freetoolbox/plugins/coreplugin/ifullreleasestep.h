@@ -34,6 +34,7 @@ public:
 
 Q_SIGNALS:
     void downloadFinished();
+    void processFinished();
 
 public Q_SLOTS:
 
