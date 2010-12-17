@@ -13,6 +13,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/httpdownloader.h>
+#include <utils/pubmeddownloader.h>
 #include <translationutils/constanttranslations.h>
 #include <translationutils/googletranslator.h>
 
@@ -41,7 +42,7 @@ static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->
 
 
 InteractionStep::InteractionStep(QObject *parent) :
-        m_UseProgressDialog(false)
+        m_UseProgressDialog(false), m_ActiveDownloadId(-1)
 {
 }
 
@@ -74,11 +75,21 @@ bool InteractionStep::downloadFiles()
     return true;
 }
 
+struct Source
+{
+    Source() {}
+    bool isNull() {return (m_TreeClass.isEmpty() && m_Inn.isEmpty() && m_Link.isEmpty());}
+
+    QString m_TreeClass, m_Inn, m_Link, m_TypeOfLink, m_Abstract, m_TextualReference, m_Explanation;
+};
+
+
 static void setClassTreeToDatabase(const QString &iclass,
                                    const QMultiHash<QString, QString> &class_mols,
                                    const QMultiHash<QString, QString> &molsToAtc,
                                    const QStringList &afssapsClass,
                                    const QStringList &molsWithoutAtc,
+                                   const QMultiHash<QString, Source> &class_sources,
                                    QMultiHash<QString, QString> *buggyIncludes,
                                    int insertChildrenIntoClassId = -1)
 {
@@ -99,30 +110,70 @@ static void setClassTreeToDatabase(const QString &iclass,
                 continue;
             }
             qWarning() << "class within a class" << iclass << inn;
-            setClassTreeToDatabase(inn, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, buggyIncludes, insertChildrenIntoClassId);
+            setClassTreeToDatabase(inn, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, buggyIncludes, insertChildrenIntoClassId);
             qWarning() << "end class within a class";
             continue;
         }
+
+        // Find source for this couple class/inn
+        QVector<Source> sources;
+        foreach(const Source &s, class_sources.values(iclass)) {
+            if (s.m_Inn==inn.toUpper()) {
+                sources << s;
+            }
+        }
+
+        int sourceLk = -1;
+        if (sources.count()) {
+            // Get SourceLk
+            req = "SELECT MAX(`SOURCE_LINK`) FROM SOURCES;";
+            QSqlQuery query(req, QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+            if (query.isActive()) {
+                if (query.next()) {
+                    sourceLk = query.value(0).toInt() + 1;
+                }
+            } else {
+                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+            }
+            query.finish();
+            // Insert all sources
+            foreach(const Source &s, sources) {
+                req = QString("INSERT INTO `SOURCES` (`SOURCE_LINK`,`TYPE`,`LINK`) VALUES "
+                              "(%1, \"%2\", \"%3\")")
+                      .arg(sourceLk)
+                      .arg(s.m_TypeOfLink)
+                      .arg(s.m_Link)
+                      ;
+                if (!query.exec(req)) {
+                    Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                }
+            }
+        }
+
+        // Create the SQL query for insertion
         if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
             foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
-                        .arg(atc);
+                        .arg(atc)
+                        .arg(sourceLk);
                 Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
             }
         } else {
             int id = molsWithoutAtc.indexOf(inn.toUpper());
             if (id==-1) {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH` like \"%2\"));")
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH` like \"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
-                        .arg(inn);
+                        .arg(inn)
+                        .arg(sourceLk);
             } else {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"));")
+                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
+                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
-                        .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'));
+                        .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'))
+                        .arg(sourceLk);
             }
 
             if (!Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__)) {
@@ -215,18 +266,18 @@ bool InteractionStep::process()
             const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
             const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
             if (type=="class") {
-                afssapsClass << Core::Tools::noAccent(mol).toUpper();
-                afssapsClassEn << molEn;
-            } else if (links.isEmpty()) {
-                molsWithoutAtc << mol.toUpper();
-            } else {
-                foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts))
-                    molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
-            }
-        }
-        if (m_UseProgressDialog) {
-            progress->setValue(3);
-        }
+                 afssapsClass << Core::Tools::noAccent(mol).toUpper();
+                 afssapsClassEn << molEn;
+             } else if (links.isEmpty()) {
+                 molsWithoutAtc << mol.toUpper();
+             } else {
+                 foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts))
+                     molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
+             }
+         }
+         if (m_UseProgressDialog) {
+             progress->setValue(3);
+         }
 
         // Add Interacting molecules without ATC code
         // 100 000 < ID < 199 999  == Interacting molecules without ATC code
@@ -276,6 +327,7 @@ bool InteractionStep::process()
     }
 
 
+    QMultiHash<QString, Source> class_sources;
     // Add interacting classes tree
     {
         // Prepare computation
@@ -293,19 +345,37 @@ bool InteractionStep::process()
             QModelIndex parent = afssapsTreeModel->index(i, AfssapsClassTreeModel::Name);
             // Get mols
             while (afssapsTreeModel->hasIndex(j, 0, parent)) {
-                const QString &mol = afssapsTreeModel->index(j, AfssapsClassTreeModel::Name, parent).data().toString();
+                QModelIndex molIndex = afssapsTreeModel->index(j, AfssapsClassTreeModel::Name, parent);
+                const QString &mol = molIndex.data().toString();
                 class_mols.insertMulti(parent.data().toString(), mol);
                 ++j;
+                // catch source
+                if (afssapsTreeModel->hasIndex(0, 0, molIndex)) {
+                    for(int k = 0; k < afssapsTreeModel->rowCount(molIndex); ++k) {
+                        Source s;
+                        s.m_Link = afssapsTreeModel->index(k, AfssapsClassTreeModel::Name, molIndex).data().toString();
+                        s.m_TreeClass = Core::Tools::noAccent(parent.data().toString()).toUpper();
+                        s.m_Inn = Core::Tools::noAccent(mol).toUpper();
+                        if (s.m_Link.startsWith("http://www.ncbi.nlm.nih.gov/pubmed/")) {
+                            s.m_TypeOfLink = "pubmed";
+                        } else {
+                            s.m_TypeOfLink = "web";
+                        }
+                        class_sources.insertMulti(s.m_TreeClass, s);
+                    }
+                }
             }
         }
         if (m_UseProgressDialog) {
             progress->setValue(6);
         }
 
+        qWarning() << "sources=" << class_sources.count() << class_sources.uniqueKeys().count();
+
         // Computation
         QMultiHash<QString, QString> buggyIncludes;
         foreach(const QString &iclass, afssapsClass) {
-            setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, &buggyIncludes);
+            setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, &buggyIncludes);
         }
         if (m_UseProgressDialog) {
             progress->setValue(7);
@@ -438,7 +508,83 @@ bool InteractionStep::process()
         progress=0;
     }
 
+    downloadNextSource();
+
     return true;
 }
 
+void InteractionStep::downloadNextSource()
+{
+    qWarning() << "download" << m_ActiveDownloadId;
+    static Utils::PubMedDownloader *downloader = 0;
+    if (!downloader) {
+        downloader = new Utils::PubMedDownloader(this);
+        connect(downloader, SIGNAL(downloadFinished()), this, SLOT(downloadNextSource()));
+    }
 
+    // connect db
+    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+        return ;
+
+    // If first call --> get all sources to download
+    if (m_ActiveDownloadId == -1) {
+        m_SourceToDownload.clear();
+        QString req = "SELECT DISTINCT `SOURCE_LINK` FROM `SOURCES` WHERE (`TEXTUAL_REFERENCE` IS NULL AND `ABSTRACT` IS NULL);";
+        QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+        if (query.exec(req)) {
+            while (query.next()) {
+                m_SourceToDownload << query.value(0).toInt();
+            }
+        }
+        m_ActiveDownloadId = m_SourceToDownload.first();
+    } else {
+        // Source retrieved
+        QString req = QString("UPDATE `SOURCES` SET "
+                              "`TEXTUAL_REFERENCE`=\"%1\", "
+                              "`ABSTRACT`=\"%2\" "
+                              "WHERE `SOURCE_LINK`=%3;")
+                .arg(downloader->reference())
+                .arg(downloader->abstract())
+                .arg(m_ActiveDownloadId)
+                ;
+        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+
+        if (m_SourceToDownload.contains(m_ActiveDownloadId))
+            m_SourceToDownload.remove(0);
+
+        if (m_SourceToDownload.count() == 0) {
+            delete downloader;
+            downloader = 0;
+            Q_EMIT processFinished();
+            return;
+        }
+        m_ActiveDownloadId = m_SourceToDownload.first();
+    }
+
+    if (m_ActiveDownloadId == -1)
+        return;
+
+    // Get link
+    QStringList link;
+    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE `SOURCE_LINK`=%1 LIMIT 1;").arg(m_ActiveDownloadId);
+    QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+    if (query.exec(req)) {
+        while (query.next()) {
+            link << query.value(0).toString();
+        }
+    }
+
+    if (link.count()==0) {
+        Q_EMIT processFinished();
+        return;
+    }
+
+    query.finish();
+
+    // Start pubmed downloader
+    if (downloader->setFullLink(link.at(0))) {
+        downloader->startDownload();
+    } else {
+        Utils::Log::addError(this, "Unable to download pubmed link " + link.at(0));
+    }
+}
