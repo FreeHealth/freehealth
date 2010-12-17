@@ -67,12 +67,12 @@ INSERT INTO `INFORMATIONS` (
     `LANGUAGE_COUNTRY`,
     `DRUGS_NAME_CONSTRUCTOR`
     ) VALUES (
-    "0.5.0",
+    "0.5.2",
     "fr=Base de données thérapeutique Américaine
 xx=FDA's Drug Product Database
 ",
     "FDA_US",
-    "0.5.0",
+    "0.5.2",
     "FDA",
     "http://www.fda.gov/Drugs/",
     "",
@@ -88,3 +88,5 @@ xx=FDA's Drug Product Database
     "en_US",
     "NAME (FORM, GLOBAL_STRENGTH)"
 );
+
+vacuum;

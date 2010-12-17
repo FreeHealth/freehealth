@@ -78,12 +78,12 @@ INSERT INTO "INFORMATIONS" (
     "LANGUAGE_COUNTRY",
     "DRUGS_NAME_CONSTRUCTOR")
 VALUES (
-    "0.5.0",
+    "0.5.2",
     "xx=South Africa Drug Product Database
     fr=Base de données thérapeutique d'Afrique du Sud
     ",
     "SAEPI_ZA",
-    "0.5.0",
+    "0.5.2",
     "SAEPI : South African Electronic Package Inserts",
     "http://home.intekom.com/pharm/",
     "http://home.intekom.com/pharm/",
@@ -99,3 +99,5 @@ VALUES (
     "en_ZA",
     "NAME"
 );
+
+vacuum;

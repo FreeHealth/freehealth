@@ -55,7 +55,7 @@ INSERT INTO `INFORMATIONS` (
     "xx=French drugs database from the AFSSAPS.
     fr=Base de données thérapeutique française (AFSSAPS)",
     "FR_AFSSAPS",
-    "0.5.0",
+    "0.5.2",
     "AFSSAPS : Agence Française de Sécurité Sanitaire des Produits de Santé",
     "http://afssaps-prd.afssaps.fr/php/ecodex/index.php",
     "http://www.freemedforms.org",
@@ -71,3 +71,5 @@ INSERT INTO `INFORMATIONS` (
     "fr_FR",
     "NAME"
     );
+
+vacuum;
