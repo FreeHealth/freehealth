@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `IAM_TREE` (
 
 -- If url is too long please consider to use tinyurl.com to create a smaller one
 CREATE TABLE IF NOT EXISTS `SOURCES` (
-`ID` INTEGER NOT NULL,
+`ID` INTEGER PRIMARY KEY,
 `SOURCE_LINK` INTEGER NOT NULL,
 `TYPE` VARCHAR(20),
 `LINK` VARCHAR(200),
