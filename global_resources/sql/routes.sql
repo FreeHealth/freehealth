@@ -101,7 +101,7 @@ INSERT INTO ROUTE_ABBREV (`ROUTE_ID`,`LANG`,`ABBREV`) VALUES (35,'fr','IM');
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (36, "intrapleurale","intrapleural","interpleural");
 
-INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (37, "intrapéricardiaque","","intraperikardial");
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (37, "intrapéricardiaque","intrapericardial","intraperikardial");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (38, "intrapéritonéale","intraperitoneal","intraperitoneal");
 
@@ -115,7 +115,7 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (42, "intraveineuse","intravenou
 -- Abbreviations
 INSERT INTO ROUTE_ABBREV (`ROUTE_ID`,`LANG`,`ABBREV`) VALUES (42,'fr','IV');
 
-INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (43, "intraventriculaire cérébrale","intraventricular brain","intraventrikulär (Gehirn)");
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (43, "intraventriculaire cérébrale","intraventricular (cerebral)","intraventrikulär (Gehirn)");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (44, "intravitréenne","intravitreal","intravitreal");
 
@@ -165,7 +165,7 @@ INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (62, "voie parentérale autre","
 -- Synonyms
 -- PARENTERAL (UNSPECIFIED)
 
-INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (63, "épilésionnelle","","epiläsional");
+INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (63, "épilésionnelle","epilesional","epiläsional");
 
 INSERT INTO ROUTES (`ID`,`FR`,`EN`,`DE`) VALUES (64, "percutanée","percutaneous","perkutan");
 

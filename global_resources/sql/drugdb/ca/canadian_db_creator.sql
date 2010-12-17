@@ -41,17 +41,18 @@
 -- /**
 --  * \file canadian_db_creator.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
---  * \version 0.4.4
---  * \date 14 July 2010
+--  * \version 0.4.5
+--  * \date 14 Dec 2010
 --  */
 
 -- /**
 --  * \brief This script creates a sqlite db from Health Canada Drug Product Data
 --  *
---  * July 14, 2010 script is renamed and splitted into three files:
---  *   - canadian_db_creator.sql (which mainly reads other sql files)
---  *   - canadian_db_preparation.sql
---  *   - canadian_db_finalize.sql
+--  * Dec 14, 2010 script is renamed and splitted into multiple files:
+--  *   - as before, canadian_db_creator.sql
+--  *     (which mainly reads other sql files)
+--  *   - others… see .read statements below)
+--  * July 14, 2010 script is renamed and splitted into multiple files:
 --  * July 14, 2010 doxygen comments, licence header and file descriptor are added
 --  * July 9, 2010 supports new (April 2010) HC drug field DESCRIPTOR VARCHAR2(150)
 --  * July 9, 2010 bugfix: made the INSERT into DRUGS to be SELECT DISTINCT
