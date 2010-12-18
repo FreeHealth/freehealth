@@ -342,9 +342,9 @@ void MainWindow::createFullRelease()
     }
 
     /** \todo add a if (userWantsToDld)... */
-//    startNextDownload();
+    startNextDownload();
+//    startNextProcess();
 //    startNextPostProcessDownload();
-    startNextPostProcessDownload();
 }
 
 void MainWindow::startNextDownload()
@@ -436,20 +436,6 @@ void MainWindow::startNextPostProcessDownload()
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
     m_ActiveStep->postProcessDownload();
-}
-
-void MainWindow::fullReleaseDownloadFinished()
-{
-//    --m_DownloadsInProgress;
-//    if (m_DownloadsInProgress==0) {
-//        QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-//        foreach(Core::IFullReleaseStep *step, steps) {
-//            m_FullReleasePage->endDownloadingProcess(step->id());
-//        }
-
-//        // start process
-//        startNextProcess();
-//    }
 }
 
 void MainWindow::saveSettings()
