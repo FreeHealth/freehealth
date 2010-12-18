@@ -63,6 +63,7 @@ private Q_SLOTS:
     void createFullRelease();
     void startNextDownload();
     void startNextProcess();
+    void startNextPostProcessDownload();
     void fullReleaseDownloadFinished();
 
 protected:

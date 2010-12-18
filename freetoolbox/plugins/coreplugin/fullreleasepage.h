@@ -5,6 +5,7 @@
 
 #include <QLabel>
 #include <QHash>
+class QSpacerItem;
 
 namespace Core {
 
@@ -36,6 +37,7 @@ private:
     QWidget *m_Widget, *m_CentralWidget;
     Ui::FullReleasePage *ui;
     QHash<QString, QLabel *> m_IconLabels;
+    QSpacerItem *m_Spacer;
 };
 
 }  //  End namespace Core

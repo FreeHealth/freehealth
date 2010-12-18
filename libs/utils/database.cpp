@@ -965,7 +965,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
 {
-    QString content = Utils::readTextFile(fileName);
+    QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
     if (content.isEmpty())
         return false;
     QStringList lines = content.split("\n", QString::SkipEmptyParts);

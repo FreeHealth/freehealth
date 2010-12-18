@@ -37,14 +37,18 @@ using namespace Utils;
 //  http://www.ncbi.nlm.nih.gov/pubmed/8148870?dopt=docsum&format=text
 //
 
-static const char * REFERENCE_URL = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=docsum&format=text";
-static const char * ABSTRACT_URL  = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=Abstract&format=text";
+static const char *REFERENCE_URL = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=docsum&format=text";
+static const char *ABSTRACT_URL  = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=Abstract&format=text";
 
 
 PubMedDownloader::PubMedDownloader(QObject *parent) :
         QObject(parent), manager(0), m_DownloadingReferences(false)
 {
     manager = new QNetworkAccessManager(this);
+}
+
+PubMedDownloader::~PubMedDownloader()
+{
 }
 
 bool PubMedDownloader::setFullLink(const QString &link)

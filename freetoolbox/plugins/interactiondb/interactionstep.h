@@ -5,6 +5,10 @@
 #include <QStringList>
 #include <QVector>
 
+namespace Utils {
+    class PubMedDownloader;
+}
+
 namespace IAMDb {
 
 class InteractionStep : public Core::IFullReleaseStep
@@ -20,7 +24,10 @@ public:
     bool cleanFiles();
     bool downloadFiles();
     bool process();
+    bool computeModelsAndPopulateDatabase();
     QString processMessage() const {return tr("Drug-Drug Interactions database creation");}
+
+    bool postProcessDownload() {m_ActiveDownloadId = -1; downloadNextSource(); return true;}
 
     QStringList errors() const {return m_Errors;}
 
@@ -32,6 +39,7 @@ private:
     bool m_UseProgressDialog;
     int m_ActiveDownloadId;
     QVector<int> m_SourceToDownload;
+    Utils::PubMedDownloader *m_Downloader;
 };
 
 }  //  End namespace IAMDb

@@ -103,6 +103,7 @@ Q_DECLARE_METATYPE(::PageData);
 MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
         ui(0),
+        m_FullReleasePage(0),
         m_ActiveStep(0),
         m_Watcher(0),
         m_applied(false)
@@ -328,7 +329,22 @@ void MainWindow::createFullRelease()
     ui->pageTree->setCurrentItem(ui->pageTree->topLevelItem(0));
     pageSelected();
     m_ActiveStep = 0;
-    startNextDownload();
+
+    // get all Core::IFullReleaseStep
+    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+    // create dirs
+    foreach(Core::IFullReleaseStep *s, steps) {
+        if (!s->createDir()) {
+            Utils::warningMessageBox(tr("%1 can not create its temporary directory.").arg(s->id()),
+                                     tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
+            return;
+        }
+    }
+
+    /** \todo add a if (userWantsToDld)... */
+//    startNextDownload();
+//    startNextPostProcessDownload();
+    startNextPostProcessDownload();
 }
 
 void MainWindow::startNextDownload()
@@ -373,8 +389,10 @@ void MainWindow::startNextProcess()
         // Stop running step process
         m_FullReleasePage->endLastAddedProcess();
         int id = steps.indexOf(m_ActiveStep);
+        // Finished ?
         if (id==(steps.count()-1)) {
             m_ActiveStep = 0;
+            startNextPostProcessDownload();
             return;
         }
         m_ActiveStep = steps.at(id+1);
@@ -391,6 +409,33 @@ void MainWindow::startNextProcess()
     connect(m_ActiveStep, SIGNAL(processFinished()), this, SLOT(startNextProcess()));
 //    m_Watcher->setFuture(future);
 
+}
+
+void MainWindow::startNextPostProcessDownload()
+{
+    // get all Core::IFullReleaseStep
+    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
+
+    // Actual process is m_ActiveStep if == 0 start first step
+    if (!m_ActiveStep) {
+        m_ActiveStep = steps.first();
+    } else {
+        // Stop running step process
+        m_FullReleasePage->endDownloadingProcess(m_ActiveStep->id());
+        int id = steps.indexOf(m_ActiveStep);
+        if (id==(steps.count()-1)) {
+            m_ActiveStep = 0;
+            return;
+        }
+        m_ActiveStep = steps.at(id+1);
+    }
+
+    if (!m_ActiveStep)
+        return;
+    m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
+    connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
+    m_ActiveStep->postProcessDownload();
 }
 
 void MainWindow::fullReleaseDownloadFinished()

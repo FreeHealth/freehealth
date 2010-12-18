@@ -40,6 +40,7 @@ class UTILS_EXPORT PubMedDownloader : public QObject
     Q_OBJECT
 public:
     explicit PubMedDownloader(QObject *parent = 0);
+    ~PubMedDownloader();
 
     void setPMID(const int pmid) {m_Pmid = QString::number(pmid);}
     void setPMID(const QString &pmid) {m_Pmid = pmid;}

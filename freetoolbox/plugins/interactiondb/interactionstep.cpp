@@ -42,7 +42,7 @@ static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->
 
 
 InteractionStep::InteractionStep(QObject *parent) :
-        m_UseProgressDialog(false), m_ActiveDownloadId(-1)
+        m_UseProgressDialog(false), m_ActiveDownloadId(-1), m_Downloader(0)
 {
 }
 
@@ -184,6 +184,13 @@ static void setClassTreeToDatabase(const QString &iclass,
 }
 
 bool InteractionStep::process()
+{
+//    Q_EMIT processFinished();
+//    return true;
+    return computeModelsAndPopulateDatabase();
+}
+
+bool InteractionStep::computeModelsAndPopulateDatabase()
 {
     // create db
     if (!QFile(iamDatabaseAbsPath()).exists()) {
@@ -508,7 +515,7 @@ bool InteractionStep::process()
         progress=0;
     }
 
-    downloadNextSource();
+    Q_EMIT processFinished();
 
     return true;
 }
@@ -516,10 +523,9 @@ bool InteractionStep::process()
 void InteractionStep::downloadNextSource()
 {
     qWarning() << "download" << m_ActiveDownloadId;
-    static Utils::PubMedDownloader *downloader = 0;
-    if (!downloader) {
-        downloader = new Utils::PubMedDownloader(this);
-        connect(downloader, SIGNAL(downloadFinished()), this, SLOT(downloadNextSource()));
+    if (!m_Downloader) {
+        m_Downloader = new Utils::PubMedDownloader;
+        connect(m_Downloader, SIGNAL(downloadFinished()), this, SLOT(downloadNextSource()));
     }
 
     // connect db
@@ -536,6 +542,12 @@ void InteractionStep::downloadNextSource()
                 m_SourceToDownload << query.value(0).toInt();
             }
         }
+        if (m_SourceToDownload.isEmpty()) {
+            delete m_Downloader;
+            m_Downloader = 0;
+            Q_EMIT postProcessDownloadFinished();
+            return;
+        }
         m_ActiveDownloadId = m_SourceToDownload.first();
     } else {
         // Source retrieved
@@ -543,8 +555,8 @@ void InteractionStep::downloadNextSource()
                               "`TEXTUAL_REFERENCE`=\"%1\", "
                               "`ABSTRACT`=\"%2\" "
                               "WHERE `ID`=%3;")
-                .arg(downloader->reference().replace("\"","'"))
-                .arg(downloader->abstract().replace("\"","'"))
+                .arg(m_Downloader->reference().replace("\"","'"))
+                .arg(m_Downloader->abstract().replace("\"","'"))
                 .arg(m_ActiveDownloadId)
                 ;
         Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
@@ -553,9 +565,9 @@ void InteractionStep::downloadNextSource()
             m_SourceToDownload.remove(0);
 
         if (m_SourceToDownload.count() == 0) {
-            delete downloader;
-            downloader = 0;
-            Q_EMIT processFinished();
+            delete m_Downloader;
+            m_Downloader = 0;
+            Q_EMIT postProcessDownloadFinished();
             return;
         }
 
@@ -576,15 +588,17 @@ void InteractionStep::downloadNextSource()
     }
 
     if (link.isEmpty()) {
-        Q_EMIT processFinished();
+        delete m_Downloader;
+        m_Downloader = 0;
+        Q_EMIT postProcessDownloadFinished();
         return;
     }
 
     query.finish();
 
     // Start pubmed downloader
-    if (downloader->setFullLink(link)) {
-        downloader->startDownload();
+    if (m_Downloader->setFullLink(link)) {
+        m_Downloader->startDownload();
     } else {
         Utils::Log::addError(this, "Unable to download pubmed link " + link);
     }
