@@ -43,6 +43,7 @@
 
 #include <QToolButton>
 #include <QToolBar>
+#include <QMultiHash>
 
 using namespace DrugsWidget;
 using namespace Trans::ConstantTranslations;
@@ -59,6 +60,7 @@ class InteractionSynthesisDialogPrivate
 public:
     QList<DrugsDB::Internal::DrugsInteraction *> m_Interactions;
     QAction *aPrint;
+    QMultiHash<DrugsDB::Internal::DrugsInteraction *, MedicalUtils::EbmData *> m_Biblio;
 };
 }
 }
@@ -197,6 +199,8 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
 {
     ui->riskBrowser->clear();
     ui->managementBrowser->clear();
+    ui->biblio->clear();
+    ui->biblioReferences->clear();
     int id = item->data(Qt::UserRole).toInt();
     if (id >= d->m_Interactions.count())
         return;
@@ -204,16 +208,7 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
-    bool show = false;
-    foreach(const DrugsDB::Internal::DrugsData *drug, interaction->drugs()) {
-        QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndIamClasses().toList());
-        foreach(const MedicalUtils::EbmData *data, v) {
-            show = true;
-            ui->biblio->append(data->references());
-            ui->biblio->append(data->link());
-        }
-    }
-    ui->bibliogroup->setVisible(show);
+    ui->getBiblio->setEnabled(true);
 }
 
 /** \todo add class informations */
@@ -226,6 +221,8 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
         return;
     ui->riskBrowser->clear();
     ui->managementBrowser->clear();
+    ui->biblio->clear();
+    ui->biblioReferences->clear();
     int id = item->data(Qt::UserRole).toInt();
     if (id >= d->m_Interactions.count())
         return;
@@ -233,14 +230,50 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
     ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
+    ui->getBiblio->setEnabled(true);
+}
+
+void InteractionSynthesisDialog::on_getBiblio_clicked()
+{
+    ui->getBiblio->setEnabled(false);
+    QTableWidgetItem *item = ui->interactors->currentItem();
+    if (!item)
+        return;
+    int id = item->data(Qt::UserRole).toInt();
+    if (id >= d->m_Interactions.count())
+        return;
+    DrugsDB::Internal::DrugsInteraction *interaction = d->m_Interactions.at(id);
     bool show = false;
-    foreach(const DrugsDB::Internal::DrugsData *drug, interaction->drugs()) {
-        QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndIamClasses().toList());
-        foreach(const MedicalUtils::EbmData *data, v) {
-            show = true;
-            ui->biblio->append(data->abstract());
+    if (d->m_Biblio.values(interaction).count()==0) {
+        foreach(const DrugsDB::Internal::DrugsData *drug, interaction->drugs()) {
+            QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndIamClasses().toList());
+            foreach(MedicalUtils::EbmData *data, v) {
+                d->m_Biblio.insertMulti(interaction, data);
+            }
         }
     }
+
+    QString reftable = "<table width=100% border=1>";
+    QString bibtable = "<table width=100% border=1>";
+    if (d->m_Biblio.values(interaction).count()==0) {
+        reftable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
+        bibtable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
+    } else {
+        foreach(MedicalUtils::EbmData *data, d->m_Biblio.values(interaction)) {
+            show = true;
+            QString link = data->link();
+            link.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID ");
+            reftable += QString("<tr><td width=70%>%1</td><td width=30%><a href='%2'>%2</a></td></tr>")
+                        .arg(data->references())
+                        .arg(link);
+            bibtable += QString("<tr><td>%1</td></tr>")
+                        .arg(data->abstract());
+        }
+    }
+    reftable += "</table>";
+    bibtable += "</table>";
+    ui->biblio->setHtml(bibtable.replace("\n","<br />"));
+    ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
     ui->bibliogroup->setVisible(show);
 }
 
