@@ -134,23 +134,22 @@ bool ZaDrugDatatabaseStep::cleanFiles()
 
 bool ZaDrugDatatabaseStep::downloadFiles()
 {
-    Q_EMIT downloadFinished();
     // get all tradename html pages from the site
-//    manager = new QNetworkAccessManager(this);
-//    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-//    if (m_WithProgress) {
-//        m_Progress = new QProgressDialog(qApp->activeWindow());
-//        m_Progress->setLabelText(tr("Downloading South African drugs database"));
-//        m_Progress->setCancelButtonText(tr("Cancel"));
-//        m_Progress->setRange(0, 26);
-//        m_Progress->setWindowModality(Qt::WindowModal);
-//        m_Progress->setValue(0);
-//    }
+    manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+    if (m_WithProgress) {
+        m_Progress = new QProgressDialog(qApp->activeWindow());
+        m_Progress->setLabelText(tr("Downloading South African drugs database"));
+        m_Progress->setCancelButtonText(tr("Cancel"));
+        m_Progress->setRange(0, 26);
+        m_Progress->setWindowModality(Qt::WindowModal);
+        m_Progress->setValue(0);
+    }
 
-//    m_nbOfDowloads = 26;
-//    for(int i = 0; i < m_nbOfDowloads; ++i) {
-//        manager->get(QNetworkRequest(QUrl(QString(ZA_URL).arg(letters[i]))));
-//    }
+    m_nbOfDowloads = 26;
+    for(int i = 0; i < m_nbOfDowloads; ++i) {
+        manager->get(QNetworkRequest(QUrl(QString(ZA_URL).arg(letters[i]))));
+    }
     return true;
 }
 
@@ -214,8 +213,20 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
                 m_Progress->setValue(0);
             }
             qWarning() << "Downloading" << m_Drug_Link.count();
-            foreach(const QString &link, m_Drug_Link.values())
-                manager->get(QNetworkRequest(QUrl(QString("http://home.intekom.com%1").arg(link))));
+            bool downloadStarted = false;
+            foreach(const QString &link, m_Drug_Link.values()) {
+                if (!QFile(workingPath() + "/home.intekom.com/" + link).exists()) {
+                    downloadStarted = true;
+                    manager->get(QNetworkRequest(QUrl(QString("http://home.intekom.com%1").arg(link))));
+                }
+            }
+            if (!downloadStarted) {
+                if (m_Progress) {
+                    delete m_Progress;
+                    m_Progress = 0;
+                }
+                Q_EMIT downloadFinished();
+            }
         } else {
             if (m_Progress) {
                 delete m_Progress;
