@@ -15,7 +15,7 @@ using namespace Core;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 FullReleasePage::FullReleasePage(QObject *parent) :
-        IToolPage(parent), m_Widget(0), m_CentralWidget(0), ui(0)
+        IToolPage(parent), m_Widget(0), m_CentralWidget(0), ui(0), m_Spacer(0)
 {
 }
 
@@ -23,6 +23,8 @@ FullReleasePage::~FullReleasePage()
 {
     if (ui)
         delete ui; ui=0;
+    if (m_Spacer)
+        delete m_Spacer; m_Spacer = 0;
 }
 
 QIcon FullReleasePage::icon() const
@@ -33,13 +35,22 @@ QIcon FullReleasePage::icon() const
 QWidget *FullReleasePage::createPage(QWidget *parent)
 {
     m_Widget = new QWidget(parent);
-    m_CentralWidget = new QWidget(parent);
+    QWidget *container = new QWidget;
+    QVBoxLayout *lcont = new QVBoxLayout(container);
+    lcont->setMargin(0);
+    lcont->setSpacing(0);
+    container->setLayout(lcont);
+
+    m_CentralWidget = new QWidget(m_Widget);
     QVBoxLayout *l = new QVBoxLayout(m_CentralWidget);
     m_CentralWidget->setLayout(l);
 
+    lcont->addWidget(m_CentralWidget);
+//    lcont->addSpacerItem(m_Spacer = new QSpacerItem(1,1, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
     ui = new Ui::FullReleasePage;
     ui->setupUi(m_Widget);
-    ui->scrollArea->setWidget(m_CentralWidget);
+    ui->scrollArea->setWidget(container);
     return m_Widget;
 }
 
