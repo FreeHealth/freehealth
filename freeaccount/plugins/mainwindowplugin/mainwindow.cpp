@@ -239,7 +239,8 @@ void MainWindow::extensionsInitialized()
     //    setCentralWidget(new receiptviewer(this));
         qDebug() << __FILE__ << QString::number(__LINE__) << " receiptGUI initialized";
     } else {
-        setCentralWidget(new Account::AccountView(this));
+        //setCentralWidget(new Account::AccountView(this));
+        setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
     }
 
     connect(Core::ICore::instance()->user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
