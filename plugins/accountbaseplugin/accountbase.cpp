@@ -146,6 +146,7 @@ AccountBase::AccountBase(QObject *parent)
     addTable(Table_Percent,           "percentages");
     addTable(Table_Rules,             "rules");
     addTable(Table_DistanceRules,     "distance_rules");
+    addTable(Table_Thesaurus,         "thesaurus");
 //    addTable(Table_Session,           "session");
 //    addTable(Table_Banking,           "banking");
 //    addTable(Table_NameIndex,         "nameindex");
@@ -431,6 +432,11 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_DistanceRules,  DISTRULES_UID,     "DISTRULES_UID",     FieldIsUUID);
     addField(Table_DistanceRules,  DISTRULES_TYPE,    "TYPE",              FieldIsShortText);
     addField(Table_DistanceRules,  DISTRULES_VALUES,  "VALUES",            FieldIsShortText);
+
+    addField(Table_Thesaurus,  THESAURUS_ID,      "THESAURUS_ID",      FieldIsUniquePrimaryKey);
+    addField(Table_Thesaurus,  THESAURUS_UID,     "DISTRULES_UID",     FieldIsUUID);
+    addField(Table_Thesaurus,  THESAURUS_USERUID, "THESAURUS_USERUID", FieldIsUUID);
+    addField(Table_Thesaurus,  THESAURUS_VALUES,  "VALUES",            FieldIsShortText);
 
 //    addTable(Table_Session, "session");
 //    addField(Table_Session,  PAIE_ID,          "BANKING_ID",      FieldIsUniquePrimaryKey);

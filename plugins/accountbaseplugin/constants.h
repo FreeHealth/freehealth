@@ -75,6 +75,7 @@ namespace Constants {
         Table_Percent,
         Table_Rules,
         Table_DistanceRules,
+        Table_Thesaurus,
         Table_Session,
         Table_Banking,
         Table_NameIndex
@@ -240,6 +241,14 @@ namespace Constants {
         DISTRULES_TYPE,
         DISTRULES_VALUES,
         DISTRULES_MaxParam
+    };
+    
+    enum TableThesaurus_Fields {
+        THESAURUS_ID = 0,
+        THESAURUS_UID,
+        THESAURUS_USERUID,
+        THESAURUS_VALUES,
+        THESAURUS_MaxParam
     };
 
     // Menu and action for ActionManager
