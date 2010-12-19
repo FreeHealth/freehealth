@@ -95,16 +95,6 @@ static QString typeToString(const QString &type)
     return tmp.join( ", " );
 }
 
-static QStringList comboItems()
-{
-    return QStringList()
-            << tkTr(Trans::Constants::CONTRAINDICATION)
-            << tkTr(Trans::Constants::DISCOURAGED)
-            << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT)
-            << tkTr(Trans::Constants::PRECAUTION_FOR_USE)
-            << tkTr(Trans::Constants::INFORMATION);
-}
-
 static void levelToListWidget(QListWidget *listWidget, const QString &type)
 {
     listWidget->clear();
@@ -173,6 +163,7 @@ class InteractionsDatabaseBuilderPrivate
 {
 public:
     QPersistentModelIndex m_EditingIndex;
+    bool m_ReviewModified;
 };
 
 } // namespace IAMDb
@@ -181,8 +172,10 @@ InteractionsDatabaseBuilder::InteractionsDatabaseBuilder(QWidget *parent) :
         QWidget(parent), ui(new Ui::InteractionDatabaseBuilder), d(new InteractionsDatabaseBuilderPrivate)
 {
     ui->setupUi(this);
+    ui->save->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+    ui->modify->setIcon(theme()->icon(Core::Constants::ICONEDIT));
     ui->makeCorrections->setEnabled(false);
-    ui->translate->setEnabled(false);
+//    ui->translate->setEnabled(false);
 
     InteractionModel *model = InteractionModel::instance();
 
@@ -203,31 +196,36 @@ InteractionsDatabaseBuilder::~InteractionsDatabaseBuilder()
 
 void InteractionsDatabaseBuilder::on_modify_clicked()
 {
-    ui->groupBox->setEnabled(true);
-    ui->groupBox_2->setEnabled(true);
-    ui->groupBox_4->setEnabled(true);
+    ui->groupBox->setEnabled(!ui->groupBox->isEnabled());
+    ui->groupBox_2->setEnabled(!ui->groupBox_2->isEnabled());
+    ui->groupBox_4->setEnabled(!ui->groupBox_4->isEnabled());
+    ui->groupReview->setEnabled(!ui->groupReview->isEnabled());
 }
 
 void InteractionsDatabaseBuilder::interactionActivated(const QModelIndex &index)
 {
     if (d->m_EditingIndex==index)
         return;
-    InteractionModel *model = InteractionModel::instance();
 
     // save ?
+    InteractionModel *model = InteractionModel::instance();
     /** \todo Save only if suficient rights */
-    if (false) {
-        if (ui->risk->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br />"));
-        if (ui->management->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br />"));
-        if (ui->risk_en->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br />"));
-        if (ui->management_en->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br />"));
-        //    if (ui->levelCombo->isModified())
-        //        model->setLevel(d->m_EditingIndex, "fr", ui->level->text());
+    if (d->m_EditingIndex.isValid() &&
+        (ui->risk->document()->isModified() ||
+         ui->management->document()->isModified() ||
+         ui->risk_en->document()->isModified() ||
+         ui->management_en->document()->isModified()
+         || (ui->checkBox->isChecked() != model->getReviewState(d->m_EditingIndex))
+        )) {
+        if (Utils::yesNoMessageBox(tr("Data changed but not saved."), tr("Do you want to save changes to the file ?")))
+            on_save_clicked();
     }
+
+    ui->groupBox->setEnabled(false);
+    ui->groupBox_2->setEnabled(false);
+    ui->groupBox_4->setEnabled(false);
+    ui->groupReview->setEnabled(false);
+
     // clear
     ui->risk->clear();
     ui->management->clear();
@@ -243,6 +241,11 @@ void InteractionsDatabaseBuilder::interactionActivated(const QModelIndex &index)
     ui->risk_en->setPlainText(model->getRisk(index, "en").replace("<br />", "\n"));
     ui->management_en->setPlainText(model->getManagement(index, "en").replace("<br />", "\n"));
     levelToListWidget(ui->listWidget, model->getLevel(index, "fr"));
+    int reviewer = ui->comboBox->findText(model->getReviewer(index));
+    if (reviewer==-1)
+        ++reviewer;
+    ui->comboBox->setCurrentIndex(reviewer);
+    ui->checkBox->setChecked(model->getReviewState(index));
     d->m_EditingIndex = index;
 }
 
@@ -260,8 +263,14 @@ void InteractionsDatabaseBuilder::on_save_clicked()
             model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br />"));
 //        if (ui->level->isModified())
 //            model->setLevel(d->m_EditingIndex, "fr", ui->level->text());
+        model->setReviewer(d->m_EditingIndex, ui->comboBox->itemText(ui->comboBox->currentIndex()));
+        model->setReviewState(d->m_EditingIndex, ui->checkBox->isChecked());
     }
     model->saveModel();
+
+    ui->groupBox->setEnabled(false);
+    ui->groupBox_2->setEnabled(false);
+    ui->groupBox_4->setEnabled(false);
 }
 
 void InteractionsDatabaseBuilder::on_translate_clicked()
@@ -275,7 +284,6 @@ void InteractionsDatabaseBuilder::on_makeCorrections_clicked()
     InteractionModel *model = InteractionModel::instance();
     model->correctTranslations();
 }
-
 
 
 namespace IAMDb {
@@ -827,6 +835,24 @@ QVariant InteractionModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::DecorationRole) {
         if (index.column()==Level)
             return typeToIcon(attributeMap.namedItem("level").nodeValue());
+        if (index.column()==Name) {
+            if (node.toElement().tagName()=="Interactor") {
+                if (attributeMap.namedItem("review").nodeValue()=="true") {
+                    return theme()->icon(Core::Constants::ICONOK);
+                }
+            } else if (node.toElement().tagName()=="MainInteractor") {
+                // check all children review state
+                QDomElement e = node.firstChildElement("Interactor");
+                while (!e.isNull()) {
+                    if (e.attribute("review") != "true") {
+                        return QVariant();
+                    }
+                    e = e.nextSiblingElement("Interactor");
+                }
+                return theme()->icon(Core::Constants::ICONOK);
+            }
+
+        }
     } else if (role == Qt::FontRole) {
         if (!index.parent().isValid()) {
             QFont bold;
@@ -971,6 +997,26 @@ QString InteractionModel::getLevel(const QModelIndex &index, const QString &lang
     return QString();
 }
 
+QString InteractionModel::getReviewer(const QModelIndex &index)
+{
+    DomItem *item = static_cast<DomItem*>(index.internalPointer());
+    QDomNode node = item->node();
+    if (node.toElement().tagName() == "Interactor") {
+        return node.toElement().attribute("reviewer");
+    }
+    return QString();
+}
+
+bool InteractionModel::getReviewState(const QModelIndex &index)
+{
+    DomItem *item = static_cast<DomItem*>(index.internalPointer());
+    QDomNode node = item->node();
+    if (node.toElement().tagName() == "Interactor") {
+        return (node.toElement().attribute("review", "false")=="true");
+    }
+    return false;
+}
+
 bool InteractionModel::setRisk(const QModelIndex &index, const QString &lang, const QString &value)
 {
     if (!index.isValid())
@@ -1017,6 +1063,35 @@ bool InteractionModel::setLevel(const QModelIndex &index, const QString &lang, c
     QDomNode node = item->node();
     if (node.toElement().tagName() == "Interactor") {
         node.toElement().setAttribute("level", value);
+        return true;
+    }
+    return true;
+}
+
+bool InteractionModel::setReviewer(const QModelIndex &index, const QString &reviewer)
+{
+    if (!index.isValid())
+        return false;
+    DomItem *item = static_cast<DomItem*>(index.internalPointer());
+    QDomNode node = item->node();
+    if (node.toElement().tagName() == "Interactor") {
+        node.toElement().setAttribute("reviewer", reviewer);
+        return true;
+    }
+    return true;
+}
+
+bool InteractionModel::setReviewState(const QModelIndex &index, bool state)
+{
+    if (!index.isValid())
+        return false;
+    DomItem *item = static_cast<DomItem*>(index.internalPointer());
+    QDomNode node = item->node();
+    if (node.toElement().tagName() == "Interactor") {
+        if (state)
+            node.toElement().setAttribute("review", "true");
+        else
+            node.toElement().setAttribute("review", "false");
         return true;
     }
     return true;

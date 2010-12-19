@@ -64,7 +64,6 @@ private Q_SLOTS:
     void startNextDownload();
     void startNextProcess();
     void startNextPostProcessDownload();
-    void fullReleaseDownloadFinished();
 
 protected:
     void closeEvent(QCloseEvent *event);

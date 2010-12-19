@@ -110,11 +110,14 @@ public:
     QString getRisk(const QModelIndex &index, const QString &lang);
     QString getManagement(const QModelIndex &index, const QString &lang);
     QString getLevel(const QModelIndex &index, const QString &lang);
+    QString getReviewer(const QModelIndex &index);
+    bool getReviewState(const QModelIndex &index);
 
     bool setRisk(const QModelIndex &item, const QString &lang, const QString &value);
     bool setManagement(const QModelIndex &item, const QString &lang, const QString &value);
     bool setLevel(const QModelIndex &item, const QString &lang, const QString &value);
-
+    bool setReviewer(const QModelIndex &index, const QString &reviewer);
+    bool setReviewState(const QModelIndex &index, bool state);
 
 public Q_SLOTS:
     bool saveModel();
