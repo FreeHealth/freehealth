@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freeicd
 mac:TARGET       = $$quote(FreeICD)
-PACKAGE_VERSION  = 0.1.0~beta
+PACKAGE_VERSION  = 0.1.0
 
 # include general configuration
 FREEICD = 1
