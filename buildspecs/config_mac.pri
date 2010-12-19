@@ -4,8 +4,7 @@ macx{
    CONFIG  -= ppc
 
    # define rpath
-   CONFIG( debug, debug|release ) {
-     CONFIG  -= ppc
+   CONFIG(debug, debug|release) {
      RPATH_LIBS_BIN   = ../../../plugins/
    } else {
      RPATH_LIBS_BIN   = ../plugins/

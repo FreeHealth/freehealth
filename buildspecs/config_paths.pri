@@ -54,7 +54,7 @@ message(Building into path $${SOURCES_BUILD_PATH})
 #}
 
 # define some paths related to application sources
-BUILD_BINARY_PATH          = $${SOURCES_ROOT_PATH}/bin
+BUILD_BINARY_PATH         = $${SOURCES_ROOT_PATH}/bin
 BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/plugins
 BUILD_PLUGIN_PATH         = $${BUILD_LIB_PATH}
 
@@ -62,11 +62,12 @@ RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
 # redefine binary target in debug mode add _d or _debug
 BINARY_TARGET             = $$quote($${TARGET})
 
-CONFIG( debug, debug|release ) {
+CONFIG(debug, debug|release) {
  unix:BINARY_TARGET   = $$quote($$join(BINARY_TARGET,,,_debug))
  else:BINARY_TARGET  = $$quote($$join(BINARY_TARGET,,,_d))
 }
 DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
+           "BUILD_PATH_POSTFIXE=\"\\\"$${BUILD_PATH_POSTFIXE}\\\"\"" \
            "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\""
 
 # define building path
