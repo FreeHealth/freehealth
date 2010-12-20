@@ -52,7 +52,7 @@
 #include <accountplugin/constants.h>
 #include <accountplugin/accountview.h>
 
-#include <accountreceiptsplugin/receipts.h>
+//#include <accountreceiptsplugin/receipts.h>
 #include <accountreceiptsplugin/receiptviewer.h>
 
 #include <extensionsystem/pluginerrorview.h>
@@ -235,9 +235,9 @@ void MainWindow::extensionsInitialized()
 
     // Here we set the UI according to the commandline parser
     if (commandLine()->value(Core::CommandLine::CL_ReceiptsCreator).toBool()) {
-        setCentralWidget(new ReceiptsGUI(this));
+     //   setCentralWidget(new ReceiptsGUI(this));
     //    setCentralWidget(new receiptviewer(this));
-        qDebug() << __FILE__ << QString::number(__LINE__) << " receiptGUI initialized";
+        qDebug() << __FILE__ << QString::number(__LINE__) << " receiptGUI";
     } else {
         //setCentralWidget(new Account::AccountView(this));
         setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
