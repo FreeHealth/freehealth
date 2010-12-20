@@ -1,4 +1,10 @@
 #include "receiptviewer.h"
+#include "receiptsmanager.h"
+#include "findReceiptsValues.h"
+#include "choiceDialog.h"
+
+#include "constants.h"
+
 #include "ui_receiptviewer.h"
 
 #include <utils/widgets/spinboxdelegate.h>
@@ -8,8 +14,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QFrame>
-
-namespace Internal {
+using namespace ReceiptsConstants;
+namespace InternalAmount {
 
     class AmountModel : public QAbstractTableModel
     {
@@ -110,8 +116,6 @@ namespace Internal {
 }  // End namespace Internal
 
 
-
-
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ReceiptViewer)
@@ -119,10 +123,16 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->setupUi(this);
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->amountsView->setModel(new Internal::AmountModel(this));
+    ui->amountsView->setModel(new InternalAmount::AmountModel(this));
     ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
+    ui->dateExecution->setDate(QDate::currentDate());
+    ui->datePayment->setDate(QDate::currentDate());
+    ui->deleteLineButton->hide();
+    ui->inputRadioButton->setChecked(true);
+    fillActionTreeView();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->deleteLineButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
+    connect(ui->actionsTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(treeViewsActions(const QModelIndex&)));
 }
 
 ReceiptViewer::~ReceiptViewer()
@@ -150,4 +160,89 @@ void ReceiptViewer::setPosition(QWidget *parent){
 void ReceiptViewer::deleteLine()
 {
     QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
+}
+
+void ReceiptViewer::fillActionTreeView(){
+    m_actionsTreeModel = new QStandardItemModel;
+    QStringList listOfMainActions;
+    QMap<QString,QString> parametersMap;
+    parametersMap.insert("Debtor","insurance");
+    parametersMap.insert("Thesaurus","thesaurus");
+    parametersMap.insert("Values","values");
+    parametersMap.insert("Sites","sites");
+    parametersMap.insert("Preferentiel rate","preferentiel rate");
+    listOfMainActions = parametersMap.keys();
+    //insert items from tables if available
+    QMap<QString,QString> mapSubItems;
+    receiptsManager manager;
+    QString strKeysParameters;
+    foreach(strKeysParameters,listOfMainActions){
+        QString table = parametersMap.value(strKeysParameters);
+        QStringList listOfItemsOfTable;
+        QString null = QString();
+        listOfItemsOfTable = manager.getParametersDatas(null,table);
+        QString strItemsOfTable;
+        foreach(strItemsOfTable,listOfItemsOfTable){
+            mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
+        }
+        //default values if unavailables :
+        if (listOfItemsOfTable.size()<1)
+        {
+        	  if (strKeysParameters == "Debtor")
+        	  {
+        	       mapSubItems.insertMulti("Debtor","Patient");
+                       mapSubItems.insertMulti("Debtor","CPAM28");  
+        	      }
+        	  else if (strKeysParameters == "Thesaurus")
+        	  {
+        	       mapSubItems.insertMulti("Thesaurus","CS");
+                       mapSubItems.insertMulti("Thesaurus","V");  
+        	      }
+        	  else if (strKeysParameters == "Sites")
+        	  {
+        	       mapSubItems.insertMulti("Sites","cabinet");
+                       mapSubItems.insertMulti("Sites","clinique");  
+        	      }
+        	  else
+        	  {
+        	       qWarning() << __FILE__ << QString::number(__LINE__) 
+        	       << " No default value for "<< strKeysParameters ;
+        	       }
+            }
+    }
+    QStandardItem *parentItem = m_actionsTreeModel->invisibleRootItem();
+    QString strMainActions;
+    foreach(strMainActions,listOfMainActions){
+        QStandardItem * actionItem = new QStandardItem(strMainActions);
+        parentItem->appendRow(actionItem);
+        QStringList listSubActions;
+        listSubActions = mapSubItems.values(strMainActions);
+        QString strSubActions;
+        foreach(strSubActions,listSubActions){
+            QStandardItem * subActionItem = new QStandardItem(strSubActions);
+            actionItem->appendRow(subActionItem);
+        }
+    }
+    ui->actionsTreeView->setHeaderHidden(true);
+    ui->actionsTreeView->setStyleSheet("background-color: silver");
+    ui->actionsTreeView->setModel(m_actionsTreeModel);
+}
+
+void ReceiptViewer::treeViewsActions(const QModelIndex & index){
+    QString data = index.data(Qt::DisplayRole).toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
+    QHash<QString,QString> listOfValues;
+    int typeOfPayment = ReceiptsConstants::Cash;
+    if(data == "Values"){
+        findReceiptsValues * rv = new findReceiptsValues(this);
+        choiceDialog choice(rv);
+        if(rv->exec() == QDialog::Accepted){
+            listOfValues = rv -> getChoosenValues();
+            if(listOfValues.keys().size() > 0){
+                choice.exec();
+                typeOfPayment = choice.returnChoiceDialog();//int
+                }
+            qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
+            }
+         }
 }

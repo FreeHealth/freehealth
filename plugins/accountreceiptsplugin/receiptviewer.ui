@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>604</width>
-    <height>378</height>
+    <height>434</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -33,109 +33,69 @@
        <property name="title">
         <string>Dates</string>
        </property>
-       <widget class="QLabel" name="label">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>81</width>
-          <height>16</height>
+          <width>169</width>
+          <height>128</height>
          </rect>
         </property>
-        <property name="text">
-         <string>Execution</string>
-        </property>
-        <property name="buddy">
-         <cstring>dateExecution</cstring>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>62</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Payment</string>
-        </property>
-        <property name="buddy">
-         <cstring>datePayment</cstring>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateExecution">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>30</y>
-          <width>110</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="datePayment">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>60</y>
-          <width>110</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>100</y>
-          <width>62</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Banked</string>
-        </property>
-        <property name="buddy">
-         <cstring>dateBanked</cstring>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateBanked">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>90</y>
-          <width>110</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_4">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>130</y>
-          <width>81</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Book value</string>
-        </property>
-        <property name="buddy">
-         <cstring>dateBook</cstring>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateBook">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>120</y>
-          <width>110</width>
-          <height>25</height>
-         </rect>
-        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Execution</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateExecution</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDateEdit" name="dateExecution"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Payment</string>
+           </property>
+           <property name="buddy">
+            <cstring>datePayment</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDateEdit" name="datePayment"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Banked</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateBanked</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDateEdit" name="dateBanked"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Book value</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateBook</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDateEdit" name="dateBook"/>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>
@@ -144,7 +104,7 @@
        <property name="minimumSize">
         <size>
          <width>280</width>
-         <height>320</height>
+         <height>200</height>
         </size>
        </property>
        <property name="title">
@@ -173,56 +133,105 @@
        </layout>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QGroupBox" name="groupBox">
+     <item row="1" column="0" rowspan="4">
+      <widget class="QGroupBox" name="actionsBox">
        <property name="minimumSize">
         <size>
          <width>240</width>
-         <height>160</height>
+         <height>241</height>
         </size>
        </property>
        <property name="title">
         <string>Actions</string>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QTreeView" name="actionsTreeView">
         <property name="geometry">
          <rect>
-          <x>11</x>
-          <y>80</y>
-          <width>221</width>
-          <height>89</height>
+          <x>0</x>
+          <y>20</y>
+          <width>231</width>
+          <height>221</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="deleteLineButton">
-           <property name="minimumSize">
-            <size>
-             <width>160</width>
-             <height>41</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Delete choosen line</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="quitButton">
-           <property name="minimumSize">
-            <size>
-             <width>160</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Quit</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </widget>
+     </item>
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QRadioButton" name="inputRadioButton">
+         <property name="text">
+          <string>Input</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="displayRadioButton">
+         <property name="text">
+          <string>View</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="1">
+      <widget class="QListView" name="returnedListView"/>
+     </item>
+     <item row="4" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="deleteLineButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Delete</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="quitButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Quit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

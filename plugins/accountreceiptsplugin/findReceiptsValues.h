@@ -4,6 +4,7 @@
 #include "xmlcategoriesparser.h"
 #include "receiptsmanager.h"
 #include <accountbaseplugin/medicalproceduremodel.h>
+#include <accountbaseplugin/thesaurusmodel.h>
 
 #include <QtGui>
 #include <QtCore>

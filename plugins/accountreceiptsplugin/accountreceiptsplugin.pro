@@ -22,24 +22,28 @@ QT *= sql \
 # Input
 HEADERS += accountreceipts_exporter.h \
     accountreceiptsplugin.h \
-    receipts.h \       
+    #receipts.h \       
     receiptsmanager.h \   
     receiptsIO.h \
     findReceiptsValues.h \
     xmlcategoriesparser.h \
+    choiceDialog.h \
+    constants.h \
     receiptviewer.h 
 
 
 FORMS += ReceiptsMainDialog.ui \
-    ReceiptsWidget.ui \
+    #ReceiptsWidget.ui \
     findValuesGUI.ui \
+    ChoiceDialog.ui \
     receiptviewer.ui
 
 SOURCES += accountreceiptsplugin.cpp \
-    receipts.cpp \
+    #receipts.cpp \
     receiptsmanager.cpp \ 
     receiptsIO.cpp \
     findReceiptsValues.cpp \
+    choiceDialog.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
     receiptviewer.cpp 
 

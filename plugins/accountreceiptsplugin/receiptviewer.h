@@ -2,6 +2,8 @@
 #define RECEIPTVIEWER_H
 
 #include <QWidget>
+#include <QStandardItemModel>
+
 
 namespace Ui {
     class ReceiptViewer;
@@ -18,12 +20,15 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
+    void fillActionTreeView();
 
 private:
     Ui::ReceiptViewer *ui;
+    QStandardItemModel *m_actionsTreeModel;
 
 private slots :
     void deleteLine();
+    void treeViewsActions(const QModelIndex&);
 };
 
 #endif // RECEIPTVIEWER_H

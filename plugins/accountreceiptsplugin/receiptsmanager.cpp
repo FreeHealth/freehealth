@@ -2,13 +2,14 @@
 #include "xmlcategoriesparser.h"
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/accountmodel.h>
+#include <accountbaseplugin/amountmodel.h>
 #include <accountbaseplugin/insurancemodel.h>
 #include <accountbaseplugin/workingplacesmodel.h>
 #include <accountbaseplugin/bankaccountmodel.h>
 #include <accountbaseplugin/percentmodel.h>
 #include <accountbaseplugin/rulesmodel.h>
 #include <accountbaseplugin/distancerulesmodel.h>
-
+#include <accountbaseplugin/thesaurusmodel.h>
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
@@ -41,7 +42,7 @@ QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
   return rList;
 }
 
-QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString & table){
+QStringList receiptsManager::getParametersDatas(QString & values , const QString & table){
    QStringList listForReturn;
 //   qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
    if (table == "insurance")
@@ -110,6 +111,20 @@ QStringList receiptsManager::getComboBoxesDatas(QString & values , const QString
    	  }
    	  if(listForReturn.size()< 1){
    	      listForReturn << "distance rule";
+   	      }
+   	  
+       }
+    if (table == "thesaurus")
+    {
+   	  ThesaurusModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	listForReturn << str;
+   	  }
+   	  if(listForReturn.size()< 1){
+   	      listForReturn << "thesaurus";
    	      }
    	  
        }
