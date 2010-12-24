@@ -165,7 +165,8 @@ bool FdaDrugDatatabaseStep::unzipFiles()
     return Core::Tools::unzipFile(fileName, workingPath());
 }
 
-struct drug {
+class drug {
+public:
     drug(const QString &line)
     {
         // Process line
@@ -243,6 +244,11 @@ struct drug {
         return this->name < other.name;
     }
 
+    static bool lessThan(const drug *s1, const drug *s2)
+     {
+         return s1->name < s2->name;
+     }
+
     QString name, uid1, uid2;
     QString globalStrength;
     QString form;
@@ -294,11 +300,7 @@ bool FdaDrugDatatabaseStep::prepareDatas()
             tmp.remove(0, tmp.indexOf("\n")+1);
             // prepare a better separator for the import command
             Utils::Log::addMessage(this, "Replacing separators");
-            tmp.replace("\",\"", SEPARATOR);
-            tmp.replace(",\"", SEPARATOR);
-            tmp.replace("\",", SEPARATOR);
-            Utils::Log::addMessage(this, "Removing last \"");
-            tmp.remove("\"");
+            tmp.replace("\t", SEPARATOR);
 
             // save file
             {
@@ -356,7 +358,7 @@ bool FdaDrugDatatabaseStep::prepareDatas()
         drugs << dr;
     }
 
-    qSort(drugs);
+    qSort(drugs.begin(), drugs.end(), drug::lessThan);
 
     // Recreate csv files ready for importation
     // Table DRUGS
