@@ -9,10 +9,15 @@ HEADERS += \
     $${PWD}/listviewplugin.h \
     $${PWD}/listview_exporter.h \
     $${PWD}/stringlistmodel.h \
-    $${PWD}/stringlistview.h
+    $${PWD}/stringlistview.h \
+    $${PWD}/fancytreeview.h
 
 SOURCES += \
     $${PWD}/listview.cpp \
     $${PWD}/listviewplugin.cpp \
     $${PWD}/stringlistmodel.cpp \
-    $${PWD}/stringlistview.cpp
+    $${PWD}/stringlistview.cpp \
+    $${PWD}/fancytreeview.cpp
+
+FORMS += \
+    $${PWD}/fancytreeview.ui
