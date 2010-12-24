@@ -236,7 +236,7 @@ void MainWindow::extensionsInitialized()
     // Here we set the UI according to the commandline parser
     if (commandLine()->value(Core::CommandLine::CL_ReceiptsCreator).toBool()) {
      //   setCentralWidget(new ReceiptsGUI(this));
-    //    setCentralWidget(new receiptviewer(this));
+        setCentralWidget(new ReceiptViewer(this));
         qDebug() << __FILE__ << QString::number(__LINE__) << " receiptGUI";
     } else {
         //setCentralWidget(new Account::AccountView(this));

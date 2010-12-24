@@ -66,6 +66,7 @@ namespace Constants {
     const char* const  GLOSSARY_INS             = "Champs d'insertions";
 
     const char* const  DEFAULTLIST_RUB          = "MenuContextuel";
+    const char* const  MENULIST_PATH            = "PathLib";
     const char* const  DEFAULTLIST_OBS          = "ListObserv";
     const char* const  DEFAULTLIST_PRE          = "ListPrescr";
     const char* const  DEFAULTLIST_DOC          = "ListDocuments";
@@ -280,7 +281,6 @@ QString Configuration::medintuxPluginInformation( PluginsParameters info ) const
     return QApplication::arguments().at(info);
 }
 
-
 QString Configuration::findManagerBinaryPath() const
 {
     if (Utils::isRunningOnMac())
@@ -318,7 +318,7 @@ QString Configuration::managerIniFileName() const
     return Utils::isFileExists(d->m_ManagerPath + QDir::separator() + MANAGER_INI);
 }
 
-QVariant Configuration::managerIni( const QString &rubrik, const QString &key ) const
+QVariant Configuration::managerIni(const QString &rubrik, const QString &key) const
 {
     if (d->m_ManagerPath.isEmpty()) {
         findManagerBinaryPath();
@@ -355,6 +355,7 @@ QVariant Configuration::drtuxIni( const QString &rubrik, const QString &key ) co
 
 QString Configuration::glossaryPath() const
 {
+    /** \todo manage settings absolute path */
     if (d->m_ManagerPath.isEmpty()) {
         findManagerBinaryPath();
         if (d->m_ManagerPath.isEmpty())
@@ -378,7 +379,18 @@ QString Configuration::glossaryPath(GlossaryFor rubrik) const
     return QString();
 }
 
-QString Configuration::defaultListsPath(DefaultList rubrik) const
+QString Configuration::menuLibraryPath() const
+{
+    /** \todo manage settings absolute path */
+    if (d->m_ManagerPath.isEmpty()) {
+        findManagerBinaryPath();
+        if (d->m_ManagerPath.isEmpty())
+            return QString();
+    }
+    return Utils::isDirExists(d->m_ManagerPath + QDir::separator() + managerIni(DEFAULTLIST_RUB, MENULIST_PATH).toString());
+}
+
+QString Configuration::menuListsPath(DefaultList rubrik) const
 {
     QString tmp;
     switch (rubrik) {
@@ -388,16 +400,16 @@ QString Configuration::defaultListsPath(DefaultList rubrik) const
         case ImageDefaultList        : tmp = managerIni(DEFAULTLIST_RUB, DEFAULTLIST_IMA).toString(); break;
     }
     if (!tmp.isEmpty())
-        tmp.prepend(glossaryPath(ChampsInsertionGlossary) + QDir::separator());
+        tmp.prepend(menuLibraryPath() + QDir::separator());
     return Utils::isDirExists(tmp);
 }
 
 bool Configuration::deleteListCache() const
 {
     // 4. delete MedinTux cache
-    QDir cacheDir( QString("%1/%2").arg( glossaryPath(), GLOSSARY_CACHELIST_PATH) );
-    if (cacheDir.exists() ) {
-        QStringList list = cacheDir.entryList( QStringList() << "*" , QDir::Files);
+    QDir cacheDir(QString("%1/%2").arg(glossaryPath(), GLOSSARY_CACHELIST_PATH));
+    if (cacheDir.exists()) {
+        QStringList list = cacheDir.entryList(QStringList() << "*" , QDir::Files);
         int n = 0;
         for (int i = 0; i < list.size(); ++i) {
             if (QFile(cacheDir.path() + QDir::separator() + list.at(i)).remove())
@@ -432,8 +444,8 @@ QString Configuration::drtuxResourcesPath() const
     return Utils::isDirExists(tmp);
 }
 
-bool Configuration::addUserMenu( const QString &shortTitle, const QString &title,
-                                           const QString &script, const QString &iconAbsPath, const QString &keySequence )
+bool Configuration::addUserMenu(const QString &shortTitle, const QString &title,
+                                const QString &script, const QString &iconAbsPath, const QString &keySequence)
 {
     bool toReturn = true;
     QDir binDir(drtuxBinaryPath());

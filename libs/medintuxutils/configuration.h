@@ -98,7 +98,9 @@ public:
 
     QString glossaryPath() const;
     QString glossaryPath(GlossaryFor rubrik) const;
-    QString defaultListsPath(DefaultList rubrik) const;
+
+    QString menuLibraryPath() const;
+    QString menuListsPath(DefaultList rubrik) const;
     bool deleteListCache() const;
 
     QString drtuxUserMenuPath() const;
