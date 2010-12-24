@@ -49,3 +49,11 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/drugsbaseplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/drugsbaseplugin_es.ts
 
+# /** \todo TO BE REMOVED */
+OTHER_FILES = \
+    $${SOURCES_PROTECTED_PATH}/afssaps_db/bin/resources/processed/link-class-substances.csv \
+    $${SOURCES_PROTECTED_PATH}/afssaps_db/bin/resources/processed/inns_molecules_link.csv \
+
+# protected
+exists( $${SOURCES_PROTECTED_PATH} ):RESOURCES += $${SOURCES_PROTECTED_PATH}/drugs/drugsresources.qrc
+else:RESOURCES += $${PWD}/resources.qrc

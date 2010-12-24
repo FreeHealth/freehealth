@@ -35,12 +35,24 @@
 #include "medicalproceduremodel.h"
 #include "accountbase.h"
 #include "constants.h"
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QSqlTableModel>
 
 using namespace AccountDB;
+using namespace Trans::ConstantTranslations;
+
+enum {WarnFilter=true};
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 namespace AccountDB {
 namespace Internal {
@@ -48,17 +60,35 @@ namespace Internal {
 class MedicalProcedureModelPrivate
 {
 public:
-    MedicalProcedureModelPrivate(MedicalProcedureModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
+    MedicalProcedureModelPrivate(MedicalProcedureModel *parent) : m_SqlTable(0), 
+                                                                  m_IsDirty(false),
+                                                                  m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                                  q(parent)
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
+        refreshFilter();
 //        m_SqlTable->setFilter(USER_UID);
     }
     ~MedicalProcedureModelPrivate () {}
+    
+    void refreshFilter()
+    {
+        if (!m_SqlTable)
+            return;
+        QHash<int, QString> where;
+        where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
+        m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_MedicalProcedure, where));
+        if (WarnFilter)
+            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
+        //q->reset();
+    }
 
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
+    QString m_UserUid;
+    //void reset();
 
 private:
     MedicalProcedureModel *q;

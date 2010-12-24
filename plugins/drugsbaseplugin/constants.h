@@ -118,7 +118,6 @@ namespace Constants {
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONP450 =             "p450iam.png";            /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONGPG =              "gpgiam.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // HELP PAGES
     const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";
@@ -235,7 +234,7 @@ namespace Constants {
     enum Tables
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
-        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_SOURCES, Table_DOSAGE,
+        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_DOSAGE,
         Table_SEARCHENGINES,
         Table_MaxParam
     };
@@ -256,9 +255,7 @@ namespace Constants {
 
     /** \brief Represents the fields index of drugs database table COMPO */
     enum COMPOSITIONfields
-    { COMPO_UID = 0,
-      COMPO_MOL_FORM,
-      COMPO_MOL_CODE, COMPO_MOL_NAME,
+    { COMPO_UID = 0, COMPO_MOL_FORM, COMPO_MOL_CODE, COMPO_MOL_NAME,
       COMPO_MOL_ATC,
       COMPO_DOSAGE, COMPO_REF_DOSAGE,
       COMPO_NATURE, COMPO_LK_NATURE,
@@ -298,14 +295,8 @@ namespace Constants {
 
     /** \brief Represents the fields index of drugs database table ATC */
     enum IAM_TREEfields
-    { TREE_ID_CLASS = 0, TREE_ID_ATC, TREE_SOURCE_LINK,
+    { TREE_ID_CLASS = 0, TREE_ID_ATC,
       TREE_MaxParam
-    };
-
-    enum SOURCESfields {
-        SOURCES_ID = 0, SOURCES_SOURCE_LINK, SOURCES_TYPE, SOURCES_LINK,
-        SOURCES_TEXTUAL_REFERENCE, SOURCES_ABSTRACT, SOURCES_EXPLANATION,
-        SOURCES_MaxParam
     };
 
     enum SEARCHENGINESfields {
@@ -424,9 +415,8 @@ namespace Interaction
         Information      = 0x0002,
         Precaution       = 0x0010,
         APrendreEnCompte = 0x0020,
-        P450             = 0x0100,
-        GPG              = 0x0200,
-        Deconseille      = 0x1000,
+        P450             = 0x0040,
+        Deconseille      = 0x0080,
         ContreIndication = 0x8000
     };
     Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );

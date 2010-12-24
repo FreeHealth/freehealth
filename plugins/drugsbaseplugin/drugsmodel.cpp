@@ -949,23 +949,12 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
 
     // Duration
     if (drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble()) {
+        tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
         tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
         if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
             tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
 
-        // Manage plurial form
-        tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
         tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
-        int max = qMax(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble(), drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
-        if (periods().contains(tokens_value["D_SCHEME"])) {
-            tokens_value["D_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["D_SCHEME"]), max, tokens_value["D_SCHEME"]);
-        }
-        max = drug->prescriptionValue(Constants::Prescription::Period).toDouble();
-        if (max==1 && QLocale().name().left(2)=="fr")
-            ++max;
-        if (periods().contains(tokens_value["PERIOD_SCHEME"])) {
-            tokens_value["PERIOD_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["PERIOD_SCHEME"]), max, tokens_value["PERIOD_SCHEME"]);
-        }
     } else {
         tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
     }

@@ -70,8 +70,6 @@ const char * const  ICONVALIDATELIGHT= "validatebuttonlight.png";
 const char * const  ICONVALIDATEDARK = "validatebuttondark.png";
 const char * const  ICONMOVEUPLIGHT=   "arrowuplight.png";
 const char * const  ICONMOVEDOWNLIGHT= "arrowdownlight.png";
-const char * const  ICONPROCESS=       "run.png";
-const char * const  ICONSPINNER=       "spinner.gif";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";

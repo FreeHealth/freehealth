@@ -34,7 +34,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
+ *   Contributors : Pierre-Marie Desombre,<pm.desombre@medsyn.fr>          *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
@@ -51,6 +51,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
+
 #include <coreplugin/constants_icons.h>
 
 using namespace Account;
@@ -59,10 +61,11 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  DrugsUserPage  //////////////////////////////////////////////
+//////////////////////////////////////  AccountUserPage  //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 MedicalProcedurePage::MedicalProcedurePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0) { setObjectName("MedicalProcedurePage"); }
@@ -74,7 +77,7 @@ MedicalProcedurePage::~MedicalProcedurePage()
 }
 
 QString MedicalProcedurePage::id() const { return objectName(); }
-QString MedicalProcedurePage::name() const { return tkTr(Trans::Constants::AVAILABLE_MOVEMENTS); }
+QString MedicalProcedurePage::name() const { return tkTr(Trans::Constants::MEDICAL_PROCEDURES); }
 QString MedicalProcedurePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 
 void MedicalProcedurePage::resetToDefaults()
@@ -117,8 +120,14 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     setupUi(this);
+    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_fullName = user()->value(Core::IUser::FullName).toString();
+    if(m_user_fullName.isEmpty()){
+        m_user_fullName = "Admin_Test";
+        }
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ownersComboBox->addItem(m_user_fullName,QVariant());
     m_Model = new AccountDB::MedicalProcedureModel(this);
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
@@ -126,11 +135,11 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
 //    m_Mapper->addMapping(currentLabel, AccountDB::Constants::MedicalProcedure_LABEL, "text");
-//    m_Mapper->addMapping(owner, AccountDB::Constants::MedicalProcedure_OWNER, "text");
+    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
 //    m_Mapper->addMapping(ownerAdress, AccountDB::Constants::MedicalProcedure_OWNERADRESS, "text");
 //    m_Mapper->addMapping(iban, AccountDB::Constants::MedicalProcedure_IBAN, "text");
 //    m_Mapper->addMapping(number, AccountDB::Constants::MedicalProcedure_ACCOUNTNUMBER, "text");
-//    m_Mapper->addMapping(balanceSpin, AccountDB::Constants::MedicalProcedure_BALANCE, "value");
+    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT, "value");
 //    m_Mapper->addMapping(balanceDate, AccountDB::Constants::MedicalProcedure_BALANCEDATE, "date");
 //    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::MedicalProcedure_BALANCEDATE, "currentIndex");
     mpComboBox->setModel(m_Model);
@@ -145,6 +154,7 @@ MedicalProcedureWidget::~MedicalProcedureWidget()
 
 void MedicalProcedureWidget::setDatasToUi()
 {
+    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(mpComboBox->currentIndex());
     m_Mapper->setCurrentIndex(mpComboBox->currentIndex());
 }
 
@@ -152,11 +162,11 @@ void MedicalProcedureWidget::saveModel()
 {
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
-                                          tr("You make changes into the bank account details.\n"
+                                          tr("You make changes into the medical procedures table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
             if (!m_Model->submit()) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
+                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
             }
         } else {
             m_Model->revert();
@@ -185,9 +195,9 @@ void MedicalProcedureWidget::on_removeButton_clicked()
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
-        Utils::warningMessageBox(tr("Can not submit bank account details to your personnal database."),
-                                 tr("An error occured during bank account details saving. Datas are corrupted."));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
+        Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
+                                 tr("An error occured during medical procedures saving. Datas are corrupted."));
     }
 }
 

@@ -9,11 +9,16 @@
 
 #include <utils/widgets/spinboxdelegate.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+
 #include <QAbstractItemModel>
 
 #include <QDebug>
 #include <QMessageBox>
 #include <QFrame>
+using namespace Core;
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 using namespace ReceiptsConstants;
 namespace InternalAmount {
 

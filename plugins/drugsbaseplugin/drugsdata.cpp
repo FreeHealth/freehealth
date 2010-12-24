@@ -364,7 +364,7 @@ QStringList DrugsData::listOfInn() const
     return toReturn;
 }
 
-/** \brief Returns all Inn and IamClasses codes known for this drug. */
+/** \brief Returns all Inn and IamClasses codes knwon for this drug. */
 QSet<int> DrugsData::allInnAndIamClasses() const
 {
     return d->m_IamCodes;

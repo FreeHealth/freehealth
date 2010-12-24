@@ -142,7 +142,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Actions</string>
+        <string>Settings</string>
        </property>
        <widget class="QTreeView" name="actionsTreeView">
         <property name="geometry">

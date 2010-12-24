@@ -10,6 +10,12 @@
     <height>370</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -69,9 +75,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2" colspan="2">
-       <widget class="QLineEdit" name="owner"/>
-      </item>
       <item row="3" column="0" colspan="2">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -91,6 +94,9 @@
       </item>
       <item row="4" column="2">
        <widget class="QDoubleSpinBox" name="amountSpin"/>
+      </item>
+      <item row="0" column="2" colspan="2">
+       <widget class="QComboBox" name="ownersComboBox"/>
       </item>
      </layout>
     </widget>
@@ -154,7 +160,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>owner</tabstop>
   <tabstop>name</tabstop>
   <tabstop>abstract_2</tabstop>
  </tabstops>

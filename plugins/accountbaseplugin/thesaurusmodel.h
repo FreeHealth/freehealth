@@ -1,5 +1,5 @@
-#ifndef THESAURUS_MODEL_H
-#define THESAURUS_MODEL_H
+#ifndef THESAURUSMODEL_H
+#define THESAURUSMODEL_H
 
 #include <QAbstractTableModel>
 
@@ -43,4 +43,4 @@ private:
 }  // End namespace AccountDB
 
 
-#endif // Thesaurus_MODEL_H
+#endif // THESAURUSMODEL_H

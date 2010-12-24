@@ -282,8 +282,6 @@ QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWar
         return th->icon(INTERACTION_ICONTAKEINTOACCOUNT, size);
     else if ( ( level & Interaction::P450 ) && ( levelOfWarning <= 1 ) )
         return th->icon(INTERACTION_ICONP450, size);
-    else if ( ( level & Interaction::GPG ) && ( levelOfWarning <= 1 ) )
-        return th->icon(INTERACTION_ICONGPG, size);
     else if ( ( level & Interaction::Precaution ) && ( levelOfWarning <= 1 ) )
         return th->icon(INTERACTION_ICONPRECAUTION, size);
     else if ( ( level & Interaction::Information ) && ( levelOfWarning == 0 ) )
