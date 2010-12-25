@@ -287,7 +287,7 @@ bool IcdDatabase::init()
 
      // Connect normal Account Database
      if (!createConnection(ICD::Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", pathToDb,
-                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "",0, CreateDatabase)) {
+                           Utils::Database::ReadOnly, Utils::Database::SQLite, "", "",0, CreateDatabase)) {
          d->m_DownloadAndPopulate = true;
      }
 

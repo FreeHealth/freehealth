@@ -41,6 +41,9 @@
 
 /** \todo Some parts should not be Internals */
 
+namespace MedicalUtils {
+class EbmData;
+}
 
 namespace DrugsDB {
 class DatabaseInfos;
@@ -90,6 +93,8 @@ public:
     QList<int> getLinkedAtcIds(const int molecule_code) const;
 
     QList<int> getAllMoleculeCodeWithAtcStartingWith(const QString &code) const;
+
+    QVector<MedicalUtils::EbmData *> getAllSourcesFromTree(const QList<int> &allInnAndIamClassIds);
 
 private:
     InteractionsBasePrivate *di;

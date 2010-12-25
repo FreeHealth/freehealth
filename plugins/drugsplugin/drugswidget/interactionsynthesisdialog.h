@@ -48,6 +48,7 @@ protected Q_SLOTS:
     void levelActivated(QAction *a);
     void interactorsActivated(const QModelIndex &current, const QModelIndex &previous);
     void interactorsActivated(QTableWidgetItem *item);
+    void on_getBiblio_clicked();
     void print();
 
 protected:

@@ -781,7 +781,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             QSqlTableModel compo(0, database());
             compo.setTable(drugsBase()->table(Constants::Table_COMPO));
             QHash<int, QString> where;
-            where.insert(Constants::COMPO_UID, QString("=%1").arg(uid));
+            where.insert(Constants::COMPO_UID, QString("='%1'").arg(uid));
             compo.setFilter(drugsBase()->getWhereClause(Constants::Table_COMPO, where));
             compo.select();
             for(int i=0; i< compo.rowCount(); ++i) {
