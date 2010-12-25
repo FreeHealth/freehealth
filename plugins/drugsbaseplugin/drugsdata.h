@@ -217,7 +217,7 @@ public:
      QList<int>        listOfCodeMolecules() const;
 
      QStringList       listOfInn() const;
-     int               numberOfInn() const        { return allInnAndIamClasses().count(); }
+     int               numberOfInn() const;
      QStringList       listOfInnClasses() const;
      QSet<int>         allInnAndIamClasses() const;
      QSet<int>         allSevenCharsAtcIds() const;

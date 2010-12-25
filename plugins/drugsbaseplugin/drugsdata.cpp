@@ -353,15 +353,18 @@ QStringList DrugsData::listOfInn() const
 {
     // return the list of distinct know INN of this drug
     QStringList toReturn;
-    QString tmp = "";
     foreach(DrugComposition *compo, d->m_Compositions) {
-        if (tmp != compo->innName()) {
-            toReturn << compo->innName();
-            tmp = compo->innName();
-        }
+        toReturn << compo->innName();
     }
+    toReturn.removeDuplicates();
 //    qWarning() << toReturn << __FILE__ << __LINE__;
     return toReturn;
+}
+
+int DrugsData::numberOfInn() const
+{
+//    qWarning() << allInnAndIamClasses() << __FILE__ <<__LINE__;
+    return allInnAndIamClasses().count();
 }
 
 /** \brief Returns all Inn and IamClasses codes known for this drug. */
