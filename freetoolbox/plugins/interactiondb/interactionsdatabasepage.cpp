@@ -318,6 +318,8 @@ InteractionDatabaseCreator::~InteractionDatabaseCreator()
 void InteractionDatabaseCreator::on_createAndSave_clicked()
 {
     d->m_Step->process();
+    if (ui->biblioCheck->isChecked())
+        d->m_Step->postProcessDownload();
 }
 
 void InteractionDatabaseCreator::on_checkDatas_clicked()

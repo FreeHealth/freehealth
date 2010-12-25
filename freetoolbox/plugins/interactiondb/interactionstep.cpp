@@ -185,8 +185,6 @@ static void setClassTreeToDatabase(const QString &iclass,
 
 bool InteractionStep::process()
 {
-//    Q_EMIT processFinished();
-//    return true;
     return computeModelsAndPopulateDatabase();
 }
 
@@ -272,6 +270,8 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             const QString &molEn = molLinkModel->index(i, AfssapsLinkerModel::En_Label).data().toString();
             const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
             const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
+            if (mol.isEmpty())
+                continue;
             if (type=="class") {
                  afssapsClass << Core::Tools::noAccent(mol).toUpper();
                  afssapsClassEn << molEn;

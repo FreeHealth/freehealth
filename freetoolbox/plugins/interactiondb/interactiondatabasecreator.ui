@@ -40,6 +40,13 @@
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QCheckBox" name="biblioCheck">
+       <property name="text">
+        <string>Get bibliography</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="checkDatas">
        <property name="text">
         <string>Check Datas</string>
