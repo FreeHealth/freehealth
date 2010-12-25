@@ -271,35 +271,42 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
-    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-    Q_ASSERT(fmenu);
-    if (!fmenu)
-        return;
-    a = aPrint = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONPRINT));
-    cmd = actionManager()->registerAction(a, Constants::A_PRINT_COLLECTION, ctx);
-    cmd->setTranslations(Constants::PRINTCOLLECTION_TEXT, "", Constants::ICDCONSTANTS_TR_CONTEXT);
-#ifdef FREEICD
-    cmd->setKeySequence(QKeySequence::Print);
+#ifdef FREEMEDFORMS
+    const char * const filemenuId = Core::Constants::M_GENERAL;
+    const char * const printGroupId = Core::Constants::G_GENERAL_PRINT;
 #else
-    cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    const char * const filemenuId = Core::Constants::M_FILE;
+    const char * const printGroupId = Core::Constants::G_FILE_PRINT;
 #endif
-    cmd->retranslate();
-    if (fmenu) {
-        fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
-    }
-    connect(aPrint,SIGNAL(triggered()), this, SLOT(print()));
+//    Core::ActionContainer *fmenu = actionManager()->actionContainer(filemenuId);
+//    Q_ASSERT(fmenu);
+//    if (!fmenu)
+//        return;
+//    a = aPrint = new QAction(this);
+//    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+//    cmd = actionManager()->registerAction(a, Constants::A_PRINT_COLLECTION, ctx);
+//    cmd->setTranslations(Constants::PRINTCOLLECTION_TEXT, "", Constants::ICDCONSTANTS_TR_CONTEXT);
+//#ifdef FREEICD
+//    cmd->setKeySequence(QKeySequence::Print);
+//#else
+//    cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+//#endif
+//    cmd->retranslate();
+//    if (fmenu) {
+//        fmenu->addAction(cmd, printGroupId);
+//    }
+//    connect(aPrint,SIGNAL(triggered()), this, SLOT(print()));
 
-    a = aPrintPreview = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONPRINTPREVIEW));
-    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
-    cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
-    cmd->retranslate();
-    if (fmenu) {
-        fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
-    }
-    connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
+//    a = aPrintPreview = new QAction(this);
+//    a->setIcon(th->icon(Core::Constants::ICONPRINTPREVIEW));
+//    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+//    cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
+//    cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
+//    cmd->retranslate();
+//    if (fmenu) {
+//        fmenu->addAction(cmd, printGroupId);
+//    }
+//    connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();

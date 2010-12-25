@@ -23,52 +23,82 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICDIO_H
-#define ICDIO_H
+#ifndef ICDWIDGETFACTORY_H
+#define ICDWIDGETFACTORY_H
 
 #include <icdplugin/icd_exporter.h>
-#include <QtGlobal>
-
-QT_BEGIN_NAMESPACE
-class QString;
-QT_END_NAMESPACE
-
-/**
- * \file icdio.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.1.0
- * \date 20 Nov 2010
-*/
-
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 namespace ICD {
-class IcdCollectionModel;
-namespace Internal {
-class IcdIOPrivate;
-}  // End namespace Internal
+class IcdCentralWidget;
 
-
-class ICD_EXPORT IcdIO
+class ICD_EXPORT IcdWidgetFactory : public Form::IFormWidgetFactory
 {
 public:
-    enum ModelManagement {
-        ReplaceModelContent = 0,
-        AddToModel
-    };
+    Q_OBJECT
+public:
+    IcdWidgetFactory(QObject *parent = 0);
+    ~IcdWidgetFactory();
 
-    IcdIO();
-    ~IcdIO();
+    bool initialize(const QStringList &arguments, QString *errorString);
+    bool extensionInitialized();
+    bool isInitialized() const;
 
-    QString icdCollectionToXml(const IcdCollectionModel *model);
-    bool icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, const ModelManagement management = ReplaceModelContent);
+    bool isContainer(const int) const {return false;}
+    QStringList providedWidgets() const;
+    Form::IFormWidget *createWidget(const QString &name, Form::FormItem *object, QWidget *parent = 0);
+};
 
-    QString icdCollectionToHtml(const IcdCollectionModel *model);
+class IcdFormData;
+
+class IcdFormWidget : public Form::IFormWidget
+{
+    Q_OBJECT
+    friend class ICD::IcdFormData;
+public:
+    IcdFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
+    ~IcdFormWidget();
+
+    void addWidgetToContainer(Form::IFormWidget *) {}
+    bool isContainer() const {return false;}
+
+public Q_SLOTS:
+    void retranslate();
+
+protected:
+    IcdCentralWidget *m_CentralWidget;
+
+};
+
+// Used to pass episode date, label, user...
+class IcdFormData : public Form::IFormItemData
+{
+public:
+    IcdFormData(Form::FormItem *item);
+    ~IcdFormData();
+
+    void setForm(IcdFormWidget *form) {m_Form = form; clear();}
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    // Use setData/Data for episode datas
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
+
+    // Storable datas
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
 
 private:
-    Internal::IcdIOPrivate *d;
+    Form::FormItem *m_FormItem;
+    IcdFormWidget *m_Form;
+    QString m_OriginalValue;
 };
 
 }  // End namespace ICD
 
 
-#endif // ICDIO_H
+#endif // ICDWIDGETFACTORY_H

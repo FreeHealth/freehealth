@@ -1,6 +1,5 @@
 TEMPLATE        = lib
 TARGET          = ICD
-PACKAGE_VERSION = 0.0.2
 
 DEFINES += ICD_LIBRARY
 FREEICD = 1

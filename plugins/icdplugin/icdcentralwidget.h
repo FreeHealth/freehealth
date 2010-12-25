@@ -68,11 +68,13 @@ public:
     CollectionModes collectionMode() const;
 
     void openFile(const QString &file);
+    void readXmlCollection(const QString &xml);
     QString collectionToXml() const;
+
+    void clear();
 
 protected:
     void toggleSelector();
-    void clear();
     void removeItem();
     void print();
 

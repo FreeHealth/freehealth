@@ -28,6 +28,10 @@
 #include "icddatabase.h"
 #include "icddownloader.h"
 
+#ifdef FREEMEDFORMS
+#    include "icdwidgetfactory.h"
+#endif
+
 #include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -76,9 +80,17 @@ void IcdPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
+#ifdef FREEMEDFORMS
+    addAutoReleasedObject(new IcdWidgetFactory(this));
+#endif
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+}
+
+void IcdPlugin::postCoreInitialization()
+{
     // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
     IcdWidgetManager::instance();
-//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 

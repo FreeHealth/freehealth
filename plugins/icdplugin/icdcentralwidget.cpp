@@ -235,23 +235,32 @@ void IcdCentralWidget::openFile(const QString &file)
                    "do you to replace it or to add the opened collection ?"),
                 QString(), QStringList() << tr("Replace collection") << tr("Add to collection"),
                 tr("Open a collection") + " - " + qApp->applicationName());
-//        if (r == 0) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
-//        } else if (r==1) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
-//        }
-        IcdIO io;
-        io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser));
+        if (r == 0) {
+            IcdIO io;
+            io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser));
+        } else if (r==1) {
+            IcdIO io;
+            io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser), ICD::IcdIO::AddToModel);
+        }
     } else {
         IcdIO io;
         io.icdCollectionFromXml(d->m_CollectionModel, Utils::readTextFile(file, Utils::DontWarnUser));
-//        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
     ui->collectionView->hideColumn(ICD::IcdCollectionModel::CodeWithoutDaget);
     ui->collectionView->hideColumn(ICD::IcdCollectionModel::HumanReadableDaget);
     ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
     ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
     ui->collectionView->expandAll();
+}
+
+void IcdCentralWidget::readXmlCollection(const QString &xml)
+{
+    IcdIO io;
+    io.icdCollectionFromXml(d->m_CollectionModel, xml, IcdIO::ReplaceModelContent);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::CodeWithoutDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::HumanReadableDaget);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::SID);
+    ui->collectionView->hideColumn(ICD::IcdCollectionModel::DagCode);
 }
 
 QString IcdCentralWidget::collectionToXml() const

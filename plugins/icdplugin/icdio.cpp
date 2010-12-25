@@ -215,15 +215,13 @@ QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
     return root.toString(2);
 }
 
-bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml)
+bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, const ModelManagement management)
 {
     Q_ASSERT(model);
     if (!model) {
         Utils::Log::addError("IcdIO", "fromXml: No model", __FILE__, __LINE__);
         return false;
     }
-
-    qWarning() << "FromXML";
 
     QDomDocument root;
     root.setContent(xml);
@@ -241,6 +239,11 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml)
         /** \todo Update XML if needed */
         Utils::Log::addMessage("IcdIO", QString("XML version (%1) different from db version (%2).")
                                .arg(dbVersion).arg(icdBase()->getDatabaseVersion()));
+    }
+
+    // Manage model insertion mode
+    if (management == ReplaceModelContent) {
+        model->clearCollection();
     }
 
     // Read the document
