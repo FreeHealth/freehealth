@@ -12,13 +12,13 @@
 <context>
     <name>Core</name>
     <message>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="156"/>
         <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="158"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="160"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="252"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="220"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -679,7 +679,7 @@ Using Url : %1
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="176"/>
         <source>ERROR - Theme : Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>

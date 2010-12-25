@@ -46,24 +46,29 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="169"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="170"/>
         <source>Can not add this drug to your prescription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="170"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="171"/>
         <source>Prescription can not contains twice the sample pharmaceutical drug.
 Drug %1 is already in your prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="173"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="174"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="188"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="192"/>
         <source>Interaction found. Do you to continue anyway ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/mfDrugsCentralWidget.cpp" line="195"/>
+        <source>Dynamic interactions alert</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -128,23 +133,59 @@ Drug %1 is already in your prescription</source>
         <translation type="unfinished">Dialog</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="43"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="71"/>
+        <source>Get the bibliography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="90"/>
+        <source>Risk and management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="96"/>
         <source>Risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="60"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="103"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="74"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="113"/>
+        <source>Class information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="128"/>
+        <source>Bibliography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="146"/>
+        <source>References</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="159"/>
+        <source>Abstracts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="78"/>
         <source>Synthetic interactions</source>
         <translation type="unfinished">Künstliche Interaktionen</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="91"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="95"/>
         <source>All interactions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="259"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="260"/>
+        <source>No bibliography available</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

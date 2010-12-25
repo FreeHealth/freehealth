@@ -4,67 +4,67 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="232"/>
-        <location filename="../../libs/utils/database.cpp" line="245"/>
-        <location filename="../../libs/utils/database.cpp" line="258"/>
+        <location filename="../../libs/utils/database.cpp" line="240"/>
+        <location filename="../../libs/utils/database.cpp" line="253"/>
+        <location filename="../../libs/utils/database.cpp" line="266"/>
         <source>ERROR : %1 driver is not available</source>
         <translation>ERREUR : le pilote %1 n&apos;est pas disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="268"/>
+        <location filename="../../libs/utils/database.cpp" line="276"/>
         <source>WARNING : %1 database already in use</source>
         <translation>ATTENTION : la base de données %1 est déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="313"/>
-        <location filename="../../libs/utils/database.cpp" line="318"/>
-        <location filename="../../libs/utils/database.cpp" line="336"/>
-        <location filename="../../libs/utils/database.cpp" line="342"/>
+        <location filename="../../libs/utils/database.cpp" line="321"/>
+        <location filename="../../libs/utils/database.cpp" line="326"/>
+        <location filename="../../libs/utils/database.cpp" line="344"/>
+        <location filename="../../libs/utils/database.cpp" line="350"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="363"/>
-        <location filename="../../libs/utils/database.cpp" line="372"/>
-        <location filename="../../libs/utils/database.cpp" line="379"/>
+        <location filename="../../libs/utils/database.cpp" line="371"/>
+        <location filename="../../libs/utils/database.cpp" line="380"/>
+        <location filename="../../libs/utils/database.cpp" line="387"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="407"/>
+        <location filename="../../libs/utils/database.cpp" line="415"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="446"/>
+        <location filename="../../libs/utils/database.cpp" line="454"/>
         <source>INFO : database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="451"/>
+        <location filename="../../libs/utils/database.cpp" line="459"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="457"/>
+        <location filename="../../libs/utils/database.cpp" line="465"/>
         <source>INFO : database %1 installed. Path : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>INFO : Base de données %1 installée. Chemin : %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="526"/>
+        <location filename="../../libs/utils/database.cpp" line="534"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="535"/>
+        <location filename="../../libs/utils/database.cpp" line="543"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1048"/>
+        <location filename="../../libs/utils/database.cpp" line="1064"/>
         <source>Can not create table %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer la table %1</translation>
     </message>
 </context>
 <context>
@@ -189,48 +189,48 @@
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="488"/>
+        <location filename="../../libs/utils/global.cpp" line="492"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="563"/>
+        <location filename="../../libs/utils/global.cpp" line="567"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="564"/>
+        <location filename="../../libs/utils/global.cpp" line="568"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer votre problème : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="605"/>
-        <location filename="../../libs/utils/global.cpp" line="606"/>
+        <location filename="../../libs/utils/global.cpp" line="609"/>
+        <location filename="../../libs/utils/global.cpp" line="610"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="617"/>
+        <location filename="../../libs/utils/global.cpp" line="621"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="625"/>
+        <location filename="../../libs/utils/global.cpp" line="629"/>
         <source>Do you agree these terms ?</source>
         <translation>Acceptez-vous les termes de la licence ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="679"/>
+        <location filename="../../libs/utils/global.cpp" line="683"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="684"/>
+        <location filename="../../libs/utils/global.cpp" line="688"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1049"/>
+        <location filename="../../libs/utils/global.cpp" line="1053"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -266,46 +266,48 @@
 <context>
     <name>Utils::HttpDownloader</name>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="94"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="92"/>
         <source>Start downloading: %1 to %2</source>
         <translation>Début du téléchargement : %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="109"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="111"/>
         <source>There already exists a file called %1 in the current directory. Overwrite?</source>
         <translation>Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="117"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="121"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="127"/>
         <source>Unable to save the file %1: %2.</source>
         <translation>Impossible de sauvegarder le fichier %1 : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="124"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="161"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="166"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="133"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="178"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="188"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="125"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="135"/>
         <source>Downloading %1
 To %2</source>
         <translation>Téléchargement de %1
 À %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="162"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="179"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="182"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="167"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="189"/>
         <source>Redirect to %1 ?</source>
         <translation>Rediriger vers %1 ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="178"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="208"/>
         <source>Downloaded %1 to current directory.</source>
         <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>
@@ -369,6 +371,19 @@ To %2</source>
         <location filename="../../libs/utils/widgets/pathchooser.cpp" line="267"/>
         <source>Path:</source>
         <translation>Chemin:</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::PubMedDownloader</name>
+    <message>
+        <location filename="../../libs/utils/pubmeddownloader.cpp" line="60"/>
+        <source>Wrong PubMed link %1</source>
+        <translation>Lien PubMed erroné %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/pubmeddownloader.cpp" line="69"/>
+        <source>Wrong PubMed link %1. Extract PMID %2</source>
+        <translation>Lien PubMed erroné %1. PMID extrait %2</translation>
     </message>
 </context>
 <context>
