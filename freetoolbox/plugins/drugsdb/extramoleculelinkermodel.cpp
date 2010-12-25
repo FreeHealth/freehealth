@@ -590,7 +590,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
             }
         }
         query.finish();
-//        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("MILLEPERTUIS");
+        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("VERAPAMIL");
     }
 
     Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
@@ -687,7 +687,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
                             atcIds = atcName_id.values(tmp);
                             if (atcIds.count()) {
                                 molName = tmp;
-                                qWarning() << "Without prefix"<< prefix << ">>>>>>>>" << molName;
+                                qWarning() << "Without prefix"<< prefix << ">>>>>>>>" << tmp << atcIds;
                                 break;
                             }
                         }
