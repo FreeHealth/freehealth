@@ -86,7 +86,7 @@ static inline void createMedicalProcedure(const QString &userUid, Utils::Randomi
     query.bindValue(AccountDB::Constants::MP_AMOUNT, random->randomInt(10, 30));
     query.bindValue(AccountDB::Constants::MP_DATE, random->randomDate(2010, 9, 1));
     query.bindValue(AccountDB::Constants::MP_ID, QVariant());
-    query.bindValue(AccountDB::Constants::MP_NAME, QVariant());
+    query.bindValue(AccountDB::Constants::MP_NAME, abstract.join(" "));
     query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
     query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
     query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
