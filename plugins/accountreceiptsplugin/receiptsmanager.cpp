@@ -23,7 +23,8 @@ receiptsManager::~receiptsManager()
 {
 }
 
-QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
+QList<QMultiHash<int,QString> > receiptsManager::getPercentages()
+{
   QList<QMultiHash<int,QString> > rList;
   QMultiHash<int,QString> type,percentage;
   QStringList idList;
@@ -42,7 +43,8 @@ QList<QMultiHash<int,QString> > receiptsManager::getPercentages(){
   return rList;
 }
 
-QStringList receiptsManager::getParametersDatas(QString & values , const QString & table){
+QStringList receiptsManager::getParametersDatas(QString & values , const QString & table)
+{
    QStringList listForReturn;
 //   qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
    if (table == "insurance")
