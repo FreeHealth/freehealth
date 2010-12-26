@@ -79,10 +79,11 @@ public:
         QHash<int, QString> where;
         where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_MedicalProcedure, where));
-        if (WarnFilter)
+        if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
-        //q->reset();
-    }
+            }
+        q->reset();
+     }
 
 public:
     QSqlTableModel *m_SqlTable;
@@ -189,4 +190,8 @@ void MedicalProcedureModel::revert()
 bool MedicalProcedureModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+QSqlError MedicalProcedureModel::lastError(){
+    return d->m_SqlTable->lastError();
 }

@@ -130,13 +130,23 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     ownersComboBox->addItem(m_user_fullName,QVariant());
     dateEdit->setDate(QDate::currentDate());
     m_Model = new AccountDB::MedicalProcedureModel(this);
+    m_Model->setFilter("%");
+    mpComboBox->setModel(m_Model);
+    mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     /** \todo  m_Model->setUserUuid(); */
     QLabel *mpUidLabel = new QLabel(this);
     mpUidLabel->setText("NULL");
+    mpUidLabel->hide();
+    QSpinBox *mpIDLabel = new QSpinBox(this);
+    mpIDLabel->hide();
+    //mpIDLabel->setValue(m_Model->last);
+    //mpIDLabel->hide();
+    userUidLabel->setText(m_user_uid);
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
+    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
     m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
     m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID, "text");
     m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
@@ -145,9 +155,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT, "value");
     m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT, "value");
     m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE, "date");
-//    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::MP_DATE, "date");
-    mpComboBox->setModel(m_Model);
-    mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
+
     setDatasToUi();
 }
 
@@ -175,6 +183,7 @@ void MedicalProcedureWidget::saveModel()
         } else {
             m_Model->revert();
         }
+        qWarning() << __FILE__ << QString::number(__LINE__) << "error "<< m_Model->lastError().text() ;
     }
 }
 
