@@ -122,7 +122,7 @@ public:
 
     bool isActive() const;
 
-    void retranslate() { qWarning() << "shortcut retranslate"; }
+    void retranslate() {}
 
 private:
     QList<int> m_context;
