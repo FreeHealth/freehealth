@@ -44,6 +44,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QSqlTableModel>
+#include <QUuid>
 
 using namespace AccountDB;
 using namespace Trans::ConstantTranslations;
@@ -156,9 +157,47 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
 {
     d->m_IsDirty = true;
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnRowChange);
-    bool ret = d->m_SqlTable->insertRows(row, count, parent);
+    bool ok = true;
+    for(int i = 0 ; i < count ; ++i) {
+//        QSqlQuery query(accountBase()->database());
+//        query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_MedicalProcedure));
+//        query.bindValue(AccountDB::Constants::MP_ABSTRACT, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_AMOUNT, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_DATE, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_ID, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_NAME, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
+//        query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
+//        query.bindValue(AccountDB::Constants::MP_USER_UID, user()->value(Core::IUser::Uuid));
+//        if (!query.exec()) {
+//            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+//        }
+//        query.finish();
+
+        if (!d->m_SqlTable->insertRow(row+i, parent)) {
+            qWarning() << d->m_SqlTable->database().lastError().text();
+            ok = false;
+        } else {
+            // Set CurrentUser UUID
+            QModelIndex userUid = d->m_SqlTable->index(row+i, Constants::MP_USER_UID, parent);
+            if (!d->m_SqlTable->setData(userUid, user()->value(Core::IUser::Uuid))) {
+                qWarning() << d->m_SqlTable->database().lastError().text();
+                ok = false;
+            }
+            // Create MP UUID
+            QModelIndex mpUid = d->m_SqlTable->index(row+i, Constants::MP_UID, parent);
+            if (!d->m_SqlTable->setData(mpUid, QUuid::createUuid().toString())) {
+                qWarning() << d->m_SqlTable->database().lastError().text();
+                ok = false;
+            }
+        }
+
+    }
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    return ret;
+//    d->m_SqlTable->select();
+//    reset();
+    return ok;
 }
 
 bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &parent)

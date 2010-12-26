@@ -131,7 +131,21 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     ownersComboBox->addItem(m_user_fullName,QVariant());
     dateEdit->setDate(QDate::currentDate());
     m_Model = new AccountDB::MedicalProcedureModel(this);
-    m_Model->setFilter("%");
+
+    m_Mapper = new QDataWidgetMapper(this);
+    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
+    m_Mapper->setModel(m_Model);
+    m_Mapper->setCurrentModelIndex(QModelIndex());
+    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
+//    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
+    m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID, "text");
+    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
+    m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT, "text");
+    m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE, "text");
+    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT, "value");
+    m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT, "value");
+    m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE, "date");
+
     mpComboBox->setModel(m_Model);
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     /** \todo  m_Model->setUserUuid(); */
@@ -143,19 +157,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     //mpIDLabel->setValue(m_Model->last);
     //mpIDLabel->hide();
     userUidLabel->setText(m_user_uid);
-    m_Mapper = new QDataWidgetMapper(this);
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->setModel(m_Model);
-    m_Mapper->setCurrentModelIndex(QModelIndex());
-    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
-    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
-    m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID, "text");
-    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
-    m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT, "text");
-    m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE, "text");
-    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT, "value");
-    m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT, "value");
-    m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE, "date");
 
     setDatasToUi();
 }
