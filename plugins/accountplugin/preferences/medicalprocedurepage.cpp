@@ -131,13 +131,24 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     ownersComboBox->addItem(m_user_fullName,QVariant());
     dateEdit->setDate(QDate::currentDate());
     m_Model = new AccountDB::MedicalProcedureModel(this);
-
+        /** \todo  m_Model->setUserUuid(); */
+    QLabel *mpUidLabel = new QLabel(this);
+    mpUidLabel->setText("NULL");
+    mpUidLabel->hide();
+    QSpinBox *mpIDLabel = new QSpinBox(this);
+    int valueHideIDSpin = (m_Model->data(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::MP_ID))).toInt();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(valueHideIDSpin);
+    mpIDLabel->setValue(valueHideIDSpin+1);
+    mpIDLabel->hide();
+    
+    //mpIDLabel->hide();
+    userUidLabel->setText(m_user_uid);
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
-//    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
+    m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
+    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
     m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID, "text");
     m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
     m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT, "text");
@@ -148,16 +159,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 
     mpComboBox->setModel(m_Model);
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
-    /** \todo  m_Model->setUserUuid(); */
-    QLabel *mpUidLabel = new QLabel(this);
-    mpUidLabel->setText("NULL");
-    mpUidLabel->hide();
-    QSpinBox *mpIDLabel = new QSpinBox(this);
-    mpIDLabel->hide();
-    //mpIDLabel->setValue(m_Model->last);
-    //mpIDLabel->hide();
-    userUidLabel->setText(m_user_uid);
-
     setDatasToUi();
 }
 
@@ -199,7 +200,8 @@ void MedicalProcedureWidget::on_addButton_clicked()
 {
     if (!m_Model->insertRow(m_Model->rowCount()))
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
-    mpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount());
+    mpComboBox->setCurrentIndex(m_Model->rowCount());
 }
 
 void MedicalProcedureWidget::on_save_clicked()

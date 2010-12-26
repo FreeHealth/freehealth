@@ -83,14 +83,13 @@ public:
         if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
             }
-//        q->reset();
+        //q->reset();
      }
 
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
     QString m_UserUid;
-    //void reset();
 
 private:
     MedicalProcedureModel *q;
@@ -120,7 +119,11 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 {
-    return d->m_SqlTable->rowCount(parent);
+    int rows = 0;
+    d->m_SqlTable->setFilter("");
+    d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount(parent);
+    return rows;
 }
 
 int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
