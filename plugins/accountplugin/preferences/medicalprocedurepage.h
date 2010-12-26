@@ -87,6 +87,7 @@ public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
     void on_mpComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
+    void on_save_clicked();
     void on_removeButton_clicked();
 
 private:

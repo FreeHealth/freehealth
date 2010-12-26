@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>476</width>
-    <height>370</height>
+    <height>383</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -146,7 +146,7 @@
       <item row="6" column="2">
        <widget class="QDoubleSpinBox" name="rateSpin"/>
       </item>
-      <item row="7" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="dateLabel">
         <property name="text">
          <string>Date</string>
@@ -156,8 +156,19 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="2">
+      <item row="8" column="2">
        <widget class="QDateEdit" name="dateEdit"/>
+      </item>
+      <item row="10" column="0" colspan="4">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="save">
+          <property name="text">
+           <string>Save</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

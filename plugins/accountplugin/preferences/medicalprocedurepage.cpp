@@ -119,12 +119,13 @@ QWidget *MedicalProcedurePage::createPage(QWidget *parent)
 MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    setObjectName("MedicalProcedureWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
-    if(m_user_fullName.isEmpty()){
+    if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
-        }
+    }
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     ownersComboBox->addItem(m_user_fullName,QVariant());
@@ -178,12 +179,12 @@ void MedicalProcedureWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
             if (!m_Model->submit()) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
+                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")), __FILE__, __LINE__);
             }
         } else {
             m_Model->revert();
         }
-        qWarning() << __FILE__ << QString::number(__LINE__) << "error "<< m_Model->lastError().text() ;
+//        qWarning() << __FILE__ << QString::number(__LINE__) << "error "<< m_Model->lastError().text() ;
     }
 }
 
@@ -195,8 +196,14 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(int index)
 
 void MedicalProcedureWidget::on_addButton_clicked()
 {
-    m_Model->insertRow(m_Model->rowCount());
+    if (!m_Model->insertRow(m_Model->rowCount()))
+        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
     mpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+}
+
+void MedicalProcedureWidget::on_save_clicked()
+{
+    saveModel();
 }
 
 void MedicalProcedureWidget::on_removeButton_clicked()
