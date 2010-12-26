@@ -352,7 +352,7 @@ DrugsModel::DrugsModel(QObject * parent)
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
     d->m_InteractionsManager = new InteractionsManager(this);
-    Utils::Log::addMessage(this, "Instance created");
+//    Utils::Log::addMessage(this, "Instance created");
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
 }
 

@@ -70,10 +70,8 @@ bool IcdDialog::isUniqueCode() const
         return false;
     if (!m_View->icdModel())
         return false;
-
-    qWarning() << m_View->icdModel()->codeCanBeUsedAlone() <<
-                  m_View->icdModel()->dagStarModel()->numberOfCheckedItems();
-
+//    qWarning() << m_View->icdModel()->codeCanBeUsedAlone() <<
+//                  m_View->icdModel()->dagStarModel()->numberOfCheckedItems();
     return (m_View->icdModel()->codeCanBeUsedAlone() &&
             (m_View->icdModel()->dagStarModel()->numberOfCheckedItems()==0));
 }

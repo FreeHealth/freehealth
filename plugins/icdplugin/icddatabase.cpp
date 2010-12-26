@@ -579,7 +579,7 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
         asso.setAssociatedHumanReadableDaget(reversedDagStar(dag->dag));
         d->m_CachedDependentDaget.insert(mainSID.toInt(), dag);
 
-        qWarning() << "Base" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar() << asso.dagCode();
+//        qWarning() << "Base" << asso.mainCodeWithDagStar() << asso.associatedCodeWithDagStar() << asso.dagCode();
 
         return asso;
     } else {

@@ -38,7 +38,7 @@
 
 #include <QDebug>
 
-enum { WarnFilter=true };
+enum { WarnFilter=false };
 
 using namespace ICD;
 

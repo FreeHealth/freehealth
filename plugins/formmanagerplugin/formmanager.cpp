@@ -69,6 +69,7 @@
 #include <QMap>
 #include <QApplication>
 
+enum { WarnFormCreation = false };
 
 using namespace Form;
 using namespace Form::Internal;
@@ -168,7 +169,8 @@ FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
     if (!uuid.isEmpty())
         f->setUuid(uuid);
     d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
-    qWarning() << "FormManager Creating Form" << uuid; // << f << d->m_UuidManager->uniqueIdentifier(f->uuid());
+    if (WarnFormCreation)
+        qWarning() << "FormManager Creating Form" << uuid; // << f << d->m_UuidManager->uniqueIdentifier(f->uuid());
     return f;
 }
 

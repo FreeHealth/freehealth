@@ -72,7 +72,7 @@ DrugsWidgetManager::DrugsWidgetManager(QObject *parent) : DrugsActionHandler(par
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
     setObjectName("DrugsWidgetManager");
-    Utils::Log::addMessage(this, "Instance created");
+//    Utils::Log::addMessage(this, "Instance created");
 }
 
 void DrugsWidgetManager::updateContext(Core::IContext *object)
@@ -150,7 +150,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("DrugsActionHandler");
-    Utils::Log::addMessage(this, "Instance created");
+//    Utils::Log::addMessage(this, "Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
@@ -158,7 +158,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(DrugsWidget::Constants::C_DRUGS_PLUGINS);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+//    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {

@@ -915,7 +915,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     /** \todo manage user's groups */
     if (d->m_Uuid_UserList.keys().contains(uid)) {
         Internal::UserData *user = d->m_Uuid_UserList.value(uid);
-        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
+//        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
         return user->linkIds();
     }
     QList<int> lk_ids;
@@ -933,7 +933,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     } else {
         Utils::Log::addQueryError("UserModel", query);
     }
-    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
+//    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
     return lk_ids;
 }
 
