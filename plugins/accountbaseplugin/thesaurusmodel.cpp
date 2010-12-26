@@ -77,13 +77,19 @@ bool ThesaurusModel::setData(const QModelIndex &index, const QVariant &value, in
 
 
 QVariant ThesaurusModel::headerData(int section, Qt::Orientation orientation, int role) const
-{}
+{
+    return QVariant();
+}
 
 bool ThesaurusModel::insertRows(int row, int count, const QModelIndex &parent)
-{}
+{
+    return true;
+}
 
 bool ThesaurusModel::removeRows(int row, int count, const QModelIndex &parent)
-{}
+{
+    return true;
+}
 
 bool ThesaurusModel::isDirty() const
 {

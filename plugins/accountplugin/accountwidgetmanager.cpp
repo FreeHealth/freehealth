@@ -148,8 +148,8 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     setObjectName("AccountActionHandler");
     Utils::Log::addMessage(this, "Instance created");
 
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    Core::ITheme *th = Core::ICore::instance()->theme();
+//    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
+//    Core::ITheme *th = Core::ICore::instance()->theme();
 
 //    QAction *a = 0;
 //    Core::Command *cmd = 0;

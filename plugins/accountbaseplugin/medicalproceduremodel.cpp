@@ -82,7 +82,7 @@ public:
         if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
             }
-        q->reset();
+//        q->reset();
      }
 
 public:
@@ -190,8 +190,4 @@ void MedicalProcedureModel::revert()
 bool MedicalProcedureModel::isDirty() const
 {
     return d->m_IsDirty;
-}
-
-QSqlError MedicalProcedureModel::lastError(){
-    return d->m_SqlTable->lastError();
 }

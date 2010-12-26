@@ -28,8 +28,8 @@ public:
     };
 
     AmountModel(AccountData *data, QObject *parent = 0);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const {return RowCount;}
-    int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
+    int rowCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return RowCount;}
+    int columnCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return ColCount;}
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
