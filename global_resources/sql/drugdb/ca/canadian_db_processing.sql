@@ -50,6 +50,10 @@
 --  *
 --  * \warning SQL commands MUST end with \e ;
 --  *
+--  * Dec 26, 2010
+--  *   More correctly constructed values for global_strength and dosage
+--  *   Patched also against Canadian source bug (drugs missing ingredients)
+--  * 
 --  * Sept 22, 2010 : recreate the drug's UID using forms and routes ID.
 --  *   Preparation of the future surrogate key.
 --  *   Drugs are created by the FreeToolBox code.
@@ -110,14 +114,29 @@ GROUP BY DRUG_CODE
 LIMIT 10);
 
 -- ensure that any Canadian drug NULL strengths are backfilled from related ingredients
+-- update is performed on two subsets of records, on account of non-uniform strength formulae
 
 UPDATE DRUGS
 SET GLOBAL_STRENGTH=
-(SELECT group_concat(STRENGTH || STRENGTH_UNIT, ";")
+(SELECT group_concat(STRENGTH || A1.STRENGTH_UNIT || "/" || A1.DOSAGE_VALUE || A1.DOSAGE_UNIT, ";")
 FROM ingred A1
-WHERE A1.DRUG_CODE=DRUGS.UID
+WHERE A1.DRUG_CODE=DRUGS.UID AND A1.DOSAGE_UNIT != "" AND
+   (A1.DOSAGE_VALUE || A1.DOSAGE_UNIT != A1.STRENGTH_UNIT)
 GROUP BY DRUG_CODE
-LIMIT 10);
+LIMIT 10)
+WHERE GLOBAL_STRENGTH IS NULL
+;
+
+UPDATE DRUGS
+SET GLOBAL_STRENGTH=
+(SELECT group_concat(STRENGTH || A1.STRENGTH_UNIT, ";")
+FROM ingred A1
+WHERE A1.DRUG_CODE=DRUGS.UID AND (A1.DOSAGE_UNIT = "" OR
+   A1.DOSAGE_VALUE || A1.DOSAGE_UNIT = A1.STRENGTH_UNIT)
+GROUP BY DRUG_CODE
+LIMIT 10)
+WHERE GLOBAL_STRENGTH IS NULL
+;
 
 -- set the ATC
 -- note Canada's "ther" table contains nondistinct ATCs (to support multiple AHFS values)
@@ -129,6 +148,12 @@ FROM ther A1
 WHERE A1.DRUG_CODE=DRUGS.UID
 );
 
+-- patch error in Canadian DPD source (Dec 2010) where 27 drugs lacked ingredients
+
+DELETE
+FROM DRUGS
+WHERE GLOBAL_STRENGTH IS NULL
+;
 
 -- ********************************
 -- Feed FreeDiams table COMPOSITION (molecular ingredients)
@@ -148,8 +173,8 @@ SELECT
    1
 FROM ingred A1, drug A2
 WHERE
-   (A1.DRUG_CODE = A2.DRUG_CODE) AND
-   (A1.DOSAGE_VALUE != "")
+   A1.DRUG_CODE = A2.DRUG_CODE AND A1.DOSAGE_UNIT != "" AND
+   (A1.DOSAGE_VALUE || A1.DOSAGE_UNIT != A1.STRENGTH_UNIT)
    ;
 
 
@@ -165,8 +190,8 @@ SELECT
    1
 FROM ingred A1, drug A2
 WHERE
-   (A1.DRUG_CODE = A2.DRUG_CODE) AND
-   (A1.DOSAGE_VALUE = "")
+   A1.DRUG_CODE = A2.DRUG_CODE AND (A1.DOSAGE_UNIT = "" OR
+   A1.DOSAGE_VALUE || A1.DOSAGE_UNIT = A1.STRENGTH_UNIT)
    ;
 
 -- ********************************
