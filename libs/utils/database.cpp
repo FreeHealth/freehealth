@@ -76,7 +76,7 @@
 #include <QTreeWidget>
 #include <QProgressDialog>
 
-enum {WarnSqlCommands=false};
+enum { WarnSqlCommands=false , WarnLogMessages = false };
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -160,7 +160,8 @@ void Database::logAvailableDrivers()
         }
     }
     tmp.chop(3);
-    Utils::Log::addMessage("Database", QString("Available drivers : %1").arg(tmp));
+    if (WarnLogMessages)
+        Utils::Log::addMessage("Database", QString("Available drivers : %1").arg(tmp));
 }
 
 
@@ -233,7 +234,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     switch (driver) {
     case SQLite :
         {
-            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+            if (WarnLogMessages)
+                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("SQLite"));
             if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
@@ -246,7 +248,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         }
     case MySQL:
         {
-            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+            if (WarnLogMessages)
+                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("MySQL"));
             if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
@@ -259,7 +262,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         }
     case PostSQL :
         {
-            Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+            if (WarnLogMessages)
+                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("PostGre SQL"));
             if (!QSqlDatabase::isDriverAvailable("QPSQL")) {
@@ -273,7 +277,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
 
     // does connection already exists ?
     if (QSqlDatabase::contains(connectionName)) {
-        Log::addMessage("Database", QCoreApplication::translate("Database",
+        if (WarnLogMessages)
+            Log::addMessage("Database", QCoreApplication::translate("Database",
                                                                 "WARNING : %1 database already in use")
                         .arg(connectionName));
         d->m_ConnectionName = connectionName;
@@ -300,7 +305,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                                      __FILE__, __LINE__);
                 return false;
             }
-            Utils::Log::addMessage("Database", QString("Connected to host %1").arg(pathOrHostName));
+            if (WarnLogMessages)
+                Utils::Log::addMessage("Database", QString("Connected to host %1").arg(pathOrHostName));
             break;
         }
     case PostSQL:
@@ -323,7 +329,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                         return false;
                     }
                 } else { // Warn Only
-                    Log::addMessage("Database", QCoreApplication::translate("Database",
+                    if (WarnLogMessages)
+                        Log::addMessage("Database", QCoreApplication::translate("Database",
                                                                             "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                     return false;
                 }
@@ -347,13 +354,15 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                         return false;
                     }
                 } else { // Warn Only
+                    if (WarnLogMessages)
                         Log::addMessage("Database", QCoreApplication::translate("Database",
                                         "ERROR : %1 database does not exist and can not be created. Path = %2")
                                         .arg(dbName, pathOrHostName));
-                        return false;
+                    return false;
                 }
             }
-            Utils::Log::addMessage("Database", QString("Connected to database %1").arg(dbName));
+            if (WarnLogMessages)
+                Utils::Log::addMessage("Database", QString("Connected to database %1").arg(dbName));
             break;
         }
     case PostSQL:
@@ -451,8 +460,10 @@ bool Database::createConnection(const QString & connectionName, const QString & 
              break;
     }
 
-    Log::addMessage("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
-                       .arg(connectionName).arg(DB.open()));
+    DB.open();
+    if (WarnLogMessages)
+        Log::addMessage("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
+                       .arg(connectionName).arg(DB.isOpen()));
 
     // test connection
     if (!DB.isOpen()) {
@@ -462,7 +473,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         toReturn = false;
     }
     else {
-        Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
+        if (WarnLogMessages)
+            Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
                            .arg(connectionName, pathOrHostName));
     }
     // return boolean
@@ -1232,18 +1244,21 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
 void Database::warn() const
 {
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
-    Log::addMessage("Database", QString("Connection name : %1, Database Name : %2, Driver : %3, Opened : %4, Can open : %5 ")
+    if (WarnLogMessages)
+        Log::addMessage("Database", QString("Connection name : %1, Database Name : %2, Driver : %3, Opened : %4, Can open : %5 ")
                        .arg(d->m_ConnectionName, DB.databaseName(), DB.driverName())
                        .arg(DB.isOpen())
                        .arg(DB.open()));
 
     foreach(int i, d->m_Tables.keys())
     {
-        Log::addMessage("Database", QString("Tables = %1 : %2").arg(i).arg(d->m_Tables[i]));
+        if (WarnLogMessages)
+            Log::addMessage("Database", QString("Tables = %1 : %2").arg(i).arg(d->m_Tables[i]));
         QList<int> list = d->m_Tables_Fields.values(i);
         qSort(list);
         foreach(int f, list)
-            Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4")
+            if (WarnLogMessages)
+                Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4")
                                .arg(f)
                                .arg(d->m_Fields[f], d->getTypeOfField(f), d->m_DefaultFieldValue[i]));
 
