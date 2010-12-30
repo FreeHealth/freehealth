@@ -158,7 +158,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(DrugsWidget::Constants::C_DRUGS_PLUGINS);
-//    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
