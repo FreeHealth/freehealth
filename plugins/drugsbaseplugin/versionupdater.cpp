@@ -563,7 +563,7 @@ public:
     {
         /** \todo read with QDomDoc */
         QString v;
-        if (xml.startsWith("<?xml version=")) {
+        if (xml.startsWith("<?xml version=\"1.0\"")) {
             int begin = xml.indexOf("<FullPrescription version=\"") + 27;
             int end = xml.indexOf("\">", begin);
             v = xml.mid(begin,end-begin).simplified();
@@ -722,11 +722,12 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
             break;
         if (step->updateFromXml()) {
             if (step->fromVersion() == version) {
-                if (!step->executeXmlUpdate(xml))
+                if (!step->executeXmlUpdate(xml)) {
                     Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()),
                                          __FILE__, __LINE__);
-                else
+                } else {
                     version = step->toVersion();
+                }
             }
         } else {
             version = step->toVersion();

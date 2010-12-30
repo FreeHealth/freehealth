@@ -43,6 +43,8 @@ public:
     static DrugSearchEngine *instance();
     ~DrugSearchEngine();
 
+    void clear();
+
     void addNewEngine(const QString &label, const QString &url, const QString &lang = Trans::Constants::ALL_LANGUAGE);
 
     void setDrug(const DrugsData *drug);

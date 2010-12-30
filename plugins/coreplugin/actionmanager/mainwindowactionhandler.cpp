@@ -47,6 +47,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/debugdialog.h>
 #include <coreplugin/dialogs/aboutdialog.h>
@@ -118,6 +119,8 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
 
 MainWindowActionHandler::~MainWindowActionHandler()
 {
+    // Save last used language
+    settings()->setValue(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2));
 }
 
 void MainWindowActionHandler::createGeneralMenu()
@@ -1008,6 +1011,8 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         // populate with actions
         QMap<QString, QString> loc_lang = Core::ICore::instance()->translators()->availableLocalesAndLanguages();
         int i = 0;
+
+        QString lang = settings()->value(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2)).toString();
         foreach( const QString &loc, loc_lang.keys() ) {
             i++;
             QAction *action = new QAction(this);  // QString("&%1 %2").arg(QString::number(i), loc_lang.value(loc)), this);
@@ -1018,8 +1023,10 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
             cmd = actionManager()->registerAction(action, loc, ctx);
             lmenu->addAction(cmd, Constants::G_LANGUAGES);
             aLanguageGroup->addAction(action);
-            if (loc == QLocale().name().left(2))
+            if (loc == lang) {
                 action->setChecked(true);
+                switchLanguage(action);
+            }
         }
         connect(aLanguageGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchLanguage(QAction*)));
     }

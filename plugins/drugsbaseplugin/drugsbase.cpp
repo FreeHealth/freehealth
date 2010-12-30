@@ -347,6 +347,7 @@ bool DrugsBase::init()
     }
 
     // get all Drugs search engines
+    searchEngine()->clear();
     QSqlQuery search(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     QString req = select(Constants::Table_SEARCHENGINES);
     if (search.exec(req)) {

@@ -588,16 +588,15 @@ QString DrugsData::toHtml() const
             .arg(atc);
 
     QString tmp = "";
-    QStringList inns;
+    QString name;
     foreach(DrugComposition *compo, d->m_Compositions) {
-        if (!compo->innName().isEmpty() && compo->m_InnCode < 200000) {
-            if (!inns.contains(compo->innName())) {
-                inns << compo->innName();
-                tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(compo->innName()).arg(compo->dosage());
-            }
-        } else {
-            tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(compo->moleculeName()).arg(compo->dosage());
+        if (compo->innName().isEmpty()) {
+            name = compo->moleculeName();
+        } else if (compo->m_InnCode < 200000) {
+            name = compo->innName();
         }
+        tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(name).arg(compo->dosage());
+        name.clear();
     }
 
     msg += QString(" %1\n"

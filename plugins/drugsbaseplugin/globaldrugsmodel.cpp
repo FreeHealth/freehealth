@@ -749,6 +749,8 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
         if (atc.isEmpty())
             atc += tr("No ATC found");
+        else
+            atc.prepend("ATC = ");
         QString uidName = "UID";
         if (drugsBase()->actualDatabaseInformations()) {
             if (!drugsBase()->actualDatabaseInformations()->drugsUidName.isEmpty())
@@ -788,7 +790,6 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                 tmp += QString("<tr><td>%1</td><td>%2</td></tr>")
                        .arg(compo.index(i, Constants::COMPO_MOL_NAME).data().toString())
                        .arg(compo.index(i, Constants::COMPO_DOSAGE).data().toString());
-                qWarning() << compo.index(i, Constants::COMPO_DOSAGE).data().toString();
             }
 //            tmp += tr("ATC codes (for interaction engine):<br>");
 //            if (!atc.isEmpty())

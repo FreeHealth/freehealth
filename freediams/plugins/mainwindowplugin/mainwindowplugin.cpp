@@ -57,6 +57,10 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(errorString);
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
+
     m_MainWindow->initialize(QStringList(),0);
     return true;
 }
@@ -65,9 +69,6 @@ void MainWinPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
 
     m_MainWindow->extensionsInitialized();
 }

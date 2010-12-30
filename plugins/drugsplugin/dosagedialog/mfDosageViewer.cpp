@@ -112,7 +112,7 @@ public:
 
             m_Mapper->addMapping(q->intakesFromSpin, Prescription::IntakesFrom, "value");
             m_Mapper->addMapping(q->intakesToSpin, Prescription::IntakesTo, "value");
-//            m_Mapper->addMapping(q->intakesCombo, Prescription::IntakesScheme, "currentText");
+            m_Mapper->addMapping(q->intakesCombo, Prescription::IntakesScheme, "currentText");
 
             m_Mapper->addMapping(q->periodSchemeCombo, Prescription::PeriodScheme, "currentText");
             m_Mapper->addMapping(q->periodSpin, Prescription::Period, "value");
@@ -515,7 +515,9 @@ void DosageViewer::done(int r)
     if (r == QDialog::Accepted) {
         // save user's intake forms
         QStringList list = intakesCombo->fancyItems(Constants::USERRECORDEDFORMS_COLOR);
-        list.insert(0, intakesCombo->currentText());
+        QStringList doNotInsert = intakesCombo->fancyItems("Model");
+        if (!doNotInsert.contains(intakesCombo->currentText()))
+            list.insert(0, intakesCombo->currentText());
         list.removeDuplicates();
         list.removeAll(tkTr(Trans::Constants::INTAKES));
         settings()->setValue(S_USERRECORDEDFORMS, list);

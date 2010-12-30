@@ -85,6 +85,12 @@ DrugSearchEngine *DrugSearchEngine::instance()
     return m_Instance;
 }
 
+void DrugSearchEngine::clear()
+{
+    qDeleteAll(d->m_Engines);
+    d->m_Engines.clear();
+}
+
 void DrugSearchEngine::addNewEngine(const QString &label, const QString &url, const QString &lang)
 {
     Engine *e = new Engine;
