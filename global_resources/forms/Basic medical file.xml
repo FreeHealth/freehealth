@@ -171,4 +171,17 @@
 
   </MedForm>
 
+  <MedForm>
+    <type>form</type>
+    <name>globalicd_form</name>
+    <label lang="xx">ICD10 coding</label>
+    <label lang="fr">Codes CIM10</label>
+    <Item>
+      <name>globalicd</name>
+      <type>icd</type>
+      <label lang="xx">ICD10 coding</label>
+      <label lang="fr">Codes CIM10</label>
+    </Item>
+  </MedForm>
+
 </FreeMedForms>
