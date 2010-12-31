@@ -473,6 +473,7 @@ private:
 class IO_Update_From_0008_To_020 : public DrugsDB::DrugsIOUpdateStep
 {
 public:
+    // Adding root FreeDiams tag
     // Unfortunatly DailyScheme was not saved before 0.2.0 --> so no update is available
     // MealTime scheme must be update since an empty choice has been added at index (0)
     IO_Update_From_0008_To_020() : DrugsDB::DrugsIOUpdateStep() {}
@@ -481,8 +482,14 @@ public:
     QString fromVersion() const {return "0.0.8";}
     QString toVersion() const {return "0.2.0";}
 
-    bool updateFromXml() const {return false;}
-    bool executeXmlUpdate(QString &xml) const {Q_UNUSED(xml); return true;}
+    bool updateFromXml() const {return true;}
+    bool executeXmlUpdate(QString &xml) const
+    {
+        int begin = xml.indexOf("<FullPrescription");
+        xml.insert(begin, "<FreeDiams>");
+        xml.append("</FreeDiams>");
+        return true;
+    }
 
     bool updateFromModel() const {return true;}
     bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
@@ -513,6 +520,13 @@ public:
     bool updateFromXml() const {return true;}
     bool executeXmlUpdate(QString &xml) const
     {
+        // add root tag <FreeDiams> ?
+        if (!xml.contains("<FreeDiams>", Qt::CaseInsensitive)) {
+            int begin = xml.indexOf("<?xml");
+            begin = xml.indexOf(">", begin) + 1;
+            xml.insert(begin, "<FreeDiams>");
+            xml.append("</FreeDiams>");
+        }
         // Rename some tags
         xml.replace("<CIS>","<Drug_UID>");
         xml.replace("</CIS>", "</Drug_UID>");
@@ -542,6 +556,38 @@ public:
     }
 };
 
+class IO_Update_From_040_To_050 : public DrugsDB::DrugsIOUpdateStep
+{
+public:
+    // Add missing main root tag
+    IO_Update_From_040_To_050() : DrugsDB::DrugsIOUpdateStep() {}
+    ~IO_Update_From_040_To_050() {}
+
+    QString fromVersion() const {return "0.4.0";}
+    QString toVersion() const {return "0.5.0";}
+
+    bool updateFromXml() const {return true;}
+    bool executeXmlUpdate(QString &xml) const
+    {
+        // add root tag <FreeDiams> ?
+        if (!xml.contains("<FreeDiams>", Qt::CaseInsensitive)) {
+            int begin = xml.indexOf("<?xml");
+            begin = xml.indexOf(">", begin) + 1;
+            xml.insert(begin, "<FreeDiams>");
+            xml.append("</FreeDiams>");
+        }
+        return true;
+    }
+
+    bool updateFromModel() const {return false;}
+    bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
+    {
+        Q_UNUSED(model);
+        Q_UNUSED(rows);
+        return true;
+    }
+};
+
 }  // End anonymous namespace
 
 namespace DrugsDB {
@@ -557,13 +603,14 @@ public:
     }
 
     static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0"; }
-    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0"; }
+    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0"; }
 
     QString xmlVersion(const QString &xml)
     {
         /** \todo read with QDomDoc */
         QString v;
-        if (xml.startsWith("<?xml version=\"1.0\"")) {
+        if (xml.startsWith("<?xml version=\"1.0\"") ||
+            xml.startsWith("<?xml version='1.0'")) {
             int begin = xml.indexOf("<FullPrescription version=\"") + 27;
             int end = xml.indexOf("\">", begin);
             v = xml.mid(begin,end-begin).simplified();
@@ -620,6 +667,7 @@ VersionUpdater::VersionUpdater() : d(0)
     d->m_Updaters.append(new ::Dosage_040_To_050);
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
     d->m_Updaters.append(new ::IO_Update_From_020_To_040);
+    d->m_Updaters.append(new ::IO_Update_From_040_To_050);
 }
 
 VersionUpdater::~VersionUpdater()
