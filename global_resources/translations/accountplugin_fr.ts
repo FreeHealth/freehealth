@@ -266,75 +266,95 @@ Do you want to save them ?</source>
 <context>
     <name>Account::Internal::MedicalProcedureWidget</name>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="14"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="20"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="32"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="38"/>
         <source>Available personnal medical procedures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="42"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="48"/>
         <source>Account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="48"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="54"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="58"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="67"/>
         <source>Abstract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="68"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="80"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="78"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="90"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="88"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="103"/>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="137"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="132"/>
+        <source>User UUID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="139"/>
+        <source>Reinbursment rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="152"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="167"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="215"/>
         <source>Medical Procedure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="154"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="178"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="155"/>
-        <source>You make changes into the bank account details.
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="179"/>
+        <source>You make changes into the medical procedures table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="159"/>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="188"/>
-        <source>bank account details</source>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="183"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="219"/>
+        <source>medical_procedures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="189"/>
-        <source>Can not submit bank account details to your personnal database.</source>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="220"/>
+        <source>Can not submit medical procedure to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="190"/>
-        <source>An error occured during bank account details saving. Datas are corrupted.</source>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="221"/>
+        <source>An error occured during medical procedures saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

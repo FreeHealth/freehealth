@@ -180,7 +180,7 @@ The default administrator&apos;s password must be redefined here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="387"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="386"/>
         <source>Choose a file</source>
         <translation type="unfinished"></translation>
     </message>
