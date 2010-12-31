@@ -195,7 +195,10 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
         qWarning() << "prepare pages wrong";
     }
 
-    Internal::PrintDialog dlg(Core::ICore::instance()->mainWindow());
+    QWidget *parent = qApp->activeModalWidget();
+    if (!parent)
+        parent = Core::ICore::instance()->mainWindow();
+    Internal::PrintDialog dlg(parent);
     dlg.setWindowModality(Qt::WindowModal);
     dlg.setPrinter(&p);
     int r = dlg.exec();
