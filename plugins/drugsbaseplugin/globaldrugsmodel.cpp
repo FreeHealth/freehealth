@@ -756,26 +756,37 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             if (!drugsBase()->actualDatabaseInformations()->drugsUidName.isEmpty())
                 uidName = drugsBase()->actualDatabaseInformations()->drugsUidName;
         }
+        // Marketed infos
+        QString mark = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_AUTHORIZATION)).toString();
+        if (!mark.isEmpty()) {
+            mark.prepend("<br>");
+            mark += " | " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_MARKET)).toString();
+        }
+
+        // Create tooltip
         tmp += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>"
                         " <tr>"
                         "   <td colspan=2 rowspan=1 align=center>"
                         "       <span style=\"font-weight: bold;\">%1</span>"
                         "       <br>%2 = %3 ;"
                         "       %4"
+                        "       %5"
                         "   </td>"
                         " </tr>"
                         " <tr>"
                         "   <td colspan=2 rowspan=1>"
-                        "       %5"
-                        "       <br>%6"
+                        "       %6"
+                        "       <br>%7"
                         "   </td>"
                         " </tr>")
                 .arg(d->getConstructedDrugName(item.row()))
                 .arg(uidName)
                 .arg(uid)
                 .arg(atc)
+                .arg(mark)
                 .arg(tr("Form(s): ") + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString())
-                .arg(tr("Route(s): ") +QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString());
+                .arg(tr("Route(s): ") + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString())
+                ;
 
         // get composition
         if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {

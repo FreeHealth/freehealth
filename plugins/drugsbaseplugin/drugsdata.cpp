@@ -574,18 +574,27 @@ QString DrugsData::toHtml() const
     } else {
         atc = QApplication::translate("DrugData", "No ATC found");
     }
+    QString mark = value(Table_DRUGS, DRUGS_AUTHORIZATION).toString();
+    if (!mark.isEmpty()) {
+        mark.prepend("<br>");
+        mark += " | " + value(Table_DRUGS, DRUGS_MARKET).toString();
+    }
+
     msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
                     "       <br>%2 = %3 ; "
                     "       %4\n"
+                    "       %5\n"
                     "   </td>\n"
                     " </tr>\n")
             .arg(denomination())
             .arg(uidName)
             .arg(value(Table_DRUGS, DRUGS_UID).toString())
-            .arg(atc);
+            .arg(atc)
+            .arg(mark)
+            ;
 
     QString tmp = "";
     QString name;
