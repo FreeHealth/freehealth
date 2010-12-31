@@ -82,13 +82,16 @@ SET AUTHORIZATION =
 -- **************************************************
 
 DELETE FROM `SEARCH_ENGINES`;
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s classification at WHO (query ATC)", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status with BC Pharmacare (manual)", "http://www.health.gov.bc.ca/pharmacare/benefitslookup/faces/Search.jsp");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status with Health Canada (query DIN)", "http://webprod.hc-sc.gc.ca/dpd-bdpp/index-eng.jsp");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status via drugcoverage.ca (manual)", "http://www.drugcoverage.ca/");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: BC PharmaCare program plans", "http://www.health.gov.bc.ca/pharmacare/plans/index.html#");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: BC PharmaCare program policies", "http://www.health.gov.bc.ca/pharmacare/policy.html");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: NLM Pillbox (Flash pill identifier, beta-test)", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "BC PharmaCare benefits search", "http://www.health.gov.bc.ca/pharmacare/benefitslookup/faces/Search.jsp");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "BC PharmaCare program plans listings", "http://www.health.gov.bc.ca/pharmacare/plans/index.html#");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "BC PharmaCare program policies", "http://www.health.gov.bc.ca/pharmacare/policy.html");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Adverse drug reaction – guidance", "http://www.hc-sc.gc.ca/dhp-mps/prodnatur/legislation/docs/arr-dri_hcpc-fscc-eng.php#2");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Adverse drug reaction – report form", "https://webprod4.hc-sc.gc.ca/medeffect-medeffet/index-eng.jsp");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Advisories, warnings and recalls", "http://www.hc-sc.gc.ca/dhp-mps/medeff/advisories-avis/index-eng.php");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Drug information (search DIN)", "http://webprod.hc-sc.gc.ca/dpd-bdpp/index-eng.jsp");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Meta coverage lookup (drugcoverage.ca search)", "http://www.drugcoverage.ca/");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Pill identifier (NLM Pillbox beta])", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO classification (auto-query ATC)", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
 
 -- clean up
 
