@@ -570,30 +570,35 @@ QString DrugsData::toHtml() const
     }
     QString atc;
     if (!value(Table_DRUGS, DRUGS_ATC).toString().isEmpty()) {
-        atc = "<br>ATC = " + value(Table_DRUGS, DRUGS_ATC).toString();
-    } else {
-        atc = QApplication::translate("DrugData", "No ATC found");
+        atc = " ; ATC: " + value(Table_DRUGS, DRUGS_ATC).toString();
     }
     QString mark = value(Table_DRUGS, DRUGS_AUTHORIZATION).toString();
     if (!mark.isEmpty()) {
         mark.prepend("<br>");
-        mark += " | " + value(Table_DRUGS, DRUGS_MARKET).toString();
+        mark += " | " + value(Table_DRUGS, DRUGS_TYPE_MP).toString();
     }
 
     msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
-                    "       <br>%2 = %3 ; "
-                    "       %4\n"
-                    "       %5\n"
+                    "       %2"
+                    "   </td>\n"
+                    " </tr>\n"
+                    " <tr>\n"
+                    "   <td colspan=2 rowspan=1>\n"
+                    "       %3\n"
+                    "       <br>%4\n"
+                    "       <br>%5 %6: %7 %8\n"
                     "   </td>\n"
                     " </tr>\n")
             .arg(denomination())
-            .arg(uidName)
+            .arg(mark)
+            .arg(QCoreApplication::translate("DrugsData", "Form(s): ") + value(Table_DRUGS, DRUGS_FORM).toString())
+            .arg(QCoreApplication::translate("DrugsData", "Route(s): ") + value(Table_DRUGS, DRUGS_ROUTE).toString())
+            .arg(QCoreApplication::translate("DrugsData", "Identifier(s): "), uidName)
             .arg(value(Table_DRUGS, DRUGS_UID).toString())
             .arg(atc)
-            .arg(mark)
             ;
 
     QString tmp = "";

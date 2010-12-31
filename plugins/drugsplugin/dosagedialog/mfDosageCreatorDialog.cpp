@@ -256,7 +256,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     availableDosagesListView->setModelColumn(Dosages::Constants::Label);
     availableDosagesListView->setEditTriggers( QListView::NoEditTriggers );
 
-    d->createHelpMenu(tr("Help and Infos"), tr("Drugs database website"));
+    d->createHelpMenu(tr("Help and Infos"), tr("Current database website"));
     d->createValidateMenu(tr("Prescribe only"), tr("Save protocol and prescribe"), tr("Save protocol only"), tr("Test interactions only"));
 
     // Create connections

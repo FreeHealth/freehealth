@@ -745,12 +745,11 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                    .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
                    .arg(tr("KNOWN INTOLERANCE"));
         }
+
         // Name, ATC and UID
         QString atc = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ATC)).toString();
-        if (atc.isEmpty())
-            atc += tr("No ATC found");
-        else
-            atc.prepend("ATC = ");
+        if (!atc.isEmpty())
+            atc.prepend(" ; ATC: ");
         QString uidName = "UID";
         if (drugsBase()->actualDatabaseInformations()) {
             if (!drugsBase()->actualDatabaseInformations()->drugsUidName.isEmpty())
@@ -760,7 +759,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         QString mark = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_AUTHORIZATION)).toString();
         if (!mark.isEmpty()) {
             mark.prepend("<br>");
-            mark += " | " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_MARKET)).toString();
+            mark += " | " + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_TYPE_MP)).toString();
         }
 
         // Create tooltip
@@ -768,24 +767,23 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                         " <tr>"
                         "   <td colspan=2 rowspan=1 align=center>"
                         "       <span style=\"font-weight: bold;\">%1</span>"
-                        "       <br>%2 = %3 ;"
-                        "       %4"
-                        "       %5"
+                        "       %2"
                         "   </td>"
                         " </tr>"
                         " <tr>"
                         "   <td colspan=2 rowspan=1>"
-                        "       %6"
-                        "       <br>%7"
+                        "       %3"
+                        "       <br>%4"
+                        "       <br>%5%6%7"
                         "   </td>"
                         " </tr>")
                 .arg(d->getConstructedDrugName(item.row()))
-                .arg(uidName)
-                .arg(uid)
-                .arg(atc)
                 .arg(mark)
                 .arg(tr("Form(s): ") + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_FORM)).toString())
                 .arg(tr("Route(s): ") + QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_ROUTE)).toString())
+                .arg(tr("Identifier(s): ") + uidName + ":")
+                .arg(uid)
+                .arg(atc)
                 ;
 
         // get composition
