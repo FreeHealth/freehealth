@@ -103,16 +103,15 @@ VALUES (
     "NAME (FORM, GLOBAL_STRENGTH)"
 );
 
--- ********************************
--- Localize "Help and Infos" button content to BC.CA
--- ********************************
+-- ***********************************************
+-- Localize "Help and Infos" button content to CA
+-- ***********************************************
+-- localization to province can be achieved by (e.g.) localize-bc_CA
+
 DELETE FROM `SEARCH_ENGINES`;
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s classification at WHO (query ATC)", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status with BC Pharmacare (manual)", "http://www.health.gov.bc.ca/pharmacare/benefitslookup/faces/Search.jsp");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status with Health Canada (query DIN)", "http://webprod.hc-sc.gc.ca/dpd-bdpp/index-eng.jsp");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Drug’s status via drugcoverage.ca (manual)", "http://www.drugcoverage.ca/");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: BC PharmaCare program plans", "http://www.health.gov.bc.ca/pharmacare/plans/index.html#");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: BC PharmaCare program policies", "http://www.health.gov.bc.ca/pharmacare/policy.html");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "General: NLM Pillbox (Flash pill identifier, beta-test)", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
 
 
