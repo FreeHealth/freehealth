@@ -504,7 +504,7 @@ void DosageModel::toPrescription(const int row)
     }
 
     // Manage INN Prescriptions
-    if (index(row,Dosages::Constants::INN_LK).data().toInt() > 999) // this is an INN prescription
+    if (index(row,Dosages::Constants::INN_LK).data().toInt() != -1) // this is an INN prescription
         m_DrugsModel->setDrugData(m_UID, Constants::Prescription::IsINNPrescription, true);
     else
         m_DrugsModel->setDrugData(m_UID, Constants::Prescription::IsINNPrescription, false);
