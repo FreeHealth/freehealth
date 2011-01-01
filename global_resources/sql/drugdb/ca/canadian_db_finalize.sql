@@ -113,8 +113,9 @@ INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Adverse drug reaction
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Adverse drug reaction – report form", "https://webprod4.hc-sc.gc.ca/medeffect-medeffet/index-eng.jsp");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Advisories, warnings and recalls", "http://www.hc-sc.gc.ca/dhp-mps/medeff/advisories-avis/index-eng.php");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Drug information (search DIN)", "http://webprod.hc-sc.gc.ca/dpd-bdpp/index-eng.jsp");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Special Access program", "http://www.hc-sc.gc.ca/dhp-mps/acces/drugs-drogues/index-eng.php");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Meta coverage lookup (drugcoverage.ca search)", "http://www.drugcoverage.ca/");
-INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Pill identifier (NLM Pillbox beta])", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Pill identifier (NLM Pillbox beta)", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO classification (auto-query ATC)", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
 
 
