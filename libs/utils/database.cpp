@@ -219,14 +219,15 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                                    CreationOption createOption
                                    )
 {   
-    qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
-    << dbName
-    <<pathOrHostName
-    << access
-    << driver
-    << login
-    << password
-    << QString::number(port) ;
+    if (WarnLogMessages)
+        qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
+                << dbName
+                <<pathOrHostName
+                << access
+                << driver
+                << login
+                << password
+                << QString::number(port) ;
     bool toReturn = true;
     d->m_ConnectionName = "";
 
@@ -522,7 +523,7 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
     d->m_Fields.insert(ref , name);
     d->m_TypeOfField.insert(ref , type);
     d->m_DefaultFieldValue.insert(ref, defaultValue);
-    return d->m_Fields.key(name)- (tableref * 1000);
+    return d->m_Fields.key(name) - (tableref * 1000);
 }
 
 /** \brief Verify that the dynamically scheme passed is corresponding to the real database scheme. */
