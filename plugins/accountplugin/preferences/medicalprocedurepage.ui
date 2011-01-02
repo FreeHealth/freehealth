@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>476</width>
-    <height>383</height>
+    <height>441</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -48,7 +48,7 @@
       <string>Account details</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="0" colspan="2">
+      <item row="3" column="0" colspan="2">
        <widget class="QLabel" name="nameLabel">
         <property name="text">
          <string>Name</string>
@@ -58,10 +58,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2">
+      <item row="3" column="2" colspan="2">
        <widget class="QLineEdit" name="name"/>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="QLabel" name="abstractLabel">
         <property name="text">
          <string>Abstract</string>
@@ -71,10 +71,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
+      <item row="4" column="2" colspan="2">
        <widget class="QLineEdit" name="abstractEdit"/>
       </item>
-      <item row="0" column="0" colspan="2">
+      <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="ownerLabel">
         <property name="text">
          <string>Owner</string>
@@ -84,7 +84,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2">
+      <item row="5" column="0" colspan="2">
        <widget class="QLabel" name="typeLabel">
         <property name="text">
          <string>Type</string>
@@ -94,10 +94,10 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="2" colspan="2">
+      <item row="5" column="2" colspan="2">
        <widget class="QLineEdit" name="type"/>
       </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="amountLabel">
         <property name="text">
          <string>Amount</string>
@@ -107,13 +107,13 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
+      <item row="6" column="2">
        <widget class="QDoubleSpinBox" name="amountSpin"/>
       </item>
-      <item row="0" column="2" colspan="2">
+      <item row="1" column="2" colspan="2">
        <widget class="QComboBox" name="ownersComboBox"/>
       </item>
-      <item row="1" column="2" colspan="2">
+      <item row="2" column="2" colspan="2">
        <widget class="QLabel" name="userUidLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -126,14 +126,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>User UUID</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="7" column="0">
        <widget class="QLabel" name="reinmbLabel">
         <property name="text">
          <string>Reinbursment rate</string>
@@ -143,10 +143,10 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
+      <item row="7" column="2">
        <widget class="QDoubleSpinBox" name="rateSpin"/>
       </item>
-      <item row="8" column="0">
+      <item row="9" column="0">
        <widget class="QLabel" name="dateLabel">
         <property name="text">
          <string>Date</string>
@@ -156,13 +156,19 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="2">
+      <item row="9" column="2">
        <widget class="QDateEdit" name="dateEdit"/>
       </item>
-      <item row="10" column="0" colspan="4">
+      <item row="11" column="0" colspan="4">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="save">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Save</string>
           </property>
@@ -180,42 +186,46 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="addButton">
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="3">
-    <widget class="QPushButton" name="removeButton">
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
+    <widget class="QPushButton" name="addButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="1" colspan="2">
     <widget class="QComboBox" name="mpComboBox"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="MPLabel">
      <property name="text">
-      <string>Medical Procedure</string>
+      <string>Medical 
+Procedure</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
      <property name="buddy">
       <cstring>mpComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QPushButton" name="removeButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

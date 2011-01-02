@@ -87,7 +87,7 @@ void MedicalProcedurePage::resetToDefaults()
 }
 
 void MedicalProcedurePage::applyChanges()
-{
+{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges =";
     if (!m_Widget) {
         return;
     }
@@ -126,36 +126,34 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
+    save->hide();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+    addButton->setText("New");
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    removeButton->setText("Delete");
     ownersComboBox->addItem(m_user_fullName,QVariant());
-    dateEdit->setDate(QDate::currentDate());
+    dateEdit->setDisplayFormat("yyyy-MM-dd");
+    //dateEdit->setDate(QDate::currentDate());
     m_Model = new AccountDB::MedicalProcedureModel(this);
         /** \todo  m_Model->setUserUuid(); */
     QLabel *mpUidLabel = new QLabel(this);
     mpUidLabel->setText("NULL");
     mpUidLabel->hide();
-    QSpinBox *mpIDLabel = new QSpinBox(this);
-    int valueHideIDSpin = (m_Model->data(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::MP_ID))).toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(valueHideIDSpin);
-    mpIDLabel->setValue(valueHideIDSpin+1);
-    mpIDLabel->hide();
-    
-    //mpIDLabel->hide();
     userUidLabel->setText(m_user_uid);
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
-    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID, "text");
-    m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID, "text");
-    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME, "text");
-    m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT, "text");
-    m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE, "text");
-    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT, "value");
-    m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT, "value");
-    m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE, "date");
+    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
+    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID);
+    m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID);
+    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME);
+    m_Mapper->addMapping(mpComboBox, AccountDB::Constants::MP_NAME);
+    m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT);
+    m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE);
+    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT);
+    m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT);
+    m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE);
 
     mpComboBox->setModel(m_Model);
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
@@ -175,13 +173,15 @@ void MedicalProcedureWidget::setDatasToUi()
 
 void MedicalProcedureWidget::saveModel()
 {
-    if (m_Model->isDirty()) {
+    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (!m_Model->isDirty()) {qDebug() << __FILE__ << QString::number(__LINE__) << " is dirty ";
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the medical procedures table.\n"
                                              "Do you want to save them ?"));
-        if (yes) {
+        if (yes) {qDebug() << __FILE__ << QString::number(__LINE__) << " submit =";
             if (!m_Model->submit()) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")), __FILE__, __LINE__);
+                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
+                                                   arg(tr("medical_procedures")), __FILE__, __LINE__);
             }
         } else {
             m_Model->revert();
@@ -192,36 +192,55 @@ void MedicalProcedureWidget::saveModel()
 
 void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(int index)
 {
-    saveModel();
+    //saveModel();
     m_Mapper->setCurrentIndex(mpComboBox->currentIndex());
 }
 
 void MedicalProcedureWidget::on_addButton_clicked()
 {
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount());
-    mpComboBox->setCurrentIndex(m_Model->rowCount());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    mpComboBox->setCurrentIndex(m_Model->rowCount()-1);
+    dateEdit->setDate(QDate::currentDate());
+    dateEdit->setFocus();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    /*name->clear();
+    abstractEdit->clear();
+    type->clear();
+    amountSpin->setValue(0.00);
+    rateSpin->setValue(0.00);
+    dateEdit->setDate(QDate::currentDate());*/
 }
 
-void MedicalProcedureWidget::on_save_clicked()
+/*void MedicalProcedureWidget::on_save_clicked()
 {
     saveModel();
-}
+}*/
+
+/*void MedicalProcedureWidget::on_name_textChanged(const QString & text){
+    mpComboBox->setItemText(mpComboBox->currentIndex(),text);
+}*/
 
 void MedicalProcedureWidget::on_removeButton_clicked()
 {
-    m_Model->removeRow(mpComboBox->currentIndex());
+    if (!m_Model->removeRow(mpComboBox->currentIndex()))
+    {
+    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
+        }
     mpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
-{
+{qDebug() << __FILE__ << QString::number(__LINE__) << " saveToSettings";
     if (!m_Model->submit()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
         Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
                                  tr("An error occured during medical procedures saving. Datas are corrupted."));
     }
+        connect(name,SIGNAL(textEdited(const QString &)),mpComboBox,SLOT(setEditText(const QString &)));
+        update();
 }
 
 void MedicalProcedureWidget::writeDefaultSettings(Core::ISettings *s)

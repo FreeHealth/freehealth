@@ -89,6 +89,7 @@ public Q_SLOTS:
     void on_addButton_clicked();
     void on_save_clicked();
     void on_removeButton_clicked();
+   // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
