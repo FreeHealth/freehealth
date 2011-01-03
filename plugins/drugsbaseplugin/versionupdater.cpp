@@ -64,6 +64,116 @@ using namespace DrugsDB;
 ///////////////////////////////////////////////////////////////////////
 namespace {
 
+class Dosage_050_To_054 : public DrugsDB::DosageDatabaseUpdateStep
+{
+public:
+    // From v 0.5.0 To v 0.5.4
+    // - Renaming and redefining DRUG_UID_LK varchar(20) instead of CIS_LK integer
+    Dosage_050_To_054() : DrugsDB::DosageDatabaseUpdateStep() {}
+    ~Dosage_050_To_054() {}
+
+    QString userMessage() const
+    {
+        return QApplication::translate("DatabaseUpdater", "Your dosage database needs to be "
+                                       "updated from version 0.5.0 to version 0.5.4.\n"
+                                       "This will be automatically done.");
+    }
+
+    QString fromVersion() const { return "0.5.0"; }
+    QString toVersion() const { return "0.5.4"; }
+
+    void setConnectionName(const QString &name) { m_Name = name; }
+
+    bool retreiveValuesToUpdate() const  {return true;}
+
+    bool updateDatabaseScheme() const
+    {
+        // these versions only use SQLite
+        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+        if (!db.isOpen()) {
+            if (!db.open()) {
+                Utils::Log::addError("VersionUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(db.connectionName()).arg(db.lastError().text()),
+                                     __FILE__, __LINE__);
+                return false;
+            }
+        }
+        QStringList req;
+        if (db.driverName() == "QSQLITE") {
+            req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
+            req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+            req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
+                    .arg("`POSO_ID`,"
+                         "`POSO_UUID`,"
+                         "`DRUGS_DATABASE_IDENTIFIANT`,"
+                         "`INN_LK`,"
+                         "`INN_DOSAGE`,"
+                         "`DRUG_UID_LK`,"
+                         "`CIP_LK`,"
+                         "`LABEL`,"
+                         "`INTAKEFROM`,"
+                         "`INTAKETO`,"
+                         "`INTAKEFROMTO`,"
+                         "`INTAKESCHEME`,"
+                         "`INTAKESINTERVALOFTIME`,"
+                         "`INTAKESINTERVALSCHEME`,"
+                         "`DURATIONFROM`,"
+                         "`DURATIONTO`,"
+                         "`DURATIONFROMTO`,"
+                         "`DURATIONSCHEME`,"
+                         "`PERIOD`,"
+                         "`PERIODSCHEME`,"
+                         "`ADMINCHEME`,"
+                         "`DAILYSCHEME`,"
+                         "`MEALSCHEME`,"
+                         "`ISALD`,"
+                         "`TYPEOFTREATEMENT`,"
+                         "`MINAGE`,"
+                         "`MAXAGE`,"
+                         "`MINAGEREFERENCE`,"
+                         "`MAXAGEREFERENCE`,"
+                         "`MINWEIGHT`,"
+                         "`SEXLIMIT`,"
+                         "`MINCLEARANCE`,"
+                         "`MAXCLEARANCE`,"
+                         "`PREGNANCYLIMITS`,"
+                         "`BREASTFEEDINGLIMITS`,"
+                         "`PHYSIOLOGICALLIMITS`,"
+                         "`NOTE`,"
+                         "`CIM10_LK`,"
+                         "`CIM10_LIMITS_LK`,"
+                         "`EDRC_LK`,"
+                         "`EXTRAS`,"
+                         "`USERVALIDATOR`,"
+                         "`CREATIONDATE`,"
+                         "`MODIFICATIONDATE`,"
+                         "`TRANSMITTED`,"
+                         "`ORDER`");
+            req << "DROP TABLE `OLD_DOSAGE`;";
+        } else if (db.driverName()=="QMYSQL") {
+            req << "ALTER TABLE `DOSAGE` ADD `ROUTE` integer AFTER `INTAKESINTERVALSCHEME`;";
+        }
+        req << "﻿DELETE FROM `VERSION`;";
+        req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('0.5.4');";
+
+        foreach(const QString &r, req) {
+            QSqlQuery q(r,db);
+            if (q.isActive()) {
+                q.finish();
+            } else {
+                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
+            }
+        }
+        Utils::Log::addMessage("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
+        return true;
+    }
+
+    bool saveUpdatedValuesToDatabase() const {return true;}
+
+private:
+    QString m_Name;
+};
+
 class Dosage_040_To_050 : public DrugsDB::DosageDatabaseUpdateStep
 {
 public:
@@ -172,8 +282,6 @@ public:
 
 private:
     QString m_Name;
-    mutable QMap<int, int> m_Id_DailySchemes;
-    mutable QMap<int, int> m_Id_MealSchemes;
 };
 
 class Dosage_030_To_040 : public DrugsDB::DosageDatabaseUpdateStep
@@ -602,7 +710,7 @@ public:
         qDeleteAll(m_Updaters);
     }
 
-    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0"; }
+    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.5.4"; }
     static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0"; }
 
     QString xmlVersion(const QString &xml)
@@ -665,6 +773,8 @@ VersionUpdater::VersionUpdater() : d(0)
     d->m_Updaters.append(new ::Dosage_008_To_020);
     d->m_Updaters.append(new ::Dosage_030_To_040);
     d->m_Updaters.append(new ::Dosage_040_To_050);
+    d->m_Updaters.append(new ::Dosage_050_To_054);
+
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
     d->m_Updaters.append(new ::IO_Update_From_020_To_040);
     d->m_Updaters.append(new ::IO_Update_From_040_To_050);
