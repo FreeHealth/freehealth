@@ -284,6 +284,26 @@
             </item>
            </layout>
           </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="routeLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Route(s):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="routeCombo"/>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>

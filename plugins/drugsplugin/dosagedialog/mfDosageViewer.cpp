@@ -39,6 +39,7 @@
 
 #include "mfDosageViewer.h"
 
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -74,6 +75,7 @@ using namespace Trans::ConstantTranslations;
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 
 namespace DrugsWidget {
@@ -114,6 +116,9 @@ public:
             m_Mapper->addMapping(q->intakesToSpin, Prescription::IntakesTo, "value");
             m_Mapper->addMapping(q->intakesCombo, Prescription::IntakesScheme, "currentText");
 
+            if (drugsBase()->isRoutesAvailable())
+                m_Mapper->addMapping(q->routeCombo, Prescription::Route, "currentText");
+
             m_Mapper->addMapping(q->periodSchemeCombo, Prescription::PeriodScheme, "currentText");
             m_Mapper->addMapping(q->periodSpin, Prescription::Period, "value");
 
@@ -152,6 +157,8 @@ public:
             m_Mapper->addMapping(q->intakesCombo, Dosages::Constants::IntakesScheme, "currentText");
             m_Mapper->addMapping(q->periodSchemeCombo, Dosages::Constants::PeriodScheme, "currentText");
             m_Mapper->addMapping(q->periodSpin, Dosages::Constants::Period, "value");
+            if (drugsBase()->isRoutesAvailable())
+                m_Mapper->addMapping(q->routeCombo, Dosages::Constants::Route, "currentText");
 
             m_Mapper->addMapping(q->durationFromSpin, Dosages::Constants::DurationFrom);
             m_Mapper->addMapping(q->durationToSpin, Dosages::Constants::DurationTo);
@@ -294,16 +301,25 @@ public:
         q->intakesToSpin->hide();
         q->durationToLabel->hide();
         q->durationToSpin->hide();
+
         // Prepare some combos
         q->durationCombo->clear();
         q->durationCombo->addItems(Trans::ConstantTranslations::periods());
         q->durationCombo->setCurrentIndex(Trans::Constants::Time::Months);
+
         q->periodSchemeCombo->clear();
         q->periodSchemeCombo->addItems(Trans::ConstantTranslations::periods());
         q->periodSchemeCombo->setCurrentIndex(Trans::Constants::Time::Days);
+
         q->intervalTimeSchemeCombo->clear();
         q->intervalTimeSchemeCombo->addItems(Trans::ConstantTranslations::periods());
         q->intervalTimeSchemeCombo->setCurrentIndex(Trans::Constants::Time::Days);
+
+        q->routeCombo->clear();
+        if (drugsBase()->isRoutesAvailable()) {
+            q->routeCombo->addItems(drugModel()->drugData(m_DrugUid, Drug::AvailableRoutes).toStringList());
+            q->routeCombo->setCurrentIndex(0);
+        }
 
         q->intakesCombo->fancyClear();
         q->intakesCombo->fancyAddItems(drugModel()->drugData(m_DrugUid, Drug::AvailableForms).toStringList(), "Model");
@@ -424,6 +440,12 @@ DosageViewer::DosageViewer(QWidget *parent)
     // show first page of the tabwidget   ;;   Hide unused tables
     tabWidget->setCurrentIndex(0);
     this->hourlyTableWidget->hide();
+
+    // manage routes ?
+    if (!drugsBase()->isRoutesAvailable()) {
+        routeCombo->hide();
+        routeLabel->hide();
+    }
 }
 
 /** \brief Use this function to define a drugsModel behavior. */
@@ -491,10 +513,12 @@ void DosageViewer::commitToModel()
         if (daily) {
             d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::DailyScheme), daily->serializedContent());
         }
+//        d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::Route), routeId);
     } else {
         if (daily) {
             drugModel()->setDrugData(d->m_DrugUid, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
         }
+//        drugModel()->setDrugData(d->m_DrugUid, DrugsDB::Constants::Prescription::Route, routeId);
     }
 }
 
