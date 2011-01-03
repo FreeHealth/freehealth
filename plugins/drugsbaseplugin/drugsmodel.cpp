@@ -166,7 +166,7 @@ public:
         case Drug::UID :                return drug->UID();
         case Drug::Pack_UID :           return drug->CIPs();
         case Drug::Form :               return drug->form();
-        case Drug::Route :              return drug->route();
+        case Drug::Route :              return drug->routes().join(", ");
         case Drug::ATC :                return drug->ATC();
         case Drug::IsScoredTablet :     return drug->isScoredTablet();
         case Drug::GlobalStrength :     return drug->strength();
@@ -192,6 +192,7 @@ public:
             }
         case Drug::HasPrescription :    return drug->hasPrescription();
         case Drug::LinkToSCP :          return drug->linkToSCP();
+        case Drug::AvailableRoutes : return drug->routes();
         case Drug::AvailableForms :
             {
                 QStringList toReturn;
@@ -232,6 +233,7 @@ public:
         case Prescription::IntakesUsesFromTo :     return drug->prescriptionValue(Prescription::IntakesUsesFromTo);
         case Prescription::IntakesIntervalOfTime : return drug->prescriptionValue(Prescription::IntakesIntervalOfTime);
         case Prescription::IntakesIntervalScheme : return drug->prescriptionValue(Prescription::IntakesIntervalScheme);
+        case Prescription::Route :                 return drug->prescriptionValue(Prescription::Route);
         case Prescription::DurationFrom :          return drug->prescriptionValue(Prescription::DurationFrom);
         case Prescription::DurationTo :            return drug->prescriptionValue(Prescription::DurationTo);
         case Prescription::DurationScheme :        return drug->prescriptionValue(Prescription::DurationScheme);
@@ -897,6 +899,7 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
     tokens_value.insert("DISTRIBUTED_DAILY_SCHEME", "");
     tokens_value.insert("PERIOD", "");
     tokens_value.insert("PERIOD_SCHEME", "");
+    tokens_value.insert("ROUTE", "");
     tokens_value.insert("D_FROM", "");
     tokens_value.insert("D_TO", "");
     tokens_value.insert("D_SCHEME", "");
@@ -993,6 +996,9 @@ QString DrugsModel::getFullPrescription(const Internal::DrugsData *drug, bool to
         interval.toInt() > 0) {
         tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());
     }
+
+    // Route
+    tokens_value["ROUTE"] = drug->prescriptionValue(Constants::Prescription::Route).toString();
 
     Utils::replaceTokens(tmp, tokens_value);
     return tmp;

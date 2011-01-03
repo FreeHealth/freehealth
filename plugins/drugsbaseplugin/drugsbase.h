@@ -76,6 +76,7 @@ public:
     const DatabaseInfos *actualDatabaseInformations() const;
     DatabaseInfos *getDatabaseInformations(const QString &connectionName);
     bool isDatabaseTheDefaultOne() const;
+    bool isRoutesAvailable() const;
 
     bool refreshAllDatabases();
     bool refreshDrugsBase();
@@ -96,6 +97,7 @@ public:
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
     QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
     QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
+    int getRouteId(const QString &fromLabel);
 
 //protected:
 public:

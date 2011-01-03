@@ -124,7 +124,8 @@ public:
             m_ActualDBInfos(0),
             m_LogChrono(false),
             m_RefreshDrugsBase(false),
-            m_RefreshDosageBase(false)
+            m_RefreshDosageBase(false),
+            m_UseRoutes(false)
     {}
 
     ~DrugsBasePrivate()
@@ -134,7 +135,7 @@ public:
 public:
     DrugsBase *q;
     DatabaseInfos *m_ActualDBInfos;
-    bool m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase;
+    bool m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase, m_UseRoutes;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -170,12 +171,14 @@ DrugsBase::DrugsBase(QObject *parent)
     setObjectName("DrugsBase");
 
     // DRUGS DATABASE
-    addTable(Table_DRUGS,       "DRUGS");
-    addTable(Table_COMPO,       "COMPOSITION");
-    addTable(Table_PACKAGING,   "PACKAGING");
-    addTable(Table_LK_MOL_ATC,  "LK_MOL_ATC");
-    addTable(Table_INFORMATION, "INFORMATIONS");
+    addTable(Table_DRUGS,         "DRUGS");
+    addTable(Table_COMPO,         "COMPOSITION");
+    addTable(Table_PACKAGING,     "PACKAGING");
+    addTable(Table_LK_MOL_ATC,    "LK_MOL_ATC");
+    addTable(Table_INFORMATION,   "INFORMATIONS");
     addTable(Table_SEARCHENGINES, "SEARCH_ENGINES");
+    addTable(Table_DRUG_ROUTES,  "DRUG_ROUTES");
+    addTable(Table_ROUTES,        "ROUTES");
 
     addField(Table_DRUGS, DRUGS_UID ,           "UID");
     addField(Table_DRUGS, DRUGS_NAME ,          "NAME");
@@ -232,6 +235,14 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_SEARCHENGINES, SEARCHENGINE_ID, "ID");
     addField(Table_SEARCHENGINES, SEARCHENGINE_LABEL, "LABEL");
     addField(Table_SEARCHENGINES, SEARCHENGINE_URL, "URL");
+
+    addField(Table_DRUG_ROUTES, DRUG_ROUTES_UID, "DRUG_UID");
+    addField(Table_DRUG_ROUTES, DRUG_ROUTES_ROUTE_ID, "ROUTE_ID");
+
+    addField(Table_ROUTES, ROUTES_ID, "ID");
+    addField(Table_ROUTES, ROUTES_FR, "FR");
+    addField(Table_ROUTES, ROUTES_EN, "EN");
+    addField(Table_ROUTES, ROUTES_DE, "DE");
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -360,6 +371,9 @@ bool DrugsBase::init()
     }
     Utils::Log::addMessage(this, QString("Getting %1 Drugs Search Engines").arg(searchEngine()->numberOfEngines()));
 
+    // Use routes ?
+    d->m_UseRoutes = (count(Table_DRUG_ROUTES, DRUG_ROUTES_UID) > 0);
+
     // Initialize
     InteractionsBase::init();
     m_initialized = true;
@@ -386,6 +400,11 @@ const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
 bool DrugsBase::isDatabaseTheDefaultOne() const
 {
     return m_IsDefaultDB;
+}
+
+bool DrugsBase::isRoutesAvailable() const
+{
+    return d->m_UseRoutes;
 }
 
 bool DrugsBase::refreshAllDatabases()
@@ -496,6 +515,7 @@ QString DrugsBase::dosageCreateTableSqlQuery()
            "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
            "`INTAKESINTERVALOFTIME` int(10)        NULL,"
            "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
+           "`ROUTE_ID`              integer        NULL,"
 
            "`DURATIONFROM`          double         NULL,"    // put NOT NULL
            "`DURATIONTO`            double         NULL,"
@@ -998,7 +1018,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                 if (!tmp.isEmpty()) {
                     tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
                     tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
-                    tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->route());
+                    tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->routes().join(", "));
                     // limit strength to three maximum --> if > 3 do not add strength
                     if (toReturn->strength().count(";") >= 3)
                         tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), "");
@@ -1054,6 +1074,26 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     }
     foreach(const int i, codeMols) {
         toReturn->addInnAndIamClasses(getAllInnAndIamClassesIndex(i)) ;
+    }
+
+    // get ROUTES
+    where.clear();
+    where.insert(DRUG_ROUTES_UID, QString("='%1'").arg(toReturn->UID().toString()));
+    req = QString("%1, `%2` WHERE %3 AND %4")
+          .arg(select(Table_ROUTES))
+          .arg(table(Table_DRUG_ROUTES))
+          .arg(getWhereClause(Table_DRUG_ROUTES, where))
+          .arg(fieldEquality(Table_ROUTES, ROUTES_ID, Table_DRUG_ROUTES, DRUG_ROUTES_ROUTE_ID))
+          ;
+    QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    if (query.exec(req)) {
+        while (query.next()) {
+            toReturn->addRoute(query.value(ROUTES_ID).toInt(), "fr", query.value(ROUTES_FR).toString());
+            toReturn->addRoute(query.value(ROUTES_ID).toInt(), "en", query.value(ROUTES_EN).toString());
+            toReturn->addRoute(query.value(ROUTES_ID).toInt(), "de", query.value(ROUTES_DE).toString());
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
     }
 
     if (WarnExtractedDrugs && toReturn)
@@ -1130,4 +1170,27 @@ QStringList DrugsBase::getDrugInns(const QVariant &uid)
             toReturn.append(n);
     }
     return toReturn;
+}
+
+int DrugsBase::getRouteId(const QString &fromLabel)
+{
+    QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    int field = Constants::ROUTES_EN;
+    const QString &lang = QLocale().name().left(2);
+    if (lang=="fr") {
+        field = Constants::ROUTES_FR;
+    } else if (lang=="de") {
+        field = Constants::ROUTES_DE;
+    }
+    int id = -1;
+    QHash<int, QString> where;
+    where.insert(field, QString("=\"%1\"").arg(fromLabel));
+    QString req = select(Constants::Table_ROUTES, Constants::ROUTES_ID, where);
+    if (query.exec(req)) {
+        if (query.next())
+            id = query.value(0).toInt();
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    return id;
 }

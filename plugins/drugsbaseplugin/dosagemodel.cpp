@@ -217,7 +217,7 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
         }
 
         // set only once modification date (infinite loop prevention)
-        if (index.column()!=Dosages::Constants::ModificationDate)
+        if (index.column() != Dosages::Constants::ModificationDate)
             setData(this->index(index.row(), Dosages::Constants::ModificationDate), QDateTime::currentDateTime());
 
         // mark row as dirty
@@ -230,10 +230,22 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
 //            warn();
 //        }
 
-        if (!QSqlTableModel::setData(index, value, role)) {
-            Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
-            Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
-            return false;
+        if (index.column()==Dosages::Constants::Route) {
+            if (value.toString().contains(QRegExp("\\D"))) {
+                // Fing the routeId
+                int routeId = drugsBase()->getRouteId(value.toString());
+                if (!QSqlTableModel::setData(index, routeId, role)) {
+                    Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
+                    Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
+                    return false;
+                }
+            }
+        } else {
+            if (!QSqlTableModel::setData(index, value, role)) {
+                Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
+                Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
+                return false;
+            }
         }
 
         QModelIndex label = this->index(index.row(), Dosages::Constants::Label);
@@ -487,6 +499,7 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert(Constants::Prescription::IntakesTo ,            Dosages::Constants::IntakesTo);
     prescr_dosage.insert(Constants::Prescription::IntakesUsesFromTo ,    Dosages::Constants::IntakesUsesFromTo);
     prescr_dosage.insert(Constants::Prescription::IntakesScheme ,        Dosages::Constants::IntakesScheme);
+    prescr_dosage.insert(Constants::Prescription::Route ,                Dosages::Constants::Route);
     prescr_dosage.insert(Constants::Prescription::Period ,               Dosages::Constants::Period);
     prescr_dosage.insert(Constants::Prescription::PeriodScheme ,         Dosages::Constants::PeriodScheme);
     prescr_dosage.insert(Constants::Prescription::DurationFrom ,         Dosages::Constants::DurationFrom);

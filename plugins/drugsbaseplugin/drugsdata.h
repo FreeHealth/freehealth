@@ -208,9 +208,10 @@ public:
      QString           denomination() const;
      QString           ATC() const                { return value( Table_DRUGS, DRUGS_ATC ).toString(); }
      QString           form() const               { return value( Table_DRUGS, DRUGS_FORM ).toString(); }
-     QString           route() const              { return value( Table_DRUGS, DRUGS_ROUTE ).toString(); }
-     QString           strength() const              { return value( Table_DRUGS, DRUGS_STRENGTH ).toString(); }
+//     QString           route() const              { return value( Table_DRUGS, DRUGS_ROUTE ).toString(); }
+     QString           strength() const           { return value( Table_DRUGS, DRUGS_STRENGTH ).toString(); }
 
+     QStringList routes() const;
 
      int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
      QStringList       listOfMolecules() const;
@@ -251,14 +252,15 @@ public:
      void smallDrugWarn() const;
 
      // sorters
-     static bool lessThan( const DrugsData *drug1, const DrugsData *drug2 );
+     static bool lessThan(const DrugsData *drug1, const DrugsData *drug2);
 
 protected:
      // setters
-     void setValue( const int tableref, const int fieldref, const QVariant & value );
-     void addInnAndIamClasses( const QSet<int> &codes );
-     void addCIP( const int CIP, const QString & denomination, QDate date = QDate() );
-     void addComposition( DrugComposition *compo );
+     void setValue(const int tableref, const int fieldref, const QVariant & value);
+     void addInnAndIamClasses(const QSet<int> &codes);
+     void addCIP(const int CIP, const QString & denomination, QDate date = QDate());
+     void addComposition(DrugComposition *compo);
+     void addRoute(const int routeId, const QString &lang, const QString &label);
 
      // getters
      QVariant value( const int tableref, const int fieldref ) const;

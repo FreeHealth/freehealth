@@ -73,8 +73,21 @@ namespace Constants {
 
     const char * const S_PRESCRIPTIONFORMATTING_HTML      = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
     const char * const S_PRESCRIPTIONFORMATTING_PLAIN     = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
-    const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants", "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">[[DRUG]]</span><span style=\"font-style:italic;\">[<br />Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />Minimum interval between intakes: [MIN_INTERVAL]][<br />[NOTE] ]</span></p>");
-    const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants", "[[DRUG]][\nTake [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][\nDaily Distribution: [DISTRIBUTED_DAILY_SCHEME]][\nMinimum interval between intakes: [MIN_INTERVAL]][\n[NOTE] ]");
+    const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants",
+                                                                              "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">"
+                                                                              "[[DRUG]]</span><span style=\"font-style:italic;\">[<br />"
+                                                                              "Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />"
+                                                                              "Route: [ROUTE]][<br />"
+                                                                              "Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />"
+                                                                              "Minimum interval between intakes: [MIN_INTERVAL]][<br />"
+                                                                              "[NOTE] ]</span></p>");
+    const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants",
+                                                                              "[[DRUG]][\n"
+                                                                              "Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][\n"
+                                                                              "Route: [ROUTE]][\n"
+                                                                              "Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][\n"
+                                                                              "Minimum interval between intakes: [MIN_INTERVAL]][\n"
+                                                                              "[NOTE] ]");
 
     const char * const S_ALD_PRE_HTML               = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
     const char * const S_ALD_POST_HTML              = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
@@ -236,7 +249,7 @@ namespace Constants {
     {
         Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
         Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_SOURCES, Table_DOSAGE,
-        Table_SEARCHENGINES,
+        Table_SEARCHENGINES, Table_DRUG_ROUTES, Table_ROUTES,
         Table_MaxParam
     };
 
@@ -312,6 +325,14 @@ namespace Constants {
         SEARCHENGINE_ID, SEARCHENGINE_LABEL, SEARCHENGINE_URL
     };
 
+    enum ROUTESFields {
+        ROUTES_ID = 0, ROUTES_FR, ROUTES_EN, ROUTES_DE
+    };
+
+    enum DRUGSROUTESFields {
+        DRUG_ROUTES_UID, DRUG_ROUTES_ROUTE_ID
+    };
+
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------
@@ -349,6 +370,7 @@ namespace Drug
         CompositionString,
         InnCompositionString,    // inn dose form ; inn dose form...
         AvailableForms,
+        AvailableRoutes,
         AvailableDosages,
         HasPrescription,
         FullPrescription,
@@ -377,6 +399,7 @@ namespace Prescription
         IntakesScheme,
         IntakesUsesFromTo,
         IntakesFullString,
+        Route,
         DurationFrom,
         DurationTo,
         DurationScheme,
@@ -472,6 +495,7 @@ namespace Constants {
         IntakesScheme,           /*!< \brief Forme sélectionnée */
         IntakesIntervalOfTime,  /*!< \brief temps entre chaque prise --> int */
         IntakesIntervalScheme,  /*!< \brief schéma de temps --> int cf enum */
+        Route,
 
         DurationFrom,           /*!< \brief espacement prises  --> double */
         DurationTo,             /*!< \brief espacement prises  --> double */

@@ -53,8 +53,10 @@
 #include <QApplication>
 #include <QHash>
 #include <QMultiHash>
-#include <QDebug>
 #include <QLocale>
+#include <QPair>
+
+#include <QDebug>
 
 using namespace DrugsDB::Constants;
 
@@ -95,8 +97,9 @@ public:
     QString prescriptionToText(bool toHtml);
     bool usesFromTo(const QString &from, QString &to, const int prescriptionIndex);
 
-
+public:
     QList<DrugComposition *>     m_Compositions;
+    QMultiHash<int, QPair<QString, QString > > m_Routes;  // Pair: x = lang; y = label
 
     QList<structCIP>             m_CIPs;
     QHash< int, QVariant>        m_CISValues;
@@ -160,6 +163,11 @@ void DrugsData::setValue(const int tableref, const int fieldref, const QVariant 
 void DrugsData::addComposition(DrugComposition *compo)
 {
     d->m_Compositions.append(compo);
+}
+
+void DrugsData::addRoute(const int routeId, const QString &lang, const QString &label)
+{
+    d->m_Routes.insertMulti(routeId, QPair<QString,QString>(lang, label));
 }
 
 void DrugsData::addCIP(const int CIP, const QString &denomination, QDate date)
@@ -264,6 +272,15 @@ QVariant DrugsData::prescriptionValue(const int fieldref) const
                 return QVariant();
             break;
         }
+    case Prescription::Route :
+        {
+            QString lang = QLocale().name().left(2);
+            typedef QPair<QString, QString> pair;
+            foreach(const pair &p, d->m_Routes.values(d->m_PrescriptionValues.value(Prescription::Route,-1).toInt())) {
+                if (p.first == lang)
+                    return p.second;
+            }
+        }
     }
     return d->m_PrescriptionValues.value(fieldref);
 }
@@ -288,7 +305,7 @@ QString DrugsData::compositionToXml()
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_INN).arg(compo->innName());
 //        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ATC).arg(compo);
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_FORM).arg(compo->form());
-        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ROUTE).arg(route());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ROUTE).arg(routes().join(", "));
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_STRENGTH).arg(compo->innDosage());
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_MOLECULAR).arg(compo->moleculeName());
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_NATURE).arg(compo->nature());
@@ -337,6 +354,18 @@ QStringList DrugsData::listOfInnClasses() const
             tmp << drugsBase()->getAtcLabel(i);
     tmp.sort();
     return tmp;
+}
+
+QStringList DrugsData::routes() const
+{
+    QString lang = QLocale().name().left(2);
+    QStringList toReturn;
+    typedef QPair<QString, QString> pair;
+    foreach(const pair &p, d->m_Routes.values()) {
+        if (p.first == lang)
+            toReturn << p.second;
+    }
+    return toReturn;
 }
 
 /** \brief Returns the list of the molecules' name */
