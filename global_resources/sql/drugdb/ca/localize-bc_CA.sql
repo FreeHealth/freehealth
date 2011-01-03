@@ -9,33 +9,20 @@ DROP TABLE IF EXISTS "pnp";
 DROP TABLE IF EXISTS "drugmast";
 
 
-CREATE TABLE IF NOT EXISTS `pnp` (
-    `CDIC` VARCHAR2(8) NOT NULL ,
-    `BEN` VARCHAR2(16),
-    `LCA` VARCHAR2(1),
-    `brandnm` varchar(50),
-    `manuf` integer,
-    `chemname` varchar(100),
-    `TRIAL` VARCHAR2(1),
-    `MAXPRIC` FLOAT(9),
-    `GENPRIC` FLOAT(9),
-    `rbpcat` varchar(10),
-    `subcat` varchar(10),
-    `unitday` varchar(10),
-    `DAYPRIC` FLOAT(9),
-    `unitpric` varchar(10),
-    `exclplan` varchar(10)
+CREATE TABLE IF NOT EXISTS "pnp" (
+    "CDIC" VARCHAR2(8) NOT NULL ,
+    "LCA" VARCHAR2(1),
+    "TRIAL" VARCHAR2(1),
+    "MAXPRIC" FLOAT(9),
+    "GENPRIC" FLOAT(9),
+    "DAYPRIC" FLOAT(9)
 );
 
 
-CREATE TABLE IF NOT EXISTS `drugmast` (
-    `ALT` VARCHAR2(1) NOT NULL ,
-    `CDIC` VARCHAR2(8),
-    `BEN` VARCHAR2(16),
-    `drugnm` varchar(50),
-    `mnfctrr` integer,
-    `chemname` varchar(100),
-    `thcl` varchar(20),
+CREATE TABLE IF NOT EXISTS "drugmast" (
+    "ALT" VARCHAR2(1) NOT NULL ,
+    "CDIC" VARCHAR2(8),
+    "BEN" VARCHAR2(16)
 );
 
 .import pnp.csv pnp
