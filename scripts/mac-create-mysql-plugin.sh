@@ -9,13 +9,13 @@
 # - installs the plugins
 # - clean the Qt sources
 
-QT_VERSION=4.7.0
+QT_VERSION=4.7.1
 ACTUAL_PATH=`pwd`
 
 # This script assumes that MySQL is installed with header files
 # Get it from : http://dev.mysql.com/downloads/mysql/
-MYSQL_SOURCES=/usr/local/mysql-5.0.67-osx10.5-x86/include
-MYSQL_LIB=/usr/local/mysql-5.0.67-osx10.5-x86/lib
+MYSQL_SOURCES=/usr/local/mysql-5.5.8-osx10.6-x86_64/include
+MYSQL_LIB=/usr/local/mysql-5.5.8-osx10.6-x86_64/lib
 
 # Download Qt sources
 # curl http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.2.tar.gz -o ~/Downloads/qt-everywhere-opensource-src-4.6.2.tar.gz -s
@@ -43,7 +43,7 @@ echo "Compiling Qt MySQL plugin"
 # cd ~/Dow*/qt*/qt*/src/plugins/sqldrivers/mysql
 cd $PLUG_SRC
 # qmake -spec macx-g++ LIBS+="-L\"/usr/local/mysql/lib\" -lmysqlclient" INCLUDEPATH+="\"/usr/local/mysql/include\""
-qmake -spec macx-g++ LIBS+="-L\"$MYSQL_LIB\" -lmysqlclient" INCLUDEPATH+="\"$MYSQL_SOURCES\"" CONFIG+=build_all
+qmake -spec macx-g++ LIBS+="-L\"$MYSQL_LIB\" -lmysqlclient_r" INCLUDEPATH+="\"$MYSQL_SOURCES\"" CONFIG+=build_all
 make
 make install
 
