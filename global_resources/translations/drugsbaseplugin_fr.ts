@@ -5,20 +5,27 @@
     <name>DatabaseUpdater</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="77"/>
+        <source>Your dosage database needs to be updated from version 0.5.0 to version 0.5.4.
+This will be automatically done.</source>
+        <translation>Votre base de données de protocoles nécessite une mise à jour depuis la version 0.5.0 vers la version 0.5.4.
+Ceci va êetre réalisé automatiquement.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="187"/>
         <source>Your dosage database needs to be updated from version 0.4.0 to version 0.5.0.
 This will be automatically done.</source>
         <translation>Votre base de données de protocoles nécessite une mise à jour depuis la version 0.4.0 vers la version 0.5.0.
 Ceci va êetre réalisé automatiquement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="189"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="297"/>
         <source>Your dosage database needs to be updated from version 0.2.0 to version 0.4.0.
 This will be automatically done.</source>
         <translation>Votre base de données de protocoles nécessite une mise à jour depuis la version 0.2.0 vers la version 0.4.0.
 Ceci va êetre réalisé automatiquement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="293"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="401"/>
         <source>Your dosage database needs to be updated from version 0.0.8 to version 0.2.0.
 This will be automatically done.
 Please verify your daily scheme prescriptions and relations to meal.</source>
@@ -30,8 +37,8 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="979"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1029"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="999"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1049"/>
         <source>ERROR : will retreiving %1. Wrong number of fields</source>
         <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
@@ -179,7 +186,7 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="496"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="498"/>
         <source>KNOWN ALLERGY</source>
         <translation>ALLERGIE CONNUE</translation>
     </message>
@@ -331,22 +338,22 @@ Voulez-vous les ajouter au fichier ?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="302"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="314"/>
         <source>Model Error : unable to insert a row</source>
         <translation>Erreur du modèle : Impossible d&apos;insérer une ligne</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="464"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="476"/>
         <source>The intakes&apos; scheme must be defined.</source>
         <translation>Le schéma de prise doit être défini.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="466"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="478"/>
         <source>The period&apos;s scheme must be defined.</source>
         <translation>Le schéma de période doit être défini.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="469"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="481"/>
         <source>The duration&apos;s scheme must be defined.</source>
         <translation>Le schema de durée doit être défini.</translation>
     </message>
@@ -354,33 +361,33 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="296"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="307"/>
         <source>Searching databases into dir %1</source>
         <translation>Recherche des bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="343"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="354"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>ATTENTION : impossible d&apos;ouvrir la base de données %1 : %2 
 %3</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="579"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="585"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="590"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="599"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="605"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="610"/>
         <source>Unable to create the Protocol database.</source>
         <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="579"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="585"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="590"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="599"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="605"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="610"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="702"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="722"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>
@@ -437,27 +444,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="557"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="586"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="562"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="591"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="597"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="626"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="598"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="627"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="599"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsdata.cpp" line="628"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>
@@ -465,12 +472,12 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="201"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="202"/>
         <source>x %1 of %2</source>
         <translation>x %1 de %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="211"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="212"/>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
     </message>
@@ -479,20 +486,22 @@ Voulez-vous les ajouter au fichier ?</translation>
     <name>mfDrugsConstants</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="76"/>
-        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;Minimum interval between intakes: [MIN_INTERVAL]][&lt;br /&gt;[NOTE] ]&lt;/span&gt;&lt;/p&gt;</source>
-        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;Prendre [Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][ pendant [D_FROM]][ à [D_TO]][ [D_SCHEME]][&lt;br /&gt;Distribution journalière: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;Intervalle minimum entre les prises: [MIN_INTERVAL]][&lt;br /&gt;[NOTE] ]&lt;/span&gt;&lt;/p&gt;</translation>
+        <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Route: [ROUTE]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;Minimum interval between intakes: [MIN_INTERVAL]][&lt;br /&gt;[NOTE] ]&lt;/span&gt;&lt;/p&gt;</source>
+        <translation>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;Prendre [Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][ pendant [D_FROM]][ à [D_TO]][ [D_SCHEME]][&lt;br /&gt;Par voie : [ROUTE]][&lt;br /&gt;Distribution journalière : [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;Intervalle minimum entre les prises : [MIN_INTERVAL]][&lt;br /&gt;[NOTE] ]&lt;/span&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="77"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="84"/>
         <source>[[DRUG]][
 Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][
+Route: [ROUTE]][
 Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][
 Minimum interval between intakes: [MIN_INTERVAL]][
 [NOTE] ]</source>
         <translation>[[DRUG]][
 Prendre [Q_FROM]][ à [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ tous les [[PERIOD] ][PERIOD_SCHEME]][ pendant [D_FROM]][ à [D_TO]][ [D_SCHEME]][
+Par voie : [ROUTE]][
 Distribution journalière : [DISTRIBUTED_DAILY_SCHEME]][
-Intervalle minimum entre chaque prises : [MIN_INTERVAL]][
+Intervalle minimum entre les prises : [MIN_INTERVAL]][
 [NOTE] ]</translation>
     </message>
 </context>

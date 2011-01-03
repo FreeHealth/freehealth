@@ -354,38 +354,38 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="184"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="349"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="369"/>
         <source>To</source>
         <translation>À</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="293"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="313"/>
         <source>Duration</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="411"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="431"/>
         <source>Used for INN prescription</source>
         <translation>En faire une prescription DCI</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="418"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="438"/>
         <source>100%</source>
         <translation>100%</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="428"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="448"/>
         <source>Schemes</source>
         <translation>Schémas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="680"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="700"/>
         <source>Min interval between intakes</source>
         <translation>Intervalle minimum entre deux prises</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="473"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="493"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="513"/>
         <source>1</source>
         <translation></translation>
     </message>
@@ -401,7 +401,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="140"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="305"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="325"/>
         <source>Range x to y</source>
         <translation>De x à y</translation>
     </message>
@@ -426,325 +426,330 @@ p, li { white-space: pre-wrap; }
         <translation>Tous les</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="320"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="298"/>
+        <source>Route(s):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="340"/>
         <source>For</source>
         <translation>Pour</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="478"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="498"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="518"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="483"/>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="503"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="523"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="488"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="508"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="508"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="528"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="513"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="533"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="518"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="538"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="523"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="543"/>
         <source>7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="528"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="548"/>
         <source>00</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="533"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="553"/>
         <source>01</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="538"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="558"/>
         <source>02</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="543"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="563"/>
         <source>03</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="548"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="568"/>
         <source>04</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="553"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="573"/>
         <source>05</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="558"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="578"/>
         <source>06</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="563"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="583"/>
         <source>07</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="568"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="588"/>
         <source>08</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="573"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="593"/>
         <source>09</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="578"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="598"/>
         <source>10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="583"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="603"/>
         <source>11</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="588"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="608"/>
         <source>12</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="593"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="613"/>
         <source>13</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="598"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="618"/>
         <source>14</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="603"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="623"/>
         <source>15</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="608"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="628"/>
         <source>16</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="613"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="633"/>
         <source>17</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="618"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="638"/>
         <source>18</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="623"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="643"/>
         <source>19</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="628"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="648"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="633"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="653"/>
         <source>21</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="638"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="658"/>
         <source>22</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="643"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="663"/>
         <source>23</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="718"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="738"/>
         <source>Meal time relation</source>
         <translation>Relation avec le repas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="731"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="751"/>
         <source>Limits</source>
         <translation>Limites</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="743"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="763"/>
         <source>Weight / Age / Sex Limited</source>
         <translation>Limites de poids / âge / sexe </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="777"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="797"/>
         <source>Kg</source>
         <translation>Kg</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="794"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="814"/>
         <source>No Sex limitation</source>
         <translation>Pas de limite de genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="799"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="819"/>
         <source>Man only</source>
         <translation>Homme seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="804"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="824"/>
         <source>Woman only</source>
         <translation>Femme seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="819"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="839"/>
         <source>Min age</source>
         <translation>Âge min</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="826"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="846"/>
         <source>Max age</source>
         <translation>Âge max</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="833"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="853"/>
         <source>Min weight</source>
         <translation>Poids Min</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="840"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="860"/>
         <source>Sex limited</source>
         <translation>Limitation de genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="859"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="879"/>
         <source>Renal function limits</source>
         <translation>Limites sur la fonction rénale</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="893"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="922"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="913"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="942"/>
         <source>ml/min</source>
         <translation>ml/min</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="929"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="949"/>
         <source>Min clearance</source>
         <translation>Clairance min</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="936"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="956"/>
         <source>Max clearance</source>
         <translation>Clairance max</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="946"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="966"/>
         <source>Pregnancy / breast feeding</source>
         <translation>Grossesse et allaitement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="952"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="984"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1006"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1044"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1066"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="972"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1004"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1026"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1064"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1086"/>
         <source>Work in progress</source>
         <translation>Travail en cours</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="966"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="986"/>
         <source>Links</source>
         <translation>Liens</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="972"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="992"/>
         <source>Links to CIM10 diagnosis</source>
         <translation>Liens vers la CIM10</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="994"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1014"/>
         <source>Links to eDRC diagnosis</source>
         <translation>Lien vers l&apos;eDRC</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1020"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1040"/>
         <source>Monitoring</source>
         <translation>Surveillance</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1032"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1052"/>
         <source>CIM10 Limitations</source>
         <translation>Limitations CIM10</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1054"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1074"/>
         <source>Biological monitoring</source>
         <translation>Surveillance biologique</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1077"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1097"/>
         <source>Note</source>
         <translation>Note</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1090"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1110"/>
         <source>Todos</source>
         <translation>À faire</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1102"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1122"/>
         <source>Don&apos;t specify the form</source>
         <translation>Ne pas préciser la forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1109"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1129"/>
         <source>INN prescription</source>
         <translation>Prescription DCI</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1122"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="1142"/>
         <source>Alternate with</source>
         <translation>Alterner avec</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="410"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="426"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="584"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="608"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="623"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="647"/>
         <source>Linking to : </source>
         <translation>Lier avec : </translation>
     </message>

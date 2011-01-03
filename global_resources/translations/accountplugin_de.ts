@@ -331,29 +331,29 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="178"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="179"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="179"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="180"/>
         <source>You make changes into the medical procedures table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="183"/>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="219"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="184"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="221"/>
         <source>medical_procedures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="220"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="222"/>
         <source>Can not submit medical procedure to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="221"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="223"/>
         <source>An error occured during medical procedures saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
