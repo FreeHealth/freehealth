@@ -95,6 +95,57 @@ plugins/listviewplugin \
 plugins/usermanagerplugin \
 scripts"
 
+FREEPAD_SOURCES="freepad.pro config.pri checkqtversion.pri \
+README.txt COPYING.txt INSTALL \
+updatetranslations.sh \
+buildspecs \
+doc \
+freepad \
+global_resources/doc/freepad \
+global_resources/textfiles/freepad.desktop \
+global_resources/pixmap \
+global_resources/package_helpers/freepad* \
+global_resources/package_helpers/freemedforms.url \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+libs \
+contrib \
+plugins/fmf_plugins.pri \
+plugins/coreplugin \
+plugins/printerplugin \
+plugins/texteditorplugin \
+plugins/listviewplugin \
+scripts"
+
+FREETOOLBOX_SOURCES="freetoolbox.pro config.pri checkqtversion.pri \
+README.txt COPYING.txt INSTALL \
+updatetranslations.sh \
+buildspecs \
+doc \
+freetoolbox/free* \
+freetoolbox/main.cpp \
+freetoolbox/Info.plist \
+freetoolbox/libs \
+freetoolbox/plugins/coreplugin \
+freetoolbox/plugins/drugsdb \
+freetoolbox/plugins/icd10db \
+freetoolbox/plugins/interactiondb \
+freetoolbox/plugins/*.pro \
+global_resources/doc/freetoolbox \
+global_resources/textfiles/freetoolbox.desktop \
+global_resources/pixmap \
+global_resources/package_helpers/freetool* \
+global_resources/package_helpers/freemedforms.url \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+global_resources/sql \
+libs \
+contrib \
+plugins/fmf_plugins.pri \
+plugins/coreplugin \
+scripts"
+
+
 FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
@@ -167,6 +218,15 @@ fi
 if [ $1 == "freeaccount" ] ; then
     SELECTED_SOURCES=$FREEACCOUNT_SOURCES
 fi
+if [ $1 == "freetoolbox" ] ; then
+    SELECTED_SOURCES=$FREETOOLBOX_SOURCES
+    EXCLUSIONS="--exclude 'global_resources/forms' "
+fi
+if [ $1 == "freepad" ] ; then
+    SELECTED_SOURCES=$FREEPAD_SOURCES
+    EXCLUSIONS="--exclude 'global_resources/forms' "
+fi
+
 
 
 tar -cf $PACKPATH/sources.tar \
@@ -180,7 +240,6 @@ tar -cf $PACKPATH/sources.tar \
 --exclude 'global_resources/databases/patients' \
 --exclude 'global_resources/databases/templates' \
 --exclude 'global_resources/databases/users' \
---exclude 'global_resources/databases/icd10' \
 --exclude 'sources.tar' \
 $EXCLUSIONS \
 $SELECTED_SOURCES
