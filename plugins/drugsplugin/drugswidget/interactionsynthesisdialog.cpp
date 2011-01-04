@@ -26,6 +26,7 @@
 #include <drugsbaseplugin/drugsinteraction.h>
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/interactionsbase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -51,12 +52,36 @@ using namespace Trans::ConstantTranslations;
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 
 namespace DrugsWidget {
 namespace Internal {
 class InteractionSynthesisDialogPrivate
 {
+public:
+    void populateDrugsBrowser(DrugsDB::Internal::DrugsInteraction *interaction, QTextBrowser *browser)
+    {
+        browser->clear();
+        QString drugs;
+        if (interaction->drugs().count() == 2) {
+            DrugsDB::Internal::DrugsData *drug1 = interaction->drugs().at(0);
+            DrugsDB::Internal::DrugsData *drug2 = interaction->drugs().at(1);
+            int id1 = interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC1).toInt();
+            int id2 = interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC2).toInt();
+            if (!drug1->allInnAndIamClasses().contains(id1)) {
+                qSwap(id1, id2);
+            }
+            drugs += QString("<p>%1<br />&nbsp;&nbsp;&nbsp;&nbsp;%2</p>")
+                     .arg(drug1->denomination())
+                     .arg(drugsBase()->getAtcLabel(id1));
+            drugs += QString("<p>%1<br />&nbsp;&nbsp;&nbsp;&nbsp;%2</p>")
+                     .arg(drug2->denomination())
+                     .arg(drugsBase()->getAtcLabel(id2));
+        }
+        browser->setHtml(drugs);
+    }
+
 public:
     QList<DrugsDB::Internal::DrugsInteraction *> m_Interactions;
     QAction *aPrint;
@@ -166,6 +191,7 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
     ui->interactors->selectionModel()->blockSignals(true);
     ui->riskBrowser->clear();
     ui->managementBrowser->clear();
+    ui->interactingDrugsBrowser->clear();
     ui->interactors->clear();
     ui->interactors->setRowCount(0);
     ui->interactors->setColumnCount(3);
@@ -201,6 +227,7 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     ui->managementBrowser->clear();
     ui->biblio->clear();
     ui->biblioReferences->clear();
+    ui->interactingDrugsBrowser->clear();
     int id = item->data(Qt::UserRole).toInt();
     if (id >= d->m_Interactions.count())
         return;
@@ -209,6 +236,7 @@ void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
     ui->getBiblio->setEnabled(true);
+    d->populateDrugsBrowser(interaction, ui->interactingDrugsBrowser);
 }
 
 /** \todo add class informations */
@@ -231,6 +259,7 @@ void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current
     ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
     ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
     ui->getBiblio->setEnabled(true);
+    d->populateDrugsBrowser(interaction, ui->interactingDrugsBrowser);
 }
 
 void InteractionSynthesisDialog::on_getBiblio_clicked()

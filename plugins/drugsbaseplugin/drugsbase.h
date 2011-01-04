@@ -50,7 +50,7 @@ class DatabaseInfos;
 
 namespace Internal {
 class DrugsData;
-class DrugInteraction;
+class DrugsInteraction;
 class DrugInfo;
 class DrugsBasePrivate;
 

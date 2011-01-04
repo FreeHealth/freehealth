@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>577</height>
+    <height>679</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,14 +90,14 @@
       <string>Risk and management</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item row="2" column="0">
        <widget class="QTextBrowser" name="riskBrowser">
         <property name="toolTip">
          <string>Risk</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="1">
        <widget class="QTextBrowser" name="managementBrowser">
         <property name="toolTip">
          <string>Management</string>
@@ -159,6 +159,18 @@
          <string>Abstracts</string>
         </property>
        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Interacting drugs</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QTextBrowser" name="interactingDrugsBrowser"/>
       </item>
      </layout>
     </widget>
