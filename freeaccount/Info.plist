@@ -3,7 +3,7 @@
 <plist version="0.9">
 <dict>
         <key>CFBundleIconFile</key>
-        <string></string>
+        <string>@ICON@</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleGetInfoString</key>
