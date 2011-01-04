@@ -316,6 +316,9 @@ bool DrugsBase::init()
             return false;
         }
 
+        // Use routes ?
+        d->m_UseRoutes = (count(Table_DRUG_ROUTES, DRUG_ROUTES_UID) > 0);
+
         // refresh InteractionsBase cache
         InteractionsBase::init(true);
     }
@@ -370,9 +373,6 @@ bool DrugsBase::init()
         Utils::Log::addQueryError(this, search, __FILE__, __LINE__);
     }
     Utils::Log::addMessage(this, QString("Getting %1 Drugs Search Engines").arg(searchEngine()->numberOfEngines()));
-
-    // Use routes ?
-    d->m_UseRoutes = (count(Table_DRUG_ROUTES, DRUG_ROUTES_UID) > 0);
 
     // Initialize
     InteractionsBase::init();
