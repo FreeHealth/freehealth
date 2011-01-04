@@ -2562,6 +2562,138 @@
        y1="-64.578178"
        x2="29.839203"
        y2="-74.32811" />
+    <filter
+       id="filter3711"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3713"
+         in="SourceAlpha"
+         stdDeviation="1.6"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3715"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset3717"
+         in="bluralpha"
+         dx="1.6"
+         dy="1.6"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3719">
+        <feMergeNode
+           id="feMergeNode3721"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3723"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter3762"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3764"
+         in="SourceAlpha"
+         stdDeviation="0.6"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3766"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset3768"
+         in="bluralpha"
+         dx="1.2"
+         dy="1.2"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3770">
+        <feMergeNode
+           id="feMergeNode3772"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3774"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter3776"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3778"
+         in="SourceAlpha"
+         stdDeviation="0.6"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3780"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset3782"
+         in="bluralpha"
+         dx="1.2"
+         dy="1.2"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3784">
+        <feMergeNode
+           id="feMergeNode3786"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3788"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter3790"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3792"
+         in="SourceAlpha"
+         stdDeviation="0.3"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3794"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset3796"
+         in="bluralpha"
+         dx="0.6"
+         dy="0.6"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3798">
+        <feMergeNode
+           id="feMergeNode3800"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3802"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2570,11 +2702,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="267.65981"
-     inkscape:cy="88.995469"
+     inkscape:zoom="2.8"
+     inkscape:cx="173.43951"
+     inkscape:cy="54.145492"
      inkscape:document-units="px"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1280"
      inkscape:window-height="712"
@@ -2616,7 +2748,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2673,7 +2805,7 @@
        ry="1" />
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      transform="translate(0,-972.36218)"
      id="g7099"
      inkscape:groupmode="layer"
@@ -2715,12 +2847,12 @@
     <text
        sodipodi:linespacing="125%"
        id="text7161"
-       y="744.03265"
-       x="417.28174"
+       y="919.74695"
+       x="172.99603"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
        xml:space="preserve"><tspan
-         y="744.03265"
-         x="417.28174"
+         y="919.74695"
+         x="172.99603"
          id="tspan7163"
          sodipodi:role="line">Entêtes : </tspan></text>
     <text
@@ -2738,45 +2870,45 @@
     <text
        sodipodi:linespacing="125%"
        id="text7185"
-       y="769.03265"
-       x="457.28174"
+       y="944.74695"
+       x="212.99603"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
        xml:space="preserve"><tspan
-         y="769.03265"
-         x="457.28174"
+         y="944.74695"
+         x="212.99603"
          id="tspan7187"
          sodipodi:role="line">0,3 70 0,6 0,6</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7193"
-       y="756.03265"
-       x="431.56744"
+       y="931.74695"
+       x="187.28174"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
        xml:space="preserve"><tspan
-         y="756.03265"
-         x="431.56744"
+         y="931.74695"
+         x="187.28174"
          id="tspan7195"
          sodipodi:role="line">Subs</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7197"
-       y="755.46124"
-       x="458.71033"
+       y="931.17554"
+       x="214.42462"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
        xml:space="preserve"><tspan
-         y="755.46124"
-         x="458.71033"
+         y="931.17554"
+         x="214.42462"
          id="tspan7199"
          sodipodi:role="line">0,6 70 1,2 1,2</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7201"
-       y="743.31836"
-       x="460.13889"
+       y="919.03265"
+       x="215.85318"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
        xml:space="preserve"><tspan
-         y="743.31836"
-         x="460.13889"
+         y="919.03265"
+         x="215.85318"
          id="tspan7203"
          sodipodi:role="line">1,6 70 1,6 1,6</tspan></text>
     <g
@@ -4293,5 +4425,60 @@
            inkscape:connector-curvature="0" />
       </g>
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="FreePad"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3711);font-family:Georgia;-inkscape-font-specification:Sans Bold"
+       x="140.44839"
+       y="20.714285"
+       id="text3707"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3709"
+         x="140.44839"
+         y="20.714285"
+         style="font-size:22px">FreePad</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Bold;filter:url(#filter3776)"
+       x="88.810204"
+       y="34.64286"
+       id="text3725"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3727"
+         x="88.810204"
+         y="34.64286">FreeMedForms mask creator assistant</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold;filter:url(#filter3762)"
+       x="81.571434"
+       y="48.214287"
+       id="text3752"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3754"
+         x="81.571434"
+         y="48.214287">Créateur de masque pour FreeMedForms</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Bold;filter:url(#filter3790)"
+       x="294.64285"
+       y="67.5"
+       id="text3756"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3758"
+         x="296.16629"
+         y="67.5">(c) FreeMedForms project, Eric Maeker, MD, </tspan><tspan
+         sodipodi:role="line"
+         x="294.64285"
+         y="75"
+         id="tspan3760">Guillaume Denry</tspan></text>
   </g>
 </svg>
