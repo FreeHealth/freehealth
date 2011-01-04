@@ -790,8 +790,8 @@ VersionUpdater::~VersionUpdater()
 
 bool VersionUpdater::isDosageDatabaseUpToDate() const
 {
-    if (!d->m_DosageDatabaseVersion.isEmpty())
-        return (d->m_DosageDatabaseVersion==d->dosageDatabaseVersions().last());
+//    if (!d->m_DosageDatabaseVersion.isEmpty())
+//        return (d->m_DosageDatabaseVersion==d->dosageDatabaseVersions().last());
 
     QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
     if (!db.open()) {
