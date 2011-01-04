@@ -160,8 +160,7 @@ void Database::logAvailableDrivers()
         }
     }
     tmp.chop(3);
-    if (WarnLogMessages)
-        Utils::Log::addMessage("Database", QString("Available drivers : %1").arg(tmp));
+    Utils::Log::addMessage("Database", QString("Available drivers: %1").arg(QSqlDatabase::drivers().join(" ; ")));
 }
 
 
@@ -781,7 +780,7 @@ QString Database::select(const int &tableref) const
     return toReturn;
 }
 
-QString Database::prepareInsertQuery(const int & tableref) const
+QString Database::prepareInsertQuery(const int tableref) const
 {
     QString toReturn;
     QString fields;
@@ -804,7 +803,7 @@ QString Database::prepareInsertQuery(const int & tableref) const
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, int fieldref, const QHash<int, QString> &conditions)
+QString Database::prepareUpdateQuery(const int tableref, const int fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4")
@@ -819,7 +818,27 @@ QString Database::prepareUpdateQuery(const int & tableref, int fieldref, const Q
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, int fieldref)
+QString Database::prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions)
+{
+    QString toReturn;
+    QString tmp;
+    foreach(const int &i, fieldref) {
+        tmp += "`" + field(tableref, i) + "`= ?, ";
+    }
+    tmp.chop(2);
+    toReturn = QString("UPDATE `%1` SET %2 WHERE %4")
+               .arg(table(tableref))
+               .arg(tmp)
+               .arg(getWhereClause(tableref, conditions));
+    // UPDATE tbl_name [, tbl_name ...]
+    // SET col_name1=expr1 [, col_name2=expr2 ...]
+    // WHERE where_definition
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
 {
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ?")
@@ -833,14 +852,14 @@ QString Database::prepareUpdateQuery(const int & tableref, int fieldref)
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref, const QHash<int, QString> &conditions)
+QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
     QString tmp;
     foreach(const QString &f, fields(tableref))
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
-    toReturn = QString("UPDATE `%1` SET \n%2 \nWHERE %4")
+    toReturn = QString("UPDATE `%1` SET \n%2 \nWHERE %3")
                .arg(table(tableref))
                .arg(tmp)
                .arg(getWhereClause(tableref, conditions));
@@ -852,7 +871,7 @@ QString Database::prepareUpdateQuery(const int & tableref, const QHash<int, QStr
     return toReturn;
 }
 
-QString Database::prepareUpdateQuery(const int & tableref)
+QString Database::prepareUpdateQuery(const int tableref)
 {
     QString toReturn;
     QString tmp;
@@ -870,7 +889,7 @@ QString Database::prepareUpdateQuery(const int & tableref)
     return toReturn;
 }
 
-bool Database::executeSQL(const QStringList & list, const QSqlDatabase & DB)
+bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
 {
     if (!DB.isOpen())
         return false;

@@ -190,12 +190,13 @@ public:
     virtual int count( const int & tableref, const int & fieldref, const QString &filter = QString()) const;
     virtual double max( const int & tableref, const int & fieldref, const int &groupBy, const QString &filter = QString()) const;
 
-    virtual QString prepareInsertQuery( const int & tableref ) const;
+    virtual QString prepareInsertQuery(const int tableref) const;
 
-    virtual QString prepareUpdateQuery( const int & tableref, int fieldref, const QHash<int, QString> &conditions);
-    virtual QString prepareUpdateQuery( const int & tableref, int fieldref );
-    virtual QString prepareUpdateQuery( const int & tableref, const QHash<int, QString> &conditions );
-    virtual QString prepareUpdateQuery( const int & tableref );
+    virtual QString prepareUpdateQuery(const int tableref, const int fieldref, const QHash<int, QString> &conditions);
+    virtual QString prepareUpdateQuery(const int tableref, const int fieldref);
+    virtual QString prepareUpdateQuery(const int tableref, const QHash<int, QString> &conditions);
+    virtual QString prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions);
+    virtual QString prepareUpdateQuery(const int tableref);
 
     virtual QString prepareDeleteQuery( const int tableref, const QHash<int,QString> & conditions );
 
