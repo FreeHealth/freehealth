@@ -366,7 +366,7 @@ Voulez-vous les ajouter au fichier ?</translation>
         <translation>Recherche des bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="354"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="357"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>ATTENTION : impossible d&apos;ouvrir la base de données %1 : %2 

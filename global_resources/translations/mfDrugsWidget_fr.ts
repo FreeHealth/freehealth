@@ -173,18 +173,23 @@ Drug %1 is already in your prescription</source>
         <translation>Résumés</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="78"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="169"/>
+        <source>Interacting drugs</source>
+        <translation>Médicaments incriminés</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="103"/>
         <source>Synthetic interactions</source>
         <translation>Synthèse des interactions</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="95"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="120"/>
         <source>All interactions</source>
         <translation>Toutes les interactions</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="259"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="260"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="288"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="289"/>
         <source>No bibliography available</source>
         <translation>Pas de bibliographie disponible</translation>
     </message>
@@ -428,7 +433,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="298"/>
         <source>Route(s):</source>
-        <translation type="unfinished"></translation>
+        <translation>Voie(s) d&apos;administration :</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="340"/>

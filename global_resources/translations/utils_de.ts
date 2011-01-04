@@ -4,66 +4,66 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="243"/>
-        <location filename="../../libs/utils/database.cpp" line="257"/>
-        <location filename="../../libs/utils/database.cpp" line="271"/>
+        <location filename="../../libs/utils/database.cpp" line="242"/>
+        <location filename="../../libs/utils/database.cpp" line="256"/>
+        <location filename="../../libs/utils/database.cpp" line="270"/>
         <source>ERROR : %1 driver is not available</source>
         <translation>%1 Treiber ist nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="282"/>
+        <location filename="../../libs/utils/database.cpp" line="281"/>
         <source>WARNING : %1 database already in use</source>
         <translation>%1 Datenbank bereits in benutzung</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="328"/>
-        <location filename="../../libs/utils/database.cpp" line="334"/>
-        <location filename="../../libs/utils/database.cpp" line="352"/>
-        <location filename="../../libs/utils/database.cpp" line="359"/>
+        <location filename="../../libs/utils/database.cpp" line="327"/>
+        <location filename="../../libs/utils/database.cpp" line="333"/>
+        <location filename="../../libs/utils/database.cpp" line="351"/>
+        <location filename="../../libs/utils/database.cpp" line="358"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation>Error: %1 Datenbank existiert nicht und kann nicht angelegt werden: Pfad=%2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="381"/>
-        <location filename="../../libs/utils/database.cpp" line="390"/>
-        <location filename="../../libs/utils/database.cpp" line="397"/>
+        <location filename="../../libs/utils/database.cpp" line="380"/>
+        <location filename="../../libs/utils/database.cpp" line="389"/>
+        <location filename="../../libs/utils/database.cpp" line="396"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation>Datenbank %1 ist nicht lesbar Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="425"/>
+        <location filename="../../libs/utils/database.cpp" line="424"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation>Datenbank %1 ist nicht schreibbar Pfad: %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="466"/>
+        <location filename="../../libs/utils/database.cpp" line="465"/>
         <source>INFO : database %1 connection = %2</source>
         <translation>Datenbank %1 verbindung= %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="471"/>
+        <location filename="../../libs/utils/database.cpp" line="470"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>Kann datenbank %1 : %2 
  %3 nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="478"/>
+        <location filename="../../libs/utils/database.cpp" line="477"/>
         <source>INFO : database %1 installed. Path : %2</source>
         <translation>Datenbank %1 installiert in Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="547"/>
+        <location filename="../../libs/utils/database.cpp" line="546"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation>Datenbank Scheme Error: falsche Feldnummern für die Tabelle %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="556"/>
+        <location filename="../../libs/utils/database.cpp" line="555"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1077"/>
+        <location filename="../../libs/utils/database.cpp" line="1076"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>

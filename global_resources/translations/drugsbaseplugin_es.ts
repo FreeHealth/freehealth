@@ -353,7 +353,7 @@ Do you want to add them to the file ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="354"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="357"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation type="unfinished"></translation>
