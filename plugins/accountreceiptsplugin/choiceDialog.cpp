@@ -7,6 +7,7 @@
 using namespace ReceiptsConstants;
 choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
+    connect(ui->okButton,SIGNAL(pressed()),this,SLOT(accept()));
 }
 choiceDialog::~choiceDialog(){}
 int choiceDialog::returnChoiceDialog(){
