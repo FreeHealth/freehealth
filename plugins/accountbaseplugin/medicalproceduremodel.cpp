@@ -69,7 +69,6 @@ public:
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
         refreshFilter();
-//        m_SqlTable->setFilter(USER_UID);
     }
     ~MedicalProcedureModelPrivate () {}
     
@@ -78,7 +77,10 @@ public:
         if (!m_SqlTable)
             return;
         QHash<int, QString> where;
-        where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
+        where.insert(AccountDB::Constants::MP_USER_UID, QString("='%1'").arg(m_UserUid));
+        if (!m_TypeFilter.isEmpty()) {
+            where.insert(AccountDB::Constants::MP_TYPE, QString("='%1'").arg(m_TypeFilter));
+        }
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_MedicalProcedure, where));
         if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
@@ -89,7 +91,7 @@ public:
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
-    QString m_UserUid;
+    QString m_UserUid, m_TypeFilter;
 
 private:
     MedicalProcedureModel *q;
@@ -119,16 +121,28 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 {
-    int rows = 0;
-    d->m_SqlTable->setFilter("");
-    d->m_SqlTable->select();
-    rows = d->m_SqlTable->rowCount(parent);
-    return rows;
+    return d->m_SqlTable->rowCount(parent);
 }
 
 int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
 {
     return d->m_SqlTable->columnCount(parent);
+}
+
+QStringList MedicalProcedureModel::distinctAvailableType() const
+{
+    QStringList toReturn;
+    QSqlQuery query(accountBase()->database());
+    query.exec(accountBase()->selectDistinct(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_TYPE));
+    if (query.isActive()) {
+        while (query.next()) {
+            toReturn << query.value(0).toString();
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    query.finish();
+    return toReturn;
 }
 
 void MedicalProcedureModel::setUserUuid(const QString &uuid)
@@ -209,9 +223,12 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
     return d->m_SqlTable->removeRows(row, count, parent);
 }
 
-void MedicalProcedureModel::setFilter(const QString & filter){
-    d->m_SqlTable->setFilter(filter);
+void MedicalProcedureModel::setTypeFilter(const QString &type)
+{
+    d->m_TypeFilter = type;
+    d->refreshFilter();
     d->m_SqlTable->select();
+    reset();
 }
 
 bool MedicalProcedureModel::submit()

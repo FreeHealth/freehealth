@@ -66,9 +66,11 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
+    QStringList distinctAvailableType() const;
+
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
-    void setFilter(const QString & filter);
+    void setTypeFilter(const QString &filter);
 
 public Q_SLOTS:
     bool submit();

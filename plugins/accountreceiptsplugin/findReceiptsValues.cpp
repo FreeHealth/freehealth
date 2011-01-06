@@ -1,63 +1,51 @@
 #include "findReceiptsValues.h"
 
+#include "ui_findValuesGUI.h"
+#include "xmlcategoriesparser.h"
+#include "receiptsmanager.h"
+
+#include <accountbaseplugin/medicalproceduremodel.h>
+#include <accountbaseplugin/thesaurusmodel.h>
 
 
-findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
+findReceiptsValues::findReceiptsValues(QWidget * parent) :
+        QDialog(parent),
+        ui(0),
+        m_rbm(0),
+        m_xmlParser(0),
+        m_mpmodel(0)
+{
   //QSqlDatabase db = QSqlDatabase::database("freeaccount");
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   fillComboCategories();
   initialize();
-  //m_model = new QSqlTableModel(this,db);
-  m_mpmodel = new MedicalProcedureModel(this);
+//  m_mpmodel = new AccountDB::MedicalProcedureModel(this);
   QString comboValue = ui->comboBoxCategories->currentText();
-  emit fillListViewValues(comboValue);
+  Q_EMIT fillListViewValues(comboValue);
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
 }
 
-findReceiptsValues::~findReceiptsValues(){
+findReceiptsValues::~findReceiptsValues()
+{
   delete m_xmlParser;
   delete m_rbm;
   delete m_mpmodel;
   ui->listChoosenWidget->clear();
 }
 
-void findReceiptsValues::initialize(){
+void findReceiptsValues::initialize()
+{
     m_xmlParser = new xmlCategoriesParser;
     m_rbm = new receiptsManager;
     m_mpmodel = new AccountDB::MedicalProcedureModel(this);
-    if(m_hashValuesChoosen.size()>0){
-        m_hashValuesChoosen.clear();
-        }
-        
-}
-
-void findReceiptsValues::clear(){
-    ui->listChoosenWidget->clear();
     m_hashValuesChoosen.clear();
-}
 
-void findReceiptsValues::fillComboCategories(){
-    QStringList choiceList ;
-    QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
-    choiceList = hashCategories.value("typesOfReceipts").split(",");
-    ui->comboBoxCategories->setEditable(true);
-    ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
-    ui->comboBoxCategories->addItems(choiceList);
-}
-
-void findReceiptsValues::fillListViewValues(const QString & comboItem){
-    QString filter = QString("TYPE = '%1'").arg(comboItem);
-    //m_model->setTable("medical_procedure");
-    m_mpmodel->setFilter(filter);
-    //m_mpmodel->select();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << m_model->lastError().text();
-    //ui->tableViewOfValues->setModel(m_mpmodel);
     ui->tableViewOfValues->setModel(m_mpmodel);
-    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->setColumnHidden(0,true);//setColumnHidden()
     ui->tableViewOfValues->setColumnHidden(1,true);
     ui->tableViewOfValues->setColumnHidden(2,true);
@@ -66,12 +54,33 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     //ui->tableViewOfValues->setColumnHidden(6,true); //amount
     ui->tableViewOfValues->setColumnHidden(7,true);
     ui->tableViewOfValues->setColumnHidden(8,true);
-    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection(true);
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
-    ui->tableViewOfValues->show();
 }
 
-void findReceiptsValues::chooseValue(const QModelIndex& index){
+void findReceiptsValues::clear()
+{
+    ui->listChoosenWidget->clear();
+    m_hashValuesChoosen.clear();
+}
+
+void findReceiptsValues::fillComboCategories()
+{
+    QStringList choiceList ;
+//    QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
+//    choiceList = hashCategories.value("typesOfReceipts").split(",");
+    ui->comboBoxCategories->setEditable(true);
+    ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
+    ui->comboBoxCategories->addItems(m_mpmodel->distinctAvailableType());
+}
+
+void findReceiptsValues::fillListViewValues(const QString &comboItem)
+{
+    m_mpmodel->setTypeFilter(comboItem);
+}
+
+void findReceiptsValues::chooseValue(const QModelIndex &index)
+{
     QModelIndex inIndex(index);
     //get datas
     int row = inIndex.row();
@@ -87,7 +96,8 @@ void findReceiptsValues::chooseValue(const QModelIndex& index){
     m_hashValuesChoosen.insert(data,amount);
 }
 
-void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
+void findReceiptsValues::supprItemChoosen(QListWidgetItem *item)
+{
     qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValuesChoosen.remove(dataToRemove);
@@ -95,6 +105,7 @@ void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
    // ui->listChoosenWidget->removeItemWidget(item);
 }
 
-QHash<QString,QString> findReceiptsValues::getChoosenValues(){
+QHash<QString,QString> findReceiptsValues::getChoosenValues()
+{
     return m_hashValuesChoosen;
 }
