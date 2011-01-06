@@ -84,14 +84,16 @@ void PatientCreatorWizard::done(int r)
                                "", tr("Patient not saved"));
         if (yes) {
             QDialog::done(r);
-            Patients::PatientModel::activeModel()->refreshModel();
+            if (Patients::PatientModel::activeModel())
+                Patients::PatientModel::activeModel()->refreshModel();
         }
     } else if (r==QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
 
         QDialog::done(r);
-        Patients::PatientModel::activeModel()->refreshModel();
+        if (Patients::PatientModel::activeModel())
+            Patients::PatientModel::activeModel()->refreshModel();
     }
 }
 
