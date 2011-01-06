@@ -82,12 +82,16 @@ void PatientCreatorWizard::done(int r)
                                tr("If you continue changes will be lost.\n"
                                   "Do you really want to close this dialog ?"),
                                "", tr("Patient not saved"));
-        if (yes)
+        if (yes) {
             QDialog::done(r);
+            Patients::PatientModel::activeModel()->refreshModel();
+        }
     } else if (r==QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
+
         QDialog::done(r);
+        Patients::PatientModel::activeModel()->refreshModel();
     }
 }
 

@@ -114,6 +114,7 @@ public:
     { return createIndex(row, column); }
 
     QList<int> practionnerLkIds(const QString &uid);
+    int practionnerLkId(const QString &uid);
 
     int numberOfUsersInMemory();
 

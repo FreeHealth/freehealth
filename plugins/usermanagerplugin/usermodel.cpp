@@ -642,42 +642,43 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 
         switch (item.column())
         {
-            case Core::IUser::Id : toReturn = user->id(); break;
-            case Core::IUser::Uuid : toReturn = user->uuid(); break;
-            case Core::IUser::Validity : toReturn = user->validity(); break;
-            case Core::IUser::Login : toReturn = user->login(); break;
-            case Core::IUser::DecryptedLogin : toReturn = user->decryptedLogin(); break;
-            case Core::IUser::Password : toReturn = user->cryptedPassword(); break;
-            case Core::IUser::LastLogin : toReturn = user->lastLogin(); break;
-            case Core::IUser::GenderIndex : toReturn = user->genderIndex(); break;
-            case Core::IUser::TitleIndex : toReturn = user->title(); break;
-            case Core::IUser::Gender : toReturn = genders().at(user->genderIndex()); break;
-            case Core::IUser::Title : toReturn = titles().at(user->title()); break;
-            case Core::IUser::Name : toReturn = user->name(); break;
-            case Core::IUser::SecondName : toReturn = user->secondName(); break;
-            case Core::IUser::Firstname : toReturn = user->firstname(); break;
-            case Core::IUser::FullName :
-                {
-                    QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->firstname();
-                    r.replace("  ", " ");
-                    toReturn = r;
-                    break;
-                }
-            case Core::IUser::Mail : toReturn = user->mail(); break;
-            case Core::IUser::Language : toReturn = user->language(); break;
-            case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
-            case Core::IUser::Adress : toReturn = user->adress(); break;
-            case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
-            case Core::IUser::City : toReturn = user->city(); break;
-            case Core::IUser::Country : toReturn = user->country(); break;
-            case Core::IUser::Tel1 : toReturn = user->tels().at(0); break;
-            case Core::IUser::Tel2 : toReturn = user->tels().at(1); break;
-            case Core::IUser::Tel3 : toReturn = user->tels().at(2); break;
-            case Core::IUser::Fax : toReturn = user->fax(); break;
-            case Core::IUser::PractitionerId : toReturn = user->practitionerId(); break;
-            case Core::IUser::Specialities : toReturn = user->specialty(); break;
-            case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
-            case Core::IUser::Preferences : toReturn = user->preferences(); break;
+        case Core::IUser::Id : toReturn = user->id(); break;
+        case Core::IUser::PersonalLinkId: toReturn = user->personalLinkId(); break;
+        case Core::IUser::Uuid : toReturn = user->uuid(); break;
+        case Core::IUser::Validity : toReturn = user->validity(); break;
+        case Core::IUser::Login : toReturn = user->login(); break;
+        case Core::IUser::DecryptedLogin : toReturn = user->decryptedLogin(); break;
+        case Core::IUser::Password : toReturn = user->cryptedPassword(); break;
+        case Core::IUser::LastLogin : toReturn = user->lastLogin(); break;
+        case Core::IUser::GenderIndex : toReturn = user->genderIndex(); break;
+        case Core::IUser::TitleIndex : toReturn = user->title(); break;
+        case Core::IUser::Gender : toReturn = genders().at(user->genderIndex()); break;
+        case Core::IUser::Title : toReturn = titles().at(user->title()); break;
+        case Core::IUser::Name : toReturn = user->name(); break;
+        case Core::IUser::SecondName : toReturn = user->secondName(); break;
+        case Core::IUser::Firstname : toReturn = user->firstname(); break;
+        case Core::IUser::FullName :
+            {
+                QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->firstname();
+                r.replace("  ", " ");
+                toReturn = r;
+                break;
+            }
+        case Core::IUser::Mail : toReturn = user->mail(); break;
+        case Core::IUser::Language : toReturn = user->language(); break;
+        case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
+        case Core::IUser::Adress : toReturn = user->adress(); break;
+        case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
+        case Core::IUser::City : toReturn = user->city(); break;
+        case Core::IUser::Country : toReturn = user->country(); break;
+        case Core::IUser::Tel1 : toReturn = user->tels().at(0); break;
+        case Core::IUser::Tel2 : toReturn = user->tels().at(1); break;
+        case Core::IUser::Tel3 : toReturn = user->tels().at(2); break;
+        case Core::IUser::Fax : toReturn = user->fax(); break;
+        case Core::IUser::PractitionerId : toReturn = user->practitionerId(); break;
+        case Core::IUser::Specialities : toReturn = user->specialty(); break;
+        case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
+        case Core::IUser::Preferences : toReturn = user->preferences(); break;
 
         case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
         case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
@@ -908,6 +909,33 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
     filter.chop(5);
     QSqlTableModel::setFilter(filter);
 //    qWarning() << filter;
+}
+
+int UserModel::practionnerLkId(const QString &uid)
+{
+    /** \todo manage user's groups */
+    if (d->m_Uuid_UserList.keys().contains(uid)) {
+        Internal::UserData *user = d->m_Uuid_UserList.value(uid);
+//        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
+        return user->personalLinkId();
+    }
+    int lk_id = -1;
+    if (uid.isEmpty())
+        return lk_id;
+
+    QHash<int, QString> where;
+    where.clear();
+    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uid));
+    QString req = userBase()->select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
+    QSqlQuery query(req, userBase()->database());
+    if (query.isActive()) {
+        if (query.next())
+            return query.value(0).toInt();
+    } else {
+        Utils::Log::addQueryError("UserModel", query);
+    }
+//    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
+    return lk_id;
 }
 
 QList<int> UserModel::practionnerLkIds(const QString &uid)

@@ -250,6 +250,8 @@ public:
     // Linkers
     QList<int> linkIds() const;
     QString linkIdsToString() const;
+    void setPersonalLkId(const int lkid);
+    int personalLinkId() const;
 
     // viewers
     void warn() const;

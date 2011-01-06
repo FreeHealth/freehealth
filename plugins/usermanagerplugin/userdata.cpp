@@ -480,6 +480,7 @@ public:
     QHash<QString, UserDynamicData*> m_DynamicDatas;
     bool m_HasModifiedDynamicDatas;
     QList<int> m_LkIds;
+    int m_PersonalLkId;
     QString m_LkIdsToString;
 };
 
@@ -707,12 +708,24 @@ void UserData::setLkIds(const QList<int> &lkids)
 
 QList<int> UserData::linkIds() const
 {
-    return d->m_LkIds;
+    /** \todo this must be updated */
+    return QList<int>() << d->m_PersonalLkId;
 }
 
 QString UserData::linkIdsToString() const
 {
-    return d->m_LkIdsToString;
+    /** \todo this must be updated */
+    return QString::number(d->m_PersonalLkId);
+}
+
+void UserData::setPersonalLkId(const int lkid)
+{
+    d->m_PersonalLkId = lkid;
+}
+
+int UserData::personalLinkId() const
+{
+    return d->m_PersonalLkId;
 }
 
 /**

@@ -317,25 +317,27 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
     if (list.count())
         toReturn->addDynamicDatasFromDatabase(list);
 
-    // get LKID Table
+    // get personal LINK_ID
+    /** \todo this must be updated: manage groups too */
     where.clear();
     where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
     req = select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
-    QList<int> lkids;
+    int lkid = -1;
     {
         QSqlQuery q(req, DB);
         if (q.isActive()) {
-            while (q.next()) {
-                lkids << q.value(0).toInt();
+            if (q.next()) {
+                lkid = q.value(0).toInt();
             }
         } else {
             Utils::Log::addQueryError("UserBase", q);
         }
-        if (lkids.count() < 1) {
+        if (lkid == -1) {
+            /** \todo WARNING this causes segfault */
             Utils::Log::addError(this, QString("No linker for user %1").arg(toReturn->uuid()));
             return 0;
         }
-        toReturn->setLkIds(lkids);
+        toReturn->setPersonalLkId(lkid);
     }
 
     if (toReturn)

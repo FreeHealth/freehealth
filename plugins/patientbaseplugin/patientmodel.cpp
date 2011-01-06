@@ -67,10 +67,14 @@
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
+/** The PatientModelWrapper is installed in Core::ICore by MainWindow */
+
+
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 
 
 namespace Patients {
@@ -83,14 +87,13 @@ public:
     PatientModelPrivate(PatientModel *parent) :
             m_SqlPatient(0),
             m_SqlPhoto(0),
-//            m_PatientWrapper(new PatientModelWrapper(parent)),
             q(parent)
     {
         m_UserUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
         q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(changeUserUuid(QString)));
 
         // install the Core Patient wrapper
-//        Core::ICore::instance()->setPatient(m_PatientWrapper);
+//        Core::ICore::instance()->setPatient(q);
     }
 
     ~PatientModelPrivate ()
@@ -151,7 +154,7 @@ public:
 
         filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME));
 
-        qWarning() << filter;
+//        qWarning() << filter;
 
         m_SqlPatient->setFilter(filter);
         m_SqlPatient->select();
@@ -627,7 +630,12 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
             ok = false;
-            Utils::Log::addError(this, "Unable to setData to newly created patient. PatientModel::insertRows()");
+            Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);
+        }
+        qWarning() << ",nnnnnnnnnnnn" << user()->value(Core::IUser::PersonalLinkId);
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+            ok = false;
+            Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);
         }
     }
     endInsertRows();
