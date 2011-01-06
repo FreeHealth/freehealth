@@ -682,6 +682,28 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
     return -1;
 }
 
+double Database::max(const int &tableref, const int &fieldref, const QString &filter) const
+{
+    QString req = QString("SELECT max(%1) FROM %2")
+                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Tables[tableref]);
+    if (!filter.isEmpty())
+        req += " WHERE " + filter;
+    if (WarnSqlCommands)
+        qWarning() << req;
+    QSqlQuery q(req, database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0).toDouble();
+        } else {
+            Utils::Log::addQueryError("Database", q);
+        }
+    } else {
+        Utils::Log::addQueryError("Database", q);
+    }
+    return 0;
+}
+
 double Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
