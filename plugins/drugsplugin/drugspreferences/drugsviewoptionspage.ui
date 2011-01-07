@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>467</width>
-    <height>436</height>
+    <width>514</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -240,14 +240,14 @@
       <string>Interactions warnings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Global level of warning</string>
+         <string>Global level of passive notification</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="1">
        <widget class="QComboBox" name="levelOfWarningCombo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -257,62 +257,62 @@
         </property>
         <item>
          <property name="text">
-          <string>Maximal</string>
+          <string>Maximal information</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Moderate</string>
+          <string>Moderate information</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Minimal</string>
+          <string>Minimal information</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="showIconsCheck">
-        <property name="text">
-         <string>Show interactions icons in the prescription</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="dynamicAlerts">
-        <property name="text">
-         <string>Enable dynamic alerts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Dynamic alert level of warning</string>
+         <string>Global level of dynamic notification</string>
         </property>
         <property name="indent">
-         <number>20</number>
+         <number>0</number>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="6" column="1">
        <widget class="QComboBox" name="dynamicAlertsLevel">
         <item>
          <property name="text">
-          <string>Maximal</string>
+          <string>Maximal information</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Moderate</string>
+          <string>Moderate information</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Minimal</string>
+          <string>Minimal information</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="showIconsCheck">
+        <property name="text">
+         <string>Show interactions icons in the prescription window (static alerts)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="dynamicAlerts">
+        <property name="text">
+         <string>Enable alerts needing acceptance (dynamic alerts)</string>
+        </property>
        </widget>
       </item>
      </layout>

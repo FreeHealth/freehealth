@@ -271,7 +271,7 @@ public:
         case Drug::OwnInteractionsSynthesis:
             {
                 QString display;
-                const QList<DrugsInteraction *> &list = m_InteractionsManager->getAllInteractionsFound();
+                QList<DrugsInteraction *> list = m_InteractionsManager->getAllInteractionsFound();
                 QList<DrugsInteraction *> concernedInteractions;
                 QList<DrugsData *> concernedDrugs;
                 int i = 0;
@@ -304,7 +304,7 @@ public:
         case Interaction::FullSynthesis :
             {
                 QString display;
-                const QList<DrugsInteraction *> &list = m_InteractionsManager->getAllInteractionsFound();
+                QList<DrugsInteraction *> list = m_InteractionsManager->getAllInteractionsFound();
                 int i = 0;
                 display.append("<p>");
                 foreach(DrugsData *drg, m_DrugsList) {

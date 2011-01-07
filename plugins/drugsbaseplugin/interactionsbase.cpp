@@ -318,11 +318,11 @@ QList<DrugsInteraction *> InteractionsBasePrivate::getInteractionsFromDatabase(c
     if (id2 == -1) {
         DrugsInteraction *dint = 0;
         dint = new DrugsInteraction();
-        dint->setValue(DrugsInteraction::DI_Type , "I" );
+        dint->setValue(DrugsInteraction::DI_Type , "U" );
         dint->setValue(DrugsInteraction::DI_ATC1, _id1 );
         dint->setValue(DrugsInteraction::DI_ATC2, _id1 );
-        dint->setValue(DrugsInteraction::DI_RiskFr, QCoreApplication::translate("DrugsBase", "This INN is present more than one time in this prescrition."));
-        dint->setValue(DrugsInteraction::DI_RiskEn, "This INN is present more than one time in this prescrition.");
+        dint->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
+        dint->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
         dint->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
         id2 = _id1;
         toReturn << dint;
@@ -400,7 +400,7 @@ QList<DrugsInteraction *> InteractionsBasePrivate::getAllInteractionsFound()
           toReturn << getInteractionsFromDatabase(i.key(), i.value());
           ++i;
      }
-     qSort(toReturn.begin(), toReturn.end(), DrugsInteraction::lessThan);
+     qSort(toReturn.begin(), toReturn.end(), DrugsInteraction::greaterThan);
      return toReturn;
 }
 

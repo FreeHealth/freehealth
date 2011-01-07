@@ -91,6 +91,7 @@ public:
     QString referencesLink() const;
 
     static bool lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
+    static bool greaterThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
 
     // viewers
     void warn() const;

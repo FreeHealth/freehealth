@@ -445,6 +445,7 @@ namespace Interaction
         noIAM            = 0x0000,
         Unknown          = 0x0001,
         Information      = 0x0002,
+        InnDuplication   = 0x0004,
         Precaution       = 0x0010,
         APrendreEnCompte = 0x0020,
         P450             = 0x0100,

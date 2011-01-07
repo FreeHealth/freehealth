@@ -61,11 +61,13 @@ using namespace Trans::ConstantTranslations;
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 /** \brief Used by drugs database to feed values. \e fieldref refers to the enum : mfDrugsConstants::IAMfields */
-void DrugsInteraction::setValue( const int fieldref, const QVariant & value )
+void DrugsInteraction::setValue(const int fieldref, const QVariant & value)
 {
     if (fieldref == DI_Type) {
         QString t = value.toString();
         Constants::Interaction::TypesOfIAM r = Constants::Interaction::noIAM;
+        if (t.contains("U"))
+            r |= Constants::Interaction::InnDuplication;
         if (t.contains("P"))
             r |= Constants::Interaction::Precaution;
         if (t.contains("C"))
@@ -135,13 +137,15 @@ QString DrugsInteraction::typeToString(const int t)
           tmp << tkTr(Trans::Constants::P450_IAM);
      if (r & Constants::Interaction::GPG)
           tmp << tkTr(Trans::Constants::GPG_IAM);
+     if (r & Constants::Interaction::InnDuplication)
+          tmp << tkTr(Trans::Constants::INN_DUPLICATION);
      if (r & Constants::Interaction::Information)
           tmp << tkTr(Trans::Constants::INFORMATION);
      return tmp.join( ", " );
 }
 
 /** \brief Transforms the type \e t to its name. \e t refers to enum : mfInteractionsConstants::Interaction::TypesOfIAM */
-QString DrugsInteraction::typeOfIAM( const int & t ) const
+QString DrugsInteraction::typeOfIAM(const int &t) const
 {
     return typeToString(t);
 }
@@ -193,4 +197,9 @@ QString DrugsInteraction::referencesLink() const
 bool DrugsInteraction::lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2)
 {
     return int1->type() < int2->type();
+}
+
+bool DrugsInteraction::greaterThan(const DrugsInteraction *int1, const DrugsInteraction *int2)
+{
+    return int1->type() > int2->type();
 }

@@ -169,6 +169,20 @@ InteractionSynthesisDialog::~InteractionSynthesisDialog()
     delete ui;
 }
 
+static void addInteractionToView(int row, QTableWidget *tw, DrugsDB::Internal::DrugsInteraction *interaction, int interactionId)
+{
+    tw->insertRow(row);
+    QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionsManager::interactionIcon(interaction->type()), "");
+    icon->setData(Qt::UserRole, interactionId);
+    QTableWidgetItem *atc1 = new QTableWidgetItem(interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC1_Label).toString());
+    atc1->setData(Qt::UserRole, interactionId);
+    QTableWidgetItem *atc2 = new QTableWidgetItem(interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC2_Label).toString());
+    atc2->setData(Qt::UserRole, interactionId);
+    tw->setItem(row, 0, icon);
+    tw->setItem(row, 1, atc1);
+    tw->setItem(row, 2, atc2);
+}
+
 void InteractionSynthesisDialog::levelActivated(QAction *a)
 {
     if (!a)
@@ -202,17 +216,11 @@ void InteractionSynthesisDialog::levelActivated(QAction *a)
     ui->interactors->setColumnWidth(0, 24);
     int row = 0;
     foreach(DrugsDB::Internal::DrugsInteraction *interaction, d->m_Interactions) {
+        if (level == DrugsDB::Constants::Interaction::Information && interaction->type() & DrugsDB::Constants::Interaction::InnDuplication) {
+                addInteractionToView(row, ui->interactors, interaction, d->m_Interactions.indexOf(interaction));
+        }
         if ((interaction->type() & level) || (level == 0)) {
-            ui->interactors->insertRow(row);
-            QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionsManager::interactionIcon(interaction->type()), "");
-            icon->setData(Qt::UserRole, d->m_Interactions.indexOf(interaction));
-            QTableWidgetItem *atc1 = new QTableWidgetItem(interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC1_Label).toString());
-            atc1->setData(Qt::UserRole, d->m_Interactions.indexOf(interaction));
-            QTableWidgetItem *atc2 = new QTableWidgetItem(interaction->value(DrugsDB::Internal::DrugsInteraction::DI_ATC2_Label).toString());
-            atc2->setData(Qt::UserRole, d->m_Interactions.indexOf(interaction));
-            ui->interactors->setItem(row,0, icon);
-            ui->interactors->setItem(row,1, atc1);
-            ui->interactors->setItem(row,2, atc2);
+            addInteractionToView(row, ui->interactors, interaction, d->m_Interactions.indexOf(interaction));
         }
     }
     ui->interactors->blockSignals(false);
