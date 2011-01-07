@@ -73,7 +73,7 @@
 <context>
     <name>Patients::IdentityPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="98"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="104"/>
         <source>Please enter the patient&apos;s identity.</source>
         <translation>Veuillez saisir l&apos;identité du patient.</translation>
     </message>

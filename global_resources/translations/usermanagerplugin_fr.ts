@@ -19,31 +19,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="446"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="471"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="448"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="473"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="509"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="511"/>
         <source>Trying to create empty user database. 
 Location : %1 
 FileName: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="597"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="599"/>
         <source>User database created : File %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="643"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="789"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="645"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="791"/>
         <source>Unable to open database %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="716"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="718"/>
         <source>User %1 correctly updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -82,7 +82,7 @@ FileName: %2</source>
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="624"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="626"/>
         <source>Recorded User Last Login : %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1080,7 +1080,7 @@ Do you really want to close this dialog ?</source>
 <context>
     <name>tkUser</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="776"/>
+        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="789"/>
         <source>User logged at %1
 </source>
         <translation type="unfinished"></translation>

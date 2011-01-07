@@ -62,7 +62,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1076"/>
+        <location filename="../../libs/utils/database.cpp" line="1118"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>

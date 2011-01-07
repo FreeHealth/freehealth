@@ -43,11 +43,6 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
         <translation>ERREUR : mauvais nombre de champs lors de la récupération de %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="324"/>
-        <source>This INN is present more than one time in this prescrition.</source>
-        <translation>Cette DCI est présente plus d&apos;une fois dans cette prescription.</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="326"/>
         <source>FreeDiams Interactions Engine</source>
         <translation>Moteur d&apos;interaction de FreeDiams</translation>
@@ -222,30 +217,30 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::InteractionsManager</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="332"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="366"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="334"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="368"/>
         <source>Nature of the risk: </source>
         <translation>Nature du risque : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="337"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="339"/>
         <source>What to do: </source>
         <translation>Conduite à tenir : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="346"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="380"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="348"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="382"/>
         <source>Interaction(s) Found : </source>
         <translation>Interactions trouvées : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="371"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="426"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="373"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="428"/>
         <source>Management: </source>
         <translation>Conduite à tenir :</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="419"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="421"/>
         <source>Nature of the risk</source>
         <translation>Nature du risque</translation>
     </message>

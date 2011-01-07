@@ -188,8 +188,8 @@ Drug %1 is already in your prescription</source>
         <translation>Toutes les interactions</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="288"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="289"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="296"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="297"/>
         <source>No bibliography available</source>
         <translation>Pas de bibliographie disponible</translation>
     </message>
@@ -1186,41 +1186,41 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="246"/>
-        <source>Global level of warning</source>
-        <translation>Niveau global d&apos;alerte</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="285"/>
-        <source>Enable dynamic alerts</source>
-        <translation>Activer les alertes dynamiques</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="292"/>
-        <source>Dynamic alert level of warning</source>
-        <translation>Niveau d&apos;alerte pour les alertes dynamiques</translation>
+        <source>Global level of passive notification</source>
+        <translation>Niveau d&apos;alerte statique</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="260"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="303"/>
-        <source>Maximal</source>
-        <translation>Maximal</translation>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="289"/>
+        <source>Maximal information</source>
+        <translation>Information maximale</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="265"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="308"/>
-        <source>Moderate</source>
-        <translation>Modéré</translation>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="294"/>
+        <source>Moderate information</source>
+        <translation>Information moyenne</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="270"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="313"/>
-        <source>Minimal</source>
-        <translation>Minimal</translation>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="299"/>
+        <source>Minimal information</source>
+        <translation>Information minimum</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="278"/>
-        <source>Show interactions icons in the prescription</source>
-        <translation>Afficher les icônes d&apos;interactions dans la prescription</translation>
+        <source>Global level of dynamic notification</source>
+        <translation>Niveau d&apos;alerte dynamique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="307"/>
+        <source>Show interactions icons in the prescription window (static alerts)</source>
+        <translation>Montrer les icônes d&apos;interaction dans la fenêtre de prescription (alertes statiques)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="314"/>
+        <source>Enable alerts needing acceptance (dynamic alerts)</source>
+        <translation>Activer les alertes nécessitant une validation (alertes dynamiques)</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="125"/>
@@ -1304,7 +1304,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Bouton de validation par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="112"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="109"/>
         <source>When protocol has changed, toggle the validation button to</source>
         <translation>Quand le protocole a été modifié, change le bouton de validation en</translation>
     </message>

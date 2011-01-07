@@ -286,6 +286,7 @@ enum TitleInterpret {
         const char* const GPG_IAM                       = QT_TRANSLATE_NOOP("tkConstants", "Glycoprotein-P interaction");
         const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
         const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
+        const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule is duplicated");
 
         // Account
         const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");

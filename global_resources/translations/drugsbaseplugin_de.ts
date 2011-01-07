@@ -38,11 +38,6 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="324"/>
-        <source>This INN is present more than one time in this prescrition.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsbaseplugin/interactionsbase.cpp" line="326"/>
         <source>FreeDiams Interactions Engine</source>
         <translation type="unfinished"></translation>
@@ -209,30 +204,30 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::InteractionsManager</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="332"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="366"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="334"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="368"/>
         <source>Nature of the risk: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="337"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="339"/>
         <source>What to do: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="346"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="380"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="348"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="382"/>
         <source>Interaction(s) Found : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="371"/>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="426"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="373"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="428"/>
         <source>Management: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="419"/>
+        <location filename="../../plugins/drugsbaseplugin/interactionsmanager.cpp" line="421"/>
         <source>Nature of the risk</source>
         <translation type="unfinished"></translation>
     </message>
