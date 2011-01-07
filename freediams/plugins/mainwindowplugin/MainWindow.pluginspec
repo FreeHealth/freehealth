@@ -7,8 +7,8 @@
     <dependencyList>
         <dependency name="Core" version="0.4.0"/>
         <dependency name="Templates" version="0.4.0"/>
-        <dependency name="DrugsBase" version="0.5.0"/>
-        <dependency name="Drugs" version="0.5.0"/>
+        <dependency name="DrugsBase" version="0.5.4"/>
+        <dependency name="Drugs" version="0.5.4"/>
         <dependency name="Printer" version="0.5.0"/>
     </dependencyList>
 </plugin>

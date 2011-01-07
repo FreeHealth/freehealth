@@ -37,6 +37,8 @@
 #include <QTextCodec>
 #include <QDir>
 
+#include <QLibrary>
+
 #include <QDebug>
 
 #include <extensionsystem/pluginmanager.h>
@@ -134,6 +136,19 @@ int main( int argc, char *argv[] )
 {
     QApplication app(argc, argv);
 
+    // --exchange-in=../../../../global_resources/textfiles/dataintest.xml --config=../../../../global_resources/config.ini
+
+    // Add some debugging informations
+    defineLibraryPaths();
+    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
+    Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
+    Utils::Database::logAvailableDrivers();
+
+    QLibrary mysql("/Developer/Applications/Qt/plugins/sqldrivers/libqsqlmysql.dylib");
+    mysql.load();
+    qWarning() << mysql.errorString() << mysql.isLoaded();
+
+
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 
@@ -156,10 +171,6 @@ int main( int argc, char *argv[] )
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
-    // Add some debugging informations
-    Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
-    Utils::Database::logAvailableDrivers();
-
 #ifdef DEBUG
     Utils::Log::addMessage("Main", "Running debug version");
 #else
@@ -168,9 +179,6 @@ int main( int argc, char *argv[] )
 #ifdef LINUX_INTEGRATED
     Utils::Log::addMessage("Main", "Linux Integrated");
 #endif
-
-    defineLibraryPaths();
-    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
@@ -209,7 +217,7 @@ int main( int argc, char *argv[] )
         }
     }
     if (!coreplugin) {
-	const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;
