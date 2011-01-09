@@ -27,12 +27,61 @@
 #ifndef BELGISHDRUGSDATABASE_H
 #define BELGISHDRUGSDATABASE_H
 
+#include <coreplugin/ifullreleasestep.h>
 #include <coreplugin/itoolpage.h>
+#include <coreplugin/ftb_constants.h>
 
 #include <QWidget>
 
-
 namespace DrugsDbCreator {
+
+class BeDrugsDatabasePage : public Core::IToolPage
+{
+public:
+    BeDrugsDatabasePage(QObject *parent = 0) : Core::IToolPage(parent) {}
+
+    virtual QString id() const {return "BeDrugsDatabasePage";}
+    virtual QString name() const {return "Belguish Drugs Database Creator";}
+    virtual QString category() const {return Core::Constants::CATEGORY_DRUGSDATABASE;}
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+};
+
+
+class BeDrugDatatabaseStep : public Core::IFullReleaseStep
+{
+    Q_OBJECT
+
+public:
+    BeDrugDatatabaseStep(QObject *parent = 0);
+    ~BeDrugDatatabaseStep();
+
+    QString id() const {return "BeDrugDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+
+    bool createDir();
+    bool cleanFiles();
+    bool downloadFiles();
+    bool process();
+    QString processMessage() const {return tr("Belguish drugs database creation");}
+
+    bool unzipFiles();
+    bool prepareDatas();
+    bool createDatabase();
+    bool populateDatabase();
+    bool splitDatabase();
+    bool linkDrugsRoutes();
+    bool linkMolecules();
+
+    QStringList errors() const {return m_Errors;}
+
+private:
+    QStringList m_Errors;
+    bool m_WithProgress;
+};
+
 
 namespace Ui {
     class BelgishDrugsDatabase;
@@ -46,12 +95,17 @@ public:
     explicit BelgishDrugsDatabase(QWidget *parent = 0);
     ~BelgishDrugsDatabase();
 
+private Q_SLOTS:
+    void on_startJobs_clicked();
+
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::BelgishDrugsDatabase *ui;
+    BeDrugDatatabaseStep *m_Step;
 };
+
 
 }  //  End namespace DrugsDbCreator
 
