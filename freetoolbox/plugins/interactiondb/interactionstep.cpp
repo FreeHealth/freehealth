@@ -579,7 +579,7 @@ void InteractionStep::downloadNextSource()
 
     // Get link
     QString link;
-    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE `ID`=%1 LIMIT 1;").arg(m_ActiveDownloadId);
+    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE (`ID`=%1 AND `LINK` NOT NULL) LIMIT 1;").arg(m_ActiveDownloadId);
     QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
     if (query.exec(req)) {
         if (query.next()) {
