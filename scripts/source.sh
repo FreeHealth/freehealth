@@ -57,8 +57,6 @@ plugins/coreplugin \
 plugins/drugsbaseplugin \
 plugins/drugsplugin \
 plugins/emptyplugin \
-plugins/fdcoreplugin \
-plugins/fdmainwindowplugin \
 plugins/listviewplugin \
 plugins/printerplugin \
 plugins/saverestoreplugin \
