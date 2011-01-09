@@ -136,15 +136,15 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(QWidget *parent) :
     bar->addAction(a);
 
     a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::PRECAUTION_FOR_USE));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONPRECAUTION, Core::ITheme::MediumIcon));
-    a->setData(3);
-    bar->addAction(a);
-
-    a = new QAction(this);
     a->setText(tkTr(Trans::Constants::TAKE_INTO_ACCOUNT));
     a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONTAKEINTOACCOUNT, Core::ITheme::MediumIcon));
     a->setData(4);
+    bar->addAction(a);
+
+    a = new QAction(this);
+    a->setText(tkTr(Trans::Constants::PRECAUTION_FOR_USE));
+    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONPRECAUTION, Core::ITheme::MediumIcon));
+    a->setData(3);
     bar->addAction(a);
 
     a = new QAction(this);

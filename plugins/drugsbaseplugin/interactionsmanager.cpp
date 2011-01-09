@@ -319,9 +319,11 @@ QIcon InteractionsManager::iamIcon(const Internal::DrugsData *drug, const int &l
 QString InteractionsManager::listToHtml(const QList<Internal::DrugsInteraction*> &list, bool fullInfos) // static
 {
     using namespace DrugsDB::Constants;
+    QList<Internal::DrugsInteraction*> sortedList = list;
+    qSort(sortedList.begin(), sortedList.end(), Internal::DrugsInteraction::greaterThan);
     QString tmp, toReturn;
     QList<int> id_di;
-    foreach(Internal::DrugsInteraction *di, list) {
+    foreach(Internal::DrugsInteraction *di, sortedList) {
         if ( id_di.contains( di->value(Internal::DrugsInteraction::DI_Id).toInt() ) )
             continue;
         id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();

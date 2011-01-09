@@ -274,6 +274,7 @@ public:
                 QList<DrugsInteraction *> list = m_InteractionsManager->getAllInteractionsFound();
                 QList<DrugsInteraction *> concernedInteractions;
                 QList<DrugsData *> concernedDrugs;
+                qSort(list.begin(), list.end(), DrugsDB::Internal::DrugsInteraction::greaterThan);
                 int i = 0;
                 display.append("<p>");
                 foreach(DrugsInteraction *interaction, list) {
@@ -500,7 +501,8 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         display += drug->toHtml();
 
         if (d->m_InteractionsManager->drugHaveInteraction(drug)) {
-            const QList<Internal::DrugsInteraction *> &list = d->m_InteractionsManager->getInteractions(drug);
+            QList<Internal::DrugsInteraction *> list = d->m_InteractionsManager->getInteractions(drug);
+            qSort(list.begin(), list.end(), DrugsDB::Internal::DrugsInteraction::greaterThan);
             display.append("<br>\n");
             display.append(d->m_InteractionsManager->listToHtml(list, false));
         }

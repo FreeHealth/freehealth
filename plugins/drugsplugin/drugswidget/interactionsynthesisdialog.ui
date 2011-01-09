@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>679</height>
+    <height>806</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,7 @@
      <item>
       <widget class="QPushButton" name="getBiblio">
        <property name="text">
-        <string>Get the bibliography</string>
+        <string>Show available bibliography</string>
        </property>
       </widget>
      </item>
