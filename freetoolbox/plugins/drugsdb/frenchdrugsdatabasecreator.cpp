@@ -201,18 +201,18 @@ bool FrDrugDatatabaseStep::prepareDatas()
     // make some replacements
     // add \t before AMM encoding == ATC code + GLOBAL_STRENGTH
     QMap<QString, QString> replacements;
-    replacements.insert(QString::fromUtf8("\tAMM active\t"), "\t\t\tA\t");
-    replacements.insert(QString::fromUtf8("\tAMM abrogée\t") , "\t\t\tB\t");
-    replacements.insert(QString::fromUtf8("\tAMM retirée\t") , "\t\t\tR\t");
-    replacements.insert(QString::fromUtf8("\tAMM suspendue\t") , "\t\t\tS\t");
-    replacements.insert(QString::fromUtf8("\tAMM archivée\t") , "\t\t\tZ\t");
-    replacements.insert(QString::fromUtf8("\tNon commercialisée\t") , "\t0\t");
-    replacements.insert(QString::fromUtf8("\tCommercialisée\t") , "\t1\t");
-    replacements.insert(QString::fromUtf8("\tProcédure nationale\t") , "\tN\t");
-    replacements.insert(QString::fromUtf8("\tProcédure centralisée\t") , "\tC\t");
-    replacements.insert(QString::fromUtf8("\tProcédure de reconnaissance mutuelle\t") , "\tR\t");
-    replacements.insert(QString::fromUtf8("\tProcédure décentralisée\t") , "\tD\t");
-    replacements.insert(QString::fromUtf8("\tAutorisation d'importation paralléle\t") , "\tI\t");
+//    replacements.insert(QString::fromUtf8("\tAMM active\t"), "\t\t\tA\t");
+//    replacements.insert(QString::fromUtf8("\tAMM abrogée\t") , "\t\t\tB\t");
+//    replacements.insert(QString::fromUtf8("\tAMM retirée\t") , "\t\t\tR\t");
+//    replacements.insert(QString::fromUtf8("\tAMM suspendue\t") , "\t\t\tS\t");
+//    replacements.insert(QString::fromUtf8("\tAMM archivée\t") , "\t\t\tZ\t");
+//    replacements.insert(QString::fromUtf8("\tNon commercialisée\t") , "\t0\t");
+//    replacements.insert(QString::fromUtf8("\tCommercialisée\t") , "\t1\t");
+//    replacements.insert(QString::fromUtf8("\tProcédure nationale\t") , "\tN\t");
+//    replacements.insert(QString::fromUtf8("\tProcédure centralisée\t") , "\tC\t");
+//    replacements.insert(QString::fromUtf8("\tProcédure de reconnaissance mutuelle\t") , "\tR\t");
+//    replacements.insert(QString::fromUtf8("\tProcédure décentralisée\t") , "\tD\t");
+//    replacements.insert(QString::fromUtf8("\tAutorisation d'importation paralléle\t") , "\tI\t");
 
     {
         QMapIterator<QString, QString> i(replacements);
@@ -252,12 +252,12 @@ bool FrDrugDatatabaseStep::prepareDatas()
         content = QString::fromLatin1(file.readAll());
     }
     // make replacements
-    replacements.insert(QString::fromUtf8("\tPrésentation active\t"), "\tA\t");
-    replacements.insert(QString::fromUtf8("\tPrésentation abrogée\t"), "\tB\t");
-    replacements.insert(QString::fromUtf8("\tDéclaration d'arrêt de commercialisation\t"), "\tA\t") ;
-    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation non communiquée\t"),"\tN\t");
-    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation\t"), "\tC\t");
-    replacements.insert(QString::fromUtf8("\tDéclaration de suspension de commercialisation\t"), "\tS\t");
+//    replacements.insert(QString::fromUtf8("\tPrésentation active\t"), "\tA\t");
+//    replacements.insert(QString::fromUtf8("\tPrésentation abrogée\t"), "\tB\t");
+//    replacements.insert(QString::fromUtf8("\tDéclaration d'arrêt de commercialisation\t"), "\tA\t") ;
+//    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation non communiquée\t"),"\tN\t");
+//    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation\t"), "\tC\t");
+//    replacements.insert(QString::fromUtf8("\tDéclaration de suspension de commercialisation\t"), "\tS\t");
     {
         QMapIterator<QString, QString> i(replacements);
         while (i.hasNext()) {
@@ -444,8 +444,8 @@ bool FrDrugDatatabaseStep::linkDrugsRoutes()
         }
     }
 
-    foreach(const QString &command, commands)
-        Core::Tools::executeSqlQuery(command, FR_DRUGS_DATABASE_NAME, __FILE__, __LINE__);
+//    foreach(const QString &command, commands)
+//        Core::Tools::executeSqlQuery(command, FR_DRUGS_DATABASE_NAME, __FILE__, __LINE__);
 
     query.finish();
 
@@ -608,6 +608,10 @@ void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
     if (ui->populate->isChecked()) {
         if (m_Step->populateDatabase())
             ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
+    }
+    if (ui->routes->isChecked()) {
+        if (m_Step->linkDrugsRoutes())
+            ui->routes->setText(ui->routes->text() + " CORRECTLY DONE");
     }
     if (ui->linkMols->isChecked()) {
         if (m_Step->linkMolecules())
