@@ -17,6 +17,7 @@ DEPENDPATH += ../
 
 SOURCES += \
     canadiandrugsdatabase.cpp \
+    canadianlocalizeddrugsdatabase.cpp \
     fdadrugsdatabasecreator.cpp \
     frenchdrugsdatabasecreator.cpp \
     extramoleculelinkermodel.cpp \
@@ -26,10 +27,12 @@ SOURCES += \
     southafricandrugsdatabase.cpp \
     belgishdrugsdatabase.cpp \
     drugsdbplugin.cpp \
+    searchatcindatabasedialog.cpp
 
 
 HEADERS  += \
     canadiandrugsdatabase.h \
+    canadianlocalizeddrugsdatabase.h \
     fdadrugsdatabasecreator.h \
     frenchdrugsdatabasecreator.h \
     extramoleculelinkermodel.h \
@@ -39,16 +42,19 @@ HEADERS  += \
     southafricandrugsdatabase.h \
     belgishdrugsdatabase.h \
     drugsdbplugin.h \
+    searchatcindatabasedialog.h
 
 
 FORMS += \
     canadiandrugsdatabasewidget.ui \
+    canadianlocalizeddrugsdatabase.ui \
     fdadrugsdatabasewidget.ui \
     frenchdrugsdatabasewidget.ui \
     moleculelinkerwidget.ui \
     atcpage.ui \
     southafricandrugsdatabase.ui \
-    belgishdrugsdatabase.ui
+    belgishdrugsdatabase.ui \
+    searchatcindatabasedialog.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \

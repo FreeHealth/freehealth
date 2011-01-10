@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "moleculelinkerwidget.h"
 #include "extramoleculelinkermodel.h"
+#include "searchatcindatabasedialog.h"
 
 #include <coreplugin/ftb_constants.h>
 
@@ -112,12 +113,20 @@ void MoleculeLinkerWidget::pressed(const QModelIndex &index)
         QAction *who = new QAction(tr("Search WHO (copy molecule to clipboard)"), menu);
         QAction *resip = new QAction(tr("Search RESIP (copy molecule to clipboard)"), menu);
         QAction *copyClip = new QAction(tr("Copy molecule name to clipboard"), menu);
+        QAction *atcSearchDialog = new QAction(tr("Open the ATC search dialog"), menu);
+        menu->addAction(atcSearchDialog);
         menu->addAction(google);
         menu->addAction(who);
         menu->addAction(resip);
         menu->addAction(copyClip);
         QAction *selected = menu->exec(QCursor::pos());
-        if (selected == google) {
+        if (selected == atcSearchDialog) {
+            SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+            if (dlg.exec() == QDialog::Accepted) {
+                proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
+                proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
+            }
+        } else if (selected == google) {
             QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString())));
         } else if (selected == who) {
             QDesktopServices::openUrl(QUrl(QString("http://www.whocc.no/atc_ddd_index/?name=%1").arg(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString())));
@@ -135,7 +144,11 @@ void MoleculeLinkerWidget::activated(const QModelIndex &index)
     if (!proxyModel)
         return;
     if (index.column()==ExtraMoleculeLinkerModel::MoleculeName) {
-        QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString())));
+        SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+        if (dlg.exec() == QDialog::Accepted) {
+            proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
+            proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
+        }
     }
 }
 
