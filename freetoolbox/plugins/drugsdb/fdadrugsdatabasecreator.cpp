@@ -32,7 +32,6 @@
 #include <coreplugin/ftb_constants.h>
 #include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
 
 #include <utils/log.h>
 #include <utils/database.h>
