@@ -50,7 +50,7 @@
 using namespace DrugsDbCreator;
 
 
-const char* const  BE_DRUGS_DATABASE_NAME     = "BE_DRUGSDB";
+const char* const  BE_DRUGS_DATABASE_NAME     = "FAGG_AFMPS_BE";
 
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
@@ -206,11 +206,52 @@ bool BeDrugDatatabaseStep::unzipFiles()
 
 bool BeDrugDatatabaseStep::prepareDatas()
 {
-    // Dump is MySQL specific --> need some adjustement to feet the SQLite requirements
     if (!QFile(workingPath() + "/dump.sql").exists()) {
         Utils::warningMessageBox(tr("No dump file found"), tr("Try to execute the unzip step."));
         return false;
     }
+
+    // Dump is MySQL specific --> need some adjustement to feet the SQLite requirements
+    QFile fileIn(workingPath() + "/dump.sql");
+    if (!fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
+        return false;
+
+    QFile fileOut(workingPath() + "/dump_sqlite.sql");
+    if (!fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
+        return false;
+
+    QTextStream in(&fileIn);
+    QTextStream out(&fileOut);
+
+    out << "BEGIN TRANSACTION;\n";
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        // line start with '#' --> '--'
+        if (line.startsWith('#'))
+            continue;
+
+        // line start with SET --> '--'
+        if (line.startsWith("SET"))
+            continue;
+
+        if (line.startsWith("DROP DATABASE"))
+            continue;
+        if (line.startsWith("USE "))
+            continue;
+        if (line.startsWith("CREATE DATABASE"))
+            continue;
+
+        // line contains \' --> ''
+        line = line.replace("\\'","''");
+
+        // ENGINE=myisam DEFAULT CHARSET=utf8  --> remove
+        line = line.replace("ENGINE=myisam DEFAULT CHARSET=utf8","");
+
+        out << line << "\n";
+    }
+
+    out << "COMMIT;\n";
 
     return true;
 }
@@ -230,21 +271,140 @@ bool BeDrugDatatabaseStep::createDatabase()
     return true;
 }
 
+struct MinCompo {
+    MinCompo(int id, const QString &name, const QString &strength, const QString &strength_unit = QString::null, const QString &dosage = QString::null, const QString &dosageunit = QString::null) :
+            mol_id(id), mol(name), strength(strength), strength_unit(strength_unit), dosage(dosage), dosage_unit(dosageunit)
+    {}
+
+    QString sqlDosage()
+    {
+        if (dosage.isEmpty()) {
+            return strength + strength_unit;
+        } else {
+            return strength + strength_unit + "/" + dosage + dosage_unit;
+        }
+        return QString();
+    }
+
+    int mol_id;
+    QString mol;
+    QString strength, strength_unit, dosage, dosage_unit;
+};
+
+struct MinDrug {
+    MinDrug(const QString &n, const QString &u) :
+            name(n), uid(u)
+    {}
+
+    ~MinDrug()
+    {
+        qDeleteAll(compo);
+        compo.clear();
+    }
+
+    QString globalStrength()
+    {
+        QString s;
+        foreach(MinCompo *c, compo) {
+            s += c->strength + c->strength_unit + ";";
+        }
+        s.chop(1);
+        return s;
+    }
+
+    QString name, uid, atc, form, aut;
+    QVector<int> routes;
+    QVector<MinCompo *> compo;
+};
+
 bool BeDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(BE_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    // create temporary database schema
-//    if (!Core::Tools::executeSqlFile(BE_DRUGS_DATABASE_NAME, databasePreparationScript())) {
-//        Utils::Log::addError(this, "Can not create Canadian DB.", __FILE__, __LINE__);
+//    if (!Utils::Database::executeSqlFile(BE_DRUGS_DATABASE_NAME, workingPath() + "/dump_sqlite.sql")) {
+//        Utils::Log::addError(this, "Can not create BE DB.", __FILE__, __LINE__);
 //        return false;
 //    }
 
-    // import files
-    QStringList files = QStringList()
-                        << "dump.sql"
-                        ;
+    // delete existing
+    Core::Tools::executeSqlQuery("DELETE FROM DRUGS;", BE_DRUGS_DATABASE_NAME, __FILE__, __LINE__);
+    Core::Tools::executeSqlQuery("DELETE FROM COMPOSITION;", BE_DRUGS_DATABASE_NAME, __FILE__, __LINE__);
+
+    QSqlDatabase be = QSqlDatabase::database(BE_DRUGS_DATABASE_NAME);
+    be.transaction();
+
+    // Get Molecules
+    QString req = "SELECT DISTINCT `ActSubst_Name` FROM Tbl_AMM_det_H;";
+    QStringList mols;
+    QSqlQuery query(be);
+    if (query.exec(req)) {
+        while (query.next()) {
+            mols.append(query.value(0).toString());
+        }
+    }
+    query.finish();
+
+    // Get drugs
+    QString lastUid;
+    req = "SELECT `Registratienummer`, `mp_name`, `PharmFormFr`, `GenFr`, `cti` FROM Tbl_AMM_H ORDER BY `mp_name`, `Registratienummer`;";
+    if (query.exec(req)) {
+        while (query.next()) {
+            if (query.value(0).toString()==lastUid)
+                continue;
+            lastUid = query.value(0).toString();
+            MinDrug drug(query.value(1).toString(), query.value(0).toString());
+            drug.form = query.value(2).toString();
+            drug.aut = query.value(3).toString();
+
+            QString req2 = QString("SELECT `ActSubst_Name`, `unit`, `dosis` FROM Tbl_AMM_det_H "
+                                       "WHERE `cti`='%1';").arg(query.value(4).toString());
+            QSqlQuery compo(be);
+            if (compo.exec(req2)) {
+                while (compo.next()) {
+                    drug.compo.append(new MinCompo(mols.indexOf(compo.value(0).toString()), compo.value(0).toString(),
+                                                   compo.value(2).toString(), compo.value(1).toString()));
+                }
+            } else {
+                Utils::Log::addQueryError(this, compo, __FILE__, __LINE__);
+            }
+            compo.finish();
+
+            // Insert drug
+            req2 = QString("INSERT INTO DRUGS (`UID`,`NAME`,`FORM`,`GLOBAL_STRENGTH`,`AUTHORIZATION`,`MARKETED`) VALUES "
+                           "('%1', '%2', '%3', '%4', '%5', 1);")
+                    .arg(drug.uid)
+                    .arg(drug.name.replace("'", "''"))
+                    .arg(drug.form.replace("'", "''"))
+                    .arg(drug.globalStrength())
+                    .arg(drug.aut.replace("'", "''"));
+            if (!compo.exec(req2)) {
+                Utils::Log::addQueryError(this, compo, __FILE__, __LINE__);
+            }
+            compo.finish();
+
+            // Insert drug composition
+            foreach(MinCompo *compositon, drug.compo) {
+                req2 = QString("INSERT INTO COMPOSITION (`UID`,`MOLECULE_NAME`,`MOLECULE_CODE`,`DOSAGE`) VALUES "
+                               "('%1','%2','%3','%4');")
+                        .arg(drug.uid)
+                        .arg(compositon->mol.replace("'", "''"))
+                        .arg(compositon->mol_id)
+                        .arg(compositon->sqlDosage().replace("'", "''"));
+                if (!compo.exec(req2)) {
+                    Utils::Log::addQueryError(this, compo, __FILE__, __LINE__);
+                }
+                compo.finish();
+                req2.clear();
+            }
+        }
+    }
+
+    be.commit();
+
+//    -- route=PackFr
+//    -- autoriation de délivrance=DelivFr
+
 
     return true;
 }
@@ -256,51 +416,62 @@ bool BeDrugDatatabaseStep::splitDatabase()
 
 bool BeDrugDatatabaseStep::linkMolecules()
 {
-        if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
-            return false;
+    // 10 Jan 2011
+    //    NUMBER OF MOLECULES 2146
+    //    CORRECTED BY NAME 1
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1351 "
+    //    LINKERMODEL (WithATC:659;WithoutATC:13) 672"
+    //    LINKERNATURE 0
+    //    LEFT 782
+    //    CONFIDENCE INDICE 63
 
-        // get all drugs and ATC codes
-        if (!Core::Tools::connectDatabase(BE_DRUGS_DATABASE_NAME, databaseAbsPath()))
-            return false;
+    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+        return false;
 
-        QSqlDatabase be = QSqlDatabase::database(BE_DRUGS_DATABASE_NAME);
-        if (!be.open()) {
-            Utils::Log::addError(this, "Can not connect to BE_DB db", __FILE__, __LINE__);
-            return false;
+    // get all drugs and ATC codes
+    if (!Core::Tools::connectDatabase(BE_DRUGS_DATABASE_NAME, databaseAbsPath()))
+        return false;
+
+    QSqlDatabase be = QSqlDatabase::database(BE_DRUGS_DATABASE_NAME);
+    if (!be.open()) {
+        Utils::Log::addError(this, "Can not connect to BE_DB db", __FILE__, __LINE__);
+        return false;
+    }
+
+    QMultiHash<QString, QString> correctedByAtcCode;
+    QHash<QString, QString> corrected;
+    corrected.insert("HYPERICUM PERFORATUM (MILLEPERTUIS)", "MILLEPERTUIS");
+
+    // Associate Mol <-> ATC for drugs with one molecule only
+    QStringList unfound;
+    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(BE_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, correctedByAtcCode);
+    qWarning() << "unfound" << unfound.count();
+
+    // Save to links to drugs database
+    be.transaction();
+    Core::Tools::executeSqlQuery("DELETE FROM LK_MOL_ATC;", BE_DRUGS_DATABASE_NAME);
+    foreach(int mol, mol_atc.uniqueKeys()) {
+        QList<int> atcCodesSaved;
+        foreach(int atc, mol_atc.values(mol)) {
+            if (atcCodesSaved.contains(atc))
+                continue;
+            atcCodesSaved.append(atc);
+            QString req = QString("INSERT INTO `LK_MOL_ATC` VALUES (%1, %2)").arg(mol).arg(atc);
+            Core::Tools::executeSqlQuery(req, BE_DRUGS_DATABASE_NAME);
         }
+    }
+    be.commit();
 
-        QMultiHash<QString, QString> correctedByAtcCode;
-        QHash<QString, QString> corrected;
+    // add unfound to extralinkermodel
+    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(BE_DRUGS_DATABASE_NAME, unfound);
+    ExtraMoleculeLinkerModel::instance()->saveModel();
 
-        // Associate Mol <-> ATC for drugs with one molecule only
-        QStringList unfound;
-        QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(BE_DRUGS_DATABASE_NAME, "en", &unfound, corrected, correctedByAtcCode);
-        qWarning() << "unfound" << unfound.count();
+    //        if (!Core::Tools::signDatabase(BE_DRUGS_DATABASE_NAME))
+    //            Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
 
-        // Save to links to drugs database
-        be.transaction();
-        Core::Tools::executeSqlQuery("DELETE FROM LK_MOL_ATC;", BE_DRUGS_DATABASE_NAME);
-        foreach(int mol, mol_atc.uniqueKeys()) {
-            QList<int> atcCodesSaved;
-            foreach(int atc, mol_atc.values(mol)) {
-                if (atcCodesSaved.contains(atc))
-                    continue;
-                atcCodesSaved.append(atc);
-                QString req = QString("INSERT INTO `LK_MOL_ATC` VALUES (%1, %2)").arg(mol).arg(atc);
-                Core::Tools::executeSqlQuery(req, BE_DRUGS_DATABASE_NAME);
-            }
-        }
-        be.commit();
+    Utils::Log::addMessage(this, QString("Database processed"));
 
-        // add unfound to extralinkermodel
-        ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(BE_DRUGS_DATABASE_NAME, unfound);
-        ExtraMoleculeLinkerModel::instance()->saveModel();
-
-//        if (!Core::Tools::signDatabase(BE_DRUGS_DATABASE_NAME))
-//            Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
-
-        Utils::Log::addMessage(this, QString("Database processed"));
-
-        return true;
+    return true;
 }
 
