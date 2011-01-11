@@ -32,8 +32,8 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef ACTS_H
-#define ACTS_H
+#ifndef ACTSMODEL_H
+#define ACTSMODEL_H
 
 #include <QAbstractTableModel>
 
@@ -43,7 +43,7 @@
 
 
 
-namespace ActsDB {
+namespace AccountDB {
 namespace Internal {
 class ActsModelPrivate;
 }

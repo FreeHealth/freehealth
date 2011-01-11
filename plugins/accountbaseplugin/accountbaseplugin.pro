@@ -24,6 +24,7 @@ HEADERS = accountbaseplugin.h \
     rulesmodel.h \
     distancerulesmodel.h \
     thesaurusmodel.h \
+    actsmodel. h \
     medicalproceduremodel.h
 
 SOURCES = accountbaseplugin.cpp \
@@ -40,6 +41,7 @@ SOURCES = accountbaseplugin.cpp \
     rulesmodel.cpp \
     distancerulesmodel.cpp \
     thesaurusmodel.cpp \
+    actsmodel.cpp \
     medicalproceduremodel.cpp
 
 OTHER_FILES = AccountBase.pluginspec

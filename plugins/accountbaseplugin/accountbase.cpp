@@ -137,7 +137,7 @@ AccountBase::AccountBase(QObject *parent)
     addTable(Table_BankDetails,       "bank_details");
     addTable(Table_Deposit,           "deposit");
     addTable(Table_Account,           "account");
-    addTable(Table_Acts,           "amount");
+    addTable(Table_Acts,              "acts");
     addTable(Table_Assets,            "assets");
     addTable(Table_Movement,          "movement");
     addTable(Table_AvailableMovement, "available_movement");
@@ -158,7 +158,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
     addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
     addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
-    addField(Table_MedicalProcedure, MP_ACTS,         "ACTS",         FieldIsReal);
+    addField(Table_MedicalProcedure, MP_AMOUNT,         "ACTS",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     /** Add a link to INSURANCE table ? One MP is reimburse by a specific insurance... */
@@ -246,17 +246,8 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Acts,  ACTS_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
     addField(Table_Acts,  ACTS_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
     addField(Table_Acts,  ACTS_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
-    addField(Table_Acts,  ACTS_MEDICALPROCEDURE_XML,   "MP_XML",  FieldIsBlob);
     addField(Table_Acts,  ACTS_MEDICALPROCEDURE_TEXT,   "MP_TXT", FieldIsLongText);
     addField(Table_Acts,  ACTS_COMMENT,         "COMMENT",        FieldIsLongText);
-    addField(Table_Acts,  ACTS_CASHACTS,      "CASH",           FieldIsReal);
-    addField(Table_Acts,  ACTS_CHEQUEACTS,    "CHEQUE",         FieldIsReal);
-    addField(Table_Acts,  ACTS_VISAACTS,      "VISA",           FieldIsReal);
-    addField(Table_Acts,  ACTS_INSURANCEACTS, "INSURANCE",      FieldIsReal);
-    addField(Table_Acts,  ACTS_OTHERACTS,     "OTHER",          FieldIsReal);
-    addField(Table_Acts,  ACTS_DUEACTS,       "DUE",            FieldIsReal);
-    addField(Table_Acts,  ACTS_DUEBY,           "DUE_BY",         FieldIsShortText);
-    addField(Table_Acts,  ACTS_ISVALID,         "ISVALID",        FieldIsBoolean);
     addField(Table_Acts,  ACTS_TRACE,           "TRACE",          FieldIsBlob);
 
 //    "CREATE TABLE 	honoraires	("   --> amount
@@ -325,7 +316,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Movement,  MOV_LABEL,          "LABEL",      FieldIsShortText);
     addField(Table_Movement,  MOV_DATE,           "DATE",       FieldIsDate, "CURRENT_DATE");
     addField(Table_Movement,  MOV_DATEOFVALUE,    "DATEVALUE",  FieldIsDate, "CURRENT_DATE");
-    addField(Table_Movement,  MOV_ACTS,         "ACTS",     FieldIsReal);
+    addField(Table_Movement,  MOV_AMOUNT,         "ACTS",     FieldIsReal);
     addField(Table_Movement,  MOV_COMMENT,        "COMMENT",    FieldIsLongText);
     addField(Table_Movement,  MOV_VALIDITY,       "VALIDITY",   FieldIsInteger);
     addField(Table_Movement,  MOV_TRACE,          "TRACE",      FieldIsBlob);

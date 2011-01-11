@@ -52,7 +52,7 @@ using namespace Trans::ConstantTranslations;
 enum {WarnFilter=true};
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline ActsDB::AccountBase *accountBase() {return ActsDB::ActsBase::instance();}
+static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 
@@ -81,12 +81,12 @@ public:
             return;
         QHash<int, QString> where;
         if (m_EndDate==m_StartDate) {
-            where.insert(ActsDB::Constants::ACTS_DATE, QString("='%1'").arg(m_EndDate.toString(Qt::ISODate)));
+            where.insert(AccountDB::Constants::ACTS_DATE, QString("='%1'").arg(m_EndDate.toString(Qt::ISODate)));
         } else {
-            where.insertMulti(ActsDB::Constants::ACTS_DATE, QString(">='%1'").arg(m_StartDate.toString(Qt::ISODate)));
-            where.insertMulti(ActsDB::Constants::ACTS_DATE, QString("<='%1'").arg( m_EndDate.toString(Qt::ISODate)));
+            where.insertMulti(AccountDB::Constants::ACTS_DATE, QString(">='%1'").arg(m_StartDate.toString(Qt::ISODate)));
+            where.insertMulti(AccountDB::Constants::ACTS_DATE, QString("<='%1'").arg( m_EndDate.toString(Qt::ISODate)));
         }
-        where.insert(ActsDB::Constants::ACTS_USER_UID, QString("='%1'").arg(m_UserUid));
+        where.insert(AccountDB::Constants::ACTS_USER_UID, QString("='%1'").arg(m_UserUid));
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Acts, where));
         if (WarnFilter)
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
@@ -104,7 +104,7 @@ private:
 };
 
 }  // End namespace Internal
-}  // End namespace ActsDB
+}  // End namespace AccountDB
 
 
 
