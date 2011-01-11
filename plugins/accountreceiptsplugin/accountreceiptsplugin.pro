@@ -32,7 +32,7 @@ HEADERS += accountreceipts_exporter.h \
     receiptviewer.h 
 
 
-FORMS += ReceiptsMainDialog.ui \
+FORMS += #ReceiptsMainDialog.ui \
     #ReceiptsWidget.ui \
     findValuesGUI.ui \
     ChoiceDialog.ui \

@@ -130,6 +130,8 @@ private:
 
 private slots :
     void deleteLine();
+    void save();
+    void saveAndQuit();
     void treeViewsActions(const QModelIndex&);
 };
 

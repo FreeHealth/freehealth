@@ -33,7 +33,7 @@ receiptsEngine::~receiptsEngine()
 {
 }
 
-bool receiptsEngine::insertIntoAccount(const QHash<QString,QString> &hashOfValues, const QHash<int,QString> &hashOfParams)
+bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues)
 {
     // fetch all the account model
     while (m_mpmodel->canFetchMore(QModelIndex())) {
@@ -50,102 +50,41 @@ bool receiptsEngine::insertIntoAccount(const QHash<QString,QString> &hashOfValue
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     bool ret = true;
     QString data;
-    QHashIterator<QString,QString> it (hashOfValues);
-    QList<int> listValuesNumbers;
-    listValuesNumbers << ACCOUNT_MEDICALPROCEDURE_TEXT // exemple C, V, MNO, ...
-            << ACCOUNT_COMMENT // exemple consultation, ...
-            << ACCOUNT_CASHAMOUNT
-            << ACCOUNT_CHEQUEAMOUNT
-            << ACCOUNT_VISAAMOUNT
-            << ACCOUNT_INSURANCEAMOUNT // <-> virement
-            << ACCOUNT_DUEAMOUNT;
-    while(it.hasNext()){//on prend chaque valeur
-        qDebug() << __FILE__ << QString::number(__LINE__) << " it hasNext";
-        it.next();
-        int row =  m_mpmodel->rowCount();
-        qDebug() << __FILE__ << QString::number(__LINE__) << " row = " << QString::number(row);
-        m_mpmodel->insertRows(row,1);
-        qDebug() << __FILE__ << QString::number(__LINE__) << " rowAfter = " << QString::number(m_mpmodel->rowCount());
-        for(int i = 0 ; i < ACCOUNT_MaxParam ; i++){
-            qDebug() << __FILE__ << QString::number(__LINE__) << " for " << QString::number(i) ;
-            if (i == 0) { //ACCOUNT_ID
-            	int idBefore = m_mpmodel->data(m_mpmodel->index(row-1,ACCOUNT_ID),Qt::DisplayRole).toInt();
-            	qDebug() << __FILE__ << QString::number(__LINE__) << "idBefore = "<< QString::number(idBefore) ;
-            	data = QString::number(idBefore+1);
-            	qDebug() << __FILE__ << QString::number(__LINE__) << " data ACCOUNT_ID = " << data;
-            }
-            else if (listValuesNumbers.contains(i)) {
-                switch(i) {
-                case ACCOUNT_MEDICALPROCEDURE_TEXT :
-                    data = it.key();
-                    break;
-                case ACCOUNT_COMMENT :
-                    data = hashOfParams.value(ACCOUNT_COMMENT);
-                    break;
-                case ACCOUNT_CASHAMOUNT :
-                    if(hashOfParams.value(ACCOUNT_CASHAMOUNT) == QString("0")) {
-                        data = "0";
-                    } else {
-                        data = it.value();
-                    }
-                    break;
-                    case ACCOUNT_CHEQUEAMOUNT:
-                    if(hashOfParams.value(ACCOUNT_CHEQUEAMOUNT) == QString("0")) {
-                        data = "0";
-                    } else {
-                        data = it.value();
-                    }
-                    break;
-                    case ACCOUNT_VISAAMOUNT:
-                    if(hashOfParams.value(ACCOUNT_VISAAMOUNT) == QString("0")) {
-                        data = "0";
-                    }
-                    else{
-                        data = it.value();
-                    }
-                    break;
-                    case ACCOUNT_INSURANCEAMOUNT :
-                    if(hashOfParams.value(ACCOUNT_INSURANCEAMOUNT) == QString("0")) {
-                        data = "0";
-                    }
-                    else{
-                        data = it.value();
-                    }
-                    break;
-                    case ACCOUNT_DUEAMOUNT :
-                    if(hashOfParams.value(ACCOUNT_DUEAMOUNT) == QString("0")) {
-                        data = "0";
-                    }
-                    else{
-                        data = it.value();
-                    }
-                    break;
-                    default :
-                            break;
-                }
-
-            }
-            else{
-                data = hashOfParams.value(i);
-            }
-            qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
-            QModelIndex index = m_mpmodel->index(row,i,QModelIndex());
-            if (!index.isValid())
-            {
-            	  qWarning() << __FILE__ << QString::number(__LINE__) << " index is not valid " ;
-                }
-            if (!m_mpmodel-> setData(index, data ,Qt::EditRole))
+    
+            ACCOUNT_ID = 0,
+        ACCOUNT_UID,
+        ACCOUNT_USER_UID,
+        ACCOUNT_PATIENT_UID,
+        ACCOUNT_PATIENT_NAME,
+        ACCOUNT_SITE_ID,
+        ACCOUNT_INSURANCE_ID,
+        ACCOUNT_DATE,
+        ACCOUNT_MEDICALPROCEDURE_XML,
+        ACCOUNT_MEDICALPROCEDURE_TEXT,
+        ACCOUNT_COMMENT,
+        ACCOUNT_CASHAMOUNT,
+        ACCOUNT_CHEQUEAMOUNT,
+        ACCOUNT_VISAAMOUNT,
+        ACCOUNT_INSURANCEAMOUNT,
+        ACCOUNT_OTHERAMOUNT,
+        ACCOUNT_DUEAMOUNT,
+        ACCOUNT_DUEBY,
+        ACCOUNT_ISVALID,
+        ACCOUNT_TRACE,
+        ACCOUNT_MaxParam
+    
+       /*     if (!m_mpmodel-> setData(index, data ,Qt::EditRole))
             {
             	              qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
                     <<m_mpmodel->lastError().text() ;
                 }
 
             qDebug() << __FILE__ << QString::number(__LINE__) << " inserted data "<< m_mpmodel->data(index,Qt::DisplayRole).toString();
-        }
+        
         m_mpmodel->submit();
         qWarning() << __FILE__ << QString::number(__LINE__) << " model account submit error = "
                 << m_mpmodel->lastError().text();
-    }
+    }*/
 
     if (m_mpmodel->rowCount(QModelIndex()) == rowBefore) {
         QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : "),trUtf8("Error = ") + m_mpmodel->lastError().text(),QMessageBox::Ok);

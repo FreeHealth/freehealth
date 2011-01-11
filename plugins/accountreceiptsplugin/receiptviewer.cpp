@@ -1,5 +1,6 @@
 #include "receiptviewer.h"
-#include "receiptsmanager.h"
+#include "receiptsmanager.h"	
+#include "receiptsIO.h"
 #include "findReceiptsValues.h"
 #include "choiceDialog.h"
 
@@ -11,6 +12,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 
 #include <QAbstractItemModel>
 
@@ -19,6 +21,7 @@
 #include <QFrame>
 using namespace Core;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 using namespace ReceiptsConstants;
 using namespace InternalAmount;
 
@@ -43,8 +46,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBook->setDate(QDate::currentDate());
     ui->deleteLineButton->hide();
     ui->inputRadioButton->setChecked(true);
+    ui->saveAndQuitButton->setShortCut(QKeySequence::InsertLineSeparator);
     fillActionTreeView();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
+    connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->deleteLineButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->actionsTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(treeViewsActions(const QModelIndex&)));
 }
@@ -84,7 +90,7 @@ void ReceiptViewer::fillActionTreeView(){
     parametersMap.insert("Thesaurus","thesaurus");
     parametersMap.insert("Values","values");
     parametersMap.insert("Sites","sites");
-    parametersMap.insert("Preferential rate","preferential rate");
+    parametersMap.insert("Prefered Value","Prefered Value");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
@@ -160,7 +166,7 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
             qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
             }
          }
-    else if(data == "Preferential rate"){// preferential act of payment
+    else if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
@@ -183,3 +189,38 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
     const QModelIndex index = m_model->index(typeOfPayment,AmountModel::Col_Value);
     m_model->setData(index, value, Qt::EditRole);
 }
+
+void ReceiptViewer::save(){
+    QHash<int,QVariant> hashOfValues;
+    hash.insert(ACCOUNT_UID,AccountDB::Constants::MP_UID);
+    hash.insert(ACCOUNT_USER_UID,AccountDB::Constants::MP_USER_UID);
+    hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString(););
+    hash.insert(ACCOUNT_PATIENT_NAME,AccountDB::Constants::MP_NAME);
+    hash.insert(ACCOUNT_SITE_ID,NULL);
+    hash.insert(ACCOUNT_INSURANCE_ID,NULL);
+    hash.insert(ACCOUNT_DATE,dateExecution->date().toString("yyyy-MM-dd"));
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,);
+    hash.insert(ACCOUNT_COMMENT,NULL);
+    hash.insert(ACCOUNT_CASHAMOUNT,m_model->data(m_model->index(Col_Value,Row_Cash)));
+    hash.insert(ACCOUNT_CHEQUEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Cheque)));
+    hash.insert(ACCOUNT_VISAAMOUNT,m_model->data(m_model->index(Col_Value,Row_Visa)));
+    hash.insert(ACCOUNT_INSURANCEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Banking)));
+    hash.insert(ACCOUNT_OTHERAMOUNT,m_model->data(m_model->index(Col_Value,Row_Other)));
+    hash.insert(ACCOUNT_DUEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Du)));
+    hash.insert(ACCOUNT_DUEBY,NULL);
+    hash.insert(ACCOUNT_ISVALID,0);
+    hash.insert(ACCOUNT_TRACE,NULL);
+    receiptsEngine r;
+    if (!r.insertIntoAccount(hashOfValues))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
+        }
+}
+
+void ReceiptViewer::saveAndQuit(){
+    save();
+    close();
+}
+
+

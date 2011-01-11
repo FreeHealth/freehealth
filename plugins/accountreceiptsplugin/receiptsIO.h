@@ -5,6 +5,8 @@
 
 #include <QHash>
 #include <QSqlDatabase>
+#include <QSqlTableModel>
+
 
 using namespace AccountDB;
 class receiptsEngine : public QObject {    
@@ -12,7 +14,7 @@ class receiptsEngine : public QObject {
 public :
     receiptsEngine();
     ~receiptsEngine();
-    bool insertIntoAccount(const QHash<QString,QString> &hashOfValues, const QHash<int,QString> &hashOfParams);
+    bool insertIntoAccount(QHash<int,QVariant> & hashValues);
 
 private :
    AccountModel *m_mpmodel;
