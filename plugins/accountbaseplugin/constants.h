@@ -66,6 +66,7 @@ namespace Constants {
         Table_BankDetails,
         Table_Deposit,
         Table_Account,
+        Table_Amount,
         Table_Assets,
         Table_Movement,
         Table_AvailableMovement,
@@ -88,7 +89,7 @@ namespace Constants {
         MP_NAME,
         MP_ABSTRACT,
         MP_TYPE,
-        MP_AMOUNT,
+        MP_ACTS,
         MP_REIMBOURSEMENT,
         MP_DATE,
         MP_MaxParam
@@ -132,16 +133,31 @@ namespace Constants {
         ACCOUNT_MEDICALPROCEDURE_XML,
         ACCOUNT_MEDICALPROCEDURE_TEXT,
         ACCOUNT_COMMENT,
-        ACCOUNT_CASHAMOUNT,
-        ACCOUNT_CHEQUEAMOUNT,
-        ACCOUNT_VISAAMOUNT,
-        ACCOUNT_INSURANCEAMOUNT,
-        ACCOUNT_OTHERAMOUNT,
-        ACCOUNT_DUEAMOUNT,
+        ACCOUNT_CASHACTS,
+        ACCOUNT_CHEQUEACTS,
+        ACCOUNT_VISAACTS,
+        ACCOUNT_INSURANCEACTS,
+        ACCOUNT_OTHERACTS,
+        ACCOUNT_DUEACTS,
         ACCOUNT_DUEBY,
         ACCOUNT_ISVALID,
         ACCOUNT_TRACE,
         ACCOUNT_MaxParam
+    };
+    
+    enum TableAmount_Fields {
+        ACTS_ID,
+        ACTS_UID,
+        ACTS_USER_UID,
+        ACTS_PATIENT_UID,
+        ACTS_PATIENT_NAME,
+        ACTS_SITE_ID,
+        ACTS_INSURANCE_ID,
+        ACTS_DATE,
+        ACTS_MEDICALPROCEDURE_TEXT,
+        ACTS_COMMENT,
+        ACTS_TRACE
+        ACTS_MaxParam
     };
     enum TableAssets_Fields {
         ASSETS_ID = 0,
@@ -152,7 +168,7 @@ namespace Constants {
         ASSETS_DURATION,
         ASSETS_MODE,
         ASSETS_VALUE,
-        ASSETS_TAXEAMOUNT,
+        ASSETS_TAXEACTS,
         ASSETS_RESIDUAL_VALUE,
         ASSETS_RESULT,
         ASSETS_MOVEMENT,
@@ -169,7 +185,7 @@ namespace Constants {
         MOV_LABEL,
         MOV_DATE,
         MOV_DATEOFVALUE,
-        MOV_AMOUNT,
+        MOV_ACTS,
         MOV_COMMENT,
         MOV_VALIDITY,
         MOV_TRACE,

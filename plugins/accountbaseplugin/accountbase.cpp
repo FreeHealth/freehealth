@@ -137,6 +137,7 @@ AccountBase::AccountBase(QObject *parent)
     addTable(Table_BankDetails,       "bank_details");
     addTable(Table_Deposit,           "deposit");
     addTable(Table_Account,           "account");
+    addTable(Table_Acts,           "amount");
     addTable(Table_Assets,            "assets");
     addTable(Table_Movement,          "movement");
     addTable(Table_AvailableMovement, "available_movement");
@@ -157,7 +158,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
     addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
     addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
-    addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
+    addField(Table_MedicalProcedure, MP_ACTS,         "ACTS",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     /** Add a link to INSURANCE table ? One MP is reimburse by a specific insurance... */
@@ -232,20 +233,33 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Account,  ACCOUNT_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
-    addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_XML,   "MP_XML",  FieldIsBlob);
     addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_TEXT,   "MP_TXT", FieldIsLongText);
     addField(Table_Account,  ACCOUNT_COMMENT,         "COMMENT",        FieldIsLongText);
-    addField(Table_Account,  ACCOUNT_CASHAMOUNT,      "CASH",           FieldIsReal);
-    addField(Table_Account,  ACCOUNT_CHEQUEAMOUNT,    "CHEQUE",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_VISAAMOUNT,      "VISA",           FieldIsReal);
-    addField(Table_Account,  ACCOUNT_INSURANCEAMOUNT, "INSURANCE",      FieldIsReal);
-    addField(Table_Account,  ACCOUNT_OTHERAMOUNT,     "OTHER",          FieldIsReal);
-    addField(Table_Account,  ACCOUNT_DUEAMOUNT,       "DUE",            FieldIsReal);
-    addField(Table_Account,  ACCOUNT_DUEBY,           "DUE_BY",         FieldIsShortText);
-    addField(Table_Account,  ACCOUNT_ISVALID,         "ISVALID",        FieldIsBoolean);
     addField(Table_Account,  ACCOUNT_TRACE,           "TRACE",          FieldIsBlob);
+    
+    
+    addField(Table_Acts,  ACTS_ID,              "ACTS_ID",     FieldIsUniquePrimaryKey);
+    addField(Table_Acts,  ACTS_UID,             "ACTS_UID",    FieldIsUUID);
+    addField(Table_Acts,  ACTS_USER_UID,        "USER_UID",       FieldIsUUID);
+    addField(Table_Acts,  ACTS_PATIENT_UID,     "PATIENT_UID",    FieldIsLongInteger);
+    addField(Table_Acts,  ACTS_PATIENT_NAME,    "PATIENT_NAME",   FieldIsLongInteger);
+    addField(Table_Acts,  ACTS_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
+    addField(Table_Acts,  ACTS_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
+    addField(Table_Acts,  ACTS_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
+    addField(Table_Acts,  ACTS_MEDICALPROCEDURE_XML,   "MP_XML",  FieldIsBlob);
+    addField(Table_Acts,  ACTS_MEDICALPROCEDURE_TEXT,   "MP_TXT", FieldIsLongText);
+    addField(Table_Acts,  ACTS_COMMENT,         "COMMENT",        FieldIsLongText);
+    addField(Table_Acts,  ACTS_CASHACTS,      "CASH",           FieldIsReal);
+    addField(Table_Acts,  ACTS_CHEQUEACTS,    "CHEQUE",         FieldIsReal);
+    addField(Table_Acts,  ACTS_VISAACTS,      "VISA",           FieldIsReal);
+    addField(Table_Acts,  ACTS_INSURANCEACTS, "INSURANCE",      FieldIsReal);
+    addField(Table_Acts,  ACTS_OTHERACTS,     "OTHER",          FieldIsReal);
+    addField(Table_Acts,  ACTS_DUEACTS,       "DUE",            FieldIsReal);
+    addField(Table_Acts,  ACTS_DUEBY,           "DUE_BY",         FieldIsShortText);
+    addField(Table_Acts,  ACTS_ISVALID,         "ISVALID",        FieldIsBoolean);
+    addField(Table_Acts,  ACTS_TRACE,           "TRACE",          FieldIsBlob);
 
-//    "CREATE TABLE 	honoraires	("   --> account
+//    "CREATE TABLE 	honoraires	("   --> amount
 //                    "id_hono  	int(11)  	 	UNSIGNED  			NOT NULL	 auto_increment  ,"
 //                    "id_usr 	int(11) 						NOT NULL			 ,"
 //                    "id_drtux_usr 	int(11) 						NULL 				 ,"
@@ -278,7 +292,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Assets,  ASSETS_DURATION,       "DURATION",      FieldIsLongInteger);
     addField(Table_Assets,  ASSETS_MODE,           "MODE",          FieldIsInteger);
     addField(Table_Assets,  ASSETS_VALUE,          "VALUE",         FieldIsReal);
-    addField(Table_Assets,  ASSETS_TAXEAMOUNT,     "TAXEAMOUNT",    FieldIsReal);
+    addField(Table_Assets,  ASSETS_TAXEACTS,     "TAXEACTS",    FieldIsReal);
     addField(Table_Assets,  ASSETS_RESIDUAL_VALUE, "RESIDUALVALUE", FieldIsLongInteger);
     addField(Table_Assets,  ASSETS_RESULT,         "RESULT",        FieldIsBlob);
     addField(Table_Assets,  ASSETS_MOVEMENT,       "MOVEMENT",      FieldIsBlob);
@@ -311,7 +325,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Movement,  MOV_LABEL,          "LABEL",      FieldIsShortText);
     addField(Table_Movement,  MOV_DATE,           "DATE",       FieldIsDate, "CURRENT_DATE");
     addField(Table_Movement,  MOV_DATEOFVALUE,    "DATEVALUE",  FieldIsDate, "CURRENT_DATE");
-    addField(Table_Movement,  MOV_AMOUNT,         "AMOUNT",     FieldIsReal);
+    addField(Table_Movement,  MOV_ACTS,         "ACTS",     FieldIsReal);
     addField(Table_Movement,  MOV_COMMENT,        "COMMENT",    FieldIsLongText);
     addField(Table_Movement,  MOV_VALIDITY,       "VALIDITY",   FieldIsInteger);
     addField(Table_Movement,  MOV_TRACE,          "TRACE",      FieldIsBlob);
@@ -446,12 +460,12 @@ AccountBase::AccountBase(QObject *parent)
 //    addField(Table_Session,  PAIE_USER_UID,    "",     FieldIs);
 //    addField(Table_Session,  PAIE_SITE_UID,    "",     FieldIs);
 //    addField(Table_Session,  PAIE_MEDICPROC,   "",     FieldIs);
-//    addField(Table_Session,  PAIE_CASHAMOUNT,      "CASH",           FieldIsReal);
-//    addField(Table_Session,  PAIE_CHEQUEAMOUNT,    "CHEQUE",         FieldIsReal);
-//    addField(Table_Session,  PAIE_VISAAMOUNT,      "VISA",           FieldIsReal);
-//    addField(Table_Session,  PAIE_INSURANCEAMOUNT, "INSURANCE",      FieldIsReal);
-//    addField(Table_Session,  PAIE_OTHERAMOUNT,     "OTHER",          FieldIsReal);
-//    addField(Table_Session,  PAIE_DUEAMOUNT,       "DUE",            FieldIsReal);
+//    addField(Table_Session,  PAIE_CASHACTS,      "CASH",           FieldIsReal);
+//    addField(Table_Session,  PAIE_CHEQUEACTS,    "CHEQUE",         FieldIsReal);
+//    addField(Table_Session,  PAIE_VISAACTS,      "VISA",           FieldIsReal);
+//    addField(Table_Session,  PAIE_INSURANCEACTS, "INSURANCE",      FieldIsReal);
+//    addField(Table_Session,  PAIE_OTHERACTS,     "OTHER",          FieldIsReal);
+//    addField(Table_Session,  PAIE_DUEACTS,       "DUE",            FieldIsReal);
 //    addField(Table_Session,  PAIE_DUEBY,           "DUE_BY",         FieldIsShortText);
 //    addField(Table_Session,  PAIE_ISVALID,         "ISVALID",        FieldIsBoolean);
 //    addField(Table_Session,  PAIE_TRACE,           "TRACE",          FieldIsBlob);
