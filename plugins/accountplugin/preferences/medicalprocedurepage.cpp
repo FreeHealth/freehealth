@@ -214,10 +214,10 @@ void MedicalProcedureWidget::on_addButton_clicked()
     dateEdit->setDate(QDate::currentDate());*/
 }
 
-void MedicalProcedureWidget::on_save_clicked()
+/*void MedicalProcedureWidget::on_save_clicked()
 {
     saveModel();
-}
+}*/
 
 /*void MedicalProcedureWidget::on_name_textChanged(const QString & text){
     mpComboBox->setItemText(mpComboBox->currentIndex(),text);
