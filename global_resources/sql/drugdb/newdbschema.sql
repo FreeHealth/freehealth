@@ -42,14 +42,8 @@ CREATE TABLE IF NOT EXISTS LABELS_LINK (
 
 CREATE TABLE IF NOT EXISTS LABELS (
   LID   INTEGER PRIMARY KEY,
-  LCID  integer,
+  LANG  varchar(5),
   LABEL varchar(250)
-);
-
-
-CREATE TABLE IF NOT EXISTS LANGUAGES (
-  LCID  INTEGER PRIMARY KEY,
-  ISO   varchar(5)
 );
 
 CREATE TABLE IF NOT EXISTS DRUGS (
@@ -61,44 +55,40 @@ CREATE TABLE IF NOT EXISTS DRUGS (
   STRENGTH  varchar(40),
   FORMS_ID  integer,
   ROUTES_ID integer,
-  AID       integer,
   VALID     boolean,
   MARKETED  boolean,
+  AID_MASTER_LID  integer,
   LINK_SPC  varchar(500),
   EXTRA_XML varchar(5000)
 );
 
--- No PK till this table is a linkage table 1 -> N
-CREATE TABLE IF NOT EXISTS AUTHORIZATIONS (
-  AID           integer,
-  MASTER_LID    integer,
-  UNIQUE(AID,MASTER_LID)
-);
-
+-- TODO: update strength and dose to real
 CREATE TABLE IF NOT EXISTS COMPOSITION (
   DID           integer,
   MID           integer,
-  STRENGTH      real,
+  STRENGTH      varchar(25),
   STRENGHT_NID  integer,
-  DOSE_REF      real,
+  DOSE_REF      varchar(25),
   DOSE_REF_NID  integer
 );
 
 CREATE TABLE IF NOT EXISTS MOLS (
   MID    INTEGER PRIMARY KEY,
+  SID    integer,
   NAME   varchar(150),
-  ATC_ID integer,
   WWW    varchar(200)
-)
+);
 
 CREATE TABLE IF NOT EXISTS UNITS (
   NID     INTEGER PRIMARY KEY,
   VALUE   varchar(20)
 );
 
-CREATE TABLE IF NOT EXISTS LK_MOL_ATC  (
-  MOLECULE_CODE  integer NOT NULL,
-  ATC_ID         integer NOT NULL
+-- one to N
+CREATE TABLE IF NOT EXISTS LK_MOL_ATC (
+  MID     integer NOT NULL,
+  ATC_ID  integer NOT NULL,
+  UNIQUE(MID, ATC_ID)
 );
 
 -- TP IMPROVE
