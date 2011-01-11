@@ -21,6 +21,7 @@ HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/medicalproceduremodel.h \
     $${PWD}/accountdata.h \
     $${PWD}/thesaurusmodel.h \
+    $${PWD}/actsmodel.h \
     $${PWD}/amountmodel.h
 
 SOURCES += $${PWD}/accountbaseplugin.cpp \
@@ -39,6 +40,7 @@ SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/medicalproceduremodel.cpp \
     $${PWD}/accountdata.cpp \
     $${PWD}/thesaurusmodel.cpp \
+    $${PWD}/actsmodel.cpp \
     $${PWD}/amountmodel.cpp
 
 
