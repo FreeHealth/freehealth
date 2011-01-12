@@ -71,6 +71,7 @@ public:
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
     void setTypeFilter(const QString &filter);
+    void setFilter(const QString & filter);
 
 public Q_SLOTS:
     bool submit();

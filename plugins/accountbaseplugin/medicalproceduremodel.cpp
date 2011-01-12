@@ -246,6 +246,10 @@ void MedicalProcedureModel::revert()
     d->m_SqlTable->revert();
 }
 
+void MedicalProcedureModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+}
+
 bool MedicalProcedureModel::isDirty() const
 {
     return d->m_IsDirty;
