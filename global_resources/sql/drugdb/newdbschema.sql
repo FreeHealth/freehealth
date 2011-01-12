@@ -150,6 +150,7 @@ INSERT INTO SEARCH_ENGINES VALUES (NULL, "Search drug name @ NIH", "http://vsear
 INSERT INTO SEARCH_ENGINES VALUES (NULL, "Search INN name @ NIH", "http://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&query=[[ONE_ATC_CODE]]&x=0&y=0");
 
 CREATE TABLE IF NOT EXISTS DB_SCHEMA_VERSION (
+  ID INTEGER PRIMARY KEY,
   VERSION varchar(10),
   DATE  date,
   COMMENT varchar(500)
