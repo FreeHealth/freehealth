@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QStandardItemModel>
-
+#include <QHash>
 
 namespace Ui {
     class ReceiptViewer;

@@ -8,6 +8,9 @@
 
 #include "ui_receiptviewer.h"
 
+#include <accountbaseplugin/constants.h>
+
+
 #include <utils/widgets/spinboxdelegate.h>
 
 #include <coreplugin/icore.h>
@@ -19,11 +22,16 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QFrame>
+#include <QPushButton>
+#include <QKeySequence>
+
+
 using namespace Core;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 using namespace ReceiptsConstants;
 using namespace InternalAmount;
+using namespace Constants;
 
 
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
@@ -46,7 +54,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBook->setDate(QDate::currentDate());
     ui->deleteLineButton->hide();
     ui->inputRadioButton->setChecked(true);
-    ui->saveAndQuitButton->setShortCut(QKeySequence::InsertLineSeparator);
+    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertLineSeparator);
     fillActionTreeView();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
@@ -191,28 +199,28 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
 }
 
 void ReceiptViewer::save(){
-    QHash<int,QVariant> hashOfValues;
+    QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,AccountDB::Constants::MP_UID);
     hash.insert(ACCOUNT_USER_UID,AccountDB::Constants::MP_USER_UID);
-    hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString(););
+    hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString());
     hash.insert(ACCOUNT_PATIENT_NAME,AccountDB::Constants::MP_NAME);
     hash.insert(ACCOUNT_SITE_ID,NULL);
     hash.insert(ACCOUNT_INSURANCE_ID,NULL);
-    hash.insert(ACCOUNT_DATE,dateExecution->date().toString("yyyy-MM-dd"));
+    hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
-    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"CS");
     hash.insert(ACCOUNT_COMMENT,NULL);
-    hash.insert(ACCOUNT_CASHAMOUNT,m_model->data(m_model->index(Col_Value,Row_Cash)));
-    hash.insert(ACCOUNT_CHEQUEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Cheque)));
-    hash.insert(ACCOUNT_VISAAMOUNT,m_model->data(m_model->index(Col_Value,Row_Visa)));
-    hash.insert(ACCOUNT_INSURANCEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Banking)));
-    hash.insert(ACCOUNT_OTHERAMOUNT,m_model->data(m_model->index(Col_Value,Row_Other)));
-    hash.insert(ACCOUNT_DUEAMOUNT,m_model->data(m_model->index(Col_Value,Row_Du)));
+    hash.insert(ACCOUNT_CASHAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Cash)));
+    hash.insert(ACCOUNT_CHEQUEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Cheque)));
+    hash.insert(ACCOUNT_VISAAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Visa)));
+    hash.insert(ACCOUNT_INSURANCEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Banking)));
+    hash.insert(ACCOUNT_OTHERAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Other)));
+    hash.insert(ACCOUNT_DUEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Du)));
     hash.insert(ACCOUNT_DUEBY,NULL);
     hash.insert(ACCOUNT_ISVALID,0);
     hash.insert(ACCOUNT_TRACE,NULL);
     receiptsEngine r;
-    if (!r.insertIntoAccount(hashOfValues))
+    if (!r.insertIntoAccount(hash))
     {
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
         }
