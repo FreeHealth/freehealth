@@ -298,8 +298,10 @@ const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief De
 //modes
 const char * const MODE_PATIENT_SEARCH   = "PatientSearch";
 const char * const MODE_PATIENT_FILE     = "PatientFile";
+const char * const MODE_PATIENT_HISTORY  = "PatientHistory";
 const int          P_MODE_PATIENT_SEARCH = 100;
-const int          P_MODE_PATIENT_FILE   = 90;
+const int          P_MODE_PATIENT_HISTORY= 80;
+const int          P_MODE_PATIENT_FILE   = 60;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";
