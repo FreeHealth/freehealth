@@ -1,11 +1,26 @@
+-- Understanding the xID
+-- M (MID): link to MASTER table
+-- L (LID): link to LABELS table
+-- S (SID): link to SOURCES table
+-- D (DID): link to DRUGS table
+-- M (MID): link to MOLS table
+-- R (RID): link to ROUTES table
+-- IA (IAID): link to INTERACTIONS table
+-- IAK (IAKID): link to INTERACTION_KNOWLEDGE table
+-- BIB_ID: link to BIBLIOGRAPHY table
+
+-- In one to many tables
+-- MASTER_xID: is used to link one to many: 1 MASTER_xID is many xID
+-- AID_MASTER_LID: is used to link one authorization text to many translations in LABELS_LINK
+
+
 CREATE TABLE IF NOT EXISTS MASTER (
   DID      INTEGER PRIMARY KEY,
   UID1     varchar(50) not null,
   UID2     varchar(50),
   UID3     varchar(50),
   OLD_UID  varchar(50),
-  SID      integer,
-  UNIQUE(UID1, UID2, UID3, OLD_UID)
+  SID      integer
 );
 
 CREATE TABLE IF NOT EXISTS SOURCES (
@@ -53,8 +68,6 @@ CREATE TABLE IF NOT EXISTS DRUGS (
   NAME      varchar(200),
   ATC_ID    integer,
   STRENGTH  varchar(40),
-  FORMS_ID  integer,
-  ROUTES_ID integer,
   VALID     boolean,
   MARKETED  boolean,
   AID_MASTER_LID  integer,
@@ -233,3 +246,8 @@ INSERT INTO DB_SCHEMA_VERSION VALUES ("0.5.2","2010-12-10","Interactions: Addind
 INSERT INTO DB_SCHEMA_VERSION VALUES ("0.5.2","2010-14-10","Interactions: Addind SOURCES_LINK to IAM_TREE");
 INSERT INTO DB_SCHEMA_VERSION VALUES ("0.5.2","2010-14-10","Interactions: Addind SOURCES table");
 INSERT INTO DB_SCHEMA_VERSION VALUES ("0.5.5","2011-01-10","Interactions: Totally redefined schema");
+
+
+-- Simple queries
+-- Get all drugs information (without composition)
+-- SELECT MASTER.DID, DRUGS.* FROM MASTER INNER JOIN DRUGS ON DRUGS.DID=MASTER.DID;
