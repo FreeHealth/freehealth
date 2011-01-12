@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS SOURCES (
   SID             INTEGER PRIMARY KEY,
   DATABASE_UID    varchar(20) not null,
   MASTER_LID      integer,
-  LCID            integer not null,
+  LANG            varcahr(5),
   WEB             varchar(250),
   COPYRIGHT       varchar(500),
   DATE            date,
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS SOURCES (
   PROVIDER        varchar(200),
   WEBLINK         varchar(500),
   DRUG_UID_NAME   varchar(50),
-  ATC             bool not null,
-  INTERACTIONS    bool not null default true,
+  ATC             bool default true,
+  INTERACTIONS    bool default true,
   COMPLEMENTARY_WEBSITE  varchar(200),
   PACK_MAIN_CODE_NAME    varchar(50),
   MOL_LINK_COMPLETION    integer default 0,
@@ -82,14 +82,16 @@ CREATE TABLE IF NOT EXISTS COMPOSITION (
   STRENGTH      varchar(25),
   STRENGHT_NID  integer,
   DOSE_REF      varchar(25),
-  DOSE_REF_NID  integer
+  DOSE_REF_NID  integer,
+  NATURE        varchar(2),
+  LK_NATURE     integer
 );
 
 CREATE TABLE IF NOT EXISTS MOLS (
-  MID    INTEGER PRIMARY KEY,
-  SID    integer,
-  NAME   varchar(150),
-  WWW    varchar(200)
+  MID       INTEGER PRIMARY KEY,
+  SID       integer,
+  NAME      varchar(150),
+  WWW       varchar(200)
 );
 
 CREATE TABLE IF NOT EXISTS UNITS (
@@ -124,11 +126,17 @@ CREATE TABLE IF NOT EXISTS DRUG_ROUTES  (
 
 -- No PK till this table is a linkage table 1 -> N
 CREATE TABLE IF NOT EXISTS ROUTES (
-  RID           integer,
-  MASTER_LID    integer
+  RID           INTEGER PRIMARY KEY,
+  MASTER_LID    integer,
+  IS_SYSTEMIC   integer,
   UNIQUE(RID, MASTER_LID)
 );
-
+-- IS_SYSTEMIC:
+--  0 : non systemic
+--  1 : fully systemic
+--  2 : moderate systemic passage
+--  3 : weak systemic passage
+--  4 : depending on INN (for future usage)
 
 CREATE TABLE IF NOT EXISTS SEARCH_ENGINES (
   ID integer primary key,
@@ -249,5 +257,35 @@ INSERT INTO DB_SCHEMA_VERSION VALUES ("0.5.5","2011-01-10","Interactions: Totall
 
 
 -- Simple queries
+
 -- Get all drugs information (without composition)
--- SELECT MASTER.DID, DRUGS.* FROM MASTER INNER JOIN DRUGS ON DRUGS.DID=MASTER.DID;
+-- SELECT DRUGS.* FROM MASTER INNER JOIN DRUGS ON DRUGS.DID=MASTER.DID;
+
+-- Get all drugs source labels
+-- SELECT LABELS.LANG, LABELS.LABEL
+-- FROM LABELS
+-- JOIN SOURCES ON SOURCES.MASTER_LID=LABELS_LINK.MASTER_LID
+-- JOIN LABELS_LINK ON LABELS_LINK.LID=LABELS.LID
+-- WHERE SOURCES.DATABASE_UID="AFSSAPS_FR";
+
+-- Get all route labels
+-- SELECT LABELS.LANG, LABELS.LABEL
+-- FROM LABELS
+-- JOIN ROUTES ON ROUTES.MASTER_LID=LABELS_LINK.MASTER_LID
+-- JOIN LABELS_LINK ON LABELS_LINK.LID=LABELS.LID
+-- WHERE ROUTES.RID=3;
+
+-- Get drug routes labels
+-- SELECT LABELS.LANG, LABELS.LABEL
+-- FROM DRUG_ROUTES
+-- JOIN ROUTES ON ROUTES.RID=DRUG_ROUTES.RID
+-- JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ROUTES.MASTER_LID
+-- JOIN LABELS ON LABELS_LINK.LID=LABELS.LID
+-- WHERE DRUG_ROUTES.DID=3;
+
+-- Get the RID from a route label
+-- SELECT ROUTES.RID
+-- FROM LABELS
+-- JOIN LABELS_LINK ON LABELS_LINK.LID=LABELS.LID
+-- JOIN ROUTES ON ROUTES.MASTER_LID=LABELS_LINK.MASTER_LID
+-- WHERE LABELS.LABEL="intralymphatisch";
