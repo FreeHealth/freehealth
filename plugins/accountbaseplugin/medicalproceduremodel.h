@@ -36,6 +36,8 @@
 #define MEDICALPROCEDUREMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
+
 
 namespace AccountDB {
 namespace Internal {
@@ -57,6 +59,10 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
+    
+    QSqlError lastError();
+    
+    bool setHeaderData(int section,Qt::Orientation orientation,QVariant & value,int role = Qt::EditRole );
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());

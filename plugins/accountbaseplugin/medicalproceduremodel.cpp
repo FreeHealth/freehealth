@@ -120,8 +120,14 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
-{
-    return d->m_SqlTable->rowCount(parent);
+{ 
+    int rows = 2;
+    /*d->m_SqlTable->setFilter("");
+    d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount(parent);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
+*/
+    return rows;
 }
 
 int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
@@ -153,7 +159,7 @@ void MedicalProcedureModel::setUserUuid(const QString &uuid)
 }
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
-{
+{   
     return d->m_SqlTable->data(index, role);
 }
 
@@ -168,6 +174,11 @@ bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &va
 QVariant MedicalProcedureModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return QVariant();
+}
+
+bool MedicalProcedureModel::setHeaderData(int section,Qt::Orientation orientation,
+                                          QVariant & value,int role ){
+    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
 }
 
 bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -253,4 +264,8 @@ void MedicalProcedureModel::setFilter(const QString & filter){
 bool MedicalProcedureModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+QSqlError MedicalProcedureModel::lastError(){
+    return d->m_SqlTable->lastError();
 }

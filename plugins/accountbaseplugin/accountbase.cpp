@@ -158,7 +158,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
     addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
     addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
-    addField(Table_MedicalProcedure, MP_AMOUNT,         "ACTS",         FieldIsReal);
+    addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     /** Add a link to INSURANCE table ? One MP is reimburse by a specific insurance... */
@@ -224,7 +224,27 @@ AccountBase::AccountBase(QObject *parent)
 //                  "remarque 	text                    COLLATE utf8_unicode_ci         NULL 				,"
 //                  "valide 	tinyint(4) 						NULL 			        ,"
 //                  "PRIMARY KEY(id_depot));";
-
+/*        ACCOUNT_ID = 0,
+        ACCOUNT_UID,
+        ACCOUNT_USER_UID,
+        ACCOUNT_PATIENT_UID,
+        ACCOUNT_PATIENT_NAME,
+        ACCOUNT_SITE_ID,
+        ACCOUNT_INSURANCE_ID,
+        ACCOUNT_DATE,
+        ACCOUNT_MEDICALPROCEDURE_XML,
+        ACCOUNT_MEDICALPROCEDURE_TEXT,
+        ACCOUNT_COMMENT,
+        ACCOUNT_CASHAMOUNT,
+        ACCOUNT_CHEQUEAMOUNT,
+        ACCOUNT_VISAAMOUNT,
+        ACCOUNT_INSURANCEAMOUNT,
+        ACCOUNT_OTHERAMOUNT,
+        ACCOUNT_DUEAMOUNT,
+        ACCOUNT_DUEBY,
+        ACCOUNT_ISVALID,
+        ACCOUNT_TRACE,
+        ACCOUNT_MaxParam*/
     addField(Table_Account,  ACCOUNT_ID,              "ACCOUNT_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Account,  ACCOUNT_UID,             "ACCOUNT_UID",    FieldIsUUID);
     addField(Table_Account,  ACCOUNT_USER_UID,        "USER_UID",       FieldIsUUID);
@@ -233,8 +253,17 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Account,  ACCOUNT_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
+    addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_XML,   "MP_XML", FieldIsLongText);
     addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_TEXT,   "MP_TXT", FieldIsLongText);
     addField(Table_Account,  ACCOUNT_COMMENT,         "COMMENT",        FieldIsLongText);
+    addField(Table_Account,  ACCOUNT_CASHAMOUNT,      "CASH",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_CHEQUEAMOUNT,    "CHEQUE",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_VISAAMOUNT,      "VISA",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_INSURANCEAMOUNT, "BANKING",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_OTHERAMOUNT,     "OTHER",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_DUEAMOUNT,       "DUE",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_DUEBY,           "DUE_BY", FieldIsLongText);
+    addField(Table_Account,  ACCOUNT_ISVALID,         "VALID",         FieldIsBoolean);
     addField(Table_Account,  ACCOUNT_TRACE,           "TRACE",          FieldIsBlob);
     
     
