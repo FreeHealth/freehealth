@@ -5,6 +5,7 @@
 #include "receiptsmanager.h"
 #include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
+#include <accountbaseplugin/constants.h>
 
 #include <QtGui>
 #include <QtCore>

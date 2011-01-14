@@ -1,9 +1,13 @@
 #ifndef RECEIPTVIEWER_H
 #define RECEIPTVIEWER_H
-
+#include <utils/widgets/spinboxdelegate.h>
 #include <QWidget>
 #include <QStandardItemModel>
 #include <QHash>
+#include <QSqlError>
+#include <QDebug>
+
+
 
 namespace Ui {
     class ReceiptViewer;
@@ -22,8 +26,8 @@ namespace InternalAmount {
 
         enum RowRepresentation {
             Row_Cash = 0,
-            Row_Visa,
             Row_Cheque,
+            Row_Visa,
             Row_Banking,  // Virement banquaire
             Row_Other,
             Row_Du,
@@ -38,6 +42,14 @@ namespace InternalAmount {
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const {return RowCount;}
         int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
+        
+        bool submit(){
+            if (!submit()) {
+               return false;
+            }
+          return true;
+        }
+
 
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
         {
@@ -46,7 +58,9 @@ namespace InternalAmount {
 
             if (role==Qt::EditRole || role==Qt::DisplayRole) {
                 switch (index.column()) {
-                case Col_Value: return m_Values[index.row()];
+                case Col_Value: 
+                    return m_Values[index.row()];
+                    break;
                 default: return QVariant();
                 }
             }
@@ -92,6 +106,10 @@ namespace InternalAmount {
             }
             return QVariant();
         }
+        
+        QSqlError lastError(){
+            return lastError();
+            }
 
         Qt::ItemFlags flags(const QModelIndex &index) const
         {

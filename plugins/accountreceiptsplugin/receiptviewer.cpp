@@ -10,9 +10,6 @@
 
 #include <accountbaseplugin/constants.h>
 
-
-#include <utils/widgets/spinboxdelegate.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
@@ -24,6 +21,8 @@
 #include <QFrame>
 #include <QPushButton>
 #include <QKeySequence>
+#include <QString>
+
 
 
 using namespace Core;
@@ -177,9 +176,12 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     else if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
+            qDebug() << __FILE__ << QString::number(__LINE__)   ;
             typeOfPayment = choice.returnChoiceDialog();//int
+            qDebug() << __FILE__ << QString::number(__LINE__)   ;
             }
-        hashOfValues.insert("CS","23.00");//preferential act
+            qDebug() << __FILE__ << QString::number(__LINE__)   ;
+            hashOfValues.insertMulti("CS","23.00");//preferential act
         }        
     else{}
     fillModel(hashOfValues,typeOfPayment);
@@ -196,27 +198,40 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
     const QModelIndex index = m_model->index(typeOfPayment,AmountModel::Col_Value);
     m_model->setData(index, value, Qt::EditRole);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " post set data"  ;
 }
 
 void ReceiptViewer::save(){
+    double cash = m_model->data(m_model->index(AmountModel::Row_Cash,AmountModel::Col_Value)).toDouble();
+    double cheque = m_model->data(m_model->index(AmountModel::Row_Cheque,AmountModel::Col_Value)).toDouble();
+    double visa = m_model->data(m_model->index(AmountModel::Row_Visa,AmountModel::Col_Value)).toDouble();
+    double banking = m_model->data(m_model->index(AmountModel::Row_Banking,AmountModel::Col_Value)).toDouble();
+    double other = m_model->data(m_model->index(AmountModel::Row_Other,AmountModel::Col_Value)).toDouble();
+    double due = m_model->data(m_model->index(AmountModel::Row_Du,AmountModel::Col_Value)).toDouble();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "
+                                                                     << QString::number(cheque)+ " "
+                                                                     << QString::number(visa)+ " "
+                                                                     << QString::number(banking)+ " "
+                                                                     << QString::number(other)+ " "
+                                                                     << QString::number(due);
     QHash<int,QVariant> hash;
-    hash.insert(ACCOUNT_UID,AccountDB::Constants::MP_UID);
-    hash.insert(ACCOUNT_USER_UID,AccountDB::Constants::MP_USER_UID);
+    hash.insert(ACCOUNT_UID,"UID");
+    hash.insert(ACCOUNT_USER_UID,user()->value(Core::IUser::Uuid).toString());
     hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString());
-    hash.insert(ACCOUNT_PATIENT_NAME,AccountDB::Constants::MP_NAME);
-    hash.insert(ACCOUNT_SITE_ID,NULL);
-    hash.insert(ACCOUNT_INSURANCE_ID,NULL);
+    hash.insert(ACCOUNT_PATIENT_NAME,patient()->data(Core::IPatient::FullName).toString());
+    hash.insert(ACCOUNT_SITE_ID,"1111111111");
+    hash.insert(ACCOUNT_INSURANCE_ID,"2222222");
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"CS");
     hash.insert(ACCOUNT_COMMENT,NULL);
-    hash.insert(ACCOUNT_CASHAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Cash)));
-    hash.insert(ACCOUNT_CHEQUEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Cheque)));
-    hash.insert(ACCOUNT_VISAAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Visa)));
-    hash.insert(ACCOUNT_INSURANCEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Banking)));
-    hash.insert(ACCOUNT_OTHERAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Other)));
-    hash.insert(ACCOUNT_DUEAMOUNT,m_model->data(m_model->index(AmountModel::Col_Value,AmountModel::Row_Du)));
-    hash.insert(ACCOUNT_DUEBY,NULL);
+    hash.insert(ACCOUNT_CASHAMOUNT,cash);
+    hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
+    hash.insert(ACCOUNT_VISAAMOUNT,visa);
+    hash.insert(ACCOUNT_INSURANCEAMOUNT,banking);
+    hash.insert(ACCOUNT_OTHERAMOUNT,other);
+    hash.insert(ACCOUNT_DUEAMOUNT,due);
+    hash.insert(ACCOUNT_DUEBY,"by");
     hash.insert(ACCOUNT_ISVALID,0);
     hash.insert(ACCOUNT_TRACE,NULL);
     receiptsEngine r;

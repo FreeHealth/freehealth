@@ -1,15 +1,14 @@
 #include "findReceiptsValues.h"
 
-
+using namespace AccountDB;
+using namespace Constants;
 
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
-  //QSqlDatabase db = QSqlDatabase::database("freeaccount");
+  m_mpmodel = new MedicalProcedureModel(this);
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   fillComboCategories();
   initialize();
-  //m_model = new QSqlTableModel(this,db);
-  m_mpmodel = new MedicalProcedureModel(this);
   QString comboValue = ui->comboBoxCategories->currentText();
   emit fillListViewValues(comboValue);
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
@@ -43,6 +42,14 @@ void findReceiptsValues::fillComboCategories(){
     QStringList choiceList ;
     QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
     choiceList = hashCategories.value("typesOfReceipts").split(",");
+    int MPRows = m_mpmodel->rowCount(QModelIndex());
+    for (int i = 0; i < MPRows; i += 1)
+    {
+        QString typeData = m_mpmodel->data(m_mpmodel->index(i,MP_TYPE)).toString();
+        if(!choiceList.contains(typeData)){
+           choiceList << typeData;
+           }
+    }
     ui->comboBoxCategories->setEditable(true);
     ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
     ui->comboBoxCategories->addItems(choiceList);
@@ -50,25 +57,33 @@ void findReceiptsValues::fillComboCategories(){
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
     QString filter = QString("TYPE = '%1'").arg(comboItem);
-    //m_model->setTable("medical_procedure");
     m_mpmodel->setFilter(filter);
-    //m_mpmodel->select();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << m_model->lastError().text();
-    //ui->tableViewOfValues->setModel(m_mpmodel);
+    QVariant act = QVariant(trUtf8("Name"));
+    QVariant value = QVariant(trUtf8("Value"));
+    if (!m_mpmodel->setHeaderData(MP_NAME,Qt::Horizontal,act,Qt::DisplayRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << m_mpmodel->lastError().text();
+    	  }
+    if (!m_mpmodel->setHeaderData(MP_AMOUNT,Qt::Horizontal,value,Qt::DisplayRole)	)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << m_mpmodel->lastError().text();
+        }
+    
     ui->tableViewOfValues->setModel(m_mpmodel);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableViewOfValues->setColumnHidden(0,true);//setColumnHidden()
-    ui->tableViewOfValues->setColumnHidden(1,true);
-    ui->tableViewOfValues->setColumnHidden(2,true);
-    ui->tableViewOfValues->setColumnHidden(4,true);
-    ui->tableViewOfValues->setColumnHidden(5,true);
+    ui->tableViewOfValues->setColumnHidden(MP_ID,true);//setColumnHidden()
+    ui->tableViewOfValues->setColumnHidden(MP_UID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_USER_UID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_ABSTRACT,true);
+    ui->tableViewOfValues->setColumnHidden(MP_TYPE,true);
     //ui->tableViewOfValues->setColumnHidden(6,true); //amount
-    ui->tableViewOfValues->setColumnHidden(7,true);
-    ui->tableViewOfValues->setColumnHidden(8,true);
+    ui->tableViewOfValues->setColumnHidden(MP_REIMBOURSEMENT,true);
+    ui->tableViewOfValues->setColumnHidden(MP_DATE,true);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
     ui->tableViewOfValues->show();
+    
 }
 
 void findReceiptsValues::chooseValue(const QModelIndex& index){
@@ -77,9 +92,6 @@ void findReceiptsValues::chooseValue(const QModelIndex& index){
     int row = inIndex.row();
     QModelIndex indexData = m_mpmodel->index(row,3,QModelIndex());
     QModelIndex indexAmount = m_mpmodel->index(row,6,QModelIndex());
-    /*QSqlRecord record = m_mpmodel->record(row);
-    QString data = record.value(3).toString();
-    QString amount = record.value(6).toString();*/
     QString data = m_mpmodel->data(indexData,Qt::DisplayRole).toString();//NAME
     QString amount = m_mpmodel->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
     qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
@@ -92,7 +104,6 @@ void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValuesChoosen.remove(dataToRemove);
     delete item;
-   // ui->listChoosenWidget->removeItemWidget(item);
 }
 
 QHash<QString,QString> findReceiptsValues::getChoosenValues(){

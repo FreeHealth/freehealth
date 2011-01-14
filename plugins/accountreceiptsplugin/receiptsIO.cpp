@@ -34,16 +34,20 @@ bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues)
     }
     int rowBefore = m_mpmodel->AccountModel::rowCount(QModelIndex());
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
-    m_mpmodel->insertRow(rowBefore,QModelIndex());
+    if (m_mpmodel->insertRows(rowBefore,1,QModelIndex()))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+        }
     bool ret = true;
     QVariant data;
     
     for(int i = 1 ; i < ACCOUNT_MaxParam ; i ++){
          data = hashValues.value(i);
-         if (!m_mpmodel-> setData(m_mpmodel->index(rowBefore+1,i), data ,Qt::EditRole))
+         qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+         if (!m_mpmodel-> setData(m_mpmodel->index(rowBefore,i), data ,Qt::EditRole))
             {
             	qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
-                                                                    <<m_mpmodel->lastError().text() ;
+                                                                    << m_mpmodel->lastError().text() ;
                 }
         }
         m_mpmodel->submit();
