@@ -22,6 +22,10 @@
 #include <QPushButton>
 #include <QKeySequence>
 #include <QString>
+#include <QBrush>
+#include <QColor>
+
+
 
 
 
@@ -141,6 +145,36 @@ void ReceiptViewer::fillActionTreeView(){
     QString strMainActions;
     foreach(strMainActions,listOfMainActions){
         QStandardItem * actionItem = new QStandardItem(strMainActions);
+        //treeViewsActions colors
+        if (strMainActions == "Debtor")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);
+            }
+        else if (strMainActions == "Prefered Value")
+        {
+        	  QBrush red(Qt::red);
+                  actionItem->setForeground(red);
+            }
+        else if (strMainActions == "Sites")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);       	  
+            }
+        else if (strMainActions == "Thesaurus")
+        {
+        	  QBrush red(Qt::red);
+                  actionItem->setForeground(red);        	  
+            }
+        else if (strMainActions == "Values")
+        {
+        	  QBrush blue(Qt::blue);
+                  actionItem->setForeground(blue);        	  
+            }
+        else{
+                  qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
+        }
+        
         parentItem->appendRow(actionItem);
         QStringList listSubActions;
         listSubActions = mapSubItems.values(strMainActions);
@@ -152,6 +186,7 @@ void ReceiptViewer::fillActionTreeView(){
     }
     ui->actionsTreeView->setHeaderHidden(true);
     ui->actionsTreeView->setStyleSheet("background-color: silver");
+   // ui->actionsTreeView->setStyleSheet("foreground-color: red");
     ui->actionsTreeView->setModel(m_actionsTreeModel);
 }
 
