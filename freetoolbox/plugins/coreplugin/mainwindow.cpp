@@ -210,8 +210,6 @@ void MainWindow::postCoreInitialization()
     raise();
     show();
     preparePages();
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
-    setWindowIcon(theme()->icon(Constants::ICONFREETOOLBOX));
 
     const QString &path = settings()->value(Constants::S_SVNFILES_PATH).toString();
     if (path.isEmpty() || !QDir(settings()->value(Constants::S_SVNFILES_PATH).toString()).exists()) {
@@ -219,6 +217,9 @@ void MainWindow::postCoreInitialization()
                                                                 "Please set the correct path, then restart the application."));
         applicationPreferences();
     }
+
+    setWindowIcon(theme()->icon(Constants::ICONFREETOOLBOX));
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -465,6 +466,7 @@ void MainWindow::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
         break;
     default:
         break;
