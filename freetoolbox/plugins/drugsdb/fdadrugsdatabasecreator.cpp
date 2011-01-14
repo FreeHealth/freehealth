@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "fdadrugsdatabasecreator.h"
 #include "extramoleculelinkermodel.h"
+#include "drug.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -34,6 +35,7 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
@@ -53,6 +55,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QVariant>
+#include <QMultiHash>
+#include <QHash>
 
 #include <QDebug>
 
@@ -61,23 +65,18 @@
 using namespace DrugsDbCreator;
 
 const char* const  FDA_URL                     = "http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip";
-const char* const  FDA_DRUGS_DATABASE_NAME     =  "FDA_US";
-const char* const  SEPARATOR                   = "|||";
+const char* const  FDA_DRUGS_DATABASE_NAME     = "FDA_US";
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_US.db");}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
+static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
 
-static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_creator.sql");}
-//static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_creator.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/usa_db_finalize.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/us/us_db_finalize.sql");}
 
-static inline QString drugsDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME));}
-static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
+
 
 FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
@@ -134,6 +133,8 @@ bool FdaDrugDatatabaseStep::downloadFiles()
     dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    connect(dld, SIGNAL(downloadProgressRange(qint64,qint64)), this, SIGNAL(progressRangeChanged(int,int)));
+    connect(dld, SIGNAL(downloadProgressRead(qint64)), this, SIGNAL(progress(int)));
     return true;
 }
 
@@ -150,6 +151,10 @@ bool FdaDrugDatatabaseStep::process()
 
 bool FdaDrugDatatabaseStep::unzipFiles()
 {
+    Q_EMIT progressLabelChanged(tr("Unzipping downloaded files"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
     // check file
     QString fileName = workingPath() + QDir::separator() + QFileInfo(FDA_URL).fileName();
     if (!QFile(fileName).exists()) {
@@ -164,12 +169,12 @@ bool FdaDrugDatatabaseStep::unzipFiles()
     return Core::Tools::unzipFile(fileName, workingPath());
 }
 
-class drug {
+class Parser {
 public:
-    drug(const QString &line)
+    Parser(const QString &line)
     {
         // Process line
-        QStringList vals = line.split(SEPARATOR);
+        QStringList vals = line.split("\t");
         if (vals.count() != 9) {
             qWarning() << "Error with line" << line;
         }
@@ -234,16 +239,43 @@ public:
         name = vals.at(7);
     }
 
+    Drug *getDrug()
+    {
+        Drug *drug = new Drug;
+        drug->setData(Drug::Uid1, uid1);
+        drug->setData(Drug::Uid2, uid2);
+        drug->setData(Drug::OldUid, uid1 + uid2);
+        drug->setData(Drug::Name, name);
+        drug->setData(Drug::Forms, form);
+        drug->setData(Drug::Routes, route);
+        drug->setData(Drug::Authorization, "");
+        drug->setData(Drug::Marketed, "");
+        drug->setData(Drug::Spc, "");
+        drug->setData(Drug::Valid, 1);
+        int i = 0;
+        foreach(const QString &mol, mols_strength.keys()) {
+            ++i;
+            Component *compo = new Component;
+            compo->setData(Component::Name, mol);
+            compo->setData(Component::Nature, "SA");
+            compo->setData(Component::NatureLink, i);
+            compo->setData(Component::Strength, mols_strength.value(mol));
+            compo->setData(Component::StrengthUnit, "");
+            drug->addComponent(compo);
+        }
+        return drug;
+    }
+
     void warn() {
         qWarning() << uid1 << uid2 << name << globalStrength << form << route << mols_strength;
     }
 
-    bool operator<(const drug &other) const
+    bool operator<(const Parser &other) const
     {
         return this->name < other.name;
     }
 
-    static bool lessThan(const drug *s1, const drug *s2)
+    static bool lessThan(const Parser *s1, const Parser *s2)
      {
          return s1->name < s2->name;
      }
@@ -257,211 +289,21 @@ public:
 
 bool FdaDrugDatatabaseStep::prepareDatas()
 {
-    QStringList files = QStringList()
-                        << "Product.txt"
-                        << "AppDoc.txt"
-                        ;
-
-    {
-        QProgressDialog *progress = 0;
-        if (m_WithProgress) {
-            progress = new QProgressDialog("Processing FDA files : preparing files", "Abort", 0, 2, qApp->activeWindow());
-            progress->setWindowModality(Qt::WindowModal);
-        }
-
-        // check files
-        foreach(const QString &file, files) {
-            if (!QFile::exists(workingPath() + file)) {
-                Utils::Log::addError(this, QString("Missing " + workingPath() + file + " file. prepareDatas()"), __FILE__, __LINE__);
-                return false;
-            }
-        }
-
-        // transform each files
-        int i = 0;
-        foreach(const QString &file, files) {
-            if (m_WithProgress) {
-                progress->setValue(i++);
-            }
-            Utils::Log::addMessage(this, "Processing file :" + file);
-            QString tmp;
-            {
-                QFile f(workingPath() + file);
-                if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                    Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
-                    return false;
-                }
-                Utils::Log::addMessage(this, "Reading file");
-                tmp = QString::fromLatin1(f.readAll());
-            }
-
-            // Remove first line
-            tmp.remove(0, tmp.indexOf("\n")+1);
-            // prepare a better separator for the import command
-            Utils::Log::addMessage(this, "Replacing separators");
-            tmp.replace("\t", SEPARATOR);
-
-            // save file
-            {
-                QFile f(workingPath() + file);
-                if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                    Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(file, f.errorString()), __FILE__, __LINE__);
-                    return false;
-                }
-                Utils::Log::addMessage(this, "Saving file");
-                f.write(tmp.toUtf8());
-            }
-        }
-        if (m_WithProgress) {
-            progress->close();
-            delete progress;
-            progress = 0;
-        }
-    }
-
-    // Now prepare the Products.txt file
-    QString content;
-    {
-        QFile f(workingPath() + "/Product.txt");
-        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg("Product.txt", f.errorString()), __FILE__, __LINE__);
-            return false;
-        }
-        Utils::Log::addMessage(this, "Reading file");
-        content = QString::fromLatin1(f.readAll());
-    }
-    QList<drug *> drugs;
-    // Form of the input file
-    // "004589","004","INJECTABLE; INJECTION","5ML/100ML;5GM/100ML",1,"AP",1,"ALCOHOL 5% AND DEXTROSE 5%","ALCOHOL; DEXTROSE"
-    QStringList lines = content.split("\n");
-
-    QProgressDialog *progress = 0;
-    if (m_WithProgress) {
-        progress = new QProgressDialog("Processing FDA files : reading files", "Abort", 0, lines.count(), qApp->activeWindow());
-        progress->setWindowModality(Qt::WindowModal);
-    }
-
-    int i = 0;
-    foreach(const QString &line, lines) {
-        ++i;
-        if (m_WithProgress) {
-            if (i % 10 == 0)
-                progress->setValue(i);
-        }
-
-        if (line.isEmpty())
-            continue;
-
-        // get the drug contents
-        drug *dr = new drug(line);
-        drugs << dr;
-    }
-
-    qSort(drugs.begin(), drugs.end(), drug::lessThan);
-
-    // Recreate csv files ready for importation
-    // Table DRUGS
-//    `UID` int(11) NOT NULL,
-//    `NAME` varchar(1000) NOT NULL,
-//    `FORM` varchar(500),
-//    `ROUTE` varchar(100),
-//    `ATC` varchar(7),
-//    `GLOBAL_STRENGTH` varchar(40),
-//    `TYPE_MP` varchar(1),
-//    `AUTHORIZATION` varchar(1),
-//    `MARKETED` bool NOT NULL DEFAULT 1,
-//    `LINK_SPC` varchar(250)
-    /**
-      \todo MARKETED, SPC
-      \todo Commit to database directly
-     */
-    QString tableDrugs;
-    foreach(drug *dr, drugs) {
-        tableDrugs += dr->uid1 + dr->uid2 + SEPARATOR + dr->name + SEPARATOR + dr->form + SEPARATOR +
-                      dr->route + SEPARATOR + "" + SEPARATOR + dr->globalStrength + SEPARATOR +
-                      "" + SEPARATOR + "" + SEPARATOR + "1" + SEPARATOR + "\n";
-    }
-    // save file
-    {
-        QFile f(workingPath() + "FDA_DRUGS.CSV");
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. populateDatabase()").arg(f.fileName(), f.errorString()), __FILE__, __LINE__);
-            return false;
-        }
-        Utils::Log::addMessage(this, "Saving file");
-        f.write(tableDrugs.toUtf8());
-    }
-    tableDrugs.clear();
-
-    // Table COMPOSITION
-    QString tableComposition;
-//    `UID` int(10) NOT NULL,
-//    `MOLECULE_FORM` varchar(100),
-//    `MOLECULE_CODE` int(11) NOT NULL,
-//    `MOLECULE_NAME` varchar(200) NOT NULL,
-//    `MOLECULE_ATC`
-//    `DOSAGE` varchar(100)  NOT NULL,
-//    `DOSAGE_REF` varchar(50)  NOT NULL,
-//    `NATURE` varchar(2) NOT NULL DEFAULT "SA",
-//    `LK_NATURE` int(11) NOT NULL DEFAULT 1
-
-    i = 0;
-    // recreate an fictive code_molecule
-    QHash<QString, int> codemols;
-    foreach(drug *dr, drugs) {
-        foreach(const QString &mol, dr->mols_strength.keys()) {
-            if (codemols.keys().contains(mol))
-                continue;
-            codemols.insert(mol, ++i);
-        }
-    }
-
-    // now create the CSV
-    foreach(drug *dr, drugs) {
-        int lknature = 1;
-        foreach(const QString &mol, dr->mols_strength.keys()) {
-            /** \todo DOSAGE REF can be improved */
-            tableComposition += dr->uid1 + dr->uid2 + SEPARATOR + dr->form + SEPARATOR + QString::number(codemols.value(mol)) + SEPARATOR +
-                                mol + SEPARATOR + SEPARATOR + dr->mols_strength.value(mol) + SEPARATOR + "" + SEPARATOR + "SA" + SEPARATOR +
-                                QString::number(lknature) + "\n";
-            ++lknature;
-        }
-    }
-    // save file
-    {
-        QFile f(workingPath() + "FDA_COMPOSITION.CSV");
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. FdaDrugsDatabaseWidget::populateDatabase()").arg(f.fileName(), f.errorString()), __FILE__, __LINE__);
-            return false;
-        }
-        Utils::Log::addMessage(this, "Saving file");
-        f.write(tableComposition.toUtf8());
-    }
-    tableComposition.clear();
-
-
-    /** \todo PACKAGING */
-
-    if (m_WithProgress) {
-        delete progress;
-        progress = 0;
-    }
-
-    qDeleteAll(drugs);
-    drugs.clear();
-
     return true;
-
 }
 
 bool FdaDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!Core::Tools::createMasterDrugInteractionDatabase())
         return false;
 
-    // create database structure
-    if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, drugsDatabaseSqlSchema())) {
-        Utils::Log::addError(this, "Can not create FDA DB.", __FILE__, __LINE__);
+    QMultiHash<QString, QVariant> labels;
+    labels.insert("fr","Base de données thérapeutiques américaine");
+    labels.insert("en","USA therapeutic database");
+    labels.insert("de","USA therapeutischen database");
+
+    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
+        Utils::Log::addError(this, "Unable to create the FDA drugs sources");
         return false;
     }
 
@@ -471,58 +313,72 @@ bool FdaDrugDatatabaseStep::createDatabase()
 
 bool FdaDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    // create temporary database schema
-    if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, databaseCreationScript())) {
-        Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
-        return false;
-    }
+    Q_EMIT progressLabelChanged(tr("Reading downloaded files"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
 
-    // import files
     QStringList files = QStringList()
-                        << "FDA_DRUGS.CSV"
-                        << "FDA_COMPOSITION.CSV"
+                        << "Product.txt"
+                        << "AppDoc.txt"
                         ;
 
-    QProgressDialog *progress = 0;
-    if (m_WithProgress) {
-        progress = new QProgressDialog("Feeding database", "Abort", 0, 3, qApp->activeWindow());
-        progress->setWindowModality(Qt::WindowModal);
-        progress->setValue(0);
-        progress->show();
+    // check files
+    foreach(const QString &file, files) {
+        if (!QFile::exists(workingPath() + file)) {
+            Utils::Log::addError(this, QString("Missing " + workingPath() + file + " file. prepareDatas()"), __FILE__, __LINE__);
+            return false;
+        }
     }
 
-    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, workingPath() + "FDA_DRUGS.CSV", "DRUGS", SEPARATOR)) {
+    // Product file
+    QVector<Drug *> drugs;
+
+    QFile file(workingPath() + "Product.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        Utils::Log::addError(this, QString("ERROR : Enable to open Product.txt : %1.").arg(file.errorString()), __FILE__, __LINE__);
         return false;
     }
-    if (m_WithProgress) {
-        progress->setValue(1);
+    Q_EMIT progressLabelChanged(tr("Reading drugs raw source"));
+    Q_EMIT progressRangeChanged(0, file.size());
+    Q_EMIT progress(0);
+
+    QTextStream in(&file);
+    in.setCodec("ISO 8859-1");
+    int pos = 0;
+    while (!in.atEnd()) {
+        QString l = in.readLine();
+        //ignore first line
+        if (pos==0) {
+            pos += l.length();
+            continue;
+        }
+
+        Parser parser(l);
+        drugs << parser.getDrug();
+
+        if (drugs.count() % 10 == 0) {
+//            break;
+            Q_EMIT progress(pos);
+        }
     }
-    if (!Utils::Database::importCsvToDatabase(FDA_DRUGS_DATABASE_NAME, workingPath() + "FDA_COMPOSITION.CSV", "COMPOSITION", SEPARATOR)) {
-        return false;
-    }
-    if (m_WithProgress) {
-        progress->setValue(2);
-        progress->setLabelText(tr("Processing SQL script (about 10 minutes)"));
-    }
+    file.close();
+
+    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, FDA_DRUGS_DATABASE_NAME);
+    Q_EMIT progress(1);
+
+    qDeleteAll(drugs);
+    drugs.clear();
 
     // Run SQL commands one by one
-    if (!Core::Tools::executeSqlFile(FDA_DRUGS_DATABASE_NAME, databaseFinalizationScript())) {
+    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
         Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
         return false;
     }
-    if (m_WithProgress) {
-        progress->setValue(3);
-    }
-
     Utils::Log::addMessage(this, QString("Database processed"));
 
-    if (m_WithProgress) {
-        delete progress;
-        progress = 0;
-    }
     return true;
 }
 
@@ -552,17 +408,21 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     // Hand association : 20
     // Found : 1349, Left: 612
 
+
     // Connect to databases
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    if (!Core::Tools::connectDatabase(FDA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    QSqlDatabase fr = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+    if (!fr.isOpen()) {
+        Utils::Log::addError(this, "Can not connect to French db", __FILE__, __LINE__);
         return false;
+    }
 
-    // get all drugs
-    QSqlDatabase us = QSqlDatabase::database(FDA_DRUGS_DATABASE_NAME);
-    if (!us.open()) {
-        Utils::Log::addError(this, "Can not connect to FDA db : populateDatabase()", __FILE__, __LINE__);
+    // Get SID
+    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
+    if (sid==-1) {
+        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
         return false;
     }
 
@@ -582,34 +442,33 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     corrected.insert("IOXAGLATE SODIUM" ,"IOXAGLIC ACID");
     corrected.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
 
+    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
+    Q_EMIT progressRangeChanged(0, 2);
+    Q_EMIT progress(0);
+
     // Associate Mol <-> ATC for drugs with one molecule only
     QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FDA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
+    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FDA_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
     qWarning() << "unfound" << unfound.count();
 
+    Q_EMIT progress(1);
+    // Clear existing links
+    QString req = QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid);
+    Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+
+    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
     // Save to links to drugs database
-    us.transaction();
-    Core::Tools::executeSqlQuery("DELETE FROM LK_MOL_ATC;", FDA_DRUGS_DATABASE_NAME);
-    foreach(int mol, mol_atc.uniqueKeys()) {
-        QList<int> atcCodesSaved;
-        foreach(int atc, mol_atc.values(mol)) {
-            if (atcCodesSaved.contains(atc))
-                continue;
-            atcCodesSaved.append(atc);
-            QString req = QString("INSERT INTO `LK_MOL_ATC` VALUES (%1, %2)").arg(mol).arg(atc);
-            Core::Tools::executeSqlQuery(req, FDA_DRUGS_DATABASE_NAME);
-        }
-    }
-    us.commit();
-
-    // add unfound to extralinkermodel
-    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FDA_DRUGS_DATABASE_NAME, unfound);
-    ExtraMoleculeLinkerModel::instance()->saveModel();
-
-    if (!Core::Tools::signDatabase(FDA_DRUGS_DATABASE_NAME))
-        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
+    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     Utils::Log::addMessage(this, QString("Database processed"));
+
+    // add unfound to extralinkermodel
+    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
+    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FDA_DRUGS_DATABASE_NAME, unfound);
+    ExtraMoleculeLinkerModel::instance()->saveModel();
 
     return true;
 }
@@ -635,6 +494,16 @@ FdaDrugsDatabaseWidget::~FdaDrugsDatabaseWidget()
 
 void FdaDrugsDatabaseWidget::on_startJobs_clicked()
 {
+    QProgressDialog progressDialog(mainwindow());
+    progressDialog.setLabelText(tr("Starting jobs"));
+    progressDialog.setRange(0, 1);
+    progressDialog.setWindowModality(Qt::WindowModal);
+    progressDialog.setValue(0);
+    progressDialog.show();
+    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
+    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
+    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
+
     if (ui->unzip->isChecked()) {
         if (m_Step->unzipFiles())
             ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
