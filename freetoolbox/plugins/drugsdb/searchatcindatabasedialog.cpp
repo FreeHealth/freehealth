@@ -20,6 +20,8 @@
 
 using namespace DrugsDbCreator;
 
+static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
@@ -50,11 +52,12 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->tableView->setModel(d->m_Model);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->term->setText(term);
-    on_lang_currentIndexChanged(ui->lang->currentText());
+    ui->lang->setCurrentIndex(settings()->value(::S_LANGUAGE).toInt());
 }
 
 SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()
 {
+    settings()->setValue(::S_LANGUAGE, ui->lang->currentIndex());
     delete ui;
     delete d->m_Model;
     delete d;
