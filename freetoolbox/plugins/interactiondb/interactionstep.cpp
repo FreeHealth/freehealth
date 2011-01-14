@@ -33,8 +33,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Interactions/") + QDir::separator();}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
-static inline QString iamDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
+static inline QString databaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
 
 static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
 static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
@@ -53,7 +52,7 @@ bool InteractionStep::createDir()
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
-    const QString &dbpath = QFileInfo(iamDatabaseAbsPath()).absolutePath();
+    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
             Utils::Log::addError(this, "Unable to create interactions database output path :" + dbpath, __FILE__, __LINE__);
@@ -65,7 +64,7 @@ bool InteractionStep::createDir()
 
 bool InteractionStep::cleanFiles()
 {
-    QFile(iamDatabaseAbsPath()).remove();
+    QFile(databaseAbsPath()).remove();
     return true;
 }
 
@@ -84,7 +83,7 @@ struct Source
 };
 
 
-static void setClassTreeToDatabase(const QString &iclass,
+static bool setClassTreeToDatabase(const QString &iclass,
                                    const QMultiHash<QString, QString> &class_mols,
                                    const QMultiHash<QString, QString> &molsToAtc,
                                    const QStringList &afssapsClass,
@@ -123,64 +122,98 @@ static void setClassTreeToDatabase(const QString &iclass,
             }
         }
 
-        int sourceLk = -1;
+        int bibMasterId = -1;
+        QVector<int> bib_ids;
         if (sources.count()) {
-            // Get SourceLk
-            req = "SELECT MAX(`SOURCE_LINK`) FROM SOURCES;";
-            QSqlQuery query(req, QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
-            if (query.isActive()) {
-                if (query.next()) {
-                    sourceLk = query.value(0).toInt() + 1;
-                }
-            } else {
-                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
-            }
-            query.finish();
             // Insert all sources
             foreach(const Source &s, sources) {
-                req = QString("INSERT INTO `SOURCES` (`SOURCE_LINK`,`TYPE`,`LINK`) VALUES "
-                              "(%1, \"%2\", \"%3\")")
-                      .arg(sourceLk)
-                      .arg(s.m_TypeOfLink)
-                      .arg(s.m_Link)
-                      ;
-                if (!query.exec(req)) {
-                    Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
-                }
+                int lastId = Core::Tools::addBibliography(Core::Constants::MASTER_DATABASE_NAME, s.m_TypeOfLink, s.m_Link, "","");
+                if (lastId==-1)
+                    return false;
+                bib_ids << lastId;
             }
         }
+        QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+        db.transaction();
+        QSqlQuery query(db);
+        req = QString("SELECT MAX(BIB_MASTER_ID) FROM BIBLIOGRAPHY_LINKS");
+        if (query.exec(req)) {
+            if (query.next()) {
+                bibMasterId = query.value(0).toInt() + 1;
+            }
+        } else {
+            Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+            db.rollback();
+            return false;
+        }
+        query.finish();
+        if (bibMasterId==-1) {
+            Utils::Log::addError("InteractionStep", "NO BIB MASTER", __FILE__, __LINE__);
+            db.rollback();
+            return false;
+        }
 
-        // Create the SQL query for insertion
+        foreach(int id, bib_ids) {
+            req = QString("INSERT INTO BIBLIOGRAPHY_LINKS (BIB_MASTER_ID, BIB_ID) VALUES (%1,%2)")
+                  .arg(bibMasterId)
+                  .arg(id);
+            if (!query.exec(req)) {
+                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                db.rollback();
+                return false;
+            }
+            query.finish();
+        }
+
+        // Insert IAM Tree + Bib link
         if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
             foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"), %3);")
+                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
                         .arg(atc)
-                        .arg(sourceLk);
-                Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+                        .arg(bibMasterId);
+                if (!query.exec(req)) {
+                    Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                    db.rollback();
+                    return false;
+                }
+                query.finish();
             }
         } else {
             int id = molsWithoutAtc.indexOf(inn.toUpper());
             if (id==-1) {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `FRENCH` like \"%2\"), %3);")
+                QString i__ = inn;
+                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+                              "(%1, ("
+                              "SELECT ATC.ATC_ID "
+                              "FROM ATC "
+                              "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+                              "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+                              "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+                              "WHERE LABELS.LANG='fr' AND LABELS.LABEL='%2'), %3);")
                         .arg(insertChildrenIntoClassId)
-                        .arg(inn)
-                        .arg(sourceLk);
+                        .arg(i__.replace("'","''"))
+                        .arg(bibMasterId);
             } else {
-                req = QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`, `SOURCE_LINK`) VALUES "
-                              "(%1, (SELECT `ID` FROM `ATC` WHERE `CODE`=\"%2\"), %3);")
+                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
                         .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'))
-                        .arg(sourceLk);
+                        .arg(bibMasterId);
             }
 
-            if (!Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__)) {
+            if (!query.exec(req)) {
                 buggyIncludes->insertMulti(iclass, inn);
+                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                db.rollback();
+                return false;
             }
+            query.finish();
+            db.commit();
         }
     }
+    return true;
 }
 
 bool InteractionStep::process()
@@ -190,44 +223,32 @@ bool InteractionStep::process()
 
 bool InteractionStep::computeModelsAndPopulateDatabase()
 {
-    // create db
-    if (!QFile(iamDatabaseAbsPath()).exists()) {
-        QSqlDatabase iam = QSqlDatabase::addDatabase("QSQLITE", Core::Constants::IAM_DATABASE_NAME);
-        iam.setDatabaseName(iamDatabaseAbsPath());
-    }
-
     // connect db
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME);
+    if (!Core::Tools::createMasterDrugInteractionDatabase())
+        return false;
+
+    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
 
     QProgressDialog *progress = 0;
     if (m_UseProgressDialog) {
-        progress = new QProgressDialog("Creating interactions database","Abord", 0, 8,qApp->activeWindow());
+        progress = new QProgressDialog("Creating interactions database","Abord", 0, 7, qApp->activeWindow());
         progress->setWindowModality(Qt::WindowModal);
         progress->setValue(0);
     }
 
-    // Create database schema
-    if (!Core::Tools::executeSqlFile(Core::Constants::IAM_DATABASE_NAME, iamDatabaseSqlSchema())) {
-        Utils::Log::addError(this, "Can not create IAM database.", __FILE__, __LINE__);
-        return false;
-    }
-    if (m_UseProgressDialog) {
-        progress->setValue(1);
-    }
-
     // refresh ATC table
     {
-        // Start transaction
-        iam.transaction();
-
         // Clean ATC table from old values
         QString req;
-        req = "DELETE FROM `ATC`"
-              "WHERE ID>=0";
-        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM ATC";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM ATC_LABELS";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM IAM_TREE";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
         // Import ATC codes to database
         QFile file(atcCsvFile());
@@ -235,20 +256,23 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             Utils::Log::addError(this, QString("ERROR : can not open file %1, %2.").arg(file.fileName(), file.errorString()), __FILE__, __LINE__);
         } else {
             QString content = QString::fromUtf8(file.readAll());
-            int i = 0;
+            if (content.isEmpty())
+                return false;
             const QStringList &list = content.split("\n", QString::SkipEmptyParts);
             foreach(const QString &s, list) {
-                req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUTSCH`) "
-                              "VALUES (%1, %2) ").arg(i).arg(s);
-                Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-                ++i;
+                QStringList values = s.split(";");
+                QMultiHash<QString, QVariant> labels;
+                labels.insert("en", values[1].remove("\""));
+                labels.insert("fr", values[2].remove("\""));
+                labels.insert("de", values[3].remove("\""));
+                if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, values[0].remove("\""), labels)) {
+                    return false;
+                }
             }
         }
-        // Commit transaction
-        iam.commit();
     }
     if (m_UseProgressDialog) {
-        progress->setValue(2);
+        progress->setValue(1);
     }
 
     // add FreeDiams ATC specific codes
@@ -283,7 +307,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
              }
          }
          if (m_UseProgressDialog) {
-             progress->setValue(3);
+             progress->setValue(2);
          }
 
         // Add Interacting molecules without ATC code
@@ -292,17 +316,15 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             QString n = QString::number(i+1);
             if (i<9)
                 n.prepend("0");
-            /** \todo add translated class names */
-            req = QString("INSERT INTO `ATC` (`ID`, `CODE`, `FRENCH`, `ENGLISH`) VALUES "
-                          "(%1, \"%2\", \"%3\", \"%4\");")
-                    .arg(i+100000)
-                    .arg("Z01AA" + n)
-                    .arg(molsWithoutAtc.at(i))
-                    .arg(molsWithoutAtc.at(i));
-            Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+            QMultiHash<QString, QVariant> labels;
+            labels.insert("fr", molsWithoutAtc.at(i));
+            labels.insert("en", molsWithoutAtc.at(i));
+            labels.insert("de", molsWithoutAtc.at(i));
+            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000))
+                return false;
         }
         if (m_UseProgressDialog) {
-            progress->setValue(4);
+            progress->setValue(3);
         }
 
         // Add classes
@@ -310,16 +332,15 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
         for (int i=0; i < afssapsClass.count(); i++) {
             QString n = QString::number(i+1);
             n = n.rightJustified(4, '0');
-            req = QString("INSERT INTO `ATC` (`ID`, `CODE`, `FRENCH`, `ENGLISH`) VALUES "
-                          "(%1, \"%2\", \"%3\", \"%4\");")
-                    .arg(i+200000)
-                    .arg("ZXX" + n)
-                    .arg(afssapsClass.at(i))
-                    .arg(afssapsClassEn.at(i));
-            Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+            QMultiHash<QString, QVariant> labels;
+            labels.insert("fr", afssapsClass.at(i));
+            labels.insert("en", afssapsClassEn.at(i));
+            labels.insert("de", afssapsClassEn.at(i));
+            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000))
+                return false;
         }
         if (m_UseProgressDialog) {
-            progress->setValue(5);
+            progress->setValue(4);
         }
 
         // Warn AFSSAPS molecules with multiples ATC
@@ -338,8 +359,8 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
     // Add interacting classes tree
     {
         // Prepare computation
-        req = "DELETE FROM IAM_TREE WHERE ID_CLASS >= 0";
-        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM IAM_TREE;";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
         // retreive AFSSAPS class tree from model
         AfssapsClassTreeModel *afssapsTreeModel = AfssapsClassTreeModel::instance();
@@ -374,7 +395,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             }
         }
         if (m_UseProgressDialog) {
-            progress->setValue(6);
+            progress->setValue(5);
         }
 
         qWarning() << "sources=" << class_sources.count() << class_sources.uniqueKeys().count();
@@ -385,7 +406,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, &buggyIncludes);
         }
         if (m_UseProgressDialog) {
-            progress->setValue(7);
+            progress->setValue(6);
         }
         afssapsTreeModel->addBuggyInclusions(buggyIncludes);
     }
@@ -394,17 +415,16 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
     // Add interaction knowledges
     {
         // Prepare computation
-        req = "DELETE FROM `INTERACTIONS` WHERE ID >= 0";
-        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-
-        // Prepare computation
-        req = "DELETE FROM `INTERACTION_KNOWLEDGE` WHERE ID >= 0";
-        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM INTERACTIONS";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM IAKNOWLEDGE";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+        req = "DELETE FROM IA_IAK";
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
         InteractionModel *interactionModel = InteractionModel::instance();
         int nb = interactionModel->rowCount();
         int interactionId = 0;
-        bool done = false;
 
         for(int i = 0; i < nb; ++i) {
             // get interactions row by row
@@ -461,33 +481,14 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                     secondCodes.append(molsToAtc.values(child));
                 }
 
-                foreach(const QString &atc1, mainCodes) {
-                    foreach(const QString &atc2, secondCodes) {
-                        done = true;
-                        req = QString("INSERT INTO `INTERACTIONS`  (`ATC_ID1`,`ATC_ID2`, `INTERACTION_KNOWLEDGE_ID`) VALUES (\n"
-                                      "%2, \n%3, \n%4);")
-                                .arg(QString("(SELECT `ID` FROM `ATC` WHERE `CODE`=\"%1\")").arg(atc1))
-                                .arg(QString("(SELECT `ID` FROM `ATC` WHERE `CODE`=\"%1\")").arg(atc2))
-                                .arg(interactionId);
-                        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-                    }
-                }
-                // Check errors
-                if (!done)
-                    Utils::Log::addError(this, QString("Interaction not added : %1   //  %2").arg(main).arg(child), __FILE__, __LINE__);
-                done = false;
-
-                req = QString("INSERT INTO `INTERACTION_KNOWLEDGE`  "
-                              "(`ID`,`TYPE`,`RISK_FR`,`MANAGEMENT_FR`, `RISK_EN`, `MANAGEMENT_EN`, `REFERENCES_LINK`) "
-                              "VALUES \n"
-                              "(%1, \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"http://tinyurl.com/24kn96t\")")
-                        .arg(interactionId)
-                        .arg(interactionModel->getLevel(childItem, "fr"))
-                        .arg(interactionModel->getRisk(childItem, "fr"))
-                        .arg(interactionModel->getManagement(childItem, "fr"))
-                        .arg(interactionModel->getRisk(childItem, "en"))
-                        .arg(interactionModel->getManagement(childItem, "en"));
-                Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME);
+                // Add IA to database
+                QMultiHash<QString, QVariant> risk;
+                QMultiHash<QString, QVariant> man;
+                risk.insert("fr", interactionModel->getRisk(childItem, "fr"));
+                risk.insert("en", interactionModel->getRisk(childItem, "en"));
+                man.insert("fr", interactionModel->getManagement(childItem, "fr"));
+                man.insert("en", interactionModel->getManagement(childItem, "en"));
+                Core::Tools::addInteraction(Core::Constants::MASTER_DATABASE_NAME, mainCodes, secondCodes, interactionModel->getLevel(childItem, "fr"), risk, man);
 
                 ++j;
                 ++interactionId;
@@ -495,7 +496,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
         }
 
         if (m_UseProgressDialog) {
-            progress->setValue(8);
+            progress->setValue(7);
         }
 
     }
@@ -506,9 +507,6 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 
 
     // drugs databases needs to be relinked with the new ATC codes
-
-    if (!Core::Tools::signDatabase(Core::Constants::IAM_DATABASE_NAME))
-        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
 
     if (progress) {
         delete progress;
@@ -529,14 +527,14 @@ void InteractionStep::downloadNextSource()
     }
 
     // connect db
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return ;
 
     // If first call --> get all sources to download
     if (m_ActiveDownloadId == -1) {
         m_SourceToDownload.clear();
         QString req = "SELECT `ID` FROM `SOURCES` WHERE (`TEXTUAL_REFERENCE` IS NULL AND `ABSTRACT` IS NULL);";
-        QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+        QSqlQuery query(QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
         if (query.exec(req)) {
             while (query.next()) {
                 m_SourceToDownload << query.value(0).toInt();
@@ -559,7 +557,7 @@ void InteractionStep::downloadNextSource()
                 .arg(m_Downloader->abstract().replace("\"","'"))
                 .arg(m_ActiveDownloadId)
                 ;
-        Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
+        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
         if (m_SourceToDownload.contains(m_ActiveDownloadId))
             m_SourceToDownload.remove(0);
@@ -580,7 +578,7 @@ void InteractionStep::downloadNextSource()
     // Get link
     QString link;
     QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE (`ID`=%1 AND `LINK` NOT NULL) LIMIT 1;").arg(m_ActiveDownloadId);
-    QSqlQuery query(QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+    QSqlQuery query(QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
     if (query.exec(req)) {
         if (query.next()) {
             link = query.value(0).toString();
