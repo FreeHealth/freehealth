@@ -39,6 +39,11 @@ Q_SIGNALS:
     void processFinished();
     void postProcessDownloadFinished();
 
+    // Progress dialog management when threaded
+    void progressLabelChanged(const QString &label);
+    void progress(int done);
+    void progressRangeChanged(int min, int max);
+
 public Q_SLOTS:
 
 };
