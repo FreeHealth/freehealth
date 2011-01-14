@@ -149,7 +149,7 @@ public:
         }
         QString content = QString::fromUtf8(file.readAll());
         foreach(const QString &line, content.split("\n")) {
-            const QStringList &vals = line.split("\",\"");
+            const QStringList &vals = line.split("\";\"");
             if (vals.count()!=4) {
                 qWarning() << vals;
                 continue;
