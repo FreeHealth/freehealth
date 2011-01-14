@@ -22,6 +22,7 @@ public:
     QStringList getSelectedCodes();
 
 private Q_SLOTS:
+    void setFilter();
     void on_term_textChanged(const QString &text);
     void on_lang_currentIndexChanged(const QString &text);
     void on_tableView_activated(const QModelIndex &index);

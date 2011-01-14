@@ -9,7 +9,7 @@
 
 #include "ui_searchatcindatabasedialog.h"
 
-#include <QSqlTableModel>
+#include <QSqlQueryModel>
 #include <QModelIndexList>
 #include <QSqlError>
 #include <QSqlRecord>
@@ -24,13 +24,13 @@ static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
 
 namespace DrugsDbCreator {
     class SearchAtcInDatabaseDialogPrivate
     {
     public:
-        QSqlTableModel *m_Model;
+        QSqlQueryModel *m_Model;
         QString m_LangFilter;
     };
 }
@@ -44,11 +44,10 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->setupUi(this);
     ui->initial->setText(term);
 
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
-        Utils::Log::addError(this, "unable to connect IAM database", __FILE__, __LINE__);
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+        Utils::Log::addError(this, "unable to connect database", __FILE__, __LINE__);
 
-    d->m_Model = new QSqlTableModel(this, QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
-    d->m_Model->setTable("ATC");
+    d->m_Model = new QSqlQueryModel(this);
     ui->tableView->setModel(d->m_Model);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->term->setText(term);
@@ -63,23 +62,38 @@ SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()
     delete d;
 }
 
-void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &text)
+void SearchAtcInDatabaseDialog::setFilter()
 {
-    d->m_Model->setFilter(QString("%1 LIKE '%%2%'").arg(ui->lang->currentText()).arg(text));
-    ui->searchLabel->setText(d->m_Model->filter() + " // " + QString::number(d->m_Model->rowCount()));
-    d->m_Model->select();
+    const QString &lang = ui->lang->currentText();
+    const QString &term = ui->term->text();
+    QString req = QString("SELECT ATC.CODE, LABELS.LABEL FROM ATC "
+                          "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+                          "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+                          "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL=\"%2\"; ")
+            .arg(lang).arg(term);
+
+    d->m_Model->setQuery(req, QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
+
+    ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
 }
 
-void SearchAtcInDatabaseDialog::on_lang_currentIndexChanged(const QString &text)
+void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &)
 {
-    d->m_Model->setFilter(QString("%1 LIKE '%%2%'").arg(text).arg(ui->term->text()));
-    d->m_Model->select();
-    // update tableView visible columns
-    for(int i = 0; i < d->m_Model->columnCount(); ++i) {
-        ui->tableView->setColumnHidden(i, true);
-    }
-    ui->tableView->setColumnHidden(1, false);
-    ui->tableView->setColumnHidden(d->m_Model->database().record("ATC").indexOf(text), false);
+    setFilter();
+}
+
+void SearchAtcInDatabaseDialog::on_lang_currentIndexChanged(const QString &)
+{
+    setFilter();
+//    d->m_Model->setFilter(QString("%1 LIKE '%%2%'").arg(text).arg(ui->term->text()));
+//    d->m_Model->select();
+//    // update tableView visible columns
+//    for(int i = 0; i < d->m_Model->columnCount(); ++i) {
+//        ui->tableView->setColumnHidden(i, true);
+//    }
+//    ui->tableView->setColumnHidden(1, false);
+//    ui->tableView->setColumnHidden(d->m_Model->database().record("ATC").indexOf(text), false);
 }
 
 void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &index)
