@@ -64,13 +64,13 @@ SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()
 
 void SearchAtcInDatabaseDialog::setFilter()
 {
-    const QString &lang = ui->lang->currentText();
+    QString lang = ui->lang->currentText().left(2).toLower();
     const QString &term = ui->term->text();
     QString req = QString("SELECT ATC.CODE, LABELS.LABEL FROM ATC "
                           "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
                           "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
                           "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL=\"%2\"; ")
+                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL like \"%%2%\"; ")
             .arg(lang).arg(term);
 
     d->m_Model->setQuery(req, QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
@@ -89,11 +89,6 @@ void SearchAtcInDatabaseDialog::on_lang_currentIndexChanged(const QString &)
 //    d->m_Model->setFilter(QString("%1 LIKE '%%2%'").arg(text).arg(ui->term->text()));
 //    d->m_Model->select();
 //    // update tableView visible columns
-//    for(int i = 0; i < d->m_Model->columnCount(); ++i) {
-//        ui->tableView->setColumnHidden(i, true);
-//    }
-//    ui->tableView->setColumnHidden(1, false);
-//    ui->tableView->setColumnHidden(d->m_Model->database().record("ATC").indexOf(text), false);
 }
 
 void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &index)
