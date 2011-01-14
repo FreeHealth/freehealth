@@ -403,7 +403,6 @@ bool ExtraMoleculeLinkerModel::setData(const QModelIndex &index, const QVariant 
             if (d->reviewer != "Reviewer" && !d->reviewer.isEmpty())
                 attributeMap.namedItem("reviewer").setNodeValue(d->reviewer);
             break;
-            break;
         case References:
             attributeMap.namedItem("references").setNodeValue(value.toString());
             if (d->reviewer != "Reviewer" && !d->reviewer.isEmpty())
@@ -418,6 +417,7 @@ bool ExtraMoleculeLinkerModel::setData(const QModelIndex &index, const QVariant 
             return false;
         }
         attributeMap.namedItem("dateofreview").setNodeValue(QDate::currentDate().toString(Qt::ISODate));
+        Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount()));
         return true;
     } else if (role==Qt::CheckStateRole && index.column()==Review) {
         if (value.toInt() == Qt::Checked) {
@@ -429,6 +429,7 @@ bool ExtraMoleculeLinkerModel::setData(const QModelIndex &index, const QVariant 
             if (d->reviewer != "Reviewer" && !d->reviewer.isEmpty())
                 attributeMap.namedItem("reviewer").setNodeValue(d->reviewer);
         }
+        Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount()));
         return true;
     }
 
@@ -564,45 +565,49 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 {
     QMultiHash<int, int> mol_atc;
     // get all ATC ids
-    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME);
+    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     if (!iam.open()) {
-        Utils::Log::addError(this, "Can not connect to IAM db : Tools::englishMoleculeLinker", __FILE__, __LINE__);
+        Utils::Log::addError(this, "Can not connect to MASTER db", __FILE__, __LINE__);
         return mol_atc;
     }
 
     QHash<QString, int> atc_id;
     QMultiHash<QString, int> atcName_id;
     QString req;
-    Utils::Log::addMessage(this, "Getting ATC Informations from the interactions database");
-    {
-        if (lang=="fr") {
-            req = "SELECT `ID`, `CODE`, `FRENCH` FROM `ATC` WHERE length(CODE)=7;";
-        } else if (lang == "de") {
-            req = "SELECT `ID`, `CODE`, `DEUTSCH` FROM `ATC` WHERE length(CODE)=7;";
-        } else {
-            req = "SELECT `ID`, `CODE`, `ENGLISH` FROM `ATC` WHERE length(CODE)=7;";
-        }
-        QSqlQuery query(req, iam);
-        if (query.isActive()) {
-            while (query.next()) {
-                atc_id.insert(query.value(1).toString(), query.value(0).toInt());
-                atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
-            }
-        }
-        query.finish();
-        qWarning() << "ATC" << atc_id.count() << atcName_id.keys().contains("VERAPAMIL");
-    }
+    QSqlQuery query(req, iam);
 
+    // Get all ATC Code and Label
+    Utils::Log::addMessage(this, "Getting ATC Informations from the interactions database");
+    req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
+                  "FROM ATC "
+                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+                  "WHERE LABELS.LANG='%1' AND length(ATC.CODE)=7;").arg(lang);
+    if (query.exec(req)) {
+        while (query.next()) {
+            atc_id.insert(query.value(1).toString(), query.value(0).toInt());
+            atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
+        }
+    }
+    query.finish();
+    qWarning() << "ATC" << atc_id.count();
+
+    // Get source ID (SID)
+    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, drugsDbUid);
+    if (sid==-1)
+        return mol_atc;
+
+    // Get all MOLS.MID and Label
     Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
     QMultiHash<QString, int> mols;
-    req = "SELECT DISTINCT `MOLECULE_CODE`, `MOLECULE_NAME` FROM `COMPOSITION`;";
-    QSqlQuery queryMols(QSqlDatabase::database(drugsDbUid));
-    if (queryMols.exec(req)) {
-        while (queryMols.next()) {
-            mols.insertMulti(queryMols.value(1).toString(), queryMols.value(0).toInt());
+    req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
+    if (query.exec(req)) {
+        while (query.next()) {
+            mols.insertMulti(query.value(1).toString(), query.value(0).toInt());
         }
     }
-    queryMols.finish();
+    query.finish();
     qWarning() << "Number of distinct molecules" << mols.uniqueKeys().count();
     const QStringList &knownMoleculeNames = mols.uniqueKeys();
 
@@ -763,7 +768,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 
     // Try to find new associations via the COMPOSITION.LK_NATURE field
     int natureLinkerNb = 0;
-    if (drugsDbUid == "AFSSAPS_FR") {
+    if (drugsDbUid == "_________AFSSAPS_FR_______") {
         QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
         QMap<int, QVector<MolLink> > cis_compo;
         {
@@ -862,7 +867,9 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Save completion percent in drugs database INFORMATION table
     int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
     Utils::Log::addMessage(this, QString("Molecule links completion: %1").arg(completion));
-    Core::Tools::executeSqlQuery(QString("UPDATE `INFORMATIONS` SET `MOL_LINK_COMPLETION`=%1").arg(completion), drugsDbUid, __FILE__, __LINE__);
+    Core::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
+                                 .arg(completion).arg(sid),
+                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
     // Inform model of founded links
     ExtraMoleculeLinkerModel::instance()->addAutoFoundMolecules(mol_atc_forModel, true);
