@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "globaltools.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/global.h>
@@ -50,6 +52,11 @@
 #include <quazip/quazip/quazipfile.h>
 
 #include <utils/log.h>
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
+static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace Core {
 
@@ -260,14 +267,13 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
         return false;
     }
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Utils::Log::addError("Tools", QString("ERROR : Enable to open %1. dc_Canadian_DrugsDatabaseCreator::createDatabase()").arg(fileName), __FILE__, __LINE__);
+    // execute all sql queries
+    QString req = Utils::readTextFile(fileName);
+    if (req.isEmpty()) {
+        Utils::Log::addError("Tools", "File is empty : " + fileName, __FILE__, __LINE__);
         return false;
     }
 
-    // execute all sql queries
-    QString req = QString::fromUtf8(file.readAll());
     req.replace("\n\n", "\n");
     req.replace("\n\n", "\n");
     req.replace("\n\n", "\n");
@@ -276,8 +282,12 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 
     QStringList list = req.split("\n");
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
-    if (!DB.open())
-        return false;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("Tools", "Database not opened", __FILE__, __LINE__);
+            return false;
+        }
+    }
 //    if (!DB.transaction()) {
 //        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
 //        return false;
@@ -340,7 +350,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file, int line)
 {
     QSqlDatabase DB = QSqlDatabase::database(dbName);
-    if (!DB.open()) {
+    if (!DB.isOpen()) {
         if (file.isEmpty())
             Utils::Log::addError("Tools", "Unable to connect to " + dbName, __FILE__, __LINE__);
         else
@@ -386,6 +396,20 @@ bool connectDatabase(const QString &connection, const QString &fileName)
             Utils::Log::addMessage("Tools", QString("Connection to database created : %1 %2")
                     .arg(DB.connectionName(), DB.databaseName()));
         }
+    }
+    return true;
+}
+
+bool createMasterDrugInteractionDatabase()
+{
+    if (!connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath())) {
+        Utils::Log::addError("Tools", "Unable to create master database");
+        return false;
+    }
+    QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+    if (db.tables().count() < 10) {
+        executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, masterDatabaseSqlSchema());
+        addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
     }
     return true;
 }
@@ -438,6 +462,466 @@ bool signDatabase(const QString &connectionName)
     return true;
 }
 
+int getSourceId(const QString &connection, const QString &dbUid)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            return -1;
+        }
+    }
+
+    QString req;
+    QSqlQuery query(db);
+
+    // Source exists ?
+    req = QString("SELECT SID FROM SOURCES WHERE (DATABASE_UID='%1')").arg(dbUid);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toInt();;
+        }
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        return -1;
+    }
+    query.finish();
+    return -1;
+}
+/** \brief Create a new drugs source in the Master database. Return -1 is an error occured, or the SID */
+int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHash<QString, QVariant> trLabels)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            return -1;
+        }
+    }
+
+    QString req;
+    QSqlQuery query(db);
+
+    // Source exists ?
+    req = QString("SELECT SID, MASTER_LID FROM SOURCES WHERE (DATABASE_UID='%1')")
+          .arg(uid);
+    if (query.exec(req)) {
+        if (query.next()) {
+            int sid = query.value(0).toInt();
+            return sid;
+        }
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        return -1;
+    }
+    query.finish();
+
+    // insert labels
+    int masterLid = addLabels(connection, -1, trLabels);
+    if (masterLid == -1) {
+        Utils::Log::addError("Tools","Unable to add source", __FILE__, __LINE__);
+        return -1;
+    }
+
+    // insert source
+    req = QString("INSERT INTO SOURCES (SID, MASTER_LID, DATABASE_UID) VALUES (NULL, %1, '%2')")
+          .arg(masterLid)
+          .arg(uid)
+          ;
+    if (query.exec(req)) {
+        return query.lastInsertId().toInt();
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+    }
+
+    return -1;
+}
+
+/** \brief Return the used MASTER_LID or -1 in case of an error */
+int addLabels(const QString &connection, const int masterLid, QMultiHash<QString, QVariant> trLabels)
+{
+    QString req;
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            return -1;
+        }
+    }
+    QSqlQuery query(db);
+    int mid = masterLid;
+    if (mid == -1) {
+        // get new one
+        req = "SELECT max(MASTER_LID) FROM `LABELS_LINK`;";
+        if (query.exec(req)) {
+            if (query.next())
+                mid = query.value(0).toInt();
+        } else {
+            Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+            return -1;
+        }
+    }
+    ++mid;
+
+    // insert all translated labels
+    foreach(const QString &lang, trLabels.uniqueKeys()) {
+        foreach(const QVariant &value, trLabels.values(lang)) {
+            QString t = value.toString();
+
+            // Check is couple already exists
+            req = QString("SELECT LID FROM LABELS WHERE (LANG='%1' AND LABEL=\"%2\")")
+                  .arg(lang)
+                  .arg(t);
+            if (query.exec(req)) {
+                if (query.next()) {
+                    int lid = query.value(0).toInt();
+                    query.finish();
+
+                    req = QString("INSERT INTO `LABELS_LINK` (MASTER_LID, LID) VALUES "
+                                  "(%1  ,%2)")
+                            .arg(mid)
+                            .arg(lid)
+                            ;
+                    if (!query.exec(req)) {
+                        Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                        return false;
+                    }
+                    query.finish();
+                }
+            } else {
+                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                return -1;
+            }
+            query.finish();
+
+            req = QString("INSERT INTO `LABELS` (LID,LANG,LABEL) VALUES ("
+                          "NULL,'%1','%2')")
+                    .arg(lang)
+                    .arg(t.replace("'","''"))
+                    ;
+            if (!query.exec(req)) {
+                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                return -1;
+            }
+            int id = query.lastInsertId().toInt();
+            query.finish();
+
+            req = QString("INSERT INTO `LABELS_LINK` (MASTER_LID, LID) VALUES "
+                          "(%1  ,%2)")
+                    .arg(mid)
+                    .arg(id)
+                    ;
+            if (!query.exec(req)) {
+                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                return -1;
+            }
+            query.finish();
+        }
+    }
+    return mid;
+}
+
+bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            return false;
+        }
+    }
+    QString content = Utils::readTextFile(absFileName);
+    if (content.isEmpty()) {
+        Utils::Log::addError("Tools","Routes file does not exist.\n" + absFileName, __FILE__, __LINE__);
+        return false;
+    }
+    db.transaction();
+    // Read file
+    foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
+        if (line.startsWith("--"))
+            continue;
+        int id = 0;
+        int rid = 0;
+        QMultiHash<QString, QVariant> trLabels;
+        // Parse line
+        foreach(QString value, line.split(",")) {
+            value = value.trimmed();
+            if (id==0) {
+                // is RID
+                rid = value.toInt();
+                ++id;
+                continue;
+            }
+            ++id;
+            value = value.remove("\"");
+            int sep = value.indexOf(":");
+            QString lang = value.left(sep);
+            if (lang.compare("systemic") == 0) {
+                /** \todo Code systemic extraction of routes */
+            } else {
+                trLabels.insertMulti(lang, value.mid(sep + 1));
+            }
+        }
+        // Push to database
+        int masterLid = Tools::addLabels(connection, -1, trLabels);
+        if (masterLid == -1) {
+            Utils::Log::addError("Tools", "Route not integrated", __FILE__, __LINE__);
+            continue;
+        }
+        QString req = QString("INSERT INTO ROUTES (RID, MASTER_LID) VALUES (NULL, %1)")
+                      .arg(masterLid)
+                      ;
+        Tools::executeSqlQuery(req, connection, __FILE__, __LINE__);
+    }
+    db.commit();
+    return true;
+}
+
+QHash<int, QString> generateMids(const QStringList &molnames, const int sid, const QString &connection)
+{
+    QHash<int, QString> mids;
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen())
+        return mids;
+
+    QString req;
+    db.transaction();
+    QSqlQuery query(db);
+
+    foreach(const QString &name, molnames) {
+
+        // Ask for an existing MID
+        req = QString("SELECT MID FROM MOLS WHERE NAME=\"%1\";").arg(name);
+        if (query.exec(req)) {
+            if (query.next()) {
+                // is already in the table MOLS
+                mids.insert(query.value(0).toInt(), name);
+                continue;
+            }
+        } else {
+            Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+            continue;
+        }
+        query.finish();
+
+        // create a new MID
+        req = QString("INSERT INTO MOLS (MID, SID, NAME) VALUES (NULL,%1,\"%2\");")
+              .arg(sid)
+              .arg(name);
+
+        if (query.exec(req)) {
+            mids.insert(query.lastInsertId().toInt(), name);
+            continue;
+        } else {
+            Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+            continue;
+        }
+        query.finish();
+    }
+    db.commit();
+    return mids;
+}
+
+bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen())
+        return false;
+    db.transaction();
+    QSqlQuery query(db);
+    int id = 0;
+    QString req;
+    if (forceAtcId == -1)
+        req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
+                  "VALUES (NULL, '%2') ").arg(code);
+    else
+        req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
+                  "VALUES (%1, '%2') ").arg(forceAtcId).arg(code);
+
+    if (query.exec(req)) {
+        id = query.lastInsertId().toInt();
+        if (forceAtcId!=-1) {
+            if (forceAtcId!=id) {
+                Utils::Log::addError("Tools", QString("Wrong ATC_ID Db=%1 / Asked=%2").arg(id).arg(forceAtcId), __FILE__, __LINE__);
+                db.rollback();
+                return false;
+            }
+        }
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+    }
+    query.finish();
+
+    // Create labels
+    int masterLid = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, trLabels);
+    if (masterLid == -1) {
+        db.rollback();
+        return false;
+    }
+
+    // Create ATC_LABELS link
+    req = QString("INSERT INTO ATC_LABELS (ATC_ID, MASTER_LID) VALUES (%1, %2) ").arg(id).arg(masterLid);
+    if (!query.exec(req)) {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        db.rollback();
+        return false;
+    }
+    query.finish();
+    db.commit();
+    return true;
+}
+
+bool addInteraction(const QString &connection, const QStringList &atc1, const QStringList &atc2, const QString &type, const QMultiHash<QString, QVariant> &risk, const QMultiHash<QString, QVariant> &management)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen())
+        return false;
+    QSqlQuery query(db);
+    QString req;
+    int iak_id = -1;
+    QList<int> ia_ids;
+
+    foreach(const QString &a1, atc1) {
+        foreach(const QString &a2, atc2) {
+            req = QString("INSERT INTO INTERACTIONS (ATC_ID1, ATC_ID2) VALUES (%1, %2);")
+                    .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a1))
+                    .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a2));
+            if (query.exec(req)) {
+                ia_ids << query.lastInsertId().toInt();
+            } else {
+                Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+                return false;
+            }
+            query.finish();
+        }
+    }
+    // Check errors
+    if (!ia_ids.count()) {
+        Utils::Log::addError("Tools", QString("Interaction not added : %1   //  %2").arg(atc1.join(",")).arg(atc2.join(",")), __FILE__, __LINE__);
+        return false;
+    }
+    // Add labels
+    int riskMasterLid = addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, risk);
+    int manMasterLid = addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, management);
+    if (riskMasterLid==-1 || manMasterLid==-1)
+        return false;
+
+    // Add IAK
+    /** \todo add bibliography */
+    req = QString("INSERT INTO IAKNOWLEDGE (IAKID,TYPE,RISK_MASTER_LID,MAN_MASTER_LID) VALUES "
+                  "(NULL, \"%1\", %2, %3)")
+            .arg(type)
+            .arg(riskMasterLid)
+            .arg(manMasterLid);
+    if (query.exec(req)) {
+        iak_id = query.lastInsertId().toInt();
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        return false;
+    }
+    query.finish();
+    if (iak_id==-1)
+        return false;
+
+    // Add to IA_IAK
+    foreach(const int ia, ia_ids) {
+        req = QString("INSERT INTO IA_IAK (IAID,IAKID) VALUES (%1,%2)")
+              .arg(ia)
+              .arg(iak_id)
+              ;
+        if (!query.exec(req)) {
+            Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+            return false;
+        }
+        query.finish();
+    }
+
+    return true;
+}
+
+int addBibliography(const QString &connection, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return false;
+        }
+    }
+    QString req;
+    db.transaction();
+    QSqlQuery query(db);
+
+    // Bibliography exists ?
+    int bib_id = -1;
+    req = QString("SELECT BIB_ID FROM BIBLIOGRAPHY WHERE LINK=\"%1\"").arg(link);
+    if (query.exec(req)) {
+        if (query.next()) {
+            bib_id = query.value(0).toInt();
+        } else {
+            // Create the bib and retreive the bib_id
+            QString t = type;
+            QString l = link;
+            QString r = reference;
+            QString a = abstract;
+            QString e = explain;
+            req = QString("INSERT INTO BIBLIOGRAPHY "
+                          "(BIB_ID,TYPE,LINK,TEXTUAL_REFERENCE,ABSTRACT,EXPLANATION) VALUES"
+                          "(NULL, '%1', '%2', '%3', '%4', '%5')")
+                    .arg(t.replace("'","''"))
+                    .arg(l.replace("'","''"))
+                    .arg(r.replace("'","''"))
+                    .arg(a.replace("'","''"))
+                    .arg(e.replace("'","''"));
+            query.finish();
+            if (query.exec(req)) {
+                bib_id = query.lastInsertId().toInt();
+            } else {
+                Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+                db.rollback();
+                return false;
+            }
+            query.finish();
+        }
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        db.rollback();
+        return false;
+    }
+    query.finish();
+    db.commit();
+    return bib_id;
+}
+
+bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> &mol_atc, const int sid)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return false;
+        }
+    }
+    db.transaction();
+    QSqlQuery query(db);
+    // Save to links to drugs database
+    foreach(int mol, mol_atc.uniqueKeys()) {
+        QList<int> atcCodesSaved;
+        foreach(int atc, mol_atc.values(mol)) {
+            if (atcCodesSaved.contains(atc))
+                continue;
+            atcCodesSaved.append(atc);
+            QString req = QString("INSERT INTO LK_MOL_ATC (MID,ATC_ID,SID) VALUES (%1, %2, %3)")
+                          .arg(mol).arg(atc).arg(sid);
+            if (!query.exec(req)) {
+                Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+                db.rollback();
+                return false;
+            }
+            query.finish();
+        }
+    }
+    db.commit();
+    return true;
+}
 
 } // end namespace Tools
 
