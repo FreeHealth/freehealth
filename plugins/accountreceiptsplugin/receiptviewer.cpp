@@ -211,14 +211,16 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     else if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
-            qDebug() << __FILE__ << QString::number(__LINE__)   ;
             typeOfPayment = choice.returnChoiceDialog();//int
-            qDebug() << __FILE__ << QString::number(__LINE__)   ;
             }
-            qDebug() << __FILE__ << QString::number(__LINE__)   ;
             hashOfValues.insertMulti("CS","23.00");//preferential act
         }        
     else{}
+    QStringList listOfValues = hashOfValues.keys();
+    QStringListModel *modelReturnedList = new QStringListModel(listOfValues);
+    ui->returnedListView->setModel(modelReturnedList);
+    ui->returnedListView->show();
+   // delete modelReturnedList;
     fillModel(hashOfValues,typeOfPayment);
     
 }
