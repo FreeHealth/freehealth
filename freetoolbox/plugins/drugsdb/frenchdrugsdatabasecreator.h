@@ -73,7 +73,6 @@ public:
     bool prepareDatas();
     bool createDatabase();
     bool populateDatabase();
-    bool linkDrugsRoutes();
     bool linkMolecules();
 
     QStringList errors() const {return m_Errors;}
