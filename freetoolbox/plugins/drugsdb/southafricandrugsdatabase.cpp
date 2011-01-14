@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "southafricandrugsdatabase.h"
 #include "extramoleculelinkermodel.h"
+#include "drug.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -78,15 +79,10 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/drugs-en_ZA.db");}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
+static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
 
-static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/za_db_preparation.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/za_db_finalize.sql");}
-static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/south_african_uids.csv");}
-
-static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
-static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
+static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
 
 
 QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
@@ -137,14 +133,10 @@ bool ZaDrugDatatabaseStep::downloadFiles()
     // get all tradename html pages from the site
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-    if (m_WithProgress) {
-        m_Progress = new QProgressDialog(qApp->activeWindow());
-        m_Progress->setLabelText(tr("Downloading South African drugs database"));
-        m_Progress->setCancelButtonText(tr("Cancel"));
-        m_Progress->setRange(0, 26);
-        m_Progress->setWindowModality(Qt::WindowModal);
-        m_Progress->setValue(0);
-    }
+
+    Q_EMIT progressLabelChanged(tr("South African database extraction : reading indexes"));
+    Q_EMIT progressRangeChanged(0, 26);
+    Q_EMIT progress(0);
 
     m_nbOfDowloads = 26;
     for(int i = 0; i < m_nbOfDowloads; ++i) {
@@ -198,20 +190,20 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
 
     // If the download list is completed
     ++nb;
-    if (m_WithProgress)
-        m_Progress->setValue(nb);
+    Q_EMIT progress(nb);
 
     if (nb==m_nbOfDowloads) {
         static bool done = false;
         if (!done) {
             done = true;
-            // download the link
             m_nbOfDowloads = m_Drug_Link.count();
+
+            Q_EMIT progressLabelChanged(tr("South African database extraction : reading drugs page"));
+            Q_EMIT progressRangeChanged(0, m_nbOfDowloads);
+            Q_EMIT progress(0);
+
+            // download the link
             nb=0;
-            if (m_WithProgress) {
-                m_Progress->setRange(0, m_nbOfDowloads);
-                m_Progress->setValue(0);
-            }
             qWarning() << "Downloading" << m_Drug_Link.count();
             bool downloadStarted = false;
             foreach(const QString &link, m_Drug_Link.values()) {
@@ -221,17 +213,9 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
                 }
             }
             if (!downloadStarted) {
-                if (m_Progress) {
-                    delete m_Progress;
-                    m_Progress = 0;
-                }
                 Q_EMIT downloadFinished();
             }
         } else {
-            if (m_Progress) {
-                delete m_Progress;
-                m_Progress = 0;
-            }
             Q_EMIT downloadFinished();
         }
     }
@@ -250,6 +234,11 @@ bool ZaDrugDatatabaseStep::process()
 bool ZaDrugDatatabaseStep::prepareDatas()
 {
     m_Drug_Link.clear();
+
+    Q_EMIT progressLabelChanged(tr("South African database extraction : parsing drugs page"));
+    Q_EMIT progressRangeChanged(0, 26);
+    Q_EMIT progress(0);
+
     for(int i=0; i<26; ++i) {
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
@@ -260,15 +249,10 @@ bool ZaDrugDatatabaseStep::prepareDatas()
 
         // read file
         Utils::Log::addMessage(this, "Processing file :" + fileName);
-        QString content;
-        {
-            QFile f(workingPath() + fileName);
-            if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                Utils::Log::addError(this, QString("ERROR : Enable to open %1 : %2. SouthAfricanDrugsDB::populateDatabase()").arg(f.fileName(), f.errorString()));
-                return false;
-            }
-            Utils::Log::addMessage(this, "Reading file");
-            content = f.readAll();
+        QString content = Utils::readTextFile(workingPath() + fileName);
+        if (content.isEmpty()) {
+            Utils::Log::addError(this, "", __FILE__, __LINE__);
+            return false;
         }
 
         // get all drugsname
@@ -302,18 +286,24 @@ bool ZaDrugDatatabaseStep::prepareDatas()
 
             m_Drug_Link.insert(drug, link);
         }
+
+        Q_EMIT progress(i);
     }
     return true;
 }
 
 bool ZaDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!Core::Tools::createMasterDrugInteractionDatabase())
         return false;
 
-    // create database structure
-    if (!Core::Tools::executeSqlFile(ZA_DRUGS_DATABASE_NAME, drugsDatabaseSqlSchema())) {
-        Utils::Log::addError(this, "Can not create ZA DB.", __FILE__, __LINE__);
+    QMultiHash<QString, QVariant> labels;
+    labels.insert("fr","Base de données thérapeutiques Sud Africaine");
+    labels.insert("en","South African therapeutic database");
+    labels.insert("de","South African therapeutischen database");
+
+    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
+        Utils::Log::addError(this, "Unable to create the French drugs sources");
         return false;
     }
 
@@ -321,9 +311,9 @@ bool ZaDrugDatatabaseStep::createDatabase()
     return true;
 }
 
-class Drug {
+class DrugFileParser {
 public:
-    Drug(const QString &drugName, const QString &fullContent) :
+    DrugFileParser(const QString &drugName, const QString &fullContent) :
             name(drugName)
     {
 //        getFormParagraph(fullContent);
@@ -499,74 +489,132 @@ public:
         return fullContent.mid(begin, end - begin);
     }
 
-    QString name;
-    QString regNumber;
-    QString forms;
-    QString presentation;
-    QStringList inns;
+    // UID is not set
+    Drug *getDrug() const
+    {
+        Drug *drug = new Drug;
+        drug->setData(Drug::Name, name);
+        drug->setData(Drug::Forms, forms);
+        drug->setData(Drug::Marketed, 1);
+        drug->setData(Drug::Valid, 1);
+        int i = 0;
+        foreach(const QString &inn, inns) {
+            ++i;
+            Component *compo = new Component;
+            compo->setData(Component::Name, inn);
+            compo->setData(Component::Nature, "SA");
+            compo->setData(Component::NatureLink, i);
+            drug->addComponent(compo);
+        }
+
+        return drug;
+    }
 
     QString formParagraph;
     QString compositionParagraph;
     QString classificationParagraph;
     QString presentationParagraph;
     QString registrationNumberParagraph;
+
+private:
+    QString name;
+    QString regNumber;
+    QString forms;
+    QString presentation;
+    QStringList inns;
+
 };
+
+static int readUids(QHash<QString, int> &drugs_uids)
+{
+    int lastUid = 20100001;
+    QString content = Utils::readTextFile(uidFile());
+    if (content.isEmpty())
+        Utils::Log::addError("ZaDrugDatatabaseStep", "Unable to read UIDs file", __FILE__, __LINE__);
+    foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
+        if (line.startsWith("//"))
+            continue;
+        int separator = line.lastIndexOf(";");
+        QString drugname = line.left(separator);
+        int uid = line.right(8).toInt();
+        if (!drugname.isEmpty() && uid>0) {
+            if (lastUid < uid)
+                lastUid = uid;
+            drugs_uids.insert(drugname, uid);
+        } else {
+            Utils::Log::addError("ZaDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
+        }
+    }
+    return lastUid;
+}
+
+static bool saveUids(const QHash<QString, int> &drugs_uids)
+{
+    QString content;
+    content += "// /***************************************************************************\n"
+               "//  *   FreeMedicalForms                                                      *\n"
+               "//  *   (C) 2008-2010 by Eric MAEKER, MD                                      *\n"
+               "//  *   eric.maeker@free.fr                                                   *\n"
+               "//  *   All rights reserved.                                                  *\n"
+               "//  ***************************************************************************/\n"
+               "// /***************************************************************************\n"
+               "//  *   Owner :  Eric MAEKER, MD <eric.maeker@gmail.com>                      *\n"
+               "//  ***************************************************************************/\n"
+               "// /***************************************************************************\n"
+               "//  * - Autogenerated file for the South African drugs database               *\n"
+               "//  *    This file presents all known drugs and their                         *\n"
+               "//  *    FreeDiams autogenerated UID                                          *\n"
+               "//  *    !!!! The content MUST NOT be changed by hand !!!!                    *\n"
+               "//  ***************************************************************************/\n"
+               "// \n";
+    QStringList names = drugs_uids.keys();
+    qSort(names);
+    foreach(const QString &drug, names) {
+        content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
+    }
+    if (!Utils::saveStringToFile(content.toUtf8(), uidFile())) {
+        Utils::Log::addError("ZaDrugDatatabaseStep", "Unable to save UID file", __FILE__, __LINE__);
+        return false;
+    }
+    return true;
+}
 
 bool ZaDrugDatatabaseStep::populateDatabase()
 {
     if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    qWarning() << "SouthAfricanDrugsDB::populateDatabase()" << m_Drug_Link.count();
-
     // 24 juin 2010 : 2682 drugs -> 1073 usable drugs
 
+    Q_EMIT progressLabelChanged(tr("South African database creation : reading drugs uids"));
+    Q_EMIT progressRangeChanged(0, m_Drug_Link.keys().count() + 1);
+    Q_EMIT progress(0);
     QString regError, compoError;
-    QList<Drug *> drugs;
 
     // Read the UID file from global_resources
     QHash<QString, int> drugs_uids;
-    int lastUid = 20100001;
-    drugs_uids.insert("UIDS STARTS FROM", lastUid);
-    {
-        QString content = Utils::readTextFile(uidFile());
-//        QFile uids(uidFile());
-//        if (uids.open(QFile::ReadOnly | QFile::Text)) {
-//            QString content = uids.readAll();
-            foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
-                if (line.startsWith("//"))
-                    continue;
-                int separator = line.lastIndexOf(";");
-                QString drugname = line.left(separator);
-                int uid = line.right(8).toInt();
-                if (!drugname.isEmpty() && uid>0) {
-                    if (lastUid < uid)
-                        lastUid = uid;
-                    drugs_uids.insert(drugname, uid);
-                } else {
-                    Utils::Log::addError(this, QString("Line : %1 , does not contains 2 values").arg(line));
-                }
-            }
-//        }
-    }
+    int lastUid = readUids(drugs_uids);
 
-    foreach(const QString &drug, m_Drug_Link.keys()) {
+    Q_EMIT progressLabelChanged(tr("South African database creation : reading drugs page"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
+    int progr = 0;
+    QVector<Drug *> drugs;
+    foreach(const QString &drugName, m_Drug_Link.keys()) {
+        ++progr;
+        Q_EMIT progress(progr);
+
         // Get the FreeDiams uid of the drug
-        if (!drugs_uids.keys().contains(drug)) {
+        if (!drugs_uids.keys().contains(drugName)) {
             ++lastUid;
-            drugs_uids.insert(drug, lastUid);
-            qWarning() << "CREATING UID FOR" << drug << lastUid;
+            drugs_uids.insert(drugName, lastUid);
+            qWarning() << "CREATING UID FOR" << drugName << lastUid;
         }
 
         // get the drugs file
-        QString fileName = workingPath() + "/home.intekom.com/" + m_Drug_Link.value(drug);
-        QFile f(fileName);
-        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, "Unable to read " + f.fileName() + " " + f.errorString());
-            continue;
-        }
-
-        QString content = f.readAll();
+        QString fileName = workingPath() + "/home.intekom.com/" + m_Drug_Link.value(drugName);
+        QString content = Utils::readTextFile(fileName);
 
         if (content.isEmpty())
             continue;
@@ -579,8 +627,10 @@ bool ZaDrugDatatabaseStep::populateDatabase()
         content.replace("&nbsp;", " ");
         content.replace("&reg;", "®");
 
-        Drug *dr = new Drug(drug, content);
-        drugs << dr;
+        DrugFileParser parser(drugName, content);
+        Drug *drug = parser.getDrug();
+        drug->setData(Drug::Uid1, drugs_uids.value(drugName));
+        drugs << drug;
 
         // test contents and create an error HTML output
 //        if (dr->registrationNumberParagraph.isEmpty()) {
@@ -589,98 +639,37 @@ bool ZaDrugDatatabaseStep::populateDatabase()
 //                        .arg(drug)
 //                        .arg("No Registration paragraph found.");
 //        }
-        if (dr->compositionParagraph.isEmpty()) {
+        if (parser.compositionParagraph.isEmpty()) {
             compoError += QString("<li><a href=\"%1\">%2 - %3</a></li>")
-                        .arg(QFileInfo(f).absoluteFilePath())
-                        .arg(drug)
+                        .arg(QFileInfo(fileName).absoluteFilePath())
+                        .arg(drugName)
                         .arg("No Composition paragraph");
         }
     }
 
     // Save the UIDS
-    {
-        QFile uids(uidFile());
-        if (uids.open(QFile::WriteOnly | QFile::Text)) {
-            QString content;
-            content += "// /***************************************************************************\n"
-                       "//  *   FreeMedicalForms                                                      *\n"
-                       "//  *   (C) 2008-2010 by Eric MAEKER, MD                                      *\n"
-                       "//  *   eric.maeker@free.fr                                                   *\n"
-                       "//  *   All rights reserved.                                                  *\n"
-                       "//  ***************************************************************************/\n"
-                       "// /***************************************************************************\n"
-                       "//  *   Owner :  Eric MAEKER, MD <eric.maeker@gmail.com>                      *\n"
-                       "//  ***************************************************************************/\n"
-                       "// /***************************************************************************\n"
-                       "//  * - Autogenerated file for the South African drugs database               *\n"
-                       "//  *    This file presents all known drugs and their                         *\n"
-                       "//  *    FreeDiams autogenerated UID                                          *\n"
-                       "//  *    !!!! The content MUST NOT be changed by hand !!!!                    *\n"
-                       "//  ***************************************************************************/\n"
-                       "// \n";
-            QStringList names = drugs_uids.keys();
-            qSort(names);
-            foreach(const QString &drug, names) {
-                content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
-            }
-            uids.write(content.toUtf8());
-        }
+    Q_EMIT progressLabelChanged(tr("South African database creation : processing..."));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
+    // save uids and error HTML output
+    saveUids(drugs_uids);
+    QString tmp = QString("<html><body><ol>%1</ol><p>&nbsp;</p><ol>%2</ol></body></html>")
+                  .arg(regError).arg(compoError);
+    Utils::saveStringToFile(tmp, workingPath() + "/incomplete.html");
+
+    // save drugs to db
+    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, ZA_DRUGS_DATABASE_NAME);
+    Q_EMIT progress(1);
+
+    // Run SQL commands one by one
+    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
+    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+        Utils::Log::addError(this, "Can not create ZA DB.", __FILE__, __LINE__);
+        return false;
     }
 
-    // save the error HTML output
-    QFile save(workingPath() + "/incomplete.html");
-    if (!save.open(QFile::WriteOnly | QFile::Text)) {
-        Utils::Log::addError(this, "Can open file " + save.fileName());
-    } else {
-        QString tmp = QString("<html><body><ol>%1</ol><p>&nbsp;</p><ol>%2</ol></body></html>")
-                      .arg(regError).arg(compoError);
-        save.write(tmp.toUtf8());
-    }
-
-    // Create the INN list to create a molecule_code
-    QStringList uniqueInns;
-    foreach(Drug *dr, drugs) {
-        foreach(const QString &s, dr->inns) {
-            if (uniqueInns.contains(s))
-                continue;
-            uniqueInns << s;
-        }
-    }
-
-    // Send datas to the database
-    QSqlDatabase db = QSqlDatabase::database(ZA_DRUGS_DATABASE_NAME);
-    db.transaction();
-    QString req;
-    foreach(Drug *dr, drugs) {
-        // Insert the drug
-        QString tmp = dr->name;
-        req = QString("INSERT INTO `DRUGS` (`UID`, `NAME`, `MARKETED`, `LINK_SPC`) \n"
-                      "VALUES (%1, '%2', %3, '%4')")
-              .arg(drugs_uids.value(dr->name))
-              .arg(tmp.replace("'", "''"))
-              .arg(1)
-              .arg("http://home.intekom.com" + m_Drug_Link.value(dr->name))
-              ;
-        Core::Tools::executeSqlQuery(req, ZA_DRUGS_DATABASE_NAME);
-        int lknature = 1;
-        foreach(const QString &mol, dr->inns) {
-            req = QString("INSERT INTO `COMPOSITION` (`UID`, `MOLECULE_NAME`, `MOLECULE_CODE`, `LK_NATURE`) \n"
-                          "VALUES (%1, '%2', %3, %4)")
-                  .arg(drugs_uids.value(dr->name))
-                  .arg(mol)
-                  .arg(uniqueInns.indexOf(mol) + 1)
-                  .arg(lknature)
-                  ;
-            ++lknature;
-            Core::Tools::executeSqlQuery(req, ZA_DRUGS_DATABASE_NAME);
-        }
-    }
-
-//    Core::Tools::executeSqlFile(ZA_DRUGS_DATABASE_NAME, databasePreparationScript());
-    Core::Tools::executeSqlFile(ZA_DRUGS_DATABASE_NAME, databaseFinalizationScript());
-
-    db.commit();
-
+    qDeleteAll(drugs);
     return true;
 }
 
@@ -719,18 +708,9 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     // Hand association: 27
     // Found: 568, Left: 631
 
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
-        return false;
-
     // get all drugs and ATC codes
-    if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
-
-    QSqlDatabase za = QSqlDatabase::database(ZA_DRUGS_DATABASE_NAME);
-    if (!za.open()) {
-        Utils::Log::addError(this, "Can not connect to ZA_DB db : SouthAfricanDrugsDB::linkMolecules()", __FILE__, __LINE__);
-        return false;
-    }
 
     QHash<QString, QString> corrected;
     corrected.insert("CALCIUM (CALCIUM CARBONATE)", "CALCIUM CARBONATE");
@@ -760,33 +740,31 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     corrected.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
     corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
-
     // Associate Mol <-> ATC for drugs with one molecule only
     QStringList unfound;
     QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(ZA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
     qWarning() << "unfound" << unfound.count();
 
-    // Save to links to drugs database
-    za.transaction();
-    Core::Tools::executeSqlQuery("DELETE FROM LK_MOL_ATC;", ZA_DRUGS_DATABASE_NAME);
-    foreach(int mol, mol_atc.uniqueKeys()) {
-        QList<int> atcCodesSaved;
-        foreach(int atc, mol_atc.values(mol)) {
-            if (atcCodesSaved.contains(atc))
-                continue;
-            atcCodesSaved.append(atc);
-            QString req = QString("INSERT INTO `LK_MOL_ATC` VALUES (%1, %2)").arg(mol).arg(atc);
-            Core::Tools::executeSqlQuery(req, ZA_DRUGS_DATABASE_NAME);
-        }
+    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME);
+    if (sid==-1) {
+        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        return false;
     }
-    za.commit();
+
+    // Clear existing links
+    QString req = QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid);
+    Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+
+    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
+    // Save to links to drugs database
+    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     // add unfound to extralinkermodel
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(ZA_DRUGS_DATABASE_NAME, unfound);
     ExtraMoleculeLinkerModel::instance()->saveModel();
-
-    if (!Core::Tools::signDatabase(ZA_DRUGS_DATABASE_NAME))
-        Utils::Log::addError(this, "Unable to tag database.", __FILE__, __LINE__);
 
     Utils::Log::addMessage(this, QString("Database processed"));
 
@@ -811,6 +789,16 @@ SouthAfricanDrugsDatabase::~SouthAfricanDrugsDatabase()
 
 void SouthAfricanDrugsDatabase::on_startJobs_clicked()
 {
+    QProgressDialog progressDialog(mainwindow());
+    progressDialog.setLabelText(tr("Starting jobs"));
+    progressDialog.setRange(0, 1);
+    progressDialog.setWindowModality(Qt::WindowModal);
+    progressDialog.setValue(0);
+    progressDialog.show();
+    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
+    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
+    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
+
     if (ui->prepare->isChecked()) {
         if (m_Step->prepareDatas())
             ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
