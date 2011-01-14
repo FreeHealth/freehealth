@@ -63,15 +63,19 @@ namespace Constants {
 
     const char * const  CREATEFULLRELEASE_TEXT = QT_TRANSLATE_NOOP("FreeTools", "Create full release data set");
 
+    const char * const  MASTER_DATABASE_FILENAME   =  "/drugs/master.db";
+    const char * const  MASTER_DATABASE_NAME   =  "master";
+
     const char * const  IAM_DATABASE_FILENAME   =  "/drugs/iam.db";
     const char * const  IAM_DATABASE_NAME   =  "iam";
 
     const char * const  SEPARATOR         = "|||";
 
+    const char * const  FILE_MASTER_DATABASE_SCHEME       = "/global_resources/sql/drugdb/newdbschema.sql";
     const char * const  FILE_DRUGS_DATABASE_SCHEME        = "/global_resources/sql/drugs_schema.sql";
     const char * const  FILE_IAM_DATABASE_SCHEME          = "/global_resources/sql/iam_schema.sql";
     const char * const  FILE_DRUGINFOS_DATABASE_SCHEME    = "/global_resources/sql/druginfos_schema.sql";
-    const char * const  FILE_DRUGS_ROUTES                 = "/global_resources/sql/routes.sql";
+    const char * const  FILE_DRUGS_ROUTES                 = "/global_resources/sql/drugdb/routes.txt";
 
     const char * const  MOL_LINK_FILENAME = "/global_resources/sql/moleculetoatclinker.xml";
     const char * const  ATC_FILENAME = "/global_resources/sql/atc_utf8.csv";
