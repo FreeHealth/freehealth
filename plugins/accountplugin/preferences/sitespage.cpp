@@ -137,7 +137,6 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->addMapping(cityEdit, AccountDB::Constants::SITES_CITY);
     m_Mapper->addMapping(zipComboBox, AccountDB::Constants::SITES_ZIPCODE);
     m_Mapper->addMapping(countryComboBox, AccountDB::Constants::SITES_COUNTRY);
-    m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
     
     m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
     m_Mapper->addMapping(faxEdit, AccountDB::Constants::SITES_FAX);
