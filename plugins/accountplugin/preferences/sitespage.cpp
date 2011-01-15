@@ -27,7 +27,7 @@
  ***************************************************************************/
 #include "sitespage.h"
 #include <accountplugin/constants.h>
-#include <accountbaseplugin/workingplacesmodel.h>
+
 #include <accountbaseplugin/constants.h>
 
 #include <utils/log.h>
@@ -112,13 +112,15 @@ SitesWidget::SitesWidget(QWidget *parent) :
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
-    save->hide();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     addButton->setText("New");
-    removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    removeButton->setText("Delete");
-    ownersComboBox->addItem(m_user_fullName,QVariant());
-    m_Model = new AccountDB::MedicalProcedureModel(this);
+    deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    deleteButton->setText("Delete");
+    zipComboBox->setEditable(true);
+    zipComboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    countryComboBox->setEditable(true);
+    countryComboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    m_Model = new AccountDB::WorkingPlacesModel(this);
         /** \todo  m_Model->setUserUuid(); */
     QLabel *siteUidLabel = new QLabel(this);
     siteUidLabel->setText("NULL");
@@ -128,13 +130,13 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
     //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
-    m_Mapper->addMapping(siteUidLabel, AccountDB::Constants::SITE_UID);
+    m_Mapper->addMapping(siteUidLabel, AccountDB::Constants::SITES_UID);
     m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(nameEdit, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(adressEdit, AccountDB::Constants::SITES_ADRESS);
     m_Mapper->addMapping(cityEdit, AccountDB::Constants::SITES_CITY);
-    m_Mapper->addMapping(zipEdit, AccountDB::Constants::SITES_ZIPCODE);
-    m_Mapper->addMapping(countryEdit, AccountDB::Constants::SITES_COUNTRY);
+    m_Mapper->addMapping(zipComboBox, AccountDB::Constants::SITES_ZIPCODE);
+    m_Mapper->addMapping(countryComboBox, AccountDB::Constants::SITES_COUNTRY);
     m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
     
     m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
@@ -190,14 +192,12 @@ void SitesWidget::on_addButton_clicked()
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
-    dateEdit->setDate(QDate::currentDate());
-    dateEdit->setFocus();
     qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 
 }
 
 
-void SitesWidget::on_removeButton_clicked()
+void SitesWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(wpComboBox->currentIndex()))
     {
@@ -207,13 +207,13 @@ void SitesWidget::on_removeButton_clicked()
 }
 
 void SitesWidget::saveToSettings(Core::ISettings *sets)
-{qDebug() << __FILE__ << QString::number(__LINE__) << " saveToSettings";
+{
     if (!m_Model->submit()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
         Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
                                  tr("An error occured during sites saving. Datas are corrupted."));
     }
-        connect(name,SIGNAL(textEdited(const QString &)),wpComboBox,SLOT(setEditText(const QString &)));
+        connect(nameEdit,SIGNAL(textEdited(const QString &)),wpComboBox,SLOT(setEditText(const QString &)));
         update();
 }
 

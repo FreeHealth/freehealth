@@ -31,7 +31,6 @@ SOURCES = accountplugin.cpp \
     preferences/medicalprocedurepage.cpp \
     preferences/sitespage.cpp \
     accountview.cpp \
-    
     preferences/virtualdatabasecreator.cpp
 
 FORMS += preferences/accountuseroptionspage.ui \

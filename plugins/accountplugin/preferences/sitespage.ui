@@ -56,16 +56,16 @@
      <item row="0" column="2">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="addButton">
          <property name="text">
           <string>New</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="deleteButton">
          <property name="text">
-          <string>New</string>
+          <string>Delete</string>
          </property>
         </widget>
        </item>
@@ -82,7 +82,7 @@
       <attribute name="title">
        <string>Adress</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -171,7 +171,7 @@
       <attribute name="title">
        <string>Phones</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -243,7 +243,7 @@
       <attribute name="title">
        <string>Contacts</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>28</x>

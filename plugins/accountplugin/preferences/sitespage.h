@@ -27,21 +27,15 @@
  ***************************************************************************/
 #ifndef SITESPAGE_H
 #define SITESPAGE_H
-
+#include "ui_sitespage.h"
 #include <coreplugin/ioptionspage.h>
+#include <accountbaseplugin/workingplacesmodel.h>
 
 #include <QPointer>
 #include <QString>
 #include <QDataWidgetMapper>
 
-#include "ui_sitespage.h"
 
-/**
- * \file Sitespage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 31 Mar 2010
-*/
 
 namespace Core {
 class ISettings;
@@ -72,10 +66,9 @@ public:
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    void on_mpComboBox_currentIndexChanged(int index);
+    void on_wpComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
-    void on_save_clicked();
-    void on_removeButton_clicked();
+    void on_deleteButton_clicked();
    // void on_name_textChanged(const QString & text);
 
 private:
