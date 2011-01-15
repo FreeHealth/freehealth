@@ -58,6 +58,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->deleteLineButton->hide();
     ui->inputRadioButton->setChecked(true);
     ui->saveAndQuitButton->setShortcut(QKeySequence::InsertLineSeparator);
+    ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     fillActionTreeView();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
@@ -185,7 +186,7 @@ void ReceiptViewer::fillActionTreeView(){
         }
     }
     ui->actionsTreeView->setHeaderHidden(true);
-    ui->actionsTreeView->setStyleSheet("background-color: silver");
+    ui->actionsTreeView->setStyleSheet("background-color: rgb(201, 201, 201)");
    // ui->actionsTreeView->setStyleSheet("foreground-color: red");
     ui->actionsTreeView->setModel(m_actionsTreeModel);
 }
