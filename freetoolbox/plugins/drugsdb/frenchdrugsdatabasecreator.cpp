@@ -72,12 +72,8 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/fr_db_finalize.sql");}
-
-static inline QString drugsDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_DATABASE_SCHEME);}
-static inline QString drugsRouteSqlFileName() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 
 FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
@@ -184,138 +180,7 @@ bool FrDrugDatatabaseStep::prepareDatas()
         return false;
     }
 
-    QString content;
-    QStringList lines;
-
-    //////////////////////////////
-    // process CIS.txt          //
-    //////////////////////////////
-    {
-        QFile file(workingPath() + "CIS.txt");
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
-            return false;
-        }
-        content = QString::fromLatin1(file.readAll());
-    }
-    // make some replacements
-    // add \t before AMM encoding == ATC code + GLOBAL_STRENGTH
-    QMap<QString, QString> replacements;
-//    replacements.insert(QString::fromUtf8("\tAMM active\t"), "\t\t\tA\t");
-//    replacements.insert(QString::fromUtf8("\tAMM abrogée\t") , "\t\t\tB\t");
-//    replacements.insert(QString::fromUtf8("\tAMM retirée\t") , "\t\t\tR\t");
-//    replacements.insert(QString::fromUtf8("\tAMM suspendue\t") , "\t\t\tS\t");
-//    replacements.insert(QString::fromUtf8("\tAMM archivée\t") , "\t\t\tZ\t");
-//    replacements.insert(QString::fromUtf8("\tNon commercialisée\t") , "\t0\t");
-//    replacements.insert(QString::fromUtf8("\tCommercialisée\t") , "\t1\t");
-//    replacements.insert(QString::fromUtf8("\tProcédure nationale\t") , "\tN\t");
-//    replacements.insert(QString::fromUtf8("\tProcédure centralisée\t") , "\tC\t");
-//    replacements.insert(QString::fromUtf8("\tProcédure de reconnaissance mutuelle\t") , "\tR\t");
-//    replacements.insert(QString::fromUtf8("\tProcédure décentralisée\t") , "\tD\t");
-//    replacements.insert(QString::fromUtf8("\tAutorisation d'importation paralléle\t") , "\tI\t");
-
-    {
-        QMapIterator<QString, QString> i(replacements);
-        while (i.hasNext()) {
-            i.next();
-            content.replace(i.key() , i.value());
-        }
-    }
-
-    // prepare a better separator for the import command
-    content.replace("\t\n", "\n");
-    content.replace("\t", Core::Constants::SEPARATOR);
-
-    // save file
-    {
-        QFile file(workingPath() + "CIS_processed.txt");
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
-            return false;
-        }
-        file.write(content.toUtf8());
-    }
-
-    replacements.clear();
-
-
-    //////////////////////////////
-    // process CIS_CIP.txt      //
-    //////////////////////////////
-    {
-        QFile file(workingPath() + "CIS_CIP.txt");
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open CIS_CIP.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
-            //refreshViews();
-            return false;
-        }
-        content = QString::fromLatin1(file.readAll());
-    }
-    // make replacements
-//    replacements.insert(QString::fromUtf8("\tPrésentation active\t"), "\tA\t");
-//    replacements.insert(QString::fromUtf8("\tPrésentation abrogée\t"), "\tB\t");
-//    replacements.insert(QString::fromUtf8("\tDéclaration d'arrêt de commercialisation\t"), "\tA\t") ;
-//    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation non communiquée\t"),"\tN\t");
-//    replacements.insert(QString::fromUtf8("\tDéclaration de commercialisation\t"), "\tC\t");
-//    replacements.insert(QString::fromUtf8("\tDéclaration de suspension de commercialisation\t"), "\tS\t");
-    {
-        QMapIterator<QString, QString> i(replacements);
-        while (i.hasNext()) {
-            i.next();
-            content.replace(i.key() , i.value());
-        }
-    }
-
-    // prepare a better separator for the import command
-    content.replace("\t\n", "\n");
-    content.replace("\t", Core::Constants::SEPARATOR);
-
-    // TODO : manage date --> SQL Date
-
-    // save file
-    {
-        QFile file(workingPath() + "CIS_CIP_processed.txt");
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open CIS_CIP_processed.txt : %1").arg(file.errorString()), __FILE__, __LINE__);
-            //refreshViews();
-            return false;
-        }
-        file.write(content.toUtf8());
-    }
-
-    replacements.clear();
-
-
-    // process COMPO.txt
-    {
-        QFile file(workingPath() + "COMPO.txt");
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open COMPO.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
-            //refreshViews();
-            return false;
-        }
-        content = QString::fromLatin1(file.readAll());
-    }
-
-    // prepare a better separator for the import command
-    content.replace("\t\n", "\n");
-    content.replace("\t", Core::Constants::SEPARATOR);
-
-    // save file
-    {
-        QFile file(workingPath() + "COMPO_processed.txt");
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to open COMPO_processed.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
-            //refreshViews();
-            return false;
-        }
-        file.write(content.toUtf8());
-    }
-
-    replacements.clear();
-
     return true;
-
 }
 
 bool FrDrugDatatabaseStep::createDatabase()
@@ -425,8 +290,8 @@ bool FrDrugDatatabaseStep::populateDatabase()
     file.close();
 
     Q_EMIT progressLabelChanged(tr("Saving drugs into database"));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
+    Q_EMIT progressRangeChanged(0, 3);
+    Q_EMIT progress(1);
 
     QVector<Drug *> drugsVector;
     foreach(const int uid, drugs.keys()) {
@@ -438,7 +303,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
     }
 
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsVector, FR_DRUGS_DATABASE_NAME);
-    Q_EMIT progress(1);
+    Q_EMIT progress(2);
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
