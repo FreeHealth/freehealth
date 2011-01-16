@@ -204,9 +204,6 @@ class AfssapsLinkerWidget : public QWidget
 public:
     AfssapsLinkerWidget(QWidget *parent = 0);
 
-    void readCSVFile();
-    void recreateTreeFromSQL();
-
 protected Q_SLOTS:
     void pressed(const QModelIndex &index);
     void on_saveFile_clicked();

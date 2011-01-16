@@ -67,8 +67,8 @@ static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->m
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
-static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
+static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/AfssapsIntegratorSources/") + QDir::separator();}
+//static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
 static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
 static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
@@ -1073,125 +1073,6 @@ AfssapsLinkerWidget::AfssapsLinkerWidget(QWidget *parent) :
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterWildcard(QString)));
 }
 
-void AfssapsLinkerWidget::readCSVFile()
-{
-    // This code was used to retrieve Eric's molecules association.
-    // ***** Should not be reused *****
-    qWarning() << "readCSVFile";
-    QFile file(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/sql/index-classes-substances.csv");
-    QString content;
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    content = QString::fromUtf8(file.readAll());
-    QStringList lines = content.split("\n");
-    qWarning() << lines.count() << content.count("\n");
-
-    QMap<int, QString> mols;
-
-    foreach(const QString &line, lines) {
-        if (line.startsWith("//"))
-            continue;
-        // 1018|||acide folique : FOLIQUE ACIDE EN ASSOCIATION(B03BB51);FER, POLYVITAMINES ET ACIDE FOLIQUE(B03AE02);FER, VITAMINE B12 ET ACIDE FOLIQUE(B03AE01);FOLIQUE ACIDE(B03BB01)
-        int id = line.left(line.indexOf("|||")).toInt();
-        int end = line.indexOf("|||")+3;
-        QString fr;
-        fr = line.mid(end);
-        end = fr.indexOf(" :");
-        if (end==-1)
-            fr = fr.simplified().toUpper();
-        else
-            fr = fr.left(end).simplified().toUpper();
-
-        qWarning() << id << fr;
-
-        mols.insert(id, fr);
-    }
-    content.clear();
-    foreach(const int id, mols.keys()) {
-        QString cat;
-        if (id < 200000)
-            cat = "mols";
-        else
-            cat = "class";
-        content += QString("<Label id=\"%1\" afssaps=\"%2\" afssapsCat=\"%3\" atcCodes=\"\" en=\"\" de=\"\" es=\"\" review=\"\" reviewer=\"\" references=\"\" comments=\"\" dateofreview=\"\" autoFound=\"\" />\n")
-                   .arg(id).arg(mols.value(id)).arg(cat);
-    }
-    QFile out(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/sql/mols.xml");
-    out.open(QFile::WriteOnly | QFile::Text);
-    out.write(content.toUtf8());
-    out.close();
-}
-
-void AfssapsLinkerWidget::recreateTreeFromSQL()
-{
-    // ***** Should not be reused *****
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
-        return;
-
-    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME);
-
-    // Get class denominations
-    QMap<int, QString> classDenomination;
-    QMap<int, QString> atcDenomination;
-    QString req;
-    req = "SELECT `ID`, `FRENCH` FROM `ATC` WHERE (`ID`>199999);";
-    QSqlQuery query(iam);
-    if (query.exec(req)) {
-        while (query.next()) {
-            classDenomination.insert(query.value(0).toInt(), query.value(1).toString().toUpper());
-        }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-    }
-    query.finish();
-
-    req = "SELECT `ID`, `FRENCH` FROM `ATC` WHERE (`ID`<199999);";
-    if (query.exec(req)) {
-        while (query.next()) {
-            atcDenomination.insert(query.value(0).toInt(), query.value(1).toString().toUpper());
-        }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-    }
-    query.finish();
-
-    // Get the afssaps tree
-    QMultiMap<int, int> class_mols;
-    req = "SELECT `ID_CLASS`, `ID_ATC` FROM `IAM_TREE`;";
-    if (query.exec(req)) {
-        while (query.next()) {
-            class_mols.insertMulti(query.value(0).toInt(),query.value(1).toInt());
-        }
-    } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
-    }
-    query.finish();
-
-    // Create XML content
-    int max = class_mols.uniqueKeys().count();
-    QString xml;
-    for(int i = 0; i < max; ++i) {
-        int classId = class_mols.uniqueKeys().at(i);
-        xml += QString("  <Class name=\"%1\" review=\"\" reviewer=\"\" dateofreview==\"\">\n").arg(classDenomination.value(classId));
-        QList<int> values = class_mols.values(classId);
-        QStringList mols;
-        for(int j = 0; j < values.count(); ++j) {
-            int molId = values.at(j);
-            mols.append(atcDenomination.value(molId));
-        }
-        mols.removeDuplicates();
-        foreach(const QString &mol, mols) {
-            xml += QString("    <Molecule name=\"%1\"/>\n").arg(mol);
-        }
-        xml += QString("  </Class>\n");
-    }
-
-    // Save XML file
-    QFile out(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/sql/tree.xml");
-    out.open(QFile::WriteOnly | QFile::Text);
-    out.write(xml.toUtf8());
-    out.close();
-}
-
 void AfssapsLinkerWidget::pressed(const QModelIndex &index)
 {
     if (index.column()==AfssapsLinkerModel::FancyButton) {
@@ -1230,67 +1111,67 @@ void AfssapsLinkerWidget::on_saveFile_clicked()
 
 void AfssapsLinkerWidget::on_findAtc_clicked()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
-        return;
+//    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+//        return;
 
-    Utils::Log::addMessage("Tools", "Getting ATC Informations from the interactions database");
+//    Utils::Log::addMessage("Tools", "Getting ATC Informations from the interactions database");
 
-    QHash<QString, int> atc_id;
-    QMultiHash<QString, int> atcName_id;
-    QString req = "SELECT `ID`, `CODE`, `FRENCH` FROM `ATC` WHERE length(CODE)=7;";
-    QSqlQuery query(req, QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
-    if (query.isActive()) {
-        while (query.next()) {
-            atc_id.insert(query.value(1).toString(), query.value(0).toInt());
-            atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
-        }
-    }
-    query.finish();
+//    QHash<QString, int> atc_id;
+//    QMultiHash<QString, int> atcName_id;
+//    QString req = "SELECT `ID`, `CODE`, `FRENCH` FROM `ATC` WHERE length(CODE)=7;";
+//    QSqlQuery query(req, QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME));
+//    if (query.isActive()) {
+//        while (query.next()) {
+//            atc_id.insert(query.value(1).toString(), query.value(0).toInt());
+//            atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
+//        }
+//    }
+//    query.finish();
 
-    // get All afssaps mols
-    AfssapsLinkerModel *model = AfssapsLinkerModel::instance(this);
-    int row = 0;
+//    // get All afssaps mols
+//    AfssapsLinkerModel *model = AfssapsLinkerModel::instance(this);
+//    int row = 0;
 
-    // populate the entire model
-    while (model->canFetchMore(QModelIndex()))
-        model->fetchMore(QModelIndex());
+//    // populate the entire model
+//    while (model->canFetchMore(QModelIndex()))
+//        model->fetchMore(QModelIndex());
 
-    // Find link between Afssaps Molecules and ATCs
-    while (model->hasIndex(row, AfssapsLinkerModel::AfssapsName)) {
-        QString toFind = model->index(row, AfssapsLinkerModel::AfssapsName).data().toString();
-        toFind = Core::Tools::noAccent(toFind);
-        int atcId = atcName_id.value(toFind);
-        if (atcId == 0) {
-            ++row;
-            continue;
-        }
-        const QString &atcLabel = atcName_id.key(atcId);
-        const QList<int> &atcIds = atcName_id.values(atcLabel);
-        QStringList atcCodes;
-        foreach(int id, atcIds) {
-            atcCodes.append(atc_id.key(id));
-        }
-        // check already available ATC codes from the model
-        QStringList modelAtcCodes = model->index(row, AfssapsLinkerModel::AtcCodes).data().toString().split(",");
-        modelAtcCodes.removeAll("");
-        if (modelAtcCodes.count() > 0) {
-            // add autoFounded to the list
-            modelAtcCodes.append(atcCodes);
-            modelAtcCodes.removeDuplicates();
-            qWarning() << atcCodes << modelAtcCodes;
-            qSort(modelAtcCodes);
-            model->setData(model->index(row, AfssapsLinkerModel::AtcCodes), modelAtcCodes.join(","));
-            model->setData(model->index(row, AfssapsLinkerModel::Review), QString("true"));
-            ++row;
-            continue;
-        }
-        qSort(atcCodes);
-        model->setData(model->index(row, AfssapsLinkerModel::References), "AFSSAPS");
-        model->setData(model->index(row, AfssapsLinkerModel::Review), QString("true"));
-        model->setData(model->index(row, AfssapsLinkerModel::AtcCodes), atcCodes.join(","));
-        model->setData(model->index(row, AfssapsLinkerModel::AutoFoundAtcs), "true");
-        ++row;
-    }
+//    // Find link between Afssaps Molecules and ATCs
+//    while (model->hasIndex(row, AfssapsLinkerModel::AfssapsName)) {
+//        QString toFind = model->index(row, AfssapsLinkerModel::AfssapsName).data().toString();
+//        toFind = Core::Tools::noAccent(toFind);
+//        int atcId = atcName_id.value(toFind);
+//        if (atcId == 0) {
+//            ++row;
+//            continue;
+//        }
+//        const QString &atcLabel = atcName_id.key(atcId);
+//        const QList<int> &atcIds = atcName_id.values(atcLabel);
+//        QStringList atcCodes;
+//        foreach(int id, atcIds) {
+//            atcCodes.append(atc_id.key(id));
+//        }
+//        // check already available ATC codes from the model
+//        QStringList modelAtcCodes = model->index(row, AfssapsLinkerModel::AtcCodes).data().toString().split(",");
+//        modelAtcCodes.removeAll("");
+//        if (modelAtcCodes.count() > 0) {
+//            // add autoFounded to the list
+//            modelAtcCodes.append(atcCodes);
+//            modelAtcCodes.removeDuplicates();
+//            qWarning() << atcCodes << modelAtcCodes;
+//            qSort(modelAtcCodes);
+//            model->setData(model->index(row, AfssapsLinkerModel::AtcCodes), modelAtcCodes.join(","));
+//            model->setData(model->index(row, AfssapsLinkerModel::Review), QString("true"));
+//            ++row;
+//            continue;
+//        }
+//        qSort(atcCodes);
+//        model->setData(model->index(row, AfssapsLinkerModel::References), "AFSSAPS");
+//        model->setData(model->index(row, AfssapsLinkerModel::Review), QString("true"));
+//        model->setData(model->index(row, AfssapsLinkerModel::AtcCodes), atcCodes.join(","));
+//        model->setData(model->index(row, AfssapsLinkerModel::AutoFoundAtcs), "true");
+//        ++row;
+//    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
