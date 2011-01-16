@@ -34,6 +34,8 @@
 #include <QIcon>
 #include <QString>
 #include <QWidget>
+#include <QMultiHash>
+#include <QHash>
 
 namespace DrugsDbCreator {
 
@@ -77,6 +79,12 @@ public:
     bool linkMolecules();
 
     QStringList errors() const {return m_Errors;}
+
+private:
+    QMultiHash<int, QString> extractUidRelatedDatas(
+            const QString &absFileName,
+            const int uidCol, const int dataCol,
+            const QHash<int, QString> &equalityCondition);
 
 private:
     QStringList m_Errors;
