@@ -168,6 +168,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
         // Insert IAM Tree + Bib link
         if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
             foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
+                // One code == One ID
                 req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
                               "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
@@ -184,18 +185,20 @@ static bool setClassTreeToDatabase(const QString &iclass,
             int id = molsWithoutAtc.indexOf(inn.toUpper());
             if (id==-1) {
                 QString i__ = inn;
-                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
-                              "(%1, ("
-                              "SELECT ATC.ATC_ID "
-                              "FROM ATC "
-                              "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
-                              "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
-                              "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-                              "WHERE LABELS.LANG='fr' AND LABELS.LABEL='%2'), %3);")
-                        .arg(insertChildrenIntoClassId)
-                        .arg(i__.replace("'","''"))
-                        .arg(bibMasterId);
+                // one INN can have N codes --> get codes
+                QVector<int> ids = Core::Tools::getAtcIds(Core::Constants::MASTER_DATABASE_NAME, inn);
+                if (ids.isEmpty()) {
+                    Utils::Log::addError("InteractionStep", "No ATC ID for "+inn, __FILE__, __LINE__);
+                }
+                for(int zz = 0; zz < ids.count(); ++zz) {
+                    req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+                                  "(%1, %2, %3);")
+                            .arg(insertChildrenIntoClassId)
+                            .arg(ids.at(zz))
+                            .arg(bibMasterId);
+                }
             } else {
+                // One code == One ID
                 req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
                               "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
                         .arg(insertChildrenIntoClassId)
@@ -232,14 +235,14 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 
     QSqlDatabase iam = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
 
-    QProgressDialog *progress = 0;
-    if (m_UseProgressDialog) {
-        progress = new QProgressDialog("Creating interactions database","Abord", 0, 7, qApp->activeWindow());
-        progress->setWindowModality(Qt::WindowModal);
-        progress->setValue(0);
-    }
+    Q_EMIT progressLabelChanged(tr("Creating interactions database"));
+    Q_EMIT progressRangeChanged(0, 7);
+    Q_EMIT progress(0);
+
+    // ******************************************* Clean database
 
     // refresh ATC table
+    Q_EMIT progressLabelChanged(tr("Creating interactions database (refresh ATC table)"));
     {
         // Clean ATC table from old values
         QString req;
@@ -271,11 +274,10 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             }
         }
     }
-    if (m_UseProgressDialog) {
-        progress->setValue(1);
-    }
+    Q_EMIT progress(1);
 
     // add FreeDiams ATC specific codes
+    Q_EMIT progressLabelChanged(tr("Creating interactions database (add specific ATC codes)"));
     iam.transaction();
     QStringList molsWithoutAtc;
     QStringList afssapsClass, afssapsClassEn;
@@ -306,9 +308,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                      molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
              }
          }
-         if (m_UseProgressDialog) {
-             progress->setValue(2);
-         }
+        Q_EMIT progress(2);
 
         // Add Interacting molecules without ATC code
         // 100 000 < ID < 199 999  == Interacting molecules without ATC code
@@ -323,9 +323,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000))
                 return false;
         }
-        if (m_UseProgressDialog) {
-            progress->setValue(3);
-        }
+        Q_EMIT progress(3);
 
         // Add classes
         // 200 000 < ID < 299 999  == Interactings classes
@@ -339,9 +337,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000))
                 return false;
         }
-        if (m_UseProgressDialog) {
-            progress->setValue(4);
-        }
+        Q_EMIT progress(4);
 
         // Warn AFSSAPS molecules with multiples ATC
         //        if (WarnTests) {
@@ -357,6 +353,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 
     QMultiHash<QString, Source> class_sources;
     // Add interacting classes tree
+    Q_EMIT progressLabelChanged(tr("Creating interactions database (create IA.Classes tree)"));
     {
         // Prepare computation
         req = "DELETE FROM IAM_TREE;";
@@ -394,25 +391,23 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                 }
             }
         }
-        if (m_UseProgressDialog) {
-            progress->setValue(5);
-        }
+        Q_EMIT progress(5);
 
         qWarning() << "sources=" << class_sources.count() << class_sources.uniqueKeys().count();
 
         // Computation
+        Q_EMIT progressLabelChanged(tr("Creating interactions database (save IA.Classes tree)"));
         QMultiHash<QString, QString> buggyIncludes;
         foreach(const QString &iclass, afssapsClass) {
             setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, &buggyIncludes);
         }
-        if (m_UseProgressDialog) {
-            progress->setValue(6);
-        }
+        Q_EMIT progress(6);
         afssapsTreeModel->addBuggyInclusions(buggyIncludes);
     }
 
 
     // Add interaction knowledges
+    Q_EMIT progressLabelChanged(tr("Creating interactions database (add IA knowledge)"));
     {
         // Prepare computation
         req = "DELETE FROM INTERACTIONS";
@@ -494,12 +489,8 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                 ++interactionId;
             }
         }
-
-        if (m_UseProgressDialog) {
-            progress->setValue(7);
-        }
-
     }
+    Q_EMIT progress(7);
 
     iam.commit();
 
@@ -508,10 +499,6 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 
     // drugs databases needs to be relinked with the new ATC codes
 
-    if (progress) {
-        delete progress;
-        progress=0;
-    }
 
     Q_EMIT processFinished();
 
@@ -520,8 +507,12 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 
 void InteractionStep::downloadNextSource()
 {
+    static int maxDownloads = 0;
     qWarning() << "download" << m_ActiveDownloadId;
     if (!m_Downloader) {
+        Q_EMIT progressLabelChanged(tr("Downloading bibliographic data"));
+        Q_EMIT progressRangeChanged(0, 1);
+        Q_EMIT progress(0);
         m_Downloader = new Utils::PubMedDownloader;
         connect(m_Downloader, SIGNAL(downloadFinished()), this, SLOT(downloadNextSource()));
     }
@@ -546,6 +537,8 @@ void InteractionStep::downloadNextSource()
             Q_EMIT postProcessDownloadFinished();
             return;
         }
+        maxDownloads = m_SourceToDownload.count();
+        Q_EMIT progressRangeChanged(0, maxDownloads);
         m_ActiveDownloadId = m_SourceToDownload.first();
     } else {
         // Source retrieved
@@ -568,6 +561,9 @@ void InteractionStep::downloadNextSource()
             Q_EMIT postProcessDownloadFinished();
             return;
         }
+
+        Q_EMIT progressRangeChanged(0, 1);
+        Q_EMIT progressRangeChanged(0, maxDownloads - m_SourceToDownload.count());
 
         m_ActiveDownloadId = m_SourceToDownload.first();
     }
