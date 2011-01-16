@@ -67,8 +67,7 @@ static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->m
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
-static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
+static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/MolLinker/") + QDir::separator();}
 static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
 
 
@@ -595,8 +594,10 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 
     // Get source ID (SID)
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, drugsDbUid);
-    if (sid==-1)
+    if (sid==-1) {
+        Utils::Log::addError(this, "NO SID: " + drugsDbUid, __FILE__, __LINE__);
         return mol_atc;
+    }
 
     // Get all MOLS.MID and Label
     Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
