@@ -65,8 +65,6 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Interactions/") + QDir::separator();}
-static inline QString iamDatabaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
-static inline QString iamDatabaseSqlSchema() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::FILE_IAM_DATABASE_SCHEME);}
 
 static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
 static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
@@ -416,18 +414,7 @@ InteractionDatabaseChecker::~InteractionDatabaseChecker()
 
 void InteractionDatabaseChecker::on_check_clicked()
 {
-    QFont bold;
-    bold.setBold(true);
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-    item->setFont(0, bold);
-    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath())) {
-        item->setText(0, tr("Database can not be connected"));
-        return;
-    } else {
-        item->setText(0, tr("Database connected"));
-    }
     /** \todo code here */
-    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::IAM_DATABASE_NAME);
 }
 
 
