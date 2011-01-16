@@ -16,7 +16,6 @@ DEPENDPATH += ../
 
 SOURCES += \
     canadiandrugsdatabase.cpp \
-    canadianlocalizeddrugsdatabase.cpp \
     fdadrugsdatabasecreator.cpp \
     frenchdrugsdatabasecreator.cpp \
     extramoleculelinkermodel.cpp \
@@ -32,7 +31,6 @@ SOURCES += \
 
 HEADERS  += \
     canadiandrugsdatabase.h \
-    canadianlocalizeddrugsdatabase.h \
     fdadrugsdatabasecreator.h \
     frenchdrugsdatabasecreator.h \
     extramoleculelinkermodel.h \
@@ -48,7 +46,6 @@ HEADERS  += \
 
 FORMS += \
     canadiandrugsdatabasewidget.ui \
-    canadianlocalizeddrugsdatabase.ui \
     fdadrugsdatabasewidget.ui \
     frenchdrugsdatabasewidget.ui \
     moleculelinkerwidget.ui \
@@ -62,6 +59,7 @@ OTHER_FILES += \
     ../global_resources/sql/moleculetoatclinker.xml \
     ../global_resources/sql/atc_utf8.csv \
     ../global_resources/sql/drugdb/newdbschema.sql \
+    ../global_resources/sql/drugdb/be/be_db_finalize.sql \
     ../global_resources/sql/drugdb/fr/fr_db_finalize.sql \
     ../global_resources/sql/drugdb/za/za_db_finalize.sql \
     ../global_resources/sql/drugdb/ca/canadian_db_creator.sql \
