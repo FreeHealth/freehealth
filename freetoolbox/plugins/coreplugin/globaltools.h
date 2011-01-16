@@ -78,6 +78,8 @@ CORE_EXPORT bool addInteraction(const QString &connection, const QStringList &at
 CORE_EXPORT int addBibliography(const QString &connection, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain = QString::null);
 CORE_EXPORT bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> &mol_atc, const int sid);
 
+CORE_EXPORT QVector<int> getAtcIds(const QString &connection, const QString &label);
+
 }  // End namespace Tools
 
 }  // End namespace DrugsDbCreator

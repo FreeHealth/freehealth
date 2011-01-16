@@ -58,6 +58,7 @@ static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->valu
 static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
 static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
+
 namespace Core {
 
 namespace Tools
@@ -488,6 +489,7 @@ int getSourceId(const QString &connection, const QString &dbUid)
     query.finish();
     return -1;
 }
+
 /** \brief Create a new drugs source in the Master database. Return -1 is an error occured, or the SID */
 int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHash<QString, QVariant> trLabels)
 {
@@ -551,17 +553,17 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
     QSqlQuery query(db);
     int mid = masterLid;
     if (mid == -1) {
-        // get new one
+        // get new master_lid
         req = "SELECT max(MASTER_LID) FROM `LABELS_LINK`;";
         if (query.exec(req)) {
             if (query.next())
                 mid = query.value(0).toInt();
+            ++mid;
         } else {
             Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
             return -1;
         }
     }
-    ++mid;
 
     // insert all translated labels
     foreach(const QString &lang, trLabels.uniqueKeys()) {
@@ -587,6 +589,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
                         return false;
                     }
                     query.finish();
+                    return mid;
                 }
             } else {
                 Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
@@ -691,7 +694,7 @@ QHash<int, QString> generateMids(const QStringList &molnames, const int sid, con
     foreach(const QString &name, molnames) {
 
         // Ask for an existing MID
-        req = QString("SELECT MID FROM MOLS WHERE NAME=\"%1\";").arg(name);
+        req = QString("SELECT MID FROM MOLS WHERE NAME=\"%1\" AND SID=\"%2\";").arg(name).arg(sid);
         if (query.exec(req)) {
             if (query.next()) {
                 // is already in the table MOLS
@@ -921,6 +924,33 @@ bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> 
     }
     db.commit();
     return true;
+}
+
+QVector<int> getAtcIds(const QString &connection, const QString &label)
+{
+    QVector<int> ret;
+    QString req;
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return ret;
+        }
+    }
+    QSqlQuery query(db);
+
+    req = QString("SELECT DISTINCT ATC.ATC_ID FROM ATC "
+                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+                  "WHERE LABELS.LABEL like \"meropenem\";");
+    if (query.exec(req)) {
+        while (query.next()) {
+            ret << query.value(0).toInt();
+        }
+    } else {
+        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+    }
+    return ret;
 }
 
 } // end namespace Tools
