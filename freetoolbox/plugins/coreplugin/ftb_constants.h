@@ -63,27 +63,20 @@ namespace Constants {
 
     const char * const  CREATEFULLRELEASE_TEXT = QT_TRANSLATE_NOOP("FreeTools", "Create full release data set");
 
-    const char * const  MASTER_DATABASE_FILENAME   =  "/drugs/master.db";
-    const char * const  MASTER_DATABASE_NAME   =  "master";
+    const char * const  MASTER_DATABASE_FILENAME                 =  "/drugs/master.db";
+    const char * const  MASTER_DATABASE_NAME                     =  "master";
 
-    const char * const  IAM_DATABASE_FILENAME   =  "/drugs/iam.db";
-    const char * const  IAM_DATABASE_NAME   =  "iam";
+    const char * const  FILE_MASTER_DATABASE_SCHEME              = "/global_resources/sql/drugdb/newdbschema.sql";
+    const char * const  FILE_DRUGINFOS_DATABASE_SCHEME           = "/global_resources/sql/druginfodb/biam2/druginfos_schema.sql";
+    const char * const  FILE_DRUGS_ROUTES                        = "/global_resources/sql/drugdb/routes.txt";
 
-    const char * const  SEPARATOR         = "|||";
+    const char * const  MOL_LINK_FILENAME                        = "/global_resources/sql/ia/moleculetoatclinker.xml";
+    const char * const  ATC_FILENAME                             = "/global_resources/sql/ia/atc_utf8.csv";
 
-    const char * const  FILE_MASTER_DATABASE_SCHEME       = "/global_resources/sql/drugdb/newdbschema.sql";
-    const char * const  FILE_DRUGS_DATABASE_SCHEME        = "/global_resources/sql/drugs_schema.sql";
-    const char * const  FILE_IAM_DATABASE_SCHEME          = "/global_resources/sql/iam_schema.sql";
-    const char * const  FILE_DRUGINFOS_DATABASE_SCHEME    = "/global_resources/sql/druginfos_schema.sql";
-    const char * const  FILE_DRUGS_ROUTES                 = "/global_resources/sql/drugdb/routes.txt";
-
-    const char * const  MOL_LINK_FILENAME = "/global_resources/sql/moleculetoatclinker.xml";
-    const char * const  ATC_FILENAME = "/global_resources/sql/atc_utf8.csv";
-
-    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME = "/global_resources/sql/afssaps_links.xml";
-    const char * const  AFSSAPS_CLASSTREE_FILENAME = "/global_resources/sql/afssaps_classtree.xml";
-    const char * const  AFSSAPS_INTERACTIONS_FILENAME = "/global_resources/sql/thesaurus_interactions.xml";
-    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/sql/interaction_text_english_translation_corrections.csv";
+    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME           = "/global_resources/sql/ia/afssaps_links.xml";
+    const char * const  AFSSAPS_CLASSTREE_FILENAME               = "/global_resources/sql/ia/afssaps_classtree.xml";
+    const char * const  AFSSAPS_INTERACTIONS_FILENAME            = "/global_resources/sql/ia/thesaurus_interactions.xml";
+    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/sql/ia/interaction_text_english_translation_corrections.csv";
 
     const char* const S_WINGEOMETRY      = "MainWin/Geometry";
     const char* const S_WINSTATE         = "MainWin/State";
