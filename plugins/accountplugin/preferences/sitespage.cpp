@@ -125,17 +125,22 @@ SitesWidget::SitesWidget(QWidget *parent) :
     addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     deleteButton->setText("Delete");
-    zipComboBox->setEditable(true);
-    zipComboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    zipComboBox->setEditable(false);
+    zipComboBox->setInsertPolicy(QComboBox::NoInsert);
     QStringList listOfZipcodes;
     listOfZipcodes  = m_hashTownZip.keys();
     listOfZipcodes.removeDuplicates();
     listOfZipcodes.sort();
     
+    QStringList listForCountry = listOfCountries();
+    listForCountry.sort();
+    
     zipComboBox->addItems(listOfZipcodes);
-    countryComboBox->setEditable(true);
-    countryComboBox->setInsertPolicy(QComboBox::InsertAtTop);
-
+    
+    countryComboBox->setEditable(false);
+    countryComboBox->setInsertPolicy(QComboBox::NoInsert);
+    countryComboBox->addItems(listForCountry);
+    
     m_Model = new AccountDB::WorkingPlacesModel(this);
         /** \todo  m_Model->setUserUuid(); */
     QLabel *siteUidLabel = new QLabel(this);
@@ -160,12 +165,14 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->addMapping(mailEdit, AccountDB::Constants::SITES_MAIL);
     
     m_Mapper->addMapping(contactEdit, AccountDB::Constants::SITES_CONTACT);
-
+    m_Mapper->toFirst();
     wpComboBox->setModel(m_Model);
     wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
     //hash of towns and zipcode
     
     setDatasToUi();
+    emit findCityFromZipCode(zipComboBox->currentText());
+    connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
 }
 
 SitesWidget::~SitesWidget()
@@ -207,13 +214,13 @@ void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 
 void SitesWidget::on_addButton_clicked()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    nameEdit->setText("name");
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    /*nameEdit->setText("name");
     adressEdit->setText("adress");
     cityEdit->setText("city");
     countryComboBox->addItem("country");
@@ -223,7 +230,7 @@ void SitesWidget::on_addButton_clicked()
     phoneEdit->setText("123457");
     faxEdit->setText("1245677");
     mailEdit->setText("DFFJ");
-    contactEdit->setText("hkgg");
+    contactEdit->setText("hkgg");*/
 
 }
 
@@ -271,9 +278,12 @@ void SitesWidget::changeEvent(QEvent *e)
     }
 }
 
-QString SitesWidget::findCityFromZipCode(){
-    QString city;
-    return city;
+void SitesWidget::findCityFromZipCode(const QString & zipCodeText){
+    zipComboBox->setFocus();
+    zipComboBox->clearFocus();
+    QString city = m_hashTownZip.value(zipCodeText);
+    cityEdit->setFocus();
+    cityEdit->setText(city);
 }
 
 QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
@@ -290,7 +300,7 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     	QString line2 = line;
     	if (line.contains("FIN")|| line.contains("<p"))
     	{
-    		  break;
+    		  break;	
     	    }
     	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
         QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
@@ -301,4 +311,25 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
         }
         qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
     return hash;
+}
+
+QStringList SitesWidget::listOfCountries(){
+    QStringList list;
+    QString countryFileStr = qApp->applicationDirPath()+"/../global_resources/textfiles/pays.txt";
+    QFile file(countryFileStr);
+    if (!file.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+        }
+    QTextStream stream(&file);
+    while (!stream.atEnd())
+    {
+    	QString line = stream.readLine().trimmed();
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+    	if (!line.isEmpty())
+    	{
+    		list << line;  
+    	    }
+    }
+    return list;
 }

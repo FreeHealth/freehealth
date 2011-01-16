@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>491</width>
+    <width>413</width>
     <height>373</height>
    </rect>
   </property>
@@ -87,8 +87,8 @@
         <rect>
          <x>10</x>
          <y>11</y>
-         <width>441</width>
-         <height>184</height>
+         <width>371</width>
+         <height>191</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
@@ -106,7 +106,7 @@
          <widget class="QLineEdit" name="nameEdit">
           <property name="minimumSize">
            <size>
-            <width>370</width>
+            <width>200</width>
             <height>0</height>
            </size>
           </property>

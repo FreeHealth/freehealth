@@ -68,12 +68,14 @@ public Q_SLOTS:
     void on_wpComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
     void on_deleteButton_clicked();
+    void findCityFromZipCode(const QString & zipCodeText);
    // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
     void saveModel();
     QHash<QString,QString> parseZipcodeCsv();
+    QStringList listOfCountries();
     QString findCityFromZipCode();
 
 private:
