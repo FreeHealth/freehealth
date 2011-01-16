@@ -649,8 +649,8 @@ bool ZaDrugDatatabaseStep::populateDatabase()
 
     // Save the UIDS
     Q_EMIT progressLabelChanged(tr("South African database creation : processing..."));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
+    Q_EMIT progressRangeChanged(0, 3);
+    Q_EMIT progress(1);
 
     // save uids and error HTML output
     saveUids(drugs_uids);
@@ -660,7 +660,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
 
     // save drugs to db
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, ZA_DRUGS_DATABASE_NAME);
-    Q_EMIT progress(1);
+    Q_EMIT progress(2);
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
