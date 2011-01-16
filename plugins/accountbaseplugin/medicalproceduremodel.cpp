@@ -121,12 +121,12 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 { 
-    int rows = 2;
-    /*d->m_SqlTable->setFilter("");
+    int rows = 0;
+    d->m_SqlTable->setFilter("");
     d->m_SqlTable->select();
     rows = d->m_SqlTable->rowCount(parent);
     qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
-*/
+
     return rows;
 }
 
