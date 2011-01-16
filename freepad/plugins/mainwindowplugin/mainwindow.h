@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEICD_MAINWINDOW_H
-#define FREEICD_MAINWINDOW_H
+#ifndef FREEPAD_MAINWINDOW_H
+#define FREEPAD_MAINWINDOW_H
 
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
@@ -106,4 +106,4 @@ public:
 
 } // End Core
 
-#endif  // FREEICD_MAINWINDOW_H
+#endif  // FREEPAD_MAINWINDOW_H

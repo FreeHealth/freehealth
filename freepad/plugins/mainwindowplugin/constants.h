@@ -1,5 +1,5 @@
-#ifndef FREEICD_MAINWINDOW_CONSTANTS_H
-#define FREEICD_MAINWINDOW_CONSTANTS_H
+#ifndef FREEPAD_MAINWINDOW_CONSTANTS_H
+#define FREEPAD_MAINWINDOW_CONSTANTS_H
 
 /**
  * \file constants.h
@@ -12,10 +12,10 @@
 namespace MainWin {
 namespace Constants {
 
-    const char * const  S_STATEPREFIX            = "FreeICD/";
+    const char * const  S_STATEPREFIX            = "FreePAD/";
 
 
 }  // End namespace Constants
 }  // End namespace MainWin
 
-#endif // FREEICD_MAINWINDOW_CONSTANTS_H
+#endif // FREEPAD_MAINWINDOW_CONSTANTS_H

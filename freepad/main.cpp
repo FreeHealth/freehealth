@@ -50,7 +50,7 @@ static const QString HELP_MESSAGE =
         QString("");
 
 static const QString VERSION_MESSAGE =
-        QString("FreeICD %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        QString("FreePAD %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
         .arg(PACKAGE_VERSION)
 #ifdef LINUX_INTEGRATED
 #  ifdef DEBUG

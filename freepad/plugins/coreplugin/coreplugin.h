@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEICD_COREPLUGIN_H
-#define FREEICD_COREPLUGIN_H
+#ifndef FREEPAD_COREPLUGIN_H
+#define FREEPAD_COREPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -67,4 +67,4 @@ private:
 } // namespace Internal
 } // namespace Core
 
-#endif // FREEICD_COREPLUGIN_H
+#endif // FREEPAD_COREPLUGIN_H

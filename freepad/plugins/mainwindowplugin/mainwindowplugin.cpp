@@ -67,7 +67,7 @@ void MainWinPlugin::extensionsInitialized()
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("freeicd-mainwindow");
+    Core::ICore::instance()->translators()->addNewTranslator("freepad-mainwindow");
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 //    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));

@@ -42,7 +42,7 @@ using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
-        "<p align=center><b>Welcome to FreeICD</b><br />"
+        "<p align=center><b>Welcome to FreePAD</b><br />"
         "(C) 2008-2010 by Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"

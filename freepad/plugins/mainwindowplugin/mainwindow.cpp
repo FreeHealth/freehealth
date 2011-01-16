@@ -260,7 +260,7 @@ void MainWindow::postCoreInitialization()
     actionManager()->retranslateMenusAndActions();
 
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEICD));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEPAD));
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 

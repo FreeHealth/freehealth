@@ -18,8 +18,8 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-#ifndef FREEICD_MAINWIN_EXPORT_H
-#define FREEICD_MAINWIN_EXPORT_H
+#ifndef FREEPAD_MAINWIN_EXPORT_H
+#define FREEPAD_MAINWIN_EXPORT_H
 
 #include <qglobal.h>
 

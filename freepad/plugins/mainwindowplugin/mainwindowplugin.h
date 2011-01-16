@@ -24,8 +24,8 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREEICD_MAINWIN_PLUGIN_H
-#define FREEICD_MAINWIN_PLUGIN_H
+#ifndef FREEPAD_MAINWIN_PLUGIN_H
+#define FREEPAD_MAINWIN_PLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -58,4 +58,4 @@ private:
 
 }  // End MainWin
 
-#endif  // End FREEICD_MAINWIN_PLUGIN_H
+#endif  // End FREEPAD_MAINWIN_PLUGIN_H
