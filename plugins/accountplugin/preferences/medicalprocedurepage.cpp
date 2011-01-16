@@ -87,7 +87,7 @@ void MedicalProcedurePage::resetToDefaults()
 }
 
 void MedicalProcedurePage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges =";
+{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }

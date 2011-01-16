@@ -85,7 +85,7 @@ void BankDetailsPage::resetToDefaults()
 }
 
 void BankDetailsPage::applyChanges()
-{
+{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }

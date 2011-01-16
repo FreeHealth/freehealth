@@ -34,8 +34,7 @@
 #include <QPointer>
 #include <QString>
 #include <QDataWidgetMapper>
-
-
+#include <QHash>
 
 namespace Core {
 class ISettings;
@@ -74,12 +73,15 @@ public Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void saveModel();
+    QHash<QString,QString> parseZipcodeCsv();
+    QString findCityFromZipCode();
 
 private:
     AccountDB::WorkingPlacesModel *m_Model;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
+    QHash<QString,QString> m_hashTownZip;
 };
 
 }  // End Internal
