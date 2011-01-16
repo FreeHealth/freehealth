@@ -26,7 +26,6 @@
 #include "drugsdbplugin.h"
 #include "atcpage.h"
 #include "canadiandrugsdatabase.h"
-#include "canadianlocalizeddrugsdatabase.h"
 #include "frenchdrugsdatabasecreator.h"
 #include "fdadrugsdatabasecreator.h"
 #include "southafricandrugsdatabase.h"
@@ -62,7 +61,6 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-drugsdbplugin");
 
     addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
-    addAutoReleasedObject(new CanadianLocalizedDrugsDatabasePage(this));
     addAutoReleasedObject(new FdaDrugsDatabasePage(this));
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
     addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
