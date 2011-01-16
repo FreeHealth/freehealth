@@ -194,7 +194,7 @@ bool Drug::toDatabase(const QString &dbConnection,
     // Composition
     foreach(Component *compo, d->m_Compo) {
         req = QString("INSERT INTO `COMPOSITION` ("
-                      "DID, MID, STRENGTH, STRENGHT_NID, DOSE_REF, DOSE_REF_NID, NATURE, LK_NATURE) VALUES ("
+                      "DID, MID, STRENGTH, STRENGTH_NID, DOSE_REF, DOSE_REF_NID, NATURE, LK_NATURE) VALUES ("
                       "%1  ,%2,   '%3',       %4,          '%5',     %6         , '%7',   %8)")
                 .arg(data(DID).toString())
                 .arg(mids.key(compo->data(Component::Name).toString().toUpper().replace("'","''")))
@@ -230,8 +230,22 @@ bool Drug::toDatabase(const QString &dbConnection,
     }
 
 
-    // Forms
-    /** \todo Save drugs forms */
+    // Forms  d->m_Content.value(Drug::Forms).value(lang);
+    if (!d->m_Content.value(Drug::Forms).isEmpty()) {
+        int formsMasterId = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, d->m_Content.value(Drug::Forms));
+        if (formsMasterId==-1) {
+            Utils::Log::addError(this, "Forms not saved", __FILE__, __LINE__);
+        }
+        // Add formsMasterId to DRUGS record
+        req = QString("INSERT INTO DRUG_FORMS (DID,MASTER_LID) VALUES (%1,%2)")
+              .arg(data(DID).toString()).arg(formsMasterId);
+        if (!query.exec(req)) {
+            Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+            db.rollback();
+            return false;
+        }
+        query.finish();
+    }
 
     db.commit();
 
@@ -243,13 +257,22 @@ bool Drug::lessThanOnNames(const Drug *s1, const Drug *s2)
      return s1->data(Name).toString() < s2->data(Name).toString();
  }
 
-bool Drug::saveDrugsIntoDatabase(const QString &connection, const QVector<Drug *> &drugs, const QString &dbUid)
+bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drugs, const QString &dbUid)
 {
     int sid = Core::Tools::getSourceId(connection, dbUid);
     if (sid==-1) {
         Utils::Log::addError("Drug", "NO SID DEFINED", __FILE__, __LINE__);
         return false;
     }
+
+    // Clear database
+    Core::Tools::executeSqlQuery(QString("DELETE FROM MASTER WHERE SID=%1;").arg(sid), connection);
+    Core::Tools::executeSqlQuery(QString("DELETE FROM DRUGS WHERE SID=%1;").arg(sid), connection);
+//    Core::Tools::executeSqlQuery(QString("DELETE FROM COMPOSITION WHERE SID=%1;").arg(sid), connection);
+    Core::Tools::executeSqlQuery(QString("DELETE FROM MOLS WHERE SID=%1;").arg(sid), connection);
+    Core::Tools::executeSqlQuery(QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid), connection);
+    Core::Tools::executeSqlQuery(QString("DELETE FROM PACKAGING WHERE SID=%1;").arg(sid), connection);
+    /** \todo delete COMPOSITION, DRUG_ROUTES, LABELS_LINK, LABELS */
 
     // get distinct component names
     QStringList molnames;
@@ -265,7 +288,7 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, const QVector<Drug *
     QHash<int, QString> mids = Core::Tools::generateMids(molnames, sid, connection);
 
     // Sort and Save
-//    qSort(drugs.begin(), drugs.end(), Drug::lessThanOnNames);
+    qSort(drugs.begin(), drugs.end(), Drug::lessThanOnNames);
 
     foreach(Drug *drug, drugs) {
         drug->toDatabase(Core::Constants::MASTER_DATABASE_NAME, mids);

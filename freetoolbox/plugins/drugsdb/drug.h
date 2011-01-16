@@ -70,7 +70,7 @@ public:
 
     static bool lessThanOnNames(const Drug *s1, const Drug *s2);
 
-    static bool saveDrugsIntoDatabase(const QString &connection, const QVector<Drug *> &drugs, const QString &dbUid);
+    static bool saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drugs, const QString &dbUid);
 
 private:
     DrugPrivate *d;
