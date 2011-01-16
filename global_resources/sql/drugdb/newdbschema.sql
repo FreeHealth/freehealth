@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS COMPOSITION (
   DID           integer,
   MID           integer,
   STRENGTH      varchar(25),
-  STRENGHT_NID  integer,
+  STRENGTH_NID  integer,
   DOSE_REF      varchar(25),
   DOSE_REF_NID  integer,
   NATURE        varchar(2),
@@ -119,14 +119,20 @@ CREATE TABLE IF NOT EXISTS PACKAGING (
   OPTIONAL_CODE int(20)
 );
 
--- No PK till this table is a linkage table 1 -> N
+-- 1 -> N
 CREATE TABLE IF NOT EXISTS DRUG_ROUTES  (
   DID  integer NOT NULL,
   RID  integer NOT NULL,
   UNIQUE(DID,RID)
 );
 
--- No PK till this table is a linkage table 1 -> N
+-- 1 -> N
+CREATE TABLE IF NOT EXISTS DRUG_FORMS (
+  DID           integer NOT NULL,
+  MASTER_LID    integer NOT NULL,
+  UNIQUE(DID,MASTER_LID)
+);
+
 CREATE TABLE IF NOT EXISTS ROUTES (
   RID           INTEGER PRIMARY KEY,
   MASTER_LID    integer,
