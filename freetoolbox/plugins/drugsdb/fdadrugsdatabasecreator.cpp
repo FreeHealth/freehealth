@@ -210,7 +210,6 @@ public:
             }
             QStringList mols = vals.at(8).split(";");
             if (strengths.count() != mols.count()) {
-
                 qWarning() << line;
                 // NPLATE
 
@@ -355,6 +354,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
             pos += l.length();
             continue;
         }
+        pos += l.length();
 
         Parser parser(l);
         drugs << parser.getDrug();
@@ -366,8 +366,12 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     }
     file.close();
 
-    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, FDA_DRUGS_DATABASE_NAME);
+    Q_EMIT progressLabelChanged(tr("Saving drugs into database"));
+    Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(1);
+
+    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, FDA_DRUGS_DATABASE_NAME);
+    Q_EMIT progress(2);
 
     qDeleteAll(drugs);
     drugs.clear();
@@ -378,6 +382,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
         return false;
     }
     Utils::Log::addMessage(this, QString("Database processed"));
+    Q_EMIT progress(3);
 
     return true;
 }
@@ -412,12 +417,6 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     // Connect to databases
     if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
-
-    QSqlDatabase fr = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-    if (!fr.isOpen()) {
-        Utils::Log::addError(this, "Can not connect to French db", __FILE__, __LINE__);
-        return false;
-    }
 
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
