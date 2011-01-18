@@ -125,7 +125,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     deleteButton->setText("Delete");
-    zipComboBox->setEditable(false);
+    zipComboBox->setEditable(true);
     zipComboBox->setInsertPolicy(QComboBox::NoInsert);
     QStringList listOfZipcodes;
     listOfZipcodes  = m_hashTownZip.keys();
@@ -137,7 +137,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     
     zipComboBox->addItems(listOfZipcodes);
     
-    countryComboBox->setEditable(false);
+    countryComboBox->setEditable(true);
     countryComboBox->setInsertPolicy(QComboBox::NoInsert);
     countryComboBox->addItems(listForCountry);
     
@@ -154,11 +154,11 @@ SitesWidget::SitesWidget(QWidget *parent) :
     //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
     m_Mapper->addMapping(siteUidLabel, AccountDB::Constants::SITES_UID);
     m_Mapper->addMapping(nameEdit, AccountDB::Constants::SITES_NAME);
-    m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
+    //m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(adressEdit, AccountDB::Constants::SITES_ADRESS);
-    m_Mapper->addMapping(cityEdit, AccountDB::Constants::SITES_CITY);
-    m_Mapper->addMapping(zipComboBox, AccountDB::Constants::SITES_ZIPCODE);
-    m_Mapper->addMapping(countryComboBox, AccountDB::Constants::SITES_COUNTRY);
+    m_Mapper->addMapping(cityEdit, AccountDB::Constants::SITES_CITY,"text");
+    m_Mapper->addMapping(zipComboBox, AccountDB::Constants::SITES_ZIPCODE,"currentText");
+    m_Mapper->addMapping(countryComboBox, AccountDB::Constants::SITES_COUNTRY,"currentText");
     
     m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
     m_Mapper->addMapping(faxEdit, AccountDB::Constants::SITES_FAX);
@@ -235,6 +235,8 @@ void SitesWidget::on_addButton_clicked()
 }
 
 
+
+
 void SitesWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(wpComboBox->currentIndex()))
@@ -279,10 +281,8 @@ void SitesWidget::changeEvent(QEvent *e)
 }
 
 void SitesWidget::findCityFromZipCode(const QString & zipCodeText){
-    zipComboBox->setFocus();
-    zipComboBox->clearFocus();
-    QString city = m_hashTownZip.value(zipCodeText);
     cityEdit->setFocus();
+    QString city = m_hashTownZip.value(zipCodeText);
     cityEdit->setText(city);
 }
 
@@ -327,7 +327,7 @@ QStringList SitesWidget::listOfCountries(){
     	QString line = stream.readLine().trimmed();
     	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
     	if (!line.isEmpty())
-    	{
+    	{qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
     		list << line;  
     	    }
     }
