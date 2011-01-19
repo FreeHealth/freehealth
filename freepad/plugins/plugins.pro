@@ -5,7 +5,7 @@ SUBDIRS = \
     mainwindow \
     printer \
     texteditor \
-    pad
+    padtools
 
 
 core.subdir = coreplugin
@@ -22,5 +22,5 @@ printer.depends += texteditor
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
 
-pad.subdir   = padplugin
-pad.depends += core
+padtools.subdir   = padtoolsplugin
+padtools.depends += core
