@@ -17,6 +17,7 @@ SUBDIRS = \
     drugs \
     drugsbase \
 #    alerts \
+    padtools
 
 # root plugin
 core.subdir = fmfcoreplugin
@@ -27,6 +28,9 @@ listview.depends += core
 
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
+
+padtools.subdir = padtoolsplugin
+padtools.depends += core
 
 saverestore.subdir   = saverestoreplugin
 saverestore.depends += core
