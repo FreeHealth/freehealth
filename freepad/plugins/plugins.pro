@@ -12,7 +12,7 @@ core.subdir = coreplugin
 
 mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
-mainwindow.depends += pad
+mainwindow.depends += padtools
 mainwindow.depends += printer
 
 printer.subdir   = printerplugin

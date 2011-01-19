@@ -7,5 +7,6 @@
     <dependencyList>
       <dependency name="Core" version="0.4.0"/>
       <dependency name="Printer" version="0.5.0"/>
+      <dependency name="PadTools" version="0.1.0"/>
     </dependencyList>
 </plugin>
