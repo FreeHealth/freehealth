@@ -30,6 +30,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QNetworkProxy>
 
 using namespace Utils;
 //
@@ -45,6 +46,8 @@ PubMedDownloader::PubMedDownloader(QObject *parent) :
         QObject(parent), manager(0), m_DownloadingReferences(false)
 {
     manager = new QNetworkAccessManager(this);
+//    QNetworkProxy prox(QNetworkProxy::HttpProxy, "chaisa1", 8080, "urg", "debut1");
+//    manager->setProxy(prox);
 }
 
 PubMedDownloader::~PubMedDownloader()
@@ -89,7 +92,6 @@ void PubMedDownloader::startDownload()
 
 void PubMedDownloader::referencesFinished(QNetworkReply *reply)
 {
-    static int nb = 0;
     qWarning() << "PubMedDownloader Reference" << reply->url();
     m_Reference = reply->readAll();
     int b = m_Reference.indexOf("<pre>\n1: ") + 9;
@@ -104,7 +106,6 @@ void PubMedDownloader::referencesFinished(QNetworkReply *reply)
 
 void PubMedDownloader::abstractFinished(QNetworkReply *reply)
 {
-    static int nb = 0;
     qWarning() << "PubMedDownloader Abstract" << reply->url();
     m_Abstract = reply->readAll();
     int b = m_Abstract.indexOf("<pre>\n1. ") + 9;

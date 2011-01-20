@@ -54,6 +54,8 @@ public:
 
 Q_SIGNALS:
     void downloadFinished();
+    void downloadProgressRange(qint64,qint64);
+    void downloadProgressRead(qint64);
 
 private Q_SLOTS:
     void startRequest(const QUrl &url);

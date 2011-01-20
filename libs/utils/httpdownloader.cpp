@@ -231,6 +231,9 @@ void HttpDownloader::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
     if (httpRequestAborted)
         return;
 
+    Q_EMIT downloadProgressRange(0, totalBytes);
+    Q_EMIT downloadProgressRead(bytesRead);
+
     if (progressDialog) {
         progressDialog->setMaximum(totalBytes);
         progressDialog->setValue(bytesRead);
