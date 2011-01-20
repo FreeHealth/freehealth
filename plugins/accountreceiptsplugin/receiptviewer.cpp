@@ -9,6 +9,7 @@
 #include "ui_receiptviewer.h"
 
 #include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/workingplacesmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -112,7 +113,7 @@ void ReceiptViewer::fillActionTreeView(){
         QString table = parametersMap.value(strKeysParameters);
         QStringList listOfItemsOfTable;
         QString null = QString();
-        listOfItemsOfTable = manager.getParametersDatas(null,table);
+        listOfItemsOfTable = manager.getParametersDatas(null,table).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
             mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
@@ -194,6 +195,7 @@ void ReceiptViewer::fillActionTreeView(){
 void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     QString data = index.data(Qt::DisplayRole).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
+    receiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
     if(data == "Values"){
@@ -209,14 +211,21 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
             qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
             }
          }
-    else if(data == "Prefered Value"){// preferential act of payment
+    if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
             }
             hashOfValues.insertMulti("CS","23.00");//preferential act
-        }        
-    else{}
+        }
+        qDebug() << __FILE__ << QString::number(__LINE__) << "manager.m_hashOfSites.keys()  =" << QString::number(manager.getHashOfSites().keys().size()) ;
+        
+    if (manager.getHashOfSites().keys().contains(data))
+    {
+    	  m_siteUid = manager.getHashOfSites().value(data);
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
+        }
+
     QStringList listOfValues = hashOfValues.keys();
     QStringListModel *modelReturnedList = new QStringListModel(listOfValues);
     ui->returnedListView->setModel(modelReturnedList);
@@ -251,13 +260,14 @@ void ReceiptViewer::save(){
                                                                      << QString::number(visa)+ " "
                                                                      << QString::number(banking)+ " "
                                                                      << QString::number(other)+ " "
-                                                                     << QString::number(due);
+                                                                     << QString::number(due) 
+                                                                     << "site uid = "+m_siteUid.toString();
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,user()->value(Core::IUser::Uuid).toString());
     hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString());
     hash.insert(ACCOUNT_PATIENT_NAME,patient()->data(Core::IPatient::FullName).toString());
-    hash.insert(ACCOUNT_SITE_ID,"1111111111");
+    hash.insert(ACCOUNT_SITE_ID,m_siteUid);//AccountDB::Constants::SITES_UID
     hash.insert(ACCOUNT_INSURANCE_ID,"2222222");
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);

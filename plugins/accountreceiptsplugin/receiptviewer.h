@@ -145,6 +145,7 @@ private:
     Ui::ReceiptViewer *ui;
     QStandardItemModel *m_actionsTreeModel;
     AmountModel * m_model;
+    QVariant m_siteUid;
 
 private slots :
     void deleteLine();
