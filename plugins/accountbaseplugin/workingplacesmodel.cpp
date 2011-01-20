@@ -7,6 +7,10 @@
 #include <QAbstractTableModel>
 #include <QSqlTableModel>
 
+#include <QDebug>
+
+
+
 using namespace AccountDB;
 
 using namespace Trans::ConstantTranslations;
@@ -70,7 +74,19 @@ int WorkingPlacesModel::columnCount(const QModelIndex &parent) const
 
 QVariant WorkingPlacesModel::data(const QModelIndex &index, int role) const
 {
-    return d->m_SqlTable->data(index, role);
+    QVariant data ;
+    if(!index.isValid()){
+       qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
+       data = QVariant();
+       }
+    if(role == Qt::DisplayRole){
+        data = d->m_SqlTable->data(index, Qt::DisplayRole);
+        }	
+    if (role == Qt::EditRole)
+    {
+    	data = d->m_SqlTable->data(index, Qt::EditRole);
+        }
+    return data;
 }
 
 bool WorkingPlacesModel::setData(const QModelIndex &index, const QVariant &value, int role)
