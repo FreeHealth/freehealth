@@ -234,7 +234,7 @@ bool Drug::toDatabase(const QString &dbConnection,
     if (!d->m_Content.value(Drug::Forms).isEmpty()) {
         int formsMasterId = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, d->m_Content.value(Drug::Forms));
         if (formsMasterId==-1) {
-            Utils::Log::addError(this, "Forms not saved", __FILE__, __LINE__);
+            Utils::Log::addError("Drug", "Forms not saved", __FILE__, __LINE__);
         }
         // Add formsMasterId to DRUGS record
         req = QString("INSERT INTO DRUG_FORMS (DID,MASTER_LID) VALUES (%1,%2)")
