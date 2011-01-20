@@ -45,19 +45,18 @@ namespace Ui {
     class BiamExtractor;
 }
 
-class BiamPage : public Core::IToolPage
+class BiamExtractorPage : public Core::IToolPage
 {
 public:
-    BiamPage(QObject *parent) : IToolPage(parent) {}
+    BiamExtractorPage(QObject *parent) : IToolPage(parent) {}
 
-    virtual QString id() const {return "BiamPage";}
+    virtual QString id() const {return "BiamExtractorPage";}
     virtual QString name() const {return "BIAM extractor";}
     virtual QString category() const {return Core::Constants::CATEGORY_DRUGINFOSDATABASE;}
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
-
 };
 
 class BiamExtractor : public QWidget

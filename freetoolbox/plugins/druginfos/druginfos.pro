@@ -17,21 +17,27 @@ DEPENDPATH += ../
 
 SOURCES += \
     druginfosplugin.cpp \
-    biamextractor.cpp
+    biamextractor.cpp \
+    pimintegrator.cpp
 
 
 HEADERS  += \
     druginfosplugin.h \
-    biamextractor.h
+    biamextractor.h \
+    pimintegrator.h
 
 
 FORMS += \
-    biamextractor.ui
+    biamextractor.ui \
+    pimintegrator.ui
 
 
 OTHER_FILES += \
-    ../global_resources/sql/druginfos_schema.sql \
-    ../global_resources/sql/biam_importer_schema.sql
+    ../global_resources/sql/druginfodb/druginfos_schema.sql \
+    ../global_resources/sql/ia/atc_utf8.csv \
+    ../global_resources/sql/ia/afssaps_links.xml \
+    ../global_resources/sql/ia/afssaps_classtree.xml \
+    ../global_resources/sql/druginfodb/biam2/biam_importer_schema.sql
 
 
 OTHER_FILES += DrugInfos.pluginspec

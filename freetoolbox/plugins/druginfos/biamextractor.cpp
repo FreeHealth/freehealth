@@ -73,10 +73,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/BIAM/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/druginfos-fr_FR.db");}
 
-static inline QString databasePreparationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_preparation.sql");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + "/za_db_finalize.sql");}
-
-static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SQL_IN_PATH).toString() + QString(Core::Constants::FILE_DRUGINFOS_DATABASE_SCHEME);}
+static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGINFOS_DATABASE_SCHEME);}
 
 using namespace DrugInfos;
 using namespace Trans::ConstantTranslations;
@@ -175,7 +172,7 @@ public:
     }
 
     /** \todo move this in Utils::Global */
-    QString extractString(const QString &fromContent, const QString startDelim, const QString &endDelim, int *startIndex = 0)
+    QString extractString(const QString &fromContent, const QString &startDelim, const QString &endDelim, int *startIndex = 0)
     {
         int begin = 0;
         if (startIndex)
@@ -409,7 +406,7 @@ public:
 
 
 
-QWidget *BiamPage::createPage(QWidget *parent)
+QWidget *BiamExtractorPage::createPage(QWidget *parent)
 {
     return new BiamExtractor(parent);
 }
