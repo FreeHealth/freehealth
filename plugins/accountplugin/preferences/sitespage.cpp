@@ -143,16 +143,16 @@ SitesWidget::SitesWidget(QWidget *parent) :
     
     m_Model = new AccountDB::WorkingPlacesModel(this);
         /** \todo  m_Model->setUserUuid(); */
-    QLabel *siteUidLabel = new QLabel(this);
-    //siteUidLabel->setText("NULL");
-    siteUidLabel->setText("1111111");
-    siteUidLabel->hide();
+    m_siteUidLabel = new QSpinBox(this);
+    //m_siteUidLabel->setText("NULL");
+    m_siteUidLabel->setValue(11111);
+    //m_siteUidLabel->hide();
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
     //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
-    m_Mapper->addMapping(siteUidLabel, AccountDB::Constants::SITES_UID);
+    m_Mapper->addMapping(m_siteUidLabel,1);// AccountDB::Constants::SITES_UID);
     m_Mapper->addMapping(nameEdit, AccountDB::Constants::SITES_NAME);
     //m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(adressEdit, AccountDB::Constants::SITES_ADRESS);
@@ -219,6 +219,9 @@ void SitesWidget::on_addButton_clicked()
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
     //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
+    m_siteUidLabel->setValue(calcSitesUid());
+    m_siteUidLabel->setFocus();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
     //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     /*nameEdit->setText("name");
     adressEdit->setText("adress");
@@ -327,9 +330,22 @@ QStringList SitesWidget::listOfCountries(){
     	QString line = stream.readLine().trimmed();
     	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
     	if (!line.isEmpty())
-    	{qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+    	{
     		list << line;  
     	    }
     }
     return list;
+}
+
+int SitesWidget::calcSitesUid(){
+    QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::SITES_UID);
+    if (!index.isValid())
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
+        }
+    int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
+    int siteUid =  siteUidBefore + 1;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
+    return siteUid;
 }

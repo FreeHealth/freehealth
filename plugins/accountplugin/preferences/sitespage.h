@@ -35,6 +35,8 @@
 #include <QString>
 #include <QDataWidgetMapper>
 #include <QHash>
+#include <QSpinBox>
+
 
 namespace Core {
 class ISettings;
@@ -77,9 +79,11 @@ private:
     QHash<QString,QString> parseZipcodeCsv();
     QStringList listOfCountries();
     QString findCityFromZipCode();
+    int calcSitesUid();
 
 private:
     AccountDB::WorkingPlacesModel *m_Model;
+    QSpinBox *m_siteUidLabel;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
