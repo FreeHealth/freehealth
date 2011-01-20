@@ -253,6 +253,9 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
+    // Create IPatient
+    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
+    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
 
     setCentralWidget(m_modeStack);
 
@@ -276,10 +279,6 @@ void MainWindow::postCoreInitialization()
     connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
     connect(userModel(), SIGNAL(userDocumentsChanged()), this, SLOT(on_currentUser_Changed()));
     
-    // Create IPatient
-    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
-    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
-
     // Create and insert the patient tab in the formplaceholder
     m_PatientBar = new Patients::PatientBar(this);
     formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);

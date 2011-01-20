@@ -97,6 +97,13 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     if (!patientBase()->isInitialized())
         return false;
 
+    // create patient widget manager instance
+    PatientWidgetManager::instance();
+
+    // add mode patient search
+    m_Mode = new PatientSearchMode(this);
+    addObject(m_Mode);
+
     return true;
 }
 
@@ -105,12 +112,6 @@ void PatientBasePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
 
-    // create patient widget manager instance
-    PatientWidgetManager::instance();
-
-    // add mode patient search
-    m_Mode = new PatientSearchMode(this);
-    addObject(m_Mode);
 }
 
 
