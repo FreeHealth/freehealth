@@ -133,3 +133,8 @@ QSqlError WorkingPlacesModel::lastError(){
     return d->m_SqlTable->lastError();
 }
 
+void WorkingPlacesModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+}
+

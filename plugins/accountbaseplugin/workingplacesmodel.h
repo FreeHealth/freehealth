@@ -28,6 +28,8 @@ public:
 //    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
 //                               int role = Qt::EditRole);
 
+    void setFilter(const QString & filter);
+
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
