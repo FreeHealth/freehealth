@@ -1,7 +1,7 @@
-include(listviewplugin_dependencies.pri)
+include(icdplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lICD_debug
+    win32:LIBS   *= -lICD_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lICD
 }
