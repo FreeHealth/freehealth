@@ -1,3 +1,21 @@
+version=0.5.4
+{
+    * Jan 2011
+    * Debug release
+
+    * Full changelog at:
+        * http://www.freemedforms.com/
+        * Follow --> news
+}
+version=0.5.2
+{
+    * Christmas 2010
+    * Interaction engine update
+
+    * Full changelog at:
+        * http://www.freemedforms.com/
+        * Follow --> news
+}
 version=0.5.0
 {
     * November 2010
