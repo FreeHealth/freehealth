@@ -231,8 +231,8 @@ tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
 --exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
---exclude 'dosages.db' --exclude 'users.db' --exclude '.*' --exclude '._*' \
---exclude '*.tgz' --exclude '*.app' --exclude '*.zip' \
+--exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
+--exclude '*.tgz' --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
 --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
 --exclude 'global_resources/databases/episodes' \
 --exclude 'global_resources/databases/patients' \
