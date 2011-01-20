@@ -36,7 +36,8 @@ HEADERS += global_exporter.h \
     widgets/basevalidatinglineedit.h \
     widgets/filenamevalidatinglineedit.h \
     widgets/pathchooser.h \
-    pubmeddownloader.h
+    pubmeddownloader.h \
+    qabstractxmltreemodel.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -61,7 +62,8 @@ SOURCES += global.cpp \
     widgets/basevalidatinglineedit.cpp \
     widgets/filenamevalidatinglineedit.cpp \
     widgets/pathchooser.cpp \
-    pubmeddownloader.cpp
+    pubmeddownloader.cpp \
+    qabstractxmltreemodel.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
