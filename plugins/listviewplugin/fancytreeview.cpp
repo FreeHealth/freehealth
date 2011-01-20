@@ -1,16 +1,347 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "fancytreeview.h"
+#include "simplecategorycreator.h"
+
 #include "ui_fancytreeview.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/contextmanager/contextmanager.h>
+
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
+
+#include <QTreeView>
+#include <QHeaderView>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QEvent>
+#include <QMenu>
+
+#include <QDebug>
+
+using namespace Views;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
+
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+
+namespace Views {
+
+    namespace Constants {
+        static const char * A_SAVE_MODEL = "FancyTreeView.aSave";
+        static const char * A_CREATE_NEW = "FancyTreeView.aCreate";
+        static const char * A_REMOVE_ITEM = "FancyTreeView.aRemove";
+        static const char * A_REVERT_MODEL = "FancyTreeView.aRevert";
+
+        static const char * REVERT_TEXT = "Revert";
+    }
+
+namespace Internal {
+class FancyTreeViewPrivate
+{
+public:
+    FancyTreeViewPrivate() :
+            m_HeaderMenu(0), m_SubHMenu(0), m_ItemMenu(0),
+            m_Delegate(0), m_Model(0),
+            aSave(0), aAddRow(0), aRemoveRow(0), aRevert(0)
+    {
+    }
+
+    ~FancyTreeViewPrivate()
+    {
+        if (m_Delegate)
+            delete m_Delegate;
+        m_Delegate = 0;
+    }
+
+    QMenu *m_HeaderMenu, *m_SubHMenu, *m_ItemMenu;
+    TreeItemDelegate *m_Delegate;
+    QAbstractItemModel *m_Model;
+    QAction *aSave, *aAddRow, *aRemoveRow, *aRevert;
+};
+
+void DeselectableTreeView::mousePressEvent(QMouseEvent *event)
+{
+    clearSelection();
+    QTreeView::mousePressEvent(event);
+}
+
+}
+}
+
+TreeItemDelegate::TreeItemDelegate(QObject *parent)
+    : QStyledItemDelegate(parent), m_FancyColumn(-1)
+{
+}
+
+void TreeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                             const QModelIndex &index) const
+{
+    if (m_FancyColumn==-1) {
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
+
+    if (option.state & QStyle::State_MouseOver) {
+        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
+            pressedIndex = QModelIndex();
+        QBrush brush = option.palette.alternateBase();
+        if (index == pressedIndex)
+            brush = option.palette.dark();
+        painter->fillRect(option.rect, brush);
+    }
+
+    QStyledItemDelegate::paint(painter, option, index);
+
+    if (index.column()==m_FancyColumn && option.state & QStyle::State_MouseOver) {
+        QIcon icon;
+        if (option.state & QStyle::State_Selected) {
+            icon = theme()->icon(Core::Constants::ICONADDLIGHT);
+        } else {
+            icon = theme()->icon(Core::Constants::ICONADDDARK);
+        }
+
+        QRect iconRect(option.rect.right() - option.rect.height(),
+                       option.rect.top(),
+                       option.rect.height(),
+                       option.rect.height());
+
+        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
+    }
+}
+
+
+
 
 FancyTreeView::FancyTreeView(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::FancyTreeView)
+    ui(new Ui::FancyTreeView),
+    d(new Internal::FancyTreeViewPrivate)
 {
     ui->setupUi(this);
+
+    ui->treeView->viewport()->setAttribute(Qt::WA_Hover);
+    ui->treeView->setItemDelegate((d->m_Delegate = new Internal::TreeItemDelegate(this)));
+    ui->treeView->setFrameStyle(QFrame::NoFrame);
+    ui->treeView->setAttribute(Qt::WA_MacShowFocusRect, false);
+    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    connect(ui->treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
+    connect(ui->treeView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 }
 
 FancyTreeView::~FancyTreeView()
 {
-    delete ui;
+    delete ui; ui=0;
+    delete d; d=0;
+}
+
+QToolButton *FancyTreeView::button()
+{
+    if (ui)
+        return ui->button;
+    return 0;
+}
+
+void FancyTreeView::setButtonActions(const ButtonActions &actions)
+{
+    QAction *a = 0;
+    Core::Command *cmd = 0;
+    QList<int> globalContext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+
+    if (actions & FTV_SaveModel) {
+        a = d->aSave = new QAction(ui->button);
+        a->setObjectName("FancyTreeView.aSave");
+        a->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+        a->setIconVisibleInMenu(true);
+        cmd = actionManager()->registerAction(a, Constants::A_SAVE_MODEL, globalContext);
+        cmd->setTranslations(Trans::Constants::FILESAVE_TEXT);
+        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        connect(a, SIGNAL(triggered()), this, SLOT(save()));
+        ui->button->addAction(cmd->action());
+    }
+    if (actions & FTV_RevertModel) {
+    }
+    if (actions & FTV_CreateNew) {
+        a = d->aAddRow = new QAction(ui->button);
+        a->setObjectName("FancyTreeView.aAddRow");
+        a->setIcon(theme()->icon(Core::Constants::ICONADD));
+        a->setIconVisibleInMenu(true);
+        cmd = actionManager()->registerAction(a, Constants::A_CREATE_NEW, globalContext);
+        cmd->setTranslations(Trans::Constants::LISTADD_TEXT);
+        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+        ui->button->addAction(cmd->action());
+    }
+    if (actions & FTV_RemoveRow) {
+        a = d->aRemoveRow = new QAction(ui->button);
+        a->setObjectName("FancyTreeView.aRemoveRow");
+        a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+        a->setIconVisibleInMenu(true);
+        a->setText("Remove");
+        cmd = actionManager()->registerAction(a, Constants::A_REMOVE_ITEM, globalContext);
+        cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
+        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
+        ui->button->addAction(cmd->action());
+    }
+
+    if (d->aSave)
+        ui->button->setDefaultAction(actionManager()->command(Constants::A_SAVE_MODEL)->action());
+    else if (d->aAddRow)
+        ui->button->setDefaultAction(actionManager()->command(Constants::A_CREATE_NEW)->action());
+    else if (d->aRemoveRow)
+        ui->button->setDefaultAction(actionManager()->command(Constants::A_REMOVE_ITEM)->action());
+    else if (d->aRevert)
+        ui->button->setDefaultAction(actionManager()->command(Constants::A_REMOVE_ITEM)->action());
+}
+
+Utils::QButtonLineEdit *FancyTreeView::searchLine()
+{
+    return ui->searchLine;
+}
+
+void FancyTreeView::setHeaderMenu(QMenu *menu)
+{
+    d->m_HeaderMenu = menu;
+}
+
+void FancyTreeView::setSubHeadingMenu(QMenu *menu)
+{
+    d->m_SubHMenu = menu;
+}
+
+void FancyTreeView::setItemMenu(QMenu *menu)
+{
+    d->m_ItemMenu = menu;
+}
+
+void FancyTreeView::useContextMenu(bool state)
+{
+    if (state)
+        ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    else
+        ui->treeView->setContextMenuPolicy(Qt::NoContextMenu);
+}
+
+void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancyButton)
+{
+    d->m_Model = model;
+    ui->treeView->setModel(model);
+    ui->treeView->header()->setStretchLastSection(false);
+    ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    ui->treeView->header()->setResizeMode(columnForFancyButton, QHeaderView::Fixed);
+    ui->treeView->setColumnWidth(columnForFancyButton, 16);
+
+    d->m_Delegate->setModel(model);
+    d->m_Delegate->setFancyColumn(columnForFancyButton);
+}
+
+void FancyTreeView::hideColumn(int column)
+{
+    if (ui)
+        ui->treeView->hideColumn(column);
+}
+
+void FancyTreeView::on_treeView_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu *pop = new QMenu(this);
+    pop->addActions(ui->button->actions());
+    pop->exec(ui->treeView->mapToGlobal(pos));
+    delete pop;
+}
+
+void FancyTreeView::handlePressed(const QModelIndex &index)
+{
+    if (index.column() == d->m_Delegate->fancyColumn()) {
+        d->m_Delegate->pressedIndex = index;
+    }
+}
+
+void FancyTreeView::handleClicked(const QModelIndex &index)
+{
+    qWarning() << index << ui->treeView->selectionModel()->isSelected(index);
+//    if (ui->treeView->selectionModel()->isSelected(index))
+//        ui->treeView->clearSelection();
+    if (index.column() == d->m_Delegate->fancyColumn()) { // the fancy button
+        qWarning() << "Fancy button called" << index;
+        // Header ?
+        if (index.parent()==QModelIndex() && d->m_Model->hasChildren(index)) {
+            qWarning() << "header";
+        } else if (index.parent() != QModelIndex() && d->m_Model->hasChildren(index)) {
+            // SubHeader
+            qWarning() << "subheader";
+        } else if (!d->m_Model->hasChildren(index)) {
+            // Item
+            qWarning() << "item";
+        }
+//        // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
+//        QPoint cursorPos = QCursor::pos();
+//        QWidget *vp = ui->treeView->viewport();
+//        QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
+//        QCoreApplication::sendEvent(vp, &e);
+    }
+}
+
+void FancyTreeView::save()
+{
+    if (!d->m_Model)
+        return;
+    if (!d->m_Model->submit())
+        Utils::Log::addError(this, "Unable to save model.", __FILE__, __LINE__);
+
+}
+
+void FancyTreeView::addItem()
+{
+    QModelIndex parent = QModelIndex();
+    if (ui->treeView->selectionModel()->hasSelection())
+        parent = ui->treeView->selectionModel()->currentIndex();
+    SimpleCategoryCreator dlg(this);
+    dlg.setModel(d->m_Model, parent);
+    dlg.setLabelColumn(0);
+    dlg.setIconColumn(1);
+    dlg.exec();
+//    if (!d->m_Model->insertRow(d->m_Model->rowCount(parent), parent))
+//        return;
+//    // expand item
+//    ui->treeView->expand(parent);
+//    // open edit item
+//    ui->treeView->edit(d->m_Model->index(d->m_Model->rowCount(parent)-1, parent.column(), parent));
 }
 
 void FancyTreeView::changeEvent(QEvent *e)
@@ -18,7 +349,7 @@ void FancyTreeView::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+//        ui->retranslateUi(this);
         break;
     default:
         break;

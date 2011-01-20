@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FancyTreeView</class>
- <widget class="QWidget" name="FancyTreeView">
+ <class>Views::FancyTreeView</class>
+ <widget class="QWidget" name="Views::FancyTreeView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,23 +15,42 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QPushButton" name="button">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>21</height>
-      </size>
-     </property>
-     <property name="text">
-      <string/>
+    <widget class="Utils::QButtonLineEdit" name="searchLine"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="Views::Internal::DeselectableTreeView" name="treeView">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QTreeView" name="treeView"/>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="button">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextUnderIcon</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::QButtonLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Views::Internal::DeselectableTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">listviewplugin/fancytreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
