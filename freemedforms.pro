@@ -16,4 +16,5 @@ OTHER_FILES += update-fmf.txt \
                COPYING \
                INSTALL \
                global_resources/textfiles/freemedforms-todo.txt \
-               global_resources/textfiles/FreeMedForms.desktop
+               global_resources/textfiles/FreeMedForms.desktop \
+               freemedforms/Info.plist
