@@ -336,7 +336,7 @@ int AfssapsLinkerModel::columnCount(const QModelIndex &) const
 QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
 {
     // <Labels>
-    //   <Label afssaps="" afssapsCat="" atcCodes="" en="" de="" es="" review="" reviewer="" references="" comments="" dateofreview="" autoFound="" />
+    //   <Label fr="" category="" atcCodes="" en="" de="" es="" review="" reviewer="" references="" comments="" dateofreview="" autoFound="" />
     // </Labels>
     // <Tree>
     // </Tree>
@@ -354,9 +354,9 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
                 return "a";
             return "b";
         case AfssapsName:
-            return attributeMap.namedItem("afssaps").nodeValue();
+            return attributeMap.namedItem("fr").nodeValue();
         case AffapsCategory:
-            return attributeMap.namedItem("afssapsCat").nodeValue();
+            return attributeMap.namedItem("category").nodeValue();
         case AtcCodes:
             return attributeMap.namedItem("atcCodes").nodeValue();
         case En_Label:
@@ -393,7 +393,7 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
             DomItem *item = static_cast<DomItem*>(index.internalPointer());
             QDomNode node = item->node();
             QDomNamedNodeMap attributeMap = node.attributes();
-            if (attributeMap.namedItem("afssapsCat").nodeValue()!="class") {
+            if (attributeMap.namedItem("category").nodeValue()!="class") {
                 return tr("Language can only be setted to CLASS, not to molecules");
             }
         }
@@ -405,7 +405,7 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
         //        return tmp;
         return QVariant();
     } else if (role==Qt::ForegroundRole) {
-        if (attributeMap.namedItem("afssapsCat").nodeValue()=="class") {
+        if (attributeMap.namedItem("category").nodeValue()=="class") {
             return QColor("darkblue");
         } else if (!attributeMap.namedItem("autoFound").nodeValue().isEmpty()) {
             return QColor("lightgray");
@@ -508,7 +508,7 @@ Qt::ItemFlags AfssapsLinkerModel::flags(const QModelIndex &index) const
         DomItem *item = static_cast<DomItem*>(index.internalPointer());
         QDomNode node = item->node();
         QDomNamedNodeMap attributeMap = node.attributes();
-        if (attributeMap.namedItem("afssapsCat").nodeValue()=="class") {
+        if (attributeMap.namedItem("category").nodeValue()=="class") {
             f |= Qt::ItemIsEditable;
         }
     }
@@ -571,8 +571,8 @@ bool AfssapsLinkerModel::addUnreviewedMolecules(const QString &dbUid, const QStr
         if (known.contains(mol, Qt::CaseInsensitive))
             continue;
         QDomElement newmol = d->domDocument.createElement("Label");
-        newmol.setAttribute("afssaps", mol);
-        newmol.setAttribute("afssapsCat", "molecule");
+        newmol.setAttribute("fr", mol);
+        newmol.setAttribute("category", "molecule");
         newmol.setAttribute("review", "false");
         newmol.setAttribute("reviewer", QString());
         newmol.setAttribute("references", QString());

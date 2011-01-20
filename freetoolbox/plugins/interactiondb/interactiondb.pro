@@ -44,10 +44,11 @@ FORMS    += afssapslinkerwidget.ui \
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \
     ../global_resources/sql/iam_schema.sql \
-    ../global_resources/sql/atc_utf8.csv \
-    ../global_resources/sql/thesaurus_interactions.xml \
-    ../global_resources/sql/afssaps_links.xml \
-    ../global_resources/sql/afssaps_classtree.xml \
+    ../global_resources/sql/ia/atc_utf8.csv \
+    ../global_resources/sql/ia/thesaurus_interactions.xml \
+    ../global_resources/sql/ia/afssaps_links.xml \
+    ../global_resources/sql/ia/afssaps_classtree.xml \
+
 
 OTHER_FILES += \
     ../global_resources/sql/xx.txt

@@ -68,6 +68,7 @@
 #include <QCloseEvent>
 #include <QLabel>
 #include <QtConcurrentRun>
+#include <QProgressDialog>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -106,7 +107,8 @@ MainWindow::MainWindow(QWidget *parent) :
         m_FullReleasePage(0),
         m_ActiveStep(0),
         m_Watcher(0),
-        m_applied(false)
+        m_applied(false),
+        m_FullReleaseProgress(0)
 {
     setObjectName("MainWindow");
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -331,6 +333,16 @@ void MainWindow::createFullRelease()
     pageSelected();
     m_ActiveStep = 0;
 
+    if (m_FullReleaseProgress) {
+        delete m_FullReleaseProgress;
+        m_FullReleaseProgress = 0;
+    }
+
+    // Create the progress dialog
+    m_FullReleaseProgress = new QProgressDialog(this);
+    m_FullReleaseProgress->setModal(true);
+    m_FullReleaseProgress->show();
+
     // get all Core::IFullReleaseStep
     QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
     // create dirs
@@ -340,6 +352,9 @@ void MainWindow::createFullRelease()
                                      tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
             return;
         }
+        connect(s, SIGNAL(progressLabelChanged(QString)), m_FullReleaseProgress, SLOT(setLabelText(QString)));
+        connect(s, SIGNAL(progress(int)), m_FullReleaseProgress, SLOT(setValue(int)));
+        connect(s, SIGNAL(progressRangeChanged(int,int)), m_FullReleaseProgress, SLOT(setRange(int,int)));
     }
 
     /** \todo add a if (userWantsToDld)... */
@@ -370,8 +385,12 @@ void MainWindow::startNextDownload()
         m_ActiveStep = steps.at(id+1);
     }
 
-    if (!m_ActiveStep)
+    if (!m_ActiveStep) {
+        if (m_FullReleaseProgress)
+            delete m_FullReleaseProgress;
+        m_FullReleaseProgress = 0;
         return;
+    }
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(downloadFinished()), this, SLOT(startNextDownload()));
     m_ActiveStep->downloadFiles();
@@ -399,8 +418,12 @@ void MainWindow::startNextProcess()
         m_ActiveStep = steps.at(id+1);
     }
 
-    if (!m_ActiveStep)
+    if (!m_ActiveStep) {
+        if (m_FullReleaseProgress)
+            delete m_FullReleaseProgress;
+        m_FullReleaseProgress = 0;
         return;
+    }
     m_FullReleasePage->addRunningProcess(m_ActiveStep->processMessage());
 //    if (!m_Watcher) {
 //        m_Watcher = new QFutureWatcher<void>;
@@ -426,14 +449,22 @@ void MainWindow::startNextPostProcessDownload()
         m_FullReleasePage->endDownloadingProcess(m_ActiveStep->id());
         int id = steps.indexOf(m_ActiveStep);
         if (id==(steps.count()-1)) {
+            // jobs terminated
             m_ActiveStep = 0;
+            if (m_FullReleaseProgress)
+                delete m_FullReleaseProgress;
+            m_FullReleaseProgress = 0;
             return;
         }
         m_ActiveStep = steps.at(id+1);
     }
 
-    if (!m_ActiveStep)
+    if (!m_ActiveStep) {
+        if (m_FullReleaseProgress)
+            delete m_FullReleaseProgress;
+        m_FullReleaseProgress = 0;
         return;
+    }
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
     m_ActiveStep->postProcessDownload();

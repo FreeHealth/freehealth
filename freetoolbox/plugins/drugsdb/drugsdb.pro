@@ -59,6 +59,7 @@ OTHER_FILES += \
     ../global_resources/sql/moleculetoatclinker.xml \
     ../global_resources/sql/atc_utf8.csv \
     ../global_resources/sql/drugdb/newdbschema.sql \
+    ../global_resources/sql/drugdb/dbschema060_queries.sql \
     ../global_resources/sql/drugdb/be/be_db_finalize.sql \
     ../global_resources/sql/drugdb/fr/fr_db_finalize.sql \
     ../global_resources/sql/drugdb/za/za_db_finalize.sql \

@@ -4,8 +4,8 @@ SUBDIRS = \
     core \
     drugsdb \
     interactiondb \
-    icd10db
-#    druginfos \
+    icd10db \
+    druginfos \
 
 
 core.subdir = coreplugin

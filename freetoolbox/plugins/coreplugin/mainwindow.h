@@ -31,6 +31,7 @@
 
 #include <QSettings>
 #include <QFutureWatcher>
+class QProgressDialog;
 
 namespace Core {
 class FullReleasePage;
@@ -80,6 +81,7 @@ private:
     bool m_applied;
     QString m_currentCategory;
     QString m_currentPage;
+    QProgressDialog *m_FullReleaseProgress;
 };
 
 

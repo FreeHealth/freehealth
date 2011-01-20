@@ -77,6 +77,7 @@ namespace Constants {
     const char * const  AFSSAPS_CLASSTREE_FILENAME               = "/global_resources/sql/ia/afssaps_classtree.xml";
     const char * const  AFSSAPS_INTERACTIONS_FILENAME            = "/global_resources/sql/ia/thesaurus_interactions.xml";
     const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/sql/ia/interaction_text_english_translation_corrections.csv";
+    const char * const  PIMS_FILENAME                            = "/global_resources/sql/pims/pims.xml";
 
     const char* const S_WINGEOMETRY      = "MainWin/Geometry";
     const char* const S_WINSTATE         = "MainWin/State";
