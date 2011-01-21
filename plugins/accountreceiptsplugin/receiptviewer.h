@@ -148,6 +148,7 @@ private:
     QStandardItemModel *m_actionsTreeModel;
     AmountModel * m_model;
     QVariant m_siteUid;
+    QVariant m_insuranceUid;
     void mousePressEvent(QMouseEvent * event);
 
 private slots :

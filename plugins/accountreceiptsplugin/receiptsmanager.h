@@ -10,6 +10,7 @@ class receiptsManager : public QObject {
   QList<QMultiHash<int,QString> > getPercentages();
   QHash<QString,QVariant> getParametersDatas(QString & values , const QString & table);//name,uid
   QHash<QString,QVariant> getHashOfSites();
+  QHash<QString,QVariant> getHashOfInsurance();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);

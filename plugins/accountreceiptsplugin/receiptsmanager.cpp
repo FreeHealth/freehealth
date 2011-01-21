@@ -162,6 +162,25 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
     return hash; 
 }
 
+QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
+    QHash<QString,QVariant> hash;
+       	  InsuranceModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
+   	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+   	  	hash.insert(str,uid);
+   	  	
+   	  	  	  	
+   	  }
+   	  if(hash.size()< 1){
+   	      hash.insert("patient","uid");
+   	      }
+    return hash; 
+}
+
 /*QString receiptsManager::createTablesAndFields(){
     QString result = "Ok";
     qDebug() <<  __FILE__ << QString::number(__LINE__) ;

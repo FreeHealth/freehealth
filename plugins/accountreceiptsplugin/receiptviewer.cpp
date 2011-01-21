@@ -52,9 +52,6 @@
 #include <QColor>
 
 
-
-
-
 using namespace Core;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -253,6 +250,11 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     	  m_siteUid = manager.getHashOfSites().value(data);
     	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
         }
+    if (manager.getHashOfInsurance().keys().contains(data))
+    {
+    	  m_insuranceUid = manager.getHashOfInsurance().value(data);
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
+        }
 
     QStringList listOfValues = hashOfValues.keys();
     QStringListModel *modelReturnedList = new QStringListModel(listOfValues);
@@ -289,14 +291,15 @@ void ReceiptViewer::save(){
                                                                      << QString::number(banking)+ " "
                                                                      << QString::number(other)+ " "
                                                                      << QString::number(due) 
-                                                                     << "site uid = "+m_siteUid.toString();
+                                                                     << "site uid = "+m_siteUid.toString()
+                                                                     << "insurance = "+m_insuranceUid.toString();
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,user()->value(Core::IUser::Uuid).toString());
     hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString());
     hash.insert(ACCOUNT_PATIENT_NAME,patient()->data(Core::IPatient::FullName).toString());
     hash.insert(ACCOUNT_SITE_ID,m_siteUid);//AccountDB::Constants::SITES_UID
-    hash.insert(ACCOUNT_INSURANCE_ID,"2222222");
+    hash.insert(ACCOUNT_INSURANCE_ID,m_insuranceUid);
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"CS");
