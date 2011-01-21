@@ -40,6 +40,7 @@
 #include "preferences/medicalprocedurepage.h"
 #include "preferences/virtualdatabasecreator.h"
 #include "preferences/sitespage.h"
+#include "preferences/insurancepage.h"
 
 #include <utils/log.h>
 
@@ -85,6 +86,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new MedicalProcedurePage(this));
     addAutoReleasedObject(new VirtualDatabaseCreatorPage(this));
     addAutoReleasedObject(new SitesPage(this));
+    addAutoReleasedObject(new InsurancePage(this));
 }
 
 

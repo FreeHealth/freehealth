@@ -20,6 +20,7 @@ HEADERS = accountplugin.h \
     preferences/availablemovementpage.h \
     preferences/medicalprocedurepage.h \
     preferences/sitespage.h \
+    preferences/insurancepage.h \
     accountview.h \
     preferences/virtualdatabasecreator.h
 
@@ -30,6 +31,7 @@ SOURCES = accountplugin.cpp \
     preferences/availablemovementpage.cpp \
     preferences/medicalprocedurepage.cpp \
     preferences/sitespage.cpp \
+    preferences/insurancepage.cpp \
     accountview.cpp \
     preferences/virtualdatabasecreator.cpp
 
@@ -38,6 +40,7 @@ FORMS += preferences/accountuseroptionspage.ui \
     preferences/availablemovementpage.ui \
     preferences/medicalprocedurepage.ui \
     preferences/sitespage.ui \
+    preferences/insurancepage.ui \
     accountview.ui \
     preferences/virtualdatabasecreator.ui
 
