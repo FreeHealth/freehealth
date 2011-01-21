@@ -30,6 +30,7 @@
 #include "fdadrugsdatabasecreator.h"
 #include "southafricandrugsdatabase.h"
 #include "belgishdrugsdatabase.h"
+#include "portuguesedrugsdatabase.h"
 #include "moleculelinkerwidget.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -65,6 +66,7 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
     addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
     addAutoReleasedObject(new BeDrugsDatabasePage(this));
+    addAutoReleasedObject(new PtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));
 

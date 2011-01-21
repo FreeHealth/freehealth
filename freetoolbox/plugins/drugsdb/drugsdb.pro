@@ -26,7 +26,8 @@ SOURCES += \
     belgishdrugsdatabase.cpp \
     drugsdbplugin.cpp \
     searchatcindatabasedialog.cpp \
-    drug.cpp
+    drug.cpp \
+    portuguesedrugsdatabase.cpp
 
 
 HEADERS  += \
@@ -41,7 +42,8 @@ HEADERS  += \
     belgishdrugsdatabase.h \
     drugsdbplugin.h \
     searchatcindatabasedialog.h \
-    drug.h
+    drug.h \
+    portuguesedrugsdatabase.h
 
 
 FORMS += \
@@ -52,7 +54,8 @@ FORMS += \
     atcpage.ui \
     southafricandrugsdatabase.ui \
     belgishdrugsdatabase.ui \
-    searchatcindatabasedialog.ui
+    searchatcindatabasedialog.ui \
+    portuguesedrugsdatabase.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \
