@@ -34,7 +34,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
+ *   Contributors : Pierre-Marie DESOMBRE , <pm.desombre@gmail.com>                                                   *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
