@@ -45,9 +45,7 @@
 #include <QTextStream>
 #include <QIODevice>
 #include <QRegExp>
-
-
-
+#include <QLocale>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -132,8 +130,14 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     listOfZipcodes.removeDuplicates();
     listOfZipcodes.sort();
     
-    QStringList listForCountry = listOfCountries();
+    QLocale local;
+    QString localCountry;
+    localCountry = QLocale::countryToString(local.country());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+    QStringList listForCountry;
+    listForCountry = listOfCountries();
     listForCountry.sort();
+    listForCountry.prepend(localCountry);
     
     zipComboBox->addItems(listOfZipcodes);
     
