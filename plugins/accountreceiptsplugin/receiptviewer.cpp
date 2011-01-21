@@ -1,3 +1,28 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by Docteur Pierre-Marie Desombre, GP               *
+ *   pm.desombre@medsyn.fr                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 3 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "receiptviewer.h"
 #include "receiptsmanager.h"	
 #include "receiptsIO.h"
@@ -61,11 +86,14 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->saveAndQuitButton->setShortcut(QKeySequence::InsertLineSeparator);
     ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     fillActionTreeView();
+    //right click
+    m_fillThesaurus = new QAction(trUtf8("Save in thesaurus."),this);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->deleteLineButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->actionsTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(treeViewsActions(const QModelIndex&)));
+    connect(m_fillThesaurus,SIGNAL(triggered()),this,SLOT(saveInThesaurus()));
 }
 
 ReceiptViewer::~ReceiptViewer()
@@ -294,4 +322,17 @@ void ReceiptViewer::saveAndQuit(){
     close();
 }
 
-
+void ReceiptViewer::mousePressEvent(QMouseEvent * event){
+  if(event->button() == Qt::RightButton){
+    qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
+    m_menu         = new QMenu;
+    m_menu        -> addAction(m_fillThesaurus);
+    //m_menu        -> exec(QCursor::pos());
+    //m_menu->exec(ui->returnedListView->mapToGlobal(QPoint(0, 0)));
+    m_menu->exec(event->globalPos());
+  }
+}
+  
+void ReceiptViewer::saveInThesaurus(){
+    QMessageBox::information(0,"info","save in thesaurus",QMessageBox::Ok);
+}

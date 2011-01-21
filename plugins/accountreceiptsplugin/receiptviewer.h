@@ -6,8 +6,8 @@
 #include <QHash>
 #include <QSqlError>
 #include <QDebug>
-
-
+#include <QMenu>
+#include <QAction>
 
 namespace Ui {
     class ReceiptViewer;
@@ -140,18 +140,22 @@ protected:
     void changeEvent(QEvent *e);
     void fillActionTreeView();
     void fillModel(QHash<QString,QString> & hashOfValues,int typeOfPayment);
+    QAction *m_fillThesaurus;
+    QMenu *m_menu;
 
 private:
     Ui::ReceiptViewer *ui;
     QStandardItemModel *m_actionsTreeModel;
     AmountModel * m_model;
     QVariant m_siteUid;
+    void mousePressEvent(QMouseEvent * event);
 
 private slots :
     void deleteLine();
     void save();
     void saveAndQuit();
     void treeViewsActions(const QModelIndex&);
+    void saveInThesaurus();
 };
 
 #endif // RECEIPTVIEWER_H
