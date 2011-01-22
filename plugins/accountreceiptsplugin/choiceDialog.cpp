@@ -7,9 +7,21 @@
 using namespace ReceiptsConstants;
 choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
+    m_percentValue = 100.00;
+    ui->percentDoubleSpinBox->setRange(0.00,100.00);
+    ui->percentDoubleSpinBox->setValue(100.00);
+    ui->percentDoubleSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    m_timer = new QTimer(this);
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(accept()));
+    connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
+    connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
+    connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueStop()));
+    connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(valueDown()));
+    connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueStop()));
 }
-choiceDialog::~choiceDialog(){}
+choiceDialog::~choiceDialog(){
+    delete m_timer;
+}
 int choiceDialog::returnChoiceDialog(){
     int ret = 0;
         if (ui->cashButton->isChecked())
@@ -37,5 +49,33 @@ int choiceDialog::returnChoiceDialog(){
     	ret = Due;
         }
     return ret;
-    
+}
+
+void choiceDialog::value(double val){
+    m_percentValue = val;
+}
+
+void choiceDialog::valueUp(){
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(doubleSpinBoxUp()));
+    m_timer->start(2);
+}
+
+void choiceDialog::valueDown(){
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(doubleSpinBoxDown()));
+    m_timer->start(2);
+}
+
+
+void choiceDialog::valueStop(){
+    m_timer->stop();
+}
+
+void choiceDialog::doubleSpinBoxUp(){
+    double valuePlus = ui->percentDoubleSpinBox->value()+0.01;
+    ui->percentDoubleSpinBox->setValue(valuePlus);
+}
+
+void choiceDialog::doubleSpinBoxDown(){
+    double valueLess = ui->percentDoubleSpinBox->value()-0.01;
+    ui->percentDoubleSpinBox->setValue(valueLess);
 }

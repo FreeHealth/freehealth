@@ -223,6 +223,7 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     receiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
+    double percentage = 100.00;
     if(data == "Values"){
         findReceiptsValues * rv = new findReceiptsValues(this);
         if(rv->exec() == QDialog::Accepted){
@@ -231,6 +232,7 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
             if(hashOfValues.keys().size() > 0){
                 if(choice.exec() == QDialog::Accepted){
                     typeOfPayment = choice.returnChoiceDialog();//int
+                    percentage = choice.m_percentValue;//double
                     }
                 }
             qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
@@ -240,6 +242,7 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
+            percentage = choice.m_percentValue;
             }
             hashOfValues.insertMulti("CS","23.00");//preferential act
         }
@@ -261,17 +264,18 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     ui->returnedListView->setModel(modelReturnedList);
     ui->returnedListView->show();
    // delete modelReturnedList;
-    fillModel(hashOfValues,typeOfPayment);
+    fillModel(hashOfValues,typeOfPayment,percentage);
     
 }
 
-void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfPayment){
+void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfPayment, double percentage){
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext()){
         it.next();
         value += it.value().toDouble();
     }
+    value = value*percentage/100.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
     const QModelIndex index = m_model->index(typeOfPayment,AmountModel::Col_Value);
     m_model->setData(index, value, Qt::EditRole);

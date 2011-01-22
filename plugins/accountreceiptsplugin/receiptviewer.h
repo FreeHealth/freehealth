@@ -139,7 +139,7 @@ public:
 protected:
     void changeEvent(QEvent *e);
     void fillActionTreeView();
-    void fillModel(QHash<QString,QString> & hashOfValues,int typeOfPayment);
+    void fillModel(QHash<QString,QString> & hashOfValues,int typeOfPayment,double percentage);
     QAction *m_fillThesaurus;
     QMenu *m_menu;
 
