@@ -2,7 +2,7 @@
 #define CHOICEDIALOG_H
 #include <QDialog>
 #include <QTimer>
-
+#include <QHash>
 
 namespace Ui{
     class ChoiceDialog;
@@ -21,9 +21,14 @@ class choiceDialog : public QDialog{
   void valueStop();
   void doubleSpinBoxUp();
   void doubleSpinBoxDown();
+  void quickPlus();
+  void quickLess();
   private :
   Ui::ChoiceDialog * ui;
   QTimer *m_timer;
+  double m_percent;
+  int m_quickInt;
+  QHash<int,QString> m_hashPercentages;
 };
 
 #endif

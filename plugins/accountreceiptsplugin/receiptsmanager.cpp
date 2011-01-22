@@ -23,24 +23,17 @@ receiptsManager::~receiptsManager()
 {
 }
 
-QList<QMultiHash<int,QString> > receiptsManager::getPercentages()
+QHash<int,QString> receiptsManager::getPercentages()
 {
-  QList<QMultiHash<int,QString> > rList;
-  QMultiHash<int,QString> type,percentage;
-  QStringList idList;
-    idList << "0" << "1" << "2" << "3";
-  QStringList typeList;
-    typeList << "zero" << "one third" << "two third"  << "Complete"   ;
-  QStringList percentageList; 
-    percentageList << "0" << "30" << "70" << "100"   ;
-  QString strId;
-  foreach(strId,idList){
-     int key = strId.toInt();
-     type.insert(key,typeList[key]);
-     percentage.insert(key,percentageList[key]);
-     }
-  rList << type << percentage;
-  return rList;
+  QHash<int,QString> hash;
+  hash.insert(1,"0.00");
+  hash.insert(2,"10.00");
+  hash.insert(3,"20.00");
+  hash.insert(4,"30.00");
+  hash.insert(5,"33.33");
+  hash.insert(6,"70.00");
+  hash.insert(7,"100.00");
+  return hash;
 }
 
 QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , const QString & table)
@@ -68,8 +61,8 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , c
    	  {
    	  	QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
    	  	hashForReturn.insert(str,uid);
    	  	
    	  	  	  	
@@ -150,8 +143,8 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
    	  {
    	  	QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
    	  	hash.insert(str,uid);
    	  	
    	  	  	  	
@@ -169,8 +162,8 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
    	  {
    	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
    	  	hash.insert(str,uid);
    	  	
    	  	  	  	

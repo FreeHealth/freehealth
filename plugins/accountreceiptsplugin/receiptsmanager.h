@@ -7,7 +7,7 @@ class receiptsManager : public QObject {
   public :
   receiptsManager();
   ~receiptsManager();
-  QList<QMultiHash<int,QString> > getPercentages();
+  QHash<int,QString> getPercentages();
   QHash<QString,QVariant> getParametersDatas(QString & values , const QString & table);//name,uid
   QHash<QString,QVariant> getHashOfSites();
   QHash<QString,QVariant> getHashOfInsurance();

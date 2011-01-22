@@ -1,4 +1,5 @@
 #include "choiceDialog.h"
+#include "receiptsmanager.h"
 #include "ui_ChoiceDialog.h"
 #include "constants.h"
 #include <QRadioButton>
@@ -7,7 +8,11 @@
 using namespace ReceiptsConstants;
 choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
+    m_percent = 100.00;
     m_percentValue = 100.00;
+    receiptsManager manager;
+    m_hashPercentages = manager.getPercentages();
+    m_quickInt = m_hashPercentages.keys().last();
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
     ui->percentDoubleSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -18,6 +23,8 @@ choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDi
     connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueStop()));
     connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(valueDown()));
     connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueStop()));
+    connect(ui->plusConstButton,SIGNAL(pressed()),this,SLOT(quickPlus()));
+    connect(ui->lessConstButton,SIGNAL(pressed()),this,SLOT(quickLess()));
 }
 choiceDialog::~choiceDialog(){
     delete m_timer;
@@ -78,4 +85,27 @@ void choiceDialog::doubleSpinBoxUp(){
 void choiceDialog::doubleSpinBoxDown(){
     double valueLess = ui->percentDoubleSpinBox->value()-0.01;
     ui->percentDoubleSpinBox->setValue(valueLess);
+}
+
+void choiceDialog::quickPlus(){
+    if(m_quickInt == m_hashPercentages.keys().last())
+        return;
+    else{
+        m_quickInt++;
+        m_percent = m_hashPercentages.value(m_quickInt).toDouble();
+ 	}
+    ui->percentDoubleSpinBox->setValue(m_percent);
+}
+
+void choiceDialog::quickLess(){
+    if(m_quickInt == 1)
+	    return;
+  	/*else if(m_percent == 100){
+            m_percent = list[0].toDouble();
+ 		}*/
+    else{
+        m_quickInt--;
+        m_percent = m_hashPercentages.value(m_quickInt).toDouble();
+ 		}
+    ui->percentDoubleSpinBox->setValue(m_percent);
 }
