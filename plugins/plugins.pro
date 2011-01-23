@@ -16,6 +16,8 @@ SUBDIRS = \
     aggir \
     drugs \
     drugsbase \
+    icd \
+    pmh \
 #    alerts \
     padtools
 
@@ -90,4 +92,13 @@ patientbase.depends += usermanager
 
 formmanager.subdir   = formmanagerplugin
 formmanager.depends += core
+formmanager.depends += usermanager
 
+icd.subdir = icdplugin
+icd.depends += core
+icd.depends += formmanager
+
+pmh.subdir = pmhplugin
+pmh.depends += core
+pmh.depends += icd
+pmh.depends += listview
