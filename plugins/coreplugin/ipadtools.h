@@ -28,8 +28,14 @@
 #define IPADTOOLS_H
 
 #include <QObject>
+#include <QMap>
+#include <QString>
+#include <QVariant>
+#include <QSyntaxHighlighter>
 
 #include <coreplugin/core_exporter.h>
+
+class QTextEdit;
 
 /**
  * \file ipadtools.h
@@ -45,12 +51,22 @@ namespace Core {
 	class CORE_EXPORT IPadTools : public QObject
 	{
         Q_OBJECT
+
 	public:
 		IPadTools(QObject * parent = 0) : QObject(parent) {}
 		virtual ~IPadTools() {}
 
+		// TODO manage errors
 
-	Q_SIGNALS:
+		/**
+		 * \brief returns a parsing result of a template against some tokens
+		 */
+		virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens) = 0;
+
+		/**
+		 * \brief returns a syntax highlighter which can be used in text editors
+		 */
+		virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
 	};
 }
 

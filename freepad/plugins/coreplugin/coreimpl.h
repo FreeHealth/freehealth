@@ -83,6 +83,8 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
+	IPadTools *padTools() const { return 0; }
+
     // Patient's datas wrapper
     IPatient *patient() const {return 0;}
     void setPatient(IPatient *) {}
