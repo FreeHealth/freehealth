@@ -117,7 +117,7 @@
   <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">utils/widgets/QButtonLineEdit.h</header>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

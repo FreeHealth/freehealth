@@ -24,7 +24,7 @@ HEADERS += global_exporter.h \
     qtcassert.h \
     widgets/scrollingwidget.h \
     widgets/lineeditechoswitcher.h \
-    widgets/QButtonLineEdit.h \
+    widgets/qbuttonlineedit.h \
     widgets/QPixLineEdit.h \
     widgets/colorbuttonchooser.h \
     widgets/spinboxdelegate.h \
@@ -51,7 +51,7 @@ SOURCES += global.cpp \
     httpdownloader.cpp \
     widgets/scrollingwidget.cpp \
     widgets/lineeditechoswitcher.cpp \
-    widgets/QButtonLineEdit.cpp \
+    widgets/qbuttonlineedit.cpp \
     widgets/colorbuttonchooser.cpp \
     widgets/spinboxdelegate.cpp \
     widgets/styledbar.cpp \

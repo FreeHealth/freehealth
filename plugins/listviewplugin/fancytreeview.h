@@ -27,7 +27,7 @@
 #define FANCYTREEVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
-#include <utils/widgets/QButtonLineEdit.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
 #include <QWidget>
 #include <QTreeView>

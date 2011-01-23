@@ -51,7 +51,7 @@
 #include "usermanager_p.h"
 
 #include <utils/log.h>
-#include <utils/widgets/QButtonLineEdit.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
