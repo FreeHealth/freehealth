@@ -33,20 +33,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 
-
-//<PIM genericSource="Beers,Priscus..." pmid="" type="" level="" country="">
-//  <Molecule class="" atc="" />
-//  <MoleculeAssociation>
-//    <Molecule class="" atc="" />
-//  </MoleculeAssociation>
-//  <DoseAlert higherThan="" lowerThan="" />
-//  <Risk lang="" value=""/>
-//  <Management lang="" value=""/>
-//  <RelatedDiagnosis>
-//    <ICD value="" />
-//  </RelatedDiagnosis>
-//  </PIM>
-
 namespace DrugInfos {
 namespace Internal {
 

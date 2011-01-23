@@ -125,13 +125,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="split">
-        <property name="text">
-         <string>Split global database into multiple language specific databases</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="createDb">
         <property name="text">

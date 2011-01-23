@@ -50,7 +50,4 @@ OTHER_FILES += \
     ../global_resources/sql/ia/afssaps_classtree.xml \
 
 
-OTHER_FILES += \
-    ../global_resources/sql/xx.txt
-
 OTHER_FILES += InteractionDB.pluginspec

@@ -37,6 +37,8 @@ OTHER_FILES += \
     ../global_resources/sql/ia/atc_utf8.csv \
     ../global_resources/sql/ia/afssaps_links.xml \
     ../global_resources/sql/ia/afssaps_classtree.xml \
+    ../global_resources/sql/pims/icdlinks.xml \
+    ../global_resources/sql/pims/pims.xml \
     ../global_resources/sql/druginfodb/biam2/biam_importer_schema.sql
 
 
