@@ -158,7 +158,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
     //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
-    m_Mapper->addMapping(m_siteUidLabel,1);// AccountDB::Constants::SITES_UID);
+    m_Mapper->addMapping(m_siteUidLabel,AccountDB::Constants::SITES_UID);// AccountDB::Constants::SITES_UID);
     m_Mapper->addMapping(nameEdit, AccountDB::Constants::SITES_NAME);
     //m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(adressEdit, AccountDB::Constants::SITES_ADRESS);
@@ -229,18 +229,6 @@ void SitesWidget::on_addButton_clicked()
     m_siteUidLabel->setFocus();
     //qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
     //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    /*nameEdit->setText("name");
-    adressEdit->setText("adress");
-    cityEdit->setText("city");
-    countryComboBox->addItem("country");
-    countryComboBox->setFocus();
-    
-    zipComboBox->setFocus();
-    phoneEdit->setText("123457");
-    faxEdit->setText("1245677");
-    mailEdit->setText("DFFJ");
-    contactEdit->setText("hkgg");*/
-
 }
 
 

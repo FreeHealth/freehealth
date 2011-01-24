@@ -41,6 +41,7 @@
 #include "preferences/virtualdatabasecreator.h"
 #include "preferences/sitespage.h"
 #include "preferences/insurancepage.h"
+#include "preferences/percentagespage.h"
 
 #include <utils/log.h>
 
@@ -87,6 +88,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new VirtualDatabaseCreatorPage(this));
     addAutoReleasedObject(new SitesPage(this));
     addAutoReleasedObject(new InsurancePage(this));
+    addAutoReleasedObject(new PercentagesPage(this));
 }
 
 

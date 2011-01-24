@@ -21,8 +21,9 @@ HEADERS = accountplugin.h \
     preferences/medicalprocedurepage.h \
     preferences/sitespage.h \
     preferences/insurancepage.h \
-    accountview.h \
-    preferences/virtualdatabasecreator.h
+    preferences/virtualdatabasecreator.h \
+    preferences/percentagespage.h \
+    accountview.h 
 
 SOURCES = accountplugin.cpp \
     preferences/accountpreferences.cpp \
@@ -32,8 +33,9 @@ SOURCES = accountplugin.cpp \
     preferences/medicalprocedurepage.cpp \
     preferences/sitespage.cpp \
     preferences/insurancepage.cpp \
-    accountview.cpp \
-    preferences/virtualdatabasecreator.cpp
+    preferences/virtualdatabasecreator.cpp \
+    preferences/percentagespage.cpp \
+    accountview.cpp 
 
 FORMS += preferences/accountuseroptionspage.ui \
     preferences/bankdetailspage.ui \
@@ -41,9 +43,9 @@ FORMS += preferences/accountuseroptionspage.ui \
     preferences/medicalprocedurepage.ui \
     preferences/sitespage.ui \
     preferences/insurancepage.ui \
-    accountview.ui \
-    preferences/virtualdatabasecreator.ui
-
+    preferences/virtualdatabasecreator.ui \
+    preferences/percentagespage.ui \
+    accountview.ui 
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/accountplugin_de.ts \

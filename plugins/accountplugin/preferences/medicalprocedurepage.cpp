@@ -206,12 +206,6 @@ void MedicalProcedureWidget::on_addButton_clicked()
     dateEdit->setDate(QDate::currentDate());
     dateEdit->setFocus();
     qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    /*name->clear();
-    abstractEdit->clear();
-    type->clear();
-    amountSpin->setValue(0.00);
-    rateSpin->setValue(0.00);
-    dateEdit->setDate(QDate::currentDate());*/
 }
 
 /*void MedicalProcedureWidget::on_save_clicked()
