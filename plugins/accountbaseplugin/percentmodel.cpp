@@ -37,10 +37,19 @@
 #include "constants.h"
 
 #include <utils/log.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 
 #include <QSqlTableModel>
+#include <QUuid>
 
 using namespace AccountDB;
+
+enum {WarnFilter=true};
+
+static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 namespace AccountDB {
 namespace Internal {
@@ -48,17 +57,33 @@ namespace Internal {
 class PercentModelPrivate
 {
 public:
-    PercentModelPrivate(PercentModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
-    {
+    PercentModelPrivate(PercentModel *parent) : m_SqlTable(0),
+                                                m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                m_IsDirty(false),
+                                                q(parent)
+    {   qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Percent));
-//        m_SqlTable->setFilter(USER_UID);
+        refreshFilter();
     }
     ~PercentModelPrivate () {}
+    
+    void refreshFilter()
+    {
+        if (!m_SqlTable)
+            return;
+        QHash<int, QString> where;
+        where.insert(AccountDB::Constants::PERCENT_USER_UID, QString("='%1'").arg(m_UserUid));
+        m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Percent, where));
+        if (WarnFilter)
+            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
+        //q->reset();
+    }
 
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
+    QString m_UserUid;
 
 private:
     PercentModel *q;
@@ -88,7 +113,11 @@ PercentModel::~PercentModel()
 
 int PercentModel::rowCount(const QModelIndex &parent) const
 {
-    return d->m_SqlTable->rowCount(parent);
+    int rows = 0;
+    d->m_SqlTable->setFilter("");
+    d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount(parent);
+    return rows;
 }
 
 int PercentModel::columnCount(const QModelIndex &parent) const
@@ -96,12 +125,12 @@ int PercentModel::columnCount(const QModelIndex &parent) const
     return d->m_SqlTable->columnCount(parent);
 }
 
-void PercentModel::setUserUuid(const QString &uuid)
+/*void PercentModel::setUserUuid(const QString &uuid)
 {
     QHash<int, QString> where;
-    where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
+    where.insert(Constants::PERCENT_USER_UID, QString("='%1'").arg(uuid));
     d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_Percent, where));
-}
+}*/
 
 QVariant PercentModel::data(const QModelIndex &index, int role) const
 {
@@ -119,6 +148,11 @@ bool PercentModel::setData(const QModelIndex &index, const QVariant &value, int 
 QVariant PercentModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return QVariant();
+}
+
+bool PercentModel::setHeaderData(int section,Qt::Orientation orientation,
+                                          QVariant & value,int role ){
+    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
 }
 
 bool PercentModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -154,4 +188,8 @@ void PercentModel::revert()
 bool PercentModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+QSqlError PercentModel::lastError(){
+    return d->m_SqlTable->lastError();
 }

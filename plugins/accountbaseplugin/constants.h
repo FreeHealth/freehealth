@@ -240,6 +240,7 @@ namespace Constants {
     enum TablePercent_Fields {
         PERCENT_ID = 0,
         PERCENT_UID,
+        PERCENT_USER_UID,
         PERCENT_TYPE,
         PERCENT_VALUES,
         PERCENT_MaxParam

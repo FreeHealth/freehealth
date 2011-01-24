@@ -36,6 +36,7 @@
 #define PERCENTMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
 
 namespace AccountDB {
 namespace Internal {
@@ -57,6 +58,8 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
+    
+    bool setHeaderData(int section,Qt::Orientation orientation,QVariant & value,int role = Qt::EditRole );
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -66,8 +69,9 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
-    void setUserUuid(const QString &uuid);
+    //void setUserUuid(const QString &uuid);
     bool isDirty() const;
+    QSqlError lastError();
 
 public Q_SLOTS:
     bool submit();

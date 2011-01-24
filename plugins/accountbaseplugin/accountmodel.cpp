@@ -68,7 +68,7 @@ public:
             m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
             m_UserUid(user()->value(Core::IUser::Uuid).toString()),
             q(parent)
-    {qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
+    {   //qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
         refreshFilter();
