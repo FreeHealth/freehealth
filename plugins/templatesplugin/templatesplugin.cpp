@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+
+/**
+  \namespace Templates
+  \brief Namespace reserved for the Templates plugin.
+*/
+
 #include "templatesplugin.h"
 #include "templatesmodel.h"
 #include "templatebase.h"

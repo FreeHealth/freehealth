@@ -32,6 +32,14 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \namespace PadTools
+  \brief Namespace reserved for the PadTools plugin.
+  The PadTools namespace includes:
+  - Token engine
+  - Pad creator
+*/
+
 #include "padtoolsplugin.h"
 
 #include <utils/log.h>

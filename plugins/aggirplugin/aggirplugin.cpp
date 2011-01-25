@@ -32,6 +32,11 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \namespace Gir
+  \brief Namespace reserved for the AGGIR plugins (a french only plugin that measure physical dependence).
+*/
+
 #include "aggirplugin.h"
 #include "girwidget.h"
 

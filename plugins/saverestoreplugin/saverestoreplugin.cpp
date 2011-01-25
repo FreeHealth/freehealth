@@ -18,6 +18,11 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/**
+  \namespace SaveRestore
+  \brief Namespace reserved for the Save and Restore plugin.
+*/
+
 #include "saverestoreplugin.h"
 #include "saverestorepage.h"
 

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /**
   \namespace Views
-  Contains some specific views.
+  \brief Contains some specific views and models to use with the views.
 */
 
 #include "listviewplugin.h"

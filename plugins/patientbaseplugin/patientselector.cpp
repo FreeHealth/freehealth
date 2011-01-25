@@ -1,42 +1,34 @@
 /***************************************************************************
- *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
- *   All rights reserved.                                                  *
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
  *                                                                         *
- *   This program is a free and open source software.                      *
- *   It is released under the terms of the new BSD License.                *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
  *                                                                         *
- *   Redistribution and use in source and binary forms, with or without    *
- *   modification, are permitted provided that the following conditions    *
- *   are met:                                                              *
- *   - Redistributions of source code must retain the above copyright      *
- *   notice, this list of conditions and the following disclaimer.         *
- *   - Redistributions in binary form must reproduce the above copyright   *
- *   notice, this list of conditions and the following disclaimer in the   *
- *   documentation and/or other materials provided with the distribution.  *
- *   - Neither the name of the FreeMedForms' organization nor the names of *
- *   its contributors may be used to endorse or promote products derived   *
- *   from this software without specific prior written permission.         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
  *                                                                         *
- *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
- *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
- *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
- *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
- *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
- *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
- *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
- *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
- *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
- *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
- *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
- *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Patients::PatientSelector
+  \brief Selector Widget for the recorded patients
+*/
+
 #include "patientselector.h"
 #include "patientmodel.h"
 #include "constants_menus.h"
@@ -76,8 +68,6 @@ public:
             m_Model(0),
             q(parent)
     {
-        ui->setupUi(q);
-        q->connect(ui->searchLine, SIGNAL(textChanged(QString)), q, SLOT(refreshFilter(QString)));
     }
 
     ~PatientSelectorPrivate()
@@ -138,16 +128,21 @@ private:
 }  // End namespace Patients
 
 
-
+/** \brief Create a PatientSelector with \e fields to show. \sa PatientSelector::FieldsToShow */
 PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         QWidget(parent), d(0)
 {
     d = new Internal::PatientSelectorPrivate(this);
+    d->ui->setupUi(q);
+    d->ui->searchLine->setDelayedSignals(true);
+
     if (fields == None) {
         d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
     } else {
         d->m_Fields = fields;
     }
+
+    // Get the active model
     if (!PatientModel::activeModel()) {
         PatientModel *model = new PatientModel(this);
         PatientModel::setActiveModel(model);
@@ -155,6 +150,9 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     } else {
         setPatientModel(PatientModel::activeModel());
     }
+
+    // Some connections
+    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SIGNAL(patientSelected(QModelIndex)));
 }
@@ -173,13 +171,16 @@ void PatientSelector::init()
     d->createSearchToolButtons();
 }
 
+/** \brief Define the search mode of the selector. */
 void PatientSelector::setSearchMode(const int search)
 {
     d->m_SearchMethod = search;
 }
 
+/** \brief Define the PatientModel to use. */
 void PatientSelector::setPatientModel(PatientModel *m)
 {
+    Q_ASSERT(m);
     d->m_Model = m;
     d->ui->tableView->setModel(m);
     setFieldsToShow(d->m_Fields);
@@ -188,6 +189,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->identity->setCurrentPatientModel(m);
 }
 
+/** \brief Define the fields to show using the FieldsToShow flag */
 void PatientSelector::setFieldsToShow(const FieldsToShow fields)
 {
     d->m_Fields = fields;
@@ -225,24 +227,25 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
+/** \brief New patient is selected. */
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
     d->ui->tableView->setCurrentIndex(index);
 }
 
+/** \brief Inform the IdentityWidget of the new identity to show. */
 void PatientSelector::changeIdentity(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
     d->ui->identity->setCurrentIndex(current);
 }
 
+/** \brief Refresh the search filter of the PatientModel */
 void PatientSelector::refreshFilter(const QString &)
 {
     if (!d->m_Model)
         return;
     QString text = d->ui->searchLine->searchText();
-    if (text.length() < 3)
-        return;
     QString name, firstname;
     switch (d->m_SearchMethod) {
     case SearchByName: name = text; break;
@@ -250,9 +253,7 @@ void PatientSelector::refreshFilter(const QString &)
     case SearchByFirstname: firstname = text; break;
     case SearchByDOB: break;
     }
-
-    if (name.length() >= 3 || firstname.length() >= 3)
-        d->m_Model->setFilter(name, firstname);
+    d->m_Model->setFilter(name, firstname);
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 

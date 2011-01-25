@@ -37,6 +37,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Patients::PatientSearchMode
+  \brief Core::IMode for the Patient selector.
+  \sa Core::IMode
+*/
+
 #include "patientsearchmode.h"
 #include "patientselector.h"
 #include "patientwidgetmanager.h"

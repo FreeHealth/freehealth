@@ -23,6 +23,16 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \namespace ICD
+  \brief Namespace reserved for the ICD plugin.
+  The ICD namespace includes:
+  - All database accesses to the ICD10 database
+  - A class used to build the ICD10 database from the raw sources
+  - All models related to ICD10
+  - Some UIs like code search, code selector, code association manager
+*/
+
 #include "icdplugin.h"
 #include "icdwidgetmanager.h"
 #include "icddatabase.h"

@@ -24,6 +24,15 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \namespace DrugsWidget
+  \brief Namespace reserved for the Drugs plugin.
+  The DrugsWidget namespace includes:
+  - All dialogs, widgets and views related to drugs (needs models classes issued from DrugsDB namespace)
+  - All preferences pages (constants are issued from DrugsDB namespace)
+  - Some private constants (reserved to the Drugs UI)
+*/
+
 #include "drugsplugin.h"
 #include "constants.h"
 #include "drugspreferences/mfDrugsPreferences.h"

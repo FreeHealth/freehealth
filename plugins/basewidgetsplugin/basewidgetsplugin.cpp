@@ -32,6 +32,11 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+/**
+  \namespace BaseWidgets
+  \brief Namespace reserved for the BaseWidgets plugin.
+*/
+
 #include "basewidgetsplugin.h"
 #include "baseformwidgets.h"
 #include "baseformwidgetsoptionspage.h"
