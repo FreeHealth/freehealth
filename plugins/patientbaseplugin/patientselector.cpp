@@ -133,7 +133,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         QWidget(parent), d(0)
 {
     d = new Internal::PatientSelectorPrivate(this);
-    d->ui->setupUi(q);
+    d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
 
     if (fields == None) {
