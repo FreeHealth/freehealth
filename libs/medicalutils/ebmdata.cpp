@@ -23,6 +23,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class MedicalUtils::EbmData
+  \brief Provide access to Evidence Based Medicine data (publications).
+*/
+
 #include "ebmdata.h"
 
 #include <QString>

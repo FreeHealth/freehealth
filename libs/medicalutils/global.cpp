@@ -23,6 +23,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \namespace MedicalUtils
+  \brief Some generic funtions and classes for all medical calculations.
+*/
+
 #include "global.h"
 
 #include <translationutils/constanttranslations.h>

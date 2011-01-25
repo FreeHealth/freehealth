@@ -34,6 +34,12 @@
 #include <QStringList>
 #include <QDebug>
 
+
+/**
+  \namespace QuaZipTools
+  \brief Some generic funtions related to QuaZip (zip).
+*/
+
 namespace QuaZipTools {
 
 
