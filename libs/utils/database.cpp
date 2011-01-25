@@ -563,7 +563,7 @@ bool Database::checkDatabaseScheme()
 }
 
 
-QString Database::field(const int &tableref, const int &fieldref)const
+QString Database::fieldName(const int &tableref, const int &fieldref) const
 {
     if (!d->m_Tables.contains(tableref))
         return QString::null;
@@ -575,7 +575,39 @@ QString Database::field(const int &tableref, const int &fieldref)const
     return d->m_Fields.value(fieldref + (tableref * 1000));
 }
 
-QStringList Database::fields(const int &tableref)const
+Field Database::field(const int &tableref, const int &fieldref) const
+{
+    Field ret;
+    ret.table = tableref;
+    ret.field = fieldref;
+    ret.tableName = table(tableref);
+    ret.fieldName = fieldName(tableref, fieldref);
+    return ret;
+}
+
+FieldList Database::fields(const int tableref) const
+{
+    FieldList ret;
+    if (!d->m_Tables.contains(tableref))
+        return ret;
+    if (!d->m_Tables_Fields.keys().contains(tableref))
+        return ret;
+
+    QList<int> fieldRefs = d->m_Tables_Fields.values(tableref);
+    qSort(fieldRefs);
+    QString tableName = table(tableref);
+    foreach(int i, fieldRefs) {
+        Field f;
+        f.table = tableref;
+        f.field = i;
+        f.tableName = tableName;
+        f.fieldName = fieldName(tableref, i);
+        ret << f;
+   }
+    return ret;
+}
+
+QStringList Database::fieldNames(const int &tableref) const
 {
     if (!d->m_Tables.contains(tableref))
         return QStringList();
@@ -600,8 +632,17 @@ QStringList Database::tables() const
     return d->m_Tables.values();
 }
 
-/** \brief Create a where clause. */
-QString Database::getWhereClause(const int & tableref, const QHash<int, QString> & conditions)const
+/**
+  \brief Create a where clause on the table \e tableref using conditions mapped into a hash.
+  Conditions: key = fieldReference , value = whereClauseString.
+  \code
+    QHash<int,QString> where;
+    where.insert(myFieldId, QString("='%1').arg(myStringMatch);
+    QString clause = db.getWhereClause(myTableId, where);
+    // Will return: "WHERE (TABLE1.FIELD_ID='StringToMatch')"
+  \endcode
+*/
+QString Database::getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const
 {
     // here we create a where condition
     QString where = "";
@@ -622,11 +663,74 @@ QString Database::getWhereClause(const int & tableref, const QHash<int, QString>
     return where;
 }
 
+/**
+  \brief Create a where clause on the \e fields.
+  \code
+    FieldList fields;
+    fields << field(1, 2, QString("='%1'").arg(myStringMatch));
+    QString clause = db.getWhereClause(fields);
+    // Will return: "WHERE (TABLE1.FIELD2='StringToMatch')"
+  \endcode
+*/
+QString Database::getWhereClause(const FieldList &fields) const
+{
+    QString where = "";
+    for(int i = 0; i < fields.count(); ++i) {
+        QString tab, f;
+        if (fields.at(i).tableName.isEmpty()) {
+            tab = table(fields.at(i).table);
+            f = fieldName(fields.at(i).table, fields.at(i).field);
+        } else {
+            tab = fields.at(i).tableName;
+            f = fields.at(i).fieldName;
+        }
+
+        where.append(QString(" (`%1`.`%2` %3) AND ")
+                      .arg(tab)
+                      .arg(f)
+                      .arg(fields.at(i).whereCondition));
+    }
+    where.chop(5);
+    if (fields.count() > 1)
+        where = QString("(%1)").arg(where);
+    if (WarnSqlCommands)
+        qWarning() << where;
+    return where;
+}
+
+/**
+  \brief Create a join statement on \e join.field1.tableName using fields equality.
+  \code
+    Join join(t1, f1, t2, f2, joinType);
+    QString sqlJoin = db.join(join);
+    // will return: JOIN T1NAME ON T1NAME.F1NAME=T2NAME.F2NAME
+  \endcode
+*/
+QString Database::join(const Join &join) const
+{
+    QString s;
+    switch (join.type) {
+    case SimpleJoin: s = "JOIN "; break;
+    case OuterJoin: s = "OUTER JOIN "; break;
+    case LeftJoin: s = "LEFT JOIN "; break;
+    case InnerJoin: s = "INNER JOIN "; break;
+    case NaturalJoin: s = "NATURAL JOIN "; break;
+    case CrossJoin: s = "CROSS JOIN "; break;
+    }
+    if (s.isEmpty())
+        return s;
+    s += join.field1.tableName + " ON " ;
+    s += QString("`%1`.`%2`=`%3`.`%4` ")
+         .arg(join.field1.tableName, join.field1.fieldName)
+         .arg(join.field2.tableName, join.field2.fieldName);
+    return s;
+}
+
 QString Database::select(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
     QString toReturn;
     toReturn = QString("SELECT `%2`.`%1` FROM `%2` WHERE %3")
-            .arg(field(tableref, fieldref))
+            .arg(fieldName(tableref, fieldref))
             .arg(table(tableref))
             .arg(getWhereClause(tableref, conditions));
     if (WarnSqlCommands)
@@ -638,7 +742,7 @@ QString Database::select(const int & tableref, const int & fieldref) const
 {
     QString toReturn;
     toReturn = QString("SELECT `%2`.`%1` FROM `%2`")
-            .arg(field(tableref, fieldref))
+            .arg(fieldName(tableref, fieldref))
             .arg(table(tableref));
     if (WarnSqlCommands)
         qWarning() << toReturn;
@@ -655,11 +759,47 @@ QString Database::selectDistinct(const int & tableref, const int & fieldref) con
     return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
 }
 
+/** \brief Create a complex SELECT command with jointures and conditions. */
+QString Database::select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
+{
+    QString fields, from;
+    QStringList tables;
+    // calculate fields
+    for(int i=0; i < select.count(); ++i) {
+        fields += QString("`%1`.`%2`, ").arg(select.at(i).tableName).arg(select.at(i).fieldName);
+        tables << select.at(i).tableName;
+    }
+    if (fields.isEmpty())
+        return fields;
+    fields.chop(2);
+    tables.removeDuplicates();
+
+    // Calculate conditions
+    QString w = getWhereClause(conditions);
+    for(int i=0; i < conditions.count(); ++i) {
+        tables.removeAll(conditions.at(i).tableName);
+    }
+
+    // Calculate joins
+    QString j;
+    for(int i=0; i < joins.count(); ++i) {
+        j += join(joins.at(i)) + "\n";
+        tables.removeAll(joins.at(i).field1.tableName);
+    }
+
+    foreach(const QString &tab, tables) {
+        from += QString("`%1`, ").arg(tab);
+    }
+    from.chop(2);
+
+    return QString("SELECT %1 FROM %2 \n %3 WHERE %4").arg(fields, from, j, w);
+}
+
 QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const
 {
     return QString("`%1`.`%2`=`%3`.`%4`")
-            .arg(table(tableRef1), field(tableRef1, fieldRef1))
-            .arg(table(tableRef2), field(tableRef2, fieldRef2));
+            .arg(table(tableRef1), fieldName(tableRef1, fieldRef1))
+            .arg(table(tableRef2), fieldName(tableRef2, fieldRef2));
 }
 
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
@@ -732,7 +872,7 @@ QString Database::select(const int &tableref, const QList<int> &fieldsref, const
     QString toReturn;
     QString tmp;
     foreach(const int & i, fieldsref)
-        tmp += "`" + table(tableref) + "`.`" + field(tableref, i)+ "`, ";
+        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -750,7 +890,7 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
     QString toReturn;
     QString tmp;
     foreach(const int &i, fieldsref)
-        tmp += "`" + table(tableref) + "`.`" + field(tableref, i)+ "`, ";
+        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -830,7 +970,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref, con
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4")
                .arg(table(tableref))
-               .arg(field(tableref, fieldref))
+               .arg(fieldName(tableref, fieldref))
                .arg(getWhereClause(tableref, conditions));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
@@ -845,7 +985,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QList<int> &field
     QString toReturn;
     QString tmp;
     foreach(const int &i, fieldref) {
-        tmp += "`" + field(tableref, i) + "`= ?, ";
+        tmp += "`" + fieldName(tableref, i) + "`= ?, ";
     }
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET %2 WHERE %4")
@@ -865,7 +1005,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ?")
                .arg(table(tableref))
-               .arg(field(tableref, fieldref));
+               .arg(fieldName(tableref, fieldref));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -878,7 +1018,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QStrin
 {
     QString toReturn;
     QString tmp;
-    foreach(const QString &f, fields(tableref))
+    foreach(const QString &f, fieldNames(tableref))
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET \n%2 \nWHERE %3")
@@ -897,7 +1037,7 @@ QString Database::prepareUpdateQuery(const int tableref)
 {
     QString toReturn;
     QString tmp;
-    foreach(const QString &f, fields(tableref))
+    foreach(const QString &f, fieldNames(tableref))
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET \n%2 ")

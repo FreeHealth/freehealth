@@ -28,11 +28,11 @@
 
 #include <utils/global_exporter.h>
 
+#include <QObject>
+#include <QSqlDatabase>
 #include <QString>
 #include <QStringList>
-#include <QSqlDatabase>
 #include <QVariant>
-#include <QObject>
 #include <QHash>
 
 QT_BEGIN_NAMESPACE
@@ -43,14 +43,64 @@ QT_END_NAMESPACE
 /**
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 13 Oct 2010
+ * \version 0.6.0
+ * \date 24 Jan 2011
 */
+
+
 namespace Utils {
 
 namespace Internal {
 class DatabasePrivate;
 }
+
+
+struct Field {
+    Field() : table(-1), field(-1), type(-1) {}
+
+    Field(const Field &f) :
+            table(f.table), field(f.field), type(f.type),
+            tableName(f.tableName), fieldName(f.fieldName), whereCondition(f.whereCondition) {}
+
+    Field(const int table, const int field, const QString &tableName, const QString &fieldName) :
+            table(table), field(field), type(-1), tableName(tableName), fieldName(fieldName) {}
+
+    Field(const int table, const int field, const QString &where = QString::null) :
+            table(table), field(field), type(-1), whereCondition(where) {}
+
+//    Field &operator=(const Field &f) const {Field ret(f.table, f.field, f.tableName, f.fieldName); ret.type=f.type; ret.whereCondition=f.whereCondition; return ret;}
+
+    bool operator==(const Field &f) const {return table==f.table && field==f.field && type==f.type;}
+
+    int table;
+    int field;
+    int type;
+    QString tableName;
+    QString fieldName;
+    QString whereCondition;
+};
+
+typedef QList<Field> FieldList;
+
+struct Join {
+    Join(const Field &field1, const Field &field2, const int type = 0) :
+            field1(field1), field2(field2), type(type) {}
+
+    Join(const int t1, const int f1, const int t2, const int f2, const int joinType = 0)
+    {
+        field1.table = t1;
+        field1.field = f1;
+        field2.table = t2;
+        field2.field = f2;
+        type = joinType;
+    }
+
+    Field field1;
+    Field field2;
+    int type;
+};
+
+typedef QList<Join> JoinList;
 
 
 class UTILS_EXPORT Database
@@ -106,6 +156,15 @@ public:
         FieldIsReal
     };
 
+    enum TypeOfJoin {
+        SimpleJoin = 0,
+        OuterJoin,
+        LeftJoin,
+        InnerJoin,
+        NaturalJoin,
+        CrossJoin
+    };
+
     /** \brief Describe the grants on database/server (mainly used for MySQL connections). */
     enum Grant {
         Grant_Select           = 0x00001,
@@ -138,24 +197,24 @@ public:
     static void logAvailableDrivers();
 
     // connection
-    virtual bool createConnection( const QString & connectionName, const QString & dbName,
-                                   const QString & pathOrHostName,
+    virtual bool createConnection(const QString &connectionName, const QString &dbName,
+                                   const QString &pathOrHostName,
                                    TypeOfAccess access = ReadWrite, AvailableDrivers driver = SQLite,
-                                   const QString & login = QString::null, const QString & pass = QString::null,
+                                   const QString &login = QString::null, const QString &pass = QString::null,
                                    const int port = 0,
-                                   CreationOption createOption = WarnOnly );
+                                   CreationOption createOption = WarnOnly);
 
     /**
         \brief This member is called by createConnection() if the asked database does not exists.
                By default it does nothing and return an error state (false).
     */
-    virtual bool createDatabase(  const QString & /*connectionName*/ , const QString & /*dbName*/,
-                                  const QString & /*pathOrHostName*/,
+    virtual bool createDatabase( const QString &/*connectionName*/ , const QString &/*dbName*/,
+                                  const QString &/*pathOrHostName*/,
                                   TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
-                                  const QString & /*login*/, const QString & /*pass*/,
+                                  const QString &/*login*/, const QString &/*pass*/,
                                   const int /*port*/,
                                   CreationOption /*createOption*/
-                                  ) { return false; }
+                                ) { return false; }
 
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
@@ -164,32 +223,42 @@ public:
 
 
     // manage database scheme (use enums for the int references)
-    virtual int addTable( const int & ref, const QString & name );
+    virtual int addTable(const int &ref, const QString &name);
 
-    virtual int addField( const int & tableref, const int & fieldref, const QString & name, TypeOfField type = FieldUndefined, const QString & defaultValue = "NULL" );
+    virtual int addField(const int &tableref, const int &fieldref, const QString &name, TypeOfField type = FieldUndefined, const QString &defaultValue = "NULL");
 
     virtual bool checkDatabaseScheme();
 
-    virtual QString field( const int & tableref, const int & fieldref) const;
-    virtual QStringList fields( const int & tableref ) const;
-    virtual QString table( const int & tableref ) const;
+    virtual QString fieldName(const int &tableref, const int &fieldref) const;
+    virtual Field field(const int &tableref, const int &fieldref) const;
+
+    virtual QStringList fieldNames(const int &tableref) const;
+    virtual FieldList fields(const int tableref) const;
+
+    virtual QString table(const int &tableref) const;
     virtual QStringList tables() const;
 
-    virtual QString getWhereClause( const int & tableref, const QHash<int, QString> & conditions ) const;
-    virtual QString select( const int & tableref, const int & fieldref, const QHash<int, QString> & conditions ) const;
-    virtual QString select( const int & tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions ) const;
-    virtual QString select( const int & tableref, const QList<int> &fieldsref ) const;
-    virtual QString select( const int & tableref, const QHash<int, QString> & conditions ) const;
-    virtual QString select( const int & tableref ) const;
-    virtual QString select(const int & tableref, const int & fieldref) const;
-    virtual QString selectDistinct( const int & tableref, const int & fieldref, const QHash<int, QString> &conditions ) const;
-    virtual QString selectDistinct( const int & tableref, const int & fieldref ) const;
+    virtual QString getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
+    virtual QString getWhereClause(const FieldList &fields) const;
+
+    virtual QString join(const Join &join) const;
+
+    virtual QString select(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const;
+    virtual QString select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const;
+    virtual QString select(const int &tableref, const QList<int> &fieldsref) const;
+    virtual QString select(const int &tableref, const QHash<int, QString> &conditions) const;
+    virtual QString select(const int &tableref) const;
+    virtual QString select(const int &tableref, const int &fieldref) const;
+    virtual QString selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const;
+    virtual QString selectDistinct(const int &tableref, const int &fieldref) const;
+
+    virtual QString select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
 
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 
-    virtual int count( const int & tableref, const int & fieldref, const QString &filter = QString()) const;
-    virtual double max( const int & tableref, const int & fieldref, const QString &filter = QString()) const;
-    virtual double max( const int & tableref, const int & fieldref, const int &groupBy, const QString &filter = QString()) const;
+    virtual int count(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
+    virtual double max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
+    virtual double max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
 
     virtual QString prepareInsertQuery(const int tableref) const;
 
@@ -199,9 +268,9 @@ public:
     virtual QString prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions);
     virtual QString prepareUpdateQuery(const int tableref);
 
-    virtual QString prepareDeleteQuery( const int tableref, const QHash<int,QString> & conditions );
+    virtual QString prepareDeleteQuery(const int tableref, const QHash<int,QString> &conditions);
 
-    virtual bool createTable( const int & tableref ) const;
+    virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
 
     virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
