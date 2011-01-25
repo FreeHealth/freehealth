@@ -47,8 +47,6 @@
 #include <QMessageBox>
 
 using namespace DrugsWidget::Constants;
-//using namespace mfDosagesConstants;
-//using namespace mfInteractionsConstants;
 using namespace DrugsWidget::Internal;
 
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }

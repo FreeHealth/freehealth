@@ -33,7 +33,6 @@
 
 /**
  \brief Some constants for Drugs management
- \ingroup freediams drugswidget
 */
 namespace DrugsWidget {
 namespace Constants {
