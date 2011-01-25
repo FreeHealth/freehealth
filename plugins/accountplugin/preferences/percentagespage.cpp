@@ -46,9 +46,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
-
-
-
+#include <QUuid>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -132,16 +130,16 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     userEditedLabel->setText(m_user_uid);
-    m_percentageUidLabel = new QSpinBox(this);
-    m_percentageUidLabel->setValue(99);
+    percentUidLabel->setText("");
+    //percentUidLabel->setFocus();
     //userEditedLabel->hide();
-    //m_percentageUidLabel->hide();
+    //percentUidLabel->hide();
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    m_Mapper->addMapping(m_percentageUidLabel,AccountDB::Constants::PERCENT_UID);
-    m_Mapper->addMapping(userEditedLabel,2);//AccountDB::Constants::PERCENT_USER_UID
+    m_Mapper->addMapping(percentUidLabel,AccountDB::Constants::PERCENT_UID);
+    m_Mapper->addMapping(userEditedLabel,AccountDB::Constants::PERCENT_USER_UID);//
     m_Mapper->addMapping(typeEdit, AccountDB::Constants::PERCENT_TYPE);
     m_Mapper->addMapping(valueDoubleSpinBox, AccountDB::Constants::PERCENT_VALUES);
     //m_Mapper->toFirst();
@@ -196,11 +194,11 @@ void PercentagesWidget::on_addButton_clicked()
     percentagesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     userEditedLabel->setText(m_user_uid);
     userEditedLabel->setFocus();
-    m_percentageUidLabel->setValue(calcPercentagesUid());
-    m_percentageUidLabel->setFocus();
+    percentUidLabel->setText(calcPercentagesUid());
+    percentUidLabel->setFocus();
     
     qDebug() << __FILE__ << QString::number(__LINE__) << " userEditedLabel =" << userEditedLabel->text() ;
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_percentageUidLabel =" << m_percentageUidLabel->text();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
     //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 
 }
@@ -248,8 +246,9 @@ void PercentagesWidget::changeEvent(QEvent *e)
     }
 }
 
-int PercentagesWidget::calcPercentagesUid(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
+QString PercentagesWidget::calcPercentagesUid(){
+    QString Uid = QUuid::createUuid().toString();
+    /*qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::PERCENT_UID);
     if (!index.isValid())
     {
@@ -258,7 +257,7 @@ int PercentagesWidget::calcPercentagesUid(){
     int percentageUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
     qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUidBefore =" << QString::number(percentageUidBefore) ;
     int percentageUid =  percentageUidBefore + 1;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);
-    return percentageUid;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);*/
+    return Uid;
 }
 

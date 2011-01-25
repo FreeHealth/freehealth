@@ -71,10 +71,9 @@ public Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void saveModel();
-    int calcPercentagesUid();
+    QString calcPercentagesUid();
 private:
     AccountDB::PercentModel *m_Model;
-    QSpinBox *m_percentageUidLabel;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
