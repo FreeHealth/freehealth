@@ -311,7 +311,13 @@ bool saveStringToFile(const QString &toSave, const QString &dirPath, const QStri
 QString readTextFile(const QString &toRead, const Warn warnUser, QWidget *parent)
 {return readTextFile(toRead, QString("UTF-8"), warnUser, parent);}
 
-/** \brief Return the content of a text file. You can choose to warn the user or not is an error is encountered. **/
+/**
+ \brief Return the content of a text file.
+  You can choose:
+  - to warn the user if an error is encountered.
+  - the encoding of the file (using the QTextCodec supported encodings)
+  - the parent widget used for the message box error
+**/
 QString readTextFile(const QString &toRead, const QString &encoder, const Warn warnUser, QWidget *parent)
 {
     if (toRead.isEmpty())
@@ -643,7 +649,6 @@ bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::
     return false;
 }
 
-
 /** \brief Creates a Dialog for simple user's input.  **/
 QString askUser(const QString &title, const QString &question)
 {
@@ -758,6 +763,7 @@ QString textAlignmentToHtml(const Qt::Alignment &align)
     }
     return toReturn;
 }
+
 /** \brief Assumes a better encoding of HTML files by replacing special characters with the html code (é==&eacute;) **/
 QString toHtmlAccent(const QString &html)
 {
