@@ -38,12 +38,10 @@
  * \date 02 Mar 2010
 */
 
-/**
- \brief Some constants for Drugs management
- \ingroup freediams drugswidget
-*/
-
 namespace DrugsDB {
+
+    /** \brief Some constants for Drugs management */
+
 namespace Constants {
 
     // SETTINGS
@@ -336,11 +334,9 @@ namespace Constants {
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
     //--------------------------------------------------------------------------------------------------------
-/**
- \brief Used by DrugsModel for column representation.
- \ingroup freediams
- \ingroup drugswidget
- */
+
+    /** \brief Used by DrugsModel for column representation. */
+
 namespace Drug
 {
     enum Drug
@@ -380,11 +376,7 @@ namespace Drug
 
 }  // End namespace Drugs::Constants::Drug
 
-/**
- \brief Used by DrugsModel for column representation.
- \ingroup freediams
- \ingroup drugswidget
- */
+/** \brief Used by DrugsModel for column representation. */
 namespace Prescription
 {
     enum Prescription
@@ -422,11 +414,7 @@ namespace Prescription
 
 }  // End namespace Drugs::Constants::Prescription
 
-/**
- \brief Used by DrugsModel for column representation.
- \ingroup freediams
- \ingroup drugswidget
-*/
+/** \brief Used by DrugsModel for column representation. */
 namespace Interaction
 {
     enum InteractionModelFields
@@ -462,23 +450,15 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Interaction::TypesOfIAM )
 }  // End namespace DrugsDB
 
 
-/**
- \brief Some constants.
- \ingroup freediams
- \ingroup drugswidget
-*/
 namespace Dosages {
+
+    /**  \brief Some constants. */
 namespace Constants {
     const char * const DB_DOSAGES_NAME = "dosages";          /*!< \brief Dosage database connection name. */
     const char * const DB_DOSAGES_FILENAME = "dosages.db";   /*!< \brief Dosage database name (SQLite). */
     const char * const DB_DOSAGES_TABLE_NAME = "DOSAGE";              /*!< \brief Table name for dosages. */
 
-/**
- \brief Used by mfDosageModel for column representation.
- \ingroup freediams
- \ingroup drugswidget
-*/
-    /** \brief Used by mfDosageModel for column representation. */
+    /** \brief Used by DosageModel for column representation. */
     enum Dosage
     {
         Id = 0,                 /*!< \brief Identifiant du dosage. integer. */
