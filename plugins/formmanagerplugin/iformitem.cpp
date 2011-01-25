@@ -146,7 +146,7 @@ void FormItemScripts::setScript(const int type, const QString &script, const QSt
 QString FormItemScripts::script(const int type, const QString &lang) const
 {
     /** \todo use languages */
-    ScriptsBook *s = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+    ScriptsBook *s = d->getLanguage(lang);
     if (!s)
         return QString::null;
     return s->m_Scripts.value(type);

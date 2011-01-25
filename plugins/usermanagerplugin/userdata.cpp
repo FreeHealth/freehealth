@@ -734,7 +734,7 @@ int UserData::personalLinkId() const
   Mark the UserDynamicData as dirty if value \e val differs of the stored data.
   \todo documentation
 */
-void UserData::setDynamicDataValue(const char *name, const QVariant & val, UserDynamicData::DynamicDataType t)
+void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDynamicData::DynamicDataType t)
 {
     // this member should not be used by database
     if (!val.isValid())
@@ -986,7 +986,7 @@ QStringList UserData::warnText() const
     QString tmp;
     for (i = 0; i < USER_MaxParam; i++)
         tmp = QString("%1 = %2\n")
-        .arg(tkb->field(Table_USERS , i))
+        .arg(tkb->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
     list << tmp;
     tmp.clear();
@@ -1011,7 +1011,7 @@ QStringList UserData::warnText() const
             for (i = 0; i < RIGHTS_MaxParam; i++)
                 tmp += QString("%1 : %2 = %3\n")
                                    .arg(id)
-                                   .arg(tkb->field(Table_RIGHTS , i))
+                                   .arg(tkb->fieldName(Table_RIGHTS , i))
                                    .arg(d->m_Role_Rights.value(id).value(i).toString());
         }
     list << tmp;

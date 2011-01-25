@@ -60,7 +60,8 @@ using namespace Patients;
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 
-PatientCreatorWizard::PatientCreatorWizard(QWidget *parent)
+PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
+        QWizard(parent)
 {
     addPage(new IdentityPage(this));
     setWindowTitle(tr("New Patient"));

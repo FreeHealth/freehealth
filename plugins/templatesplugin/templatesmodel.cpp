@@ -783,6 +783,7 @@ bool TemplatesModel::isDirty() const
 
 bool TemplatesModel::setCurrentUser(const QString &uuid)
 {
+    /** \todo upadte template model filter */
     return true;
 }
 

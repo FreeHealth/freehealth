@@ -1016,14 +1016,14 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
             if (d->m_ActualDBInfos) {
                 QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
                 if (!tmp.isEmpty()) {
-                    tmp.replace(field(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
-                    tmp.replace(field(Table_DRUGS, DRUGS_FORM), toReturn->form());
-                    tmp.replace(field(Table_DRUGS, DRUGS_ROUTE), toReturn->routes().join(", "));
+                    tmp.replace(fieldName(Table_DRUGS, DRUGS_NAME), toReturn->denomination());
+                    tmp.replace(fieldName(Table_DRUGS, DRUGS_FORM), toReturn->form());
+                    tmp.replace(fieldName(Table_DRUGS, DRUGS_ROUTE), toReturn->routes().join(", "));
                     // limit strength to three maximum --> if > 3 do not add strength
                     if (toReturn->strength().count(";") >= 3)
-                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), "");
+                        tmp.replace(fieldName(Table_DRUGS, DRUGS_STRENGTH), "");
                     else
-                        tmp.replace(field(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
+                        tmp.replace(fieldName(Table_DRUGS, DRUGS_STRENGTH), toReturn->strength());
                     toReturn->setValue(Table_DRUGS, DRUGS_NAME, tmp);
                 }
             }
@@ -1035,7 +1035,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
     // get COMPO table
     where.clear();
     where.insert(COMPO_UID, QString("='%1'").arg(newUID));
-    QString sort = QString(" ORDER BY %1 ASC").arg(field(Table_COMPO,COMPO_LK_NATURE));
+    QString sort = QString(" ORDER BY %1 ASC").arg(fieldName(Table_COMPO,COMPO_LK_NATURE));
     req = select(Table_COMPO, where) + sort;
     QSet<int> codeMols;
     {

@@ -429,7 +429,7 @@ int SimpleCategoryModel::rowCount(const QModelIndex &parent) const
     return 0;
 }
 
-int SimpleCategoryModel::columnCount(const QModelIndex &parent) const
+int SimpleCategoryModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }

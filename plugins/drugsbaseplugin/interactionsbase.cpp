@@ -801,8 +801,8 @@ QVector<MedicalUtils::EbmData *> InteractionsBase::getAllSourcesFromTree(const Q
                           "`%2`.`%3` IN (%5) AND `%2`.`%4` IN (%6) AND %7")
             .arg(di->m_DB->select(Table_SOURCES))
             .arg(di->m_DB->table(Table_IAM_TREE))
-            .arg(di->m_DB->field(Table_IAM_TREE, TREE_ID_CLASS))
-            .arg(di->m_DB->field(Table_IAM_TREE, TREE_ID_ATC))
+            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_CLASS))
+            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_ATC))
             .arg(classIds.join(","))
             .arg(innIds.join(","))
             .arg(di->m_DB->fieldEquality(Table_IAM_TREE, TREE_SOURCE_LINK,

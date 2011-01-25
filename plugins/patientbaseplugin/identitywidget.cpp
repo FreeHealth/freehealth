@@ -230,10 +230,10 @@ bool IdentityWidget::isIdentityValid() const
 bool IdentityWidget::isIdentityAlreadyInDatabase() const
 {
     // check database for doublons
-    QString where = QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME), d->editUi->birthName->text());
+    QString where = QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME), d->editUi->birthName->text());
     if (!d->editUi->secondName->text().isEmpty())
-        where += QString("`%1`='%2' AND ").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
-    where += QString("`%1`='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME), d->editUi->firstname->text());
+        where += QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
+    where += QString("`%1`='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME), d->editUi->firstname->text());
     return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, where)>0);
 }
 

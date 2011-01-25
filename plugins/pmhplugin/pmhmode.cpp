@@ -32,14 +32,14 @@ PmhMode::PmhMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
 
-    ui->setupUi(this);
+//    ui->setupUi(this);
     Views::FancyTreeView *v = new Views::FancyTreeView;
 //    v->setModel(new PmhModel(this), PmhModel::MH_EmptyColumn);
     v->setModel(new Views::SimpleCategoryModel("", this));
     v->setButtonActions(Views::FancyTreeView::FTV_SaveModel |  Views::FancyTreeView::FTV_CreateNew);
     v->useContextMenu(true);
 
-    m_Widget = v;
+    QWidget *m_Widget = v;
     setWidget(m_Widget);
 
     // Get PMH categories

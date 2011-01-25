@@ -386,7 +386,7 @@ public:
         }
         item->removeEpisodes();
         int nb = item->childCount();
-        for(int i = 0; i < item->childCount(); ++i) {
+        for(int i = 0; i < nb; ++i) {
             deleteEpisodes(item->child(i));
         }
     }
@@ -422,7 +422,7 @@ public:
             int limit;
             f->episodePossibilities()==FormMain::UniqueEpisode ? limit=1 : limit=5;
             req += QString(" ORDER BY %1 ASC LIMIT %2;")
-                   .arg(episodeBase()->field(Constants::Table_EPISODES, Constants::EPISODES_DATE))
+                   .arg(episodeBase()->fieldName(Constants::Table_EPISODES, Constants::EPISODES_DATE))
                    .arg(limit);
             query.exec(req);
             if (query.isActive()) {
@@ -882,7 +882,7 @@ int EpisodeModel::rowCount(const QModelIndex &parent) const
     return 0;
 }
 
-int EpisodeModel::columnCount(const QModelIndex &parent) const
+int EpisodeModel::columnCount(const QModelIndex &) const
 {
     return MaxData;
 }

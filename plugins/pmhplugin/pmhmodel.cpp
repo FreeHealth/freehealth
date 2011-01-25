@@ -414,8 +414,9 @@ bool PmhModel::setData(const QModelIndex &index, const QVariant &value, int role
     return true;
 }
 
-Qt::ItemFlags PmhModel::flags(const QModelIndex &index) const
+Qt::ItemFlags PmhModel::flags(const QModelIndex &) const
 {
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 //QVariant PmhModel::headerData(int section, Qt::Orientation orientation, int role) const

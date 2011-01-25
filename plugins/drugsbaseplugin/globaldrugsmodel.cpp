@@ -126,16 +126,16 @@ public:
         if (drugsBase()->actualDatabaseInformations()) {
             QString tmp = drugsBase()->actualDatabaseInformations()->drugsNameConstructor;
             if (!tmp.isEmpty()) {
-                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_NAME), drugName);
-                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_FORM),
+                tmp.replace(drugsBase()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME), drugName);
+                tmp.replace(drugsBase()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_FORM),
                             q->QSqlTableModel::data(q->index(row, Constants::DRUGS_FORM)).toString());
-                tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
+                tmp.replace(drugsBase()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_ROUTE),
                             q->QSqlTableModel::data(q->index(row, Constants::DRUGS_ROUTE)).toString());
                 const QString &s = q->QSqlTableModel::data(q->index(row, Constants::DRUGS_STRENGTH)).toString();
                 if (s.count(";") < 3)
-                    tmp.replace(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), s);
+                    tmp.replace(drugsBase()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), s);
                 else
-                    tmp.remove(drugsBase()->field(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH));
+                    tmp.remove(drugsBase()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH));
                 return tmp;
             }
         }

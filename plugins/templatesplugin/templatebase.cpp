@@ -307,7 +307,9 @@ bool TemplateBase::init()
 }
 
 void TemplateBase::logChronos(bool state)
-{}
+{
+    Q_UNUSED(state);
+}
 
 bool TemplateBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,

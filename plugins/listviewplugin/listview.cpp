@@ -357,8 +357,8 @@ ListView::~ListView()
 /** \brief Defines the objectName */
 void ListView::setObjectName(const QString &name)
 {
-//    setObjectName(name+"ListView");
-//    QListView::setObjectName(name);
+    setObjectName(name+"ListView");
+    QListView::setObjectName(name);
 }
 
 void ListView::setActions(AvailableActions actions)

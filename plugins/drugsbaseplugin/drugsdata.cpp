@@ -727,7 +727,7 @@ QString DrugsData::warnText() const
 
     foreach(const int i, d->m_CISValues.keys())
         tmp += QString("  %1 = %2\n")
-                           .arg(DrugsBase::instance()->field(Table_DRUGS, i))
+                           .arg(DrugsBase::instance()->fieldName(Table_DRUGS, i))
                            .arg(d->m_CISValues[i].toString());
 
     foreach(DrugComposition *compo, d->m_Compositions)

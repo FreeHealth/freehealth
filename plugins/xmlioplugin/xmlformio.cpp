@@ -544,7 +544,7 @@ bool XmlFormIO::createItemWidget(Form::FormItem *item, QWidget *parent)
 bool XmlFormIO::createFormWidget(Form::FormMain *form)
 {
     // Create a new Widget with a vbox and put the label
-    QWidget *w = new QWidget();
+//    QWidget *w = new QWidget();
     if (!createItemWidget(form, 0))
         return false;
     return true;

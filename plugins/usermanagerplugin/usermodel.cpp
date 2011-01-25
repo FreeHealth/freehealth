@@ -115,7 +115,7 @@ public:
 
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
-    bool fromXml(const QString &xml) {return true;}
+    bool fromXml(const QString &) {return true;}
 
 private:
     UserModel *m_Model;
@@ -899,8 +899,8 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
         QString baseField = "";
         switch (r)
         {
-        case Core::IUser::Name : baseField = b->field(Table_USERS, USER_NAME); break;
-        case Core::IUser::Firstname : baseField = b->field(Table_USERS, USER_FIRSTNAME); break;
+        case Core::IUser::Name : baseField = b->fieldName(Table_USERS, USER_NAME); break;
+        case Core::IUser::Firstname : baseField = b->fieldName(Table_USERS, USER_FIRSTNAME); break;
         default: break;
         }
         if (baseField.isEmpty()) continue;

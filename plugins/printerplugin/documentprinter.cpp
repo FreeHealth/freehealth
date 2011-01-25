@@ -177,7 +177,7 @@ void DocumentPrinter::setDocumentName(Print::Printer *p) const
 bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool printDuplicata) const
 {
     Print::Printer p;
-    const QString &name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
+//    const QString &name = settings()->value(Constants::S_DEFAULT_PRINTER).toString();
     if (!p.getUserPrinter()) {
         QPrinter *print = new QPrinter;
         print->setResolution(QPrinter::ScreenResolution);

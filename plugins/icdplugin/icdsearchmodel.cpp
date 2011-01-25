@@ -71,9 +71,9 @@ public:
         if (m_SearchMode == IcdSearchModel::SearchByLabel) {
             fields = QString("`%1`.`%2`, `%3`.`%4` ")
                      .arg(icdBase()->table(Constants::Table_System))
-                     .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_SID))
+                     .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_SID))
                      .arg(icdBase()->table(Constants::Table_System))
-                     .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_LID));
+                     .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_LID));
 
             req = QString("SELECT %1 \nFROM %2 \n"
                           "LEFT JOIN %3 ON %2.%4=%3.%5 \n")
@@ -81,8 +81,8 @@ public:
                     .arg(icdBase()->table(Constants::Table_System))
                     // join libelle
                     .arg(icdBase()->table(Constants::Table_Libelle))
-                    .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_LID))
-                    .arg(icdBase()->field(Constants::Table_Libelle, Constants::LIBELLE_LID));
+                    .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_LID))
+                    .arg(icdBase()->fieldName(Constants::Table_Libelle, Constants::LIBELLE_LID));
         } else {
             // Search by ICD Codes
 //            SELECT `master`.`SID`, system.LID
@@ -90,9 +90,9 @@ public:
 //            WHERE  (`master`.`code` like 'B5%') AND (system.SID=master.SID)
             fields = QString("`%1`.`%2`, `%3`.`%4` ")
                      .arg(icdBase()->table(Constants::Table_Master))
-                     .arg(icdBase()->field(Constants::Table_Master, Constants::MASTER_SID))
+                     .arg(icdBase()->fieldName(Constants::Table_Master, Constants::MASTER_SID))
                      .arg(icdBase()->table(Constants::Table_System))
-                     .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_LID));
+                     .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_LID));
             req = QString("SELECT %1 \n"
                           "FROM %2, %3  \n"
                           "WHERE %2.%5 = %3.%6 \n")
@@ -100,8 +100,8 @@ public:
                     .arg(icdBase()->table(Constants::Table_Master))
                     .arg(icdBase()->table(Constants::Table_System))
                     // Where clause
-                    .arg(icdBase()->field(Constants::Table_Master, Constants::MASTER_SID))
-                    .arg(icdBase()->field(Constants::Table_System, Constants::SYSTEM_SID));
+                    .arg(icdBase()->fieldName(Constants::Table_Master, Constants::MASTER_SID))
+                    .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_SID));
         }
 
         if (WarnFilter) {

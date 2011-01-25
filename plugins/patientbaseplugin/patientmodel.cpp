@@ -152,7 +152,7 @@ public:
         if (!m_ExtraFilter.isEmpty())
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
-        filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME));
+        filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
 
 //        qWarning() << filter;
 
@@ -294,12 +294,12 @@ void PatientModel::changeUserUuid(const QString &uuid)
     d->refreshFilter();
 }
 
-int PatientModel::rowCount(const QModelIndex &parent) const
+int PatientModel::rowCount(const QModelIndex &) const
 {
     return d->m_SqlPatient->rowCount();
 }
 
-int PatientModel::columnCount(const QModelIndex &parent) const
+int PatientModel::columnCount(const QModelIndex &) const
 {
     return Core::IPatient::NumberOfColumns;
 }
@@ -309,7 +309,7 @@ int PatientModel::numberOfFilteredPatients() const
     return patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, d->m_SqlPatient->filter());
 }
 
-bool PatientModel::hasChildren(const QModelIndex &parent) const
+bool PatientModel::hasChildren(const QModelIndex &) const
 {
     return false;
 }
@@ -532,9 +532,9 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
     case FilterOnFullName :
         {
             // WHERE (NAME || SECONDNAME || SURNAME LIKE '%') OR (NAME LIKE '%')
-            const QString &nameField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME);
-            const QString &secondField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME);
-            const QString &surField = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
+            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME);
+            const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME);
+            const QString &surField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
             d->m_ExtraFilter.clear();
 //            d->m_ExtraFilter =  name + " || ";
 //            d->m_ExtraFilter += second + " || ";
@@ -571,7 +571,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE NAME LIKE '%'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_NAME) + " ";
+            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME) + " ";
             d->m_ExtraFilter += QString("LIKE '%%1%'").arg(name);
             break;
         }
@@ -579,7 +579,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
 //            // WHERE CITY LIKE '%'
 //            d->m_ExtraFilter.clear();
-//            d->m_ExtraFilter = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_ADRESS_CITY) + " ";
+//            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ADRESS_CITY) + " ";
 //            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(filter);
             break;
         }
@@ -587,7 +587,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE PATIENT_UID='xxxx'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_UID) + " ";
+            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID) + " ";
             d->m_ExtraFilter += QString("='%1'").arg(uuid);
             break;
         }
@@ -625,7 +625,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
         while (!findUuid) {
             /** \todo Take care to inifinite looping... */
             uuid = QUuid::createUuid().toString();
-            QString f = QString("%1='%2'").arg(patientBase()->field(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
+            QString f = QString("%1='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
             findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);
         }
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
