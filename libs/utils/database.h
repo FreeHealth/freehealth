@@ -259,6 +259,8 @@ public:
     virtual int count(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual double max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual double max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
+    virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
+    virtual QString total(const int tableRef, const int fieldRef) const;
 
     virtual QString prepareInsertQuery(const int tableref) const;
 
@@ -272,9 +274,6 @@ public:
 
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
-
-    virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
-    virtual QString total(const int tableRef, const int fieldRef) const;
 
     static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
     static bool executeSQL(const QString &req, const QSqlDatabase &DB);

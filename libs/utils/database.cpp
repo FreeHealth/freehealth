@@ -55,7 +55,6 @@
     createConnection( "users", "users.db", databasePath(), ReadWrite, SQLite);
     // That's done, now you can work with enums instead of magic strings...
     // If you want to create database if it doesn't exist define the member createDatabase() in your superclass.
-
     \endcode
 */
 
@@ -499,6 +498,7 @@ Database::Grants Database::grants(const QString &connectionName) const
 void Database::setConnectionName(const QString & c)
 { d->m_ConnectionName = c; }
 
+/** \brief Define the driver to use */
 void Database::setDriver(const Database::AvailableDrivers &drv)
 { d->m_Driver = drv; }
 
@@ -562,7 +562,10 @@ bool Database::checkDatabaseScheme()
     return true;
 }
 
-
+/**
+   \brief Return the field name for the table \e tableref field \e fieldref
+   \sa addField()
+*/
 QString Database::fieldName(const int &tableref, const int &fieldref) const
 {
     if (!d->m_Tables.contains(tableref))
@@ -575,6 +578,10 @@ QString Database::fieldName(const int &tableref, const int &fieldref) const
     return d->m_Fields.value(fieldref + (tableref * 1000));
 }
 
+/**
+   \brief Return a complete reference to a field for the table \e tableref field \e fieldref
+   \sa addField()
+*/
 Field Database::field(const int &tableref, const int &fieldref) const
 {
     Field ret;
@@ -585,6 +592,7 @@ Field Database::field(const int &tableref, const int &fieldref) const
     return ret;
 }
 
+/** \brief Return all fields of a table as \e FieldList */
 FieldList Database::fields(const int tableref) const
 {
     FieldList ret;
@@ -607,6 +615,7 @@ FieldList Database::fields(const int tableref) const
     return ret;
 }
 
+/** \brief Return all fields name of a table */
 QStringList Database::fieldNames(const int &tableref) const
 {
     if (!d->m_Tables.contains(tableref))
@@ -622,7 +631,7 @@ QStringList Database::fieldNames(const int &tableref) const
     return toReturn;
 }
 
-QString Database::table(const int & tableref)const
+QString Database::table(const int & tableref) const
 {
     return d->m_Tables.value(tableref, QString());
 }
@@ -726,6 +735,15 @@ QString Database::join(const Join &join) const
     return s;
 }
 
+/**
+  \brief Return a SELECT SQL command with the table \e tableref, field \e fieldref and where conditions \e conditions.
+  \code
+  // output is like:
+  SELECT FIELD1 FROM TABLE1 WHERE (...);
+  // output is adapted to the driver
+  \endcode
+  \sa getWhereClause(), setDriver()
+*/
 QString Database::select(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
     QString toReturn;
@@ -738,7 +756,16 @@ QString Database::select(const int &tableref, const int &fieldref, const QHash<i
     return toReturn;
 }
 
-QString Database::select(const int & tableref, const int & fieldref) const
+/**
+  \brief Return a SELECT SQL command with the table \e tableref, field \e fieldref.
+  \code
+  // output is like:
+  SELECT FIELD1 FROM TABLE1;
+  // output is adapted to the driver
+  \endcode
+  \sa setDriver()
+*/
+QString Database::select(const int &tableref, const int &fieldref) const
 {
     QString toReturn;
     toReturn = QString("SELECT `%2`.`%1` FROM `%2`")
@@ -749,17 +776,119 @@ QString Database::select(const int & tableref, const int & fieldref) const
     return toReturn;
 }
 
+/**
+  \brief Return a SELECT SQL command.
+*/
+QString Database::select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions) const
+{
+    QString toReturn;
+    QString tmp;
+    foreach(const int & i, fieldsref)
+        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
+    if (tmp.isEmpty())
+        return QString::null;
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+            .arg(tmp)
+            .arg(table(tableref))
+            .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+/**
+  \brief Return a SELECT SQL command.
+*/
+QString Database::select(const int & tableref,const  QList<int> &fieldsref) const
+{
+    QString toReturn;
+    QString tmp;
+    foreach(const int &i, fieldsref)
+        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
+    if (tmp.isEmpty())
+        return QString::null;
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2`")
+            .arg(tmp)
+            .arg(table(tableref));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+/**
+  \brief Return a SELECT SQL command for the table \e tableref with conditions \e conditions.
+  The fields are ordered.
+  \sa addField()
+*/
+QString Database::select(const int &tableref, const QHash<int, QString> &conditions) const
+{
+    QString toReturn;
+    QString tmp;
+    QList<int> list = d->m_Tables_Fields.values(tableref);
+    qSort(list);
+    foreach(const int &i, list)
+        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
+//        tmp += "`" + d->m_Fields.value(i)+ "`, ";
+    if (tmp.isEmpty())
+        return QString::null;
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+            .arg(tmp)
+            .arg(table(tableref))
+            .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+/**
+  \brief Return a SELECT SQL command for the table \e tableref.
+  The fields are ordered.
+  \sa addField()
+*/
+QString Database::select(const int &tableref) const
+{
+    QString toReturn;
+    QString tmp;
+    QList<int> list = d->m_Tables_Fields.values(tableref);
+    qSort(list);
+    foreach(const int & i, list)
+        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
+    if (tmp.isEmpty())
+        return QString::null;
+    tmp.chop(2);
+    toReturn = QString("SELECT %1 FROM `%2`")
+            .arg(tmp)
+            .arg(table(tableref));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+/**
+  \brief Return a SELECT DISTINCT SQL command.
+  \sa select()
+*/
 QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
 {
     return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
 }
 
+/**
+  \brief Return a SELECT DISTINCT SQL command.
+  \sa select()
+*/
 QString Database::selectDistinct(const int & tableref, const int & fieldref) const
 {
     return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
 }
 
-/** \brief Create a complex SELECT command with jointures and conditions. */
+/**
+  \brief Create a complex SELECT command with jointures and conditions.
+  Jointures must be ordered as needed in the SQL command.
+*/
 QString Database::select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
 {
     QString fields, from;
@@ -795,6 +924,14 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
     return QString("SELECT %1 FROM %2 \n %3 WHERE %4").arg(fields, from, j, w);
 }
 
+/**
+  \brief Return a SELECT SQL structured field equality.
+  \code
+  // output is like:
+  TABLE1.FIELD1=TABLE2.FIELD2
+  // output is adapted to the driver
+  \endcode
+*/
 QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const
 {
     return QString("`%1`.`%2`=`%3`.`%4`")
@@ -802,6 +939,10 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
             .arg(table(tableRef2), fieldName(tableRef2, fieldRef2));
 }
 
+/**
+  \brief Return a a COUNT SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+  Filter whould be not contains the "WHERE" word.
+*/
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
     QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
@@ -822,6 +963,10 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
     return -1;
 }
 
+/**
+  \brief Return a MAX SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+  Filter whould be not contains the "WHERE" word.
+*/
 double Database::max(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2")
@@ -844,6 +989,10 @@ double Database::max(const int &tableref, const int &fieldref, const QString &fi
     return 0;
 }
 
+/**
+  \brief Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
+  Filter whould be not contains the "WHERE" word.
+*/
 double Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
@@ -867,81 +1016,37 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
     return 0;
 }
 
-QString Database::select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions)const
+/**
+  \brief Return a TOTAL SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+  Filter whould be not contains the "WHERE" word.
+*/
+QString Database::total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
 {
     QString toReturn;
-    QString tmp;
-    foreach(const int & i, fieldsref)
-        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
-    if (tmp.isEmpty())
-        return QString::null;
-    tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
-            .arg(tmp)
-            .arg(table(tableref))
-            .arg(getWhereClause(tableref, conditions));
-    if (WarnSqlCommands)
-        qWarning() << toReturn;
+    if (where.count()) {
+        toReturn = QString("SELECT total(`%1`) FROM `%2` WHERE %3")
+                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Tables.value(tableRef))
+                   .arg(getWhereClause(tableRef, where));
+    } else  {
+        toReturn = QString("SELECT total(`%1`) FROM `%2`")
+                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Tables.value(tableRef));
+    }
     return toReturn;
 }
 
-QString Database::select(const int & tableref,const  QList<int> &fieldsref)const
+/**  \brief Return a TOTAL SQL command on the table \e tableref, field \e fieldref. */
+QString Database::total(const int tableRef, const int fieldRef) const
 {
     QString toReturn;
-    QString tmp;
-    foreach(const int &i, fieldsref)
-        tmp += "`" + table(tableref) + "`.`" + fieldName(tableref, i)+ "`, ";
-    if (tmp.isEmpty())
-        return QString::null;
-    tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2`")
-            .arg(tmp)
-            .arg(table(tableref));
-    if (WarnSqlCommands)
-        qWarning() << toReturn;
+    toReturn = QString("SELECT total(`%1`) FROM `%2`")
+               .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+               .arg(d->m_Tables.value(tableRef));
     return toReturn;
 }
 
-QString Database::select(const int &tableref, const QHash<int, QString> &conditions)const
-{
-    QString toReturn;
-    QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref);
-    qSort(list);
-    foreach(const int &i, list)
-        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
-//        tmp += "`" + d->m_Fields.value(i)+ "`, ";
-    if (tmp.isEmpty())
-        return QString::null;
-    tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
-            .arg(tmp)
-            .arg(table(tableref))
-            .arg(getWhereClause(tableref, conditions));
-    if (WarnSqlCommands)
-        qWarning() << toReturn;
-    return toReturn;
-}
-
-QString Database::select(const int &tableref) const
-{
-    QString toReturn;
-    QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref);
-    qSort(list);
-    foreach(const int & i, list)
-        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
-    if (tmp.isEmpty())
-        return QString::null;
-    tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2`")
-            .arg(tmp)
-            .arg(table(tableref));
-    if (WarnSqlCommands)
-        qWarning() << toReturn;
-    return toReturn;
-}
-
+/**  \brief Return a SQL command usable for QSqlQuery::prepareInsertQuery(). Fields are ordered. */
 QString Database::prepareInsertQuery(const int tableref) const
 {
     QString toReturn;
@@ -965,6 +1070,7 @@ QString Database::prepareInsertQuery(const int tableref) const
     return toReturn;
 }
 
+/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const int fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -980,6 +1086,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref, con
     return toReturn;
 }
 
+/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -1000,6 +1107,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QList<int> &field
     return toReturn;
 }
 
+/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
 {
     QString toReturn;
@@ -1014,6 +1122,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
     return toReturn;
 }
 
+/** \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -1033,6 +1142,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QStrin
     return toReturn;
 }
 
+/** \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref)
 {
     QString toReturn;
@@ -1051,6 +1161,56 @@ QString Database::prepareUpdateQuery(const int tableref)
     return toReturn;
 }
 
+/**  \brief Return a SQL command usable for QSqlQuery::prepareDeleteQuery(). Fields are ordered. */
+QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
+{
+    QString toReturn;
+    toReturn = QString("DELETE FROM `%1` \n WHERE %2")
+               .arg(table(tableref))
+               .arg(getWhereClause(tableref, conditions));
+    if (WarnSqlCommands)
+        qWarning() << toReturn;
+    return toReturn;
+}
+
+/**  \brief Create table \e tableref in the database. */
+bool Database::createTable(const int &tableref) const
+{
+    if (!d->m_Tables.contains(tableref))
+        return false;
+    if (! d->m_Tables_Fields.keys().contains(tableref))
+        return false;
+    if (d->m_ConnectionName.isEmpty())
+        return false;
+
+    // get database and open
+    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    if (!DB.open())
+        return false;
+
+    // create query
+    QString req;
+    req = d->getSQLCreateTable(tableref);
+
+    return executeSQL(QStringList() << req, DB);
+}
+
+/**  \brief Create all the tables in the database. */
+bool Database::createTables() const
+{
+    bool toReturn = true;
+    QList<int> list = d->m_Tables.keys();
+    qSort(list);
+    foreach(const int & i, list)
+        if(!createTable(i)) {
+            toReturn = false;
+            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)),
+                                 __FILE__, __LINE__);
+        }
+    return toReturn;
+}
+
+/**  \brief Execute simple SQL commands on the QSqlDatabase \e DB. */
 bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
 {
     if (!DB.isOpen())
@@ -1071,6 +1231,7 @@ bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
     return true;
 }
 
+/**  \brief Execute simple SQL commands on the QSqlDatabase \e DB. */
 bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
 {
     if (req.isEmpty())
@@ -1080,6 +1241,11 @@ bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
     return executeSQL(list, DB);
 }
 
+/**
+  \brief Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
+  Line starting with '-- ' are ignored.\n
+  All SQL commands must end with a ;
+*/
 bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
 {
     if (!QFile::exists(fileName)) {
@@ -1157,6 +1323,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
     return true;
 }
 
+/**  \brief Import a CSV structured file \e fielName into a database \e connectionName, table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.*/
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
 {
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
@@ -1224,66 +1391,6 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     db.commit();
 
     return true;
-}
-
-bool Database::createTable(const int & tableref) const
-{
-    if (!d->m_Tables.contains(tableref))
-        return false;
-    if (! d->m_Tables_Fields.keys().contains(tableref))
-        return false;
-    if (d->m_ConnectionName.isEmpty())
-        return false;
-
-    // get database and open
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
-    if (!DB.open())
-        return false;
-
-    // create query
-    QString req;
-    req = d->getSQLCreateTable(tableref);
-
-    return executeSQL(QStringList() << req, DB);
-}
-
-bool Database::createTables() const
-{
-    bool toReturn = true;
-    QList<int> list = d->m_Tables.keys();
-    qSort(list);
-    foreach(const int & i, list)
-        if(!createTable(i)) {
-            toReturn = false;
-            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)),
-                                 __FILE__, __LINE__);
-        }
-    return toReturn;
-}
-
-QString Database::total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
-{
-    QString toReturn;
-    if (where.count()) {
-        toReturn = QString("SELECT total(`%1`) FROM `%2` WHERE %3")
-                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
-                   .arg(d->m_Tables.value(tableRef))
-                   .arg(getWhereClause(tableRef, where));
-    } else  {
-        toReturn = QString("SELECT total(`%1`) FROM `%2`")
-                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
-                   .arg(d->m_Tables.value(tableRef));
-    }
-    return toReturn;
-}
-
-QString Database::total(const int tableRef, const int fieldRef) const
-{
-    QString toReturn;
-    toReturn = QString("SELECT total(`%1`) FROM `%2`")
-               .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
-               .arg(d->m_Tables.value(tableRef));
-    return toReturn;
 }
 
 QString DatabasePrivate::getSQLCreateTable(const int & tableref)
@@ -1408,17 +1515,6 @@ QString DatabasePrivate::getTypeOfField(const int & fieldref) const
             break;
         default : toReturn = QString::null; break;
     }
-    return toReturn;
-}
-
-QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
-{
-    QString toReturn;
-    toReturn = QString("DELETE FROM `%1` \n WHERE %2")
-               .arg(table(tableref))
-               .arg(getWhereClause(tableref, conditions));
-    if (WarnSqlCommands)
-        qWarning() << toReturn;
     return toReturn;
 }
 
