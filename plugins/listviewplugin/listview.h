@@ -65,8 +65,6 @@ public:
     ListView(QWidget *parent = 0, AvailableActions actions = DefaultActions);
     virtual ~ListView();
 
-    void setObjectName(const QString &name);
-
     void setActions( AvailableActions actions );
 
     void hideButtons() const;

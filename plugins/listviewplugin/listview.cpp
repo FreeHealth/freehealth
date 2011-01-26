@@ -354,13 +354,6 @@ ListView::~ListView()
     contextManager()->removeContextObject(d->m_Context);
 }
 
-/** \brief Defines the objectName */
-void ListView::setObjectName(const QString &name)
-{
-    setObjectName(name+"ListView");
-    QListView::setObjectName(name);
-}
-
 void ListView::setActions(AvailableActions actions)
 {
     d->m_Actions = actions;
