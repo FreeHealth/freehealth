@@ -1054,8 +1054,8 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                 int i = 0;
                 for (i = 0; i < COMPO_MaxParam; ++i)
                     compo->setValue(i, q.value(i));
-                compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->m_CodeMolecule));
-                compo->setValue(COMPO_IAM_CLASS_DENOMINATION, getIamClassDenomination(compo->m_CodeMolecule));
+                compo->setValue(COMPO_IAM_DENOMINATION, getInnDenominationFromSubstanceCode(compo->codeMolecule()));
+                compo->setValue(COMPO_IAM_CLASS_DENOMINATION, getIamClassDenomination(compo->codeMolecule()));
                 compo->setInnCode(getInnCodeForCodeMolecule(q.value(COMPO_MOL_CODE).toInt()));
                 list << compo;
                 codeMols << q.value(COMPO_MOL_CODE).toInt();

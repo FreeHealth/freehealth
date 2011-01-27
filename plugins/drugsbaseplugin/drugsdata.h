@@ -51,139 +51,40 @@
 namespace DrugsDB {
 namespace Internal {
 class DrugsDataPrivate;
+class DrugCompositionPrivate;
 class DrugsBase;
 class DrugsBasePrivate;
 
 class DrugComposition
 {
 public:
-    DrugComposition() : m_InnCode(-1), m_LinkId(-1), m_Link(0) {}
-    ~DrugComposition() {} // Don't delete m_Link
+    DrugComposition();
+    ~DrugComposition();
 
-    /** \brief Feed values from the database */
-    void setValue(const int fieldref, const QVariant &value )
-    {
-        using namespace DrugsDB::Constants;
-        switch (fieldref)
-        {
-            case COMPO_MOL_FORM : m_Form = value.toString(); break;
-            case COMPO_MOL_NAME : m_MoleculeName = value.toString(); break;
-            case COMPO_MOL_CODE : m_CodeMolecule = value.toInt(); break;
-            case COMPO_DOSAGE : m_Dosage = value.toString(); break;
-            case COMPO_REF_DOSAGE : m_RefDosage = value.toString(); break;
-            case COMPO_NATURE : m_Nature = value.toString(); break;
-            case COMPO_LK_NATURE: m_LinkId = value.toInt(); break;
-            case COMPO_IAM_DENOMINATION: m_InnName = value.toString(); break;
-            case COMPO_IAM_CLASS_DENOMINATION : m_IamClass = value.toStringList(); break;
-            default : break;
-        }
-    }
+    void setValue(const int fieldref, const QVariant &value);
+    void setLinkedSubstance(DrugComposition *link);
+    void setInnCode(const int code);
+    int linkId() const;
+    bool isLinkedWith(DrugComposition *link) const;
+    bool isTheActiveSubstance() const;
+    int codeMolecule() const;
+    int innCode() const;
 
-    /** \brief Set the linked mfDrugComposition (this happens when a molecule is transform to another one which is the active one */
-    void setLinkedSubstance( DrugComposition *link )
-    {
-        Q_ASSERT(link);
-        m_Link = link;
-        link->m_Link = this;
-    }
-
-    void setInnCode(const int code)
-    {
-        m_InnCode = code;
-    }
-
-    int linkId() const
-    {
-        return m_LinkId;
-    }
-
-    /** \brief Test link relation with the \e link */
-    bool isLinkedWith(DrugComposition *link) const
-    {
-        Q_ASSERT(link);
-        return (link==m_Link);
-    }
-
-    /** \brief Returns composition is the active substance ? */
-    bool isTheActiveSubstance() const
-    {
-        if (m_Nature=="FT")
-            return true;
-        if (!m_Link)
-            return true;
-        return false;//(!m_Link->isTheActiveSubstance());  // take care to infinite looping...
-    }
-
-    /** \brief Return the INN of the molecule. Check the linked composition for the inn name. */
-    QString innName() const
-    {
-        if (this->isTheActiveSubstance())
-            return m_InnName;
-        else if (m_Link)
-            return m_Link->m_InnName; // avoid infinite loop by retreiving value directly not with the function of m_Link
-        return QString();
-    }
-
-    /** \brief Returns the iam classes names */
-    QStringList iamClasses() const
-    {
-        return m_IamClass;
-    }
-
-    /** \brief Return the corrected dosage of the INN */
-    QString innDosage() const
-    {
-        QString tmp;
-        if (this->isTheActiveSubstance())
-            tmp = m_Dosage;
-        else if (m_Link)
-            tmp = m_Link->m_Dosage; // avoid infinite loop by retreiving value directly not with the function of m_Link
-        // do some transformations
-        if (!tmp.isEmpty()) {
-            tmp.replace(",000","");
-            tmp.replace(",00","");
-        }
-        // set the transformed dosage for the next call
-        m_Dosage = tmp;
-        return tmp;
-    }
-
-    /** \brief Return the dosage of the molecule */
-    QString dosage() const
-    {
-        return m_Dosage;
-    }
-
-    QString form() const {return m_Form;}
-    QString moleculeName() const {return m_MoleculeName;}
-    QString nature() const {return m_Nature;}
-    int lkNature() const {return m_LinkId;}
-
-    QString warnText() const
-    {
-        QString tmp;
-        tmp += "Composition : " + m_MoleculeName
-               + "\n  Form : " + m_Form + "\n  inn : " + m_InnName +  "\n  dosage : " + m_Dosage
-               + "\n  refDosagase : " + m_RefDosage + "\n  nature : " + m_Nature;
-        if (m_Link)
-            tmp += "\n  Linked";
-        tmp += "\n    innName() : " + innName() + "\n    innDosage() : " + innDosage();
-        tmp += "\n    iamClasses() : " + iamClasses().join("; ");
-        return tmp + "\n";
-    }
+    QString innName() const;
+    QStringList iamClasses() const;
+    QString innDosage() const;
+    QString dosage() const;
+    QString form() const;
+    QString moleculeName() const;
+    QString nature() const;
+    int lkNature() const;
+    QString warnText() const;
 
 public:
-    QString m_MoleculeName;
-    QString m_InnName;
-    QStringList m_IamClass;
-    int m_CodeMolecule;
-    int m_InnCode;
-    QString m_Form;
-    mutable QString m_Dosage;
-    QString m_RefDosage;
-    QString m_Nature;     // SA / FT
-    int m_LinkId;
+    DrugCompositionPrivate *d;
     DrugComposition *m_Link;
+    QString m_InnName;
+    mutable QString m_Dosage;
 };
 
 

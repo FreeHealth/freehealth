@@ -26,14 +26,14 @@
  ***************************************************************************/
 
 /**
-  \class DrugsData
-  \brief This class owns the getters, setters and viewers of drugs.
+  \class DrugsDB::Internal::DrugComposition
+  \brief Represents the moleculare composition of a drug.
+*/
 
 
-  \todo Write documentation
-  \todo Actually inside FMF and drugwidgetplugins mfDrugs are carried via a QList of pointers. This way we can not
-  use the operators with mfDrugs. May be we must redefine QList of pointers in QList of references ?
- \ingroup freediams drugswidget
+/**
+  \class DrugsDB::Internal::DrugsData
+  \brief Represents a drug.
 */
 
 #include "drugsdata.h"
@@ -67,6 +67,178 @@ static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ec
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
+
+namespace DrugsDB {
+namespace Internal {
+    class DrugCompositionPrivate
+    {
+    public:
+        DrugCompositionPrivate() : m_InnCode(-1), m_LinkId(-1) {}
+        ~DrugCompositionPrivate() {}
+
+    public:
+        QString m_MoleculeName;
+        QStringList m_IamClass;
+        int m_CodeMolecule;
+        int m_InnCode;
+        QString m_Form;
+        QString m_RefDosage;
+        QString m_Nature;     // SA / FT
+        int m_LinkId;
+    };
+}  // End namespace Internal
+}  // End namespace DrugsDB
+
+
+/** \brief Create a new molecular component for one specified drug */
+DrugComposition::DrugComposition() :
+        d(new DrugCompositionPrivate), m_Link(0)
+{
+}
+
+DrugComposition::~DrugComposition()
+{
+    if (d)
+        delete d;
+    d = 0;
+    // Don't delete m_Link
+}
+
+/** \brief Feed values from the database */
+void DrugComposition::setValue(const int fieldref, const QVariant &value)
+{
+    using namespace DrugsDB::Constants;
+    switch (fieldref)
+    {
+    case COMPO_MOL_FORM : d->m_Form = value.toString(); break;
+    case COMPO_MOL_NAME : d->m_MoleculeName = value.toString(); break;
+    case COMPO_MOL_CODE : d->m_CodeMolecule = value.toInt(); break;
+    case COMPO_DOSAGE : m_Dosage = value.toString(); break;
+    case COMPO_REF_DOSAGE : d->m_RefDosage = value.toString(); break;
+    case COMPO_NATURE : d->m_Nature = value.toString(); break;
+    case COMPO_LK_NATURE: d->m_LinkId = value.toInt(); break;
+    case COMPO_IAM_DENOMINATION: m_InnName = value.toString(); break;
+    case COMPO_IAM_CLASS_DENOMINATION : d->m_IamClass = value.toStringList(); break;
+    default : break;
+    }
+}
+
+/** \brief Set the linked DrugComposition (this happens when a molecule is transform to another one which is the active one). */
+void DrugComposition::setLinkedSubstance(DrugComposition *link)
+{
+    Q_ASSERT(link);
+    m_Link = link;
+    if (!link->isLinkedWith(this))
+        link->setLinkedSubstance(this);
+}
+
+/** \brief Define the ATC id code to \e code. */
+void DrugComposition::setInnCode(const int code)
+{
+    /** \todo One drug component can have multiple ATC IDs */
+   d->m_InnCode = code;
+}
+
+/** \brief Return the nature link id. */
+int DrugComposition::linkId() const
+{
+    return d->m_LinkId;
+}
+
+/** \brief Test link relation with the \e link */
+bool DrugComposition::isLinkedWith(DrugComposition *link) const
+{
+    Q_ASSERT(link);
+    return (link==m_Link);
+}
+
+/** \brief Test if this component is the active one ? \sa setLinkedSubstance() */
+bool DrugComposition::isTheActiveSubstance() const
+{
+    if (d->m_Nature=="FT")
+        return true;
+    if (!m_Link)
+        return true;
+    return false;//(!m_Link->isTheActiveSubstance());  // take care to infinite looping...
+}
+
+/** \brief Returns the code of the molecule. */
+int DrugComposition::codeMolecule() const
+{
+    return d->m_CodeMolecule;
+}
+
+/** \brief Returns the main ATC id code. */
+int DrugComposition::innCode() const
+{
+    return d->m_InnCode;
+}
+
+/** \brief Return the ATC label of the molecule. Check the linked composition for the inn name. */
+QString DrugComposition::innName() const
+{
+    if (this->isTheActiveSubstance())
+        return m_InnName;
+    else if (m_Link)
+        return m_Link->m_InnName; // avoid infinite loop by retreiving value directly not with the function of m_Link
+    return QString();
+}
+
+/** \brief Returns the interacting classes names. */
+QStringList DrugComposition::iamClasses() const
+{
+    return d->m_IamClass;
+}
+
+/** \brief Return the corrected dosage of this component. */
+QString DrugComposition::innDosage() const
+{
+    QString tmp;
+    if (this->isTheActiveSubstance())
+        tmp = m_Dosage;
+    else if (m_Link)
+        tmp = m_Link->m_Dosage; // avoid infinite loop by retreiving value directly not with the function of m_Link
+    // do some transformations
+    if (!tmp.isEmpty()) {
+        tmp.replace(",000","");
+        tmp.replace(",00","");
+    }
+    // set the transformed dosage for the next call
+    m_Dosage = tmp;
+    return tmp;
+}
+
+/** \brief Return the dosage of the molecule */
+QString DrugComposition::dosage() const
+{
+    return m_Dosage;
+}
+
+/** \brief Return the form of the molecule */
+QString DrugComposition::form() const {return d->m_Form;}
+
+/** \brief Return the name of the molecule */
+QString DrugComposition::moleculeName() const {return d->m_MoleculeName;}
+
+/** \brief Return the nature of the molecule */
+QString DrugComposition::nature() const {return d->m_Nature;}
+
+/** \brief Return the nature link of the molecule */
+int DrugComposition::lkNature() const {return d->m_LinkId;}
+
+/** \brief Return the warning text (for debugging purpose) */
+QString DrugComposition::warnText() const
+{
+    QString tmp;
+    tmp += "Composition : " + d->m_MoleculeName
+           + "\n  Form : " + d->m_Form + "\n  inn : " + m_InnName +  "\n  dosage : " + m_Dosage
+           + "\n  refDosagase : " + d->m_RefDosage + "\n  nature : " + d->m_Nature;
+    if (m_Link)
+        tmp += "\n  Linked";
+    tmp += "\n    innName() : " + innName() + "\n    innDosage() : " + innDosage();
+    tmp += "\n    iamClasses() : " + iamClasses().join("; ");
+    return tmp + "\n";
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- mfDrugPrivate constructor / destructor ---------------------------------
@@ -116,7 +288,10 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------- mfDrug constructor / destructor ------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Constructor. All created instance are deleted by DrugsDB::Internal::DrugsModel. */
+/**
+  \brief Create a new drug.
+  All created instance are deleted by DrugsDB::DrugsModel.
+*/
 DrugsData::DrugsData()
     : d(new DrugsDataPrivate())
 {
@@ -159,12 +334,13 @@ void DrugsData::setValue(const int tableref, const int fieldref, const QVariant 
     }
 }
 
-/** \brief Add a composition class description to this drug */
+/** \brief Add a composition class to this drug */
 void DrugsData::addComposition(DrugComposition *compo)
 {
     d->m_Compositions.append(compo);
 }
 
+/** \brief Define the routes. */
 void DrugsData::addRoute(const int routeId, const QString &lang, const QString &label)
 {
     d->m_Routes.insertMulti(routeId, QPair<QString,QString>(lang, label));
@@ -180,7 +356,10 @@ void DrugsData::addCIP(const int CIP, const QString &denomination, QDate date)
     d->m_CIPs.append(st);
 }
 
-/** \brief Stores a new INN and IamClasses codes for this drug assuming no doublons. Only used by DrugsBase::getDrugByCIS(). */
+/**
+  \brief Stores a new ATC ids and interacting classes codes for this drug removing duplicates.
+   Only used by DrugDB::DrugsBase::getDrugByCIS().
+*/
 void DrugsData::addInnAndIamClasses(const QSet<int> &codes)
 {
     foreach(const int i, codes) {
@@ -192,7 +371,7 @@ void DrugsData::addInnAndIamClasses(const QSet<int> &codes)
 
 /**
   \brief Stores \e value of drugs' prescription source field \e fieldref.
-  \sa mfDrugsModel mfDosageDialog
+  \sa DrugsDB::DrugsModel, DrugsDB::DosageDialog
 */
 void DrugsData::setPrescriptionValue(const int fieldref, const QVariant & value)
 {
@@ -206,8 +385,8 @@ void DrugsData::setPrescriptionValue(const int fieldref, const QVariant & value)
 //------------------------------------------------ Getters -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /**
-  \brief Return the drugs' value referenced by its table and field reference : \e tableref, \e fieldref.
-  \sa mfDrugsConstants
+  \brief Return the drugs' value referenced by its database table and field references : \e tableref, \e fieldref.
+  \sa DrugsDB::Constants
 */
 QVariant DrugsData::value(const int tableref, const int fieldref) const
 {
@@ -238,12 +417,12 @@ QVariant DrugsData::value(const int tableref, const int fieldref) const
 
 /**
   \brief Return true if drugs has a prescription.
-  \sa mfDrugsConstants::Prescription
+  \sa DrugsDB::Constants::Prescription
 */
 bool DrugsData::hasPrescription() const
 {
-    // TODO this needs improvments +++
-    int i =0;
+    /** \todo this needs improvements ++ */
+    int i = 0;
     foreach(const QVariant &q , d->m_PrescriptionValues) {
         if (!q.isNull())
             i++;
@@ -253,7 +432,7 @@ bool DrugsData::hasPrescription() const
 
 /**
   \brief Return the prescription value referenced by its field \e fieldref.
-  \sa mfDrugsConstants::Prescription
+  \sa DrugsDB::Constants::Prescription
 */
 QVariant DrugsData::prescriptionValue(const int fieldref) const
 {
@@ -296,6 +475,8 @@ namespace {
     const char *const XML_COMPOSITION_NATURE           = "nature";
     const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";
 }
+
+/** \brief Return the composition of the drug in XML format. */
 QString DrugsData::compositionToXml()
 {
     QString tmp;
@@ -316,7 +497,7 @@ QString DrugsData::compositionToXml()
 }
 
 /**
-  \brief Return the drug denomination with or without pharmaceutical firms name
+  \brief Return the drug denomination with or without pharmaceutical firms name.
   \sa DrugsDB::Constants::S_HIDELABORATORY
 */
 QString DrugsData::denomination() const
@@ -336,16 +517,16 @@ QString DrugsData::denomination() const
     return value(Constants::Table_DRUGS, Constants::DRUGS_NAME).toString();
 }
 
-/** \brief Returns the list of all the molecules' code of the drug composition */
+/** \brief Returns the list of all the molecules' code of the drug composition. */
 QList<int> DrugsData::listOfCodeMolecules() const
 {
     QList<int> tmp;
     foreach(DrugComposition *compo, d->m_Compositions)
-        tmp << compo->m_CodeMolecule;
+        tmp << compo->codeMolecule();
     return tmp;
 }
 
-/** \brief Returns the list of all IAM classes' names */
+/** \brief Returns the list of all interacting classes' names */
 QStringList DrugsData::listOfInnClasses() const
 {
     QStringList tmp;
@@ -356,6 +537,7 @@ QStringList DrugsData::listOfInnClasses() const
     return tmp;
 }
 
+/** \brief Return all available routes for this drug. */
 QStringList DrugsData::routes() const
 {
     QString lang = QLocale().name().left(2);
@@ -373,11 +555,11 @@ QStringList DrugsData::listOfMolecules() const
 {
     QStringList toReturn;
     foreach(const DrugComposition *compo, d->m_Compositions)
-        toReturn << compo->m_MoleculeName;
+        toReturn << compo->moleculeName();
     return toReturn;
 }
 
-/** \brief Return the list of all unique known Inn and Iam Classes names into a QStringList. */
+/** \brief Return the list of all unique known ATC labels and interacting Classes names into a QStringList. */
 QStringList DrugsData::listOfInn() const
 {
     // return the list of distinct know INN of this drug
@@ -390,18 +572,20 @@ QStringList DrugsData::listOfInn() const
     return toReturn;
 }
 
+/** \brief Return the number of known ATC ids and interacting classes ids. */
 int DrugsData::numberOfInn() const
 {
 //    qWarning() << allInnAndIamClasses() << __FILE__ <<__LINE__;
     return allInnAndIamClasses().count();
 }
 
-/** \brief Returns all Inn and IamClasses codes known for this drug. */
+/** \brief Returns all Inn and interacting classes codes known for this drug. */
 QSet<int> DrugsData::allInnAndIamClasses() const
 {
     return d->m_IamCodes;
 }
 
+/** \brief Return all 7char ATC codes ids known. This represent the INN of a molecule. */
 QSet<int> DrugsData::allSevenCharsAtcIds() const
 {
     QSet<int> list;
@@ -415,6 +599,7 @@ QSet<int> DrugsData::allSevenCharsAtcIds() const
     return list;
 }
 
+/** \brief Return all 7char ATC codes labels known. This represent the INN of a molecule. */
 QStringList DrugsData::allSevenCharsAtcCodes() const
 {
     QStringList list;
@@ -429,6 +614,7 @@ QStringList DrugsData::allSevenCharsAtcCodes() const
     return list;
 }
 
+/** \brief Return all ATC codes ids known. */
 QSet<int> DrugsData::allAtcIds() const
 {
     QSet<int> list;
@@ -440,6 +626,7 @@ QSet<int> DrugsData::allAtcIds() const
     return list;
 }
 
+/** \brief Return all ATC codes labels known. */
 QStringList DrugsData::allAtcCodes() const
 {
     QStringList list;
@@ -451,8 +638,7 @@ QStringList DrugsData::allAtcCodes() const
     return list;
 }
 
-
-/** \brief Returns all Inn and IamClasses codes knwon for this drug. */
+/** \brief Returns all INN and interacting classes codes knwon for this drug. */
 int DrugsData::mainInnCode() const
 {
     QSet<int> list;
@@ -465,14 +651,14 @@ int DrugsData::mainInnCode() const
     return -1;
 }
 
-/** \brief Returns the main Inn for this drug. If there is more than one inn or no inn, it returns a null string.*/
+/** \brief Returns the main INN for this drug. If there is more than one INN or no INN, it returns a null string.*/
 QString DrugsData::mainInnName() const
 {
     return drugsBase()->getAtcLabel(mainInnCode());
 }
 
 /**
-  \brief Return the main dosage of the main inn
+  \brief Return the main dosage of the main INN
   \sa mainInnCode(), mainInnName()
 */
 QString DrugsData::mainInnDosage() const
@@ -481,7 +667,7 @@ QString DrugsData::mainInnDosage() const
     int main = mainInnCode();
     if (main != -1) {
         foreach(DrugComposition *compo, d->m_Compositions)
-            if ((compo->m_InnCode==main) && (compo->isTheActiveSubstance()))
+            if ((compo->innCode()==main) && (compo->isTheActiveSubstance()))
                 return compo->innDosage();
     }
     return QString();
@@ -515,10 +701,7 @@ QStringList DrugsData::dosageOfMolecules() const
     return toReturn;
 }
 
-/**
-  /~english \brief Return true if drug can be scored.
-  /~french  \brief Retourne true si le médicament est sécable.
-*/
+/** \brief Return true if drug can be scored. */
 bool DrugsData::isScoredTablet() const
 {
     if (drugsBase()->actualDatabaseInformations()->identifiant==Constants::DB_DEFAULT_IDENTIFIANT)
@@ -527,6 +710,7 @@ bool DrugsData::isScoredTablet() const
     return true;
 }
 
+/** \brief Unused. */
 QList<QVariant> DrugsData::CIPs() const
 {
     QList<QVariant> ret;
@@ -535,6 +719,7 @@ QList<QVariant> DrugsData::CIPs() const
     return ret;
 }
 
+/** \brief Unused. */
 QStringList DrugsData::CIPsDenominations() const
 {
     QStringList ret;
@@ -543,6 +728,7 @@ QStringList DrugsData::CIPsDenominations() const
     return ret;
 }
 
+/** \brief Return the web link to the Summary Characteritics of the Product (monographs). */
 QString DrugsData::linkToSCP() const
 {
     QString toReturn;
@@ -558,6 +744,7 @@ QString DrugsData::linkToSCP() const
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------------ Viewers -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+/** \brief Return the INN composition of the drug in human readable format. */
 QString DrugsData::innComposition() const
 {
     QString toReturn;
@@ -575,6 +762,7 @@ QString DrugsData::innComposition() const
     return toReturn;
 }
 
+/** \brief Return the drug characteristics in human readable format. */
 QString DrugsData::toHtml() const
 {
     QString msg;
@@ -635,7 +823,7 @@ QString DrugsData::toHtml() const
     foreach(DrugComposition *compo, d->m_Compositions) {
         if (compo->innName().isEmpty()) {
             name = compo->moleculeName();
-        } else if (compo->m_InnCode < 200000) {
+        } else if (compo->innCode() < 200000) {
             name = compo->innName();
         }
         tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(name).arg(compo->dosage());
@@ -654,7 +842,8 @@ QString DrugsData::toHtml() const
 
 inline static DrugsDB::InteractionsManager *new_im() {return new DrugsDB::InteractionsManager();}
 
-QString DrugsData::drugsListToHtml(const QDrugsList & list)
+/** \brief Return the drug list in human readable format. */
+QString DrugsData::drugsListToHtml(const QDrugsList &list)
 {
     QString msg;
 
@@ -694,6 +883,7 @@ QString DrugsData::drugsListToHtml(const QDrugsList & list)
     return msg;
 }
 
+/** \brief Used to sort the drugs list. */
 bool DrugsData::lessThan(const DrugsData *drug1, const DrugsData *drug2)
 {
     bool ald1, ald2;
@@ -709,7 +899,7 @@ bool DrugsData::lessThan(const DrugsData *drug1, const DrugsData *drug2)
     return drug1->denomination() < drug2->denomination();
 }
 
-/** \brief Fro debugging purpose only. Warn all values of the drug. */
+/** \brief For debugging purpose only. Warn all values of the drug. */
 void DrugsData::warn() const
 {
     if (Utils::isDebugCompilation()) {
@@ -757,6 +947,12 @@ void DrugsData::smallDrugWarn() const
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- TextualDrugsData -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+/**
+  \class DrugsDB::Internal::TextualDrugsData
+  \brief A TextualDrugsData represent a fully textual drug.
+  These kind of drugs are not retrieved from the database.
+  Users can set the drug brand name by hand.
+*/
 TextualDrugsData::TextualDrugsData() :
         DrugsData()
 {
