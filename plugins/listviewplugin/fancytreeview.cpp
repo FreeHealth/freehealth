@@ -230,26 +230,31 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions)
         ui->button->setDefaultAction(actionManager()->command(Constants::A_REMOVE_ITEM)->action());
 }
 
+/** \brief Returns the search line edit used in the view. */
 Utils::QButtonLineEdit *FancyTreeView::searchLine()
 {
     return ui->searchLine;
 }
 
+/** \brief Define the menu to use with the fancy button and and the context menu on header items (items without parent). */
 void FancyTreeView::setHeaderMenu(QMenu *menu)
 {
     d->m_HeaderMenu = menu;
 }
 
+/** \brief Define the menu to use with the fancy button and and the context menu on subheader items (items with parent and items). */
 void FancyTreeView::setSubHeadingMenu(QMenu *menu)
 {
     d->m_SubHMenu = menu;
 }
 
+/** \brief Define the menu to use with the fancy button and and the context menu on items. */
 void FancyTreeView::setItemMenu(QMenu *menu)
 {
     d->m_ItemMenu = menu;
 }
 
+/** \brief Define the context menu behavior of the treeview. */
 void FancyTreeView::useContextMenu(bool state)
 {
     if (state)
@@ -258,6 +263,10 @@ void FancyTreeView::useContextMenu(bool state)
         ui->treeView->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
+/**
+  \brief Define the model to use with the fancytreeview and define the empty columns to use for the fancy buttons.
+  Models should not provide data on the emptycolumns.
+*/
 void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancyButton)
 {
     d->m_Model = model;
@@ -271,12 +280,14 @@ void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancy
     d->m_Delegate->setFancyColumn(columnForFancyButton);
 }
 
+/** \brief Defines the model column to hide in the QTreeView. */
 void FancyTreeView::hideColumn(int column)
 {
     if (ui)
         ui->treeView->hideColumn(column);
 }
 
+/** \brief Show context menu of the treeview. */
 void FancyTreeView::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu *pop = new QMenu(this);
@@ -317,6 +328,7 @@ void FancyTreeView::handleClicked(const QModelIndex &index)
     }
 }
 
+/** \brief Slot called when user triggers the save action. By default, call submit() on the QTreeView model. */
 void FancyTreeView::save()
 {
     if (!d->m_Model)
@@ -326,22 +338,23 @@ void FancyTreeView::save()
 
 }
 
+/** \brief Slot called when user triggers the add item action. */
 void FancyTreeView::addItem()
 {
     QModelIndex parent = QModelIndex();
     if (ui->treeView->selectionModel()->hasSelection())
         parent = ui->treeView->selectionModel()->currentIndex();
-    SimpleCategoryCreator dlg(this);
-    dlg.setModel(d->m_Model, parent);
-    dlg.setLabelColumn(0);
-    dlg.setIconColumn(1);
-    dlg.exec();
-//    if (!d->m_Model->insertRow(d->m_Model->rowCount(parent), parent))
-//        return;
-//    // expand item
-//    ui->treeView->expand(parent);
-//    // open edit item
-//    ui->treeView->edit(d->m_Model->index(d->m_Model->rowCount(parent)-1, parent.column(), parent));
+//    SimpleCategoryCreator dlg(this);
+//    dlg.setModel(d->m_Model, parent);
+//    dlg.setLabelColumn(0);
+//    dlg.setIconColumn(1);
+//    dlg.exec();
+    if (!d->m_Model->insertRow(d->m_Model->rowCount(parent), parent))
+        return;
+    // expand item
+    ui->treeView->expand(parent);
+    // open edit item
+    ui->treeView->edit(d->m_Model->index(d->m_Model->rowCount(parent)-1, parent.column(), parent));
 }
 
 void FancyTreeView::changeEvent(QEvent *e)
