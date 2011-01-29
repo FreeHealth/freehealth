@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <QMenu>
 #include <QAction>
+#include <QStringListModel>
+
 
 namespace Ui {
     class ReceiptViewer;
@@ -140,15 +142,17 @@ protected:
     void changeEvent(QEvent *e);
     void fillActionTreeView();
     void fillModel(QHash<QString,QString> & hashOfValues,int typeOfPayment,double percentage);
-    QAction *m_fillThesaurus;
+    QAction *m_clear;
     QMenu *m_menu;
 
 private:
     Ui::ReceiptViewer *ui;
     QStandardItemModel *m_actionsTreeModel;
+    QStringListModel *m_modelReturnedList;
     AmountModel * m_model;
     QVariant m_siteUid;
     QVariant m_insuranceUid;
+    QStringList m_listOfValues;
     void mousePressEvent(QMouseEvent * event);
 
 private slots :
@@ -157,6 +161,7 @@ private slots :
     void saveAndQuit();
     void treeViewsActions(const QModelIndex&);
     void saveInThesaurus();
+    void clearAll();
 };
 
 #endif // RECEIPTVIEWER_H

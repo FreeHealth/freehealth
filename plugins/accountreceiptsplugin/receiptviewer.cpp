@@ -78,19 +78,24 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBanked->setDate(QDate::currentDate());
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
     ui->dateBook->setDate(QDate::currentDate());
-    ui->deleteLineButton->hide();
     ui->inputRadioButton->setChecked(true);
-    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertLineSeparator);
+    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
+    ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
     ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     fillActionTreeView();
+    m_modelReturnedList = new QStringListModel;
+    ui->returnedListView->setModel(m_modelReturnedList);
+    ui->returnedListView->setEnabled(true);
+    ui->returnedListView->show();
     //right click
-    m_fillThesaurus = new QAction(trUtf8("Save in thesaurus."),this);
+    m_clear = new QAction(trUtf8("Clear all."),this);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
-    connect(ui->deleteLineButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
+    connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
     connect(ui->actionsTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(treeViewsActions(const QModelIndex&)));
-    connect(m_fillThesaurus,SIGNAL(triggered()),this,SLOT(saveInThesaurus()));
+    connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
 }
 
 ReceiptViewer::~ReceiptViewer()
@@ -237,6 +242,9 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
                 }
             qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
             }
+             /*QStringList*/ m_listOfValues << hashOfValues.keys();
+             m_modelReturnedList->setStringList(m_listOfValues);
+             fillModel(hashOfValues,typeOfPayment,percentage);
          }
     if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
@@ -244,7 +252,11 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
             typeOfPayment = choice.returnChoiceDialog();//int
             percentage = choice.m_percentValue;
             }
+            
             hashOfValues.insertMulti("CS","23.00");//preferential act
+            m_listOfValues << hashOfValues.keys();
+            m_modelReturnedList->setStringList(m_listOfValues);
+            fillModel(hashOfValues,typeOfPayment,percentage);
         }
         qDebug() << __FILE__ << QString::number(__LINE__) << "manager.m_hashOfSites.keys()  =" << QString::number(manager.getHashOfSites().keys().size()) ;
         
@@ -258,14 +270,14 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
     	  m_insuranceUid = manager.getHashOfInsurance().value(data);
     	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
         }
-
-    QStringList listOfValues = hashOfValues.keys();
-    QStringListModel *modelReturnedList = new QStringListModel(listOfValues);
-    ui->returnedListView->setModel(modelReturnedList);
-    ui->returnedListView->show();
-   // delete modelReturnedList;
-    fillModel(hashOfValues,typeOfPayment,percentage);
-    
+    if (manager.getHashOfThesaurus().keys().contains(data))
+    {
+        choiceDialog choice(this);
+        if(choice.exec() == QDialog::Accepted){
+            typeOfPayment = choice.returnChoiceDialog();//int
+            percentage = choice.m_percentValue;
+            }        
+        }
 }
 
 void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfPayment, double percentage){
@@ -283,6 +295,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
 }
 
 void ReceiptViewer::save(){
+    QString textOfListOfActs = m_listOfValues.join("+");
     double cash = m_model->data(m_model->index(AmountModel::Row_Cash,AmountModel::Col_Value)).toDouble();
     double cheque = m_model->data(m_model->index(AmountModel::Row_Cheque,AmountModel::Col_Value)).toDouble();
     double visa = m_model->data(m_model->index(AmountModel::Row_Visa,AmountModel::Col_Value)).toDouble();
@@ -306,7 +319,7 @@ void ReceiptViewer::save(){
     hash.insert(ACCOUNT_INSURANCE_ID,m_insuranceUid);
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
-    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,"CS");
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,textOfListOfActs);
     hash.insert(ACCOUNT_COMMENT,NULL);
     hash.insert(ACCOUNT_CASHAMOUNT,cash);
     hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
@@ -332,8 +345,8 @@ void ReceiptViewer::saveAndQuit(){
 void ReceiptViewer::mousePressEvent(QMouseEvent * event){
   if(event->button() == Qt::RightButton){
     qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
-    m_menu         = new QMenu;
-    m_menu        -> addAction(m_fillThesaurus);
+    m_menu         = new QMenu(this);
+    m_menu        -> addAction(m_clear);
     //m_menu        -> exec(QCursor::pos());
     //m_menu->exec(ui->returnedListView->mapToGlobal(QPoint(0, 0)));
     m_menu->exec(event->globalPos());
@@ -342,4 +355,10 @@ void ReceiptViewer::mousePressEvent(QMouseEvent * event){
   
 void ReceiptViewer::saveInThesaurus(){
     QMessageBox::information(0,"info","save in thesaurus",QMessageBox::Ok);
+}
+
+void ReceiptViewer::clearAll(){
+    m_listOfValues.clear();
+    //m_modelReturnedList->clear();
+    
 }

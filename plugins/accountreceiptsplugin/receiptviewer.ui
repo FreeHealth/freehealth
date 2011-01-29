@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>659</width>
-    <height>434</height>
+    <width>707</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -187,20 +187,7 @@
      <item row="4" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="deleteLineButton">
+        <widget class="QPushButton" name="thesaurusButton">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -208,7 +195,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Delete</string>
+          <string>Save in thesaurus</string>
          </property>
         </widget>
        </item>
@@ -241,19 +228,6 @@
           <string>&amp;Quit</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>

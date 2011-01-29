@@ -174,6 +174,12 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
     return hash; 
 }
 
+QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
+    QHash<QString,QVariant> hash;
+    
+    return hash;
+}
+
 /*QString receiptsManager::createTablesAndFields(){
     QString result = "Ok";
     qDebug() <<  __FILE__ << QString::number(__LINE__) ;

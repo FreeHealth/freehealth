@@ -11,6 +11,7 @@ class receiptsManager : public QObject {
   QHash<QString,QVariant> getParametersDatas(QString & values , const QString & table);//name,uid
   QHash<QString,QVariant> getHashOfSites();
   QHash<QString,QVariant> getHashOfInsurance();
+  QHash<QString,QVariant> getHashOfThesaurus();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);
