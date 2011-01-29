@@ -474,7 +474,7 @@ void OverrideableAction::addOverrideAction(QAction *action, const QList<int> &co
         for (int i=0; i<context.size(); ++i) {
             int k = context.at(i);
             if (m_contextActionMap.contains(k))
-                qWarning() << QString("addOverrideAction: action already registered for context when registering '%1'").arg(action->text());
+                qWarning() << QString("addOverrideAction: action already registered for context when registering '%1' // '%2'").arg(action->text()).arg(action->objectName());
             m_contextActionMap.insert(k, action);
         }
     }
