@@ -11,10 +11,10 @@ HEADERS += \
     $${PWD}/stringlistmodel.h \
     $${PWD}/stringlistview.h \
     $${PWD}/fancytreeview.h \
-    $${PWD}/constants.h \
-    $${PWD}/listviewbase.h \
-    $${PWD}/simplecategorymodel.h \
-    $${PWD}/simplecategorycreator.h
+#    $${PWD}/constants.h \
+#    $${PWD}/listviewbase.h \
+#    $${PWD}/simplecategorymodel.h \
+#    $${PWD}/simplecategorycreator.h
 
 SOURCES += \
     $${PWD}/listview.cpp \
@@ -22,11 +22,11 @@ SOURCES += \
     $${PWD}/stringlistmodel.cpp \
     $${PWD}/stringlistview.cpp \
     $${PWD}/fancytreeview.cpp \
-    $${PWD}/listviewbase.cpp \
-    $${PWD}/simplecategorymodel.cpp \
-    $${PWD}/simplecategorycreator.cpp
+#    $${PWD}/listviewbase.cpp \
+#    $${PWD}/simplecategorymodel.cpp \
+#    $${PWD}/simplecategorycreator.cpp
 
 
 FORMS += \
     $${PWD}/fancytreeview.ui \
-    $${PWD}/simplecategorycreator.ui
+ #   $${PWD}/simplecategorycreator.ui
