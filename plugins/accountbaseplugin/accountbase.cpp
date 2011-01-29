@@ -472,6 +472,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Thesaurus,  THESAURUS_UID,     "DISTRULES_UID",     FieldIsUUID);
     addField(Table_Thesaurus,  THESAURUS_USERUID, "THESAURUS_USERUID", FieldIsUUID);
     addField(Table_Thesaurus,  THESAURUS_VALUES,  "VALUES",            FieldIsShortText);
+    addField(Table_Thesaurus,  THESAURUS_PREF,    "PREFERED",          FieldIsBoolean);
 
 //    addTable(Table_Session, "session");
 //    addField(Table_Session,  PAIE_ID,          "BANKING_ID",      FieldIsUniquePrimaryKey);

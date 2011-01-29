@@ -265,6 +265,7 @@ namespace Constants {
         THESAURUS_UID,
         THESAURUS_USERUID,
         THESAURUS_VALUES,
+        THESAURUS_PREF,
         THESAURUS_MaxParam
     };
 
