@@ -290,6 +290,8 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
     value = value*percentage/100.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
     const QModelIndex index = m_model->index(typeOfPayment,AmountModel::Col_Value);
+    double lastValue = m_model->data(index).toDouble();
+    value += lastValue;
     m_model->setData(index, value, Qt::EditRole);
     qDebug() << __FILE__ << QString::number(__LINE__) << " post set data"  ;
 }
