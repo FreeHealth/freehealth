@@ -18,6 +18,7 @@ choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDi
     ui->percentDoubleSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
     m_timer = new QTimer(this);
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(accept()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
     connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
     connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
     connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueStop()));

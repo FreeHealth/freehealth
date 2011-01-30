@@ -137,6 +137,7 @@ public:
     explicit ReceiptViewer(QWidget *parent = 0);
     ~ReceiptViewer();
     void setPosition(QWidget *parent);
+    QString m_userUuid;
 
 protected:
     void changeEvent(QEvent *e);

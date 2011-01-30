@@ -157,7 +157,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
 
 QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
     QHash<QString,QVariant> hash;
-       	  InsuranceModel model(this);
+    InsuranceModel model(this);
    	  for (int row = 0; row < model.rowCount(); row += 1)
    	  {
    	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
@@ -176,7 +176,18 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
 
 QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
     QHash<QString,QVariant> hash;
-    
+    ThesaurusModel model(this);
+    for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
+   	  	QVariant uid = model.data(model.index(row,THESAURUS_USERUID),Qt::DisplayRole);
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+   	  	hash.insert(str,uid);
+   	  }
+   	  if(hash.size()< 1){
+   	      hash.insert("thesaurus","userUuid");
+   	      }
     return hash;
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>285</width>
-    <height>281</height>
+    <height>314</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -107,10 +107,17 @@ payment</string>
      <item row="2" column="0">
       <widget class="QPushButton" name="okButton">
        <property name="text">
-        <string>Ok</string>
+        <string>&amp;Ok</string>
        </property>
        <property name="default">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="quitButton">
+       <property name="text">
+        <string>&amp;Quit</string>
        </property>
       </widget>
      </item>

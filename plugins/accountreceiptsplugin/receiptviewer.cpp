@@ -64,6 +64,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ReceiptViewer)
 {
+    m_userUuid = user()->value(Core::IUser::Uuid).toString();
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -238,25 +239,29 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
                 if(choice.exec() == QDialog::Accepted){
                     typeOfPayment = choice.returnChoiceDialog();//int
                     percentage = choice.m_percentValue;//double
-                    }
-                }
+                    
+                
             qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
-            }
+            
              /*QStringList*/ m_listOfValues << hashOfValues.keys();
              m_modelReturnedList->setStringList(m_listOfValues);
              fillModel(hashOfValues,typeOfPayment,percentage);
+             }
+            }
+           }
          }
     if(data == "Prefered Value"){// preferential act of payment
         choiceDialog choice(this);
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
             percentage = choice.m_percentValue;
-            }
+            
             
             hashOfValues.insertMulti("CS","23.00");//preferential act
             m_listOfValues << hashOfValues.keys();
             m_modelReturnedList->setStringList(m_listOfValues);
             fillModel(hashOfValues,typeOfPayment,percentage);
+            }
         }
         qDebug() << __FILE__ << QString::number(__LINE__) << "manager.m_hashOfSites.keys()  =" << QString::number(manager.getHashOfSites().keys().size()) ;
         
@@ -276,7 +281,19 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
             percentage = choice.m_percentValue;
-            }        
+            
+            QStringList list;
+            list = data.split("+");
+            receiptsEngine r;
+            QHash<QString,QVariant> hashFromMp ;
+            hashFromMp = r.getNamesAndValuesFromMP();
+            QString str;
+            foreach(str,list){
+                QString value = hashFromMp.value(str).toString();
+                hashOfValues.insertMulti(str,value);
+                }
+            fillModel(hashOfValues,typeOfPayment,percentage);
+            }
         }
 }
 
@@ -293,7 +310,6 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
     double lastValue = m_model->data(index).toDouble();
     value += lastValue;
     m_model->setData(index, value, Qt::EditRole);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " post set data"  ;
 }
 
 void ReceiptViewer::save(){
@@ -356,7 +372,11 @@ void ReceiptViewer::mousePressEvent(QMouseEvent * event){
 }
   
 void ReceiptViewer::saveInThesaurus(){
-    QMessageBox::information(0,"info","save in thesaurus",QMessageBox::Ok);
+    QString listOfValuesStr = m_listOfValues.join("+");
+    receiptsEngine r;
+    if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
+        QMessageBox::information(0,trUtf8("Information"),trUtf8("Saved in thesaurus."),QMessageBox::Ok);
+        }
 }
 
 void ReceiptViewer::clearAll(){

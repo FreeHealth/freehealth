@@ -28,6 +28,7 @@
 
 #include <QSqlDriver>
 #include <QMessageBox>
+#include <QUuid>
 
 #include <QDebug>
 
@@ -83,6 +84,43 @@ bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues)
                              QMessageBox::Ok);
         ret = false;
     }
+    return ret;
+}
+
+QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){
+    QHash<QString,QVariant> hash;
+    MedicalProcedureModel model(this);
+    int rows = model.rowCount(QModelIndex());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
+    	QVariant value = model.data(model.index(i,MP_AMOUNT),Qt::DisplayRole);
+    	hash.insert(name,value);
+    }
+    return hash;
+}
+
+bool receiptsEngine::insertInThesaurus(QString & listOfValuesStr,QString & userUuid){
+    bool ret = true;
+    QUuid uuid;
+    QString uuidStr = uuid.createUuid();
+    ThesaurusModel model(this);
+    int rowBefore = model.ThesaurusModel::rowCount(QModelIndex());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
+    if (model.insertRows(rowBefore,1,QModelIndex()))
+        {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+        }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(model.ThesaurusModel::rowCount(QModelIndex())) ;
+    model.setData(model.index(rowBefore,THESAURUS_UID), uuidStr,Qt::EditRole);
+    model.setData(model.index(rowBefore,THESAURUS_USERUID), userUuid,Qt::EditRole);
+    model.setData(model.index(rowBefore,THESAURUS_VALUES),listOfValuesStr,Qt::EditRole);
+    model.setData(model.index(rowBefore,THESAURUS_PREF),0,Qt::EditRole);
+    if (!model.submit())
+    {
+    	  ret = false;
+        }
     return ret;
 }
 
