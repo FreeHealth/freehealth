@@ -469,7 +469,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_DistanceRules,  DISTRULES_VALUES,  "VALUES",            FieldIsShortText);
 
     addField(Table_Thesaurus,  THESAURUS_ID,      "THESAURUS_ID",      FieldIsUniquePrimaryKey);
-    addField(Table_Thesaurus,  THESAURUS_UID,     "DISTRULES_UID",     FieldIsUUID);
+    addField(Table_Thesaurus,  THESAURUS_UID,     "THESAURUS_UID",     FieldIsUUID);
     addField(Table_Thesaurus,  THESAURUS_USERUID, "THESAURUS_USERUID", FieldIsUUID);
     addField(Table_Thesaurus,  THESAURUS_VALUES,  "VALUES",            FieldIsShortText);
     addField(Table_Thesaurus,  THESAURUS_PREF,    "PREFERED",          FieldIsBoolean);

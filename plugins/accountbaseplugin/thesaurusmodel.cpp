@@ -19,7 +19,7 @@ class ThesaurusModelPrivate
 public:
     ThesaurusModelPrivate(ThesaurusModel *parent) : m_SqlTable(0), q(parent)
     {
-        m_SqlTable = new QSqlTableModel(q);
+        m_SqlTable = new QSqlTableModel(q,QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
     }
 
     ~ThesaurusModelPrivate () {}
@@ -39,8 +39,8 @@ private:
 ThesaurusModel::ThesaurusModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::ThesaurusModelPrivate(this))
 {
-    d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_Sites));
-    //    d->m_SqlTable->setEditStrategy();
+    d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_Thesaurus));
+    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     //    d->m_SqlTable->setFilter( user );
     d->m_SqlTable->select();
 }
@@ -83,16 +83,26 @@ QVariant ThesaurusModel::headerData(int section, Qt::Orientation orientation, in
 
 bool ThesaurusModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    return true;
+      bool ret = d->m_SqlTable->insertRows(row, count, parent);
+      return ret;
 }
 
 bool ThesaurusModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    return true;
+      bool ret = d->m_SqlTable->removeRows(row, count, parent);
+      return ret;
 }
 
 bool ThesaurusModel::isDirty() const
 {
     return true;
+}
+
+bool ThesaurusModel::submit()
+{
+    if (d->m_SqlTable->submitAll()) {
+        return true;
+    }
+    return false;
 }
 
