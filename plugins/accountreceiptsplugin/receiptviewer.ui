@@ -151,16 +151,6 @@
        <property name="title">
         <string>Settings</string>
        </property>
-       <widget class="QTreeView" name="actionsTreeView">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>20</y>
-          <width>231</width>
-          <height>221</height>
-         </rect>
-        </property>
-       </widget>
       </widget>
      </item>
      <item row="2" column="1">

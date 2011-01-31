@@ -18,6 +18,7 @@ public :
     bool insertIntoAccount(QHash<int,QVariant> & hashValues);
     QHash<QString,QVariant> getNamesAndValuesFromMP();
     bool insertInThesaurus(QString & listOfValuesStr,QString & userUuid);
+    bool deleteFromThesaurus(QString & data );
 
 private :
    AccountModel *m_mpmodel;

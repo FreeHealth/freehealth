@@ -124,3 +124,22 @@ bool receiptsEngine::insertInThesaurus(QString & listOfValuesStr,QString & userU
     return ret;
 }
 
+bool receiptsEngine::deleteFromThesaurus(QString & data ){
+    bool ret = true;
+    ThesaurusModel model(this);
+    int row = 0;
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
+    	if (dataReturned == data)
+    	{
+    		  row = i;
+    	    }
+    }
+    if (!model.removeRow(row))
+    {
+    	  ret = false;
+        }
+    return ret;
+}
+

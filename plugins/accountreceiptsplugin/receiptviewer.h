@@ -9,7 +9,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QStringListModel>
-
+#include <QTreeView>
 
 namespace Ui {
     class ReceiptViewer;
@@ -129,6 +129,16 @@ namespace InternalAmount {
 
 }  // End namespace Internal
 using namespace InternalAmount;
+class treeViewsActions: public QTreeView {
+    Q_OBJECT
+    public :
+        treeViewsActions(QWidget * parent);
+        ~treeViewsActions();
+        void reset(){QTreeView::reset();}
+    private :
+        void mousePressEvent(QMouseEvent * event);
+        bool deleteItemFromThesaurus(QModelIndex & index);
+};
 class ReceiptViewer : public QWidget
 {
     Q_OBJECT
@@ -138,6 +148,7 @@ public:
     ~ReceiptViewer();
     void setPosition(QWidget *parent);
     QString m_userUuid;
+    treeViewsActions *actionTreeView;
 
 protected:
     void changeEvent(QEvent *e);
@@ -160,7 +171,7 @@ private slots :
     void deleteLine();
     void save();
     void saveAndQuit();
-    void treeViewsActions(const QModelIndex&);
+    void actionsOfTreeView(const QModelIndex&);
     void saveInThesaurus();
     void clearAll();
 };

@@ -41,7 +41,6 @@
 #include <coreplugin/ipatient.h>
 
 #include <QAbstractItemModel>
-
 #include <QDebug>
 #include <QMessageBox>
 #include <QFrame>
@@ -51,7 +50,6 @@
 #include <QBrush>
 #include <QColor>
 
-
 using namespace Core;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -59,6 +57,47 @@ using namespace ReceiptsConstants;
 using namespace InternalAmount;
 using namespace Constants;
 
+treeViewsActions::treeViewsActions(QWidget * parent){
+    }
+
+void treeViewsActions::mousePressEvent(QMouseEvent * event){
+    if(event->button() == Qt::RightButton){
+        blockSignals(true);
+        QMessageBox msgBox;
+        msgBox.setText("Do you want to delete choosen item ?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        int ret = msgBox.exec();
+        QModelIndex index;
+        switch(ret){
+            case QMessageBox::Yes :
+                index = currentIndex();
+                deleteItemFromThesaurus(index);
+                break;
+            case QMessageBox::No :
+                break;
+        }
+    }
+    if(event->button() == Qt::LeftButton){
+        blockSignals(false);
+        QTreeView::mousePressEvent(event);
+    }
+}
+
+treeViewsActions::~treeViewsActions(){}
+
+bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
+    bool ret = true;
+    QString data = index.data().toString();
+    receiptsEngine r;
+    if (!r.deleteFromThesaurus(data))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
+    	  ret = false;
+        }
+    reset();
+    return ret;
+}
 
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
@@ -84,18 +123,24 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
     ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
     ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
-    fillActionTreeView();
+    
     m_modelReturnedList = new QStringListModel;
     ui->returnedListView->setModel(m_modelReturnedList);
     ui->returnedListView->setEnabled(true);
     ui->returnedListView->show();
+    actionTreeView = new treeViewsActions(this);
+    QVBoxLayout *vbox = new QVBoxLayout;
+     vbox->addWidget(actionTreeView);
+    ui->actionsBox->setLayout(vbox);
+    //actionTreeView->show();
+    fillActionTreeView();
     //right click
     m_clear = new QAction(trUtf8("Clear all."),this);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
-    connect(ui->actionsTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(treeViewsActions(const QModelIndex&)));
+    connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
 }
 
@@ -217,13 +262,15 @@ void ReceiptViewer::fillActionTreeView(){
             actionItem->appendRow(subActionItem);
         }
     }
-    ui->actionsTreeView->setHeaderHidden(true);
-    ui->actionsTreeView->setStyleSheet("background-color: rgb(201, 201, 201)");
-   // ui->actionsTreeView->setStyleSheet("foreground-color: red");
-    ui->actionsTreeView->setModel(m_actionsTreeModel);
+    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+    actionTreeView->setHeaderHidden(true);
+    actionTreeView->setStyleSheet("background-color: rgb(201, 201, 201)");
+   // actionsTreeView->setStyleSheet("foreground-color: red");
+    actionTreeView->setModel(m_actionsTreeModel);
+    qDebug() << __FILE__ << QString::number(__LINE__)  ;
 }
 
-void ReceiptViewer::treeViewsActions(const QModelIndex & index){
+void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
     QString data = index.data(Qt::DisplayRole).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
     receiptsManager manager;
@@ -295,6 +342,7 @@ void ReceiptViewer::treeViewsActions(const QModelIndex & index){
             fillModel(hashOfValues,typeOfPayment,percentage);
             }
         }
+        //actionTreeView->reset();
 }
 
 void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfPayment, double percentage){
@@ -368,6 +416,10 @@ void ReceiptViewer::mousePressEvent(QMouseEvent * event){
     //m_menu        -> exec(QCursor::pos());
     //m_menu->exec(ui->returnedListView->mapToGlobal(QPoint(0, 0)));
     m_menu->exec(event->globalPos());
+    if (QObject::sender() == qobject_cast<QTreeView*>(actionTreeView))
+    {
+    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Delete in thesaurus."),QMessageBox::Ok);
+        }
   }
 }
   
