@@ -59,6 +59,8 @@ using namespace Constants;
 
 treeViewsActions::treeViewsActions(QWidget * parent){
     }
+    
+treeViewsActions::~treeViewsActions(){}
 
 void treeViewsActions::mousePressEvent(QMouseEvent * event){
     if(event->button() == Qt::RightButton){
@@ -84,94 +86,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent * event){
     }
 }
 
-treeViewsActions::~treeViewsActions(){}
-
-bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
-    bool ret = true;
-    QString data = index.data().toString();
-    receiptsEngine r;
-    if (!r.deleteFromThesaurus(data))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
-    	  ret = false;
-        }
-    reset();
-    return ret;
-}
-
-ReceiptViewer::ReceiptViewer(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::ReceiptViewer)
-{
-    m_userUuid = user()->value(Core::IUser::Uuid).toString();
-    m_model = new InternalAmount::AmountModel(this);
-    ui->setupUi(this);
-    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->amountsView->setModel(m_model);
-    ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
-    ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
-    ui->dateExecution->setDate(QDate::currentDate());
-    ui->datePayment->setDisplayFormat("yyyy-MM-dd");
-    ui->datePayment->setDate(QDate::currentDate());
-    ui->dateBanked->setDisplayFormat("yyyy-MM-dd");
-    ui->dateBanked->setDate(QDate::currentDate());
-    ui->dateBook->setDisplayFormat("yyyy-MM-dd");
-    ui->dateBook->setDate(QDate::currentDate());
-    ui->inputRadioButton->setChecked(true);
-    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
-    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
-    ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
-    ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
-    
-    m_modelReturnedList = new QStringListModel;
-    ui->returnedListView->setModel(m_modelReturnedList);
-    ui->returnedListView->setEnabled(true);
-    ui->returnedListView->show();
-    actionTreeView = new treeViewsActions(this);
-    QVBoxLayout *vbox = new QVBoxLayout;
-     vbox->addWidget(actionTreeView);
-    ui->actionsBox->setLayout(vbox);
-    //actionTreeView->show();
-    fillActionTreeView();
-    //right click
-    m_clear = new QAction(trUtf8("Clear all."),this);
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
-    connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
-    connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
-    connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
-    connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
-    connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
-}
-
-ReceiptViewer::~ReceiptViewer()
-{
-    delete ui;
-}
-
-void ReceiptViewer::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
-
-void ReceiptViewer::setPosition(QWidget *parent){
-    QRect rect = parent->rect();
-    setGeometry(parent->x(),parent->y(),rect.width()-10,rect.height()-10);
-}
-
-void ReceiptViewer::deleteLine()
-{
-    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
-}
-
-void ReceiptViewer::fillActionTreeView(){
+void treeViewsActions::fillActionTreeView(){
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
@@ -263,12 +178,98 @@ void ReceiptViewer::fillActionTreeView(){
         }
     }
     qDebug() << __FILE__ << QString::number(__LINE__)  ;
-    actionTreeView->setHeaderHidden(true);
-    actionTreeView->setStyleSheet("background-color: rgb(201, 201, 201)");
+    setHeaderHidden(true);
+    setStyleSheet("background-color: rgb(201, 201, 201)");
    // actionsTreeView->setStyleSheet("foreground-color: red");
-    actionTreeView->setModel(m_actionsTreeModel);
+    setModel(m_actionsTreeModel);
     qDebug() << __FILE__ << QString::number(__LINE__)  ;
 }
+
+bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
+    bool ret = true;
+    QString data = index.data().toString();
+    receiptsEngine r;
+    if (!r.deleteFromThesaurus(data))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
+    	  ret = false;
+        }
+    fillActionTreeView();
+    return ret;
+}
+
+ReceiptViewer::ReceiptViewer(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::ReceiptViewer)
+{
+    m_userUuid = user()->value(Core::IUser::Uuid).toString();
+    m_model = new InternalAmount::AmountModel(this);
+    ui->setupUi(this);
+    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->amountsView->setModel(m_model);
+    ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
+    ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
+    ui->dateExecution->setDate(QDate::currentDate());
+    ui->datePayment->setDisplayFormat("yyyy-MM-dd");
+    ui->datePayment->setDate(QDate::currentDate());
+    ui->dateBanked->setDisplayFormat("yyyy-MM-dd");
+    ui->dateBanked->setDate(QDate::currentDate());
+    ui->dateBook->setDisplayFormat("yyyy-MM-dd");
+    ui->dateBook->setDate(QDate::currentDate());
+    ui->inputRadioButton->setChecked(true);
+    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
+    ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
+    ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
+    
+    m_modelReturnedList = new QStringListModel;
+    ui->returnedListView->setModel(m_modelReturnedList);
+    ui->returnedListView->setEnabled(true);
+    ui->returnedListView->show();
+    actionTreeView = new treeViewsActions(this);
+    QVBoxLayout *vbox = new QVBoxLayout;
+     vbox->addWidget(actionTreeView);
+    ui->actionsBox->setLayout(vbox);
+    actionTreeView->fillActionTreeView();
+    //right click
+    m_clear = new QAction(trUtf8("Clear all."),this);
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
+    connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
+    connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
+    connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
+    connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
+}
+
+ReceiptViewer::~ReceiptViewer()
+{
+    delete ui;
+}
+
+void ReceiptViewer::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+void ReceiptViewer::setPosition(QWidget *parent){
+    QRect rect = parent->rect();
+    setGeometry(parent->x(),parent->y(),rect.width()-10,rect.height()-10);
+}
+
+void ReceiptViewer::deleteLine()
+{
+    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
+}
+
+
 
 void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
     QString data = index.data(Qt::DisplayRole).toString();
@@ -416,10 +417,6 @@ void ReceiptViewer::mousePressEvent(QMouseEvent * event){
     //m_menu        -> exec(QCursor::pos());
     //m_menu->exec(ui->returnedListView->mapToGlobal(QPoint(0, 0)));
     m_menu->exec(event->globalPos());
-    if (QObject::sender() == qobject_cast<QTreeView*>(actionTreeView))
-    {
-    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Delete in thesaurus."),QMessageBox::Ok);
-        }
   }
 }
   
@@ -429,10 +426,22 @@ void ReceiptViewer::saveInThesaurus(){
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Saved in thesaurus."),QMessageBox::Ok);
         }
+    actionTreeView->fillActionTreeView();
 }
 
-void ReceiptViewer::clearAll(){
+void ReceiptViewer::clearAll(bool b){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in clearAll ";
+    if (b==false)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
+        }
     m_listOfValues.clear();
-    //m_modelReturnedList->clear();
+    m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
+    //clear accountmodel
+    for (int i = 0; i < AmountModel::RowCount; i += 1)
+    {
+        double value = 0.00;
+    	m_model->setData(m_model->index(i,AmountModel::Col_Value), value, Qt::EditRole);
+    }
     
 }

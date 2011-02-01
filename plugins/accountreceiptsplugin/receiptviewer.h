@@ -135,6 +135,8 @@ class treeViewsActions: public QTreeView {
         treeViewsActions(QWidget * parent);
         ~treeViewsActions();
         void reset(){QTreeView::reset();}
+        void fillActionTreeView();
+        QStandardItemModel *m_actionsTreeModel;
     private :
         void mousePressEvent(QMouseEvent * event);
         bool deleteItemFromThesaurus(QModelIndex & index);
@@ -152,14 +154,12 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-    void fillActionTreeView();
     void fillModel(QHash<QString,QString> & hashOfValues,int typeOfPayment,double percentage);
     QAction *m_clear;
     QMenu *m_menu;
 
 private:
     Ui::ReceiptViewer *ui;
-    QStandardItemModel *m_actionsTreeModel;
     QStringListModel *m_modelReturnedList;
     AmountModel * m_model;
     QVariant m_siteUid;
@@ -173,7 +173,7 @@ private slots :
     void saveAndQuit();
     void actionsOfTreeView(const QModelIndex&);
     void saveInThesaurus();
-    void clearAll();
+    void clearAll(bool b);
 };
 
 #endif // RECEIPTVIEWER_H
