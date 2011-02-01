@@ -10,6 +10,7 @@
 #include <accountbaseplugin/rulesmodel.h>
 #include <accountbaseplugin/distancerulesmodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
+#include <accountbaseplugin/medicalproceduremodel.h>
 #include <QMessageBox>
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
@@ -188,6 +189,35 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
    	  if(hash.size()< 1){
    	      hash.insert("thesaurus","userUuid");
    	      }
+    return hash;
+}
+
+QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
+    QHash<QString,QString> hash;
+    ThesaurusModel model(this);
+    QString filter = QString("%1 = '%2'").arg("PREFERED",QString::number(true));
+    model.setFilter(filter);
+    model.select();
+    QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
+    MedicalProcedureModel MPmodel(this);
+    double value = 0.00;
+    QString MPfilter ;
+    QStringList list;
+    if (data.contains("+"))
+    {
+    	  list = data.split("+");
+        }
+    else{
+          list << data;
+    }
+    QString str;
+    foreach(str,list){
+        MPfilter = QString("%1 = '%2'").arg("NAME",str);
+        MPmodel.setFilter(MPfilter);
+        MPmodel.select();
+        value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
+        }
+    hash.insert(data,QString::number(value));
     return hash;
 }
 

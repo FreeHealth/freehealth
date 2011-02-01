@@ -12,6 +12,7 @@ class receiptsManager : public QObject {
   QHash<QString,QVariant> getHashOfSites();
   QHash<QString,QVariant> getHashOfInsurance();
   QHash<QString,QVariant> getHashOfThesaurus();
+  QHash<QString,QString> getPreferentialActFromThesaurus();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);
