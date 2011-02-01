@@ -1,7 +1,7 @@
 /*!
     \mainpage FreeMedForms a free and open source medical files manager.
     \author    Eric Maeker, MD
-    \version   FreeMedForms alpha 0.4.0
+    \version   FreeMedForms alpha 0.5.0 (not released yet)
 
 
     \section introduction Introduction
@@ -72,13 +72,13 @@ französischen AFSSAPS synchronisiert.
 
 FreeMedForms and derivatives are availables for :
   - Linux
-  - FreeBSD
+  - FreeBSD (need some adaptation, please contact dev team)
   - MacOs X universal
   - Windows
 
 FreeMedForms and derivatives use :
   - C++ language
-  - Qt4.5 libs
+  - Qt libs (latests)
   - SQLite / MySQL
   - XML / HTML / ECMA Script
   - Bash for some scripts
@@ -119,13 +119,14 @@ FreeMedForms and derivatives use :
 */
 
 /**    \page participate Participate to FreeMedForms and derivative
-    If you want to participate at this project, please let us know by sending a mail at freemedforms@googlegroups.com.
-    We are looking for :
-    - testers
-    - coders
-    - writer for documentation, howto and tutorial
-    - drugs database checking
-    - medical doctors to help us in providing a better application
-    - translators (from english to german, spanish, italian...).
-   \htmlonly <a href="http://www.freemedforms.org">Find all informations about the FreeMedForms project in the main website</a> \endhtmlonly
+
+\section redirection This page has moved
+
+Follow this link
+
+  - <a href="http://www.freemedforms.com/en/participate">English section</a>
+  - <a href="http://www.freemedforms.com/fr/participate">French section</a>
+
+  \ref index
+
 */
