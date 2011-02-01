@@ -261,6 +261,10 @@ void MedicalProcedureModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
 }
 
+void MedicalProcedureModel::select(){
+    d->m_SqlTable->select();
+}
+
 bool MedicalProcedureModel::isDirty() const
 {
     return d->m_IsDirty;

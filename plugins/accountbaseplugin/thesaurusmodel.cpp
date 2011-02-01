@@ -106,3 +106,12 @@ bool ThesaurusModel::submit()
     return false;
 }
 
+void ThesaurusModel::setFilter(QString & filter){
+    d->m_SqlTable->setFilter(filter);
+}
+
+void ThesaurusModel::select(){
+    d->m_SqlTable->select();
+}
+
+

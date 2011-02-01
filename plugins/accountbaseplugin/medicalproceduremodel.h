@@ -78,6 +78,7 @@ public:
     bool isDirty() const;
     void setTypeFilter(const QString &filter);
     void setFilter(const QString & filter);
+    void select();
 
 public Q_SLOTS:
     bool submit();
