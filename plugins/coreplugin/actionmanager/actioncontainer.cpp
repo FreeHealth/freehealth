@@ -177,7 +177,8 @@ void ActionContainerPrivate::appendGroup(const QString &group)
     ActionManagerPrivate *am = ActionManagerPrivate::instance();
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
-    Command *cmd = am->registerAction(sep, QLatin1String("Sep.")+group, QList<int>() << Constants::C_GLOBAL_ID);
+    sep->setObjectName(QLatin1String("Sep.")+group);
+    Command *cmd = am->registerAction(sep, sep->objectName(), QList<int>() << Constants::C_GLOBAL_ID);
     addAction(cmd, group);
 }
 
