@@ -272,7 +272,7 @@ void EditorActionHandler::createActions()
     // Font actions
     aBold = createAction(this, "aBold", ICONBOLD, A_FORMAT_BOLD, allContexts, FORMATBOLD_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Bold, true);
     aItalic = createAction(this, "aItalic", ICONITALIC, A_FORMAT_ITALIC, allContexts, FORMATITALIC_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Italic, true);
-    aUnderline = createAction(this, "aUnderline", ICONUNDERLINE, A_FORMAT_UNDERLINE, allContexts, FORMATUNDERLINE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Italic, true);
+    aUnderline = createAction(this, "aUnderline", ICONUNDERLINE, A_FORMAT_UNDERLINE, allContexts, FORMATUNDERLINE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Underline, true);
     aStrike = createAction(this, "aStrike", ICONSTRIKE, A_FORMAT_STRIKE, allContexts, FORMATSTRIKE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::UnknownKey, true);
     aFontBigger = createAction(this, "aFontBigger", ICONFONTBIGGER, A_FORMAT_BIGGER, allContexts, FORMATBIGGER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
     aFontSmaller = createAction(this, "aFontSmaller", ICONFONTSMALLER, A_FORMAT_SMALLER, allContexts, FORMATSMALLER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
