@@ -138,8 +138,11 @@ class treeViewsActions: public QTreeView {
         void fillActionTreeView();
         QStandardItemModel *m_actionsTreeModel;
     private :
+        QAction * m_choosePreferedValue;
         void mousePressEvent(QMouseEvent * event);
         bool deleteItemFromThesaurus(QModelIndex & index);
+        void choosePreferedValue(bool b);
+        bool isChildOfThesaurus();
 };
 class ReceiptViewer : public QWidget
 {

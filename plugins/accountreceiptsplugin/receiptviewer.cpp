@@ -58,32 +58,50 @@ using namespace InternalAmount;
 using namespace Constants;
 
 treeViewsActions::treeViewsActions(QWidget * parent){
+    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
+    connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
     }
     
 treeViewsActions::~treeViewsActions(){}
 
 void treeViewsActions::mousePressEvent(QMouseEvent * event){
     if(event->button() == Qt::RightButton){
-        blockSignals(true);
-        QMessageBox msgBox;
-        msgBox.setText("Do you want to delete choosen item ?");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::Yes);
-        int ret = msgBox.exec();
-        QModelIndex index;
-        switch(ret){
-            case QMessageBox::Yes :
-                index = currentIndex();
-                deleteItemFromThesaurus(index);
-                break;
-            case QMessageBox::No :
-                break;
+        if(isChildOfThesaurus()){
+            blockSignals(true);
+            QMessageBox msgBox;
+            msgBox.setText("Do you want to delete choosen item ?");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            QModelIndex index;
+            switch(ret){
+                case QMessageBox::Yes :
+                    index = currentIndex();
+                    deleteItemFromThesaurus(index);
+                    break;
+                case QMessageBox::No :
+                    break;
         }
+        }
+
     }
     if(event->button() == Qt::LeftButton){
         blockSignals(false);
         QTreeView::mousePressEvent(event);
     }
+}
+
+bool treeViewsActions::isChildOfThesaurus(){
+    bool ret = true;
+    QModelIndex current = currentIndex();
+    QModelIndex indexParent = m_actionsTreeModel->parent(current);
+    QString dataParent = m_actionsTreeModel->data(indexParent).toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
+    if (dataParent != "Thesaurus")
+    {
+    	  ret = false;
+        }
+    return ret;
 }
 
 void treeViewsActions::fillActionTreeView(){
@@ -198,6 +216,10 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
     return ret;
 }
 
+void treeViewsActions::choosePreferedValue(bool b){
+
+}
+
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ReceiptViewer)
@@ -303,9 +325,11 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
             percentage = choice.m_percentValue;
-            
-            
-            hashOfValues.insertMulti("CS","23.00");//preferential act
+            hashOfValues = manager.getPreferentialActFromThesaurus();
+            if (hashOfValues.size() < 1)
+            {
+            	  hashOfValues.insertMulti("CS","23.00");//preferential act
+                }           
             m_listOfValues << hashOfValues.keys();
             m_modelReturnedList->setStringList(m_listOfValues);
             fillModel(hashOfValues,typeOfPayment,percentage);
