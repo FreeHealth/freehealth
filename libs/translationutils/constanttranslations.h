@@ -407,6 +407,12 @@ enum TitleInterpret {
         const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
         const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
 
+        // Widely used words
+        const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
+        const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
+        const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
+
+
         // Messages and errors
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
         const char* const CANCEL                             = QT_TRANSLATE_NOOP("tkConstants", "Cancel");
