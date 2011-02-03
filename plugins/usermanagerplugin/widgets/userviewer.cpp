@@ -140,7 +140,7 @@ void UserViewerPrivate::initialize()
     // QListView need to be managed by hand
     QStringListModel *modelspe = new QStringListModel(this);
     specialtyListView->setModel(modelspe);
-    specialtyListView->setActions(Views::ListView::AllActions);
+    specialtyListView->setActions(Views::Constants::AllActions);
     QStringListModel *modelqual = new QStringListModel(this);
     qualificationsListView->setModel(modelqual);
     QStringListModel *modelids = new QStringListModel(this);
