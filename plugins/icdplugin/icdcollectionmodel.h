@@ -63,11 +63,9 @@ public:
     bool addCode(const QVariant &SID);
     bool addAssociation(const Internal::IcdAssociation &pair);
 
-//    int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
-
-//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    // Direct access to datas and model cleaning
     void clearCollection();
+    QStringList includedCodesWithDaget() const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

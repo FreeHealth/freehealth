@@ -136,6 +136,11 @@ bool IcdCollectionModel::isCollectionSimpleList() const
     return d->m_IsSimpleList;
 }
 
+/**
+  \brief Add a single ICD code using its \e SID to the model with/without daget checking.
+  This member checks the ICD code exclusion from the already included codes, and
+  checks the daget coding validity.
+*/
 bool IcdCollectionModel::canAddThisCode(const QVariant &SID, bool checkDaget) const
 {
     // already included ?
@@ -164,6 +169,11 @@ bool IcdCollectionModel::canAddThisCode(const QVariant &SID, bool checkDaget) co
     return true;
 }
 
+/**
+  \brief Add an ICD association \e asso to the model with daget checking.
+  This member checks the ICD code exclusion from the already included codes, and
+  checks the daget coding validity.
+*/
 bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &asso) const
 {
     // Association valid ?
@@ -207,6 +217,10 @@ bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &a
     return true;
 }
 
+/**
+  \brief Add a single ICD code \e asso to the model.
+  This member will firstly check if the code can be added to the model.
+*/
 bool IcdCollectionModel::addCode(const QVariant &SID)
 {
     // Can add this code ?
@@ -234,6 +248,10 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
     return true;
 }
 
+/**
+  \brief Add an ICD association \e asso to the model.
+  This member will firstly check if the association can be added to the model.
+*/
 bool IcdCollectionModel::addAssociation(const Internal::IcdAssociation &asso)
 {
     // Can add this association ?
@@ -327,6 +345,24 @@ void IcdCollectionModel::clearCollection()
     d->m_SIDs.clear();
     d->m_ExcludedSIDs.clear();
     QStandardItemModel::clear();
+}
+
+/**
+  \brief Return the full list of included codes.
+  Single codes are added as single item of the QStringList,
+  Associations are added as single item of the QStringList serialized like (code1/code2).
+*/
+QStringList IcdCollectionModel::includedCodesWithDaget() const
+{
+    QStringList codes;
+    foreach(Internal::ModelItem *it, d->m_Rows) {
+        if (it->association.isValid()) {
+            codes << it->association.mainCodeWithDagStar() + "/" + it->association.associatedCodeWithDagStar();
+        } else {
+            codes << it->code;
+        }
+    }
+    return codes;
 }
 
 Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
