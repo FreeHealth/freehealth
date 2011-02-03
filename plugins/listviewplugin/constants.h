@@ -35,30 +35,26 @@ namespace Constants {
     // Translate context
     const char * const  VIEWS_CONSTANTS_TR_CONTEXT = "Views";
 
-    // Database
-    const char * const  DB_NAME            = "views";
-    const char * const  DB_FILENAME        = "views.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
+    const char* const C_BASIC            = "context.ListView.basic";
+    const char* const C_BASIC_ADDREMOVE  = "context.ListView.AddRemove";
+    const char* const C_BASIC_MOVE       = "context.ListView.Move";
+    const char * const HIDDEN_ID         = "@#HiDdEnId#@";
 
-    // Tables
-    enum Tables {
-      Table_CATEGORIES = 0,
-      Table_CATEGORY_LABEL,
-      Table_VERSION
-    };
 
-    enum PmhCatFields {
-        CATEGORY_ID = 0, CATEGORY_MIME, CATEGORY_PARENT, CATEGORY_LABEL_ID, CATEGORY_THEMEDICON,
-        CATEGORY_MaxParam
+    /** \brief Enumerates the available default actions that can be added. Actions are pop-upped. */
+    enum AvailableAction {
+        AddRemove      = 0x01,
+        MoveUpDown     = 0x02,
+        Edit           = 0x04,
+        DefaultActions = AddRemove,
+        AllActions     = AddRemove | MoveUpDown
     };
+    Q_DECLARE_FLAGS( AvailableActions, AvailableAction );
 
-    enum PmhCatLabelFields {
-        CATEGORYLABEL_ID = 0, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
-        CATEGORYLABEL_MaxParam
-    };
 
 }  // End namespace Constants
 }  // End namespace Views
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Views::Constants::AvailableActions)
 
 #endif // VIEWS_PLUGIN_CONSTANTS_H
