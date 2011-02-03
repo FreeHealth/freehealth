@@ -143,3 +143,30 @@ bool receiptsEngine::deleteFromThesaurus(QString & data ){
     return ret;
 }
 
+bool receiptsEngine::addBoolTrue(QString & data){
+    bool ret = true;
+    ThesaurusModel model(this);
+    int row = 0;
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
+    	bool b = model.data(model.index(i,THESAURUS_PREF)).toBool();
+    	if (dataReturned == data)
+    	{
+    		  row = i;
+    	    }
+    	if(b == true){
+    	    if (!model.setData(model.index(i,THESAURUS_PREF),false,Qt::EditRole))
+    	    {
+    	    	  qWarning() << __FILE__ << QString::number(__LINE__) << "thesaurusModel cannot set bool to false !" ;
+    	    	  ret == false;
+    	        }
+    	}
+    }
+    if (!model.setData(model.index(row,THESAURUS_PREF),false,Qt::EditRole))
+    {
+    	  ret = false;
+        }
+    return ret;
+}
+

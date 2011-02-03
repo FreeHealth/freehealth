@@ -203,21 +203,24 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     double value = 0.00;
     QString MPfilter ;
     QStringList list;
-    if (data.contains("+"))
-    {
-    	  list = data.split("+");
-        }
-    else{
-          list << data;
+    if(!data.isEmpty()){
+        if (data.contains("+"))
+        {
+    	    list = data.split("+");
+          }
+        else{
+              list << data;
+            }
+        QString str;
+        foreach(str,list){
+            MPfilter = QString("%1 = '%2'").arg("NAME",str);
+            MPmodel.setFilter(MPfilter);
+            MPmodel.select();
+            value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
+            }
+        qDebug() << __FILE__ << QString::number(__LINE__) << " date et values =" << data+":"+QString::number(value) ;
+        hash.insert(data,QString::number(value));
     }
-    QString str;
-    foreach(str,list){
-        MPfilter = QString("%1 = '%2'").arg("NAME",str);
-        MPmodel.setFilter(MPfilter);
-        MPmodel.select();
-        value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
-        }
-    hash.insert(data,QString::number(value));
     return hash;
 }
 

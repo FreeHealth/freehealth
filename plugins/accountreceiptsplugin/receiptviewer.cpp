@@ -58,8 +58,10 @@ using namespace InternalAmount;
 using namespace Constants;
 
 treeViewsActions::treeViewsActions(QWidget * parent){
+    m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
     m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
+    connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
     
 treeViewsActions::~treeViewsActions(){}
@@ -68,7 +70,22 @@ void treeViewsActions::mousePressEvent(QMouseEvent * event){
     if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
-            QMessageBox msgBox;
+            m_menuRightClic = new QMenu(this); 
+            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic-> addAction(m_deleteThesaurusValue);
+            m_menuRightClic->exec(event->globalPos());
+            blockSignals(false);
+        }
+
+    }
+    if(event->button() == Qt::LeftButton){
+        blockSignals(false);
+        QTreeView::mousePressEvent(event);
+    }
+}
+
+void treeViewsActions::deleteBox(bool b){
+    QMessageBox msgBox;
             msgBox.setText("Do you want to delete choosen item ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
@@ -81,14 +98,42 @@ void treeViewsActions::mousePressEvent(QMouseEvent * event){
                     break;
                 case QMessageBox::No :
                     break;
-        }
-        }
+            }
+}
 
-    }
-    if(event->button() == Qt::LeftButton){
-        blockSignals(false);
-        QTreeView::mousePressEvent(event);
-    }
+void treeViewsActions::choosePreferedValue(bool b){
+    QMessageBox msgBox;
+            msgBox.setText("Do you want to choose this item as prefered value ?");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            QModelIndex index;
+            switch(ret){
+                case QMessageBox::Yes :
+                    index = currentIndex();
+                    if (!addPreferedItem(index))
+                    {
+                    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to choose this item."),
+                    	                       QMessageBox::Ok);
+                        }
+                    break;
+                case QMessageBox::No :
+                    break;
+            }
+} 
+
+bool treeViewsActions::addPreferedItem(QModelIndex & index){
+    bool ret = true;
+    QString data = index.data().toString();
+    receiptsEngine r;
+    if (!r.addBoolTrue(data))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot change value bool in thesaurus :")+data,
+    	                       QMessageBox::Ok);
+    	  ret = false;
+        }
+    fillActionTreeView();
+    return ret;
 }
 
 bool treeViewsActions::isChildOfThesaurus(){
@@ -216,9 +261,6 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
     return ret;
 }
 
-void treeViewsActions::choosePreferedValue(bool b){
-
-}
 
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
