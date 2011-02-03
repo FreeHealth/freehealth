@@ -27,6 +27,8 @@
 #define LISTVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
+#include <listviewplugin/extendedview.h>
+#include <listviewplugin/constants.h>
 
 #include <QWidget>
 #include <QListView>
@@ -38,9 +40,11 @@
 /**
  * \file listview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.11
- * \date 08 Sept 2009
+ * \version 0.5.0
+ * \date 03 Feb 2011
 */
+
+
 namespace Views {
 namespace Internal {
 class ListViewPrivate;
@@ -50,35 +54,22 @@ class LISTVIEW_EXPORT ListView : public QListView
 {
     Q_OBJECT
     friend class ListViewPrivate;
+
 public:
-
-    /** \brief Enumerates the available default actions that can be added. Actions are pop-upped. */
-    enum AvailableAction {
-        AddRemove      = 0x01,
-        MoveUpDown     = 0x02,
-        Edit           = 0x04,
-        DefaultActions = AddRemove,
-        AllActions     = AddRemove | MoveUpDown
-    };
-    Q_DECLARE_FLAGS( AvailableActions, AvailableAction );
-
-    ListView(QWidget *parent = 0, AvailableActions actions = DefaultActions);
+    ListView(QWidget *parent = 0, Views::Constants::AvailableActions actions = Views::Constants::DefaultActions);
     virtual ~ListView();
 
-    void setActions( AvailableActions actions );
+    void setActions(Views::Constants::AvailableActions actions);
 
     void hideButtons() const;
     void showButtons();
     void useContextMenu(bool state = true);
 
 public Q_SLOTS:
-    virtual QMenu *getContextMenu();
-    virtual void contextMenu(const QPoint & );
     virtual void addItem();
     virtual void removeItem();
     virtual void moveDown();
     virtual void moveUp();
-    virtual void on_edit_triggered();
 
 Q_SIGNALS:
     void addRequested();
@@ -92,6 +83,5 @@ private:
 
 }  // End Views
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Views::ListView::AvailableActions)
 
-#endif // TKLISTVIEW_H
+#endif // LISTVIEW_H
