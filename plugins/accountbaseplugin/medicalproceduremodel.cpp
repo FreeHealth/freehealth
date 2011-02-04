@@ -81,6 +81,11 @@ public:
         if (!m_TypeFilter.isEmpty()) {
             where.insert(AccountDB::Constants::MP_TYPE, QString("='%1'").arg(m_TypeFilter));
         }
+        if (!m_nameFilter.isEmpty() )
+        {
+        	  where.insert(AccountDB::Constants::MP_NAME, QString("='%1'").arg(m_nameFilter));
+            } 
+            
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_MedicalProcedure, where));
         if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
@@ -91,7 +96,7 @@ public:
 public:
     QSqlTableModel *m_SqlTable;
     bool m_IsDirty;
-    QString m_UserUid, m_TypeFilter;
+    QString m_UserUid, m_TypeFilter ,m_nameFilter ;
 
 private:
     MedicalProcedureModel *q;
@@ -160,6 +165,7 @@ void MedicalProcedureModel::setUserUuid(const QString &uuid)
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
 {   
+    d->refreshFilter() ;
     return d->m_SqlTable->data(index, role);
 }
 
@@ -242,6 +248,14 @@ void MedicalProcedureModel::setTypeFilter(const QString &type)
     reset();
 }
 
+void MedicalProcedureModel::setNameFilter(const QString & name)
+{
+    d->m_nameFilter = name;
+    d->refreshFilter();
+    d->m_SqlTable->select();
+    reset();
+}
+
 bool MedicalProcedureModel::submit()
 {
     if (d->m_SqlTable->submitAll()) {
@@ -255,14 +269,6 @@ void MedicalProcedureModel::revert()
 {
     d->m_IsDirty = false;
     d->m_SqlTable->revert();
-}
-
-void MedicalProcedureModel::setFilter(const QString & filter){
-    d->m_SqlTable->setFilter(filter);
-}
-
-void MedicalProcedureModel::select(){
-    d->m_SqlTable->select();
 }
 
 bool MedicalProcedureModel::isDirty() const

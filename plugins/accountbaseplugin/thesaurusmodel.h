@@ -34,8 +34,8 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
     bool submit();
-    void setFilter(QString & filter);
-    void select();
+    void setFilter(const QString & filter);
+    bool select();
     bool isDirty() const;
 
 private:
