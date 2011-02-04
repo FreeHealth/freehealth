@@ -204,6 +204,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     QString MPfilter ;
     QStringList list;
     if(!data.isEmpty()){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
         if (data.contains("+"))
         {
     	    list = data.split("+");
@@ -213,12 +214,13 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
             }
         QString str;
         foreach(str,list){
-            MPfilter = QString("%1 = '%2'").arg("NAME",str);
-            MPmodel.setFilter(MPfilter);
-            MPmodel.select();
+            str = str.trimmed();
+            qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+            MPfilter = str;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " MPfilter =" << MPfilter ;
+            MPmodel.setNameFilter(MPfilter);
             value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
             }
-        qDebug() << __FILE__ << QString::number(__LINE__) << " date et values =" << data+":"+QString::number(value) ;
         hash.insert(data,QString::number(value));
     }
     return hash;

@@ -260,7 +260,11 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
     fillActionTreeView();
     return ret;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////RECEIPTS VIEWER/////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
@@ -367,7 +371,9 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
         if(choice.exec() == QDialog::Accepted){
             typeOfPayment = choice.returnChoiceDialog();//int
             percentage = choice.m_percentValue;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " prefered value =" << data ;
             hashOfValues = manager.getPreferentialActFromThesaurus();
+            qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
             if (hashOfValues.size() < 1)
             {
             	  hashOfValues.insertMulti("CS","23.00");//preferential act

@@ -56,8 +56,8 @@ void findReceiptsValues::fillComboCategories(){
 }
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
-    QString filter = QString("TYPE = '%1'").arg(comboItem);
-    m_mpmodel->setFilter(filter);
+    QString filter = comboItem;
+    m_mpmodel->setTypeFilter(filter);
     QVariant act = QVariant(trUtf8("Name"));
     QVariant value = QVariant(trUtf8("Value"));
     if (!m_mpmodel->setHeaderData(MP_NAME,Qt::Horizontal,act,Qt::DisplayRole))
