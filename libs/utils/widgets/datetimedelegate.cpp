@@ -31,6 +31,8 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
+#include <QDebug>
+
 using namespace Utils;
 
 DateTimeDelegate::DateTimeDelegate(QObject *parent, bool dateOnly) :
@@ -70,15 +72,13 @@ QWidget *DateTimeDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &index) const
 {
-//    if (m_Max == 0.00)
-//        return 0;
     if (m_IsDateOnly) {
         QDateEdit *editor = new QDateEdit(parent);
         editor->setMinimumDate(m_MinDate);
         editor->setMaximumDate(m_MaxDate);
         editor->setCalendarPopup(true);
         editor->setDisplayFormat(QLocale().dateFormat());
-        editor->setDate(index.data().toDate());
+        editor->setDate(index.data(Qt::EditRole).toDate());
         return editor;
     } else {
         QDateTimeEdit *editor = new QDateTimeEdit(parent);
