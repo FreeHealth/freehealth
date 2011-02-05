@@ -411,6 +411,7 @@ enum TitleInterpret {
         const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
         const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
         const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
+        const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
 
 
         // Messages and errors
