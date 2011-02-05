@@ -18,7 +18,8 @@ HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icddialog.h \
     $${PWD}/icdcentralwidget.h \
     $${PWD}/icdio.h \
-    $${PWD}/icdsearchmodel.h
+    $${PWD}/icdsearchmodel.h \
+    $${PWD}/icdcollectiondialog.h
 
 SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icddatabase.cpp \
@@ -34,7 +35,9 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icddialog.cpp \
     $${PWD}/icdcentralwidget.cpp \
     $${PWD}/icdio.cpp \
-    $${PWD}/icdsearchmodel.cpp
+    $${PWD}/icdsearchmodel.cpp \
+    $${PWD}/icdcollectiondialog.cpp
+
 
 
 FORMS += $${PWD}/icdviewer.ui \
