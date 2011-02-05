@@ -183,7 +183,7 @@ void ExtendedView::addItem()
             row = 0;
     }
     if (!d->m_Parent->model()->insertRows(row, 1, parentIndex))
-        Utils::Log::addError("ExtendedView", QString("ExtendedView can not add a row to the model %1").arg(d->m_Parent->model()->objectName()),
+        Utils::Log::addError("ExtendedView", QString("Can not add a row to the model %1").arg(d->m_Parent->model()->objectName()),
                              __FILE__, __LINE__);
 
     // select inserted row and edit it
@@ -206,8 +206,8 @@ void ExtendedView::removeItem()
         d->m_Parent->closePersistentEditor(idx);
         // Now delete row
         int row = idx.row();
-        if (!d->m_Parent->model()->removeRow(row)) {
-            Utils::Log::addError("ExtendedView", QString("ListView can not remove row %1 to the model %2")
+        if (!d->m_Parent->model()->removeRow(row, idx.parent())) {
+            Utils::Log::addError("ExtendedView", QString("Can not remove row %1 to the model %2")
                              .arg(row)
                              .arg(d->m_Parent->model()->objectName()),
                              __FILE__, __LINE__);
