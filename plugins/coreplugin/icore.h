@@ -96,7 +96,7 @@ public:
     virtual void setMainWindow(IMainWindow *) = 0;
     virtual IMainWindow *mainWindow() const = 0;
 
-	virtual IPadTools *padTools() const { return 0; } // pad tools are not mandatory for everyone, so not pure virtual
+    virtual IPadTools *padTools() const { return 0; } // pad tools are not mandatory for everyone, so not pure virtual
 
     // Patient's datas wrapper
     virtual IPatient *patient() const = 0;

@@ -435,7 +435,7 @@ public:
                     ++zz;
                 }
             } else {
-                Utils::Log::addQueryError(q, query);
+                LOG_QUERY_ERROR_FOR(q, query);
             }
             query.finish();
         }
@@ -467,7 +467,7 @@ public:
                 item->setData(EpisodeModel::XmlContent, query.value(0));
             }
         } else {
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
         }
         query.finish();
     }
@@ -490,7 +490,7 @@ public:
         query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
         if (!query.exec()) {
             ok = false;
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
         }
         item->setData(EpisodeModel::Id, query.lastInsertId());
         query.finish();
@@ -501,7 +501,7 @@ public:
         query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, item->data(EpisodeModel::Id));
         query.bindValue(Constants::EPISODE_CONTENT_XML, item->data(EpisodeModel::XmlContent));
         if (!query.exec()) {
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
             ok = false;
         }
         query.finish();
@@ -588,7 +588,7 @@ public:
                 query.bindValue(Constants::EPISODE_CONTENT_XML, xml);
             }
             if (!query.exec()) {
-                Utils::Log::addQueryError(q, query);
+                LOG_QUERY_ERROR_FOR(q, query);
             }
             query.finish();
         }
@@ -632,13 +632,13 @@ public:
         query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_LABEL, where));
         query.bindValue(0, itemToSave->data(EpisodeModel::Label));
         if (!query.exec()) {
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
         }
         query.finish();
         query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_DATE, where));
         query.bindValue(0, itemToSave->data(EpisodeModel::Date));
         if (!query.exec()) {
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
         }
         query.finish();
     }

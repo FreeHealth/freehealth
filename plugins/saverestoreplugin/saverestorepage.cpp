@@ -199,7 +199,7 @@ void SaveRestoreWidget::on_saveButton_clicked()
             continue;
         }
 
-        while ((inFile.getChar(&c)) && (outFile.putChar(c)));
+        while ((inFile.getChar(&c)) && (outFile.putChar(c))) ;
         if (outFile.getZipError() != UNZ_OK) {
             Utils::Log::addError(this, QString("QuaZip error while setting content : %1").arg(outFile.getZipError()));
             error = true;
