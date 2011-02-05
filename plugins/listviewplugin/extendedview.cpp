@@ -171,19 +171,23 @@ void ExtendedView::addItem()
 
     // insert a row into model
     int row = 0;
+    int col = 0;
+    QModelIndex parentIndex;
     if (d->m_Parent->currentIndex().isValid()) {
         row = d->m_Parent->currentIndex().row() + 1;
+        col = d->m_Parent->currentIndex().column();
+        parentIndex = d->m_Parent->currentIndex().parent();
     } else {
         row = d->m_Parent->model()->rowCount();
         if (row<0)
             row = 0;
     }
-    if (!d->m_Parent->model()->insertRows(row, 1))
-        Utils::Log::addError("ExtendedView", QString("ListView can not add a row to the model %1").arg(d->m_Parent->model()->objectName()),
+    if (!d->m_Parent->model()->insertRows(row, 1, parentIndex))
+        Utils::Log::addError("ExtendedView", QString("ExtendedView can not add a row to the model %1").arg(d->m_Parent->model()->objectName()),
                              __FILE__, __LINE__);
 
     // select inserted row and edit it
-    QModelIndex index = d->m_Parent->model()->index(row, d->m_Parent->currentIndex().column());
+    QModelIndex index = d->m_Parent->model()->index(row, col, parentIndex);
     d->m_Parent->setCurrentIndex(index);
     if (d->m_Parent->editTriggers() != QAbstractItemView::NoEditTriggers) {
         d->m_Parent->edit(index);
