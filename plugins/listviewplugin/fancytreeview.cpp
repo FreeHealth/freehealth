@@ -170,6 +170,11 @@ FancyTreeView::~FancyTreeView()
     delete d; d=0;
 }
 
+QTreeView *FancyTreeView::treeView() const
+{
+    return ui->treeView;
+}
+
 QToolButton *FancyTreeView::button()
 {
     if (ui)

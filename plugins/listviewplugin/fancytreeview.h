@@ -81,6 +81,8 @@ public:
     explicit FancyTreeView(QWidget *parent = 0);
     ~FancyTreeView();
 
+    QTreeView *treeView() const;
+
     QToolButton *button();
     void setButtonActions(const ButtonActions &actions);
 
