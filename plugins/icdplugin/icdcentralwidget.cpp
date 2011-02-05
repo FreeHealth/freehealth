@@ -226,6 +226,20 @@ void IcdCentralWidget::setCollectionMode(const CollectionModes mode)
 IcdCentralWidget::CollectionModes IcdCentralWidget::collectionMode() const
 {return CollectionModes(d->m_CollectionMode);}
 
+/**
+  \brief Defines the ICD::IcdCollectionModel to use.
+  By default, the IcdCentralWidget creates its own model, if you set yours, the current model will be deleted and set to zero
+*/
+void IcdCentralWidget::setIcdCollectionModel(IcdCollectionModel *model)
+{
+    if (d->m_CollectionModel) {
+        delete d->m_CollectionModel;
+        d->m_CollectionModel = 0;
+    }
+    d->m_CollectionModel = model;
+    ui->collectionView->setModel(model);
+}
+
 void IcdCentralWidget::openFile(const QString &file)
 {
     if (d->m_CollectionModel->rowCount() > 0) {

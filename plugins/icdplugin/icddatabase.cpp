@@ -344,7 +344,7 @@ QString IcdDatabase::getDatabaseVersion()
                        query.value(Constants::VERSION_BUILD).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return toReturn;
 }
@@ -425,7 +425,7 @@ QList<int> IcdDatabase::getHeadersSID(const QVariant &SID)
                     << query.value(6).toInt();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return toReturn;
 }
@@ -452,7 +452,7 @@ QVariant IcdDatabase::getIcdCode(const QVariant &SID)
             return *qvar;
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QVariant();
 }
@@ -485,7 +485,7 @@ QString IcdDatabase::getDagStarCode(const QVariant &SID)
         return *s;
 
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QChar();
 }
@@ -540,7 +540,7 @@ QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)
              sids << query.value(0).toInt();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return sids;
 }
@@ -583,7 +583,7 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
 
         return asso;
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return Internal::IcdAssociation();
 }
@@ -626,7 +626,7 @@ bool IcdDatabase::codeCanBeUsedAlone(const QVariant &SID)
 //        return dag->dag;
 
 //    } else {
-//        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+//                LOG_QUERY_ERROR(query);
 //    }
 //    return QChar();
 //}
@@ -659,7 +659,7 @@ QString IcdDatabase::getLabelFromLid(const QVariant &LID)
             return *s;
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QString();
 }
@@ -693,7 +693,7 @@ QString IcdDatabase::getSystemLabel(const QVariant &SID)
             return *s;
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QString();
 }
@@ -724,7 +724,7 @@ QStringList IcdDatabase::getAllLabels(const QVariant &SID, const int libelleFiel
             toReturn << query.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return toReturn;
 }
@@ -752,7 +752,7 @@ QString IcdDatabase::getAssociatedLabel(const QVariant &mainSID, const QVariant 
             return query.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QString();
 }
@@ -779,7 +779,7 @@ QStringList IcdDatabase::getIncludedLabels(const QVariant &SID)
                 lids << query.value(0).toInt();
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
     QStringList toReturn;
@@ -814,7 +814,7 @@ QVector<int> IcdDatabase::getExclusions(const QVariant &SID)
                 toReturn << query.value(0).toInt();
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
     return toReturn;
@@ -854,7 +854,7 @@ QString IcdDatabase::getMemo(const QVariant &SID)
             return query.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return QString();
 }

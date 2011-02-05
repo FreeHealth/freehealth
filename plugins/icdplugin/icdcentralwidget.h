@@ -32,6 +32,7 @@
 
 namespace ICD {
 class IcdWidgetManager;
+class IcdCollectionModel;
 
 namespace Internal {
 class IcdCentralWidgetPrivate;
@@ -66,6 +67,8 @@ public:
 
     void setCollectionMode(const CollectionModes mode);
     CollectionModes collectionMode() const;
+
+    void setIcdCollectionModel(IcdCollectionModel *model);
 
     void openFile(const QString &file);
     void readXmlCollection(const QString &xml);

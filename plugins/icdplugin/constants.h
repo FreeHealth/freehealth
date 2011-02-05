@@ -240,8 +240,8 @@ namespace Constants {
     const char* const   DATABASE_INFOS_TEXT     = QT_TRANSLATE_NOOP("ICD", "ICD10 database informations");
     const char* const   SEARCHMENU_TEXT         = QT_TRANSLATE_NOOP("ICD", "ICD10 search method");
     const char* const   SEARCHLABEL_TEXT        = QT_TRANSLATE_NOOP("ICD", "Search by label");
-    const char* const   MODESMENU_TEXT          = QT_TRANSLATE_NOOP("ICD", "ICD models modes");
     const char* const   SEARCHCODE_TEXT         = QT_TRANSLATE_NOOP("ICD", "Search by code");
+    const char* const   MODESMENU_TEXT          = QT_TRANSLATE_NOOP("ICD", "ICD models modes");
     const char* const   TOGGLEICDSELECTOR_TEXT  = QT_TRANSLATE_NOOP("ICD", "Toggle code selector");
     const char* const   PRINTCOLLECTION_TEXT    = QT_TRANSLATE_NOOP("ICD", "Print ICD10 code collection");
     const char* const   SELECTORSIMPLEMODE_TEXT = QT_TRANSLATE_NOOP("ICD", "Selector: simple list mode");
