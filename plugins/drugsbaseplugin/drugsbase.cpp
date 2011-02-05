@@ -370,7 +370,7 @@ bool DrugsBase::init()
                                          search.value(Constants::SEARCHENGINE_URL).toString());
         }
     } else {
-        Utils::Log::addQueryError(this, search, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(search);
     }
     Utils::Log::addMessage(this, QString("Getting %1 Drugs Search Engines").arg(searchEngine()->numberOfEngines()));
 
@@ -490,7 +490,7 @@ DatabaseInfos *DrugsBase::getDatabaseInformations(const QString &connectionName)
             }
         }
     } else {
-        Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(q);
     }
     return info;
 }
@@ -601,7 +601,7 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                Utils::Log::addQueryError("Database", q, __FILE__, __LINE__);
+                LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
                 return false;
             }
@@ -679,7 +679,7 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
                 toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
             }
         } else
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
     }
 
     req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED`<`MODIFICATIONDATE`);");
@@ -696,7 +696,7 @@ QHash<QString, QString> DrugsBase::getDosageToTransmit()
                 toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
     return toReturn;
@@ -765,7 +765,7 @@ QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
                 toReturn << query.value(0);
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
 
@@ -813,7 +813,7 @@ QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
             cis_compo.insertMulti(cis, compo);
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
 
     // now check every drugs
@@ -870,7 +870,7 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
                 toReturn.insertMulti(query.value(0).toInt(), query.value(1).toString());
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
     return toReturn;
@@ -912,10 +912,10 @@ QVariant DrugsBase::getUIDFromCIP(int CIP)
         if (q.next()) {
             return q.value(0);
         } else {
-            Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(q);
         }
     } else {
-        Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(q);
     }
     return QVariant();
 }
@@ -937,7 +937,7 @@ QString DrugsBase::getDrugName(const QString &uid) const
             return q.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(q);
     }
     return QString();
 }
@@ -982,7 +982,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
         } else {
             Utils::Log::addError(this, "Can find a valid DRUGS_UID in getDrugByUID where uid==-1",
                                  __FILE__, __LINE__);
-            Utils::Log::addQueryError("DrugsBase", q, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(q);
             return 0;
         }
     }
@@ -1005,7 +1005,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                 for (i = 0; i < DRUGS_MaxParam; ++i)
                     toReturn->setValue(Table_DRUGS, i, q.value(i));
             } else {
-                Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+                LOG_QUERY_ERROR(q);
             }
 
             // drug not found --> break
@@ -1028,7 +1028,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
                 }
             }
         } else {
-            Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(q);
         }
     }
 
@@ -1069,7 +1069,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
             foreach(DrugComposition *c, list)
                 toReturn->addComposition(c);
         } else {
-            Utils::Log::addQueryError(this, q, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(q);
         }
     }
     foreach(const int i, codeMols) {
@@ -1093,7 +1093,7 @@ DrugsData *DrugsBase::getDrugByUID(const QVariant &drug_UID)
             toReturn->addRoute(query.value(ROUTES_ID).toInt(), "de", query.value(ROUTES_DE).toString());
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
 
     if (WarnExtractedDrugs && toReturn)
@@ -1161,7 +1161,7 @@ QStringList DrugsBase::getDrugInns(const QVariant &uid)
                 codes.append(query.value(0).toInt());
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
     foreach(int id, codes) {
@@ -1190,7 +1190,7 @@ int DrugsBase::getRouteId(const QString &fromLabel)
         if (query.next())
             id = query.value(0).toInt();
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     return id;
 }

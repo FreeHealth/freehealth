@@ -46,9 +46,17 @@ class QTreeWidget;
 /**
  * \file log.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.12
- * \date 14 Sept 2009
+ * \version 0.5.0
+ * \date 05 Feb 2011
 */
+
+#define LOG_ERROR_FOR(object, message)  Utils::Log::addError(object, message,__FILE__,__LINE__)
+#define LOG_ERROR(message)              Utils::Log::addError(this, message,__FILE__,__LINE__)
+
+#define LOG_QUERY_ERROR_FOR(object, qsqlquery)  Utils::Log::addQueryError(object, qsqlquery,__FILE__,__LINE__)
+#define LOG_QUERY_ERROR(qsqlquery)              Utils::Log::addQueryError(this, qsqlquery,__FILE__,__LINE__)
+
+#define LOG(object, message) Utils::Log::addMessage(object, message)
 
 
 namespace Utils {

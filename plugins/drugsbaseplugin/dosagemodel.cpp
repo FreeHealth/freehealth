@@ -235,15 +235,15 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
                 // Fing the routeId
                 int routeId = drugsBase()->getRouteId(value.toString());
                 if (!QSqlTableModel::setData(index, routeId, role)) {
-                    Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
-                    Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
+                    LOG_ERROR("Can not set data to QSqlTableModel");
+                    LOG_QUERY_ERROR(query());
                     return false;
                 }
             }
         } else {
             if (!QSqlTableModel::setData(index, value, role)) {
-                Utils::Log::addError(this, "Can not set data to QSqlTableModel", __FILE__, __LINE__);
-                Utils::Log::addQueryError(this, query(), __FILE__, __LINE__);
+                LOG_ERROR("Can not set data to QSqlTableModel");
+                LOG_QUERY_ERROR(query());
                 return false;
             }
         }
@@ -404,7 +404,7 @@ bool DosageModel::submitAll()
         return true;
     } else {
         m_DirtyRows = safe;
-        Utils::Log::addQueryError(this, QSqlTableModel::query(), __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query());
     }
     //    reset();
     return false;

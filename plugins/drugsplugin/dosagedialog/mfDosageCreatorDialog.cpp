@@ -305,6 +305,7 @@ void DosageCreatorDialog::done(int r)
     QDialog::done(r);
 }
 
+/** \brief Catch Enter key to validate the dialog. */
 void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
 {
     if (e->key()==Qt::Key_Enter || e->key() == Qt::Key_Return) {
@@ -315,6 +316,7 @@ void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
     QDialog::keyPressEvent(e);
 }
 
+/** \brief Update the settings of the dialog */
 void DosageCreatorDialog::updateSettings()
 {
     if (settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool())
@@ -398,6 +400,7 @@ void DosageCreatorDialog::helpRequested()
     Core::HelpDialog::showPage(Constants::H_PROTOCOL_DIALOG);
 }
 
+/** \brief Open the drug information dialog */
 void DosageCreatorDialog::drugsInformationsRequested()
 {
     QAction *action = qobject_cast<QAction *>(sender());
@@ -405,6 +408,7 @@ void DosageCreatorDialog::drugsInformationsRequested()
         QDesktopServices::openUrl(QUrl(action->data().toString()));
 }
 
+/** \brief Add the selected drug as 'ForInteractionsTestOnly' */
 void DosageCreatorDialog::addTestOnlyRequested()
 {
     drugModel()->setDrugData(d->m_DosageModel->drugUID(), DrugsDB::Constants::Prescription::OnlyForTest, true);
