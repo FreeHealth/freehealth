@@ -30,6 +30,7 @@
 #include <coreplugin/modemanager/basemode.h>
 
 #include <QObject>
+class QModelIndex;
 
 namespace PMH {
 namespace Internal {
@@ -43,6 +44,10 @@ class PmhMode : public Core::BaseMode
 public:
     explicit PmhMode(QObject *parent = 0);
     ~PmhMode();
+
+private Q_SLOTS:
+    void on_addButton_clicked();
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:
     Ui::PmhMode *ui;

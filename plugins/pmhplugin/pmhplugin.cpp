@@ -36,6 +36,7 @@
 #include "pmhplugin.h"
 #include "pmhmode.h"
 #include "pmhbase.h"
+#include "pmhcore.h"
 
 #include <utils/log.h>
 
@@ -74,9 +75,6 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("PmhPlugin");
 
-    // Initialize database
-    Internal::PmhBase::instance();
-
     return true;
 }
 
@@ -85,6 +83,9 @@ void PmhPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PmhPlugin::extensionsInitialized";
 
+    // Initialize Base
+    Internal::PmhBase::instance();
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInit()));
@@ -92,6 +93,7 @@ void PmhPlugin::extensionsInitialized()
 
 void PmhPlugin::postCoreInit()
 {
+    PmhCore::instance(this);
     mode = new Internal::PmhMode(this);
     addObject(mode);
 }

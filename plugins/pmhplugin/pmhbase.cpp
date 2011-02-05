@@ -24,16 +24,25 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class PMH::PmhBase
+  \brief Provides all read/write access to the PMHx database.
+*/
+
 #include "pmhbase.h"
 #include "constants.h"
+#include "pmhdata.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -47,11 +56,14 @@ using namespace PMH::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
 
 
 PmhBase *PmhBase::m_Instance = 0;
 bool PmhBase::m_initialized = false;
 
+/** \brief Returns the singleton. There should be only one instance of the PmhBase class. */
 PmhBase *PmhBase::instance()
 {
     if (!m_Instance) {
@@ -61,45 +73,91 @@ PmhBase *PmhBase::instance()
     return m_Instance;
 }
 
+
+
+namespace PMH {
+namespace Internal {
+class PmhBasePrivate
+{
+public:
+    PmhBasePrivate() {}
+    ~PmhBasePrivate() {}
+
+//    void checkPmhDataContent(PmhData *pmh)
+//    {
+//        // MASTER_ID defined ?
+//        if (pmh->data(PmhData::Uid).isNull()) {
+//            LOG_ERROR_FOR("PmhBase", "MasterId not defined for PMHx " + pmh->data(PmhData::Label).toString());
+//        }
+
+//        // PmhEpisodeData MasterId defined ?
+//        foreach(PmhEpisodeData *ep, pmh->episodes()) {
+
+//        }
+//    }
+
+public:
+
+};
+}
+}
+
 PmhBase::PmhBase(QObject *parent) :
-        QObject(parent), Utils::Database()
+        QObject(parent), Utils::Database(), d(new Internal::PmhBasePrivate)
+
 {
     using namespace PMH::Constants;
-    addTable(Table_MASTER,     "MASTER");
-    addTable(Table_EPISODE,    "EPISODE");
-    addTable(Table_ICD,        "ICD_CODING");
-    addTable(Table_CATEGORIES, "PMH_CATEGORIES");
-    addTable(Table_CATEGORY_LABEL, "PMH_CAT_LABEL");
+    addTable(Table_MASTER,        "PMH_MASTER");
+    addTable(Table_EPISODE,       "PMH_EPISODE");
+    addTable(Table_ICD,           "PMH_ICD_CODING");
+    addTable(Table_CATEGORIES,    "PMH_CATEGORIES");
+    addTable(Table_CATEGORY_LABEL,"PMH_CAT_LABEL");
 
 //    addTable(Table_VERSION, "VERSION");
 
     addField(Table_MASTER, MASTER_ID,            "ID",             FieldIsUniquePrimaryKey);
     addField(Table_MASTER, MASTER_PATIENT_UID,   "PATIENT_UUID",   FieldIsUUID);
     addField(Table_MASTER, MASTER_USER_UID,      "USER_UUID",      FieldIsUUID);
+    addField(Table_MASTER, MASTER_CATEGORY_ID,   "CATEGORY_ID",    FieldIsInteger);
     addField(Table_MASTER, MASTER_EPISODE_ID,    "MH_EPISODE_ID",  FieldIsInteger);
     addField(Table_MASTER, MASTER_CONTACTS_ID,   "MH_CONTACTS_ID", FieldIsInteger);
     addField(Table_MASTER, MASTER_LABEL,         "LABEL",          FieldIsShortText);
     addField(Table_MASTER, MASTER_TYPE,          "TYPE_ID",        FieldIsInteger);
     addField(Table_MASTER, MASTER_STATE,         "STATE_ID",       FieldIsInteger);
+    addField(Table_MASTER, MASTER_CONFINDEX,     "GLOBAL_CONF_INDEX",FieldIsInteger);
+    addField(Table_MASTER, MASTER_COMMENT,       "COMMENT",        FieldIsLongText);
 
     addField(Table_EPISODE, EPISODE_ID,            "ID",             FieldIsUniquePrimaryKey);
     addField(Table_EPISODE, EPISODE_MASTER_ID,     "MASTER_ID",      FieldIsInteger);
+    addField(Table_EPISODE, EPISODE_LABEL,         "LABEL",          FieldIsShortText);
     addField(Table_EPISODE, EPISODE_DATE_START,    "DATE_START",     FieldIsDate);
     addField(Table_EPISODE, EPISODE_DATE_END,      "DATE_END",       FieldIsDate);
     addField(Table_EPISODE, EPISODE_CONF_INDEX,    "CONF_INDEX",     FieldIsInteger);
-    addField(Table_EPISODE, EPISODE_ICD_CODES,     "ICD_ID",         FieldIsInteger);
-    addField(Table_EPISODE, EPISODE_LABEL,         "LABEL",         FieldIsInteger);
+    addField(Table_EPISODE, EPISODE_ICD_CODES,     "XML_ICD",        FieldIsLongText);
+    addField(Table_EPISODE, EPISODE_COMMENT,       "COMMENT",        FieldIsLongText);
+    addField(Table_EPISODE, EPISODE_TRACE_ID,      "TRACE_ID",       FieldIsInteger);
 
-    addField(Table_ICD, ICD_ID,       "ICD_ID",         FieldIsUniquePrimaryKey);
-    addField(Table_ICD, ICD_CONTENT,  "ICD_CONTENT",    FieldIsLongText);
+    addField(Table_CATEGORIES, CATEGORY_ID,              "ID",         FieldIsUniquePrimaryKey);
+    addField(Table_CATEGORIES, CATEGORY_PARENT,          "PARENT_ID",  FieldIsInteger);
+    addField(Table_CATEGORIES, CATEGORY_LABEL_ID,        "LABEL_ID",   FieldIsInteger);
+    addField(Table_CATEGORIES, CATEGORY_ISRISKFACTOR,    "IS_RF",      FieldIsBoolean);
+    addField(Table_CATEGORIES, CATEGORY_ISCHONICDISEASE, "IS_CD",      FieldIsBoolean);
+    addField(Table_CATEGORIES, CATEGORY_SORT_ID,         "SHORT_ID",   FieldIsInteger);
+    addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
 
-
+    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ID,       "ID",       FieldIsUniquePrimaryKey);
+    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LABEL_ID, "LID",      FieldIsInteger);
+    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LANG,     "LANG",     FieldIsLanguageText);
+    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_VALUE,    "VALUE",    FieldIsShortText);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 PmhBase::~PmhBase()
 {
+    if (d)
+        delete d;
+    d = 0;
 }
 
 bool PmhBase::init()
@@ -202,6 +260,327 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     }
 
     return true;
+}
+
+/** \brief Retreive all PMHx related to a patient. */
+QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
+{
+    QVector<PmhData *> pmhs;
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(database().connectionName()).arg(database().lastError().text()), __FILE__, __LINE__);
+            return pmhs;
+        }
+    }
+    QString req;
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+
+    // Get Master table
+    where.insert(Constants::MASTER_PATIENT_UID,
+                 QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+    //    where.insert(Constants::MASTER_USER_UID,
+    //                 QString("='%1'").arg(currentUserUuid()));
+    req = select(Constants::Table_MASTER, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            PmhData *pmh = new PmhData;
+            pmh->setData(PmhData::Uid, query.value(Constants::MASTER_ID));
+            pmh->setData(PmhData::Label, query.value(Constants::MASTER_LABEL));
+            pmh->setData(PmhData::State, query.value(Constants::MASTER_STATE));
+            pmh->setData(PmhData::PatientUid, query.value(Constants::MASTER_PATIENT_UID));
+            pmh->setData(PmhData::UserOwner, query.value(Constants::MASTER_USER_UID));
+            pmh->setData(PmhData::Type, query.value(Constants::MASTER_TYPE));
+            pmh->setData(PmhData::ConfidenceIndex, query.value(Constants::MASTER_CONFINDEX));
+            pmh->setData(PmhData::Comment, query.value(Constants::MASTER_COMMENT));
+            pmh->setData(PmhData::DbOnly_MasterEpisodeId, query.value(Constants::MASTER_EPISODE_ID));
+            pmh->setData(PmhData::DbOnly_MasterContactId, query.value(Constants::MASTER_CONTACTS_ID));
+            pmhs << pmh;
+        }
+    } else {
+        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+    }
+    query.finish();
+
+    // Get Episodes
+    where.clear();
+    for(int i = 0; i < pmhs.count(); ++i) {
+        PmhData *pmh = pmhs.at(i);
+        where.insert(Constants::EPISODE_MASTER_ID, QString("='%1'").arg(pmh->data(PmhData::Uid).toString()));
+        req = select(Constants::Table_EPISODE, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                PmhEpisodeData *ep = new PmhEpisodeData;
+                ep->setData(PmhEpisodeData::DbOnly_MasterId, query.value(Constants::EPISODE_MASTER_ID));
+                ep->setData(PmhEpisodeData::DbOnly_Id, query.value(Constants::EPISODE_ID));
+                ep->setData(PmhEpisodeData::DateStart, query.value(Constants::EPISODE_DATE_START));
+                ep->setData(PmhEpisodeData::DateEnd, query.value(Constants::EPISODE_DATE_END));
+                ep->setData(PmhEpisodeData::IcdXml, query.value(Constants::EPISODE_ICD_CODES));
+                ep->setData(PmhEpisodeData::ConfidenceIndex, query.value(Constants::EPISODE_CONF_INDEX));
+                ep->setData(PmhEpisodeData::Comment, query.value(Constants::EPISODE_COMMENT));
+                pmh->addEpisode(ep);
+            }
+        } else {
+            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        }
+    }
+
+    // Get Contacts
+    where.clear();
+
+    return pmhs;
+}
+
+/** \brief Return flatten list of PmhCategory extracted from database. */
+QVector<PmhCategory *> PmhBase::getPmhCategory(const QString &patientUid) const
+{
+    QVector<PmhCategory *> cats;
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(database().connectionName()).arg(database().lastError().text()), __FILE__, __LINE__);
+            return cats;
+        }
+    }
+    QString req;
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+
+    // Get Category table
+    req = select(Constants::Table_CATEGORIES);
+    if (query.exec(req)) {
+        while (query.next()) {
+            PmhCategory *cat = new PmhCategory;
+            cat->setData(PmhCategory::DbOnly_Id, query.value(Constants::CATEGORY_ID));
+            cat->setData(PmhCategory::DbOnly_LabelId, query.value(Constants::CATEGORY_LABEL_ID));
+            cat->setData(PmhCategory::DbOnly_ParentId, query.value(Constants::CATEGORY_PARENT));
+            cat->setData(PmhCategory::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
+            cat->setData(PmhCategory::SortId, query.value(Constants::CATEGORY_SORT_ID));
+            cats << cat;
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    // Get Category labels
+    for(int i = 0; i < cats.count(); ++i) {
+        where.clear();
+        PmhCategory *cat = cats.at(i);
+        where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("='%1'").arg(cat->data(PmhCategory::DbOnly_LabelId).toInt()));
+        req = select(Constants::Table_CATEGORY_LABEL, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                cat->setLabel(query.value(Constants::CATEGORYLABEL_VALUE).toString(),
+                              query.value(Constants::CATEGORYLABEL_LANG).toString());
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+        }
+        query.finish();
+    }
+    return cats;
+}
+
+/** \brief Recreate the category tree and return a QList of root categories. */
+QList<PmhCategory *> PmhBase::createCategoryTree(const QVector<PmhCategory *> &cats) const
+{
+    QList<PmhCategory *> toReturn;
+    // Reparent categories
+    for(int i = 0; i < cats.count(); ++i) {
+        PmhCategory *cat = cats.at(i);
+        int id = cat->id();
+        // Find all its children
+        for(int j = 0; j < cats.count(); ++j) {
+            PmhCategory *child = cats.at(j);
+            if (child->parentId() == id) {
+                qWarning() << "reparent" << child->label() << "as child of" << cat->label();
+                cat->addChild(child);
+                child->setParent(cat);
+            }
+        }
+        // Find roots categories
+        if (cat->parentId() < 0) {
+            toReturn << cat;
+        }
+        cat->sortChildren();
+    }
+
+    // Sort root items
+    qSort(toReturn.begin(), toReturn.end(), PmhCategory::lessThan);
+
+    return toReturn;
+}
+
+/** \brief Link PMH with their category. createCateogryTree() must be called first. */
+bool PmhBase::linkPmhWithCategory(const QVector<PmhCategory *> &cats, const QVector<PmhData *> &pmhs) const
+{
+    for(int i = 0; i < pmhs.count(); ++i) {
+        // PMHx has a category ID ?
+        if (pmhs.at(i)->data(PmhData::CategoryId).isNull())
+            continue;
+        int id = pmhs.at(i)->data(PmhData::CategoryId).toInt();
+        if (id==-1)
+            continue;
+
+        // Add PMHx to the category
+        for(int j = 0; j < cats.count(); ++j) {
+            if (cats.at(j)->id() == id) {
+                cats.at(j)->addPhmData(pmhs.at(i));
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+/**
+  \brief Save a PmhData pointer to database. If PmhData already exists in database, PmhData is updated.
+  \sa updatePmhData()
+*/
+bool PmhBase::savePmhData(PmhData *pmh)
+{
+    // save or update ?
+    if (!pmh->data(PmhData::Uid).isNull()) {
+        return updatePmhData(pmh);
+    }
+    // save pmh
+    qWarning() << "save pmh";
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Constants::Table_MASTER));
+    query.bindValue(Constants::MASTER_ID, QVariant());
+    query.bindValue(Constants::MASTER_LABEL, pmh->data(PmhData::Label));
+    query.bindValue(Constants::MASTER_TYPE, pmh->data(PmhData::Type));
+    query.bindValue(Constants::MASTER_PATIENT_UID, pmh->data(PmhData::PatientUid));
+    query.bindValue(Constants::MASTER_USER_UID, pmh->data(PmhData::UserOwner));
+    query.bindValue(Constants::MASTER_STATE, pmh->data(PmhData::State));
+    query.bindValue(Constants::MASTER_CATEGORY_ID, pmh->data(PmhData::CategoryId));
+    query.bindValue(Constants::MASTER_CONFINDEX, pmh->data(PmhData::ConfidenceIndex));
+    query.bindValue(Constants::MASTER_COMMENT, pmh->data(PmhData::Comment));
+    query.bindValue(Constants::MASTER_CONTACTS_ID, QVariant());
+    query.bindValue(Constants::MASTER_EPISODE_ID, QVariant());
+    if (query.exec()) {
+        pmh->setData(PmhData::Uid, query.lastInsertId());
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+
+    foreach(PmhEpisodeData *ep, pmh->episodes()) {
+        this->savePmhEpsiodeData(ep);
+    }
+
+    return false;
+}
+
+/**
+  \brief Update a PmhData pointer to database. If PmhData does not already exist in database, PmhData is saved.
+  \sa savePmhData()
+*/
+bool PmhBase::updatePmhData(PmhData *pmh)
+{
+    // save or update ?
+    if (pmh->data(PmhData::Uid).isNull()) {
+        return savePmhData(pmh);
+    }
+    // update pmh
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::MASTER_ID, QString("=%1").arg(pmh->data(PmhData::Uid).toString()));
+    query.prepare(prepareUpdateQuery(Constants::Table_MASTER, QList<int>()
+                                     << Constants::MASTER_LABEL
+                                     << Constants::MASTER_TYPE
+                                     << Constants::MASTER_STATE
+                                     << Constants::MASTER_CATEGORY_ID
+                                     << Constants::MASTER_CONFINDEX
+                                     << Constants::MASTER_COMMENT
+                                     << Constants::MASTER_CONTACTS_ID
+                                     << Constants::MASTER_EPISODE_ID, where));
+    query.bindValue(0, pmh->data(PmhData::Label));
+    query.bindValue(1, pmh->data(PmhData::Type));
+    query.bindValue(2, pmh->data(PmhData::State));
+    query.bindValue(3, pmh->data(PmhData::CategoryId));
+    query.bindValue(4, pmh->data(PmhData::ConfidenceIndex));
+    query.bindValue(5, pmh->data(PmhData::Comment));
+    query.bindValue(6, QVariant());
+    query.bindValue(7, QVariant());
+    if (query.exec()) {
+        return true;
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    return false;
+}
+
+/**
+  \brief Save a PmhEpisodeData pointer to database. If PmhEpisodeData already exists in database, PmhEpisodeData is updated.
+  \sa updatePmhEpisodeData()
+*/
+bool PmhBase::savePmhEpsiodeData(PmhEpisodeData *episode)
+{
+    // save or update ?
+    if (!episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
+        return updatePmhEpsisodeData(episode);
+    }
+    // save episode
+    qWarning() << "save episode";
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Constants::Table_EPISODE));
+    query.bindValue(Constants::EPISODE_ID, QVariant());
+    query.bindValue(Constants::EPISODE_MASTER_ID, episode->data(PmhEpisodeData::DbOnly_MasterId));
+    query.bindValue(Constants::EPISODE_LABEL, episode->data(PmhEpisodeData::Label));
+    query.bindValue(Constants::EPISODE_DATE_START, episode->data(PmhEpisodeData::DateStart));
+    query.bindValue(Constants::EPISODE_DATE_END, episode->data(PmhEpisodeData::DateEnd));
+    query.bindValue(Constants::EPISODE_CONF_INDEX, episode->data(PmhEpisodeData::ConfidenceIndex));
+    query.bindValue(Constants::EPISODE_ICD_CODES, episode->data(PmhEpisodeData::IcdXml));
+    query.bindValue(Constants::EPISODE_COMMENT, episode->data(PmhEpisodeData::Comment));
+    query.bindValue(Constants::EPISODE_TRACE_ID, QVariant());
+    if (query.exec()) {
+        episode->setData(PmhEpisodeData::DbOnly_Id, query.lastInsertId());
+        return true;
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    return false;
+}
+
+/**
+  \brief Update a PmhEpisodeData pointer to database. If PmhEpisodeData does not already exist in database, PmhEpisodeData is saved.
+  \sa savePmhEpisodeData()
+*/
+bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
+{
+    if (!episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
+        return savePmhEpsiodeData(episode);
+    }
+    // update episode
+    qWarning() << "update episode";
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::EPISODE_ID, QString("=%1").arg(episode->data(PmhEpisodeData::DbOnly_Id).toString()));
+    query.prepare(prepareUpdateQuery(Constants::Table_EPISODE, QList<int>()
+                                     << Constants::EPISODE_DATE_START
+                                     << Constants::EPISODE_DATE_END
+                                     << Constants::EPISODE_LABEL
+                                     << Constants::EPISODE_CONF_INDEX
+                                     << Constants::EPISODE_COMMENT
+                                     << Constants::EPISODE_ICD_CODES, where));
+    query.bindValue(0, episode->data(PmhEpisodeData::DateStart));
+    query.bindValue(1, episode->data(PmhEpisodeData::DateEnd));
+    query.bindValue(2, episode->data(PmhEpisodeData::Label));
+    query.bindValue(3, episode->data(PmhEpisodeData::ConfidenceIndex));
+    query.bindValue(4, episode->data(PmhEpisodeData::Comment));
+    query.bindValue(5, episode->data(PmhEpisodeData::IcdXml));
+    if (query.exec()) {
+        return true;
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    return false;
 }
 
 void PmhBase::onCoreDatabaseServerChanged()

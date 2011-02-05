@@ -24,26 +24,152 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class PMH::PmhViewer
+  \brief PMHx viewer widget. Allow to show / modify a PMH.
+  This class uses PMH::Internal::PmhData pointers to create the view. It is not
+  mapped to the model. You must:
+  - set the PMH::Internal::PmhData to use
+  - get it back after the edition
+  - then send it to the PMH::PmhCategoryModel
+*/
+
 #include "pmhviewer.h"
+#include "pmhdata.h"
+#include "constants.h"
+#include "pmhepisodemodel.h"
+
+#include <utils/global.h>
+#include <utils/log.h>
+
 #include "ui_pmhviewer.h"
 
 using namespace PMH;
 using namespace Internal;
 
-PmhViewer::PmhViewer(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PmhViewer)
-{
-    ui->setupUi(this);
-    ui->tabWidget->setCurrentWidget(ui->categoryTab);
 
-    // Insert ICD widget inside icdTab
-    //
+namespace PMH {
+namespace Internal {
+
+class PmhViewerPrivate {
+public:
+    PmhViewerPrivate() : ui(0), m_Pmh(0) {}
+    ~PmhViewerPrivate()
+    {
+        delete ui; ui=0;
+    }
+
+    void setEditMode(PmhViewer::EditMode mode)
+    {
+        m_Mode = mode;
+        Q_ASSERT(ui);
+        bool enable = (mode == PmhViewer::ReadWriteMode);
+        ui->personalLabel->setEnabled(enable);
+        ui->typeCombo->setEnabled(enable);
+        ui->statusCombo->setEnabled(enable);
+    }
+
+    void populateUiWithPmh(PmhData *pmh)
+    {
+        m_Pmh = pmh;
+        ui->personalLabel->setText(pmh->data(PmhData::Label).toString());
+        ui->typeCombo->setCurrentIndex(pmh->data(PmhData::Type).toInt());
+        ui->statusCombo->setCurrentIndex(pmh->data(PmhData::State).toInt());
+        ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
+        ui->comment->setHtml(pmh->data(PmhData::Comment).toString());
+        // Category
+
+        // Populate EpisodeView
+        ui->episodeViewer->setPmhData(pmh);
+
+        // Populate Link viewer
+    }
+
+    void populatePmhWithUi()
+    {
+        m_Pmh->setData(PmhData::Label, ui->personalLabel->text());
+        m_Pmh->setData(PmhData::Type, ui->typeCombo->currentIndex());
+        m_Pmh->setData(PmhData::State, ui->statusCombo->currentIndex());
+        m_Pmh->setData(PmhData::ConfidenceIndex, ui->confIndexSlider->value());
+        m_Pmh->setData(PmhData::Comment, ui->comment->textEdit()->toHtml());
+
+//        m_Pmh->setData(PmhData::CategoryId, ui->categoryTreeview);
+    }
+
+
+public:
+    Internal::Ui::PmhViewer *ui;
+    PmhViewer::EditMode m_Mode;
+    PmhData *m_Pmh;
+};
+
+} // End namespace Internal
+} // End namespace PMH
+
+
+/** \brief Creates a new PMH::PmhViewer with the specified \e editMode. \sa PMH::PmhViewer::EditMode */
+PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
+    QWidget(parent), d(new PmhViewerPrivate)
+{
+    // Create Ui
+    d->ui = new Internal::Ui::PmhViewer;
+    d->ui->setupUi(this);
+    // Populate combos
+    d->ui->typeCombo->addItems(Constants::availableTypes());
+    d->ui->statusCombo->addItems(Constants::availableStatus());
+
+    // adjust tabwidget
+    d->ui->tabWidget->setCurrentWidget(d->ui->categoryTab);
+    d->ui->comment->toogleToolbar(true);
+
+    // Manage the Edit Mode
+    d->setEditMode(editMode);
 }
 
 PmhViewer::~PmhViewer()
 {
-    delete ui;
+    delete d; d = 0;
+}
+
+/** Defines the edit mode to use (Read only or Read Write). \sa PMH::PmhViewer::EditMode */
+void PmhViewer::setEditMode(EditMode mode)
+{
+    d->setEditMode(mode);
+}
+
+/** \brief Define the PMH::Internal::PmhData pointer to use in the view. */
+void PmhViewer::setPmhData(Internal::PmhData *pmh)
+{
+    if (d->m_Pmh) {
+        if (d->m_Pmh == pmh)
+            return;
+        Utils::warningMessageBox(tr("Replacing pmh data"),"","");
+    }
+    d->populateUiWithPmh(pmh);
+}
+
+/** \brief Create a new PMH::Internal::PmhData pointer and use it in the view. Equivalent to setPmhData(new PMH::Internal::PmhData) */
+void PmhViewer::createNewPmh()
+{
+    if (d->m_Pmh) {
+        Utils::warningMessageBox(tr("Replacing pmh data"),"","");
+    }
+    PmhData *pmh = new PmhData;
+    pmh->populateWithCurrentData();
+    d->populateUiWithPmh(pmh);
+}
+
+/** \brief Return the PMH::Internal::PmhData pointer modified or not according to the actual EditMode of the viewer. */
+Internal::PmhData *PmhViewer::pmhData() const
+{
+    // Read only == return the unchanged PmhData
+    if (d->m_Mode==ReadOnlyMode) {
+        return d->m_Pmh;
+    }
+    // Apply changes to PmhData
+    d->populatePmhWithUi();
+    return d->m_Pmh;
 }
 
 void PmhViewer::changeEvent(QEvent *e)
@@ -51,7 +177,7 @@ void PmhViewer::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
         break;
     default:
         break;

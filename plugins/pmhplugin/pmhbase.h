@@ -32,6 +32,9 @@
 namespace PMH {
 namespace Internal {
 class PmhBasePrivate;
+class PmhData;
+class PmhCategory;
+class PmhEpisodeData;
 
 class PmhBase : public QObject, public Utils::Database
 {
@@ -48,6 +51,17 @@ public:
     // initialize
     bool init();
 
+    // Database getters
+    QVector<PmhData *> getPmh(const QString &patientUid) const;
+    QVector<PmhCategory *> getPmhCategory(const QString &patientUid) const;
+    QList<PmhCategory *> createCategoryTree(const QVector<PmhCategory *> &cats) const;
+    bool linkPmhWithCategory(const QVector<PmhCategory *> &cats, const QVector<PmhData *> &pmhs) const;
+
+    // Database setters
+    bool savePmhData(PmhData *pmh);
+    bool updatePmhData(PmhData *pmh);
+    bool savePmhEpsiodeData(PmhEpisodeData *episode);
+    bool updatePmhEpsisodeData(PmhEpisodeData *episode);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
@@ -64,6 +78,7 @@ private Q_SLOTS:
 private:
     static bool m_initialized;
     static PmhBase *m_Instance;
+    Internal::PmhBasePrivate *d;
 };
 
 }  // End namespace Internal

@@ -41,6 +41,9 @@ namespace Constants {
     const char * const  DB_FILENAME        = "pmh.db";
     const char * const  DB_ACTUALVERSION   = "0.1";
 
+    // Help pages
+    const char * const  H_PMH_CREATOR_PAGE  = "";
+
     // Tables
     enum Tables {
       Table_MASTER = 0,
@@ -56,22 +59,28 @@ namespace Constants {
         MASTER_ID = 0,
         MASTER_PATIENT_UID,
         MASTER_USER_UID,
+        MASTER_CATEGORY_ID,
         MASTER_EPISODE_ID,
         MASTER_CONTACTS_ID,
         MASTER_LABEL,
         MASTER_TYPE,
         MASTER_STATE,
+        MASTER_CONFINDEX,
+        MASTER_COMMENT,
+        MASTER_TRACE_ID,
         MASTER_MaxParam
     };
 
     enum EpisodeFields {
         EPISODE_ID = 0,
         EPISODE_MASTER_ID,
+        EPISODE_LABEL,
         EPISODE_DATE_START,
         EPISODE_DATE_END,
         EPISODE_CONF_INDEX,
         EPISODE_ICD_CODES,
-        EPISODE_LABEL,
+        EPISODE_COMMENT,
+        EPISODE_TRACE_ID,
         EPISODE_MaxParam
     };
 
@@ -83,12 +92,12 @@ namespace Constants {
 
     enum PmhCatFields {
         CATEGORY_ID = 0, CATEGORY_PARENT, CATEGORY_LABEL_ID, CATEGORY_ISRISKFACTOR,
-        CATEGORY_ISCHONICDISEASE,CATEGORY_THEMEDICON,
+        CATEGORY_ISCHONICDISEASE, CATEGORY_SORT_ID, CATEGORY_THEMEDICON,
         CATEGORY_MaxParam
     };
 
     enum PmhCatLabelFields {
-        CATEGORYLABEL_ID = 0, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
+        CATEGORYLABEL_ID = 0, CATEGORYLABEL_LABEL_ID, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
         CATEGORYLABEL_MaxParam
     };
 
@@ -97,23 +106,42 @@ namespace Constants {
     };
 
 
-    // Types of Medical History
+    // Types and Statuts of Medical History
     enum MHType {
-        ChronicDisease                      = 0x0001,
-        ChronicDiseaseWithoutAcuteEpisodes  = 0x0002,
-        AcuteDisease                        = 0x0004,
-        RiskFactor                          = 0x0100,
+        NoTypeDefined                       = 0,
+        ChronicDisease,
+        ChronicDiseaseWithoutAcuteEpisodes,
+        AcuteDisease,
+        RiskFactor
     };
 
     enum MHStatus {
-        IsActive                            = 0x01,
-        IsInRemission                       = 0x02,
-        IsQuiescent                         = 0x04,
-        IsCured                             = 0x08
+        NoStatusDefined = 0,
+        IsActive,
+        IsInRemission,
+        IsQuiescent,
+        IsCured
     };
 
     QString typeToString(int type);
+    QStringList availableTypes();
+    int stringToType(const QString &type);
+
     QString statusToString(int state);
+    QStringList availableStatus();
+    int stringToStatus(const QString &status);
+
+
+    // Settings
+    const char * const  S_BACKGROUND_CATEGORIES    = "PMHx/ModelBackground/Categories";
+    const char * const  S_BACKGROUND_TEMPLATES     = "PMHx/ModelBackground/PMH";
+    const char * const  S_FOREGROUND_CATEGORIES    = "PMHx/ModelForeground/Categories";
+    const char * const  S_FOREGROUND_TEMPLATES     = "PMHx/ModelForeground/PMH";
+
+
+    // Translations
+    const char * const  PMHCONSTANTS_TR_CONTEXT = "PMH";
+
 
 }  // End namespace Constants
 }  // End namespace History

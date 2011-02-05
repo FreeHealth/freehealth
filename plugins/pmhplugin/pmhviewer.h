@@ -31,9 +31,8 @@
 
 namespace PMH {
 namespace Internal {
-namespace Ui {
-class PmhViewer;
-}
+class PmhViewerPrivate;
+class PmhData;
 }  // End namespace Internal
 
 class PmhViewer : public QWidget
@@ -41,14 +40,25 @@ class PmhViewer : public QWidget
     Q_OBJECT
 
 public:
-    explicit PmhViewer(QWidget *parent = 0);
+    enum EditMode {
+        ReadOnlyMode,
+        ReadWriteMode
+    };
+
+    PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode);
     ~PmhViewer();
+
+    void setEditMode(EditMode mode);
+    void setPmhData(Internal::PmhData *pmh);
+    void createNewPmh();
+
+    Internal::PmhData *pmhData() const;
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::PmhViewer *ui;
+    Internal::PmhViewerPrivate *d;
 };
 
 }  // End namespace PMH

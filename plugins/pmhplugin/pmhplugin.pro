@@ -11,17 +11,29 @@ HEADERS = pmhplugin.h \
     pmh_exporter.h \
     pmhmode.h \
     pmhmodel.h \
+    pmhcategorymodel.h \
     pmhbase.h \
     constants.h \
-    pmhviewer.h
+    pmhviewer.h \
+    pmhdata.h \
+    pmhcreatordialog.h \
+    pmhcore.h \
+    pmhepisodemodel.h \
+    pmhepisodeviewer.h
 
 
 SOURCES = pmhplugin.cpp \
     pmhmode.cpp \
     pmhmodel.cpp \
+    pmhcategorymodel.cpp \
     pmhbase.cpp \
     constants.cpp \
-    pmhviewer.cpp
+    pmhviewer.cpp \
+    pmhdata.cpp \
+    pmhcreatordialog.cpp \
+    pmhcore.cpp \
+    pmhepisodemodel.cpp \
+    pmhepisodeviewer.cpp
 
 
 OTHER_FILES = PMH.pluginspec
@@ -32,4 +44,6 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS}/pmhplugin_fr.ts \
 
 FORMS += \
     pmhviewer.ui \
-    pmhmode.ui
+    pmhmode.ui \
+    pmhcreatordialog.ui \
+    pmhepisodeviewer.ui

@@ -26,7 +26,10 @@
  ***************************************************************************/
 #include "pmhmode.h"
 #include "pmhmodel.h"
+#include "pmhcore.h"
 #include "pmhcategorymodel.h"
+#include "pmhcreatordialog.h"
+#include "pmhviewer.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -39,6 +42,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QLabel>
+#include <QItemSelectionModel>
 
 #include "ui_pmhmode.h"
 
@@ -46,6 +50,7 @@
 using namespace PMH;
 using namespace Internal;
 
+static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 PmhMode::PmhMode(QObject *parent) :
@@ -58,18 +63,21 @@ PmhMode::PmhMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
 
-//    ui->setupUi(this);
-    Views::FancyTreeView *v = new Views::FancyTreeView;
-//    v->setModel(new PmhModel(this), PmhModel::MH_EmptyColumn);
-    v->setModel(new Views::SimpleCategoryModel("", this));
-    v->setButtonActions(Views::FancyTreeView::FTV_SaveModel |  Views::FancyTreeView::FTV_CreateNew);
-    v->useContextMenu(true);
+    QWidget *m_Widget = new QWidget;
+    ui->setupUi(m_Widget);
+    ui->treeView->setModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::EmptyColumn);
+//    ui->treeView->setModel(new PmhModel(this), PmhModel::MH_EmptyColumn);
+//    ui->treeView->setModel(new Views::SimpleCategoryModel("", this));
+    ui->treeView->setButtonActions(Views::FancyTreeView::FTV_SaveModel |  Views::FancyTreeView::FTV_CreateNew);
+    ui->treeView->useContextMenu(true);
 
-    QWidget *m_Widget = v;
+    QPushButton *addButton = new QPushButton("Add", m_Widget);
+    ui->gridLayout->addWidget(addButton);
     setWidget(m_Widget);
 
-    // Get PMH categories
-
+    connect(addButton, SIGNAL(clicked()), this, SLOT(on_addButton_clicked()));
+    connect(ui->treeView->treeView()->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
+            this, SLOT(currentChanged(QModelIndex, QModelIndex)));
 }
 
 PmhMode::~PmhMode()
@@ -77,4 +85,14 @@ PmhMode::~PmhMode()
     delete ui;
 }
 
+void PmhMode::on_addButton_clicked()
+{
+    // Create a viewer
+    PmhCreatorDialog dlg;
+    dlg.exec();
+}
 
+void PmhMode::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
+}
