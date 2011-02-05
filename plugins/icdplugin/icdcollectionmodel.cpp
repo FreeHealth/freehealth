@@ -75,8 +75,6 @@ public:
     }
     ~IcdCollectionModelPrivate()
     {
-        qDeleteAll(m_Rows);
-        m_Rows.clear();
     }
 
     void translateRow(const int row)
@@ -98,7 +96,6 @@ public:
 public:
     QVector<int> m_ExcludedSIDs;
     QVector<int> m_SIDs;
-    QList<ModelItem *> m_Rows;
     bool m_IsSimpleList;
 
 private:
@@ -355,17 +352,70 @@ void IcdCollectionModel::clearCollection()
 QStringList IcdCollectionModel::includedCodesWithDaget() const
 {
     QStringList codes;
-    foreach(Internal::ModelItem *it, d->m_Rows) {
-        if (it->association.isValid()) {
-            codes << it->association.mainCodeWithDagStar() + "/" + it->association.associatedCodeWithDagStar();
-        } else {
-            codes << it->code;
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex idx = index(i, CodeWithDaget);
+        QStringList children;
+        if (hasChildren(idx)) {
+            for(int j = 0; j < rowCount(idx); ++j) {
+                QModelIndex child = index(i, CodeWithDaget, idx);
+                children << child.data().toString();
+            }
         }
+        QString c = children.join(";");
+        if (!c.isEmpty()) {
+            c.prepend("(");
+            c.append(")");
+        }
+        codes << idx.data().toString() + c;
     }
     return codes;
 }
 
-Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &index) const
+/** \brief Return the full list of included labels in HTML format. */
+QString IcdCollectionModel::includedLabelsToHtml() const
+{
+    QString html;
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex idx = index(i, Label);
+        QModelIndex parent = index(i, CodeWithDaget);
+        QString children;
+        if (hasChildren(parent)) {
+            for(int j = 0; j < rowCount(parent); ++j) {
+                QModelIndex child = index(j, Label, parent);
+                QString l = child.data().toString();
+                if (l.compare(idx.data().toString(), Qt::CaseInsensitive)!=0) {
+                    children += "<br />&nbsp;&nbsp;&nbsp;*&nbsp;" + l;
+                }
+            }
+        }
+        html += idx.data().toString() + children + "<br />";
+    }
+    return html;
+}
+
+QStringList IcdCollectionModel::includedLabels() const
+{
+    QStringList labels;
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex idx = index(i, Label);
+        QModelIndex parent = index(i, CodeWithDaget);
+        QStringList children;
+        if (hasChildren(parent)) {
+            for(int j = 0; j < rowCount(parent); ++j) {
+                QModelIndex child = index(j, Label, parent);
+                QString l = child.data().toString();
+                if (l.compare(idx.data().toString(), Qt::CaseInsensitive)!=0) {
+                    children << l;
+                }
+            }
+        }
+        labels << idx.data().toString();
+        labels << children;
+    }
+    return labels;
+}
+
+Qt::ItemFlags IcdCollectionModel::flags(const QModelIndex &) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }

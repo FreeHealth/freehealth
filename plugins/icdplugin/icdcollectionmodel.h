@@ -66,6 +66,8 @@ public:
     // Direct access to datas and model cleaning
     void clearCollection();
     QStringList includedCodesWithDaget() const;
+    QString includedLabelsToHtml() const;
+    QStringList includedLabels() const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
