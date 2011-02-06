@@ -296,6 +296,7 @@ enum TitleInterpret {
         const char*const  SITES = QT_TRANSLATE_NOOP("tkConstants", "Sites");
         const char*const  INSURANCE = QT_TRANSLATE_NOOP("tkConstants", "Insurance");
         const char*const  PERCENT = QT_TRANSLATE_NOOP("tkConstants", "Percentages");
+        const char*const  DISTRULES = QT_TRANSLATE_NOOP("tkConstants", "Distance rules");
 
         // Database related
         const char *const SQLITE_DRIVER_NOT_AVAILABLE = QT_TRANSLATE_NOOP("tkConstants", "SQLite driver is not available.");
@@ -406,13 +407,6 @@ enum TitleInterpret {
         const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
         const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
         const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
-
-        // Widely used words
-        const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
-        const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
-        const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
-        const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
-
 
         // Messages and errors
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
