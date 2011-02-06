@@ -42,6 +42,7 @@
 #include "preferences/sitespage.h"
 #include "preferences/insurancepage.h"
 #include "preferences/percentagespage.h"
+#include "preferences/distancerulespage.h"
 
 #include <utils/log.h>
 
@@ -89,6 +90,7 @@ void AccountPlugin::extensionsInitialized()
     addAutoReleasedObject(new SitesPage(this));
     addAutoReleasedObject(new InsurancePage(this));
     addAutoReleasedObject(new PercentagesPage(this));
+    addAutoReleasedObject(new DistanceRulesPage(this));
 }
 
 

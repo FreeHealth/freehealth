@@ -23,6 +23,7 @@ HEADERS = accountplugin.h \
     preferences/insurancepage.h \
     preferences/virtualdatabasecreator.h \
     preferences/percentagespage.h \
+    preferences/distancerulespage.h \
     accountview.h 
 
 SOURCES = accountplugin.cpp \
@@ -35,6 +36,7 @@ SOURCES = accountplugin.cpp \
     preferences/insurancepage.cpp \
     preferences/virtualdatabasecreator.cpp \
     preferences/percentagespage.cpp \
+    preferences/distancerulespage.cpp \
     accountview.cpp 
 
 FORMS += preferences/accountuseroptionspage.ui \
@@ -45,6 +47,7 @@ FORMS += preferences/accountuseroptionspage.ui \
     preferences/insurancepage.ui \
     preferences/virtualdatabasecreator.ui \
     preferences/percentagespage.ui \
+    preferences/distancerulespage.ui \
     accountview.ui 
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountplugin_fr.ts \
