@@ -172,8 +172,11 @@ private:
     AmountModel * m_model;
     QVariant m_siteUid;
     QVariant m_insuranceUid;
+    double m_kilometers;
+    double m_distanceRuleValue;
     QStringList m_listOfValues;
     void mousePressEvent(QMouseEvent * event);
+    QVariant firstItemChoosenAsPreferential(QString & item);
 
 private slots :
     void deleteLine();

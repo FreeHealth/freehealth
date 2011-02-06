@@ -8,6 +8,8 @@
 using namespace ReceiptsConstants;
 choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
+    ui->distanceDoubleSpinBox->hide();
+    ui->distanceGroupBox->hide();
     m_percent = 100.00;
     m_percentValue = 100.00;
     receiptsManager manager;
@@ -15,20 +17,23 @@ choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDi
     m_quickInt = m_hashPercentages.keys().last();
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
+    ui->percentDoubleSpinBox->setSingleStep(0.10);
     ui->percentDoubleSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
-    m_timer = new QTimer(this);
+    m_timerUp = new QTimer(this);
+    m_timerDown = new QTimer(this);
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(accept()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
     connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
     connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
-    connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueStop()));
+    connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueUpStop()));
     connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(valueDown()));
-    connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueStop()));
+    connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueDownStop()));
     connect(ui->plusConstButton,SIGNAL(pressed()),this,SLOT(quickPlus()));
     connect(ui->lessConstButton,SIGNAL(pressed()),this,SLOT(quickLess()));
 }
 choiceDialog::~choiceDialog(){
-    delete m_timer;
+    delete m_timerUp;
+    delete m_timerDown;
 }
 int choiceDialog::returnChoiceDialog(){
     int ret = 0;
@@ -64,29 +69,24 @@ void choiceDialog::value(double val){
 }
 
 void choiceDialog::valueUp(){
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(doubleSpinBoxUp()));
-    m_timer->start(2);
+    connect(m_timerUp,SIGNAL(timeout()),ui->percentDoubleSpinBox,SLOT(stepUp()));
+    m_timerUp->start(10);
 }
 
 void choiceDialog::valueDown(){
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(doubleSpinBoxDown()));
-    m_timer->start(2);
+    connect(m_timerDown,SIGNAL(timeout()),ui->percentDoubleSpinBox,SLOT(stepDown()));
+    m_timerDown->start(10);
 }
 
 
-void choiceDialog::valueStop(){
-    m_timer->stop();
+void choiceDialog::valueUpStop(){
+    m_timerUp->stop();
 }
 
-void choiceDialog::doubleSpinBoxUp(){
-    double valuePlus = ui->percentDoubleSpinBox->value()+0.01;
-    ui->percentDoubleSpinBox->setValue(valuePlus);
+void choiceDialog::valueDownStop(){
+    m_timerDown->stop();
 }
 
-void choiceDialog::doubleSpinBoxDown(){
-    double valueLess = ui->percentDoubleSpinBox->value()-0.01;
-    ui->percentDoubleSpinBox->setValue(valueLess);
-}
 
 void choiceDialog::quickPlus(){
     if(m_quickInt == m_hashPercentages.keys().last())

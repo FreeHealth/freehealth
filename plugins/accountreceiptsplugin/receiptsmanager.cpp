@@ -163,16 +163,27 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
    	  {
    	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
-   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
    	  	hash.insert(str,uid);
-   	  	
-   	  	  	  	
-   	  }
+    	  }
    	  if(hash.size()< 1){
    	      hash.insert("patient","uid");
    	      }
     return hash; 
+}
+
+QHash<QString,QVariant> receiptsManager::getDistanceRules(){
+    QHash<QString,QVariant> hash;
+    DistanceRulesModel model(this);
+   	  for (int row = 0; row < model.rowCount(); row += 1)
+   	  {
+   	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
+   	  	QVariant uid = model.data(model.index(row,DISTRULES_VALUES),Qt::DisplayRole);
+   	  	hash.insert(str,uid);
+    	  }
+   	  if(hash.size()< 1){
+   	      hash.insert("DistPrice",0.50);
+   	      }
+    return hash;
 }
 
 QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
@@ -393,6 +404,23 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
        }
    return ret;
 }*/
+
+bool receiptsManager::getPreferedValues(){
+    bool b = true;
+    DistanceRulesModel modelDR(this);
+    modelDR.setFilter("PREFERED = '1'");
+    m_preferedDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
+    WorkingPlacesModel modelWP(this);
+    modelWP.setFilter("PREFERED = '1'");
+    m_preferedSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
+    InsuranceModel modelINS(this);
+    modelINS.setFilter("PREFERED = '1'");
+    m_preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
+    if(m_preferedDistanceRule.isNull() || m_preferedInsurance.isNull() || m_preferedSite.isNull()){
+        b = false;
+        }
+    return b;
+}
 
 QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QStringList listOfItems;

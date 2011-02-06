@@ -28,6 +28,7 @@
 #include "receiptsIO.h"
 #include "findReceiptsValues.h"
 #include "choiceDialog.h"
+#include "distance.h"
 
 #include "constants.h"
 
@@ -158,6 +159,8 @@ void treeViewsActions::fillActionTreeView(){
     parametersMap.insert("Values","values");
     parametersMap.insert("Sites","sites");
     parametersMap.insert("Prefered Value","Prefered Value");
+    parametersMap.insert("Round trip","Round trip");
+    parametersMap.insert("Distance rules","Distance rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
@@ -189,6 +192,10 @@ void treeViewsActions::fillActionTreeView(){
         	  {
         	       mapSubItems.insertMulti("Sites","cabinet");
                        mapSubItems.insertMulti("Sites","clinique");  
+        	      }
+        	  else if (strKeysParameters == "Distance rules")
+        	  {
+        	  	  mapSubItems.insertMulti("Distance rules","DistPrice");
         	      }
         	  else
         	  {
@@ -226,6 +233,16 @@ void treeViewsActions::fillActionTreeView(){
         {
         	  QBrush blue(Qt::blue);
                   actionItem->setForeground(blue);        	  
+            }
+        else if (strMainActions == "Round trip")
+        {
+        	  QBrush blue(Qt::blue);
+                  actionItem->setForeground(blue);    
+            }
+        else if (strMainActions == "Distance rules")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);
             }
         else{
                   qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
@@ -271,6 +288,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui(new Ui::ReceiptViewer)
 {
     m_userUuid = user()->value(Core::IUser::Uuid).toString();
+    m_kilometers = 0.00 ;
+    m_distanceRuleValue = 0.00;
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -300,6 +319,18 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
      vbox->addWidget(actionTreeView);
     ui->actionsBox->setLayout(vbox);
     actionTreeView->fillActionTreeView();
+    //preferential choices in the tree view.
+    QString site = QString("Sites");
+    QString distRule = QString("Distance rules");
+    QString debtor = QString("Debtor");
+    m_siteUid = firstItemChoosenAsPreferential(site);
+    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
+    m_insuranceUid = firstItemChoosenAsPreferential(debtor);
+    qDebug() << __FILE__ << QString::number(__LINE__) 
+             << " site,dist,ins prefered =" << m_siteUid.toString()
+                                            << QString::number(m_distanceRuleValue)
+                                            << m_insuranceUid.toString() ;
+    
     //right click
     m_clear = new QAction(trUtf8("Clear all."),this);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
@@ -383,8 +414,26 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
             fillModel(hashOfValues,typeOfPayment,percentage);
             }
         }
-        qDebug() << __FILE__ << QString::number(__LINE__) << "manager.m_hashOfSites.keys()  =" << QString::number(manager.getHashOfSites().keys().size()) ;
         
+    if (manager.getDistanceRules().keys().contains(data))
+    {
+    	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();
+        }
+    if (data == "Round trip")
+    {
+    	  distance dist(this);
+    	  if (dist.exec()== QDialog::Accepted)
+    	  {
+    	          m_kilometers = dist.getDistanceNumber();
+    	          double value = m_kilometers * m_distanceRuleValue;
+    	          typeOfPayment = dist.returnDistanceDialog();
+    	          percentage = dist.m_percentValue;
+    	  	  hashOfValues.insertMulti("DistPrice",QString::number(value));
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
+    	          fillModel(hashOfValues,typeOfPayment,percentage);
+    	      }
+    	  
+        }
     if (manager.getHashOfSites().keys().contains(data))
     {
     	  m_siteUid = manager.getHashOfSites().value(data);
@@ -515,5 +564,22 @@ void ReceiptViewer::clearAll(bool b){
         double value = 0.00;
     	m_model->setData(m_model->index(i,AmountModel::Col_Value), value, Qt::EditRole);
     }
-    
+}
+
+QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString & item){
+    QVariant variantValue;
+    receiptsManager manager;
+    if (manager.getDistanceRules().keys().contains(item))
+    {
+    	  variantValue = manager.m_preferedDistanceRule;
+        }
+    if (manager.getHashOfSites().keys().contains(item))
+    {
+    	  variantValue = manager.m_preferedSite;
+        }
+    if (manager.getHashOfInsurance().keys().contains(item))
+    {
+    	  variantValue = manager.m_preferedInsurance;
+        }
+    return variantValue;
 }

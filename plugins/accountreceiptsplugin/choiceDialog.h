@@ -18,14 +18,14 @@ class choiceDialog : public QDialog{
   void value(double val);
   void valueUp();
   void valueDown();
-  void valueStop();
-  void doubleSpinBoxUp();
-  void doubleSpinBoxDown();
+  void valueUpStop();
+  void valueDownStop();
   void quickPlus();
   void quickLess();
   private :
   Ui::ChoiceDialog * ui;
-  QTimer *m_timer;
+  QTimer * m_timerUp;
+  QTimer * m_timerDown;
   double m_percent;
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;

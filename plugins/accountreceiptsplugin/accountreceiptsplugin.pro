@@ -29,6 +29,7 @@ HEADERS += accountreceipts_exporter.h \
     xmlcategoriesparser.h \
     choiceDialog.h \
     constants.h \
+    distance.h \
     receiptviewer.h 
 
 
@@ -45,6 +46,7 @@ SOURCES += accountreceiptsplugin.cpp \
     findReceiptsValues.cpp \
     choiceDialog.cpp \
     xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
+    distance.cpp \
     receiptviewer.cpp 
 
 
