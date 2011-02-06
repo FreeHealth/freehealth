@@ -115,6 +115,10 @@ bool DistanceRulesModel::setData(const QModelIndex &index, const QVariant &value
     return ret;
 }
 
+void DistanceRulesModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+}
+
 
 QVariant DistanceRulesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
@@ -154,4 +158,8 @@ void DistanceRulesModel::revert()
 bool DistanceRulesModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+QSqlError DistanceRulesModel::lastError(){
+    return d->m_SqlTable->lastError();
 }

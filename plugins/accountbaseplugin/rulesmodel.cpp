@@ -136,6 +136,10 @@ bool RulesModel::removeRows(int row, int count, const QModelIndex &parent)
     return d->m_SqlTable->removeRows(row, count, parent);
 }
 
+void RulesModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+}
+
 bool RulesModel::submit()
 {
     if (d->m_SqlTable->submitAll()) {

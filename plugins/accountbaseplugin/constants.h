@@ -213,6 +213,7 @@ namespace Constants {
         INSURANCE_FAX,
         INSURANCE_MAIL,
         INSURANCE_CONTACT,
+        INSURANCE_PREF,
         INSURANCE_MaxParam
     };
     enum TableSites_Fields {
@@ -227,6 +228,7 @@ namespace Constants {
         SITES_FAX,
         SITES_MAIL,
         SITES_CONTACT,
+        SITES_PREF,
         SITES_MaxParam
     };
     enum TableUsers_Fields {
@@ -250,6 +252,7 @@ namespace Constants {
         RULES_UID,
         RULES_TYPE,
         RULES_VALUES,
+        RULES_PREF,
         RULES_MaxParam
     };
     enum TableDistanceRules_Fields {
@@ -257,6 +260,7 @@ namespace Constants {
         DISTRULES_UID,
         DISTRULES_TYPE,
         DISTRULES_VALUES,
+        DISTRULES_PREF,
         DISTRULES_MaxParam
     };
     

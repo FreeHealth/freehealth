@@ -396,6 +396,8 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Insurance,  INSURANCE_FAX,         "FAX",   FieldIsShortText);
     addField(Table_Insurance,  INSURANCE_MAIL,        "MAIL",   FieldIsShortText);
     addField(Table_Insurance,  INSURANCE_CONTACT,     "CONTACT",   FieldIsShortText);
+    addField(Table_Insurance,  INSURANCE_PREF,        "PREFERED",  FieldIsBoolean);
+    
     /** Create an IDENTITY table */
 
 //    "CREATE TABLE 	payeurs	("  --> insurance
@@ -420,6 +422,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Sites,  SITES_FAX,     "FAX",   FieldIsShortText);
     addField(Table_Sites,  SITES_MAIL,    "MAIL",   FieldIsShortText);
     addField(Table_Sites,  SITES_CONTACT, "CONTACT",   FieldIsShortText);
+    addField(Table_Sites,  SITES_PREF,    "PREFERED",  FieldIsBoolean);
 
 //    "CREATE TABLE	sites ("  --> sites
 //                    "ID_Primkey  	bigint(10)  	 	  				NOT NULL 	 auto_increment  ,"
@@ -462,11 +465,14 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Rules,  RULES_UID,     "RULES_UID",     FieldIsUUID);
     addField(Table_Rules,  RULES_TYPE,    "TYPE",          FieldIsShortText);
     addField(Table_Rules,  RULES_VALUES,  "VALUES",        FieldIsShortText);
+    addField(Table_Rules,  RULES_PREF,    "PREFERED",      FieldIsBoolean);
+    
     
     addField(Table_DistanceRules,  DISTRULES_ID,      "DISTRULES_ID",      FieldIsUniquePrimaryKey);
     addField(Table_DistanceRules,  DISTRULES_UID,     "DISTRULES_UID",     FieldIsUUID);
     addField(Table_DistanceRules,  DISTRULES_TYPE,    "TYPE",              FieldIsShortText);
     addField(Table_DistanceRules,  DISTRULES_VALUES,  "VALUES",            FieldIsShortText);
+    addField(Table_DistanceRules,  DISTRULES_PREF,    "PREFERED",          FieldIsBoolean);
 
     addField(Table_Thesaurus,  THESAURUS_ID,      "THESAURUS_ID",      FieldIsUniquePrimaryKey);
     addField(Table_Thesaurus,  THESAURUS_UID,     "THESAURUS_UID",     FieldIsUUID);
