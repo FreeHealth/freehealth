@@ -374,6 +374,11 @@ enum TitleInterpret {
         const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
         const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
 
+        // Widely used words
+        const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
+        const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
+        const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
+        const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
 
         // Settings related messages
         const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
