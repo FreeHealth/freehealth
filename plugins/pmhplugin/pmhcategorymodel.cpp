@@ -215,6 +215,9 @@ public:
 
         // Add episodes
         foreach(PmhEpisodeData *episode, pmh->episodes()) {
+            child = new TreeItem(item);
+            child->setLabel(episode->data(PmhEpisodeData::Label).toString());
+            child->setPmhData(pmh);
             QString label;
             QString dateEnd = tkTr(Trans::Constants::NOW);
             if (!episode->data(PmhEpisodeData::DateEnd).isNull())
@@ -222,7 +225,7 @@ public:
             label = QString("%1 to %2")
                     .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
                     .arg(dateEnd);
-            child = new TreeItem(item);
+            child = new TreeItem(child);
             child->setLabel(label);
             child->setPmhData(pmh);
             // Add ICD codings

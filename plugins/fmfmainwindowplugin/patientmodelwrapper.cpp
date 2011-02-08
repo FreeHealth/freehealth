@@ -26,13 +26,18 @@
  ***************************************************************************/
 #include "patientmodelwrapper.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientbar.h>
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 using namespace MainWin::Internal;
 
@@ -43,6 +48,10 @@ PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
 }
 
 PatientModelWrapper::~PatientModelWrapper()
+{
+}
+
+void PatientModelWrapper::init()
 {
 }
 
@@ -88,4 +97,9 @@ void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {
     if (m_Model->currentPatient().row() == index.row())
         Q_EMIT this->dataChanged(index, index);
+}
+
+QWidget *PatientModelWrapper::newPatientBar(QWidget *parent) const
+{
+    return new Patients::PatientBar(parent);
 }

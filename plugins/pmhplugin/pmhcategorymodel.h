@@ -40,7 +40,7 @@ class PmhCategoryModel : public QAbstractItemModel
     Q_OBJECT
 public:
     enum DataRepresentation {
-            Label = 0,
+        Label = 0,
         Type,
         Id,
         EmptyColumn,

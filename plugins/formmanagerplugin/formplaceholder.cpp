@@ -35,6 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
 
 #include <utils/widgets/minisplitter.h>
@@ -58,6 +59,7 @@ using namespace Form;
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 
 namespace Form {
@@ -276,6 +278,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Scroll->setWidget(w);
 
     d->m_GeneralLayout->addWidget(d->horizSplitter, 100, 0);
+    addTopWidget(patient()->newPatientBar(this));
 }
 
 FormPlaceHolder::~FormPlaceHolder()

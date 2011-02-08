@@ -187,6 +187,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->resizeColumnsToContents();
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
+    /** \todo Patient Selector should be autoconnected to patient model and current changed sa MainWindow::setCurrentPatient()*/
 }
 
 /** \brief Define the fields to show using the FieldsToShow flag */

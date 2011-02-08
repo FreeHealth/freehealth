@@ -121,7 +121,6 @@ static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w);
 MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
         m_modeStack(0),
-        m_PatientBar(0),
         m_RecentPatients(0),
         m_PatientModelWrapper(0)
 {
@@ -248,6 +247,7 @@ void MainWindow::extensionsInitialized()
     // Create IPatient
     m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
     Core::ICore::instance()->setPatient(m_PatientModelWrapper);
+    m_PatientModelWrapper->init();
 
     setCentralWidget(m_modeStack);
 
@@ -270,10 +270,6 @@ void MainWindow::postCoreInitialization()
     on_currentUser_Changed();
     connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
     connect(userModel(), SIGNAL(userDocumentsChanged()), this, SLOT(on_currentUser_Changed()));
-    
-    // Create and insert the patient tab in the formplaceholder
-    m_PatientBar = new Patients::PatientBar(this);
-    formManager()->formPlaceHolder()->addTopWidget(m_PatientBar);
 
     // Connect this tab with the patientsearchmode
     connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
@@ -307,8 +303,8 @@ void MainWindow::on_currentUser_Changed()
 
 void MainWindow::setCurrentPatient(const QModelIndex &index)
 {
-    // Inform Patient Bar and Patient Selector
-    m_PatientBar->setCurrentIndex(index);
+    // Inform Patient Patient Selector
+    /** \todo Patient Selector should be autoconnected to patient model and current changed */
     Patients::PatientWidgetManager::instance()->selector()->setSelectedPatient(index);
 
     // Activate Patient files mode

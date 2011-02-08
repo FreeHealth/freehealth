@@ -30,6 +30,7 @@
   It contains:
   - a brief resume of the patient's identity
   - a specific place where PatientsActions are presented
+  \todo The PatientBar is created by the MainWindow and added to Modes manually. Make the patientBar available for everyone in IPatient ?
   \sa Patients::PatientAction
 */
 
@@ -51,6 +52,7 @@
 using namespace Patients;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 namespace Patients {
 namespace Internal {
@@ -98,6 +100,7 @@ PatientBar::PatientBar(QWidget *parent) :
         PatientModel::setActiveModel(new PatientModel(qApp));
     }
     setPatientModel(PatientModel::activeModel());
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PatientBar::~PatientBar()
@@ -111,10 +114,17 @@ void PatientBar::setPatientModel(PatientModel *model)
 
 void PatientBar::setCurrentIndex(const QModelIndex &index)
 {
+    qWarning() << "PatientBar::setCurrentIndex()" << index;
     if (d->m_Index)
         delete d->m_Index;
     d->m_Index = new QPersistentModelIndex(index);
     d->setUi();
+}
+
+void PatientBar::onCurrentPatientChanged()
+{
+    qWarning() << "PatientBar::onCurrentPatientChanged()";
+    setCurrentIndex(d->m_Model->currentPatient());
 }
 
 void PatientBar::paintEvent(QPaintEvent *)

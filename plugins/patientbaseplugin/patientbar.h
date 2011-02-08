@@ -52,6 +52,9 @@ public:
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &index);
 
+private Q_SLOTS:
+    void onCurrentPatientChanged();
+
 protected:
     void paintEvent(QPaintEvent *);
 

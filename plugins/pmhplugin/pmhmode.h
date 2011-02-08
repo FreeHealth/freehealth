@@ -51,6 +51,7 @@ private Q_SLOTS:
 
 private:
     Ui::PmhMode *ui;
+    QWidget *m_Widget;
 };
 
 }  // End namespace Internal

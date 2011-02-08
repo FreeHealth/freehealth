@@ -131,7 +131,6 @@ protected:
 
 public:
     Utils::FancyTabWidget *m_modeStack;
-    Patients::PatientBar *m_PatientBar;
 
     /** \todo Move this Patient History in the ICore ? */
     Core::FileManager *m_RecentPatients;

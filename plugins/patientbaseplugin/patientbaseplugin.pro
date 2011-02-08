@@ -19,7 +19,6 @@ HEADERS = patientbaseplugin.h \
     constants_trans.h \
     patientselector.h \
     patientwidgetmanager.h \
-    patientselector_p.h \
     patientsearchmode.h \
     patientbasepreferencespage.h \
     patientbar.h \

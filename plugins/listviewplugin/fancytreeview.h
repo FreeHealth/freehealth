@@ -73,7 +73,8 @@ public:
         FTV_SaveModel    = 0x0001,
         FTV_RevertModel  = 0x0002,
         FTV_CreateNew    = 0x0004,
-        FTV_RemoveRow    = 0x0008
+        FTV_RemoveRow    = 0x0008,
+        FTV_PrintItem    = 0x0010
     };
     Q_DECLARE_FLAGS(ButtonActions, ButtonAction);
 
@@ -84,7 +85,7 @@ public:
     QTreeView *treeView() const;
 
     QToolButton *button();
-    void setButtonActions(const ButtonActions &actions);
+    void setButtonActions(const ButtonActions &actions, bool connectToDefault = false);
 
     Utils::QButtonLineEdit *searchLine();
 
@@ -104,6 +105,12 @@ private Q_SLOTS:
     void handleClicked(const QModelIndex &index);
     void save();
     void addItem();
+
+Q_SIGNALS:
+    void saveRequested();
+    void addItemRequested();
+    void removeItemRequested();
+    void printItemRequested();
 
 protected:
     void changeEvent(QEvent *e);

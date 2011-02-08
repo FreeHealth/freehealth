@@ -235,6 +235,7 @@ QVariant PmhEpisodeModel::headerData(int section, Qt::Orientation orientation, i
         case DateStart: return tr("Starting date");
         case DateEnd: return tr("Ending date");
         case Label: return tr("Label");
+        case IcdCodeList: return tr("ICD10 coding");
         }
     }
     return QVariant();

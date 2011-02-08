@@ -76,6 +76,9 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
     ui->tableView->hideColumn(PmhEpisodeModel::IcdXml);
     ui->tableView->hideColumn(PmhEpisodeModel::Contact);
     ui->tableView->hideColumn(PmhEpisodeModel::EmptyColumn);
+    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
 }
 
 void PmhEpisodeViewer::itemActivated(const QModelIndex &item)
@@ -88,10 +91,9 @@ void PmhEpisodeViewer::itemActivated(const QModelIndex &item)
         LOG(this, xml);
         dlg.setXmlIcdCollection(xml);
         if (dlg.exec()==QDialog::Accepted) {
-           d->m_Pmh->episodeModel()->setData(item.model()->index(item.row(), PmhEpisodeModel::IcdXml), dlg.xmlIcdCollection());
+            // retrieve selected codes to the PmhEpisodeModel
+            d->m_Pmh->episodeModel()->setData(item.model()->index(item.row(), PmhEpisodeModel::IcdXml), dlg.xmlIcdCollection());
         }
-
-        // retrieve selected codes to the PmhEpisodeModel
     }
 }
 

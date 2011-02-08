@@ -33,15 +33,13 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
 #include <listviewplugin/fancytreeview.h>
 #include <listviewplugin/simplecategorymodel.h>
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QLabel>
 #include <QItemSelectionModel>
 
 #include "ui_pmhmode.h"
@@ -52,6 +50,7 @@ using namespace Internal;
 
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 PmhMode::PmhMode(QObject *parent) :
         Core::BaseMode(parent), ui(new Ui::PmhMode)
@@ -63,19 +62,24 @@ PmhMode::PmhMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
 
-    QWidget *m_Widget = new QWidget;
+    m_Widget = new QWidget;
     ui->setupUi(m_Widget);
+
+    ui->patientBarLayout->addWidget(patient()->newPatientBar(m_Widget));
     ui->treeView->setModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::EmptyColumn);
 //    ui->treeView->setModel(new PmhModel(this), PmhModel::MH_EmptyColumn);
 //    ui->treeView->setModel(new Views::SimpleCategoryModel("", this));
-    ui->treeView->setButtonActions(Views::FancyTreeView::FTV_SaveModel |  Views::FancyTreeView::FTV_CreateNew);
+    ui->treeView->setButtonActions(Views::FancyTreeView::FTV_CreateNew);
     ui->treeView->useContextMenu(true);
+    ui->treeView->treeView()->hideColumn(PmhCategoryModel::Id);
+    ui->treeView->treeView()->hideColumn(PmhCategoryModel::Type);
+    ui->treeView->treeView()->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
 
-    QPushButton *addButton = new QPushButton("Add", m_Widget);
-    ui->gridLayout->addWidget(addButton);
+//    QPushButton *addButton = new QPushButton("Add", m_Widget);
+//    ui->gridLayout->addWidget(addButton);
     setWidget(m_Widget);
 
-    connect(addButton, SIGNAL(clicked()), this, SLOT(on_addButton_clicked()));
+    connect(ui->treeView, SIGNAL(addItemRequested()), this, SLOT(on_addButton_clicked()));
     connect(ui->treeView->treeView()->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
 }
@@ -87,7 +91,7 @@ PmhMode::~PmhMode()
 
 void PmhMode::on_addButton_clicked()
 {
-    // Create a viewer
+    // Create a new Pmh in the creator dialog
     PmhCreatorDialog dlg;
     dlg.exec();
 }

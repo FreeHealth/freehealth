@@ -182,7 +182,8 @@ QToolButton *FancyTreeView::button()
     return 0;
 }
 
-void FancyTreeView::setButtonActions(const ButtonActions &actions)
+/** \brief Define the \e actions to add in the treeview button. If you just want to connect the signals set \e connectToDefault to false. */
+void FancyTreeView::setButtonActions(const ButtonActions &actions, bool connectToDefault)
 {
     QAction *a = 0;
     Core::Command *cmd = 0;
@@ -196,7 +197,9 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions)
         cmd = actionManager()->registerAction(a, Constants::A_SAVE_MODEL, globalContext);
         cmd->setTranslations(Trans::Constants::FILESAVE_TEXT);
         //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-        connect(a, SIGNAL(triggered()), this, SLOT(save()));
+        if (connectToDefault)
+            connect(a, SIGNAL(triggered()), this, SLOT(save()));
+        connect(a, SIGNAL(triggered()), this, SIGNAL(saveRequested()));
         ui->button->addAction(cmd->action());
     }
     if (actions & FTV_RevertModel) {
@@ -209,7 +212,9 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions)
         cmd = actionManager()->registerAction(a, Constants::A_CREATE_NEW, globalContext);
         cmd->setTranslations(Trans::Constants::LISTADD_TEXT);
         //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-        connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+        if (connectToDefault)
+            connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+        connect(a, SIGNAL(triggered()), this, SIGNAL(addItemRequested()));
         ui->button->addAction(cmd->action());
     }
     if (actions & FTV_RemoveRow) {
@@ -221,7 +226,9 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions)
         cmd = actionManager()->registerAction(a, Constants::A_REMOVE_ITEM, globalContext);
         cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
         //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-        connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
+        if (connectToDefault)
+            connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
+        connect(a, SIGNAL(triggered()), this, SIGNAL(removeItemRequested()));
         ui->button->addAction(cmd->action());
     }
 

@@ -280,6 +280,9 @@ public:
 PmhData::PmhData() :
         d(new PmhDataPrivate)
 {
+    // create default values
+    populateWithCurrentData();
+    d->m_Data.insert(ConfidenceIndex, 5);
 }
 
 PmhData::~PmhData()

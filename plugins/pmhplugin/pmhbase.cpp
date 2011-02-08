@@ -314,6 +314,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
                 PmhEpisodeData *ep = new PmhEpisodeData;
                 ep->setData(PmhEpisodeData::DbOnly_MasterId, query.value(Constants::EPISODE_MASTER_ID));
                 ep->setData(PmhEpisodeData::DbOnly_Id, query.value(Constants::EPISODE_ID));
+                ep->setData(PmhEpisodeData::Label, query.value(Constants::EPISODE_LABEL));
                 ep->setData(PmhEpisodeData::DateStart, query.value(Constants::EPISODE_DATE_START));
                 ep->setData(PmhEpisodeData::DateEnd, query.value(Constants::EPISODE_DATE_END));
                 ep->setData(PmhEpisodeData::IcdXml, query.value(Constants::EPISODE_ICD_CODES));

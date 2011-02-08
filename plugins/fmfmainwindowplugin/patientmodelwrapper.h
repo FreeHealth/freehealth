@@ -28,6 +28,7 @@
 #define PATIENTMODELWRAPPER_H
 
 #include <coreplugin/ipatient.h>
+#include <patientbaseplugin/patientbar.h>
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -37,8 +38,8 @@ QT_END_NAMESPACE
 /**
  * \file patientmodelwrapper.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 20 June 2010
+ * \version 0.5.0
+ * \date 08 Feb 2011
 */
 
 namespace Patients {
@@ -55,6 +56,7 @@ class PatientModelWrapper : public Core::IPatient
 public:
     PatientModelWrapper(Patients::PatientModel *model);
     ~PatientModelWrapper();
+    void init();
 
     // IPatient interface
     void clear() {}
@@ -67,6 +69,8 @@ public:
     /** \todo Is this needed in freemedforms ? */
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
+
+    QWidget *newPatientBar(QWidget *parent) const;
 
 private Q_SLOTS:
     void patientDataChanged(const QModelIndex &index);

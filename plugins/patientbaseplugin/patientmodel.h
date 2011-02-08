@@ -57,7 +57,7 @@ public:
     static PatientModel *activeModel() {return m_ActiveModel;}
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
 
-    void setCurrentPatient(const QModelIndex &index) {m_CurrentPatient = index;}
+    void setCurrentPatient(const QModelIndex &index);
     QModelIndex currentPatient() const {return m_CurrentPatient;}
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

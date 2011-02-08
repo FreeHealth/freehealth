@@ -37,6 +37,11 @@
 
 using namespace Core;
 
+QWidget *IPatient::newPatientBar(QWidget *parent) const
+{
+    return new QWidget(parent);
+}
+
 void IPatient::replaceTokens(QString &stringWillBeModified)
 {
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME,       data(IPatient::BirthName).toString());

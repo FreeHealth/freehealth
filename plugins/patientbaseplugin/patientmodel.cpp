@@ -288,6 +288,14 @@ void PatientModel::changeUserUuid(const QString &uuid)
     d->refreshFilter();
 }
 
+void PatientModel::setCurrentPatient(const QModelIndex &index)
+{
+    if (index == m_CurrentPatient)
+        return;
+    m_CurrentPatient = index;
+    Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+}
+
 int PatientModel::rowCount(const QModelIndex &) const
 {
     return d->m_SqlPatient->rowCount();
