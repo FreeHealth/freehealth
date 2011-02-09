@@ -506,9 +506,9 @@ void ReceiptViewer::save(){
     hash.insert(ACCOUNT_SITE_ID,m_siteUid);//AccountDB::Constants::SITES_UID
     hash.insert(ACCOUNT_INSURANCE_ID,m_insuranceUid);
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
-    hash.insert(ACCOUNT_MEDICALPROCEDURE_XML,NULL);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
     hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,textOfListOfActs);
-    hash.insert(ACCOUNT_COMMENT,NULL);
+    hash.insert(ACCOUNT_COMMENT, QVariant());
     hash.insert(ACCOUNT_CASHAMOUNT,cash);
     hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
     hash.insert(ACCOUNT_VISAAMOUNT,visa);
@@ -517,12 +517,11 @@ void ReceiptViewer::save(){
     hash.insert(ACCOUNT_DUEAMOUNT,due);
     hash.insert(ACCOUNT_DUEBY,"by");
     hash.insert(ACCOUNT_ISVALID,0);
-    hash.insert(ACCOUNT_TRACE,NULL);
+    hash.insert(ACCOUNT_TRACE, QVariant());
     receiptsEngine r;
-    if (!r.insertIntoAccount(hash))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
-        }
+    if (!r.insertIntoAccount(hash)) {
+        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
+    }
 }
 
 void ReceiptViewer::saveAndQuit(){
