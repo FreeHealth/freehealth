@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>273</width>
-    <height>300</height>
+    <width>328</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,60 +21,54 @@
        <property name="title">
         <string>Type of payment</string>
        </property>
-       <widget class="QWidget" name="">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>102</width>
-          <height>164</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="cashButton">
-           <property name="text">
-            <string>Cash</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="checkButton">
-           <property name="text">
-            <string>Check</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="visaButton">
-           <property name="text">
-            <string>Credit Card</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="otherButton">
-           <property name="text">
-            <string>Other</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QRadioButton" name="bankingButton">
-           <property name="text">
-            <string>Banking</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QRadioButton" name="dueButton">
-           <property name="text">
-            <string>Due</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="cashButton">
+            <property name="text">
+             <string>Cash</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="checkButton">
+            <property name="text">
+             <string>Check</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="visaButton">
+            <property name="text">
+             <string>Credit Card</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="otherButton">
+            <property name="text">
+             <string>Other</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="bankingButton">
+            <property name="text">
+             <string>Banking</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="dueButton">
+            <property name="text">
+             <string>Due</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="0" column="1">
@@ -82,56 +76,50 @@
        <property name="title">
         <string>Percentages</string>
        </property>
-       <widget class="QWidget" name="">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>20</y>
-          <width>87</width>
-          <height>161</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="plusConstButton">
-           <property name="text">
-            <string>++</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="plusButton">
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QDoubleSpinBox" name="percentDoubleSpinBox">
-           <property name="maximumSize">
-            <size>
-             <width>90</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="lessButton">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QPushButton" name="lessConstButton">
-           <property name="text">
-            <string>--</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="plusConstButton">
+            <property name="text">
+             <string>++</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="plusButton">
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QDoubleSpinBox" name="percentDoubleSpinBox">
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="lessButton">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QPushButton" name="lessConstButton">
+            <property name="text">
+             <string>--</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="1" column="0" rowspan="2">
@@ -139,16 +127,11 @@
        <property name="title">
         <string>Round Trip</string>
        </property>
-       <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>30</y>
-          <width>63</width>
-          <height>27</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="1" column="1">
