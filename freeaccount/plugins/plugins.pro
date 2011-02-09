@@ -5,6 +5,7 @@ SUBDIRS = \
     mainwindow \
     accountbase \
     account \
+    accountmanager \
     printer \
     texteditor \
     listview \
@@ -28,6 +29,11 @@ account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
 #account.depends += listview
+
+accountmanager.subdir   = accountmanagerplugin
+accountmanager.depends += core
+accountmanager.depends += accountbase
+accountmanager.depends += receipts
 
 receipts.subdir   = ../../plugins/accountreceiptsplugin
 receipts.depends += core
