@@ -208,14 +208,14 @@ void MedicalProcedureWidget::on_addButton_clicked()
     qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 }
 
-/*void MedicalProcedureWidget::on_save_clicked()
+void MedicalProcedureWidget::on_save_clicked()
 {
     saveModel();
-}*/
+}
 
-/*void MedicalProcedureWidget::on_name_textChanged(const QString & text){
-    mpComboBox->setItemText(mpComboBox->currentIndex(),text);
-}*/
+//void MedicalProcedureWidget::on_name_textChanged(const QString & text){
+//    mpComboBox->setItemText(mpComboBox->currentIndex(),text);
+//}
 
 void MedicalProcedureWidget::on_removeButton_clicked()
 {
