@@ -6,6 +6,9 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
+MOC_DIR += moc
+OBJECTS_DIR += o
+UI_HEADERS_DIR += ui_h
 
 # Input
 HEADERS += movementsviewer.h
