@@ -12,7 +12,7 @@ class accountManager : public QWidget {
         accountManager(QWidget * parent);
         ~accountManager();
     private :
-        Ui::AccountManagerWidget ui;
+        Ui::AccountManagerWidget * ui;
 };
 
 

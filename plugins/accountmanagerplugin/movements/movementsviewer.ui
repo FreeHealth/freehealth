@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MovementsViewerWidget</class>
+ <widget class="QWidget" name="MovementsViewerWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>539</width>
+    <height>373</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Movements</string>
+  </property>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>10</y>
+     <width>531</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="valueLabel">
+      <property name="text">
+       <string>Value</string>
+      </property>
+      <property name="buddy">
+       <cstring>valueDoubleSpinBox</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QDoubleSpinBox" name="valueDoubleSpinBox"/>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="percentLabel">
+      <property name="text">
+       <string>Percentage</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="buddy">
+       <cstring>percentDoubleSpinBox</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QDoubleSpinBox" name="percentDoubleSpinBox"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="detailsLabel">
+      <property name="text">
+       <string>Details</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="buddy">
+       <cstring>detailsEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="3">
+     <widget class="QLineEdit" name="detailsEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="dateLabel">
+      <property name="text">
+       <string>Date</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="buddy">
+       <cstring>dateEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QDateEdit" name="dateEdit"/>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="bankLabel">
+      <property name="text">
+       <string>bank</string>
+      </property>
+      <property name="buddy">
+       <cstring>bankComboBox</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QComboBox" name="bankComboBox"/>
+    </item>
+    <item row="3" column="0" colspan="4">
+     <widget class="QTableView" name="tableView"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="validButton">
+      <property name="text">
+       <string>&amp;Valid</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="recordButton">
+      <property name="text">
+       <string>&amp;Record</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>&amp;Delete</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="3">
+     <widget class="QPushButton" name="quitButton">
+      <property name="text">
+       <string>&amp;Quit</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>valueDoubleSpinBox</tabstop>
+  <tabstop>percentDoubleSpinBox</tabstop>
+  <tabstop>detailsEdit</tabstop>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>bankComboBox</tabstop>
+  <tabstop>recordButton</tabstop>
+  <tabstop>quitButton</tabstop>
+  <tabstop>validButton</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>tableView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
