@@ -31,6 +31,7 @@
 
 #include <QObject>
 class QModelIndex;
+class QAbstractButton;
 
 namespace PMH {
 namespace Internal {
@@ -48,6 +49,7 @@ public:
 private Q_SLOTS:
     void on_addButton_clicked();
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void onButtonClicked(QAbstractButton *button);
 
 private:
     Ui::PmhMode *ui;

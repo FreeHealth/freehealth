@@ -51,8 +51,9 @@ public:
     void setEditMode(EditMode mode);
     void setPmhData(Internal::PmhData *pmh);
     void createNewPmh();
+    void revert();
 
-    Internal::PmhData *pmhData() const;
+    Internal::PmhData *modifiedPmhData() const;
 
 protected:
     void changeEvent(QEvent *e);

@@ -35,6 +35,8 @@
 
 #include "ui_pmhcreatordialog.h"
 
+#include <QDebug>
+
 using namespace PMH;
 
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
@@ -60,7 +62,7 @@ void PmhCreatorDialog::on_buttonBox_clicked(QAbstractButton *button)
     switch (ui->buttonBox->standardButton(button)) {
     case QDialogButtonBox::Save:
         {
-            Internal::PmhData *pmh = ui->pmhViewer->pmhData();
+            Internal::PmhData *pmh = ui->pmhViewer->modifiedPmhData();
             // Feed category model with this new PmhData
             pmhCore()->pmhCategoryModel()->addPmhData(pmh);
             accept();

@@ -64,6 +64,7 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new QWidget;
     ui->setupUi(m_Widget);
+    ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
 
     ui->patientBarLayout->addWidget(patient()->newPatientBar(m_Widget));
     ui->treeView->setModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::EmptyColumn);
@@ -82,6 +83,8 @@ PmhMode::PmhMode(QObject *parent) :
     connect(ui->treeView, SIGNAL(addItemRequested()), this, SLOT(on_addButton_clicked()));
     connect(ui->treeView->treeView()->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
+
+    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 }
 
 PmhMode::~PmhMode()
@@ -99,4 +102,20 @@ void PmhMode::on_addButton_clicked()
 void PmhMode::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
+}
+
+void PmhMode::onButtonClicked(QAbstractButton *button)
+{
+    switch (ui->buttonBox->standardButton(button)) {
+    case QDialogButtonBox::Save:
+        {
+            // Get the modified PmhData
+            PmhData *pmh = ui->pmhViewer->modifiedPmhData();
+            // Inform the model
+            pmhCore()->pmhCategoryModel()->addPmhData(pmh);
+            break;
+        }
+    case QDialogButtonBox::Cancel: ui->pmhViewer->revert(); break;
+    default: break;
+    }
 }

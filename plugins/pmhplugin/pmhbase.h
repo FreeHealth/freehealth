@@ -60,7 +60,7 @@ public:
     // Database setters
     bool savePmhData(PmhData *pmh);
     bool updatePmhData(PmhData *pmh);
-    bool savePmhEpsiodeData(PmhEpisodeData *episode);
+    bool savePmhEpisodeData(PmhEpisodeData *episode);
     bool updatePmhEpsisodeData(PmhEpisodeData *episode);
 
 private:

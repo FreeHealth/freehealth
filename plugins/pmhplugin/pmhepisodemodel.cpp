@@ -181,7 +181,6 @@ bool PmhEpisodeModel::setData(const QModelIndex &index, const QVariant &value, i
 
 bool PmhEpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << "insertrows" << row << count << parent;
     beginInsertRows(parent, row, row+count);
     for(int i = 0; i < count; ++i) {
         d->m_Pmh->insertEpisode(row+i, new Internal::PmhEpisodeData);

@@ -76,7 +76,7 @@ public:
             m_Parent->addChildren(this);
     }
 
-    ~TreeItem() { qDeleteAll(m_Children); }
+    ~TreeItem();
 
     // Genealogy management
     TreeItem *child(int number) { return m_Children.value(number); }
@@ -118,10 +118,10 @@ public:
 
     // For data management
     QString label() const {return m_Label;}
-    void setLabel(const QString &label) {m_Label = label;}
+    void setLabel(QString label) {m_Label = label;}
 
     QString icon() const {return m_Icon;}
-    void setIcon(const QString &icon) {m_Icon = icon;}
+    void setIcon(QString icon) {m_Icon = icon;}
 
     // Category / PMH
     void setPmhCategory(PmhCategory *cat)
@@ -159,6 +159,16 @@ private:
     PmhCategory *m_Cat;
     PmhData *m_Pmh;
 };
+
+/** \todo Bug: ~TreeItem() Can not be inlined ???? */
+TreeItem::~TreeItem()
+{
+    m_Label.clear();
+    m_Icon.clear();
+    qDeleteAll(m_Children);
+    m_Children.clear();
+    m_Pmh=0;m_Cat=0;m_Parent=0;
+}
 
 class PmhCategoryModelPrivate
 {
@@ -256,7 +266,7 @@ public:
         // Get all categories from database
         m_Cats.clear();
         m_Cats = base()->getPmhCategory(patient()->data(Core::IPatient::Uid).toString());
-        qWarning() << "xxxxxxxxx getCategory" << m_Cats.count();
+        qWarning() << "PMHxxxxxxxxx getCategory" << m_Cats.count();
         // Recreate the category tree
         foreach(PmhCategory *cat, base()->createCategoryTree(m_Cats)) {
             categoryToItem(cat, new TreeItem(m_Root));
@@ -268,7 +278,7 @@ public:
     void getPmh()
     {
         m_Pmhs = base()->getPmh(patient()->data(Core::IPatient::Uid).toString());
-        qWarning() << "xxxxxxxxx getPMH" << m_Pmhs.count();
+        qWarning() << "PMHxxxxxxxxx getPMH" << m_Pmhs.count();
 //        base()->linkPmhWithCategory(m_Cats, m_Pmhs);
         for(int i = 0; i < m_Pmhs.count(); ++i) {
             pmhToItem(m_Pmhs.at(i), new TreeItem);
@@ -471,12 +481,40 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void PmhCategoryModel::addPmhData(PmhData *pmh)
+/**
+  \brief Add or modify a PmhData. If the PmhData pointer does not already exists in the model, the data is created, otherwise it is updated.
+  \todo improve this using dataChanged(index, index) ??
+*/
+bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
-    // save pmh to database
-    base()->savePmhData(pmh);
-    d->pmhToItem(pmh, new TreeItem);
-    reset();
+    if (d->m_Pmhs.contains(pmh)) {
+        // update the model
+        for(int i = 0; i < d->m_Root->childCount(); ++i) {
+            TreeItem *item = d->m_Root->child(i);
+            if (item->pmhData() == pmh) {
+                // Remove the row
+                d->m_Root->removeChild(item);
+                delete item;
+                item = 0;
+                // Insert the row
+                item = new TreeItem(d->m_Root);
+                d->pmhToItem(pmh, item);
+                // Send to database
+                base()->savePmhData(pmh);
+                // Reset the model
+                /** \todo improve this */
+                reset();
+                return true;
+            }
+        }
+    } else {
+        // save pmh to database
+        base()->savePmhData(pmh);
+        // insert the pmh to the model
+        d->pmhToItem(pmh, new TreeItem);
+        reset();
+    }
+    return true;
 }
 
 Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) const

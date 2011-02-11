@@ -160,8 +160,15 @@ void PmhViewer::createNewPmh()
     d->populateUiWithPmh(pmh);
 }
 
+/** \brief Removes any editing and restore values to the originals ones of the PmhData. */
+void PmhViewer::revert()
+{
+    if (d->m_Pmh)
+        d->populateUiWithPmh(d->m_Pmh);
+}
+
 /** \brief Return the PMH::Internal::PmhData pointer modified or not according to the actual EditMode of the viewer. */
-Internal::PmhData *PmhViewer::pmhData() const
+Internal::PmhData *PmhViewer::modifiedPmhData() const
 {
     // Read only == return the unchanged PmhData
     if (d->m_Mode==ReadOnlyMode) {

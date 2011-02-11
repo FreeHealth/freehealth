@@ -447,7 +447,6 @@ bool PmhBase::savePmhData(PmhData *pmh)
         return updatePmhData(pmh);
     }
     // save pmh
-    qWarning() << "save pmh";
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_MASTER));
     query.bindValue(Constants::MASTER_ID, QVariant());
@@ -465,11 +464,10 @@ bool PmhBase::savePmhData(PmhData *pmh)
         pmh->setData(PmhData::Uid, query.lastInsertId());
     } else {
         LOG_QUERY_ERROR(query);
-        return false;
     }
 
     foreach(PmhEpisodeData *ep, pmh->episodes()) {
-        this->savePmhEpsiodeData(ep);
+        savePmhEpisodeData(ep);
     }
 
     return false;
@@ -506,12 +504,14 @@ bool PmhBase::updatePmhData(PmhData *pmh)
     query.bindValue(5, pmh->data(PmhData::Comment));
     query.bindValue(6, QVariant());
     query.bindValue(7, QVariant());
-    if (query.exec()) {
-        return true;
-    } else {
+    if (!query.exec()) {
         LOG_QUERY_ERROR(query);
-        return false;
     }
+
+    foreach(PmhEpisodeData *ep, pmh->episodes()) {
+        updatePmhEpsisodeData(ep);
+    }
+
     return false;
 }
 
@@ -519,14 +519,13 @@ bool PmhBase::updatePmhData(PmhData *pmh)
   \brief Save a PmhEpisodeData pointer to database. If PmhEpisodeData already exists in database, PmhEpisodeData is updated.
   \sa updatePmhEpisodeData()
 */
-bool PmhBase::savePmhEpsiodeData(PmhEpisodeData *episode)
+bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
 {
     // save or update ?
     if (!episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
         return updatePmhEpsisodeData(episode);
     }
     // save episode
-    qWarning() << "save episode";
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_EPISODE));
     query.bindValue(Constants::EPISODE_ID, QVariant());
@@ -554,11 +553,10 @@ bool PmhBase::savePmhEpsiodeData(PmhEpisodeData *episode)
 */
 bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
 {
-    if (!episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
-        return savePmhEpsiodeData(episode);
+    if (episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
+        return savePmhEpisodeData(episode);
     }
     // update episode
-    qWarning() << "update episode";
     QSqlQuery query(database());
     QHash<int, QString> where;
     where.insert(Constants::EPISODE_ID, QString("=%1").arg(episode->data(PmhEpisodeData::DbOnly_Id).toString()));

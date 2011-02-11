@@ -51,7 +51,7 @@ public:
     explicit PmhCategoryModel(QObject *parent = 0);
     ~PmhCategoryModel();
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -66,7 +66,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     // Data
-    void addPmhData(Internal::PmhData *pmh);
+    bool addPmhData(Internal::PmhData *pmh);
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
 
 private:
