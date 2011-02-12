@@ -449,7 +449,7 @@ void MainWindow::aboutToShowRecentFiles()
 void MainWindow::aboutToShowRecentPatients()
 {
     // update patient history
-    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_HISTORY);
+    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
     if (!recentsMenu)
         return;
     if (!recentsMenu->menu())

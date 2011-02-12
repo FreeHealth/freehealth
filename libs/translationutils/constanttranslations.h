@@ -137,7 +137,7 @@ enum TitleInterpret {
         // Menus translations
         const char * const  M_FILE_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "File");               /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
         const char * const  M_FILE_RECENTFILES_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Recent files");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
-        const char * const  M_PATIENT_HISTORY_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Patient history");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
+        const char * const  M_PATIENT_NAVIGATION_TEXT= QT_TRANSLATE_NOOP("tkConstants", "Patient navigation");   /*!< \brief Default text for menu File  \ingroup constants_actionmanager */
         const char * const  M_EDIT_TEXT              = QT_TRANSLATE_NOOP("tkConstants", "Edit");               /*!< \brief Default text for menu Edit  \ingroup constants_actionmanager */
         const char * const  M_EDIT_SELECT_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Selection");          /*!< \brief Default text for menu Selection  \ingroup constants_actionmanager */
         const char * const  M_EDIT_LIST_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "List");               /*!< \brief Default text for menu List  \ingroup constants_actionmanager */
@@ -287,6 +287,9 @@ enum TitleInterpret {
         const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
         const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
         const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule is duplicated");
+
+        // PMHx
+        const char* const PMHMENU_TEXT                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
 
         // Account
         const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");

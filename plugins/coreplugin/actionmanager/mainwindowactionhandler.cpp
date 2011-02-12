@@ -584,16 +584,16 @@ void MainWindowActionHandler::createPatientMenu()
     menubar->appendGroup(Constants::G_PATIENTS);
 
     ActionContainer *menu = actionManager()->createMenu(Constants::M_PATIENTS);
-    menu->appendGroup(Core::Constants::G_PATIENT_HISTORY);
     menu->appendGroup(Core::Constants::G_PATIENTS);
+    menu->appendGroup(Core::Constants::G_PATIENT_NAVIGATION);
     menu->appendGroup(Core::Constants::G_PATIENT_INFORMATIONS);
 
     menubar->addMenu(menu, Constants::G_PATIENTS);
     menu->setTranslations(Trans::Constants::PATIENTS);
 
-    ActionContainer *historyMenu = actionManager()->createMenu(Constants::M_PATIENTS_HISTORY);
-    historyMenu->setTranslations(Trans::Constants::M_PATIENT_HISTORY_TEXT);
-    menu->addMenu(historyMenu, Constants::G_PATIENT_HISTORY);
+    ActionContainer *historyMenu = actionManager()->createMenu(Constants::M_PATIENTS_NAVIGATION);
+    historyMenu->setTranslations(Trans::Constants::M_PATIENT_NAVIGATION_TEXT);
+    menu->addMenu(historyMenu, Constants::G_PATIENT_NAVIGATION);
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/

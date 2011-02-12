@@ -45,14 +45,14 @@ const char * const  M_GENERAL_NEW        = "menuGeneral.New";
 const char * const  M_FILE               = "menuFile";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_TEMPLATES          = "menuTemplates";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
-const char * const  M_EDIT               = "menuEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
-const char * const  M_PATIENTS           = "menuPatients";          /*!< \brief Default menu Patients object name  \ingroup constants_actionmanager */
-const char * const  M_PATIENTS_HISTORY   = "menuPatients.history";
-const char * const  M_EDITOR_EDIT        = "menu.editor.edition";
-const char * const  M_EDITOR_FILE        = "menu.editor.file";
-const char * const  M_EDIT_SELECT        = "menuEdit.Select";   /*!< \brief Default menu Edit/Select object name  \ingroup constants_actionmanager */
-const char * const  M_EDIT_LIST          = "menuEdit.List";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
-const char * const  M_EDIT_TEMPLATES     = "menuEdit.Templates";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
+const char * const  M_EDIT               = "mEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
+const char * const  M_PATIENTS           = "mPatients";          /*!< \brief Default menu Patients object name  \ingroup constants_actionmanager */
+const char * const  M_PATIENTS_NAVIGATION= "mPatients.Navigation";
+const char * const  M_EDITOR_EDIT        = "m.editor.edition";
+const char * const  M_EDITOR_FILE        = "m.editor.file";
+const char * const  M_EDIT_SELECT        = "mEdit.Select";   /*!< \brief Default menu Edit/Select object name  \ingroup constants_actionmanager */
+const char * const  M_EDIT_LIST          = "mEdit.List";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
+const char * const  M_EDIT_TEMPLATES     = "mEdit.Templates";     /*!< \brief Default menu Edit/List object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT             = "menuFormat";        /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT_FONT        = "menuFormat.Font";  /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
 const char * const  M_FORMAT_PARAGRAPH   = "menuFormat.Paragraph";  /*!< \brief Default menu Format object name  \ingroup constants_actionmanager */
@@ -119,7 +119,7 @@ const char * const G_EDIT_OTHER          = "grEdit.Other";     /*!< \brief Defau
 
 // patients menu groups
 const char * const G_PATIENTS             = "grPatients";     /*!< \brief Default group name  \ingroup constants_actionmanager */
-const char * const G_PATIENT_HISTORY      = "grPatientsHist";
+const char * const G_PATIENT_NAVIGATION   = "grPatientsNavigation";
 const char * const G_PATIENT_INFORMATIONS = "grPatientsInfos";
 
 // format menu groups
