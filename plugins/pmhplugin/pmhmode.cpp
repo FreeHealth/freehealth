@@ -41,8 +41,10 @@
 #include <listviewplugin/simplecategorymodel.h>
 
 #include <QItemSelectionModel>
+#include <QToolBar>
+#include <QPushButton>
 
-#include "ui_pmhmode.h"
+#include "ui_pmhmodewidget.h"
 
 
 using namespace PMH;
@@ -52,8 +54,96 @@ static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
+
+PmhModeWidget::PmhModeWidget(QWidget *parent) :
+        QWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
+{
+    ui->setupUi(this);
+    ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
+
+    ui->patientBarLayout->addWidget(patient()->newPatientBar(this));
+    ui->treeView->setModel(pmhCore()->pmhCategoryModel());
+    ui->treeView->header()->hide();
+
+    // Create ToolBar
+    m_ToolBar = new QToolBar(this);
+    ui->toolBarLayout->addWidget(m_ToolBar);
+
+    // Populate ToolBar and create specific buttons
+    m_EditButton = new QPushButton(ui->buttonBox);
+    m_EditButton->setText(tr("Edit"));
+    ui->buttonBox->addButton(m_EditButton, QDialogButtonBox::YesRole);
+    ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
+
+    ui->treeView->hideColumn(PmhCategoryModel::Id);
+    ui->treeView->hideColumn(PmhCategoryModel::Type);
+    ui->treeView->hideColumn(PmhCategoryModel::EmptyColumn);
+    ui->treeView->header()->setStretchLastSection(false);
+    ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
+
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
+            this, SLOT(currentChanged(QModelIndex, QModelIndex)));
+    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
+}
+
+PmhModeWidget::~PmhModeWidget()
+{
+    delete ui;
+}
+
+void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
+}
+
+void PmhModeWidget::onButtonClicked(QAbstractButton *button)
+{
+    if (button==m_EditButton) {
+        ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
+    }
+
+    switch (ui->buttonBox->standardButton(button)) {
+    case QDialogButtonBox::Save:
+        {
+            // Get the modified PmhData
+            PmhData *pmh = ui->pmhViewer->modifiedPmhData();
+            // Inform the model
+            pmhCore()->pmhCategoryModel()->addPmhData(pmh);
+            ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
+            ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
+            ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+            break;
+        }
+    case QDialogButtonBox::Cancel:
+        ui->pmhViewer->revert();
+        ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
+        ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+        ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
+        break;
+    default: break;
+    }
+}
+
+void PmhModeWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        m_EditButton->setText(tr("Edit"));
+        break;
+    default:
+        break;
+    }
+}
+
+
+
+
+
 PmhMode::PmhMode(QObject *parent) :
-        Core::BaseMode(parent), ui(new Ui::PmhMode)
+        Core::BaseMode(parent)
 {
     setName(tr("Medical History"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTHISTORY, Core::ITheme::BigIcon));
@@ -62,60 +152,11 @@ PmhMode::PmhMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
 
-    m_Widget = new QWidget;
-    ui->setupUi(m_Widget);
-    ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
-
-    ui->patientBarLayout->addWidget(patient()->newPatientBar(m_Widget));
-    ui->treeView->setModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::EmptyColumn);
-//    ui->treeView->setModel(new PmhModel(this), PmhModel::MH_EmptyColumn);
-//    ui->treeView->setModel(new Views::SimpleCategoryModel("", this));
-    ui->treeView->setButtonActions(Views::FancyTreeView::FTV_CreateNew);
-    ui->treeView->useContextMenu(true);
-    ui->treeView->treeView()->hideColumn(PmhCategoryModel::Id);
-    ui->treeView->treeView()->hideColumn(PmhCategoryModel::Type);
-    ui->treeView->treeView()->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
-
-//    QPushButton *addButton = new QPushButton("Add", m_Widget);
-//    ui->gridLayout->addWidget(addButton);
+    m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
-
-    connect(ui->treeView, SIGNAL(addItemRequested()), this, SLOT(on_addButton_clicked()));
-    connect(ui->treeView->treeView()->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
-            this, SLOT(currentChanged(QModelIndex, QModelIndex)));
-
-    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 }
 
 PmhMode::~PmhMode()
 {
-    delete ui;
 }
 
-void PmhMode::on_addButton_clicked()
-{
-    // Create a new Pmh in the creator dialog
-    PmhCreatorDialog dlg;
-    dlg.exec();
-}
-
-void PmhMode::currentChanged(const QModelIndex &current, const QModelIndex &previous)
-{
-    ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
-}
-
-void PmhMode::onButtonClicked(QAbstractButton *button)
-{
-    switch (ui->buttonBox->standardButton(button)) {
-    case QDialogButtonBox::Save:
-        {
-            // Get the modified PmhData
-            PmhData *pmh = ui->pmhViewer->modifiedPmhData();
-            // Inform the model
-            pmhCore()->pmhCategoryModel()->addPmhData(pmh);
-            break;
-        }
-    case QDialogButtonBox::Cancel: ui->pmhViewer->revert(); break;
-    default: break;
-    }
-}

@@ -32,12 +32,36 @@
 #include <QObject>
 class QModelIndex;
 class QAbstractButton;
+class QPushButton;
+class QToolBar;
 
 namespace PMH {
 namespace Internal {
 namespace Ui {
-class PmhMode;
+class PmhModeWidget;
 }
+
+class PmhModeWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    PmhModeWidget(QWidget *parent = 0);
+    ~PmhModeWidget();
+
+private Q_SLOTS:
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void onButtonClicked(QAbstractButton *button);
+
+private:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::PmhModeWidget *ui;
+    QToolBar *m_ToolBar;
+    QPushButton *m_EditButton;
+
+};
 
 class PmhMode : public Core::BaseMode
 {
@@ -46,13 +70,7 @@ public:
     explicit PmhMode(QObject *parent = 0);
     ~PmhMode();
 
-private Q_SLOTS:
-    void on_addButton_clicked();
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
-    void onButtonClicked(QAbstractButton *button);
-
 private:
-    Ui::PmhMode *ui;
     QWidget *m_Widget;
 };
 

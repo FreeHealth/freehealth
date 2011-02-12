@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
+#include "pmhwidgetmanager.h"
 
 #include <QApplication>
 
@@ -63,6 +64,7 @@ public:
         m_PmhCategoryModel = 0;
     }
 
+public:
     PmhCategoryModel *m_PmhCategoryModel;
 };
 
@@ -74,7 +76,9 @@ PmhCore::PmhCore(QObject *parent) :
     QObject(parent), d(new PmhCorePrivate)
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
+    PmhWidgetManager::instance(this);
 }
+
 PmhCore::~PmhCore()
 {
     if (d)

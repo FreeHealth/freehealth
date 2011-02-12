@@ -50,6 +50,7 @@ PmhCreatorDialog::PmhCreatorDialog(QWidget *parent) :
     setWindowTitle(tr("Past Medical History Creator"));
     ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
     ui->pmhViewer->createNewPmh();
+    ui->pmhViewer->setShowPatientInformations(true);
 }
 
 PmhCreatorDialog::~PmhCreatorDialog()

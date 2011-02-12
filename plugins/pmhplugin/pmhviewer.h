@@ -48,6 +48,7 @@ public:
     PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode);
     ~PmhViewer();
 
+    void setShowPatientInformations(bool show);
     void setEditMode(EditMode mode);
     void setPmhData(Internal::PmhData *pmh);
     void createNewPmh();

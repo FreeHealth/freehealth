@@ -138,9 +138,20 @@ namespace Constants {
     const char * const  S_FOREGROUND_CATEGORIES    = "PMHx/ModelForeground/Categories";
     const char * const  S_FOREGROUND_TEMPLATES     = "PMHx/ModelForeground/PMH";
 
+    // Contexts, menus and actions
+    const char * const  C_PMH_PLUGINS = "PmhContext";
+    const char * const  M_PMH         = "mPmh";
+    const char * const  G_PMH         = "gPmh";
+    const char * const  G_PMH_NEW     = "gPmhNew";
+    const char * const  G_PMH_EDITION = "gPmhEdit";
+
+    const char * const  A_PMH_NEW = "aNewPmh";
+    const char * const  A_PMH_ = "gPmhEdit";
+
 
     // Translations
     const char * const  PMHCONSTANTS_TR_CONTEXT = "PMH";
+    const char * const  CREATEPMH_TEXT          =  QT_TRANSLATE_NOOP("PMH", "Create a new PMHx");
 
 
 }  // End namespace Constants

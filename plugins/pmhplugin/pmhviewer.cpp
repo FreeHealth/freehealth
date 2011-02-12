@@ -43,18 +43,22 @@
 #include <utils/global.h>
 #include <utils/log.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include "ui_pmhviewer.h"
 
 using namespace PMH;
 using namespace Internal;
 
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace PMH {
 namespace Internal {
 
 class PmhViewerPrivate {
 public:
-    PmhViewerPrivate() : ui(0), m_Pmh(0) {}
+    PmhViewerPrivate() : ui(0), m_Pmh(0), m_ShowPatient(false) {}
     ~PmhViewerPrivate()
     {
         delete ui; ui=0;
@@ -102,6 +106,7 @@ public:
     Internal::Ui::PmhViewer *ui;
     PmhViewer::EditMode m_Mode;
     PmhData *m_Pmh;
+    bool m_ShowPatient;
 };
 
 } // End namespace Internal
@@ -125,11 +130,27 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
 
     // Manage the Edit Mode
     d->setEditMode(editMode);
+    setShowPatientInformations(d->m_ShowPatient);
 }
 
 PmhViewer::~PmhViewer()
 {
     delete d; d = 0;
+}
+
+/** \brief Show or hide the patient informations (title, name, age) inside the dialog. */
+void PmhViewer::setShowPatientInformations(bool show)
+{
+    if (show) {
+        d->ui->patientGroup->show();
+        QString text = "<b>"+ patient()->data(Core::IPatient::Title).toString();;
+        text += " " + patient()->data(Core::IPatient::FullName).toString();
+        text += ", " + patient()->data(Core::IPatient::Age).toString();
+        text += "</b>";
+        d->ui->patientInfos->setText(text);
+    } else {
+        d->ui->patientGroup->hide();
+    }
 }
 
 /** Defines the edit mode to use (Read only or Read Write). \sa PMH::PmhViewer::EditMode */
