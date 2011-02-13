@@ -14,7 +14,8 @@ HEADERS += \
     $${PWD}/extendedview.h \
     $${PWD}/tableview.h \
     $${PWD}/constants.h \
-    $${PWD}/viewmanager.h
+    $${PWD}/viewmanager.h \
+    $${PWD}/treeview.h
 
 #    $${PWD}/listview_p.h \
 #    $${PWD}/listviewbase.h \
@@ -29,7 +30,9 @@ SOURCES += \
     $${PWD}/fancytreeview.cpp \
     $${PWD}/extendedview.cpp \
     $${PWD}/tableview.cpp \
-    $${PWD}/viewmanager.cpp
+    $${PWD}/viewmanager.cpp \
+    $${PWD}/treeview.cpp
+
 #    $${PWD}/listviewbase.cpp \
 #    $${PWD}/simplecategorymodel.cpp \
 #    $${PWD}/simplecategorycreator.cpp

@@ -23,41 +23,40 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef TREEVIEW_H
+#define TREEVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
 #include <listviewplugin/extendedview.h>
 #include <listviewplugin/constants.h>
 
 #include <QWidget>
-#include <QTableView>
+#include <QTreeView>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
 #include <QFlags>
 #include <QMenu>
 
 /**
- * \file tableview.h
+ * \file treeview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 03 Feb 2011
+ * \date 13 Feb 2011
 */
 
 
 namespace Views {
 namespace Internal {
-class TableViewPrivate;
-class ExtendedViewPrivate;
+class TreeViewPrivate;
 }
 
-class LISTVIEW_EXPORT TableView : public QTableView
+class LISTVIEW_EXPORT TreeView : public QTreeView
 {
     Q_OBJECT
-    friend class TableViewPrivate;
+    friend class TreeViewPrivate;
 public:
-    TableView(QWidget *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
-    virtual ~TableView();
+    TreeView(QWidget *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
+    virtual ~TreeView();
 
     void setActions(Constants::AvailableActions actions);
 
@@ -78,10 +77,9 @@ Q_SIGNALS:
     void moveDownRequested();
 
 private:
-    Internal::TableViewPrivate *d;
+    Internal::TreeViewPrivate *d;
 };
 
 }  // End Views
 
-
-#endif // TABLEVIEW_H
+#endif // TREEVIEW_H

@@ -23,7 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "tableview.h"
+#include "treeview.h"
+
 #include "constants.h"
 #include "viewmanager.h"
 
@@ -42,10 +43,10 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 namespace Views {
 namespace Internal {
 
-class TableViewPrivate
+class TreeViewPrivate
 {
 public:
-    TableViewPrivate(QWidget *parent, Constants::AvailableActions actions) :
+    TreeViewPrivate(QWidget *parent, Constants::AvailableActions actions) :
             m_Parent(parent),
             m_Actions(actions),
             m_Context(0),
@@ -53,7 +54,7 @@ public:
     {
     }
 
-    ~TableViewPrivate()
+    ~TreeViewPrivate()
     {
         if (m_ExtView)
             delete m_ExtView;
@@ -84,15 +85,15 @@ public:
 
 
 /** \brief Constructor */
-TableView::TableView(QWidget *parent, Constants::AvailableActions actions) :
-        QTableView(parent),
+TreeView::TreeView(QWidget *parent, Constants::AvailableActions actions) :
+        QTreeView(parent),
         d(0)
 {
     static int handler = 0;
     ++handler;
-    QObject::setObjectName("TableView_"+QString::number(handler));
+    QObject::setObjectName("TreeView_"+QString::number(handler));
     setProperty(Constants::HIDDEN_ID, "xx");
-    d = new Internal::TableViewPrivate(this, actions);
+    d = new Internal::TreeViewPrivate(this, actions);
 
     // Create the Manager instance and context
     ViewManager::instance();
@@ -104,52 +105,52 @@ TableView::TableView(QWidget *parent, Constants::AvailableActions actions) :
     d->m_ExtView = new ExtendedView(this);
 }
 
-TableView::~TableView()
+TreeView::~TreeView()
 {
     contextManager()->removeContextObject(d->m_Context);
 }
 
-void TableView::setActions(Constants::AvailableActions actions)
+void TreeView::setActions(Constants::AvailableActions actions)
 {
     d->m_Actions = actions;
     d->calculateContext();
 }
 
-void TableView::hideButtons() const
+void TreeView::hideButtons() const
 {
     d->m_ExtView->hideButtons();
 }
 
-void TableView::showButtons()
+void TreeView::showButtons()
 {
     d->m_ExtView->showButtons();
 }
 
-void TableView::useContextMenu(bool state)
+void TreeView::useContextMenu(bool state)
 {
     d->m_ExtView->useContextMenu(state);
 }
 
-void TableView::addItem()
+void TreeView::addItem()
 {
-    qWarning() << "TableView::addItem()";
+    qWarning() << "TreeView::addItem()";
     setFocus();
     d->m_ExtView->addItem();
 }
 
-void TableView::removeItem()
+void TreeView::removeItem()
 {
     setFocus();
     d->m_ExtView->removeItem();
 }
 
-void TableView::moveDown()
+void TreeView::moveDown()
 {
     setFocus();
     d->m_ExtView->moveDown();
 }
 
-void TableView::moveUp()
+void TreeView::moveUp()
 {
     setFocus();
     d->m_ExtView->moveUp();
