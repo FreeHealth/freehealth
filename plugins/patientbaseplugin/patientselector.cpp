@@ -31,6 +31,7 @@
 
 #include "patientselector.h"
 #include "patientmodel.h"
+#include "patientbar.h"
 #include "constants_menus.h"
 #include "constants_settings.h"
 
@@ -258,14 +259,32 @@ void PatientSelector::refreshFilter(const QString &)
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
-void PatientSelector::changeEvent(QEvent *e)
+//void PatientSelector::changeEvent(QEvent *e)
+//{
+//    QWidget::changeEvent(e);
+//    switch (e->type()) {
+//    case QEvent::LanguageChange:
+//        d->ui->retranslateUi(this);
+//        break;
+//    default:
+//        break;
+//    }
+//}
+
+bool PatientSelector::event(QEvent *event)
 {
-    QWidget::changeEvent(e);
-    switch (e->type()) {
+    switch (event->type()) {
     case QEvent::LanguageChange:
         d->ui->retranslateUi(this);
+        break;
+    case QEvent::Show:
+        PatientBar::instance()->hide();
+        break;
+    case QEvent::Hide:
+        PatientBar::instance()->show();
         break;
     default:
         break;
     }
+    return QWidget::event(event);
 }

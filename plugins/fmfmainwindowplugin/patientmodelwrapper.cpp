@@ -34,7 +34,6 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <patientbaseplugin/patientmodel.h>
-#include <patientbaseplugin/patientbar.h>
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
@@ -97,9 +96,4 @@ void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {
     if (m_Model->currentPatient().row() == index.row())
         Q_EMIT this->dataChanged(index, index);
-}
-
-QWidget *PatientModelWrapper::newPatientBar(QWidget *parent) const
-{
-    return new Patients::PatientBar(parent);
 }

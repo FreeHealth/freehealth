@@ -31,9 +31,6 @@
 
 #include <QObject>
 
-namespace Patients {
-class PatientBar;
-}
 
 namespace Form {
 namespace Internal {
@@ -45,8 +42,6 @@ public:
     FormManagerMode(QObject *parent);
     ~FormManagerMode();
 
-private:
-    Patients::PatientBar *m_PatientBar;
 };
 
 }  // End namespace Internal

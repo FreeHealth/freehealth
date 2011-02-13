@@ -255,9 +255,9 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     vertic->setObjectName("FormPlaceHolder::MiniSplitter::Vertical");
     vertic->setOrientation(Qt::Vertical);
 
-    d->m_EpisodesTable = new QTableView(this);
-    d->m_EpisodesTable->horizontalHeader()->hide();
-    d->m_EpisodesTable->verticalHeader()->hide();
+//    d->m_EpisodesTable = new QTableView(this);
+//    d->m_EpisodesTable->horizontalHeader()->hide();
+//    d->m_EpisodesTable->verticalHeader()->hide();
 
     d->horizSplitter->addWidget(d->m_FileTree);
 //    d->horizSplitter->addWidget(wb);
@@ -278,7 +278,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_Scroll->setWidget(w);
 
     d->m_GeneralLayout->addWidget(d->horizSplitter, 100, 0);
-    addTopWidget(patient()->newPatientBar(this));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -345,12 +344,12 @@ QStackedLayout *FormPlaceHolder::formStackLayout() const
     return d->m_Stack;
 }
 
-void FormPlaceHolder::addTopWidget(QWidget *top)
-{
-    static int lastInsertedRow = 0;
-    d->m_GeneralLayout->addWidget(top, lastInsertedRow, 0);
-    ++lastInsertedRow;
-}
+//void FormPlaceHolder::addTopWidget(QWidget *top)
+//{
+//    static int lastInsertedRow = 0;
+//    d->m_GeneralLayout->addWidget(top, lastInsertedRow, 0);
+//    ++lastInsertedRow;
+//}
 
 void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 {

@@ -27,7 +27,7 @@
 /**
   \class Core::IPatient
   Abstract interface provided to access Patient's datas.
-  \sa Core::setPatient(), Core::patient()
+  \sa Core::ICore::setPatient(), Core::ICore::patient()
 */
 
 #include "ipatient.h"
@@ -36,11 +36,6 @@
 #include <utils/global.h>
 
 using namespace Core;
-
-QWidget *IPatient::newPatientBar(QWidget *parent) const
-{
-    return new QWidget(parent);
-}
 
 void IPatient::replaceTokens(QString &stringWillBeModified)
 {

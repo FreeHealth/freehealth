@@ -91,6 +91,15 @@ public:
 }
 }
 
+
+PatientBar *PatientBar::m_Instance = 0;
+PatientBar *PatientBar::instance(QWidget *parent)
+{
+    if (!m_Instance)
+        m_Instance = new PatientBar(parent);
+    return m_Instance;
+}
+
 PatientBar::PatientBar(QWidget *parent) :
     QWidget(parent),
     d(new Internal::PatientBarPrivate)

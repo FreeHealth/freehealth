@@ -95,7 +95,8 @@ private Q_SLOTS:
     void refreshFilter(const QString &);
 
 protected:
-    void changeEvent(QEvent *e);
+//    void changeEvent(QEvent *e);
+    bool event(QEvent *event);
 
 private:
     Internal::PatientSelectorPrivate *d;

@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class PMH::PmhMode
+  \brief Core::IMode to show in the MainWindow
+*/
+
 #include "pmhmode.h"
 #include "pmhmodel.h"
 #include "pmhcore.h"
@@ -61,7 +66,6 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
 
-    ui->patientBarLayout->addWidget(patient()->newPatientBar(this));
     ui->treeView->setModel(pmhCore()->pmhCategoryModel());
     ui->treeView->header()->hide();
 

@@ -138,9 +138,6 @@ public:
     virtual QString toXml() const = 0;
     virtual bool fromXml(const QString &xml) = 0;
 
-    // Patients Widgets
-    virtual QWidget *newPatientBar(QWidget *parent) const;
-
     void replaceTokens(QString &stringWillBeModified);
 
 Q_SIGNALS:

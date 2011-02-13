@@ -70,8 +70,6 @@ public:
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 
-    QWidget *newPatientBar(QWidget *parent) const;
-
 private Q_SLOTS:
     void patientDataChanged(const QModelIndex &index);
 

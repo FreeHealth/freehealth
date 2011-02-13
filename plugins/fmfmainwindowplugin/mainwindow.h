@@ -54,9 +54,6 @@ namespace Utils {
 class FancyTabWidget;
 }
 
-namespace Patients {
-class PatientBar;
-}
 //namespace Form {
 //class EpisodeModel;
 //}

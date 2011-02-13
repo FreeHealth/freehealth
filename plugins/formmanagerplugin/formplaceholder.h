@@ -77,7 +77,7 @@ public:
     QTreeView *formTree() const;
     QStackedLayout *formStackLayout() const;
     
-    void addTopWidget(QWidget *top);
+//    void addTopWidget(QWidget *top);
     void addBottomWidget(QWidget *bottom);
 
 public Q_SLOTS:

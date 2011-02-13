@@ -43,8 +43,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 
 FormManagerMode::FormManagerMode(QObject *parent) :
-        Core::BaseMode(parent),
-        m_PatientBar(0)
+        Core::BaseMode(parent)
 {
     setName(tr("Patients Files"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));

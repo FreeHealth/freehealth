@@ -43,8 +43,9 @@ class PATIENT_EXPORT PatientBar : public QWidget
 {
     Q_OBJECT
 
-public:
     PatientBar(QWidget *parent = 0);
+public:
+    static PatientBar *instance(QWidget *parent = 0);
     ~PatientBar();
 
     void setPatientModel(PatientModel *model);
@@ -61,7 +62,7 @@ protected:
 
 private:
     Internal::PatientBarPrivate *d;
-
+    static PatientBar *m_Instance;
 };
 
 }  // End namespace Patients

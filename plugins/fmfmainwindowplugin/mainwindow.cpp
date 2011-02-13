@@ -248,6 +248,8 @@ void MainWindow::extensionsInitialized()
     m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
     Core::ICore::instance()->setPatient(m_PatientModelWrapper);
     m_PatientModelWrapper->init();
+    m_modeStack->insertTopWidget(0, Patients::PatientBar::instance(this));
+    m_modeStack->statusBar()->hide();
 
     setCentralWidget(m_modeStack);
 
