@@ -186,7 +186,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setIcon(th->icon(Constants::I_SEARCH_LABEL));
     cmd = actionManager()->registerAction(a, Constants::A_SEARCH_LABEL, ctx);
     cmd->setTranslations(Constants::SEARCHLABEL_TEXT, Constants::SEARCHLABEL_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, Constants::M_ICD_SEARCH);
+    searchmenu->addAction(cmd, Constants::G_ICD_SEARCH);
     gSearchMethod->addAction(a);
 
     a = aSearchByCode = new QAction(this);
@@ -195,7 +195,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setIcon(th->icon(Constants::I_SEARCH_CODE));
     cmd = actionManager()->registerAction(a, Constants::A_SEARCH_CODE, ctx);
     cmd->setTranslations(Constants::SEARCHCODE_TEXT, Constants::SEARCHCODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, Constants::M_ICD_SEARCH);
+    searchmenu->addAction(cmd, Constants::G_ICD_SEARCH);
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
@@ -217,7 +217,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_SIMPLEMODE, ctx);
     cmd->setTranslations(Constants::SELECTORSIMPLEMODE_TEXT, Constants::SELECTORSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    modesmenu->addAction(cmd, Constants::G_ICD_SELECTORMODE);
     gModes->addAction(a);
 
     a = aSelectorFullMode = new QAction(this);
@@ -226,7 +226,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_FULLMODE, ctx);
     cmd->setTranslations(Constants::SELECTORFULLMODE_TEXT, Constants::SELECTORFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    modesmenu->addAction(cmd, Constants::G_ICD_SELECTORMODE);
     gModes->addAction(a);
 
     a = aCollectionModelSimpleMode = new QAction(this);
@@ -235,7 +235,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_SIMPLEMODE, ctx);
     cmd->setTranslations(Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    modesmenu->addAction(cmd, Constants::G_ICD_COLLECTIONMODE);
     gModes->addAction(a);
 
     a = aCollectionModelFullMode = new QAction(this);
@@ -244,7 +244,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setChecked(false);
     cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_FULLMODE, ctx);
     cmd->setTranslations(Constants::COLLECTIONFULLMODE_TEXT, Constants::COLLECTIONFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::M_ICD_MODES);
+    modesmenu->addAction(cmd, Constants::G_ICD_COLLECTIONMODE);
     gModes->addAction(a);
     connect(gModes, SIGNAL(triggered(QAction*)), this, SLOT(modeActionChanged(QAction*)));
 
