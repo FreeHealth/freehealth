@@ -1,3 +1,9 @@
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "availablemovementmodel.h"
 #include "constants.h"
 #include "accountbase.h"
@@ -77,16 +83,30 @@ bool AvailableMovementModel::setData(const QModelIndex &index, const QVariant &v
 
 
 QVariant AvailableMovementModel::headerData(int section, Qt::Orientation orientation, int role) const
-{}
+{return QVariant();}
 
 bool AvailableMovementModel::insertRows(int row, int count, const QModelIndex &parent)
-{}
+{
+    bool b = true;
+    
+    return b;
+   }
 
 bool AvailableMovementModel::removeRows(int row, int count, const QModelIndex &parent)
-{}
+{
+    bool b = true;
+    
+    return b;
+
+}
 
 bool AvailableMovementModel::isDirty() const
 {
     return true;
+}
+
+void AvailableMovementModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
 }
 

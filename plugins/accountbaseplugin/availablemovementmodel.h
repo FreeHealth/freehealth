@@ -1,5 +1,11 @@
-#ifndef AVAILABLE_MOVEMENT_MODEL_H
-#define AVAILABLE_MOVEMENT_MODEL_H
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef AVAILABLEMOVEMENTMODEL_H
+#define AVAILABLEMOVEMENTMODEL_H
 
 #include <QAbstractTableModel>
 
@@ -33,7 +39,7 @@ public:
     bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
-
+    void setFilter(const QString & filter);
     bool isDirty() const;
 
 private:

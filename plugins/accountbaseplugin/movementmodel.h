@@ -32,10 +32,17 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+ /***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef MOVEMENTMODEL_H
 #define MOVEMENTMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
 
 namespace AccountDB {
 namespace Internal {
@@ -68,6 +75,7 @@ public:
 
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
+    QSqlError lastError();
 
 public Q_SLOTS:
     bool submit();

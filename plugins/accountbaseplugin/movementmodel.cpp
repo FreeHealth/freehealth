@@ -32,6 +32,12 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+ /***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "movementmodel.h"
 #include "accountbase.h"
 #include "constants.h"
@@ -154,4 +160,8 @@ void MovementModel::revert()
 bool MovementModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+QSqlError MovementModel::lastError(){
+    return d->m_SqlTable->lastError();
 }
