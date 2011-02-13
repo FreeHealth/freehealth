@@ -28,6 +28,9 @@
 #include "pmhcontextualwidget.h"
 #include "constants.h"
 #include "pmhcreatordialog.h"
+#include "pmhcategorydialog.h"
+#include "pmhcore.h"
+#include "pmhcategorymodel.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -50,6 +53,7 @@ using namespace Trans::ConstantTranslations;
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
+static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +116,7 @@ PmhContextualWidget *PmhWidgetManager::currentView() const
 PmhActionHandler::PmhActionHandler(QObject *parent) :
         QObject(parent),
         aAddPmh(0),
+        aCategoryManager(0),
         aPmhDatabaseInformations(0),
         m_CurrentView(0)
 {
@@ -147,6 +152,14 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::CREATEPMH_TEXT, Constants::CREATEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
     connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
+
+    a = aCategoryManager= new QAction(this);
+    a->setObjectName("aCategoryManager");
+    a->setIcon(th->icon(Core::Constants::ICONNEXT));
+    cmd = actionManager()->registerAction(a, Constants::A_PMH_CATEGORYMANAGER, globalcontext);
+    cmd->setTranslations(Constants::CATEGORYMANAGER_TEXT, Constants::CATEGORYMANAGER_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
+    pmhMenu->addAction(cmd, Constants::G_PMH_EDITION);
+    connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -197,5 +210,13 @@ void PmhActionHandler::showPmhDatabaseInformations()
 void PmhActionHandler::createPmh()
 {
     PmhCreatorDialog dlg(mainWindow());
+    dlg.exec();
+}
+
+void PmhActionHandler::categoryManager()
+{
+    PmhCategoryDialog dlg(mainWindow());
+//    pmhCore()->pmhCategoryModel()->setShowOnlyCategories(true);
+    dlg.setPmhCategoryModel(pmhCore()->pmhCategoryModel());
     dlg.exec();
 }

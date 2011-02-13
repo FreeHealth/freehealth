@@ -76,6 +76,7 @@ public:
 
     bool setLabel(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE);
     QString label(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    QStringList allLanguagesForLabel() const;
 
     void addPhmData(PmhData *data);
 //    QList<PmhData *> phmDataChildren() const;

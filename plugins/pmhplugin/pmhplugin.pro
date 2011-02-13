@@ -21,7 +21,9 @@ HEADERS = pmhplugin.h \
     pmhepisodemodel.h \
     pmhepisodeviewer.h \
     pmhwidgetmanager.h \
-    pmhcontextualwidget.h
+    pmhcontextualwidget.h \
+    pmhcategorydialog.h \
+    pmhcategoryonlyproxymodel.h
 
 
 SOURCES = pmhplugin.cpp \
@@ -37,7 +39,9 @@ SOURCES = pmhplugin.cpp \
     pmhepisodemodel.cpp \
     pmhepisodeviewer.cpp \
     pmhwidgetmanager.cpp \
-    pmhcontextualwidget.cpp
+    pmhcontextualwidget.cpp \
+    pmhcategorydialog.cpp \
+    pmhcategoryonlyproxymodel.cpp
 
 
 OTHER_FILES = PMH.pluginspec
@@ -50,4 +54,5 @@ FORMS += \
     pmhviewer.ui \
     pmhmodewidget.ui \
     pmhcreatordialog.ui \
-    pmhepisodeviewer.ui
+    pmhepisodeviewer.ui \
+    pmhcategorywidget.ui

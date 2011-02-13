@@ -62,6 +62,8 @@ public:
     bool updatePmhData(PmhData *pmh);
     bool savePmhEpisodeData(PmhEpisodeData *episode);
     bool updatePmhEpsisodeData(PmhEpisodeData *episode);
+    bool savePmhCategory(PmhCategory *category);
+    bool savePmhCategoryLabels(PmhCategory *category);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

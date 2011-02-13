@@ -145,13 +145,14 @@ namespace Constants {
     const char * const  G_PMH_NEW     = "gPmhNew";
     const char * const  G_PMH_EDITION = "gPmhEdit";
 
-    const char * const  A_PMH_NEW = "aNewPmh";
-    const char * const  A_PMH_ = "gPmhEdit";
+    const char * const  A_PMH_NEW               = "aNewPmh";
+    const char * const  A_PMH_CATEGORYMANAGER   = "aPmhCatMan";
 
 
     // Translations
     const char * const  PMHCONSTANTS_TR_CONTEXT = "PMH";
     const char * const  CREATEPMH_TEXT          =  QT_TRANSLATE_NOOP("PMH", "Create a new PMHx");
+    const char * const  CATEGORYMANAGER_TEXT    =  QT_TRANSLATE_NOOP("PMH", "PMHx category manager");
 
 
 }  // End namespace Constants

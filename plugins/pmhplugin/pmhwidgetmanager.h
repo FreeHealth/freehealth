@@ -22,14 +22,16 @@ public:
     void setCurrentView(PmhContextualWidget *view);
 
 private Q_SLOTS:
-    void createPmh();
     void showPmhDatabaseInformations();
+    void createPmh();
+    void categoryManager();
 
 private:
     void updateActions();
 
 protected:
     QAction *aAddPmh;
+    QAction *aCategoryManager;
     QAction *aPmhDatabaseInformations;
     QPointer<PmhContextualWidget> m_CurrentView;
 };

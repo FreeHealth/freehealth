@@ -123,6 +123,11 @@ int PmhCategory::childNumber() const
 
 bool PmhCategory::setData(const int ref, const QVariant &value)
 {
+    if (ref == DbOnly_Id) {
+        foreach(PmhData *pmh, d->m_PmhData) {
+            pmh->setData(PmhData::CategoryId, value);
+        }
+    }
     d->m_Data.insert(ref, value);
     return true;
 }
@@ -141,6 +146,11 @@ bool PmhCategory::setLabel(const QString &label, const QString &lang)
 QString PmhCategory::label(const QString &lang) const
 {
     return d->m_Labels.value(lang);
+}
+
+QStringList PmhCategory::allLanguagesForLabel() const
+{
+    d->m_Labels.keys();
 }
 
 void PmhCategory::addPhmData(PmhData *data)

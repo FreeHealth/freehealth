@@ -28,11 +28,13 @@
 #define PMHCATEGORYMODEL_H
 
 #include <QAbstractItemModel>
+#include <QAbstractProxyModel>
 
 namespace PMH {
 namespace Internal {
 class PmhCategoryModelPrivate;
 class PmhData;
+class PmhCategory;
 }  // End namespace Internal
 
 class PmhCategoryModel : public QAbstractItemModel
@@ -51,6 +53,10 @@ public:
     explicit PmhCategoryModel(QObject *parent = 0);
     ~PmhCategoryModel();
 
+    QAbstractProxyModel *categoryOnlyModel();
+    void setShowOnlyCategories(bool state);
+    bool isCategory(const QModelIndex &index) const;
+
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 
@@ -65,13 +71,17 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+//    QVariant headerData(int section, Qt::Orientation orientation, int role) const {return section;}
+
     // Data
     bool addPmhData(Internal::PmhData *pmh);
+    bool addPmhCategoryData(Internal::PmhCategory *cat);
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
 
 private:
     Internal::PmhCategoryModelPrivate *d;
 };
+
 
 }  // End namespace PMH
 

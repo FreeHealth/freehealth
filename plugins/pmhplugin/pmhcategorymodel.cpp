@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "pmhcategorymodel.h"
+#include "pmhcategoryonlyproxymodel.h"
 #include "pmhbase.h"
 #include "pmhdata.h"
 #include "constants.h"
@@ -175,6 +176,7 @@ class PmhCategoryModelPrivate
 public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
             m_Root(0),
+            m_ShowCategoriesOnly(false),
             q(parent)
     {
         m_Root = new TreeItem;
@@ -247,7 +249,7 @@ public:
         }
 
         // Find related PmhCategory in TreeItems
-        int id = pmh->data(PmhData::Uid).toInt();
+        int id = pmh->categoryId();
         for(int i = 0; i < m_Cats.count(); ++i) {
             if (m_Cats.at(i)->id()==id) {
                 // Reparent TreeItem
@@ -265,13 +267,12 @@ public:
     {
         // Get all categories from database
         m_Cats.clear();
+        m_CategoryToItem.clear();
         m_Cats = base()->getPmhCategory(patient()->data(Core::IPatient::Uid).toString());
         qWarning() << "PMHxxxxxxxxx getCategory" << m_Cats.count();
         // Recreate the category tree
         foreach(PmhCategory *cat, base()->createCategoryTree(m_Cats)) {
             categoryToItem(cat, new TreeItem(m_Root));
-//            m_Root->addChild(cat);
-//            cat->setParent(m_Root);
         }
     }
 
@@ -301,14 +302,18 @@ public:
     QVector<PmhCategory *> m_Cats;
     QHash<PmhCategory *, TreeItem *> m_CategoryToItem;
     QMultiHash<PmhCategory *, PmhData *> m_Cat_Pmhs;
+    PmhCategoryOnlyModel *m_CategoryOnlyModel;
+    bool m_ShowCategoriesOnly;
 
 private:
     PmhCategoryModel *q;
 
 };
 
+
 }  // End namespace Internal
 }  // End namespace PMH
+
 
 
 
@@ -325,6 +330,34 @@ PmhCategoryModel::~PmhCategoryModel()
     d = 0;
 }
 
+//QAbstractProxyModel *PmhCategoryModel::categoriesOnlyModel()
+//{
+//    if (!d->m_CategoryOnlyModel)
+//        d->m_CategoryOnlyModel = new PmhCategoryOnlyModel(this);
+//    return d->m_CategoryOnlyModel;
+//}
+
+void PmhCategoryModel::setShowOnlyCategories(bool state)
+{
+    d->m_ShowCategoriesOnly = state;
+}
+
+QAbstractProxyModel *PmhCategoryModel::categoryOnlyModel()
+{
+    if (!d->m_CategoryOnlyModel)
+        d->m_CategoryOnlyModel = new PmhCategoryOnlyModel(this);
+    return d->m_CategoryOnlyModel;
+}
+
+/** \brief Return true is the \e index is category, false if \e index is a PMHx */
+bool PmhCategoryModel::isCategory(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    TreeItem *it = d->getItem(index);
+    return it->isCategory();
+}
+
 QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &parent) const
  {
      if (parent.isValid() && parent.column() != 0)
@@ -334,6 +367,13 @@ QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &pare
 //         return QModelIndex();
 
      TreeItem *parentItem = d->getItem(parent);
+
+     if (d->m_ShowCategoriesOnly) {
+         if (!parentItem->isCategory()) {
+             return QModelIndex();
+         }
+     }
+
      TreeItem *childItem = parentItem->child(row);
 
      if (childItem) {
@@ -512,6 +552,24 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         base()->savePmhData(pmh);
         // insert the pmh to the model
         d->pmhToItem(pmh, new TreeItem);
+        reset();
+    }
+    return true;
+}
+
+/**
+  \brief Add or modify a PmhCategory. If the PmhCategory pointer does not already exists in the model, the data is created, otherwise it is updated.
+  \todo improve this using dataChanged(index, index) ??
+*/
+bool PmhCategoryModel::addPmhCategoryData(PmhCategory *cat)
+{
+    if (d->m_Cats.contains(cat)) {
+        // update the model
+    } else {
+        // save the category to database
+        base()->savePmhCategory(cat);
+        // insert the pmh to the model
+        d->categoryToItem(cat, new TreeItem);
         reset();
     }
     return true;

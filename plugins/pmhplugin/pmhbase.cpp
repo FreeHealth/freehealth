@@ -294,6 +294,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             pmh->setData(PmhData::Type, query.value(Constants::MASTER_TYPE));
             pmh->setData(PmhData::ConfidenceIndex, query.value(Constants::MASTER_CONFINDEX));
             pmh->setData(PmhData::Comment, query.value(Constants::MASTER_COMMENT));
+            pmh->setData(PmhData::CategoryId, query.value(Constants::MASTER_CATEGORY_ID));
             pmh->setData(PmhData::DbOnly_MasterEpisodeId, query.value(Constants::MASTER_EPISODE_ID));
             pmh->setData(PmhData::DbOnly_MasterContactId, query.value(Constants::MASTER_CONTACTS_ID));
             pmhs << pmh;
@@ -580,6 +581,72 @@ bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
         return false;
     }
     return false;
+}
+
+/**
+  \brief Save a PmhCategory pointer to database. If PmhCategory already exists in database, PmhCategory is updated.
+  \sa updatePmhCategory()
+*/
+bool PmhBase::savePmhCategory(PmhCategory *category)
+{
+    // save or update ?
+    if (!category->data(PmhCategory::DbOnly_Id).isNull()) {
+//        return updatePmhCategory(category);
+    }
+    // save labels
+    if (!savePmhCategoryLabels(category))
+        return false;
+    // save category itself
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
+    query.bindValue(Constants::CATEGORY_ID, QVariant());
+    query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
+    query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
+    query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(PmhCategory::ThemedIcon));
+    query.bindValue(Constants::CATEGORY_ISCHONICDISEASE, QVariant());
+    query.bindValue(Constants::CATEGORY_ISRISKFACTOR, QVariant());
+    query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(PmhCategory::DbOnly_LabelId));
+    if (query.exec()) {
+        category->setData(PmhEpisodeData::DbOnly_Id, query.lastInsertId());
+        return true;
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    return false;
+}
+
+/** \brief Save or update categories labels. */
+bool PmhBase::savePmhCategoryLabels(PmhCategory *category)
+{
+    // save or update ?
+//    if (!category->data(PmhCategory::DbOnly_LabelId).isNull()) {
+//        return updatePmhCategory(episode);
+//    }
+    QSqlQuery query(database());
+    // get label_id
+    int labelId = -1;
+    if (category->data(PmhCategory::DbOnly_LabelId).isNull()) {
+        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORY_LABEL_ID);
+        ++labelId;
+        category->setData(PmhCategory::DbOnly_LabelId, labelId);
+    } else {
+        labelId = category->data(PmhCategory::DbOnly_LabelId).toInt();
+    }
+    // save labels
+    foreach(const QString &lang, category->allLanguagesForLabel()) {
+        query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
+        query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
+        query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
+        query.bindValue(Constants::CATEGORYLABEL_LANG, lang);
+        query.bindValue(Constants::CATEGORYLABEL_VALUE, category->label(lang));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+    }
+    return true;
 }
 
 void PmhBase::onCoreDatabaseServerChanged()
