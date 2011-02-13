@@ -12,9 +12,12 @@ class movementsViewer:public QWidget{
         movementsViewer(QWidget * parent = 0);
         ~movementsViewer();
     private slots :
+        void showMovements();
         void recordMovement();
         void deleteMovement();
         void validMovement();
+        void validAndRecord();
+        void fillMovementsComboBox();
     private :
         Ui::MovementsViewerWidget * ui;
 };
