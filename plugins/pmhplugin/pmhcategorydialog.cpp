@@ -43,8 +43,9 @@ PmhCategoryDialog::PmhCategoryDialog(QWidget *parent) :
 void PmhCategoryDialog::setPmhCategoryModel(PmhCategoryModel *model)
 {
     Q_ASSERT(model);
+    qWarning() << model;
+    qWarning() << model->categoryOnlyModel();
     d->m_Model = model;
-    qWarning() << model << model->categoryOnlyModel();
     d->ui->treeView->setModel(model->categoryOnlyModel());
 }
 

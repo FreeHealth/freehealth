@@ -176,6 +176,7 @@ class PmhCategoryModelPrivate
 public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
             m_Root(0),
+            m_CategoryOnlyModel(0),
             m_ShowCategoriesOnly(false),
             q(parent)
     {
