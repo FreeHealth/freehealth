@@ -123,7 +123,6 @@ void PatientBar::setPatientModel(PatientModel *model)
 
 void PatientBar::setCurrentIndex(const QModelIndex &index)
 {
-    qWarning() << "PatientBar::setCurrentIndex()" << index;
     if (d->m_Index)
         delete d->m_Index;
     d->m_Index = new QPersistentModelIndex(index);
@@ -132,7 +131,6 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
 
 void PatientBar::onCurrentPatientChanged()
 {
-    qWarning() << "PatientBar::onCurrentPatientChanged()";
     setCurrentIndex(d->m_Model->currentPatient());
 }
 
