@@ -80,9 +80,9 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
 
-//    ui->treeView->hideColumn(PmhCategoryModel::Id);
-//    ui->treeView->hideColumn(PmhCategoryModel::Type);
-//    ui->treeView->hideColumn(PmhCategoryModel::EmptyColumn);
+    ui->treeView->hideColumn(PmhCategoryModel::Id);
+    ui->treeView->hideColumn(PmhCategoryModel::Type);
+    ui->treeView->hideColumn(PmhCategoryModel::EmptyColumn);
     ui->treeView->header()->setStretchLastSection(false);
     ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
 
@@ -98,7 +98,8 @@ PmhModeWidget::~PmhModeWidget()
 
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
+    if (!pmhCore()->pmhCategoryModel()->isCategory(current))
+        ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
 }
 
 void PmhModeWidget::onButtonClicked(QAbstractButton *button)

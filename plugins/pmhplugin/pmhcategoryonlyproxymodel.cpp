@@ -101,6 +101,11 @@ QVariant PmhCategoryOnlyModel::headerData(int section, Qt::Orientation orientati
     return section;
 }
 
+Qt::ItemFlags PmhCategoryOnlyModel::flags(const QModelIndex &index) const
+{
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
 void PmhCategoryOnlyModel::hidePmh(bool hide)
 {
     d->m_HidePmh = hide;
@@ -112,7 +117,6 @@ void PmhCategoryOnlyModel::hidePmh(bool hide)
 
 void PmhCategoryOnlyModel::updateBranch(QModelIndex &rootIndex)
 {
-    qWarning() << Q_FUNC_INFO;
     if (d->m_PmhModel->isCategory(rootIndex)) {
         QModelIndex proxy = createIndex(rootIndex.row(), rootIndex.column(), rootIndex.internalPointer());
         d->mapping.insert(QPersistentModelIndex(rootIndex), proxy);
@@ -129,7 +133,6 @@ void PmhCategoryOnlyModel::updateBranch(QModelIndex &rootIndex)
 
 void PmhCategoryOnlyModel::updateModel()
 {
-    qWarning() << Q_FUNC_INFO;
     d->mapping.clear();
     d->proxySourceParent.clear();
     for (int i = 0; i<d->m_PmhModel->rowCount(); ++i) {
@@ -153,6 +156,5 @@ void PmhCategoryOnlyModel::updateModel()
 //            proxySourceParent.insert(proxy, sourceParent);
 //        }
     }
-    qWarning() << d->mapping << d->proxySourceParent;
 }
 

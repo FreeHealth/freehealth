@@ -38,7 +38,17 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QTreeView" name="treeView"/>
+    <widget class="Views::TreeView" name="treeView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupBox">
@@ -61,6 +71,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Views::TreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">listviewplugin/treeview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

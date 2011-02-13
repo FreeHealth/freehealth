@@ -26,7 +26,6 @@ public:
     PmhCategoryModel *m_Model;
 };
 
-
 }
 }
 
@@ -38,13 +37,16 @@ PmhCategoryDialog::PmhCategoryDialog(QWidget *parent) :
     d->ui = new Ui::PmhCategoryWidget;
     d->ui->setupUi(d->m_Widget);
     d->ui->treeView->header()->hide();
+    d->ui->treeView->hideColumn(PmhCategoryModel::Id);
+    d->ui->treeView->hideColumn(PmhCategoryModel::Type);
+    d->ui->treeView->hideColumn(PmhCategoryModel::EmptyColumn);
+    ui->treeView->header()->setStretchLastSection(false);
+    ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
 }
 
 void PmhCategoryDialog::setPmhCategoryModel(PmhCategoryModel *model)
 {
     Q_ASSERT(model);
-    qWarning() << model;
-    qWarning() << model->categoryOnlyModel();
     d->m_Model = model;
     d->ui->treeView->setModel(model->categoryOnlyModel());
 }
