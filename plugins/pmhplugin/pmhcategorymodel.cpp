@@ -330,13 +330,6 @@ PmhCategoryModel::~PmhCategoryModel()
     d = 0;
 }
 
-QAbstractProxyModel *PmhCategoryModel::categoriesOnlyModel()
-{
-    if (!d->m_CategoryOnlyModel)
-        d->m_CategoryOnlyModel = new PmhCategoryOnlyModel(this);
-    return d->m_CategoryOnlyModel;
-}
-
 void PmhCategoryModel::setShowOnlyCategories(bool state)
 {
     d->m_ShowCategoriesOnly = state;
