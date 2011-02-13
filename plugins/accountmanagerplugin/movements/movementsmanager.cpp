@@ -37,3 +37,9 @@ QHash<int,QVariant> movementsManager::getHashOfValues(int acMovId ,
     hash.insert(MOV_DETAILS,details);
     return hash;
 }
+
+double movementsManager::getCalculatedValue(double value, double percentage){
+    double calculation = 0.00;
+    calculation = value * percentage/100.00;
+    return calculation;
+}

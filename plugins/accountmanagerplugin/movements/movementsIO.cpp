@@ -84,3 +84,13 @@ int movementsIODb::getAvailableMovementId(QString & movementsComboBoxText){
     
     return availableMovementId;
 }
+
+bool movementsIODb::validMovement(int row){
+    bool b = true;
+    const QVariant value = QVariant(1);
+    if (!m_modelMovements->setData(m_modelMovements->index(row,MOV_ISVALID), value , Qt::EditRole))
+    {
+    	  b = false;
+        }
+    return b;
+}

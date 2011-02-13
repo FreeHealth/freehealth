@@ -15,6 +15,7 @@ class movementsIODb : public QObject{
         QStandardItemModel * getMovementsComboBoxModel(QObject * parent);
         bool insertIntoMovements(QHash<int,QVariant> & hashValues);
         bool deleteMovement(int row);
+        bool validMovement(int row);
         int getAvailableMovementId(QString & movementsComboBoxText);
     private :
         MovementModel * m_modelMovements;

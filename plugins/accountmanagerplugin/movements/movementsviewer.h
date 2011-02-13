@@ -13,7 +13,7 @@ class movementsViewer:public QWidget{
         ~movementsViewer();
     private slots :
         void showMovements();
-        void recordMovement();
+        void recordMovement(int valid);
         void deleteMovement();
         void validMovement();
         void validAndRecord();

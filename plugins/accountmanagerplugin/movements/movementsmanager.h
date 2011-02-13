@@ -21,6 +21,7 @@ class movementsManager : public QObject {
                                             QString & trace ,
                                             int isValid ,
                                             QString & details);
+         double getCalculatedValue(double value,double percentage);
 };
 
 
