@@ -332,17 +332,17 @@ FancyTabWidget::FancyTabWidget(QWidget *parent)
     m_statusBar = new QStatusBar;
     m_statusBar->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
-    QVBoxLayout *vlayout = new QVBoxLayout;
-    vlayout->setMargin(0);
-    vlayout->setSpacing(0);
-    vlayout->addLayout(m_modesStack);
-    vlayout->addWidget(m_statusBar);
+    m_centralLayout = new QVBoxLayout;
+    m_centralLayout->setMargin(0);
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->addLayout(m_modesStack);
+    m_centralLayout->addWidget(m_statusBar);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setMargin(0);
     mainLayout->setSpacing(1);
     mainLayout->addWidget(m_selectionWidget);
-    mainLayout->addLayout(vlayout);
+    mainLayout->addLayout(m_centralLayout);
     setLayout(mainLayout);
 
     connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(showWidget(int)));
@@ -386,6 +386,11 @@ void FancyTabWidget::insertCornerWidget(int pos, QWidget *widget)
 {
     QVBoxLayout *layout = static_cast<QVBoxLayout *>(m_cornerWidgetContainer->layout());
     layout->insertWidget(pos, widget);
+}
+
+void FancyTabWidget::insertTopWidget(int pos, QWidget *widget)
+{
+    m_centralLayout->insertWidget(pos, widget);
 }
 
 int FancyTabWidget::cornerWidgetCount() const

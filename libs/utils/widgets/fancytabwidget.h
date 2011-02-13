@@ -41,6 +41,7 @@ QT_BEGIN_NAMESPACE
 class QPainter;
 class QStackedLayout;
 class QStatusBar;
+class QVBoxLayout;
 QT_END_NAMESPACE
 
 namespace Utils {
@@ -127,6 +128,7 @@ public:
     void setBackgroundBrush(const QBrush &brush);
     void addCornerWidget(QWidget *widget);
     void insertCornerWidget(int pos, QWidget *widget);
+    void insertTopWidget(int pos, QWidget *widget);
     int cornerWidgetCount() const;
     void setTabToolTip(int index, const QString &toolTip);
 
@@ -151,6 +153,7 @@ private:
     QStackedLayout *m_modesStack;
     QWidget *m_selectionWidget;
     QStatusBar *m_statusBar;
+    QVBoxLayout *m_centralLayout;
 };
 
 } // namespace Core
