@@ -17,7 +17,9 @@ movementsIODb::~movementsIODb(){
     delete m_modelMovements;
 }
 
-MovementModel * movementsIODb::getModelMovements(){
+MovementModel * movementsIODb::getModelMovements(QString & year){
+    QString filter = QString("DATEVALUE beetween '%1' AND '%2'").arg(year+"-01-01",year+"12-31");
+    m_modelMovements->setFilter(filter);
     return m_modelMovements;
 }
 

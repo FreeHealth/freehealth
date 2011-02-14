@@ -41,7 +41,8 @@ movementsViewer::~movementsViewer(){}
 
 void movementsViewer::showMovements(){
     movementsIODb  mov(this) ;
-    ui->tableView->setModel(mov.getModelMovements());
+    QString year = ui->yearComboBox->currentText();
+    ui->tableView->setModel(mov.getModelMovements(year));
 }
 
 void movementsViewer::recordMovement(){
