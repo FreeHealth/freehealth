@@ -165,3 +165,8 @@ bool MovementModel::isDirty() const
 QSqlError MovementModel::lastError(){
     return d->m_SqlTable->lastError();
 }
+
+void MovementModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+}

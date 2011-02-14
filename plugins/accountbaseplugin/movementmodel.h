@@ -72,7 +72,7 @@ public:
     bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
-
+    void setFilter(const QString & filter);
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
     QSqlError lastError();
