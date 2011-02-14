@@ -56,120 +56,125 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
+namespace {
+
+    class TreeItem
+    {
+    public:
+        enum DataRepresentation {
+            Label = 0
+        };
+
+        TreeItem(TreeItem *parent = 0) :
+                m_Parent(parent),
+                m_IsModified(false),
+                m_Cat(0),
+                m_Pmh(0)
+        {
+            if (m_Parent)
+                m_Parent->addChildren(this);
+        }
+
+        ~TreeItem()
+        {
+            qWarning() << "~TreeItem";
+            m_Label.clear();
+            m_Icon.clear();
+            qDeleteAll(m_Children);
+            m_Children.clear();
+            m_Pmh=0;m_Cat=0;m_Parent=0;
+        }
+
+
+        // Genealogy management
+        TreeItem *child(int number) { return m_Children.value(number); }
+        int childCount() const { return m_Children.count(); }
+        int columnCount() const { return 1; }
+        TreeItem *parent() { return m_Parent; }
+        void setParent(TreeItem *parent) { m_Parent = parent; }
+        bool addChildren(TreeItem *child)
+        {
+            if (!m_Children.contains(child))
+                m_Children.append(child);
+            return true;
+        }
+        bool insertChild(const int row, TreeItem *child)
+        {
+            if (row > m_Children.count())
+                return false;
+            m_Children.insert(row, child);
+            return true;
+        }
+        int childNumber() const
+        {
+            if (m_Parent)
+                return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+            return 0;
+        }
+        //    void sortChildren()
+        //    {
+        //        qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
+        //    }
+        bool removeChild(TreeItem *child)
+        {
+            if (m_Children.contains(child)) {
+                m_Children.removeAll(child);
+                return true;
+            }
+            return false;
+        }
+
+        // For data management
+        QString label() const {return m_Label;}
+        void setLabel(QString label) {m_Label = label;}
+
+        QString icon() const {return m_Icon;}
+        void setIcon(QString icon) {m_Icon = icon;}
+
+        // Category / PMH
+        void setPmhCategory(PmhCategory *cat)
+        {
+            m_Cat = cat;
+            setLabel(cat->label());
+            setIcon(cat->data(PmhCategory::ThemedIcon).toString());
+        }
+        PmhCategory *pmhCategory() const {return m_Cat;}
+
+        void setPmhData(PmhData *pmh)
+        {
+            m_Pmh = pmh;
+        }
+        PmhData *pmhData() const {return m_Pmh;}
+
+        bool isCategory() const {return (m_Cat);}
+
+        // For sort functions
+        //    static bool lessThan(TreeItem *item1, TreeItem *item2)
+        //    {
+        //        // category goes first
+        //        // then sort by name
+        //        bool sameType = (((item1->isTemplate()) && (item2->isTemplate())) || ((!item1->isTemplate()) && (!item2->isTemplate())));
+        //        if (sameType)
+        //            return item1->data(Constants::Data_Label).toString() < item2->data(Constants::Data_Label).toString();
+        //        return item2->isTemplate();
+        //    }
+
+    private:
+        TreeItem *m_Parent;
+        QList<TreeItem*> m_Children;
+        QString m_Label, m_Icon;
+        QVector<int> m_DirtyRows;
+        bool m_IsTemplate, m_IsModified;
+        PmhCategory *m_Cat;
+        PmhData *m_Pmh;
+    };
+
+}
+
 
 namespace PMH {
 namespace Internal {
 
-class TreeItem
-{
-public:
-    enum DataRepresentation {
-        Label = 0
-    };
-
-    TreeItem(TreeItem *parent = 0) :
-            m_Parent(parent),
-            m_IsModified(false),
-            m_Cat(0),
-            m_Pmh(0)
-    {
-        if (m_Parent)
-            m_Parent->addChildren(this);
-    }
-
-    ~TreeItem();
-
-    // Genealogy management
-    TreeItem *child(int number) { return m_Children.value(number); }
-    int childCount() const { return m_Children.count(); }
-    int columnCount() const { return 1; }
-    TreeItem *parent() { return m_Parent; }
-    void setParent(TreeItem *parent) { m_Parent = parent; }
-    bool addChildren(TreeItem *child)
-    {
-        if (!m_Children.contains(child))
-            m_Children.append(child);
-        return true;
-    }
-    bool insertChild(const int row, TreeItem *child)
-    {
-        if (row > m_Children.count())
-            return false;
-        m_Children.insert(row, child);
-        return true;
-    }
-    int childNumber() const
-    {
-        if (m_Parent)
-            return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
-        return 0;
-    }
-    //    void sortChildren()
-    //    {
-    //        qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
-    //    }
-    bool removeChild(TreeItem *child)
-    {
-        if (m_Children.contains(child)) {
-            m_Children.removeAll(child);
-            return true;
-        }
-        return false;
-    }
-
-    // For data management
-    QString label() const {return m_Label;}
-    void setLabel(QString label) {m_Label = label;}
-
-    QString icon() const {return m_Icon;}
-    void setIcon(QString icon) {m_Icon = icon;}
-
-    // Category / PMH
-    void setPmhCategory(PmhCategory *cat)
-    {
-        m_Cat = cat;
-        setLabel(cat->label());
-        setIcon(cat->data(PmhCategory::ThemedIcon).toString());
-    }
-
-    void setPmhData(PmhData *pmh)
-    {
-        m_Pmh = pmh;
-    }
-    PmhData *pmhData() const {return m_Pmh;}
-
-    bool isCategory() const {return (m_Cat);}
-
-    // For sort functions
-    //    static bool lessThan(TreeItem *item1, TreeItem *item2)
-    //    {
-    //        // category goes first
-    //        // then sort by name
-    //        bool sameType = (((item1->isTemplate()) && (item2->isTemplate())) || ((!item1->isTemplate()) && (!item2->isTemplate())));
-    //        if (sameType)
-    //            return item1->data(Constants::Data_Label).toString() < item2->data(Constants::Data_Label).toString();
-    //        return item2->isTemplate();
-    //    }
-
-private:
-    TreeItem *m_Parent;
-    QList<TreeItem*> m_Children;
-    QString m_Label, m_Icon;
-    QVector<int> m_DirtyRows;
-    bool m_IsTemplate, m_IsModified;
-    PmhCategory *m_Cat;
-    PmhData *m_Pmh;
-};
-
-/** \todo Bug: ~TreeItem() Can not be inlined ???? */
-TreeItem::~TreeItem()
-{
-    m_Label.clear();
-    m_Icon.clear();
-    qDeleteAll(m_Children);
-    m_Children.clear();
-    m_Pmh=0;m_Cat=0;m_Parent=0;
-}
 
 class PmhCategoryModelPrivate
 {
@@ -577,5 +582,16 @@ Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) co
     TreeItem *it = d->getItem(item);
     if (it)
         return it->pmhData();
+    return 0;
+}
+
+Internal::PmhCategory *PmhCategoryModel::pmhCategoryforIndex(const QModelIndex &item) const
+{
+    if (!item.isValid())
+        return 0;
+
+    TreeItem *it = d->getItem(item);
+    if (it)
+        return it->pmhCategory();
     return 0;
 }

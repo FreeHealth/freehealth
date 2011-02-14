@@ -77,6 +77,7 @@ public:
     bool addPmhData(Internal::PmhData *pmh);
     bool addPmhCategoryData(Internal::PmhCategory *cat);
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
+    Internal::PmhCategory *pmhCategoryforIndex(const QModelIndex &item) const;
 
 private:
     Internal::PmhCategoryModelPrivate *d;
