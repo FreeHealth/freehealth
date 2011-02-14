@@ -309,7 +309,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Assets,  ASSETS_ACCOUNT_ID,     "ACCOUNT_ID",    FieldIsLongInteger);
     addField(Table_Assets,  ASSETS_LABEL,          "LABEL",         FieldIsShortText);
     addField(Table_Assets,  ASSETS_DATE,           "DATE",          FieldIsDate, "CURRENT_DATE");
-    addField(Table_Assets,  ASSETS_DURATION,       "DURATION",      FieldIsLongInteger);
+    addField(Table_Assets,  ASSETS_DURATION,       "DURATION",      FieldIsReal);
     addField(Table_Assets,  ASSETS_MODE,           "MODE",          FieldIsInteger);
     addField(Table_Assets,  ASSETS_VALUE,          "VALUE",         FieldIsReal);
     addField(Table_Assets,  ASSETS_TAXEACTS,     "TAXEACTS",    FieldIsReal);
