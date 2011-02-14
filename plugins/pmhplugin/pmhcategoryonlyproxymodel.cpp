@@ -1,6 +1,7 @@
 #include "pmhcategoryonlyproxymodel.h"
 #include "pmhcategorymodel.h"
 
+#include <QItemSelectionRange>
 #include <QDebug>
 
 using namespace PMH;
@@ -96,6 +97,44 @@ QModelIndex PmhCategoryOnlyModel::mapFromSource(const QModelIndex &sourceIndex) 
     return d->mapping.value(sourceIndex);
 }
 
+QItemSelection PmhCategoryOnlyModel::mapSelectionFromSource(const QItemSelection &sourceSelection) const
+{
+    QItemSelection proxySelection;
+
+    if (!sourceModel())
+        return proxySelection;
+
+    QItemSelection::const_iterator it = sourceSelection.constBegin();
+    const QItemSelection::const_iterator end = sourceSelection.constEnd();
+    for ( ; it != end; ++it) {
+        Q_ASSERT(it->model() == sourceModel());
+        const QItemSelectionRange range(mapFromSource(it->topLeft()), mapFromSource(it->bottomRight()));
+        proxySelection.append(range);
+    }
+
+    return proxySelection;
+}
+
+QItemSelection PmhCategoryOnlyModel::mapSelectionToSource(const QItemSelection &proxySelection) const
+{
+    QItemSelection sourceSelection;
+
+    if (!sourceModel())
+      return sourceSelection;
+
+    QItemSelection::const_iterator it = proxySelection.constBegin();
+    const QItemSelection::const_iterator end = proxySelection.constEnd();
+    for ( ; it != end; ++it) {
+        Q_ASSERT(it->model() == this);
+        const QItemSelectionRange range(mapToSource(it->topLeft()), mapToSource(it->bottomRight()));
+        sourceSelection.append(range);
+    }
+
+    qWarning() << sourceSelection << proxySelection;
+
+    return sourceSelection;
+}
+
 QVariant PmhCategoryOnlyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return section;
@@ -103,7 +142,7 @@ QVariant PmhCategoryOnlyModel::headerData(int section, Qt::Orientation orientati
 
 Qt::ItemFlags PmhCategoryOnlyModel::flags(const QModelIndex &index) const
 {
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 }
 
 void PmhCategoryOnlyModel::hidePmh(bool hide)

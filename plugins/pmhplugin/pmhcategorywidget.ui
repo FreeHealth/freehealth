@@ -38,7 +38,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="Views::TreeView" name="treeView">
+    <widget class="QTreeView" name="treeView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -71,13 +71,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Views::TreeView</class>
-   <extends>QTreeView</extends>
-   <header location="global">listviewplugin/treeview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
