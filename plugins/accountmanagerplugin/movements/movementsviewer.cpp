@@ -24,9 +24,12 @@ using namespace Constants;
 movementsViewer::movementsViewer(QWidget * parent):QWidget(parent),ui(new Ui::MovementsViewerWidget){
     ui->setupUi(this);
     //instanciate
+    m_valid = 0; //bill not received
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
     ui->dateEdit->setDate(QDate::currentDate());
+    fillMovementsComboBox();
+    fillYearComboBox();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
@@ -41,7 +44,7 @@ void movementsViewer::showMovements(){
     ui->tableView->setModel(mov.getModelMovements());
 }
 
-void movementsViewer::recordMovement(int valid){
+void movementsViewer::recordMovement(){
     movementsIODb  mov(this) ;
     movementsManager manager;
     QHash<int,QVariant>  hashValues;
@@ -58,7 +61,7 @@ void movementsViewer::recordMovement(int valid){
     QString comment;//no comment
     int validity = 0;
     QString trace;// ??
-    int isValid = valid;
+    int isValid = m_valid;
     QString details = ui->detailsEdit->text();
     hashValues = manager.getHashOfValues(acMovId ,
                                          userUid,
@@ -116,10 +119,23 @@ void movementsViewer::validMovement(){
 }
 
 void movementsViewer::validAndRecord(){
-    recordMovement(1);// 1 = invoice,bill received
+    m_valid = 1;
+    recordMovement();// 1 = invoice,bill received
+    m_valid = 0;
 }
 
 void movementsViewer::fillMovementsComboBox(){
     movementsIODb mov(this);
     ui->movementsComboBox->setModel(mov.getMovementsComboBoxModel(this));
+}
+
+void movementsViewer::fillYearComboBox(){
+    movementsIODb mov(this);
+    QStringList listOfYears;
+    listOfYears = mov.getYearComboBoxModel();
+    if (listOfYears.size()== 0)
+    {
+    	  listOfYears << QString::number(QDate::currentDate().year());
+        }
+    ui->yearComboBox->addItems(listOfYears);
 }

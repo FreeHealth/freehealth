@@ -13,6 +13,7 @@ class movementsIODb : public QObject{
         ~movementsIODb();
         MovementModel * getModelMovements();
         QStandardItemModel * getMovementsComboBoxModel(QObject * parent);
+        QStringList getYearComboBoxModel();
         bool insertIntoMovements(QHash<int,QVariant> & hashValues);
         bool deleteMovement(int row);
         bool validMovement(int row);

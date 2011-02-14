@@ -18,12 +18,12 @@
     <rect>
      <x>0</x>
      <y>10</y>
-     <width>559</width>
-     <height>361</height>
+     <width>551</width>
+     <height>359</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="3">
+    <item row="0" column="0">
      <widget class="QLabel" name="valueLabel">
       <property name="text">
        <string>Value</string>
@@ -33,10 +33,10 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="3" colspan="3">
+    <item row="0" column="2" colspan="2">
      <widget class="QDoubleSpinBox" name="valueDoubleSpinBox"/>
     </item>
-    <item row="0" column="6">
+    <item row="0" column="4">
      <widget class="QLabel" name="percentLabel">
       <property name="text">
        <string>Percentage</string>
@@ -49,10 +49,10 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="7">
+    <item row="0" column="6">
      <widget class="QDoubleSpinBox" name="percentDoubleSpinBox"/>
     </item>
-    <item row="1" column="0" colspan="3">
+    <item row="1" column="0" colspan="2">
      <widget class="QLabel" name="movementsLabel">
       <property name="text">
        <string>Movements</string>
@@ -62,7 +62,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="3" colspan="3">
+    <item row="1" column="2" colspan="2">
      <widget class="QComboBox" name="movementsComboBox">
       <property name="minimumSize">
        <size>
@@ -72,7 +72,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="6">
+    <item row="1" column="4">
      <widget class="QLabel" name="dateLabel">
       <property name="text">
        <string>Date</string>
@@ -85,7 +85,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="7">
+    <item row="1" column="6">
      <widget class="QDateEdit" name="dateEdit"/>
     </item>
     <item row="2" column="0">
@@ -98,7 +98,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="4">
+    <item row="2" column="1" colspan="3">
      <widget class="QComboBox" name="bankComboBox">
       <property name="minimumSize">
        <size>
@@ -108,7 +108,20 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="5">
+    <item row="2" column="4">
+     <widget class="QLabel" name="yearLabel">
+      <property name="text">
+       <string>Year</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5" colspan="2">
+     <widget class="QComboBox" name="yearComboBox"/>
+    </item>
+    <item row="3" column="0" colspan="2">
      <widget class="QLabel" name="detailsLabel">
       <property name="text">
        <string>Details</string>
@@ -121,7 +134,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="6" colspan="2">
+    <item row="3" column="2" colspan="5">
      <widget class="QLineEdit" name="detailsEdit">
       <property name="minimumSize">
        <size>
@@ -131,17 +144,17 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="8">
+    <item row="4" column="0" colspan="7">
      <widget class="QTableView" name="tableView"/>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="5" column="0" colspan="2">
      <widget class="QPushButton" name="validButton">
       <property name="text">
        <string>&amp;Valid</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="2" colspan="2">
+    <item row="5" column="2">
      <widget class="QPushButton" name="valAndRecButton">
       <property name="text">
        <string>V&amp;alidAndRecord</string>
@@ -151,21 +164,21 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="4" colspan="2">
+    <item row="5" column="3">
      <widget class="QPushButton" name="recordButton">
       <property name="text">
        <string>&amp;Record</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="6">
+    <item row="5" column="4" colspan="2">
      <widget class="QPushButton" name="deleteButton">
       <property name="text">
        <string>&amp;Delete</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="7">
+    <item row="5" column="6">
      <widget class="QPushButton" name="quitButton">
       <property name="text">
        <string>&amp;Quit</string>

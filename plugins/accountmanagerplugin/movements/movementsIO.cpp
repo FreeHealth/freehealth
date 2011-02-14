@@ -4,6 +4,7 @@
 #include "../../accountbaseplugin/movementmodel.h"//<accountbaseplugin/movementmodel>
 #include <QMessageBox>
 #include <QDebug>
+#include <QDate>
 
 using namespace AccountDB;
 using namespace Constants;
@@ -41,6 +42,20 @@ QStandardItemModel  * movementsIODb::getMovementsComboBoxModel(QObject *parent){
     return model;
 }
 
+QStringList movementsIODb::getYearComboBoxModel(){
+    QStringList listOfYears;
+    for (int i = 0; i < m_modelMovements->rowCount(); i += 1)
+    {
+    	QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
+    	QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
+    	QString yearDate = QString::number(QDate::fromString(dateStr,"yyyy-MM-dd").year());
+    	QString yearDateOfValue = QString::number(QDate::fromString(dateOfValueStr,"yyyy-MM-dd").year());
+    	listOfYears << yearDate << yearDateOfValue;
+    }
+    listOfYears.removeDuplicates();
+    return listOfYears;
+}
+
 bool movementsIODb::insertIntoMovements(QHash<int,QVariant> & hashValues){
     bool ret = true;
     int rowBefore = m_modelMovements->rowCount(QModelIndex());
@@ -61,7 +76,8 @@ bool movementsIODb::insertIntoMovements(QHash<int,QVariant> & hashValues){
         }
         m_modelMovements->submit();
     if (m_modelMovements->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : "),trUtf8("Error = ") + m_modelMovements->lastError().text(),
+        QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : "),trUtf8("Error = ") 
+                             + m_modelMovements->lastError().text(),
                              QMessageBox::Ok);
         ret = false;
     }

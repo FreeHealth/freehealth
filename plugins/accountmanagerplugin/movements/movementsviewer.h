@@ -13,13 +13,15 @@ class movementsViewer:public QWidget{
         ~movementsViewer();
     private slots :
         void showMovements();
-        void recordMovement(int valid);
+        void recordMovement();
         void deleteMovement();
         void validMovement();
         void validAndRecord();
-        void fillMovementsComboBox();
     private :
         Ui::MovementsViewerWidget * ui;
+        void fillMovementsComboBox();
+        void fillYearComboBox();
+        int m_valid ;
 };
 
 #endif
