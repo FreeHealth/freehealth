@@ -312,8 +312,8 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Assets,  ASSETS_DURATION,       "DURATION",      FieldIsReal);
     addField(Table_Assets,  ASSETS_MODE,           "MODE",          FieldIsInteger);
     addField(Table_Assets,  ASSETS_VALUE,          "VALUE",         FieldIsReal);
-    addField(Table_Assets,  ASSETS_TAXEACTS,     "TAXEACTS",    FieldIsReal);
-    addField(Table_Assets,  ASSETS_RESIDUAL_VALUE, "RESIDUALVALUE", FieldIsLongInteger);
+    addField(Table_Assets,  ASSETS_TAXEACTS,       "TAXEACTS",      FieldIsReal);
+    addField(Table_Assets,  ASSETS_RESIDUAL_VALUE, "RESIDUALVALUE", FieldIsReal);
     addField(Table_Assets,  ASSETS_RESULT,         "RESULT",        FieldIsBlob);
     addField(Table_Assets,  ASSETS_MOVEMENT,       "MOVEMENT",      FieldIsBlob);
     addField(Table_Assets,  ASSETS_COMMENT,        "COMMENT",       FieldIsLongText);
