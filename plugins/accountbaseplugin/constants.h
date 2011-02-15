@@ -272,6 +272,13 @@ namespace Constants {
         THESAURUS_PREF,
         THESAURUS_MaxParam
     };
+    
+    //assets
+    enum Modes {
+        LINEAR_MODE = 1,
+        DECREASING_MODE,
+        MODES_MaxParam
+    };
 
     // Menu and action for ActionManager
     const char * const  ACCOUNTCONSTANTS_TR_CONTEXT = "Account";
