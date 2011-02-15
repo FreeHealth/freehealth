@@ -165,7 +165,6 @@ QMenu *ExtendedView::getContextMenu()
 
 void ExtendedView::addItem()
 {
-    qWarning() << "ExtendedView::addItem()" << d->m_Parent->model();
     if (!d->m_Parent->model())
         return;
 

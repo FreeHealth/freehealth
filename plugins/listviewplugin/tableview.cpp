@@ -132,7 +132,6 @@ void TableView::useContextMenu(bool state)
 
 void TableView::addItem()
 {
-    qWarning() << "TableView::addItem()";
     setFocus();
     d->m_ExtView->addItem();
 }

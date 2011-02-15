@@ -51,7 +51,7 @@ namespace Internal {
 class ViewContext : public Core::IContext
 {
 public:
-    ViewContext(QWidget *parent) : Core::IContext(parent), w(parent)
+    ViewContext(QAbstractItemView *parent) : Core::IContext(parent), w(parent)
     {
         setObjectName("ListViewContext");
     }
@@ -67,7 +67,7 @@ public:
     QWidget *widget()          { return w; }
 
 private:
-    QWidget *w;
+    QAbstractItemView *w;
     QList<int> m_Context;
 };
 

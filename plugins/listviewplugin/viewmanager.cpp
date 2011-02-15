@@ -92,9 +92,11 @@ void ViewManager::updateContext(Core::IContext *object)
             break;
         }
         view = qobject_cast<QAbstractItemView *>(object->widget());
-        if (view)
-            if (view->property(Constants::HIDDEN_ID).isNull())
+        if (view) {
+            if (view->property(Constants::HIDDEN_ID).isNull()) {
                 view = 0;
+            }
+        }
         if (!view) {
             if (!m_CurrentView)
                 return;
@@ -187,7 +189,7 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
 void ViewActionHandler::setCurrentView(QAbstractItemView *view)
 {
 //    if (view)
-//        qWarning() << "current view " << view;
+//        qWarning() << "current view " << view << m_CurrentView;
     // disconnect old view
     if (m_CurrentView) {
         disconnect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
@@ -198,8 +200,10 @@ void ViewActionHandler::setCurrentView(QAbstractItemView *view)
         return;
     }
     // reconnect some actions
-    connect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(listViewItemChanged()));
+    if (m_CurrentView->selectionModel()) {
+        connect(m_CurrentView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(listViewItemChanged()));
+    }
     updateActions();
 }
 
