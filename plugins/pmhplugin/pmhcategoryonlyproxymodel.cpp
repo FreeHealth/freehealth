@@ -57,7 +57,7 @@ int PmhCategoryOnlyModel::rowCount(const QModelIndex &parent) const
 
 int PmhCategoryOnlyModel::columnCount(const QModelIndex &index) const
 {
-    return d->m_PmhModel->columnCount(index);
+    return 1; // d->m_PmhModel->columnCount(index); // Causes views to be non selectables...
 }
 
 QModelIndex PmhCategoryOnlyModel::index(int row, int column, const QModelIndex &parent) const
@@ -130,20 +130,18 @@ QItemSelection PmhCategoryOnlyModel::mapSelectionToSource(const QItemSelection &
         sourceSelection.append(range);
     }
 
-    qWarning() << sourceSelection << proxySelection;
-
     return sourceSelection;
 }
 
-QVariant PmhCategoryOnlyModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    return section;
-}
+//QVariant PmhCategoryOnlyModel::headerData(int section, Qt::Orientation orientation, int role) const
+//{
+//    return section;
+//}
 
-Qt::ItemFlags PmhCategoryOnlyModel::flags(const QModelIndex &index) const
-{
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
-}
+//Qt::ItemFlags PmhCategoryOnlyModel::flags(const QModelIndex &index) const
+//{
+//    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+//}
 
 void PmhCategoryOnlyModel::hidePmh(bool hide)
 {

@@ -24,9 +24,9 @@ public:
     QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
     QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+//    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+//    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void hidePmh(bool hide);
 

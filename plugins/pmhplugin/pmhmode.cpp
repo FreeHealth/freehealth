@@ -35,12 +35,14 @@
 #include "pmhcategorymodel.h"
 #include "pmhcreatordialog.h"
 #include "pmhviewer.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <listviewplugin/fancytreeview.h>
 #include <listviewplugin/simplecategorymodel.h>
@@ -58,10 +60,11 @@ using namespace Internal;
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 PmhModeWidget::PmhModeWidget(QWidget *parent) :
-        QWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
+        PmhContextualWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
 {
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
@@ -72,6 +75,28 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     // Create ToolBar
     m_ToolBar = new QToolBar(this);
     ui->toolBarLayout->addWidget(m_ToolBar);
+    // Actions connected in global context
+    QStringList actions;
+    actions << Constants::A_PMH_NEW;
+    foreach(const QString &s, actions) {
+        Core::Command *cmd = actionManager()->command(s);
+        if (cmd)
+            m_ToolBar->addAction(cmd->action());
+    }
+    // Actions connected in local widget context
+    Core::Command *cmd = 0;
+    cmd = actionManager()->command(Constants::A_PMH_REMOVE);
+    m_ToolBar->addAction(cmd->action());
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(removePmh()));
+
+    cmd = actionManager()->command(Constants::A_PMH_NEWCATEGORY);
+    m_ToolBar->addAction(cmd->action());
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(createCategory()));
+
+    cmd = actionManager()->command(Constants::A_PMH_REMOVECATEGORY);
+    m_ToolBar->addAction(cmd->action());
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(removeCategory()));
+
 
     // Populate ToolBar and create specific buttons
     m_EditButton = new QPushButton(ui->buttonBox);
@@ -130,6 +155,28 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
         break;
     default: break;
     }
+}
+
+void PmhModeWidget::removePmh()
+{
+    if (!ui->treeView->selectionModel()->hasSelection())
+        return;
+    QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+    pmhCore()->pmhCategoryModel()->removeRow(item.row(),item.parent());
+}
+
+void PmhModeWidget::createCategory()
+{
+    if (!ui->treeView->selectionModel()->hasSelection())
+        return;
+    QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+}
+
+void PmhModeWidget::removeCategory()
+{
+    if (!ui->treeView->selectionModel()->hasSelection())
+        return;
+    QModelIndex item = ui->treeView->selectionModel()->currentIndex();
 }
 
 void PmhModeWidget::changeEvent(QEvent *e)

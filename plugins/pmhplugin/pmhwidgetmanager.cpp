@@ -115,7 +115,8 @@ PmhContextualWidget *PmhWidgetManager::currentView() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 PmhActionHandler::PmhActionHandler(QObject *parent) :
         QObject(parent),
-        aAddPmh(0),
+        aAddPmh(0),aRemovePmh(0),
+        aAddCat(0), aRemoveCat(0),
         aCategoryManager(0),
         aPmhDatabaseInformations(0),
         m_CurrentView(0)
@@ -152,6 +153,30 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::CREATEPMH_TEXT, Constants::CREATEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
     connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
+
+    a = aRemovePmh= new QAction(this);
+    a->setObjectName("aRemovePmh");
+    a->setIcon(th->icon(Core::Constants::ICONREMOVE));
+    cmd = actionManager()->registerAction(a, Constants::A_PMH_REMOVE, ctx);
+    cmd->setTranslations(Constants::REMOVEPMH_TEXT, Constants::REMOVEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
+    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+//    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
+
+    a = aAddCat = new QAction(this);
+    a->setObjectName("aAddCat");
+    a->setIcon(th->icon(Core::Constants::ICONCATEGORY_ADD));
+    cmd = actionManager()->registerAction(a, Constants::A_PMH_NEWCATEGORY, ctx);
+    cmd->setTranslations(Constants::CREATECATEGORY_TEXT, Constants::CREATECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
+    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+//    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
+
+    a = aRemoveCat= new QAction(this);
+    a->setObjectName("aRemoveCat");
+    a->setIcon(th->icon(Core::Constants::ICONCATEGORY_REMOVE));
+    cmd = actionManager()->registerAction(a, Constants::A_PMH_REMOVECATEGORY, ctx);
+    cmd->setTranslations(Constants::REMOVECATEGORY_TEXT, Constants::REMOVECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
+    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+//    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aCategoryManager= new QAction(this);
     a->setObjectName("aCategoryManager");

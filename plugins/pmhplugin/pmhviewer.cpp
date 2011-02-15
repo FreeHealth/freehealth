@@ -39,6 +39,9 @@
 #include "pmhdata.h"
 #include "constants.h"
 #include "pmhepisodemodel.h"
+#include "pmhcore.h"
+#include "pmhcategorymodel.h"
+#include "pmhcategoryonlyproxymodel.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -52,6 +55,8 @@ using namespace PMH;
 using namespace Internal;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
+
 
 namespace PMH {
 namespace Internal {
@@ -81,6 +86,7 @@ public:
         ui->typeCombo->setCurrentIndex(pmh->data(PmhData::Type).toInt());
         ui->statusCombo->setCurrentIndex(pmh->data(PmhData::State).toInt());
         ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
+        ui->makePrivateBox->setChecked(pmh->data(PmhData::IsPrivate).toBool());
         ui->comment->setHtml(pmh->data(PmhData::Comment).toString());
         // Category
 
@@ -97,6 +103,7 @@ public:
         m_Pmh->setData(PmhData::State, ui->statusCombo->currentIndex());
         m_Pmh->setData(PmhData::ConfidenceIndex, ui->confIndexSlider->value());
         m_Pmh->setData(PmhData::Comment, ui->comment->textEdit()->toHtml());
+        m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
 
 //        m_Pmh->setData(PmhData::CategoryId, ui->categoryTreeview);
     }
@@ -120,6 +127,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
     // Create Ui
     d->ui = new Internal::Ui::PmhViewer;
     d->ui->setupUi(this);
+
     // Populate combos
     d->ui->typeCombo->addItems(Constants::availableTypes());
     d->ui->statusCombo->addItems(Constants::availableStatus());
@@ -131,6 +139,9 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
     // Manage the Edit Mode
     d->setEditMode(editMode);
     setShowPatientInformations(d->m_ShowPatient);
+
+    // add models to views
+    d->ui->categoryTreeview->setModel(pmhCore()->pmhCategoryModel()->categoryOnlyModel());
 }
 
 PmhViewer::~PmhViewer()
@@ -165,7 +176,6 @@ void PmhViewer::setPmhData(Internal::PmhData *pmh)
     if (d->m_Pmh) {
         if (d->m_Pmh == pmh)
             return;
-        Utils::warningMessageBox(tr("Replacing pmh data"),"","");
     }
     d->populateUiWithPmh(pmh);
 }

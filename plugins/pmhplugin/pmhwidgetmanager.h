@@ -31,6 +31,9 @@ private:
 
 protected:
     QAction *aAddPmh;
+    QAction *aRemovePmh;
+    QAction *aAddCat;
+    QAction *aRemoveCat;
     QAction *aCategoryManager;
     QAction *aPmhDatabaseInformations;
     QPointer<PmhContextualWidget> m_CurrentView;

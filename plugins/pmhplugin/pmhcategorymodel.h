@@ -71,6 +71,8 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
 //    QVariant headerData(int section, Qt::Orientation orientation, int role) const {return section;}
 
     // Data

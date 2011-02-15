@@ -23,7 +23,8 @@ HEADERS = pmhplugin.h \
     pmhwidgetmanager.h \
     pmhcontextualwidget.h \
     pmhcategorydialog.h \
-    pmhcategoryonlyproxymodel.h
+    pmhcategoryonlyproxymodel.h \
+    categorylabelsmodel.h
 
 
 SOURCES = pmhplugin.cpp \
@@ -41,7 +42,8 @@ SOURCES = pmhplugin.cpp \
     pmhwidgetmanager.cpp \
     pmhcontextualwidget.cpp \
     pmhcategorydialog.cpp \
-    pmhcategoryonlyproxymodel.cpp
+    pmhcategoryonlyproxymodel.cpp \
+    categorylabelsmodel.cpp
 
 
 OTHER_FILES = PMH.pluginspec

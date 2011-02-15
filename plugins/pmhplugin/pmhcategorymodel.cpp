@@ -77,7 +77,6 @@ namespace {
 
         ~TreeItem()
         {
-            qWarning() << "~TreeItem";
             m_Label.clear();
             m_Icon.clear();
             qDeleteAll(m_Children);
@@ -496,21 +495,26 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/** \brief setData only works on category labels */
 bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//    if (!index.isValid())
-//        return QVariant();
+    if (!index.isValid())
+        return false;
 
-//    if (index.column() == EmptyColumn)
-//        return QVariant();
+    if (index.column() != Label)
+        return false;
 
-//    const TreeItem *it = d->getItem(index);
+    TreeItem *it = d->getItem(index);
 
-//    if (role==Qt::EditRole || role == Qt::DisplayRole) {
-//        switch (index.column()) {
+    if (!it->isCategory())
+        return false;
 
-//        }
-//    }
+    if (role==Qt::EditRole || role == Qt::DisplayRole) {
+        it->pmhCategory()->clearLabels();
+        it->pmhCategory()->setLabel(value.toString());
+        it->setLabel(value.toString());
+        Q_EMIT dataChanged(index, index);
+    }
 
     return true;
 }
@@ -518,6 +522,44 @@ bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, 
 Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+/** \brief Remove PMH or Category. */
+bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginRemoveRows(parent, row, row+count);
+    int max = row+count;
+    TreeItem *parentItem = d->getItem(parent);
+
+    for(int i=row; i < max; ++i) {
+        // Get item
+        QModelIndex indexToDelete = index(i,0,parent);
+        TreeItem *item = d->getItem(indexToDelete);
+        if (item) {
+            if (item->isCategory()) {
+                PmhCategory *cat = item->pmhCategory();
+                cat->setData(PmhCategory::DbOnly_IsValid, false);
+                base()->updatePmhCategory(cat);
+                d->m_CategoryToItem.remove(cat);
+            } else {
+                PmhData *pmh = item->pmhData();
+                if (pmh->data(PmhData::IsValid).toBool()) {
+                    pmh->setData(PmhData::IsValid, false);
+                    base()->updatePmhData(pmh);
+                    if (d->m_Pmhs.contains(pmh))
+                        d->m_Pmhs.remove(d->m_Pmhs.indexOf(pmh));
+                }
+            }
+            // remove childrens
+            removeRows(0, rowCount(indexToDelete), indexToDelete);
+
+            // remove from treeItems
+            parentItem->removeChild(item);
+            delete item;
+            item = 0;
+        }
+    }
+    endRemoveRows();
 }
 
 /**

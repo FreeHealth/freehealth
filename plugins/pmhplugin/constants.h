@@ -66,6 +66,8 @@ namespace Constants {
         MASTER_TYPE,
         MASTER_STATE,
         MASTER_CONFINDEX,
+        MASTER_ISVALID,
+        MASTER_PRIVATE,
         MASTER_COMMENT,
         MASTER_TRACE_ID,
         MASTER_MaxParam
@@ -79,6 +81,7 @@ namespace Constants {
         EPISODE_DATE_END,
         EPISODE_CONF_INDEX,
         EPISODE_ICD_CODES,
+        EPISODE_ISVALID,
         EPISODE_COMMENT,
         EPISODE_TRACE_ID,
         EPISODE_MaxParam
@@ -92,12 +95,13 @@ namespace Constants {
 
     enum PmhCatFields {
         CATEGORY_ID = 0, CATEGORY_PARENT, CATEGORY_LABEL_ID, CATEGORY_ISRISKFACTOR,
-        CATEGORY_ISCHONICDISEASE, CATEGORY_SORT_ID, CATEGORY_THEMEDICON,
+        CATEGORY_ISCHONICDISEASE, CATEGORY_SORT_ID, CATEGORY_ISVALID, CATEGORY_THEMEDICON,
         CATEGORY_MaxParam
     };
 
     enum PmhCatLabelFields {
         CATEGORYLABEL_ID = 0, CATEGORYLABEL_LABEL_ID, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
+        CATEGORYLABEL_ISVALID,
         CATEGORYLABEL_MaxParam
     };
 
@@ -146,13 +150,19 @@ namespace Constants {
     const char * const  G_PMH_EDITION = "gPmhEdit";
 
     const char * const  A_PMH_NEW               = "aNewPmh";
+    const char * const  A_PMH_REMOVE            = "aRemovePmh";
+    const char * const  A_PMH_NEWCATEGORY       = "aNewCatgeroyPmh";
+    const char * const  A_PMH_REMOVECATEGORY    = "aRemoveCatgeroyPmh";
     const char * const  A_PMH_CATEGORYMANAGER   = "aPmhCatMan";
 
 
     // Translations
     const char * const  PMHCONSTANTS_TR_CONTEXT = "PMH";
-    const char * const  CREATEPMH_TEXT          =  QT_TRANSLATE_NOOP("PMH", "Create a new PMHx");
-    const char * const  CATEGORYMANAGER_TEXT    =  QT_TRANSLATE_NOOP("PMH", "PMHx category manager");
+    const char * const  CREATEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "Create a new PMHx");
+    const char * const  REMOVEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "Remove PMH");
+    const char * const  CREATECATEGORY_TEXT     = QT_TRANSLATE_NOOP("PMH", "Create a new category");
+    const char * const  REMOVECATEGORY_TEXT     = QT_TRANSLATE_NOOP("PMH", "Remove category");
+    const char * const  CATEGORYMANAGER_TEXT    = QT_TRANSLATE_NOOP("PMH", "PMHx category manager");
 
 
 }  // End namespace Constants

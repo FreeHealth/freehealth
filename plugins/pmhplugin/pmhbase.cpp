@@ -28,6 +28,8 @@
 /**
   \class PMH::PmhBase
   \brief Provides all read/write access to the PMHx database.
+  No items are deleted in the database, items are putted a trash using the IsValod value. Setting it
+  to false will cause item to be trashed.
 */
 
 #include "pmhbase.h"
@@ -125,6 +127,8 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_MASTER, MASTER_TYPE,          "TYPE_ID",        FieldIsInteger);
     addField(Table_MASTER, MASTER_STATE,         "STATE_ID",       FieldIsInteger);
     addField(Table_MASTER, MASTER_CONFINDEX,     "GLOBAL_CONF_INDEX",FieldIsInteger);
+    addField(Table_MASTER, MASTER_ISVALID,       "VALID",          FieldIsBoolean, "1");
+    addField(Table_MASTER, MASTER_PRIVATE,       "PRIV",           FieldIsBoolean);
     addField(Table_MASTER, MASTER_COMMENT,       "COMMENT",        FieldIsLongText);
 
     addField(Table_EPISODE, EPISODE_ID,            "ID",             FieldIsUniquePrimaryKey);
@@ -134,6 +138,7 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_EPISODE, EPISODE_DATE_END,      "DATE_END",       FieldIsDate);
     addField(Table_EPISODE, EPISODE_CONF_INDEX,    "CONF_INDEX",     FieldIsInteger);
     addField(Table_EPISODE, EPISODE_ICD_CODES,     "XML_ICD",        FieldIsLongText);
+    addField(Table_EPISODE, EPISODE_ISVALID,       "VALID",          FieldIsBoolean, "1");
     addField(Table_EPISODE, EPISODE_COMMENT,       "COMMENT",        FieldIsLongText);
     addField(Table_EPISODE, EPISODE_TRACE_ID,      "TRACE_ID",       FieldIsInteger);
 
@@ -143,12 +148,14 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_CATEGORIES, CATEGORY_ISRISKFACTOR,    "IS_RF",      FieldIsBoolean);
     addField(Table_CATEGORIES, CATEGORY_ISCHONICDISEASE, "IS_CD",      FieldIsBoolean);
     addField(Table_CATEGORIES, CATEGORY_SORT_ID,         "SHORT_ID",   FieldIsInteger);
+    addField(Table_CATEGORIES, CATEGORY_ISVALID,         "VALID",      FieldIsBoolean, "1");
     addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
 
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ID,       "ID",       FieldIsUniquePrimaryKey);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LABEL_ID, "LID",      FieldIsInteger);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LANG,     "LANG",     FieldIsLanguageText);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_VALUE,    "VALUE",    FieldIsShortText);
+    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ISVALID,  "VALID",    FieldIsBoolean);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -278,8 +285,10 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     QHash<int, QString> where;
 
     // Get Master table
+    /** \todo Manage User's Private PMHx */
     where.insert(Constants::MASTER_PATIENT_UID,
                  QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+    where.insert(Constants::MASTER_ISVALID, "=1");
     //    where.insert(Constants::MASTER_USER_UID,
     //                 QString("='%1'").arg(currentUserUuid()));
     req = select(Constants::Table_MASTER, where);
@@ -295,6 +304,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             pmh->setData(PmhData::ConfidenceIndex, query.value(Constants::MASTER_CONFINDEX));
             pmh->setData(PmhData::Comment, query.value(Constants::MASTER_COMMENT));
             pmh->setData(PmhData::CategoryId, query.value(Constants::MASTER_CATEGORY_ID));
+            pmh->setData(PmhData::IsPrivate, query.value(Constants::MASTER_PRIVATE));
             pmh->setData(PmhData::DbOnly_MasterEpisodeId, query.value(Constants::MASTER_EPISODE_ID));
             pmh->setData(PmhData::DbOnly_MasterContactId, query.value(Constants::MASTER_CONTACTS_ID));
             pmhs << pmh;
@@ -309,6 +319,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     for(int i = 0; i < pmhs.count(); ++i) {
         PmhData *pmh = pmhs.at(i);
         where.insert(Constants::EPISODE_MASTER_ID, QString("='%1'").arg(pmh->data(PmhData::Uid).toString()));
+        where.insert(Constants::EPISODE_ISVALID, "=1");
         req = select(Constants::Table_EPISODE, where);
         if (query.exec(req)) {
             while (query.next()) {
@@ -348,9 +359,10 @@ QVector<PmhCategory *> PmhBase::getPmhCategory(const QString &patientUid) const
     QString req;
     QSqlQuery query(database());
     QHash<int, QString> where;
+    where.insert(Constants::CATEGORY_ISVALID, "=1");
 
     // Get Category table
-    req = select(Constants::Table_CATEGORIES);
+    req = select(Constants::Table_CATEGORIES, where);
     if (query.exec(req)) {
         while (query.next()) {
             PmhCategory *cat = new PmhCategory;
@@ -460,6 +472,8 @@ bool PmhBase::savePmhData(PmhData *pmh)
     query.bindValue(Constants::MASTER_CONFINDEX, pmh->data(PmhData::ConfidenceIndex));
     query.bindValue(Constants::MASTER_COMMENT, pmh->data(PmhData::Comment));
     query.bindValue(Constants::MASTER_CONTACTS_ID, QVariant());
+    query.bindValue(Constants::MASTER_ISVALID, pmh->data(PmhData::IsValid).toInt());
+    query.bindValue(Constants::MASTER_PRIVATE, pmh->data(PmhData::IsPrivate).toInt());
     query.bindValue(Constants::MASTER_EPISODE_ID, QVariant());
     if (query.exec()) {
         pmh->setData(PmhData::Uid, query.lastInsertId());
@@ -496,7 +510,9 @@ bool PmhBase::updatePmhData(PmhData *pmh)
                                      << Constants::MASTER_CONFINDEX
                                      << Constants::MASTER_COMMENT
                                      << Constants::MASTER_CONTACTS_ID
-                                     << Constants::MASTER_EPISODE_ID, where));
+                                     << Constants::MASTER_EPISODE_ID
+                                     << Constants::MASTER_ISVALID
+                                     << Constants::MASTER_PRIVATE, where));
     query.bindValue(0, pmh->data(PmhData::Label));
     query.bindValue(1, pmh->data(PmhData::Type));
     query.bindValue(2, pmh->data(PmhData::State));
@@ -505,6 +521,8 @@ bool PmhBase::updatePmhData(PmhData *pmh)
     query.bindValue(5, pmh->data(PmhData::Comment));
     query.bindValue(6, QVariant());
     query.bindValue(7, QVariant());
+    query.bindValue(8, pmh->data(PmhData::IsValid).toInt());
+    query.bindValue(9, pmh->data(PmhData::IsPrivate).toInt());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
     }
@@ -536,6 +554,7 @@ bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
     query.bindValue(Constants::EPISODE_DATE_END, episode->data(PmhEpisodeData::DateEnd));
     query.bindValue(Constants::EPISODE_CONF_INDEX, episode->data(PmhEpisodeData::ConfidenceIndex));
     query.bindValue(Constants::EPISODE_ICD_CODES, episode->data(PmhEpisodeData::IcdXml));
+    query.bindValue(Constants::EPISODE_ISVALID, episode->data(PmhEpisodeData::DbOnly_IsValid).toInt());
     query.bindValue(Constants::EPISODE_COMMENT, episode->data(PmhEpisodeData::Comment));
     query.bindValue(Constants::EPISODE_TRACE_ID, QVariant());
     if (query.exec()) {
@@ -567,13 +586,16 @@ bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
                                      << Constants::EPISODE_LABEL
                                      << Constants::EPISODE_CONF_INDEX
                                      << Constants::EPISODE_COMMENT
-                                     << Constants::EPISODE_ICD_CODES, where));
+                                     << Constants::EPISODE_ICD_CODES
+                                     << Constants::EPISODE_ISVALID, where));
     query.bindValue(0, episode->data(PmhEpisodeData::DateStart));
     query.bindValue(1, episode->data(PmhEpisodeData::DateEnd));
     query.bindValue(2, episode->data(PmhEpisodeData::Label));
     query.bindValue(3, episode->data(PmhEpisodeData::ConfidenceIndex));
     query.bindValue(4, episode->data(PmhEpisodeData::Comment));
     query.bindValue(5, episode->data(PmhEpisodeData::IcdXml));
+    query.bindValue(6, episode->data(PmhEpisodeData::DbOnly_IsValid).toInt());
+
     if (query.exec()) {
         return true;
     } else {
@@ -591,7 +613,7 @@ bool PmhBase::savePmhCategory(PmhCategory *category)
 {
     // save or update ?
     if (!category->data(PmhCategory::DbOnly_Id).isNull()) {
-//        return updatePmhCategory(category);
+        return updatePmhCategory(category);
     }
     // save labels
     if (!savePmhCategoryLabels(category))
@@ -605,6 +627,7 @@ bool PmhBase::savePmhCategory(PmhCategory *category)
     query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(PmhCategory::ThemedIcon));
     query.bindValue(Constants::CATEGORY_ISCHONICDISEASE, QVariant());
     query.bindValue(Constants::CATEGORY_ISRISKFACTOR, QVariant());
+    query.bindValue(Constants::CATEGORY_ISVALID, category->data(PmhCategory::DbOnly_IsValid).toInt());
     query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(PmhCategory::DbOnly_LabelId));
     if (query.exec()) {
         category->setData(PmhEpisodeData::DbOnly_Id, query.lastInsertId());
@@ -613,6 +636,44 @@ bool PmhBase::savePmhCategory(PmhCategory *category)
         LOG_QUERY_ERROR(query);
         return false;
     }
+    return false;
+}
+
+/**
+  \brief Update a PmhCategory pointer to database. If PmhCategory does not already exist in database, PmhCategory is saved.
+  \sa savePmhCategory()
+*/
+bool PmhBase::updatePmhCategory(PmhCategory *category)
+{
+    if (category->data(PmhCategory::DbOnly_Id).isNull()) {
+        return savePmhCategory(category);
+    }
+    // update episode
+//    QSqlQuery query(database());
+//    QHash<int, QString> where;
+//    where.insert(Constants::CATE, QString("=%1").arg(episode->data(PmhEpisodeData::DbOnly_Id).toString()));
+//    query.prepare(prepareUpdateQuery(Constants::Table_EPISODE, QList<int>()
+//                                     << Constants::EPISODE_DATE_START
+//                                     << Constants::EPISODE_DATE_END
+//                                     << Constants::EPISODE_LABEL
+//                                     << Constants::EPISODE_CONF_INDEX
+//                                     << Constants::EPISODE_COMMENT
+//                                     << Constants::EPISODE_ICD_CODES
+//                                     << Constants::EPISODE_ISVALID, where));
+//    query.bindValue(0, episode->data(PmhEpisodeData::DateStart));
+//    query.bindValue(1, episode->data(PmhEpisodeData::DateEnd));
+//    query.bindValue(2, episode->data(PmhEpisodeData::Label));
+//    query.bindValue(3, episode->data(PmhEpisodeData::ConfidenceIndex));
+//    query.bindValue(4, episode->data(PmhEpisodeData::Comment));
+//    query.bindValue(5, episode->data(PmhEpisodeData::IcdXml));
+//    query.bindValue(6, episode->data(PmhEpisodeData::DbOnly_IsValid));
+
+//    if (query.exec()) {
+//        return true;
+//    } else {
+//        LOG_QUERY_ERROR(query);
+//        return false;
+//    }
     return false;
 }
 

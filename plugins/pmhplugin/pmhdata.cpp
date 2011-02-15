@@ -71,6 +71,7 @@ public:
 PmhCategory::PmhCategory() :
         d(new PmhCategoryPrivate)
 {
+    d->m_Data.insert(DbOnly_IsValid, true);
 }
 
 PmhCategory::~PmhCategory()
@@ -150,7 +151,12 @@ QString PmhCategory::label(const QString &lang) const
 
 QStringList PmhCategory::allLanguagesForLabel() const
 {
-    d->m_Labels.keys();
+    return d->m_Labels.keys();
+}
+
+void PmhCategory::clearLabels()
+{
+    d->m_Labels.clear();
 }
 
 void PmhCategory::addPhmData(PmhData *data)
@@ -205,6 +211,7 @@ PmhEpisodeData::PmhEpisodeData() :
 {
     // Default start date is currentDate
     d->m_Data.insert(PmhEpisodeData::DateStart, QDate::currentDate());
+    d->m_Data.insert(PmhEpisodeData::DbOnly_IsValid, true);
 }
 
 PmhEpisodeData::~PmhEpisodeData()
@@ -293,6 +300,7 @@ PmhData::PmhData() :
     // create default values
     populateWithCurrentData();
     d->m_Data.insert(ConfidenceIndex, 5);
+    d->m_Data.insert(IsValid, true);
 }
 
 PmhData::~PmhData()

@@ -56,6 +56,7 @@ public:
         DbOnly_Id = 0,
         DbOnly_LabelId,
         DbOnly_ParentId,
+        DbOnly_IsValid,
         ThemedIcon,
         SortId
     };
@@ -77,6 +78,7 @@ public:
     bool setLabel(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE);
     QString label(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
     QStringList allLanguagesForLabel() const;
+    void clearLabels();
 
     void addPhmData(PmhData *data);
 //    QList<PmhData *> phmDataChildren() const;
@@ -109,6 +111,7 @@ public:
         IcdXml,
         Comment,
         DbOnly_Id,
+        DbOnly_IsValid,
         DbOnly_MasterId,
     };
 
@@ -135,9 +138,11 @@ public:
         Label,
         Type,
         State,
+        IsValid,
         ConfidenceIndex,
         Comment,
         CategoryId,
+        IsPrivate,
         DbOnly_MasterEpisodeId,
         DbOnly_MasterContactId,
     };

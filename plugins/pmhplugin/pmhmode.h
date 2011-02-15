@@ -28,6 +28,7 @@
 #define PMHMODE_H
 
 #include <coreplugin/modemanager/basemode.h>
+#include <pmhplugin/pmhcontextualwidget.h>
 
 #include <QObject>
 class QModelIndex;
@@ -41,7 +42,7 @@ namespace Ui {
 class PmhModeWidget;
 }
 
-class PmhModeWidget : public QWidget
+class PmhModeWidget : public PMH::PmhContextualWidget
 {
     Q_OBJECT
 
@@ -52,6 +53,9 @@ public:
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void onButtonClicked(QAbstractButton *button);
+    void removePmh();
+    void createCategory();
+    void removeCategory();
 
 private:
     void changeEvent(QEvent *e);
