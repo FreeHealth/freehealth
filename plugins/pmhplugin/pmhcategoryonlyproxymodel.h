@@ -32,6 +32,8 @@ public:
 
 private:
     void updateBranch(QModelIndex &rootIndex);
+
+private Q_SLOTS:
     void updateModel();
 
 private:

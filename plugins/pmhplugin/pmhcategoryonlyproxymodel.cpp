@@ -33,6 +33,8 @@ PmhCategoryOnlyModel::PmhCategoryOnlyModel(PmhCategoryModel *parent) :
     d->m_HidePmh = true;
     setSourceModel(parent);
     updateModel();
+    connect(parent, SIGNAL(modelReset()), this, SLOT(updateModel()));
+    connect(parent, SIGNAL(layoutChanged()), this, SLOT(updateModel()));
 }
 
 PmhCategoryOnlyModel::~PmhCategoryOnlyModel()
