@@ -81,6 +81,9 @@ public:
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
     Internal::PmhCategory *pmhCategoryforIndex(const QModelIndex &item) const;
 
+    // Helpers
+    QModelIndex indexForCategoryId(const int id) const;
+
 private:
     Internal::PmhCategoryModelPrivate *d;
 };

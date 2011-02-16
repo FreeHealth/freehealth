@@ -434,6 +434,12 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
         {
             if (index.column()==Label) {
                 return it->label();
+            } else if (index.column()==Id) {
+                if (it->isCategory()) {
+                    return it->pmhCategory()->id();
+                } else {
+                    return it->pmhData()->data(PmhData::Uid);
+                }
             }
             return QVariant();
         }
@@ -636,4 +642,35 @@ Internal::PmhCategory *PmhCategoryModel::pmhCategoryforIndex(const QModelIndex &
     if (it)
         return it->pmhCategory();
     return 0;
+}
+
+static QModelIndex categoryIndexId(const int id, const QModelIndex &parent, const PmhCategoryModel *model)
+{
+    // Test parent
+    if (model->isCategory(parent)) {
+        QModelIndex item = model->index(parent.row(), PmhCategoryModel::Id, parent.parent());
+        if (item.data().toInt() == id) {
+            return model->index(item.row(), 0, item.parent());
+        }
+    }
+    // Test its children
+    for(int i = 0; i < model->rowCount(parent); ++i) {
+        QModelIndex item = model->index(i, 0, parent);
+        QModelIndex ret = categoryIndexId(id, item, model);
+        if (ret.isValid())
+            return model->index(ret.row(), 0, ret.parent());
+    }
+    return QModelIndex();
+}
+
+/** \brief Return the QModelIndex corresponding to the category with the specified \e id, or return an invalid index. */
+QModelIndex PmhCategoryModel::indexForCategoryId(const int id) const
+{
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex ret = categoryIndexId(id, index(i,0), this);
+        if (ret.isValid()) {
+            return ret;
+        }
+    }
+    return QModelIndex();
 }
