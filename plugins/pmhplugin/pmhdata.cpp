@@ -54,8 +54,6 @@ public:
 
     ~PmhCategoryPrivate()
     {
-        qDeleteAll(m_Children);
-        m_Children.clear();
     }
 
 public:
@@ -68,12 +66,14 @@ public:
 }
 }
 
+/** \brief Creates a valid PmhCategory. */
 PmhCategory::PmhCategory() :
         d(new PmhCategoryPrivate)
 {
     d->m_Data.insert(DbOnly_IsValid, true);
 }
 
+/** \brief Destructor of PmhCategory. Children categories are not deleted. */
 PmhCategory::~PmhCategory()
 {
     if (d) {
@@ -82,21 +82,25 @@ PmhCategory::~PmhCategory()
     d = 0;
 }
 
+/** \brief When building a category tree, define the \e parent of the item. Warning, the item is not automatically added to the children of the \e parent. \sa addChild() */
 void PmhCategory::setParent(PmhCategory *parent)
 {
     d->m_Parent = parent;
 }
 
+/** \brief Return the category parent. */
 PmhCategory *PmhCategory::parent() const
 {
     return d->m_Parent;
 }
 
+/** \brief When building a category tree, add the item \e child to the list of children. Warning, adding an item to the children list will not redefine the parent of the \e child. \sa setParent()*/
 void PmhCategory::addChild(PmhCategory *child)
 {
     d->m_Children.append(child);
 }
 
+/** \brief Returns the child number \e number. */
 PmhCategory *PmhCategory::child(int number) const
 {
     if (number < d->m_Children.count()) {
@@ -105,16 +109,19 @@ PmhCategory *PmhCategory::child(int number) const
     return 0;
 }
 
+/** \brief Returns the children categories list of the category. */
 QList<PmhCategory *> PmhCategory::children() const
 {
     return d->m_Children;
 }
 
+/** \brief Returns the children categories list count. */
 int PmhCategory::childCount() const
 {
     return d->m_Children.count();
 }
 
+/** \brief Returns the category index of this category in the parent list of children. */
 int PmhCategory::childNumber() const
 {
     if (d->m_Parent)
@@ -122,6 +129,7 @@ int PmhCategory::childNumber() const
     return 0;
 }
 
+/** \brief Set data \e value for the category for \e ref. */
 bool PmhCategory::setData(const int ref, const QVariant &value)
 {
     if (ref == DbOnly_Id) {
@@ -133,6 +141,7 @@ bool PmhCategory::setData(const int ref, const QVariant &value)
     return true;
 }
 
+/** \brief Return the data for the category for \e ref. */
 QVariant PmhCategory::data(const int ref) const
 {
     return d->m_Data.value(ref);
@@ -159,6 +168,7 @@ void PmhCategory::clearLabels()
     d->m_Labels.clear();
 }
 
+/** \brief Add a PmhData \e data to the category. */
 void PmhCategory::addPhmData(PmhData *data)
 {
     d->m_PmhData << data;
@@ -174,12 +184,14 @@ void PmhCategory::addPhmData(PmhData *data)
 //    return d->m_PmhData.count();
 //}
 
+/** \brief Sort category children according to the lessThan() member. */
 bool PmhCategory::sortChildren()
 {
     qSort(d->m_Children.begin(), d->m_Children.end(), PmhCategory::lessThan);
     return true;
 }
 
+/** \brief Sort category children according to the SortId value. */
 bool PmhCategory::lessThan(const PmhCategory *c1, const PmhCategory *c2)
 {
     return c1->sortId() < c2->sortId();
