@@ -9,7 +9,7 @@ int main (int argc, char * argv[])
 	libPath << a.applicationDirPath()+"/plugins";
 	qDebug() << __FILE__ << QString::number(__LINE__) << " path =" << libPath ;
 	a.setLibraryPaths(libPath);
-	assetsViewer m;
+	AssetsViewer m;
 	m.show();
 	int r = a.exec();
 	return r;

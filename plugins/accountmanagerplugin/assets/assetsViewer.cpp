@@ -18,7 +18,7 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 using namespace Constants;
 */
 
-assetsViewer::assetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
+AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
     ui->setupUi(this);
     //instanciate
     fillModeComboBox();
@@ -29,12 +29,12 @@ assetsViewer::assetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsVi
     
 }
 
-assetsViewer::~assetsViewer(){}
+AssetsViewer::~AssetsViewer(){}
 
-void assetsViewer::recordAsset(){
+void AssetsViewer::recordAsset(){
     QHash<int,QVariant>  hashValues;
-    assetsManager manager;
-    assetsIO as(this);
+    AssetsManager manager;
+    AssetsIO as(this);
     QString userUid;
     int accountId = 0;
     QString label = ui->detailsEdit->text();
@@ -72,13 +72,13 @@ void assetsViewer::recordAsset(){
     }
 }
 
-void assetsViewer::deleteAsset(){
+void AssetsViewer::deleteAsset(){
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
     if(!index.isValid()){
         QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
     int row = index.row(); 
-    assetsIO  asset(this) ;
+    AssetsIO  asset(this) ;
     if (!asset.deleteAsset(row))
     {
     	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset is not deleted."),QMessageBox::Ok);
@@ -88,8 +88,8 @@ void assetsViewer::deleteAsset(){
     }
 }
 
-void assetsViewer::fillModeComboBox(){
-    assetsManager manager;
+void AssetsViewer::fillModeComboBox(){
+    AssetsManager manager;
     QStringList list = manager.getHashForModeComboBox().values();
     ui->modeComboBox->addItems(list);
 }

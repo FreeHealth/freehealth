@@ -3,11 +3,11 @@
 #include <QHash>
 #include <QtCore>
 
-class assetsManager : public QObject {
+class AssetsManager : public QObject {
     Q_OBJECT
     public :
-        assetsManager();
-        ~assetsManager();
+        AssetsManager();
+        ~AssetsManager();
         QHash<int,QVariant> getHashOfValues(       QString & userUid,
                                                    int accountId,
                                                    QString & label,

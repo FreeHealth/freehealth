@@ -7,13 +7,13 @@
 using namespace AccountDB;
 using namespace Constants;
 
-assetsIO::assetsIO(QObject * parent){
+AssetsIO::AssetsIO(QObject * parent){
     m_assetModel = new AssetModel(this);
 }
 
-assetsIO::~assetsIO(){}
+AssetsIO::~AssetsIO(){}
 
-bool assetsIO::insertIntoAssets(QHash<int,QVariant> & hashValues){
+bool AssetsIO::insertIntoAssets(QHash<int,QVariant> & hashValues){
     bool ret = true;
     int rowBefore = m_assetModel->rowCount(QModelIndex());
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
@@ -33,7 +33,7 @@ bool assetsIO::insertIntoAssets(QHash<int,QVariant> & hashValues){
         }
         m_assetModel->submit();
     if (m_assetModel->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning assetsIO : "),trUtf8("Error = ") 
+        QMessageBox::warning(0,trUtf8("Warning AssetsIO : "),trUtf8("Error = ") 
                              + m_assetModel->lastError().text(),
                              QMessageBox::Ok);
         ret = false;
@@ -41,7 +41,7 @@ bool assetsIO::insertIntoAssets(QHash<int,QVariant> & hashValues){
     return ret;
 }
 
-bool assetsIO::deleteAsset(int row){
+bool AssetsIO::deleteAsset(int row){
     bool b = true;
     if (!m_assetModel->removeRow(row,QModelIndex()))
     {

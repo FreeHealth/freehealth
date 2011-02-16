@@ -4,11 +4,11 @@
 using namespace AccountDB;
 using namespace Constants;
 
-assetsManager::assetsManager(){}
+AssetsManager::AssetsManager(){}
 
-assetsManager::~assetsManager(){}
+AssetsManager::~AssetsManager(){}
 
-QHash<int,QVariant> assetsManager::getHashOfValues(QString & userUid,
+QHash<int,QVariant> AssetsManager::getHashOfValues(QString & userUid,
                                                    int accountId,
                                                    QString & label,
                                                    QString & date,
@@ -38,14 +38,14 @@ QHash<int,QVariant> assetsManager::getHashOfValues(QString & userUid,
     return hash;
 }
 
-QHash<int,QString> assetsManager::getHashForModeComboBox(){
+QHash<int,QString> AssetsManager::getHashForModeComboBox(){
     QHash<int,QString> hash;
     hash.insert(1,trUtf8("strait line depreciation"));
     hash.insert(2,trUtf8("declining balance"));
     return hash;
 }
 
-double assetsManager::getResidualValue(QString & dateBegin , double value,int mode,double duration){
+double AssetsManager::getResidualValue(QString & dateBegin , double value,int mode,double duration){
     double residualValue = 0.00;
     switch (mode) {
         case LINEAR_MODE :
@@ -61,7 +61,7 @@ double assetsManager::getResidualValue(QString & dateBegin , double value,int mo
     return residualValue;
 }
 
-double assetsManager::linearCalc(double value , double  duration , QString & date){
+double AssetsManager::linearCalc(double value , double  duration , QString & date){
   QDate currentDate = QDate::currentDate();
   int currDateYear = currentDate.year();
   QDate dateduration = QDate::fromString(date,"yyyy-MM-dd");
@@ -74,7 +74,7 @@ double assetsManager::linearCalc(double value , double  duration , QString & dat
   return yearlyValue;
 }
 
-double assetsManager::decreasingCalc(double  val , double  duration , QString & date){
+double AssetsManager::decreasingCalc(double  val , double  duration , QString & date){
     double     value          = val;
     double      ans             = duration;
     QDate       dateDebut       = QDate::fromString(date,"yyyy-MM-dd");

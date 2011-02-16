@@ -6,11 +6,11 @@ namespace Ui {
     class AssetsViewerWidget;
 }
 
-class assetsViewer : public QWidget {
+class AssetsViewer : public QWidget {
     Q_OBJECT
     public :
-        assetsViewer(QWidget * parent = 0);
-        ~assetsViewer();
+        AssetsViewer(QWidget * parent = 0);
+        ~AssetsViewer();
     private slots :
         void recordAsset();
         void deleteAsset();
