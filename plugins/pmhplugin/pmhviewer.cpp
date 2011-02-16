@@ -77,6 +77,8 @@ public:
         ui->personalLabel->setEnabled(enable);
         ui->typeCombo->setEnabled(enable);
         ui->statusCombo->setEnabled(enable);
+        ui->categoryTreeview->setEnabled(enable);
+        ui->episodeViewer->setEnabled(enable);
     }
 
     void populateUiWithPmh(PmhData *pmh)
@@ -88,7 +90,10 @@ public:
         ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
         ui->makePrivateBox->setChecked(pmh->data(PmhData::IsPrivate).toBool());
         ui->comment->setHtml(pmh->data(PmhData::Comment).toString());
-        // Category
+        // Get category
+        QModelIndex cat = pmhCore()->pmhCategoryModel()->indexForCategoryId(pmh->categoryId());
+        cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapFromSource(cat);
+        ui->categoryTreeview->setCurrentIndex(cat);
 
         // Populate EpisodeView
         ui->episodeViewer->setPmhData(pmh);
@@ -104,8 +109,9 @@ public:
         m_Pmh->setData(PmhData::ConfidenceIndex, ui->confIndexSlider->value());
         m_Pmh->setData(PmhData::Comment, ui->comment->textEdit()->toHtml());
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
-
-//        m_Pmh->setData(PmhData::CategoryId, ui->categoryTreeview);
+        // Get category
+        QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeview->currentIndex());
+        m_Pmh->setData(PmhData::CategoryId, pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent()).data().toInt());
     }
 
 
@@ -142,6 +148,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
 
     // add models to views
     d->ui->categoryTreeview->setModel(pmhCore()->pmhCategoryModel()->categoryOnlyModel());
+    d->ui->categoryTreeview->expandAll();
 }
 
 PmhViewer::~PmhViewer()
