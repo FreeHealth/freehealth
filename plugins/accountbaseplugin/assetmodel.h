@@ -36,6 +36,7 @@
 #define ASSETMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
 
 namespace AccountDB {
 namespace Internal {
@@ -68,6 +69,7 @@ public:
 
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
+    QSqlError lastError();
 
 public Q_SLOTS:
     bool submit();

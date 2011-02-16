@@ -155,3 +155,7 @@ bool AssetModel::isDirty() const
 {
     return d->m_IsDirty;
 }
+
+QSqlError AssetModel::lastError(){
+    return d->m_SqlTable->lastError();
+}
