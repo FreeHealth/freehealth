@@ -153,6 +153,10 @@ const char * const  ICONPENCIL    =  "pencil.png";
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
 
+// categories icons
+const char * const  ICONCATEGORY_ADD  =  "category_add.png";
+const char * const  ICONCATEGORY_REMOVE  =  "category_remove.png";
+
 // menu Users --> MediumSize
 const char * const  ICONUSER          = "user.png";
 const char * const  ICONPERSONAL      = "personal.png";
