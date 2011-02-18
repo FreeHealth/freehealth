@@ -82,6 +82,7 @@ public:
 
     // Helpers
     QModelIndex indexForCategoryId(const int id) const;
+    void updateFontAndColors(const QModelIndex &parent = QModelIndex());
 
 private:
     Internal::PmhCategoryModelPrivate *d;

@@ -58,7 +58,9 @@ public:
         DbOnly_ParentId,
         DbOnly_IsValid,
         ThemedIcon,
-        SortId
+        SortId,
+        IsDisease,
+        IsRiskFactor
     };
 
     PmhCategory();
@@ -81,7 +83,7 @@ public:
     void clearLabels();
 
     void addPhmData(PmhData *data);
-//    QList<PmhData *> phmDataChildren() const;
+    QList<PmhData *> phmDataChildren() const;
 //    void phmDataCount() const;
 
     bool sortChildren();

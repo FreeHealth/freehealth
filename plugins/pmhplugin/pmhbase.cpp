@@ -649,42 +649,39 @@ bool PmhBase::updatePmhCategory(PmhCategory *category)
         return savePmhCategory(category);
     }
     // update episode
-//    QSqlQuery query(database());
-//    QHash<int, QString> where;
-//    where.insert(Constants::CATE, QString("=%1").arg(episode->data(PmhEpisodeData::DbOnly_Id).toString()));
-//    query.prepare(prepareUpdateQuery(Constants::Table_EPISODE, QList<int>()
-//                                     << Constants::EPISODE_DATE_START
-//                                     << Constants::EPISODE_DATE_END
-//                                     << Constants::EPISODE_LABEL
-//                                     << Constants::EPISODE_CONF_INDEX
-//                                     << Constants::EPISODE_COMMENT
-//                                     << Constants::EPISODE_ICD_CODES
-//                                     << Constants::EPISODE_ISVALID, where));
-//    query.bindValue(0, episode->data(PmhEpisodeData::DateStart));
-//    query.bindValue(1, episode->data(PmhEpisodeData::DateEnd));
-//    query.bindValue(2, episode->data(PmhEpisodeData::Label));
-//    query.bindValue(3, episode->data(PmhEpisodeData::ConfidenceIndex));
-//    query.bindValue(4, episode->data(PmhEpisodeData::Comment));
-//    query.bindValue(5, episode->data(PmhEpisodeData::IcdXml));
-//    query.bindValue(6, episode->data(PmhEpisodeData::DbOnly_IsValid));
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::CATEGORY_ID, QString("=%1").arg(category->id()));
+    query.prepare(prepareUpdateQuery(Constants::Table_CATEGORIES, QList<int>()
+                                     << Constants::CATEGORY_ISCHONICDISEASE
+                                     << Constants::CATEGORY_ISRISKFACTOR
+                                     << Constants::CATEGORY_ISVALID
+                                     << Constants::CATEGORY_PARENT
+                                     << Constants::CATEGORY_SORT_ID
+                                     << Constants::CATEGORY_THEMEDICON
+                                     << Constants::CATEGORY_LABEL_ID, where));
+    query.bindValue(0, category->data(PmhCategory::IsDisease).toBool());
+    query.bindValue(1, category->data(PmhCategory::IsRiskFactor).toBool());
+    query.bindValue(2, category->data(PmhCategory::DbOnly_IsValid).toBool());
+    query.bindValue(3, category->data(PmhCategory::DbOnly_ParentId));
+    query.bindValue(4, category->data(PmhCategory::SortId));
+    query.bindValue(5, category->data(PmhCategory::ThemedIcon));
+    query.bindValue(6, category->data(PmhCategory::DbOnly_LabelId));
 
-//    if (query.exec()) {
-//        return true;
-//    } else {
-//        LOG_QUERY_ERROR(query);
-//        return false;
-//    }
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    // update labels
+    savePmhCategoryLabels(category);
+
     return false;
 }
 
 /** \brief Save or update categories labels. */
 bool PmhBase::savePmhCategoryLabels(PmhCategory *category)
 {
-    // save or update ?
-//    if (!category->data(PmhCategory::DbOnly_LabelId).isNull()) {
-//        return updatePmhCategory(episode);
-//    }
-    QSqlQuery query(database());
     // get label_id
     int labelId = -1;
     if (category->data(PmhCategory::DbOnly_LabelId).isNull()) {
@@ -694,6 +691,12 @@ bool PmhBase::savePmhCategoryLabels(PmhCategory *category)
     } else {
         labelId = category->data(PmhCategory::DbOnly_LabelId).toInt();
     }
+    // delete all labels related to this LabelId
+    QHash<int, QString> where;
+    where.clear();
+    where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
+    QSqlQuery query(database());
+    query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
     // save labels
     foreach(const QString &lang, category->allLanguagesForLabel()) {
         query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));

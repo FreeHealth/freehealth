@@ -111,7 +111,10 @@ public:
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
         // Get category
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeview->currentIndex());
-        m_Pmh->setData(PmhData::CategoryId, pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent()).data().toInt());
+        qWarning() << cat.data();
+        cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
+        qWarning() << cat.data();
+        m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
     }
 
 

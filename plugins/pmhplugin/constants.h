@@ -138,9 +138,11 @@ namespace Constants {
 
     // Settings
     const char * const  S_BACKGROUND_CATEGORIES    = "PMHx/ModelBackground/Categories";
-    const char * const  S_BACKGROUND_TEMPLATES     = "PMHx/ModelBackground/PMH";
+    const char * const  S_BACKGROUND_PMH           = "PMHx/ModelBackground/PMH";
     const char * const  S_FOREGROUND_CATEGORIES    = "PMHx/ModelForeground/Categories";
-    const char * const  S_FOREGROUND_TEMPLATES     = "PMHx/ModelForeground/PMH";
+    const char * const  S_FOREGROUND_PMH           = "PMHx/ModelForeground/PMH";
+    const char * const  S_FONT_CATEGORIES          = "PMHx/ModelFont/Categories";
+    const char * const  S_FONT_PMH                 = "PMHx/ModelFont/PMH";
 
     // Contexts, menus and actions
     const char * const  C_PMH_PLUGINS = "PmhContext";

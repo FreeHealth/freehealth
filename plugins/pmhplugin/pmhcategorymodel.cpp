@@ -24,6 +24,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+   \class PMH::PmhCategoryModel
+   \brief General model for the categorized PMHx.
+   Unique instance is available in the PMH::PmhCore.
+ */
+
 #include "pmhcategorymodel.h"
 #include "pmhcategoryonlyproxymodel.h"
 #include "pmhbase.h"
@@ -42,6 +49,7 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QColor>
+#include <QFont>
 
 #include <QDebug>
 
@@ -173,8 +181,6 @@ namespace {
 
 namespace PMH {
 namespace Internal {
-
-
 class PmhCategoryModelPrivate
 {
 public:
@@ -306,20 +312,6 @@ public:
         getPmh();
     }
 
-    void removeCategory(PmhCategory *cat, TreeItem *item)
-    {
-        // Unvalid the category
-        cat->setData(PmhCategory::DbOnly_IsValid, false);
-        for(int i = 0; i < item->childCount(); ++i) {
-            if (item->child(i)->isCategory()) {
-
-            }
-        }
-        // Delete TreeItem
-        // Update database
-        // Delete Category pointer
-    }
-
 public:
     TreeItem *m_Root;
     QVector<PmhData *> m_Pmhs;
@@ -333,7 +325,6 @@ private:
     PmhCategoryModel *q;
 
 };
-
 
 }  // End namespace Internal
 }  // End namespace PMH
@@ -475,6 +466,18 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             }
             return QVariant();
         }
+    case Qt::FontRole :
+        {
+            if (index.column()!=Label)
+                return QVariant();
+            QFont font;
+            if (it->isCategory()) {
+                font.fromString(settings()->value(Constants::S_FONT_CATEGORIES).toString());
+            } else {
+                font.fromString(settings()->value(Constants::S_FONT_PMH).toString());
+            }
+            return font;
+        }
     case Qt::ForegroundRole :
         {
             if (index.column()!=Label)
@@ -482,7 +485,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             if (it->isCategory()) {
                 return QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
             } else {
-                return QColor(settings()->value(Constants::S_FOREGROUND_TEMPLATES, "#000").toString());
+                return QColor(settings()->value(Constants::S_FOREGROUND_PMH, "#000").toString());
             }
             return QVariant();
         }
@@ -494,7 +497,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             if (it->isCategory()) {
                 c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
             } else {
-                c = QColor(settings()->value(Constants::S_BACKGROUND_TEMPLATES, "white").toString());
+                c = QColor(settings()->value(Constants::S_BACKGROUND_PMH, "white").toString());
             }
 //            if (Utils::isDebugCompilation()) {
 //                if (it->isNewlyCreated()) {
@@ -540,18 +543,20 @@ bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, 
 
 Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 {
+    if (isCategory(index)) {
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    }
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-/** \brief Remove PMH or Category. */
+/** \brief Remove PMHx or Categories. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     int max = row+count;
     TreeItem *parentItem = 0;
-    qWarning() << "removeRows" << row << count << parent.data();
 
     for(int i = row; i < max; ++i) {
-        QModelIndex indexToDelete = index(i,0,parent);
+        QModelIndex indexToDelete = index(row,0,parent);
         if (!indexToDelete.isValid())
             continue;
         TreeItem *item = d->getItem(indexToDelete);
@@ -561,13 +566,11 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
         // Item is a PMH
         if (!item->isCategory()) {
             // Get the root index of the PMH
-            qWarning() << "trying to remove PMH" << indexToDelete.data().toString();
             while (true) {
                 if (isCategory(indexToDelete.parent()))
                     break;
                 indexToDelete = indexToDelete.parent();
             }
-            qWarning() << "remove PMH" << indexToDelete.data().toString();
 
             beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
             item = d->getItem(indexToDelete);
@@ -592,8 +595,6 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             endRemoveRows();
         } else {
             // Item is a category
-            qWarning() << "remove Category" << indexToDelete.data().toString() << item->pmhCategory()->label();
-
             // Remove children
             removeRows(0, rowCount(indexToDelete), indexToDelete);
 
@@ -613,37 +614,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             item = 0;
             endRemoveRows();
         }
-
-//        qWarning() << indexToDelete.data().toString() << item->label();
-
-//        if (item) {
-//            if (item->isCategory()) {
-//                PmhCategory *cat = item->pmhCategory();
-//                cat->setData(PmhCategory::DbOnly_IsValid, false);
-//                base()->updatePmhCategory(cat);
-//                d->m_CategoryToItem.remove(cat);
-//            } else {
-//                PmhData *pmh = item->pmhData();
-//                if (pmh) {
-//                    qWarning() << item->label() << pmh;
-//                    if (pmh->data(PmhData::IsValid).toBool()) {
-//                        pmh->setData(PmhData::IsValid, false);
-//                        base()->updatePmhData(pmh);
-//                        if (d->m_Pmhs.contains(pmh))
-//                            d->m_Pmhs.remove(d->m_Pmhs.indexOf(pmh));
-//                    }
-//                }
-//            }
-//            // remove childrens
-//            removeRows(0, rowCount(indexToDelete), indexToDelete);
-
-//            // remove from treeItems
-//            parentItem->removeChild(item);
-//            delete item;
-//            item = 0;
-//        }
     }
-//    endRemoveRows();
     return true;
 }
 
@@ -707,6 +678,7 @@ bool PmhCategoryModel::addPmhCategoryData(PmhCategory *cat)
     return true;
 }
 
+/** \brief Returns the related PmhData pointer related to the QModelIndex \e item. Warning, the pointer should not be deleted. */
 Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) const
 {
     if (!item.isValid())
@@ -718,6 +690,7 @@ Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) co
     return 0;
 }
 
+/** \brief Returns the related PmhCategory pointer related to the QModelIndex \e item. Warning, the pointer should not be deleted. */
 Internal::PmhCategory *PmhCategoryModel::pmhCategoryforIndex(const QModelIndex &item) const
 {
     if (!item.isValid())
@@ -758,4 +731,13 @@ QModelIndex PmhCategoryModel::indexForCategoryId(const int id) const
         }
     }
     return QModelIndex();
+}
+
+/** \brief Call this member when you want views to update their fonts and color fore and background. */
+void PmhCategoryModel::updateFontAndColors(const QModelIndex &parent)
+{
+    Q_EMIT dataChanged(index(parent.row(), 0, parent.parent()), index(parent.row(), columnCount(), parent.parent()));
+    for(int i = 0; i < rowCount(parent); ++i) {
+        updateFontAndColors(index(i,0,parent));
+    }
 }

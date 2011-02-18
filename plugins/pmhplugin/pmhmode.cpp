@@ -133,6 +133,7 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
         ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(true);
         ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
+        return;
     }
 
     switch (ui->buttonBox->standardButton(button)) {
@@ -162,7 +163,9 @@ void PmhModeWidget::removePmh()
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
-    pmhCore()->pmhCategoryModel()->removeRow(item.row(),item.parent());
+    if (pmhCore()->pmhCategoryModel()->isCategory(item))
+        return;
+    pmhCore()->pmhCategoryModel()->removeRow(item.row(), item.parent());
 }
 
 void PmhModeWidget::createCategory()
@@ -170,6 +173,8 @@ void PmhModeWidget::createCategory()
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+    if (!pmhCore()->pmhCategoryModel()->isCategory(item))
+        return;
 }
 
 void PmhModeWidget::removeCategory()
@@ -177,6 +182,7 @@ void PmhModeWidget::removeCategory()
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+    pmhCore()->pmhCategoryModel()->removeRow(item.row(), item.parent());
 }
 
 void PmhModeWidget::changeEvent(QEvent *e)

@@ -133,7 +133,11 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="Views::TreeView" name="categoryTreeview"/>
+        <widget class="Views::TreeView" name="categoryTreeview">
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
+        </widget>
        </item>
       </layout>
      </widget>

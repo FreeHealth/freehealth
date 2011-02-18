@@ -37,6 +37,7 @@
 #include "pmhmode.h"
 #include "pmhbase.h"
 #include "pmhcore.h"
+#include "pmhpreferencespage.h"
 
 #include <utils/log.h>
 
@@ -87,6 +88,7 @@ void PmhPlugin::extensionsInitialized()
     Internal::PmhBase::instance();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    addAutoReleasedObject(new Internal::PmhPreferencesPage(this));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInit()));
 }

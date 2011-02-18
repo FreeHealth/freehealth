@@ -174,10 +174,10 @@ void PmhCategory::addPhmData(PmhData *data)
     d->m_PmhData << data;
 }
 
-//QList<PmhData *> PmhCategory::phmDataChildren() const
-//{
-//    return d->m_PmhData;
-//}
+QList<PmhData *> PmhCategory::phmDataChildren() const
+{
+    return d->m_PmhData;
+}
 
 //void PmhCategory::phmDataCount() const
 //{
