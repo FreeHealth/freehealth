@@ -181,7 +181,6 @@ public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
             m_Root(0),
             m_CategoryOnlyModel(0),
-            m_ShowCategoriesOnly(false),
             q(parent)
     {
         m_Root = new TreeItem;
@@ -190,9 +189,14 @@ public:
 
     ~PmhCategoryModelPrivate()
     {
+        // Delete all TreeItem
         if (m_Root) {
             delete m_Root; m_Root=0;
         }
+        // Delete all PmhData and PmhCategory pointers
+        qDeleteAll(m_Pmhs);
+        m_Pmhs.clear();
+        qDeleteAll(m_Cats);
     }
 
     TreeItem *getItem(const QModelIndex &index) const
@@ -221,6 +225,7 @@ public:
         // Master Item (shows user label)
         item->setPmhData(pmh);
         item->setLabel(pmh->data(PmhData::Label).toString());
+        m_PmhToItems.insert(pmh, item);
 
         // Add type and status as children of the Master Item
         TreeItem *child = new TreeItem(item);
@@ -301,14 +306,28 @@ public:
         getPmh();
     }
 
+    void removeCategory(PmhCategory *cat, TreeItem *item)
+    {
+        // Unvalid the category
+        cat->setData(PmhCategory::DbOnly_IsValid, false);
+        for(int i = 0; i < item->childCount(); ++i) {
+            if (item->child(i)->isCategory()) {
+
+            }
+        }
+        // Delete TreeItem
+        // Update database
+        // Delete Category pointer
+    }
+
 public:
     TreeItem *m_Root;
     QVector<PmhData *> m_Pmhs;
     QVector<PmhCategory *> m_Cats;
     QHash<PmhCategory *, TreeItem *> m_CategoryToItem;
+    QHash<PmhData *, TreeItem *> m_PmhToItems;
     QMultiHash<PmhCategory *, PmhData *> m_Cat_Pmhs;
     PmhCategoryOnlyModel *m_CategoryOnlyModel;
-    bool m_ShowCategoriesOnly;
 
 private:
     PmhCategoryModel *q;
@@ -333,11 +352,6 @@ PmhCategoryModel::~PmhCategoryModel()
     if (d)
         delete d;
     d = 0;
-}
-
-void PmhCategoryModel::setShowOnlyCategories(bool state)
-{
-    d->m_ShowCategoriesOnly = state;
 }
 
 QAbstractProxyModel *PmhCategoryModel::categoryOnlyModel()
@@ -365,12 +379,8 @@ QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &pare
 //         return QModelIndex();
 
      TreeItem *parentItem = d->getItem(parent);
-
-     if (d->m_ShowCategoriesOnly) {
-         if (!parentItem->isCategory()) {
-             return QModelIndex();
-         }
-     }
+     if (!parentItem)
+         return QModelIndex();
 
      TreeItem *childItem = parentItem->child(row);
 
@@ -386,9 +396,12 @@ QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     TreeItem *childItem = d->getItem(index);
+    if (!childItem)
+        return QModelIndex();
+
     TreeItem *parentItem = childItem->parent();
 
-    if (parentItem == d->m_Root)
+    if (parentItem == d->m_Root || !parentItem)
         return QModelIndex();
 
     return createIndex(parentItem->childNumber(), 0, parentItem);
@@ -533,22 +546,35 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 /** \brief Remove PMH or Category. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    beginRemoveRows(parent, row, row+count);
     int max = row+count;
-    TreeItem *parentItem = d->getItem(parent);
+    TreeItem *parentItem = 0;
+    qWarning() << "removeRows" << row << count << parent.data();
 
-    for(int i=row; i < max; ++i) {
-        // Get item
+    for(int i = row; i < max; ++i) {
         QModelIndex indexToDelete = index(i,0,parent);
+        if (!indexToDelete.isValid())
+            continue;
         TreeItem *item = d->getItem(indexToDelete);
-        if (item) {
-            if (item->isCategory()) {
-                PmhCategory *cat = item->pmhCategory();
-                cat->setData(PmhCategory::DbOnly_IsValid, false);
-                base()->updatePmhCategory(cat);
-                d->m_CategoryToItem.remove(cat);
-            } else {
-                PmhData *pmh = item->pmhData();
+        if (!item)
+            continue;
+
+        // Item is a PMH
+        if (!item->isCategory()) {
+            // Get the root index of the PMH
+            qWarning() << "trying to remove PMH" << indexToDelete.data().toString();
+            while (true) {
+                if (isCategory(indexToDelete.parent()))
+                    break;
+                indexToDelete = indexToDelete.parent();
+            }
+            qWarning() << "remove PMH" << indexToDelete.data().toString();
+
+            beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
+            item = d->getItem(indexToDelete);
+            if (!item)
+                continue;
+            PmhData *pmh = item->pmhData();
+            if (pmh) {
                 if (pmh->data(PmhData::IsValid).toBool()) {
                     pmh->setData(PmhData::IsValid, false);
                     base()->updatePmhData(pmh);
@@ -556,46 +582,105 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
                         d->m_Pmhs.remove(d->m_Pmhs.indexOf(pmh));
                 }
             }
-            // remove childrens
-            removeRows(0, rowCount(indexToDelete), indexToDelete);
-
             // remove from treeItems
+            parentItem = d->getItem(indexToDelete.parent());
+            if (!parentItem)
+                continue;
             parentItem->removeChild(item);
             delete item;
             item = 0;
+            endRemoveRows();
+        } else {
+            // Item is a category
+            qWarning() << "remove Category" << indexToDelete.data().toString() << item->pmhCategory()->label();
+
+            // Remove children
+            removeRows(0, rowCount(indexToDelete), indexToDelete);
+
+            beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
+            PmhCategory *cat = item->pmhCategory();
+            cat->setData(PmhCategory::DbOnly_IsValid, false);
+            d->m_CategoryToItem.remove(cat);
+            d->m_Cats.remove(d->m_Cats.indexOf(cat));
+            d->m_Cat_Pmhs.remove(cat);
+            base()->updatePmhCategory(cat);
+            // remove from treeItems
+            parentItem = d->getItem(indexToDelete.parent());
+            if (!parentItem)
+                continue;
+            parentItem->removeChild(item);
+            delete item;
+            item = 0;
+            endRemoveRows();
         }
+
+//        qWarning() << indexToDelete.data().toString() << item->label();
+
+//        if (item) {
+//            if (item->isCategory()) {
+//                PmhCategory *cat = item->pmhCategory();
+//                cat->setData(PmhCategory::DbOnly_IsValid, false);
+//                base()->updatePmhCategory(cat);
+//                d->m_CategoryToItem.remove(cat);
+//            } else {
+//                PmhData *pmh = item->pmhData();
+//                if (pmh) {
+//                    qWarning() << item->label() << pmh;
+//                    if (pmh->data(PmhData::IsValid).toBool()) {
+//                        pmh->setData(PmhData::IsValid, false);
+//                        base()->updatePmhData(pmh);
+//                        if (d->m_Pmhs.contains(pmh))
+//                            d->m_Pmhs.remove(d->m_Pmhs.indexOf(pmh));
+//                    }
+//                }
+//            }
+//            // remove childrens
+//            removeRows(0, rowCount(indexToDelete), indexToDelete);
+
+//            // remove from treeItems
+//            parentItem->removeChild(item);
+//            delete item;
+//            item = 0;
+//        }
     }
-    endRemoveRows();
+//    endRemoveRows();
+    return true;
 }
 
 /**
   \brief Add or modify a PmhData. If the PmhData pointer does not already exists in the model, the data is created, otherwise it is updated.
-  \todo improve this using dataChanged(index, index) ??
 */
 bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
     if (d->m_Pmhs.contains(pmh)) {
-        // update the model
-        for(int i = 0; i < d->m_Root->childCount(); ++i) {
-            TreeItem *item = d->m_Root->child(i);
-            if (item->pmhData() == pmh) {
-                // Remove the row
-                d->m_Root->removeChild(item);
-                delete item;
-                item = 0;
-                // Insert the row
-                item = new TreeItem(d->m_Root);
-                d->pmhToItem(pmh, item);
-                // Send to database
-                base()->savePmhData(pmh);
-                // Reset the model
-                /** \todo improve this */
-                reset();
-                return true;
+        // Update PMH
+        TreeItem *item = d->m_PmhToItems.value(pmh);
+        TreeItem *parentItem = item->parent(); //parent should be a category
+        // Remove the row
+        parentItem->removeChild(item);
+        delete item;
+        item = 0;
+
+        // Insert the row to the right category
+        for(int i=0; i < d->m_Cats.count(); ++i) {
+            PmhCategory *cat = d->m_Cats.at(i);
+            if (cat->id() == pmh->categoryId()) {
+                parentItem = d->m_CategoryToItem.value(cat);
+                break;
             }
         }
+        item = new TreeItem(parentItem);
+        d->pmhToItem(pmh, item);
+        // Send to database
+        base()->savePmhData(pmh);
+        // Reset the model
+        /** \todo improve this */
+//        reset();
+        Q_EMIT layoutChanged();
+
+        return true;
     } else {
-        // save pmh to database
+        // Save PMH to database
         base()->savePmhData(pmh);
         // insert the pmh to the model
         d->pmhToItem(pmh, new TreeItem);

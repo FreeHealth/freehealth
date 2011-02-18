@@ -54,7 +54,6 @@ public:
     ~PmhCategoryModel();
 
     QAbstractProxyModel *categoryOnlyModel();
-    void setShowOnlyCategories(bool state);
     bool isCategory(const QModelIndex &index) const;
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
