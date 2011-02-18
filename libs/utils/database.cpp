@@ -1161,7 +1161,7 @@ QString Database::prepareUpdateQuery(const int tableref)
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for QSqlQuery::prepareDeleteQuery(). Fields are ordered. */
+/**  \brief Return a SQL command usable for DELETE command. Fields are ordered. */
 QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
 {
     QString toReturn;
