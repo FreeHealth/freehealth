@@ -144,6 +144,26 @@ void ListView::setActions(Constants::AvailableActions actions)
 {
     d->m_Actions = actions;
     d->calculateContext();
+    d->m_ExtView->setActions(actions);
+}
+
+void ListView::setCommands(const QStringList &commandsUid)
+{
+    d->m_Actions = 0;
+    d->calculateContext();
+    d->m_ExtView->setCommands(commandsUid);
+}
+
+void ListView::addContext(const int id)
+{
+    d->m_Context->addContext(id);
+}
+
+void ListView::addContexts(const QList<int> &id)
+{
+    for(int i = 0; i < id.count(); ++i) {
+        d->m_Context->addContext(id.at(i));
+    }
 }
 
 void ListView::hideButtons() const

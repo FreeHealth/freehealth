@@ -41,7 +41,7 @@
  * \file tableview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 03 Feb 2011
+ * \date 19 Feb 2011
 */
 
 
@@ -60,6 +60,9 @@ public:
     virtual ~TableView();
 
     void setActions(Constants::AvailableActions actions);
+    void setCommands(const QStringList &commandsUid);
+    void addContext(const int id);
+    void addContexts(const QList<int> &id);
 
     void hideButtons() const;
     void showButtons();

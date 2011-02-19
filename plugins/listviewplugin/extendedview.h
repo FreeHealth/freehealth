@@ -47,6 +47,7 @@ public:
     virtual ~ExtendedView();
 
     void setActions(Constants::AvailableActions actions);
+    void setCommands(const QStringList &commandsUid);
 
     void hideButtons() const;
     void showButtons();

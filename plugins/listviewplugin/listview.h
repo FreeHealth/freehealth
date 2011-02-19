@@ -60,6 +60,9 @@ public:
     virtual ~ListView();
 
     void setActions(Views::Constants::AvailableActions actions);
+    void setCommands(const QStringList &commandsUid);
+    void addContext(const int id);
+    void addContexts(const QList<int> &id);
 
     void hideButtons() const;
     void showButtons();

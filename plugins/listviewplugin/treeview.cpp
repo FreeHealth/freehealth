@@ -38,6 +38,7 @@ using namespace Views;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 
 namespace Views {
@@ -75,7 +76,6 @@ public:
     QWidget *m_Parent;
     Constants::AvailableActions m_Actions;
     ViewContext *m_Context;
-    QToolBar *m_ToolBar;
     QString m_ContextName;
     ExtendedView *m_ExtView;
 };
@@ -114,6 +114,26 @@ void TreeView::setActions(Constants::AvailableActions actions)
 {
     d->m_Actions = actions;
     d->calculateContext();
+    d->m_ExtView->setActions(actions);
+}
+
+void TreeView::setCommands(const QStringList &commandsUid)
+{
+    d->m_Actions = 0;
+    d->calculateContext();
+    d->m_ExtView->setCommands(commandsUid);
+}
+
+void TreeView::addContext(const int id)
+{
+    d->m_Context->addContext(id);
+}
+
+void TreeView::addContexts(const QList<int> &id)
+{
+    for(int i = 0; i < id.count(); ++i) {
+        d->m_Context->addContext(id.at(i));
+    }
 }
 
 void TreeView::hideButtons() const

@@ -75,6 +75,7 @@ public:
     void populateToolbar()
     {
         Core::ActionManager *am = Core::ICore::instance()->actionManager();
+        m_ToolBar->clear();
         if (m_Actions & Constants::AddRemove) {
             Core::Command *cmd = am->command(Core::Constants::A_LIST_ADD);
             m_ToolBar->addAction(cmd->action());
@@ -136,6 +137,18 @@ ExtendedView::~ExtendedView()
 void ExtendedView::setActions(Constants::AvailableActions actions)
 {
     d->m_Actions = actions;
+    d->populateToolbar();
+}
+
+void ExtendedView::setCommands(const QStringList &commandsUid)
+{
+    d->m_Actions = 0;
+    foreach(const QString &uid, commandsUid) {
+        Core::Command *cmd = actionManager()->command(uid);
+        if (cmd)
+            d->m_ToolBar->addAction(cmd->action());
+    }
+    d->m_ToolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
 void ExtendedView::hideButtons() const
