@@ -185,7 +185,7 @@ void ExtendedView::addItem()
     int row = 0;
     int col = 0;
     QModelIndex parentIndex;
-    if (d->m_Parent->currentIndex().isValid()) {
+    if (d->m_Parent->selectionModel()->hasSelection()) {
         row = d->m_Parent->currentIndex().row() + 1;
         col = d->m_Parent->currentIndex().column();
         parentIndex = d->m_Parent->currentIndex().parent();
@@ -210,6 +210,8 @@ void ExtendedView::addItem()
 void ExtendedView::removeItem()
 {
     if (!d->m_Parent->model())
+        return;
+    if (!d->m_Parent->selectionModel()->hasSelection())
         return;
     const QModelIndex &idx = d->m_Parent->currentIndex();
     if (idx.isValid()) {
