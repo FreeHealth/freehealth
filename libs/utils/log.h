@@ -56,7 +56,8 @@ class QTreeWidget;
 #define LOG_QUERY_ERROR_FOR(object, qsqlquery)  Utils::Log::addQueryError(object, qsqlquery,__FILE__,__LINE__)
 #define LOG_QUERY_ERROR(qsqlquery)              Utils::Log::addQueryError(this, qsqlquery,__FILE__,__LINE__)
 
-#define LOG(object, message) Utils::Log::addMessage(object, message)
+#define LOG_FOR(object, message) Utils::Log::addMessage(object, message)
+#define LOG(message) Utils::Log::addMessage(this, message)
 
 
 namespace Utils {

@@ -531,7 +531,7 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
 /** \brief Add a primary key reference to \e tableref \e fieldref.
     \sa createTables(), createTable(), addField(), addTable()
 */
-int Database::addPrimaryKey(const int &tableref, const int &fieldref)
+void Database::addPrimaryKey(const int &tableref, const int &fieldref)
 {
     d->m_PrimKeys.insertMulti(tableref, fieldref);
 }
