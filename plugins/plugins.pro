@@ -18,8 +18,9 @@ SUBDIRS = \
     drugsbase \
     icd \
     pmh \
+    padtools \
+    category \
 #    alerts \
-    padtools
 
 # root plugin
 core.subdir = fmfcoreplugin
@@ -102,3 +103,9 @@ pmh.subdir = pmhplugin
 pmh.depends += core
 pmh.depends += icd
 pmh.depends += listview
+pmh.depends += texteditor
+pmh.depends += category
+
+category.subdir = categoryplugin
+category.depends += core
+category.depends += listview

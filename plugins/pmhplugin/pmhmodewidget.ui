@@ -41,7 +41,7 @@
         <layout class="QHBoxLayout" name="toolBarLayout"/>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView"/>
+        <widget class="Views::TreeView" name="treeView"/>
        </item>
       </layout>
      </widget>
@@ -64,6 +64,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Views::TreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">listviewplugin/treeview.h</header>
+  </customwidget>
   <customwidget>
    <class>PMH::PmhViewer</class>
    <extends>QWidget</extends>

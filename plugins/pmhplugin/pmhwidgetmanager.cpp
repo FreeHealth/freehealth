@@ -28,9 +28,10 @@
 #include "pmhcontextualwidget.h"
 #include "constants.h"
 #include "pmhcreatordialog.h"
-#include "pmhcategorydialog.h"
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
+
+#include <categoryplugin/categorydialog.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -116,7 +117,7 @@ PmhContextualWidget *PmhWidgetManager::currentView() const
 PmhActionHandler::PmhActionHandler(QObject *parent) :
         QObject(parent),
         aAddPmh(0),aRemovePmh(0),
-        aAddCat(0), aRemoveCat(0),
+        aAddCat(0),
         aCategoryManager(0),
         aPmhDatabaseInformations(0),
         m_CurrentView(0)
@@ -167,14 +168,6 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONCATEGORY_ADD));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_NEWCATEGORY, ctx);
     cmd->setTranslations(Constants::CREATECATEGORY_TEXT, Constants::CREATECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
-//    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
-
-    a = aRemoveCat= new QAction(this);
-    a->setObjectName("aRemoveCat");
-    a->setIcon(th->icon(Core::Constants::ICONCATEGORY_REMOVE));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_REMOVECATEGORY, ctx);
-    cmd->setTranslations(Constants::REMOVECATEGORY_TEXT, Constants::REMOVECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
@@ -229,6 +222,7 @@ void PmhActionHandler::updateActions()
 
 void PmhActionHandler::showPmhDatabaseInformations()
 {
+    /** \todo code this : PmhActionHandler::showPmhDatabaseInformations() */
     qWarning() << Q_FUNC_INFO;
 }
 
@@ -240,8 +234,7 @@ void PmhActionHandler::createPmh()
 
 void PmhActionHandler::categoryManager()
 {
-    PmhCategoryDialog dlg(mainWindow());
-//    pmhCore()->pmhCategoryModel()->setShowOnlyCategories(true);
-    dlg.setPmhCategoryModel(pmhCore()->pmhCategoryModel());
+    Category::CategoryDialog dlg(mainWindow());
+    dlg.setCategoryModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::Label);
     dlg.exec();
 }

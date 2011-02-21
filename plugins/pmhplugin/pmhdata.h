@@ -29,6 +29,8 @@
 
 #include <translationutils/constanttranslations.h>
 
+#include <categoryplugin/icategorycontentitem.h>
+
 #include <QVariant>
 
 namespace ICD {
@@ -42,63 +44,6 @@ namespace Internal {
 class PmhData;
 class PmhDataPrivate;
 class PmhEpisodeDataPrivate;
-class PmhCategoryPrivate;
-
-
-//CATEGORY_ID = 0, CATEGORY_PARENT, CATEGORY_LABEL_ID, CATEGORY_ISRISKFACTOR,
-//CATEGORY_ISCHONICDISEASE,CATEGORY_THEMEDICON,
-
-//CATEGORYLABEL_ID = 0, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
-
-class PmhCategory {
-public:
-    enum DataRepresentation {
-        DbOnly_Id = 0,
-        DbOnly_LabelId,
-        DbOnly_ParentId,
-        DbOnly_IsValid,
-        ThemedIcon,
-        SortId,
-        IsDisease,
-        IsRiskFactor
-    };
-
-    PmhCategory();
-    ~PmhCategory();
-
-    void setParent(PmhCategory *parent);
-    PmhCategory *parent() const;
-    void addChild(PmhCategory *child);
-    PmhCategory *child(int number) const;
-    QList<PmhCategory *> children() const;
-    int childCount() const;
-    int childNumber() const;
-
-    bool setData(const int ref, const QVariant &value);
-    QVariant data(const int ref) const;
-
-    bool setLabel(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE);
-    QString label(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
-    QStringList allLanguagesForLabel() const;
-    void clearLabels();
-
-    void addPhmData(PmhData *data);
-    QList<PmhData *> phmDataChildren() const;
-//    void phmDataCount() const;
-
-    bool sortChildren();
-    static bool lessThan(const PmhCategory *c1, const PmhCategory *c2);
-
-    // code beautifying
-    int id() const {return data(DbOnly_Id).toInt();}
-    int parentId() const {return data(DbOnly_ParentId).toInt();}
-    int sortId() const  {return data(SortId).toInt();}
-    QString iconName() const {return data(ThemedIcon).toString();}
-
-private:
-    PmhCategoryPrivate *d;
-};
-
 
 class PmhEpisodeData {
 public:
@@ -130,7 +75,7 @@ private:
 };
 
 
-class PmhData
+class PmhData : public Category::ICategoryContentItem
 {
 public:
     enum DataRepresentation {
@@ -162,10 +107,11 @@ public:
     QList<PmhEpisodeData *> episodes() const;
     PmhEpisodeModel *episodeModel();
 
-    void setCategory(PmhCategory *cat);
 
-    // Code beautifyers
+    // Category::ICategoryContentItem
     int categoryId() const {return data(CategoryId).toInt();}
+    void setCategory(Category::CategoryItem *cat);
+    Category::CategoryItem *category() const;
 
 private:
     PmhDataPrivate *d;

@@ -16,6 +16,8 @@
 #include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/uniqueidmanager.h>
 
+#include <QDebug>
+
 using namespace PMH;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
@@ -65,4 +67,9 @@ PmhContextualWidget::~PmhContextualWidget()
 void PmhContextualWidget::addContexts(const QList<int> &contexts)
 {
     m_Context->addContext(contexts);
+}
+
+QList<int> PmhContextualWidget::contexts() const
+{
+    return m_Context->context();
 }

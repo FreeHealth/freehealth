@@ -40,6 +40,7 @@ namespace Constants {
     const char * const  DB_NAME            = "pmh";
     const char * const  DB_FILENAME        = "pmh.db";
     const char * const  DB_ACTUALVERSION   = "0.1";
+    const char * const  CATEGORY_MIME      = "PMHx";
 
     // Help pages
     const char * const  H_PMH_CREATOR_PAGE  = "";
@@ -154,7 +155,6 @@ namespace Constants {
     const char * const  A_PMH_NEW               = "aNewPmh";
     const char * const  A_PMH_REMOVE            = "aRemovePmh";
     const char * const  A_PMH_NEWCATEGORY       = "aNewCatgeroyPmh";
-    const char * const  A_PMH_REMOVECATEGORY    = "aRemoveCatgeroyPmh";
     const char * const  A_PMH_CATEGORYMANAGER   = "aPmhCatMan";
 
 

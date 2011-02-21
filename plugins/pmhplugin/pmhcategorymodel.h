@@ -27,6 +27,8 @@
 #ifndef PMHCATEGORYMODEL_H
 #define PMHCATEGORYMODEL_H
 
+#include <categoryplugin/icategorymodelhelper.h>
+
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
 
@@ -37,7 +39,7 @@ class PmhData;
 class PmhCategory;
 }  // End namespace Internal
 
-class PmhCategoryModel : public QAbstractItemModel
+class PmhCategoryModel : public Category::ICategoryModelHelper
 {
     Q_OBJECT
 public:
@@ -52,9 +54,6 @@ public:
     // Model
     explicit PmhCategoryModel(QObject *parent = 0);
     ~PmhCategoryModel();
-
-    QAbstractProxyModel *categoryOnlyModel();
-    bool isCategory(const QModelIndex &index) const;
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
@@ -76,13 +75,22 @@ public:
 
     // Data
     bool addPmhData(Internal::PmhData *pmh);
-    bool addPmhCategoryData(Internal::PmhCategory *cat);
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
-    Internal::PmhCategory *pmhCategoryforIndex(const QModelIndex &item) const;
 
     // Helpers
-    QModelIndex indexForCategoryId(const int id) const;
     void updateFontAndColors(const QModelIndex &parent = QModelIndex());
+
+    // Category::ICategoryModelHelper interface
+    bool isCategory(const QModelIndex &item) const;
+    Category::CategoryItem *categoryForIndex(const QModelIndex &item) const;
+    QModelIndex indexForCategory(const Category::CategoryItem *category) const;
+
+    void addCategory(Category::CategoryItem *category);
+    void updateCategory(Category::CategoryItem *category);
+
+public Q_SLOTS:
+    // Connections to Core::IPatient
+    void patientChanged();
 
 private:
     Internal::PmhCategoryModelPrivate *d;

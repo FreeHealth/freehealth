@@ -42,8 +42,8 @@ class CategoryLabelsModel : public QAbstractTableModel
     Q_OBJECT
 public:
     enum DataRepresentation {
-        Label = 0,
-        Lang,
+        Lang = 0,
+        Label,
         ColumnCount
     };
 
@@ -57,6 +57,9 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     // Data
     bool setPmhCategoryData(Internal::PmhCategory *cat);

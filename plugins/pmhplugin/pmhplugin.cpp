@@ -43,12 +43,15 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace PMH;
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 PmhPlugin::PmhPlugin() : mode(0)
 {
@@ -72,6 +75,8 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
         qWarning() << "PmhPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    messageSplash(tr("Initializing PMHx database plugin..."));
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("PmhPlugin");

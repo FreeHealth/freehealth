@@ -29,6 +29,12 @@
 
 #include <utils/database.h>
 
+
+namespace Category {
+class CategoryItem;
+}
+
+
 namespace PMH {
 namespace Internal {
 class PmhBasePrivate;
@@ -52,19 +58,17 @@ public:
     bool init();
 
     // Database getters
-    QVector<PmhData *> getPmh(const QString &patientUid) const;
-    QVector<PmhCategory *> getPmhCategory(const QString &patientUid) const;
-    QList<PmhCategory *> createCategoryTree(const QVector<PmhCategory *> &cats) const;
-    bool linkPmhWithCategory(const QVector<PmhCategory *> &cats, const QVector<PmhData *> &pmhs) const;
+    QVector<PmhData *> getPmh(const QString &patientUid = QString::null) const;
+    QVector<Category::CategoryItem *> getPmhCategory() const;
+    QList<Category::CategoryItem *> createCategoryTree(const QVector<Category::CategoryItem *> &cats) const;
+    bool linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats, const QVector<PmhData *> &pmhs) const;
 
     // Database setters
     bool savePmhData(PmhData *pmh);
     bool updatePmhData(PmhData *pmh);
     bool savePmhEpisodeData(PmhEpisodeData *episode);
     bool updatePmhEpsisodeData(PmhEpisodeData *episode);
-    bool savePmhCategory(PmhCategory *category);
-    bool savePmhCategoryLabels(PmhCategory *category);
-    bool updatePmhCategory(PmhCategory *category);
+    bool savePmhCategory(Category::CategoryItem *category);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

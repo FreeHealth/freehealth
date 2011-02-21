@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout" name="gridLayout">
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -33,14 +33,30 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0" colspan="2">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="patientGroup">
+     <property name="title">
+      <string>Patient</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <item row="0" column="0">
+       <widget class="QLabel" name="patientInfos">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>General information</string>
@@ -122,25 +138,27 @@
      </layout>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="3" column="1">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Category</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QTreeView" name="categoryTreeView">
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="categoryTab">
-      <attribute name="title">
-       <string>Category</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="Views::TreeView" name="categoryTreeview">
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="episodesTab">
       <attribute name="title">
        <string>Episodes</string>
@@ -178,22 +196,6 @@
      </widget>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="patientGroup">
-     <property name="title">
-      <string>Patient</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_6">
-      <item row="0" column="0">
-       <widget class="QLabel" name="patientInfos">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -207,11 +209,6 @@
    <extends>QWidget</extends>
    <header location="global">pmhplugin/pmhepisodeviewer.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Views::TreeView</class>
-   <extends>QTreeView</extends>
-   <header location="global">listviewplugin/treeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

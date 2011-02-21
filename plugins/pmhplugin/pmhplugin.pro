@@ -10,7 +10,6 @@ include(pmhplugin_dependencies.pri)
 HEADERS = pmhplugin.h \
     pmh_exporter.h \
     pmhmode.h \
-    pmhmodel.h \
     pmhcategorymodel.h \
     pmhbase.h \
     constants.h \
@@ -22,15 +21,15 @@ HEADERS = pmhplugin.h \
     pmhepisodeviewer.h \
     pmhwidgetmanager.h \
     pmhcontextualwidget.h \
-    pmhcategorydialog.h \
-    pmhcategoryonlyproxymodel.h \
-    categorylabelsmodel.h \
     pmhpreferencespage.h
+#    pmhmodel.h \
+#    pmhcategorydialog.h \
+#    pmhcategoryonlyproxymodel.h \
+#    categorylabelsmodel.h \
 
 
 SOURCES = pmhplugin.cpp \
     pmhmode.cpp \
-    pmhmodel.cpp \
     pmhcategorymodel.cpp \
     pmhbase.cpp \
     constants.cpp \
@@ -42,10 +41,11 @@ SOURCES = pmhplugin.cpp \
     pmhepisodeviewer.cpp \
     pmhwidgetmanager.cpp \
     pmhcontextualwidget.cpp \
-    pmhcategorydialog.cpp \
-    pmhcategoryonlyproxymodel.cpp \
-    categorylabelsmodel.cpp \
     pmhpreferencespage.cpp
+#    pmhmodel.cpp \
+#    pmhcategorydialog.cpp \
+#    pmhcategoryonlyproxymodel.cpp \
+#    categorylabelsmodel.cpp \
 
 
 OTHER_FILES = PMH.pluginspec
@@ -59,5 +59,5 @@ FORMS += \
     pmhmodewidget.ui \
     pmhcreatordialog.ui \
     pmhepisodeviewer.ui \
-    pmhcategorywidget.ui \
     pmhpreferencespage.ui
+#    pmhcategorywidget.ui \

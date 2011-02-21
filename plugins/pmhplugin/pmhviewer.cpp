@@ -41,13 +41,14 @@
 #include "pmhepisodemodel.h"
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
-#include "pmhcategoryonlyproxymodel.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+
+#include <categoryplugin/categoryonlyproxymodel.h>
 
 #include "ui_pmhviewer.h"
 
@@ -77,7 +78,7 @@ public:
         ui->personalLabel->setEnabled(enable);
         ui->typeCombo->setEnabled(enable);
         ui->statusCombo->setEnabled(enable);
-        ui->categoryTreeview->setEnabled(enable);
+//        ui->categoryTreeView->setEnabled(enable);
         ui->episodeViewer->setEnabled(enable);
     }
 
@@ -91,9 +92,9 @@ public:
         ui->makePrivateBox->setChecked(pmh->data(PmhData::IsPrivate).toBool());
         ui->comment->setHtml(pmh->data(PmhData::Comment).toString());
         // Get category
-        QModelIndex cat = pmhCore()->pmhCategoryModel()->indexForCategoryId(pmh->categoryId());
+        QModelIndex cat = pmhCore()->pmhCategoryModel()->indexForCategory(pmh->category());
         cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapFromSource(cat);
-        ui->categoryTreeview->setCurrentIndex(cat);
+        ui->categoryTreeView->setCurrentIndex(cat);
 
         // Populate EpisodeView
         ui->episodeViewer->setPmhData(pmh);
@@ -110,10 +111,8 @@ public:
         m_Pmh->setData(PmhData::Comment, ui->comment->textEdit()->toHtml());
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
         // Get category
-        QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeview->currentIndex());
-        qWarning() << cat.data();
+        QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
-        qWarning() << cat.data();
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
     }
 
@@ -142,7 +141,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
     d->ui->statusCombo->addItems(Constants::availableStatus());
 
     // adjust tabwidget
-    d->ui->tabWidget->setCurrentWidget(d->ui->categoryTab);
+    d->ui->tabWidget->setCurrentWidget(d->ui->episodesTab);
     d->ui->comment->toogleToolbar(true);
 
     // Manage the Edit Mode
@@ -150,8 +149,10 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
     setShowPatientInformations(d->m_ShowPatient);
 
     // add models to views
-    d->ui->categoryTreeview->setModel(pmhCore()->pmhCategoryModel()->categoryOnlyModel());
-    d->ui->categoryTreeview->expandAll();
+    d->ui->categoryTreeView->setModel(pmhCore()->pmhCategoryModel()->categoryOnlyModel());
+    d->ui->categoryTreeView->expandAll();
+    connect(pmhCore()->pmhCategoryModel()->categoryOnlyModel(), SIGNAL(layoutChanged()),
+            d->ui->categoryTreeView, SLOT(expandAll()));
 }
 
 PmhViewer::~PmhViewer()

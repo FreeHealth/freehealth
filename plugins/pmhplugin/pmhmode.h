@@ -31,10 +31,12 @@
 #include <pmhplugin/pmhcontextualwidget.h>
 
 #include <QObject>
+QT_BEGIN_NAMESPACE
 class QModelIndex;
 class QAbstractButton;
 class QPushButton;
 class QToolBar;
+QT_END_NAMESPACE
 
 namespace PMH {
 namespace Internal {
@@ -53,9 +55,8 @@ public:
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void onButtonClicked(QAbstractButton *button);
-    void removePmh();
     void createCategory();
-    void removeCategory();
+    void removeItem();
 
 private:
     void changeEvent(QEvent *e);

@@ -28,8 +28,12 @@
 #include "pmhcategorymodel.h"
 #include "categorylabelsmodel.h"
 
+#include <listviewplugin/languagecombobox.h>
+#include <listviewplugin/languagecomboboxdelegate.h>
+
 #include "ui_pmhcategorywidget.h"
 
+#include <QGridLayout>
 #include <QDebug>
 
 
@@ -41,7 +45,7 @@ namespace Internal {
 class PmhCategoryDialogPrivate
 {
 public:
-    PmhCategoryDialogPrivate() : m_Widget(0), ui(0), m_Model(0), m_CatLabelsModel(0)
+    PmhCategoryDialogPrivate() : ui(0), m_Model(0), m_CatLabelsModel(0)
     {
     }
 
@@ -53,7 +57,6 @@ public:
     }
 
 public:
-    QWidget *m_Widget;
     Ui::PmhCategoryWidget *ui;
     PmhCategoryModel *m_Model;
     CategoryLabelsModel *m_CatLabelsModel;
@@ -63,13 +66,14 @@ public:
 }
 
 
+
 PmhCategoryDialog::PmhCategoryDialog(QWidget *parent) :
         QDialog(parent), d(new Internal::PmhCategoryDialogPrivate)
 {
-    d->m_Widget = new QWidget(this);
     d->ui = new Ui::PmhCategoryWidget;
-    d->ui->setupUi(d->m_Widget);
+    d->ui->setupUi(this);
     d->ui->treeView->header()->hide();
+    d->ui->treeView->header()->setStretchLastSection(true);
     connect(d->ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -91,7 +95,6 @@ void PmhCategoryDialog::setPmhCategoryModel(PmhCategoryModel *model)
 
 void PmhCategoryDialog::editItem(const QModelIndex &current, const QModelIndex &)
 {
-    qWarning() << Q_FUNC_INFO;
     // get the categoryData pointer from the pmhCategoryModel
     QModelIndex sourceItem = d->m_Model->categoryOnlyModel()->mapToSource(current);
     PmhCategory *cat = d->m_Model->pmhCategoryforIndex(sourceItem);
@@ -103,6 +106,8 @@ void PmhCategoryDialog::editItem(const QModelIndex &current, const QModelIndex &
     }
     d->m_CatLabelsModel->setPmhCategoryData(cat);
     d->ui->tableView->setModel(d->m_CatLabelsModel);
+    d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
+    d->ui->tableView->horizontalHeader()->setStretchLastSection(true);
 }
 
 void PmhCategoryDialog::done(int r)

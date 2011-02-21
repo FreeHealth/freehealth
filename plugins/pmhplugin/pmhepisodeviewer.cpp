@@ -114,7 +114,7 @@ void PmhEpisodeViewer::itemActivated(const QModelIndex &item)
         ICD::IcdCollectionDialog dlg(this);
         // get the XML ICD10 coding
         QString xml = item.model()->index(item.row(), PmhEpisodeModel::IcdXml).data(Qt::EditRole).toString();
-        LOG(this, xml);
+        LOG(xml);
         dlg.setXmlIcdCollection(xml);
         if (dlg.exec()==QDialog::Accepted) {
             // retrieve selected codes to the PmhEpisodeModel

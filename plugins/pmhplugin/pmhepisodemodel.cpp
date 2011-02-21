@@ -207,7 +207,7 @@ bool PmhEpisodeModel::setData(const QModelIndex &index, const QVariant &value, i
 
 bool PmhEpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    beginInsertRows(parent, row, row+count);
+    beginInsertRows(parent, row, row+count-1);
     for(int i = 0; i < count; ++i) {
         d->m_Pmh->insertEpisode(row+i, new Internal::PmhEpisodeData);
     }
@@ -217,7 +217,7 @@ bool PmhEpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool PmhEpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    beginRemoveRows(parent, row, row+count);
+    beginRemoveRows(parent, row, row+count-1);
     // Get episodes to remove
     QVector<Internal::PmhEpisodeData *> toRemove;
     int nbEpisodes = d->m_Pmh->episodes().count();

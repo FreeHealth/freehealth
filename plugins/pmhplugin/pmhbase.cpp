@@ -46,6 +46,8 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 
+#include <categoryplugin/categorycore.h>
+
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -60,6 +62,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
+static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 
 PmhBase *PmhBase::m_Instance = 0;
@@ -286,8 +289,13 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 
     // Get Master table
     /** \todo Manage User's Private PMHx */
-    where.insert(Constants::MASTER_PATIENT_UID,
-                 QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+    if (patientUid.isEmpty())
+        where.insert(Constants::MASTER_PATIENT_UID,
+                     QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+    else
+        where.insert(Constants::MASTER_PATIENT_UID,
+                     QString("='%1'").arg(patientUid));
+
     where.insert(Constants::MASTER_ISVALID, "=1");
     //    where.insert(Constants::MASTER_USER_UID,
     //                 QString("='%1'").arg(currentUserUuid()));
@@ -345,108 +353,26 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     return pmhs;
 }
 
-/** \brief Return flatten list of PmhCategory extracted from database. */
-QVector<PmhCategory *> PmhBase::getPmhCategory(const QString &patientUid) const
+/** \brief Return flatten list of Category::CategoryItem extracted from database. \sa Category::CategoryCore */
+QVector<Category::CategoryItem *> PmhBase::getPmhCategory() const
 {
-    QVector<PmhCategory *> cats;
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(database().connectionName()).arg(database().lastError().text()), __FILE__, __LINE__);
-            return cats;
-        }
-    }
-    QString req;
-    QSqlQuery query(database());
-    QHash<int, QString> where;
-    where.insert(Constants::CATEGORY_ISVALID, "=1");
-
-    // Get Category table
-    req = select(Constants::Table_CATEGORIES, where);
-    if (query.exec(req)) {
-        while (query.next()) {
-            PmhCategory *cat = new PmhCategory;
-            cat->setData(PmhCategory::DbOnly_Id, query.value(Constants::CATEGORY_ID));
-            cat->setData(PmhCategory::DbOnly_LabelId, query.value(Constants::CATEGORY_LABEL_ID));
-            cat->setData(PmhCategory::DbOnly_ParentId, query.value(Constants::CATEGORY_PARENT));
-            cat->setData(PmhCategory::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
-            cat->setData(PmhCategory::SortId, query.value(Constants::CATEGORY_SORT_ID));
-            cats << cat;
-        }
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-
-    // Get Category labels
-    for(int i = 0; i < cats.count(); ++i) {
-        where.clear();
-        PmhCategory *cat = cats.at(i);
-        where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("='%1'").arg(cat->data(PmhCategory::DbOnly_LabelId).toInt()));
-        req = select(Constants::Table_CATEGORY_LABEL, where);
-        if (query.exec(req)) {
-            while (query.next()) {
-                cat->setLabel(query.value(Constants::CATEGORYLABEL_VALUE).toString(),
-                              query.value(Constants::CATEGORYLABEL_LANG).toString());
-            }
-        } else {
-            LOG_QUERY_ERROR(query);
-        }
-        query.finish();
-    }
-    return cats;
+    return categoryCore()->getCategory(Constants::CATEGORY_MIME);
 }
 
-/** \brief Recreate the category tree and return a QList of root categories. */
-QList<PmhCategory *> PmhBase::createCategoryTree(const QVector<PmhCategory *> &cats) const
+/** \brief Recreate the category tree and return a QList of root categories. \sa Category::CategoryCore */
+QList<Category::CategoryItem *> PmhBase::createCategoryTree(const QVector<Category::CategoryItem *> &cats) const
 {
-    QList<PmhCategory *> toReturn;
-    // Reparent categories
-    for(int i = 0; i < cats.count(); ++i) {
-        PmhCategory *cat = cats.at(i);
-        int id = cat->id();
-        // Find all its children
-        for(int j = 0; j < cats.count(); ++j) {
-            PmhCategory *child = cats.at(j);
-            if (child->parentId() == id) {
-                qWarning() << "reparent" << child->label() << "as child of" << cat->label();
-                cat->addChild(child);
-                child->setParent(cat);
-            }
-        }
-        // Find roots categories
-        if (cat->parentId() < 0) {
-            toReturn << cat;
-        }
-        cat->sortChildren();
-    }
-
-    // Sort root items
-    qSort(toReturn.begin(), toReturn.end(), PmhCategory::lessThan);
-
-    return toReturn;
+    return categoryCore()->createCategoryTree(cats);
 }
 
-/** \brief Link PMH with their category. createCateogryTree() must be called first. */
-bool PmhBase::linkPmhWithCategory(const QVector<PmhCategory *> &cats, const QVector<PmhData *> &pmhs) const
+/** \brief Link PMH with their category. \sa Category::CategoryCore */
+bool PmhBase::linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats, const QVector<PmhData *> &pmhs) const
 {
+    QVector<Category::ICategoryContentItem *> contents;
     for(int i = 0; i < pmhs.count(); ++i) {
-        // PMHx has a category ID ?
-        if (pmhs.at(i)->data(PmhData::CategoryId).isNull())
-            continue;
-        int id = pmhs.at(i)->data(PmhData::CategoryId).toInt();
-        if (id==-1)
-            continue;
-
-        // Add PMHx to the category
-        for(int j = 0; j < cats.count(); ++j) {
-            if (cats.at(j)->id() == id) {
-                cats.at(j)->addPhmData(pmhs.at(i));
-                break;
-            }
-        }
+        contents.append(static_cast<Category::ICategoryContentItem*>(pmhs.at(i)));
     }
-    return true;
+    return categoryCore()->linkContentItemWithCategoryItem(cats, contents);
 }
 
 /**
@@ -605,112 +531,10 @@ bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
     return false;
 }
 
-/**
-  \brief Save a PmhCategory pointer to database. If PmhCategory already exists in database, PmhCategory is updated.
-  \sa updatePmhCategory()
-*/
-bool PmhBase::savePmhCategory(PmhCategory *category)
+/** \brief Save or update a Category::CategoryItem pointer to database. \sa Category::CategoryCore */
+bool PmhBase::savePmhCategory(Category::CategoryItem *category)
 {
-    // save or update ?
-    if (!category->data(PmhCategory::DbOnly_Id).isNull()) {
-        return updatePmhCategory(category);
-    }
-    // save labels
-    if (!savePmhCategoryLabels(category))
-        return false;
-    // save category itself
-    QSqlQuery query(database());
-    query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
-    query.bindValue(Constants::CATEGORY_ID, QVariant());
-    query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
-    query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
-    query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(PmhCategory::ThemedIcon));
-    query.bindValue(Constants::CATEGORY_ISCHONICDISEASE, QVariant());
-    query.bindValue(Constants::CATEGORY_ISRISKFACTOR, QVariant());
-    query.bindValue(Constants::CATEGORY_ISVALID, category->data(PmhCategory::DbOnly_IsValid).toInt());
-    query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(PmhCategory::DbOnly_LabelId));
-    if (query.exec()) {
-        category->setData(PmhEpisodeData::DbOnly_Id, query.lastInsertId());
-        return true;
-    } else {
-        LOG_QUERY_ERROR(query);
-        return false;
-    }
-    return false;
-}
-
-/**
-  \brief Update a PmhCategory pointer to database. If PmhCategory does not already exist in database, PmhCategory is saved.
-  \sa savePmhCategory()
-*/
-bool PmhBase::updatePmhCategory(PmhCategory *category)
-{
-    if (category->data(PmhCategory::DbOnly_Id).isNull()) {
-        return savePmhCategory(category);
-    }
-    // update episode
-    QSqlQuery query(database());
-    QHash<int, QString> where;
-    where.insert(Constants::CATEGORY_ID, QString("=%1").arg(category->id()));
-    query.prepare(prepareUpdateQuery(Constants::Table_CATEGORIES, QList<int>()
-                                     << Constants::CATEGORY_ISCHONICDISEASE
-                                     << Constants::CATEGORY_ISRISKFACTOR
-                                     << Constants::CATEGORY_ISVALID
-                                     << Constants::CATEGORY_PARENT
-                                     << Constants::CATEGORY_SORT_ID
-                                     << Constants::CATEGORY_THEMEDICON
-                                     << Constants::CATEGORY_LABEL_ID, where));
-    query.bindValue(0, category->data(PmhCategory::IsDisease).toBool());
-    query.bindValue(1, category->data(PmhCategory::IsRiskFactor).toBool());
-    query.bindValue(2, category->data(PmhCategory::DbOnly_IsValid).toBool());
-    query.bindValue(3, category->data(PmhCategory::DbOnly_ParentId));
-    query.bindValue(4, category->data(PmhCategory::SortId));
-    query.bindValue(5, category->data(PmhCategory::ThemedIcon));
-    query.bindValue(6, category->data(PmhCategory::DbOnly_LabelId));
-
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-
-    // update labels
-    savePmhCategoryLabels(category);
-
-    return false;
-}
-
-/** \brief Save or update categories labels. */
-bool PmhBase::savePmhCategoryLabels(PmhCategory *category)
-{
-    // get label_id
-    int labelId = -1;
-    if (category->data(PmhCategory::DbOnly_LabelId).isNull()) {
-        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORY_LABEL_ID);
-        ++labelId;
-        category->setData(PmhCategory::DbOnly_LabelId, labelId);
-    } else {
-        labelId = category->data(PmhCategory::DbOnly_LabelId).toInt();
-    }
-    // delete all labels related to this LabelId
-    QHash<int, QString> where;
-    where.clear();
-    where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
-    QSqlQuery query(database());
-    query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
-    // save labels
-    foreach(const QString &lang, category->allLanguagesForLabel()) {
-        query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
-        query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
-        query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
-        query.bindValue(Constants::CATEGORYLABEL_LANG, lang);
-        query.bindValue(Constants::CATEGORYLABEL_VALUE, category->label(lang));
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-        query.finish();
-    }
-    return true;
+    return categoryCore()->saveCategory(category);
 }
 
 void PmhBase::onCoreDatabaseServerChanged()

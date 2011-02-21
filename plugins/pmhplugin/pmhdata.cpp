@@ -45,158 +45,6 @@ using namespace Internal;
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
 
-namespace PMH {
-namespace Internal {
-class PmhCategoryPrivate
-{
-public:
-    PmhCategoryPrivate() : m_Parent(0) {}
-
-    ~PmhCategoryPrivate()
-    {
-    }
-
-public:
-    QHash<int, QVariant> m_Data;
-    QHash<QString, QString> m_Labels; //K=lang, V=label
-    PmhCategory *m_Parent;
-    QList<PmhCategory *> m_Children;
-    QList<PmhData *> m_PmhData;
-};
-}
-}
-
-/** \brief Creates a valid PmhCategory. */
-PmhCategory::PmhCategory() :
-        d(new PmhCategoryPrivate)
-{
-    d->m_Data.insert(DbOnly_IsValid, true);
-}
-
-/** \brief Destructor of PmhCategory. Children categories are not deleted. */
-PmhCategory::~PmhCategory()
-{
-    if (d) {
-        delete d;
-    }
-    d = 0;
-}
-
-/** \brief When building a category tree, define the \e parent of the item. Warning, the item is not automatically added to the children of the \e parent. \sa addChild() */
-void PmhCategory::setParent(PmhCategory *parent)
-{
-    d->m_Parent = parent;
-}
-
-/** \brief Return the category parent. */
-PmhCategory *PmhCategory::parent() const
-{
-    return d->m_Parent;
-}
-
-/** \brief When building a category tree, add the item \e child to the list of children. Warning, adding an item to the children list will not redefine the parent of the \e child. \sa setParent()*/
-void PmhCategory::addChild(PmhCategory *child)
-{
-    d->m_Children.append(child);
-}
-
-/** \brief Returns the child number \e number. */
-PmhCategory *PmhCategory::child(int number) const
-{
-    if (number < d->m_Children.count()) {
-        return d->m_Children.at(number);
-    }
-    return 0;
-}
-
-/** \brief Returns the children categories list of the category. */
-QList<PmhCategory *> PmhCategory::children() const
-{
-    return d->m_Children;
-}
-
-/** \brief Returns the children categories list count. */
-int PmhCategory::childCount() const
-{
-    return d->m_Children.count();
-}
-
-/** \brief Returns the category index of this category in the parent list of children. */
-int PmhCategory::childNumber() const
-{
-    if (d->m_Parent)
-        return d->m_Parent->children().indexOf(const_cast<PmhCategory*>(this));
-    return 0;
-}
-
-/** \brief Set data \e value for the category for \e ref. */
-bool PmhCategory::setData(const int ref, const QVariant &value)
-{
-    if (ref == DbOnly_Id) {
-        foreach(PmhData *pmh, d->m_PmhData) {
-            pmh->setData(PmhData::CategoryId, value);
-        }
-    }
-    d->m_Data.insert(ref, value);
-    return true;
-}
-
-/** \brief Return the data for the category for \e ref. */
-QVariant PmhCategory::data(const int ref) const
-{
-    return d->m_Data.value(ref);
-}
-
-bool PmhCategory::setLabel(const QString &label, const QString &lang)
-{
-    d->m_Labels.insert(lang, label);
-    return true;
-}
-
-QString PmhCategory::label(const QString &lang) const
-{
-    return d->m_Labels.value(lang);
-}
-
-QStringList PmhCategory::allLanguagesForLabel() const
-{
-    return d->m_Labels.keys();
-}
-
-void PmhCategory::clearLabels()
-{
-    d->m_Labels.clear();
-}
-
-/** \brief Add a PmhData \e data to the category. */
-void PmhCategory::addPhmData(PmhData *data)
-{
-    d->m_PmhData << data;
-}
-
-QList<PmhData *> PmhCategory::phmDataChildren() const
-{
-    return d->m_PmhData;
-}
-
-//void PmhCategory::phmDataCount() const
-//{
-//    return d->m_PmhData.count();
-//}
-
-/** \brief Sort category children according to the lessThan() member. */
-bool PmhCategory::sortChildren()
-{
-    qSort(d->m_Children.begin(), d->m_Children.end(), PmhCategory::lessThan);
-    return true;
-}
-
-/** \brief Sort category children according to the SortId value. */
-bool PmhCategory::lessThan(const PmhCategory *c1, const PmhCategory *c2)
-{
-    return c1->sortId() < c2->sortId();
-}
-
 
 namespace PMH {
 namespace Internal {
@@ -299,7 +147,7 @@ public:
 public:
     QHash<int, QVariant> m_Data;
     QList<PmhEpisodeData *> m_Episodes;
-    PmhCategory *m_Category;
+    Category::CategoryItem *m_Category;
     PmhEpisodeModel *m_EpisodeModel;
 };
 }
@@ -307,7 +155,7 @@ public:
 
 /** \brief Create a new empty PmhData. */
 PmhData::PmhData() :
-        d(new PmhDataPrivate)
+        Category::ICategoryContentItem(), d(new PmhDataPrivate)
 {
     // create default values
     populateWithCurrentData();
@@ -403,8 +251,13 @@ PmhEpisodeModel *PmhData::episodeModel()
     return d->m_EpisodeModel;
 }
 
-/** \brief Links the PmhData with a PmhCategory. */
-void PmhData::setCategory(PmhCategory *cat)
+/** \brief Links the PmhData with a Category::CategoryItem. */
+void PmhData::setCategory(Category::CategoryItem *cat)
 {
     d->m_Category = cat;
+}
+
+Category::CategoryItem *PmhData::category() const
+{
+    return d->m_Category;
 }
