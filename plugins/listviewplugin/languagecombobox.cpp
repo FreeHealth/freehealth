@@ -33,6 +33,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include <QDir>
 #include <QApplication>
 
@@ -43,7 +45,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 
 using namespace Views;
 using namespace Internal;
-
+using namespace Trans::ConstantTranslations;
 
 namespace {
 class Language;
@@ -68,17 +70,21 @@ static QStringList findQmFiles(const QString& pathToTranslations)
 class Language
 {
 public:
-    Language(const QLocale::Language& language) :
+    Language(const QLocale::Language &language) :
             m_Language(language),
             m_CountryCode("C")
     {
-        QLocale loc(language);
-        if (loc.language() == language)
-            m_CountryCode = loc.name().right(2);
-        else
-            m_CountryCode = "";
-
-        m_DisplayName = qApp->translate("QLocale", qPrintable(QLocale::languageToString(m_Language)));
+        if (language==QLocale::C) {
+            m_DisplayName = tkTr(Trans::Constants::ALL_LANGUAGE_TEXT);
+            m_CountryCode = tkTr(Trans::Constants::ALL_LANGUAGE).toUpper();
+        } else {
+            QLocale loc(language);
+            if (loc.language() == language)
+                m_CountryCode = loc.name().right(2);
+            else
+                m_CountryCode = "";
+            m_DisplayName = qApp->translate("QLocale", qPrintable(QLocale::languageToString(m_Language)));
+        }
     }
 
     bool operator<(const Language &lang) const
@@ -101,6 +107,7 @@ public:
                 m_AllLanguages.push_back(Language(l));
             }
             qSort(m_AllLanguages);
+            m_AllLanguages.prepend(Language(QLocale::C));
         }
         return m_AllLanguages;
     }
@@ -116,7 +123,9 @@ public:
                 continue;
             trLanguages.push_back(Language(locale.language()));
         }
+        trLanguages.append(QLocale::English);
         qSort(trLanguages);
+        trLanguages.prepend(Language(QLocale::C));
         return trLanguages;
     }
 
@@ -263,6 +272,12 @@ QString LanguageComboBox::currentLanguageName() const
     return currentText();
 }
 
+void LanguageComboBox::setCurrentLanguage(const QString &languageIsoCode)
+{
+    QLocale::Language language = QLocale(languageIsoCode).language();
+    setCurrentLanguage(language);
+}
+
 void LanguageComboBox::setCurrentLanguage(QLocale::Language language)
 {
     // column 1 is QLocale::Language
@@ -270,9 +285,6 @@ void LanguageComboBox::setCurrentLanguage(QLocale::Language language)
     QModelIndexList result = d->m_Model->match(start, Qt::DisplayRole, language, 1, Qt::MatchExactly);
     if (!result.isEmpty())
         setCurrentIndex(result.first().row());
-//   else
-//     qDebug() << "Cannot setCurrentLanguage: " << language << m_Model;
-
     comboBoxCurrentIndexChanged(0);
 }
 
