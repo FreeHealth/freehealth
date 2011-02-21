@@ -30,6 +30,12 @@
   \brief Namespace reserved for the User manager plugin.
 */
 
+/**
+  \class UserPlugin::UserManagerPlugin
+  \brief Core::IPlugin class for the user plugin. Owns some global actions (create new user,
+  show user manager...).
+*/
+
 #include "usermanagerplugin.h"
 #include "usermodel.h"
 #include "widgets/usermanager.h"
@@ -44,6 +50,7 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -63,6 +70,9 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 static inline bool identifyUser()
 {
@@ -126,6 +136,8 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    messageSplash(tr("Initializing user manager plugin..."));
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
 
@@ -142,6 +154,8 @@ void UserManagerPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "UserManagerPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing user manager plugin..."));
 
     // add UserPreferences page
     addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
@@ -213,6 +227,7 @@ void UserManagerPlugin::extensionsInitialized()
 
 }
 
+/** \brief Show the user manager session is connected to Core::Constants::A_USERMANAGER command. */
 void UserManagerPlugin::showUserManager()
 {
     if (m_UserManager) {
@@ -224,6 +239,7 @@ void UserManagerPlugin::showUserManager()
     }
 }
 
+/** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */
 void UserManagerPlugin::createUser()
 {
     UserWizard wiz;
@@ -231,6 +247,7 @@ void UserManagerPlugin::createUser()
     wiz.exec();
 }
 
+/** \brief Change current user is connected to a private action. */
 void UserManagerPlugin::changeCurrentUser()
 {
     Internal::UserIdentifier ident;
@@ -245,6 +262,7 @@ void UserManagerPlugin::changeCurrentUser()
                                  .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),"","","");
 }
 
+/** \brief Update available global users actions according to the rights of the current user. */
 void UserManagerPlugin::updateActions()
 {
     if (user()) {

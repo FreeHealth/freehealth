@@ -89,6 +89,8 @@ public:
     // IPatient interface
     void clear() {}
     bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
+    bool hasCurrentUser() const {return m_Model->hasCurrentUser();}
+
 
     QVariant value(const int ref) const {return m_Model->currentUserData(ref);}
     bool setValue(const int ref, const QVariant &value)
