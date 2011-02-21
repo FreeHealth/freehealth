@@ -356,6 +356,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_AppConfigurator) {
         a = aGeneralAppConfigurator = new QAction(this);
         a->setObjectName("aGeneralAppConfigurator");
+        a->setMenuRole(QAction::NoRole);
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
         cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
@@ -968,6 +969,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a = aAppConfigurator = new QAction(this);
         a->setObjectName("aAppConfigurator");
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        a->setMenuRole(QAction::NoRole);
         cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
         menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
