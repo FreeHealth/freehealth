@@ -579,6 +579,8 @@ const char* const   K_PRINT_PRESCRIPTION = QT_TRANSLATE_NOOP("tkConstants", "Ctr
 
 // For multilingual class template
 const char* const ALL_LANGUAGE = "xx";
+const char* const ALL_LANGUAGE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "All languages");
+const char* const ALL_OTHER_LANGUAGES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "All other languages");
 
 
 } // end Constants
