@@ -224,8 +224,8 @@ public:
 
     // manage database scheme (use enums for the int references)
     virtual int addTable(const int &ref, const QString &name);
-
     virtual int addField(const int &tableref, const int &fieldref, const QString &name, TypeOfField type = FieldUndefined, const QString &defaultValue = "NULL");
+    virtual int addPrimaryKey(const int &tableref, const int &fieldref);
 
     virtual bool checkDatabaseScheme();
 

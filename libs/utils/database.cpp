@@ -48,6 +48,8 @@
     addField( Table_TABLE1, TAB1_FIELD1, "FIRST_FIELD_OF_TABLE1", FieldIsInteger, "NULL");
     addField( Table_TABLE1, TAB1_FIELD2, "SECOND_FIELD_OF_TABLE1", FieldIsInteger, "NULL");
     ...
+    addPrimaryKey(Table_TABLE1, TAB1_FIELD1);
+
     addTable( Table_TABLE2, "SECOND_TABLE");
     addField( Table_TABLE2, TAB2_FIELD1, "FIRST_FIELD_OF_TABLE2", FieldIsInteger, "NULL");
     ...
@@ -146,6 +148,7 @@ public:
     QString                    m_ConnectionName;
     QHash<QString, Database::Grants> m_Grants;
     Database::AvailableDrivers m_Driver;
+    QMultiHash<int,int> m_PrimKeys;
 };
 }
 }
@@ -523,6 +526,14 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
     d->m_TypeOfField.insert(ref , type);
     d->m_DefaultFieldValue.insert(ref, defaultValue);
     return d->m_Fields.key(name) - (tableref * 1000);
+}
+
+/** \brief Add a primary key reference to \e tableref \e fieldref.
+    \sa createTables(), createTable(), addField(), addTable()
+*/
+int Database::addPrimaryKey(const int &tableref, const int &fieldref)
+{
+    d->m_PrimKeys.insertMulti(tableref, fieldref);
 }
 
 /** \brief Verify that the dynamically scheme passed is corresponding to the real database scheme. */
@@ -1393,7 +1404,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     return true;
 }
 
-QString DatabasePrivate::getSQLCreateTable(const int & tableref)
+QString DatabasePrivate::getSQLCreateTable(const int &tableref)
 {
     QString toReturn;
     toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
@@ -1401,7 +1412,6 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref)
     qSort(list);
 
     foreach(int i, list) {
-
         // Manage NULL value
         if (m_DefaultFieldValue.value(i) == "NULL") {
             if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
@@ -1460,6 +1470,14 @@ QString DatabasePrivate::getSQLCreateTable(const int & tableref)
         }
     }
     toReturn.chop(3);
+
+    foreach(int field, m_PrimKeys.values(tableref)) {
+        int ref = field + (tableref * 1000);
+        if (m_TypeOfField.value(ref) != Database::FieldIsUniquePrimaryKey) {
+            toReturn.append(QString(",\nPRIMARY KEY(%1)").arg(m_Fields.value(ref)));
+        }
+    }
+
     toReturn.append("\n); \n\n");
 
     if (WarnSqlCommands)
