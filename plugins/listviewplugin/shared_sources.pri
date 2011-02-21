@@ -16,7 +16,8 @@ HEADERS += \
     $${PWD}/constants.h \
     $${PWD}/viewmanager.h \
     $${PWD}/treeview.h \
-    $${PWD}/languagecombobox.h
+    $${PWD}/languagecombobox.h \
+    languagecomboboxdelegate.h
 
 
 #    $${PWD}/listview_p.h \
@@ -34,7 +35,8 @@ SOURCES += \
     $${PWD}/tableview.cpp \
     $${PWD}/viewmanager.cpp \
     $${PWD}/treeview.cpp \
-    $${PWD}/languagecombobox.cpp
+    $${PWD}/languagecombobox.cpp \
+    languagecomboboxdelegate.cpp
 
 #    $${PWD}/listviewbase.cpp \
 #    $${PWD}/simplecategorymodel.cpp \
