@@ -1,0 +1,1 @@
+#include <categoryplugin/categoryitem.h>
