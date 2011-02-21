@@ -17,13 +17,8 @@ HEADERS += \
     $${PWD}/viewmanager.h \
     $${PWD}/treeview.h \
     $${PWD}/languagecombobox.h \
-    languagecomboboxdelegate.h
+    $${PWD}/languagecomboboxdelegate.h
 
-
-#    $${PWD}/listview_p.h \
-#    $${PWD}/listviewbase.h \
-#    $${PWD}/simplecategorymodel.h \
-#    $${PWD}/simplecategorycreator.h
 
 SOURCES += \
     $${PWD}/listview.cpp \
@@ -36,13 +31,8 @@ SOURCES += \
     $${PWD}/viewmanager.cpp \
     $${PWD}/treeview.cpp \
     $${PWD}/languagecombobox.cpp \
-    languagecomboboxdelegate.cpp
-
-#    $${PWD}/listviewbase.cpp \
-#    $${PWD}/simplecategorymodel.cpp \
-#    $${PWD}/simplecategorycreator.cpp
-
+    $${PWD}/languagecomboboxdelegate.cpp
 
 FORMS += \
     $${PWD}/fancytreeview.ui \
- #   $${PWD}/simplecategorycreator.ui
+
