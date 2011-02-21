@@ -46,12 +46,15 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace ICD;
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 QString ICD::IcdPlugin::m_PlugVersion = "";
 
@@ -71,6 +74,8 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
         qWarning() << "IcdPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    messageSplash(tr("Initializing ICD10 plugin..."));
 
     m_PlugVersion = pluginSpec()->version();
 

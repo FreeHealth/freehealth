@@ -62,8 +62,6 @@
 #include <fmfcoreplugin/coreimpl.h>
 #include <fmfcoreplugin/commandlineparser.h>
 
-#include <usermanagerplugin/usermodel.h>
-
 #include <patientbaseplugin/patientbar.h>
 #include <patientbaseplugin/patientsearchmode.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
@@ -102,7 +100,8 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
@@ -215,11 +214,9 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 void MainWindow::extensionsInitialized()
 {
     // First check if there is a logged user
-    if (!userModel()->hasCurrentUser()) {
+    if (!user()->hasCurrentUser()) {
         return;
     }
-
-//    finishSplash(this);
 
     if (settings()->firstTimeRunning()) {
         if (!applicationConfiguratorWizard()) {
@@ -230,8 +227,6 @@ void MainWindow::extensionsInitialized()
     }
 
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
-    raise();
-    show();
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
@@ -266,16 +261,13 @@ MainWindow::~MainWindow()
 //    }
 }
 
+/** \brief Post core initialization of MainWindow. */
 void MainWindow::postCoreInitialization()
 {
-    // Manage current user
-    on_currentUser_Changed();
-    connect(userModel(), SIGNAL(userConnected(QString)), this, SLOT(on_currentUser_Changed()));
-    connect(userModel(), SIGNAL(userDocumentsChanged()), this, SLOT(on_currentUser_Changed()));
-
-    // Connect this tab with the patientsearchmode
-    connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
-            this, SLOT(setCurrentPatient(QModelIndex)));
+    // Manage current user and patient
+    onCurrentUserChanged();
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -288,44 +280,37 @@ void MainWindow::postCoreInitialization()
     formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
     // END TEST
 
+    theme()->finishSplashScreen(this);
+    raise();
+    show();
+
     // clear the focus of the mainwin so that the lineeditbuton show the tooltip
     statusBar()->setFocus();
 }
 
-void MainWindow::on_currentUser_Changed()
+/** \brief Slot connected to Core::IUser::userChanged().*/
+void MainWindow::onCurrentUserChanged()
 {
-    patientModel()->setCurrentPatient(patientModel()->index(0,0));
-    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
-
     // Change window title
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
-                   userModel()->currentUserData(Core::IUser::FullName).toString());
+                   user()->value(Core::IUser::FullName).toString());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
 }
 
-void MainWindow::setCurrentPatient(const QModelIndex &index)
+/** \brief  Define the current patient to different structure such as Form::FormManager, Form::EpisodeModel.*/
+void MainWindow::onCurrentPatientChanged()
 {
-    // Inform Patient Patient Selector
-    /** \todo Patient Selector should be autoconnected to patient model and current changed */
-    Patients::PatientWidgetManager::instance()->selector()->setSelectedPatient(index);
-
     // Activate Patient files mode
     formManager()->activateMode();
 
     // Store the uuids of the patient in the recent manager
-    const QString &uuid = patientModel()->index(index.row(), Core::IPatient::Uid).data().toString();
+    const QString &uuid = patient()->data(Core::IPatient::Uid).toString();
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
 
     // inform formplaceholder; episodemodel and patient model
     episodeModel()->setCurrentPatient(uuid);
     formManager()->setCurrentPatient(uuid);
-    patientModel()->setCurrentPatient(index);
-}
-
-QString MainWindow::currentPatient() const
-{
-    return m_RecentPatients->currentFile();
 }
 
 /** \brief Close the main window and the application */
@@ -356,12 +341,14 @@ void MainWindow::updateCheckerEnd()
 //    delete statusBar();
 }
 
+/** \brief Load a patient XML file into the FormManager. */
 void MainWindow::openPatientFormsFile()
 {
     /** \todo Save patient forms file to database */
     loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
 }
 
+/** \brief Load a patient XML file into the FormManager. */
 bool MainWindow::openFile()
 {
     // Get all IFormIO from pluginsmanager
@@ -388,6 +375,7 @@ bool MainWindow::openFile()
     return true;
 }
 
+/** \brief Load a patient XML file into the FormManager using the IFormIO objects \e iolist. */
 bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
     if (filename.isEmpty())
@@ -407,6 +395,7 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
     return true;
 }
 
+/** \brief Create a new patient. \sa Patients::PatientCreatorWizard */
 bool MainWindow::createNewPatient()
 {
     Patients::PatientCreatorWizard wiz(this);
@@ -496,7 +485,7 @@ void MainWindow::openRecentPatient()
     // get the QModelIndex corresponding to the uuid
     patientModel()->setFilter("", "", uuid, Patients::PatientModel::FilterOnUuid);
     QModelIndex index = patientModel()->index(0,0);
-    setCurrentPatient(index);
+    patientModel()->setCurrentPatient(index);
 }
 
 /** \brief Reads main window's settings */
@@ -518,6 +507,7 @@ void MainWindow::readSettings()
     statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
 }
 
+/** \brief Write main window's settings */
 void MainWindow::writeSettings()
 {
     settings()->saveState(this);
@@ -532,15 +522,7 @@ void MainWindow::writeSettings()
     settings()->sync();
 }
 
-/** \obsolete */
-void MainWindow::createStatusBar()
-{
-    statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
-}
-
-/**
-  \brief Open the preferences dialog
-*/
+/** \brief Open the preferences dialog */
 bool MainWindow::applicationPreferences()
 {
     Core::SettingsDialog dlg(this);
@@ -548,6 +530,7 @@ bool MainWindow::applicationPreferences()
     return true;
 }
 
+/** \brief Open the application global configurator dialog. \sa MainWindow::AppConfigWizard */
 bool MainWindow::applicationConfiguratorWizard()
 {
     AppConfigWizard wiz(this);

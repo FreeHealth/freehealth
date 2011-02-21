@@ -54,6 +54,11 @@ void PatientModelWrapper::init()
 {
 }
 
+QModelIndex PatientModelWrapper::currentPatientIndex() const
+{
+    return m_Model->currentPatient();
+}
+
 QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -80,7 +85,16 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-//bool PatientModelWrapper::setValue(const int ref, const QVariant &value)
+QVariant PatientModelWrapper::data(int column) const
+{
+    return m_Model->index(m_Model->currentPatient().row(), column).data();
+}
+
+bool PatientModelWrapper::setValue(int ref, const QVariant &value)
+{
+    return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);
+}
+
 bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value, int role)
 {
     qWarning() << " PatientModelWrapper::setValue" << item.column() << value;

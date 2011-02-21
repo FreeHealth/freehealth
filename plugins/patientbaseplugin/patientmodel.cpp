@@ -288,12 +288,19 @@ void PatientModel::changeUserUuid(const QString &uuid)
     d->refreshFilter();
 }
 
+/**
+  \brief Set the current patient according to its QModelIndex \e index.
+  A signal \e patientChanged() is emitted when setting a new current patient.
+  \sa Core::IPatient::currentPatientChanged()
+ */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
-    if (index == m_CurrentPatient)
+    if (index == m_CurrentPatient) {
         return;
+    }
     m_CurrentPatient = index;
     Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+    LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
 }
 
 int PatientModel::rowCount(const QModelIndex &) const

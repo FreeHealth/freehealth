@@ -39,11 +39,15 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 
 using namespace DrugsDB;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 DrugsBasePlugin::DrugsBasePlugin()
 {
@@ -67,8 +71,7 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-//    DrugsDatabaseSelector::instance();
-//    DrugsDatabaseSelector::instance()->getAllDatabaseInformations();
+    messageSplash(tr("Initializing drugs database plugin..."));
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");

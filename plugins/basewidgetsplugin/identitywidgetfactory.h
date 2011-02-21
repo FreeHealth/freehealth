@@ -89,7 +89,7 @@ public:
 
 public Q_SLOTS:
     void retranslate();
-    void setCurrentPatient(const QModelIndex &index);
+    void onCurrentPatientChanged();
 
 public:
     Patients::IdentityWidget *m_Identity;

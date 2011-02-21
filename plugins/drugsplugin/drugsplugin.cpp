@@ -48,6 +48,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
@@ -58,6 +59,8 @@
 
 using namespace DrugsWidget::Internal;
 
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 DrugsPlugin::DrugsPlugin() :
@@ -118,6 +121,8 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Q_UNUSED(errorMessage);
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
+
+    messageSplash(tr("Initializing drugs widgets plugin..."));
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");

@@ -86,13 +86,14 @@ public:
     void setSelectedPatient(const QModelIndex &index);
 
 
-Q_SIGNALS:
-    void patientSelected(const QString &uuid);
-    void patientSelected(const QModelIndex &index);
+//Q_SIGNALS:
+//    void patientSelected(const QString &uuid);
+//    void patientSelected(const QModelIndex &index);
 
 private Q_SLOTS:
     void changeIdentity(const QModelIndex &current, const QModelIndex &previous);
     void refreshFilter(const QString &);
+    void onPatientSelected(const QModelIndex &index);
 
 protected:
 //    void changeEvent(QEvent *e);

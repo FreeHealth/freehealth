@@ -61,8 +61,13 @@ public:
     // IPatient interface
     void clear() {}
     bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
+    QModelIndex currentPatientIndex() const;
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(int column) const;
+
+    /** \todo remove this and use setData instead **/
+    virtual bool setValue(int ref, const QVariant &value);
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 

@@ -41,6 +41,7 @@
 #include "patientbasepreferencespage.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/modemanager/modemanager.h>
 
@@ -52,6 +53,8 @@
 
 using namespace Patients;
 using namespace Internal;
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
@@ -85,6 +88,8 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
         qWarning() << "PatientBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    messageSplash(tr("Initializing patients database plugin..."));
 
     // Add Translators
     Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");

@@ -43,12 +43,15 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QWidget>
 #include <QDebug>
 
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 using namespace Form;
 using namespace Internal;
@@ -79,6 +82,8 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         qWarning() << "FormManagerPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    messageSplash(tr("Initializing form manager plugin..."));
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");

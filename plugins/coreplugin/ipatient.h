@@ -129,11 +129,13 @@ public:
     int	columnCount(const QModelIndex & = QModelIndex()) const {return NumberOfColumns;}
     int	rowCount(const QModelIndex & = QModelIndex()) const {return 1;}
 
+    virtual QModelIndex currentPatientIndex() const = 0;
+
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const = 0;
-    virtual QVariant data(int column) const {return data(index(0, column));}
+    virtual QVariant data(int column) const = 0;
 
     /** \todo remove this and use setData instead **/
-    virtual bool setValue(int ref, const QVariant &value) {return setData(index(0,ref), value);}
+    virtual bool setValue(int ref, const QVariant &value) = 0;
 
     virtual QString toXml() const = 0;
     virtual bool fromXml(const QString &xml) = 0;

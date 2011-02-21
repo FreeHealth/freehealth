@@ -155,7 +155,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     // Some connections
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
-    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SIGNAL(patientSelected(QModelIndex)));
+    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 }
 
 PatientSelector::~PatientSelector()
@@ -257,6 +257,12 @@ void PatientSelector::refreshFilter(const QString &)
     }
     d->m_Model->setFilter(name, firstname);
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
+}
+
+void PatientSelector::onPatientSelected(const QModelIndex &index)
+{
+    // Inform Core::IPatient model wrapper
+    PatientModel::activeModel()->setCurrentPatient(index);
 }
 
 //void PatientSelector::changeEvent(QEvent *e)

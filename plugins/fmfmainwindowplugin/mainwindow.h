@@ -84,14 +84,12 @@ public:
     void refreshPatient() const;
     void readSettings();
     void writeSettings();
-    void createStatusBar();
     QStatusBar *statusBar();
-    QString currentPatient() const;
 
 public Q_SLOTS:
     void postCoreInitialization();
-    void on_currentUser_Changed();
-    void setCurrentPatient(const QModelIndex &index);
+    void onCurrentUserChanged();
+    void onCurrentPatientChanged();
 
     // Interface of MainWidowActionHandler
 //    bool newFile();

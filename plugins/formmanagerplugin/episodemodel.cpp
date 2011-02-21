@@ -131,7 +131,7 @@ private:
 };
 
 
-/** \todo create an Utils::GenericTreeItem \sa TemplateModel */
+/** \todo create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel */
 class TreeItem
 {
 public:

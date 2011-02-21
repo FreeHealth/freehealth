@@ -46,10 +46,15 @@
 
 #include <formmanagerplugin/iformitem.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <translationutils/constanttranslations.h>
 
 using namespace BaseWidgets;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 IdentityWidgetFactory::IdentityWidgetFactory(QObject *parent) :
         IFormWidgetFactory(parent)
@@ -143,8 +148,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     row = 1;
     col = 0;
 
-    connect(Patients::PatientWidgetManager::instance()->selector(), SIGNAL(patientSelected(QModelIndex)),
-            this, SLOT(setCurrentPatient(QModelIndex)));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
     // create itemdata
     IdentityWidgetData *datas = new IdentityWidgetData(m_FormItem);
@@ -168,9 +172,9 @@ void IdentityFormWidget::addWidgetToContainer(IFormWidget *widget)
     i++;
 }
 
-void IdentityFormWidget::setCurrentPatient(const QModelIndex &index)
+void IdentityFormWidget::onCurrentPatientChanged()
 {
-    m_Identity->setCurrentIndex(index);
+    m_Identity->setCurrentIndex(patient()->currentPatientIndex());
 }
 
 void IdentityFormWidget::retranslate()

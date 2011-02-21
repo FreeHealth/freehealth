@@ -131,6 +131,7 @@ public:
 
     virtual void clear() = 0;
     virtual bool has(const int ref) const = 0;
+    virtual bool hasCurrentUser() const = 0;
 
     virtual QVariant value(const int ref) const = 0;
     virtual bool setValue(const int ref, const QVariant &value) = 0;
