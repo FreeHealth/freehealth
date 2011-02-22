@@ -46,18 +46,6 @@ QT_END_NAMESPACE
 namespace Views {
 namespace Internal {
 class FancyTreeViewPrivate;
-
-class DeselectableTreeView : public QTreeView
-{
-public:
-    DeselectableTreeView(QWidget *parent) : QTreeView(parent) {}
-
-private:
-    void mousePressEvent(QMouseEvent *event);
-
-};
-
-
 }  // End namespace Internal
 
 namespace Ui {

@@ -18,7 +18,7 @@
     <widget class="Utils::QButtonLineEdit" name="searchLine"/>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="Views::Internal::DeselectableTreeView" name="treeView">
+    <widget class="Views::DeselectableTreeView" name="treeView">
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -46,9 +46,9 @@
    <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>Views::Internal::DeselectableTreeView</class>
+   <class>Views::DeselectableTreeView</class>
    <extends>QTreeView</extends>
-   <header location="global">listviewplugin/fancytreeview.h</header>
+   <header location="global">listviewplugin/deselectabletreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

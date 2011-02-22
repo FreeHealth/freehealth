@@ -27,11 +27,11 @@
 #define TREEVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
+#include <listviewplugin/deselectabletreeview.h>
 #include <listviewplugin/extendedview.h>
 #include <listviewplugin/constants.h>
 
 #include <QWidget>
-#include <QTreeView>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
 #include <QFlags>
@@ -41,7 +41,7 @@
  * \file treeview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 13 Feb 2011
+ * \date 22 Feb 2011
 */
 
 
@@ -50,7 +50,7 @@ namespace Internal {
 class TreeViewPrivate;
 }
 
-class LISTVIEW_EXPORT TreeView : public QTreeView
+class LISTVIEW_EXPORT TreeView : public DeselectableTreeView
 {
     Q_OBJECT
     friend class TreeViewPrivate;

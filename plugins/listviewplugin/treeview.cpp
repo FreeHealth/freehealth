@@ -86,7 +86,7 @@ public:
 
 /** \brief Constructor */
 TreeView::TreeView(QWidget *parent, Constants::AvailableActions actions) :
-        QTreeView(parent),
+        DeselectableTreeView(parent),
         d(0)
 {
     static int handler = 0;
@@ -155,7 +155,7 @@ void TreeView::addItem()
 {
     qWarning() << "TreeView::addItem()";
     setFocus();
-    d->m_ExtView->addItem();
+    d->m_ExtView->addItem(true);
 }
 
 void TreeView::removeItem()

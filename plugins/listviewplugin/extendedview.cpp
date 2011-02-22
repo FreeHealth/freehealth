@@ -176,7 +176,12 @@ QMenu *ExtendedView::getContextMenu()
     return pop;
 }
 
-void ExtendedView::addItem()
+/**
+  \brief Add a row to the model in two ways: list way, tree way.
+  In the list way \e hasChildOfCurrentIndex is \e false, the new item is added under the current item.\n
+  In the tree way \e hasChildOfCurrentIndex is \e true, the new item is added as a child of the current item.
+*/
+void ExtendedView::addItem(bool hasChildOfCurrentIndex)
 {
     if (!d->m_Parent->model())
         return;
@@ -186,9 +191,13 @@ void ExtendedView::addItem()
     int col = 0;
     QModelIndex parentIndex;
     if (d->m_Parent->selectionModel()->hasSelection()) {
-        row = d->m_Parent->currentIndex().row() + 1;
-        col = d->m_Parent->currentIndex().column();
-        parentIndex = d->m_Parent->currentIndex().parent();
+        if (hasChildOfCurrentIndex) {
+            parentIndex = d->m_Parent->currentIndex();
+        } else {
+            row = d->m_Parent->currentIndex().row() + 1;
+            col = d->m_Parent->currentIndex().column();
+            parentIndex = d->m_Parent->currentIndex().parent();
+        }
     } else {
         row = d->m_Parent->model()->rowCount();
         if (row<0)

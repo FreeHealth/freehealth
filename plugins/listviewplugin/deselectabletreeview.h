@@ -23,50 +23,36 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef EXTENDEDVIEW_H
-#define EXTENDEDVIEW_H
+#ifndef DESELECTABLETREEVIEW_H
+#define DESELECTABLETREEVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
-#include <listviewplugin/constants.h>
+#include <QTreeView>
+#include <QMouseEvent>
 
-#include <QObject>
-
-class QAbstractItemView;
-class QMenu;
-class QPoint;
+#include <QDebug>
 
 namespace Views {
-namespace Internal {
-class ExtendedViewPrivate;
-}
 
-class LISTVIEW_EXPORT ExtendedView
+class LISTVIEW_EXPORT DeselectableTreeView : public QTreeView
 {
 public:
-    ExtendedView(QAbstractItemView *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
-    virtual ~ExtendedView();
-
-    void setActions(Constants::AvailableActions actions);
-    void setCommands(const QStringList &commandsUid);
-
-    void hideButtons() const;
-    void showButtons();
-    void useContextMenu(bool state = true);
-
-    virtual QMenu *getContextMenu();
-    virtual void contextMenu(const QPoint &);
-    virtual void addItem(bool hasChildOfCurrentIndex = false);
-    virtual void removeItem();
-    virtual void moveDown();
-    virtual void moveUp();
-    virtual void on_edit_triggered();
+    DeselectableTreeView(QWidget *parent) : QTreeView(parent) {}
+    virtual ~DeselectableTreeView() {}
 
 private:
-    Internal::ExtendedViewPrivate *d;
-};
+    virtual void mousePressEvent(QMouseEvent *event)
+    {
+        QModelIndex item = indexAt(event->pos());
+        bool selected = selectionModel()->isSelected(indexAt(event->pos()));
+        QTreeView::mousePressEvent(event);
+        if (selected)
+            selectionModel()->select(item, QItemSelectionModel::Deselect);
+    }
 
+};
 
 }  // End namespace Views
 
 
-#endif // EXTENDEDVIEW_H
+#endif // DESELECTABLETREEVIEW_H

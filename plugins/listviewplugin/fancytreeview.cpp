@@ -93,12 +93,6 @@ public:
     QAction *aSave, *aAddRow, *aRemoveRow, *aRevert;
 };
 
-void DeselectableTreeView::mousePressEvent(QMouseEvent *event)
-{
-    clearSelection();
-    QTreeView::mousePressEvent(event);
-}
-
 }
 }
 
