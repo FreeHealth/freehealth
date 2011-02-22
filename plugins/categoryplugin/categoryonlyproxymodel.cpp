@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "categoryonlyproxymodel.h"
 #include "icategorymodelhelper.h"
+#include "categoryitem.h"
 
 #include <QItemSelectionRange>
 #include <QDebug>
@@ -170,6 +171,23 @@ QModelIndex CategoryOnlyProxyModel::mapFromSource(const QModelIndex &sourceIndex
 //{
 //    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 //}
+
+bool CategoryOnlyProxyModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    return true;
+}
+
+bool CategoryOnlyProxyModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    qWarning() << Q_FUNC_INFO;
+    for(int i=0; i < count; ++i) {
+        Category::CategoryItem *cat = new Category::CategoryItem;
+        cat->setParent(d->m_Model->categoryForIndex(mapToSource(parent)));
+        cat->setData(CategoryItem::DbOnly_Mime, d->m_Model->mime());
+        d->m_Model->addCategory(cat);
+    }
+    return true;
+}
 
 void CategoryOnlyProxyModel::hidePmh(bool hide)
 {

@@ -51,10 +51,14 @@ public:
     QModelIndex parent(const QModelIndex &child) const;
     QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
     QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+
 //    QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
 //    QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
 
 //    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 //    Qt::ItemFlags flags(const QModelIndex &index) const;
 
