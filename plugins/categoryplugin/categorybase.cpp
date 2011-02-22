@@ -301,7 +301,7 @@ QList<CategoryItem *> CategoryBase::createCategoryTree(const QVector<CategoryIte
 bool CategoryBase::saveCategory(CategoryItem *category)
 {
     // save or update ?
-    if (!category->data(CategoryItem::DbOnly_Id).isNull()) {
+    if (!(category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1)) {
         return updateCategory(category);
     }
     // save labels
@@ -311,13 +311,16 @@ bool CategoryBase::saveCategory(CategoryItem *category)
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
     query.bindValue(Constants::CATEGORY_ID, QVariant());
+    query.bindValue(Constants::CATEGORY_UUID, QVariant());
     query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
-    query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
-    query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(CategoryItem::ThemedIcon));
+    query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(CategoryItem::DbOnly_LabelId));
     query.bindValue(Constants::CATEGORY_MIME, category->mime());
+    query.bindValue(Constants::CATEGORY_PROTECTION_ID, QVariant());
+    query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
     query.bindValue(Constants::CATEGORY_PASSWORD, category->cryptedPassword());
     query.bindValue(Constants::CATEGORY_ISVALID, category->data(CategoryItem::DbOnly_IsValid).toInt());
-    query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(CategoryItem::DbOnly_LabelId));
+    query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(CategoryItem::ThemedIcon));
+    query.bindValue(Constants::CATEGORY_EXTRAXML, QVariant());
     if (query.exec()) {
         category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
     } else {
@@ -335,7 +338,7 @@ bool CategoryBase::saveCategory(CategoryItem *category)
 */
 bool CategoryBase::updateCategory(CategoryItem *category)
 {
-    if (category->data(CategoryItem::DbOnly_Id).isNull()) {
+    if (category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) {
         return saveCategory(category);
     }
     // update episode
@@ -374,8 +377,8 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
 {
     // get label_id
     int labelId = -1;
-    if (category->data(CategoryItem::DbOnly_LabelId).isNull()) {
-        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORY_LABEL_ID);
+    if (category->data(CategoryItem::DbOnly_LabelId).isNull() || category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
+        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID);
         ++labelId;
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
     } else {
