@@ -52,6 +52,9 @@ public:
     virtual void addCategory(CategoryItem *category) = 0;
     virtual void updateCategory(CategoryItem *category) = 0;
 
+    virtual QString mime() const = 0;
+
+
 private:
     CategoryOnlyProxyModel *m_Proxy;
 };

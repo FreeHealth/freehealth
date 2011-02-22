@@ -88,6 +88,8 @@ public:
     void addCategory(Category::CategoryItem *category);
     void updateCategory(Category::CategoryItem *category);
 
+    virtual QString mime() const;
+
 public Q_SLOTS:
     // Connections to Core::IPatient
     void patientChanged();

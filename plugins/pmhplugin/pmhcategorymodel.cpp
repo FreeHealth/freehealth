@@ -40,6 +40,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
@@ -62,6 +63,7 @@ static inline PmhBase *base() {return PmhBase::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
 
@@ -498,6 +500,12 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             c.setAlpha(125);
             return c;
         }
+    case Qt::DecorationRole :
+        {
+            if (it->isCategory()) {
+                return theme()->icon(it->pmhCategory()->iconName(), Core::ITheme::SmallIcon);
+            }
+        }
     }
 
     return QVariant();
@@ -731,7 +739,7 @@ void PmhCategoryModel::addCategory(Category::CategoryItem *cat)
         // save the category to database
         base()->savePmhCategory(cat);
         // insert the pmh to the model
-        d->categoryToItem(cat, new TreeItem);
+        d->categoryToItem(cat, new TreeItem(d->m_Root));
         Q_EMIT layoutChanged();
 //        reset();
     }
@@ -747,6 +755,11 @@ void PmhCategoryModel::updateCategory(Category::CategoryItem *category)
     item->setLabel(category->label());
     base()->savePmhCategory(category);
     Q_EMIT dataChanged(cat, cat);
+}
+
+QString PmhCategoryModel::mime() const
+{
+    return Constants::CATEGORY_MIME;
 }
 
 /**  \brief Update the model when the current patient changes. */
