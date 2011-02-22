@@ -129,5 +129,12 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
 
 void CategoryDialog::done(int r)
 {
+    if (r==QDialog::Accepted) {
+        if (d->m_CatLabelsModel) {
+            d->m_CatLabelsModel->submit();
+            CategoryItem *cat = d->m_CatLabelsModel->categoryItem();
+            d->m_Model->updateCategory(cat);
+        }
+    }
     QDialog::done(r);
 }
