@@ -81,6 +81,9 @@ CategoryItem::CategoryItem() :
         d(new CategoryItemPrivate(this))
 {
     d->m_Data.insert(DbOnly_IsValid, true);
+    d->m_Data.insert(DbOnly_Id, -1);
+    d->m_Data.insert(DbOnly_ParentId, -1);
+    d->m_Data.insert(DbOnly_LabelId, -1);
 }
 
 /** \brief Destructor of CategoryItem. Children categories are not deleted. */
@@ -177,16 +180,25 @@ bool CategoryItem::setLabel(const QString &label, const QString &lang)
 {
     if (d->m_Labels.value(lang) == label)
         return true;
+    if (lang.isEmpty()) {
+        d->m_Labels.insert(QLocale().name().left(2), label);
+    } else {
+        d->m_Labels.insert(lang, label);
+    }
     d->m_IsDirty = true;
-    d->m_Labels.insert(lang, label);
     return true;
 }
 
 /** \brief Return the label of this CategoryItem in the language \e lang (or the ALL_LANGUAGE if \e lang is not defined). */
 QString CategoryItem::label(const QString &lang) const
 {
-    if (!d->m_Labels.keys().contains(lang))
-        return d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
+    if (lang.isEmpty() || (!d->m_Labels.keys().contains(lang))) {
+        QString t = d->m_Labels.value(QLocale().name().left(2));
+        if (t.isEmpty()) {
+            t = d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
+        }
+        return t;
+    }
     return d->m_Labels.value(lang);
 }
 
@@ -206,7 +218,12 @@ void CategoryItem::clearLabels()
 /** \brief Remove the label for the language \e lang (\e lang must be formatted in 2char ISO format). */
 void CategoryItem::removeLabel(const QString &lang)
 {
-    d->m_Labels.remove(lang);
+    if (lang.isEmpty()) {
+        d->m_Labels.remove(QLocale().name().left(2));
+        d->m_Labels.remove(Trans::Constants::ALL_LANGUAGE);
+    } else {
+        d->m_Labels.remove(lang);
+    }
     d->m_IsDirty = true;
 }
 

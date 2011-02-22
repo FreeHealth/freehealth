@@ -83,11 +83,11 @@ public:
     bool isDirty() const;
     void setDirty(bool state);
 
-    bool setLabel(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE);
-    QString label(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    bool setLabel(const QString &label, const QString &lang = QString::null);
+    QString label(const QString &lang = QString::null) const;
     QStringList allLanguagesForLabel() const;
     void clearLabels();
-    void removeLabel(const QString &lang = Trans::Constants::ALL_LANGUAGE);
+    void removeLabel(const QString &lang = QString::null);
 
     bool sortChildren();
     static bool lessThan(const CategoryItem *c1, const CategoryItem *c2);
