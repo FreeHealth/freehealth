@@ -30,6 +30,7 @@
 #include "extendedview.h"
 #include "listview.h"
 #include "tableview.h"
+#include "treeview.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -255,6 +256,11 @@ void ViewActionHandler::moveUp()
             tview->moveUp();
             return;
         }
+        TreeView *trview = qobject_cast<TreeView*>(m_CurrentView);
+        if (trview) {
+            trview->moveUp();
+            return;
+        }
     }
 }
 
@@ -269,6 +275,11 @@ void ViewActionHandler::moveDown()
         TableView *tview = qobject_cast<TableView*>(m_CurrentView);
         if (tview) {
             tview->moveDown();
+            return;
+        }
+        TreeView *trview = qobject_cast<TreeView*>(m_CurrentView);
+        if (trview) {
+            trview->moveDown();
             return;
         }
     }
@@ -287,6 +298,11 @@ void ViewActionHandler::addItem()
             tview->addItem();
             return;
         }
+        TreeView *trview = qobject_cast<TreeView*>(m_CurrentView);
+        if (trview) {
+            trview->addItem();
+            return;
+        }
     }
 }
 
@@ -301,6 +317,11 @@ void ViewActionHandler::removeItem()
         TableView *tview = qobject_cast<TableView*>(m_CurrentView);
         if (tview) {
             tview->removeItem();
+            return;
+        }
+        TreeView *trview = qobject_cast<TreeView*>(m_CurrentView);
+        if (trview) {
+            trview->removeItem();
             return;
         }
     }
