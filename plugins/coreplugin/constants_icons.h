@@ -154,6 +154,7 @@ const char * const  ICONPENCIL    =  "pencil.png";
 const char * const  ICONDATE        =  "date.png";
 
 // categories icons
+const char * const  ICONCATEGORY_MANAGER  =  "category_manager.png";
 const char * const  ICONCATEGORY_ADD  =  "category_add.png";
 const char * const  ICONCATEGORY_REMOVE  =  "category_remove.png";
 

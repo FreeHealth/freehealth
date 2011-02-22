@@ -78,7 +78,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->setCommands(QStringList()
                               << Constants::A_PMH_NEW
                               << Constants::A_PMH_REMOVE
-                              << Constants::A_PMH_NEWCATEGORY);
+                              << Constants::A_PMH_CATEGORYMANAGER);
     ui->treeView->addContexts(contexts());
     ui->treeView->setModel(pmhCore()->pmhCategoryModel());
     ui->treeView->header()->hide();
@@ -87,9 +87,6 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     Core::Command *cmd = 0;
     cmd = actionManager()->command(Constants::A_PMH_REMOVE);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(removeItem()));
-
-    cmd = actionManager()->command(Constants::A_PMH_NEWCATEGORY);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(createCategory()));
 
     // Populate ToolBar and create specific buttons
     m_EditButton = new QPushButton(ui->buttonBox);

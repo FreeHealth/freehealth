@@ -78,7 +78,7 @@ public:
         ui->personalLabel->setEnabled(enable);
         ui->typeCombo->setEnabled(enable);
         ui->statusCombo->setEnabled(enable);
-//        ui->categoryTreeView->setEnabled(enable);
+        ui->categoryTreeView->setEnabled(enable);
         ui->episodeViewer->setEnabled(enable);
     }
 

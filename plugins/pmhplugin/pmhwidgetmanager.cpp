@@ -173,7 +173,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
 
     a = aCategoryManager= new QAction(this);
     a->setObjectName("aCategoryManager");
-    a->setIcon(th->icon(Core::Constants::ICONNEXT));
+    a->setIcon(th->icon(Core::Constants::ICONCATEGORY_MANAGER));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_CATEGORYMANAGER, globalcontext);
     cmd->setTranslations(Constants::CATEGORYMANAGER_TEXT, Constants::CATEGORYMANAGER_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Constants::G_PMH_EDITION);
